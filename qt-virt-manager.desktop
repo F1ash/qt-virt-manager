@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Qt VirtManager
+GenericName=Qt Virtual Machine Manager
+Type=Application
+Categories=Development;System;Qt;
+Icon=/usr/share/sandbox-runner-data/icons/256x256/apps/virtual-engineering.png
+Exec=qt-virt-manager
+Terminal=false
+StartupNotify=true
