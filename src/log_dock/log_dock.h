@@ -1,5 +1,5 @@
-#ifndef LOG_DOC_H
-#define LOG_DOC_H
+#ifndef LOG_DOCK_H
+#define LOG_DOCK_H
 
 #include <QWidget>
 #include <QGridLayout>
@@ -8,12 +8,12 @@
 
 #define LOG_SIZE 1048576
 
-class LogDocContent : public QWidget
+class LogDock : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LogDocContent(QWidget *parent = 0);
-    ~LogDocContent();
+    explicit LogDock(QWidget *parent = 0);
+    ~LogDock();
 
 private:
     QSize         _size;
@@ -29,4 +29,4 @@ private slots:
 
 };
 
-#endif // LOG_DOC_H
+#endif // LOG_DOCK_H

@@ -6,11 +6,11 @@
 #include <QTimer>
 #include <QSettings>
 #include <QCloseEvent>
-#include "log_doc/log_doc.h"
+#include "log_dock/log_dock.h"
 #include "virt_objects/virt_network/virtnet_control.h"
-#include "virt_objects/virt_domain/domain_doc.h"
-#include "virt_objects/virt_storage_vol/storage_vol_doc.h"
-#include "virt_objects/virt_storage_pool/storage_pool_doc.h"
+#include "virt_objects/virt_domain/domain_control.h"
+#include "virt_objects/virt_storage_vol/storage_vol_control.h"
+#include "virt_objects/virt_storage_pool/storage_pool_control.h"
 #include "tray/traywidget.h"
 #include "layout/conn_list_widget.h"
 #include "toolbar/toolbar.h"
@@ -29,21 +29,21 @@ signals:
 public slots:
 
 private :
-    QSettings               settings;
-    ConnectList            *connListWidget;
-    TrayIcon               *trayIcon;
-    ToolBar                *toolBar;
-    Wait                   *wait_thread = NULL;
-    QDockWidget            *logDoc;
-    LogDocContent          *logDocContent;
-    QDockWidget            *domainDoc;
-    DomainDocContent       *domainDocContent;
-    QDockWidget            *networkDoc;
-    VirtNetControl         *networkDocContent;
-    QDockWidget            *storageVolDoc;
-    StorageVolDocContent   *storageVolDocContent;
-    QDockWidget            *storagePoolDoc;
-    StoragePoolDocContent  *storagePoolDocContent;
+    QSettings                settings;
+    ConnectList             *connListWidget;
+    TrayIcon                *trayIcon;
+    ToolBar                 *toolBar;
+    Wait                    *wait_thread = NULL;
+    QDockWidget             *logDock;
+    LogDock                 *logDockContent;
+    QDockWidget             *domainDock;
+    VirtDomainControl       *domainDockContent;
+    QDockWidget             *networkDock;
+    VirtNetControl          *networkDockContent;
+    QDockWidget             *storageVolDock;
+    VirtStorageVolControl   *storageVolDockContent;
+    QDockWidget             *storagePoolDock;
+    VirtStoragePoolControl  *storagePoolDockContent;
 
 private slots:
     void closeEvent(QCloseEvent*);
@@ -68,7 +68,7 @@ private slots:
     void autoHide();
     void writeToErrorLog(QString&);
     void changeLogViewerVisibility();
-    Qt::DockWidgetArea getDocArea(int) const;
+    Qt::DockWidgetArea getDockArea(int) const;
     void receiveConnPtr(virConnect*);
     void stopProcessing();
 

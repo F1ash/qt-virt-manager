@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QGridLayout>
 #include <QTreeView>
-#include <QDockWidget>
 #include <QSettings>
 #include <QTime>
 #include <QTimerEvent>
@@ -42,7 +41,6 @@ public slots:
     bool setCurrentWorkConnect(virConnect*);
 
 private slots:
-    void closeEvent(QCloseEvent*);
     void timerEvent(QTimerEvent*);
     void resultReceiver(QStringList);
     void warningShow(QString, QString);

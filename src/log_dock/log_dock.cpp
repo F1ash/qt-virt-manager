@@ -1,6 +1,6 @@
-#include "log_doc.h"
+#include "log_dock.h"
 
-LogDocContent::LogDocContent(QWidget *parent) :
+LogDock::LogDock(QWidget *parent) :
     QWidget(parent)
 {
     //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -15,7 +15,7 @@ LogDocContent::LogDocContent(QWidget *parent) :
     docLayout->addWidget(Log, 2, 0, 3, 2);
     setLayout(docLayout);
 }
-LogDocContent::~LogDocContent()
+LogDock::~LogDock()
 {
     disconnect(Log, SIGNAL(customContextMenuRequested(const QPoint&)), Log, SLOT(clear()));
     Log->clear();
@@ -24,7 +24,7 @@ LogDocContent::~LogDocContent()
     delete docLayout;
     docLayout = 0;
 }
-void LogDocContent::appendErrorMsg(QString &msg)
+void LogDock::appendErrorMsg(QString &msg)
 {
     if ( Log->toPlainText().count()>LOG_SIZE ) Log->clear();
     Log->append(msg);

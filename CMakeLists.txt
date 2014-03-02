@@ -10,7 +10,7 @@ set (HELPER_NAME qt_virt_manager_helper)
 set (PROJECT_VERSION 1.0.0)
 set (HEADERS 
   src/mainwindow.h
-  src/log_doc/log_doc.h
+  src/log_dock/log_dock.h
   src/tray/traywidget.h
   src/toolbar/toolbar.h
   src/settings/conn_settings.h
@@ -20,7 +20,7 @@ set (HEADERS
   src/layout/conn_item_index.h
   src/layout/conn_item_model.h
   src/layout/progressbar_delegate.h
-  src/virt_objects/virt_domain/domain_doc.h
+  src/virt_objects/virt_domain/domain_control.h
   src/virt_objects/virt_connect/conn_element.h
   src/virt_objects/virt_connect/conn_alive_thread.h
   src/virt_objects/virt_network/virtnet_control.h
@@ -30,13 +30,13 @@ set (HEADERS
   src/virt_objects/virt_network/open_file_menu.h
   src/virt_objects/virt_network/virtnet_control_menu.h
   src/virt_objects/virt_network/net_control_thread.h
-  src/virt_objects/virt_storage_vol/storage_vol_doc.h
-  src/virt_objects/virt_storage_pool/storage_pool_doc.h
+  src/virt_objects/virt_storage_vol/storage_vol_control.h
+  src/virt_objects/virt_storage_pool/storage_pool_control.h
 )
 set (SOURCES 
   src/main.cpp
   src/mainwindow.cpp
-  src/log_doc/log_doc.cpp
+  src/log_dock/log_dock.cpp
   src/tray/traywidget.cpp
   src/toolbar/toolbar.cpp
   src/settings/conn_settings.cpp
@@ -46,7 +46,7 @@ set (SOURCES
   src/layout/conn_item_index.cpp
   src/layout/conn_item_model.cpp
   src/layout/progressbar_delegate.cpp
-  src/virt_objects/virt_domain/domain_doc.cpp
+  src/virt_objects/virt_domain/domain_control.cpp
   src/virt_objects/virt_connect/conn_element.cpp
   src/virt_objects/virt_connect/conn_alive_thread.cpp
   src/virt_objects/virt_network/virtnet_control.cpp
@@ -56,8 +56,8 @@ set (SOURCES
   src/virt_objects/virt_network/open_file_menu.cpp
   src/virt_objects/virt_network/net_control_thread.cpp
   src/virt_objects/virt_network/virtnet_control_menu.cpp
-  src/virt_objects/virt_storage_vol/storage_vol_doc.cpp
-  src/virt_objects/virt_storage_pool/storage_pool_doc.cpp
+  src/virt_objects/virt_storage_vol/storage_vol_control.cpp
+  src/virt_objects/virt_storage_pool/storage_pool_control.cpp
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE ${PROJECT_NAME}.desktop)

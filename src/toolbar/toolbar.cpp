@@ -49,8 +49,8 @@ ToolBar::~ToolBar()
   _stVolUpAction = 0;
   delete _stPoolUpAction;
   _stPoolUpAction = 0;
-  delete showDocsControlMenu;
-  showDocsControlMenu = 0;
+  delete showDocksControlMenu;
+  showDocksControlMenu = 0;
   delete _docsUpAction;
   _docsUpAction = 0;
 }
@@ -65,7 +65,7 @@ void ToolBar::initActions()
     addSeparator();
     addItemControlMenu();
     addSeparator();
-    addDocsControlMenu();
+    addDocksControlMenu();
     addSeparator();
     addAction(_exitAction);
 
@@ -107,31 +107,31 @@ void ToolBar::addItemControlMenu()
     addAction( itemControlAction );
     connect(itemControlAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
 }
-void ToolBar::addDocsControlMenu()
+void ToolBar::addDocksControlMenu()
 {
-    showDocsControlMenu = new QMenu(this);
+    showDocksControlMenu = new QMenu(this);
 
-    _logUpAction = new QAction("Log Doc", this);
+    _logUpAction = new QAction("Log Dock", this);
     _logUpAction->setCheckable(true);
-    _domUpAction = new QAction("Domain Doc", this);
+    _domUpAction = new QAction("Domain Dock", this);
     _domUpAction->setCheckable(true);
-    _netUpAction = new QAction("Network Doc", this);
+    _netUpAction = new QAction("Network Dock", this);
     _netUpAction->setCheckable(true);
-    _stVolUpAction = new QAction("StorageVol Doc", this);
+    _stVolUpAction = new QAction("StorageVol Dock", this);
     _stVolUpAction->setCheckable(true);
-    _stPoolUpAction = new QAction("StoragePool Doc", this);
+    _stPoolUpAction = new QAction("StoragePool Dock", this);
     _stPoolUpAction->setCheckable(true);
 
-    showDocsControlMenu->addAction(_logUpAction);
-    showDocsControlMenu->addSeparator();
-    showDocsControlMenu->addAction(_domUpAction);
-    showDocsControlMenu->addAction(_netUpAction);
-    showDocsControlMenu->addAction(_stVolUpAction);
-    showDocsControlMenu->addAction(_stPoolUpAction);
+    showDocksControlMenu->addAction(_logUpAction);
+    showDocksControlMenu->addSeparator();
+    showDocksControlMenu->addAction(_domUpAction);
+    showDocksControlMenu->addAction(_netUpAction);
+    showDocksControlMenu->addAction(_stVolUpAction);
+    showDocksControlMenu->addAction(_stPoolUpAction);
 
-    _docsUpAction = new QAction(QString("Doc Control"), this);
+    _docsUpAction = new QAction(QString("Dock Control"), this);
     _docsUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
-    _docsUpAction->setMenu(showDocsControlMenu);
+    _docsUpAction->setMenu(showDocksControlMenu);
     addAction( _docsUpAction );
     connect(_docsUpAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
 }

@@ -51,11 +51,11 @@ MainWindow::~MainWindow()
   disconnect(toolBar->_logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
   disconnect(toolBar->_exitAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
   disconnect(toolBar, SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
-  disconnect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDoc, SLOT(setVisible(bool)));
-  disconnect(toolBar->_netUpAction, SIGNAL(triggered(bool)), networkDoc, SLOT(setVisible(bool)));
-  disconnect(toolBar->_stVolUpAction, SIGNAL(triggered(bool)), storageVolDoc, SLOT(setVisible(bool)));
-  disconnect(toolBar->_stPoolUpAction, SIGNAL(triggered(bool)), storagePoolDoc, SLOT(setVisible(bool)));
-  disconnect(networkDocContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+  disconnect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
+  disconnect(toolBar->_netUpAction, SIGNAL(triggered(bool)), networkDock, SLOT(setVisible(bool)));
+  disconnect(toolBar->_stVolUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
+  disconnect(toolBar->_stPoolUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
+  disconnect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
 
   qDebug()<<"processing stopped";
   if ( wait_thread!=NULL ) {
@@ -65,30 +65,30 @@ MainWindow::~MainWindow()
       wait_thread = 0;
   };
 
-  delete logDocContent;
-  logDocContent = 0;
-  delete logDoc;
-  logDoc = 0;
+  delete logDockContent;
+  logDockContent = 0;
+  delete logDock;
+  logDock = 0;
 
-  delete domainDocContent;
-  domainDocContent = 0;
-  delete domainDoc;
-  domainDoc = 0;
+  delete domainDockContent;
+  domainDockContent = 0;
+  delete domainDock;
+  domainDock = 0;
 
-  delete networkDocContent;
-  networkDocContent = 0;
-  delete networkDoc;
-  networkDoc = 0;
+  delete networkDockContent;
+  networkDockContent = 0;
+  delete networkDock;
+  networkDock = 0;
 
-  delete storageVolDocContent;
-  storageVolDocContent = 0;
-  delete storageVolDoc;
-  storageVolDoc = 0;
+  delete storageVolDockContent;
+  storageVolDockContent = 0;
+  delete storageVolDock;
+  storageVolDock = 0;
 
-  delete storagePoolDocContent;
-  storagePoolDocContent = 0;
-  delete storagePoolDoc;
-  storagePoolDoc = 0;
+  delete storagePoolDockContent;
+  storagePoolDockContent = 0;
+  delete storagePoolDock;
+  storagePoolDock = 0;
 
   delete connListWidget;
   connListWidget = 0;
@@ -106,35 +106,35 @@ void MainWindow::closeEvent(QCloseEvent *ev)
   settings.setValue("State", saveState());
   settings.setValue("ToolBarArea", toolBarArea(toolBar));
   settings.setValue("Visible", this->isVisible());
-  settings.beginGroup("LogDoc");
-  settings.setValue("DocArea", dockWidgetArea(logDoc));
-  settings.setValue("Visible", logDoc->isVisible());
-  settings.setValue("Floating", logDoc->isFloating());
-  settings.setValue("Geometry", logDoc->saveGeometry());
+  settings.beginGroup("LogDock");
+  settings.setValue("DockkArea", dockWidgetArea(logDock));
+  settings.setValue("Visible", logDock->isVisible());
+  settings.setValue("Floating", logDock->isFloating());
+  settings.setValue("Geometry", logDock->saveGeometry());
   settings.endGroup();
-  settings.beginGroup("DomainDoc");
-  settings.setValue("DocArea", dockWidgetArea(domainDoc));
-  settings.setValue("Visible", domainDoc->isVisible());
-  settings.setValue("Floating", domainDoc->isFloating());
-  settings.setValue("Geometry", domainDoc->saveGeometry());
+  settings.beginGroup("DomainDock");
+  settings.setValue("DockkArea", dockWidgetArea(domainDock));
+  settings.setValue("Visible", domainDock->isVisible());
+  settings.setValue("Floating", domainDock->isFloating());
+  settings.setValue("Geometry", domainDock->saveGeometry());
   settings.endGroup();
-  settings.beginGroup("NetworkDoc");
-  settings.setValue("DocArea", dockWidgetArea(networkDoc));
-  settings.setValue("Visible", networkDoc->isVisible());
-  settings.setValue("Floating", networkDoc->isFloating());
-  settings.setValue("Geometry", networkDoc->saveGeometry());
+  settings.beginGroup("NetworkDock");
+  settings.setValue("DockArea", dockWidgetArea(networkDock));
+  settings.setValue("Visible", networkDock->isVisible());
+  settings.setValue("Floating", networkDock->isFloating());
+  settings.setValue("Geometry", networkDock->saveGeometry());
   settings.endGroup();
-  settings.beginGroup("StorageVolDoc");
-  settings.setValue("DocArea", dockWidgetArea(storageVolDoc));
-  settings.setValue("Visible", storageVolDoc->isVisible());
-  settings.setValue("Floating", storageVolDoc->isFloating());
-  settings.setValue("Geometry", storageVolDoc->saveGeometry());
+  settings.beginGroup("StorageVolDock");
+  settings.setValue("DockArea", dockWidgetArea(storageVolDock));
+  settings.setValue("Visible", storageVolDock->isVisible());
+  settings.setValue("Floating", storageVolDock->isFloating());
+  settings.setValue("Geometry", storageVolDock->saveGeometry());
   settings.endGroup();
-  settings.beginGroup("StoragePoolDoc");
-  settings.setValue("DocArea", dockWidgetArea(storagePoolDoc));
-  settings.setValue("Visible", storagePoolDoc->isVisible());
-  settings.setValue("Floating", storagePoolDoc->isFloating());
-  settings.setValue("Geometry", storagePoolDoc->saveGeometry());
+  settings.beginGroup("StoragePoolDock");
+  settings.setValue("DockArea", dockWidgetArea(storagePoolDock));
+  settings.setValue("Visible", storagePoolDock->isVisible());
+  settings.setValue("Floating", storagePoolDock->isFloating());
+  settings.setValue("Geometry", storagePoolDock->saveGeometry());
   settings.endGroup();
   settings.beginGroup("ConnectListColumns");
   settings.setValue("column0", connListWidget->columnWidth(0));
@@ -153,7 +153,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       };
       connListWidget->setEnabled(false);
       toolBar->setEnabled(false);
-      logDoc->setEnabled(false);
+      logDock->setEnabled(false);
       wait_thread = new Wait(this);
       wait_thread->setPtr(connListWidget);
       connect(wait_thread, SIGNAL(finished()), this, SLOT(closeEvent()));
@@ -192,18 +192,18 @@ void MainWindow::changeVisibility()
         this->hide();
         trayIcon->hideAction->setText (QString("Up"));
         trayIcon->hideAction->setIcon (QIcon::fromTheme("up"));
-        if ( domainDoc->isFloating() ) domainDoc->hide();
-        if ( networkDoc->isFloating() ) networkDoc->hide();
-        if ( storageVolDoc->isFloating() ) storageVolDoc->hide();
-        if ( storagePoolDoc->isFloating() ) storagePoolDoc->hide();
+        if ( domainDock->isFloating() ) domainDock->hide();
+        if ( networkDock->isFloating() ) networkDock->hide();
+        if ( storageVolDock->isFloating() ) storageVolDock->hide();
+        if ( storagePoolDock->isFloating() ) storagePoolDock->hide();
     } else {
         this->show();
         trayIcon->hideAction->setText (QString("Down"));
         trayIcon->hideAction->setIcon (QIcon::fromTheme("down"));
-        if ( domainDoc->isFloating() && toolBar->_domUpAction->isChecked() ) domainDoc->show();
-        if ( networkDoc->isFloating() && toolBar->_netUpAction->isChecked() ) networkDoc->show();
-        if ( storageVolDoc->isFloating() && toolBar->_stVolUpAction->isChecked() ) storageVolDoc->show();
-        if ( storagePoolDoc->isFloating() && toolBar->_stPoolUpAction->isChecked() ) storagePoolDoc->show();
+        if ( domainDock->isFloating() && toolBar->_domUpAction->isChecked() ) domainDock->show();
+        if ( networkDock->isFloating() && toolBar->_netUpAction->isChecked() ) networkDock->show();
+        if ( storageVolDock->isFloating() && toolBar->_stVolUpAction->isChecked() ) storageVolDock->show();
+        if ( storagePoolDock->isFloating() && toolBar->_stPoolUpAction->isChecked() ) storagePoolDock->show();
     };
 }
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
@@ -255,110 +255,110 @@ void MainWindow::initDockWidgets()
 {
     bool visible;
     Qt::DockWidgetArea area;
-    logDoc = new QDockWidget(this);
-    logDoc->setObjectName("logDoc");
-    logDoc->setWindowTitle("Log:");
-    logDoc->setFeatures(
+    logDock = new QDockWidget(this);
+    logDock->setObjectName("logDock");
+    logDock->setWindowTitle("Log:");
+    logDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
-    logDocContent = new LogDocContent(this);
-    logDoc->setWidget( logDocContent );
-    settings.beginGroup("LogDoc");
-    logDoc->setFloating(settings.value("Floating", false).toBool());
-    logDoc->restoreGeometry(settings.value("Geometry").toByteArray());
+    logDockContent = new LogDock(this);
+    logDock->setWidget( logDockContent );
+    settings.beginGroup("LogDock");
+    logDock->setFloating(settings.value("Floating", false).toBool());
+    logDock->restoreGeometry(settings.value("Geometry").toByteArray());
     visible = !settings.value("Visible", false).toBool();
-    logDoc->setVisible(visible);
+    logDock->setVisible(visible);
     changeLogViewerVisibility();
-    area = getDocArea(settings.value("DocArea", Qt::BottomDockWidgetArea).toInt());
+    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
-    addDockWidget(area, logDoc);
+    addDockWidget(area, logDock);
 
-    domainDoc = new QDockWidget(this);
-    domainDoc->setObjectName("domainDoc");
-    domainDoc->setWindowTitle("Domain:");
-    domainDoc->setFeatures(
+    domainDock = new QDockWidget(this);
+    domainDock->setObjectName("domainDock");
+    domainDock->setWindowTitle("Domain:");
+    domainDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
-    domainDocContent = new DomainDocContent(this);
-    domainDoc->setWidget( domainDocContent );
-    settings.beginGroup("DomainDoc");
-    domainDoc->setFloating(settings.value("Floating", false).toBool());
-    domainDoc->restoreGeometry(settings.value("Geometry").toByteArray());
+    domainDockContent = new VirtDomainControl(this);
+    domainDock->setWidget( domainDockContent );
+    settings.beginGroup("DomainDock");
+    domainDock->setFloating(settings.value("Floating", false).toBool());
+    domainDock->restoreGeometry(settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", false).toBool();
-    domainDoc->setVisible(visible);
+    domainDock->setVisible(visible);
     toolBar->_domUpAction->setChecked(visible);
-    connect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDoc, SLOT(setVisible(bool)));
-    area = getDocArea(settings.value("DocArea", Qt::BottomDockWidgetArea).toInt());
+    connect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
+    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
-    addDockWidget(area, domainDoc);
+    addDockWidget(area, domainDock);
 
-    networkDoc = new QDockWidget(this);
-    networkDoc->setObjectName("networkDoc");
-    networkDoc->setWindowTitle("Network:");
-    networkDoc->setFeatures(
+    networkDock = new QDockWidget(this);
+    networkDock->setObjectName("networkDock");
+    networkDock->setWindowTitle("Network:");
+    networkDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
-    networkDocContent = new VirtNetControl(this);
-    networkDoc->setWidget( networkDocContent );
-    settings.beginGroup("NetworkDoc");
-    networkDoc->setFloating(settings.value("Floating", false).toBool());
-    networkDoc->restoreGeometry(settings.value("Geometry").toByteArray());
+    networkDockContent = new VirtNetControl(this);
+    networkDock->setWidget( networkDockContent );
+    settings.beginGroup("NetworkDock");
+    networkDock->setFloating(settings.value("Floating", false).toBool());
+    networkDock->restoreGeometry(settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", false).toBool();
-    networkDoc->setVisible(visible);
+    networkDock->setVisible(visible);
     toolBar->_netUpAction->setChecked(visible);
-    area = getDocArea(settings.value("DocArea", Qt::BottomDockWidgetArea).toInt());
+    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
-    addDockWidget(area, networkDoc);
-    connect(toolBar->_netUpAction, SIGNAL(triggered(bool)), networkDoc, SLOT(setVisible(bool)));
-    connect(networkDocContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+    addDockWidget(area, networkDock);
+    connect(toolBar->_netUpAction, SIGNAL(triggered(bool)), networkDock, SLOT(setVisible(bool)));
+    connect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
 
-    storageVolDoc = new QDockWidget(this);
-    storageVolDoc->setObjectName("storageVolDoc");
-    storageVolDoc->setWindowTitle("StorageVol:");
-    storageVolDoc->setFeatures(
+    storageVolDock = new QDockWidget(this);
+    storageVolDock->setObjectName("storageVolDock");
+    storageVolDock->setWindowTitle("StorageVol:");
+    storageVolDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
-    storageVolDocContent = new StorageVolDocContent(this);
-    storageVolDoc->setWidget( storageVolDocContent );
-    settings.beginGroup("StorageVolDoc");
-    storageVolDoc->setFloating(settings.value("Floating", false).toBool());
-    storageVolDoc->restoreGeometry(settings.value("Geometry").toByteArray());
+    storageVolDockContent = new VirtStorageVolControl(this);
+    storageVolDock->setWidget( storageVolDockContent );
+    settings.beginGroup("StorageVolDock");
+    storageVolDock->setFloating(settings.value("Floating", false).toBool());
+    storageVolDock->restoreGeometry(settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", false).toBool();
-    storageVolDoc->setVisible(visible);
+    storageVolDock->setVisible(visible);
     toolBar->_stVolUpAction->setChecked(visible);
-    area = getDocArea(settings.value("DocArea", Qt::BottomDockWidgetArea).toInt());
+    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
-    addDockWidget(area, storageVolDoc);
-    connect(toolBar->_stVolUpAction, SIGNAL(triggered(bool)), storageVolDoc, SLOT(setVisible(bool)));
+    addDockWidget(area, storageVolDock);
+    connect(toolBar->_stVolUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
 
-    storagePoolDoc = new QDockWidget(this);
-    storagePoolDoc->setObjectName("storagePoolDoc");
-    storagePoolDoc->setWindowTitle("StoragePool:");
-    storagePoolDoc->setFeatures(
+    storagePoolDock = new QDockWidget(this);
+    storagePoolDock->setObjectName("storagePoolDock");
+    storagePoolDock->setWindowTitle("StoragePool:");
+    storagePoolDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
-    storagePoolDocContent = new StoragePoolDocContent(this);
-    storagePoolDoc->setWidget( storagePoolDocContent );
-    settings.beginGroup("StoragePoolDoc");
-    storagePoolDoc->setFloating(settings.value("Floating", false).toBool());
-    storagePoolDoc->restoreGeometry(settings.value("Geometry").toByteArray());
+    storagePoolDockContent = new VirtStoragePoolControl(this);
+    storagePoolDock->setWidget( storagePoolDockContent );
+    settings.beginGroup("StoragePoolDock");
+    storagePoolDock->setFloating(settings.value("Floating", false).toBool());
+    storagePoolDock->restoreGeometry(settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", false).toBool();
-    storagePoolDoc->setVisible(visible);
+    storagePoolDock->setVisible(visible);
     toolBar->_stPoolUpAction->setChecked(visible);
-    area = getDocArea(settings.value("DocArea", Qt::BottomDockWidgetArea).toInt());
+    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
-    addDockWidget(area, storagePoolDoc);
-    connect(toolBar->_stPoolUpAction, SIGNAL(triggered(bool)), storagePoolDoc, SLOT(setVisible(bool)));
+    addDockWidget(area, storagePoolDock);
+    connect(toolBar->_stPoolUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
 }
 void MainWindow::editCurrentConnect()
 {
@@ -433,23 +433,23 @@ void MainWindow::autoHide()
 }
 void MainWindow::writeToErrorLog(QString &msg)
 {
-    logDocContent->appendErrorMsg(msg);
+    logDockContent->appendErrorMsg(msg);
 }
 void MainWindow::changeLogViewerVisibility()
 {
     QString text;
-    if ( logDoc->isVisible() ) {
-        logDoc->hide();
+    if ( logDock->isVisible() ) {
+        logDock->hide();
         text = "Show Log Viewer";
     } else {
-        logDoc->show();
+        logDock->show();
         text = "Hide Log Viewer";
     };
     trayIcon->setLogUpActionText(text);
-    toolBar->_logUpAction->setChecked(logDoc->isVisible());
+    toolBar->_logUpAction->setChecked(logDock->isVisible());
 }
 
-Qt::DockWidgetArea MainWindow::getDocArea(int i) const
+Qt::DockWidgetArea MainWindow::getDockArea(int i) const
 {
     Qt::DockWidgetArea result;
     switch (i) {
@@ -474,19 +474,19 @@ Qt::DockWidgetArea MainWindow::getDocArea(int i) const
 void MainWindow::receiveConnPtr(virConnect *conn)
 {
     // send connect ptr to all related virtual resources for operating
-    networkDocContent->setCurrentWorkConnect(conn);
+    networkDockContent->setCurrentWorkConnect(conn);
 }
 void MainWindow::stopProcessing()
 {
     bool result = true;
     // stop processing of all virtual resources
-    domainDocContent->stopProcessing();
-    networkDocContent->stopProcessing();
-    storageVolDocContent->stopProcessing();
-    storagePoolDocContent->stopProcessing();
-    //result = result && domainDocContent->getThreadState();
-    result = result && networkDocContent->getThreadState() ;
-    //result = result && storageVolDocContent->getThreadState();
-    //result = result && storagePoolDocContent->getThreadState();
+    domainDockContent->stopProcessing();
+    networkDockContent->stopProcessing();
+    storageVolDockContent->stopProcessing();
+    storagePoolDockContent->stopProcessing();
+    //result = result && domainDockContent->getThreadState();
+    result = result && networkDockContent->getThreadState() ;
+    //result = result && storageVolDockContent->getThreadState();
+    //result = result && storagePoolDockContent->getThreadState();
     if ( wait_thread!=NULL ) wait_thread->setProcessingState(result);
 }

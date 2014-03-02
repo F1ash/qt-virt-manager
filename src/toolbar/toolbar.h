@@ -36,12 +36,12 @@ private:
   QAction    *itemControlAction;
   QMenu      *itemControlMenu;
 
-  QMenu      *showDocsControlMenu;
+  QMenu      *showDocksControlMenu;
 
 private slots:
   void initActions();
   void addItemControlMenu();
-  void addDocsControlMenu();
+  void addDocksControlMenu();
   void mainWindowUp();
   void showHoveredMenu();
 

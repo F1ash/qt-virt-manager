@@ -120,14 +120,6 @@ bool VirtNetControl::setCurrentWorkConnect(virConnect *conn)
 }
 
 /* private slots */
-void VirtNetControl::closeEvent(QCloseEvent *ev)
-{
-    settings.beginGroup("VirtNetControl");
-    //settings.setValue("Geometry", saveGeometry());
-    settings.endGroup();
-    settings.sync();
-    close();
-}
 void VirtNetControl::timerEvent(QTimerEvent *event)
 {
     int _timerId = event->timerId();
