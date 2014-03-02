@@ -13,10 +13,48 @@ bool NetControlThread::setCurrentWorkConnect(virConnectPtr conn)
     qDebug()<<"net_thread"<<currWorkConnect;
 }
 void NetControlThread::stop() { keep_alive = false; }
-void NetControlThread::execAction(Actions act = GET_ALL_NETWORK)
+void NetControlThread::execAction(Actions act = GET_ALL_NETWORK,
+                                  QStringList _args = QStringList())
 {
     action = act;
-    if ( keep_alive ) start();
+    args = _args;
+    if ( keep_alive && !isRunning() ) start();
+}
+
+/* private slots */
+void NetControlThread::run()
+{
+    QStringList result;
+    switch (action) {
+    case GET_ALL_NETWORK :
+        result.append(getAllNetworkList());
+        break;
+    case CREATE_NETWORK :
+        result.append(createNetwork());
+        break;
+    case DEFINE_NETWORK :
+        result.append(defineNetwork());
+        break;
+    case START_NETWORK :
+        result.append(startNetwork());
+        break;
+    case DESTROY_NETWORK :
+        result.append(destroyNetwork());
+        break;
+    case UNDEFINE_NETWORK :
+        result.append(undefineNetwork());
+        break;
+    case CHANGE_AUTOSTART :
+        result.append(changeAutoStartNetwork());
+        break;
+    default:
+        result.append(QString());
+        break;
+    };
+    result.prepend(QString::number(action));
+
+    emit resultData(result);
+    //qDebug()<<"netControlThread stopped";
 }
 QStringList NetControlThread::getAllNetworkList()
 {
@@ -56,36 +94,33 @@ QStringList NetControlThread::getAllNetworkList()
     };
     return virtNetList;
 }
-
-/* private slots */
-void NetControlThread::run()
+QStringList NetControlThread::createNetwork()
 {
     QStringList result;
-    switch (action) {
-    case GET_ALL_NETWORK :
-        result.append("getVirtNetList");
-        result.append(getAllNetworkList());
-        break;
-    case CREATE_NETWORK :
-        break;
-    case CREATE_NETWORK_EXAMPLE :
-        break;
-    case DEFINE_NETWORK :
-        break;
-    case DEFINE_NETWORK_EXAMPLE :
-        break;
-    case START_NETWORK :
-        break;
-    case DESTROY_NETWORK :
-        break;
-    case UNDEFINE_NETWORK :
-        break;
-    case CHANGE_AUTOSTART :
-        break;
-    default:
-        break;
-    };
-
-    emit resultData(result);
-    qDebug()<<"netControlThread stopped";
+    return result;
+}
+QStringList NetControlThread::defineNetwork()
+{
+    QStringList result;
+    return result;
+}
+QStringList NetControlThread::startNetwork()
+{
+    QStringList result;
+    return result;
+}
+QStringList NetControlThread::destroyNetwork()
+{
+    QStringList result;
+    return result;
+}
+QStringList NetControlThread::undefineNetwork()
+{
+    QStringList result;
+    return result;
+}
+QStringList NetControlThread::changeAutoStartNetwork()
+{
+    QStringList result;
+    return result;
 }

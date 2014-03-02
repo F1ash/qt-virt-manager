@@ -10,9 +10,7 @@
 enum Actions {
     GET_ALL_NETWORK,
     CREATE_NETWORK,
-    CREATE_NETWORK_EXAMPLE,
     DEFINE_NETWORK,
-    DEFINE_NETWORK_EXAMPLE,
     START_NETWORK,
     DESTROY_NETWORK,
     UNDEFINE_NETWORK,
@@ -31,17 +29,24 @@ signals:
 
 private:
     Actions          action;
+    QStringList      args;
     bool             keep_alive;
     virConnect      *currWorkConnect = NULL;
 
 public slots:
     bool setCurrentWorkConnect(virConnectPtr);
     void stop();
-    void execAction(Actions);
-    QStringList getAllNetworkList();
+    void execAction(Actions, QStringList);
 
 private slots:
     void run();
+    QStringList getAllNetworkList();
+    QStringList createNetwork();
+    QStringList defineNetwork();
+    QStringList startNetwork();
+    QStringList destroyNetwork();
+    QStringList undefineNetwork();
+    QStringList changeAutoStartNetwork();
 
 };
 

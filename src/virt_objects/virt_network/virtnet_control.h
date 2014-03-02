@@ -44,6 +44,7 @@ private slots:
     void timerEvent(QTimerEvent*);
     void resultReceiver(QStringList);
     void warningShow(QString, QString);
+    void changeToolBarState();
 
     // TODO: display XML format of network item
 
