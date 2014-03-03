@@ -15,6 +15,7 @@ public:
 
 signals:
     void connMsg(QString);
+    void connected();
 
 private:
     bool            keep_alive;

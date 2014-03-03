@@ -7,6 +7,10 @@ VirtNetModel::VirtNetModel(QObject *parent) :
     no_activeIcon = QIcon::fromTheme("list-remove");
     defined = QIcon::fromTheme("network-define");
     created = QIcon::fromTheme("network-create");
+    column0 = "Name";
+    column1 = "State";
+    column2 = "Auto";
+    column3 = "Prst";
 }
 VirtNetModel::~VirtNetModel()
 {
@@ -37,22 +41,44 @@ int VirtNetModel::columnCount(const QModelIndex &parent) const
 {
     return 4;
 }
+bool VirtNetModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
+{
+    if ( orientation == Qt::Horizontal ) {
+      if ( role == Qt::EditRole ) {
+        switch (section) {
+        case 0:
+          column0 = value.toString();
+          break;
+        case 1:
+          column1 = value.toString();
+          break;
+        case 2:
+          column2 = value.toString();
+          break;
+        case 3:
+          column3 = value.toString();
+        default:
+          break;
+        }
+      }
+    };
+}
 QVariant VirtNetModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if ( orientation == Qt::Horizontal ) {
     if ( role == Qt::DisplayRole ) {
       switch (section) {
       case 0:
-        return QString("Name");
+        return column0;
         break;
       case 1:
-        return QString("State");
+        return column1;
         break;
       case 2:
-        return QString("Auto");
+        return column2;
         break;
       case 3:
-        return QString("Prst");
+        return column3;
       default:
         break;
       }

@@ -2,6 +2,7 @@
 #define NET_CONTROL_THREAD_H
 
 #include <QThread>
+#include <QFile>
 #include <QStringList>
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
@@ -24,14 +25,15 @@ public:
     explicit NetControlThread(QObject *parent = 0);
 
 signals:
-    void errorMsg(QString&);
-    void resultData(QStringList);
+    void errorMsg(QString);
+    void resultData(Actions, QStringList);
 
 private:
     Actions          action;
     QStringList      args;
     bool             keep_alive;
     virConnect      *currWorkConnect = NULL;
+    virErrorPtr      virtErrors;
 
 public slots:
     bool setCurrentWorkConnect(virConnectPtr);
@@ -47,6 +49,9 @@ private slots:
     QStringList destroyNetwork();
     QStringList undefineNetwork();
     QStringList changeAutoStartNetwork();
+
+    void sendConnErrors();
+    void sendGlobalErrors();
 
 };
 

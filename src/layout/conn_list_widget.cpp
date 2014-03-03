@@ -30,7 +30,7 @@ ConnectList::~ConnectList()
   foreach (QString key, keys) {
       disconnect(connects->value(key), SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
       disconnect(connects->value(key), SIGNAL(warning(QString&)), this, SLOT(sendWarning(QString&)));
-      disconnect(connects->value(key), SIGNAL(connPtr(virConnect*)), this, SLOT(sendConnPtr(virConnect*)));
+      disconnect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(sendConnPtr(virConnect*, QString&)));
   };
   connects->clear();
   delete connects;
@@ -120,7 +120,7 @@ void ConnectList::createConnect(QModelIndex &_item)
   clearSelection();
   connect(connects->value(key), SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
   connect(connects->value(key), SIGNAL(warning(QString&)), this, SLOT(sendWarning(QString&)));
-  connect(connects->value(key), SIGNAL(connPtr(virConnect*)), this, SLOT(sendConnPtr(virConnect*)));
+  connect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(sendConnPtr(virConnect*, QString&)));
   //qDebug()<<key<<" create Connect item";
 }
 void ConnectList::connectItemDoubleClicked(const QModelIndex &_item)
@@ -260,7 +260,7 @@ void ConnectList::mainWindowUp()
 {
     emit messageShowed();
 }
-void ConnectList::sendConnPtr(virConnect *conn)
+void ConnectList::sendConnPtr(virConnect *conn, QString &name)
 {
-    emit connPtr(conn);
+    emit connPtr(conn, name);
 }

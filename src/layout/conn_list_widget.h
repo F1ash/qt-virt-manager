@@ -27,7 +27,7 @@ signals:
     void removeConnect(QString&);
     void messageShowed();
     void warning(QString&);
-    void connPtr(virConnect*);
+    void connPtr(virConnect*, QString&);
     void connectClosed();
 
 public slots:
@@ -54,7 +54,7 @@ private slots:
     void showMessage(QString, QString);
     void sendWarning(QString&);
     void mainWindowUp();
-    void sendConnPtr(virConnect*);
+    void sendConnPtr(virConnect*, QString&);
 };
 
 #endif   // CONN_LIST_WIDGET_H

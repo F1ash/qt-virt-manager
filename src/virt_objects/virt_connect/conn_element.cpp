@@ -13,12 +13,14 @@ ElemConnect::ElemConnect(QObject *parent) :
     //connect(connAliveThread, SIGNAL(started()), this, SLOT(connectStarted()));
     connect(connAliveThread, SIGNAL(finished()), this, SLOT(connectFinished()));
     connect(connAliveThread, SIGNAL(connMsg(QString)), this, SLOT(receiveConnMessage(QString)));
+    connect(connAliveThread, SIGNAL(connected()), this, SLOT(connectOpened()));
 }
 ElemConnect::~ElemConnect()
 {
     //disconnect(connAliveThread, SIGNAL(started()), this, SLOT(connectStarted()));
     disconnect(connAliveThread, SIGNAL(finished()), this, SLOT(connectFinished()));
     disconnect(connAliveThread, SIGNAL(connMsg(QString)), this, SLOT(receiveConnMessage(QString)));
+    disconnect(connAliveThread, SIGNAL(connected()), this, SLOT(connectOpened()));
     disconnect(this, SIGNAL(connectState(bool)), this, SLOT(setConnectState(bool)));
     //disconnect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
 
@@ -79,6 +81,10 @@ void ElemConnect::connectStarted()
 {
     emit connectState(RUNNING);
 }
+void ElemConnect::connectOpened()
+{
+    _diff = checkTimeout + 1;
+}
 void ElemConnect::connectFinished()
 {
     emit connectState(STOPPED);
@@ -102,8 +108,8 @@ void ElemConnect::showConnectData()
 {
     virConnect *conn = NULL;
     conn = connAliveThread->getConnect();
-    qDebug()<<"showConnectData:"<<name<<QVariant((conn!=NULL)?true:false).toString()<<conn;
-    emit connPtr(conn);
+    //qDebug()<<"showConnectData:"<<name<<QVariant((conn!=NULL)?true:false).toString()<<conn;
+    emit connPtr(conn, name);
 }
 void ElemConnect::closeConnect()
 {

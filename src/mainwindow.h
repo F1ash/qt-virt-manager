@@ -69,7 +69,7 @@ private slots:
     void writeToErrorLog(QString&);
     void changeLogViewerVisibility();
     Qt::DockWidgetArea getDockArea(int) const;
-    void receiveConnPtr(virConnect*);
+    void receiveConnPtr(virConnect*, QString&);
     void stopProcessing();
 
 };

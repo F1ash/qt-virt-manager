@@ -35,7 +35,7 @@ signals:
     void connectState(bool);
     void warningShowed();
     void warning(QString&);
-    void connPtr(virConnect*);
+    void connPtr(virConnect*, QString&);
 
 private:
     ConnItemModel    *own_model;
@@ -57,6 +57,7 @@ private:
 private slots:
     void buildCommand();
     void connectStarted();
+    void connectOpened();
     void connectFinished();
     void setConnectState(bool);
     void timerEvent(QTimerEvent*);

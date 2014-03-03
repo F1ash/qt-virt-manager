@@ -38,7 +38,7 @@ MainWindow::~MainWindow()
   disconnect(connListWidget, SIGNAL(removeConnect(QString&)), this, SLOT(removeConnectItem(QString&)));
   disconnect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
   disconnect(connListWidget, SIGNAL(warning(QString&)), this, SLOT(writeToErrorLog(QString&)));
-  disconnect(connListWidget, SIGNAL(connPtr(virConnect*)), this, SLOT(receiveConnPtr(virConnect*)));
+  disconnect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(receiveConnPtr(virConnect*, QString&)));
   disconnect(connListWidget, SIGNAL(connectClosed()), this, SLOT(stopProcessing()));
   disconnect(toolBar->_hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
   disconnect(toolBar->_createAction, SIGNAL(triggered()), this, SLOT(createNewConnect()));
@@ -154,6 +154,10 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       connListWidget->setEnabled(false);
       toolBar->setEnabled(false);
       logDock->setEnabled(false);
+      domainDock->setEnabled(false);
+      networkDock->setEnabled(false);
+      storageVolDock->setEnabled(false);
+      storagePoolDock->setEnabled(false);
       wait_thread = new Wait(this);
       wait_thread->setPtr(connListWidget);
       connect(wait_thread, SIGNAL(finished()), this, SLOT(closeEvent()));
@@ -230,7 +234,7 @@ void MainWindow::initConnListWidget()
   connect(connListWidget, SIGNAL(removeConnect(QString&)), this, SLOT(removeConnectItem(QString&)));
   connect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
   connect(connListWidget, SIGNAL(warning(QString&)), this, SLOT(writeToErrorLog(QString&)));
-  connect(connListWidget, SIGNAL(connPtr(virConnect*)), this, SLOT(receiveConnPtr(virConnect*)));
+  connect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(receiveConnPtr(virConnect*, QString&)));
   connect(connListWidget, SIGNAL(connectClosed()), this, SLOT(stopProcessing()));
 }
 void MainWindow::initToolBar()
@@ -257,7 +261,7 @@ void MainWindow::initDockWidgets()
     Qt::DockWidgetArea area;
     logDock = new QDockWidget(this);
     logDock->setObjectName("logDock");
-    logDock->setWindowTitle("Log:");
+    logDock->setWindowTitle("Log");
     logDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
@@ -277,7 +281,7 @@ void MainWindow::initDockWidgets()
 
     domainDock = new QDockWidget(this);
     domainDock->setObjectName("domainDock");
-    domainDock->setWindowTitle("Domain:");
+    domainDock->setWindowTitle("Domain");
     domainDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
@@ -298,7 +302,7 @@ void MainWindow::initDockWidgets()
 
     networkDock = new QDockWidget(this);
     networkDock->setObjectName("networkDock");
-    networkDock->setWindowTitle("Network:");
+    networkDock->setWindowTitle("Network");
     networkDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
@@ -320,7 +324,7 @@ void MainWindow::initDockWidgets()
 
     storageVolDock = new QDockWidget(this);
     storageVolDock->setObjectName("storageVolDock");
-    storageVolDock->setWindowTitle("StorageVol:");
+    storageVolDock->setWindowTitle("StorageVol");
     storageVolDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
@@ -341,7 +345,7 @@ void MainWindow::initDockWidgets()
 
     storagePoolDock = new QDockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
-    storagePoolDock->setWindowTitle("StoragePool:");
+    storagePoolDock->setWindowTitle("StoragePool");
     storagePoolDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
@@ -471,10 +475,14 @@ Qt::DockWidgetArea MainWindow::getDockArea(int i) const
     };
     return result;
 }
-void MainWindow::receiveConnPtr(virConnect *conn)
+void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
 {
     // send connect ptr to all related virtual resources for operating
+    //domainDock->setWindowTitle(QString("Domain: %1").arg(name));
     networkDockContent->setCurrentWorkConnect(conn);
+    networkDockContent->setListHeader(name);
+    //storageVolDock->setWindowTitle(QString("StorageVol: %1").arg(name));
+    //storagePoolDock->setWindowTitle(QString("StoragePool: %1").arg(name));
 }
 void MainWindow::stopProcessing()
 {

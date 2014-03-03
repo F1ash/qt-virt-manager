@@ -39,18 +39,20 @@ public slots:
     bool getThreadState() const;
     void stopProcessing();
     bool setCurrentWorkConnect(virConnect*);
+    void setListHeader(QString&);
 
 private slots:
     void timerEvent(QTimerEvent*);
-    void resultReceiver(QStringList);
-    void warningShow(QString, QString);
-    void changeToolBarState();
+    void resultReceiver(Actions, QStringList);
+    void msgRepeater(QString);
+    void changeDockVisibility();
 
     // TODO: display XML format of network item
 
     void networkClicked(const QPoint&);
     void networkDoubleClicked(const QModelIndex&);
-    void appendNetworkName(const QStringList&);
+    void execAction(const QStringList&);
+    void newVirtNetworkFromXML(const QStringList&);
 };
 
 #endif // VIRTNET_CONTROL_H

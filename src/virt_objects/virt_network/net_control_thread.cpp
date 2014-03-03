@@ -3,6 +3,7 @@
 NetControlThread::NetControlThread(QObject *parent) :
     QThread(parent)
 {
+    qRegisterMetaType<Actions>("Actions");
 }
 
 /* public slots */
@@ -10,15 +11,16 @@ bool NetControlThread::setCurrentWorkConnect(virConnectPtr conn)
 {
     keep_alive = true;
     currWorkConnect = conn;
-    qDebug()<<"net_thread"<<currWorkConnect;
+    //qDebug()<<"net_thread"<<currWorkConnect;
 }
 void NetControlThread::stop() { keep_alive = false; }
-void NetControlThread::execAction(Actions act = GET_ALL_NETWORK,
-                                  QStringList _args = QStringList())
+void NetControlThread::execAction(Actions act, QStringList _args)
 {
-    action = act;
-    args = _args;
-    if ( keep_alive && !isRunning() ) start();
+    if ( keep_alive && !isRunning() ) {
+        action = act;
+        args = _args;
+        start();
+    };
 }
 
 /* private slots */
@@ -48,28 +50,21 @@ void NetControlThread::run()
         result.append(changeAutoStartNetwork());
         break;
     default:
-        result.append(QString());
         break;
     };
-    result.prepend(QString::number(action));
-
-    emit resultData(result);
-    //qDebug()<<"netControlThread stopped";
+    if ( !result.isEmpty() ) emit resultData(action, result);
 }
 QStringList NetControlThread::getAllNetworkList()
 {
     QStringList virtNetList;
     if ( currWorkConnect!=NULL && keep_alive ) {
         virNetworkPtr *network;
-        virErrorPtr error;
         unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                              VIR_CONNECT_LIST_NETWORKS_INACTIVE;
         int ret = virConnectListAllNetworks( currWorkConnect, &network, flags);
         if ( ret<0 ) {
-            error = virConnGetLastError(currWorkConnect);
+            sendConnErrors();
             free(network);
-            QString err = QString("%1 : %2").arg(error->code).arg(error->message);
-            emit errorMsg(err);
             return virtNetList;
         };
 
@@ -97,6 +92,23 @@ QStringList NetControlThread::getAllNetworkList()
 QStringList NetControlThread::createNetwork()
 {
     QStringList result;
+    QString path = args.first();
+    QByteArray xmlData;
+    QFile f;
+    f.setFileName(path);
+    if ( !f.open(QIODevice::ReadOnly) ) {
+        emit errorMsg( QString("File \"%1\"\nnot opened.").arg(path) );
+        return result;
+    };
+    xmlData = f.readAll();
+    f.close();
+    virNetworkPtr network = virNetworkCreateXML(currWorkConnect, xmlData.data());
+    if ( network==NULL ) {
+        sendConnErrors();
+        return result;
+    };
+    result.append(QString("'%1' Network from\n\"%2\"\nis created.").arg(virNetworkGetName(network)).arg(path));
+    virNetworkFree(network);
     return result;
 }
 QStringList NetControlThread::defineNetwork()
@@ -112,6 +124,31 @@ QStringList NetControlThread::startNetwork()
 QStringList NetControlThread::destroyNetwork()
 {
     QStringList result;
+    QString name = args.first();
+    virNetworkPtr *network;
+    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
+                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
+    int ret = virConnectListAllNetworks( currWorkConnect, &network, flags);
+    if ( ret<0 ) {
+        sendConnErrors();
+        free(network);
+        return result;
+    };
+    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
+
+    int i = 0;
+    bool deleted = false;
+    while ( network[i] != NULL ) {
+        QString currNetName = QString( virNetworkGetName(network[i]) );
+        if ( !deleted && currNetName==name ) {
+            deleted = (virNetworkDestroy(network[i])+1) ? true : false;
+            if (!deleted) sendGlobalErrors();
+        };
+        virNetworkFree(network[i]);
+        i++;
+    };
+    free(network);
+    result.append(QString("'%1' Network %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
 QStringList NetControlThread::undefineNetwork()
@@ -123,4 +160,20 @@ QStringList NetControlThread::changeAutoStartNetwork()
 {
     QStringList result;
     return result;
+}
+
+void NetControlThread::sendConnErrors()
+{
+    virtErrors = virConnGetLastError(currWorkConnect);
+    if ( virtErrors!=NULL ) {
+        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
+        virResetError(virtErrors);
+    };
+}
+void NetControlThread::sendGlobalErrors()
+{
+    virtErrors = virGetLastError();
+    if ( virtErrors!=NULL )
+        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
+    virResetLastError();
 }
