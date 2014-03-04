@@ -226,15 +226,19 @@ void VirtNetControl::execAction(const QStringList &l)
     if ( idx.isValid() ) {
         QString networkName = virtNetModel->virtNetDataList.at(idx.row())->getName();
         args.append(networkName);
-        if ( l.first()=="setAutostartVirtNetwork" ) {
+        if        ( l.first()=="startVirtNetwork" ) {
+            netControlThread->execAction(START_NETWORK, args);
+        } else if ( l.first()=="destroyVirtNetwork" ) {
+            netControlThread->execAction(DESTROY_NETWORK, args);
+        } else if ( l.first()=="undefineVirtNetwork" ) {
+            netControlThread->execAction(UNDEFINE_NETWORK, args);
+        } else if ( l.first()=="setAutostartVirtNetwork" ) {
             /* set the opposite value */
             QString autostartState =
                 (virtNetModel->virtNetDataList.at(idx.row())->getAutostart()=="yes")
                  ? "0" : "1";
             args.append(autostartState);
             netControlThread->execAction(CHANGE_AUTOSTART, args);
-        } else if ( l.first()=="destroyVirtNetwork" ) {
-            netControlThread->execAction(DESTROY_NETWORK, args);
         };
     }
 }

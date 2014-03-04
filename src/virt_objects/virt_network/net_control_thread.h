@@ -15,7 +15,8 @@ enum Actions {
     START_NETWORK,
     DESTROY_NETWORK,
     UNDEFINE_NETWORK,
-    CHANGE_AUTOSTART
+    CHANGE_AUTOSTART,
+    EMPTY_ACTION
 };
 
 class NetControlThread : public QThread
