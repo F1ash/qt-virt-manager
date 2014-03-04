@@ -51,6 +51,9 @@ void NetControlThread::run()
     case CHANGE_AUTOSTART :
         result.append(changeAutoStartNetwork());
         break;
+    case GET_NET_XML_DESC :
+        result.append(getVirtNetXMLDesc());
+        break;
     default:
         break;
     };
@@ -266,6 +269,45 @@ QStringList NetControlThread::changeAutoStartNetwork()
     };
     free(network);
     result.append(QString("'%1' Network %2 Set.").arg(name).arg((set)?"":"don't"));
+    return result;
+}
+QStringList NetControlThread::getVirtNetXMLDesc()
+{
+    QStringList result;
+    QString name = args.first();
+    virNetworkPtr *network;
+    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
+                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
+    int ret = virConnectListAllNetworks( currWorkConnect, &network, flags);
+    if ( ret<0 ) {
+        sendConnErrors();
+        free(network);
+        return result;
+    };
+    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
+
+    int i = 0;
+    bool read = false;
+    char *Returns = NULL;
+    while ( network[i] != NULL ) {
+        QString currNetName = QString( virNetworkGetName(network[i]) );
+        if ( !read && currNetName==name ) {
+            Returns = (virNetworkGetXMLDesc(network[i], VIR_NETWORK_XML_INACTIVE));
+            if ( Returns==NULL ) sendGlobalErrors();
+            else read = true;
+        };
+        virNetworkFree(network[i]);
+        i++;
+    };
+    free(network);
+    QTemporaryFile f;
+    f.setAutoRemove(false);
+    read = f.open();
+    if (read) f.write(Returns);
+    result.append(f.fileName());
+    f.close();
+    free(Returns);
+    result.append(QString("'%1' Network %2 XML'ed").arg(name).arg((read)?"":"don't"));
     return result;
 }
 

@@ -177,6 +177,17 @@ void VirtNetControl::resultReceiver(Actions act, QStringList data)
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == CHANGE_AUTOSTART ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+    } else if ( act == GET_NET_XML_DESC ) {
+        if ( !data.isEmpty() ) {
+            QString xml = data.first();
+            data.removeFirst();
+            data<<"in"<<xml;
+            msgRepeater(data.join(" "));
+            // exec xdg-open temporarily XML file
+            // TODO: make a cross-platform
+            QString command = QString("xdg-open %1").arg(xml);
+            QProcess::startDetached(command);
+        };
     };
 }
 void VirtNetControl::msgRepeater(QString msg)
@@ -239,6 +250,8 @@ void VirtNetControl::execAction(const QStringList &l)
                  ? "0" : "1";
             args.append(autostartState);
             netControlThread->execAction(CHANGE_AUTOSTART, args);
+        } else if ( l.first()=="getVirtNetXMLDesc" ) {
+            netControlThread->execAction(GET_NET_XML_DESC, args);
         };
     }
 }

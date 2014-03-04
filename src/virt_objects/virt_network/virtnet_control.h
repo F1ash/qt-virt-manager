@@ -7,6 +7,7 @@
 #include <QSettings>
 #include <QTime>
 #include <QTimerEvent>
+#include <QProcess>
 #include <QDebug>
 #include "virtnet_model.h"
 #include "virtnet_toolbar.h"
@@ -47,12 +48,14 @@ private slots:
     void msgRepeater(QString);
     void changeDockVisibility();
 
-    // TODO: display XML format of network item
-
     void networkClicked(const QPoint&);
     void networkDoubleClicked(const QModelIndex&);
     void execAction(const QStringList&);
     void newVirtNetworkFromXML(const QStringList&);
+
+    // TODO: virNetworkUpdate()
+    // Update the definition of an existing network,
+    // either its live running state, its persistent configuration, or both.
 };
 
 #endif // VIRTNET_CONTROL_H

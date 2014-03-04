@@ -21,6 +21,7 @@ private:
     QAction        *destroy;
     QAction        *undefine;
     QAction        *autoStart;
+    QAction        *getXMLDesc;
     QStringList     parameters;
 
 private slots:

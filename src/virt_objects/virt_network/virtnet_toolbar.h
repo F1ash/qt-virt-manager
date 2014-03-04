@@ -27,6 +27,7 @@ private:
     QAction         *define_Action;
     QAction         *undefine_Action;
     QAction         *setAutostart_Action;
+    QAction         *getXMLDesc_Action;
 
 private slots:
     void repeatParameters(QStringList&);

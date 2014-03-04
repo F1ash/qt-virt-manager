@@ -16,11 +16,16 @@ VirtNetControlMenu::VirtNetControlMenu(QWidget *parent, QStringList params) :
     autoStart = new QAction("change AutoStart", this);
     autoStart->setIcon(QIcon::fromTheme("network-autostart"));
     autoStart->setEnabled(parameters.last()=="yes");
+    getXMLDesc = new QAction("get XML Description", this);
+    getXMLDesc->setIcon(QIcon::fromTheme("network-xml"));
+    getXMLDesc->setEnabled(true);
 
     addAction(start);
     addAction(destroy);
     addAction(undefine);
     addAction(autoStart);
+    addSeparator();
+    addAction(getXMLDesc);
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
 }
 VirtNetControlMenu::~VirtNetControlMenu()
@@ -34,6 +39,8 @@ VirtNetControlMenu::~VirtNetControlMenu()
     undefine = 0;
     delete autoStart;
     autoStart = 0;
+    delete getXMLDesc;
+    getXMLDesc = 0;
 }
 void VirtNetControlMenu::emitExecMethod(QAction *action)
 {
@@ -47,6 +54,8 @@ void VirtNetControlMenu::emitExecMethod(QAction *action)
     } else if ( action == autoStart ) {
         paramList << "setAutostartVirtNetwork";
         paramList << QString((parameters[2]=="yes")? "0" : "1");
+    } else if ( action == getXMLDesc ) {
+        paramList << "getVirtNetXMLDesc";
     } else return;
     paramList.insert(1, parameters.first());
     emit execMethod(paramList);

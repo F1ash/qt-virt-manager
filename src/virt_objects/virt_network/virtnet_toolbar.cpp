@@ -25,6 +25,9 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     setAutostart_Action = new QAction(this);
     setAutostart_Action->setIcon(QIcon::fromTheme("network-autostart"));
     setAutostart_Action->setToolTip("Change AutoStart State");
+    getXMLDesc_Action = new QAction(this);
+    getXMLDesc_Action->setIcon(QIcon::fromTheme("network-xml"));
+    getXMLDesc_Action->setToolTip("Get XML Description");
 
     addAction(start_Action);
     addAction(destroy_Action);
@@ -32,8 +35,10 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     addAction(create_Action);
     addAction(define_Action);
     addAction(undefine_Action);
-    addSeparator();
+    //addSeparator();
     addAction(setAutostart_Action);
+    addSeparator();
+    addAction(getXMLDesc_Action);
 
     connect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     connect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
@@ -41,6 +46,7 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     connect(define_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     connect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     connect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    connect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
 
     connect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     connect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
@@ -54,6 +60,7 @@ VirtNetToolBar::~VirtNetToolBar()
     disconnect(define_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     disconnect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     disconnect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    disconnect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
@@ -73,6 +80,8 @@ VirtNetToolBar::~VirtNetToolBar()
     undefine_Action = 0;
     delete setAutostart_Action;
     setAutostart_Action = 0;
+    delete getXMLDesc_Action;
+    getXMLDesc_Action = 0;
 }
 
 Qt::ToolBarArea VirtNetToolBar::get_ToolBarArea(int i) const
@@ -132,6 +141,8 @@ void VirtNetToolBar::detectTriggerredAction(QAction *action)
         parameters << "undefineVirtNetwork";
     } else if ( action == setAutostart_Action ) {
         parameters << "setAutostartVirtNetwork";
+    } else if ( action == getXMLDesc_Action ) {
+        parameters << "getVirtNetXMLDesc";
     } else return;
     emit execMethod(parameters);
 }

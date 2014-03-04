@@ -2,7 +2,7 @@
 #define NET_CONTROL_THREAD_H
 
 #include <QThread>
-#include <QFile>
+#include <QTemporaryFile>
 #include <QStringList>
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
@@ -16,6 +16,7 @@ enum Actions {
     DESTROY_NETWORK,
     UNDEFINE_NETWORK,
     CHANGE_AUTOSTART,
+    GET_NET_XML_DESC,
     EMPTY_ACTION
 };
 
@@ -50,6 +51,7 @@ private slots:
     QStringList destroyNetwork();
     QStringList undefineNetwork();
     QStringList changeAutoStartNetwork();
+    QStringList getVirtNetXMLDesc();
 
     void sendConnErrors();
     void sendGlobalErrors();
