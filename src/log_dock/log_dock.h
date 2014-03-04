@@ -2,7 +2,7 @@
 #define LOG_DOCK_H
 
 #include <QWidget>
-#include <QGridLayout>
+#include <QVBoxLayout>
 #include <QTextEdit>
 #include <QDebug>
 
@@ -17,7 +17,7 @@ public:
 
 private:
     QSize         _size;
-    QGridLayout  *docLayout;
+    QVBoxLayout  *docLayout;
     QTextEdit    *Log;
 
 signals:

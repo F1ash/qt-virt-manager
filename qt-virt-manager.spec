@@ -10,7 +10,7 @@ Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 URL:            https://github.com/F1ash/%{name}
 
 Requires:       libvirt
-Requires:       sandbox-runner-data >= 0.3.3
+Requires:       sandbox-runner-data >= 0.3.5
 # for xdg-open
 Requires:       xdg-utils
 BuildRequires:  qt4-devel
