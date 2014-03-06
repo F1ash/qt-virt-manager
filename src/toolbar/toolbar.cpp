@@ -10,10 +10,13 @@ ToolBar::ToolBar (QWidget *parent = 0) : QToolBar(parent)
 }
 ToolBar::~ToolBar()
 {
-  disconnect(itemControlAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-  disconnect(_hideAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-  disconnect(_docsUpAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-  disconnect(_exitAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+  //disconnect(itemControlAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+  //disconnect(_hideAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+  //disconnect(_docsUpAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+  //disconnect(_exitAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+
+    disconnect(itemControlAction, SIGNAL(triggered()), this, SLOT(showMenu()));
+    disconnect(_docsUpAction, SIGNAL(triggered()), this, SLOT(showMenu()));
 
   delete _hideAction;
   _hideAction = 0;
@@ -69,8 +72,8 @@ void ToolBar::initActions()
     addSeparator();
     addAction(_exitAction);
 
-    connect(_hideAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    connect(_exitAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(_hideAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(_exitAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
 }
 void ToolBar::addItemControlMenu()
 {
@@ -84,7 +87,7 @@ void ToolBar::addItemControlMenu()
     _deleteAction->setIcon ( QIcon::fromTheme("clean") );
     _openAction = new QAction(QString("Open selected Connect"), this);
     _openAction->setIcon ( QIcon::fromTheme("run") );
-    _showAction = new QAction(QString("Show selected Connect"), this);
+    _showAction = new QAction(QString("Overview selected Connect"), this);
     _showAction->setIcon ( QIcon::fromTheme("utilities-terminal") );
     _closeAction = new QAction(QString("Close selected Connect"), this);
     _closeAction->setIcon ( QIcon::fromTheme("stop") );
@@ -105,7 +108,8 @@ void ToolBar::addItemControlMenu()
     itemControlAction->setToolTip("Connect Control");
     itemControlAction->setMenu(itemControlMenu);
     addAction( itemControlAction );
-    connect(itemControlAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(itemControlAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    connect(itemControlAction, SIGNAL(triggered()), this, SLOT(showMenu()));
 }
 void ToolBar::addDocksControlMenu()
 {
@@ -133,7 +137,8 @@ void ToolBar::addDocksControlMenu()
     _docsUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
     _docsUpAction->setMenu(showDocksControlMenu);
     addAction( _docsUpAction );
-    connect(_docsUpAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(_docsUpAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    connect(_docsUpAction, SIGNAL(triggered()), this, SLOT(showMenu()));
 }
 void ToolBar::mainWindowUp()
 {
@@ -159,6 +164,15 @@ void ToolBar::showHoveredMenu()
     //act->menu()->popup(mapToGlobal(this->pos()), act);
     act->menu()->show();
     act->menu()->move(QCursor::pos());
+}
+void ToolBar::showMenu()
+{
+    QAction *act = static_cast<QAction*>(sender());
+    if ( act->menu()->isVisible() ) act->menu()->hide();
+    else {
+        act->menu()->show();
+        act->menu()->move(QCursor::pos());
+    };
 }
 
 Qt::ToolBarArea ToolBar::get_ToolBarArea(int i) const

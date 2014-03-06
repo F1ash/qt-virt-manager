@@ -1,0 +1,32 @@
+<!--
+Example config version 2
+http://libvirt.org/drvlxc.html#exconfig
+The next example assumes there is a private root filesystem
+(perhaps hand-crafted using busybox, or installed
+from media, debootstrap, whatever) under /opt/vm-1-root. 
+-->
+
+<domain type='lxc'>
+  <name>vm1_1</name>
+  <memory>32768</memory>
+  <os>
+    <type>exe</type>
+    <init>/init</init>
+  </os>
+  <vcpu>1</vcpu>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/libexec/libvirt_lxc</emulator>
+    <filesystem type='mount'>
+      <source dir='/opt/vm-1-root'/>
+      <target dir='/'/>
+    </filesystem>
+    <interface type='network'>
+      <source network='default'/>
+    </interface>
+    <console type='pty' />
+  </devices>
+</domain>

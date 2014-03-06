@@ -15,22 +15,34 @@ set (HEADERS
   src/toolbar/toolbar.h
   src/settings/conn_settings.h
   src/wait_thread/wait_thread.h
+  
   src/layout/conn_list_widget.h
   src/layout/conn_menu.h
   src/layout/conn_item_index.h
   src/layout/conn_item_model.h
   src/layout/progressbar_delegate.h
-  src/virt_objects/virt_domain/domain_control.h
+  
+  src/virt_objects/open_file_menu.h
+  
   src/virt_objects/virt_connect/conn_element.h
   src/virt_objects/virt_connect/conn_alive_thread.h
+  
+  src/virt_objects/virt_domain/domain_control.h
+  src/virt_objects/virt_domain/domain_model.h
+  src/virt_objects/virt_domain/domain_index.h
+  src/virt_objects/virt_domain/domain_toolbar.h
+  src/virt_objects/virt_domain/domain_control_menu.h
+  src/virt_objects/virt_domain/domain_control_thread.h
+  
   src/virt_objects/virt_network/virtnet_control.h
   src/virt_objects/virt_network/virtnet_model.h
   src/virt_objects/virt_network/virtnet_index.h
   src/virt_objects/virt_network/virtnet_toolbar.h
-  src/virt_objects/virt_network/open_file_menu.h
   src/virt_objects/virt_network/virtnet_control_menu.h
   src/virt_objects/virt_network/net_control_thread.h
+  
   src/virt_objects/virt_storage_vol/storage_vol_control.h
+  
   src/virt_objects/virt_storage_pool/storage_pool_control.h
 )
 set (SOURCES 
@@ -46,17 +58,28 @@ set (SOURCES
   src/layout/conn_item_index.cpp
   src/layout/conn_item_model.cpp
   src/layout/progressbar_delegate.cpp
-  src/virt_objects/virt_domain/domain_control.cpp
+  
+  src/virt_objects/open_file_menu.cpp
+  
   src/virt_objects/virt_connect/conn_element.cpp
   src/virt_objects/virt_connect/conn_alive_thread.cpp
+  
+  src/virt_objects/virt_domain/domain_control.cpp
+  src/virt_objects/virt_domain/domain_model.cpp
+  src/virt_objects/virt_domain/domain_index.cpp
+  src/virt_objects/virt_domain/domain_toolbar.cpp
+  src/virt_objects/virt_domain/domain_control_thread.cpp
+  src/virt_objects/virt_domain/domain_control_menu.cpp
+  
   src/virt_objects/virt_network/virtnet_control.cpp
   src/virt_objects/virt_network/virtnet_model.cpp
   src/virt_objects/virt_network/virtnet_index.cpp
   src/virt_objects/virt_network/virtnet_toolbar.cpp
-  src/virt_objects/virt_network/open_file_menu.cpp
   src/virt_objects/virt_network/net_control_thread.cpp
   src/virt_objects/virt_network/virtnet_control_menu.cpp
+  
   src/virt_objects/virt_storage_vol/storage_vol_control.cpp
+  
   src/virt_objects/virt_storage_pool/storage_pool_control.cpp
 )
 set (SOURCES_DIRS src)
@@ -79,4 +102,6 @@ target_link_libraries (${PROJECT_NAME}
 
 install (TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 install (FILES ${DESKTOP_FILE} DESTINATION ${SHARE_INSTALL_PREFIX}/applications)
+install (DIRECTORY src/misc src/icons
+  DESTINATION ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME})
 # * end

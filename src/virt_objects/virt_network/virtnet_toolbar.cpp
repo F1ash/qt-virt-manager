@@ -12,13 +12,15 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     create_Action = new QAction(this);
     create_Action->setIcon(QIcon::fromTheme("network-create"));
     create_Action->setToolTip("Create");
-    create_Menu = new OpenFileMenu(this, "create");
+    create_Menu = new OpenFileMenu(this, "create", "Network");
     create_Action->setMenu(create_Menu);
+    connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("network-define"));
     define_Action->setToolTip("Define");
-    define_Menu = new OpenFileMenu(this, "define");
+    define_Menu = new OpenFileMenu(this, "define", "Network");
     define_Action->setMenu(define_Menu);
+    connect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("network-undefine"));
     undefine_Action->setToolTip("Undefine");
@@ -40,13 +42,13 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     addSeparator();
     addAction(getXMLDesc_Action);
 
-    connect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    connect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    connect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    connect(define_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    connect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    connect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    connect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(define_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //connect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
 
     connect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     connect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
@@ -54,16 +56,20 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
 }
 VirtNetToolBar::~VirtNetToolBar()
 {
-    disconnect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    disconnect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    disconnect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    disconnect(define_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    disconnect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    disconnect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    disconnect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //disconnect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //disconnect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //disconnect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //disconnect(define_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //disconnect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //disconnect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    //disconnect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
+
+    disconnect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+    disconnect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+
     delete start_Action;
     start_Action = 0;
     delete destroy_Action;
@@ -129,6 +135,15 @@ void VirtNetToolBar::showHoveredMenu()
     //act->menu()->popup(mapToGlobal(this->pos()), act);
     act->menu()->show();
     act->menu()->move(QCursor::pos());
+}
+void VirtNetToolBar::showMenu()
+{
+    QAction *act = static_cast<QAction*>(sender());
+    if ( act->menu()->isVisible() ) act->menu()->hide();
+    else {
+        act->menu()->show();
+        act->menu()->move(QCursor::pos());
+    };
 }
 void VirtNetToolBar::detectTriggerredAction(QAction *action)
 {

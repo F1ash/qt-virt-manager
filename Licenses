@@ -1,0 +1,72 @@
+           PROJECT ICONS
+           =============
+
+
+        virtual-engineering.png
+==================================
+
+    is the remake of
+    applications-engineering.png
+    from oxygen-icon-theme package
+______________________________________
+
+
+
+           nuclear.png
+==================================
+
+    loaded from
+    http://www.iconsearch.ru/detailed/25798/6/
+    License (as specified site): Free for commercial use
+                                 (Email author for permission)
+______________________________________
+
+
+         stop.png
+==================================
+
+    is the mix of
+    run-build.png
+        and
+    process-stop.png
+    from oxygen-icon-theme package
+______________________________________
+
+
+         run.png
+==================================
+
+    is the mix of
+    run-build.png
+        and
+    arrow-right.png
+    from oxygen-icon-theme package
+______________________________________
+
+
+         network*.png
+==================================
+
+    is the mix of
+    applications-internet.png
+        and
+    {weather-clear,quickopen,
+     media-eject,media-playback-start,
+     media-playback-stop}.png
+    from oxygen-icon-theme package
+______________________________________
+
+
+       undock.png
+==================================
+
+    is the mix of
+      job.png
+        and
+    media-eject.png
+    from oxygen-icon-theme package
+______________________________________
+
+
+The remaining icons are taken from the oxygen-icon-theme
+______________________________________

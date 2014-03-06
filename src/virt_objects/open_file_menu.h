@@ -6,13 +6,14 @@
 #include <QFileDialog>
 #include <QIcon>
 
-#define EXAMPLES QString("/usr/share/sandbox-runner-data/misc/virt-sandbox-runner/network")
+// TODO: make a cross-platform
+#define EXAMPLES QString("/usr/share/qt-virt-manager/misc")
 
 class OpenFileMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit OpenFileMenu(QWidget *parent = 0, QString str = "create");
+    explicit OpenFileMenu(QWidget *parent = 0, QString str = "create", QString src = "Network");
     ~OpenFileMenu();
 
 signals:
@@ -20,6 +21,7 @@ signals:
 
 private:
     QString     method;
+    QString     source;
     QString     fullMethodName;
     QIcon       icon;
     QAction    *examples;

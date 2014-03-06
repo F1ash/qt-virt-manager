@@ -1,0 +1,6 @@
+<!-- http://libvirt.org/formatnetwork.html#examplesBridge -->
+<network>
+	<name>host-bridge</name>
+	<forward mode="bridge"/>
+	<bridge name="br0"/>
+</network>

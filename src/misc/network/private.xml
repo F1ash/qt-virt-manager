@@ -1,0 +1,11 @@
+<!--  http://libvirt.org/formatnetwork.html#examplesPrivate -->
+<network>
+    <name>private</name>
+    <bridge name="virbr2" />
+    <ip address="192.168.152.1" netmask="255.255.255.0">
+        <dhcp>
+            <range start="192.168.152.2" end="192.168.152.254" />
+        </dhcp>
+    </ip>
+    <ip family="ipv6" address="2001:db8:ca2:3::1" prefix="64" />
+</network>

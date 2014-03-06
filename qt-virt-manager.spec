@@ -10,7 +10,6 @@ Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 URL:            https://github.com/F1ash/%{name}
 
 Requires:       libvirt
-Requires:       sandbox-runner-data >= 0.3.5
 # for xdg-open
 Requires:       xdg-utils
 BuildRequires:  qt4-devel
@@ -44,9 +43,10 @@ popd
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 %files
-%doc README.md COPYING Changelog
+%doc README.md LICENSE Licenses Changelog
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/%{name}
 
 %changelog
 * Mon Feb 17 2014 Fl@sh <kaperang07@gmail.com> - 0.0.1-1

@@ -1,0 +1,27 @@
+<!--
+Example config version 1
+http://libvirt.org/drvlxc.html#exconfig
+In the <emulator> element, be sure you specify the correct path to libvirt_lxc,
+if it does not live in /usr/libexec on your system. 
+-->
+
+<domain type='lxc'>
+  <name>vm1</name>
+  <memory>500000</memory>
+  <os>
+    <type>exe</type>
+    <init>/bin/sh</init>
+  </os>
+  <vcpu>1</vcpu>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/libexec/libvirt_lxc</emulator>
+    <interface type='network'>
+      <source network='default'/>
+    </interface>
+    <console type='pty' />
+  </devices>
+</domain>

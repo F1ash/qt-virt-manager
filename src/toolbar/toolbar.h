@@ -44,6 +44,7 @@ private slots:
   void addDocksControlMenu();
   void mainWindowUp();
   void showHoveredMenu();
+  void showMenu();
 
 public slots:
   Qt::ToolBarArea get_ToolBarArea(int) const;

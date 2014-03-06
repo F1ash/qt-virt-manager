@@ -1,0 +1,27 @@
+<!--
+KVM hardware accelerated guest on i686
+http://libvirt.org/drvqemu.html#xmlconfig
+-->
+
+<domain type='kvm'>
+  <name>demo2</name>
+  <uuid>4dea24b3-1d52-d8f3-2516-782e98a23fa0</uuid>
+  <memory>131072</memory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+  </os>
+  <clock sync="localtime"/>
+  <devices>
+    <emulator>/usr/bin/qemu-kvm</emulator>
+    <disk type='file' device='disk'>
+      <source file='/var/lib/libvirt/images/demo2.img'/>
+      <target dev='hda'/>
+    </disk>
+    <interface type='network'>
+      <source network='default'/>
+      <mac address='24:42:53:21:52:45'/>
+    </interface>
+    <graphics type='vnc' port='-1' keymap='de'/>
+  </devices>
+</domain>

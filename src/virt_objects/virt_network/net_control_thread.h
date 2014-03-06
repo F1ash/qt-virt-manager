@@ -8,16 +8,16 @@
 #include "libvirt/virterror.h"
 #include <QDebug>
 
-enum Actions {
+enum NetActions {
     GET_ALL_NETWORK,
     CREATE_NETWORK,
     DEFINE_NETWORK,
     START_NETWORK,
     DESTROY_NETWORK,
     UNDEFINE_NETWORK,
-    CHANGE_AUTOSTART,
+    CHANGE_NET_AUTOSTART,
     GET_NET_XML_DESC,
-    EMPTY_ACTION
+    NET_EMPTY_ACTION
 };
 
 class NetControlThread : public QThread
@@ -28,10 +28,10 @@ public:
 
 signals:
     void errorMsg(QString);
-    void resultData(Actions, QStringList);
+    void resultData(NetActions, QStringList);
 
 private:
-    Actions          action;
+    NetActions          action;
     QStringList      args;
     bool             keep_alive;
     virConnect      *currWorkConnect = NULL;
@@ -40,7 +40,7 @@ private:
 public slots:
     bool setCurrentWorkConnect(virConnectPtr);
     void stop();
-    void execAction(Actions, QStringList);
+    void execAction(NetActions, QStringList);
 
 private slots:
     void run();

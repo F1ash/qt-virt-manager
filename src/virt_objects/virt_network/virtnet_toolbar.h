@@ -4,7 +4,7 @@
 #include <QToolBar>
 #include <QAction>
 #include <QIcon>
-#include "open_file_menu.h"
+#include "virt_objects/open_file_menu.h"
 #include <QDebug>
 
 class VirtNetToolBar : public QToolBar
@@ -32,6 +32,7 @@ private:
 private slots:
     void repeatParameters(QStringList&);
     void showHoveredMenu();
+    void showMenu();
     void detectTriggerredAction(QAction*);
 
 public slots:

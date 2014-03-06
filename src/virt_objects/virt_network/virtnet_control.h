@@ -44,7 +44,7 @@ public slots:
 
 private slots:
     void timerEvent(QTimerEvent*);
-    void resultReceiver(Actions, QStringList);
+    void resultReceiver(NetActions, QStringList);
     void msgRepeater(QString);
     void changeDockVisibility();
 

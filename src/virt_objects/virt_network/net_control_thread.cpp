@@ -3,7 +3,7 @@
 NetControlThread::NetControlThread(QObject *parent) :
     QThread(parent)
 {
-    qRegisterMetaType<Actions>("Actions");
+    qRegisterMetaType<NetActions>("NetActions");
 }
 
 /* public slots */
@@ -14,9 +14,9 @@ bool NetControlThread::setCurrentWorkConnect(virConnectPtr conn)
     //qDebug()<<"net_thread"<<currWorkConnect;
 }
 void NetControlThread::stop() { keep_alive = false; }
-void NetControlThread::execAction(Actions act, QStringList _args)
+void NetControlThread::execAction(NetActions act, QStringList _args)
 {
-    action = EMPTY_ACTION;
+    action = NET_EMPTY_ACTION;
     args.clear();
     if ( keep_alive && !isRunning() ) {
         action = act;
@@ -48,7 +48,7 @@ void NetControlThread::run()
     case UNDEFINE_NETWORK :
         result.append(undefineNetwork());
         break;
-    case CHANGE_AUTOSTART :
+    case CHANGE_NET_AUTOSTART :
         result.append(changeAutoStartNetwork());
         break;
     case GET_NET_XML_DESC :
@@ -57,7 +57,7 @@ void NetControlThread::run()
     default:
         break;
     };
-    if ( !result.isEmpty() ) emit resultData(action, result);
+    emit resultData(action, result);
 }
 QStringList NetControlThread::getAllNetworkList()
 {
@@ -317,7 +317,7 @@ void NetControlThread::sendConnErrors()
     if ( virtErrors!=NULL ) {
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
         virResetError(virtErrors);
-    };
+    } else sendGlobalErrors();
 }
 void NetControlThread::sendGlobalErrors()
 {

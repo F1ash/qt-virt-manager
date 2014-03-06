@@ -33,7 +33,7 @@ VirtNetControl::VirtNetControl(QWidget *parent) :
     netControlThread = new NetControlThread(this);
     connect(netControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
     connect(netControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    connect(netControlThread, SIGNAL(resultData(Actions, QStringList)), this, SLOT(resultReceiver(Actions, QStringList)));
+    connect(netControlThread, SIGNAL(resultData(NetActions, QStringList)), this, SLOT(resultReceiver(NetActions, QStringList)));
     connect(netControlThread, SIGNAL(errorMsg(QString)), this, SLOT(msgRepeater(QString)));
 }
 VirtNetControl::~VirtNetControl()
@@ -54,7 +54,7 @@ VirtNetControl::~VirtNetControl()
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
     disconnect(netControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
     disconnect(netControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    disconnect(netControlThread, SIGNAL(resultData(Actions, QStringList)), this, SLOT(resultReceiver(Actions, QStringList)));
+    disconnect(netControlThread, SIGNAL(resultData(NetActions, QStringList)), this, SLOT(resultReceiver(NetActions, QStringList)));
     disconnect(netControlThread, SIGNAL(errorMsg(QString)), this, SLOT(msgRepeater(QString)));
 
     stopProcessing();
@@ -137,7 +137,7 @@ void VirtNetControl::timerEvent(QTimerEvent *event)
         netControlThread->execAction(GET_ALL_NETWORK, QStringList());
     };
 }
-void VirtNetControl::resultReceiver(Actions act, QStringList data)
+void VirtNetControl::resultReceiver(NetActions act, QStringList data)
 {
     //qDebug()<<act<<data<<"result";
     if ( act == GET_ALL_NETWORK ) {
@@ -175,7 +175,7 @@ void VirtNetControl::resultReceiver(Actions act, QStringList data)
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == UNDEFINE_NETWORK ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
-    } else if ( act == CHANGE_AUTOSTART ) {
+    } else if ( act == CHANGE_NET_AUTOSTART ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == GET_NET_XML_DESC ) {
         if ( !data.isEmpty() ) {
@@ -249,7 +249,7 @@ void VirtNetControl::execAction(const QStringList &l)
                 (virtNetModel->virtNetDataList.at(idx.row())->getAutostart()=="yes")
                  ? "0" : "1";
             args.append(autostartState);
-            netControlThread->execAction(CHANGE_AUTOSTART, args);
+            netControlThread->execAction(CHANGE_NET_AUTOSTART, args);
         } else if ( l.first()=="getVirtNetXMLDesc" ) {
             netControlThread->execAction(GET_NET_XML_DESC, args);
         };
@@ -257,7 +257,7 @@ void VirtNetControl::execAction(const QStringList &l)
 }
 void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
 {
-    Actions act;
+    NetActions act;
     if ( !_args.isEmpty() ) {
         if ( _args.first().startsWith("create") ) act = CREATE_NETWORK;
         else act = DEFINE_NETWORK;

@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     QStringList searchThemePath;
     // TODO: make a cross platform here
     searchThemePath.append(QIcon::themeSearchPaths());
-    searchThemePath.insert(0, "/usr/share/sandbox-runner-data/");
+    searchThemePath.insert(0, "/usr/share/qt-virt-manager/");
     QIcon::setThemeSearchPaths(searchThemePath);
     //
     QIcon::setThemeName("icons");
@@ -56,6 +56,7 @@ MainWindow::~MainWindow()
   disconnect(toolBar->_stVolUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
   disconnect(toolBar->_stPoolUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
   disconnect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+  disconnect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
 
   qDebug()<<"processing stopped";
   if ( wait_thread!=NULL ) {
@@ -282,6 +283,7 @@ void MainWindow::initDockWidgets()
     domainDock = new QDockWidget(this);
     domainDock->setObjectName("domainDock");
     domainDock->setWindowTitle("Domain");
+    domainDock->setWindowIcon(QIcon::fromTheme("domain"));
     domainDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
@@ -295,14 +297,16 @@ void MainWindow::initDockWidgets()
     visible = settings.value("Visible", false).toBool();
     domainDock->setVisible(visible);
     toolBar->_domUpAction->setChecked(visible);
-    connect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, domainDock);
+    connect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
+    connect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
 
     networkDock = new QDockWidget(this);
     networkDock->setObjectName("networkDock");
     networkDock->setWindowTitle("Network");
+    networkDock->setWindowIcon(QIcon::fromTheme("preferences-system-network"));
     networkDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |
@@ -478,11 +482,14 @@ Qt::DockWidgetArea MainWindow::getDockArea(int i) const
 void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
 {
     // send connect ptr to all related virtual resources for operating
-    //domainDock->setWindowTitle(QString("Domain: %1").arg(name));
+    domainDockContent->setCurrentWorkConnect(conn);
+    domainDockContent->setListHeader(name);
     networkDockContent->setCurrentWorkConnect(conn);
     networkDockContent->setListHeader(name);
-    //storageVolDock->setWindowTitle(QString("StorageVol: %1").arg(name));
-    //storagePoolDock->setWindowTitle(QString("StoragePool: %1").arg(name));
+    //storageVolDockContent->setCurrentWorkConnect(conn);
+    //storageVolDockContent->setListHeader(name);
+    //storagePoolDockContent->setCurrentWorkConnect(conn);
+    //storagePoolDockContent->setListHeader(name);
 }
 void MainWindow::stopProcessing()
 {
@@ -492,7 +499,7 @@ void MainWindow::stopProcessing()
     networkDockContent->stopProcessing();
     storageVolDockContent->stopProcessing();
     storagePoolDockContent->stopProcessing();
-    //result = result && domainDockContent->getThreadState();
+    result = result && domainDockContent->getThreadState();
     result = result && networkDockContent->getThreadState() ;
     //result = result && storageVolDockContent->getThreadState();
     //result = result && storagePoolDockContent->getThreadState();

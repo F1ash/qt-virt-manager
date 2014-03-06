@@ -36,6 +36,8 @@ private :
     Wait                    *wait_thread = NULL;
     QDockWidget             *logDock;
     LogDock                 *logDockContent;
+    // TODO: implement common Control widget based on QMainWindow
+    // for connect's resource controls with related widgets
     QDockWidget             *domainDock;
     VirtDomainControl       *domainDockContent;
     QDockWidget             *networkDock;

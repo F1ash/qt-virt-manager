@@ -118,7 +118,7 @@ void ConnAliveThread::sendConnErrors()
     if ( virtErrors!=NULL ) {
         emit connMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
         virResetError(virtErrors);
-    };
+    } else sendGlobalErrors();
 }
 void ConnAliveThread::sendGlobalErrors()
 {
