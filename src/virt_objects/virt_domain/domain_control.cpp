@@ -127,6 +127,7 @@ bool VirtDomainControl::setCurrentWorkConnect(virConnect *conn)
 void VirtDomainControl::setListHeader(QString &connName)
 {
     domainModel->setHeaderData(0, Qt::Horizontal, QString("Name (Conn: \"%1\")").arg(connName), Qt::EditRole);
+    currConnName = connName;
 }
 
 /* private slots */
@@ -193,7 +194,7 @@ void VirtDomainControl::resultReceiver(DomActions act, QStringList data)
 void VirtDomainControl::msgRepeater(QString msg)
 {
     QString time = QTime::currentTime().toString();
-    QString title = QString("INFO");
+    QString title = QString("Connect '%1'").arg(currConnName);
     QString errorMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
     emit domMsg(errorMsg);
 }

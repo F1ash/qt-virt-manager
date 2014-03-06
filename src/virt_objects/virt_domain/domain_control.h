@@ -25,6 +25,7 @@ signals:
     void domMsg(QString&);
 
 private:
+    QString                 currConnName;
     QSettings               settings;
     DomainModel            *domainModel = NULL;
     QTreeView              *domainList = NULL;

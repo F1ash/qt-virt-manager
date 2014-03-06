@@ -268,7 +268,7 @@ QStringList NetControlThread::changeAutoStartNetwork()
         i++;
     };
     free(network);
-    result.append(QString("'%1' Network %2 Set.").arg(name).arg((set)?"":"don't"));
+    result.append(QString("'%1' Network autostart %2 Set.").arg(name).arg((set)?"":"don't"));
     return result;
 }
 QStringList NetControlThread::getVirtNetXMLDesc()

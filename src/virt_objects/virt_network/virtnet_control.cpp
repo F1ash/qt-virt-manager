@@ -127,6 +127,7 @@ bool VirtNetControl::setCurrentWorkConnect(virConnect *conn)
 void VirtNetControl::setListHeader(QString &connName)
 {
     virtNetModel->setHeaderData(0, Qt::Horizontal, QString("Name (Conn: \"%1\")").arg(connName), Qt::EditRole);
+    currConnName = connName;
 }
 
 /* private slots */
@@ -193,7 +194,7 @@ void VirtNetControl::resultReceiver(NetActions act, QStringList data)
 void VirtNetControl::msgRepeater(QString msg)
 {
     QString time = QTime::currentTime().toString();
-    QString title = QString("INFO");
+    QString title = QString("Connect '%1'").arg(currConnName);
     QString errorMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
     emit netMsg(errorMsg);
 }

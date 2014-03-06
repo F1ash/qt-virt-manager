@@ -1,17 +1,17 @@
-#ifndef DOMAIN_CONTROL_MENU_H
-#define DOMAIN_CONTROL_MENU_H
+#ifndef STORAGE_POOL_CONTROL_MENU_H
+#define STORAGE_POOL_CONTROL_MENU_H
 
 #include <QMenu>
 #include <QAction>
 #include <QIcon>
 #include <QStringList>
 
-class DomainControlMenu : public QMenu
+class StoragePoolControlMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit DomainControlMenu(QWidget *parent = 0, QStringList params = QStringList());
-    ~DomainControlMenu();
+    explicit StoragePoolControlMenu(QWidget *parent = 0, QStringList params = QStringList());
+    ~StoragePoolControlMenu();
 
 signals:
     void execMethod(const QStringList&);
@@ -29,4 +29,4 @@ private slots:
 
 };
 
-#endif // DOMAIN_CONTROL_MENU_H
+#endif // STORAGE_POOL_CONTROL_MENU_H

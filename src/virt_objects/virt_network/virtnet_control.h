@@ -25,6 +25,7 @@ signals:
     void netMsg(QString&);
 
 private:
+    QString                 currConnName;
     QSettings               settings;
     VirtNetModel           *virtNetModel = NULL;
     QTreeView              *virtNetList = NULL;

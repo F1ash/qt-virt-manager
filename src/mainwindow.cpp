@@ -57,6 +57,7 @@ MainWindow::~MainWindow()
   disconnect(toolBar->_stPoolUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
   disconnect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+  disconnect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
 
   qDebug()<<"processing stopped";
   if ( wait_thread!=NULL ) {
@@ -367,6 +368,7 @@ void MainWindow::initDockWidgets()
     settings.endGroup();
     addDockWidget(area, storagePoolDock);
     connect(toolBar->_stPoolUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
+    connect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
 }
 void MainWindow::editCurrentConnect()
 {
@@ -482,14 +484,10 @@ Qt::DockWidgetArea MainWindow::getDockArea(int i) const
 void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
 {
     // send connect ptr to all related virtual resources for operating
-    domainDockContent->setCurrentWorkConnect(conn);
-    domainDockContent->setListHeader(name);
-    networkDockContent->setCurrentWorkConnect(conn);
-    networkDockContent->setListHeader(name);
-    //storageVolDockContent->setCurrentWorkConnect(conn);
-    //storageVolDockContent->setListHeader(name);
-    //storagePoolDockContent->setCurrentWorkConnect(conn);
-    //storagePoolDockContent->setListHeader(name);
+    if ( domainDockContent->setCurrentWorkConnect(conn) ) domainDockContent->setListHeader(name);
+    if ( networkDockContent->setCurrentWorkConnect(conn) ) networkDockContent->setListHeader(name);
+    if ( storagePoolDockContent->setCurrentWorkConnect(conn) ) storagePoolDockContent->setListHeader(name);
+    //if ( storageVolDockContent->setCurrentWorkConnect(conn) )storageVolDockContent->setListHeader(name);
 }
 void MainWindow::stopProcessing()
 {
@@ -501,7 +499,7 @@ void MainWindow::stopProcessing()
     storagePoolDockContent->stopProcessing();
     result = result && domainDockContent->getThreadState();
     result = result && networkDockContent->getThreadState() ;
+    result = result && storagePoolDockContent->getThreadState();
     //result = result && storageVolDockContent->getThreadState();
-    //result = result && storagePoolDockContent->getThreadState();
     if ( wait_thread!=NULL ) wait_thread->setProcessingState(result);
 }

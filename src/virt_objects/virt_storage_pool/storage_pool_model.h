@@ -1,19 +1,19 @@
-#ifndef VIRTNET_MODEL_H
-#define VIRTNET_MODEL_H
+#ifndef STORAGE_POOL_MODEL_H
+#define STORAGE_POOL_MODEL_H
 
 #include <QAbstractTableModel>
 #include <QIcon>
 #include <QList>
 #include <QDebug>
-#include "virtnet_index.h"
+#include "storage_pool_index.h"
 
-class VirtNetModel : public QAbstractTableModel
+class StoragePoolModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit VirtNetModel(QObject *parent = 0);
-    ~VirtNetModel();
-    QList<VirtNetIndex *>  virtNetDataList;
+    explicit StoragePoolModel(QObject *parent = 0);
+    ~StoragePoolModel();
+    QList<StoragePoolIndex *>  virtStoragePoolDataList;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -40,4 +40,4 @@ private:
 public slots:
 };
 
-#endif // VIRTNET_MODEL_H
+#endif // STORAGE_POOL_MODEL_H

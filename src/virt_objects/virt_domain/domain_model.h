@@ -28,14 +28,14 @@ public:
 signals:
 
 private:
-    QString column0;
-    QString column1;
-    QString column2;
-    QString column3;
-    QIcon  activeIcon;
-    QIcon  no_activeIcon;
-    QIcon  defined;
-    QIcon  created;
+    QString  column0;
+    QString  column1;
+    QString  column2;
+    QString  column3;
+    QIcon    activeIcon;
+    QIcon    no_activeIcon;
+    QIcon    defined;
+    QIcon    created;
 
 public slots:
 };

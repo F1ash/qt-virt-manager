@@ -41,9 +41,14 @@ set (HEADERS
   src/virt_objects/virt_network/virtnet_control_menu.h
   src/virt_objects/virt_network/net_control_thread.h
   
-  src/virt_objects/virt_storage_vol/storage_vol_control.h
-  
   src/virt_objects/virt_storage_pool/storage_pool_control.h
+  src/virt_objects/virt_storage_pool/storage_pool_model.h
+  src/virt_objects/virt_storage_pool/storage_pool_index.h
+  src/virt_objects/virt_storage_pool/storage_pool_toolbar.h
+  src/virt_objects/virt_storage_pool/storage_pool_control_thread.h
+  src/virt_objects/virt_storage_pool/storage_pool_control_menu.h
+  
+  src/virt_objects/virt_storage_vol/storage_vol_control.h
 )
 set (SOURCES 
   src/main.cpp
@@ -78,9 +83,14 @@ set (SOURCES
   src/virt_objects/virt_network/net_control_thread.cpp
   src/virt_objects/virt_network/virtnet_control_menu.cpp
   
-  src/virt_objects/virt_storage_vol/storage_vol_control.cpp
-  
   src/virt_objects/virt_storage_pool/storage_pool_control.cpp
+  src/virt_objects/virt_storage_pool/storage_pool_model.cpp
+  src/virt_objects/virt_storage_pool/storage_pool_index.cpp
+  src/virt_objects/virt_storage_pool/storage_pool_toolbar.cpp
+  src/virt_objects/virt_storage_pool/storage_pool_control_thread.cpp
+  src/virt_objects/virt_storage_pool/storage_pool_control_menu.cpp
+  
+  src/virt_objects/virt_storage_vol/storage_vol_control.cpp
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE ${PROJECT_NAME}.desktop)

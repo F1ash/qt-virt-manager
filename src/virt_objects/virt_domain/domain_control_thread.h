@@ -51,7 +51,7 @@ private slots:
     QStringList destroyDomain();
     QStringList undefineDomain();
     QStringList changeAutoStartDomain();
-    QStringList getVirtNetXMLDesc();
+    QStringList getDomainXMLDesc();
 
     void sendConnErrors();
     void sendGlobalErrors();

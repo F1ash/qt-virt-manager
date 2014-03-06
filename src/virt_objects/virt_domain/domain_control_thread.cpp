@@ -52,7 +52,7 @@ void DomControlThread::run()
         result.append(changeAutoStartDomain());
         break;
     case GET_DOM_XML_DESC :
-        result.append(getVirtNetXMLDesc());
+        result.append(getDomainXMLDesc());
         break;
     default:
         break;
@@ -270,10 +270,10 @@ QStringList DomControlThread::changeAutoStartDomain()
         i++;
     };
     free(domain);
-    result.append(QString("'%1' Domain %2 Set.").arg(name).arg((set)?"":"don't"));
+    result.append(QString("'%1' Domain autostart %2 Set.").arg(name).arg((set)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::getVirtNetXMLDesc()
+QStringList DomControlThread::getDomainXMLDesc()
 {
     QStringList result;
     QString name = args.first();
