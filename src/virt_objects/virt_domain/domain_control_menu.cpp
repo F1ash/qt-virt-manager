@@ -5,19 +5,19 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params) :
 {
     if (parameters.isEmpty()) return;
     start = new QAction("Start", this);
-    start->setIcon(QIcon::fromTheme("network-start"));
+    start->setIcon(QIcon::fromTheme("domain-start"));
     start->setEnabled(parameters.last()=="yes" && parameters[1]!="active" );
     destroy = new QAction("Destroy", this);
-    destroy->setIcon(QIcon::fromTheme("network-stop"));
+    destroy->setIcon(QIcon::fromTheme("domain-stop"));
     destroy->setEnabled(parameters[1]=="active");
     undefine = new QAction("Undefine", this);
-    undefine->setIcon(QIcon::fromTheme("network-undefine"));
+    undefine->setIcon(QIcon::fromTheme("domain-undefine"));
     undefine->setEnabled(parameters.last()=="yes");
     autoStart = new QAction("change AutoStart", this);
-    autoStart->setIcon(QIcon::fromTheme("network-autostart"));
+    autoStart->setIcon(QIcon::fromTheme("domain-autostart"));
     autoStart->setEnabled(parameters.last()=="yes");
     getXMLDesc = new QAction("get XML Description", this);
-    getXMLDesc->setIcon(QIcon::fromTheme("network-xml"));
+    getXMLDesc->setIcon(QIcon::fromTheme("domain-xml"));
     getXMLDesc->setEnabled(true);
 
     addAction(start);

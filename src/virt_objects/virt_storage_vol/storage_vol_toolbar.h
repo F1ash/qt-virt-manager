@@ -1,5 +1,5 @@
-#ifndef STORAGE_POOL_TOOLBAR_H
-#define STORAGE_POOL_TOOLBAR_H
+#ifndef STORAGE_VOL_TOOLBAR_H
+#define STORAGE_VOL_TOOLBAR_H
 
 #include <QToolBar>
 #include <QAction>
@@ -7,12 +7,12 @@
 #include "virt_objects/open_file_menu.h"
 #include <QDebug>
 
-class StoragePoolToolBar : public QToolBar
+class StorageVolToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit StoragePoolToolBar(QWidget *parent = 0);
-    ~StoragePoolToolBar();
+    explicit StorageVolToolBar(QWidget *parent = 0);
+    ~StorageVolToolBar();
 
 signals:
     void fileForMethod(const QStringList&);
@@ -28,7 +28,7 @@ private:
     QAction         *undefine_Action;
     QAction         *setAutostart_Action;
     QAction         *getXMLDesc_Action;
-    QAction         *overview_Action;
+    QAction         *stopOverview_Action;
 
 private slots:
     void repeatParameters(QStringList&);
@@ -41,4 +41,4 @@ public slots:
 
 };
 
-#endif // STORAGE_POOL_TOOLBAR_H
+#endif // STORAGE_VOL_TOOLBAR_H

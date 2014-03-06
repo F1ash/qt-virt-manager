@@ -1,7 +1,7 @@
 %global cmake_build_dir build-cmake
 
 Name:           qt-virt-manager
-Version:        0.0.1
+Version:        0.0.2
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -49,5 +49,8 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/%{name}
 
 %changelog
+* Fri Mar  7 2014 Fl@sh <kaperang07@gmail.com> - 0.0.2-1
+- version updated;
+
 * Mon Feb 17 2014 Fl@sh <kaperang07@gmail.com> - 0.0.1-1
 - begin build;

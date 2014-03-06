@@ -215,12 +215,12 @@ void VirtStoragePoolControl::storagePoolClicked(const QPoint &p)
         params<<storagePoolModel->virtStoragePoolDataList.at(idx.row())->getState();
         params<<storagePoolModel->virtStoragePoolDataList.at(idx.row())->getAutostart();
         params<<storagePoolModel->virtStoragePoolDataList.at(idx.row())->getPersistent();
-        StoragePoolControlMenu *domControlMenu = new StoragePoolControlMenu(this, params);
-        connect(domControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
-        domControlMenu->move(QCursor::pos());
-        domControlMenu->exec();
-        disconnect(domControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
-        domControlMenu->deleteLater();
+        StoragePoolControlMenu *storagePoolControlMenu = new StoragePoolControlMenu(this, params);
+        connect(storagePoolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+        storagePoolControlMenu->move(QCursor::pos());
+        storagePoolControlMenu->exec();
+        disconnect(storagePoolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+        storagePoolControlMenu->deleteLater();
     } else {
         storagePoolList->clearSelection();
     }
@@ -251,8 +251,10 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
                  ? "0" : "1";
             args.append(autostartState);
             stPoolControlThread->execAction(CHANGE_StPOOL_AUTOSTART, args);
-        } else if ( l.first()=="getVirtDomXMLDesc" ) {
+        } else if ( l.first()=="getVirtStoragePoolXMLDesc" ) {
             stPoolControlThread->execAction(GET_StPOOL_XML_DESC, args);
+        } else if ( l.first()=="overviewVirtStoragePool" ) {
+            emit currPool(currWorkConnect, currConnName, storagePoolName);
         };
     }
 }

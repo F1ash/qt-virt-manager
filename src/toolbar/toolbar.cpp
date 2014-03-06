@@ -88,7 +88,7 @@ void ToolBar::addItemControlMenu()
     _openAction = new QAction(QString("Open selected Connect"), this);
     _openAction->setIcon ( QIcon::fromTheme("run") );
     _showAction = new QAction(QString("Overview selected Connect"), this);
-    _showAction->setIcon ( QIcon::fromTheme("utilities-terminal") );
+    _showAction->setIcon ( QIcon::fromTheme("overview") );
     _closeAction = new QAction(QString("Close selected Connect"), this);
     _closeAction->setIcon ( QIcon::fromTheme("stop") );
     _closeAllAction = new QAction(QString("Close all Connect"), this);

@@ -58,6 +58,9 @@ MainWindow::~MainWindow()
   disconnect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+  disconnect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+  disconnect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
+             this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
 
   qDebug()<<"processing stopped";
   if ( wait_thread!=NULL ) {
@@ -347,6 +350,7 @@ void MainWindow::initDockWidgets()
     settings.endGroup();
     addDockWidget(area, storageVolDock);
     connect(toolBar->_stVolUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
+    connect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
 
     storagePoolDock = new QDockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
@@ -369,6 +373,8 @@ void MainWindow::initDockWidgets()
     addDockWidget(area, storagePoolDock);
     connect(toolBar->_stPoolUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
     connect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+    connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
+            this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
 }
 void MainWindow::editCurrentConnect()
 {
@@ -487,7 +493,11 @@ void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
     if ( domainDockContent->setCurrentWorkConnect(conn) ) domainDockContent->setListHeader(name);
     if ( networkDockContent->setCurrentWorkConnect(conn) ) networkDockContent->setListHeader(name);
     if ( storagePoolDockContent->setCurrentWorkConnect(conn) ) storagePoolDockContent->setListHeader(name);
-    //if ( storageVolDockContent->setCurrentWorkConnect(conn) )storageVolDockContent->setListHeader(name);
+}
+void MainWindow::receivePoolName(virConnect *conn, QString &connName, QString &poolName)
+{
+    // send Pool name to Volume Comtrol for operating
+    storageVolDockContent->setCurrentStoragePool(conn, connName, poolName);
 }
 void MainWindow::stopProcessing()
 {
@@ -495,11 +505,11 @@ void MainWindow::stopProcessing()
     // stop processing of all virtual resources
     domainDockContent->stopProcessing();
     networkDockContent->stopProcessing();
-    storageVolDockContent->stopProcessing();
     storagePoolDockContent->stopProcessing();
+    storageVolDockContent->stopProcessing();
     result = result && domainDockContent->getThreadState();
     result = result && networkDockContent->getThreadState() ;
     result = result && storagePoolDockContent->getThreadState();
-    //result = result && storageVolDockContent->getThreadState();
+    result = result && storageVolDockContent->getThreadState();
     if ( wait_thread!=NULL ) wait_thread->setProcessingState(result);
 }

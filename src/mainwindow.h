@@ -72,6 +72,7 @@ private slots:
     void changeLogViewerVisibility();
     Qt::DockWidgetArea getDockArea(int) const;
     void receiveConnPtr(virConnect*, QString&);
+    void receivePoolName(virConnect*, QString&, QString&);
     void stopProcessing();
 
 };

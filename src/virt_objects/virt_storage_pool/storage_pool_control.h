@@ -23,13 +23,14 @@ public:
 
 signals:
     void storagePoolMsg(QString&);
+    void currPool(virConnect*, QString&, QString&);
 
 private:
     QString                    currConnName;
     QSettings                  settings;
     StoragePoolModel          *storagePoolModel = NULL;
     QTreeView                 *storagePoolList = NULL;
-    StoragePoolToolBar         *toolBar;
+    StoragePoolToolBar        *toolBar;
 
     virConnect                *currWorkConnect = NULL;
     StoragePoolControlThread  *stPoolControlThread = NULL;

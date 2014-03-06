@@ -49,6 +49,11 @@ set (HEADERS
   src/virt_objects/virt_storage_pool/storage_pool_control_menu.h
   
   src/virt_objects/virt_storage_vol/storage_vol_control.h
+  src/virt_objects/virt_storage_vol/storage_vol_model.h
+  src/virt_objects/virt_storage_vol/storage_vol_index.h
+  src/virt_objects/virt_storage_vol/storage_vol_toolbar.h
+  src/virt_objects/virt_storage_vol/storage_vol_control_thread.h
+  src/virt_objects/virt_storage_vol/storage_vol_control_menu.h
 )
 set (SOURCES 
   src/main.cpp
@@ -91,6 +96,11 @@ set (SOURCES
   src/virt_objects/virt_storage_pool/storage_pool_control_menu.cpp
   
   src/virt_objects/virt_storage_vol/storage_vol_control.cpp
+  src/virt_objects/virt_storage_vol/storage_vol_model.cpp
+  src/virt_objects/virt_storage_vol/storage_vol_index.cpp
+  src/virt_objects/virt_storage_vol/storage_vol_toolbar.cpp
+  src/virt_objects/virt_storage_vol/storage_vol_control_thread.cpp
+  src/virt_objects/virt_storage_vol/storage_vol_control_menu.cpp
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE ${PROJECT_NAME}.desktop)

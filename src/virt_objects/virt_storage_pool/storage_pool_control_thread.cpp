@@ -162,8 +162,8 @@ QStringList StoragePoolControlThread::startStoragePool()
     // flags: extra flags; not used yet, so callers should always pass 0
     flags = 0;
     while ( storagePool[i] != NULL ) {
-        QString currNetName = QString( virStoragePoolGetName(storagePool[i]) );
-        if ( !started && currNetName==name ) {
+        QString currPoolName = QString( virStoragePoolGetName(storagePool[i]) );
+        if ( !started && currPoolName==name ) {
             started = (virStoragePoolCreate(storagePool[i], flags)+1) ? true : false;
             if (!started) sendGlobalErrors();
         };
@@ -192,12 +192,12 @@ QStringList StoragePoolControlThread::destroyStoragePool()
     int i = 0;
     bool deleted = false;
     while ( storagePool[i] != NULL ) {
-        QString currDomName = QString( virStoragePoolGetName(storagePool[i]) );
-        if ( !deleted && currDomName==name ) {
+        QString currPoolName = QString( virStoragePoolGetName(storagePool[i]) );
+        if ( !deleted && currPoolName==name ) {
             deleted = (virStoragePoolDestroy(storagePool[i])+1) ? true : false;
             if (!deleted) sendGlobalErrors();
         };
-        qDebug()<<QVariant(deleted).toString()<<currDomName<<name;
+        qDebug()<<QVariant(deleted).toString()<<currPoolName<<name;
         virStoragePoolFree(storagePool[i]);
         i++;
     };
@@ -223,12 +223,12 @@ QStringList StoragePoolControlThread::undefineStoragePool()
     int i = 0;
     bool deleted = false;
     while ( storagePool[i] != NULL ) {
-        QString currDomName = QString( virStoragePoolGetName(storagePool[i]) );
-        if ( !deleted && currDomName==name ) {
+        QString currPoolName = QString( virStoragePoolGetName(storagePool[i]) );
+        if ( !deleted && currPoolName==name ) {
             deleted = (virStoragePoolUndefine(storagePool[i])+1) ? true : false;
             if (!deleted) sendGlobalErrors();
         };
-        qDebug()<<QVariant(deleted).toString()<<currDomName<<name;
+        qDebug()<<QVariant(deleted).toString()<<currPoolName<<name;
         virStoragePoolFree(storagePool[i]);
         i++;
     };

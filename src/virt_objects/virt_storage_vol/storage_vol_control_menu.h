@@ -1,17 +1,17 @@
-#ifndef STORAGE_POOL_CONTROL_MENU_H
-#define STORAGE_POOL_CONTROL_MENU_H
+#ifndef STORAGE_VOL_CONTROL_MENU_H
+#define STORAGE_VOL_CONTROL_MENU_H
 
 #include <QMenu>
 #include <QAction>
 #include <QIcon>
 #include <QStringList>
 
-class StoragePoolControlMenu : public QMenu
+class StorageVolControlMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit StoragePoolControlMenu(QWidget *parent = 0, QStringList params = QStringList());
-    ~StoragePoolControlMenu();
+    explicit StorageVolControlMenu(QWidget *parent = 0, QStringList params = QStringList());
+    ~StorageVolControlMenu();
 
 signals:
     void execMethod(const QStringList&);
@@ -30,4 +30,4 @@ private slots:
 
 };
 
-#endif // STORAGE_POOL_CONTROL_MENU_H
+#endif // STORAGE_VOL_CONTROL_MENU_H

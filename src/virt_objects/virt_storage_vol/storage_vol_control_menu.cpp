@@ -1,23 +1,23 @@
-#include "storage_pool_control_menu.h"
+#include "storage_vol_control_menu.h"
 
-StoragePoolControlMenu::StoragePoolControlMenu(QWidget *parent, QStringList params) :
+StorageVolControlMenu::StorageVolControlMenu(QWidget *parent, QStringList params) :
     QMenu(parent), parameters(params)
 {
     if (parameters.isEmpty()) return;
     start = new QAction("Start", this);
-    start->setIcon(QIcon::fromTheme("storagePool-start"));
+    start->setIcon(QIcon::fromTheme("storageVol-start"));
     start->setEnabled(parameters.last()=="yes" && parameters[1]!="active" );
     destroy = new QAction("Destroy", this);
-    destroy->setIcon(QIcon::fromTheme("storagePool-stop"));
+    destroy->setIcon(QIcon::fromTheme("storageVol-stop"));
     destroy->setEnabled(parameters[1]=="active");
     undefine = new QAction("Undefine", this);
-    undefine->setIcon(QIcon::fromTheme("storagePool-undefine"));
+    undefine->setIcon(QIcon::fromTheme("storageVol-undefine"));
     undefine->setEnabled(parameters.last()=="yes");
     autoStart = new QAction("change AutoStart", this);
-    autoStart->setIcon(QIcon::fromTheme("storagePool-autostart"));
+    autoStart->setIcon(QIcon::fromTheme("storageVol-autostart"));
     autoStart->setEnabled(parameters.last()=="yes");
     getXMLDesc = new QAction("get XML Description", this);
-    getXMLDesc->setIcon(QIcon::fromTheme("storagePool-xml"));
+    getXMLDesc->setIcon(QIcon::fromTheme("storageVol-xml"));
     getXMLDesc->setEnabled(true);
     overview = new QAction("overview Pool", this);
     overview->setIcon(QIcon::fromTheme("overview"));
@@ -33,7 +33,7 @@ StoragePoolControlMenu::StoragePoolControlMenu(QWidget *parent, QStringList para
     addAction(overview);
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
 }
-StoragePoolControlMenu::~StoragePoolControlMenu()
+StorageVolControlMenu::~StorageVolControlMenu()
 {
     disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
     delete start;
@@ -49,22 +49,21 @@ StoragePoolControlMenu::~StoragePoolControlMenu()
     delete overview;
     overview = 0;
 }
-void StoragePoolControlMenu::emitExecMethod(QAction *action)
+void StorageVolControlMenu::emitExecMethod(QAction *action)
 {
     QStringList paramList;
     if ( action == start) {
-        paramList << "startVirtStoragePool";
+        paramList << "downloadVirtStorageVolList";
     } else if ( action == destroy ) {
-        paramList << "destroyVirtStoragePool";
+        paramList << "deleteVirtStorageVol";
     } else if ( action == undefine ) {
-        paramList << "undefineVirtStoragePool";
+        paramList << "resizeVirtStorageVol";
     } else if ( action == autoStart ) {
-        paramList << "setAutostartVirtStoragePool";
-        paramList << QString((parameters[2]=="yes")? "0" : "1");
+        paramList << "uploadVirtStorageVolList";
     } else if ( action == getXMLDesc ) {
-        paramList << "getVirtStoragePoolXMLDesc";
+        paramList << "getVirtStorageVolXMLDesc";
     } else if ( action == overview ) {
-        paramList << "overviewVirtStoragePool";
+        paramList << "overviewVirtStorageVol";
     } else return;
     paramList.insert(1, parameters.first());
     emit execMethod(paramList);

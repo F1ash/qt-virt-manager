@@ -1,2 +1,7 @@
 v.0.0.1 :
 begin build;
+
+v.0.0.2 :
+implemented simple actions for Connect
+and overview it resources;
+created icon set & example's files;
