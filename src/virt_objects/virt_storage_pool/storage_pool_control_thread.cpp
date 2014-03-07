@@ -146,9 +146,10 @@ QStringList StoragePoolControlThread::startStoragePool()
 {
     QStringList result;
     QString name = args.first();
-    virStoragePoolPtr *storagePool;
     unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                          VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
+    /*
+    virStoragePoolPtr *storagePool;
     int ret = virConnectListAllStoragePools( currWorkConnect, &storagePool, flags);
     if ( ret<0 ) {
         sendConnErrors();
@@ -158,9 +159,11 @@ QStringList StoragePoolControlThread::startStoragePool()
     //qDebug()<<QString(virConnectGetURI(currWorkConnect));
 
     int i = 0;
+    */
     bool started = false;
     // flags: extra flags; not used yet, so callers should always pass 0
     flags = 0;
+    /*
     while ( storagePool[i] != NULL ) {
         QString currPoolName = QString( virStoragePoolGetName(storagePool[i]) );
         if ( !started && currPoolName==name ) {
@@ -171,6 +174,13 @@ QStringList StoragePoolControlThread::startStoragePool()
         i++;
     };
     free(storagePool);
+    */
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    if ( storagePool!=NULL ) {
+        started = (virStoragePoolCreate(storagePool, flags)+1) ? true : false;
+        if (!started) sendConnErrors();
+        virStoragePoolFree(storagePool);
+    } else sendConnErrors();
     result.append(QString("'%1' StoragePool %2 Started.").arg(name).arg((started)?"":"don't"));
     return result;
 }
@@ -178,6 +188,7 @@ QStringList StoragePoolControlThread::destroyStoragePool()
 {
     QStringList result;
     QString name = args.first();
+    /*
     virStoragePoolPtr *storagePool;
     unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                          VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
@@ -190,7 +201,9 @@ QStringList StoragePoolControlThread::destroyStoragePool()
     //qDebug()<<QString(virConnectGetURI(currWorkConnect));
 
     int i = 0;
+    */
     bool deleted = false;
+    /*
     while ( storagePool[i] != NULL ) {
         QString currPoolName = QString( virStoragePoolGetName(storagePool[i]) );
         if ( !deleted && currPoolName==name ) {
@@ -202,6 +215,13 @@ QStringList StoragePoolControlThread::destroyStoragePool()
         i++;
     };
     free(storagePool);
+    */
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    if ( storagePool!=NULL ) {
+        deleted = (virStoragePoolDestroy(storagePool)+1) ? true : false;
+        if (!deleted) sendConnErrors();
+        virStoragePoolFree(storagePool);
+    } else sendConnErrors();
     result.append(QString("'%1' StoragePool %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
@@ -209,6 +229,7 @@ QStringList StoragePoolControlThread::undefineStoragePool()
 {
     QStringList result;
     QString name = args.first();
+    /*
     virStoragePoolPtr *storagePool;
     unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                          VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
@@ -221,7 +242,9 @@ QStringList StoragePoolControlThread::undefineStoragePool()
     //qDebug()<<QString(virConnectGetURI(currWorkConnect));
 
     int i = 0;
+    */
     bool deleted = false;
+    /*
     while ( storagePool[i] != NULL ) {
         QString currPoolName = QString( virStoragePoolGetName(storagePool[i]) );
         if ( !deleted && currPoolName==name ) {
@@ -233,6 +256,13 @@ QStringList StoragePoolControlThread::undefineStoragePool()
         i++;
     };
     free(storagePool);
+    */
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    if ( storagePool!=NULL ) {
+        deleted = (virStoragePoolDestroy(storagePool)+1) ? true : false;
+        if (!deleted) sendConnErrors();
+        virStoragePoolFree(storagePool);
+    } else sendConnErrors();
     result.append(QString("'%1' StoragePool %2 Undefined.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
@@ -253,6 +283,7 @@ QStringList StoragePoolControlThread::changeAutoStartStoragePool()
             return result;
         };
     };
+    /*
     virStoragePoolPtr *storagePool;
     unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                          VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
@@ -265,7 +296,9 @@ QStringList StoragePoolControlThread::changeAutoStartStoragePool()
     //qDebug()<<QString(virConnectGetURI(currWorkConnect));
 
     int i = 0;
+    */
     bool set = false;
+    /*
     while ( storagePool[i] != NULL ) {
         QString currNetName = QString( virStoragePoolGetName(storagePool[i]) );
         if ( !set && currNetName==name ) {
@@ -276,6 +309,13 @@ QStringList StoragePoolControlThread::changeAutoStartStoragePool()
         i++;
     };
     free(storagePool);
+    */
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    if ( storagePool!=NULL ) {
+        set = (virStoragePoolSetAutostart(storagePool, autostart)+1) ? true : false;
+        if (!set) sendConnErrors();
+        virStoragePoolFree(storagePool);
+    } else sendConnErrors();
     result.append(QString("'%1' StoragePool autostart %2 Set.").arg(name).arg((set)?"":"don't"));
     return result;
 }
@@ -283,6 +323,7 @@ QStringList StoragePoolControlThread::getStoragePoolXMLDesc()
 {
     QStringList result;
     QString name = args.first();
+    /*
     virStoragePoolPtr *storagePool;
     unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                          VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
@@ -295,8 +336,10 @@ QStringList StoragePoolControlThread::getStoragePoolXMLDesc()
     //qDebug()<<QString(virConnectGetURI(currWorkConnect));
 
     int i = 0;
+    */
     bool read = false;
     char *Returns = NULL;
+    /*
     while ( storagePool[i] != NULL ) {
         QString currNetName = QString( virStoragePoolGetName(storagePool[i]) );
         if ( !read && currNetName==name ) {
@@ -308,6 +351,14 @@ QStringList StoragePoolControlThread::getStoragePoolXMLDesc()
         i++;
     };
     free(storagePool);
+    */
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    if ( storagePool!=NULL ) {
+        Returns = (virStoragePoolGetXMLDesc(storagePool, VIR_STORAGE_XML_INACTIVE));
+        if ( Returns==NULL ) sendConnErrors();
+        else read = true;
+        virStoragePoolFree(storagePool);
+    } else sendConnErrors();
     QTemporaryFile f;
     f.setAutoRemove(false);
     read = f.open();
