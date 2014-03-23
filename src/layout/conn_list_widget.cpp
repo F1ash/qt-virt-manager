@@ -147,6 +147,7 @@ void ConnectList::connectItemDoubleClicked(const QModelIndex &_item)
   else if ( conn_state==RUNNING ) {
       // TODO: check here for close related instances :
       // domains, networks, storages, etc.
+      emit connectClosed();
       conn->closeConnect();
   };
   clearSelection();

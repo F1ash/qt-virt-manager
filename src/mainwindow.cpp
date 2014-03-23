@@ -39,6 +39,7 @@ MainWindow::~MainWindow()
   disconnect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
   disconnect(connListWidget, SIGNAL(warning(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(receiveConnPtr(virConnect*, QString&)));
+  disconnect(connListWidget, SIGNAL(connectClosed()), this, SLOT(stopProcessing()));
   disconnect(toolBar->_hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
   disconnect(toolBar->_createAction, SIGNAL(triggered()), this, SLOT(createNewConnect()));
   disconnect(toolBar->_editAction, SIGNAL(triggered()), this, SLOT(editCurrentConnect()));
@@ -239,6 +240,7 @@ void MainWindow::initConnListWidget()
   connect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
   connect(connListWidget, SIGNAL(warning(QString&)), this, SLOT(writeToErrorLog(QString&)));
   connect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(receiveConnPtr(virConnect*, QString&)));
+  connect(connListWidget, SIGNAL(connectClosed()), this, SLOT(stopProcessing()));
 }
 void MainWindow::initToolBar()
 {
