@@ -6,6 +6,12 @@
 #include "libvirt/virterror.h"
 #include <QDebug>
 
+enum CONN_STATE {
+    FAILED  = -1,
+    STOPPED,
+    RUNNING
+};
+
 class ConnAliveThread : public QThread
 {
     Q_OBJECT
@@ -15,7 +21,7 @@ public:
 
 signals:
     void connMsg(QString);
-    void connected();
+    void changeConnState(CONN_STATE);
 
 private:
     bool            keep_alive;

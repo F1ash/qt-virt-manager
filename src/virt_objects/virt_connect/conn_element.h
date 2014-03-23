@@ -10,8 +10,6 @@
 #include <QDebug>
 
 #define TIMEOUT 10
-#define RUNNING true
-#define STOPPED false
 #define TO_RUN true
 #define TO_STOP false
 #define AVAILABLE true
@@ -32,7 +30,6 @@ public slots:
     void closeConnect();
 
 signals:
-    void connectState(bool);
     void warningShowed();
     void warning(QString&);
     void connPtr(virConnect*, QString&);
@@ -47,7 +44,6 @@ private:
     DATA              conn_Status;
     QSettings         settings;
     int               waitTimerId;
-    int               timerId;
 
     int               checkTimeout;
     int               _diff;
@@ -56,10 +52,7 @@ private:
 
 private slots:
     void buildCommand();
-    void connectStarted();
-    void connectOpened();
-    void connectFinished();
-    void setConnectState(bool);
+    void setConnectState(CONN_STATE);
     void timerEvent(QTimerEvent*);
     void receiveConnMessage(QString);
     void addMsgToLog(QString, QString);

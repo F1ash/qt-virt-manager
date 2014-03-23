@@ -18,9 +18,9 @@ void Wait::run()
           for (int i=0; i<count; i++) {
               ConnItemIndex *idx = wdg->connItemModel->connItemDataList.at(i);
               DATA map = idx->getData();
-              if ( map.value("availability").toBool() && !map.value("isRunning").toBool() ) {
+              if ( map.value("availability").toBool() && map.value("isRunning").toInt()!=RUNNING ) {
                   to_Delete.append(idx->getName());
-              } else if ( map.value("availability").toBool() && map.value("isRunning").toBool() ) {
+              } else if ( map.value("availability").toBool() && map.value("isRunning").toInt()==RUNNING ) {
                   wdg->connects->value(idx->getName())->closeConnect();
               };
           };

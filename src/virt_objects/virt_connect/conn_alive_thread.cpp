@@ -8,6 +8,7 @@
 ConnAliveThread::ConnAliveThread(QObject *parent) :
     QThread(parent)
 {
+    qRegisterMetaType<CONN_STATE>("CONN_STATE");
 }
 ConnAliveThread::~ConnAliveThread()
 {
@@ -76,6 +77,7 @@ void ConnAliveThread::run()
     };
     // dirty hack for close connect while unregister events don't implemented here
     if ( !registered ) closeConnect();
+    else emit changeConnState(STOPPED);
 }
 void ConnAliveThread::openConnect()
 {
@@ -88,12 +90,13 @@ void ConnAliveThread::openConnect()
     if (conn==NULL) {
         keep_alive = false;
         emit connMsg( "Connection to the Hypervisor is failed." );
+        emit changeConnState(FAILED);
     } else {
         keep_alive = true;
         emit connMsg( QString("connect opened: %1").arg(QVariant(conn!=NULL).toString()) );
         registered = (virEventRegisterDefaultImpl()==0)?true:false;
         emit connMsg( QString("default event implementation registered: %1").arg(QVariant(registered).toString()) );
-        emit connected();
+        emit changeConnState(RUNNING);
     };
 }
 void ConnAliveThread::closeConnect()
@@ -108,8 +111,10 @@ void ConnAliveThread::closeConnect()
             connMsg( QString("close exit code: %1").arg(ret) );
         };
         conn = NULL;
+        emit changeConnState(STOPPED);
     } else {
         emit connMsg( QString("connect is NULL") );
+        emit changeConnState(FAILED);
     };
 }
 void ConnAliveThread::sendConnErrors()

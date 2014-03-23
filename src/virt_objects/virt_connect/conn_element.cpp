@@ -3,25 +3,18 @@
 ElemConnect::ElemConnect(QObject *parent) :
     QObject(parent)
 {
-    connect(this, SIGNAL(connectState(bool)), this, SLOT(setConnectState(bool)));
     //connect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
-    timerId = 0;
     waitTimerId = 0;
     _diff = 0;
 
     connAliveThread = new ConnAliveThread(this);
-    //connect(connAliveThread, SIGNAL(started()), this, SLOT(connectStarted()));
-    connect(connAliveThread, SIGNAL(finished()), this, SLOT(connectFinished()));
     connect(connAliveThread, SIGNAL(connMsg(QString)), this, SLOT(receiveConnMessage(QString)));
-    connect(connAliveThread, SIGNAL(connected()), this, SLOT(connectOpened()));
+    connect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)), this, SLOT(setConnectState(CONN_STATE)));
 }
 ElemConnect::~ElemConnect()
 {
-    //disconnect(connAliveThread, SIGNAL(started()), this, SLOT(connectStarted()));
-    disconnect(connAliveThread, SIGNAL(finished()), this, SLOT(connectFinished()));
     disconnect(connAliveThread, SIGNAL(connMsg(QString)), this, SLOT(receiveConnMessage(QString)));
-    disconnect(connAliveThread, SIGNAL(connected()), this, SLOT(connectOpened()));
-    disconnect(this, SIGNAL(connectState(bool)), this, SLOT(setConnectState(bool)));
+    disconnect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)), this, SLOT(setConnectState(CONN_STATE)));
     //disconnect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
 
     if ( connAliveThread!=NULL ) {
@@ -77,18 +70,6 @@ void ElemConnect::buildCommand()
     };
     URI = _uri.join("");
 }
-void ElemConnect::connectStarted()
-{
-    emit connectState(RUNNING);
-}
-void ElemConnect::connectOpened()
-{
-    _diff = checkTimeout + 1;
-}
-void ElemConnect::connectFinished()
-{
-    emit connectState(STOPPED);
-}
 void ElemConnect::openConnect()
 {
     conn_Status.insert("availability", QVariant(NOT_AVAILABLE));
@@ -115,23 +96,17 @@ void ElemConnect::closeConnect()
 {
     connAliveThread->setKeepAlive(false);
 }
-void ElemConnect::setConnectState(bool status)
+void ElemConnect::setConnectState(CONN_STATE status)
 {
-  if ( status ) {
-      conn_Status.insert("isRunning", QVariant(RUNNING));
-  } else {
+  if ( status!=RUNNING ) {
       if (waitTimerId) {
           killTimer(waitTimerId);
           waitTimerId = 0;
       };
-      if (timerId) {
-          killTimer(timerId);
-          timerId = 0;
-      };
       Host.clear();
       Host.append("-");
-      conn_Status.insert("isRunning", QVariant(STOPPED));
-  };
+  } else _diff = checkTimeout + 1;
+  conn_Status.insert("isRunning", QVariant(status));
   conn_Status.insert("availability", QVariant(AVAILABLE));
   own_index->setData(conn_Status);
   int row = own_model->connItemDataList.indexOf(own_index);
@@ -145,7 +120,19 @@ void ElemConnect::setConnectState(bool status)
           data = Host;
           break;
       case 2:
-          data = (status) ? "OPEN":"CLOSE";
+          switch (status) {
+          case FAILED:
+              data = "FAILED";
+              break;
+          case RUNNING:
+              data = "OPENED";
+              break;
+          case STOPPED:
+              data = "CLOSED";
+              break;
+          default:
+              break;
+          };
           break;
       default:
           break;
@@ -157,24 +144,12 @@ void ElemConnect::timerEvent(QTimerEvent *event)
 {
     int percent = 0;
     int _timerId = event->timerId();
-    if ( _timerId && timerId==_timerId ) {
-        // TODO: use to check alive connect the metod from connAliveThread
-        if ( !connAliveThread->getKeepAlive() ) {
-            emit connectState(STOPPED);
-        };
-    } else if ( _timerId && waitTimerId==_timerId ) {
+    if ( _timerId && waitTimerId==_timerId ) {
         if ( checkTimeout - _diff + 1 ) {
             percent = int ((float(_diff)/checkTimeout)*100.0);
             QModelIndex _idx = own_model->index( own_model->connItemDataList.indexOf( own_index ), 2 );
             own_model->setData(_idx, QString::number(percent), Qt::EditRole);
             _diff++;
-        } else {
-            killTimer(waitTimerId);
-            waitTimerId = 0;
-            _diff = 0;
-            emit connectState(RUNNING);
-            if (!timerId) timerId = startTimer(1000);
-            else addMsgToLog(QString("Connect '%1'").arg(name), QString("Wait Timer is running: %1").arg(waitTimerId));
         };
     };
 }

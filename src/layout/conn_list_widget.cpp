@@ -82,7 +82,7 @@ void ConnectList::connectItemClicked(const QPoint &pos)
   if ( !conn_Status.value("availability", NOT_AVAILABLE).toBool() ) return;
   bool to_run = TO_RUN;
   ConnectMenu *connectMenu = new ConnectMenu(this);
-  if ( conn_Status.value("isRunning", STOPPED).toBool() ) {
+  if ( conn_Status.value("isRunning", STOPPED)==RUNNING ) {
       connectMenu->act->setText("Close Connect");
       connectMenu->act->setIcon(QIcon::fromTheme("stop"));
       connect(connectMenu->act, SIGNAL(triggered()), this, SLOT(connectItemKillAction()));
@@ -139,16 +139,15 @@ void ConnectList::connectItemDoubleClicked(const QModelIndex &_item)
       conn->setItemReference(connItemModel, idx);
   };
   //qDebug()<<key<<" Connect doubleClicked"<<conn;
-  bool conn_state;
-  conn_state = conn_Status.value(QString("isRunning"), STOPPED).toBool();
+  int conn_state;
+  conn_state = conn_Status.value(QString("isRunning"), STOPPED).toInt();
   if ( !conn_Status.value(QString("availability"), NOT_AVAILABLE).toBool() ) {
       showMessage("Info", "Connect is busy.");
-  } else if ( !conn_state ) conn->openConnect();
-  else if ( conn_state ) {
+  } else if ( conn_state!=RUNNING ) conn->openConnect();
+  else if ( conn_state==RUNNING ) {
       // TODO: check here for close related instances :
       // domains, networks, storages, etc.
       conn->closeConnect();
-      emit connectClosed();
   };
   clearSelection();
 }
@@ -173,11 +172,12 @@ void ConnectList::openConnect(QModelIndex &_item)
 }
 void ConnectList::showConnect(QModelIndex &_item)
 {
-    bool conn_state, conn_availability;
+    int conn_state;
+    bool conn_availability;
     ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-    conn_state = idx->getData().value(QString("isRunning"), STOPPED).toBool();
+    conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
     conn_availability = idx->getData().value(QString("availability"), NOT_AVAILABLE).toBool();
-    if ( conn_state && conn_availability ) {
+    if ( conn_state==RUNNING && conn_availability ) {
         QString _name = idx->getName();
         ElemConnect *conn;
         conn = connects->value(_name);
@@ -191,10 +191,10 @@ void ConnectList::closeConnect(QModelIndex &_item)
 }
 void ConnectList::checkConnect(QModelIndex &_item, bool to_run = TO_RUN)
 {
-  bool conn_state;
+  int conn_state;
   ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-  conn_state = idx->getData().value(QString("isRunning"), STOPPED).toBool();
-  if ( (to_run && !conn_state) || (!to_run && conn_state) )
+  conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
+  if ( (to_run && conn_state!=RUNNING) || (!to_run && conn_state==RUNNING) )
     connectItemDoubleClicked(_item);
 }
 int  ConnectList::connectItemEditAction()
@@ -223,15 +223,16 @@ void ConnectList::deleteCurrentConnect()
       QString connect = idx->getName();
       ElemConnect *conn;
       conn = connects->value(connect);
-      bool conn_state;
-      conn_state = idx->getData().value(QString("availability"), AVAILABLE).toBool();
-      if ( !conn_state ) {
+      int conn_state;
+      bool conn_availability;
+      conn_availability = idx->getData().value(QString("availability"), AVAILABLE).toBool();
+      if ( !conn_availability ) {
           showMessage(QString("Connect '%1'").arg(connect), "Connect is Busy.");
           clearSelection();
           return;
       };
-      conn_state = idx->getData().value(QString("isRunning"), STOPPED).toBool();
-      if ( conn && conn_state ) {
+      conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
+      if ( conn && conn_state==RUNNING ) {
           showMessage(QString("Connect '%1'").arg(connect), "Connect is Running.");
       } else {
           //if ( conn && !conn_state ) conn->closeConnect();

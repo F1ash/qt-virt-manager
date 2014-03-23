@@ -39,7 +39,6 @@ MainWindow::~MainWindow()
   disconnect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
   disconnect(connListWidget, SIGNAL(warning(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  disconnect(connListWidget, SIGNAL(connectClosed()), this, SLOT(stopProcessing()));
   disconnect(toolBar->_hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
   disconnect(toolBar->_createAction, SIGNAL(triggered()), this, SLOT(createNewConnect()));
   disconnect(toolBar->_editAction, SIGNAL(triggered()), this, SLOT(editCurrentConnect()));
@@ -240,7 +239,6 @@ void MainWindow::initConnListWidget()
   connect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
   connect(connListWidget, SIGNAL(warning(QString&)), this, SLOT(writeToErrorLog(QString&)));
   connect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  connect(connListWidget, SIGNAL(connectClosed()), this, SLOT(stopProcessing()));
 }
 void MainWindow::initToolBar()
 {
@@ -434,8 +432,8 @@ bool MainWindow::runningConnectsExist()
     int count = connListWidget->connItemModel->rowCount();
     for (int i=0; i<count; i++) {
         ConnItemIndex *item = connListWidget->connItemModel->connItemDataList.at(i);
-        //qDebug()<<connListWidget->item(i)->text()<< connListWidget->item(i)->data(Qt::UserRole).toMap().value("isRunning").toBool();
-        if ( item->getData().value("isRunning").toBool() ||
+        //qDebug()<<connListWidget->item(i)->text()<< connListWidget->item(i)->data(Qt::UserRole).toMap().value("isRunning").toInt();
+        if ( item->getData().value("isRunning").toInt()==RUNNING ||
             !item->getData().value("availability").toBool() ) {
             result = true;
             break;
