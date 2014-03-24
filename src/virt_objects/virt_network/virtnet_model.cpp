@@ -44,23 +44,24 @@ int VirtNetModel::columnCount(const QModelIndex &parent) const
 bool VirtNetModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
     if ( orientation == Qt::Horizontal ) {
-      if ( role == Qt::EditRole ) {
-        switch (section) {
-        case 0:
-          column0 = value.toString();
-          break;
-        case 1:
-          column1 = value.toString();
-          break;
-        case 2:
-          column2 = value.toString();
-          break;
-        case 3:
-          column3 = value.toString();
-        default:
-          break;
-        }
-      }
+        if ( role == Qt::EditRole ) {
+            switch (section) {
+            case 0:
+                column0 = value.toString();
+                break;
+            case 1:
+                column1 = value.toString();
+                break;
+            case 2:
+                column2 = value.toString();
+                break;
+            case 3:
+                column3 = value.toString();
+            default:
+                break;
+            }
+        };
+        headerDataChanged(Qt::Horizontal, 0, 3);
     };
 }
 QVariant VirtNetModel::headerData(int section, Qt::Orientation orientation, int role) const
