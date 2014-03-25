@@ -2,8 +2,7 @@
 #define CONN_ALIVE_THREAD_H
 
 #include <QThread>
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
+#include "conn_callbacks.h"
 #include <QDebug>
 
 enum CONN_STATE {
@@ -43,6 +42,8 @@ private slots:
     void closeConnect();
     void sendConnErrors();
     void sendGlobalErrors();
+    void registerConnEvents();
+    void deregisterConnEvents();
 
 };
 

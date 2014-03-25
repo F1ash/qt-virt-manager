@@ -375,6 +375,9 @@ void MainWindow::initDockWidgets()
     connect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
     connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
             this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
+    /*
+     * TODO: add docs for Interfaces, NetFilters, NodeDevices, Secrets
+     */
 }
 void MainWindow::editCurrentConnect()
 {

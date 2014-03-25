@@ -1,8 +1,8 @@
 #include "conn_alive_thread.h"
+
 /*
- * TODO: implement an event loop with virEventRegisterImpl()
- * or virEventRegisterDefaultImpl() to be able to use keepalive messages.
- * Implement virConnectRegisterCloseCallback() if necessary.
+ * TODO: Implement virConnectRegisterCloseCallback()
+ * & some event callbacks if necessary.
  */
 
 ConnAliveThread::ConnAliveThread(QObject *parent) :
@@ -21,10 +21,9 @@ void ConnAliveThread::setData(QString &uri) { URI = uri; }
 void ConnAliveThread::setKeepAlive(bool b)
 {
     keep_alive = b;
-    // dirty hack for close connect while unregister events don't implemented here
-    if ( isRunning() && registered && !keep_alive ) {
+    if ( isRunning() && !keep_alive ) {
         closeConnect();
-        terminate();
+        //terminate();
     };
 }
 bool ConnAliveThread::getKeepAlive() const
@@ -42,23 +41,22 @@ void ConnAliveThread::run()
     openConnect();
     int probe = 0;
     int ret;
-    // check for connect's validity
-    /*
-     * TODO: Maybe this is nessesary to extend for other type connects
-     */
-    if ( registered ) {
+    if ( keep_alive && registered ) {
         /* Use if virEventRegisterDefaultImpl() is registered */
         ret = virConnectSetKeepAlive(conn, 60, 5);
         if ( ret<0 ) {
             sendConnErrors();
+            closeConnect();
         } else if ( ret ) {
             emit connMsg( "Remote party doesn't support keepalive messages." );
         } else {
             emit connMsg( "Set keepalive messages." );
         };
         while ( keep_alive ) {
-            if ( virEventRunDefaultImpl() < 0 )
-                keep_alive = false;
+            if ( virEventRunDefaultImpl() < 0 ) {
+                sendConnErrors();
+                if ( ++probe>2 ) break;
+            };
         };
     } else {
         /* virConnectIsAlive() --
@@ -67,17 +65,18 @@ void ConnAliveThread::run()
          * or running over a channel (TCP or UNIX socket) which is not closed.
          */
         while ( keep_alive ) {
+            msleep(500);
             ret = virConnectIsAlive(conn);
             if ( ret<0 ) {
-                if ( ++probe>2 ) keep_alive = false;
                 sendConnErrors();
-            } else keep_alive = (ret)?true:false;
-            msleep(500);
+                if ( ++probe>2 ) break;
+            } else if ( ret==0 ) {
+                emit connMsg( "Connection is dead." );
+                break;
+            };
         };
     };
-    // dirty hack for close connect while unregister events don't implemented here
-    if ( !registered ) closeConnect();
-    else emit changeConnState(STOPPED);
+    if ( keep_alive ) closeConnect();
 }
 void ConnAliveThread::openConnect()
 {
@@ -86,7 +85,7 @@ void ConnAliveThread::openConnect()
      */
     conn = virConnectOpen(URI.toUtf8().constData());
     //qDebug()<<"openConn"<<conn;
-    sendGlobalErrors();
+    sendConnErrors();
     if (conn==NULL) {
         keep_alive = false;
         emit connMsg( "Connection to the Hypervisor is failed." );
@@ -97,14 +96,15 @@ void ConnAliveThread::openConnect()
         registered = (virEventRegisterDefaultImpl()==0)?true:false;
         emit connMsg( QString("default event implementation registered: %1").arg(QVariant(registered).toString()) );
         emit changeConnState(RUNNING);
+        registerConnEvents();
     };
 }
 void ConnAliveThread::closeConnect()
 {
     keep_alive = false;
+    deregisterConnEvents();
     if ( conn!=NULL ) {
         int ret = virConnectClose(conn);
-        sendGlobalErrors();
         if ( ret<0 ) {
             sendConnErrors();
         } else {
@@ -132,4 +132,11 @@ void ConnAliveThread::sendGlobalErrors()
         emit connMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
     virResetLastError();
 }
-
+void ConnAliveThread::registerConnEvents()
+{
+    virConnectRegisterCloseCallback(conn, connectCloseCallback, NULL, NULL);
+}
+void ConnAliveThread::deregisterConnEvents()
+{
+    virConnectUnregisterCloseCallback(conn, connectCloseCallback);
+}

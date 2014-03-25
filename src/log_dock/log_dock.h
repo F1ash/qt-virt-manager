@@ -3,7 +3,10 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QLabel>
 #include <QTextEdit>
+#include <QTime>
+#include <QTimerEvent>
 #include <QDebug>
 
 #define LOG_SIZE 1048576
@@ -16,8 +19,10 @@ public:
     ~LogDock();
 
 private:
+    int           timerId;
     QSize         _size;
     QVBoxLayout  *docLayout;
+    QLabel       *currentTime;
     QTextEdit    *Log;
 
 signals:
@@ -26,6 +31,7 @@ public slots:
     void appendErrorMsg(QString&);
 
 private slots:
+    void timerEvent(QTimerEvent*);
 
 };
 
