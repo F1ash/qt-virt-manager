@@ -23,7 +23,7 @@ void ConnAliveThread::setKeepAlive(bool b)
     keep_alive = b;
     if ( isRunning() && !keep_alive ) {
         closeConnect();
-        //terminate();
+        terminate();
     };
 }
 bool ConnAliveThread::getKeepAlive() const
@@ -138,5 +138,5 @@ void ConnAliveThread::registerConnEvents()
 }
 void ConnAliveThread::deregisterConnEvents()
 {
-    virConnectUnregisterCloseCallback(conn, connectCloseCallback);
+    if ( NULL!=conn ) virConnectUnregisterCloseCallback(conn, connectCloseCallback);
 }
