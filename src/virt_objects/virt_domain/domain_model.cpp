@@ -93,6 +93,9 @@ QVariant DomainModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::DisplayRole && index.column()==0 ) {
         return virtDomDataList.at(index.row())->getName();
     };
+    if ( role==Qt::DisplayRole && index.column()==1 ) {
+        return virtDomDataList.at(index.row())->getState().split(":").last();
+    };
     if ( role==Qt::DecorationRole ) {
         switch (index.column()) {
         case 0:
@@ -101,7 +104,7 @@ QVariant DomainModel::data(const QModelIndex &index, int role) const
             } else res = created;
             break;
         case 1:
-            if ( virtDomDataList.at(index.row())->getState()=="active" ) {
+            if ( virtDomDataList.at(index.row())->getState().split(":").first()=="active" ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
@@ -122,7 +125,7 @@ QVariant DomainModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::ToolTipRole && index.column() ) {
         switch (index.column()) {
         case 1:
-            res = QString("State: %1").arg(virtDomDataList.at(index.row())->getState());
+            res = QString("State: %1").arg(virtDomDataList.at(index.row())->getState().split(":").first());
             break;
         case 2:
             res = QString("Autostart: %1").arg(virtDomDataList.at(index.row())->getAutostart());

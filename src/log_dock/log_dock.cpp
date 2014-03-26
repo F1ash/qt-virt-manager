@@ -41,6 +41,7 @@ void LogDock::appendErrorMsg(QString &msg)
     Log->append(msg);
     Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2").arg(LOG_SIZE).arg(Log->toPlainText().count()));
 }
+
 /* private slots */
 void LogDock::timerEvent(QTimerEvent *ev)
 {

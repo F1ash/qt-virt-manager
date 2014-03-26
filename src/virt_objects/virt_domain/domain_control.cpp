@@ -212,7 +212,7 @@ void VirtDomainControl::domainClicked(const QPoint &p)
         //qDebug()<<domainModel->virtDomDataList.at(idx.row())->getName();
         QStringList params;
         params<<domainModel->virtDomDataList.at(idx.row())->getName();
-        params<<domainModel->virtDomDataList.at(idx.row())->getState();
+        params<<domainModel->virtDomDataList.at(idx.row())->getState().split(":").first();
         params<<domainModel->virtDomDataList.at(idx.row())->getAutostart();
         params<<domainModel->virtDomDataList.at(idx.row())->getPersistent();
         DomainControlMenu *domControlMenu = new DomainControlMenu(this, params);
