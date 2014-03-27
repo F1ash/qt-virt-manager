@@ -44,6 +44,8 @@ private:
     QComboBox           *Transports;
     QLabel              *host;
     QLineEdit           *Host;
+    QLabel              *path;
+    QLineEdit           *Path;
     QLabel              *extra;
     QLineEdit           *Extra;
     QGridLayout         *paramLayout;
@@ -73,6 +75,7 @@ private slots:
     void closeEvent(QCloseEvent*);
     void set_Title_Name(QString);
     void timerEvent(QTimerEvent*);
+    void changeConnParameters(QString);
 };
 
 #endif   // CONN_SETTINGS_H

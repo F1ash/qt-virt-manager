@@ -73,6 +73,7 @@ private slots:
     Qt::DockWidgetArea getDockArea(int) const;
     void receiveConnPtr(virConnect*, QString&);
     void receivePoolName(virConnect*, QString&, QString&);
+    void stopConnProcessing(virConnect*);
     void stopProcessing();
 
 };

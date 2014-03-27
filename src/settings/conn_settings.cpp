@@ -7,11 +7,12 @@
 #include "settings/conn_settings.h"
 
 // http://libvirt.org/drivers.html#hypervisor
-#define HV_DRIVERS QStringList()<<"TEST"<<"LXC"<<"QEMU"<<"XEN"
+#define HV_DRIVERS QStringList()<<"TEST"<<"LXC"<<"XEN"<<"QEMU/KVM"<<"QEMU/KVM user session"
 //<<"OpenVZ"<<"UML"
 
 // http://libvirt.org/remote.html#Remote_transports
-#define TRANSPORTS QStringList()<<""<<"TLS"<<"SSH"<<"UNIX"<<"EXT"<<"TCP"<<"LibSSH2"
+#define TRANSPORTS QStringList()<<""<<"TLS"<<"SSH"<<"UNIX"<<"TCP"<<"LibSSH2"
+//<<"EXT"
 
 
 ConnSettings::ConnSettings(QWidget *parent) :
@@ -28,7 +29,6 @@ ConnSettings::ConnSettings(QWidget *parent) :
     initButtons();
     URI = new QTextEdit(this);
     URI->setReadOnly(true);
-    initParameters();
     commonLayout = new QVBoxLayout();
     commonLayout->addWidget(parameters);
     commonLayout->addWidget(warning);
@@ -36,6 +36,7 @@ ConnSettings::ConnSettings(QWidget *parent) :
     commonLayout->addWidget(buttons);
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
+    initParameters();
     timerId = startTimer(1000);
 }
 ConnSettings::~ConnSettings()
@@ -43,6 +44,7 @@ ConnSettings::~ConnSettings()
     disconnect(ok, SIGNAL(clicked()), this, SLOT(saveConnect()));
     disconnect(cancel, SIGNAL(clicked()), this, SLOT(cancelConnect()));
     disconnect(ConnName, SIGNAL(textChanged(QString)), this, SLOT(set_Title_Name(QString)));
+    disconnect(Drivers, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeConnParameters(QString)));
 
     delete atStart;
     atStart = 0;
@@ -75,6 +77,10 @@ ConnSettings::~ConnSettings()
     host = 0;
     delete Host;
     Host = 0;
+    delete path;
+    path = 0;
+    delete Path;
+    Path = 0;
     delete extra;
     extra = 0;
     delete Extra;
@@ -95,12 +101,16 @@ void ConnSettings::initParamLayout()
     driver = new QLabel("Driver:", this);
     Drivers = new QComboBox(this);
     Drivers->addItems(HV_DRIVERS);
+    connect(Drivers, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeConnParameters(QString)));
     transport = new QLabel("Transport:", this);
     Transports = new QComboBox(this);
     Transports->addItems(TRANSPORTS);
-    host = new QLabel("Host/Path:", this);
+    host = new QLabel("Host:", this);
     Host = new QLineEdit(this);
-    Host->setPlaceholderText("[username@][hostname][:port]/[path]");
+    Host->setPlaceholderText("[username@][hostname][:port]");
+    path = new QLabel("Path:", this);
+    Path = new QLineEdit(this);
+    Path->setPlaceholderText("[path]");
     extra = new QLabel("Extra:", this);
     Extra = new QLineEdit(this);
     Extra->setPlaceholderText("[?extraparameters]");
@@ -113,8 +123,10 @@ void ConnSettings::initParamLayout()
     paramLayout->addWidget(Transports, 2, 1);
     paramLayout->addWidget(host, 3, 0);
     paramLayout->addWidget(Host, 3, 1);
-    paramLayout->addWidget(extra, 4, 0);
-    paramLayout->addWidget(Extra, 4, 1);
+    paramLayout->addWidget(path, 4, 0);
+    paramLayout->addWidget(Path, 4, 1);
+    paramLayout->addWidget(extra, 5, 0);
+    paramLayout->addWidget(Extra, 5, 1);
     parameters = new QWidget(this);
     parameters->setLayout(paramLayout);
 }
@@ -199,6 +211,8 @@ void ConnSettings::initParameters()
     if (idx<0) idx=0;
     Transports->setCurrentIndex(idx);
     Host->setText(settings.value("Host", "").toString());
+    QString path = settings.value("Path", "").toString();
+    if ( !path.isEmpty() ) Path->setText(path);
     Extra->setText(settings.value("Extra", "").toString());
     settings.endGroup();
     settings.endGroup();
@@ -211,6 +225,7 @@ void ConnSettings::saveParameters()
     settings.setValue("Driver", Drivers->currentText());
     settings.setValue("Transport", Transports->currentText());
     settings.setValue("Host", Host->text());
+    settings.setValue("Path", Path->text());
     settings.setValue("Extra", Extra->text());
     settings.endGroup();
     settings.endGroup();
@@ -235,7 +250,7 @@ void ConnSettings::timerEvent(QTimerEvent *event)
     if ( _timerId && timerId==_timerId ) {
         // URI building
         QStringList _uri;
-        _uri.append(Drivers->currentText().toLower());
+        _uri.append(Drivers->currentText().toLower().split("/").first());
         if ( !Transports->currentText().isEmpty() ) {
             _uri.append("+");
             _uri.append(Transports->currentText().toLower());
@@ -245,10 +260,21 @@ void ConnSettings::timerEvent(QTimerEvent *event)
             _uri.append(Host->text());
         };
         _uri.append("/");
+        if ( !Path->text().isEmpty() ) {
+            _uri.append(Path->text());
+        };
         if ( !Extra->text().isEmpty() ) {
-            //_uri.append("?");
+            _uri.append("?");
             _uri.append(Extra->text());
         };
         URI->setText(_uri.join(""));
     };
+}
+void ConnSettings::changeConnParameters(QString s)
+{
+    if ( s.toLower().split("/").first()=="qemu" ) {
+        Path->setText( (s.endsWith("session"))?"session":"system" );
+    } else if ( s.toLower().split("/").first()=="test" ) {
+        Path->setText( "default" );
+    } else Path->clear();
 }

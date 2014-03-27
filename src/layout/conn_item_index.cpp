@@ -4,7 +4,7 @@ ConnItemIndex::ConnItemIndex(QObject *parent) :
     QObject(parent)
 {
     Name = "";
-    Host = "";
+    URI = "";
     State = "";
     Data = DATA();
 }
@@ -12,9 +12,9 @@ void ConnItemIndex::setName(QString &s)
 {
     Name = s;
 }
-void ConnItemIndex::setHost(QString &s)
+void ConnItemIndex::setURI(QString &s)
 {
-    Host = s;
+    URI = s;
 }
 void ConnItemIndex::setState(QString &s)
 {
@@ -28,9 +28,9 @@ QString ConnItemIndex::getName() const
 {
     return Name;
 }
-QString ConnItemIndex::getHost() const
+QString ConnItemIndex::getURI() const
 {
-    return Host;
+    return URI;
 }
 QString ConnItemIndex::getState() const
 {

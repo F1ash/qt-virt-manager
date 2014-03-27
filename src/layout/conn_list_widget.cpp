@@ -145,9 +145,9 @@ void ConnectList::connectItemDoubleClicked(const QModelIndex &_item)
       showMessage("Info", "Connect is busy.");
   } else if ( conn_state!=RUNNING ) conn->openConnect();
   else if ( conn_state==RUNNING ) {
+      emit connectClosed(conn->getConnect());
       // TODO: check here for close related instances :
       // domains, networks, storages, etc.
-      emit connectClosed();
       conn->closeConnect();
   };
   clearSelection();

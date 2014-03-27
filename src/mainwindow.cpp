@@ -39,7 +39,7 @@ MainWindow::~MainWindow()
   disconnect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
   disconnect(connListWidget, SIGNAL(warning(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  disconnect(connListWidget, SIGNAL(connectClosed()), this, SLOT(stopProcessing()));
+  disconnect(connListWidget, SIGNAL(connectClosed(virConnect*)), this, SLOT(stopConnProcessing(virConnect*)));
   disconnect(toolBar->_hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
   disconnect(toolBar->_createAction, SIGNAL(triggered()), this, SLOT(createNewConnect()));
   disconnect(toolBar->_editAction, SIGNAL(triggered()), this, SLOT(editCurrentConnect()));
@@ -240,7 +240,7 @@ void MainWindow::initConnListWidget()
   connect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
   connect(connListWidget, SIGNAL(warning(QString&)), this, SLOT(writeToErrorLog(QString&)));
   connect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  connect(connListWidget, SIGNAL(connectClosed()), this, SLOT(stopProcessing()));
+  connect(connListWidget, SIGNAL(connectClosed(virConnect*)), this, SLOT(stopConnProcessing(virConnect*)));
 }
 void MainWindow::initToolBar()
 {
@@ -375,6 +375,11 @@ void MainWindow::initDockWidgets()
     connect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
     connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
             this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
+
+    domainDockContent->setEnabled(false);
+    networkDockContent->setEnabled(false);
+    storageVolDockContent->setEnabled(false);
+    storagePoolDockContent->setEnabled(false);
     /*
      * TODO: add docs for Interfaces, NetFilters, NodeDevices, Secrets
      */
@@ -496,11 +501,17 @@ void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
     if ( domainDockContent->setCurrentWorkConnect(conn) ) domainDockContent->setListHeader(name);
     if ( networkDockContent->setCurrentWorkConnect(conn) ) networkDockContent->setListHeader(name);
     if ( storagePoolDockContent->setCurrentWorkConnect(conn) ) storagePoolDockContent->setListHeader(name);
+    storageVolDockContent->stopProcessing();
 }
 void MainWindow::receivePoolName(virConnect *conn, QString &connName, QString &poolName)
 {
     // send Pool name to Volume Comtrol for operating
     storageVolDockContent->setCurrentStoragePool(conn, connName, poolName);
+}
+void MainWindow::stopConnProcessing(virConnect *conn)
+{
+    // clear Overview Docks if closed connect is overviewed
+    if ( NULL!=conn && conn==domainDockContent->getConnect() ) stopProcessing();
 }
 void MainWindow::stopProcessing()
 {

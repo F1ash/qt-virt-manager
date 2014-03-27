@@ -101,6 +101,7 @@ void VirtStoragePoolControl::stopProcessing()
         storagePoolModel->removeRow(0);
     };
     storagePoolModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
+    setEnabled(false);
 
 }
 bool VirtStoragePoolControl::setCurrentWorkConnect(virConnect *conn)
@@ -128,6 +129,7 @@ void VirtStoragePoolControl::setListHeader(QString &connName)
 {
     storagePoolModel->setHeaderData(0, Qt::Horizontal, QString("Name (Conn: \"%1\")").arg(connName), Qt::EditRole);
     currConnName = connName;
+    setEnabled(true);
 }
 
 /* private slots */

@@ -45,7 +45,7 @@ QVariant ConnItemModel::headerData(int section, Qt::Orientation orientation, int
         return QString("Name");
         break;
       case 1:
-        return QString("Host");
+        return QString("URI");
         break;
       case 2:
         return QString("State");
@@ -68,7 +68,7 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
             res = connItemDataList.at(index.row())->getName();
             break;
         case 1:
-            res = connItemDataList.at(index.row())->getHost();
+            res = connItemDataList.at(index.row())->getURI();
             break;
         case 2:
             res = connItemDataList.at(index.row())->getState();
@@ -99,7 +99,7 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
             res = s;
             break;
         case 1:
-            res = QString("Host: %1").arg(connItemDataList.at(index.row())->getHost());
+            res = QString("URI: %1").arg(connItemDataList.at(index.row())->getURI());
             break;
         case 2:
             res = QString("State: %1").arg(connItemDataList.at(index.row())->getState());
@@ -138,7 +138,7 @@ bool ConnItemModel::setData( const QModelIndex &index, const QVariant &value, in
             connItemDataList.at(editedRow)->setName ( val );
             break;
         case 1:
-            connItemDataList.at(editedRow)->setHost ( val );
+            connItemDataList.at(editedRow)->setURI ( val );
             break;
         case 2:
             connItemDataList.at(editedRow)->setState ( val );

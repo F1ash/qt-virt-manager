@@ -25,34 +25,35 @@ signals:
     void domMsg(QString&);
 
 private:
-    QString                 currConnName;
-    QSettings               settings;
-    DomainModel            *domainModel = NULL;
-    QTreeView              *domainList = NULL;
-    DomainToolBar          *toolBar;
+    QString                  currConnName;
+    QSettings                settings;
+    DomainModel             *domainModel = NULL;
+    QTreeView               *domainList = NULL;
+    DomainToolBar           *toolBar;
 
-    virConnect             *currWorkConnect = NULL;
-    DomControlThread       *domControlThread = NULL;
+    virConnect              *currWorkConnect = NULL;
+    DomControlThread        *domControlThread = NULL;
 
-    int                     interval;
-    int                     timerId;
+    int                      interval;
+    int                      timerId;
 
 public slots:
-    bool getThreadState() const;
-    void stopProcessing();
-    bool setCurrentWorkConnect(virConnect*);
-    void setListHeader(QString&);
+    bool                     getThreadState() const;
+    void                     stopProcessing();
+    bool                     setCurrentWorkConnect(virConnect*);
+    void                     setListHeader(QString&);
+    virConnect*              getConnect() const;
 
 private slots:
-    void timerEvent(QTimerEvent*);
-    void resultReceiver(DomActions, QStringList);
-    void msgRepeater(QString);
-    void changeDockVisibility();
+    void                     timerEvent(QTimerEvent*);
+    void                     resultReceiver(DomActions, QStringList);
+    void                     msgRepeater(QString);
+    void                     changeDockVisibility();
 
-    void domainClicked(const QPoint&);
-    void domainDoubleClicked(const QModelIndex&);
-    void execAction(const QStringList&);
-    void newVirtDomainFromXML(const QStringList&);
+    void                     domainClicked(const QPoint&);
+    void                     domainDoubleClicked(const QModelIndex&);
+    void                     execAction(const QStringList&);
+    void                     newVirtDomainFromXML(const QStringList&);
 
 };
 

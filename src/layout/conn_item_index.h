@@ -17,18 +17,18 @@ public:
 signals:
 
 private:
-    QString  Name;
-    QString  Host;
-    QString  State;
-    DATA     Data;
+    QString Name;
+    QString URI;
+    QString State;
+    DATA    Data;
 
 public slots:
-    void setName(QString&);
-    void setHost(QString&);
-    void setState(QString&);
-    void setData(DATA&);
+    void    setName(QString&);
+    void    setURI(QString&);
+    void    setState(QString&);
+    void    setData(DATA&);
     QString getName() const;
-    QString getHost() const;
+    QString getURI() const;
     QString getState() const;
     DATA    getData() const;
 

@@ -101,6 +101,7 @@ void VirtDomainControl::stopProcessing()
         domainModel->removeRow(0);
     };
     domainModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
+    setEnabled(false);
 
 }
 bool VirtDomainControl::setCurrentWorkConnect(virConnect *conn)
@@ -128,6 +129,11 @@ void VirtDomainControl::setListHeader(QString &connName)
 {
     domainModel->setHeaderData(0, Qt::Horizontal, QString("Name (Conn: \"%1\")").arg(connName), Qt::EditRole);
     currConnName = connName;
+    setEnabled(true);
+}
+virConnect* VirtDomainControl::getConnect() const
+{
+    return currWorkConnect;
 }
 
 /* private slots */

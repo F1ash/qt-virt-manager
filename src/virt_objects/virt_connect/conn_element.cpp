@@ -24,6 +24,8 @@ ElemConnect::~ElemConnect()
         connAliveThread = 0;
     };
 }
+
+/* public slots */
 void ElemConnect::setItemReference(ConnItemModel *model, ConnItemIndex *idx)
 {
     own_model = model;
@@ -40,36 +42,6 @@ void ElemConnect::setItemReference(ConnItemModel *model, ConnItemIndex *idx)
     settings.endGroup();
     if ( atStart ) openConnect();
 }
-void ElemConnect::buildCommand()
-{
-    settings.beginGroup("Connects");
-    settings.beginGroup(name);
-    checkTimeout = settings.value("TimeOut", TIMEOUT).toInt();
-    QString Driver = settings.value("Driver", "").toString();
-    QString Transport = settings.value("Transport", "").toString();
-    Host = settings.value("Host", "").toString();
-    QString Extra = settings.value("Extra", "").toString();
-    settings.endGroup();
-    settings.endGroup();
-
-    // URI building
-    QStringList _uri;
-    _uri.append(Driver.toLower());
-    if ( !Transport.isEmpty() ) {
-        _uri.append("+");
-        _uri.append(Transport.toLower());
-    };
-    _uri.append("://");
-    if ( !Host.isEmpty() ) {
-        _uri.append(Host);
-    };
-    _uri.append("/");
-    if ( !Extra.isEmpty() ) {
-        //_uri.append("?");
-        _uri.append(Extra);
-    };
-    URI = _uri.join("");
-}
 void ElemConnect::openConnect()
 {
     conn_Status.insert("availability", QVariant(NOT_AVAILABLE));
@@ -85,6 +57,10 @@ void ElemConnect::openConnect()
             QString("Wait Timer is running: %1").arg(waitTimerId));
     };
 }
+void ElemConnect::closeConnect()
+{
+    connAliveThread->setKeepAlive(false);
+}
 void ElemConnect::showConnectData()
 {
     virConnect *conn = NULL;
@@ -92,9 +68,45 @@ void ElemConnect::showConnectData()
     //qDebug()<<"showConnectData:"<<name<<QVariant((conn!=NULL)?true:false).toString()<<conn;
     emit connPtr(conn, name);
 }
-void ElemConnect::closeConnect()
+virConnect* ElemConnect::getConnect() const
 {
-    connAliveThread->setKeepAlive(false);
+    return connAliveThread->getConnect();
+}
+
+/* private slots */
+void ElemConnect::buildCommand()
+{
+    settings.beginGroup("Connects");
+    settings.beginGroup(name);
+    checkTimeout = settings.value("TimeOut", TIMEOUT).toInt();
+    QString Driver = settings.value("Driver", "").toString();
+    QString Transport = settings.value("Transport", "").toString();
+    Host = settings.value("Host", "").toString();
+    QString Path = settings.value("Path", "").toString();
+    QString Extra = settings.value("Extra", "").toString();
+    settings.endGroup();
+    settings.endGroup();
+
+    // URI building
+    QStringList _uri;
+    _uri.append(Driver.toLower().toLower().split("/").first());
+    if ( !Transport.isEmpty() ) {
+        _uri.append("+");
+        _uri.append(Transport.toLower());
+    };
+    _uri.append("://");
+    if ( !Host.isEmpty() ) {
+        _uri.append(Host);
+    };
+    _uri.append("/");
+    if ( !Path.isEmpty() ) {
+        _uri.append(Path);
+    };
+    if ( !Extra.isEmpty() ) {
+        _uri.append("?");
+        _uri.append(Extra);
+    };
+    URI = _uri.join("");
 }
 void ElemConnect::setConnectState(CONN_STATE status)
 {
@@ -103,8 +115,8 @@ void ElemConnect::setConnectState(CONN_STATE status)
           killTimer(waitTimerId);
           waitTimerId = 0;
       };
-      Host.clear();
-      Host.append("-");
+      URI.clear();
+      URI.append("-");
   } else _diff = checkTimeout + 1;
   conn_Status.insert("isRunning", QVariant(status));
   conn_Status.insert("availability", QVariant(AVAILABLE));
@@ -117,7 +129,7 @@ void ElemConnect::setConnectState(CONN_STATE status)
           data = name;
           break;
       case 1:
-          data = Host;
+          data = URI;
           break;
       case 2:
           switch (status) {

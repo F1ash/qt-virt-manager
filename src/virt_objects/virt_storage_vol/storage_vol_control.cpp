@@ -83,6 +83,7 @@ bool VirtStorageVolControl::getThreadState() const
 }
 void VirtStorageVolControl::stopProcessing()
 {
+    setEnabled(false);
     if ( timerId ) {
         killTimer(timerId);
         timerId = 0;
@@ -119,6 +120,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
         currWorkConnect = NULL;
         return false;
     } else {
+        setEnabled(true);
         currConnName = connName;
         currPoolName = poolName;
         storageVolModel->setHeaderData(0, Qt::Horizontal, QString("Name (Pool: \"%1\")").arg(poolName), Qt::EditRole);
@@ -246,6 +248,8 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             stVolControlThread->execAction(RESIZE_StVOL, args);
         } else if ( l.first()=="getVirtStorageVolXMLDesc" ) {
             stVolControlThread->execAction(GET_StVOL_XML_DESC, args);
+        } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
+            stopProcessing();
         };
     } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
         stopProcessing();

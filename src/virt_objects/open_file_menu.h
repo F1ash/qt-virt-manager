@@ -26,10 +26,12 @@ private:
     QIcon       icon;
     QAction    *examples;
     QAction    *custom;
+    QAction    *manual;
 
 private slots:
     void exampleChoised();
     void customChoised();
+    void manualChoised();
     void emitParameters(const QString&, const QString&);
 
 };

@@ -24,10 +24,11 @@ public:
     ~ElemConnect();
 
 public slots:
-    void setItemReference(ConnItemModel*, ConnItemIndex*);
-    void openConnect();
-    void showConnectData();
-    void closeConnect();
+    void              setItemReference(ConnItemModel*, ConnItemIndex*);
+    void              openConnect();
+    void              closeConnect();
+    void              showConnectData();
+    virConnect*       getConnect() const;
 
 signals:
     void warningShowed();

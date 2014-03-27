@@ -28,7 +28,7 @@ signals:
     void messageShowed();
     void warning(QString&);
     void connPtr(virConnect*, QString&);
-    void connectClosed();
+    void connectClosed(virConnect*);
 
 public slots:
     int  connectItemEditAction();

@@ -11,10 +11,16 @@ OpenFileMenu::OpenFileMenu(QWidget *parent, QString str, QString src) :
     custom = new QAction(this);
     custom->setText(QString("%1 Virtual %2 from custom XML").arg(method).arg(src));
     custom->setIcon(icon);
+    manual = new QAction(this);
+    manual->setText(QString("%1 Virtual %2 manually").arg(method).arg(src));
+    manual->setIcon(icon);
     connect(examples, SIGNAL(triggered()), this, SLOT(exampleChoised()));
     connect(custom, SIGNAL(triggered()), this, SLOT(customChoised()));
+    connect(manual, SIGNAL(triggered()), this, SLOT(manualChoised()));
     addAction(examples);
     addAction(custom);
+    addSeparator();
+    addAction(manual);
 }
 OpenFileMenu::~OpenFileMenu()
 {
@@ -24,6 +30,8 @@ OpenFileMenu::~OpenFileMenu()
     examples = 0;
     delete custom;
     custom = 0;
+    delete manual;
+    manual = 0;
 }
 void OpenFileMenu::exampleChoised()
 {
@@ -33,6 +41,15 @@ void OpenFileMenu::exampleChoised()
 void OpenFileMenu::customChoised()
 {
     emitParameters("Get Custom Source XML", "~");
+}
+void OpenFileMenu::manualChoised()
+{
+    QString path;
+    QStringList parameters;
+    // show SRC Creator widget
+    // get path for method
+    parameters << fullMethodName << path;
+    emit fileForMethod(parameters);
 }
 void OpenFileMenu::emitParameters(const QString &title, const QString &dirPath)
 {
