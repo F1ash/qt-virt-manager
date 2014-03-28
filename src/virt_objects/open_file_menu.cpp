@@ -6,10 +6,10 @@ OpenFileMenu::OpenFileMenu(QWidget *parent, QString str, QString src) :
     fullMethodName = QString("%1_FromXML").arg(method.toLower());
     icon = QIcon::fromTheme( QString("%1-%2").arg(src.toLower()).arg(method.toLower()) );
     examples = new QAction(this);
-    examples->setText(QString("%1 Virtual %2 from example XML").arg(method).arg(src));
+    examples->setText(QString("%1 Virtual %2 from example XML description").arg(method).arg(src));
     examples->setIcon(icon);
     custom = new QAction(this);
-    custom->setText(QString("%1 Virtual %2 from custom XML").arg(method).arg(src));
+    custom->setText(QString("%1 Virtual %2 from custom XML description").arg(method).arg(src));
     custom->setIcon(icon);
     manual = new QAction(this);
     manual->setText(QString("%1 Virtual %2 manually").arg(method).arg(src));

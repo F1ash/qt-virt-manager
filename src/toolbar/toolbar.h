@@ -21,6 +21,7 @@ public:
   QAction    *_closeAction;
   QAction    *_closeAllAction;
   QAction    *_docsUpAction;
+  QAction    *_closeOverview;
   QAction    *_exitAction;
 
   QAction    *_logUpAction;

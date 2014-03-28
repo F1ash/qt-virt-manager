@@ -20,6 +20,8 @@ ToolBar::~ToolBar()
 
   delete _hideAction;
   _hideAction = 0;
+  delete _closeOverview;
+  _closeOverview = 0;
   delete _exitAction;
   _exitAction = 0;
 
@@ -61,6 +63,8 @@ void ToolBar::initActions()
 {
     _hideAction = new QAction(QString("Hide to tray"), this);
     _hideAction->setIcon ( QIcon::fromTheme("down") );
+    _closeOverview = new QAction(QString("Close Overview"), this);
+    _closeOverview->setIcon ( QIcon::fromTheme("overview-stop") );
     _exitAction = new QAction(QString("Exit"), this);
     _exitAction->setIcon ( QIcon::fromTheme("exit") );
 
@@ -69,6 +73,8 @@ void ToolBar::initActions()
     addItemControlMenu();
     addSeparator();
     addDocksControlMenu();
+    addSeparator();
+    addAction(_closeOverview);
     addSeparator();
     addAction(_exitAction);
 

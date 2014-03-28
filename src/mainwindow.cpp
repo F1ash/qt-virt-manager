@@ -49,6 +49,7 @@ MainWindow::~MainWindow()
   disconnect(toolBar->_closeAction, SIGNAL(triggered()), this, SLOT(closeCurrentConnect()));
   disconnect(toolBar->_closeAllAction, SIGNAL(triggered()), this, SLOT(closeAllConnect()));
   disconnect(toolBar->_logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
+  disconnect(toolBar->_closeOverview, SIGNAL(triggered()), this, SLOT(stopProcessing()));
   disconnect(toolBar->_exitAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
   disconnect(toolBar, SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
   disconnect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
@@ -255,6 +256,7 @@ void MainWindow::initToolBar()
   connect(toolBar->_closeAction, SIGNAL(triggered()), this, SLOT(closeCurrentConnect()));
   connect(toolBar->_closeAllAction, SIGNAL(triggered()), this, SLOT(closeAllConnect()));
   connect(toolBar->_logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
+  connect(toolBar->_closeOverview, SIGNAL(triggered()), this, SLOT(stopProcessing()));
   connect(toolBar->_exitAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
   connect(toolBar, SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
   int area_int = settings.value("ToolBarArea", 4).toInt();

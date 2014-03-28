@@ -32,7 +32,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     getXMLDesc_Action->setToolTip("Get XML Description");
     stopOverview_Action = new QAction(this);
     stopOverview_Action->setIcon(QIcon::fromTheme("overview-stop"));
-    stopOverview_Action->setToolTip("Stop Overview");
+    stopOverview_Action->setToolTip("Close Pool Overview");
 
     addAction(start_Action);
     addAction(destroy_Action);
