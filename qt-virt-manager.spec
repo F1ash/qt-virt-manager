@@ -26,9 +26,9 @@ management API.
 
 %prep
 %setup -q
-mkdir %{cmake_build_dir}
 
 %build
+mkdir %{cmake_build_dir}
 pushd %{cmake_build_dir}
       %cmake ..
       make %{?_smp_mflags}

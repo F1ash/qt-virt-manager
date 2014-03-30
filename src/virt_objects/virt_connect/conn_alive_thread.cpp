@@ -85,8 +85,8 @@ void ConnAliveThread::openConnect()
      */
     conn = virConnectOpen(URI.toUtf8().constData());
     //qDebug()<<"openConn"<<conn;
-    sendConnErrors();
     if (conn==NULL) {
+        sendConnErrors();
         keep_alive = false;
         emit connMsg( "Connection to the Hypervisor is failed." );
         emit changeConnState(FAILED);

@@ -6,9 +6,18 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     start_Action = new QAction(this);
     start_Action->setIcon(QIcon::fromTheme("domain-start"));
     start_Action->setToolTip("Start");
+    destroy_Menu = new QMenu(this);
+    reboot_Action = destroy_Menu->addAction("Reboot");
+    reboot_Action->setIcon(QIcon::fromTheme("reboot"));
+    reset_Action = destroy_Menu->addAction("Reset");
+    reset_Action->setIcon(QIcon::fromTheme("reset"));
+    sep = destroy_Menu->addSeparator();
+    save_Action = destroy_Menu->addAction("Save");
+    save_Action->setIcon(QIcon::fromTheme("save"));
     destroy_Action = new QAction(this);
     destroy_Action->setIcon(QIcon::fromTheme("domain-stop"));
     destroy_Action->setToolTip("Stop");
+    destroy_Action->setMenu(destroy_Menu);
     create_Action = new QAction(this);
     create_Action->setIcon(QIcon::fromTheme("domain-create"));
     create_Action->setToolTip("Create");
@@ -72,6 +81,16 @@ DomainToolBar::~DomainToolBar()
 
     delete start_Action;
     start_Action = 0;
+    delete reset_Action;
+    reset_Action = 0;
+    delete reboot_Action;
+    reboot_Action = 0;
+    delete save_Action;
+    save_Action = 0;
+    delete sep;
+    sep = 0;
+    delete destroy_Menu;
+    destroy_Menu = 0;
     delete destroy_Action;
     destroy_Action = 0;
     delete create_Menu;

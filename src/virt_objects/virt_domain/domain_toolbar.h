@@ -21,6 +21,14 @@ signals:
 private:
     QAction         *start_Action;
     QAction         *destroy_Action;
+    QMenu           *destroy_Menu;
+    QAction         *restore_Action;
+    QAction         *save_Action;
+    QAction         *sep;
+    QAction         *resume_Action;
+    QAction         *suspend_Action;
+    QAction         *reboot_Action;
+    QAction         *reset_Action;
     OpenFileMenu    *create_Menu;
     OpenFileMenu    *define_Menu;
     QAction         *create_Action;

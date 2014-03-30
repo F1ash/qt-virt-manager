@@ -383,7 +383,8 @@ void MainWindow::initDockWidgets()
     storageVolDockContent->setEnabled(false);
     storagePoolDockContent->setEnabled(false);
     /*
-     * TODO: add docs for Interfaces, NetFilters, NodeDevices, Secrets
+     * TODO: add docs for Interfaces, NetFilters, Node(Devices|Info),
+     * Secrets, DomainInfo
      */
 }
 void MainWindow::editCurrentConnect()
