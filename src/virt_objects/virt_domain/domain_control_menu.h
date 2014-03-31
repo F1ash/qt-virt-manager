@@ -18,7 +18,12 @@ signals:
 
 private:
     QAction        *start;
+    QAction        *pause;
     QAction        *destroy;
+    QAction        *reset;
+    QAction        *reboot;
+    QAction        *shutdown;
+    QAction        *save;
     QAction        *undefine;
     QAction        *autoStart;
     QAction        *getXMLDesc;

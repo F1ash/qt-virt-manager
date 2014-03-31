@@ -6,12 +6,17 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     start_Action = new QAction(this);
     start_Action->setIcon(QIcon::fromTheme("domain-start"));
     start_Action->setToolTip("Start");
+    pause_Action = new QAction(this);
+    pause_Action->setIcon(QIcon::fromTheme("domain-pause"));
+    pause_Action->setToolTip("Pause");
     destroy_Menu = new QMenu(this);
     reboot_Action = destroy_Menu->addAction("Reboot");
     reboot_Action->setIcon(QIcon::fromTheme("reboot"));
     reset_Action = destroy_Menu->addAction("Reset");
     reset_Action->setIcon(QIcon::fromTheme("reset"));
     sep = destroy_Menu->addSeparator();
+    shutdown_Action = destroy_Menu->addAction("Shutdown");
+    shutdown_Action->setIcon(QIcon::fromTheme("shutdown"));
     save_Action = destroy_Menu->addAction("Save");
     save_Action->setIcon(QIcon::fromTheme("save"));
     destroy_Action = new QAction(this);
@@ -41,6 +46,7 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     getXMLDesc_Action->setToolTip("Get XML Description");
 
     addAction(start_Action);
+    addAction(pause_Action);
     addAction(destroy_Action);
     addSeparator();
     addAction(create_Action);
@@ -81,10 +87,14 @@ DomainToolBar::~DomainToolBar()
 
     delete start_Action;
     start_Action = 0;
+    delete pause_Action;
+    pause_Action = 0;
     delete reset_Action;
     reset_Action = 0;
     delete reboot_Action;
     reboot_Action = 0;
+    delete shutdown_Action;
+    shutdown_Action = 0;
     delete save_Action;
     save_Action = 0;
     delete sep;
@@ -169,8 +179,18 @@ void DomainToolBar::detectTriggerredAction(QAction *action)
     QStringList parameters;
     if ( action == start_Action) {
         parameters << "startVirtDomain";
+    } else if ( action == pause_Action ) {
+        parameters << "pauseVirtDomain";
     } else if ( action == destroy_Action ) {
         parameters << "destroyVirtDomain";
+    } else if ( action == reset_Action ) {
+        parameters << "resetVirtDomain";
+    } else if ( action == reboot_Action ) {
+        parameters << "rebootVirtDomain";
+    } else if ( action == shutdown_Action ) {
+        parameters << "shutdownVirtDomain";
+    } else if ( action == save_Action ) {
+        parameters << "saveVirtDomain";
     } else if ( action == undefine_Action ) {
         parameters << "undefineVirtDomain";
     } else if ( action == setAutostart_Action ) {

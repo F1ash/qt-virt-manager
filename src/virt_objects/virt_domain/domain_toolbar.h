@@ -25,10 +25,10 @@ private:
     QAction         *restore_Action;
     QAction         *save_Action;
     QAction         *sep;
-    QAction         *resume_Action;
-    QAction         *suspend_Action;
+    QAction         *pause_Action;
     QAction         *reboot_Action;
     QAction         *reset_Action;
+    QAction         *shutdown_Action;
     OpenFileMenu    *create_Menu;
     OpenFileMenu    *define_Menu;
     QAction         *create_Action;

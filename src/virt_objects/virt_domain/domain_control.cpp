@@ -178,7 +178,17 @@ void VirtDomainControl::resultReceiver(DomActions act, QStringList data)
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == START_DOMAIN ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+    } else if ( act == PAUSE_DOMAIN ) {
+        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == DESTROY_DOMAIN ) {
+        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+    } else if ( act == RESET_DOMAIN ) {
+        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+    } else if ( act == REBOOT_DOMAIN ) {
+        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+    } else if ( act == SHUTDOWN_DOMAIN ) {
+        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+    } else if ( act == SAVE_DOMAIN ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == UNDEFINE_DOMAIN ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
@@ -246,8 +256,24 @@ void VirtDomainControl::execAction(const QStringList &l)
         args.append(domainName);
         if        ( l.first()=="startVirtDomain" ) {
             domControlThread->execAction(START_DOMAIN, args);
+        } else if ( l.first()=="pauseVirtDomain" ) {
+            args.append(domainModel->virtDomDataList.at(idx.row())->getState().split(":").last());
+            domControlThread->execAction(PAUSE_DOMAIN, args);
         } else if ( l.first()=="destroyVirtDomain" ) {
             domControlThread->execAction(DESTROY_DOMAIN, args);
+        } else if ( l.first()=="resetVirtDomain" ) {
+            domControlThread->execAction(RESET_DOMAIN, args);
+        } else if ( l.first()=="rebootVirtDomain" ) {
+            domControlThread->execAction(REBOOT_DOMAIN, args);
+        } else if ( l.first()=="shutdownVirtDomain" ) {
+            domControlThread->execAction(SHUTDOWN_DOMAIN, args);
+        } else if ( l.first()=="saveVirtDomain" ) {
+            QString to = QFileDialog::getSaveFileName(this, "Save to", "~");
+            if ( !to.isEmpty() ) {
+                args.append(to);
+                args.append(domainModel->virtDomDataList.at(idx.row())->getState().split(":").last());
+                domControlThread->execAction(SAVE_DOMAIN, args);
+            };
         } else if ( l.first()=="undefineVirtDomain" ) {
             domControlThread->execAction(UNDEFINE_DOMAIN, args);
         } else if ( l.first()=="setAutostartVirtDomain" ) {

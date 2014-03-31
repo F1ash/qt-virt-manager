@@ -42,8 +42,23 @@ void DomControlThread::run()
     case START_DOMAIN :
         result.append(startDomain());
         break;
+    case PAUSE_DOMAIN :
+        result.append(pauseDomain());
+        break;
     case DESTROY_DOMAIN :
         result.append(destroyDomain());
+        break;
+    case RESET_DOMAIN :
+        result.append(resetDomain());
+        break;
+    case REBOOT_DOMAIN :
+        result.append(rebootDomain());
+        break;
+    case SHUTDOWN_DOMAIN :
+        result.append(shutdownDomain());
+        break;
+    case SAVE_DOMAIN :
+        result.append(saveDomain());
         break;
     case UNDEFINE_DOMAIN :
         result.append(undefineDomain());
@@ -252,6 +267,28 @@ QStringList DomControlThread::startDomain()
     result.append(QString("'%1' Domain %2 Started.").arg(name).arg((started)?"":"don't"));
     return result;
 }
+QStringList DomControlThread::pauseDomain()
+{
+    QStringList result;
+    QString name = args.first();
+    QString state = args.last();
+    bool invoked = false;
+
+    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+
+    if ( domain!=NULL ) {
+        if ( state=="RUNNING" ) {
+            invoked = (virDomainSuspend(domain)+1) ? true : false;
+            if (!invoked) sendConnErrors();
+        } else if ( state=="PAUSED" ) {
+            invoked = (virDomainResume(domain)+1) ? true : false;
+            if (!invoked) sendConnErrors();
+        } else 0;
+        virDomainFree(domain);
+    } else sendConnErrors();
+    result.append(QString("'%1' Domain state %2 changed.").arg(name).arg((invoked)?"":"don't"));
+    return result;
+}
 QStringList DomControlThread::destroyDomain()
 {
     QStringList result;
@@ -291,6 +328,94 @@ QStringList DomControlThread::destroyDomain()
         virDomainFree(domain);
     } else sendConnErrors();
     result.append(QString("'%1' Domain %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
+    return result;
+}
+QStringList DomControlThread::resetDomain()
+{
+    QStringList result;
+    QString name = args.first();
+    bool invoked = false;
+    // extra flags; not used yet, so callers should always pass 0
+    unsigned int flags = 0;
+
+    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+
+    if ( domain!=NULL ) {
+        invoked = (virDomainReset(domain, flags)+1) ? true : false;
+        if (!invoked) sendConnErrors();
+        virDomainFree(domain);
+    } else sendConnErrors();
+    result.append(QString("'%1' Domain %2 reset.").arg(name).arg((invoked)?"":"don't"));
+    return result;
+}
+QStringList DomControlThread::rebootDomain()
+{
+    QStringList result;
+    QString name = args.first();
+    bool invoked = false;
+    unsigned int flags =
+            VIR_DOMAIN_REBOOT_DEFAULT |
+            VIR_DOMAIN_REBOOT_ACPI_POWER_BTN |
+            VIR_DOMAIN_REBOOT_GUEST_AGENT |
+            VIR_DOMAIN_REBOOT_INITCTL |
+            VIR_DOMAIN_REBOOT_SIGNAL;
+
+    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+
+    if ( domain!=NULL ) {
+        invoked = (virDomainReboot(domain, flags)+1) ? true : false;
+        if (!invoked) sendConnErrors();
+        virDomainFree(domain);
+    } else sendConnErrors();
+    result.append(QString("'%1' Domain %2 reboot.").arg(name).arg((invoked)?"":"don't"));
+    return result;
+}
+QStringList DomControlThread::shutdownDomain()
+{
+    QStringList result;
+    QString name = args.first();
+    bool invoked = false;
+    unsigned int flags =
+            VIR_DOMAIN_SHUTDOWN_DEFAULT |
+            VIR_DOMAIN_SHUTDOWN_ACPI_POWER_BTN |
+            VIR_DOMAIN_SHUTDOWN_GUEST_AGENT |
+            VIR_DOMAIN_SHUTDOWN_INITCTL |
+            VIR_DOMAIN_SHUTDOWN_SIGNAL;
+
+    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+
+    if ( domain!=NULL ) {
+        invoked = (virDomainShutdownFlags(domain, flags)+1) ? true : false;
+        if (!invoked) sendConnErrors();
+        virDomainFree(domain);
+    } else sendConnErrors();
+    result.append(QString("'%1' Domain %2 shutdown.").arg(name).arg((invoked)?"":"don't"));
+    return result;
+}
+QStringList DomControlThread::saveDomain()
+{
+    QStringList result;
+    QString name = args.first();
+    args.removeFirst();
+    const char *to = args.first().toUtf8().data();
+    const char *dxml = NULL;
+    QString state = args.last();
+    bool invoked = false;
+    unsigned int flags = VIR_DOMAIN_SAVE_BYPASS_CACHE;
+    if ( state=="RUNNING" ) {
+        flags = flags | VIR_DOMAIN_SAVE_RUNNING;
+    } else if ( state=="PAUSED" ) {
+        flags = flags | VIR_DOMAIN_SAVE_PAUSED;
+    };
+
+    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+
+    if ( domain!=NULL ) {
+        invoked = (virDomainSaveFlags(domain, to, dxml, flags)+1) ? true : false;
+        if (!invoked) sendConnErrors();
+        virDomainFree(domain);
+    } else sendConnErrors();
+    result.append(QString("'%1' Domain %2 saved.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 QStringList DomControlThread::undefineDomain()

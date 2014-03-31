@@ -13,7 +13,12 @@ enum DomActions {
     CREATE_DOMAIN,
     DEFINE_DOMAIN,
     START_DOMAIN,
+    PAUSE_DOMAIN,
     DESTROY_DOMAIN,
+    RESET_DOMAIN,
+    REBOOT_DOMAIN,
+    SHUTDOWN_DOMAIN,
+    SAVE_DOMAIN,
     UNDEFINE_DOMAIN,
     CHANGE_DOM_AUTOSTART,
     GET_DOM_XML_DESC,
@@ -48,7 +53,12 @@ private slots:
     QStringList createDomain();
     QStringList defineDomain();
     QStringList startDomain();
+    QStringList pauseDomain();
     QStringList destroyDomain();
+    QStringList resetDomain();
+    QStringList rebootDomain();
+    QStringList shutdownDomain();
+    QStringList saveDomain();
     QStringList undefineDomain();
     QStringList changeAutoStartDomain();
     QStringList getDomainXMLDesc();
