@@ -8,6 +8,7 @@
 #include <QTime>
 #include <QTimerEvent>
 #include <QProcess>
+#include <QMessageBox>
 #include <QDebug>
 #include "virtnet_model.h"
 #include "virtnet_toolbar.h"

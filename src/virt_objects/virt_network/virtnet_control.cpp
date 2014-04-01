@@ -266,6 +266,18 @@ void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
         else act = DEFINE_NETWORK;
         QStringList args = _args;
         args.removeFirst();
-        if ( !args.isEmpty() ) netControlThread->execAction(act, args);
+        if ( !args.isEmpty() )  {
+            if ( args.first()=="manually" ) {
+                args.removeFirst();
+                QString source = args.first();
+                args.removeFirst();
+                // show SRC Creator widget
+                // get path for method
+                QString path;
+                QMessageBox::information(this, "INFO", QString("Manual settings for %2(%1) not implemented yet.").arg(act).arg(source), QMessageBox::Ok);
+                args.prepend(path);
+            };
+            netControlThread->execAction(act, args);
+        };
     };
 }

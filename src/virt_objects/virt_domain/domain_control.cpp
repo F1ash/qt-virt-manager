@@ -274,6 +274,13 @@ void VirtDomainControl::execAction(const QStringList &l)
                 args.append(domainModel->virtDomDataList.at(idx.row())->getState().split(":").last());
                 domControlThread->execAction(SAVE_DOMAIN, args);
             };
+        } else if ( l.first()=="restoreVirtDomain" ) {
+            QString from = QFileDialog::getOpenFileName(this, "Restore from", "~");
+            if ( !from.isEmpty() ) {
+                args.append(from);
+                // TODO: get restore domain state
+                domControlThread->execAction(RESTORE_DOMAIN, args);
+            };
         } else if ( l.first()=="undefineVirtDomain" ) {
             domControlThread->execAction(UNDEFINE_DOMAIN, args);
         } else if ( l.first()=="setAutostartVirtDomain" ) {
@@ -296,6 +303,18 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
         else act = DEFINE_DOMAIN;
         QStringList args = _args;
         args.removeFirst();
-        if ( !args.isEmpty() ) domControlThread->execAction(act, args);
+        if ( !args.isEmpty() ) {
+            if ( args.first()=="manually" ) {
+                args.removeFirst();
+                QString source = args.first();
+                args.removeFirst();
+                // show SRC Creator widget
+                // get path for method
+                QString path;
+                QMessageBox::information(this, "INFO", QString("Manual settings for %2(%1) not implemented yet.").arg(act).arg(source), QMessageBox::Ok);
+                args.prepend(path);
+            };
+            domControlThread->execAction(act, args);
+        };
     };
 }

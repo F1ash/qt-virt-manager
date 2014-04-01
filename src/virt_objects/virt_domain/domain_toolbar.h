@@ -20,9 +20,10 @@ signals:
 
 private:
     QAction         *start_Action;
+    QAction         *restore_Action;
+    QMenu           *start_Menu;
     QAction         *destroy_Action;
     QMenu           *destroy_Menu;
-    QAction         *restore_Action;
     QAction         *save_Action;
     QAction         *sep;
     QAction         *pause_Action;

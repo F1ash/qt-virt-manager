@@ -268,6 +268,18 @@ void VirtStoragePoolControl::newVirtStoragePoolFromXML(const QStringList &_args)
         else act = DEFINE_StPOOL;
         QStringList args = _args;
         args.removeFirst();
-        if ( !args.isEmpty() ) stPoolControlThread->execAction(act, args);
+        if ( !args.isEmpty() ) {
+                if ( args.first()=="manually" ) {
+                    args.removeFirst();
+                    QString source = args.first();
+                    args.removeFirst();
+                    // show SRC Creator widget
+                    // get path for method
+                    QString path;
+                    QMessageBox::information(this, "INFO", QString("Manual settings for %2(%1) not implemented yet.").arg(act).arg(source), QMessageBox::Ok);
+                    args.prepend(path);
+                };
+                stPoolControlThread->execAction(act, args);
+        };
     };
 }

@@ -60,6 +60,9 @@ void DomControlThread::run()
     case SAVE_DOMAIN :
         result.append(saveDomain());
         break;
+    case RESTORE_DOMAIN :
+        result.append(restoreDomain());
+        break;
     case UNDEFINE_DOMAIN :
         result.append(undefineDomain());
         break;
@@ -416,6 +419,29 @@ QStringList DomControlThread::saveDomain()
         virDomainFree(domain);
     } else sendConnErrors();
     result.append(QString("'%1' Domain %2 saved.").arg(name).arg((invoked)?"":"don't"));
+    return result;
+}
+QStringList DomControlThread::restoreDomain()
+{
+    QStringList result;
+    QString name = args.first();
+    args.removeFirst();
+    const char *from = args.first().toUtf8().data();
+    const char *dxml = NULL;
+    QString to_state = args.last();
+    bool invoked = false;
+    unsigned int flags = VIR_DOMAIN_SAVE_BYPASS_CACHE;
+    if ( to_state=="RUNNING" ) {
+        flags = flags | VIR_DOMAIN_SAVE_RUNNING;
+    } else if ( to_state=="PAUSED" ) {
+        flags = flags | VIR_DOMAIN_SAVE_PAUSED;
+    };
+
+    if ( currWorkConnect!=NULL ) {
+        invoked = (virDomainRestoreFlags(currWorkConnect, from, dxml, flags)+1) ? true : false;
+        if (!invoked) sendConnErrors();
+    };
+    result.append(QString("'%1' Domain %2 restored.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 QStringList DomControlThread::undefineDomain()

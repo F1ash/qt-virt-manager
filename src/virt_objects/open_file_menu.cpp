@@ -44,11 +44,8 @@ void OpenFileMenu::customChoised()
 }
 void OpenFileMenu::manualChoised()
 {
-    QString path;
     QStringList parameters;
-    // show SRC Creator widget
-    // get path for method
-    parameters << fullMethodName << path;
+    parameters << fullMethodName << "manually" << source;
     emit fileForMethod(parameters);
 }
 void OpenFileMenu::emitParameters(const QString &title, const QString &dirPath)

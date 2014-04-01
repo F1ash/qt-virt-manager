@@ -6,6 +6,10 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     start_Action = new QAction(this);
     start_Action->setIcon(QIcon::fromTheme("domain-start"));
     start_Action->setToolTip("Start");
+    start_Menu = new QMenu(this);
+    restore_Action = start_Menu->addAction("Restore");
+    restore_Action->setIcon(QIcon::fromTheme("domain-start"));
+    start_Action->setMenu(start_Menu);
     pause_Action = new QAction(this);
     pause_Action->setIcon(QIcon::fromTheme("domain-pause"));
     pause_Action->setToolTip("Pause");
@@ -87,6 +91,10 @@ DomainToolBar::~DomainToolBar()
 
     delete start_Action;
     start_Action = 0;
+    delete restore_Action;
+    restore_Action = 0;
+    delete start_Menu;
+    start_Menu = 0;
     delete pause_Action;
     pause_Action = 0;
     delete reset_Action;
@@ -191,6 +199,8 @@ void DomainToolBar::detectTriggerredAction(QAction *action)
         parameters << "shutdownVirtDomain";
     } else if ( action == save_Action ) {
         parameters << "saveVirtDomain";
+    } else if ( action == restore_Action ) {
+        parameters << "restoreVirtDomain";
     } else if ( action == undefine_Action ) {
         parameters << "undefineVirtDomain";
     } else if ( action == setAutostart_Action ) {

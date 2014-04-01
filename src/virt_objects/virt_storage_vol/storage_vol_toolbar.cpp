@@ -15,6 +15,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     create_Menu = new OpenFileMenu(this, "create", "StorageVol");
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+    /* define don't exist for StorageVol
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("storageVol-define"));
     define_Action->setToolTip("Define");
@@ -24,6 +25,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("storageVol-undefine"));
     undefine_Action->setToolTip("Undefine");
+    */
     setAutostart_Action = new QAction(this);
     setAutostart_Action->setIcon(QIcon::fromTheme("storageVol-autostart"));
     setAutostart_Action->setToolTip("Change AutoStart State");
@@ -38,8 +40,8 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     addAction(destroy_Action);
     addSeparator();
     addAction(create_Action);
-    addAction(define_Action);
-    addAction(undefine_Action);
+    //addAction(define_Action);
+    //addAction(undefine_Action);
     //addSeparator();
     addAction(setAutostart_Action);
     addSeparator();
@@ -56,7 +58,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     //connect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
 
     connect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    connect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
+    //connect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     connect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
 }
 StorageVolToolBar::~StorageVolToolBar()
@@ -69,10 +71,10 @@ StorageVolToolBar::~StorageVolToolBar()
     //disconnect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    disconnect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
+    //disconnect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
 
-    disconnect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+    //disconnect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     disconnect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
 
     delete start_Action;
@@ -81,14 +83,14 @@ StorageVolToolBar::~StorageVolToolBar()
     destroy_Action = 0;
     delete create_Menu;
     create_Menu = 0;
-    delete define_Menu;
-    define_Menu = 0;
+    //delete define_Menu;
+    //define_Menu = 0;
     delete create_Action;
     create_Action = 0;
-    delete define_Action;
-    define_Action = 0;
-    delete undefine_Action;
-    undefine_Action = 0;
+    //delete define_Action;
+    //define_Action = 0;
+    //delete undefine_Action;
+    //undefine_Action = 0;
     delete setAutostart_Action;
     setAutostart_Action = 0;
     delete getXMLDesc_Action;

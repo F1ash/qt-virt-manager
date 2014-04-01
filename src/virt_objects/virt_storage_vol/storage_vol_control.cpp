@@ -263,6 +263,18 @@ void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
         else act = StVOL_EMPTY_ACTION;
         QStringList args = _args;
         args.removeFirst();
-        if ( !args.isEmpty() ) stVolControlThread->execAction(act, args);
+        if ( !args.isEmpty() ) {
+            if ( args.first()=="manually" ) {
+                args.removeFirst();
+                QString source = args.first();
+                args.removeFirst();
+                // show SRC Creator widget
+                // get path for method
+                QString path;
+                QMessageBox::information(this, "INFO", QString("Manual settings for %2(%1) not implemented yet.").arg(act).arg(source), QMessageBox::Ok);
+                args.prepend(path);
+            };
+            stVolControlThread->execAction(act, args);
+        };
     };
 }

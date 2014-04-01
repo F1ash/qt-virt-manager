@@ -8,6 +8,7 @@
 #include <QTime>
 #include <QTimerEvent>
 #include <QProcess>
+#include <QMessageBox>
 #include <QDebug>
 #include "storage_pool_model.h"
 #include "storage_pool_toolbar.h"

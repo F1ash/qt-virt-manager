@@ -8,6 +8,7 @@
 #include <QTime>
 #include <QTimerEvent>
 #include <QProcess>
+#include <QMessageBox>
 #include <QDebug>
 #include "domain_model.h"
 #include "domain_toolbar.h"
