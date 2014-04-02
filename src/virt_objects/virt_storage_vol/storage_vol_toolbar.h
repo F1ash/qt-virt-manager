@@ -37,7 +37,7 @@ private slots:
     void detectTriggerredAction(QAction*);
 
 public slots:
-    Qt::ToolBarArea get_ToolBarArea(int i) const;
+    Qt::ToolBarArea get_ToolBarArea(int) const;
 
 };
 

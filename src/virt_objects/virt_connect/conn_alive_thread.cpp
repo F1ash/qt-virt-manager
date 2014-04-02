@@ -80,10 +80,14 @@ void ConnAliveThread::run()
 }
 void ConnAliveThread::openConnect()
 {
-    /*
-     * TODO: implement virConnectOpenReadOnly(), virConnectOpenAuth()
-     */
-    conn = virConnectOpen(URI.toUtf8().constData());
+    if ( virInitialize()+1 ) {
+        registered = (virEventRegisterDefaultImpl()==0)?true:false;
+        emit connMsg( QString("default event implementation registered: %1").arg(QVariant(registered).toString()) );
+        /*
+         * TODO: implement virConnectOpenReadOnly(), virConnectOpenAuth()
+         */
+        conn = virConnectOpen(URI.toUtf8().constData());
+    };
     //qDebug()<<"openConn"<<conn;
     if (conn==NULL) {
         sendConnErrors();
@@ -93,8 +97,6 @@ void ConnAliveThread::openConnect()
     } else {
         keep_alive = true;
         emit connMsg( QString("connect opened: %1").arg(QVariant(conn!=NULL).toString()) );
-        registered = (virEventRegisterDefaultImpl()==0)?true:false;
-        emit connMsg( QString("default event implementation registered: %1").arg(QVariant(registered).toString()) );
         emit changeConnState(RUNNING);
         registerConnEvents();
     };

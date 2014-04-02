@@ -54,8 +54,8 @@ MainWindow::~MainWindow()
   disconnect(toolBar, SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
   disconnect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
   disconnect(toolBar->_netUpAction, SIGNAL(triggered(bool)), networkDock, SLOT(setVisible(bool)));
-  disconnect(toolBar->_stVolUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
-  disconnect(toolBar->_stPoolUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
+  disconnect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
+  disconnect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
   disconnect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
@@ -212,8 +212,8 @@ void MainWindow::changeVisibility()
         trayIcon->hideAction->setIcon (QIcon::fromTheme("down"));
         if ( domainDock->isFloating() && toolBar->_domUpAction->isChecked() ) domainDock->show();
         if ( networkDock->isFloating() && toolBar->_netUpAction->isChecked() ) networkDock->show();
-        if ( storageVolDock->isFloating() && toolBar->_stVolUpAction->isChecked() ) storageVolDock->show();
-        if ( storagePoolDock->isFloating() && toolBar->_stPoolUpAction->isChecked() ) storagePoolDock->show();
+        if ( storageVolDock->isFloating() && toolBar->_storageUpAction->isChecked() ) storageVolDock->show();
+        if ( storagePoolDock->isFloating() && toolBar->_storageUpAction->isChecked() ) storagePoolDock->show();
     };
 }
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
@@ -347,11 +347,11 @@ void MainWindow::initDockWidgets()
     storageVolDock->restoreGeometry(settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", false).toBool();
     storageVolDock->setVisible(visible);
-    toolBar->_stVolUpAction->setChecked(visible);
+    toolBar->_storageUpAction->setChecked(visible);
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, storageVolDock);
-    connect(toolBar->_stVolUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
+    connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
     connect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
 
     storagePoolDock = new QDockWidget(this);
@@ -369,11 +369,11 @@ void MainWindow::initDockWidgets()
     storagePoolDock->restoreGeometry(settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", false).toBool();
     storagePoolDock->setVisible(visible);
-    toolBar->_stPoolUpAction->setChecked(visible);
+    toolBar->_storageUpAction->setChecked(visible);
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, storagePoolDock);
-    connect(toolBar->_stPoolUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
+    connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
     connect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
     connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
             this, SLOT(receivePoolName(virConnect*,QString&,QString&)));

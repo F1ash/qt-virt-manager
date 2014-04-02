@@ -7,11 +7,14 @@ LogDock::LogDock(QWidget *parent) :
     docLayout = new QVBoxLayout();
     currentTime = new QLabel();
 
-    Log = new QTextEdit(this);
+    Log = new QTextBrowser(this);
     Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2").arg(LOG_SIZE).arg(Log->toPlainText().count()));
     Log->setReadOnly(true);
+    Log->setOpenLinks(false);
+    Log->setOpenExternalLinks(true);
     Log->setContextMenuPolicy(Qt::DefaultContextMenu);   //Qt::CustomContextMenu);
     //connect(Log, SIGNAL(customContextMenuRequested(const QPoint&)), Log, SLOT(clear()));
+    connect(Log, SIGNAL(anchorClicked(QUrl)), this, SLOT(openLink(QUrl)));
 
     docLayout->addWidget(currentTime);
     docLayout->addWidget(Log);
@@ -26,7 +29,8 @@ LogDock::~LogDock()
     };
     delete currentTime;
     currentTime = 0;
-    disconnect(Log, SIGNAL(customContextMenuRequested(const QPoint&)), Log, SLOT(clear()));
+    //disconnect(Log, SIGNAL(customContextMenuRequested(const QPoint&)), Log, SLOT(clear()));
+    connect(Log, SIGNAL(anchorClicked(QUrl)), this, SLOT(openLink(QUrl)));
     Log->clear();
     delete Log;
     Log = 0;
@@ -47,4 +51,9 @@ void LogDock::timerEvent(QTimerEvent *ev)
 {
     if ( timerId==ev->timerId() )
         currentTime->setText(QString("Current Time: <b>%1</b>").arg(QTime::currentTime().toString()));
+}
+void LogDock::openLink(QUrl url)
+{
+    //qDebug()<<url.toString();
+    QDesktopServices::openUrl(url);
 }

@@ -7,7 +7,8 @@
 #include <QSettings>
 #include <QTime>
 #include <QTimerEvent>
-#include <QProcess>
+#include <QUrl>
+#include <QDesktopServices>
 #include <QMessageBox>
 #include <QDebug>
 #include "virtnet_model.h"

@@ -136,7 +136,8 @@ void VirtStoragePoolControl::setListHeader(QString &connName)
 void VirtStoragePoolControl::timerEvent(QTimerEvent *event)
 {
     int _timerId = event->timerId();
-    if ( _timerId && timerId==_timerId ) {
+    if ( _timerId && timerId==_timerId && isVisible() ) {
+        //qDebug()<<"get stPool list";
         stPoolControlThread->execAction(GET_ALL_StPOOL, QStringList());
     };
 }
@@ -184,12 +185,9 @@ void VirtStoragePoolControl::resultReceiver(StoragePoolActions act, QStringList 
         if ( !data.isEmpty() ) {
             QString xml = data.first();
             data.removeFirst();
-            data<<"in"<<xml;
+            data.append(QString("in <a href='%1'>%1</a>").arg(xml));
             msgRepeater(data.join(" "));
-            // exec xdg-open temporarily XML file
-            // TODO: make a cross-platform
-            QString command = QString("xdg-open %1").arg(xml);
-            QProcess::startDetached(command);
+            QDesktopServices::openUrl(QUrl(xml));
         };
     };
 }
@@ -273,9 +271,9 @@ void VirtStoragePoolControl::newVirtStoragePoolFromXML(const QStringList &_args)
                     args.removeFirst();
                     QString source = args.first();
                     args.removeFirst();
+                    QString path;
                     // show SRC Creator widget
                     // get path for method
-                    QString path;
                     QMessageBox::information(this, "INFO", QString("Manual settings for %2(%1) not implemented yet.").arg(act).arg(source), QMessageBox::Ok);
                     args.prepend(path);
                 };

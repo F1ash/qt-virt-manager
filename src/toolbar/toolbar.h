@@ -27,8 +27,7 @@ public:
   QAction    *_logUpAction;
   QAction    *_domUpAction;
   QAction    *_netUpAction;
-  QAction    *_stVolUpAction;
-  QAction    *_stPoolUpAction;
+  QAction    *_storageUpAction;
 
 signals:
   void        warningShowed();

@@ -4,9 +4,11 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QTextEdit>
+#include <QTextBrowser>
 #include <QTime>
 #include <QTimerEvent>
+#include <QUrl>
+#include <QDesktopServices>
 #include <QDebug>
 
 #define LOG_SIZE 1048576
@@ -19,11 +21,11 @@ public:
     ~LogDock();
 
 private:
-    int           timerId;
-    QSize         _size;
-    QVBoxLayout  *docLayout;
-    QLabel       *currentTime;
-    QTextEdit    *Log;
+    int               timerId;
+    QSize             _size;
+    QVBoxLayout      *docLayout;
+    QLabel           *currentTime;
+    QTextBrowser     *Log;
 
 signals:
 
@@ -32,6 +34,7 @@ public slots:
 
 private slots:
     void timerEvent(QTimerEvent*);
+    void openLink(QUrl);
 
 };
 

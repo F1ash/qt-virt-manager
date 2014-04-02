@@ -50,10 +50,8 @@ ToolBar::~ToolBar()
   _domUpAction = 0;
   delete _netUpAction;
   _netUpAction = 0;
-  delete _stVolUpAction;
-  _stVolUpAction = 0;
-  delete _stPoolUpAction;
-  _stPoolUpAction = 0;
+  delete _storageUpAction;
+  _storageUpAction = 0;
   delete showDocksControlMenu;
   showDocksControlMenu = 0;
   delete _docsUpAction;
@@ -127,17 +125,14 @@ void ToolBar::addDocksControlMenu()
     _domUpAction->setCheckable(true);
     _netUpAction = new QAction("Network Dock", this);
     _netUpAction->setCheckable(true);
-    _stVolUpAction = new QAction("StorageVol Dock", this);
-    _stVolUpAction->setCheckable(true);
-    _stPoolUpAction = new QAction("StoragePool Dock", this);
-    _stPoolUpAction->setCheckable(true);
+    _storageUpAction = new QAction("Storages Docks", this);
+    _storageUpAction->setCheckable(true);
 
     showDocksControlMenu->addAction(_logUpAction);
     showDocksControlMenu->addSeparator();
     showDocksControlMenu->addAction(_domUpAction);
     showDocksControlMenu->addAction(_netUpAction);
-    showDocksControlMenu->addAction(_stVolUpAction);
-    showDocksControlMenu->addAction(_stPoolUpAction);
+    showDocksControlMenu->addAction(_storageUpAction);
 
     _docsUpAction = new QAction(QString("Dock Control"), this);
     _docsUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );

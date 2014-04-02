@@ -136,7 +136,8 @@ void VirtNetControl::setListHeader(QString &connName)
 void VirtNetControl::timerEvent(QTimerEvent *event)
 {
     int _timerId = event->timerId();
-    if ( _timerId && timerId==_timerId ) {
+    if ( _timerId && timerId==_timerId && isVisible() ) {
+        //qDebug()<<"get Network list";
         netControlThread->execAction(GET_ALL_NETWORK, QStringList());
     };
 }
@@ -184,12 +185,9 @@ void VirtNetControl::resultReceiver(NetActions act, QStringList data)
         if ( !data.isEmpty() ) {
             QString xml = data.first();
             data.removeFirst();
-            data<<"in"<<xml;
+            data.append(QString("in <a href='%1'>%1</a>").arg(xml));
             msgRepeater(data.join(" "));
-            // exec xdg-open temporarily XML file
-            // TODO: make a cross-platform
-            QString command = QString("xdg-open %1").arg(xml);
-            QProcess::startDetached(command);
+            QDesktopServices::openUrl(QUrl(xml));
         };
     };
 }
@@ -266,14 +264,14 @@ void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
         else act = DEFINE_NETWORK;
         QStringList args = _args;
         args.removeFirst();
-        if ( !args.isEmpty() )  {
+        if ( !args.isEmpty() ) {
             if ( args.first()=="manually" ) {
                 args.removeFirst();
                 QString source = args.first();
                 args.removeFirst();
+                QString path;
                 // show SRC Creator widget
                 // get path for method
-                QString path;
                 QMessageBox::information(this, "INFO", QString("Manual settings for %2(%1) not implemented yet.").arg(act).arg(source), QMessageBox::Ok);
                 args.prepend(path);
             };

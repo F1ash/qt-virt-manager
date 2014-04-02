@@ -99,6 +99,7 @@ StorageVolToolBar::~StorageVolToolBar()
     stopOverview_Action = 0;
 }
 
+/* public slots */
 Qt::ToolBarArea StorageVolToolBar::get_ToolBarArea(int i) const
 {
   Qt::ToolBarArea result;
@@ -121,6 +122,8 @@ Qt::ToolBarArea StorageVolToolBar::get_ToolBarArea(int i) const
   };
   return result;
 }
+
+/* private slots */
 void StorageVolToolBar::repeatParameters(QStringList &p)
 {
     emit fileForMethod(p);
