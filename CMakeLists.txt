@@ -34,6 +34,7 @@ set (HEADERS
   src/virt_objects/virt_domain/domain_toolbar.h
   src/virt_objects/virt_domain/domain_control_menu.h
   src/virt_objects/virt_domain/domain_control_thread.h
+  src/virt_objects/virt_domain/create_virt_domain.h
   
   src/virt_objects/virt_network/virtnet_control.h
   src/virt_objects/virt_network/virtnet_model.h
@@ -82,6 +83,7 @@ set (SOURCES
   src/virt_objects/virt_domain/domain_toolbar.cpp
   src/virt_objects/virt_domain/domain_control_thread.cpp
   src/virt_objects/virt_domain/domain_control_menu.cpp
+  src/virt_objects/virt_domain/create_virt_domain.cpp
   
   src/virt_objects/virt_network/virtnet_control.cpp
   src/virt_objects/virt_network/virtnet_model.cpp

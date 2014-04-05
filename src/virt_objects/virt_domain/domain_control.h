@@ -9,12 +9,12 @@
 #include <QTimerEvent>
 #include <QUrl>
 #include <QDesktopServices>
-#include <QMessageBox>
 #include <QDebug>
 #include "domain_model.h"
 #include "domain_toolbar.h"
 #include "domain_control_menu.h"
 #include "domain_control_thread.h"
+#include "create_virt_domain.h"
 
 class VirtDomainControl : public QMainWindow
 {
@@ -30,11 +30,12 @@ private:
     QString                  currConnName;
     QSettings                settings;
     DomainModel             *domainModel = NULL;
-    QTreeView               *domainList = NULL;
+    QTreeView               *domainList  = NULL;
     DomainToolBar           *toolBar;
 
-    virConnect              *currWorkConnect = NULL;
+    virConnect              *currWorkConnect  = NULL;
     DomControlThread        *domControlThread = NULL;
+    CreateVirtDomain        *createVirtDomain = NULL;
 
     int                      interval;
     int                      timerId;

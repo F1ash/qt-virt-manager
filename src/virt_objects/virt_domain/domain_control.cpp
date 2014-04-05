@@ -57,6 +57,11 @@ VirtDomainControl::~VirtDomainControl()
     disconnect(domControlThread, SIGNAL(resultData(DomActions, QStringList)), this, SLOT(resultReceiver(DomActions, QStringList)));
     disconnect(domControlThread, SIGNAL(errorMsg(QString)), this, SLOT(msgRepeater(QString)));
 
+    if ( createVirtDomain!=NULL ) {
+        delete createVirtDomain;
+        createVirtDomain = 0;
+    };
+
     stopProcessing();
     domControlThread->terminate();
     delete domControlThread;
@@ -309,7 +314,14 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                 QString path;
                 // show SRC Creator widget
                 // get path for method
-                QMessageBox::information(this, "INFO", QString("Manual settings for %2(%1) not implemented yet.").arg(act).arg(source), QMessageBox::Ok);
+                createVirtDomain = new CreateVirtDomain(this);
+                int result = createVirtDomain->exec();
+                if ( createVirtDomain!=NULL && result ) {
+                    path = createVirtDomain->getXMLFile();
+                    delete createVirtDomain;
+                    createVirtDomain = 0;
+                };
+                qDebug()<<path<<"path"<<result;
                 args.prepend(path);
             };
             domControlThread->execAction(act, args);
