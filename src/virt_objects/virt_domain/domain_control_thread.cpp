@@ -16,8 +16,6 @@ bool DomControlThread::setCurrentWorkConnect(virConnectPtr conn)
 void DomControlThread::stop() { keep_alive = false; }
 void DomControlThread::execAction(DomActions act, QStringList _args)
 {
-    action = DOM_EMPTY_ACTION;
-    args.clear();
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;
