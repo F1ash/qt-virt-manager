@@ -16,8 +16,6 @@ bool StoragePoolControlThread::setCurrentWorkConnect(virConnectPtr conn)
 void StoragePoolControlThread::stop() { keep_alive = false; }
 void StoragePoolControlThread::execAction(StoragePoolActions act, QStringList _args)
 {
-    action = StPOOL_EMPTY_ACTION;
-    args.clear();
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;

@@ -28,8 +28,6 @@ void StorageVolControlThread::stop()
 }
 void StorageVolControlThread::execAction(StorageVolActions act, QStringList _args)
 {
-    action = StVOL_EMPTY_ACTION;
-    args.clear();
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;

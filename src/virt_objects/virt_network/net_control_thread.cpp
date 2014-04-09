@@ -16,8 +16,6 @@ bool NetControlThread::setCurrentWorkConnect(virConnectPtr conn)
 void NetControlThread::stop() { keep_alive = false; }
 void NetControlThread::execAction(NetActions act, QStringList _args)
 {
-    action = NET_EMPTY_ACTION;
-    args.clear();
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;
