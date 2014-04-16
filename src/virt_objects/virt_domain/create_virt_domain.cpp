@@ -176,9 +176,17 @@ void CreateVirtDomain::buildXMLDescription()
     root.setAttribute("type", type.toLower());
     doc.appendChild(root);
     QDomNodeList list = general->getNodeList();
-    for (uint i=0; i<=list.length();i++) {
-        qDebug()<<list.item(i).nodeName()<<i;
-        root.appendChild(list.item(i));
+    /*
+     * current DomNode is removed to root-elrment
+     * but NULL-elemens not removed
+     * therefore keep to seek on not-NULL next element
+     */
+    uint j = 0;
+    uint count = list.length();
+    for (uint i=0; i<=count;i++) {
+        qDebug()<<list.item(j).nodeName()<<i;
+        if (!list.item(j).isNull()) root.appendChild(list.item(j));
+        else ++j;
     };
     elem = doc.createElement("some");
     elem.setAttribute("id", 456);
