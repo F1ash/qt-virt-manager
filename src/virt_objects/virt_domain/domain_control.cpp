@@ -309,20 +309,25 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
         if ( !args.isEmpty() ) {
             if ( args.first()=="manually" ) {
                 args.removeFirst();
-                QString source = args.first();
+                //QString source = args.first();
                 args.removeFirst();
-                QString path;
+                QString xml;
                 // show SRC Creator widget
-                // get path for method
-                createVirtDomain = new CreateVirtDomain(this);
+                createVirtDomain = new CreateVirtDomain(this, QString("%1").arg(virConnectGetType(currWorkConnect)));
                 int result = createVirtDomain->exec();
                 if ( createVirtDomain!=NULL && result ) {
-                    path = createVirtDomain->getXMLFile();
+                    // get path for method
+                    xml = createVirtDomain->getXMLDescFileName();
                     delete createVirtDomain;
                     createVirtDomain = 0;
+                    QStringList data;
+                    data.append("New Domain XML'ed");
+                    data.append(QString("in <a href='%1'>%1</a>").arg(xml));
+                    msgRepeater(data.join(" "));
+                    QDesktopServices::openUrl(QUrl(xml));
                 };
-                qDebug()<<path<<"path"<<result;
-                args.prepend(path);
+                qDebug()<<xml<<"path"<<result;
+                args.prepend(xml);
             };
             domControlThread->execAction(act, args);
         };

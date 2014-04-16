@@ -2,6 +2,7 @@
 #define NET_CONTROL_THREAD_H
 
 #include <QThread>
+#include <QDir>
 #include <QTemporaryFile>
 #include <QStringList>
 #include "libvirt/libvirt.h"

@@ -84,14 +84,13 @@
 
 */
 
-CreateVirtDomain::CreateVirtDomain(QWidget *parent) :
-    QDialog(parent)
+CreateVirtDomain::CreateVirtDomain(QWidget *parent, QString str) :
+    QDialog(parent), type(str)
 {
     setModal(true);
     setWindowTitle("Domain Settings");
     commonLayout = new QVBoxLayout(this);
-    input = new QLineEdit(this);
-    general = new QWidget(this);
+    general = new General(this, type);
     boot = new QWidget(this);
     cpu = new QWidget(this);
     memory = new QWidget(this);
@@ -119,17 +118,17 @@ CreateVirtDomain::CreateVirtDomain(QWidget *parent) :
     buttonLayout->addWidget(cancel);
     buttons = new QWidget(this);
     buttons->setLayout(buttonLayout);
-    commonLayout->addWidget(input);
     commonLayout->addWidget(tabWidget);
     commonLayout->addWidget(buttons);
     setLayout(commonLayout);
+    xml = new QTemporaryFile(this);
+    xml->setAutoRemove(false);
+    xml->setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml").arg(QDir::tempPath()).arg(QDir::separator()));
 }
 CreateVirtDomain::~CreateVirtDomain()
 {
     disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
     disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
-    delete input;
-    input = 0;
     delete general;
     general = 0;
     delete boot;
@@ -158,18 +157,39 @@ CreateVirtDomain::~CreateVirtDomain()
     buttons = 0;
     delete commonLayout;
     commonLayout = 0;
+    delete xml;
+    xml = 0;
 }
 
 /* public slots */
-QString CreateVirtDomain::getXMLFile() const
+QString CreateVirtDomain::getXMLDescFileName() const
 {
-    return input->text();
+    return xml->fileName();
 }
 
 /* private slots */
 void CreateVirtDomain::buildXMLDescription()
 {
+    QDomDocument doc = QDomDocument();
+    QDomElement root, elem;
+    root = doc.createElement("domain");
+    root.setAttribute("type", type.toLower());
+    doc.appendChild(root);
+    QDomNodeList list = general->getNodeList();
+    for (uint i=0; i<=list.length();i++) {
+        qDebug()<<list.item(i).nodeName()<<i;
+        root.appendChild(list.item(i));
+    };
+    elem = doc.createElement("some");
+    elem.setAttribute("id", 456);
+    QDomText data = doc.createTextNode("E-E-E-E-E!!!");
+    elem.appendChild(data);
+    root.appendChild(elem);
+    qDebug()<<doc.toString();
 
+    bool read = xml->open();
+    if (read) xml->write(doc.toByteArray(4).data());
+    xml->close();
 }
 void CreateVirtDomain::set_Result()
 {

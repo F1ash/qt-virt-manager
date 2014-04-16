@@ -578,6 +578,7 @@ QStringList DomControlThread::getDomainXMLDesc()
     } else sendConnErrors();
     QTemporaryFile f;
     f.setAutoRemove(false);
+    f.setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml").arg(QDir::tempPath()).arg(QDir::separator()));
     read = f.open();
     if (read) f.write(Returns);
     result.append(f.fileName());

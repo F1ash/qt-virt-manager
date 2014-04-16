@@ -2,26 +2,30 @@
 #define CREATE_VIRT_DOMAIN_H
 
 #include <QDialog>
+#include <QDir>
 #include <QTemporaryFile>
 #include <QTabWidget>
-#include <QLineEdit>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QtXml/QDomDocument>
+#include <QTextStream>
+#include "general.h"
+#include <QDebug>
 
 class CreateVirtDomain : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CreateVirtDomain(QWidget *parent = 0);
+    explicit CreateVirtDomain(QWidget *parent = 0, QString str = "");
     ~CreateVirtDomain();
 
 signals:
 
 private:
-    QLineEdit       *input;
+    QString          type;
     QTabWidget      *tabWidget;
-    QWidget         *general;
+    General         *general;
     QWidget         *boot;
     QWidget         *cpu;
     QWidget         *memory;
@@ -35,8 +39,10 @@ private:
     QHBoxLayout     *buttonLayout;
     QVBoxLayout     *commonLayout;
 
+    QTemporaryFile  *xml;
+
 public slots:
-    QString getXMLFile() const;
+    QString getXMLDescFileName() const;
 
 private slots:
     void buildXMLDescription();

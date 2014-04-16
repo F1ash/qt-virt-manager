@@ -6,7 +6,6 @@ endif ()
 cmake_minimum_required (VERSION 2.8.3)
 
 set (PROJECT_NAME qt-virt-manager)
-set (HELPER_NAME qt_virt_manager_helper)
 set (PROJECT_VERSION 1.0.0)
 set (HEADERS 
   src/mainwindow.h
@@ -35,6 +34,7 @@ set (HEADERS
   src/virt_objects/virt_domain/domain_control_menu.h
   src/virt_objects/virt_domain/domain_control_thread.h
   src/virt_objects/virt_domain/create_virt_domain.h
+  src/virt_objects/virt_domain/general.h
   
   src/virt_objects/virt_network/virtnet_control.h
   src/virt_objects/virt_network/virtnet_model.h
@@ -84,6 +84,7 @@ set (SOURCES
   src/virt_objects/virt_domain/domain_control_thread.cpp
   src/virt_objects/virt_domain/domain_control_menu.cpp
   src/virt_objects/virt_domain/create_virt_domain.cpp
+  src/virt_objects/virt_domain/general.cpp
   
   src/virt_objects/virt_network/virtnet_control.cpp
   src/virt_objects/virt_network/virtnet_model.cpp
@@ -112,7 +113,7 @@ set (DESKTOP_FILE ${PROJECT_NAME}.desktop)
 project (${PROJECT_NAME})
 
 include_directories (${CMAKE_CURRENT_BINARY_DIR} ${SOURCES_DIRS})
-find_package (Qt4 COMPONENTS QtCore QtGui)
+find_package (Qt4 COMPONENTS QtCore QtGui QtXml)
 include (${QT_USE_FILE})
 qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
 set (BUILD_PROJECT_LIBRARIES ${QT_LIBRARIES})
