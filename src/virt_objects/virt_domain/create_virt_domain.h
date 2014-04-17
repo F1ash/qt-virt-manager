@@ -2,6 +2,7 @@
 #define CREATE_VIRT_DOMAIN_H
 
 #include <QDialog>
+#include <QSettings>
 #include <QDir>
 #include <QTemporaryFile>
 #include <QTabWidget>
@@ -23,6 +24,7 @@ public:
 signals:
 
 private:
+    QSettings        settings;
     QString          type;
     QTabWidget      *tabWidget;
     General         *general;

@@ -89,6 +89,7 @@ CreateVirtDomain::CreateVirtDomain(QWidget *parent, QString str) :
 {
     setModal(true);
     setWindowTitle("Domain Settings");
+    restoreGeometry(settings.value("DomCreateGeometry").toByteArray());
     commonLayout = new QVBoxLayout(this);
     general = new General(this, type);
     boot = new QWidget(this);
@@ -127,6 +128,7 @@ CreateVirtDomain::CreateVirtDomain(QWidget *parent, QString str) :
 }
 CreateVirtDomain::~CreateVirtDomain()
 {
+    settings.setValue("DomCreateGeometry", saveGeometry());
     disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
     disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     delete general;
@@ -184,16 +186,11 @@ void CreateVirtDomain::buildXMLDescription()
     uint j = 0;
     uint count = list.length();
     for (uint i=0; i<=count;i++) {
-        qDebug()<<list.item(j).nodeName()<<i;
+        //qDebug()<<list.item(j).nodeName()<<i;
         if (!list.item(j).isNull()) root.appendChild(list.item(j));
         else ++j;
     };
-    elem = doc.createElement("some");
-    elem.setAttribute("id", 456);
-    QDomText data = doc.createTextNode("E-E-E-E-E!!!");
-    elem.appendChild(data);
-    root.appendChild(elem);
-    qDebug()<<doc.toString();
+    //qDebug()<<doc.toString();
 
     bool read = xml->open();
     if (read) xml->write(doc.toByteArray(4).data());

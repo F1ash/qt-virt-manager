@@ -318,15 +318,15 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                 if ( createVirtDomain!=NULL && result ) {
                     // get path for method
                     xml = createVirtDomain->getXMLDescFileName();
-                    delete createVirtDomain;
-                    createVirtDomain = 0;
                     QStringList data;
                     data.append("New Domain XML'ed");
                     data.append(QString("in <a href='%1'>%1</a>").arg(xml));
                     msgRepeater(data.join(" "));
                     QDesktopServices::openUrl(QUrl(xml));
                 };
-                qDebug()<<xml<<"path"<<result;
+                delete createVirtDomain;
+                createVirtDomain = 0;
+                //qDebug()<<xml<<"path"<<result;
                 args.prepend(xml);
             };
             domControlThread->execAction(act, args);

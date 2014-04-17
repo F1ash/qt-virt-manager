@@ -76,6 +76,6 @@ QDomNodeList General::getNodeList() const
     _desc.appendChild(data);
     doc.appendChild(_desc);
 
-    qDebug()<<doc.toString();
+    //qDebug()<<doc.toString();
     return doc.childNodes();
 }
