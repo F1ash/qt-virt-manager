@@ -14,7 +14,7 @@
 #include "domain_toolbar.h"
 #include "domain_control_menu.h"
 #include "domain_control_thread.h"
-#include "create_virt_domain.h"
+#include "create_widgets/domain/create_virt_domain.h"
 
 class VirtDomainControl : public QMainWindow
 {

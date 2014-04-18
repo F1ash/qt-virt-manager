@@ -91,23 +91,8 @@ CreateVirtDomain::CreateVirtDomain(QWidget *parent, QString str) :
     setWindowTitle("Domain Settings");
     restoreGeometry(settings.value("DomCreateGeometry").toByteArray());
     commonLayout = new QVBoxLayout(this);
-    general = new General(this, type);
-    boot = new QWidget(this);
-    cpu = new QWidget(this);
-    memory = new QWidget(this);
-    power = new QWidget(this);
-    devices = new QWidget(this);
-    interfaces = new QWidget(this);
-    security = new QWidget(this);
-    tabWidget = new QTabWidget(this);
-    tabWidget->addTab(general, QIcon::fromTheme("domain"), "General");
-    tabWidget->addTab(boot, QIcon::fromTheme("domain"), "Boot");
-    tabWidget->addTab(cpu, QIcon::fromTheme("domain"), "CPU");
-    tabWidget->addTab(memory, QIcon::fromTheme("domain"), "Memory");
-    tabWidget->addTab(power, QIcon::fromTheme("domain"), "Power");
-    tabWidget->addTab(devices, QIcon::fromTheme("domain"), "Devices");
-    tabWidget->addTab(interfaces, QIcon::fromTheme("domain"), "Interfaces");
-    tabWidget->addTab(security, QIcon::fromTheme("domain"), "Security");
+    create_specified_widgets();
+    set_specified_Tabs();
     ok = new QPushButton("Ok", this);
     ok->setAutoDefault(true);
     connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
@@ -131,22 +116,7 @@ CreateVirtDomain::~CreateVirtDomain()
     settings.setValue("DomCreateGeometry", saveGeometry());
     disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
     disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
-    delete general;
-    general = 0;
-    delete boot;
-    boot = 0;
-    delete cpu;
-    cpu = 0;
-    delete memory;
-    memory = 0;
-    delete power;
-    power = 0;
-    delete devices;
-    devices = 0;
-    delete interfaces;
-    interfaces = 0;
-    delete security;
-    security = 0;
+    delete_specified_widgets();
     delete tabWidget;
     tabWidget = 0;
     delete ok;
@@ -177,18 +147,21 @@ void CreateVirtDomain::buildXMLDescription()
     root = doc.createElement("domain");
     root.setAttribute("type", type.toLower());
     doc.appendChild(root);
-    QDomNodeList list = general->getNodeList();
-    /*
-     * current DomNode is removed to root-elrment
-     * but NULL-elemens not removed
-     * therefore keep to seek on not-NULL next element
-     */
-    uint j = 0;
-    uint count = list.length();
-    for (uint i=0; i<=count;i++) {
-        //qDebug()<<list.item(j).nodeName()<<i;
-        if (!list.item(j).isNull()) root.appendChild(list.item(j));
-        else ++j;
+    WidgetList::const_iterator Wdg;
+    for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
+        QDomNodeList list = (*Wdg)->getNodeList();
+        /*
+         * current DomNode is removed to root-elrment
+         * but NULL-elemens not removed
+         * therefore keep to seek on not-NULL next element
+         */
+        uint j = 0;
+        uint count = list.length();
+        for (uint i=0; i<=count;i++) {
+            //qDebug()<<list.item(j).nodeName()<<i;
+            if (!list.item(j).isNull()) root.appendChild(list.item(j));
+            else ++j;
+        };
     };
     //qDebug()<<doc.toString();
 
@@ -205,4 +178,36 @@ void CreateVirtDomain::set_Result()
         setResult(QDialog::Rejected);
     };
     done(result());
+}
+void CreateVirtDomain::create_specified_widgets()
+{
+    if ( type.toLower() == "lxc" ) {
+        wdgList.append(new General(this, type));
+        wdgList.append(new LXC_OSBooting(this));
+    } else if ( type.toLower() == "qemu" ) {
+        wdgList.append(new General(this, type));
+    } else if ( type.toLower() == "xen" ) {
+        wdgList.append(new General(this, type));
+    } else wdgList.clear();
+}
+void CreateVirtDomain::set_specified_Tabs()
+{
+    tabWidget = new QTabWidget(this);
+    WidgetList::const_iterator Wdg;
+    for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
+        if ( NULL!=*Wdg ) {
+            QString name = (*Wdg)->objectName();
+            tabWidget->addTab(*Wdg, QIcon::fromTheme(name.toLower()), name);
+        };
+    };
+}
+void CreateVirtDomain::delete_specified_widgets()
+{
+    WidgetList::const_iterator Wdg;
+    for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
+        if ( NULL!=*Wdg ) {
+            delete *Wdg;
+        };
+    };
+    wdgList.clear();
 }

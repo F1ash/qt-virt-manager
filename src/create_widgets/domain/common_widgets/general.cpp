@@ -1,8 +1,9 @@
 #include "general.h"
 
 General::General(QWidget *parent, QString str) :
-    QWidget(parent), type(str)
+    _QWidget(parent), type(str)
 {
+    setObjectName("Domain");
     typeLabel = new QLabel(QString("Type: %1").arg(type.toLower()), this);
     nameLabel = new QLabel("Name:", this);
     name = new QLineEdit(this);

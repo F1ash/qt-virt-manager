@@ -2,6 +2,7 @@
 #define CREATE_VIRT_DOMAIN_H
 
 #include <QDialog>
+#include <QList>
 #include <QSettings>
 #include <QDir>
 #include <QTemporaryFile>
@@ -11,8 +12,11 @@
 #include <QVBoxLayout>
 #include <QtXml/QDomDocument>
 #include <QTextStream>
-#include "general.h"
+#include "domain_widgets.h"
+#include "_qwidget.h"
 #include <QDebug>
+
+typedef QList<_QWidget*> WidgetList;
 
 class CreateVirtDomain : public QDialog
 {
@@ -27,14 +31,6 @@ private:
     QSettings        settings;
     QString          type;
     QTabWidget      *tabWidget;
-    General         *general;
-    QWidget         *boot;
-    QWidget         *cpu;
-    QWidget         *memory;
-    QWidget         *power;
-    QWidget         *devices;
-    QWidget         *interfaces;
-    QWidget         *security;
     QPushButton     *ok;
     QPushButton     *cancel;
     QWidget         *buttons;
@@ -42,6 +38,7 @@ private:
     QVBoxLayout     *commonLayout;
 
     QTemporaryFile  *xml;
+    WidgetList       wdgList;
 
 public slots:
     QString getXMLDescFileName() const;
@@ -49,6 +46,9 @@ public slots:
 private slots:
     void buildXMLDescription();
     void set_Result();
+    void create_specified_widgets();
+    void set_specified_Tabs();
+    void delete_specified_widgets();
 
 };
 

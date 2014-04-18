@@ -1,15 +1,13 @@
 #ifndef GENERAL_H
 #define GENERAL_H
 
-#include <QWidget>
+#include "create_widgets/domain/_qwidget.h"
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QLabel>
 #include <QTextEdit>
-#include <QtXml/QDomDocument>
-#include <QDebug>
 
-class General : public QWidget
+class General : public _QWidget
 {
     Q_OBJECT
 public:

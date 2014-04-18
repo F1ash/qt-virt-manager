@@ -311,8 +311,9 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                 args.removeFirst();
                 //QString source = args.first();
                 args.removeFirst();
-                QString xml;
+                QString capabilities, xml;
                 // show SRC Creator widget
+                capabilities = QString("%1").arg(virConnectGetCapabilities(currWorkConnect));
                 createVirtDomain = new CreateVirtDomain(this, QString("%1").arg(virConnectGetType(currWorkConnect)));
                 int result = createVirtDomain->exec();
                 if ( createVirtDomain!=NULL && result ) {
