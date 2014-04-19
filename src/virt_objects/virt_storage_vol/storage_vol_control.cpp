@@ -23,8 +23,6 @@ VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
     storageVolList->setColumnWidth(2, settings.value("column2", 32).toInt());
     storageVolList->setColumnWidth(3, settings.value("column3", 32).toInt());
     int area_int = settings.value("ToolBarArea", 4).toInt();
-    //bool check = settings.value("CheckList", false).toBool();
-    interval = settings.value("UpdateTime", 3).toInt();
     settings.endGroup();
     toolBar = new StorageVolToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
@@ -43,8 +41,6 @@ VirtStorageVolControl::~VirtStorageVolControl()
     settings.setValue("column1", storageVolList->columnWidth(1));
     settings.setValue("column2", storageVolList->columnWidth(2));
     settings.setValue("column3", storageVolList->columnWidth(3));
-    //settings.setValue("UpdateTime", docContent->getUpdateTime());
-    //settings.setValue("CheckList", docContent->getCheckList());
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
@@ -84,10 +80,7 @@ bool VirtStorageVolControl::getThreadState() const
 void VirtStorageVolControl::stopProcessing()
 {
     setEnabled(false);
-    if ( timerId ) {
-        killTimer(timerId);
-        timerId = 0;
-    }
+    toolBar->stopProcessing();
     if ( stVolControlThread!=NULL ) {
         stVolControlThread->stop();
     };
@@ -125,20 +118,12 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
         currPoolName = poolName;
         storageVolModel->setHeaderData(0, Qt::Horizontal, QString("Name (Pool: \"%1\")").arg(poolName), Qt::EditRole);
         stVolControlThread->setCurrentStoragePoolName(currWorkConnect, currPoolName);
-        timerId = startTimer(interval*1000);
+        toolBar->enableAutoReload();
         return true;
     };
 }
 
 /* private slots */
-void VirtStorageVolControl::timerEvent(QTimerEvent *event)
-{
-    int _timerId = event->timerId();
-    if ( _timerId && timerId==_timerId && isVisible() ) {
-        //qDebug()<<"get stVol list";
-        stVolControlThread->execAction(GET_ALL_StVOL, QStringList());
-    };
-}
 void VirtStorageVolControl::resultReceiver(StorageVolActions act, QStringList data)
 {
     //qDebug()<<act<<data<<"result";
@@ -248,9 +233,13 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             stVolControlThread->execAction(GET_StVOL_XML_DESC, args);
         } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
             stopProcessing();
+        } else if ( l.first()=="reloadVirtStoragePool" ) {
+            stVolControlThread->execAction(GET_ALL_StVOL, args);
         };
     } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
         stopProcessing();
+    } else if ( l.first()=="reloadVirtStoragePool" ) {
+        stVolControlThread->execAction(GET_ALL_StVOL, args);
     };
 }
 void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)

@@ -4,6 +4,9 @@
 #include <QToolBar>
 #include <QAction>
 #include <QIcon>
+#include <QPushButton>
+#include <QTimerEvent>
+#include <QSettings>
 #include "virt_objects/open_file_menu.h"
 #include <QDebug>
 
@@ -29,15 +32,26 @@ private:
     QAction         *setAutostart_Action;
     QAction         *getXMLDesc_Action;
     QAction         *stopOverview_Action;
+    QPushButton     *_autoReload;
+    QAction         *autoReload;
+    QAction         *reload;
+
+    QSettings        settings;
+    int              interval;
+    int              timerId;
 
 private slots:
+    void timerEvent(QTimerEvent*);
     void repeatParameters(QStringList&);
     void showHoveredMenu();
     void showMenu();
     void detectTriggerredAction(QAction*);
+    void changeAutoReloadState(bool);
 
 public slots:
     Qt::ToolBarArea get_ToolBarArea(int) const;
+    void enableAutoReload();
+    void stopProcessing();
 
 };
 

@@ -22,7 +22,7 @@ private:
     QAction        *undefine;
     QAction        *autoStart;
     QAction        *getXMLDesc;
-    QAction        *overview;
+    //QAction        *overview;
     QStringList     parameters;
 
 private slots:

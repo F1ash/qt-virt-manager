@@ -85,11 +85,12 @@
 */
 
 CreateVirtDomain::CreateVirtDomain(QWidget *parent, QString str) :
-    QDialog(parent), type(str)
+    QDialog(parent), capabilities(str)
 {
     setModal(true);
     setWindowTitle("Domain Settings");
     restoreGeometry(settings.value("DomCreateGeometry").toByteArray());
+    readCapabilities();
     commonLayout = new QVBoxLayout(this);
     create_specified_widgets();
     set_specified_Tabs();
@@ -140,6 +141,38 @@ QString CreateVirtDomain::getXMLDescFileName() const
 }
 
 /* private slots */
+void CreateVirtDomain::readCapabilities()
+{
+    QDomDocument doc = QDomDocument();
+    doc.setContent(capabilities);
+    arch = doc.firstChildElement("capabilities").
+               firstChildElement("host").
+               firstChildElement("cpu").
+               firstChildElement("arch").
+               firstChild().toText().data();
+    os_type = doc.firstChildElement("capabilities").
+               firstChildElement("guest").
+               firstChildElement("os_type").
+               firstChild().toText().data();
+    type = doc.firstChildElement("capabilities").
+               firstChildElement("guest").
+               firstChildElement("arch").
+               firstChildElement("domain").
+               attribute("type", "???");
+    /*  search emulator from guest with system achitecture  */
+    QDomElement el = doc.firstChildElement("capabilities").
+               firstChildElement("guest");
+    while ( !el.isNull() ) {
+        QDomElement _el = el.firstChildElement("arch");
+        if ( !_el.isNull() && arch==_el.attribute("name", "???") ) {
+               emulator = _el.
+                        firstChildElement("emulator").
+                        firstChild().toText().data();
+                break;
+        } else el = el.nextSiblingElement("guest");
+    };
+    qDebug()<<arch<<os_type<<type<<emulator;
+}
 void CreateVirtDomain::buildXMLDescription()
 {
     QDomDocument doc = QDomDocument();
@@ -182,12 +215,12 @@ void CreateVirtDomain::set_Result()
 void CreateVirtDomain::create_specified_widgets()
 {
     if ( type.toLower() == "lxc" ) {
-        wdgList.append(new General(this, type));
-        wdgList.append(new LXC_OSBooting(this));
+        wdgList.append(new General(this, type, arch, emulator));
+        wdgList.append(new LXC_OSBooting(this, os_type, arch));
     } else if ( type.toLower() == "qemu" ) {
-        wdgList.append(new General(this, type));
+        wdgList.append(new General(this, type, arch, emulator));
     } else if ( type.toLower() == "xen" ) {
-        wdgList.append(new General(this, type));
+        wdgList.append(new General(this, type, arch, emulator));
     } else wdgList.clear();
 }
 void CreateVirtDomain::set_specified_Tabs()

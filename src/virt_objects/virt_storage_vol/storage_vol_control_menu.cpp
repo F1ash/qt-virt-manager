@@ -19,9 +19,9 @@ StorageVolControlMenu::StorageVolControlMenu(QWidget *parent, QStringList params
     getXMLDesc = new QAction("get XML Description", this);
     getXMLDesc->setIcon(QIcon::fromTheme("storageVol-xml"));
     getXMLDesc->setEnabled(true);
-    overview = new QAction("overview Pool", this);
-    overview->setIcon(QIcon::fromTheme("overview"));
-    overview->setEnabled(true);
+    //overview = new QAction("overview Volume", this);
+    //overview->setIcon(QIcon::fromTheme("overview"));
+    //overview->setEnabled(true);
 
     addAction(start);
     addAction(destroy);
@@ -29,8 +29,8 @@ StorageVolControlMenu::StorageVolControlMenu(QWidget *parent, QStringList params
     addAction(autoStart);
     addSeparator();
     addAction(getXMLDesc);
-    addSeparator();
-    addAction(overview);
+    //addSeparator();
+    //addAction(overview);
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
 }
 StorageVolControlMenu::~StorageVolControlMenu()
@@ -46,8 +46,8 @@ StorageVolControlMenu::~StorageVolControlMenu()
     autoStart = 0;
     delete getXMLDesc;
     getXMLDesc = 0;
-    delete overview;
-    overview = 0;
+    //delete overview;
+    //overview = 0;
 }
 void StorageVolControlMenu::emitExecMethod(QAction *action)
 {
@@ -62,8 +62,8 @@ void StorageVolControlMenu::emitExecMethod(QAction *action)
         paramList << "uploadVirtStorageVolList";
     } else if ( action == getXMLDesc ) {
         paramList << "getVirtStorageVolXMLDesc";
-    } else if ( action == overview ) {
-        paramList << "overviewVirtStorageVol";
+    //} else if ( action == overview ) {
+    //    paramList << "overviewVirtStorageVol";
     } else return;
     paramList.insert(1, parameters.first());
     emit execMethod(paramList);

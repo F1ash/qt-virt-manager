@@ -1,10 +1,9 @@
 #include "os_booting.h"
 
-LXC_OSBooting::LXC_OSBooting(QWidget *parent) :
-    _QWidget(parent)
+LXC_OSBooting::LXC_OSBooting(QWidget *parent, QString arg1, QString arg2) :
+    _QWidget(parent), os_type(arg1), arch(arg2)
 {
     setObjectName("Booting");
-    arch = new QLabel(this);
     initPathLabel = new QLabel("Init path (Ex.: /sbin/init, /bin/sh, etc.):", this);
     initPath = new QLineEdit(this);
     initPath->setPlaceholderText("Enter Init Path");
@@ -56,8 +55,6 @@ LXC_OSBooting::LXC_OSBooting(QWidget *parent) :
 LXC_OSBooting::~LXC_OSBooting()
 {
     disconnect(nameSpaceEnable, SIGNAL(toggled(bool)), nameSpaceWidget, SLOT(setEnabled(bool)));
-    delete arch;
-    arch = 0;
     delete initPathLabel;
     initPathLabel = 0;
     delete initPath;
@@ -105,8 +102,8 @@ QDomNodeList LXC_OSBooting::getNodeList() const
     doc.appendChild(os);
 
     type= doc.createElement("type");
-    type.setAttribute("arch", arch->text());
-    data = doc.createTextNode("exe");
+    type.setAttribute("arch", arch);
+    data = doc.createTextNode(os_type);
     type.appendChild(data);
     os.appendChild(type);
 

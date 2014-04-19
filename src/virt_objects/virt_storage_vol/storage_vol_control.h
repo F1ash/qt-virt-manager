@@ -6,7 +6,6 @@
 #include <QTreeView>
 #include <QSettings>
 #include <QTime>
-#include <QTimerEvent>
 #include <QUrl>
 #include <QDesktopServices>
 #include <QMessageBox>
@@ -37,16 +36,12 @@ private:
     virConnect                *currWorkConnect = NULL;
     StorageVolControlThread   *stVolControlThread = NULL;
 
-    int                        interval;
-    int                        timerId;
-
 public slots:
     bool getThreadState() const;
     void stopProcessing();
     bool setCurrentStoragePool(virConnect*, QString&, QString&);
 
 private slots:
-    void timerEvent(QTimerEvent*);
     void resultReceiver(StorageVolActions, QStringList);
     void msgRepeater(QString);
     void changeDockVisibility();

@@ -29,7 +29,11 @@ signals:
 
 private:
     QSettings        settings;
+    QString          capabilities;
     QString          type;
+    QString          arch;
+    QString          os_type;
+    QString          emulator;
     QTabWidget      *tabWidget;
     QPushButton     *ok;
     QPushButton     *cancel;
@@ -44,6 +48,7 @@ public slots:
     QString getXMLDescFileName() const;
 
 private slots:
+    void readCapabilities();
     void buildXMLDescription();
     void set_Result();
     void create_specified_widgets();

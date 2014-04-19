@@ -314,7 +314,9 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                 QString capabilities, xml;
                 // show SRC Creator widget
                 capabilities = QString("%1").arg(virConnectGetCapabilities(currWorkConnect));
-                createVirtDomain = new CreateVirtDomain(this, QString("%1").arg(virConnectGetType(currWorkConnect)));
+                //qDebug()<<capabilities;
+                //createVirtDomain = new CreateVirtDomain(this, QString("%1").arg(virConnectGetType(currWorkConnect)));
+                createVirtDomain = new CreateVirtDomain(this, capabilities);
                 int result = createVirtDomain->exec();
                 if ( createVirtDomain!=NULL && result ) {
                     // get path for method

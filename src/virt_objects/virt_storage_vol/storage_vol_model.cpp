@@ -140,7 +140,7 @@ QVariant StorageVolModel::data(const QModelIndex &index, int role) const
 bool StorageVolModel::setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole )
 {
     if ( !index.isValid() ) {
-        qDebug()<<"index not valid";
+        //qDebug()<<"index not valid";
         return false;
     };
 

@@ -1,10 +1,12 @@
 #include "general.h"
 
-General::General(QWidget *parent, QString str) :
-    _QWidget(parent), type(str)
+General::General(QWidget *parent, QString arg1, QString arg2, QString arg3) :
+    _QWidget(parent), type(arg1), arch(arg2), emulator(arg3)
 {
     setObjectName("Domain");
     typeLabel = new QLabel(QString("Type: %1").arg(type.toLower()), this);
+    archLabel = new QLabel(QString("Arch: %1").arg(arch), this);
+    emulLabel = new QLabel(QString("Emulator: %1").arg(emulator), this);
     nameLabel = new QLabel("Name:", this);
     name = new QLineEdit(this);
     name->setPlaceholderText("Enter VM name");
@@ -17,6 +19,8 @@ General::General(QWidget *parent, QString str) :
     description = new QTextEdit(this);
     commonLayout = new QVBoxLayout();
     commonLayout->addWidget(typeLabel);
+    commonLayout->addWidget(archLabel);
+    commonLayout->addWidget(emulLabel);
     commonLayout->addWidget(nameLabel);
     commonLayout->addWidget(name);
     commonLayout->addWidget(uuidLabel);
@@ -31,6 +35,10 @@ General::~General()
 {
     delete typeLabel;
     typeLabel = 0;
+    delete archLabel;
+    archLabel = 0;
+    delete emulLabel;
+    emulLabel = 0;
     delete nameLabel;
     nameLabel = 0;
     delete name;
