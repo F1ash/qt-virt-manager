@@ -1,13 +1,13 @@
-#ifndef VIRTNET_INDEX_H
-#define VIRTNET_INDEX_H
+#ifndef INDEX_H
+#define INDEX_H
 
 #include <QObject>
 
-class VirtNetIndex : public QObject
+class Index : public QObject
 {
     Q_OBJECT
 public:
-    explicit VirtNetIndex(QObject *parent = 0);
+    explicit Index(QObject *parent = 0);
 
 signals:
 
@@ -29,4 +29,4 @@ public slots:
 
 };
 
-#endif // VIRTNET_INDEX_H
+#endif // INDEX_H

@@ -5,7 +5,7 @@
 #include <QIcon>
 #include <QList>
 #include <QDebug>
-#include "domain_index.h"
+#include "virt_objects/index.h"
 
 class DomainModel : public QAbstractTableModel
 {
@@ -13,7 +13,7 @@ class DomainModel : public QAbstractTableModel
 public:
     explicit DomainModel(QObject *parent = 0);
     ~DomainModel();
-    QList<DomainIndex *>  virtDomDataList;
+    QList<Index *>  virtDomDataList;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;

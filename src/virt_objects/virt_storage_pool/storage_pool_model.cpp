@@ -24,7 +24,7 @@ Qt::ItemFlags StoragePoolModel::flags(const QModelIndex &index) const
         return defaultFlags;
     };
 
-    StoragePoolIndex *item = static_cast<StoragePoolIndex *>(index.internalPointer());
+    Index *item = static_cast<Index *>(index.internalPointer());
     if ( !item ) {
         //qDebug()<<"item not valid";
         return defaultFlags;
@@ -169,7 +169,7 @@ bool StoragePoolModel::insertRow(int row)
 {
     if (row == -1) row = 0;
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    StoragePoolIndex *newItem = new StoragePoolIndex;
+    Index *newItem = new Index;
     virtStoragePoolDataList.insert(row, newItem);
     endInsertRows();
     emit dataChanged(index(0,0), index(0,0).sibling(rowCount(), columnCount()));

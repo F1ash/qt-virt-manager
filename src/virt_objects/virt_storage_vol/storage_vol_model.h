@@ -5,7 +5,7 @@
 #include <QIcon>
 #include <QList>
 #include <QDebug>
-#include "storage_vol_index.h"
+#include "virt_objects/index.h"
 
 class StorageVolModel : public QAbstractTableModel
 {
@@ -13,7 +13,7 @@ class StorageVolModel : public QAbstractTableModel
 public:
     explicit StorageVolModel(QObject *parent = 0);
     ~StorageVolModel();
-    QList<StorageVolIndex *>  virtStorageVolDataList;
+    QList<Index *>  virtStorageVolDataList;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;

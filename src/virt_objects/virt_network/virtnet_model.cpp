@@ -24,7 +24,7 @@ Qt::ItemFlags VirtNetModel::flags(const QModelIndex &index) const
         return defaultFlags;
     };
 
-    VirtNetIndex *item = static_cast<VirtNetIndex *>(index.internalPointer());
+    Index *item = static_cast<Index *>(index.internalPointer());
     if ( !item ) {
         //qDebug()<<"item not valid";
         return defaultFlags;
@@ -169,7 +169,7 @@ bool VirtNetModel::insertRow(int row)
 {
     if (row == -1) row = 0;
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    VirtNetIndex *newItem = new VirtNetIndex;
+    Index *newItem = new Index;
     virtNetDataList.insert(row, newItem);
     endInsertRows();
     emit dataChanged(index(0,0), index(0,0).sibling(rowCount(), columnCount()));

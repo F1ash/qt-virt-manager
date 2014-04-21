@@ -5,7 +5,7 @@
 #include <QIcon>
 #include <QList>
 #include <QDebug>
-#include "virtnet_index.h"
+#include "virt_objects/index.h"
 
 class VirtNetModel : public QAbstractTableModel
 {
@@ -13,7 +13,7 @@ class VirtNetModel : public QAbstractTableModel
 public:
     explicit VirtNetModel(QObject *parent = 0);
     ~VirtNetModel();
-    QList<VirtNetIndex *>  virtNetDataList;
+    QList<Index *>  virtNetDataList;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
