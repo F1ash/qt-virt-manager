@@ -97,7 +97,7 @@ void VirtStoragePoolControl::stopProcessing()
     };
 
     // clear StoragePool list
-    while ( storagePoolModel->virtStoragePoolDataList.count() ) {
+    while ( storagePoolModel->DataList.count() ) {
         storagePoolModel->removeRow(0);
     };
     storagePoolModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
@@ -145,15 +145,15 @@ void VirtStoragePoolControl::resultReceiver(StoragePoolActions act, QStringList 
 {
     //qDebug()<<act<<data<<"result";
     if ( act == GET_ALL_StPOOL ) {
-        if ( data.count() > storagePoolModel->virtStoragePoolDataList.count() ) {
-            int _diff = data.count() - storagePoolModel->virtStoragePoolDataList.count();
+        if ( data.count() > storagePoolModel->DataList.count() ) {
+            int _diff = data.count() - storagePoolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 storagePoolModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( storagePoolModel->virtStoragePoolDataList.count() > data.count() ) {
-            int _diff = storagePoolModel->virtStoragePoolDataList.count() - data.count();
+        if ( storagePoolModel->DataList.count() > data.count() ) {
+            int _diff = storagePoolModel->DataList.count() - data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 storagePoolModel->removeRow(0);
                 //qDebug()<<i<<"remove";
@@ -209,12 +209,12 @@ void VirtStoragePoolControl::storagePoolClicked(const QPoint &p)
     //qDebug()<<"custom Menu request";
     QModelIndex idx = storagePoolList->indexAt(p);
     if ( idx.isValid() ) {
-        //qDebug()<<storagePoolModel->virtStoragePoolDataList.at(idx.row())->getName();
+        //qDebug()<<storagePoolModel->DataList.at(idx.row())->getName();
         QStringList params;
-        params<<storagePoolModel->virtStoragePoolDataList.at(idx.row())->getName();
-        params<<storagePoolModel->virtStoragePoolDataList.at(idx.row())->getState();
-        params<<storagePoolModel->virtStoragePoolDataList.at(idx.row())->getAutostart();
-        params<<storagePoolModel->virtStoragePoolDataList.at(idx.row())->getPersistent();
+        params<<storagePoolModel->DataList.at(idx.row())->getName();
+        params<<storagePoolModel->DataList.at(idx.row())->getState();
+        params<<storagePoolModel->DataList.at(idx.row())->getAutostart();
+        params<<storagePoolModel->DataList.at(idx.row())->getPersistent();
         StoragePoolControlMenu *storagePoolControlMenu = new StoragePoolControlMenu(this, params);
         connect(storagePoolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
         storagePoolControlMenu->move(QCursor::pos());
@@ -228,7 +228,7 @@ void VirtStoragePoolControl::storagePoolClicked(const QPoint &p)
 void VirtStoragePoolControl::storagePoolDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<storagePoolModel->virtStoragePoolDataList.at(index.row())->getName();
+        qDebug()<<storagePoolModel->DataList.at(index.row())->getName();
     }
 }
 void VirtStoragePoolControl::execAction(const QStringList &l)
@@ -236,7 +236,7 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
     QStringList args;
     QModelIndex idx = storagePoolList->currentIndex();
     if ( idx.isValid() ) {
-        QString storagePoolName = storagePoolModel->virtStoragePoolDataList.at(idx.row())->getName();
+        QString storagePoolName = storagePoolModel->DataList.at(idx.row())->getName();
         args.append(storagePoolName);
         if        ( l.first()=="startVirtStoragePool" ) {
             stPoolControlThread->execAction(START_StPOOL, args);
@@ -247,7 +247,7 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
         } else if ( l.first()=="setAutostartVirtStoragePool" ) {
             /* set the opposite value */
             QString autostartState =
-                (storagePoolModel->virtStoragePoolDataList.at(idx.row())->getAutostart()=="yes")
+                (storagePoolModel->DataList.at(idx.row())->getAutostart()=="yes")
                  ? "0" : "1";
             args.append(autostartState);
             stPoolControlThread->execAction(CHANGE_StPOOL_AUTOSTART, args);

@@ -102,7 +102,7 @@ void VirtDomainControl::stopProcessing()
     };
 
     // clear Domain list
-    while ( domainModel->virtDomDataList.count() ) {
+    while ( domainModel->DataList.count() ) {
         domainModel->removeRow(0);
     };
     domainModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
@@ -154,15 +154,15 @@ void VirtDomainControl::resultReceiver(DomActions act, QStringList data)
 {
     //qDebug()<<act<<data<<"result";
     if ( act == GET_ALL_DOMAIN ) {
-        if ( data.count() > domainModel->virtDomDataList.count() ) {
-            int _diff = data.count() - domainModel->virtDomDataList.count();
+        if ( data.count() > domainModel->DataList.count() ) {
+            int _diff = data.count() - domainModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 domainModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( domainModel->virtDomDataList.count() > data.count() ) {
-            int _diff = domainModel->virtDomDataList.count() - data.count();
+        if ( domainModel->DataList.count() > data.count() ) {
+            int _diff = domainModel->DataList.count() - data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 domainModel->removeRow(0);
                 //qDebug()<<i<<"remove";
@@ -228,12 +228,12 @@ void VirtDomainControl::domainClicked(const QPoint &p)
     //qDebug()<<"custom Menu request";
     QModelIndex idx = domainList->indexAt(p);
     if ( idx.isValid() ) {
-        //qDebug()<<domainModel->virtDomDataList.at(idx.row())->getName();
+        //qDebug()<<domainModel->DataList.at(idx.row())->getName();
         QStringList params;
-        params<<domainModel->virtDomDataList.at(idx.row())->getName();
-        params<<domainModel->virtDomDataList.at(idx.row())->getState().split(":").first();
-        params<<domainModel->virtDomDataList.at(idx.row())->getAutostart();
-        params<<domainModel->virtDomDataList.at(idx.row())->getPersistent();
+        params<<domainModel->DataList.at(idx.row())->getName();
+        params<<domainModel->DataList.at(idx.row())->getState().split(":").first();
+        params<<domainModel->DataList.at(idx.row())->getAutostart();
+        params<<domainModel->DataList.at(idx.row())->getPersistent();
         DomainControlMenu *domControlMenu = new DomainControlMenu(this, params);
         connect(domControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
         domControlMenu->move(QCursor::pos());
@@ -247,7 +247,7 @@ void VirtDomainControl::domainClicked(const QPoint &p)
 void VirtDomainControl::domainDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<domainModel->virtDomDataList.at(index.row())->getName();
+        qDebug()<<domainModel->DataList.at(index.row())->getName();
     }
 }
 void VirtDomainControl::execAction(const QStringList &l)
@@ -255,12 +255,12 @@ void VirtDomainControl::execAction(const QStringList &l)
     QStringList args;
     QModelIndex idx = domainList->currentIndex();
     if ( idx.isValid() ) {
-        QString domainName = domainModel->virtDomDataList.at(idx.row())->getName();
+        QString domainName = domainModel->DataList.at(idx.row())->getName();
         args.append(domainName);
         if        ( l.first()=="startVirtDomain" ) {
             domControlThread->execAction(START_DOMAIN, args);
         } else if ( l.first()=="pauseVirtDomain" ) {
-            args.append(domainModel->virtDomDataList.at(idx.row())->getState().split(":").last());
+            args.append(domainModel->DataList.at(idx.row())->getState().split(":").last());
             domControlThread->execAction(PAUSE_DOMAIN, args);
         } else if ( l.first()=="destroyVirtDomain" ) {
             domControlThread->execAction(DESTROY_DOMAIN, args);
@@ -274,7 +274,7 @@ void VirtDomainControl::execAction(const QStringList &l)
             QString to = QFileDialog::getSaveFileName(this, "Save to", "~");
             if ( !to.isEmpty() ) {
                 args.append(to);
-                args.append(domainModel->virtDomDataList.at(idx.row())->getState().split(":").last());
+                args.append(domainModel->DataList.at(idx.row())->getState().split(":").last());
                 domControlThread->execAction(SAVE_DOMAIN, args);
             };
         } else if ( l.first()=="restoreVirtDomain" ) {
@@ -289,7 +289,7 @@ void VirtDomainControl::execAction(const QStringList &l)
         } else if ( l.first()=="setAutostartVirtDomain" ) {
             /* set the opposite value */
             QString autostartState =
-                (domainModel->virtDomDataList.at(idx.row())->getAutostart()=="yes")
+                (domainModel->DataList.at(idx.row())->getAutostart()=="yes")
                  ? "0" : "1";
             args.append(autostartState);
             domControlThread->execAction(CHANGE_DOM_AUTOSTART, args);

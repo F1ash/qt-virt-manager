@@ -97,7 +97,7 @@ void VirtNetControl::stopProcessing()
     };
 
     // clear Network list
-    while ( virtNetModel->virtNetDataList.count() ) {
+    while ( virtNetModel->DataList.count() ) {
         virtNetModel->removeRow(0);
     };
     virtNetModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
@@ -145,15 +145,15 @@ void VirtNetControl::resultReceiver(NetActions act, QStringList data)
 {
     //qDebug()<<act<<data<<"result";
     if ( act == GET_ALL_NETWORK ) {
-        if ( data.count() > virtNetModel->virtNetDataList.count() ) {
-            int _diff = data.count() - virtNetModel->virtNetDataList.count();
+        if ( data.count() > virtNetModel->DataList.count() ) {
+            int _diff = data.count() - virtNetModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtNetModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( virtNetModel->virtNetDataList.count() > data.count() ) {
-            int _diff = virtNetModel->virtNetDataList.count() - data.count();
+        if ( virtNetModel->DataList.count() > data.count() ) {
+            int _diff = virtNetModel->DataList.count() - data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtNetModel->removeRow(0);
                 //qDebug()<<i<<"remove";
@@ -209,12 +209,12 @@ void VirtNetControl::networkClicked(const QPoint &p)
     //qDebug()<<"custom Menu request";
     QModelIndex idx = virtNetList->indexAt(p);
     if ( idx.isValid() ) {
-        //qDebug()<<virtNetModel->virtNetDataList.at(idx.row())->getName();
+        //qDebug()<<virtNetModel->DataList.at(idx.row())->getName();
         QStringList params;
-        params<<virtNetModel->virtNetDataList.at(idx.row())->getName();
-        params<<virtNetModel->virtNetDataList.at(idx.row())->getState();
-        params<<virtNetModel->virtNetDataList.at(idx.row())->getAutostart();
-        params<<virtNetModel->virtNetDataList.at(idx.row())->getPersistent();
+        params<<virtNetModel->DataList.at(idx.row())->getName();
+        params<<virtNetModel->DataList.at(idx.row())->getState();
+        params<<virtNetModel->DataList.at(idx.row())->getAutostart();
+        params<<virtNetModel->DataList.at(idx.row())->getPersistent();
         VirtNetControlMenu *netControlMenu = new VirtNetControlMenu(this, params);
         connect(netControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
         netControlMenu->move(QCursor::pos());
@@ -228,7 +228,7 @@ void VirtNetControl::networkClicked(const QPoint &p)
 void VirtNetControl::networkDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<virtNetModel->virtNetDataList.at(index.row())->getName();
+        qDebug()<<virtNetModel->DataList.at(index.row())->getName();
     }
 }
 void VirtNetControl::execAction(const QStringList &l)
@@ -236,7 +236,7 @@ void VirtNetControl::execAction(const QStringList &l)
     QStringList args;
     QModelIndex idx = virtNetList->currentIndex();
     if ( idx.isValid() ) {
-        QString networkName = virtNetModel->virtNetDataList.at(idx.row())->getName();
+        QString networkName = virtNetModel->DataList.at(idx.row())->getName();
         args.append(networkName);
         if        ( l.first()=="startVirtNetwork" ) {
             netControlThread->execAction(START_NETWORK, args);
@@ -247,7 +247,7 @@ void VirtNetControl::execAction(const QStringList &l)
         } else if ( l.first()=="setAutostartVirtNetwork" ) {
             /* set the opposite value */
             QString autostartState =
-                (virtNetModel->virtNetDataList.at(idx.row())->getAutostart()=="yes")
+                (virtNetModel->DataList.at(idx.row())->getAutostart()=="yes")
                  ? "0" : "1";
             args.append(autostartState);
             netControlThread->execAction(CHANGE_NET_AUTOSTART, args);

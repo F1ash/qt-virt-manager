@@ -23,6 +23,7 @@ set (HEADERS
   
   src/virt_objects/open_file_menu.h
   src/virt_objects/index.h
+  src/virt_objects/model.h
   
   src/virt_objects/virt_connect/conn_element.h
   src/virt_objects/virt_connect/conn_callbacks.h
@@ -30,28 +31,24 @@ set (HEADERS
   
   src/virt_objects/virt_domain/domain_control.h
   src/virt_objects/virt_domain/domain_model.h
-  #src/virt_objects/virt_domain/domain_index.h
   src/virt_objects/virt_domain/domain_toolbar.h
   src/virt_objects/virt_domain/domain_control_menu.h
   src/virt_objects/virt_domain/domain_control_thread.h
   
   src/virt_objects/virt_network/virtnet_control.h
   src/virt_objects/virt_network/virtnet_model.h
-  #src/virt_objects/virt_network/virtnet_index.h
   src/virt_objects/virt_network/virtnet_toolbar.h
   src/virt_objects/virt_network/virtnet_control_menu.h
   src/virt_objects/virt_network/net_control_thread.h
   
   src/virt_objects/virt_storage_pool/storage_pool_control.h
   src/virt_objects/virt_storage_pool/storage_pool_model.h
-  #src/virt_objects/virt_storage_pool/storage_pool_index.h
   src/virt_objects/virt_storage_pool/storage_pool_toolbar.h
   src/virt_objects/virt_storage_pool/storage_pool_control_thread.h
   src/virt_objects/virt_storage_pool/storage_pool_control_menu.h
   
   src/virt_objects/virt_storage_vol/storage_vol_control.h
   src/virt_objects/virt_storage_vol/storage_vol_model.h
-  #src/virt_objects/virt_storage_vol/storage_vol_index.h
   src/virt_objects/virt_storage_vol/storage_vol_toolbar.h
   src/virt_objects/virt_storage_vol/storage_vol_control_thread.h
   src/virt_objects/virt_storage_vol/storage_vol_control_menu.h
@@ -60,6 +57,7 @@ set (HEADERS
   src/create_widgets/domain/_qwidget.h
   src/create_widgets/domain/create_virt_domain.h
   src/create_widgets/domain/common_widgets/general.h
+  src/create_widgets/domain/common_widgets/memory.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
 )
 set (SOURCES 
@@ -78,6 +76,7 @@ set (SOURCES
   
   src/virt_objects/open_file_menu.cpp
   src/virt_objects/index.cpp
+  src/virt_objects/model.cpp
   
   src/virt_objects/virt_connect/conn_element.cpp
   src/virt_objects/virt_connect/conn_callbacks.cpp
@@ -85,28 +84,24 @@ set (SOURCES
   
   src/virt_objects/virt_domain/domain_control.cpp
   src/virt_objects/virt_domain/domain_model.cpp
-  #src/virt_objects/virt_domain/domain_index.cpp
   src/virt_objects/virt_domain/domain_toolbar.cpp
   src/virt_objects/virt_domain/domain_control_thread.cpp
   src/virt_objects/virt_domain/domain_control_menu.cpp
   
   src/virt_objects/virt_network/virtnet_control.cpp
   src/virt_objects/virt_network/virtnet_model.cpp
-  #src/virt_objects/virt_network/virtnet_index.cpp
   src/virt_objects/virt_network/virtnet_toolbar.cpp
   src/virt_objects/virt_network/net_control_thread.cpp
   src/virt_objects/virt_network/virtnet_control_menu.cpp
   
   src/virt_objects/virt_storage_pool/storage_pool_control.cpp
   src/virt_objects/virt_storage_pool/storage_pool_model.cpp
-  #src/virt_objects/virt_storage_pool/storage_pool_index.cpp
   src/virt_objects/virt_storage_pool/storage_pool_toolbar.cpp
   src/virt_objects/virt_storage_pool/storage_pool_control_thread.cpp
   src/virt_objects/virt_storage_pool/storage_pool_control_menu.cpp
   
   src/virt_objects/virt_storage_vol/storage_vol_control.cpp
   src/virt_objects/virt_storage_vol/storage_vol_model.cpp
-  #src/virt_objects/virt_storage_vol/storage_vol_index.cpp
   src/virt_objects/virt_storage_vol/storage_vol_toolbar.cpp
   src/virt_objects/virt_storage_vol/storage_vol_control_thread.cpp
   src/virt_objects/virt_storage_vol/storage_vol_control_menu.cpp
@@ -114,6 +109,7 @@ set (SOURCES
   src/create_widgets/domain/create_virt_domain.cpp
   src/create_widgets/domain/_qwidget.cpp
   src/create_widgets/domain/common_widgets/general.cpp
+  src/create_widgets/domain/common_widgets/memory.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
 )
 set (SOURCES_DIRS src)

@@ -4,6 +4,7 @@
 
 /* COMMON WIDGETS HEADERS */
 #include "common_widgets/general.h"
+#include "common_widgets/memory.h"
 
 
 /* LXC WIDGETS HEADERS */

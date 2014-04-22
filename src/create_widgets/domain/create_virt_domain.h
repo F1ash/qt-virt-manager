@@ -34,6 +34,8 @@ private:
     QString          arch;
     QString          os_type;
     QString          emulator;
+    QString          memUnit;
+    QString          memValue;
     QTabWidget      *tabWidget;
     QPushButton     *ok;
     QPushButton     *cancel;

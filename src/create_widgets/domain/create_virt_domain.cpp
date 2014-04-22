@@ -159,6 +159,20 @@ void CreateVirtDomain::readCapabilities()
                firstChildElement("arch").
                firstChildElement("domain").
                attribute("type", "???");
+    memValue = doc.firstChildElement("capabilities").
+               firstChildElement("host").
+               firstChildElement("topology").
+               firstChildElement("cells").
+               firstChildElement("cell").
+               firstChildElement("memory").
+               firstChild().toText().data();
+    memUnit = doc.firstChildElement("capabilities").
+               firstChildElement("host").
+               firstChildElement("topology").
+               firstChildElement("cells").
+               firstChildElement("cell").
+               firstChildElement("memory").
+               attribute("unit", "???");
     /*  search emulator from guest with system achitecture  */
     QDomElement el = doc.firstChildElement("capabilities").
                firstChildElement("guest");
@@ -171,7 +185,7 @@ void CreateVirtDomain::readCapabilities()
                 break;
         } else el = el.nextSiblingElement("guest");
     };
-    qDebug()<<arch<<os_type<<type<<emulator;
+    qDebug()<<arch<<os_type<<type<<emulator<<memUnit<<memValue;
 }
 void CreateVirtDomain::buildXMLDescription()
 {
@@ -217,6 +231,7 @@ void CreateVirtDomain::create_specified_widgets()
     if ( type.toLower() == "lxc" ) {
         wdgList.append(new General(this, type, arch, emulator));
         wdgList.append(new LXC_OSBooting(this, os_type, arch));
+        wdgList.append(new Memory(this, memUnit, memValue));
     } else if ( type.toLower() == "qemu" ) {
         wdgList.append(new General(this, type, arch, emulator));
     } else if ( type.toLower() == "xen" ) {

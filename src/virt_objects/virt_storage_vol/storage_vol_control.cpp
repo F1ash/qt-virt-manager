@@ -91,7 +91,7 @@ void VirtStorageVolControl::stopProcessing()
     };
 
     // clear StorageVol list
-    while ( storageVolModel->virtStorageVolDataList.count() ) {
+    while ( storageVolModel->DataList.count() ) {
         storageVolModel->removeRow(0);
     };
     storageVolModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
@@ -128,15 +128,15 @@ void VirtStorageVolControl::resultReceiver(StorageVolActions act, QStringList da
 {
     //qDebug()<<act<<data<<"result";
     if ( act == GET_ALL_StVOL ) {
-        if ( data.count() > storageVolModel->virtStorageVolDataList.count() ) {
-            int _diff = data.count() - storageVolModel->virtStorageVolDataList.count();
+        if ( data.count() > storageVolModel->DataList.count() ) {
+            int _diff = data.count() - storageVolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 storageVolModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( storageVolModel->virtStorageVolDataList.count() > data.count() ) {
-            int _diff = storageVolModel->virtStorageVolDataList.count() - data.count();
+        if ( storageVolModel->DataList.count() > data.count() ) {
+            int _diff = storageVolModel->DataList.count() - data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 storageVolModel->removeRow(0);
                 //qDebug()<<i<<"remove";
@@ -190,12 +190,12 @@ void VirtStorageVolControl::storageVolClicked(const QPoint &p)
     //qDebug()<<"custom Menu request";
     QModelIndex idx = storageVolList->indexAt(p);
     if ( idx.isValid() ) {
-        //qDebug()<<storageVolModel->virtStorageVolDataList.at(idx.row())->getName();
+        //qDebug()<<storageVolModel->DataList.at(idx.row())->getName();
         QStringList params;
-        params<<storageVolModel->virtStorageVolDataList.at(idx.row())->getName();
-        params<<storageVolModel->virtStorageVolDataList.at(idx.row())->getState();
-        params<<storageVolModel->virtStorageVolDataList.at(idx.row())->getAutostart();
-        params<<storageVolModel->virtStorageVolDataList.at(idx.row())->getPersistent();
+        params<<storageVolModel->DataList.at(idx.row())->getName();
+        params<<storageVolModel->DataList.at(idx.row())->getState();
+        params<<storageVolModel->DataList.at(idx.row())->getAutostart();
+        params<<storageVolModel->DataList.at(idx.row())->getPersistent();
         StorageVolControlMenu *storageVolControlMenu = new StorageVolControlMenu(this, params);
         connect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
         storageVolControlMenu->move(QCursor::pos());
@@ -209,7 +209,7 @@ void VirtStorageVolControl::storageVolClicked(const QPoint &p)
 void VirtStorageVolControl::storageVolDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<storageVolModel->virtStorageVolDataList.at(index.row())->getName();
+        qDebug()<<storageVolModel->DataList.at(index.row())->getName();
     }
 }
 void VirtStorageVolControl::execAction(const QStringList &l)
@@ -217,7 +217,7 @@ void VirtStorageVolControl::execAction(const QStringList &l)
     QStringList args;
     QModelIndex idx = storageVolList->currentIndex();
     if ( idx.isValid() ) {
-        QString storageVolName = storageVolModel->virtStorageVolDataList.at(idx.row())->getName();
+        QString storageVolName = storageVolModel->DataList.at(idx.row())->getName();
         args.append(storageVolName);
         if        ( l.first()=="getVirtStorageVolList" ) {
             stVolControlThread->execAction(GET_ALL_StVOL, args);
