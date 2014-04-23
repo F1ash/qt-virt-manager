@@ -10,19 +10,21 @@ class StoragePoolControlMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit StoragePoolControlMenu(QWidget *parent = 0, QStringList params = QStringList());
+    explicit StoragePoolControlMenu(QWidget *parent = 0, QStringList params = QStringList(), bool state = false);
     ~StoragePoolControlMenu();
 
 signals:
     void execMethod(const QStringList&);
 
 private:
+    bool            autoReloadState;
     QAction        *start;
     QAction        *destroy;
     QAction        *undefine;
     QAction        *autoStart;
     QAction        *getXMLDesc;
     QAction        *overview;
+    QAction        *reload;
     QStringList     parameters;
 
 private slots:

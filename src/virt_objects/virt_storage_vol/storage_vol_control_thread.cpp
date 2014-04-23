@@ -16,7 +16,9 @@ bool StorageVolControlThread::setCurrentStoragePoolName(virConnect *conn, QStrin
         virStoragePoolFree(currStoragePool);
         currStoragePool = NULL;
     };
-    //qDebug()<<"stVol_thread"<<currStoragePool;
+    //qDebug()<<"stVol_thread (setPoolData)\n\tConnect\t\t"<<currWorkConnect
+    //        <<"\n\tPool\t\t"<<currStoragePool
+    //        <<"\n\tName\t\t"<<currPoolName;
 }
 void StorageVolControlThread::stop()
 {
@@ -25,6 +27,9 @@ void StorageVolControlThread::stop()
         virStoragePoolFree(currStoragePool);
         currStoragePool = NULL;
     };
+    //qDebug()<<"stVol_thread (stop)\n\tConnect\t\t"<<currWorkConnect
+    //        <<"\n\tPool\t\t"<<currStoragePool
+    //        <<"\n\tName\t\t"<<currPoolName;
 }
 void StorageVolControlThread::execAction(StorageVolActions act, QStringList _args)
 {
@@ -32,6 +37,10 @@ void StorageVolControlThread::execAction(StorageVolActions act, QStringList _arg
         action = act;
         args = _args;
         start();
+        //qDebug()<<"stVolThread started\n\targs\t\t"<<_args<<"\n\taction\t\t"<<act;
+        //qDebug()<<"stVol_thread (execAct)\n\tConnect\t\t"<<currWorkConnect
+        //        <<"\n\tPool\t\t"<<currStoragePool
+        //        <<"\n\tName\t\t"<<currPoolName;
     };
 }
 
@@ -64,12 +73,13 @@ void StorageVolControlThread::run()
     default:
         break;
     };
+    //qDebug()<<result<<"stVolThread res";
     emit resultData(action, result);
 }
 QStringList StorageVolControlThread::getAllStorageVolList()
 {
     QStringList storageVolList;
-    if (currStoragePool==NULL ) {
+    if ( currStoragePool==NULL ) {
         if ( currWorkConnect!=NULL && keep_alive ) {
             currStoragePool = virStoragePoolLookupByName(currWorkConnect, currPoolName.toUtf8().data());
         };
@@ -78,7 +88,7 @@ QStringList StorageVolControlThread::getAllStorageVolList()
         virStorageVolPtr *storageVol;
         // flags: extra flags; not used yet, so callers should always pass 0
         unsigned int flags = 0;
-        int ret = virStoragePoolListAllVolumes( currStoragePool, &storageVol, flags);
+        int ret = virStoragePoolListAllVolumes( currStoragePool, &storageVol, flags );
         if ( ret<0 ) {
             sendConnErrors();
             return storageVolList;
@@ -86,10 +96,37 @@ QStringList StorageVolControlThread::getAllStorageVolList()
 
         int i = 0;
         while ( storageVol[i] != NULL ) {
+            QString type, use;
+            virStorageVolInfo info;
+            if ( virStorageVolGetInfo(storageVol[i], &info)+1 ) {
+                switch (info.type) {
+                case VIR_STORAGE_VOL_FILE:
+                    type.append("file");
+                    break;
+                case VIR_STORAGE_VOL_BLOCK:
+                    type.append("block");
+                    break;
+                case VIR_STORAGE_VOL_DIR:
+                    type.append("dir");
+                    break;
+                case VIR_STORAGE_VOL_NETWORK:
+                    type.append("net");
+                    break;
+                default:
+                    type.append("-");
+                    break;
+                };
+                use.append(QString("%1").arg(info.capacity));
+            } else {
+                sendConnErrors();
+                type.append("-");
+                use.append("-");
+            };
             QStringList currentAttr;
             currentAttr<< QString( virStorageVolGetName(storageVol[i]) )
-                       << QString( virStorageVolGetKey (storageVol[i]) )
-                       << QString( virStorageVolGetPath(storageVol[i]) );
+                       << QString( virStorageVolGetPath(storageVol[i]) )
+                       << QString( type )
+                       << QString( use );
             storageVolList.append(currentAttr.join(" "));
             //qDebug()<<currentAttr<<"Volume";
             virStorageVolFree(storageVol[i]);

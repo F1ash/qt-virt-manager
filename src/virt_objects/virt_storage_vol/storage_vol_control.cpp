@@ -95,7 +95,6 @@ void VirtStorageVolControl::stopProcessing()
         storageVolModel->removeRow(0);
     };
     storageVolModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
-
 }
 bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &connName, QString &poolName)
 {
@@ -189,22 +188,23 @@ void VirtStorageVolControl::storageVolClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
     QModelIndex idx = storageVolList->indexAt(p);
+    QStringList params;
     if ( idx.isValid() ) {
         //qDebug()<<storageVolModel->DataList.at(idx.row())->getName();
-        QStringList params;
         params<<storageVolModel->DataList.at(idx.row())->getName();
-        params<<storageVolModel->DataList.at(idx.row())->getState();
-        params<<storageVolModel->DataList.at(idx.row())->getAutostart();
-        params<<storageVolModel->DataList.at(idx.row())->getPersistent();
-        StorageVolControlMenu *storageVolControlMenu = new StorageVolControlMenu(this, params);
-        connect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
-        storageVolControlMenu->move(QCursor::pos());
-        storageVolControlMenu->exec();
-        disconnect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
-        storageVolControlMenu->deleteLater();
+        params<<storageVolModel->DataList.at(idx.row())->getPath();
+        params<<storageVolModel->DataList.at(idx.row())->getType();
+        params<<storageVolModel->DataList.at(idx.row())->getSize();
     } else {
         storageVolList->clearSelection();
-    }
+    };
+    bool state = toolBar->getAutoReloadState();
+    StorageVolControlMenu *storageVolControlMenu = new StorageVolControlMenu(this, params, state);
+    connect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    storageVolControlMenu->move(QCursor::pos());
+    storageVolControlMenu->exec();
+    disconnect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    storageVolControlMenu->deleteLater();
 }
 void VirtStorageVolControl::storageVolDoubleClicked(const QModelIndex &index)
 {
@@ -216,7 +216,7 @@ void VirtStorageVolControl::execAction(const QStringList &l)
 {
     QStringList args;
     QModelIndex idx = storageVolList->currentIndex();
-    if ( idx.isValid() ) {
+    if ( idx.isValid() && storageVolModel->DataList.count() ) {
         QString storageVolName = storageVolModel->DataList.at(idx.row())->getName();
         args.append(storageVolName);
         if        ( l.first()=="getVirtStorageVolList" ) {

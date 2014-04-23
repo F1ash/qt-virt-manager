@@ -33,6 +33,10 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
     overview_Action = new QAction(this);
     overview_Action->setIcon(QIcon::fromTheme("overview"));
     overview_Action->setToolTip("Overview Pool");
+    _autoReload = new QPushButton(this);
+    _autoReload->setToolTip("AutoReload Pool Overview");
+    _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
+    _autoReload->setCheckable(true);
 
     addAction(start_Action);
     addAction(destroy_Action);
@@ -46,6 +50,14 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
     addAction(getXMLDesc_Action);
     addSeparator();
     addAction(overview_Action);
+    addSeparator();
+    autoReload = addWidget(_autoReload);
+    addAction(autoReload);
+
+    settings.beginGroup("VirtStoragePoolControl");
+    interval = settings.value("UpdateTime", 3).toInt();
+    _autoReload->setChecked(settings.value("AutoReload", false).toBool());
+    settings.endGroup();
 
     //connect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //connect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
@@ -54,6 +66,7 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
     //connect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //connect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //connect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    connect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
 
     connect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     connect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
@@ -61,6 +74,10 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
 }
 StoragePoolToolBar::~StoragePoolToolBar()
 {
+    settings.beginGroup("VirtStoragePoolControl");
+    settings.setValue("UpdateTime", interval);
+    settings.setValue("AutoReload", _autoReload->isChecked());
+    settings.endGroup();
     //disconnect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
@@ -68,6 +85,7 @@ StoragePoolToolBar::~StoragePoolToolBar()
     //disconnect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    disconnect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
     disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
@@ -95,8 +113,13 @@ StoragePoolToolBar::~StoragePoolToolBar()
     getXMLDesc_Action = 0;
     delete overview_Action;
     overview_Action = 0;
+    delete _autoReload;
+    _autoReload = 0;
+    delete autoReload;
+    autoReload = 0;
 }
 
+/* public slots */
 Qt::ToolBarArea StoragePoolToolBar::get_ToolBarArea(int i) const
 {
   Qt::ToolBarArea result;
@@ -118,6 +141,33 @@ Qt::ToolBarArea StoragePoolToolBar::get_ToolBarArea(int i) const
     break;
   };
   return result;
+}
+void StoragePoolToolBar::enableAutoReload()
+{
+    if ( _autoReload->isChecked() ) timerId = startTimer(interval*1000);
+}
+void StoragePoolToolBar::stopProcessing()
+{
+    if ( timerId ) {
+        killTimer(timerId);
+        timerId = 0;
+    }
+}
+bool StoragePoolToolBar::getAutoReloadState() const
+{
+    return _autoReload->isChecked();
+}
+
+/* private slots */
+void StoragePoolToolBar::timerEvent(QTimerEvent *event)
+{
+    int _timerId = event->timerId();
+    //qDebug()<<_timerId<<timerId;
+    if ( _timerId && timerId==_timerId && isVisible() ) {
+        QStringList parameters;
+        parameters << "reloadVirtStoragePool";
+        emit execMethod(parameters);
+    };
 }
 void StoragePoolToolBar::repeatParameters(QStringList &p)
 {
@@ -169,4 +219,9 @@ void StoragePoolToolBar::detectTriggerredAction(QAction *action)
         parameters << "overviewVirtStoragePool";
     } else return;
     emit execMethod(parameters);
+}
+void StoragePoolToolBar::changeAutoReloadState(bool state)
+{
+    if ( state ) enableAutoReload();
+    else stopProcessing();
 }

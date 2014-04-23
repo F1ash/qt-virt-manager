@@ -23,8 +23,6 @@ VirtStoragePoolControl::VirtStoragePoolControl(QWidget *parent) :
     storagePoolList->setColumnWidth(2, settings.value("column2", 32).toInt());
     storagePoolList->setColumnWidth(3, settings.value("column3", 32).toInt());
     int area_int = settings.value("ToolBarArea", 4).toInt();
-    //bool check = settings.value("CheckList", false).toBool();
-    interval = settings.value("UpdateTime", 3).toInt();
     settings.endGroup();
     toolBar = new StoragePoolToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
@@ -43,8 +41,6 @@ VirtStoragePoolControl::~VirtStoragePoolControl()
     settings.setValue("column1", storagePoolList->columnWidth(1));
     settings.setValue("column2", storagePoolList->columnWidth(2));
     settings.setValue("column3", storagePoolList->columnWidth(3));
-    //settings.setValue("UpdateTime", docContent->getUpdateTime());
-    //settings.setValue("CheckList", docContent->getCheckList());
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
@@ -83,10 +79,6 @@ bool VirtStoragePoolControl::getThreadState() const
 }
 void VirtStoragePoolControl::stopProcessing()
 {
-    if ( timerId ) {
-        killTimer(timerId);
-        timerId = 0;
-    }
     if ( stPoolControlThread!=NULL ) {
         stPoolControlThread->stop();
     };
@@ -121,7 +113,7 @@ bool VirtStoragePoolControl::setCurrentWorkConnect(virConnect *conn)
         return false;
     } else {
         stPoolControlThread->setCurrentWorkConnect(currWorkConnect);
-        timerId = startTimer(interval*1000);
+        toolBar->enableAutoReload();
         return true;
     };
 }
@@ -133,14 +125,6 @@ void VirtStoragePoolControl::setListHeader(QString &connName)
 }
 
 /* private slots */
-void VirtStoragePoolControl::timerEvent(QTimerEvent *event)
-{
-    int _timerId = event->timerId();
-    if ( _timerId && timerId==_timerId && isVisible() ) {
-        //qDebug()<<"get stPool list";
-        stPoolControlThread->execAction(GET_ALL_StPOOL, QStringList());
-    };
-}
 void VirtStoragePoolControl::resultReceiver(StoragePoolActions act, QStringList data)
 {
     //qDebug()<<act<<data<<"result";
@@ -208,22 +192,23 @@ void VirtStoragePoolControl::storagePoolClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
     QModelIndex idx = storagePoolList->indexAt(p);
+    QStringList params;
     if ( idx.isValid() ) {
         //qDebug()<<storagePoolModel->DataList.at(idx.row())->getName();
-        QStringList params;
         params<<storagePoolModel->DataList.at(idx.row())->getName();
         params<<storagePoolModel->DataList.at(idx.row())->getState();
         params<<storagePoolModel->DataList.at(idx.row())->getAutostart();
         params<<storagePoolModel->DataList.at(idx.row())->getPersistent();
-        StoragePoolControlMenu *storagePoolControlMenu = new StoragePoolControlMenu(this, params);
-        connect(storagePoolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
-        storagePoolControlMenu->move(QCursor::pos());
-        storagePoolControlMenu->exec();
-        disconnect(storagePoolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
-        storagePoolControlMenu->deleteLater();
     } else {
         storagePoolList->clearSelection();
-    }
+    };
+    bool state = toolBar->getAutoReloadState();
+    StoragePoolControlMenu *storagePoolControlMenu = new StoragePoolControlMenu(this, params, state);
+    connect(storagePoolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    storagePoolControlMenu->move(QCursor::pos());
+    storagePoolControlMenu->exec();
+    disconnect(storagePoolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    storagePoolControlMenu->deleteLater();
 }
 void VirtStoragePoolControl::storagePoolDoubleClicked(const QModelIndex &index)
 {
@@ -235,7 +220,7 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
 {
     QStringList args;
     QModelIndex idx = storagePoolList->currentIndex();
-    if ( idx.isValid() ) {
+    if ( idx.isValid() && storagePoolModel->DataList.count() ) {
         QString storagePoolName = storagePoolModel->DataList.at(idx.row())->getName();
         args.append(storagePoolName);
         if        ( l.first()=="startVirtStoragePool" ) {
@@ -255,8 +240,12 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
             stPoolControlThread->execAction(GET_StPOOL_XML_DESC, args);
         } else if ( l.first()=="overviewVirtStoragePool" ) {
             emit currPool(currWorkConnect, currConnName, storagePoolName);
+        } else if ( l.first()=="reloadVirtStoragePool" ) {
+            stPoolControlThread->execAction(GET_ALL_StPOOL, args);
         };
-    }
+    } else if ( l.first()=="reloadVirtStoragePool" ) {
+        stPoolControlThread->execAction(GET_ALL_StPOOL, args);
+    };
 }
 void VirtStoragePoolControl::newVirtStoragePoolFromXML(const QStringList &_args)
 {

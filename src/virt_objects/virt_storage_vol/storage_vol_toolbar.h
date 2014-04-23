@@ -22,19 +22,17 @@ signals:
     void execMethod(const QStringList&);
 
 private:
-    QAction         *start_Action;
-    QAction         *destroy_Action;
     OpenFileMenu    *create_Menu;
-    OpenFileMenu    *define_Menu;
     QAction         *create_Action;
-    QAction         *define_Action;
-    QAction         *undefine_Action;
-    QAction         *setAutostart_Action;
+    QAction         *delete_Action;
+    QAction         *download_Action;
+    QAction         *resize_Action;
+    QAction         *upload_Action;
+    QAction         *wipe_Action;
     QAction         *getXMLDesc_Action;
     QAction         *stopOverview_Action;
     QPushButton     *_autoReload;
     QAction         *autoReload;
-    QAction         *reload;
 
     QSettings        settings;
     int              interval;
@@ -43,7 +41,6 @@ private:
 private slots:
     void timerEvent(QTimerEvent*);
     void repeatParameters(QStringList&);
-    void showHoveredMenu();
     void showMenu();
     void detectTriggerredAction(QAction*);
     void changeAutoReloadState(bool);
@@ -52,6 +49,7 @@ public slots:
     Qt::ToolBarArea get_ToolBarArea(int) const;
     void enableAutoReload();
     void stopProcessing();
+    bool getAutoReloadState() const;
 
 };
 

@@ -48,6 +48,7 @@ set (HEADERS
   src/virt_objects/virt_storage_pool/storage_pool_control_menu.h
   
   src/virt_objects/virt_storage_vol/storage_vol_control.h
+  src/virt_objects/virt_storage_vol/storage_vol_index.h
   src/virt_objects/virt_storage_vol/storage_vol_model.h
   src/virt_objects/virt_storage_vol/storage_vol_toolbar.h
   src/virt_objects/virt_storage_vol/storage_vol_control_thread.h
@@ -58,6 +59,7 @@ set (HEADERS
   src/create_widgets/domain/create_virt_domain.h
   src/create_widgets/domain/common_widgets/general.h
   src/create_widgets/domain/common_widgets/memory.h
+  src/create_widgets/domain/common_widgets/cpu.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
 )
 set (SOURCES 
@@ -101,6 +103,7 @@ set (SOURCES
   src/virt_objects/virt_storage_pool/storage_pool_control_menu.cpp
   
   src/virt_objects/virt_storage_vol/storage_vol_control.cpp
+  src/virt_objects/virt_storage_vol/storage_vol_index.cpp
   src/virt_objects/virt_storage_vol/storage_vol_model.cpp
   src/virt_objects/virt_storage_vol/storage_vol_toolbar.cpp
   src/virt_objects/virt_storage_vol/storage_vol_control_thread.cpp
@@ -110,6 +113,7 @@ set (SOURCES
   src/create_widgets/domain/_qwidget.cpp
   src/create_widgets/domain/common_widgets/general.cpp
   src/create_widgets/domain/common_widgets/memory.cpp
+  src/create_widgets/domain/common_widgets/cpu.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
 )
 set (SOURCES_DIRS src)

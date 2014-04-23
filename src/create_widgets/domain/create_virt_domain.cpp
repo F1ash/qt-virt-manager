@@ -189,16 +189,48 @@ void CreateVirtDomain::readCapabilities()
 }
 void CreateVirtDomain::buildXMLDescription()
 {
+    /*
+     * build Device description
+     * then common description append it
+     */
     QDomDocument doc = QDomDocument();
-    QDomElement root, elem;
+    QDomElement root, devices, console, target;
     root = doc.createElement("domain");
     root.setAttribute("type", type.toLower());
     doc.appendChild(root);
+    devices = doc.createElement("devices");
     WidgetList::const_iterator Wdg;
     for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
-        QDomNodeList list = (*Wdg)->getNodeList();
+        QString property = (*Wdg)->objectName().split(":").last();
+        QDomNodeList list;
+        if ( property=="Device" ) {
+            list = (*Wdg)->getNodeList();
+        } else {
+            continue;
+        };
         /*
-         * current DomNode is removed to root-elrment
+         * current DomNode is removed to root-element
+         * but NULL-elemens not removed
+         * therefore keep to seek on not-NULL next element
+         */
+        uint j = 0;
+        uint count = list.length();
+        for (uint i=0; i<=count;i++) {
+            //qDebug()<<list.item(j).nodeName()<<i;
+            if (!list.item(j).isNull()) devices.appendChild(list.item(j));
+            else ++j;
+        };
+    };
+    for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
+        QString property = (*Wdg)->objectName().split(":").last();
+        QDomNodeList list;
+        if ( property=="Device" ) {
+            continue;
+        } else {
+            list = (*Wdg)->getNodeList();
+        };
+        /*
+         * current DomNode is removed to root-element
          * but NULL-elemens not removed
          * therefore keep to seek on not-NULL next element
          */
@@ -210,6 +242,17 @@ void CreateVirtDomain::buildXMLDescription()
             else ++j;
         };
     };
+    // append Device description
+    // TODO: remove it into some Device-desc widget
+    console = doc.createElement("console");
+    console.setAttribute("type", "pty");
+    devices.appendChild(console);
+    target = doc.createElement("target");
+    target.setAttribute("type", type.toLower());
+    target.setAttribute("port", "0");
+    console.appendChild(target);
+    root.appendChild(devices);
+    //
     //qDebug()<<doc.toString();
 
     bool read = xml->open();
@@ -232,6 +275,7 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.append(new General(this, type, arch, emulator));
         wdgList.append(new LXC_OSBooting(this, os_type, arch));
         wdgList.append(new Memory(this, memUnit, memValue));
+        wdgList.append(new CPU(this));
     } else if ( type.toLower() == "qemu" ) {
         wdgList.append(new General(this, type, arch, emulator));
     } else if ( type.toLower() == "xen" ) {
@@ -244,7 +288,7 @@ void CreateVirtDomain::set_specified_Tabs()
     WidgetList::const_iterator Wdg;
     for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
         if ( NULL!=*Wdg ) {
-            QString name = (*Wdg)->objectName();
+            QString name = (*Wdg)->objectName().split(":").first();
             tabWidget->addTab(*Wdg, QIcon::fromTheme(name.toLower()), name);
         };
     };

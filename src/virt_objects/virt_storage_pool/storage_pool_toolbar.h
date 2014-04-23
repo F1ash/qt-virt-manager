@@ -2,8 +2,11 @@
 #define STORAGE_POOL_TOOLBAR_H
 
 #include <QToolBar>
+#include <QSettings>
 #include <QAction>
 #include <QIcon>
+#include <QPushButton>
+#include <QTimerEvent>
 #include "virt_objects/open_file_menu.h"
 #include <QDebug>
 
@@ -29,15 +32,26 @@ private:
     QAction         *setAutostart_Action;
     QAction         *getXMLDesc_Action;
     QAction         *overview_Action;
+    QPushButton     *_autoReload;
+    QAction         *autoReload;
+
+    QSettings        settings;
+    int              interval;
+    int              timerId;
 
 private slots:
+    void timerEvent(QTimerEvent*);
     void repeatParameters(QStringList&);
     void showHoveredMenu();
     void showMenu();
     void detectTriggerredAction(QAction*);
+    void changeAutoReloadState(bool);
 
 public slots:
     Qt::ToolBarArea get_ToolBarArea(int) const;
+    void enableAutoReload();
+    void stopProcessing();
+    bool getAutoReloadState() const;
 
 };
 
