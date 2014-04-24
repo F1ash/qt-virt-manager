@@ -8,6 +8,7 @@
 #include <QTimerEvent>
 #include <QSettings>
 #include "virt_objects/open_file_menu.h"
+#include "wipe_menu.h"
 #include <QDebug>
 
 class StorageVolToolBar : public QToolBar
@@ -29,6 +30,7 @@ private:
     QAction         *resize_Action;
     QAction         *upload_Action;
     QAction         *wipe_Action;
+    WipeMenu        *wipe_Menu;
     QAction         *getXMLDesc_Action;
     QAction         *stopOverview_Action;
     QPushButton     *_autoReload;
@@ -43,6 +45,7 @@ private slots:
     void repeatParameters(QStringList&);
     void showMenu();
     void detectTriggerredAction(QAction*);
+    void emitWipeAction(const QStringList&);
     void changeAutoReloadState(bool);
 
 public slots:

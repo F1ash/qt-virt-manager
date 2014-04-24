@@ -23,17 +23,22 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     delete_Action = new QAction(this);
-    delete_Action->setIcon(QIcon::fromTheme("storageVol-stop"));
+    delete_Action->setIcon(QIcon::fromTheme("delete"));
     delete_Action->setToolTip("Delete");
     download_Action = new QAction(this);
-    download_Action->setIcon(QIcon::fromTheme("storageVol-autostart"));
+    download_Action->setIcon(QIcon::fromTheme("download"));
     download_Action->setToolTip("Download");
     resize_Action = new QAction(this);
-    resize_Action->setIcon(QIcon::fromTheme("storageVol-resize"));
+    resize_Action->setIcon(QIcon::fromTheme("resize"));
     resize_Action->setToolTip("Resize");
     upload_Action = new QAction(this);
-    upload_Action->setIcon(QIcon::fromTheme("storageVol-start"));
+    upload_Action->setIcon(QIcon::fromTheme("upload"));
     upload_Action->setToolTip("Upload");
+    wipe_Menu = new WipeMenu(this);
+    wipe_Action = new QAction(this);
+    wipe_Action->setIcon(QIcon::fromTheme("wipe"));
+    wipe_Action->setToolTip("Wipe");
+    wipe_Action->setMenu(wipe_Menu);
     getXMLDesc_Action = new QAction(this);
     getXMLDesc_Action->setIcon(QIcon::fromTheme("storageVol-xml"));
     getXMLDesc_Action->setToolTip("Get XML Description");
@@ -50,6 +55,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     addAction(download_Action);
     addAction(resize_Action);
     addAction(upload_Action);
+    addAction(wipe_Action);
     addSeparator();
     addAction(getXMLDesc_Action);
     addSeparator();
@@ -66,6 +72,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     connect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
 
     connect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
+    connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)), this, SLOT(emitWipeAction(const QStringList&)));
     connect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
 }
 StorageVolToolBar::~StorageVolToolBar()
@@ -76,6 +83,7 @@ StorageVolToolBar::~StorageVolToolBar()
     settings.endGroup();
     disconnect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
     disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
+    disconnect(wipe_Menu, SIGNAL(execMethod(const QStringList&)), this, SLOT(emitWipeAction(const QStringList&)));
     disconnect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
 
     disconnect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
@@ -92,6 +100,10 @@ StorageVolToolBar::~StorageVolToolBar()
     resize_Action = 0;
     delete upload_Action;
     upload_Action = 0;
+    delete wipe_Menu;
+    wipe_Menu = 0;
+    delete wipe_Action;
+    wipe_Action = 0;
     delete getXMLDesc_Action;
     getXMLDesc_Action = 0;
     delete stopOverview_Action;
@@ -172,16 +184,22 @@ void StorageVolToolBar::detectTriggerredAction(QAction *action)
         parameters << "uploadVirtStorageVol";
     } else if ( action == delete_Action ) {
         parameters << "deleteVirtStorageVol";
-    } else if ( action == resize_Action ) {
-        parameters << "resizeVirtStorageVol";
     } else if ( action == download_Action ) {
         parameters << "downloadVirtStorageVol";
+    } else if ( action == resize_Action ) {
+        parameters << "resizeVirtStorageVol";
+    } else if ( action == wipe_Action ) {
+        parameters << "wipeVirtStorageVol" << "0";
     } else if ( action == getXMLDesc_Action ) {
         parameters << "getVirtStorageVolXMLDesc";
     } else if ( action == stopOverview_Action ) {
         parameters << "stopOverViewVirtStoragePool";
     } else return;
     emit execMethod(parameters);
+}
+void StorageVolToolBar::emitWipeAction(const QStringList &args)
+{
+    emit execMethod(args);
 }
 void StorageVolToolBar::changeAutoReloadState(bool state)
 {

@@ -153,13 +153,15 @@ void VirtStorageVolControl::resultReceiver(StorageVolActions act, QStringList da
         };
     } else if ( act == CREATE_StVOL ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+    } else if ( act == DELETE_StVOL ) {
+        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == DOWNLOAD_StVOL ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == UPLOAD_StVOL ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
-    } else if ( act == DELETE_StVOL ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == RESIZE_StVOL ) {
+        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+    } else if ( act == WIPE_StVOL ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == GET_StVOL_XML_DESC ) {
         if ( !data.isEmpty() ) {
@@ -221,14 +223,17 @@ void VirtStorageVolControl::execAction(const QStringList &l)
         args.append(storageVolName);
         if        ( l.first()=="getVirtStorageVolList" ) {
             stVolControlThread->execAction(GET_ALL_StVOL, args);
-        } else if ( l.first()=="uploadVirtStorageVol" ) {
-            stVolControlThread->execAction(UPLOAD_StVOL, args);
-        } else if ( l.first()=="downloadVirtStorageVol" ) {
-            stVolControlThread->execAction(DOWNLOAD_StVOL, args);
         } else if ( l.first()=="deleteVirtStorageVol" ) {
             stVolControlThread->execAction(DELETE_StVOL, args);
+        } else if ( l.first()=="downloadVirtStorageVol" ) {
+            stVolControlThread->execAction(DOWNLOAD_StVOL, args);
         } else if ( l.first()=="resizeVirtStorageVol" ) {
             stVolControlThread->execAction(RESIZE_StVOL, args);
+        } else if ( l.first()=="uploadVirtStorageVol" ) {
+            stVolControlThread->execAction(UPLOAD_StVOL, args);
+        } else if ( l.first()=="wipeVirtStorageVol" ) {
+            args.append( (l.count()>1) ? l.at(1) : "0" );
+            stVolControlThread->execAction(WIPE_StVOL, args);
         } else if ( l.first()=="getVirtStorageVolXMLDesc" ) {
             stVolControlThread->execAction(GET_StVOL_XML_DESC, args);
         } else if ( l.first()=="stopOverViewVirtStoragePool" ) {

@@ -55,17 +55,20 @@ void StorageVolControlThread::run()
     case CREATE_StVOL :
         result.append(createStorageVol());
         break;
+    case DELETE_StVOL :
+        result.append(deleteStorageVol());
+        break;
     case DOWNLOAD_StVOL :
         result.append(downloadStorageVol());
         break;
     case UPLOAD_StVOL :
         result.append(uploadStorageVol());
         break;
-    case DELETE_StVOL :
-        result.append(deleteStorageVol());
-        break;
     case RESIZE_StVOL :
         result.append(resizeStorageVol());
+        break;
+    case WIPE_StVOL :
+        result.append(wipeStorageVol());
         break;
     case GET_StVOL_XML_DESC :
         result.append(getStorageVolXMLDesc());
@@ -158,139 +161,14 @@ QStringList StorageVolControlThread::createStorageVol()
     virStorageVolFree(storageVol);
     return result;
 }
-QStringList StorageVolControlThread::downloadStorageVol()
-{
-    QStringList result;
-    QString name = args.first();
-    // flags: extra flags; not used yet, so callers should always pass 0
-    unsigned int flags = 0;
-    /*
-    virStorageVolPtr *storageVol;
-    int ret = virStoragePoolListAllVolumes( currStoragePool, &storageVol, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(storageVol);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currStoragePool));
-    */
-
-    bool downloaded = false;
-    virStreamPtr stream;
-    unsigned long long offset = 0;
-    unsigned long long length = 0;
-    // flags: extra flags; not used yet, so callers should always pass 0
-    flags = 0;
-    /*
-    int i = 0;
-    while ( storageVol[i] != NULL ) {
-        QString currVolName = QString( virStorageVolGetName(storageVol[i]) );
-        if ( !downloaded && currVolName==name ) {
-            int ret = virStorageVolDownload(storageVol[i], stream, offset, length, flags);
-            if ( ret<0 ) {
-                sendConnErrors();
-                return result;
-            } else downloaded = true;
-        };
-        virStorageVolFree(storageVol[i]);
-        i++;
-    };
-    free(storageVol);
-    */
-    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
-    if ( storageVol!=NULL ) {
-        int ret = virStorageVolDownload(storageVol, stream, offset, length, flags);
-        if ( ret<0 ) sendConnErrors();
-        else downloaded = true;
-        virStorageVolFree(storageVol);
-    } else sendConnErrors();
-    result.append(QString("'%1' StorageVol %2 Downloaded.").arg(name).arg((downloaded)?"":"don't"));
-    return result;
-}
-QStringList StorageVolControlThread::uploadStorageVol()
-{
-    QStringList result;
-    QString name = args.first();
-    // flags: extra flags; not used yet, so callers should always pass 0
-    unsigned int flags = 0;
-    /*
-    virStorageVolPtr *storageVol;
-    int ret = virStoragePoolListAllVolumes( currStoragePool, &storageVol, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(storageVol);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currStoragePool));
-    */
-
-    virStreamPtr stream;
-    unsigned long long offset = 0;
-    unsigned long long length = 0;
-    // flags: extra flags; not used yet, so callers should always pass 0
-    flags = 0;
-    bool uploaded = false;
-    /*
-    int i = 0;
-    while ( storageVol[i] != NULL ) {
-        QString currVolName = QString( virStorageVolGetName(storageVol[i]) );
-        if ( !uploaded && currVolName==name ) {
-            int ret = virStorageVolUpload(storageVol[i], stream, offset, length, flags);
-            if ( ret<0 ) {
-                sendConnErrors();
-                return result;
-            } else uploaded = true;
-        };
-        virStorageVolFree(storageVol[i]);
-        i++;
-    };
-    free(storageVol);
-    */
-    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
-    if ( storageVol!=NULL ) {
-        int ret = virStorageVolUpload(storageVol, stream, offset, length, flags);
-        if ( ret<0 ) {
-            sendConnErrors();
-        } else uploaded = true;
-        virStorageVolFree(storageVol);
-    } else sendConnErrors();
-    result.append(QString("'%1' StorageVol %2 Uploaded.").arg(name).arg((uploaded)?"":"don't"));
-    return result;
-}
 QStringList StorageVolControlThread::deleteStorageVol()
 {
     QStringList result;
     QString name = args.first();
-    // flags: extra flags; not used yet, so callers should always pass 0
-    unsigned int flags = 0;
-    /*
-    virStorageVolPtr *storageVol;
-    int ret = virStoragePoolListAllVolumes( currStoragePool, &storageVol, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(storageVol);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currStoragePool));
-    */
 
     // flags: extra flags; not used yet, so callers should always pass 0
-    flags = 0;
+    unsigned int flags = 0;
     bool deleted = false;
-    /*
-    int i = 0;
-    while ( storageVol[i] != NULL ) {
-        QString currVolName = QString( virStorageVolGetName(storageVol[i]) );
-        if ( !deleted && currVolName==name ) {
-            deleted = (virStorageVolDelete(storageVol[i], flags)+1) ? true : false;
-            if (!deleted) sendGlobalErrors();
-        };
-        qDebug()<<QVariant(deleted).toString()<<currVolName<<name;
-        virStorageVolFree(storageVol[i]);
-        i++;
-    };
-    free(storageVol);
-    */
     virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         deleted = (virStorageVolDelete(storageVol, flags)+1) ? true : false;
@@ -300,42 +178,36 @@ QStringList StorageVolControlThread::deleteStorageVol()
     result.append(QString("'%1' StorageVol %2 Deleted.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
+QStringList StorageVolControlThread::downloadStorageVol()
+{
+    QStringList result;
+    QString name = args.first();
+
+    bool downloaded = false;
+    virStreamPtr stream = NULL;
+    unsigned long long offset = 0;
+    unsigned long long length = 0;
+    // flags: extra flags; not used yet, so callers should always pass 0
+    unsigned int flags = 0;
+    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
+    if ( storageVol!=NULL ) {
+        // TODO:  implement stream ptr
+        int ret = virStorageVolDownload(storageVol, stream, offset, length, flags);
+        //
+        if ( ret<0 ) sendConnErrors();
+        else downloaded = true;
+        virStorageVolFree(storageVol);
+    } else sendConnErrors();
+    result.append(QString("'%1' StorageVol %2 Downloaded.").arg(name).arg((downloaded)?"":"don't"));
+    return result;
+}
 QStringList StorageVolControlThread::resizeStorageVol()
 {
     QStringList result;
     QString name = args.first();
-    /*
-    // flags: extra flags; not used yet, so callers should always pass 0
-    unsigned int flags = 0;
-    virStorageVolPtr *storageVol;
-    int ret = virStoragePoolListAllVolumes( currStoragePool, &storageVol, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(storageVol);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currStoragePool));
-    */
 
     unsigned long long capacity = 0;
     bool resized = false;
-    /*
-    int i = 0;
-    while ( storageVol[i] != NULL ) {
-        QString currVolName = QString( virStorageVolGetName(storageVol[i]) );
-        if ( !resized && currVolName==name ) {
-            int ret = virStorageVolResize(storageVol[i], capacity, VIR_STORAGE_VOL_RESIZE_ALLOCATE);
-            if ( ret<0 ) {
-                sendConnErrors();
-                return result;
-            } else resized = true;
-        };
-        qDebug()<<QVariant(resized).toString()<<currVolName<<name;
-        virStorageVolFree(storageVol[i]);
-        i++;
-    };
-    free(storageVol);
-    */
     virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         int ret = virStorageVolResize(storageVol, capacity, VIR_STORAGE_VOL_RESIZE_ALLOCATE);
@@ -347,41 +219,94 @@ QStringList StorageVolControlThread::resizeStorageVol()
     result.append(QString("'%1' StorageVol %2 Resized.").arg(name).arg((resized)?"":"don't"));
     return result;
 }
+QStringList StorageVolControlThread::uploadStorageVol()
+{
+    QStringList result;
+    QString name = args.first();
+
+    virStreamPtr stream = NULL;
+    unsigned long long offset = 0;
+    unsigned long long length = 0;
+    // flags: extra flags; not used yet, so callers should always pass 0
+    unsigned int flags = 0;
+    bool uploaded = false;
+    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
+    if ( storageVol!=NULL ) {
+        // TODO:  implement stream ptr
+        int ret = virStorageVolUpload(storageVol, stream, offset, length, flags);
+        //
+        if ( ret<0 ) {
+            sendConnErrors();
+        } else uploaded = true;
+        virStorageVolFree(storageVol);
+    } else sendConnErrors();
+    result.append(QString("'%1' StorageVol %2 Uploaded.").arg(name).arg((uploaded)?"":"don't"));
+    return result;
+}
+QStringList StorageVolControlThread::wipeStorageVol()
+{
+    QStringList result;
+    QString name, algorithm;
+    name = args.first();
+    args.removeFirst();
+
+    //flags: extra flags; not used yet, so callers should always pass 0
+    unsigned int flags = 0;
+    unsigned int alg = 0;
+    bool wiped = false;
+    if ( !args.isEmpty() ) alg = args.first().toUInt();
+    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
+    if ( storageVol!=NULL ) {
+        int ret = virStorageVolWipePattern(storageVol, alg, flags);
+        if ( ret<0 ) {
+            sendConnErrors();
+        } else wiped = true;
+        virStorageVolFree(storageVol);
+    } else sendConnErrors();
+    switch (alg) {
+    case VIR_STORAGE_VOL_WIPE_ALG_ZERO:
+        algorithm.append("ZERO");
+        break;
+    case VIR_STORAGE_VOL_WIPE_ALG_NNSA:
+        algorithm.append("NNSA");
+        break;
+    case VIR_STORAGE_VOL_WIPE_ALG_DOD:
+        algorithm.append("DOD");
+        break;
+    case VIR_STORAGE_VOL_WIPE_ALG_BSI:
+        algorithm.append("BSI");
+        break;
+    case VIR_STORAGE_VOL_WIPE_ALG_GUTMANN:
+        algorithm.append("GUTMANN");
+        break;
+    case VIR_STORAGE_VOL_WIPE_ALG_PFITZNER7:
+        algorithm.append("PFITZNER7");
+        break;
+    case VIR_STORAGE_VOL_WIPE_ALG_PFITZNER33:
+        algorithm.append("PFITZNER33");
+        break;
+    case VIR_STORAGE_VOL_WIPE_ALG_RANDOM:
+        algorithm.append("RANDOM");
+        break;
+    case VIR_STORAGE_VOL_WIPE_ALG_SCHNEIER:
+        algorithm.append("SCHNEIER");
+        break;
+    default:
+        algorithm.append("NONE");
+        break;
+    };
+    result.append(QString("'%1' StorageVol %2 Wiped with %3 algorithm.").arg(name).arg((wiped)?"":"don't").arg(algorithm));
+    return result;
+}
 QStringList StorageVolControlThread::getStorageVolXMLDesc()
 {
     QStringList result;
     QString name = args.first();
-    // flags: extra flags; not used yet, so callers should always pass 0
-    unsigned int flags = 0;
-    /*
-    virStorageVolPtr *storageVol;
-    int ret = virStoragePoolListAllVolumes( currStoragePool, &storageVol, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(storageVol);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currStoragePool));
-    */
 
     bool read = false;
     char *Returns = NULL;
     // flags: extra flags; not used yet, so callers should always pass 0
-    flags = 0;
-    /*
-    int i = 0;
-    while ( storageVol[i] != NULL ) {
-        QString currVolName = QString( virStorageVolGetName(storageVol[i]) );
-        if ( !read && currVolName==name ) {
-            Returns = (virStorageVolGetXMLDesc(storageVol[i], flags));
-            if ( Returns==NULL ) sendGlobalErrors();
-            else read = true;
-        };
-        virStorageVolFree(storageVol[i]);
-        i++;
-    };
-    free(storageVol);
-    */
+    unsigned int flags = 0;
     virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         Returns = virStorageVolGetXMLDesc(storageVol, flags);

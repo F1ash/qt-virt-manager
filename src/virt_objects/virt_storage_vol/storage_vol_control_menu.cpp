@@ -4,28 +4,29 @@ StorageVolControlMenu::StorageVolControlMenu(QWidget *parent, QStringList params
     QMenu(parent), parameters(params), autoReloadState(state)
 {
     if ( !parameters.isEmpty() ) {
-        start = new QAction("Start", this);
-        start->setIcon(QIcon::fromTheme("storageVol-start"));
-        start->setEnabled(parameters.last()=="yes" && parameters[1]!="active" );
-        destroy = new QAction("Destroy", this);
-        destroy->setIcon(QIcon::fromTheme("storageVol-stop"));
-        destroy->setEnabled(parameters[1]=="active");
-        undefine = new QAction("Undefine", this);
-        undefine->setIcon(QIcon::fromTheme("storageVol-undefine"));
-        undefine->setEnabled(parameters.last()=="yes");
-        autoStart = new QAction("change AutoStart", this);
-        autoStart->setIcon(QIcon::fromTheme("storageVol-autostart"));
-        autoStart->setEnabled(parameters.last()=="yes");
-        getXMLDesc = new QAction("get XML Description", this);
-        getXMLDesc->setIcon(QIcon::fromTheme("storageVol-xml"));
-        getXMLDesc->setEnabled(true);
+        delete_Action = new QAction("Delete", this);
+        delete_Action->setIcon(QIcon::fromTheme("storageVol-stop"));
+        download_Action = new QAction("Download", this);
+        download_Action->setIcon(QIcon::fromTheme("download"));
+        resize_Action = new QAction("Resize", this);
+        resize_Action->setIcon(QIcon::fromTheme("resize"));
+        upload_Action = new QAction("Upload", this);
+        upload_Action->setIcon(QIcon::fromTheme("upload"));
+        wipe_Menu = new WipeMenu(this);
+        wipe_Action = new QAction("Wipe", this);
+        wipe_Action->setIcon(QIcon::fromTheme("wipe"));
+        wipe_Action->setMenu(wipe_Menu);
+        connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)), this, SLOT(emitWipeAction(const QStringList&)));
+        getXMLDesc_Action = new QAction("get XML Description", this);
+        getXMLDesc_Action->setIcon(QIcon::fromTheme("storageVol-xml"));
 
-        addAction(start);
-        addAction(destroy);
-        addAction(undefine);
-        addAction(autoStart);
+        addAction(delete_Action);
+        addAction(download_Action);
+        addAction(resize_Action);
+        addAction(upload_Action);
+        addAction(wipe_Action);
         addSeparator();
-        addAction(getXMLDesc);
+        addAction(getXMLDesc_Action);
         addSeparator();
     };
     reload = new QAction("Reload Pool OverView", this);
@@ -39,16 +40,21 @@ StorageVolControlMenu::~StorageVolControlMenu()
 {
     disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
     if ( !parameters.isEmpty() ) {
-        delete start;
-        start = 0;
-        delete destroy;
-        destroy = 0;
-        delete undefine;
-        undefine = 0;
-        delete autoStart;
-        autoStart = 0;
-        delete getXMLDesc;
-        getXMLDesc = 0;
+        disconnect(wipe_Menu, SIGNAL(execMethod(const QStringList&)), this, SLOT(emitWipeAction(const QStringList&)));
+        delete delete_Action;
+        delete_Action = 0;
+        delete download_Action;
+        download_Action = 0;
+        delete resize_Action;
+        resize_Action = 0;
+        delete upload_Action;
+        upload_Action = 0;
+        delete wipe_Menu;
+        wipe_Menu = 0;
+        delete wipe_Action;
+        wipe_Action = 0;
+        delete getXMLDesc_Action;
+        getXMLDesc_Action = 0;
     };
     delete reload;
     reload = 0;
@@ -57,23 +63,28 @@ void StorageVolControlMenu::emitExecMethod(QAction *action)
 {
     QStringList paramList;
     if ( !parameters.isEmpty() ) {
-        if ( action == start) {
-            paramList << "downloadVirtStorageVolList";
-        } else if ( action == destroy ) {
-            paramList << "deleteVirtStorageVol";
-        } else if ( action == undefine ) {
+        if ( action == resize_Action) {
             paramList << "resizeVirtStorageVol";
-        } else if ( action == autoStart ) {
-            paramList << "uploadVirtStorageVolList";
-        } else if ( action == getXMLDesc ) {
+        } else if ( action == delete_Action ) {
+            paramList << "deleteVirtStorageVol";
+        } else if ( action == download_Action ) {
+            paramList << "downloadVirtStorageVol";
+        } else if ( action == upload_Action ) {
+            paramList << "uploadVirtStorageVol";
+        } else if ( action == wipe_Action ) {
+            paramList << "wipeVirtStorageVol" << "0";
+        } else if ( action == getXMLDesc_Action ) {
             paramList << "getVirtStorageVolXMLDesc";
         } else if ( action == reload ) {
             paramList << "reloadVirtStoragePool";
         } else return;
-        paramList.append(parameters.first());
     } else if ( action == reload ) {
         paramList << "reloadVirtStoragePool";
     } else return;
     //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);
+}
+void StorageVolControlMenu::emitWipeAction(const QStringList &args)
+{
+    emit execMethod(args);
 }

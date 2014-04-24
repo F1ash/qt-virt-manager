@@ -12,10 +12,11 @@
 enum StorageVolActions {
     GET_ALL_StVOL,
     CREATE_StVOL,
-    DOWNLOAD_StVOL,
-    UPLOAD_StVOL,
     DELETE_StVOL,
+    DOWNLOAD_StVOL,
     RESIZE_StVOL,
+    UPLOAD_StVOL,
+    WIPE_StVOL,
     GET_StVOL_XML_DESC,
     StVOL_EMPTY_ACTION
 };
@@ -49,9 +50,10 @@ private slots:
     QStringList getAllStorageVolList();
     QStringList createStorageVol();
     QStringList downloadStorageVol();
-    QStringList uploadStorageVol();
     QStringList deleteStorageVol();
+    QStringList uploadStorageVol();
     QStringList resizeStorageVol();
+    QStringList wipeStorageVol();
     QStringList getStorageVolXMLDesc();
 
     void sendConnErrors();

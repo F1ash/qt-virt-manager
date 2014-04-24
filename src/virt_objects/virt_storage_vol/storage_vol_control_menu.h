@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QIcon>
 #include <QStringList>
+#include "wipe_menu.h"
 #include <QDebug>
 
 class StorageVolControlMenu : public QMenu
@@ -19,16 +20,19 @@ signals:
 
 private:
     bool            autoReloadState;
-    QAction        *start;
-    QAction        *destroy;
-    QAction        *undefine;
-    QAction        *autoStart;
-    QAction        *getXMLDesc;
+    QAction        *delete_Action;
+    QAction        *download_Action;
+    QAction        *resize_Action;
+    QAction        *upload_Action;
+    QAction        *wipe_Action;
+    WipeMenu       *wipe_Menu;
+    QAction        *getXMLDesc_Action;
     QAction        *reload;
     QStringList     parameters;
 
 private slots:
     void emitExecMethod(QAction*);
+    void emitWipeAction(const QStringList&);
 
 };
 
