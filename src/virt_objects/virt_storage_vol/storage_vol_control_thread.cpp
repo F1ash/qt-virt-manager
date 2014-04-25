@@ -215,7 +215,7 @@ QStringList StorageVolControlThread::downloadStorageVol()
                 };
                 if (got == 0) break;
                 step++;
-                saved = f->write(buf, BLOCK_SIZE);
+                saved = f->write(buf, got);
                 //qDebug()<<"got<>saved"<<got<<saved<<step;
                 if ( saved+1 ) length += saved;
                 else emit errorMsg( QString("WriteError after (%2): %1 bytes").arg(length).arg(step) );
@@ -259,27 +259,59 @@ QStringList StorageVolControlThread::resizeStorageVol()
 QStringList StorageVolControlThread::uploadStorageVol()
 {
     QStringList result;
-    QString name = args.first();
+    QString name, path;
+    name = args.first();
     args.removeFirst();
-    //qDebug()<<args.first()<<"upload";
+    path = args.first();
+    //qDebug()<<path<<"upload";
+    QFile *f = new QFile(path);
+    f->open(QIODevice::ReadOnly);
 
-    virStreamPtr stream = NULL;
+    bool uploaded = false;
+    virStreamPtr stream = virStreamNew(currWorkConnect, 0);
     unsigned long long offset = 0;
-    unsigned long long length = 0;
+    unsigned long long length = f->size();
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
-    bool uploaded = false;
     virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
-        // TODO:  implement stream ptr
         int ret = virStorageVolUpload(storageVol, stream, offset, length, flags);
-        //
         if ( ret<0 ) {
             sendConnErrors();
-        } else uploaded = true;
+        } else {
+            uploaded = true;
+            length = 0;
+            int got, saved, step;
+            step = 0;
+            char buf[BLOCK_SIZE];
+            while ( 1 && keep_alive ) {
+                got = f->read(buf, BLOCK_SIZE);
+                if (got == 0) break;
+                if ( got<0 ) {
+                    emit errorMsg( QString("ReadError after (%2): %1 bytes")
+                                   .arg(length).arg(step) );
+                } else {
+                    saved = virStreamSend(stream, buf, got);
+                    if (saved < 0) {
+                        sendConnErrors();
+                        uploaded = false;
+                        break;
+                    };
+                    step++;
+                    length += saved;
+                    //qDebug()<<"got<>saved:length"<<got<<saved<<step<<length;
+                };
+            };
+            virStreamFinish(stream);
+        };
         virStorageVolFree(storageVol);
     } else sendConnErrors();
-    result.append(QString("'%1' StorageVol %2 Uploaded.").arg(name).arg((uploaded)?"":"don't"));
+    if ( stream!=NULL ) virStreamFree(stream);
+    f->close();
+    delete f; f = 0;
+    result.append(QString("'%1' StorageVol %2 Uploaded from %3 (%4).")
+                  .arg(name).arg((uploaded)?"":"don't")
+                  .arg(path).arg(length));
     return result;
 }
 QStringList StorageVolControlThread::wipeStorageVol()

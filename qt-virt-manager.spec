@@ -1,8 +1,8 @@
 %global cmake_build_dir build-cmake
 
 Name:           qt-virt-manager
-Version:        0.0.2
-Release:        2%{?dist}
+Version:        0.0.3
+Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
 License:        GPLv2+
@@ -50,7 +50,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/%{name}
 
 %changelog
-* Wed Apr  2 2014 Fl@sh <kaperang07@gmail.com> - 0.0.2-2
+* Fri Apr 25 2014 Fl@sh <kaperang07@gmail.com> - 0.0.3-1
 - added scrub to R optionally;
 
 * Wed Apr  2 2014 Fl@sh <kaperang07@gmail.com> - 0.0.2-2
