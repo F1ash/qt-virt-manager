@@ -3,7 +3,7 @@
 StorageVolModel::StorageVolModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
-    defined = QIcon::fromTheme("storageVol-define");
+    defined = QIcon::fromTheme("storage");
     column0 = "Name";
     column1 = "Path";
     column2 = "Type";

@@ -10,6 +10,8 @@ Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 URL:            https://github.com/F1ash/%{name}
 
 Requires:       libvirt
+# for scrubbing (optional)
+Requires:       scrub
 
 BuildRequires:  qt4-devel
 BuildRequires:  libvirt-devel
@@ -48,6 +50,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/%{name}
 
 %changelog
+* Wed Apr  2 2014 Fl@sh <kaperang07@gmail.com> - 0.0.2-2
+- added scrub to R optionally;
+
 * Wed Apr  2 2014 Fl@sh <kaperang07@gmail.com> - 0.0.2-2
 - remove open-xdg R;
 

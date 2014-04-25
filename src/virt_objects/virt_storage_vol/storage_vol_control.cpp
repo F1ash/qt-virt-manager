@@ -127,29 +127,26 @@ void VirtStorageVolControl::resultReceiver(StorageVolActions act, QStringList da
 {
     //qDebug()<<act<<data<<"result";
     if ( act == GET_ALL_StVOL ) {
-        if ( data.count() > storageVolModel->DataList.count() ) {
-            int _diff = data.count() - storageVolModel->DataList.count();
+        int chain  = storageVolModel->columnCount();
+        int chains = data.count()/chain;
+        if ( chains > storageVolModel->DataList.count() ) {
+            int _diff = chains - storageVolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 storageVolModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( storageVolModel->DataList.count() > data.count() ) {
-            int _diff = storageVolModel->DataList.count() - data.count();
+        if ( storageVolModel->DataList.count() > chains ) {
+            int _diff = storageVolModel->DataList.count() - chains;
             for ( int i = 0; i<_diff; i++ ) {
                 storageVolModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
-        int i = 0;
-        foreach (QString _data, data) {
-            QStringList chain = _data.split(" ");
-            if (chain.isEmpty()) continue;
-            int count = chain.size();
-            for (int j=0; j<count; j++) {
-                storageVolModel->setData(storageVolModel->index(i,j), chain.at(j), Qt::EditRole);
+        for (int i = 0; i<chains; i++) {
+            for (int j = 0; j<chain; j++) {
+                storageVolModel->setData(storageVolModel->index(i,j), data.at(i*chain+j), Qt::EditRole);
             };
-            i++;
         };
     } else if ( act == CREATE_StVOL ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
@@ -226,11 +223,30 @@ void VirtStorageVolControl::execAction(const QStringList &l)
         } else if ( l.first()=="deleteVirtStorageVol" ) {
             stVolControlThread->execAction(DELETE_StVOL, args);
         } else if ( l.first()=="downloadVirtStorageVol" ) {
-            stVolControlThread->execAction(DOWNLOAD_StVOL, args);
+            QString path = QFileDialog::getSaveFileName(this, "Save to", "~");
+            if ( !path.isEmpty() ) {
+                args.append(path);
+                args.append(storageVolModel->DataList.at(idx.row())->getSize());
+                stVolControlThread->execAction(DOWNLOAD_StVOL, args);
+            } else return;
         } else if ( l.first()=="resizeVirtStorageVol" ) {
+            ResizeDialog *resizeDialog = new ResizeDialog(this,
+                storageVolModel->DataList.at(idx.row())->getSize().toULongLong());
+            int res = resizeDialog->exec();
+            unsigned long long size = resizeDialog->getNewSize();
+            resizeDialog->deleteLater();
+            if ( res ) {
+                args.append( QString("%1").arg(size) );
+            } else {
+                return;
+            };
             stVolControlThread->execAction(RESIZE_StVOL, args);
         } else if ( l.first()=="uploadVirtStorageVol" ) {
-            stVolControlThread->execAction(UPLOAD_StVOL, args);
+            QString path = QFileDialog::getOpenFileName(this, "Read from", "~");
+            if ( !path.isEmpty() ) {
+                args.append(path);
+                stVolControlThread->execAction(UPLOAD_StVOL, args);
+            } else return;
         } else if ( l.first()=="wipeVirtStorageVol" ) {
             args.append( (l.count()>1) ? l.at(1) : "0" );
             stVolControlThread->execAction(WIPE_StVOL, args);

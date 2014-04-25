@@ -54,6 +54,7 @@ set (HEADERS
   src/virt_objects/virt_storage_vol/storage_vol_control_thread.h
   src/virt_objects/virt_storage_vol/storage_vol_control_menu.h
   src/virt_objects/virt_storage_vol/wipe_menu.h
+  src/virt_objects/virt_storage_vol/resize_dialog.h
   
   src/create_widgets/domain/domain_widgets.h
   src/create_widgets/domain/_qwidget.h
@@ -110,6 +111,7 @@ set (SOURCES
   src/virt_objects/virt_storage_vol/storage_vol_control_thread.cpp
   src/virt_objects/virt_storage_vol/storage_vol_control_menu.cpp
   src/virt_objects/virt_storage_vol/wipe_menu.cpp
+  src/virt_objects/virt_storage_vol/resize_dialog.cpp
   
   src/create_widgets/domain/create_virt_domain.cpp
   src/create_widgets/domain/_qwidget.cpp

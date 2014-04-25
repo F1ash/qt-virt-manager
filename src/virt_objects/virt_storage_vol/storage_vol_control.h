@@ -14,6 +14,7 @@
 #include "storage_vol_toolbar.h"
 #include "storage_vol_control_menu.h"
 #include "storage_vol_control_thread.h"
+#include "resize_dialog.h"
 
 class VirtStorageVolControl : public QMainWindow
 {

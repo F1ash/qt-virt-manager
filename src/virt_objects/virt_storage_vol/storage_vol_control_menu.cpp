@@ -5,16 +5,16 @@ StorageVolControlMenu::StorageVolControlMenu(QWidget *parent, QStringList params
 {
     if ( !parameters.isEmpty() ) {
         delete_Action = new QAction("Delete", this);
-        delete_Action->setIcon(QIcon::fromTheme("storageVol-stop"));
+        delete_Action->setIcon(QIcon::fromTheme("storageVol-delete"));
         download_Action = new QAction("Download", this);
-        download_Action->setIcon(QIcon::fromTheme("download"));
+        download_Action->setIcon(QIcon::fromTheme("storageVol-download"));
         resize_Action = new QAction("Resize", this);
-        resize_Action->setIcon(QIcon::fromTheme("resize"));
+        resize_Action->setIcon(QIcon::fromTheme("storageVol-resize"));
         upload_Action = new QAction("Upload", this);
-        upload_Action->setIcon(QIcon::fromTheme("upload"));
+        upload_Action->setIcon(QIcon::fromTheme("storageVol-upload"));
         wipe_Menu = new WipeMenu(this);
         wipe_Action = new QAction("Wipe", this);
-        wipe_Action->setIcon(QIcon::fromTheme("wipe"));
+        wipe_Action->setIcon(QIcon::fromTheme("storageVol-wipe"));
         wipe_Action->setMenu(wipe_Menu);
         connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)), this, SLOT(emitWipeAction(const QStringList&)));
         getXMLDesc_Action = new QAction("get XML Description", this);

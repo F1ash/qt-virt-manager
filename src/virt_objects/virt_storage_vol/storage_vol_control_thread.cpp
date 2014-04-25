@@ -119,18 +119,18 @@ QStringList StorageVolControlThread::getAllStorageVolList()
                     type.append("-");
                     break;
                 };
-                use.append(QString("%1").arg(info.capacity));
+                use.append(QString("%1").arg(info.allocation));
             } else {
                 sendConnErrors();
                 type.append("-");
                 use.append("-");
             };
             QStringList currentAttr;
-            currentAttr<< QString( virStorageVolGetName(storageVol[i]) )
-                       << QString( virStorageVolGetPath(storageVol[i]) )
+            currentAttr<< QString().fromUtf8( virStorageVolGetName(storageVol[i]) )
+                       << QString().fromUtf8( virStorageVolGetPath(storageVol[i]) )
                        << QString( type )
                        << QString( use );
-            storageVolList.append(currentAttr.join(" "));
+            storageVolList.append(currentAttr);
             //qDebug()<<currentAttr<<"Volume";
             virStorageVolFree(storageVol[i]);
             i++;
@@ -181,48 +181,87 @@ QStringList StorageVolControlThread::deleteStorageVol()
 QStringList StorageVolControlThread::downloadStorageVol()
 {
     QStringList result;
-    QString name = args.first();
+    QString name, path;
+    name = args.first();
+    args.removeFirst();
+    path = args.first();
+    args.removeFirst();
+    //qDebug()<<args.first()<<"download";
+    QFile *f = new QFile(path);
+    f->open(QIODevice::WriteOnly);
 
     bool downloaded = false;
-    virStreamPtr stream = NULL;
+    virStreamPtr stream = virStreamNew(currWorkConnect, 0);
     unsigned long long offset = 0;
-    unsigned long long length = 0;
+    unsigned long long length = args.first().toULongLong();
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
-        // TODO:  implement stream ptr
         int ret = virStorageVolDownload(storageVol, stream, offset, length, flags);
-        //
         if ( ret<0 ) sendConnErrors();
-        else downloaded = true;
+        else {
+            downloaded = true;
+            length = 0;
+            char buf[BLOCK_SIZE];
+            int got, saved, step;
+            step = 0;
+            while ( 1 && keep_alive ) {
+                got = virStreamRecv(stream, buf, BLOCK_SIZE);
+                if (got < 0) {
+                    sendConnErrors();
+                    downloaded = false;
+                    break;
+                };
+                if (got == 0) break;
+                step++;
+                saved = f->write(buf, BLOCK_SIZE);
+                //qDebug()<<"got<>saved"<<got<<saved<<step;
+                if ( saved+1 ) length += saved;
+                else emit errorMsg( QString("WriteError after (%2): %1 bytes").arg(length).arg(step) );
+            };
+            virStreamFinish(stream);
+        };
         virStorageVolFree(storageVol);
     } else sendConnErrors();
-    result.append(QString("'%1' StorageVol %2 Downloaded.").arg(name).arg((downloaded)?"":"don't"));
+    if ( stream!=NULL ) virStreamFree(stream);
+    f->close();
+    delete f; f = 0;
+    result.append(QString("'%1' StorageVol %2 Downloaded into %3 (%4).")
+                  .arg(name).arg((downloaded)?"":"don't")
+                  .arg(path).arg(length));
     return result;
 }
 QStringList StorageVolControlThread::resizeStorageVol()
 {
     QStringList result;
     QString name = args.first();
+    args.removeFirst();
 
     unsigned long long capacity = 0;
+    if ( args.count() && !args.first().isEmpty() ) {
+        capacity = args.first().toULongLong();
+    };
     bool resized = false;
     virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
-        int ret = virStorageVolResize(storageVol, capacity, VIR_STORAGE_VOL_RESIZE_ALLOCATE);
+        int ret = virStorageVolResize(storageVol, capacity,
+                                      VIR_STORAGE_VOL_RESIZE_ALLOCATE |
+                                      VIR_STORAGE_VOL_RESIZE_SHRINK);
         if ( ret<0 ) {
             sendConnErrors();
         } else resized = true;
         virStorageVolFree(storageVol);
     } else sendConnErrors();
-    result.append(QString("'%1' StorageVol %2 Resized.").arg(name).arg((resized)?"":"don't"));
+    result.append(QString("'%1' StorageVol %2 Resized to %3.").arg(name).arg((resized)?"":"don't").arg(capacity));
     return result;
 }
 QStringList StorageVolControlThread::uploadStorageVol()
 {
     QStringList result;
     QString name = args.first();
+    args.removeFirst();
+    //qDebug()<<args.first()<<"upload";
 
     virStreamPtr stream = NULL;
     unsigned long long offset = 0;

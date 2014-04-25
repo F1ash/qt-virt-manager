@@ -3,11 +3,14 @@
 
 #include <QThread>
 #include <QDir>
+#include <QFile>
 #include <QTemporaryFile>
 #include <QStringList>
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
 #include <QDebug>
+
+#define BLOCK_SIZE 1024
 
 enum StorageVolActions {
     GET_ALL_StVOL,

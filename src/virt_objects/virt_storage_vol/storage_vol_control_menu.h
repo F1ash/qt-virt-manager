@@ -6,6 +6,7 @@
 #include <QIcon>
 #include <QStringList>
 #include "wipe_menu.h"
+#include "resize_dialog.h"
 #include <QDebug>
 
 class StorageVolControlMenu : public QMenu
