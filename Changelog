@@ -5,3 +5,7 @@ v.0.0.2 :
 implemented simple actions for Connect
 and overview it resources;
 created icon set & example's files;
+
+v.0.0.3 :
+implemented simple contol
+for virtual entities;
