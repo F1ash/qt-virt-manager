@@ -99,7 +99,7 @@ QStringList StorageVolControlThread::getAllStorageVolList()
 
         int i = 0;
         while ( storageVol[i] != NULL ) {
-            QString type, use;
+            QString type, capacity, allocation;
             virStorageVolInfo info;
             if ( virStorageVolGetInfo(storageVol[i], &info)+1 ) {
                 switch (info.type) {
@@ -119,17 +119,20 @@ QStringList StorageVolControlThread::getAllStorageVolList()
                     type.append("-");
                     break;
                 };
-                use.append(QString("%1").arg(info.allocation));
+                allocation.append(QString("%1").arg(info.allocation));
+                capacity.append(QString("%1").arg(info.capacity));
             } else {
                 sendConnErrors();
                 type.append("-");
-                use.append("-");
+                allocation.append("-");
+                capacity.append("-");
             };
             QStringList currentAttr;
             currentAttr<< QString().fromUtf8( virStorageVolGetName(storageVol[i]) )
                        << QString().fromUtf8( virStorageVolGetPath(storageVol[i]) )
                        << QString( type )
-                       << QString( use );
+                       << QString( allocation )
+                       << QString( capacity );;
             storageVolList.append(currentAttr);
             //qDebug()<<currentAttr<<"Volume";
             virStorageVolFree(storageVol[i]);
@@ -246,14 +249,18 @@ QStringList StorageVolControlThread::resizeStorageVol()
     virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         int ret = virStorageVolResize(storageVol, capacity,
-                                      VIR_STORAGE_VOL_RESIZE_ALLOCATE |
-                                      VIR_STORAGE_VOL_RESIZE_SHRINK);
+                                      VIR_STORAGE_VOL_RESIZE_ALLOCATE);
+    //                                 | VIR_STORAGE_VOL_RESIZE_SHRINK);
+    // TODO: add SHRINK-flag when fixed
+    // See for: <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>
         if ( ret<0 ) {
             sendConnErrors();
+            emit errorMsg("ResizeError: Maybe <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>");
         } else resized = true;
         virStorageVolFree(storageVol);
     } else sendConnErrors();
-    result.append(QString("'%1' StorageVol %2 Resized to %3.").arg(name).arg((resized)?"":"don't").arg(capacity));
+    result.append(QString("'%1' StorageVol %2 Resized to %3 (bytes).")
+                  .arg(name).arg((resized)?"":"don't").arg(capacity));
     return result;
 }
 QStringList StorageVolControlThread::uploadStorageVol()

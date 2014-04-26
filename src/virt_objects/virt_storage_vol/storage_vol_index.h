@@ -15,17 +15,20 @@ private:
     QString Name;
     QString Path;
     QString Type;
-    QString Size;
+    QString CurrSize;
+    QString LogicSize;
 
 public slots:
     void setName(const QString&);
     void setPath(const QString&);
     void setType(const QString&);
-    void setSize(const QString&);
+    void setCurrSize(const QString&);
+    void setLogicSize(const QString&);
     QString getName() const;
     QString getPath() const;
     QString getType() const;
-    QString getSize() const;
+    QString getCurrSize() const;
+    QString getLogicSize() const;
 
 };
 

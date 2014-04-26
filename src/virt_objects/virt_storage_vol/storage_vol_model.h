@@ -33,6 +33,7 @@ private:
     QString  column1;
     QString  column2;
     QString  column3;
+    QString  column4;
 
 public slots:
 };

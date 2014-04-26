@@ -6,7 +6,8 @@ StorageVolIndex::StorageVolIndex(QObject *parent) :
     Name = "";
     Path = "";
     Type = "";
-    Size = "";
+    CurrSize = "";
+    LogicSize = "";
 }
 void StorageVolIndex::setName(const QString &s)
 {
@@ -20,9 +21,13 @@ void StorageVolIndex::setType(const QString &s)
 {
     Type = s;
 }
-void StorageVolIndex::setSize(const QString &s)
+void StorageVolIndex::setCurrSize(const QString &s)
 {
-    Size = s;
+    CurrSize = s;
+}
+void StorageVolIndex::setLogicSize(const QString &s)
+{
+    LogicSize = s;
 }
 QString StorageVolIndex::getName() const
 {
@@ -36,7 +41,11 @@ QString StorageVolIndex::getType() const
 {
     return Type;
 }
-QString StorageVolIndex::getSize() const
+QString StorageVolIndex::getCurrSize() const
 {
-    return Size;
+    return CurrSize;
+}
+QString StorageVolIndex::getLogicSize() const
+{
+    return LogicSize;
 }

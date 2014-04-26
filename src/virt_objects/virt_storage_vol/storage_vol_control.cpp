@@ -191,9 +191,10 @@ void VirtStorageVolControl::storageVolClicked(const QPoint &p)
     if ( idx.isValid() ) {
         //qDebug()<<storageVolModel->DataList.at(idx.row())->getName();
         params<<storageVolModel->DataList.at(idx.row())->getName();
-        params<<storageVolModel->DataList.at(idx.row())->getPath();
-        params<<storageVolModel->DataList.at(idx.row())->getType();
-        params<<storageVolModel->DataList.at(idx.row())->getSize();
+        //params<<storageVolModel->DataList.at(idx.row())->getPath();
+        //params<<storageVolModel->DataList.at(idx.row())->getType();
+        //params<<storageVolModel->DataList.at(idx.row())->getCurrSize();
+        //params<<storageVolModel->DataList.at(idx.row())->getLogicSize();
     } else {
         storageVolList->clearSelection();
     };
@@ -226,12 +227,12 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             QString path = QFileDialog::getSaveFileName(this, "Save to", "~");
             if ( !path.isEmpty() ) {
                 args.append(path);
-                args.append(storageVolModel->DataList.at(idx.row())->getSize());
+                args.append(storageVolModel->DataList.at(idx.row())->getCurrSize());
                 stVolControlThread->execAction(DOWNLOAD_StVOL, args);
             } else return;
         } else if ( l.first()=="resizeVirtStorageVol" ) {
             ResizeDialog *resizeDialog = new ResizeDialog(this,
-                storageVolModel->DataList.at(idx.row())->getSize().toULongLong());
+                storageVolModel->DataList.at(idx.row())->getLogicSize().toULongLong());
             int res = resizeDialog->exec();
             unsigned long long size = resizeDialog->getNewSize();
             resizeDialog->deleteLater();

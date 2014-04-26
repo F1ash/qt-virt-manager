@@ -7,7 +7,8 @@ StorageVolModel::StorageVolModel(QObject *parent) :
     column0 = "Name";
     column1 = "Path";
     column2 = "Type";
-    column3 = "Size";
+    column3 = "Allocation";
+    column4 = "Capacity";
 }
 StorageVolModel::~StorageVolModel()
 {
@@ -36,7 +37,7 @@ int StorageVolModel::rowCount(const QModelIndex &parent) const
 }
 int StorageVolModel::columnCount(const QModelIndex &parent) const
 {
-    return 4;
+    return 5;
 }
 bool StorageVolModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
@@ -54,11 +55,15 @@ bool StorageVolModel::setHeaderData(int section, Qt::Orientation orientation, co
                 break;
             case 3:
                 column3 = value.toString();
+                break;
+            case 4:
+                column4 = value.toString();
+                break;
             default:
                 break;
             }
         };
-        headerDataChanged(Qt::Horizontal, 0, 3);
+        headerDataChanged(Qt::Horizontal, 0, columnCount()-1);
     };
 }
 QVariant StorageVolModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -77,6 +82,10 @@ QVariant StorageVolModel::headerData(int section, Qt::Orientation orientation, i
         break;
       case 3:
         return column3;
+          break;
+      case 4:
+        return column4;
+          break;
       default:
         break;
       }
@@ -99,7 +108,10 @@ QVariant StorageVolModel::data(const QModelIndex &index, int role) const
             res = DataList.at(index.row())->getType();
             break;
         case 3:
-            res = DataList.at(index.row())->getSize();
+            res = DataList.at(index.row())->getCurrSize();
+            break;
+        case 4:
+            res = DataList.at(index.row())->getLogicSize();
             break;
         default:
             break;
@@ -123,7 +135,10 @@ QVariant StorageVolModel::data(const QModelIndex &index, int role) const
             res = QString("Type: %1").arg(DataList.at(index.row())->getType());
             break;
         case 3:
-            res = QString("Size: %1").arg(DataList.at(index.row())->getSize());
+            res = QString("Current Size: %1").arg(DataList.at(index.row())->getCurrSize());
+            break;
+        case 4:
+            res = QString("Logic Volume Size: %1").arg(DataList.at(index.row())->getLogicSize());
             break;
         default:
             break;
@@ -151,7 +166,10 @@ bool StorageVolModel::setData( const QModelIndex &index, const QVariant &value, 
             DataList.at(index.row())->setType ( value.toString() );
             break;
         case 3:
-            DataList.at(index.row())->setSize ( value.toString() );
+            DataList.at(index.row())->setCurrSize ( value.toString() );
+            break;
+        case 4:
+            DataList.at(index.row())->setLogicSize ( value.toString() );
             break;
         default:
             break;
