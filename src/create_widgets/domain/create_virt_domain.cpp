@@ -194,7 +194,7 @@ void CreateVirtDomain::buildXMLDescription()
      * then common description append it
      */
     QDomDocument doc = QDomDocument();
-    QDomElement root, devices, console, target;
+    QDomElement root, devices, _emulator, console, target;
     root = doc.createElement("domain");
     root.setAttribute("type", type.toLower());
     doc.appendChild(root);
@@ -244,6 +244,10 @@ void CreateVirtDomain::buildXMLDescription()
     };
     // append Device description
     // TODO: remove it into some Device-desc widget
+    _emulator = doc.createElement("emulator");
+    QDomText data = doc.createTextNode(emulator);
+    _emulator.appendChild(data);
+    devices.appendChild(_emulator);
     console = doc.createElement("console");
     console.setAttribute("type", "pty");
     devices.appendChild(console);
