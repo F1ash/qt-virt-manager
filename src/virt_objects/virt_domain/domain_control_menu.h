@@ -10,13 +10,14 @@ class DomainControlMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit DomainControlMenu(QWidget *parent = 0, QStringList params = QStringList());
+    explicit DomainControlMenu(QWidget *parent = 0, QStringList params = QStringList(), bool state = false);
     ~DomainControlMenu();
 
 signals:
     void execMethod(const QStringList&);
 
 private:
+    bool            autoReloadState;
     QAction        *start;
     QAction        *pause;
     QAction        *destroy;
@@ -27,6 +28,7 @@ private:
     QAction        *undefine;
     QAction        *autoStart;
     QAction        *getXMLDesc;
+    QAction        *reload;
     QStringList     parameters;
 
 private slots:

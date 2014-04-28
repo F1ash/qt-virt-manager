@@ -48,6 +48,10 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     getXMLDesc_Action = new QAction(this);
     getXMLDesc_Action->setIcon(QIcon::fromTheme("domain-xml"));
     getXMLDesc_Action->setToolTip("Get XML Description");
+    _autoReload = new QPushButton(this);
+    _autoReload->setToolTip("AutoReload Pool Overview");
+    _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
+    _autoReload->setCheckable(true);
 
     addAction(start_Action);
     addAction(pause_Action);
@@ -60,6 +64,14 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     addAction(setAutostart_Action);
     addSeparator();
     addAction(getXMLDesc_Action);
+    addSeparator();
+    autoReload = addWidget(_autoReload);
+    addAction(autoReload);
+
+    settings.beginGroup("VirtDomainControl");
+    interval = settings.value("UpdateTime", 3).toInt();
+    _autoReload->setChecked(settings.value("AutoReload", false).toBool());
+    settings.endGroup();
 
     //connect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //connect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
@@ -68,6 +80,7 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     //connect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //connect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //connect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    connect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
 
     connect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     connect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
@@ -75,6 +88,10 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
 }
 DomainToolBar::~DomainToolBar()
 {
+    settings.beginGroup("VirtDomainControl");
+    settings.setValue("UpdateTime", interval);
+    settings.setValue("AutoReload", _autoReload->isChecked());
+    settings.endGroup();
     //disconnect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
@@ -82,6 +99,7 @@ DomainToolBar::~DomainToolBar()
     //disconnect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    disconnect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
     disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
@@ -125,8 +143,13 @@ DomainToolBar::~DomainToolBar()
     setAutostart_Action = 0;
     delete getXMLDesc_Action;
     getXMLDesc_Action = 0;
+    delete _autoReload;
+    _autoReload = 0;
+    delete autoReload;
+    autoReload = 0;
 }
 
+/* public slots */
 Qt::ToolBarArea DomainToolBar::get_ToolBarArea(int i) const
 {
   Qt::ToolBarArea result;
@@ -148,6 +171,33 @@ Qt::ToolBarArea DomainToolBar::get_ToolBarArea(int i) const
     break;
   };
   return result;
+}
+void DomainToolBar::enableAutoReload()
+{
+    if ( _autoReload->isChecked() ) timerId = startTimer(interval*1000);
+}
+void DomainToolBar::stopProcessing()
+{
+    if ( timerId ) {
+        killTimer(timerId);
+        timerId = 0;
+    }
+}
+bool DomainToolBar::getAutoReloadState() const
+{
+    return _autoReload->isChecked();
+}
+
+/* private slots */
+void DomainToolBar::timerEvent(QTimerEvent *event)
+{
+    int _timerId = event->timerId();
+    //qDebug()<<_timerId<<timerId;
+    if ( _timerId && timerId==_timerId && isVisible() ) {
+        QStringList parameters;
+        parameters << "reloadVirtDomain";
+        emit execMethod(parameters);
+    };
 }
 void DomainToolBar::repeatParameters(QStringList &p)
 {
@@ -209,4 +259,9 @@ void DomainToolBar::detectTriggerredAction(QAction *action)
         parameters << "getVirtDomXMLDesc";
     } else return;
     emit execMethod(parameters);
+}
+void DomainToolBar::changeAutoReloadState(bool state)
+{
+    if ( state ) enableAutoReload();
+    else stopProcessing();
 }

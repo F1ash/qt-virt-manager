@@ -2,11 +2,11 @@
 #define STORAGE_POOL_TOOLBAR_H
 
 #include <QToolBar>
-#include <QSettings>
 #include <QAction>
 #include <QIcon>
 #include <QPushButton>
 #include <QTimerEvent>
+#include <QSettings>
 #include "virt_objects/open_file_menu.h"
 #include <QDebug>
 

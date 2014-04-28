@@ -6,7 +6,6 @@
 #include <QTreeView>
 #include <QSettings>
 #include <QTime>
-#include <QTimerEvent>
 #include <QUrl>
 #include <QDesktopServices>
 #include <QDebug>
@@ -37,9 +36,6 @@ private:
     DomControlThread        *domControlThread = NULL;
     CreateVirtDomain        *createVirtDomain = NULL;
 
-    int                      interval;
-    int                      timerId;
-
 public slots:
     bool                     getThreadState() const;
     void                     stopProcessing();
@@ -48,7 +44,6 @@ public slots:
     virConnect*              getConnect() const;
 
 private slots:
-    void                     timerEvent(QTimerEvent*);
     void                     resultReceiver(DomActions, QStringList);
     void                     msgRepeater(QString);
     void                     changeDockVisibility();

@@ -23,8 +23,6 @@ VirtNetControl::VirtNetControl(QWidget *parent) :
     virtNetList->setColumnWidth(2, settings.value("column2", 32).toInt());
     virtNetList->setColumnWidth(3, settings.value("column3", 32).toInt());
     int area_int = settings.value("ToolBarArea", 4).toInt();
-    //bool check = settings.value("CheckList", false).toBool();
-    interval = settings.value("UpdateTime", 3).toInt();
     settings.endGroup();
     toolBar = new VirtNetToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
@@ -43,8 +41,6 @@ VirtNetControl::~VirtNetControl()
     settings.setValue("column1", virtNetList->columnWidth(1));
     settings.setValue("column2", virtNetList->columnWidth(2));
     settings.setValue("column3", virtNetList->columnWidth(3));
-    //settings.setValue("UpdateTime", docContent->getUpdateTime());
-    //settings.setValue("CheckList", docContent->getCheckList());
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
@@ -83,10 +79,6 @@ bool VirtNetControl::getThreadState() const
 }
 void VirtNetControl::stopProcessing()
 {
-    if ( timerId ) {
-        killTimer(timerId);
-        timerId = 0;
-    }
     if ( netControlThread!=NULL ) {
         netControlThread->stop();
     };
@@ -121,7 +113,7 @@ bool VirtNetControl::setCurrentWorkConnect(virConnect *conn)
         return false;
     } else {
         netControlThread->setCurrentWorkConnect(currWorkConnect);
-        timerId = startTimer(interval*1000);
+        toolBar->enableAutoReload();
         return true;
     };
 }
@@ -133,14 +125,6 @@ void VirtNetControl::setListHeader(QString &connName)
 }
 
 /* private slots */
-void VirtNetControl::timerEvent(QTimerEvent *event)
-{
-    int _timerId = event->timerId();
-    if ( _timerId && timerId==_timerId && isVisible() ) {
-        //qDebug()<<"get Network list";
-        netControlThread->execAction(GET_ALL_NETWORK, QStringList());
-    };
-}
 void VirtNetControl::resultReceiver(NetActions act, QStringList data)
 {
     //qDebug()<<act<<data<<"result";
@@ -208,22 +192,23 @@ void VirtNetControl::networkClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
     QModelIndex idx = virtNetList->indexAt(p);
+    QStringList params;
     if ( idx.isValid() ) {
         //qDebug()<<virtNetModel->DataList.at(idx.row())->getName();
-        QStringList params;
         params<<virtNetModel->DataList.at(idx.row())->getName();
         params<<virtNetModel->DataList.at(idx.row())->getState();
         params<<virtNetModel->DataList.at(idx.row())->getAutostart();
         params<<virtNetModel->DataList.at(idx.row())->getPersistent();
-        VirtNetControlMenu *netControlMenu = new VirtNetControlMenu(this, params);
-        connect(netControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
-        netControlMenu->move(QCursor::pos());
-        netControlMenu->exec();
-        disconnect(netControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
-        netControlMenu->deleteLater();
     } else {
         virtNetList->clearSelection();
-    }
+    };
+    bool state = toolBar->getAutoReloadState();
+    VirtNetControlMenu *netControlMenu = new VirtNetControlMenu(this, params, state);
+    connect(netControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    netControlMenu->move(QCursor::pos());
+    netControlMenu->exec();
+    disconnect(netControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    netControlMenu->deleteLater();
 }
 void VirtNetControl::networkDoubleClicked(const QModelIndex &index)
 {
@@ -253,8 +238,12 @@ void VirtNetControl::execAction(const QStringList &l)
             netControlThread->execAction(CHANGE_NET_AUTOSTART, args);
         } else if ( l.first()=="getVirtNetXMLDesc" ) {
             netControlThread->execAction(GET_NET_XML_DESC, args);
+        } else if ( l.first()=="reloadVirtNetwork" ) {
+            netControlThread->execAction(GET_ALL_NETWORK, args);
         };
-    }
+    } else if ( l.first()=="reloadVirtNetwork" ) {
+        netControlThread->execAction(GET_ALL_NETWORK, args);
+    };
 }
 void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
 {

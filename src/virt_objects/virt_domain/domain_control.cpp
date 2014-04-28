@@ -23,8 +23,6 @@ VirtDomainControl::VirtDomainControl(QWidget *parent) :
     domainList->setColumnWidth(2, settings.value("column2", 32).toInt());
     domainList->setColumnWidth(3, settings.value("column3", 32).toInt());
     int area_int = settings.value("ToolBarArea", 4).toInt();
-    //bool check = settings.value("CheckList", false).toBool();
-    interval = settings.value("UpdateTime", 3).toInt();
     settings.endGroup();
     toolBar = new DomainToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
@@ -43,8 +41,6 @@ VirtDomainControl::~VirtDomainControl()
     settings.setValue("column1", domainList->columnWidth(1));
     settings.setValue("column2", domainList->columnWidth(2));
     settings.setValue("column3", domainList->columnWidth(3));
-    //settings.setValue("UpdateTime", docContent->getUpdateTime());
-    //settings.setValue("CheckList", docContent->getCheckList());
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
@@ -88,10 +84,6 @@ bool VirtDomainControl::getThreadState() const
 }
 void VirtDomainControl::stopProcessing()
 {
-    if ( timerId ) {
-        killTimer(timerId);
-        timerId = 0;
-    }
     if ( domControlThread!=NULL ) {
         domControlThread->stop();
     };
@@ -126,7 +118,7 @@ bool VirtDomainControl::setCurrentWorkConnect(virConnect *conn)
         return false;
     } else {
         domControlThread->setCurrentWorkConnect(currWorkConnect);
-        timerId = startTimer(interval*1000);
+        toolBar->enableAutoReload();
         return true;
     };
 }
@@ -142,14 +134,6 @@ virConnect* VirtDomainControl::getConnect() const
 }
 
 /* private slots */
-void VirtDomainControl::timerEvent(QTimerEvent *event)
-{
-    int _timerId = event->timerId();
-    if ( _timerId && timerId==_timerId && isVisible() ) {
-        //qDebug()<<"get domain list";
-        domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-    };
-}
 void VirtDomainControl::resultReceiver(DomActions act, QStringList data)
 {
     //qDebug()<<act<<data<<"result";
@@ -227,22 +211,23 @@ void VirtDomainControl::domainClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
     QModelIndex idx = domainList->indexAt(p);
+    QStringList params;
     if ( idx.isValid() ) {
         //qDebug()<<domainModel->DataList.at(idx.row())->getName();
-        QStringList params;
         params<<domainModel->DataList.at(idx.row())->getName();
         params<<domainModel->DataList.at(idx.row())->getState().split(":").first();
         params<<domainModel->DataList.at(idx.row())->getAutostart();
         params<<domainModel->DataList.at(idx.row())->getPersistent();
-        DomainControlMenu *domControlMenu = new DomainControlMenu(this, params);
-        connect(domControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
-        domControlMenu->move(QCursor::pos());
-        domControlMenu->exec();
-        disconnect(domControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
-        domControlMenu->deleteLater();
     } else {
         domainList->clearSelection();
-    }
+    };
+    bool state = toolBar->getAutoReloadState();
+    DomainControlMenu *domControlMenu = new DomainControlMenu(this, params, state);
+    connect(domControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    domControlMenu->move(QCursor::pos());
+    domControlMenu->exec();
+    disconnect(domControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    domControlMenu->deleteLater();
 }
 void VirtDomainControl::domainDoubleClicked(const QModelIndex &index)
 {
@@ -295,8 +280,12 @@ void VirtDomainControl::execAction(const QStringList &l)
             domControlThread->execAction(CHANGE_DOM_AUTOSTART, args);
         } else if ( l.first()=="getVirtDomXMLDesc" ) {
             domControlThread->execAction(GET_DOM_XML_DESC, args);
+        } else if ( l.first()=="reloadVirtDomain" ) {
+            domControlThread->execAction(GET_ALL_DOMAIN, args);
         };
-    }
+    } else if ( l.first()=="reloadVirtDomain" ) {
+        domControlThread->execAction(GET_ALL_DOMAIN, args);
+    };
 }
 void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
 {

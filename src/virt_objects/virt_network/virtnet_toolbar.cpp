@@ -30,6 +30,10 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     getXMLDesc_Action = new QAction(this);
     getXMLDesc_Action->setIcon(QIcon::fromTheme("network-xml"));
     getXMLDesc_Action->setToolTip("Get XML Description");
+    _autoReload = new QPushButton(this);
+    _autoReload->setToolTip("AutoReload Network Overview");
+    _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
+    _autoReload->setCheckable(true);
 
     addAction(start_Action);
     addAction(destroy_Action);
@@ -41,6 +45,14 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     addAction(setAutostart_Action);
     addSeparator();
     addAction(getXMLDesc_Action);
+    addSeparator();
+    autoReload = addWidget(_autoReload);
+    addAction(autoReload);
+
+    settings.beginGroup("VirtNetworkControl");
+    interval = settings.value("UpdateTime", 3).toInt();
+    _autoReload->setChecked(settings.value("AutoReload", false).toBool());
+    settings.endGroup();
 
     //connect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //connect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
@@ -49,6 +61,7 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     //connect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //connect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //connect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    connect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
 
     connect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     connect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
@@ -56,6 +69,10 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
 }
 VirtNetToolBar::~VirtNetToolBar()
 {
+    settings.beginGroup("VirtNetworkControl");
+    settings.setValue("UpdateTime", interval);
+    settings.setValue("AutoReload", _autoReload->isChecked());
+    settings.endGroup();
     //disconnect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
@@ -63,6 +80,7 @@ VirtNetToolBar::~VirtNetToolBar()
     //disconnect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     //disconnect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
+    disconnect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
     disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
     disconnect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
@@ -88,8 +106,13 @@ VirtNetToolBar::~VirtNetToolBar()
     setAutostart_Action = 0;
     delete getXMLDesc_Action;
     getXMLDesc_Action = 0;
+    delete _autoReload;
+    _autoReload = 0;
+    delete autoReload;
+    autoReload = 0;
 }
 
+/* public slots */
 Qt::ToolBarArea VirtNetToolBar::get_ToolBarArea(int i) const
 {
   Qt::ToolBarArea result;
@@ -111,6 +134,33 @@ Qt::ToolBarArea VirtNetToolBar::get_ToolBarArea(int i) const
     break;
   };
   return result;
+}
+void VirtNetToolBar::enableAutoReload()
+{
+    if ( _autoReload->isChecked() ) timerId = startTimer(interval*1000);
+}
+void VirtNetToolBar::stopProcessing()
+{
+    if ( timerId ) {
+        killTimer(timerId);
+        timerId = 0;
+    }
+}
+bool VirtNetToolBar::getAutoReloadState() const
+{
+    return _autoReload->isChecked();
+}
+
+/* private slots */
+void VirtNetToolBar::timerEvent(QTimerEvent *event)
+{
+    int _timerId = event->timerId();
+    //qDebug()<<_timerId<<timerId;
+    if ( _timerId && timerId==_timerId && isVisible() ) {
+        QStringList parameters;
+        parameters << "reloadVirtNetwork";
+        emit execMethod(parameters);
+    };
 }
 void VirtNetToolBar::repeatParameters(QStringList &p)
 {
@@ -160,4 +210,9 @@ void VirtNetToolBar::detectTriggerredAction(QAction *action)
         parameters << "getVirtNetXMLDesc";
     } else return;
     emit execMethod(parameters);
+}
+void VirtNetToolBar::changeAutoReloadState(bool state)
+{
+    if ( state ) enableAutoReload();
+    else stopProcessing();
 }

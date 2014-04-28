@@ -10,18 +10,20 @@ class VirtNetControlMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit VirtNetControlMenu(QWidget *parent = 0, QStringList params = QStringList());
+    explicit VirtNetControlMenu(QWidget *parent = 0, QStringList params = QStringList(), bool state = false);
     ~VirtNetControlMenu();
 
 signals:
     void execMethod(const QStringList&);
 
 private:
+    bool            autoReloadState;
     QAction        *start;
     QAction        *destroy;
     QAction        *undefine;
     QAction        *autoStart;
     QAction        *getXMLDesc;
+    QAction        *reload;
     QStringList     parameters;
 
 private slots:
