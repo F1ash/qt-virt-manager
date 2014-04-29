@@ -114,6 +114,8 @@ bool VirtStoragePoolControl::setCurrentWorkConnect(virConnect *conn)
     } else {
         stPoolControlThread->setCurrentWorkConnect(currWorkConnect);
         toolBar->enableAutoReload();
+        // for initiation content
+        stPoolControlThread->execAction(GET_ALL_StPOOL, QStringList());
         return true;
     };
 }
@@ -154,17 +156,35 @@ void VirtStoragePoolControl::resultReceiver(StoragePoolActions act, QStringList 
             i++;
         };
     } else if ( act == CREATE_StPOOL ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            stPoolControlThread->execAction(GET_ALL_StPOOL, QStringList());
+        };
     } else if ( act == DEFINE_StPOOL ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            stPoolControlThread->execAction(GET_ALL_StPOOL, QStringList());
+        };
     } else if ( act == START_StPOOL ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            stPoolControlThread->execAction(GET_ALL_StPOOL, QStringList());
+        };
     } else if ( act == DESTROY_StPOOL ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            stPoolControlThread->execAction(GET_ALL_StPOOL, QStringList());
+        };
     } else if ( act == UNDEFINE_StPOOL ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            stPoolControlThread->execAction(GET_ALL_StPOOL, QStringList());
+        };
     } else if ( act == CHANGE_StPOOL_AUTOSTART ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            stPoolControlThread->execAction(GET_ALL_StPOOL, QStringList());
+        };
     } else if ( act == GET_StPOOL_XML_DESC ) {
         if ( !data.isEmpty() ) {
             QString xml = data.first();

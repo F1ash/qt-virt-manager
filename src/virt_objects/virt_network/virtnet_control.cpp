@@ -114,6 +114,8 @@ bool VirtNetControl::setCurrentWorkConnect(virConnect *conn)
     } else {
         netControlThread->setCurrentWorkConnect(currWorkConnect);
         toolBar->enableAutoReload();
+        // for initiation content
+        netControlThread->execAction(GET_ALL_NETWORK, QStringList());
         return true;
     };
 }
@@ -154,17 +156,35 @@ void VirtNetControl::resultReceiver(NetActions act, QStringList data)
             i++;
         };
     } else if ( act == CREATE_NETWORK ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
+        };
     } else if ( act == DEFINE_NETWORK ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
+        };
     } else if ( act == START_NETWORK ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
+        };
     } else if ( act == DESTROY_NETWORK ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
+        };
     } else if ( act == UNDEFINE_NETWORK ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
+        };
     } else if ( act == CHANGE_NET_AUTOSTART ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
+        };
     } else if ( act == GET_NET_XML_DESC ) {
         if ( !data.isEmpty() ) {
             QString xml = data.first();

@@ -118,6 +118,8 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
         storageVolModel->setHeaderData(0, Qt::Horizontal, QString("Name (Pool: \"%1\")").arg(poolName), Qt::EditRole);
         stVolControlThread->setCurrentStoragePoolName(currWorkConnect, currPoolName);
         toolBar->enableAutoReload();
+        // for initiation content
+        stVolControlThread->execAction(GET_ALL_StVOL, QStringList());
         return true;
     };
 }
@@ -149,15 +151,24 @@ void VirtStorageVolControl::resultReceiver(StorageVolActions act, QStringList da
             };
         };
     } else if ( act == CREATE_StVOL ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            stVolControlThread->execAction(GET_ALL_StVOL, QStringList());
+        };
     } else if ( act == DELETE_StVOL ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            stVolControlThread->execAction(GET_ALL_StVOL, QStringList());
+        };
     } else if ( act == DOWNLOAD_StVOL ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == UPLOAD_StVOL ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == RESIZE_StVOL ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            stVolControlThread->execAction(GET_ALL_StVOL, QStringList());
+        };
     } else if ( act == WIPE_StVOL ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
     } else if ( act == GET_StVOL_XML_DESC ) {

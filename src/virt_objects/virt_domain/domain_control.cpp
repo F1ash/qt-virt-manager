@@ -119,6 +119,8 @@ bool VirtDomainControl::setCurrentWorkConnect(virConnect *conn)
     } else {
         domControlThread->setCurrentWorkConnect(currWorkConnect);
         toolBar->enableAutoReload();
+        // for initiation content
+        domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
         return true;
     };
 }
@@ -163,27 +165,60 @@ void VirtDomainControl::resultReceiver(DomActions act, QStringList data)
             i++;
         };
     } else if ( act == CREATE_DOMAIN ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == DEFINE_DOMAIN ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == START_DOMAIN ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == PAUSE_DOMAIN ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == DESTROY_DOMAIN ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == RESET_DOMAIN ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == REBOOT_DOMAIN ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == SHUTDOWN_DOMAIN ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == SAVE_DOMAIN ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == UNDEFINE_DOMAIN ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == CHANGE_DOM_AUTOSTART ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
+        if ( !data.isEmpty() ) {
+            msgRepeater(data.join(" "));
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+        };
     } else if ( act == GET_DOM_XML_DESC ) {
         if ( !data.isEmpty() ) {
             QString xml = data.first();
