@@ -6,7 +6,7 @@ VirtNetControl::VirtNetControl(QWidget *parent) :
     setObjectName("VirtNetControl");
     setWindowTitle("VirtNet Control");
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
-    setWindowIcon(QIcon::fromTheme("preferences-system-network"));
+    setWindowIcon(QIcon::fromTheme("network"));
     virtNetModel = new VirtNetModel();
     virtNetList = new QTreeView(this);
     virtNetList->setItemsExpandable(false);

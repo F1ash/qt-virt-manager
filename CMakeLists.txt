@@ -62,7 +62,10 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/general.h
   src/create_widgets/domain/common_widgets/memory.h
   src/create_widgets/domain/common_widgets/cpu.h
+  src/create_widgets/domain/common_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
+  
+  src/create_widgets/network/create_virt_network.h
 )
 set (SOURCES 
   src/main.cpp
@@ -118,7 +121,10 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/general.cpp
   src/create_widgets/domain/common_widgets/memory.cpp
   src/create_widgets/domain/common_widgets/cpu.cpp
+  src/create_widgets/domain/common_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
+  
+  src/create_widgets/network/create_virt_network.cpp
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE ${PROJECT_NAME}.desktop)

@@ -338,9 +338,13 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                 QString capabilities, xml;
                 // show SRC Creator widget
                 capabilities = QString("%1").arg(virConnectGetCapabilities(currWorkConnect));
+                virNetworkPtr *nets;
+                unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
+                                     VIR_CONNECT_LIST_NETWORKS_INACTIVE;
+                virConnectListAllNetworks(currWorkConnect, &nets, flags);
                 //qDebug()<<capabilities;
                 //createVirtDomain = new CreateVirtDomain(this, QString("%1").arg(virConnectGetType(currWorkConnect)));
-                createVirtDomain = new CreateVirtDomain(this, capabilities);
+                createVirtDomain = new CreateVirtDomain(this, capabilities, nets);
                 int result = createVirtDomain->exec();
                 if ( createVirtDomain!=NULL && result ) {
                     // get path for method
@@ -353,6 +357,7 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                 };
                 delete createVirtDomain;
                 createVirtDomain = 0;
+                free(nets);
                 //qDebug()<<xml<<"path"<<result;
                 args.prepend(xml);
             };

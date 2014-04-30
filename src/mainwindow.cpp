@@ -312,7 +312,7 @@ void MainWindow::initDockWidgets()
     networkDock = new QDockWidget(this);
     networkDock->setObjectName("networkDock");
     networkDock->setWindowTitle("Network");
-    networkDock->setWindowIcon(QIcon::fromTheme("preferences-system-network"));
+    networkDock->setWindowIcon(QIcon::fromTheme("network"));
     networkDock->setFeatures(
         QDockWidget::DockWidgetMovable   |
         QDockWidget::DockWidgetFloatable |

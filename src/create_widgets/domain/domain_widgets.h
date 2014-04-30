@@ -6,6 +6,7 @@
 #include "common_widgets/general.h"
 #include "common_widgets/memory.h"
 #include "common_widgets/cpu.h"
+#include "common_widgets/net_interface.h"
 
 
 /* LXC WIDGETS HEADERS */

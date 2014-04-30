@@ -84,8 +84,8 @@
 
 */
 
-CreateVirtDomain::CreateVirtDomain(QWidget *parent, QString str) :
-    QDialog(parent), capabilities(str)
+CreateVirtDomain::CreateVirtDomain(QWidget *parent, QString str, virNetworkPtr *nets) :
+    QDialog(parent), capabilities(str), networks(nets)
 {
     setModal(true);
     setWindowTitle("Domain Settings");
@@ -280,6 +280,7 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.append(new LXC_OSBooting(this, os_type, arch));
         wdgList.append(new Memory(this, memUnit, memValue));
         wdgList.append(new CPU(this));
+        wdgList.append(new NetInterface(this, networks));
     } else if ( type.toLower() == "qemu" ) {
         wdgList.append(new General(this, type, arch, emulator));
     } else if ( type.toLower() == "xen" ) {

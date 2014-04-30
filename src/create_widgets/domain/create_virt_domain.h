@@ -14,6 +14,7 @@
 #include <QTextStream>
 #include "domain_widgets.h"
 #include "_qwidget.h"
+#include "libvirt/libvirt.h"
 #include <QDebug>
 
 typedef QList<_QWidget*> WidgetList;
@@ -22,7 +23,7 @@ class CreateVirtDomain : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CreateVirtDomain(QWidget *parent = 0, QString str = "");
+    explicit CreateVirtDomain(QWidget *parent = 0, QString str = "", virNetworkPtr *nets = NULL);
     ~CreateVirtDomain();
 
 signals:
@@ -30,6 +31,7 @@ signals:
 private:
     QSettings        settings;
     QString          capabilities;
+    virNetworkPtr   *networks;
     QString          type;
     QString          arch;
     QString          os_type;
