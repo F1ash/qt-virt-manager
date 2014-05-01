@@ -132,7 +132,7 @@ QStringList DomControlThread::getAllDomainList()
                     break;
                 }
             } else domainState.append("ERROR");
-            currentAttr<< QString( virDomainGetName(domain[i]) )
+            currentAttr<< QString().fromUtf8( virDomainGetName(domain[i]) )
                        << QString("%1:%2").arg( virDomainIsActive(domain[i]) ? "active" : "inactive" ).arg(domainState)
                        << autostartStr
                        << QString( virDomainIsPersistent(domain[i]) ? "yes" : "no" );
@@ -200,7 +200,8 @@ QStringList DomControlThread::createDomain()
         sendConnErrors();
         return result;
     };
-    result.append(QString("'%1' Domain from\n\"%2\"\nis created.").arg(virDomainGetName(domain)).arg(path));
+    result.append(QString("'%1' Domain from\n\"%2\"\nis created.")
+                  .arg(QString().fromUtf8( virDomainGetName(domain) )).arg(path));
     virDomainFree(domain);
     return result;
 }
@@ -222,7 +223,8 @@ QStringList DomControlThread::defineDomain()
         sendConnErrors();
         return result;
     };
-    result.append(QString("'%1' Domain from\n\"%2\"\nis defined.").arg(virDomainGetName(domain)).arg(path));
+    result.append(QString("'%1' Domain from\n\"%2\"\nis defined.")
+                  .arg(QString().fromUtf8( virDomainGetName(domain) )).arg(path));
     virDomainFree(domain);
     return result;
 }
@@ -230,34 +232,8 @@ QStringList DomControlThread::startDomain()
 {
     QStringList result;
     QString name = args.first();
-    /*
-    virDomainPtr *domain;
-    unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
-                         VIR_CONNECT_LIST_DOMAINS_INACTIVE;
-    int ret = virConnectListAllDomains( currWorkConnect, &domain, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(domain);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
-    */
 
     bool started = false;
-    /*
-    int i = 0;
-    while ( domain[i] != NULL ) {
-        QString currNetName = QString( virDomainGetName(domain[i]) );
-        if ( !started && currNetName==name ) {
-            started = (virDomainCreate(domain[i])+1) ? true : false;
-            if (!started) sendGlobalErrors();
-        };
-        virDomainFree(domain[i]);
-        i++;
-    };
-    free(domain);
-    */
-
     virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
 
     if ( domain!=NULL ) {
@@ -592,7 +568,8 @@ void DomControlThread::sendConnErrors()
 {
     virtErrors = virConnGetLastError(currWorkConnect);
     if ( virtErrors!=NULL ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
+        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
+                       .arg(QString().fromUtf8(virtErrors->message)) );
         virResetError(virtErrors);
     } else sendGlobalErrors();
 }
@@ -600,6 +577,7 @@ void DomControlThread::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
     if ( virtErrors!=NULL )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
+        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
+                       .arg(QString().fromUtf8(virtErrors->message)) );
     virResetLastError();
 }

@@ -1,6 +1,6 @@
 #include "net_interface.h"
 
-NetInterface::NetInterface(QWidget *parent, virNetworkPtr *nets) :
+LXC_NetInterface::LXC_NetInterface(QWidget *parent, virNetworkPtr *nets) :
     _QWidget(parent), existNetwork(nets)
 {
     setObjectName("Network:Device");
@@ -11,20 +11,29 @@ NetInterface::NetInterface(QWidget *parent, virNetworkPtr *nets) :
         networks->addItem( QString( virNetworkGetName(existNetwork[i]) ) );
         i++;
     };
-    netDescWdg = new CreateVirtNetwork(this);
-    scroll = new QScrollArea(this);
-    scroll->setWidget(netDescWdg);
+
+    bridgeName = new QLineEdit(this);
+    bridgeName->setPlaceholderText("Enter Exist Virtual Bridge Name");
+    mac = new QLineEdit(this);
+    mac->setPlaceholderText("00:11:22:33:44:55 (optional)");
+    macLabel = new QLabel("MAC:", this);
+    netDescLayout = new QGridLayout();
+    netDescLayout->addWidget(bridgeName, 0, 0, 1, 2);
+    netDescLayout->addWidget(macLabel, 2, 0, Qt::AlignLeft);
+    netDescLayout->addWidget(mac, 2, 1);
+    netDescWdg = new QWidget(this);
+    netDescWdg->setLayout(netDescLayout);
     commonLayout = new QVBoxLayout();
     commonLayout->addWidget(useExistNetwork);
     commonLayout->addWidget(networks);
-    commonLayout->addWidget(scroll);
+    commonLayout->addWidget(netDescWdg);
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
     connect(useExistNetwork, SIGNAL(toggled(bool)), this, SLOT(changeUsedNetwork(bool)));
     connect(networks, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeUsedNetwork(QString)));
     useExistNetwork->setChecked(true);
 }
-NetInterface::~NetInterface()
+LXC_NetInterface::~LXC_NetInterface()
 {
     disconnect(useExistNetwork, SIGNAL(toggled(bool)), this, SLOT(changeUsedNetwork(bool)));
     disconnect(networks, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeUsedNetwork(QString)));
@@ -39,10 +48,15 @@ NetInterface::~NetInterface()
     delete networks;
     networks = 0;
 
+    delete bridgeName;
+    bridgeName = 0;
+    delete macLabel;
+    macLabel = 0;
+    delete mac;
+    mac = 0;
+    delete netDescLayout;
     delete netDescWdg;
     netDescWdg = 0;
-    delete scroll;
-    scroll = 0;
     delete commonLayout;
     commonLayout = 0;
 }
@@ -51,7 +65,7 @@ NetInterface::~NetInterface()
 
 
 /* private slots */
-void NetInterface::changeUsedNetwork(bool state)
+void LXC_NetInterface::changeUsedNetwork(bool state)
 {
     if (state) {
         networks->setEnabled(true);
@@ -61,7 +75,7 @@ void NetInterface::changeUsedNetwork(bool state)
         netDescWdg->setEnabled(true);
     };
 }
-void NetInterface::changeUsedNetwork(QString item)
+void LXC_NetInterface::changeUsedNetwork(QString item)
 {
     qDebug()<<item;
 }

@@ -79,7 +79,7 @@ QStringList StoragePoolControlThread::getAllStoragePoolList()
             if (virStoragePoolGetAutostart(storagePool[i], &is_autostart) < 0) {
                 autostartStr.append("no autostart");
             } else autostartStr.append( is_autostart ? "yes" : "no" );
-            currentAttr<< QString( virStoragePoolGetName(storagePool[i]) )
+            currentAttr<< QString().fromUtf8( virStoragePoolGetName(storagePool[i]) )
                        << QString( virStoragePoolIsActive(storagePool[i]) ? "active" : "inactive" )
                        << autostartStr
                        << QString( virStoragePoolIsPersistent(storagePool[i]) ? "yes" : "no" );
@@ -373,7 +373,8 @@ void StoragePoolControlThread::sendConnErrors()
 {
     virtErrors = virConnGetLastError(currWorkConnect);
     if ( virtErrors!=NULL ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
+        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
+                       .arg(QString().fromUtf8(virtErrors->message)) );
         virResetError(virtErrors);
     } else sendGlobalErrors();
 }
@@ -381,6 +382,7 @@ void StoragePoolControlThread::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
     if ( virtErrors!=NULL )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
+        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
+                       .arg(QString().fromUtf8(virtErrors->message)) );
     virResetLastError();
 }

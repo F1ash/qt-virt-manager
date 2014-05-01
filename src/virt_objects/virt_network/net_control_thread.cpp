@@ -79,7 +79,7 @@ QStringList NetControlThread::getAllNetworkList()
             if (virNetworkGetAutostart(network[i], &is_autostart) < 0) {
                 autostartStr.append("no autostart");
             } else autostartStr.append( is_autostart ? "yes" : "no" );
-            currentAttr<< QString( virNetworkGetName(network[i]) )
+            currentAttr<< QString().fromUtf8( virNetworkGetName(network[i]) )
                        << QString( virNetworkIsActive(network[i]) ? "active" : "inactive" )
                        << autostartStr
                        << QString( virNetworkIsPersistent(network[i]) ? "yes" : "no" );
@@ -365,7 +365,8 @@ void NetControlThread::sendConnErrors()
 {
     virtErrors = virConnGetLastError(currWorkConnect);
     if ( virtErrors!=NULL ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
+        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
+                       .arg(QString().fromUtf8(virtErrors->message)) );
         virResetError(virtErrors);
     } else sendGlobalErrors();
 }
@@ -373,6 +374,7 @@ void NetControlThread::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
     if ( virtErrors!=NULL )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
+        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
+                       .arg(QString().fromUtf8(virtErrors->message)) );
     virResetLastError();
 }

@@ -1,7 +1,11 @@
 #ifndef CREATE_VIRT_NETWORK_H
 #define CREATE_VIRT_NETWORK_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include <QDialog>
+#include <QSettings>
+#include <QPushButton>
+#include <QDir>
+#include <QTemporaryFile>
 #include "libvirt/libvirt.h"
 #include <QGridLayout>
 #include <QVBoxLayout>
@@ -10,10 +14,11 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QSpinBox>
+#include <QDebug>
 
 #define FORWARD_TYPE QStringList()<<"network"<<"bridge"<<"hostdev"<<"mcast"<<"server"<<"user"<<"direct"<<"ethernet"
 
-class CreateVirtNetwork : public _QWidget
+class CreateVirtNetwork : public QDialog
 {
     Q_OBJECT
 public:
@@ -23,6 +28,7 @@ public:
 signals:
 
 private:
+    QSettings        settings;
     QWidget         *bridge;
     QGridLayout     *bridgeLayout;
     QLineEdit       *bridgeName;
@@ -38,7 +44,19 @@ private:
     QLineEdit       *address;
     QLineEdit       *mac;
 
+    QPushButton     *ok;
+    QPushButton     *cancel;
+    QHBoxLayout     *buttonLayout;
+    QWidget         *buttons;
+
+    QTemporaryFile  *xml;
+
 public slots:
+    QString getXMLDescFileName() const;
+
+private slots:
+    void buildXMLDescription();
+    void set_Result();
 
 };
 

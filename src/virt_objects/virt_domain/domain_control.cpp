@@ -342,7 +342,7 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                 unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                                      VIR_CONNECT_LIST_NETWORKS_INACTIVE;
                 virConnectListAllNetworks(currWorkConnect, &nets, flags);
-                //qDebug()<<capabilities;
+                qDebug()<<capabilities;
                 //createVirtDomain = new CreateVirtDomain(this, QString("%1").arg(virConnectGetType(currWorkConnect)));
                 createVirtDomain = new CreateVirtDomain(this, capabilities, nets);
                 int result = createVirtDomain->exec();

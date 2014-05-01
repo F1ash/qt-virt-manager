@@ -123,7 +123,8 @@ void ConnAliveThread::sendConnErrors()
 {
     virtErrors = virConnGetLastError(conn);
     if ( virtErrors!=NULL ) {
-        emit connMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
+        emit connMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
+                      .arg(QString().fromUtf8(virtErrors->message)) );
         virResetError(virtErrors);
     } else sendGlobalErrors();
 }
@@ -131,7 +132,8 @@ void ConnAliveThread::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
     if ( virtErrors!=NULL )
-        emit connMsg( QString("VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message) );
+        emit connMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
+                      .arg(QString().fromUtf8(virtErrors->message)) );
     virResetLastError();
 }
 void ConnAliveThread::registerConnEvents()

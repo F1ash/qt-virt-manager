@@ -276,13 +276,25 @@ void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
         if ( !args.isEmpty() ) {
             if ( args.first()=="manually" ) {
                 args.removeFirst();
-                QString source = args.first();
+                //QString source = args.first();
                 args.removeFirst();
-                QString path;
+                QString xml;
                 // show SRC Creator widget
-                // get path for method
-                QMessageBox::information(this, "INFO", QString("Manual settings for %2(%1) not implemented yet.").arg(act).arg(source), QMessageBox::Ok);
-                args.prepend(path);
+                CreateVirtNetwork *createVirtNet = new CreateVirtNetwork(this);
+                int result = createVirtNet->exec();
+                if ( createVirtNet!=NULL && result ) {
+                    // get path for method
+                    xml = createVirtNet->getXMLDescFileName();
+                    QStringList data;
+                    data.append("New Network XML'ed");
+                    data.append(QString("in <a href='%1'>%1</a>").arg(xml));
+                    msgRepeater(data.join(" "));
+                    QDesktopServices::openUrl(QUrl(xml));
+                };
+                delete createVirtNet;
+                createVirtNet = 0;
+                //qDebug()<<xml<<"path"<<result;
+                args.prepend(xml);
             };
             netControlThread->execAction(act, args);
         };
