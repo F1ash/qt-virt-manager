@@ -33,6 +33,7 @@ private:
     QVBoxLayout             *commonLayout;
 
 public slots:
+    QDomNodeList getNodeList() const;
 
 private slots:
     void changeUsedNetwork(bool);

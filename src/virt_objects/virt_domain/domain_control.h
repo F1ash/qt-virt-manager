@@ -14,6 +14,7 @@
 #include "domain_control_menu.h"
 #include "domain_control_thread.h"
 #include "create_widgets/domain/create_virt_domain.h"
+#include "vm_viewer/vm_viewer.h"
 
 class VirtDomainControl : public QMainWindow
 {
@@ -24,6 +25,7 @@ public:
 
 signals:
     void domMsg(QString&);
+    void dislayRequest(virConnect*, QString, QString);
 
 private:
     QString                  currConnName;

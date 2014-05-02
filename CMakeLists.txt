@@ -66,6 +66,11 @@ set (HEADERS
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
   src/create_widgets/network/create_virt_network.h
+
+  src/vm_viewer/vm_viewer.h
+  src/vm_viewer/viewer_toolbar.h
+
+  src/vm_viewer/lxc/lxc_viewer.h
 )
 set (SOURCES 
   src/main.cpp
@@ -125,6 +130,11 @@ set (SOURCES
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   
   src/create_widgets/network/create_virt_network.cpp
+
+  src/vm_viewer/vm_viewer.cpp
+  src/vm_viewer/viewer_toolbar.cpp
+
+  src/vm_viewer/lxc/lxc_viewer.cpp
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE ${PROJECT_NAME}.desktop)

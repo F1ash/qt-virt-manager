@@ -1,7 +1,7 @@
 #include "wait_thread.h"
 
-Wait::Wait(QObject *parent = 0) :
-    QThread(parent)
+Wait::Wait(QObject *parent, ConnectList *wdgList, ViewerMap map) :
+    QThread(parent), wdg(wdgList), vm_displayed_map(map)
 {
     processingState = false;
 }
@@ -11,6 +11,20 @@ Wait::~Wait()
 }
 void Wait::run()
 {
+  // close VM Displays
+  bool vm_running = true;
+  while ( vm_running ) {
+      bool ret = false;
+      foreach ( QString key, vm_displayed_map.keys() ) {
+          VM_Viewer *vm = vm_displayed_map.value(key);
+          bool state = vm->isActive();
+          if ( state ) vm->stopProcessing();
+          ret = ret || state;
+      };
+      vm_running = ret;
+      msleep(333);
+  };
+  // close connections
   while (wdg->connItemModel->connItemDataList.count()) {
       if ( processingState ) {
           int count = wdg->connItemModel->connItemDataList.count();
@@ -41,13 +55,9 @@ void Wait::run()
           };
       };
       emit refreshProcessingState();
-      msleep(500);
+      msleep(333);
   };
-  msleep(1000);
-}
-void Wait::setPtr(ConnectList *w)
-{
-    wdg = w;
+  msleep(333);
 }
 void Wait::setProcessingState(bool b)
 {

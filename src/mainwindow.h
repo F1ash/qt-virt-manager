@@ -15,6 +15,7 @@
 #include "layout/conn_list_widget.h"
 #include "toolbar/toolbar.h"
 #include "wait_thread/wait_thread.h"
+#include "vm_viewer/vm_viewer.h"
 #include <QDebug>
 
 class MainWindow : public QMainWindow
@@ -29,23 +30,24 @@ signals:
 public slots:
 
 private :
-    QSettings                settings;
-    ConnectList             *connListWidget;
-    TrayIcon                *trayIcon;
-    ToolBar                 *toolBar;
-    Wait                    *wait_thread = NULL;
-    QDockWidget             *logDock;
-    LogDock                 *logDockContent;
+    QSettings                    settings;
+    ConnectList                 *connListWidget;
+    TrayIcon                    *trayIcon;
+    ToolBar                     *toolBar;
+    Wait                        *wait_thread = NULL;
+    QDockWidget                 *logDock;
+    LogDock                     *logDockContent;
     // TODO: implement common Control widget based on QMainWindow
     // for connect's resource controls with related widgets
-    QDockWidget             *domainDock;
-    VirtDomainControl       *domainDockContent;
-    QDockWidget             *networkDock;
-    VirtNetControl          *networkDockContent;
-    QDockWidget             *storageVolDock;
-    VirtStorageVolControl   *storageVolDockContent;
-    QDockWidget             *storagePoolDock;
-    VirtStoragePoolControl  *storagePoolDockContent;
+    QDockWidget                 *domainDock;
+    VirtDomainControl           *domainDockContent;
+    QDockWidget                 *networkDock;
+    VirtNetControl              *networkDockContent;
+    QDockWidget                 *storageVolDock;
+    VirtStorageVolControl       *storageVolDockContent;
+    QDockWidget                 *storagePoolDock;
+    VirtStoragePoolControl      *storagePoolDockContent;
+    ViewerMap                    VM_Displayed_Map;
 
 private slots:
     void closeEvent(QCloseEvent*);
@@ -75,6 +77,7 @@ private slots:
     void receivePoolName(virConnect*, QString&, QString&);
     void stopConnProcessing(virConnect*);
     void stopProcessing();
+    void invokeVMDisplay(virConnect*, QString, QString);
 
 };
 

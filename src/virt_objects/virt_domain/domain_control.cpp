@@ -315,6 +315,9 @@ void VirtDomainControl::execAction(const QStringList &l)
             domControlThread->execAction(CHANGE_DOM_AUTOSTART, args);
         } else if ( l.first()=="getVirtDomXMLDesc" ) {
             domControlThread->execAction(GET_DOM_XML_DESC, args);
+        } else if ( l.first()=="displayVirtDomain" ) {
+            // send signal with Connect & Domain Names to call VM_Viewer into MainWindow widget
+            emit dislayRequest(currWorkConnect, currConnName, domainName);
         } else if ( l.first()=="reloadVirtDomain" ) {
             domControlThread->execAction(GET_ALL_DOMAIN, args);
         };

@@ -35,6 +35,9 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         getXMLDesc = new QAction("get XML Description", this);
         getXMLDesc->setIcon(QIcon::fromTheme("domain-xml"));
         getXMLDesc->setEnabled(true);
+        display = new QAction("display VM", this);
+        display->setIcon(QIcon::fromTheme("display"));
+        display->setEnabled(true);
 
         addAction(start);
         addAction(pause);
@@ -49,6 +52,8 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         addAction(autoStart);
         addSeparator();
         addAction(getXMLDesc);
+        addSeparator();
+        addAction(display);
         addSeparator();
     };
     reload = new QAction("Reload Pool OverView", this);
@@ -82,6 +87,8 @@ DomainControlMenu::~DomainControlMenu()
         autoStart = 0;
         delete getXMLDesc;
         getXMLDesc = 0;
+        delete display;
+        display = 0;
     };
     delete reload;
     reload = 0;
@@ -111,6 +118,8 @@ void DomainControlMenu::emitExecMethod(QAction *action)
             paramList << QString((parameters[2]=="yes")? "0" : "1");
         } else if ( action == getXMLDesc ) {
             paramList << "getVirtDomXMLDesc";
+        } else if ( action == display ) {
+            paramList << "displayVirtDomain";
         } else return;
         paramList.append(parameters.first());
     } else if ( action == reload ) {

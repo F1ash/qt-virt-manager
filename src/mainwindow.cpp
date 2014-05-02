@@ -58,6 +58,8 @@ MainWindow::~MainWindow()
   disconnect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
   disconnect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+  disconnect(domainDockContent, SIGNAL(dislayRequest(virConnect*,QString,QString)),
+             this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
   disconnect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
@@ -70,6 +72,14 @@ MainWindow::~MainWindow()
       delete wait_thread;
       wait_thread = 0;
   };
+  foreach (QString name, VM_Displayed_Map.keys()) {
+      VM_Viewer *wdg = VM_Displayed_Map.value(name);
+      if ( wdg!=NULL ) {
+          delete wdg;
+          wdg = 0;
+      }
+  };
+  VM_Displayed_Map.clear();
 
   delete logDockContent;
   logDockContent = 0;
@@ -164,8 +174,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       networkDock->setEnabled(false);
       storageVolDock->setEnabled(false);
       storagePoolDock->setEnabled(false);
-      wait_thread = new Wait(this);
-      wait_thread->setPtr(connListWidget);
+      wait_thread = new Wait(this, connListWidget, VM_Displayed_Map);
       connect(wait_thread, SIGNAL(finished()), this, SLOT(closeEvent()));
       connect(wait_thread, SIGNAL(refreshProcessingState()), this, SLOT(stopProcessing()));
       wait_thread->start();
@@ -308,6 +317,8 @@ void MainWindow::initDockWidgets()
     addDockWidget(area, domainDock);
     connect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
     connect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+    connect(domainDockContent, SIGNAL(dislayRequest(virConnect*,QString,QString)),
+            this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
 
     networkDock = new QDockWidget(this);
     networkDock->setObjectName("networkDock");
@@ -529,4 +540,14 @@ void MainWindow::stopProcessing()
     result = result && storagePoolDockContent->getThreadState();
     result = result && storageVolDockContent->getThreadState();
     if ( wait_thread!=NULL ) wait_thread->setProcessingState(result);
+}
+void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString domName)
+{
+    QString key = QString("%1_%2").arg(connName).arg(domName);
+    if ( !VM_Displayed_Map.contains(key) ) {
+        VM_Viewer *value = new VM_Viewer(this, conn, domName);
+        VM_Displayed_Map.insert(key, value);
+    } else {
+        setFocusProxy(VM_Displayed_Map.value(key, NULL));
+    };
 }
