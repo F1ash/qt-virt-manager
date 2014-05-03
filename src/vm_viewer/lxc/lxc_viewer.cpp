@@ -21,9 +21,25 @@ LXC_Viewer::LXC_Viewer(QWidget *parent, virConnect *conn, QString str) :
     };
     if ( domainPtr!=NULL ) {
         stream = virStreamNew( jobConnect, VIR_STREAM_NONBLOCK );
-        int ret = virDomainOpenConsole( domainPtr, "pty", stream, VIR_DOMAIN_CONSOLE_FORCE );
-        if ( ret<0 ) {
-           display->append("Open console failed...");
+        if ( stream==NULL ) {
+            display->append("Create virtual stream failed...");
+        } else {
+            /*
+             * Older servers did not support either flag,
+             * and also did not forbid simultaneous clients on a console,
+             * with potentially confusing results.
+             * When passing @flags of 0 in order to support a wider range of server versions,
+             * it is up to the client to ensure mutual exclusion.
+             */
+            if ( virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_SAFE)+1 ) {
+                display->append("Console opened in SAFE-mode...");
+            } else if ( virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_FORCE )+1 ) {
+                display->append("Console opened in FORCE-mode...");
+            } else if ( virDomainOpenConsole( domainPtr, NULL, stream, 0 )+1 ) {
+                display->append("Console opened in ZIRO-mode...");
+            } else {
+               display->append("Open console failed...");
+            };
         };
     } else display->append("Connect or Domain is NULL...");
 }
