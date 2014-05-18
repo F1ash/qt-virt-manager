@@ -18,6 +18,7 @@ public:
     ~VM_Viewer();
 
 signals:
+    void finished();
 
 private:
     QString          domain, type;
@@ -32,7 +33,7 @@ public slots:
     void stopProcessing();
 
 private slots:
-    void closeEvent();
+    void closeEvent(QCloseEvent *ev);
 
 };
 

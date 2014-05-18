@@ -27,6 +27,12 @@ enum DomActions {
     DOM_EMPTY_ACTION
 };
 
+struct Result {
+    QString         name   = QString();
+    bool            result = false;
+    QStringList     msg    = QStringList();
+};
+
 class DomControlThread : public QThread
 {
     Q_OBJECT
@@ -35,7 +41,7 @@ public:
 
 signals:
     void errorMsg(QString);
-    void resultData(DomActions, QStringList);
+    void resultData(DomActions, Result);
 
 private:
     DomActions       action;
@@ -51,20 +57,20 @@ public slots:
 
 private slots:
     void run();
-    QStringList getAllDomainList();
-    QStringList createDomain();
-    QStringList defineDomain();
-    QStringList startDomain();
-    QStringList pauseDomain();
-    QStringList destroyDomain();
-    QStringList resetDomain();
-    QStringList rebootDomain();
-    QStringList shutdownDomain();
-    QStringList saveDomain();
-    QStringList restoreDomain();
-    QStringList undefineDomain();
-    QStringList changeAutoStartDomain();
-    QStringList getDomainXMLDesc();
+    Result getAllDomainList();
+    Result createDomain();
+    Result defineDomain();
+    Result startDomain();
+    Result pauseDomain();
+    Result destroyDomain();
+    Result resetDomain();
+    Result rebootDomain();
+    Result shutdownDomain();
+    Result saveDomain();
+    Result restoreDomain();
+    Result undefineDomain();
+    Result changeAutoStartDomain();
+    Result getDomainXMLDesc();
 
     void sendConnErrors();
     void sendGlobalErrors();

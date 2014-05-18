@@ -25,7 +25,8 @@ public:
 
 signals:
     void domMsg(QString&);
-    void dislayRequest(virConnect*, QString, QString);
+    void displayRequest(virConnect*, QString, QString);
+    void domainClosed(QString, QString);
 
 private:
     QString                  currConnName;
@@ -46,7 +47,7 @@ public slots:
     virConnect*              getConnect() const;
 
 private slots:
-    void                     resultReceiver(DomActions, QStringList);
+    void                     resultReceiver(DomActions, Result);
     void                     msgRepeater(QString);
     void                     changeDockVisibility();
 

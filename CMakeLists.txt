@@ -71,6 +71,38 @@ set (HEADERS
   src/vm_viewer/viewer_toolbar.h
 
   src/vm_viewer/lxc/lxc_viewer.h
+
+  # qtermwidget
+  src/qtermwidget/lib/BlockArray.h
+  src/qtermwidget/lib/History.h
+  src/qtermwidget/lib/kpty_p.h
+  src/qtermwidget/lib/kpty.h
+  src/qtermwidget/lib/ScreenWindow.h
+  src/qtermwidget/lib/CharacterColor.h
+
+  src/qtermwidget/lib/Character.h
+  src/qtermwidget/lib/k3process.h
+  src/qtermwidget/lib/k3processcontroller.h
+  src/qtermwidget/lib/LineFont.h
+  src/qtermwidget/lib/Session.h
+  src/qtermwidget/lib/ColorTables.h
+  src/qtermwidget/lib/ShellCommand.h
+
+  src/qtermwidget/lib/DefaultTranslatorText.h
+  src/qtermwidget/lib/Pty.h
+  src/qtermwidget/lib/TerminalCharacterDecoder.h
+
+  src/qtermwidget/lib/Emulation.h
+  src/qtermwidget/lib/KeyboardTranslator.h
+  src/qtermwidget/lib/qtermwidget.h
+
+  src/qtermwidget/lib/ExtendedDefaultTranslator.h
+  src/qtermwidget/lib/TerminalDisplay.h
+  src/qtermwidget/lib/konsole_wcwidth.h
+
+  src/qtermwidget/lib/Filter.h
+  src/qtermwidget/lib/Screen.h
+  src/qtermwidget/lib/Vt102Emulation.h
 )
 set (SOURCES 
   src/main.cpp
@@ -135,6 +167,34 @@ set (SOURCES
   src/vm_viewer/viewer_toolbar.cpp
 
   src/vm_viewer/lxc/lxc_viewer.cpp
+
+  # qtermwidget
+  src/qtermwidget/lib/BlockArray.cpp
+  src/qtermwidget/lib/History.cpp
+  src/qtermwidget/lib/ScreenWindow.cpp
+  src/qtermwidget/lib/k3processcontroller.cpp
+  src/qtermwidget/lib/Session.cpp
+  src/qtermwidget/lib/k3process.cpp
+  src/qtermwidget/lib/LineFont.src
+  src/qtermwidget/lib/ShellCommand.cpp
+  src/qtermwidget/lib/Pty.cpp
+  src/qtermwidget/lib/TerminalCharacterDecoder.cpp
+
+  src/qtermwidget/lib/Emulation.cpp
+  src/qtermwidget/lib/KeyboardTranslator.cpp
+  src/qtermwidget/lib/qtermwidget.cpp
+  src/qtermwidget/lib/TerminalDisplay.cpp
+  src/qtermwidget/lib/konsole_wcwidth.cpp
+
+  src/qtermwidget/lib/Filter.cpp
+  src/qtermwidget/lib/Screen.cpp
+  src/qtermwidget/lib/Vt102Emulation.cpp
+  src/qtermwidget/lib/kpty.cpp
+
+  src/qtermwidget/lib/default.keytab  
+  src/qtermwidget/lib/kb-layouts/default.keytab
+  src/qtermwidget/lib/kb-layouts/linux.keytab
+  src/qtermwidget/lib/kb-layouts/vt420pc.keytab
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE ${PROJECT_NAME}.desktop)
@@ -142,7 +202,7 @@ set (DESKTOP_FILE ${PROJECT_NAME}.desktop)
 project (${PROJECT_NAME})
 
 include_directories (${CMAKE_CURRENT_BINARY_DIR} ${SOURCES_DIRS})
-find_package (Qt4 COMPONENTS QtCore QtGui QtXml)
+find_package (Qt4 COMPONENTS QtCore QtGui QtXml REQUIRED)
 include (${QT_USE_FILE})
 qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
 set (BUILD_PROJECT_LIBRARIES ${QT_LIBRARIES})
@@ -152,6 +212,7 @@ add_executable (${PROJECT_NAME} ${HEADERS} ${SOURCES} ${MOC_SOURCES})
 target_link_libraries (${PROJECT_NAME}
     ${BUILD_PROJECT_LIBRARIES}
     virt
+    util
 )
 
 install (TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)

@@ -2,12 +2,11 @@
 #define LXC_VIEWER_H
 
 #include <QWidget>
-#include <QPalette>
-#include <QTextBrowser>
+#include <QLabel>
 #include <QVBoxLayout>
-#include <QTextStream>
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
+#include "qtermwidget/lib/qtermwidget.h"
 #include <QDebug>
 
 class LXC_Viewer : public QWidget
@@ -18,24 +17,30 @@ public:
     ~LXC_Viewer();
 
 signals:
-    void closed();
+    void errorMsg(QString&);
 
 private:
     QString              domain;
-    virDomain           *domainPtr;
+    virDomain           *domainPtr = NULL;
     virConnect          *jobConnect = NULL;
-    QTextBrowser        *display;
+    QTermWidget         *display = NULL;
+    QLabel              *dontActive;
     QVBoxLayout         *commonLayout;
-    QTextStream          textStream;
-    QPalette             pallete;
-
-    virStream           *stream;
+    virErrorPtr          virtErrors = NULL;
+    virStream           *stream = NULL;
 
 public slots:
-    void close();
+    void        close();
 
 private slots:
-    virDomain* getDomainPtr() const;
+    virDomain*  getDomainPtr() const;
+    void        registerStreamEvents();
+    void        unregisterStreamEvents();
+    static void        freeData(void*);
+    static void        streamCallBack(virStreamPtr, int, void*);
+
+    void        sendConnErrors();
+    void        sendGlobalErrors();
 
 };
 

@@ -78,6 +78,8 @@ private slots:
     void stopConnProcessing(virConnect*);
     void stopProcessing();
     void invokeVMDisplay(virConnect*, QString, QString);
+    void deleteVMDisplay();
+    void deleteVMDisplay(QString, QString);
 
 };
 

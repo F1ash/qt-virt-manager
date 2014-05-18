@@ -33,6 +33,7 @@ VM_Viewer::~VM_Viewer()
         virConnectClose(jobConnect);
     };
     VM_State = false;
+    emit finished();
 }
 
 /* public slots */
@@ -43,11 +44,10 @@ bool VM_Viewer::isActive() const
 void VM_Viewer::stopProcessing()
 {
     close();
-    VM_State = false;
 }
 
 /* private slots */
-void VM_Viewer::closeEvent()
+void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
-    viewer->close();
+    deleteLater();
 }

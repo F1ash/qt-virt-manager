@@ -31,7 +31,7 @@ VirtDomainControl::VirtDomainControl(QWidget *parent) :
     domControlThread = new DomControlThread(this);
     connect(domControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
     connect(domControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    connect(domControlThread, SIGNAL(resultData(DomActions, QStringList)), this, SLOT(resultReceiver(DomActions, QStringList)));
+    connect(domControlThread, SIGNAL(resultData(DomActions, Result)), this, SLOT(resultReceiver(DomActions, Result)));
     connect(domControlThread, SIGNAL(errorMsg(QString)), this, SLOT(msgRepeater(QString)));
 }
 VirtDomainControl::~VirtDomainControl()
@@ -50,7 +50,7 @@ VirtDomainControl::~VirtDomainControl()
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
     disconnect(domControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
     disconnect(domControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    disconnect(domControlThread, SIGNAL(resultData(DomActions, QStringList)), this, SLOT(resultReceiver(DomActions, QStringList)));
+    disconnect(domControlThread, SIGNAL(resultData(DomActions, Result)), this, SLOT(resultReceiver(DomActions, Result)));
     disconnect(domControlThread, SIGNAL(errorMsg(QString)), this, SLOT(msgRepeater(QString)));
 
     if ( createVirtDomain!=NULL ) {
@@ -136,26 +136,26 @@ virConnect* VirtDomainControl::getConnect() const
 }
 
 /* private slots */
-void VirtDomainControl::resultReceiver(DomActions act, QStringList data)
+void VirtDomainControl::resultReceiver(DomActions act, Result data)
 {
     //qDebug()<<act<<data<<"result";
     if ( act == GET_ALL_DOMAIN ) {
-        if ( data.count() > domainModel->DataList.count() ) {
-            int _diff = data.count() - domainModel->DataList.count();
+        if ( data.msg.count() > domainModel->DataList.count() ) {
+            int _diff = data.msg.count() - domainModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 domainModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( domainModel->DataList.count() > data.count() ) {
-            int _diff = domainModel->DataList.count() - data.count();
+        if ( domainModel->DataList.count() > data.msg.count() ) {
+            int _diff = domainModel->DataList.count() - data.msg.count();
             for ( int i = 0; i<_diff; i++ ) {
                 domainModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QString _data, data) {
+        foreach (QString _data, data.msg) {
             QStringList chain = _data.split(" ");
             if (chain.isEmpty()) continue;
             int count = chain.size();
@@ -164,68 +164,25 @@ void VirtDomainControl::resultReceiver(DomActions act, QStringList data)
             };
             i++;
         };
-    } else if ( act == CREATE_DOMAIN ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
-    } else if ( act == DEFINE_DOMAIN ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
-    } else if ( act == START_DOMAIN ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
-    } else if ( act == PAUSE_DOMAIN ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
-    } else if ( act == DESTROY_DOMAIN ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
-    } else if ( act == RESET_DOMAIN ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
-    } else if ( act == REBOOT_DOMAIN ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
-    } else if ( act == SHUTDOWN_DOMAIN ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
-    } else if ( act == SAVE_DOMAIN ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
-    } else if ( act == UNDEFINE_DOMAIN ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
-    } else if ( act == CHANGE_DOM_AUTOSTART ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
-        };
     } else if ( act == GET_DOM_XML_DESC ) {
-        if ( !data.isEmpty() ) {
-            QString xml = data.first();
-            data.removeFirst();
-            data.append(QString("in <a href='%1'>%1</a>").arg(xml));
-            msgRepeater(data.join(" "));
+        if ( !data.msg.isEmpty() ) {
+            QString xml = data.msg.first();
+            data.msg.removeFirst();
+            data.msg.append(QString("in <a href='%1'>%1</a>").arg(xml));
+            msgRepeater(data.msg.join(" "));
             QDesktopServices::openUrl(QUrl(xml));
+        };
+    } else if ( act < GET_DOM_XML_DESC ) {
+        if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
+        if ( data.result ) {
+            domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
+            switch (act) {
+            case DESTROY_DOMAIN:
+                emit domainClosed(currConnName, data.name);
+                break;
+            default:
+                break;
+            }
         };
     };
 }
@@ -317,7 +274,7 @@ void VirtDomainControl::execAction(const QStringList &l)
             domControlThread->execAction(GET_DOM_XML_DESC, args);
         } else if ( l.first()=="displayVirtDomain" ) {
             // send signal with Connect & Domain Names to call VM_Viewer into MainWindow widget
-            emit dislayRequest(currWorkConnect, currConnName, domainName);
+            emit displayRequest(currWorkConnect, currConnName, domainName);
         } else if ( l.first()=="reloadVirtDomain" ) {
             domControlThread->execAction(GET_ALL_DOMAIN, args);
         };

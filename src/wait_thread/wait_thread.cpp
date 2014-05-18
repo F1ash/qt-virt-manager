@@ -12,18 +12,12 @@ Wait::~Wait()
 void Wait::run()
 {
   // close VM Displays
-  bool vm_running = true;
-  while ( vm_running ) {
-      bool ret = false;
-      foreach ( QString key, vm_displayed_map.keys() ) {
-          VM_Viewer *vm = vm_displayed_map.value(key);
-          bool state = vm->isActive();
-          if ( state ) vm->stopProcessing();
-          ret = ret || state;
-      };
-      vm_running = ret;
-      msleep(333);
+  foreach ( QString key, vm_displayed_map.keys() ) {
+      VM_Viewer *vm = vm_displayed_map.value(key, NULL);
+      bool state = (vm!=NULL)? vm->isActive() : false;
+      if ( state ) vm->stopProcessing();
   };
+  //vm_displayed_map.clear();
   // close connections
   while (wdg->connItemModel->connItemDataList.count()) {
       if ( processingState ) {

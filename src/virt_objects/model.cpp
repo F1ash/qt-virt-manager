@@ -121,6 +121,9 @@ QVariant Model::data(const QModelIndex &index, int role) const
     };
     if ( role==Qt::ToolTipRole && index.column() ) {
         switch (index.column()) {
+        case 0:
+            res = QString("Name: %1").arg(DataList.at(index.row())->getName());
+            break;
         case 1:
             res = QString("State: %1").arg(DataList.at(index.row())->getState());
             break;

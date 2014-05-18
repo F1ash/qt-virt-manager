@@ -4,6 +4,7 @@ DomControlThread::DomControlThread(QObject *parent) :
     QThread(parent)
 {
     qRegisterMetaType<DomActions>("DomActions");
+    qRegisterMetaType<Result>("Result");
 }
 
 /* public slots */
@@ -26,57 +27,58 @@ void DomControlThread::execAction(DomActions act, QStringList _args)
 /* private slots */
 void DomControlThread::run()
 {
-    QStringList result;
+    Result result;
     switch (action) {
     case GET_ALL_DOMAIN :
-        result.append(getAllDomainList());
+        result = getAllDomainList();
         break;
     case CREATE_DOMAIN :
-        result.append(createDomain());
+        result = createDomain();
         break;
     case DEFINE_DOMAIN :
-        result.append(defineDomain());
+        result = defineDomain();
         break;
     case START_DOMAIN :
-        result.append(startDomain());
+        result = startDomain();
         break;
     case PAUSE_DOMAIN :
-        result.append(pauseDomain());
+        result = pauseDomain();
         break;
     case DESTROY_DOMAIN :
-        result.append(destroyDomain());
+        result = destroyDomain();
         break;
     case RESET_DOMAIN :
-        result.append(resetDomain());
+        result = resetDomain();
         break;
     case REBOOT_DOMAIN :
-        result.append(rebootDomain());
+        result = rebootDomain();
         break;
     case SHUTDOWN_DOMAIN :
-        result.append(shutdownDomain());
+        result = shutdownDomain();
         break;
     case SAVE_DOMAIN :
-        result.append(saveDomain());
+        result = saveDomain();
         break;
     case RESTORE_DOMAIN :
-        result.append(restoreDomain());
+        result = restoreDomain();
         break;
     case UNDEFINE_DOMAIN :
-        result.append(undefineDomain());
+        result = undefineDomain();
         break;
     case CHANGE_DOM_AUTOSTART :
-        result.append(changeAutoStartDomain());
+        result = changeAutoStartDomain();
         break;
     case GET_DOM_XML_DESC :
-        result.append(getDomainXMLDesc());
+        result = getDomainXMLDesc();
         break;
     default:
         break;
     };
     emit resultData(action, result);
 }
-QStringList DomControlThread::getAllDomainList()
+Result DomControlThread::getAllDomainList()
 {
+    Result result;
     QStringList domainList;
     if ( currWorkConnect!=NULL && keep_alive ) {
         virDomainPtr *domain;
@@ -86,7 +88,7 @@ QStringList DomControlThread::getAllDomainList()
         if ( ret<0 ) {
             sendConnErrors();
             free(domain);
-            return domainList;
+            return result;
         };
 
         int i = 0;
@@ -180,11 +182,13 @@ QStringList DomControlThread::getAllDomainList()
         };
     };
     */
-    return domainList;
+    result.result = true;
+    result.msg = domainList;
+    return result;
 }
-QStringList DomControlThread::createDomain()
+Result DomControlThread::createDomain()
 {
-    QStringList result;
+    Result result;
     QString path = args.first();
     QByteArray xmlData;
     QFile f;
@@ -200,14 +204,16 @@ QStringList DomControlThread::createDomain()
         sendConnErrors();
         return result;
     };
-    result.append(QString("'%1' Domain from\n\"%2\"\nis created.")
-                  .arg(QString().fromUtf8( virDomainGetName(domain) )).arg(path));
+    result.name = QString().fromUtf8( virDomainGetName(domain) );
+    result.result = true;
+    result.msg.append(QString("'%1' Domain from\n\"%2\"\nis created.")
+                     .arg(result.name).arg(path));
     virDomainFree(domain);
     return result;
 }
-QStringList DomControlThread::defineDomain()
+Result DomControlThread::defineDomain()
 {
-    QStringList result;
+    Result result;
     QString path = args.first();
     QByteArray xmlData;
     QFile f;
@@ -223,14 +229,16 @@ QStringList DomControlThread::defineDomain()
         sendConnErrors();
         return result;
     };
-    result.append(QString("'%1' Domain from\n\"%2\"\nis defined.")
-                  .arg(QString().fromUtf8( virDomainGetName(domain) )).arg(path));
+    result.name = QString().fromUtf8( virDomainGetName(domain) );
+    result.result = true;
+    result.msg.append(QString("'%1' Domain from\n\"%2\"\nis defined.")
+                  .arg(result.name).arg(path));
     virDomainFree(domain);
     return result;
 }
-QStringList DomControlThread::startDomain()
+Result DomControlThread::startDomain()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
 
     bool started = false;
@@ -241,12 +249,14 @@ QStringList DomControlThread::startDomain()
         if (!started) sendConnErrors();
         virDomainFree(domain);
     } else sendConnErrors();
-    result.append(QString("'%1' Domain %2 Started.").arg(name).arg((started)?"":"don't"));
+    result.name = name;
+    result.result = started;
+    result.msg.append(QString("'%1' Domain %2 Started.").arg(name).arg((started)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::pauseDomain()
+Result DomControlThread::pauseDomain()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     QString state = args.last();
     bool invoked = false;
@@ -263,53 +273,31 @@ QStringList DomControlThread::pauseDomain()
         } else 0;
         virDomainFree(domain);
     } else sendConnErrors();
-    result.append(QString("'%1' Domain state %2 changed.").arg(name).arg((invoked)?"":"don't"));
+    result.name = name;
+    result.result = invoked;
+    result.msg.append(QString("'%1' Domain state %2 changed.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::destroyDomain()
+Result DomControlThread::destroyDomain()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
-    /*
-    virDomainPtr *domain;
-    unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
-                         VIR_CONNECT_LIST_DOMAINS_INACTIVE;
-    int ret = virConnectListAllDomains( currWorkConnect, &domain, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(domain);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
-    */
 
     bool deleted = false;
-    /*
-    int i = 0;
-    while ( domain[i] != NULL ) {
-        QString currDomName = QString( virDomainGetName(domain[i]) );
-        if ( !deleted && currDomName==name ) {
-            deleted = (virDomainDestroy(domain[i])+1) ? true : false;
-            if (!deleted) sendGlobalErrors();
-        };
-        qDebug()<<QVariant(deleted).toString()<<currDomName<<name;
-        virDomainFree(domain[i]);
-        i++;
-    };
-    free(domain);
-    */
     virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
     if ( domain!=NULL ) {
         deleted = (virDomainDestroy(domain)+1) ? true : false;
         if (!deleted) sendConnErrors();
         virDomainFree(domain);
     } else sendConnErrors();
-    result.append(QString("'%1' Domain %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
+    result.name = name;
+    result.result = deleted;
+    result.msg.append(QString("'%1' Domain %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::resetDomain()
+Result DomControlThread::resetDomain()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     bool invoked = false;
     // extra flags; not used yet, so callers should always pass 0
@@ -322,12 +310,14 @@ QStringList DomControlThread::resetDomain()
         if (!invoked) sendConnErrors();
         virDomainFree(domain);
     } else sendConnErrors();
-    result.append(QString("'%1' Domain %2 reset.").arg(name).arg((invoked)?"":"don't"));
+    result.name = name;
+    result.result = invoked;
+    result.msg.append(QString("'%1' Domain %2 reset.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::rebootDomain()
+Result DomControlThread::rebootDomain()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     bool invoked = false;
     unsigned int flags =
@@ -344,12 +334,14 @@ QStringList DomControlThread::rebootDomain()
         if (!invoked) sendConnErrors();
         virDomainFree(domain);
     } else sendConnErrors();
-    result.append(QString("'%1' Domain %2 reboot.").arg(name).arg((invoked)?"":"don't"));
+    result.name = name;
+    result.result = invoked;
+    result.msg.append(QString("'%1' Domain %2 reboot.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::shutdownDomain()
+Result DomControlThread::shutdownDomain()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     bool invoked = false;
     unsigned int flags =
@@ -366,12 +358,14 @@ QStringList DomControlThread::shutdownDomain()
         if (!invoked) sendConnErrors();
         virDomainFree(domain);
     } else sendConnErrors();
-    result.append(QString("'%1' Domain %2 shutdown.").arg(name).arg((invoked)?"":"don't"));
+    result.name = name;
+    result.result = invoked;
+    result.msg.append(QString("'%1' Domain %2 shutdown.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::saveDomain()
+Result DomControlThread::saveDomain()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     args.removeFirst();
     const char *to = args.first().toUtf8().data();
@@ -392,12 +386,14 @@ QStringList DomControlThread::saveDomain()
         if (!invoked) sendConnErrors();
         virDomainFree(domain);
     } else sendConnErrors();
-    result.append(QString("'%1' Domain %2 saved.").arg(name).arg((invoked)?"":"don't"));
+    result.name = name;
+    result.result = invoked;
+    result.msg.append(QString("'%1' Domain %2 saved.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::restoreDomain()
+Result DomControlThread::restoreDomain()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     args.removeFirst();
     const char *from = args.first().toUtf8().data();
@@ -415,136 +411,66 @@ QStringList DomControlThread::restoreDomain()
         invoked = (virDomainRestoreFlags(currWorkConnect, from, dxml, flags)+1) ? true : false;
         if (!invoked) sendConnErrors();
     };
-    result.append(QString("'%1' Domain %2 restored.").arg(name).arg((invoked)?"":"don't"));
+    result.name = name;
+    result.result = invoked;
+    result.msg.append(QString("'%1' Domain %2 restored.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::undefineDomain()
+Result DomControlThread::undefineDomain()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
-    /*
-    virDomainPtr *domain;
-    unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
-                         VIR_CONNECT_LIST_DOMAINS_INACTIVE;
-    int ret = virConnectListAllDomains( currWorkConnect, &domain, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(domain);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
-    */
 
     bool deleted = false;
-    /*
-    int i = 0;
-    while ( domain[i] != NULL ) {
-        QString currDomName = QString( virDomainGetName(domain[i]) );
-        if ( !deleted && currDomName==name ) {
-            deleted = (virDomainUndefine(domain[i])+1) ? true : false;
-            if (!deleted) sendGlobalErrors();
-        };
-        qDebug()<<QVariant(deleted).toString()<<currDomName<<name;
-        virDomainFree(domain[i]);
-        i++;
-    };
-    free(domain);
-    */
     virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
     if ( domain!=NULL ) {
         deleted = (virDomainUndefine(domain)+1) ? true : false;
         if (!deleted) sendConnErrors();
         virDomainFree(domain);
     } else sendConnErrors();
-    result.append(QString("'%1' Domain %2 Undefined.").arg(name).arg((deleted)?"":"don't"));
+    result.name = name;
+    result.result = deleted;
+    result.msg.append(QString("'%1' Domain %2 Undefined.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::changeAutoStartDomain()
+Result DomControlThread::changeAutoStartDomain()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
+    result.name = name;
     int autostart;
     if ( args.count()<2 || args.at(1).isEmpty() ) {
-        result.append("Incorrect parameters.");
+        result.msg.append("Incorrect parameters.");
         return result;
     } else {
         bool converted;
         int res = args.at(1).toInt(&converted);
         if (converted) autostart = (res) ? 1 : 0;
         else {
-            result.append("Incorrect parameters.");
+            result.msg.append("Incorrect parameters.");
             return result;
         };
     };
-    /*
-    virDomainPtr *domain;
-    unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
-                         VIR_CONNECT_LIST_DOMAINS_INACTIVE;
-    int ret = virConnectListAllDomains( currWorkConnect, &domain, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(domain);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
-    */
 
     bool set = false;
-    /*
-    int i = 0;
-    while ( domain[i] != NULL ) {
-        QString currNetName = QString( virDomainGetName(domain[i]) );
-        if ( !set && currNetName==name ) {
-            set = (virDomainSetAutostart(domain[i], autostart)+1) ? true : false;
-            if (!set) sendGlobalErrors();
-        };
-        virDomainFree(domain[i]);
-        i++;
-    };
-    free(domain);
-    */
     virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
     if ( domain!=NULL ) {
         set = (virDomainSetAutostart(domain, autostart)+1) ? true : false;
         if (!set) sendConnErrors();
         virDomainFree(domain);
     } else sendConnErrors();
-    result.append(QString("'%1' Domain autostart %2 Set.").arg(name).arg((set)?"":"don't"));
+    result.name = name;
+    result.result = set;
+    result.msg.append(QString("'%1' Domain autostart %2 Set.").arg(name).arg((set)?"":"don't"));
     return result;
 }
-QStringList DomControlThread::getDomainXMLDesc()
+Result DomControlThread::getDomainXMLDesc()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
-    /*
-    virDomainPtr *domain;
-    unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
-                         VIR_CONNECT_LIST_DOMAINS_INACTIVE;
-    int ret = virConnectListAllDomains( currWorkConnect, &domain, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(domain);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
 
-    int i = 0;
-    */
     bool read = false;
     char *Returns = NULL;
-    /*
-    while ( domain[i] != NULL ) {
-        QString currNetName = QString( virDomainGetName(domain[i]) );
-        if ( !read && currNetName==name ) {
-            Returns = (virDomainGetXMLDesc(domain[i], VIR_DOMAIN_XML_INACTIVE));
-            if ( Returns==NULL ) sendGlobalErrors();
-            else read = true;
-        };
-        virDomainFree(domain[i]);
-        i++;
-    };
-    free(domain);
-    */
     virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
     if ( domain!=NULL ) {
         Returns = (virDomainGetXMLDesc(domain, VIR_DOMAIN_XML_INACTIVE));
@@ -557,10 +483,12 @@ QStringList DomControlThread::getDomainXMLDesc()
     f.setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml").arg(QDir::tempPath()).arg(QDir::separator()));
     read = f.open();
     if (read) f.write(Returns);
-    result.append(f.fileName());
+    result.msg.append(f.fileName());
     f.close();
     free(Returns);
-    result.append(QString("'%1' Domain %2 XML'ed").arg(name).arg((read)?"":"don't"));
+    result.name = name;
+    result.result = read;
+    result.msg.append(QString("'%1' Domain %2 XML'ed").arg(name).arg((read)?"":"don't"));
     return result;
 }
 

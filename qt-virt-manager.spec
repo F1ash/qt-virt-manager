@@ -15,6 +15,7 @@ Requires:       scrub
 
 BuildRequires:  qt4-devel
 BuildRequires:  libvirt-devel
+BuildRequires:  glibc-headers
 BuildRequires:  desktop-file-utils
 BuildRequires:  cmake
 

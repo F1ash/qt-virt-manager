@@ -58,8 +58,9 @@ MainWindow::~MainWindow()
   disconnect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
   disconnect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
-  disconnect(domainDockContent, SIGNAL(dislayRequest(virConnect*,QString,QString)),
+  disconnect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
              this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
+  disconnect(domainDockContent, SIGNAL(domainClosed(QString,QString)), this, SLOT(deleteVMDisplay(QString,QString)));
   disconnect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
@@ -72,13 +73,13 @@ MainWindow::~MainWindow()
       delete wait_thread;
       wait_thread = 0;
   };
-  foreach (QString name, VM_Displayed_Map.keys()) {
-      VM_Viewer *wdg = VM_Displayed_Map.value(name);
-      if ( wdg!=NULL ) {
-          delete wdg;
-          wdg = 0;
-      }
-  };
+  //foreach (QString name, VM_Displayed_Map.keys()) {
+  //    VM_Viewer *wdg = VM_Displayed_Map.value(name);
+  //    if ( wdg!=NULL ) {
+  //        delete wdg;
+  //        wdg = 0;
+  //    }
+  //};
   VM_Displayed_Map.clear();
 
   delete logDockContent;
@@ -317,8 +318,9 @@ void MainWindow::initDockWidgets()
     addDockWidget(area, domainDock);
     connect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
     connect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
-    connect(domainDockContent, SIGNAL(dislayRequest(virConnect*,QString,QString)),
+    connect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
             this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
+    connect(domainDockContent, SIGNAL(domainClosed(QString,QString)), this, SLOT(deleteVMDisplay(QString,QString)));
 
     networkDock = new QDockWidget(this);
     networkDock->setObjectName("networkDock");
@@ -547,7 +549,32 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
     if ( !VM_Displayed_Map.contains(key) ) {
         VM_Viewer *value = new VM_Viewer(this, conn, domName);
         VM_Displayed_Map.insert(key, value);
+        connect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()), this, SLOT(deleteVMDisplay()));
     } else {
-        setFocusProxy(VM_Displayed_Map.value(key, NULL));
+        VM_Viewer *term = VM_Displayed_Map.value(key, NULL);
+        if ( term==NULL ) {
+            term = new VM_Viewer(this, conn, domName);
+        };
+        term->show();
+    };
+}
+void MainWindow::deleteVMDisplay()
+{
+    VM_Viewer *term = qobject_cast<VM_Viewer*>( sender() );
+    if ( term!=NULL ) {
+        QString key = VM_Displayed_Map.key(term);
+        disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()), this, SLOT(deleteVMDisplay()));
+        VM_Displayed_Map.remove(key);
+    }
+}
+void MainWindow::deleteVMDisplay(QString connName, QString domName)
+{
+    QString key = QString("%1_%2").arg(connName).arg(domName);
+    if ( VM_Displayed_Map.contains(key) ) {
+        if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
+            disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()), this, SLOT(deleteVMDisplay()));
+            VM_Displayed_Map.value(key, NULL)->stopProcessing();
+        };
+        VM_Displayed_Map.remove(key);
     };
 }

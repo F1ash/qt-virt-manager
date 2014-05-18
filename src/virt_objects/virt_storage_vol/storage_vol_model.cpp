@@ -128,6 +128,9 @@ QVariant StorageVolModel::data(const QModelIndex &index, int role) const
     };
     if ( role==Qt::ToolTipRole && index.column() ) {
         switch (index.column()) {
+        case 0:
+            res = QString("Path: %1").arg(DataList.at(index.row())->getName());
+            break;
         case 1:
             res = QString("Path: %1").arg(DataList.at(index.row())->getPath());
             break;
