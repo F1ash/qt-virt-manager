@@ -31,7 +31,7 @@ VirtNetControl::VirtNetControl(QWidget *parent) :
     netControlThread = new NetControlThread(this);
     connect(netControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
     connect(netControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    connect(netControlThread, SIGNAL(resultData(NetActions, QStringList)), this, SLOT(resultReceiver(NetActions, QStringList)));
+    connect(netControlThread, SIGNAL(resultData(NetActions, Result)), this, SLOT(resultReceiver(NetActions, Result)));
     connect(netControlThread, SIGNAL(errorMsg(QString)), this, SLOT(msgRepeater(QString)));
 }
 VirtNetControl::~VirtNetControl()
@@ -50,7 +50,7 @@ VirtNetControl::~VirtNetControl()
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
     disconnect(netControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
     disconnect(netControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    disconnect(netControlThread, SIGNAL(resultData(NetActions, QStringList)), this, SLOT(resultReceiver(NetActions, QStringList)));
+    disconnect(netControlThread, SIGNAL(resultData(NetActions, Result)), this, SLOT(resultReceiver(NetActions, Result)));
     disconnect(netControlThread, SIGNAL(errorMsg(QString)), this, SLOT(msgRepeater(QString)));
 
     stopProcessing();
@@ -127,26 +127,26 @@ void VirtNetControl::setListHeader(QString &connName)
 }
 
 /* private slots */
-void VirtNetControl::resultReceiver(NetActions act, QStringList data)
+void VirtNetControl::resultReceiver(NetActions act, Result data)
 {
     //qDebug()<<act<<data<<"result";
     if ( act == GET_ALL_NETWORK ) {
-        if ( data.count() > virtNetModel->DataList.count() ) {
-            int _diff = data.count() - virtNetModel->DataList.count();
+        if ( data.msg.count() > virtNetModel->DataList.count() ) {
+            int _diff = data.msg.count() - virtNetModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtNetModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( virtNetModel->DataList.count() > data.count() ) {
-            int _diff = virtNetModel->DataList.count() - data.count();
+        if ( virtNetModel->DataList.count() > data.msg.count() ) {
+            int _diff = virtNetModel->DataList.count() - data.msg.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtNetModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QString _data, data) {
+        foreach (QString _data, data.msg) {
             QStringList chain = _data.split(" ");
             if (chain.isEmpty()) continue;
             int count = chain.size();
@@ -155,43 +155,26 @@ void VirtNetControl::resultReceiver(NetActions act, QStringList data)
             };
             i++;
         };
-    } else if ( act == CREATE_NETWORK ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
-        };
-    } else if ( act == DEFINE_NETWORK ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
-        };
-    } else if ( act == START_NETWORK ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
-        };
-    } else if ( act == DESTROY_NETWORK ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
-        };
-    } else if ( act == UNDEFINE_NETWORK ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
-        };
-    } else if ( act == CHANGE_NET_AUTOSTART ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
-            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
-        };
     } else if ( act == GET_NET_XML_DESC ) {
-        if ( !data.isEmpty() ) {
-            QString xml = data.first();
-            data.removeFirst();
-            data.append(QString("in <a href='%1'>%1</a>").arg(xml));
-            msgRepeater(data.join(" "));
+        if ( !data.msg.isEmpty() ) {
+            QString xml = data.msg.first();
+            data.msg.removeFirst();
+            data.msg.append(QString("in <a href='%1'>%1</a>").arg(xml));
+            msgRepeater(data.msg.join(" "));
             QDesktopServices::openUrl(QUrl(xml));
+        };
+    } else if ( act < GET_NET_XML_DESC ) {
+        if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
+        if ( data.result ) {
+            netControlThread->execAction(GET_ALL_NETWORK, QStringList());
+            // for different action's specified manipulation
+            switch (act) {
+            case NET_EMPTY_ACTION:
+                // some job;
+                break;
+            default:
+                break;
+            }
         };
     };
 }

@@ -1,13 +1,7 @@
 #ifndef DOM_CONTROL_THREAD_H
 #define DOM_CONTROL_THREAD_H
 
-#include <QThread>
-#include <QDir>
-#include <QTemporaryFile>
-#include <QStringList>
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
-#include <QDebug>
+#include "virt_objects/control_thread.h"
 
 enum DomActions {
     GET_ALL_DOMAIN,
@@ -27,32 +21,19 @@ enum DomActions {
     DOM_EMPTY_ACTION
 };
 
-struct Result {
-    QString         name   = QString();
-    bool            result = false;
-    QStringList     msg    = QStringList();
-};
-
-class DomControlThread : public QThread
+class DomControlThread : public ControlThread
 {
     Q_OBJECT
 public:
     explicit DomControlThread(QObject *parent = 0);
 
 signals:
-    void errorMsg(QString);
     void resultData(DomActions, Result);
 
 private:
-    DomActions       action;
-    QStringList      args;
-    bool             keep_alive;
-    virConnect      *currWorkConnect = NULL;
-    virErrorPtr      virtErrors;
+    DomActions  action;
 
 public slots:
-    bool setCurrentWorkConnect(virConnectPtr);
-    void stop();
     void execAction(DomActions, QStringList);
 
 private slots:
@@ -71,9 +52,6 @@ private slots:
     Result undefineDomain();
     Result changeAutoStartDomain();
     Result getDomainXMLDesc();
-
-    void sendConnErrors();
-    void sendGlobalErrors();
 
 };
 

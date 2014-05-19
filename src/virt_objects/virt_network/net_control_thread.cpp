@@ -1,19 +1,12 @@
 #include "net_control_thread.h"
 
 NetControlThread::NetControlThread(QObject *parent) :
-    QThread(parent)
+    ControlThread(parent)
 {
     qRegisterMetaType<NetActions>("NetActions");
 }
 
 /* public slots */
-bool NetControlThread::setCurrentWorkConnect(virConnectPtr conn)
-{
-    keep_alive = true;
-    currWorkConnect = conn;
-    //qDebug()<<"net_thread"<<currWorkConnect;
-}
-void NetControlThread::stop() { keep_alive = false; }
 void NetControlThread::execAction(NetActions act, QStringList _args)
 {
     if ( keep_alive && !isRunning() ) {
@@ -26,39 +19,40 @@ void NetControlThread::execAction(NetActions act, QStringList _args)
 /* private slots */
 void NetControlThread::run()
 {
-    QStringList result;
+    Result result;
     switch (action) {
     case GET_ALL_NETWORK :
-        result.append(getAllNetworkList());
+        result = getAllNetworkList();
         break;
     case CREATE_NETWORK :
-        result.append(createNetwork());
+        result = createNetwork();
         break;
     case DEFINE_NETWORK :
-        result.append(defineNetwork());
+        result = defineNetwork();
         break;
     case START_NETWORK :
-        result.append(startNetwork());
+        result = startNetwork();
         break;
     case DESTROY_NETWORK :
-        result.append(destroyNetwork());
+        result = destroyNetwork();
         break;
     case UNDEFINE_NETWORK :
-        result.append(undefineNetwork());
+        result = undefineNetwork();
         break;
     case CHANGE_NET_AUTOSTART :
-        result.append(changeAutoStartNetwork());
+        result = changeAutoStartNetwork();
         break;
     case GET_NET_XML_DESC :
-        result.append(getVirtNetXMLDesc());
+        result = getVirtNetXMLDesc();
         break;
     default:
         break;
     };
     emit resultData(action, result);
 }
-QStringList NetControlThread::getAllNetworkList()
+Result NetControlThread::getAllNetworkList()
 {
+    Result result;
     QStringList virtNetList;
     if ( currWorkConnect!=NULL && keep_alive ) {
         virNetworkPtr *network;
@@ -68,7 +62,7 @@ QStringList NetControlThread::getAllNetworkList()
         if ( ret<0 ) {
             sendConnErrors();
             free(network);
-            return virtNetList;
+            return result;
         };
 
         int i = 0;
@@ -90,11 +84,13 @@ QStringList NetControlThread::getAllNetworkList()
         };
         free(network);
     };
-    return virtNetList;
+    result.result = true;
+    result.msg = virtNetList;
+    return result;
 }
-QStringList NetControlThread::createNetwork()
+Result NetControlThread::createNetwork()
 {
-    QStringList result;
+    Result result;
     QString path = args.first();
     QByteArray xmlData;
     QFile f;
@@ -110,13 +106,16 @@ QStringList NetControlThread::createNetwork()
         sendConnErrors();
         return result;
     };
-    result.append(QString("'%1' Network from\n\"%2\"\nis created.").arg(virNetworkGetName(network)).arg(path));
+    result.name = QString().fromUtf8( virNetworkGetName(network) );
+    result.result = true;
+    result.msg.append(QString("'%1' Network from\n\"%2\"\nis created.")
+                      .arg(result.name).arg(path));
     virNetworkFree(network);
     return result;
 }
-QStringList NetControlThread::defineNetwork()
+Result NetControlThread::defineNetwork()
 {
-    QStringList result;
+    Result result;
     QString path = args.first();
     QByteArray xmlData;
     QFile f;
@@ -132,216 +131,101 @@ QStringList NetControlThread::defineNetwork()
         sendConnErrors();
         return result;
     };
-    result.append(QString("'%1' Network from\n\"%2\"\nis defined.").arg(virNetworkGetName(network)).arg(path));
+    result.name = QString().fromUtf8( virNetworkGetName(network) );
+    result.result = true;
+    result.msg.append(QString("'%1' Network from\n\"%2\"\nis defined.")
+                      .arg(result.name).arg(path));
     virNetworkFree(network);
     return result;
 }
-QStringList NetControlThread::startNetwork()
+Result NetControlThread::startNetwork()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
-    /*
-    virNetworkPtr *network;
-    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks( currWorkConnect, &network, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(network);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
-
-    int i = 0;
-    */
     bool started = false;
-    /*
-    while ( network[i] != NULL ) {
-        QString currNetName = QString( virNetworkGetName(network[i]) );
-        if ( !started && currNetName==name ) {
-            started = (virNetworkCreate(network[i])+1) ? true : false;
-            if (!started) sendGlobalErrors();
-        };
-        virNetworkFree(network[i]);
-        i++;
-    };
-    free(network);
-    */
     virNetworkPtr network = virNetworkLookupByName(currWorkConnect, name.toUtf8().data());
     if ( network!=NULL ) {
         started = (virNetworkCreate(network)+1) ? true : false;
         if (!started) sendConnErrors();
         virNetworkFree(network);
     } else sendConnErrors();
-    result.append(QString("'%1' Network %2 Started.").arg(name).arg((started)?"":"don't"));
+    result.name = name;
+    result.result = started;
+    result.msg.append(QString("'%1' Network %2 Started.")
+                      .arg(name).arg((started)?"":"don't"));
     return result;
 }
-QStringList NetControlThread::destroyNetwork()
+Result NetControlThread::destroyNetwork()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
-    /*
-    virNetworkPtr *network;
-    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks( currWorkConnect, &network, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(network);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
-
-    int i = 0;
-    */
     bool deleted = false;
-    /*
-    while ( network[i] != NULL ) {
-        QString currNetName = QString( virNetworkGetName(network[i]) );
-        if ( !deleted && currNetName==name ) {
-            deleted = (virNetworkDestroy(network[i])+1) ? true : false;
-            if (!deleted) sendGlobalErrors();
-        };
-        virNetworkFree(network[i]);
-        i++;
-    };
-    free(network);
-    */
     virNetworkPtr network = virNetworkLookupByName(currWorkConnect, name.toUtf8().data());
     if ( network!=NULL ) {
         deleted = (virNetworkDestroy(network)+1) ? true : false;
         if (!deleted) sendConnErrors();
         virNetworkFree(network);
     } else sendConnErrors();
-    result.append(QString("'%1' Network %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
+    result.name = name;
+    result.result = deleted;
+    result.msg.append(QString("'%1' Network %2 Destroyed.")
+                      .arg(name).arg((deleted)?"":"don't"));
     return result;
 }
-QStringList NetControlThread::undefineNetwork()
+Result NetControlThread::undefineNetwork()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
-    /*
-    virNetworkPtr *network;
-    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks( currWorkConnect, &network, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(network);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
-
-    int i = 0;
-    */
     bool deleted = false;
-    /*
-    while ( network[i] != NULL ) {
-        QString currNetName = QString( virNetworkGetName(network[i]) );
-        if ( !deleted && currNetName==name ) {
-            deleted = (virNetworkUndefine(network[i])+1) ? true : false;
-            if (!deleted) sendGlobalErrors();
-        };
-        virNetworkFree(network[i]);
-        i++;
-    };
-    free(network);
-    */
     virNetworkPtr network = virNetworkLookupByName(currWorkConnect, name.toUtf8().data());
     if ( network!=NULL ) {
         deleted = (virNetworkUndefine(network)+1) ? true : false;
         if (!deleted) sendConnErrors();
         virNetworkFree(network);
     } else sendConnErrors();
-    result.append(QString("'%1' Network %2 Undefined.").arg(name).arg((deleted)?"":"don't"));
+    result.name = name;
+    result.result = deleted;
+    result.msg.append(QString("'%1' Network %2 Undefined.")
+                      .arg(name).arg((deleted)?"":"don't"));
     return result;
 }
-QStringList NetControlThread::changeAutoStartNetwork()
+Result NetControlThread::changeAutoStartNetwork()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
+    result.name = name;
     int autostart;
     if ( args.count()<2 || args.at(1).isEmpty() ) {
-        result.append("Incorrect parameters.");
+        result.msg.append("Incorrect parameters.");
         return result;
     } else {
         bool converted;
         int res = args.at(1).toInt(&converted);
         if (converted) autostart = (res) ? 1 : 0;
         else {
-            result.append("Incorrect parameters.");
+            result.msg.append("Incorrect parameters.");
             return result;
         };
     };
-    /*
-    virNetworkPtr *network;
-    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks( currWorkConnect, &network, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(network);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
-
-    int i = 0;
-    */
     bool set = false;
-    /*
-    while ( network[i] != NULL ) {
-        QString currNetName = QString( virNetworkGetName(network[i]) );
-        if ( !set && currNetName==name ) {
-            set = (virNetworkSetAutostart(network[i], autostart)+1) ? true : false;
-            if (!set) sendGlobalErrors();
-        };
-        virNetworkFree(network[i]);
-        i++;
-    };
-    free(network);
-    */
     virNetworkPtr network = virNetworkLookupByName(currWorkConnect, name.toUtf8().data());
     if ( network!=NULL ) {
         set = (virNetworkSetAutostart(network, autostart)+1) ? true : false;
         if (!set) sendConnErrors();
         virNetworkFree(network);
     } else sendConnErrors();
-    result.append(QString("'%1' Network autostart %2 Set.").arg(name).arg((set)?"":"don't"));
+    result.result = set;
+    result.msg.append(QString("'%1' Network autostart %2 Set.")
+                      .arg(name).arg((set)?"":"don't"));
     return result;
 }
-QStringList NetControlThread::getVirtNetXMLDesc()
+Result NetControlThread::getVirtNetXMLDesc()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
-    /*
-    virNetworkPtr *network;
-    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks( currWorkConnect, &network, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-        free(network);
-        return result;
-    };
-    //qDebug()<<QString(virConnectGetURI(currWorkConnect));
-
-    int i = 0;
-    */
+    result.name = name;
     bool read = false;
     char *Returns = NULL;
-    /*
-    while ( network[i] != NULL ) {
-        QString currNetName = QString( virNetworkGetName(network[i]) );
-        if ( !read && currNetName==name ) {
-            Returns = (virNetworkGetXMLDesc(network[i], VIR_NETWORK_XML_INACTIVE));
-            if ( Returns==NULL ) sendGlobalErrors();
-            else read = true;
-        };
-        virNetworkFree(network[i]);
-        i++;
-    };
-    free(network);
-    */
     virNetworkPtr network = virNetworkLookupByName(currWorkConnect, name.toUtf8().data());
     if ( network!=NULL ) {
         Returns = (virNetworkGetXMLDesc(network, VIR_NETWORK_XML_INACTIVE));
@@ -354,27 +238,11 @@ QStringList NetControlThread::getVirtNetXMLDesc()
     f.setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml").arg(QDir::tempPath()).arg(QDir::separator()));
     read = f.open();
     if (read) f.write(Returns);
-    result.append(f.fileName());
+    result.msg.append(f.fileName());
     f.close();
     free(Returns);
-    result.append(QString("'%1' Network %2 XML'ed").arg(name).arg((read)?"":"don't"));
+    result.result = read;
+    result.msg.append(QString("'%1' Network %2 XML'ed")
+                      .arg(name).arg((read)?"":"don't"));
     return result;
-}
-
-void NetControlThread::sendConnErrors()
-{
-    virtErrors = virConnGetLastError(currWorkConnect);
-    if ( virtErrors!=NULL ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-        virResetError(virtErrors);
-    } else sendGlobalErrors();
-}
-void NetControlThread::sendGlobalErrors()
-{
-    virtErrors = virGetLastError();
-    if ( virtErrors!=NULL )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-    virResetLastError();
 }

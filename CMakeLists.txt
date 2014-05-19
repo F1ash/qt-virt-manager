@@ -24,6 +24,7 @@ set (HEADERS
   src/virt_objects/open_file_menu.h
   src/virt_objects/index.h
   src/virt_objects/model.h
+  src/virt_objects/control_thread.h
   
   src/virt_objects/virt_connect/conn_element.h
   src/virt_objects/virt_connect/conn_callbacks.h
@@ -121,6 +122,7 @@ set (SOURCES
   src/virt_objects/open_file_menu.cpp
   src/virt_objects/index.cpp
   src/virt_objects/model.cpp
+  src/virt_objects/control_thread.cpp
   
   src/virt_objects/virt_connect/conn_element.cpp
   src/virt_objects/virt_connect/conn_callbacks.cpp

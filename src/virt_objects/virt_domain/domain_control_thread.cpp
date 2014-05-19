@@ -1,20 +1,12 @@
 #include "domain_control_thread.h"
 
 DomControlThread::DomControlThread(QObject *parent) :
-    QThread(parent)
+    ControlThread(parent)
 {
     qRegisterMetaType<DomActions>("DomActions");
-    qRegisterMetaType<Result>("Result");
 }
 
 /* public slots */
-bool DomControlThread::setCurrentWorkConnect(virConnectPtr conn)
-{
-    keep_alive = true;
-    currWorkConnect = conn;
-    //qDebug()<<"net_thread"<<currWorkConnect;
-}
-void DomControlThread::stop() { keep_alive = false; }
 void DomControlThread::execAction(DomActions act, QStringList _args)
 {
     if ( keep_alive && !isRunning() ) {
@@ -240,10 +232,8 @@ Result DomControlThread::startDomain()
 {
     Result result;
     QString name = args.first();
-
     bool started = false;
     virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
-
     if ( domain!=NULL ) {
         started = (virDomainCreate(domain)+1) ? true : false;
         if (!started) sendConnErrors();
@@ -490,22 +480,4 @@ Result DomControlThread::getDomainXMLDesc()
     result.result = read;
     result.msg.append(QString("'%1' Domain %2 XML'ed").arg(name).arg((read)?"":"don't"));
     return result;
-}
-
-void DomControlThread::sendConnErrors()
-{
-    virtErrors = virConnGetLastError(currWorkConnect);
-    if ( virtErrors!=NULL ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-        virResetError(virtErrors);
-    } else sendGlobalErrors();
-}
-void DomControlThread::sendGlobalErrors()
-{
-    virtErrors = virGetLastError();
-    if ( virtErrors!=NULL )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-    virResetLastError();
 }

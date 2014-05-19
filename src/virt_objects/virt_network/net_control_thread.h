@@ -1,13 +1,7 @@
 #ifndef NET_CONTROL_THREAD_H
 #define NET_CONTROL_THREAD_H
 
-#include <QThread>
-#include <QDir>
-#include <QTemporaryFile>
-#include <QStringList>
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
-#include <QDebug>
+#include "virt_objects/control_thread.h"
 
 enum NetActions {
     GET_ALL_NETWORK,
@@ -21,41 +15,31 @@ enum NetActions {
     NET_EMPTY_ACTION
 };
 
-class NetControlThread : public QThread
+class NetControlThread : public ControlThread
 {
     Q_OBJECT
 public:
     explicit NetControlThread(QObject *parent = 0);
 
 signals:
-    void errorMsg(QString);
-    void resultData(NetActions, QStringList);
+    void resultData(NetActions, Result);
 
 private:
-    NetActions          action;
-    QStringList      args;
-    bool             keep_alive;
-    virConnect      *currWorkConnect = NULL;
-    virErrorPtr      virtErrors;
+    NetActions  action;
 
 public slots:
-    bool setCurrentWorkConnect(virConnectPtr);
-    void stop();
     void execAction(NetActions, QStringList);
 
 private slots:
     void run();
-    QStringList getAllNetworkList();
-    QStringList createNetwork();
-    QStringList defineNetwork();
-    QStringList startNetwork();
-    QStringList destroyNetwork();
-    QStringList undefineNetwork();
-    QStringList changeAutoStartNetwork();
-    QStringList getVirtNetXMLDesc();
-
-    void sendConnErrors();
-    void sendGlobalErrors();
+    Result getAllNetworkList();
+    Result createNetwork();
+    Result defineNetwork();
+    Result startNetwork();
+    Result destroyNetwork();
+    Result undefineNetwork();
+    Result changeAutoStartNetwork();
+    Result getVirtNetXMLDesc();
 
 };
 

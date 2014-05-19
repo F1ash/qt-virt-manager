@@ -43,7 +43,7 @@ public slots:
     void setListHeader(QString&);
 
 private slots:
-    void resultReceiver(NetActions, QStringList);
+    void resultReceiver(NetActions, Result);
     void msgRepeater(QString);
     void changeDockVisibility();
 
