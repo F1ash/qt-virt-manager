@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
-#include "qtermwidget/lib/qtermwidget.h"
+#include "qtermwidget/lib/vm_qtermwidget.h"
 #include <QDebug>
 
 class LXC_Viewer : public QWidget
@@ -33,14 +33,15 @@ public slots:
     void        close();
 
 private slots:
-    virDomain*  getDomainPtr() const;
-    void        registerStreamEvents();
-    void        unregisterStreamEvents();
-    static void        freeData(void*);
-    static void        streamCallBack(virStreamPtr, int, void*);
+    virDomain*      getDomainPtr() const;
+    void            registerStreamEvents();
+    void            unregisterStreamEvents();
+    static void     freeData(void*);
+    static void     streamCallBack(virStreamPtr, int, void*);
+    void            sendData(const QString&);
 
-    void        sendConnErrors();
-    void        sendGlobalErrors();
+    void            sendConnErrors();
+    void            sendGlobalErrors();
 
 };
 

@@ -9,3 +9,6 @@ created icon set & example's files;
 v.0.0.3 :
 implemented simple contol
 for virtual entities;
+
+v.0.0.4 :
+prepared qterminal for LXC;

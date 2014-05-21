@@ -1,9 +1,7 @@
 /*
     This source file is part of Konsole, a terminal emulator.
 
-    Copyright (C) 2007 by Robert Knight <robertknight@gmail.com>
-
-    Rewritten for QT4 by e_k <e_k at users.sourceforge.net>, Copyright (C)2008
+    Copyright 2007-2008 by Robert Knight <robertknight@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,82 +28,10 @@
 #include <QtGui/QKeySequence>
 #include <QtCore/QMetaType>
 #include <QtCore/QVarLengthArray>
-#include <QtCore>
 
-typedef void (*CleanUpFunction)();
-
-/**
- * @internal
- *
- * Helper class for K_GLOBAL_STATIC to clean up the object on library unload or application
- * shutdown.
- */
-class CleanUpGlobalStatic
-{
-    public:
-        CleanUpFunction func;
-
-        inline ~CleanUpGlobalStatic() { func(); }
-};
-
-
-//these directives are taken from the heart of kdecore
-
-# define K_GLOBAL_STATIC_STRUCT_NAME(NAME)
-
-#if QT_VERSION < 0x040400
-# define Q_BASIC_ATOMIC_INITIALIZER     Q_ATOMIC_INIT
-# define testAndSetOrdered              testAndSet
-#endif
-
-#define K_GLOBAL_STATIC(TYPE, NAME) K_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ())
-
-#define K_GLOBAL_STATIC_WITH_ARGS(TYPE, NAME, ARGS)                            \
-static QBasicAtomicPointer<TYPE > _k_static_##NAME = Q_BASIC_ATOMIC_INITIALIZER(0); \
-static bool _k_static_##NAME##_destroyed;                                      \
-static struct K_GLOBAL_STATIC_STRUCT_NAME(NAME)                                \
-{                                                                              \
-    bool isDestroyed()                                                         \
-    {                                                                          \
-        return _k_static_##NAME##_destroyed;                                   \
-    }                                                                          \
-    inline operator TYPE*()                                                    \
-    {                                                                          \
-        return operator->();                                                   \
-    }                                                                          \
-    inline TYPE *operator->()                                                  \
-    {                                                                          \
-        if (!_k_static_##NAME) {                                               \
-            if (isDestroyed()) {                                               \
-            qFatal("Fatal Error: Accessed global static '%s *%s()' after destruction. " \
-             "Defined at %s:%d", #TYPE, #NAME, __FILE__, __LINE__);		\
-	     }                                                                  \
-	     TYPE *x = new TYPE ARGS;                                           \
-	     if (!_k_static_##NAME.testAndSetOrdered(0, x)                      \
-	         && _k_static_##NAME != x ) {                                   \
-	         delete x;                                                      \
-	     } else { 								\
-		static CleanUpGlobalStatic cleanUpObject = { destroy };	\
-	     }   								\
-	 }                                                                      \
-         return _k_static_##NAME;                                               \
-    }            								\
-    inline TYPE &operator*()                                                   \
-    {                                                                          \
-        return *operator->();                                                  \
-    }                                                                          \
-    static void destroy()                                                      \
-    {                                                                          \
-        _k_static_##NAME##_destroyed = true;                                   \
-        TYPE *x = _k_static_##NAME;                                            \
-        _k_static_##NAME = 0;                                                  \
-        delete x;                                                              \
-    }                                                                          \
-} NAME;
-								
-								
-
-
+// Konsole
+//#include "konsole_export.h"
+#define KONSOLEPRIVATE_EXPORT
 
 class QIODevice;
 class QTextStream;
@@ -160,7 +86,9 @@ public:
          */
         AlternateScreenState = 8,
         /** Indicates that any of the modifier keys is active. */ 
-        AnyModifierState = 16
+        AnyModifierState = 16,
+        /** Indicates that the numpad is in application mode. */
+        ApplicationKeypadState = 32
     };
     Q_DECLARE_FLAGS(States,State)
 
@@ -183,8 +111,8 @@ public:
         ScrollLineDownCommand = 16,
         /** Toggles scroll lock mode */
         ScrollLockCommand = 32,
-		/** Echos the operating system specific erase character. */
-		EraseCommand = 64
+        /** Echos the operating system specific erase character. */
+        EraseCommand = 64
     };
     Q_DECLARE_FLAGS(Commands,Command)
 
@@ -384,7 +312,7 @@ public:
 
 private:
 
-    QHash<int,Entry> _entries; // entries in this keyboard translation,
+    QMultiHash<int,Entry> _entries; // entries in this keyboard translation,
                                                  // entries are indexed according to
                                                  // their keycode
     QString _name;
@@ -479,7 +407,7 @@ private:
     static bool parseAsModifier(const QString& item , Qt::KeyboardModifier& modifier);
     static bool parseAsStateFlag(const QString& item , KeyboardTranslator::State& state);
     static bool parseAsKeyCode(const QString& item , int& keyCode);
-   	static bool parseAsCommand(const QString& text , KeyboardTranslator::Command& command);
+       static bool parseAsCommand(const QString& text , KeyboardTranslator::Command& command);
 
     QIODevice* _source;
     QString _description;
@@ -515,7 +443,7 @@ private:
  * Manages the keyboard translations available for use by terminal sessions,
  * see KeyboardTranslator.
  */
-class KeyboardTranslatorManager
+class KONSOLEPRIVATE_EXPORT KeyboardTranslatorManager
 {
 public:
     /** 
@@ -566,7 +494,7 @@ public:
    static KeyboardTranslatorManager* instance();
 
 private:
-    static const char* defaultTranslatorText;
+    static const QByteArray defaultTranslatorText;
     
     void findTranslators(); // locate the available translators
     KeyboardTranslator* loadTranslator(const QString& name); // loads the translator 
@@ -579,6 +507,8 @@ private:
     QHash<QString,KeyboardTranslator*> _translators; // maps translator-name -> KeyboardTranslator
                                                      // instance
     bool _haveLoadedAll;
+
+    static KeyboardTranslatorManager * theKeyboardTranslatorManager;
 };
 
 inline int KeyboardTranslator::Entry::keyCode() const { return _keyCode; }

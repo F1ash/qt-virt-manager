@@ -41,17 +41,20 @@ LXC_Viewer::LXC_Viewer(QWidget *parent, virConnect *conn, QString str) :
                 emit errorMsg(msg);
             };
             if ( ret ) {
-                //ret = ::openpty(&master_fd, &slave_fd, &namePTY, NULL, NULL);
                 registerStreamEvents();
-                display = new QTermWidget();
+                display = new QTermWidget(0, this);
                 QFont font = QApplication::font();
                 font.setFamily("Mono");
                 font.setPointSize(12);
                 display->setTerminalFont(font);
-                //display->setColorScheme(COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW);
                 display->setScrollBarPosition(QTermWidget::ScrollBarRight);
+                //display->setShellProgram("/usr/bin/mc");
+                //connect(display, SIGNAL(receivedData(const QString&)),
+                //        this, SLOT(sendData(const QString&)));
                 connect(display, SIGNAL(finished()), this, SLOT(close()));
+                connect(display, SIGNAL(destroyed()), this, SLOT(close()));
                 commonLayout->addWidget(display);
+                display->startShellProgram();
                 if ( ret<0 ) {
                     msg = QString("Open PTY Error...");
                     emit errorMsg(msg);
@@ -69,6 +72,10 @@ LXC_Viewer::~LXC_Viewer()
 {
     unregisterStreamEvents();
     if ( display!=NULL ) {
+        //disconnect(display, SIGNAL(receivedData(const QString&)),
+        //           this, SLOT(sendData(const QString&)));
+        disconnect(display, SIGNAL(finished()), this, SLOT(close()));
+        disconnect(display, SIGNAL(destroyed()), this, SLOT(close()));
         delete display;
         display = 0;
     };
@@ -85,6 +92,7 @@ LXC_Viewer::~LXC_Viewer()
 /* public slots */
 void LXC_Viewer::close()
 {
+    commonLayout->removeWidget(display);
     this->close();
 }
 
@@ -162,6 +170,10 @@ void LXC_Viewer::streamCallBack(virStreamPtr _stream, int events, void *opaque)
     default:
         break;
     }
+}
+void LXC_Viewer::sendData(const QString &text)
+{
+    qDebug()<<text<<"received";
 }
 
 void LXC_Viewer::sendConnErrors()

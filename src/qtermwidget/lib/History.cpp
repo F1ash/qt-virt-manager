@@ -1,8 +1,6 @@
 /*
     This file is part of Konsole, an X terminal.
-    Copyright (C) 1997,1998 by Lars Doelle <lars.doelle@on-line.de>
-
-    Rewritten for QT4 by e_k <e_k at users.sourceforge.net>, Copyright (C)2008
+    Copyright 1997,1998 by Lars Doelle <lars.doelle@on-line.de>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,9 +31,15 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include <QtDebug>
+
+// KDE
+//#include <kde_file.h>
+//#include <kdebug.h>
 
 // Reasonable line size
-#define LINE_SIZE	1024
+#define LINE_SIZE    1024
+#define KDE_lseek lseek
 
 using namespace Konsole;
 
@@ -86,7 +90,7 @@ FIXME: There is noticeable decrease in speed, also. Perhaps,
 HistoryFile::HistoryFile()
   : ion(-1),
     length(0),
-	fileMap(0)
+    fileMap(0)
 {
   if (tmpFile.open())
   { 
@@ -97,8 +101,8 @@ HistoryFile::HistoryFile()
 
 HistoryFile::~HistoryFile()
 {
-	if (fileMap)
-		unmap();
+    if (fileMap)
+        unmap();
 }
 
 //TODO:  Mapping the entire file in will cause problems if the history file becomes exceedingly large,
@@ -106,42 +110,42 @@ HistoryFile::~HistoryFile()
 //to avoid this.
 void HistoryFile::map()
 {
-	assert( fileMap == 0 );
+    assert( fileMap == 0 );
 
-	fileMap = (char*)mmap( 0 , length , PROT_READ , MAP_PRIVATE , ion , 0 );
+    fileMap = (char*)mmap( 0 , length , PROT_READ , MAP_PRIVATE , ion , 0 );
 
     //if mmap'ing fails, fall back to the read-lseek combination
     if ( fileMap == MAP_FAILED )
     {
             readWriteBalance = 0; 
             fileMap = 0;
-            qDebug() << ": mmap'ing history failed.  errno = " << errno;
+            qDebug() << __FILE__ << __LINE__ << ": mmap'ing history failed.  errno = " << errno;
     }
 }
 
 void HistoryFile::unmap()
 {
-	int result = munmap( fileMap , length );
-	assert( result == 0 );
+    int result = munmap( fileMap , length );
+    assert( result == 0 ); Q_UNUSED( result );
 
-	fileMap = 0;
+    fileMap = 0;
 }
 
 bool HistoryFile::isMapped()
 {
-	return (fileMap != 0);
+    return (fileMap != 0);
 }
 
 void HistoryFile::add(const unsigned char* bytes, int len)
 {
   if ( fileMap )
-		  unmap();
-		
+          unmap();
+        
   readWriteBalance++;
 
   int rc = 0;
 
-  rc = lseek(ion,length,SEEK_SET); if (rc < 0) { perror("HistoryFile::add.seek"); return; }
+  rc = KDE_lseek(ion,length,SEEK_SET); if (rc < 0) { perror("HistoryFile::add.seek"); return; }
   rc = write(ion,bytes,len);       if (rc < 0) { perror("HistoryFile::add.write"); return; }
   length += rc;
 }
@@ -154,21 +158,21 @@ void HistoryFile::get(unsigned char* bytes, int len, int loc)
   //file to improve performance.
   readWriteBalance--;
   if ( !fileMap && readWriteBalance < MAP_THRESHOLD )
-		  map();
+          map();
 
   if ( fileMap )
   {
-	for (int i=0;i<len;i++)
-			bytes[i]=fileMap[loc+i];
+    for (int i=0;i<len;i++)
+            bytes[i]=fileMap[loc+i];
   }
   else
-  {	
-  	int rc = 0;
+  {    
+      int rc = 0;
 
-  	if (loc < 0 || len < 0 || loc + len > length)
-    	fprintf(stderr,"getHist(...,%d,%d): invalid args.\n",len,loc);
-  	rc = lseek(ion,loc,SEEK_SET); if (rc < 0) { perror("HistoryFile::get.seek"); return; }
-  	rc = read(ion,bytes,len);     if (rc < 0) { perror("HistoryFile::get.read"); return; }
+      if (loc < 0 || len < 0 || loc + len > length)
+        fprintf(stderr,"getHist(...,%d,%d): invalid args.\n",len,loc);
+      rc = KDE_lseek(ion,loc,SEEK_SET); if (rc < 0) { perror("HistoryFile::get.seek"); return; }
+      rc = read(ion,bytes,len);     if (rc < 0) { perror("HistoryFile::get.read"); return; }
   }
 }
 
@@ -244,11 +248,11 @@ int HistoryScrollFile::startOfLine(int lineno)
   if (lineno <= 0) return 0;
   if (lineno <= getLines())
     { 
-	
-	if (!index.isMapped())
-			index.map();
-	
-	int res;
+    
+    if (!index.isMapped())
+            index.map();
+    
+    int res;
     index.get((unsigned char*)&res,sizeof(int),(lineno-1)*sizeof(int));
     return res;
     }
@@ -268,7 +272,7 @@ void HistoryScrollFile::addCells(const Character text[], int count)
 void HistoryScrollFile::addLine(bool previousWrapped)
 {
   if (index.isMapped())
-		  index.unmap();
+          index.unmap();
 
   int locn = cells.len();
   index.add((unsigned char*)&locn,sizeof(int));
@@ -352,7 +356,7 @@ bool HistoryScrollBuffer::isWrappedLine(int lineNumber)
     return false;
 }
 
-void HistoryScrollBuffer::getCells(int lineNumber, int startColumn, int count, Character* buffer)
+void HistoryScrollBuffer::getCells(int lineNumber, int startColumn, int count, Character buffer[])
 {
   if ( count == 0 ) return;
 
@@ -393,6 +397,7 @@ void HistoryScrollBuffer::setMaxNbLines(unsigned int lineCount)
     delete[] oldBuffer;
 
     _wrappedLine.resize(lineCount);
+    dynamic_cast<HistoryTypeBuffer*>(m_histType)->m_nbLines = lineCount;
 }
 
 int HistoryScrollBuffer::bufferIndex(int lineNumber)
@@ -525,6 +530,258 @@ void HistoryScrollBlockArray::addCells(const Character a[], int count)
 void HistoryScrollBlockArray::addLine(bool)
 {
 }
+
+////////////////////////////////////////////////////////////////
+// Compact History Scroll //////////////////////////////////////
+////////////////////////////////////////////////////////////////
+void* CompactHistoryBlock::allocate ( size_t length )
+{
+ Q_ASSERT ( length > 0 );
+  if ( tail-blockStart+length > blockLength )
+    return NULL;
+
+  void* block = tail;
+  tail += length;
+  //kDebug() << "allocated " << length << " bytes at address " << block;
+  allocCount++;
+  return block;
+}
+
+void CompactHistoryBlock::deallocate ( )
+{
+  allocCount--;
+  Q_ASSERT ( allocCount >= 0 );
+}
+
+void* CompactHistoryBlockList::allocate(size_t size)
+{
+  CompactHistoryBlock* block;
+  if ( list.isEmpty() || list.last()->remaining() < size)
+  {
+    block = new CompactHistoryBlock();
+    list.append ( block );
+    //kDebug() << "new block created, remaining " << block->remaining() << "number of blocks=" << list.size();
+  }
+  else
+  {
+    block = list.last();
+    //kDebug() << "old block used, remaining " << block->remaining();
+  }
+  return block->allocate(size);
+}
+
+void CompactHistoryBlockList::deallocate(void* ptr)
+{
+  Q_ASSERT( !list.isEmpty());
+  
+  int i=0;  
+  CompactHistoryBlock *block = list.at(i);
+  while ( i<list.size() && !block->contains(ptr) )
+  { 
+    i++;
+    block=list.at(i);
+  }
+
+  Q_ASSERT( i<list.size() );
+  
+  block->deallocate();
+
+  if (!block->isInUse())
+  {
+    list.removeAt(i);
+    delete block;
+    //kDebug() << "block deleted, new size = " << list.size();
+  }
+}
+
+CompactHistoryBlockList::~CompactHistoryBlockList()
+{
+  qDeleteAll ( list.begin(), list.end() );
+  list.clear();
+}
+
+void* CompactHistoryLine::operator new (size_t size, CompactHistoryBlockList& blockList)
+{
+  return blockList.allocate(size);
+}
+
+CompactHistoryLine::CompactHistoryLine ( const TextLine& line, CompactHistoryBlockList& bList ) 
+  : blockList(bList),
+    formatLength(0)
+{
+  length=line.size();
+      
+  if (line.size() > 0) {
+    formatLength=1;
+    int k=1;
+  
+    // count number of different formats in this text line
+    Character c = line[0];
+    while ( k<length )
+    {
+      if ( !(line[k].equalsFormat(c)))
+      {
+        formatLength++; // format change detected
+        c=line[k];
+      }
+      k++;
+    }
+  
+    //kDebug() << "number of different formats in string: " << formatLength;
+    formatArray = (CharacterFormat*) blockList.allocate(sizeof(CharacterFormat)*formatLength);
+    Q_ASSERT (formatArray!=NULL);
+    text = (quint16*) blockList.allocate(sizeof(quint16)*line.size());
+    Q_ASSERT (text!=NULL);
+  
+    length=line.size();
+    formatLength=formatLength;
+    wrapped=false;
+  
+    // record formats and their positions in the format array
+    c=line[0];
+    formatArray[0].setFormat ( c );
+    formatArray[0].startPos=0;                        // there's always at least 1 format (for the entire line, unless a change happens)
+  
+    k=1;                                              // look for possible format changes
+    int j=1;
+    while ( k<length && j<formatLength )
+    {
+      if (!(line[k].equalsFormat(c)))
+      {
+        c=line[k];
+        formatArray[j].setFormat(c);
+        formatArray[j].startPos=k;
+        //kDebug() << "format entry " << j << " at pos " << formatArray[j].startPos << " " << &(formatArray[j].startPos) ;
+        j++;
+      }
+      k++;
+    }
+  
+    // copy character values
+    for ( int i=0; i<line.size(); i++ )
+    {
+      text[i]=line[i].character;
+      //kDebug() << "char " << i << " at mem " << &(text[i]);
+    }
+  }
+  //kDebug() << "line created, length " << length << " at " << &(length);
+}
+
+CompactHistoryLine::~CompactHistoryLine()
+{
+  //kDebug() << "~CHL";
+  if (length>0) {
+    blockList.deallocate(text);
+    blockList.deallocate(formatArray);
+  }
+  blockList.deallocate(this);  
+}
+
+void CompactHistoryLine::getCharacter ( int index, Character &r )
+{
+  Q_ASSERT ( index < length );
+  int formatPos=0;
+  while ( ( formatPos+1 ) < formatLength && index >= formatArray[formatPos+1].startPos )
+    formatPos++;
+
+  r.character=text[index];
+  r.rendition = formatArray[formatPos].rendition;
+  r.foregroundColor = formatArray[formatPos].fgColor;
+  r.backgroundColor = formatArray[formatPos].bgColor;
+}
+
+void CompactHistoryLine::getCharacters ( Character* array, int length, int startColumn )
+{
+  Q_ASSERT ( startColumn >= 0 && length >= 0 );
+  Q_ASSERT ( startColumn+length <= ( int ) getLength() );
+
+  for ( int i=startColumn; i<length+startColumn; i++ )
+  {
+    getCharacter ( i, array[i-startColumn] );
+  }
+}
+
+CompactHistoryScroll::CompactHistoryScroll ( unsigned int maxLineCount )
+    : HistoryScroll ( new CompactHistoryType ( maxLineCount ) )
+    ,lines()
+    ,blockList()
+{
+  //kDebug() << "scroll of length " << maxLineCount << " created";
+  setMaxNbLines ( maxLineCount );
+}
+
+CompactHistoryScroll::~CompactHistoryScroll()
+{
+  qDeleteAll ( lines.begin(), lines.end() );
+  lines.clear();
+}
+
+void CompactHistoryScroll::addCellsVector ( const TextLine& cells )
+{
+  CompactHistoryLine *line;
+  line = new(blockList) CompactHistoryLine ( cells, blockList );
+
+  if ( lines.size() > ( int ) _maxLineCount )
+  {
+    delete lines.takeAt ( 0 );
+  }
+  lines.append ( line );
+}
+
+void CompactHistoryScroll::addCells ( const Character a[], int count )
+{
+  TextLine newLine ( count );
+  qCopy ( a,a+count,newLine.begin() );
+  addCellsVector ( newLine );
+}
+
+void CompactHistoryScroll::addLine ( bool previousWrapped )
+{
+  CompactHistoryLine *line = lines.last();
+  //kDebug() << "last line at address " << line;
+  line->setWrapped(previousWrapped);
+}
+
+int CompactHistoryScroll::getLines()
+{
+  return lines.size();
+}
+
+int CompactHistoryScroll::getLineLen ( int lineNumber )
+{
+  Q_ASSERT ( lineNumber >= 0 && lineNumber < lines.size() );
+  CompactHistoryLine* line = lines[lineNumber];
+  //kDebug() << "request for line at address " << line;
+  return line->getLength();
+}
+
+
+void CompactHistoryScroll::getCells ( int lineNumber, int startColumn, int count, Character buffer[] )
+{
+  if ( count == 0 ) return;
+  Q_ASSERT ( lineNumber < lines.size() );
+  CompactHistoryLine* line = lines[lineNumber];
+  Q_ASSERT ( startColumn >= 0 );
+  Q_ASSERT ( (unsigned int)startColumn <= line->getLength() - count );
+  line->getCharacters ( buffer, count, startColumn );
+}
+
+void CompactHistoryScroll::setMaxNbLines ( unsigned int lineCount )
+{
+  _maxLineCount = lineCount;
+
+  while (lines.size() > (int) lineCount) {
+    delete lines.takeAt(0);
+  }
+  //kDebug() << "set max lines to: " << _maxLineCount;
+}
+
+bool CompactHistoryScroll::isWrappedLine ( int lineNumber )
+{
+  Q_ASSERT ( lineNumber < lines.size() );
+  return lines[lineNumber]->isWrapped();
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // History Types
@@ -695,4 +952,36 @@ HistoryScroll* HistoryTypeFile::scroll(HistoryScroll *old) const
 int HistoryTypeFile::maximumLineCount() const
 {
   return 0;
+}
+
+//////////////////////////////
+
+CompactHistoryType::CompactHistoryType ( unsigned int nbLines )
+    : m_nbLines ( nbLines )
+{
+}
+
+bool CompactHistoryType::isEnabled() const
+{
+  return true;
+}
+
+int CompactHistoryType::maximumLineCount() const
+{
+  return m_nbLines;
+}
+
+HistoryScroll* CompactHistoryType::scroll ( HistoryScroll *old ) const
+{
+  if ( old )
+  {
+    CompactHistoryScroll *oldBuffer = dynamic_cast<CompactHistoryScroll*> ( old );
+    if ( oldBuffer )
+    {
+      oldBuffer->setMaxNbLines ( m_nbLines );
+      return oldBuffer;
+    }
+    delete old;
+  }
+  return new CompactHistoryScroll ( m_nbLines );
 }

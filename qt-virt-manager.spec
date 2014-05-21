@@ -1,7 +1,7 @@
 %global cmake_build_dir build-cmake
 
 Name:           qt-virt-manager
-Version:        0.0.3
+Version:        0.0.4
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -44,13 +44,25 @@ popd
 %check
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
+%post
+ldconfig
+
+%postun
+ldconfig
+
 %files
 %doc README.md LICENSE Licenses Changelog
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/%{name}
+%{_datadir}/vm_qtermwidget
+%{_libdir}/libvm_qtermwidget.so*
 
 %changelog
+* Wed May 21 2014 Fl@sh <kaperang07@gmail.com> - 0.0.4-1
+- added glibc-headers to BR;
+- added shared library path to %%files;
+
 * Fri Apr 25 2014 Fl@sh <kaperang07@gmail.com> - 0.0.3-1
 - added scrub to R optionally;
 
