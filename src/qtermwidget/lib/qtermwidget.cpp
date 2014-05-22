@@ -21,7 +21,7 @@
 #include <QtGui/qlayoutitem.h>
 #include <QtGui/qsizepolicy.h>
 #include "SearchBar.h"
-#include "vm_qtermwidget.h"
+#include "qtermwidget.h"
 #include "ColorTables.h"
 
 #include "Session.h"

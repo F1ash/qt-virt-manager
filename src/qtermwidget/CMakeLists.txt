@@ -1,4 +1,4 @@
-###| Cmake vm_qtermwidget |###
+###| Cmake qtermwidget |###
 
 option(BUILD_DESIGNER_PLUGIN "Build Qt4 designer plugin" ON)
 
@@ -6,15 +6,15 @@ option(BUILD_DESIGNER_PLUGIN "Build Qt4 designer plugin" ON)
 cmake_minimum_required( VERSION 2.4 )
 
 #| Project
-project( vm_qtermwidget )
+project( qtermwidget )
 
 #| Library Versioning
 #|	Libraries are not versioned by default
-set ( vm_qtermwidget_VERSION_MAJOR "0" )
-set ( vm_qtermwidget_VERSION_MINOR "4" )
-set ( vm_qtermwidget_VERSION_PATCH "0" )
-set ( vm_qtermwidget_VERSION 
-	"${vm_qtermwidget_VERSION_MAJOR}.${vm_qtermwidget_VERSION_MINOR}.${vm_qtermwidget_VERSION_PATCH}"
+set ( qtermwidget_VERSION_MAJOR "0" )
+set ( qtermwidget_VERSION_MINOR "4" )
+set ( qtermwidget_VERSION_PATCH "0" )
+set ( qtermwidget_VERSION 
+	"${qtermwidget_VERSION_MAJOR}.${qtermwidget_VERSION_MINOR}.${qtermwidget_VERSION_PATCH}"
 )
 
 subdirs( 
@@ -39,9 +39,9 @@ ADD_CUSTOM_TARGET(uninstall
 
 
 # make dist custom target
-SET(CPACK_PACKAGE_NAME "vm_qtermwidget")
+SET(CPACK_PACKAGE_NAME "qtermwidget")
 # TODO/FIXME: versioning from player subdir... I don't know why it's separated...
-SET(CPACK_PACKAGE_VERSION ${vm_qtermwidget_VERSION})
+SET(CPACK_PACKAGE_VERSION ${qtermwidget_VERSION})
 SET(CPACK_SOURCE_GENERATOR "TGZ;TBZ2")
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 SET(CPACK_IGNORE_FILES "/CVS/;/\\\\.svn/;/\\\\.git/;\\\\.swp$;\\\\.#;/#;\\\\.tar.gz$;/CMakeFiles/;CMakeCache.txt;\\\\.qm$;/build/;\\\\.diff$;.DS_Store'")

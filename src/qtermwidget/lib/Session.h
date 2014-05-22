@@ -489,8 +489,8 @@ private:
 
     int            _uniqueIdentifier;
 
-    Pty           *_shellProcess;
-    Emulation     *_emulation;
+    Pty     *_shellProcess;
+    Emulation  *  _emulation;
 
     QList<TerminalDisplay *> _views;
 

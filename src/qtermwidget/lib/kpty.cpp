@@ -240,7 +240,7 @@ bool KPty::open()
 #elif defined(PTM_DEVICE)
     d->masterFd = ::open(PTM_DEVICE, O_RDWR|O_NOCTTY);
 #else
-    qWarning()<< "No method to open a PTY master detected.";
+# error No method to open a PTY master detected.
 #endif
     if (d->masterFd >= 0) {
 #ifdef HAVE_PTSNAME

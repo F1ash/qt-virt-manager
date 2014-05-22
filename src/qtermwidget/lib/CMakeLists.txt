@@ -1,11 +1,11 @@
-###| CMAKE vm_qtermwidget/lib |###
+###| CMAKE qtermwidget/lib |###
 
 #| 2.6 is out, but most distros only have 2.4
 cmake_minimum_required ( VERSION 2.4 )
 include(CheckFunctionExists)
 
 #| Project
-project ( vm_qtermwidget )
+project ( qtermwidget )
 
 
 IF (NOT LIB_SUFFIX)
@@ -51,7 +51,7 @@ set ( SRCS
     kptydevice.cpp
     kptyprocess.cpp
     Pty.cpp
-    vm_qtermwidget.cpp
+    qtermwidget.cpp
     Screen.cpp
     ScreenWindow.cpp
     SearchBar.cpp
@@ -73,7 +73,7 @@ set ( HDRS
     kptydevice.h
     kptyprocess.h
     Pty.h
-    vm_qtermwidget.h
+    qtermwidget.h
     ScreenWindow.h
     SearchBar.h
     Session.h   
@@ -82,7 +82,7 @@ set ( HDRS
 )
 
 set ( HDRS_DISTRIB
-	${CMAKE_SOURCE_DIR}/lib/vm_qtermwidget.h )
+	${CMAKE_SOURCE_DIR}/lib/qtermwidget.h )
 
 
 #| Qt4 Required Options
@@ -94,7 +94,7 @@ QT4_WRAP_CPP ( MOC_SRCS ${HDRS} ) # Moc's the headers
 
 QT4_WRAP_UI(UI_SRCS SearchBar.ui)
 
-#| vm_qtermwidget specific
+#| qtermwidget specific
 include_directories ( ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}) # You mark some of the headers as global, so I just add the source directory to the includes
 
 
@@ -102,11 +102,11 @@ include_directories ( ${PROJECT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}) # You m
 set ( SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share )
 message ( STATUS "Share dire: ${SHARE_DIR}" )
 
-set ( KB_LAYOUT_DIR ${CMAKE_INSTALL_PREFIX}/share/vm_qtermwidget/kb-layouts/ )
+set ( KB_LAYOUT_DIR ${CMAKE_INSTALL_PREFIX}/share/qtermwidget/kb-layouts/ )
 message ( STATUS "Keyboard layouts will be installed in: ${KB_LAYOUT_DIR}" )
 add_definitions( -DKB_LAYOUT_DIR="\\"${KB_LAYOUT_DIR}\\"" )
 
-set ( COLORSCHEMES_DIR ${CMAKE_INSTALL_PREFIX}/share/vm_qtermwidget/color-schemes/ )
+set ( COLORSCHEMES_DIR ${CMAKE_INSTALL_PREFIX}/share/qtermwidget/color-schemes/ )
 message ( STATUS "Color schemes will be insatlled in: ${COLORSCHEMES_DIR}" )
 add_definitions( -DCOLORSCHEMES_DIR="\\"${COLORSCHEMES_DIR}\\"" )
 
@@ -124,12 +124,12 @@ endif (HAVE_UPDWTMPX)
 
 
 #| Create the Library
-#add_library( vm_qtermwidget STATIC ${SRCS} ${MOC_SRCS} )
-add_library ( vm_qtermwidget SHARED ${SRCS} ${MOC_SRCS} ${UI_SRCS})
+#add_library( qtermwidget STATIC ${SRCS} ${MOC_SRCS} )
+add_library ( qtermwidget SHARED ${SRCS} ${MOC_SRCS} ${UI_SRCS})
 
 if (APPLE)
     # this is a must to load the lib correctly
-    set_target_properties( vm_qtermwidget PROPERTIES
+    set_target_properties( qtermwidget PROPERTIES
                             INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX} )
 endif (APPLE)
 
@@ -145,19 +145,19 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 #| Library Properties
-set_target_properties ( vm_qtermwidget PROPERTIES
+set_target_properties ( qtermwidget PROPERTIES
 	#OUTPUT_NAME "alternateName"
 	#PREFIX "lib"
-	SOVERSION ${vm_qtermwidget_VERSION_MAJOR}
+	SOVERSION ${qtermwidget_VERSION_MAJOR}
 	#SUFFIX "so"
-	VERSION ${vm_qtermwidget_VERSION}
+	VERSION ${qtermwidget_VERSION}
 )
 
 #| Link Qt4 Libraries
-target_link_libraries ( vm_qtermwidget ${QT_LIBRARIES} )
+target_link_libraries ( qtermwidget ${QT_LIBRARIES} )
 
-install(TARGETS vm_qtermwidget DESTINATION lib${LIB_SUFFIX})
-#install(FILES ${HDRS_DISTRIB} DESTINATION include)
+install(TARGETS qtermwidget DESTINATION lib${LIB_SUFFIX})
+install(FILES ${HDRS_DISTRIB} DESTINATION include)
 
 # keyboard layouts
 install(DIRECTORY kb-layouts/ DESTINATION ${KB_LAYOUT_DIR} FILES_MATCHING PATTERN "*.keytab" )
@@ -179,27 +179,27 @@ if (BUILD_DESIGNER_PLUGIN)
     QT4_ADD_RESOURCES( DESIGNER_QRC designer/qtermwidgetplugin.qrc)
 
     link_directories(${CMAKE_BINARY_DIR})
-    add_library( vm_qtermwidgetplugin SHARED
+    add_library( qtermwidgetplugin SHARED
         ${DESIGNER_MOC}
         ${DESIGNER_QRC}
         ${DESIGNER_SRC}
     )
-    add_dependencies(vm_qtermwidgetplugin vm_qtermwidget)
+    add_dependencies(qtermwidgetplugin qtermwidget)
 
-    target_link_libraries( vm_qtermwidgetplugin
+    target_link_libraries( qtermwidgetplugin
         ${QT_QTCORE_LIBRARY}
         ${QT_QTDESIGNER_LIBRARY}
         ${QT_QTDESIGNERCOMPONENTS_LIBRARY}
-        vm_qtermwidget
+        qtermwidget
     )
 
     if (APPLE)
         # this is a must to load the lib correctly
-        set_target_properties( vm_qtermwidgetplugin PROPERTIES
+        set_target_properties( qtermwidgetplugin PROPERTIES
                                 INSTALL_NAME_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/qt4/plugins/designer )
     endif (APPLE)
 
-    #install( TARGETS vm_qtermwidgetplugin DESTINATION ${QT_PLUGINS_DIR}/designer )
-    install( TARGETS vm_qtermwidgetplugin DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/qt4/plugins/designer )
+    #install( TARGETS qtermwidgetplugin DESTINATION ${QT_PLUGINS_DIR}/designer )
+    install( TARGETS qtermwidgetplugin DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/qt4/plugins/designer )
 
 endif (BUILD_DESIGNER_PLUGIN)

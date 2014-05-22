@@ -2,7 +2,8 @@
 #define CONN_ALIVE_THREAD_H
 
 #include <QThread>
-#include "conn_callbacks.h"
+#include "libvirt/libvirt.h"
+#include "libvirt/virterror.h"
 #include <QDebug>
 
 enum CONN_STATE {
@@ -10,6 +11,12 @@ enum CONN_STATE {
     STOPPED,
     RUNNING
 };
+
+struct Keep_Alive {
+    bool       state;
+    QString    msg;
+};
+static Keep_Alive*     conn_keep_alive;
 
 class ConnAliveThread : public QThread
 {
@@ -23,7 +30,6 @@ signals:
     void changeConnState(CONN_STATE);
 
 private:
-    bool            keep_alive;
     QString         URI;
 
     virConnectPtr   conn = NULL;
@@ -43,7 +49,9 @@ private slots:
     void sendConnErrors();
     void sendGlobalErrors();
     void registerConnEvents();
-    void deregisterConnEvents();
+    void unregisterConnEvents();
+    static void     freeData(void*);
+    static void     connEventCallBack(virConnectPtr, int, void*);
 
 };
 

@@ -4,7 +4,7 @@ if (NOT CMAKE_INSTALL_PREFIX)
 endif ()
 
 cmake_minimum_required (VERSION 2.8.3)
-add_subdirectory("src/qtermwidget/lib/")
+include(CheckFunctionExists)
 
 set (PROJECT_NAME qt-virt-manager)
 set (PROJECT_VERSION 1.0.0)
@@ -28,7 +28,6 @@ set (HEADERS
   src/virt_objects/control_thread.h
   
   src/virt_objects/virt_connect/conn_element.h
-  src/virt_objects/virt_connect/conn_callbacks.h
   src/virt_objects/virt_connect/conn_alive_thread.h
   
   src/virt_objects/virt_domain/domain_control.h
@@ -75,36 +74,36 @@ set (HEADERS
   src/vm_viewer/lxc/lxc_viewer.h
 
   # qtermwidget
-  #src/qtermwidget/lib/Filter.h                
-  #src/qtermwidget/lib/kpty_p.h
-  #src/qtermwidget/lib/BlockArray.h
-  #src/qtermwidget/lib/CharacterColor.h
-  #src/qtermwidget/lib/History.h               
-  #src/qtermwidget/lib/kptyprocess.h     
-  #src/qtermwidget/lib/Session.h
-  #src/qtermwidget/lib/Character.h       
-  #src/qtermwidget/lib/LineFont.h
-  #src/qtermwidget/lib/HistorySearch.h
-  #src/qtermwidget/lib/ShellCommand.h
-  #src/qtermwidget/lib/ColorScheme.h  
-  #src/qtermwidget/lib/Pty.h             
-  #src/qtermwidget/lib/TerminalCharacterDecoder.h
-  #src/qtermwidget/lib/KeyboardTranslator.h    
-  #src/qtermwidget/lib/ColorTables.h     
-  #src/qtermwidget/lib/qtermwidget.h     
-  #src/qtermwidget/lib/TerminalDisplay.h
-  #src/qtermwidget/lib/konsole_wcwidth.h
-  #src/qtermwidget/lib/DefaultTranslatorText.h
-  #src/qtermwidget/lib/tools.h
-  #src/qtermwidget/lib/kprocess.h              
-  #src/qtermwidget/lib/Screen.h          
-  #src/qtermwidget/lib/Vt102Emulation.h
-  #src/qtermwidget/lib/Emulation.h                  
-  #src/qtermwidget/lib/ScreenWindow.h
-  #src/qtermwidget/lib/ExtendedDefaultTranslator.h  
-  #src/qtermwidget/lib/kptydevice.h            
-  #src/qtermwidget/lib/kpty.h                  
-  #src/qtermwidget/lib/SearchBar.h
+  src/qtermwidget/lib/Filter.h                
+  src/qtermwidget/lib/kpty_p.h
+  src/qtermwidget/lib/BlockArray.h
+  src/qtermwidget/lib/CharacterColor.h
+  src/qtermwidget/lib/History.h               
+  src/qtermwidget/lib/kptyprocess.h     
+  src/qtermwidget/lib/Session.h
+  src/qtermwidget/lib/Character.h       
+  src/qtermwidget/lib/LineFont.h
+  src/qtermwidget/lib/HistorySearch.h
+  src/qtermwidget/lib/ShellCommand.h
+  src/qtermwidget/lib/ColorScheme.h  
+  src/qtermwidget/lib/Pty.h             
+  src/qtermwidget/lib/TerminalCharacterDecoder.h
+  src/qtermwidget/lib/KeyboardTranslator.h    
+  src/qtermwidget/lib/ColorTables.h     
+  src/qtermwidget/lib/qtermwidget.h     
+  src/qtermwidget/lib/TerminalDisplay.h
+  src/qtermwidget/lib/konsole_wcwidth.h
+  src/qtermwidget/lib/DefaultTranslatorText.h
+  src/qtermwidget/lib/tools.h
+  src/qtermwidget/lib/kprocess.h              
+  src/qtermwidget/lib/Screen.h          
+  src/qtermwidget/lib/Vt102Emulation.h
+  src/qtermwidget/lib/Emulation.h                  
+  src/qtermwidget/lib/ScreenWindow.h
+  src/qtermwidget/lib/ExtendedDefaultTranslator.h  
+  src/qtermwidget/lib/kptydevice.h            
+  src/qtermwidget/lib/kpty.h                  
+  src/qtermwidget/lib/SearchBar.h
 )
 set (SOURCES 
   src/main.cpp
@@ -126,7 +125,6 @@ set (SOURCES
   src/virt_objects/control_thread.cpp
   
   src/virt_objects/virt_connect/conn_element.cpp
-  src/virt_objects/virt_connect/conn_callbacks.cpp
   src/virt_objects/virt_connect/conn_alive_thread.cpp
   
   src/virt_objects/virt_domain/domain_control.cpp
@@ -172,55 +170,83 @@ set (SOURCES
   src/vm_viewer/lxc/lxc_viewer.cpp
 
   # qtermwidget
-  #src/qtermwidget/lib/BlockArray.cpp
-  #src/qtermwidget/lib/History.cpp             
-  #src/qtermwidget/lib/kptyprocess.cpp   
-  #src/qtermwidget/lib/Session.cpp
-  #src/qtermwidget/lib/HistorySearch.cpp        
-  #src/qtermwidget/lib/ShellCommand.cpp
-  #src/qtermwidget/lib/LineFont.src      
-  #src/qtermwidget/lib/ColorScheme.cpp              
-  #src/qtermwidget/lib/Pty.cpp           
-  #src/qtermwidget/lib/TerminalCharacterDecoder.cpp
-  #src/qtermwidget/lib/KeyboardTranslator.cpp
-  #src/qtermwidget/lib/qtermwidget.cpp   
-  #src/qtermwidget/lib/TerminalDisplay.cpp
-  #src/qtermwidget/lib/konsole_wcwidth.cpp
-  #src/qtermwidget/lib/default.keytab
-  #src/qtermwidget/lib/tools.cpp
-  #src/qtermwidget/lib/kprocess.cpp            
-  #src/qtermwidget/lib/Screen.cpp        
-  #src/qtermwidget/lib/Vt102Emulation.cpp
-  #src/qtermwidget/lib/Emulation.cpp                
-  #src/qtermwidget/lib/kpty.cpp                
-  #src/qtermwidget/lib/ScreenWindow.cpp  
-  #src/qtermwidget/lib/kptydevice.cpp          
-  #src/qtermwidget/lib/SearchBar.cpp
-  #src/qtermwidget/lib/Filter.cpp
+  src/qtermwidget/lib/BlockArray.cpp
+  src/qtermwidget/lib/History.cpp             
+  src/qtermwidget/lib/kptyprocess.cpp   
+  src/qtermwidget/lib/Session.cpp
+  src/qtermwidget/lib/HistorySearch.cpp        
+  src/qtermwidget/lib/ShellCommand.cpp
+  src/qtermwidget/lib/LineFont.src      
+  src/qtermwidget/lib/ColorScheme.cpp              
+  src/qtermwidget/lib/Pty.cpp           
+  src/qtermwidget/lib/TerminalCharacterDecoder.cpp
+  src/qtermwidget/lib/KeyboardTranslator.cpp
+  src/qtermwidget/lib/qtermwidget.cpp   
+  src/qtermwidget/lib/TerminalDisplay.cpp
+  src/qtermwidget/lib/konsole_wcwidth.cpp
+  src/qtermwidget/lib/default.keytab
+  src/qtermwidget/lib/tools.cpp
+  src/qtermwidget/lib/kprocess.cpp            
+  src/qtermwidget/lib/Screen.cpp        
+  src/qtermwidget/lib/Vt102Emulation.cpp
+  src/qtermwidget/lib/Emulation.cpp                
+  src/qtermwidget/lib/kpty.cpp                
+  src/qtermwidget/lib/ScreenWindow.cpp  
+  src/qtermwidget/lib/kptydevice.cpp          
+  src/qtermwidget/lib/SearchBar.cpp
+  src/qtermwidget/lib/Filter.cpp
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE ${PROJECT_NAME}.desktop)
 
 project (${PROJECT_NAME})
 
-include_directories (${CMAKE_CURRENT_BINARY_DIR} ${SOURCES_DIRS} "src/qtermwidget/lib/")
-link_directories ("src/qtermwidget/lib/")
+include_directories (${CMAKE_CURRENT_BINARY_DIR} ${SOURCES_DIRS})
 find_package (Qt4 COMPONENTS QtCore QtGui QtXml REQUIRED)
 include (${QT_USE_FILE})
 qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
+QT4_WRAP_UI(UI_SRCS src/qtermwidget/lib/SearchBar.ui)
 set (BUILD_PROJECT_LIBRARIES ${QT_LIBRARIES})
 
+
+# dirs
+set ( KB_LAYOUT_DIR ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME}/kb-layouts/ )
+message ( STATUS "Keyboard layouts will be installed in: ${KB_LAYOUT_DIR}" )
+add_definitions( -DKB_LAYOUT_DIR="\\"${KB_LAYOUT_DIR}\\"" )
+
+set ( COLORSCHEMES_DIR ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME}/color-schemes/ )
+message ( STATUS "Color schemes will be insatlled in: ${COLORSCHEMES_DIR}" )
+add_definitions( -DCOLORSCHEMES_DIR="\\"${COLORSCHEMES_DIR}\\"" )
+
+#| Defines
+add_definitions ( -DHAVE_POSIX_OPENPT -DHAVE_SYS_TIME_H )
+#add_definitions( -DHAVE_GETPT )
+if (APPLE)
+    add_definitions( -DHAVE_UTMPX -D_UTMPX_COMPAT )
+endif (APPLE)
+
+CHECK_FUNCTION_EXISTS(updwtmpx HAVE_UPDWTMPX)
+if (HAVE_UPDWTMPX)
+    add_definitions( -DHAVE_UPDWTMPX )
+endif (HAVE_UPDWTMPX)
+
 # * build & install application & files
-add_executable (${PROJECT_NAME} ${HEADERS} ${SOURCES} ${MOC_SOURCES})
+add_executable (${PROJECT_NAME} ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS})
 target_link_libraries (${PROJECT_NAME}
     ${BUILD_PROJECT_LIBRARIES}
     virt
     util
-    vm_qtermwidget
 )
 
 install (TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 install (FILES ${DESKTOP_FILE} DESTINATION ${SHARE_INSTALL_PREFIX}/applications)
 install (DIRECTORY src/misc src/icons
   DESTINATION ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME})
+# keyboard layouts
+install(DIRECTORY src/qtermwidget/lib/kb-layouts/
+  DESTINATION ${KB_LAYOUT_DIR} FILES_MATCHING PATTERN "*.keytab" )
+# color schemes
+install(DIRECTORY src/qtermwidget/lib/color-schemes/
+  DESTINATION ${COLORSCHEMES_DIR} FILES_MATCHING PATTERN "*.*schem*")
+
 # * end

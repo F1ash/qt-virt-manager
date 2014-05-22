@@ -17,7 +17,7 @@ include_directories (
     ${CMAKE_CURRENT_BINARY_DIR}/../lib
 )
 
-set(QTERMWIDGET_LIB vm_qtermwidget)
+set(QTERMWIDGET_LIB qtermwidget)
 link_directories(${PROJECT_BINARY_DIR}/../)
 
 #| Qt4 Required Options
@@ -33,7 +33,7 @@ endif(COMMAND cmake_policy)
 #| Create the Library
 add_executable ( test ${SRCS} )
 
-add_dependencies(test vm_qtermwidget)
+add_dependencies(test qtermwidget)
 
 #| Set Build Type
 set ( CMAKE_BUILD_TYPE

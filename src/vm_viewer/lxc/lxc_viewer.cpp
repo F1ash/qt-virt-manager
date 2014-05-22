@@ -108,7 +108,7 @@ void LXC_Viewer::registerStreamEvents()
                                         VIR_STREAM_EVENT_HANGUP |
                                         VIR_STREAM_EVENT_READABLE |
                                         VIR_STREAM_EVENT_WRITABLE,
-                                        streamCallBack, NULL, freeData);
+                                        streamEventCallBack, NULL, freeData);
     if (ret<0) sendConnErrors();
 }
 void LXC_Viewer::unregisterStreamEvents()
@@ -116,12 +116,12 @@ void LXC_Viewer::unregisterStreamEvents()
     int ret = virStreamEventRemoveCallback(stream);
     if (ret<0) sendConnErrors();
 }
-void LXC_Viewer::freeData(void * opaque)
+void LXC_Viewer::freeData(void *opaque)
 {
     void *data = opaque;
     free(data);
 }
-void LXC_Viewer::streamCallBack(virStreamPtr _stream, int events, void *opaque)
+void LXC_Viewer::streamEventCallBack(virStreamPtr _stream, int events, void *opaque)
 {
     uint length = 0;
     int got, saved, step, recvd;
