@@ -66,52 +66,53 @@ MainWindow::~MainWindow()
   disconnect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
              this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
 
-  qDebug()<<"processing stopped";
   if ( wait_thread!=NULL ) {
       disconnect(wait_thread, SIGNAL(finished()), this, SLOT(closeEvent()));
       disconnect(wait_thread, SIGNAL(refreshProcessingState()), this, SLOT(stopProcessing()));
       delete wait_thread;
       wait_thread = 0;
   };
-  //foreach (QString name, VM_Displayed_Map.keys()) {
-  //    VM_Viewer *wdg = VM_Displayed_Map.value(name);
-  //    if ( wdg!=NULL ) {
-  //        delete wdg;
-  //        wdg = 0;
-  //    }
-  //};
+  qDebug()<<"processing stopped";
   VM_Displayed_Map.clear();
+  qDebug()<<"Viewers cleared";
 
   delete logDockContent;
   logDockContent = 0;
   delete logDock;
   logDock = 0;
+  qDebug()<<"LogDock cleared";
 
   delete domainDockContent;
   domainDockContent = 0;
   delete domainDock;
   domainDock = 0;
+  qDebug()<<"DomDock cleared";
 
   delete networkDockContent;
   networkDockContent = 0;
   delete networkDock;
   networkDock = 0;
+  qDebug()<<"NetDock cleared";
 
   delete storageVolDockContent;
   storageVolDockContent = 0;
   delete storageVolDock;
   storageVolDock = 0;
+  qDebug()<<"SVolDock cleared";
 
   delete storagePoolDockContent;
   storagePoolDockContent = 0;
   delete storagePoolDock;
   storagePoolDock = 0;
+  qDebug()<<"SPoolDock cleared";
 
   delete connListWidget;
   connListWidget = 0;
+  qDebug()<<"ConnListWdg cleared";
 
   delete toolBar;
   toolBar = 0;
+  qDebug()<<"ToolBar cleared";
 
   delete trayIcon;
   trayIcon = 0;

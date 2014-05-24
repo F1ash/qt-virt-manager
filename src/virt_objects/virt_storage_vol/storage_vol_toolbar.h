@@ -38,7 +38,7 @@ private:
 
     QSettings        settings;
     int              interval;
-    int              timerId;
+    int              timerId = 0;
 
 private slots:
     void timerEvent(QTimerEvent*);

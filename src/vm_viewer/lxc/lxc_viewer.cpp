@@ -92,7 +92,7 @@ LXC_Viewer::~LXC_Viewer()
 /* public slots */
 void LXC_Viewer::close()
 {
-    commonLayout->removeWidget(display);
+    //commonLayout->removeWidget(display);
     this->close();
 }
 
@@ -118,8 +118,10 @@ void LXC_Viewer::unregisterStreamEvents()
 }
 void LXC_Viewer::freeData(void *opaque)
 {
-    void *data = opaque;
-    free(data);
+    if ( opaque!=NULL ) {
+        void *data = opaque;
+        free(data);
+    }
 }
 void LXC_Viewer::streamEventCallBack(virStreamPtr _stream, int events, void *opaque)
 {

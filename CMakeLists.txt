@@ -6,6 +6,32 @@ endif ()
 cmake_minimum_required (VERSION 2.8.3)
 include(CheckFunctionExists)
 
+IF (NOT LIB_SUFFIX)
+    MESSAGE(STATUS "")
+    MESSAGE(STATUS "LIB_SUFFIX variable is not defined. It will be autodetected now.")
+    MESSAGE(STATUS "You can set it manually with -DLIB_SUFFIX=<value> (64 for example)")
+    IF (NOT APPLE)
+        # check 64 bit
+        if (CMAKE_SIZEOF_VOID_P EQUAL 4)
+            SET (LIB_SUFFIX "")
+        else (CMAKE_SIZEOF_VOID_P EQUAL 4)
+            set (LIB_SUFFIX "64")
+            MESSAGE(STATUS "   LIB_SUFFIX is set to '${LIB_SUFFIX}'")
+        endif (CMAKE_SIZEOF_VOID_P EQUAL 4)
+    ELSE (NOT APPLE)
+        message(STATUS "LIB_SUFFIX is disabled for APPLE: ${CMAKE_SYSTEM_NAME}")
+        SET (LIB_SUFFIX "")
+    ENDIF (NOT APPLE)
+    # BSD does not use lib64 for 64bit libs
+    IF (${CMAKE_SYSTEM_NAME} MATCHES "(FreeBSD|OpenBSD)")
+        message(STATUS "LIB_SUFFIX is disabled for *BSD: ${CMAKE_SYSTEM_NAME}")
+        SET (LIB_SUFFIX "")
+    ENDIF()
+    #
+    MESSAGE(STATUS "")
+ENDIF (NOT LIB_SUFFIX)
+
+
 set (PROJECT_NAME qt-virt-manager)
 set (PROJECT_VERSION 1.0.0)
 set (HEADERS 

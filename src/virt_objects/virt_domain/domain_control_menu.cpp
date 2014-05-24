@@ -37,7 +37,7 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         getXMLDesc->setEnabled(true);
         display = new QAction("display VM", this);
         display->setIcon(QIcon::fromTheme("display"));
-        display->setEnabled(true);
+        display->setEnabled(parameters[1]=="active");
 
         addAction(start);
         addAction(pause);
