@@ -32,7 +32,7 @@ ConnectList::~ConnectList()
       disconnect(connects->value(key), SIGNAL(warning(QString&)), this, SLOT(sendWarning(QString&)));
       disconnect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(sendConnPtr(virConnect*, QString&)));
   };
-  //connects->clear();
+  connects->clear();
   delete connects;
   connects = 0;
 }

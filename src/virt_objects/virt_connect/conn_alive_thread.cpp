@@ -9,36 +9,28 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
     QThread(parent)
 {
     qRegisterMetaType<CONN_STATE>("CONN_STATE");
+    connect(this, SIGNAL(connectClosed(int)), this, SLOT(closeConnect(int)));
 }
 ConnAliveThread::~ConnAliveThread()
 {
+    disconnect(this, SIGNAL(connectClosed(int)), this, SLOT(closeConnect(int)));
     conn = NULL;
     virtErrors = NULL;
-    conn_keep_alive.remove(connName);
 }
 
 /* public slots */
-bool ConnAliveThread::setData(QString &name, QString &uri)
-{
-    connName = name;
-    URI = uri;
-    bool res = !conn_keep_alive.contains(connName);
-    if (res) {
-        conn_keep_alive.insert(connName, new Keep_Alive);
-    };
-    return res;
-}
+void ConnAliveThread::setData(QString &uri) { URI = uri; }
 void ConnAliveThread::setKeepAlive(bool b)
 {
-    conn_keep_alive.value(connName)->state = b;
-    if ( isRunning() && !conn_keep_alive.value(connName)->state ) {
+    keep_alive = b;
+    if ( isRunning() && !keep_alive ) {
         closeConnect();
         terminate();
     };
 }
 bool ConnAliveThread::getKeepAlive() const
 {
-    return conn_keep_alive.value(connName)->state;
+    return keep_alive;
 }
 virConnect* ConnAliveThread::getConnect() const
 {
@@ -51,9 +43,9 @@ void ConnAliveThread::run()
     openConnect();
     int probe = 0;
     int ret;
-    if ( conn_keep_alive.value(connName)->state && registered ) {
+    if ( keep_alive && registered ) {
         /* Use if virEventRegisterDefaultImpl() is registered */
-        ret = virConnectSetKeepAlive(conn, 60, 5);
+        ret = virConnectSetKeepAlive(conn, 10, 3);
         if ( ret<0 ) {
             sendConnErrors();
             closeConnect();
@@ -62,7 +54,7 @@ void ConnAliveThread::run()
         } else {
             emit connMsg( "Set keepalive messages." );
         };
-        while ( conn_keep_alive.value(connName)->state ) {
+        while ( keep_alive ) {
             if ( virEventRunDefaultImpl() < 0 ) {
                 sendConnErrors();
                 if ( ++probe>2 ) break;
@@ -74,7 +66,7 @@ void ConnAliveThread::run()
          * A connection will be classed as alive if it is either local,
          * or running over a channel (TCP or UNIX socket) which is not closed.
          */
-        while ( conn_keep_alive.value(connName)->state ) {
+        while ( keep_alive ) {
             msleep(500);
             ret = virConnectIsAlive(conn);
             if ( ret<0 ) {
@@ -86,11 +78,10 @@ void ConnAliveThread::run()
             };
         };
     };
-    if ( conn_keep_alive.value(connName)->state ) closeConnect();
+    if ( keep_alive ) closeConnect();
 }
 void ConnAliveThread::openConnect()
 {
-    conn_keep_alive.value(connName)->msg.clear();
     if ( virInitialize()+1 ) {
         registered = (virEventRegisterDefaultImpl()==0)?true:false;
         emit connMsg( QString("default event implementation registered: %1").arg(QVariant(registered).toString()) );
@@ -102,11 +93,11 @@ void ConnAliveThread::openConnect()
     //qDebug()<<"openConn"<<conn;
     if (conn==NULL) {
         sendConnErrors();
-        conn_keep_alive.value(connName)->state = false;
+        keep_alive = false;
         emit connMsg( "Connection to the Hypervisor is failed." );
         emit changeConnState(FAILED);
     } else {
-        conn_keep_alive.value(connName)->state = true;
+        keep_alive = true;
         emit connMsg( QString("connect opened: %1").arg(QVariant(conn!=NULL).toString()) );
         emit changeConnState(RUNNING);
         registerConnEvents();
@@ -114,13 +105,9 @@ void ConnAliveThread::openConnect()
 }
 void ConnAliveThread::closeConnect()
 {
-    conn_keep_alive.value(connName)->state = false;
-    if ( !conn_keep_alive.value(connName)->msg.isEmpty() ) {
-        emit connMsg(conn_keep_alive.value(connName)->msg);
-        conn_keep_alive.value(connName)->msg.clear();
-    };
-    unregisterConnEvents();
+    keep_alive = false;
     if ( conn!=NULL ) {
+        unregisterConnEvents();
         int ret = virConnectClose(conn);
         if ( ret<0 ) {
             sendConnErrors();
@@ -155,8 +142,8 @@ void ConnAliveThread::registerConnEvents()
 {
     int ret = virConnectRegisterCloseCallback(conn,
                                               connEventCallBack,
-                                              NULL,
-                                              freeData);
+                                              this,
+                                              NULL);
     if (ret<0) sendConnErrors();
 }
 void ConnAliveThread::unregisterConnEvents()
@@ -173,25 +160,40 @@ void ConnAliveThread::freeData(void *opaque)
 }
 void ConnAliveThread::connEventCallBack(virConnectPtr _conn, int reason, void *opaque)
 {
+    static_cast<ConnAliveThread*>(opaque)->closeConnect(reason);
+}
+void ConnAliveThread::closeConnect(int reason)
+{
+    CONN_STATE state;
+    keep_alive = false;
     switch (reason) {
     case VIR_CONNECT_CLOSE_REASON_ERROR:
-        conn_keep_alive.value(connName)->msg.append("Misc I/O error");
+        emit connMsg("Connect closed: Misc I/O error");
+        state = FAILED;
         break;
     case VIR_CONNECT_CLOSE_REASON_EOF:
-        conn_keep_alive.value(connName)->msg.append("End-of-file from server");
+        emit connMsg("Connect closed: End-of-file from server");
+        state = FAILED;
         break;
     case VIR_CONNECT_CLOSE_REASON_KEEPALIVE:
-        conn_keep_alive.value(connName)->msg.append("Keepalive timer triggered");
+        emit connMsg("Connect closed: Keepalive timer triggered");
+        state = STOPPED;
         break;
     case VIR_CONNECT_CLOSE_REASON_CLIENT:
-        conn_keep_alive.value(connName)->msg.append("Client requested it");
+        emit connMsg("Connect closed: Client requested it");
+        state = STOPPED;
         break;
     default:
+        emit connMsg("Connect closed: Unknown reason");
+        state = FAILED;
         break;
     };
-    conn_keep_alive.value(connName)->state = false;
-    freeData(opaque);
-    virConnectClose(_conn);
-    _conn = NULL;
-    emit connMsg("78686868");
+    int ret = virConnectClose(conn);
+    if ( ret<0 ) {
+        sendConnErrors();
+    } else {
+        emit connMsg( QString("close exit code: %1").arg(ret) );
+    };
+    conn = NULL;
+    emit changeConnState(state);
 }

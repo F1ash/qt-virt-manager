@@ -12,14 +12,6 @@ enum CONN_STATE {
     RUNNING
 };
 
-struct Keep_Alive {
-    static bool       state;
-    static QString    msg;
-};
-
-typedef QMap<QString, Keep_Alive*> KEEP_ALIVE;
-#define conn_keep_alive  KEEP_ALIVE()
-
 class ConnAliveThread : public QThread
 {
     Q_OBJECT
@@ -30,17 +22,18 @@ public:
 signals:
     void connMsg(const QString&);
     void changeConnState(CONN_STATE);
+    void connectClosed(int);
 
 private:
-    static QString         connName;
-    QString         URI      = QString();
+    bool            keep_alive;
+    QString         URI = QString();
 
     virConnectPtr   conn = NULL;
     virErrorPtr     virtErrors;
     bool            registered;
 
 public slots:
-    bool            setData(QString&, QString&);
+    void            setData(QString&);
     void            setKeepAlive(bool);
     bool            getKeepAlive() const;
     virConnect*     getConnect() const;
@@ -55,6 +48,7 @@ private slots:
     void unregisterConnEvents();
     static void     freeData(void*);
     static void     connEventCallBack(virConnectPtr, int, void*);
+    void closeConnect(int);
 
 };
 

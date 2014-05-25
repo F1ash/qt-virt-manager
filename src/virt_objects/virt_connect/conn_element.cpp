@@ -48,7 +48,7 @@ void ElemConnect::openConnect()
     conn_Status.insert("isRunning", QVariant(RUNNING));
     own_index->setData(conn_Status);
     buildCommand();
-    connAliveThread->setData(name, URI);
+    connAliveThread->setData(URI);
     connAliveThread->start();
     if (!waitTimerId) {
         waitTimerId = startTimer(1000);
