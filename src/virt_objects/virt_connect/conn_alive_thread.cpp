@@ -1,8 +1,7 @@
 #include "conn_alive_thread.h"
 
 /*
- * TODO: Implement virConnectRegisterCloseCallback()
- * & some event callbacks if necessary.
+ * TODO: Implement some event callbacks if necessary.
  */
 
 ConnAliveThread::ConnAliveThread(QObject *parent) :
@@ -143,6 +142,7 @@ void ConnAliveThread::registerConnEvents()
     int ret = virConnectRegisterCloseCallback(conn,
                                               connEventCallBack,
                                               this,
+    // don't register freeData, because it remove this thread
                                               NULL);
     if (ret<0) sendConnErrors();
 }

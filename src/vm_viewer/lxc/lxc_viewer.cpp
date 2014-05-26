@@ -70,8 +70,8 @@ LXC_Viewer::LXC_Viewer(QWidget *parent, virConnect *conn, QString str) :
 }
 LXC_Viewer::~LXC_Viewer()
 {
-    unregisterStreamEvents();
     if ( display!=NULL ) {
+        unregisterStreamEvents();
         //disconnect(display, SIGNAL(receivedData(const QString&)),
         //           this, SLOT(sendData(const QString&)));
         disconnect(display, SIGNAL(finished()), this, SLOT(close()));
@@ -108,7 +108,9 @@ void LXC_Viewer::registerStreamEvents()
                                         VIR_STREAM_EVENT_HANGUP |
                                         VIR_STREAM_EVENT_READABLE |
                                         VIR_STREAM_EVENT_WRITABLE,
-                                        streamEventCallBack, NULL, freeData);
+                                        streamEventCallBack, this,
+    //  don't register freeCallback, because it remove viewer
+                                        NULL);
     if (ret<0) sendConnErrors();
 }
 void LXC_Viewer::unregisterStreamEvents()
@@ -125,6 +127,7 @@ void LXC_Viewer::freeData(void *opaque)
 }
 void LXC_Viewer::streamEventCallBack(virStreamPtr _stream, int events, void *opaque)
 {
+    LXC_Viewer *obj = static_cast<LXC_Viewer*>(opaque);
     uint length = 0;
     int got, saved, step, recvd;
     char buf[BLOCK_SIZE];

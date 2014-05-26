@@ -32,6 +32,7 @@
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
 #include <QtCore/QTimer>
+#include <QDebug>
 
 // Konsole
 //#include "konsole_export.h"
