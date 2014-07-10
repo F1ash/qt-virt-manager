@@ -28,6 +28,7 @@ private:
     QAction        *undefine;
     QAction        *autoStart;
     QAction        *getXMLDesc;
+    QAction        *migrate;
     QAction        *display;
     QAction        *reload;
     QStringList     parameters;

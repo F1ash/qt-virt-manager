@@ -46,7 +46,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     stopOverview_Action->setIcon(QIcon::fromTheme("overview-stop"));
     stopOverview_Action->setToolTip("Close Pool Overview");
     _autoReload = new QPushButton(this);
-    _autoReload->setToolTip("AutoReload Pool Overview");
+    _autoReload->setToolTip("AutoReload Volume Overview");
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
     _autoReload->setCheckable(true);
 

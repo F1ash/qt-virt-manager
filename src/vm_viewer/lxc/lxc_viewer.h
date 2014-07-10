@@ -7,6 +7,7 @@
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
 #include "qtermwidget/lib/qtermwidget.h"
+#include <unistd.h>
 #include <QDebug>
 
 class LXC_Viewer : public QWidget
@@ -20,6 +21,7 @@ signals:
     void errorMsg(QString&);
 
 private:
+    QString         terminalToStream;
     QString         domain;
     virDomain      *domainPtr = NULL;
     virConnect     *jobConnect = NULL;
@@ -28,17 +30,22 @@ private:
     QVBoxLayout    *commonLayout;
     virErrorPtr     virtErrors = NULL;
     virStream      *stream = NULL;
+    int             ptySlaveFd = -1;
 
 public slots:
     void            close();
 
 private slots:
     virDomain*      getDomainPtr() const;
-    void            registerStreamEvents();
-    void            unregisterStreamEvents();
+    int             registerStreamEvents();
+    int             unregisterStreamEvents();
     static void     freeData(void*);
     static void     streamEventCallBack(virStreamPtr, int, void*);
-    void            sendData(const QString&);
+    void            updateStreamEvents(virStreamPtr, int);
+    void            sendDataToDisplay(virStreamPtr);
+    void            sendDataToVMachine(virStreamPtr);
+    void            sendDataToVMachine(const QByteArray&);
+    void            streamClosed();
 
     void            sendConnErrors();
     void            sendGlobalErrors();

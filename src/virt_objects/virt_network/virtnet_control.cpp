@@ -159,7 +159,7 @@ void VirtNetControl::resultReceiver(NetActions act, Result data)
         if ( !data.msg.isEmpty() ) {
             QString xml = data.msg.first();
             data.msg.removeFirst();
-            data.msg.append(QString("in <a href='%1'>%1</a>").arg(xml));
+            data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
             msgRepeater(data.msg.join(" "));
             QDesktopServices::openUrl(QUrl(xml));
         };
@@ -270,7 +270,7 @@ void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
                     xml = createVirtNet->getXMLDescFileName();
                     QStringList data;
                     data.append("New Network XML'ed");
-                    data.append(QString("in <a href='%1'>%1</a>").arg(xml));
+                    data.append(QString("to <a href='%1'>%1</a>").arg(xml));
                     msgRepeater(data.join(" "));
                     QDesktopServices::openUrl(QUrl(xml));
                 };

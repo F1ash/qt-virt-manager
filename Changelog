@@ -12,3 +12,11 @@ for virtual entities;
 
 v.0.0.4 :
 prepared qterminal for LXC;
+
+0.1.7 :
+implemented the daemon mode application;
+changed open connect method to OpenAuth;
+implemented domain migration;
+implemented domain close event;
+added migrate icons & some fixes;
+probe to implement LXC-terminal (fail);

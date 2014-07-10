@@ -175,7 +175,7 @@ void VirtStorageVolControl::resultReceiver(StorageVolActions act, QStringList da
         if ( !data.isEmpty() ) {
             QString xml = data.first();
             data.removeFirst();
-            data.append(QString("in <a href='%1'>%1</a>").arg(xml));
+            data.append(QString("to <a href='%1'>%1</a>").arg(xml));
             msgRepeater(data.join(" "));
             QDesktopServices::openUrl(QUrl(xml));
         };

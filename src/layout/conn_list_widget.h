@@ -3,6 +3,7 @@
 
 #include <QTreeView>
 #include <QMessageBox>
+#include <QInputDialog>
 #include "conn_menu.h"
 #include "conn_item_model.h"
 #include "progressbar_delegate.h"
@@ -11,6 +12,7 @@
 
 #define TO_RUN true
 #define TO_STOP false
+typedef QMap<QString, ElemConnect*> CONN_LIST;
 
 class ConnectList : public QTreeView
 {
@@ -19,8 +21,8 @@ public:
     ConnectList(QWidget *parent);
     ~ConnectList();
 
-    QMap<QString, ElemConnect*>  *connects;
-    ConnItemModel                *connItemModel;
+    CONN_LIST           *connects;
+    ConnItemModel       *connItemModel;
 
 signals:
     void clickedItem(QString);
@@ -37,6 +39,7 @@ public slots:
     void openConnect(QModelIndex&);
     void showConnect(QModelIndex&);
     void closeConnect(QModelIndex&);
+    virConnectPtr getConnect(QString&);
 
 private :
     ConnSettings         *sDialog;
@@ -55,6 +58,7 @@ private slots:
     void sendWarning(QString&);
     void mainWindowUp();
     void sendConnPtr(virConnect*, QString&);
+    void getAuthCredentials(QString&);
 };
 
 #endif   // CONN_LIST_WIDGET_H

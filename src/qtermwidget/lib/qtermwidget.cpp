@@ -17,13 +17,12 @@
 */
 
 #include <QLayout>
-#include <QtGui/qboxlayout.h>
-#include <QtGui/qlayoutitem.h>
-#include <QtGui/qsizepolicy.h>
-#include "SearchBar.h"
-#include "qtermwidget.h"
-#include "ColorTables.h"
+#include <QBoxLayout>
+#include <QtDebug>
+#include <QDir>
+#include <QMessageBox>
 
+#include "ColorTables.h"
 #include "Session.h"
 #include "Screen.h"
 #include "ScreenWindow.h"
@@ -32,6 +31,8 @@
 #include "KeyboardTranslator.h"
 #include "ColorScheme.h"
 #include "SearchBar.h"
+#include "qtermwidget.h"
+
 
 #define STEP_ZOOM 1
 
@@ -237,6 +238,17 @@ void QTermWidget::init(int startnow)
     m_impl->m_terminalDisplay->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_layout->addWidget(m_impl->m_terminalDisplay);
 
+    connect(m_impl->m_session, SIGNAL(bellRequest(QString)), m_impl->m_terminalDisplay, SLOT(bell(QString)));
+    connect(m_impl->m_terminalDisplay, SIGNAL(notifyBell(QString)), this, SIGNAL(bell(QString)));
+
+    connect(m_impl->m_session, SIGNAL(activity()), this, SIGNAL(activity()));
+    connect(m_impl->m_session, SIGNAL(silence()), this, SIGNAL(silence()));
+
+    // That's OK, FilterChain's dtor takes care of UrlFilter.
+    UrlFilter *urlFilter = new UrlFilter();
+    connect(urlFilter, SIGNAL(activated(QUrl)), this, SIGNAL(urlActivated(QUrl)));
+    m_impl->m_terminalDisplay->filterChain()->addFilter(urlFilter);
+
     m_searchBar = new SearchBar(this);
     m_searchBar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
     connect(m_searchBar, SIGNAL(searchCriteriaChanged()), this, SLOT(find()));
@@ -286,7 +298,7 @@ QTermWidget::~QTermWidget()
 }
 
 
-void QTermWidget::setTerminalFont(QFont &font)
+void QTermWidget::setTerminalFont(const QFont &font)
 {
     if (!m_impl->m_terminalDisplay)
         return;
@@ -345,7 +357,7 @@ fallback:
     return m_impl->m_session->initialWorkingDirectory();
 }
 
-void QTermWidget::setArgs(QStringList &args)
+void QTermWidget::setArgs(const QStringList &args)
 {
     if (!m_impl->m_session)
         return;
@@ -359,12 +371,31 @@ void QTermWidget::setTextCodec(QTextCodec *codec)
     m_impl->m_session->setCodec(codec);
 }
 
-void QTermWidget::setColorScheme(const QString & name)
+void QTermWidget::setColorScheme(const QString& origName)
 {
-    const ColorScheme *cs;
+    const ColorScheme *cs = 0;
+
+    const bool isFile = QFile::exists(origName);
+    const QString& name = isFile ?
+            QFileInfo(origName).baseName() :
+            origName;
+
     // avoid legacy (int) solution
     if (!availableColorSchemes().contains(name))
-        cs = ColorSchemeManager::instance()->defaultColorScheme();
+    {
+        if (isFile)
+        {
+            if (ColorSchemeManager::instance()->loadCustomColorScheme(origName))
+                cs = ColorSchemeManager::instance()->findColorScheme(name);
+            else
+                qWarning () << Q_FUNC_INFO
+                        << "cannot load color scheme from"
+                        << origName;
+        }
+
+        if (!cs)
+            cs = ColorSchemeManager::instance()->defaultColorScheme();
+    }
     else
         cs = ColorSchemeManager::instance()->findColorScheme(name);
 
@@ -417,7 +448,7 @@ void QTermWidget::scrollToEnd()
     m_impl->m_terminalDisplay->scrollToEnd();
 }
 
-void QTermWidget::sendText(QString &text)
+void QTermWidget::sendText(const QString &text)
 {
     m_impl->m_session->sendText(text);
 }
@@ -524,4 +555,54 @@ void QTermWidget::setEnvironment(const QStringList& environment)
 void QTermWidget::setMotionAfterPasting(int action)
 {
     m_impl->m_terminalDisplay->setMotionAfterPasting((Konsole::MotionAfterPasting) action);
+}
+
+int QTermWidget::historyLinesCount()
+{
+    return m_impl->m_terminalDisplay->screenWindow()->screen()->getHistLines();
+}
+
+int QTermWidget::screenColumnsCount()
+{
+    return m_impl->m_terminalDisplay->screenWindow()->screen()->getColumns();
+}
+
+void QTermWidget::setSelectionStart(int row, int column)
+{
+    m_impl->m_terminalDisplay->screenWindow()->screen()->setSelectionStart(column, row, true);
+}
+
+void QTermWidget::setSelectionEnd(int row, int column)
+{
+    m_impl->m_terminalDisplay->screenWindow()->screen()->setSelectionEnd(column, row);
+}
+
+void QTermWidget::getSelectionStart(int& row, int& column)
+{
+    m_impl->m_terminalDisplay->screenWindow()->screen()->getSelectionStart(column, row);
+}
+
+void QTermWidget::setSelectionEnd(int& row, int& column)
+{
+    m_impl->m_terminalDisplay->screenWindow()->screen()->setSelectionEnd(column, row);
+}
+
+QString QTermWidget::selectedText(bool preserveLineBreaks)
+{
+    return m_impl->m_terminalDisplay->screenWindow()->screen()->selectedText(preserveLineBreaks);
+}
+
+void QTermWidget::setMonitorActivity(bool monitor)
+{
+    m_impl->m_session->setMonitorActivity(monitor);
+}
+
+void QTermWidget::setMonitorSilence(bool monitor)
+{
+    m_impl->m_session->setMonitorSilence(monitor);
+}
+
+void QTermWidget::setSilenceTimeout(int seconds)
+{
+    m_impl->m_session->setMonitorSilenceSeconds(seconds);
 }

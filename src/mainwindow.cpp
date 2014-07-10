@@ -60,7 +60,10 @@ MainWindow::~MainWindow()
   disconnect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
              this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
-  disconnect(domainDockContent, SIGNAL(domainClosed(QString,QString)), this, SLOT(deleteVMDisplay(QString,QString)));
+  disconnect(domainDockContent, SIGNAL(domainClosed(QString,QString)),
+             this, SLOT(deleteVMDisplay(QString,QString)));
+  disconnect(domainDockContent, SIGNAL(migrateToConnect(QStringList&)),
+             this, SLOT(buildMigrateArgs(QStringList&)));
   disconnect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
@@ -72,51 +75,51 @@ MainWindow::~MainWindow()
       delete wait_thread;
       wait_thread = 0;
   };
-  qDebug()<<"processing stopped";
+  //qDebug()<<"processing stopped";
   VM_Displayed_Map.clear();
-  qDebug()<<"Viewers cleared";
+  //qDebug()<<"Viewers cleared";
 
   delete logDockContent;
   logDockContent = 0;
   delete logDock;
   logDock = 0;
-  qDebug()<<"LogDock cleared";
+  //qDebug()<<"LogDock cleared";
 
   delete domainDockContent;
   domainDockContent = 0;
   delete domainDock;
   domainDock = 0;
-  qDebug()<<"DomDock cleared";
+  //qDebug()<<"DomDock cleared";
 
   delete networkDockContent;
   networkDockContent = 0;
   delete networkDock;
   networkDock = 0;
-  qDebug()<<"NetDock cleared";
+  //qDebug()<<"NetDock cleared";
 
   delete storageVolDockContent;
   storageVolDockContent = 0;
   delete storageVolDock;
   storageVolDock = 0;
-  qDebug()<<"SVolDock cleared";
+  //qDebug()<<"SVolDock cleared";
 
   delete storagePoolDockContent;
   storagePoolDockContent = 0;
   delete storagePoolDock;
   storagePoolDock = 0;
-  qDebug()<<"SPoolDock cleared";
+  //qDebug()<<"SPoolDock cleared";
 
   delete connListWidget;
   connListWidget = 0;
-  qDebug()<<"ConnListWdg cleared";
+  //qDebug()<<"ConnListWdg cleared";
 
   delete toolBar;
   toolBar = 0;
-  qDebug()<<"ToolBar cleared";
+  //qDebug()<<"ToolBar cleared";
 
   delete trayIcon;
   trayIcon = 0;
-  qDebug()<<"application stopped";
+  //qDebug()<<"application stopped";
 }
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
@@ -125,13 +128,13 @@ void MainWindow::closeEvent(QCloseEvent *ev)
   settings.setValue("ToolBarArea", toolBarArea(toolBar));
   settings.setValue("Visible", this->isVisible());
   settings.beginGroup("LogDock");
-  settings.setValue("DockkArea", dockWidgetArea(logDock));
+  settings.setValue("DockArea", dockWidgetArea(logDock));
   settings.setValue("Visible", logDock->isVisible());
   settings.setValue("Floating", logDock->isFloating());
   settings.setValue("Geometry", logDock->saveGeometry());
   settings.endGroup();
   settings.beginGroup("DomainDock");
-  settings.setValue("DockkArea", dockWidgetArea(domainDock));
+  settings.setValue("DockArea", dockWidgetArea(domainDock));
   settings.setValue("Visible", domainDock->isVisible());
   settings.setValue("Floating", domainDock->isFloating());
   settings.setValue("Geometry", domainDock->saveGeometry());
@@ -162,13 +165,15 @@ void MainWindow::closeEvent(QCloseEvent *ev)
   settings.sync();
   if ( !this->isVisible() ) changeVisibility();
   if ( runningConnectsExist() && wait_thread==NULL ) {
+      /*
       QString q;
-      q.append("Running Connects are exist.\nKill it at exit?");
+      q.append("Running Connects are exist.\nKill them and exit?");
       int answer = QMessageBox::question(this, "Action", q, QMessageBox::Yes, QMessageBox::Cancel);
       if ( answer == QMessageBox::Cancel ) {
           ev->ignore();
           return;
       };
+      */
       connListWidget->setEnabled(false);
       toolBar->setEnabled(false);
       logDock->setEnabled(false);
@@ -321,7 +326,10 @@ void MainWindow::initDockWidgets()
     connect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
     connect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
             this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
-    connect(domainDockContent, SIGNAL(domainClosed(QString,QString)), this, SLOT(deleteVMDisplay(QString,QString)));
+    connect(domainDockContent, SIGNAL(domainClosed(QString,QString)),
+            this, SLOT(deleteVMDisplay(QString,QString)));
+    connect(domainDockContent, SIGNAL(migrateToConnect(QStringList&)),
+            this, SLOT(buildMigrateArgs(QStringList&)));
 
     networkDock = new QDockWidget(this);
     networkDock->setObjectName("networkDock");
@@ -578,4 +586,11 @@ void MainWindow::deleteVMDisplay(QString connName, QString domName)
         };
         VM_Displayed_Map.remove(key);
     };
+}
+void MainWindow::buildMigrateArgs(QStringList &args)
+{
+    virConnectPtr namedConnect = connListWidget->getConnect(args[1]);
+    if ( NULL!=namedConnect ) {
+        domainDockContent->execMigrateAction(namedConnect, args);
+    }
 }

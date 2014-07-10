@@ -14,7 +14,7 @@ ConnectList::ConnectList(QWidget *parent = 0)
   this->setModel(connItemModel);
   progressBarDlg = new ProgressBarDelegate();
   this->setItemDelegate(progressBarDlg);
-  connects = new QMap<QString, ElemConnect*>();
+  connects = new CONN_LIST();
   connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(connectItemClicked(const QPoint &)));
   connect(this, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(connectItemDoubleClicked(const QModelIndex&)));
 }
@@ -31,10 +31,31 @@ ConnectList::~ConnectList()
       disconnect(connects->value(key), SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
       disconnect(connects->value(key), SIGNAL(warning(QString&)), this, SLOT(sendWarning(QString&)));
       disconnect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(sendConnPtr(virConnect*, QString&)));
+      disconnect(connects->value(key), SIGNAL(authRequested(QString&)), this, SLOT(getAuthCredentials(QString&)));
   };
   connects->clear();
   delete connects;
   connects = 0;
+}
+
+/* public slots */
+int  ConnectList::connectItemEditAction()
+{
+    int exitCode = 0;
+    QModelIndex _item = currentIndex();
+    if ( !_item.isValid() ) {
+        showMessage("Info", "Item not exist.");
+        return exitCode;
+    };
+    ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
+    sDialog = new ConnSettings(this->parentWidget());
+    sDialog->setConnectItem(idx);
+    connect(sDialog, SIGNAL(creatingConnectCancelled()), this, SLOT(deleteCancelledCreation()));
+    exitCode = sDialog->exec();
+    disconnect(sDialog, SIGNAL(creatingConnectCancelled()), this, SLOT(deleteCancelledCreation()));
+
+    sDialog->deleteLater();
+    return exitCode;
 }
 void ConnectList::addConnectItem(QString &s)
 {
@@ -67,6 +88,68 @@ void ConnectList::addConnectItem(QString &s)
       if ( _createConnect ) createConnect(item);
   };
 }
+void ConnectList::deleteCurrentConnect()
+{
+  QModelIndex _item = currentIndex();
+  if ( _item.isValid() ) {
+      ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
+      QString connect = idx->getName();
+      ElemConnect *conn;
+      conn = connects->value(connect);
+      int conn_state;
+      bool conn_availability;
+      conn_availability = idx->getData().value(QString("availability"), AVAILABLE).toBool();
+      if ( !conn_availability ) {
+          showMessage(QString("Connect '%1'").arg(connect), "Connect is Busy.");
+          clearSelection();
+          return;
+      };
+      conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
+      if ( conn && conn_state==RUNNING ) {
+          showMessage(QString("Connect '%1'").arg(connect), "Connect is Running.");
+      } else {
+          //if ( conn && !conn_state ) conn->closeConnect();
+          connects->remove(connect);
+          connItemModel->removeRow(_item.row());
+          //disconnect(connects->value(connect), SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
+          //disconnect(connects->value(connect), SIGNAL(warning(QString&)), this, SLOT(sendWarning(QString&)));
+          //disconnect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(sendConnPtr(virConnect*, QString&)));
+          //disconnect(connects->value(key), SIGNAL(authRequested(QString&)), this, SLOT(getAuthCredentials(QString&)));
+          emit removeConnect(connect);
+      };
+  } else showMessage("Info", "Item not exist.");
+}
+void ConnectList::openConnect(QModelIndex &_item)
+{
+  checkConnect(_item, TO_RUN);
+}
+void ConnectList::showConnect(QModelIndex &_item)
+{
+    int conn_state;
+    bool conn_availability;
+    ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
+    conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
+    conn_availability = idx->getData().value(QString("availability"), NOT_AVAILABLE).toBool();
+    if ( conn_state==RUNNING && conn_availability ) {
+        QString _name = idx->getName();
+        ElemConnect *conn;
+        conn = connects->value(_name);
+        conn->showConnectData();
+    };
+    clearSelection();
+}
+void ConnectList::closeConnect(QModelIndex &_item)
+{
+  checkConnect(_item, TO_STOP);
+}
+virConnectPtr ConnectList::getConnect(QString &name)
+{
+    return (connects->contains(name)) ?
+            connects->value(name)->getConnect()
+            : NULL;
+}
+
+/* private slots */
 void ConnectList::connectItemClicked(const QPoint &pos)
 {
   QModelIndex _item = indexAt(pos);
@@ -109,19 +192,6 @@ void ConnectList::connectItemClicked(const QPoint &pos)
   disconnect(connectMenu->display, SIGNAL(triggered()), this, SLOT(connectItemShowAction()));
   disconnect(connectMenu->clean, SIGNAL(triggered()), this, SLOT(deleteCurrentConnect()));
   connectMenu->deleteLater();
-}
-void ConnectList::createConnect(QModelIndex &_item)
-{
-  ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-  QString key = idx->getName();
-  ElemConnect *conn = new ElemConnect(this);
-  conn->setItemReference(connItemModel, idx);
-  connects->insert(key, conn);
-  clearSelection();
-  connect(connects->value(key), SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
-  connect(connects->value(key), SIGNAL(warning(QString&)), this, SLOT(sendWarning(QString&)));
-  connect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(sendConnPtr(virConnect*, QString&)));
-  //qDebug()<<key<<" create Connect item";
 }
 void ConnectList::connectItemDoubleClicked(const QModelIndex &_item)
 {
@@ -167,28 +237,19 @@ void ConnectList::connectItemShowAction()
     QModelIndex _item = currentIndex();
     showConnect(_item);
 }
-void ConnectList::openConnect(QModelIndex &_item)
+void ConnectList::createConnect(QModelIndex &_item)
 {
-  checkConnect(_item, TO_RUN);
-}
-void ConnectList::showConnect(QModelIndex &_item)
-{
-    int conn_state;
-    bool conn_availability;
-    ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-    conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
-    conn_availability = idx->getData().value(QString("availability"), NOT_AVAILABLE).toBool();
-    if ( conn_state==RUNNING && conn_availability ) {
-        QString _name = idx->getName();
-        ElemConnect *conn;
-        conn = connects->value(_name);
-        conn->showConnectData();
-    };
-    clearSelection();
-}
-void ConnectList::closeConnect(QModelIndex &_item)
-{
-  checkConnect(_item, TO_STOP);
+  ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
+  QString key = idx->getName();
+  ElemConnect *conn = new ElemConnect(this);
+  conn->setItemReference(connItemModel, idx);
+  connects->insert(key, conn);
+  clearSelection();
+  connect(connects->value(key), SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
+  connect(connects->value(key), SIGNAL(warning(QString&)), this, SLOT(sendWarning(QString&)));
+  connect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(sendConnPtr(virConnect*, QString&)));
+  connect(connects->value(key), SIGNAL(authRequested(QString&)), this, SLOT(getAuthCredentials(QString&)));
+  //qDebug()<<key<<" create Connect item";
 }
 void ConnectList::checkConnect(QModelIndex &_item, bool to_run = TO_RUN)
 {
@@ -197,53 +258,6 @@ void ConnectList::checkConnect(QModelIndex &_item, bool to_run = TO_RUN)
   conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
   if ( (to_run && conn_state!=RUNNING) || (!to_run && conn_state==RUNNING) )
     connectItemDoubleClicked(_item);
-}
-int  ConnectList::connectItemEditAction()
-{
-    int exitCode = 0;
-    QModelIndex _item = currentIndex();
-    if ( !_item.isValid() ) {
-        showMessage("Info", "Item not exist.");
-        return exitCode;
-    };
-    ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-    sDialog = new ConnSettings(this->parentWidget());
-    sDialog->setConnectItem(idx);
-    connect(sDialog, SIGNAL(creatingConnectCancelled()), this, SLOT(deleteCancelledCreation()));
-    exitCode = sDialog->exec();
-    disconnect(sDialog, SIGNAL(creatingConnectCancelled()), this, SLOT(deleteCancelledCreation()));
-
-    sDialog->deleteLater();
-    return exitCode;
-}
-void ConnectList::deleteCurrentConnect()
-{
-  QModelIndex _item = currentIndex();
-  if ( _item.isValid() ) {
-      ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-      QString connect = idx->getName();
-      ElemConnect *conn;
-      conn = connects->value(connect);
-      int conn_state;
-      bool conn_availability;
-      conn_availability = idx->getData().value(QString("availability"), AVAILABLE).toBool();
-      if ( !conn_availability ) {
-          showMessage(QString("Connect '%1'").arg(connect), "Connect is Busy.");
-          clearSelection();
-          return;
-      };
-      conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
-      if ( conn && conn_state==RUNNING ) {
-          showMessage(QString("Connect '%1'").arg(connect), "Connect is Running.");
-      } else {
-          //if ( conn && !conn_state ) conn->closeConnect();
-          connects->remove(connect);
-          connItemModel->removeRow(_item.row());
-          //disconnect(connects->value(connect), SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
-          //disconnect(connects->value(connect), SIGNAL(warning(QString&)), this, SLOT(sendWarning(QString&)));
-          emit removeConnect(connect);
-      };
-  } else showMessage("Info", "Item not exist.");
 }
 void ConnectList::deleteCancelledCreation()
 {
@@ -265,4 +279,18 @@ void ConnectList::mainWindowUp()
 void ConnectList::sendConnPtr(virConnect *conn, QString &name)
 {
     emit connPtr(conn, name);
+}
+void ConnectList::getAuthCredentials(QString &crd)
+{
+    ElemConnect *obj = static_cast<ElemConnect*>(sender());
+    QString text;
+    QLineEdit::EchoMode mode = (crd.toLower()=="password") ?
+                QLineEdit::PasswordEchoOnEdit :
+                QLineEdit::Normal;
+    text = QInputDialog::getText(
+                    this,
+                    QString("<%1> credentials").arg(obj->getName()),
+                    crd,
+                    mode);
+    obj->setAuthCredentials(crd, text);
 }

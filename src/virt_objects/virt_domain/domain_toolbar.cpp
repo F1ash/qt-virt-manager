@@ -48,8 +48,11 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     getXMLDesc_Action = new QAction(this);
     getXMLDesc_Action->setIcon(QIcon::fromTheme("domain-xml"));
     getXMLDesc_Action->setToolTip("Get XML Description");
+    migrate_Action = new QAction(this);
+    migrate_Action->setIcon(QIcon::fromTheme("migrate"));
+    migrate_Action->setToolTip("Migrate");
     _autoReload = new QPushButton(this);
-    _autoReload->setToolTip("AutoReload Pool Overview");
+    _autoReload->setToolTip("AutoReload Domain Overview");
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
     _autoReload->setCheckable(true);
 
@@ -64,6 +67,8 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     addAction(setAutostart_Action);
     addSeparator();
     addAction(getXMLDesc_Action);
+    addSeparator();
+    addAction(migrate_Action);
     addSeparator();
     autoReload = addWidget(_autoReload);
     addAction(autoReload);
@@ -143,6 +148,8 @@ DomainToolBar::~DomainToolBar()
     setAutostart_Action = 0;
     delete getXMLDesc_Action;
     getXMLDesc_Action = 0;
+    delete migrate_Action;
+    migrate_Action = 0;
     delete _autoReload;
     _autoReload = 0;
     delete autoReload;
@@ -257,6 +264,8 @@ void DomainToolBar::detectTriggerredAction(QAction *action)
         parameters << "setAutostartVirtDomain";
     } else if ( action == getXMLDesc_Action ) {
         parameters << "getVirtDomXMLDesc";
+    } else if ( action == migrate_Action ) {
+        parameters << "migrateVirtDomain";
     } else return;
     emit execMethod(parameters);
 }

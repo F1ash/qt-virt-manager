@@ -40,6 +40,7 @@ private:
     QAction         *undefine_Action;
     QAction         *setAutostart_Action;
     QAction         *getXMLDesc_Action;
+    QAction         *migrate_Action;
     QPushButton     *_autoReload;
     QAction         *autoReload;
 

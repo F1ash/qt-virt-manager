@@ -29,11 +29,14 @@ public slots:
     void              closeConnect();
     void              showConnectData();
     virConnect*       getConnect() const;
+    void              setAuthCredentials(QString&, QString&);
+    QString           getName() const;
 
 signals:
     void warningShowed();
     void warning(QString&);
     void connPtr(virConnect*, QString&);
+    void authRequested(QString&);
 
 private:
     ConnItemModel    *own_model;
@@ -59,6 +62,7 @@ private slots:
     void addMsgToLog(QString, QString);
     void sendWarning(QString&);
     void mainWindowUp();
+    void getAuthCredentials(QString&);
 };
 
 #endif   // CONN_ELEMENT_H

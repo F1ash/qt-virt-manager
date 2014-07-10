@@ -38,6 +38,9 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         display = new QAction("display VM", this);
         display->setIcon(QIcon::fromTheme("display"));
         display->setEnabled(parameters[1]=="active");
+        migrate = new QAction("Migrate", this);
+        migrate->setIcon(QIcon::fromTheme("migrate"));
+        migrate->setEnabled(parameters[1]=="active");
 
         addAction(start);
         addAction(pause);
@@ -55,8 +58,10 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         addSeparator();
         addAction(display);
         addSeparator();
+        addAction(migrate);
+        addSeparator();
     };
-    reload = new QAction("Reload Pool OverView", this);
+    reload = new QAction("Reload Domain OverView", this);
     reload->setIcon(QIcon::fromTheme("view-refresh"));
     reload->setEnabled(!autoReloadState);
 
@@ -89,6 +94,8 @@ DomainControlMenu::~DomainControlMenu()
         getXMLDesc = 0;
         delete display;
         display = 0;
+        delete migrate;
+        migrate = 0;
     };
     delete reload;
     reload = 0;
@@ -120,6 +127,8 @@ void DomainControlMenu::emitExecMethod(QAction *action)
             paramList << "getVirtDomXMLDesc";
         } else if ( action == display ) {
             paramList << "displayVirtDomain";
+        } else if ( action == migrate ) {
+            paramList << "migrateVirtDomain";
         } else return;
         paramList.append(parameters.first());
     } else if ( action == reload ) {

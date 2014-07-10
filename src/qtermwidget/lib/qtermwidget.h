@@ -20,11 +20,12 @@
 #ifndef _Q_TERM_WIDGET
 #define _Q_TERM_WIDGET
 
-#include <QtGui>
+#include <QWidget>
 
+class QVBoxLayout;
 struct TermWidgetImpl;
 class SearchBar;
-
+class QUrl;
 
 class QTermWidget : public QWidget {
     Q_OBJECT
@@ -63,7 +64,7 @@ public:
     // Default is application font with family Monospace, size 10
     // USE ONLY FIXED-PITCH FONT!
     // otherwise symbols' position could be incorrect
-    void setTerminalFont(QFont & font);
+    void setTerminalFont(const QFont & font);
     QFont getTerminalFont();
     void setTerminalOpacity(qreal level);
 
@@ -78,12 +79,16 @@ public:
     QString workingDirectory();
 
     // Shell program args, default is none
-    void setArgs(QStringList & args);
+    void setArgs(const QStringList & args);
 
     //Text codec, default is UTF-8
     void setTextCodec(QTextCodec * codec);
 
-    //Color scheme, default is white on black
+    /** @brief Sets the color scheme, default is white on black
+     *
+     * @param[in] name The name of the color scheme, either returned from
+     * availableColorSchemes() or a full path to a color scheme.
+     */
     void setColorScheme(const QString & name);
     static QStringList availableColorSchemes();
 
@@ -100,7 +105,7 @@ public:
     void scrollToEnd();
 
     // Send some text to terminal
-    void sendText(QString & text);
+    void sendText(const QString & text);
 
     // Sets whether flow control is enabled
     void setFlowControlEnabled(bool enabled);
@@ -123,6 +128,27 @@ public:
     
     void setMotionAfterPasting(int);
 
+    /** Return the number of lines in the history buffer. */
+    int historyLinesCount();
+
+    int screenColumnsCount();
+
+    void setSelectionStart(int row, int column);
+    void setSelectionEnd(int row, int column);
+    void getSelectionStart(int& row, int& column);
+    void setSelectionEnd(int& row, int& column);
+
+    /**
+     * Returns the currently selected text.
+     * @param preserveLineBreaks Specifies whether new line characters should
+     * be inserted into the returned text at the end of each terminal line.
+     */
+    QString selectedText(bool preserveLineBreaks = true);
+
+    void setMonitorActivity(bool);
+    void setMonitorSilence(bool);
+    void setSilenceTimeout(int seconds);
+
 signals:
     void finished();
     void copyAvailable(bool);
@@ -131,6 +157,13 @@ signals:
     void termLostFocus();
 
     void termKeyPressed(QKeyEvent *);
+
+    void urlActivated(const QUrl&);
+
+    void bell(const QString& message);
+
+    void activity();
+    void silence();
 
 public slots:
     // Copy selection to clipboard

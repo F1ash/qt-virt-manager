@@ -27,12 +27,11 @@
 #include <stdio.h>
 
 // Qt 
-#include <QtGui/QKeyEvent>
+#include <QKeyEvent>
 //#include <QPointer>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
-#include <QtCore/QTimer>
-#include <QDebug>
+#include <QTextCodec>
+#include <QTextStream>
+#include <QTimer>
 
 // Konsole
 //#include "konsole_export.h"

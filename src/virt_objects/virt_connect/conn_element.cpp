@@ -5,17 +5,18 @@ ElemConnect::ElemConnect(QObject *parent) :
 {
     //connect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
     waitTimerId = 0;
-    _diff = 0;
 
     connAliveThread = new ConnAliveThread(this);
     connect(connAliveThread, SIGNAL(connMsg(QString)), this, SLOT(receiveConnMessage(QString)));
     connect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)), this, SLOT(setConnectState(CONN_STATE)));
+    connect(connAliveThread, SIGNAL(authRequested(QString&)), this, SLOT(getAuthCredentials(QString&)));
 }
 ElemConnect::~ElemConnect()
 {
+    //disconnect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
     disconnect(connAliveThread, SIGNAL(connMsg(QString)), this, SLOT(receiveConnMessage(QString)));
     disconnect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)), this, SLOT(setConnectState(CONN_STATE)));
-    //disconnect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
+    disconnect(connAliveThread, SIGNAL(authRequested(QString&)), this, SLOT(getAuthCredentials(QString&)));
 
     if ( connAliveThread!=NULL ) {
         connAliveThread->setKeepAlive(false);
@@ -51,6 +52,7 @@ void ElemConnect::openConnect()
     connAliveThread->setData(URI);
     connAliveThread->start();
     if (!waitTimerId) {
+        _diff = 0;
         waitTimerId = startTimer(1000);
     } else {
         addMsgToLog(QString("Connect '%1'").arg(name),
@@ -71,6 +73,16 @@ void ElemConnect::showConnectData()
 virConnect* ElemConnect::getConnect() const
 {
     return connAliveThread->getConnect();
+}
+void ElemConnect::setAuthCredentials(QString &crd, QString &text)
+{
+    if ( connAliveThread!=NULL ) {
+        connAliveThread->setAuthCredentials(crd, text);
+    }
+}
+QString ElemConnect::getName() const
+{
+    return name;
 }
 
 /* private slots */
@@ -183,4 +195,8 @@ void ElemConnect::sendWarning(QString &msg)
 void ElemConnect::mainWindowUp()
 {
     emit warningShowed();
+}
+void ElemConnect::getAuthCredentials(QString &crd)
+{
+    emit authRequested(crd);
 }

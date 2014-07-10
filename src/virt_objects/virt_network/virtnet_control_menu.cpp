@@ -28,7 +28,7 @@ VirtNetControlMenu::VirtNetControlMenu(QWidget *parent, QStringList params, bool
         addAction(getXMLDesc);
         addSeparator();
     };
-    reload = new QAction("Reload Pool OverView", this);
+    reload = new QAction("Reload Network OverView", this);
     reload->setIcon(QIcon::fromTheme("view-refresh"));
     reload->setEnabled(!autoReloadState);
 

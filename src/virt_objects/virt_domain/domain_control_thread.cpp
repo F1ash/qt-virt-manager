@@ -15,6 +15,10 @@ void DomControlThread::execAction(DomActions act, QStringList _args)
         start();
     };
 }
+void DomControlThread::setMigrateConnect(virConnectPtr conn)
+{
+    destConnect = conn;
+}
 
 /* private slots */
 void DomControlThread::run()
@@ -63,6 +67,9 @@ void DomControlThread::run()
     case GET_DOM_XML_DESC :
         result = getDomainXMLDesc();
         break;
+    case MIGRATE_DOMAIN :
+        result = migrateDomain();
+        break;
     default:
         break;
     };
@@ -76,7 +83,7 @@ Result DomControlThread::getAllDomainList()
         virDomainPtr *domain;
         unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
                              VIR_CONNECT_LIST_DOMAINS_INACTIVE;
-        int ret = virConnectListAllDomains( currWorkConnect, &domain, flags);
+        int ret = virConnectListAllDomains(currWorkConnect, &domain, flags);
         if ( ret<0 ) {
             sendConnErrors();
             free(domain);
@@ -479,5 +486,97 @@ Result DomControlThread::getDomainXMLDesc()
     result.name = name;
     result.result = read;
     result.msg.append(QString("'%1' Domain %2 XML'ed").arg(name).arg((read)?"":"don't"));
+    return result;
+}
+Result DomControlThread::migrateDomain()
+{
+    Result result;
+    bool migrated = false;
+    unsigned int flags = 0;
+    qDebug()<<args<<"migrate";
+    //qDebug()<<virConnectGetCapabilities(currWorkConnect);
+    if ( args.count()<17 ) {
+        result.name = args[0];
+        result.result = migrated;
+        result.msg.append(QString("'%1' Domain don't Migrated: %2")
+                          .arg(args[0]).arg("arguments incorrect."));
+        return result;
+    };
+    virDomainPtr domain = virDomainLookupByName(currWorkConnect, args[0].toUtf8().constData());
+    //const char *uri = ( args[2].isEmpty() ) ? NULL : args[2].toUtf8().constData();
+    bool ok;
+    int maxDownTime = args[3].toInt(&ok);
+    if (!ok) maxDownTime = 0;
+    int bdw = args[4].toInt(&ok);
+    if (!ok) bdw = 0;
+    bool live = !args[5].isEmpty();
+    bool p2p = !args[6].isEmpty();
+    bool tun = !args[7].isEmpty();
+    bool persist = !args[8].isEmpty();
+    bool undefine = !args[9].isEmpty();
+    bool pause = !args[10].isEmpty();
+    bool full = !args[11].isEmpty();
+    bool inc = !args[12].isEmpty();
+    bool unsafe = !args[13].isEmpty();
+    bool offline = !args[14].isEmpty();
+    bool compressed = !args[15].isEmpty();
+    bool abortOn = !args[16].isEmpty();
+    //const char *dName = ( args[17].isEmpty() )? NULL : args[17].toUtf8().constData();
+    //qDebug()<<args[0].toUtf8().constData()<<tun<< unsafe<<maxDownTime<<uri<<bdw<<args[17].toUtf8().constData();
+    if ( domain!=NULL ) {
+        // virDomainMigrateSetMaxDowntime
+        // flags: extra flags; not used yet, so callers should always pass 0
+        virDomainMigrateSetMaxDowntime(domain, maxDownTime, 0);
+        if ( live )
+            flags |= VIR_MIGRATE_LIVE;
+        if ( p2p )
+            flags |= VIR_MIGRATE_PEER2PEER;
+        if ( tun )
+            flags |= VIR_MIGRATE_TUNNELLED;
+        if ( persist )
+            flags |= VIR_MIGRATE_PERSIST_DEST;
+        if ( undefine )
+            flags |= VIR_MIGRATE_UNDEFINE_SOURCE;
+        if ( pause )
+            flags |= VIR_MIGRATE_PAUSED;
+        if ( full )
+            flags |= VIR_MIGRATE_NON_SHARED_DISK;
+        if ( inc )
+            flags |= VIR_MIGRATE_NON_SHARED_INC;
+        if ( unsafe )
+            flags |= VIR_MIGRATE_UNSAFE;
+        if ( offline )
+            flags |= VIR_MIGRATE_OFFLINE;
+        if ( compressed )
+            flags |= VIR_MIGRATE_COMPRESSED;
+        if ( abortOn )
+            flags |= VIR_MIGRATE_ABORT_ON_ERROR;
+        if ( NULL!=destConnect ) {
+            qDebug()<<"migrate to exist connect";
+            virDomainPtr newDomain =
+            virDomainMigrate(domain,
+                             destConnect,
+                             flags,
+                             args[17].toUtf8().constData(),
+                             args[2].toUtf8().constData(),
+                             bdw);
+            migrated = NULL!=newDomain;
+            if (migrated) virDomainFree( newDomain );
+        } else {
+            qDebug()<< "migrate to URI";
+            migrated = (virDomainMigrateToURI(domain,
+                                              args[2].toUtf8().constData(),
+                                              flags,
+                                              args[17].toUtf8().constData(),
+                                              bdw)
+                        +1)?true:false;
+        };
+        virDomainFree(domain);
+        if ( !migrated ) sendConnErrors();
+    } else sendConnErrors();
+    result.name = args[0];
+    result.result = migrated;
+    result.msg.append(QString("'%1' Domain %2 Migrated.").arg(args[0]).arg((migrated)?"":"don't"));
+    if ( destConnect ) destConnect = NULL;
     return result;
 }

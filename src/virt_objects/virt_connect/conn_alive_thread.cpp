@@ -35,6 +35,14 @@ virConnect* ConnAliveThread::getConnect() const
 {
     return conn;
 }
+void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
+{
+    if ( crd.toLower()=="username" )
+        authData.username = text.toUtf8().data();
+    if ( crd.toLower()=="password" )
+        authData.password = text.toUtf8().data();
+    authWaitKey = false;
+}
 
 /* private slots */
 void ConnAliveThread::run()
@@ -84,10 +92,10 @@ void ConnAliveThread::openConnect()
     if ( virInitialize()+1 ) {
         registered = (virEventRegisterDefaultImpl()==0)?true:false;
         emit connMsg( QString("default event implementation registered: %1").arg(QVariant(registered).toString()) );
-        /*
-         * TODO: implement virConnectOpenReadOnly(), virConnectOpenAuth()
-         */
-        conn = virConnectOpen(URI.toUtf8().constData());
+        //conn = virConnectOpen(URI.toUtf8().constData());
+        auth.cb = authCallback;
+        auth.cbdata = this;
+        conn = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
     };
     //qDebug()<<"openConn"<<conn;
     if (conn==NULL) {
@@ -162,6 +170,59 @@ void ConnAliveThread::connEventCallBack(virConnectPtr _conn, int reason, void *o
 {
     static_cast<ConnAliveThread*>(opaque)->closeConnect(reason);
 }
+int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int ncred, void *cbdata)
+{
+    qDebug()<<ncred<<"keep auth";
+    size_t i;
+    ConnAliveThread *obj = static_cast<ConnAliveThread*>(cbdata);
+
+    /* libvirt might request multiple credentials in a single call.
+     * This example supports VIR_CRED_AUTHNAME and VIR_CRED_PASSPHRASE
+     * credentials only, but there are several other types.
+     *
+     * A request may also contain a prompt message that can be displayed
+     * to the user and a challenge. The challenge is specific to the
+     * credential type and hypervisor type.
+     *
+     * For example the ESX driver passes the hostname of the ESX or vCenter
+     * server as challenge. This allows a auth callback to return the
+     * proper credentials. */
+    obj->authData.username = NULL;
+    obj->authData.password = NULL;
+    QString crd;
+    for (i = 0; i < ncred; ++i) {
+        switch (cred[i].type) {
+        case VIR_CRED_AUTHNAME:
+            crd = "Username";
+            obj->getAuthCredentials(crd);
+            cred[i].result = strdup(obj->authData.username);
+            if (cred[i].result == NULL) {
+                return -1;
+            };
+            cred[i].resultlen = strlen(cred[i].result);
+            // clear/shred authData credential for more security
+            if ( obj->authData.username!=NULL )
+                memset(&obj->authData.username[0], 0, sizeof(obj->authData.username));
+            break;
+        case VIR_CRED_PASSPHRASE:
+            crd = "Password";
+            obj->getAuthCredentials(crd);
+            cred[i].result = strdup(obj->authData.password);
+            if (cred[i].result == NULL) {
+                return -1;
+            };
+            cred[i].resultlen = strlen(cred[i].result);
+            // clear/shred authData credential for more security
+            if ( obj->authData.password!=NULL )
+                memset(&obj->authData.password[0], 0, sizeof(obj->authData.password));
+            break;
+        default:
+            qDebug()<<cred[i].type<<"unused credential type";
+            return -1;
+        }
+    };
+    return 0;
+}
 void ConnAliveThread::closeConnect(int reason)
 {
     CONN_STATE state;
@@ -196,4 +257,24 @@ void ConnAliveThread::closeConnect(int reason)
     };
     conn = NULL;
     emit changeConnState(state);
+}
+void ConnAliveThread::getAuthCredentials(QString &crd)
+{
+    /*
+     * Get credentials for authData;
+     * invoke Input Credentials graphic widget &
+     * wait a credentials from him
+     */
+    qDebug()<<crd<<"keep auth";
+    authWaitKey = true;
+    emit authRequested(crd);
+    int i = 0;
+    while ( i<WAIT_AUTH) {
+        i++;
+        if ( !authWaitKey ) {
+            break;
+        } else {
+            msleep(100);
+        };
+    };
 }

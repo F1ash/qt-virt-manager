@@ -15,6 +15,7 @@
 #include "domain_control_thread.h"
 #include "create_widgets/domain/create_virt_domain.h"
 #include "vm_viewer/vm_viewer.h"
+#include "migrate_dialog.h"
 
 class VirtDomainControl : public QMainWindow
 {
@@ -27,6 +28,7 @@ signals:
     void domMsg(QString&);
     void displayRequest(virConnect*, QString, QString);
     void domainClosed(QString, QString);
+    void migrateToConnect(QStringList&);
 
 private:
     QString                  currConnName;
@@ -45,6 +47,7 @@ public slots:
     bool                     setCurrentWorkConnect(virConnect*);
     void                     setListHeader(QString&);
     virConnect*              getConnect() const;
+    void                     execMigrateAction(virConnectPtr, QStringList&);
 
 private slots:
     void                     resultReceiver(DomActions, Result);

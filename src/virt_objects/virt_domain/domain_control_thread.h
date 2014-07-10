@@ -16,6 +16,7 @@ enum DomActions {
     SAVE_DOMAIN,
     RESTORE_DOMAIN,
     UNDEFINE_DOMAIN,
+    MIGRATE_DOMAIN,
     CHANGE_DOM_AUTOSTART,
     GET_DOM_XML_DESC,
     DOM_EMPTY_ACTION
@@ -31,10 +32,12 @@ signals:
     void resultData(DomActions, Result);
 
 private:
-    DomActions  action;
+    DomActions      action;
+    virConnectPtr   destConnect = NULL;
 
 public slots:
     void execAction(DomActions, QStringList);
+    void setMigrateConnect(virConnectPtr);
 
 private slots:
     void run();
@@ -52,6 +55,7 @@ private slots:
     Result undefineDomain();
     Result changeAutoStartDomain();
     Result getDomainXMLDesc();
+    Result migrateDomain();
 
 };
 

@@ -1,7 +1,7 @@
 %global cmake_build_dir build-cmake
 
 Name:           qt-virt-manager
-Version:        0.0.4
+Version:        0.1.7
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -51,6 +51,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/%{name}
 
 %changelog
+* Thu Jul 10 2014 Fl@sh <kaperang07@gmail.com> - 0.1.7-1
+- version updated;
+
 * Wed May 21 2014 Fl@sh <kaperang07@gmail.com> - 0.0.4-1
 - added glibc-headers to BR;
 

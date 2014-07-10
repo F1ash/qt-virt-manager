@@ -22,9 +22,9 @@
 #define TERMINALDISPLAY_H
 
 // Qt
-#include <QtGui/QColor>
-#include <QtCore/QPointer>
-#include <QtGui/QWidget>
+#include <QColor>
+#include <QPointer>
+#include <QWidget>
 
 // Konsole
 #include "Filter.h"
@@ -436,6 +436,11 @@ public slots:
      * terminal screen ( see setScreenWindow() ) and redraw the display.
      */
     void updateImage(); 
+
+    /** Essentially calles processFilters().
+     */
+    void updateFilters();
+
     /**
      * Causes the terminal display to fetch the latest line status flags from the 
      * associated terminal screen ( see setScreenWindow() ).  
@@ -560,6 +565,7 @@ signals:
 	void copyAvailable(bool);
 	void termGetFocus();
 	void termLostFocus();
+    void notifyBell(const QString&);
 
 protected:
     virtual bool event( QEvent * );

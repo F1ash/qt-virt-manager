@@ -80,6 +80,7 @@ private slots:
     void invokeVMDisplay(virConnect*, QString, QString);
     void deleteVMDisplay();
     void deleteVMDisplay(QString, QString);
+    void buildMigrateArgs(QStringList&);
 
 };
 

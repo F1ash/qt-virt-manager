@@ -134,6 +134,11 @@ virConnect* VirtDomainControl::getConnect() const
 {
     return currWorkConnect;
 }
+void VirtDomainControl::execMigrateAction(virConnectPtr conn, QStringList &args)
+{
+    domControlThread->setMigrateConnect(conn);
+    domControlThread->execAction(MIGRATE_DOMAIN, args);
+}
 
 /* private slots */
 void VirtDomainControl::resultReceiver(DomActions act, Result data)
@@ -168,7 +173,7 @@ void VirtDomainControl::resultReceiver(DomActions act, Result data)
         if ( !data.msg.isEmpty() ) {
             QString xml = data.msg.first();
             data.msg.removeFirst();
-            data.msg.append(QString("in <a href='%1'>%1</a>").arg(xml));
+            data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
             msgRepeater(data.msg.join(" "));
             QDesktopServices::openUrl(QUrl(xml));
         };
@@ -270,6 +275,34 @@ void VirtDomainControl::execAction(const QStringList &l)
                  ? "0" : "1";
             args.append(autostartState);
             domControlThread->execAction(CHANGE_DOM_AUTOSTART, args);
+        } else if ( l.first()=="migrateVirtDomain" ) {
+            // set Migrate parameters
+            char *hostName = virConnectGetHostname(currWorkConnect);
+            const char *connType = virConnectGetType(currWorkConnect);
+            QStringList list;
+            settings.beginGroup("Connects");
+            foreach (QString conn, settings.childGroups()) {
+                settings.beginGroup(conn);
+                list.append(QString("%1\t(%2)").arg(conn).arg(settings.value("Driver").toString()));
+                settings.endGroup();
+            };
+            settings.endGroup();
+            MigrateDialog *migrateDialog = new MigrateDialog(this, domainName, hostName, connType, list);
+            int exitCode = migrateDialog->exec();
+            QStringList migrArgs = migrateDialog->getMigrateArgs();
+            migrateDialog->deleteLater();
+            if ( exitCode ) {
+                foreach (QString arg, migrArgs) {
+                    args.append(arg);
+                };
+                if ( migrArgs.first().isEmpty() ) {
+                    // migrate useing specified URI
+                    domControlThread->execAction(MIGRATE_DOMAIN, args);
+                } else {
+                    // migrate useing specified connect
+                    emit migrateToConnect(args);
+                };
+            };
         } else if ( l.first()=="getVirtDomXMLDesc" ) {
             domControlThread->execAction(GET_DOM_XML_DESC, args);
         } else if ( l.first()=="displayVirtDomain" ) {
@@ -311,7 +344,7 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                     xml = createVirtDomain->getXMLDescFileName();
                     QStringList data;
                     data.append("New Domain XML'ed");
-                    data.append(QString("in <a href='%1'>%1</a>").arg(xml));
+                    data.append(QString("to <a href='%1'>%1</a>").arg(xml));
                     msgRepeater(data.join(" "));
                     QDesktopServices::openUrl(QUrl(xml));
                 };

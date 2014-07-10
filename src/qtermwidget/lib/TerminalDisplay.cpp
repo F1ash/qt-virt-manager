@@ -24,24 +24,26 @@
 #include "TerminalDisplay.h"
 
 // Qt
-#include <QtGui/QApplication>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QClipboard>
-#include <QtGui/QKeyEvent>
-#include <QtCore/QEvent>
-#include <QtCore/QTime>
-#include <QtCore/QFile>
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QLayout>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QScrollBar>
-#include <QtGui/QStyle>
-#include <QtCore/QTimer>
-#include <QtGui/QToolTip>
+#include <QApplication>
+#include <QBoxLayout>
+#include <QClipboard>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QTime>
+#include <QFile>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QPainter>
+#include <QPixmap>
+#include <QScrollBar>
+#include <QStyle>
+#include <QTimer>
+#include <QToolTip>
 #include <QtDebug>
 #include <QUrl>
+#include <QMimeData>
+#include <QDrag>
 
 // KDE
 //#include <kshell.h>
@@ -139,6 +141,8 @@ void TerminalDisplay::setScreenWindow(ScreenWindow* window)
 //#warning "The order here is not specified - does it matter whether updateImage or updateLineProperties comes first?"
         connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateLineProperties()) );
         connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateImage()) );
+        connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateFilters()) );
+        connect( _screenWindow , SIGNAL(scrolled(int)) , this , SLOT(updateFilters()) );
         window->setWindowLines(_lines);
     }
 }
@@ -1575,6 +1579,7 @@ void TerminalDisplay::blinkCursorEvent()
 void TerminalDisplay::resizeEvent(QResizeEvent*)
 {
   updateImageSize();
+  processFilters();
 }
 
 void TerminalDisplay::propagateSize()
@@ -1769,6 +1774,17 @@ void TerminalDisplay::mousePressEvent(QMouseEvent* ev)
       else
       {
         emit mouseSignal( 0, charColumn + 1, charLine + 1 +_scrollBar->value() -_scrollBar->maximum() , 0);
+      }
+
+      if (ev->modifiers() & Qt::ControlModifier)
+      {
+          Filter::HotSpot *spot = _filterChain->hotSpotAt(charLine, charColumn);
+          if (spot && spot->type() == Filter::HotSpot::Link)
+          {
+              QObject action;
+              action.setObjectName ("open-action");
+              spot->activate(&action);
+          }
       }
     }
   }
@@ -2193,6 +2209,14 @@ void TerminalDisplay::getCharacterPosition(const QPoint& widgetPoint,int& line,i
     // column (or left-most for right-to-left input)
     if ( column > _usedColumns )
         column = _usedColumns;
+}
+
+void TerminalDisplay::updateFilters()
+{
+    if ( !_screenWindow )
+        return;
+
+    processFilters();
 }
 
 void TerminalDisplay::updateLineProperties()
@@ -2752,8 +2776,7 @@ void TerminalDisplay::bell(const QString& message)
     } 
     else if (_bellMode==NotifyBell) 
     {
-        //KNotification::event("BellVisible", message,QPixmap(),this);
-        // TODO/FIXME: qt4 notifications?
+        emit notifyBell(message);
     } 
     else if (_bellMode==VisualBell) 
     {

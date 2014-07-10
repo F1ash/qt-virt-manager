@@ -1,5 +1,5 @@
 #include "lxc_viewer.h"
-#define BLOCK_SIZE 1024
+#define BLOCK_SIZE 1024*100
 
 LXC_Viewer::LXC_Viewer(QWidget *parent, virConnect *conn, QString str) :
     QWidget(parent), jobConnect(conn), domain(str)
@@ -22,10 +22,6 @@ LXC_Viewer::LXC_Viewer(QWidget *parent, virConnect *conn, QString str) :
              * When passing @flags of 0 in order to support a wider range of server versions,
              * it is up to the client to ensure mutual exclusion.
              */
-            /*
-             * TODO: implement virStreamEventCallback for read/write stream control
-             * for display info into terminal emulator
-             */
             int ret;
             if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_SAFE)+1 ) {
                 msg = "Console opened in SAFE-mode...";
@@ -41,24 +37,39 @@ LXC_Viewer::LXC_Viewer(QWidget *parent, virConnect *conn, QString str) :
                 emit errorMsg(msg);
             };
             if ( ret ) {
-                registerStreamEvents();
                 display = new QTermWidget(0, this);
-                QFont font = QApplication::font();
-                font.setFamily("Mono");
-                font.setPointSize(12);
-                display->setTerminalFont(font);
+                //QFont font = QApplication::font();
+                //font.setFamily("Mono");
+                //font.setPointSize(12);
+                //display->setTerminalFont(font);
+                display->setTerminalOpacity(0.5);
                 display->setScrollBarPosition(QTermWidget::ScrollBarRight);
                 //display->setShellProgram("/usr/bin/mc");
                 //connect(display, SIGNAL(receivedData(const QString&)),
                 //        this, SLOT(sendData(const QString&)));
                 connect(display, SIGNAL(finished()), this, SLOT(close()));
                 connect(display, SIGNAL(destroyed()), this, SLOT(close()));
+                /*
+                connect(display->getSession(),
+                        SIGNAL(commToVM(const QByteArray&)),
+                        this,
+                        SLOT(sendDataToVMachine(const QByteArray&)));
+                        */
                 commonLayout->addWidget(display);
-                display->startShellProgram();
+                // don't start (default) shell program,
+                // because take the data from VM Stream
+                // display->startShellProgram();
+                //ptySlaveFd = display->getSession()->getSlaveFd();
+                //qDebug()<<ptySlaveFd<<"slFd";
+                ret = registerStreamEvents();
                 if ( ret<0 ) {
                     msg = QString("Open PTY Error...");
                     emit errorMsg(msg);
                 };
+                //else updateStreamEvents(stream,
+                //                          VIR_STREAM_EVENT_READABLE |
+                //                          VIR_STREAM_EVENT_ERROR |
+                //                          VIR_STREAM_EVENT_HANGUP);
             } else
                 commonLayout->addWidget(dontActive, Qt::AlignCenter);
         };
@@ -71,22 +82,26 @@ LXC_Viewer::LXC_Viewer(QWidget *parent, virConnect *conn, QString str) :
 LXC_Viewer::~LXC_Viewer()
 {
     if ( display!=NULL ) {
-        unregisterStreamEvents();
         //disconnect(display, SIGNAL(receivedData(const QString&)),
         //           this, SLOT(sendData(const QString&)));
         disconnect(display, SIGNAL(finished()), this, SLOT(close()));
         disconnect(display, SIGNAL(destroyed()), this, SLOT(close()));
+        /*
+         * disconnect(display->getSession(),
+                   SIGNAL(commToVM(const QByteArray&)),
+                   this,
+                   SLOT(sendDataToVMachine(const QByteArray&)));
+                   */
+        unregisterStreamEvents();
         delete display;
         display = 0;
+        //qDebug()<<domain<< "Display destroyed";
     };
     delete dontActive;
     dontActive = 0;
-    if ( stream!=NULL ) {
-        virStreamFinish(stream);
-        virStreamFree(stream);
-    };
     delete commonLayout;
     commonLayout = 0;
+    //qDebug()<<domain<<"Viewer destroyed";
 }
 
 /* public slots */
@@ -101,22 +116,23 @@ virDomain* LXC_Viewer::getDomainPtr() const
 {
     return virDomainLookupByName(jobConnect, domain.toUtf8().data());
 }
-void LXC_Viewer::registerStreamEvents()
+int LXC_Viewer::registerStreamEvents()
 {
     int ret = virStreamEventAddCallback(stream,
-                                        VIR_STREAM_EVENT_ERROR |
-                                        VIR_STREAM_EVENT_HANGUP |
                                         VIR_STREAM_EVENT_READABLE |
-                                        VIR_STREAM_EVENT_WRITABLE,
+                                        VIR_STREAM_EVENT_HANGUP |
+                                        VIR_STREAM_EVENT_ERROR,
                                         streamEventCallBack, this,
     //  don't register freeCallback, because it remove viewer
                                         NULL);
     if (ret<0) sendConnErrors();
+    return ret;
 }
-void LXC_Viewer::unregisterStreamEvents()
+int LXC_Viewer::unregisterStreamEvents()
 {
     int ret = virStreamEventRemoveCallback(stream);
     if (ret<0) sendConnErrors();
+    return ret;
 }
 void LXC_Viewer::freeData(void *opaque)
 {
@@ -128,57 +144,87 @@ void LXC_Viewer::freeData(void *opaque)
 void LXC_Viewer::streamEventCallBack(virStreamPtr _stream, int events, void *opaque)
 {
     LXC_Viewer *obj = static_cast<LXC_Viewer*>(opaque);
-    uint length = 0;
-    int got, saved, step, recvd;
-    char buf[BLOCK_SIZE];
-    QString msg;
-    switch (events) {
-    case VIR_STREAM_EVENT_ERROR:
-        break;
-    case VIR_STREAM_EVENT_HANGUP:
-        break;
-    case VIR_STREAM_EVENT_READABLE:
-        step = 0;
-        while ( 1 ) {
-            //got = read(buf, BLOCK_SIZE);
-            if (got == 0) break;
-            if ( got<0 ) {
-                //msg = QString("ReadError after (%2): %1 bytes")
-                //        .arg(length).arg(step);
-                //emit errorMsg( msg );
-            } else {
-                saved = virStreamSend(_stream, buf, got);
-                if (saved < 0) {
-                    break;
-                };
-                step++;
-                length += saved;
-                //qDebug()<<"got<>saved:length"<<got<<saved<<step<<length;
-            };
-        };
-        break;
-    case VIR_STREAM_EVENT_WRITABLE:
-        recvd = 0;
-        while ( 1 ) {
-            got = virStreamRecv(_stream, buf, BLOCK_SIZE);
-            if (got < 0) {
-                //msg = QString("WriteError after : %1 bytes").arg(recvd);
-                //emit errorMsg( msg );
-                break;
-            };
-            if (got == 0) break;
-            recvd += got;
-            //msg = QString().fromUtf8(buf);
-            //emit errorMsg(msg);
-        };
-        break;
-    default:
-        break;
-    }
+    if ( events & VIR_STREAM_EVENT_ERROR ||
+         events & VIR_STREAM_EVENT_HANGUP ) {
+        // Received stream ERROR/HANGUP, closing console
+        obj->streamClosed();
+        return;
+    };
+    if ( events & VIR_STREAM_EVENT_READABLE ) {
+        obj->sendDataToDisplay(_stream);
+    };
+    if ( events & VIR_STREAM_EVENT_WRITABLE ) {
+        obj->sendDataToVMachine(_stream);
+    };
 }
-void LXC_Viewer::sendData(const QString &text)
+void LXC_Viewer::updateStreamEvents(virStreamPtr _stream, int type)
 {
-    qDebug()<<text<<"received";
+    int ret = virStreamEventUpdateCallback(_stream, type);
+    if (ret<0) sendConnErrors();
+}
+void LXC_Viewer::sendDataToDisplay(virStreamPtr _stream)
+{
+    char buf[BLOCK_SIZE];
+    int got = virStreamRecv(_stream, buf, BLOCK_SIZE);
+    switch ( got ) {
+    case -2:
+        // This is basically EAGAIN
+        return;
+    case 0:
+        // Received EOF from stream, closing
+        streamClosed();
+        return;
+    case -1:
+        // Error stream
+        return;
+    default:
+        // send to TermEmulator stdout useing pty->slaveFd
+        ::write(ptySlaveFd, &buf, got);
+        //qDebug()<<QString().fromUtf8(buf)<<"toTerm";
+        //QString answer = QString().fromUtf8(buf);
+        //display->sendText(answer);
+        break;
+    };
+}
+void LXC_Viewer::sendDataToVMachine(virStreamPtr _stream)
+{
+    if ( terminalToStream.isEmpty() ) {
+        return;
+    };
+    int saved = virStreamSend(_stream, terminalToStream.toUtf8().data(), BLOCK_SIZE);
+    if ( saved==-2 ) {
+        // This is basically EAGAIN
+        return;
+    } else if ( saved==-1 ) {
+        sendConnErrors();
+    } else {
+        qDebug()<<saved<<"sent";
+        terminalToStream.remove(0, saved);
+    };
+    if ( terminalToStream.isEmpty() ) {
+        updateStreamEvents(_stream,
+                           VIR_STREAM_EVENT_READABLE |
+                           VIR_STREAM_EVENT_ERROR |
+                           VIR_STREAM_EVENT_HANGUP);
+    };
+}
+void LXC_Viewer::sendDataToVMachine(const QByteArray &comm)
+{
+    qDebug()<<terminalToStream.append(comm)<<"recv from Term";
+    updateStreamEvents(stream,
+                       VIR_STREAM_EVENT_WRITABLE |
+                       VIR_STREAM_EVENT_ERROR |
+                       VIR_STREAM_EVENT_HANGUP);
+}
+
+void LXC_Viewer::streamClosed()
+{
+    if ( stream!=NULL ) {
+        virStreamFinish(stream);
+        virStreamFree(stream);
+    };
+    qDebug()<<"stream closed";
+    //close();
 }
 
 void LXC_Viewer::sendConnErrors()

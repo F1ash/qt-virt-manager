@@ -29,7 +29,7 @@ StorageVolControlMenu::StorageVolControlMenu(QWidget *parent, QStringList params
         addAction(getXMLDesc_Action);
         addSeparator();
     };
-    reload = new QAction("Reload Pool OverView", this);
+    reload = new QAction("Reload Volume OverView", this);
     reload->setIcon(QIcon::fromTheme("view-refresh"));
     reload->setEnabled(!autoReloadState);
 
