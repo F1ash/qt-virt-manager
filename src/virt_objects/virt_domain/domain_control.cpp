@@ -108,7 +108,7 @@ bool VirtDomainControl::setCurrentWorkConnect(virConnect *conn)
     int ret = virConnectRef(currWorkConnect);
     if ( ret<0 ) {
         virErrorPtr virtErrors = virGetLastError();
-        if ( virtErrors!=NULL ) {
+        if ( virtErrors!=NULL && virtErrors->code>0 ) {
             QString time = QTime::currentTime().toString();
             QString msg = QString("%3 VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message).arg(time);
             emit domMsg( msg );
@@ -138,6 +138,10 @@ void VirtDomainControl::execMigrateAction(virConnectPtr conn, QStringList &args)
 {
     domControlThread->setMigrateConnect(conn);
     domControlThread->execAction(MIGRATE_DOMAIN, args);
+}
+void VirtDomainControl::reloadDomainState()
+{
+    domControlThread->execAction(GET_ALL_DOMAIN, QStringList());
 }
 
 /* private slots */

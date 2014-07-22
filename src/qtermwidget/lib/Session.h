@@ -359,6 +359,11 @@ public:
      */
     void refresh();
 
+    Pty         *_shellProcess;
+
+    int ptyMasterFd = -1;
+    int ptySlaveFd = -1;
+
 //  void startZModem(const QString &rz, const QString &dir, const QStringList &list);
 //  void cancelZModem();
 //  bool isZModemBusy() { return _zmodemBusy; }
@@ -491,9 +496,7 @@ private:
     WId windowId() const;
 
     int            _uniqueIdentifier;
-
-    Pty     *_shellProcess;
-    Emulation  *  _emulation;
+    Emulation   *  _emulation;
 
     QList<TerminalDisplay *> _views;
 

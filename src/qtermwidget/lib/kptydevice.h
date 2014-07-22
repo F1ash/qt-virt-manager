@@ -32,6 +32,7 @@
 #include "kpty_p.h"
 
 #include <QIODevice>
+#include <QDebug>
 
 #define KMAXINT ((int)(~0U >> 1))
 

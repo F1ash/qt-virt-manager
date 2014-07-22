@@ -108,7 +108,7 @@ Result NetControlThread::createNetwork()
     };
     result.name = QString().fromUtf8( virNetworkGetName(network) );
     result.result = true;
-    result.msg.append(QString("'%1' Network from\n\"%2\"\nis created.")
+    result.msg.append(QString("'<b>%1</b>' Network from\n\"%2\"\nis created.")
                       .arg(result.name).arg(path));
     virNetworkFree(network);
     return result;
@@ -133,7 +133,7 @@ Result NetControlThread::defineNetwork()
     };
     result.name = QString().fromUtf8( virNetworkGetName(network) );
     result.result = true;
-    result.msg.append(QString("'%1' Network from\n\"%2\"\nis defined.")
+    result.msg.append(QString("'<b>%1</b>' Network from\n\"%2\"\nis defined.")
                       .arg(result.name).arg(path));
     virNetworkFree(network);
     return result;
@@ -151,7 +151,7 @@ Result NetControlThread::startNetwork()
     } else sendConnErrors();
     result.name = name;
     result.result = started;
-    result.msg.append(QString("'%1' Network %2 Started.")
+    result.msg.append(QString("'<b>%1</b>' Network %2 Started.")
                       .arg(name).arg((started)?"":"don't"));
     return result;
 }
@@ -168,7 +168,7 @@ Result NetControlThread::destroyNetwork()
     } else sendConnErrors();
     result.name = name;
     result.result = deleted;
-    result.msg.append(QString("'%1' Network %2 Destroyed.")
+    result.msg.append(QString("'<b>%1</b>' Network %2 Destroyed.")
                       .arg(name).arg((deleted)?"":"don't"));
     return result;
 }
@@ -185,7 +185,7 @@ Result NetControlThread::undefineNetwork()
     } else sendConnErrors();
     result.name = name;
     result.result = deleted;
-    result.msg.append(QString("'%1' Network %2 Undefined.")
+    result.msg.append(QString("'<b>%1</b>' Network %2 Undefined.")
                       .arg(name).arg((deleted)?"":"don't"));
     return result;
 }
@@ -215,7 +215,7 @@ Result NetControlThread::changeAutoStartNetwork()
         virNetworkFree(network);
     } else sendConnErrors();
     result.result = set;
-    result.msg.append(QString("'%1' Network autostart %2 Set.")
+    result.msg.append(QString("'<b>%1</b>' Network autostart %2 Set.")
                       .arg(name).arg((set)?"":"don't"));
     return result;
 }
@@ -242,7 +242,7 @@ Result NetControlThread::getVirtNetXMLDesc()
     f.close();
     free(Returns);
     result.result = read;
-    result.msg.append(QString("'%1' Network %2 XML'ed")
+    result.msg.append(QString("'<b>%1</b>' Network %2 XML'ed")
                       .arg(name).arg((read)?"":"don't"));
     return result;
 }

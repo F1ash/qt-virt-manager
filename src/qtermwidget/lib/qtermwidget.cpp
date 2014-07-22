@@ -606,3 +606,8 @@ void QTermWidget::setSilenceTimeout(int seconds)
 {
     m_impl->m_session->setMonitorSilenceSeconds(seconds);
 }
+
+int QTermWidget::getSlaveFd() const
+{
+    return m_impl->m_session->ptySlaveFd;
+}

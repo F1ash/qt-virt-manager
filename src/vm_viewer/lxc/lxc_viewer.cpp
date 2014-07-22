@@ -1,18 +1,21 @@
 #include "lxc_viewer.h"
-#define BLOCK_SIZE 1024*100
 
-LXC_Viewer::LXC_Viewer(QWidget *parent, virConnect *conn, QString str) :
-    QWidget(parent), jobConnect(conn), domain(str)
+#define BLOCK_SIZE  1024*100
+#define TIMEOUT     60*1000
+#define PERIOD      333
+
+LXC_Viewer::LXC_Viewer(int startnow, QWidget *parent, virConnect *conn, QString str) :
+    QTermWidget(startnow, parent), jobConnect(conn), domain(str)
 {
-    dontActive = new QLabel("Domain is shutdown", this);
-    commonLayout = new QVBoxLayout();
+    qRegisterMetaType<QString>("QString&");
     if ( jobConnect!=NULL ) {
         domainPtr = getDomainPtr();
-    };QString msg;
+    };
+    QString msg;
     if ( domainPtr!=NULL ) {
         stream = virStreamNew( jobConnect, VIR_STREAM_NONBLOCK );
         if ( stream==NULL ) {
-            msg = "Create virtual stream failed...";
+            msg = QString("In '<b>%1</b>': Create virtual stream failed...").arg(domain);
             emit errorMsg(msg);
         } else {
             /*
@@ -24,94 +27,115 @@ LXC_Viewer::LXC_Viewer(QWidget *parent, virConnect *conn, QString str) :
              */
             int ret;
             if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_SAFE)+1 ) {
-                msg = "Console opened in SAFE-mode...";
+                msg = QString("In '<b>%1</b>': Console opened in SAFE-mode...").arg(domain);
                 emit errorMsg(msg);
             } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_FORCE )+1 ) {
-                msg = "Console opened in FORCE-mode...";
+                msg = QString("In '<b>%1</b>': Console opened in FORCE-mode...").arg(domain);
                 emit errorMsg(msg);
             } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, 0 )+1 ) {
-                msg = "Console opened in ZIRO-mode...";
+                msg = QString("In '<b>%1</b>': Console opened in ZIRO-mode...").arg(domain);
                 emit errorMsg(msg);
             } else {
-                msg = "Open console failed...";
+                msg = QString("In '<b>%1</b>': Open console failed...").arg(domain);
                 emit errorMsg(msg);
             };
             if ( ret ) {
-                display = new QTermWidget(0, this);
-                //QFont font = QApplication::font();
-                //font.setFamily("Mono");
-                //font.setPointSize(12);
-                //display->setTerminalFont(font);
-                display->setTerminalOpacity(0.5);
-                display->setScrollBarPosition(QTermWidget::ScrollBarRight);
-                //display->setShellProgram("/usr/bin/mc");
-                //connect(display, SIGNAL(receivedData(const QString&)),
-                //        this, SLOT(sendData(const QString&)));
-                connect(display, SIGNAL(finished()), this, SLOT(close()));
-                connect(display, SIGNAL(destroyed()), this, SLOT(close()));
-                /*
-                connect(display->getSession(),
-                        SIGNAL(commToVM(const QByteArray&)),
-                        this,
-                        SLOT(sendDataToVMachine(const QByteArray&)));
-                        */
-                commonLayout->addWidget(display);
+                QFont font = QApplication::font();
+            #ifdef Q_WS_MAC
+                font.setFamily("Monaco");
+            #elif defined(Q_WS_QWS)
+                font.setFamily("fixed");
+            #else
+                font.setFamily("Monospace");
+            #endif
+                font.setPointSize(12);
+                this->setTerminalFont(font);
+                // usually in a terminals don't used opacity
+                //this->setTerminalOpacity(0.5);
+                this->setScrollBarPosition(QTermWidget::ScrollBarRight);
+                this->setTerminalFont(font);
+                //this->setColorScheme(COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW);
+                this->setScrollBarPosition(QTermWidget::ScrollBarRight);
+                foreach (QString arg, QApplication::arguments()) {
+                    if (this->availableColorSchemes().contains(arg))
+                        this->setColorScheme(arg);
+                    if (this->availableKeyBindings().contains(arg))
+                        this->setKeyBindings(arg);
+                };
                 // don't start (default) shell program,
                 // because take the data from VM Stream
-                // display->startShellProgram();
-                //ptySlaveFd = display->getSession()->getSlaveFd();
-                //qDebug()<<ptySlaveFd<<"slFd";
-                ret = registerStreamEvents();
-                if ( ret<0 ) {
-                    msg = QString("Open PTY Error...");
-                    emit errorMsg(msg);
-                };
-                //else updateStreamEvents(stream,
-                //                          VIR_STREAM_EVENT_READABLE |
-                //                          VIR_STREAM_EVENT_ERROR |
-                //                          VIR_STREAM_EVENT_HANGUP);
-            } else
-                commonLayout->addWidget(dontActive, Qt::AlignCenter);
+                timerId = startTimer(PERIOD);
+            };
         };
     } else {
-        msg = "Connect or Domain is NULL...";
+        msg = QString("In '<b>%1</b>': Connect or Domain is NULL...").arg(domain);
         emit errorMsg(msg);
     };
-    setLayout(commonLayout);
 }
 LXC_Viewer::~LXC_Viewer()
 {
-    if ( display!=NULL ) {
-        //disconnect(display, SIGNAL(receivedData(const QString&)),
-        //           this, SLOT(sendData(const QString&)));
-        disconnect(display, SIGNAL(finished()), this, SLOT(close()));
-        disconnect(display, SIGNAL(destroyed()), this, SLOT(close()));
-        /*
-         * disconnect(display->getSession(),
-                   SIGNAL(commToVM(const QByteArray&)),
-                   this,
-                   SLOT(sendDataToVMachine(const QByteArray&)));
-                   */
-        unregisterStreamEvents();
-        delete display;
-        display = 0;
-        //qDebug()<<domain<< "Display destroyed";
+    if ( timerId>0 ) killTimer(timerId);
+    if ( domainPtr!=NULL ) {
+        if ( readSlaveFd!=NULL ) {
+            disconnect(readSlaveFd,
+                       SIGNAL(activated(int)),
+                       this,
+                       SLOT(sendDataToVMachine(int)));
+            delete readSlaveFd;
+            readSlaveFd = 0;
+        };
+        closeStream();
     };
-    delete dontActive;
-    dontActive = 0;
-    delete commonLayout;
-    commonLayout = 0;
-    //qDebug()<<domain<<"Viewer destroyed";
+    qDebug()<<domain<< "Display destroyed";
 }
 
 /* public slots */
-void LXC_Viewer::close()
+void LXC_Viewer::closeTerminal()
 {
-    //commonLayout->removeWidget(display);
-    this->close();
+    closeStream();
+    emit jobFinished();
 }
 
 /* private slots */
+void LXC_Viewer::timerEvent(QTimerEvent *ev)
+{
+    if ( ev->timerId()==timerId ) {
+        ptySlaveFd = this->getSlaveFd();
+        counter++;
+        //qDebug()<<counter<<ptySlaveFd;
+        if ( ptySlaveFd>0 ) {
+            killTimer(timerId);
+            timerId = 0;
+            counter = 0;
+            if ( registerStreamEvents()<0 ) {
+                QString msg = QString("In '<b>%1</b>': Stream Registation fail.").arg(domain);
+                emit errorMsg(msg);
+            } else {
+                readSlaveFd = new QSocketNotifier(
+                            ptySlaveFd,
+                            QSocketNotifier::Read);
+                connect(readSlaveFd,
+                        SIGNAL(activated(int)),
+                        this,
+                        SLOT(sendDataToVMachine(int)));
+                readSlaveFd->setEnabled(true);
+                QString msg = QString("In '<b>%1</b>': Stream Registation success. \
+PTY opened. Terminal is active.").arg(domain);
+                emit errorMsg(msg);
+            };
+        } else if ( TIMEOUT<counter*PERIOD ) {
+            killTimer(timerId);
+            timerId = 0;
+            counter = 0;
+            QString msg = QString("In '<b>%1</b>': Open PTY Error...").arg(domain);
+            emit errorMsg(msg);
+        }
+    }
+}
+void LXC_Viewer::closeEvent(QCloseEvent *ev)
+{
+    closeTerminal();
+}
 virDomain* LXC_Viewer::getDomainPtr() const
 {
     return virDomainLookupByName(jobConnect, domain.toUtf8().data());
@@ -147,14 +171,14 @@ void LXC_Viewer::streamEventCallBack(virStreamPtr _stream, int events, void *opa
     if ( events & VIR_STREAM_EVENT_ERROR ||
          events & VIR_STREAM_EVENT_HANGUP ) {
         // Received stream ERROR/HANGUP, closing console
-        obj->streamClosed();
+        obj->closeTerminal();
         return;
     };
     if ( events & VIR_STREAM_EVENT_READABLE ) {
         obj->sendDataToDisplay(_stream);
     };
     if ( events & VIR_STREAM_EVENT_WRITABLE ) {
-        obj->sendDataToVMachine(_stream);
+        //obj->sendDataToVMachine(_stream);
     };
 }
 void LXC_Viewer::updateStreamEvents(virStreamPtr _stream, int type)
@@ -172,7 +196,7 @@ void LXC_Viewer::sendDataToDisplay(virStreamPtr _stream)
         return;
     case 0:
         // Received EOF from stream, closing
-        streamClosed();
+        closeTerminal();
         return;
     case -1:
         // Error stream
@@ -180,18 +204,19 @@ void LXC_Viewer::sendDataToDisplay(virStreamPtr _stream)
     default:
         // send to TermEmulator stdout useing pty->slaveFd
         ::write(ptySlaveFd, &buf, got);
-        //qDebug()<<QString().fromUtf8(buf)<<"toTerm";
+        qDebug()<<QString().fromUtf8(buf)<<"toTerm";
         //QString answer = QString().fromUtf8(buf);
         //display->sendText(answer);
         break;
     };
 }
-void LXC_Viewer::sendDataToVMachine(virStreamPtr _stream)
+void LXC_Viewer::sendDataToVMachine(int fd)
 {
-    if ( terminalToStream.isEmpty() ) {
-        return;
-    };
-    int saved = virStreamSend(_stream, terminalToStream.toUtf8().data(), BLOCK_SIZE);
+    readSlaveFd->setEnabled(false);
+    char buff[BLOCK_SIZE];
+    size_t got = read(ptySlaveFd, &buff, BLOCK_SIZE);
+    qDebug()<<fd<<"fd"<<buff;
+    int saved = virStreamSend(stream, buff, got);
     if ( saved==-2 ) {
         // This is basically EAGAIN
         return;
@@ -199,38 +224,35 @@ void LXC_Viewer::sendDataToVMachine(virStreamPtr _stream)
         sendConnErrors();
     } else {
         qDebug()<<saved<<"sent";
-        terminalToStream.remove(0, saved);
     };
-    if ( terminalToStream.isEmpty() ) {
-        updateStreamEvents(_stream,
-                           VIR_STREAM_EVENT_READABLE |
-                           VIR_STREAM_EVENT_ERROR |
-                           VIR_STREAM_EVENT_HANGUP);
-    };
-}
-void LXC_Viewer::sendDataToVMachine(const QByteArray &comm)
-{
-    qDebug()<<terminalToStream.append(comm)<<"recv from Term";
     updateStreamEvents(stream,
-                       VIR_STREAM_EVENT_WRITABLE |
+                       VIR_STREAM_EVENT_READABLE |
                        VIR_STREAM_EVENT_ERROR |
                        VIR_STREAM_EVENT_HANGUP);
+    readSlaveFd->setEnabled(true);
 }
-
-void LXC_Viewer::streamClosed()
+void LXC_Viewer::closeStream()
 {
     if ( stream!=NULL ) {
+        if ( virStreamEventUpdateCallback(
+                 stream,
+                 VIR_STREAM_EVENT_READABLE |
+                 VIR_STREAM_EVENT_WRITABLE |
+                 VIR_STREAM_EVENT_ERROR |
+                 VIR_STREAM_EVENT_HANGUP) +1 ) {
+            unregisterStreamEvents();
+        } else sendConnErrors();
         virStreamFinish(stream);
         virStreamFree(stream);
+        stream = NULL;
     };
     qDebug()<<"stream closed";
-    //close();
 }
 
 void LXC_Viewer::sendConnErrors()
 {
     virtErrors = virConnGetLastError(jobConnect);
-    if ( virtErrors!=NULL ) {
+    if ( virtErrors!=NULL && virtErrors->code>0 ) {
         QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
         emit errorMsg( msg );
@@ -240,7 +262,7 @@ void LXC_Viewer::sendConnErrors()
 void LXC_Viewer::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
-    if ( virtErrors!=NULL ) {
+    if ( virtErrors!=NULL && virtErrors->code>0 ) {
         QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
         emit errorMsg( msg );

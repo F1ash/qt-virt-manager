@@ -131,7 +131,7 @@ void ConnAliveThread::closeConnect()
 void ConnAliveThread::sendConnErrors()
 {
     virtErrors = virConnGetLastError(conn);
-    if ( virtErrors!=NULL ) {
+    if ( virtErrors!=NULL && virtErrors->code>0 ) {
         emit connMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                       .arg(QString().fromUtf8(virtErrors->message)) );
         virResetError(virtErrors);
@@ -140,7 +140,7 @@ void ConnAliveThread::sendConnErrors()
 void ConnAliveThread::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
-    if ( virtErrors!=NULL )
+    if ( virtErrors!=NULL && virtErrors->code>0 )
         emit connMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                       .arg(QString().fromUtf8(virtErrors->message)) );
     virResetLastError();

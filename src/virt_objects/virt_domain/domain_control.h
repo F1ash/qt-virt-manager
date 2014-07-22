@@ -48,6 +48,7 @@ public slots:
     void                     setListHeader(QString&);
     virConnect*              getConnect() const;
     void                     execMigrateAction(virConnectPtr, QStringList&);
+    void                     reloadDomainState();
 
 private slots:
     void                     resultReceiver(DomActions, Result);

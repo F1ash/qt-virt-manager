@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 #endif
     font.setPointSize(12);
     
-    console->setTerminalFont(font);
+    //console->setTerminalFont(font);
     
    // console->setColorScheme(COLOR_SCHEME_BLACK_ON_LIGHT_YELLOW);
     console->setScrollBarPosition(QTermWidget::ScrollBarRight);

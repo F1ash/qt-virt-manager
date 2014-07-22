@@ -5,23 +5,14 @@ WipeMenu::WipeMenu(QWidget *parent) :
 {
     setTitle("Wipe Algorithm");
     algorithm_ZERO = new QAction("ZERO", this);
-    algorithm_ZERO->setToolTip("1-pass, all zeroes");
     algorithm_NNSA = new QAction("NNSA", this);
-    algorithm_NNSA->setToolTip("4-pass NNSA Policy Letter NAP-14.1-C (XVI-8)");
     algorithm_DOD = new QAction("DOD", this);
-    algorithm_DOD->setToolTip("4-pass DoD 5220.22-M section 8-306 procedure");
     algorithm_BSI = new QAction("BSI", this);
-    algorithm_BSI->setToolTip("9-pass method recommended by the German Center\nof Security in Information Technologies");
     algorithm_GUTMANN = new QAction("GUTMANN", this);
-    algorithm_GUTMANN->setToolTip("The canonical 35-pass sequence");
     algorithm_SCHNEIER = new QAction("SCHNEIER", this);
-    algorithm_SCHNEIER->setToolTip("7-pass method described by Bruce Schneier\nin \"Applied Cryptography\" (1996)");
     algorithm_PFITZNER7 = new QAction("PFITZNER7", this);
-    algorithm_PFITZNER7->setToolTip("7-pass random");
     algorithm_PFITZNER33 = new QAction("PFITZNER33", this);
-    algorithm_PFITZNER33->setToolTip("33-pass random");
     algorithm_RANDOM = new QAction("RANDOM", this);
-    algorithm_RANDOM->setToolTip("1-pass random");
 
     addAction(algorithm_ZERO);
     addAction(algorithm_NNSA);
@@ -34,9 +25,12 @@ WipeMenu::WipeMenu(QWidget *parent) :
     addAction(algorithm_RANDOM);
 
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
+    connect(this, SIGNAL(hovered(QAction*)), this, SLOT(showActionToolTip(QAction*)));
 }
 WipeMenu::~WipeMenu()
 {
+    disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
+    disconnect(this, SIGNAL(hovered(QAction*)), this, SLOT(showActionToolTip(QAction*)));
     delete algorithm_ZERO;
     algorithm_ZERO = 0;
     delete algorithm_NNSA;
@@ -81,4 +75,28 @@ void WipeMenu::emitExecMethod(QAction *action)
         parameters << "wipeVirtStorageVol" << QString("%1").arg(VIR_STORAGE_VOL_WIPE_ALG_RANDOM);
     } else return;
     emit execMethod(parameters);
+}
+void WipeMenu::showActionToolTip(QAction *action)
+{
+    QString toolTip;
+    if ( action == algorithm_ZERO ) {
+        toolTip = QString("1-pass, all zeroes");
+    } else if ( action == algorithm_NNSA ) {
+        toolTip = QString("4-pass NNSA Policy Letter NAP-14.1-C (XVI-8)");
+    } else if ( action == algorithm_DOD ) {
+        toolTip = QString("4-pass DoD 5220.22-M section 8-306 procedure");
+    } else if ( action == algorithm_BSI ) {
+        toolTip = QString("9-pass method recommended by the German Center\nof Security in Information Technologies");
+    } else if ( action == algorithm_GUTMANN ) {
+        toolTip = QString("The canonical 35-pass sequence");
+    } else if ( action == algorithm_SCHNEIER ) {
+        toolTip = QString("7-pass method described by Bruce Schneier\nin \"Applied Cryptography\" (1996)");
+    } else if ( action == algorithm_PFITZNER7 ) {
+        toolTip = QString("7-pass random");
+    } else if ( action == algorithm_PFITZNER33 ) {
+        toolTip = QString("33-pass random");
+    } else if ( action == algorithm_RANDOM ) {
+        toolTip = QString("1-pass random");
+    };
+    setToolTip(toolTip);
 }

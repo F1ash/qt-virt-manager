@@ -20,3 +20,13 @@ implemented domain migration;
 implemented domain close event;
 added migrate icons & some fixes;
 probe to implement LXC-terminal (fail);
+
+v 0.2.12 :
+improved closing vm_viewers;
+implemented messaging from vm_viewers to Event&Error Log;
+improved wait_thread for closing all vm_viewers;
+improved wipe menu from Volume Storages;
+some prepears for LXC-terminal:
+    get pty file descriptors;
+    added socket notifier (for read pty);
+some fixes & improvements;

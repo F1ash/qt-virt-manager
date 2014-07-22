@@ -189,6 +189,8 @@ public slots:
 
     void toggleShowSearchBar();
 
+    int  getSlaveFd() const;
+
 protected:
     virtual void resizeEvent(QResizeEvent *);
 

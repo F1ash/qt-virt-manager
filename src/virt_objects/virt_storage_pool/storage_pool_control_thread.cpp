@@ -112,7 +112,7 @@ QStringList StoragePoolControlThread::createStoragePool()
         sendConnErrors();
         return result;
     };
-    result.append(QString("'%1' StoragePool from\n\"%2\"\nis created.").arg(virStoragePoolGetName(storagePool)).arg(path));
+    result.append(QString("'<b>%1</b>' StoragePool from\n\"%2\"\nis created.").arg(virStoragePoolGetName(storagePool)).arg(path));
     virStoragePoolFree(storagePool);
     return result;
 }
@@ -136,7 +136,7 @@ QStringList StoragePoolControlThread::defineStoragePool()
         sendConnErrors();
         return result;
     };
-    result.append(QString("'%1' StoragePool from\n\"%2\"\nis defined.").arg(virStoragePoolGetName(storagePool)).arg(path));
+    result.append(QString("'<b>%1</b>' StoragePool from\n\"%2\"\nis defined.").arg(virStoragePoolGetName(storagePool)).arg(path));
     virStoragePoolFree(storagePool);
     return result;
 }
@@ -179,7 +179,7 @@ QStringList StoragePoolControlThread::startStoragePool()
         if (!started) sendConnErrors();
         virStoragePoolFree(storagePool);
     } else sendConnErrors();
-    result.append(QString("'%1' StoragePool %2 Started.").arg(name).arg((started)?"":"don't"));
+    result.append(QString("'<b>%1</b>' StoragePool %2 Started.").arg(name).arg((started)?"":"don't"));
     return result;
 }
 QStringList StoragePoolControlThread::destroyStoragePool()
@@ -220,7 +220,7 @@ QStringList StoragePoolControlThread::destroyStoragePool()
         if (!deleted) sendConnErrors();
         virStoragePoolFree(storagePool);
     } else sendConnErrors();
-    result.append(QString("'%1' StoragePool %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
+    result.append(QString("'<b>%1</b>' StoragePool %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
 QStringList StoragePoolControlThread::undefineStoragePool()
@@ -261,7 +261,7 @@ QStringList StoragePoolControlThread::undefineStoragePool()
         if (!deleted) sendConnErrors();
         virStoragePoolFree(storagePool);
     } else sendConnErrors();
-    result.append(QString("'%1' StoragePool %2 Undefined.").arg(name).arg((deleted)?"":"don't"));
+    result.append(QString("'<b>%1</b>' StoragePool %2 Undefined.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
 QStringList StoragePoolControlThread::changeAutoStartStoragePool()
@@ -314,7 +314,7 @@ QStringList StoragePoolControlThread::changeAutoStartStoragePool()
         if (!set) sendConnErrors();
         virStoragePoolFree(storagePool);
     } else sendConnErrors();
-    result.append(QString("'%1' StoragePool autostart %2 Set.").arg(name).arg((set)?"":"don't"));
+    result.append(QString("'<b>%1</b>' StoragePool autostart %2 Set.").arg(name).arg((set)?"":"don't"));
     return result;
 }
 QStringList StoragePoolControlThread::getStoragePoolXMLDesc()
@@ -365,14 +365,14 @@ QStringList StoragePoolControlThread::getStoragePoolXMLDesc()
     result.append(f.fileName());
     f.close();
     free(Returns);
-    result.append(QString("'%1' StoragePool %2 XML'ed").arg(name).arg((read)?"":"don't"));
+    result.append(QString("'<b>%1</b>' StoragePool %2 XML'ed").arg(name).arg((read)?"":"don't"));
     return result;
 }
 
 void StoragePoolControlThread::sendConnErrors()
 {
     virtErrors = virConnGetLastError(currWorkConnect);
-    if ( virtErrors!=NULL ) {
+    if ( virtErrors!=NULL && virtErrors->code>0 ) {
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                        .arg(QString().fromUtf8(virtErrors->message)) );
         virResetError(virtErrors);
@@ -381,7 +381,7 @@ void StoragePoolControlThread::sendConnErrors()
 void StoragePoolControlThread::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
-    if ( virtErrors!=NULL )
+    if ( virtErrors!=NULL && virtErrors->code>0 )
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                        .arg(QString().fromUtf8(virtErrors->message)) );
     virResetLastError();

@@ -24,7 +24,7 @@ void ControlThread::run()
 void ControlThread::sendConnErrors()
 {
     virtErrors = virConnGetLastError(currWorkConnect);
-    if ( virtErrors!=NULL ) {
+    if ( virtErrors!=NULL && virtErrors->code>0 ) {
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                        .arg(QString().fromUtf8(virtErrors->message)) );
         virResetError(virtErrors);
@@ -33,7 +33,7 @@ void ControlThread::sendConnErrors()
 void ControlThread::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
-    if ( virtErrors!=NULL )
+    if ( virtErrors!=NULL && virtErrors->code>0 )
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                        .arg(QString().fromUtf8(virtErrors->message)) );
     virResetLastError();

@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-
+    /*
     pid_t pid, sid;
 
     //Fork the Parent Process
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
-
+    */
 
     // init GUI
     QApplication a(argc, argv, QApplication::GuiClient);

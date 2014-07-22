@@ -8,25 +8,36 @@
 #include "vm_viewer/lxc/lxc_viewer.h"
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QMenu>
+#include <QMenuBar>
+#include <QTime>
+#include <QSettings>
 #include <QDebug>
 
 class VM_Viewer : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit VM_Viewer(QWidget *parent = 0, virConnect *conn = NULL, QString str = QString());
+    explicit VM_Viewer(QWidget *parent = 0,
+                       virConnect *conn = NULL,
+                       QString arg1 = QString(),
+                       QString arg2 = QString());
     ~VM_Viewer();
 
 signals:
     void finished();
+    void errorMsg(QString&);
 
 private:
-    QString          domain, type;
+    QString          connName, domain, type;
     virConnect      *jobConnect = NULL;
     QWidget         *viewer = NULL;
     ViewerToolBar   *toolBar;
+    QMenu           *actionsMenu = NULL;
+    QMenuBar        *menuBar = NULL;
 
     bool             VM_State;
+    QSettings        settings;
 
 public slots:
     bool isActive() const;
@@ -34,6 +45,8 @@ public slots:
 
 private slots:
     void closeEvent(QCloseEvent *ev);
+    void closeViewer();
+    void receiveErrMsg(QString&);
 
 };
 

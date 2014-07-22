@@ -160,7 +160,7 @@ QStringList StorageVolControlThread::createStorageVol()
         sendConnErrors();
         return result;
     };
-    result.append(QString("'%1' StorageVol from\n\"%2\"\nis created.").arg(virStorageVolGetName(storageVol)).arg(path));
+    result.append(QString("'<b>%1</b>' StorageVol from\n\"%2\"\nis created.").arg(virStorageVolGetName(storageVol)).arg(path));
     virStorageVolFree(storageVol);
     return result;
 }
@@ -178,7 +178,7 @@ QStringList StorageVolControlThread::deleteStorageVol()
         if (!deleted) sendConnErrors();
         virStorageVolFree(storageVol);
     } else sendConnErrors();
-    result.append(QString("'%1' StorageVol %2 Deleted.").arg(name).arg((deleted)?"":"don't"));
+    result.append(QString("'<b>%1</b>' StorageVol %2 Deleted.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
 QStringList StorageVolControlThread::downloadStorageVol()
@@ -230,7 +230,7 @@ QStringList StorageVolControlThread::downloadStorageVol()
     if ( stream!=NULL ) virStreamFree(stream);
     f->close();
     delete f; f = 0;
-    result.append(QString("'%1' StorageVol %2 Downloaded into %3 (%4).")
+    result.append(QString("'<b>%1</b>' StorageVol %2 Downloaded into %3 (%4).")
                   .arg(name).arg((downloaded)?"":"don't")
                   .arg(path).arg(length));
     return result;
@@ -259,7 +259,7 @@ QStringList StorageVolControlThread::resizeStorageVol()
         } else resized = true;
         virStorageVolFree(storageVol);
     } else sendConnErrors();
-    result.append(QString("'%1' StorageVol %2 Resized to %3 (bytes).")
+    result.append(QString("'<b>%1</b>' StorageVol %2 Resized to %3 (bytes).")
                   .arg(name).arg((resized)?"":"don't").arg(capacity));
     return result;
 }
@@ -316,7 +316,7 @@ QStringList StorageVolControlThread::uploadStorageVol()
     if ( stream!=NULL ) virStreamFree(stream);
     f->close();
     delete f; f = 0;
-    result.append(QString("'%1' StorageVol %2 Uploaded from %3 (%4).")
+    result.append(QString("'<b>%1</b>' StorageVol %2 Uploaded from %3 (%4).")
                   .arg(name).arg((uploaded)?"":"don't")
                   .arg(path).arg(length));
     return result;
@@ -373,7 +373,7 @@ QStringList StorageVolControlThread::wipeStorageVol()
         algorithm.append("NONE");
         break;
     };
-    result.append(QString("'%1' StorageVol %2 Wiped with %3 algorithm.").arg(name).arg((wiped)?"":"don't").arg(algorithm));
+    result.append(QString("'<b>%1</b>' StorageVol %2 Wiped with %3 algorithm.").arg(name).arg((wiped)?"":"don't").arg(algorithm));
     return result;
 }
 QStringList StorageVolControlThread::getStorageVolXMLDesc()
@@ -400,14 +400,14 @@ QStringList StorageVolControlThread::getStorageVolXMLDesc()
     result.append(f.fileName());
     f.close();
     free(Returns);
-    result.append(QString("'%1' StorageVol %2 XML'ed").arg(name).arg((read)?"":"don't"));
+    result.append(QString("'<b>%1</b>' StorageVol %2 XML'ed").arg(name).arg((read)?"":"don't"));
     return result;
 }
 
 void StorageVolControlThread::sendConnErrors()
 {
     virtErrors = virConnGetLastError( currWorkConnect );
-    if ( virtErrors!=NULL ) {
+    if ( virtErrors!=NULL && virtErrors->code>0 ) {
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                        .arg(QString().fromUtf8(virtErrors->message)) );
         virResetError(virtErrors);
@@ -416,7 +416,7 @@ void StorageVolControlThread::sendConnErrors()
 void StorageVolControlThread::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
-    if ( virtErrors!=NULL )
+    if ( virtErrors!=NULL && virtErrors->code>0 )
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                        .arg(QString().fromUtf8(virtErrors->message)) );
     virResetLastError();

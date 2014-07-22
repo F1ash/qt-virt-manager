@@ -205,7 +205,7 @@ Result DomControlThread::createDomain()
     };
     result.name = QString().fromUtf8( virDomainGetName(domain) );
     result.result = true;
-    result.msg.append(QString("'%1' Domain from\n\"%2\"\nis created.")
+    result.msg.append(QString("'<b>%1</b>' Domain from\n\"%2\"\nis created.")
                      .arg(result.name).arg(path));
     virDomainFree(domain);
     return result;
@@ -230,7 +230,7 @@ Result DomControlThread::defineDomain()
     };
     result.name = QString().fromUtf8( virDomainGetName(domain) );
     result.result = true;
-    result.msg.append(QString("'%1' Domain from\n\"%2\"\nis defined.")
+    result.msg.append(QString("'<b>%1</b>' Domain from\n\"%2\"\nis defined.")
                   .arg(result.name).arg(path));
     virDomainFree(domain);
     return result;
@@ -248,7 +248,7 @@ Result DomControlThread::startDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = started;
-    result.msg.append(QString("'%1' Domain %2 Started.").arg(name).arg((started)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 Started.").arg(name).arg((started)?"":"don't"));
     return result;
 }
 Result DomControlThread::pauseDomain()
@@ -272,7 +272,7 @@ Result DomControlThread::pauseDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'%1' Domain state %2 changed.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain state %2 changed.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::destroyDomain()
@@ -289,7 +289,7 @@ Result DomControlThread::destroyDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = deleted;
-    result.msg.append(QString("'%1' Domain %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
 Result DomControlThread::resetDomain()
@@ -309,7 +309,7 @@ Result DomControlThread::resetDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'%1' Domain %2 reset.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 reset.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::rebootDomain()
@@ -333,7 +333,7 @@ Result DomControlThread::rebootDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'%1' Domain %2 reboot.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 reboot.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::shutdownDomain()
@@ -357,7 +357,7 @@ Result DomControlThread::shutdownDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'%1' Domain %2 shutdown.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 shutdown.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::saveDomain()
@@ -385,7 +385,7 @@ Result DomControlThread::saveDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'%1' Domain %2 saved.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 saved.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::restoreDomain()
@@ -410,7 +410,7 @@ Result DomControlThread::restoreDomain()
     };
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'%1' Domain %2 restored.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 restored.").arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::undefineDomain()
@@ -427,7 +427,7 @@ Result DomControlThread::undefineDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = deleted;
-    result.msg.append(QString("'%1' Domain %2 Undefined.").arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 Undefined.").arg(name).arg((deleted)?"":"don't"));
     return result;
 }
 Result DomControlThread::changeAutoStartDomain()
@@ -458,7 +458,7 @@ Result DomControlThread::changeAutoStartDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = set;
-    result.msg.append(QString("'%1' Domain autostart %2 Set.").arg(name).arg((set)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain autostart %2 Set.").arg(name).arg((set)?"":"don't"));
     return result;
 }
 Result DomControlThread::getDomainXMLDesc()
@@ -485,7 +485,7 @@ Result DomControlThread::getDomainXMLDesc()
     free(Returns);
     result.name = name;
     result.result = read;
-    result.msg.append(QString("'%1' Domain %2 XML'ed").arg(name).arg((read)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 XML'ed").arg(name).arg((read)?"":"don't"));
     return result;
 }
 Result DomControlThread::migrateDomain()
@@ -498,7 +498,7 @@ Result DomControlThread::migrateDomain()
     if ( args.count()<17 ) {
         result.name = args[0];
         result.result = migrated;
-        result.msg.append(QString("'%1' Domain don't Migrated: %2")
+        result.msg.append(QString("'<b>%1</b>' Domain don't Migrated: %2")
                           .arg(args[0]).arg("arguments incorrect."));
         return result;
     };
@@ -576,7 +576,7 @@ Result DomControlThread::migrateDomain()
     } else sendConnErrors();
     result.name = args[0];
     result.result = migrated;
-    result.msg.append(QString("'%1' Domain %2 Migrated.").arg(args[0]).arg((migrated)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 Migrated.").arg(args[0]).arg((migrated)?"":"don't"));
     if ( destConnect ) destConnect = NULL;
     return result;
 }

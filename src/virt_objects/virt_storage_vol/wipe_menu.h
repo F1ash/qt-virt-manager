@@ -27,6 +27,7 @@ private:
 
 private slots:
     void emitExecMethod(QAction*);
+    void showActionToolTip(QAction*);
 
 };
 

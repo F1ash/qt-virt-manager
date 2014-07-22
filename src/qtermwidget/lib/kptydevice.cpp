@@ -274,6 +274,7 @@ void KPtyDevicePrivate::finishOpen(QIODevice::OpenMode mode)
 
     q->QIODevice::open(mode);
     fcntl(q->masterFd(), F_SETFL, O_NONBLOCK);
+    qDebug()<<"pty opened"<<q->masterFd()<<q->slaveFd();
     readBuffer.clear();
     readNotifier = new QSocketNotifier(q->masterFd(), QSocketNotifier::Read, q);
     writeNotifier = new QSocketNotifier(q->masterFd(), QSocketNotifier::Write, q);
@@ -400,6 +401,7 @@ bool KPtyDevice::isSuspended() const
 qint64 KPtyDevice::readData(char *data, qint64 maxlen)
 {
     Q_D(KPtyDevice);
+    //qDebug()<<data<<"readFromPTY_MasterFD";
     return d->readBuffer.read(data, (int)qMin<qint64>(maxlen, KMAXINT));
 }
 
@@ -417,6 +419,7 @@ qint64 KPtyDevice::writeData(const char *data, qint64 len)
     Q_ASSERT(len <= KMAXINT);
 
     d->writeBuffer.write(data, len);
+    //qDebug()<<data<<"writeToPTY_MasterFD"<<len;
     d->writeNotifier->setEnabled(true);
     return len;
 }
