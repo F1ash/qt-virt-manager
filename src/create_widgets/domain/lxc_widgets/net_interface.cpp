@@ -1,16 +1,12 @@
 #include "net_interface.h"
 
-LXC_NetInterface::LXC_NetInterface(QWidget *parent, virNetworkPtr *nets) :
+LXC_NetInterface::LXC_NetInterface(QWidget *parent, QStringList nets) :
     _QWidget(parent), existNetwork(nets)
 {
     setObjectName("Network:Device");
     useExistNetwork = new QCheckBox("Use Exist Network", this);
     networks = new QComboBox(this);
-    int i = 0;
-    while ( existNetwork[i] != NULL ) {
-        networks->addItem( QString( virNetworkGetName(existNetwork[i]) ) );
-        i++;
-    };
+    networks->addItems( nets );
 
     bridgeName = new QLineEdit(this);
     bridgeName->setPlaceholderText("Enter Exist Virtual Bridge Name");
@@ -37,12 +33,6 @@ LXC_NetInterface::~LXC_NetInterface()
 {
     disconnect(useExistNetwork, SIGNAL(toggled(bool)), this, SLOT(changeUsedNetwork(bool)));
     disconnect(networks, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeUsedNetwork(QString)));
-    int i = 0;
-    while ( existNetwork[i] != NULL ) {
-        virNetworkFree(existNetwork[i]);
-        i++;
-    };
-    // free useExistNetwork into VirtDomainControl widget
     delete useExistNetwork;
     useExistNetwork = 0;
     delete networks;

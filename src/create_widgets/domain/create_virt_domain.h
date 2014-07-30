@@ -12,9 +12,11 @@
 #include <QVBoxLayout>
 #include <QtXml/QDomDocument>
 #include <QTextStream>
+#include <QTimerEvent>
 #include "domain_widgets.h"
 #include "_qwidget.h"
 #include "libvirt/libvirt.h"
+#include "libvirt/virterror.h"
 #include <QDebug>
 
 typedef QList<_QWidget*> WidgetList;
@@ -23,15 +25,20 @@ class CreateVirtDomain : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CreateVirtDomain(QWidget *parent = 0, QString str = "", virNetworkPtr *nets = NULL);
+    explicit CreateVirtDomain(QWidget *parent = 0, virConnectPtr conn = NULL);
     ~CreateVirtDomain();
 
 signals:
+    void errorMsg(QString);
 
 private:
     QSettings        settings;
+    virConnect      *currWorkConnect = NULL;
+    virErrorPtr      virtErrors;
+    virNodeDevice  **nodeDevices = NULL;
     QString          capabilities;
-    virNetworkPtr   *networks;
+    QStringList      nets;
+    QStringList      devices;
     QString          type;
     QString          arch;
     QString          os_type;
@@ -47,17 +54,27 @@ private:
 
     QTemporaryFile  *xml;
     WidgetList       wdgList;
+    bool             ready = false;
+    uint             timerId = 0;
+    uint             counter = 0;
 
 public slots:
     QString getXMLDescFileName() const;
 
 private slots:
     void readCapabilities();
+    void readNetworkList();
+    void readNodeDevicesList();
+    void readyDataLists();
+    void timerEvent(QTimerEvent*);
     void buildXMLDescription();
     void set_Result();
     void create_specified_widgets();
     void set_specified_Tabs();
     void delete_specified_widgets();
+
+    void sendConnErrors();
+    void sendGlobalErrors();
 
 };
 

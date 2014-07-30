@@ -148,8 +148,8 @@ Result DomControlThread::getAllDomainList()
                         <<info.nrVirtCpu
                         <<info.cpuTime;
             };
-            virDomainFree(domain[i]);
             */
+            virDomainFree(domain[i]);
             i++;
         };
         free(domain);

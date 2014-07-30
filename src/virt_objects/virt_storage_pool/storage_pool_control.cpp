@@ -58,6 +58,11 @@ VirtStoragePoolControl::~VirtStoragePoolControl()
     delete stPoolControlThread;
     stPoolControlThread = 0;
 
+    if ( currWorkConnect!=NULL ) {
+        virConnectClose(currWorkConnect);
+        currWorkConnect = NULL;
+    };
+
     delete toolBar;
     toolBar = 0;
 

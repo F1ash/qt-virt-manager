@@ -274,7 +274,7 @@ void QTermWidget::init(int startnow)
             this, SIGNAL(termLostFocus()));
     connect(m_impl->m_terminalDisplay, SIGNAL(keyPressedSignal(QKeyEvent *)),
             this, SIGNAL(termKeyPressed(QKeyEvent *)));
-//    m_impl->m_terminalDisplay->setSize(80, 40);
+    m_impl->m_terminalDisplay->setSize(80, 40);
 
     QFont font = QApplication::font();
     font.setFamily("Monospace");

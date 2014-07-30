@@ -14,7 +14,8 @@ VM_Viewer::VM_Viewer(QWidget *parent, virConnect *conn, QString arg1, QString ar
     if ( type.isEmpty() ) {
         QMessageBox::information(this, "VM Viewer", "Job empty.");
     } else if ( type.toLower()=="lxc" ) {
-        viewer = new LXC_Viewer(0, this, jobConnect, domain);
+        // startnow = 1/yes
+        viewer = new LXC_Viewer(1, this, jobConnect, domain);
         // from qtermwidget/main.cpp
         menuBar = new QMenuBar(this);
         actionsMenu = new QMenu("Actions", menuBar);

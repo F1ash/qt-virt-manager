@@ -1,4 +1,5 @@
 #include "wait_thread.h"
+#define  PERIOD 333
 
 Wait::Wait(QObject *parent, ConnectList *wdgList, ViewerMap map) :
     QThread(parent), wdg(wdgList), vm_displayed_map(map)
@@ -53,9 +54,9 @@ void Wait::run()
             };
         };
         emit refreshProcessingState();
-        msleep(333);
+        msleep(PERIOD);
     };
-    msleep(333);
+    msleep(PERIOD);
 }
 void Wait::setProcessingState(bool b)
 {

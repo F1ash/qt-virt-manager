@@ -2,7 +2,6 @@
 #define LXC_NET_INTERFACE_H
 
 #include "create_widgets/domain/_qwidget.h"
-#include "libvirt/libvirt.h"
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QCheckBox>
@@ -14,13 +13,13 @@ class LXC_NetInterface : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit LXC_NetInterface(QWidget *parent = 0, virNetworkPtr *nets = NULL);
+    explicit LXC_NetInterface(QWidget *parent = 0, QStringList nets = QStringList());
     ~LXC_NetInterface();
 
 signals:
 
 private:
-    virNetworkPtr           *existNetwork;
+    QStringList              existNetwork;
     QCheckBox               *useExistNetwork;
     QComboBox               *networks;
 

@@ -9,7 +9,7 @@ Memory::Memory(QWidget *parent, QString arg1, QString arg2) :
     maxMemValue = new QSpinBox(this);
     maxMemValue->setRange(0, memValue.toInt());
     connect(maxMemValue, SIGNAL(valueChanged(int)), this, SLOT(changeCurrentMemValue(int)));
-    currMemLabel = new QLabel("Current Memeory:", this);
+    currMemLabel = new QLabel("Current Memory:", this);
     currMemValue = new QSpinBox(this);
     currMemValue->setRange(0, memValue.toInt());
     connect(currMemValue, SIGNAL(valueChanged(int)), this, SLOT(changeMaximumMemValue(int)));
