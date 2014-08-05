@@ -13,12 +13,13 @@ class DeviceExistanceMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit DeviceExistanceMenu(QWidget *parent = 0);
+    explicit DeviceExistanceMenu(QWidget *parent = 0, bool valid = false);
     ~DeviceExistanceMenu();
 
 private:
+    bool                 validItem;
     QAction             *addNewDevice;
-    QAction             *delSelDevice;
+    QAction             *delSelDevice = NULL;
     Device_Action        result = ERROR;
 
 signals:

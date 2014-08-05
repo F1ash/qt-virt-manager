@@ -8,3 +8,7 @@ QDomNodeList _QWidget::getNodeList() const
 {
     return QDomNodeList();
 }
+QString _QWidget::getDevType() const
+{
+    return QString();
+}

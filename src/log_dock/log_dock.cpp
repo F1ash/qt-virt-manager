@@ -8,7 +8,9 @@ LogDock::LogDock(QWidget *parent) :
     currentTime = new QLabel();
 
     Log = new QTextBrowser(this);
-    Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2").arg(LOG_SIZE).arg(Log->toPlainText().count()));
+    Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
+                    .arg(LOG_SIZE)
+                    .arg(Log->toPlainText().count()));
     Log->setReadOnly(true);
     Log->setOpenLinks(false);
     Log->setOpenExternalLinks(true);
@@ -43,7 +45,9 @@ void LogDock::appendErrorMsg(QString &msg)
 {
     if ( Log->toPlainText().count()>LOG_SIZE ) Log->clear();
     Log->append(msg);
-    Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2").arg(LOG_SIZE).arg(Log->toPlainText().count()));
+    Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
+                    .arg(LOG_SIZE)
+                    .arg(Log->toPlainText().count()));
 }
 
 /* private slots */

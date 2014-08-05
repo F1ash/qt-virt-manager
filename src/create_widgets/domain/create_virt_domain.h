@@ -14,9 +14,7 @@
 #include <QTextStream>
 #include <QTimerEvent>
 #include "domain_widgets.h"
-#include "_qwidget.h"
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
+#include "common_widgets/devices.h"
 #include <QDebug>
 
 typedef QList<_QWidget*> WidgetList;
@@ -25,7 +23,10 @@ class CreateVirtDomain : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CreateVirtDomain(QWidget *parent = 0, virConnectPtr conn = NULL);
+    explicit CreateVirtDomain(
+            QWidget *parent = 0,
+            virConnectPtr conn = NULL,
+            virDomainPtr domain = NULL);
     ~CreateVirtDomain();
 
 signals:
@@ -34,11 +35,9 @@ signals:
 private:
     QSettings        settings;
     virConnect      *currWorkConnect = NULL;
+    virDomain       *currDomain = NULL;
     virErrorPtr      virtErrors;
-    virNodeDevice  **nodeDevices = NULL;
     QString          capabilities;
-    QStringList      nets;
-    QStringList      devices;
     QString          type;
     QString          arch;
     QString          os_type;
@@ -47,6 +46,7 @@ private:
     QString          memValue;
     QTabWidget      *tabWidget;
     QPushButton     *ok;
+    QPushButton     *restore;
     QPushButton     *cancel;
     QWidget         *buttons;
     QHBoxLayout     *buttonLayout;
@@ -63,8 +63,6 @@ public slots:
 
 private slots:
     void readCapabilities();
-    void readNetworkList();
-    void readNodeDevicesList();
     void readyDataLists();
     void timerEvent(QTimerEvent*);
     void buildXMLDescription();
@@ -72,6 +70,7 @@ private slots:
     void create_specified_widgets();
     void set_specified_Tabs();
     void delete_specified_widgets();
+    void restoreParameters();
 
     void sendConnErrors();
     void sendGlobalErrors();

@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QtXml/QDomDocument>
+#include "libvirt/libvirt.h"
+#include "libvirt/virterror.h"
 #include <QDebug>
 
 class _QWidget : public QWidget
@@ -13,6 +15,7 @@ public:
 
 public slots:
     virtual QDomNodeList getNodeList() const;
+    virtual QString      getDevType() const;
 
 };
 

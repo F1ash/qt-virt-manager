@@ -92,6 +92,14 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/cpu.h
   src/create_widgets/domain/common_widgets/devices.h
   src/create_widgets/domain/common_widgets/device_existance_menu.h
+  src/create_widgets/domain/common_widgets/device_stack.h
+  src/create_widgets/domain/common_widgets/char_device.h
+  src/create_widgets/domain/common_widgets/pty_widget.h
+  src/create_widgets/domain/common_widgets/dev_widget.h
+  src/create_widgets/domain/common_widgets/file_widget.h
+  src/create_widgets/domain/common_widgets/tcp_widget.h
+  src/create_widgets/domain/common_widgets/udp_widget.h
+  src/create_widgets/domain/common_widgets/unix_widget.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -191,6 +199,14 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/cpu.cpp
   src/create_widgets/domain/common_widgets/devices.cpp
   src/create_widgets/domain/common_widgets/device_existance_menu.cpp
+  src/create_widgets/domain/common_widgets/device_stack.cpp
+  src/create_widgets/domain/common_widgets/char_device.cpp
+  src/create_widgets/domain/common_widgets/pty_widget.cpp
+  src/create_widgets/domain/common_widgets/dev_widget.cpp
+  src/create_widgets/domain/common_widgets/file_widget.cpp
+  src/create_widgets/domain/common_widgets/tcp_widget.cpp
+  src/create_widgets/domain/common_widgets/udp_widget.cpp
+  src/create_widgets/domain/common_widgets/unix_widget.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   
