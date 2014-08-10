@@ -16,7 +16,6 @@ public:
 signals:
 
 private:
-
     QGridLayout     *ptyLayout;
 
 public slots:

@@ -3,15 +3,12 @@
 
 #include <QDialog>
 #include <QSettings>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QListWidget>
 #include <QPushButton>
 #include <QStringList>
 #include <QScrollArea>
 #include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/domain_widgets.h"
-#include <QDebug>
 
 typedef QMap<QString, _QWidget*> WidgetMap;
 
@@ -58,6 +55,7 @@ private slots:
     void readNetworkList();
     void readNodeDevicesList();
     void showDevice(QListWidgetItem*);
+    void showDevice();
     void set_Result();
 
     void sendConnErrors();

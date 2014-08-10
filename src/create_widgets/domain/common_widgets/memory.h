@@ -2,11 +2,6 @@
 #define MEMORY_H
 
 #include "create_widgets/domain/_qwidget.h"
-#include <QVBoxLayout>
-#include <QGridLayout>
-#include <QSpinBox>
-#include <QCheckBox>
-#include <QLabel>
 
 class Memory : public _QWidget
 {

@@ -8,9 +8,6 @@
 #include <QTemporaryFile>
 #include <QTabWidget>
 #include <QPushButton>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QtXml/QDomDocument>
 #include <QTextStream>
 #include <QTimerEvent>
 #include "domain_widgets.h"
@@ -45,6 +42,7 @@ private:
     QString          memUnit;
     QString          memValue;
     QTabWidget      *tabWidget;
+    QCheckBox       *showDescription;
     QPushButton     *ok;
     QPushButton     *restore;
     QPushButton     *cancel;
@@ -60,6 +58,7 @@ private:
 
 public slots:
     QString getXMLDescFileName() const;
+    bool getShowing() const;
 
 private slots:
     void readCapabilities();

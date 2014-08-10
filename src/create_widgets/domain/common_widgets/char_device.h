@@ -8,25 +8,16 @@
 #include "udp_widget.h"
 #include "unix_widget.h"
 
-#include <QLabel>
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QSpinBox>
-#include <QComboBox>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
-
 class CharDevice : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit CharDevice(QWidget *parent = 0);
+    explicit CharDevice(
+            QWidget *parent = 0,
+            virConnectPtr conn = NULL,
+            virDomainPtr domain = NULL
+            );
     ~CharDevice();
-
-signals:
-
-private:
     QComboBox       *devType;
     PtyWidget       *ptyWdg;
     DevWidget       *devWdg;
@@ -34,8 +25,11 @@ private:
     TcpWidget       *tcpWdg;
     UdpWidget       *udpWdg;
     UnixWidget      *unixWdg;
-
     QVBoxLayout     *commonLayout;
+
+signals:
+
+private:
 
 public slots:
     QDomNodeList getNodeList() const;

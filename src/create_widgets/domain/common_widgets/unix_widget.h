@@ -2,10 +2,6 @@
 #define UNIX_WIDGET_H
 
 #include "create_widgets/domain/_qwidget.h"
-#include <QLabel>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QGridLayout>
 
 class UnixWidget : public _QWidget
 {
@@ -25,6 +21,7 @@ private:
 
 public slots:
     QDomNodeList getNodeList() const;
+    void setPath(QString);
 
 };
 

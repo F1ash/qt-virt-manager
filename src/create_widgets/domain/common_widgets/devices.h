@@ -3,8 +3,6 @@
 
 #include "device_existance_menu.h"
 #include "device_stack.h"
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QListWidget>
 #include <QPushButton>
 
@@ -15,7 +13,8 @@ public:
     explicit Devices(
             QWidget *parent = 0,
             virConnectPtr conn = NULL,
-            virDomainPtr domain = NULL);
+            virDomainPtr domain = NULL
+            );
     ~Devices();
 
 signals:
@@ -33,8 +32,8 @@ private:
     QWidget         *listWidget;
     QWidget         *infoWidget;
 
-    virConnect      *currWorkConnect = NULL;
-    virDomain       *currDomain = NULL;
+    //virConnect      *currWorkConnect = NULL;
+    //virDomain       *currDomain = NULL;
 
     DeviceStack     *deviceStack = NULL;
     WidgetMap        wdgMap;

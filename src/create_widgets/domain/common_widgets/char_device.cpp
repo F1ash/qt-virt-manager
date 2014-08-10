@@ -11,16 +11,20 @@
 #define CHAR_DEV_TYPE_LIST QStringList()\
     <<"pty"<<"dev"<<"file"<<"tcp"<<"udp"<<"unix"
 
-CharDevice::CharDevice(QWidget *parent) :
-    _QWidget(parent)
+CharDevice::CharDevice(
+        QWidget *parent,
+        virConnectPtr conn,
+        virDomainPtr domain
+        ) :
+    _QWidget(parent, conn, domain)
 {
     devType = new QComboBox(this);
 
-    ptyWdg = new PtyWidget(this);
-    devWdg = new DevWidget(this);
+    ptyWdg  = new PtyWidget(this);
+    devWdg  = new DevWidget(this);
     fileWdg = new FileWidget(this);
-    tcpWdg = new TcpWidget(this);
-    udpWdg = new UdpWidget(this);
+    tcpWdg  = new TcpWidget(this);
+    udpWdg  = new UdpWidget(this);
     unixWdg = new UnixWidget(this);
 
     commonLayout = new QVBoxLayout(this);

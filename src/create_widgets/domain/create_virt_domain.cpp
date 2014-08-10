@@ -115,6 +115,9 @@ CreateVirtDomain::~CreateVirtDomain()
         disconnect(restore, SIGNAL(clicked()), this, SLOT(restoreParameters()));
         disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
         delete_specified_widgets();
+        settings.setValue("DomCreateShowDesc", showDescription->isChecked());
+        delete showDescription;
+        showDescription = 0;
         delete ok;
         ok = 0;
         delete restore;
@@ -134,6 +137,10 @@ CreateVirtDomain::~CreateVirtDomain()
 QString CreateVirtDomain::getXMLDescFileName() const
 {
     return xml->fileName();
+}
+bool CreateVirtDomain::getShowing() const
+{
+    return showDescription->isChecked();
 }
 
 /* private slots */
@@ -201,6 +208,8 @@ void CreateVirtDomain::timerEvent(QTimerEvent *ev){
             commonLayout = new QVBoxLayout(this);
             create_specified_widgets();
             set_specified_Tabs();
+            showDescription = new QCheckBox("Show XML Description\nat close", this);
+            showDescription->setChecked(settings.value("DomCreateShowDesc").toBool());
             ok = new QPushButton(QIcon::fromTheme("dialog-ok"), "Ok", this);
             ok->setAutoDefault(true);
             connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
@@ -210,6 +219,7 @@ void CreateVirtDomain::timerEvent(QTimerEvent *ev){
             cancel->setAutoDefault(true);
             connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
             buttonLayout = new QHBoxLayout();
+            buttonLayout->addWidget(showDescription);
             buttonLayout->addWidget(ok);
             buttonLayout->addWidget(restore);
             buttonLayout->addWidget(cancel);
@@ -236,7 +246,7 @@ void CreateVirtDomain::buildXMLDescription()
      * then common description append it
      */
     QDomDocument doc = QDomDocument();
-    QDomElement root, devices, _emulator, console, target;
+    QDomElement root, devices, _emulator;
     root = doc.createElement("domain");
     root.setAttribute("type", type.toLower());
     doc.appendChild(root);
@@ -292,13 +302,6 @@ void CreateVirtDomain::buildXMLDescription()
     QDomText data = doc.createTextNode(emulator);
     _emulator.appendChild(data);
     devices.appendChild(_emulator);
-    console = doc.createElement("console");
-    console.setAttribute("type", "pty");
-    devices.appendChild(console);
-    target = doc.createElement("target");
-    target.setAttribute("type", type.toLower());
-    target.setAttribute("port", "0");
-    console.appendChild(target);
     root.appendChild(devices);
     //qDebug()<<doc.toString();
 
@@ -329,6 +332,12 @@ void CreateVirtDomain::create_specified_widgets()
                            currDomain));
     } else if ( type.toLower() == "qemu" ) {
         wdgList.append(new General(this, type, arch, emulator));
+        wdgList.append(new Memory(this, memUnit, memValue));
+        wdgList.append(new CPU(this));
+        wdgList.append(new Devices(
+                           this,
+                           currWorkConnect,
+                           currDomain));
     } else if ( type.toLower() == "xen" ) {
         wdgList.append(new General(this, type, arch, emulator));
     } else wdgList.clear();

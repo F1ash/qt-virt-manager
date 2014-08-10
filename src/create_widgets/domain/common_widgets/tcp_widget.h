@@ -2,14 +2,6 @@
 #define TCP_WIDGET_H
 
 #include "create_widgets/domain/_qwidget.h"
-#include <QLabel>
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QSpinBox>
-#include <QComboBox>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
 
 class TcpWidget : public _QWidget
 {
@@ -21,7 +13,14 @@ public:
 signals:
 
 private:
-
+    QLabel          *modeLabel;
+    QComboBox       *mode;
+    QLabel          *hostLabel;
+    QLineEdit       *host;
+    QLabel          *portLabel;
+    QSpinBox        *port;
+    QLabel          *telnetlabel;
+    QComboBox       *telnet;
     QGridLayout     *tcpLayout;
 
 public slots:

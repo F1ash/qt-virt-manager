@@ -68,8 +68,9 @@
 Devices::Devices(
         QWidget *parent,
         virConnectPtr conn,
-        virDomainPtr domain) :
-    _QWidget(parent), currWorkConnect(conn), currDomain(domain)
+        virDomainPtr domain
+        ) :
+    _QWidget(parent, conn, domain)
 {
     setObjectName("Computer:Device");
     usedDeviceList = new QListWidget(this);
@@ -199,13 +200,22 @@ void Devices::addDevice()
     QString device = list.item(0).nodeName();
     if ( device=="interface" ) {
         // Network Interface
-
+        item->setText("Network Interface");
     } else if ( device=="serial" ) {
         // Serial port
         item->setText("Serial Port");
-        item->setData(Qt::UserRole, doc.toString());
-        usedDeviceList->addItem(item);
+    } else if ( device=="parallel" ) {
+        // Parallel port
+        item->setText("Parallel Port");
+    } else if ( device=="console" ) {
+        // Console
+        item->setText("Console");
+    } else if ( device=="channel" ) {
+        // Channel
+        item->setText("Channel");
     } else return;
+    item->setData(Qt::UserRole, doc.toString());
+    usedDeviceList->addItem(item);
     qDebug()<<"added New Device";
 }
 void Devices::delDevice()

@@ -2,9 +2,6 @@
 #define FILE_WIDGET_H
 
 #include "create_widgets/domain/_qwidget.h"
-#include <QLabel>
-#include <QLineEdit>
-#include <QGridLayout>
 
 class FileWidget : public _QWidget
 {

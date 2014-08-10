@@ -2,12 +2,6 @@
 #define LXC_NET_INTERFACE_H
 
 #include "create_widgets/domain/_qwidget.h"
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QLabel>
 
 class LXC_NetInterface : public _QWidget
 {

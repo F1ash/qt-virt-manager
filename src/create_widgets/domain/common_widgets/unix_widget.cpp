@@ -43,3 +43,7 @@ QDomNodeList UnixWidget::getNodeList() const
     //qDebug()<<doc.toString();
     return doc.childNodes();
 }
+void UnixWidget::setPath(QString text)
+{
+    path->setText(text);
+}

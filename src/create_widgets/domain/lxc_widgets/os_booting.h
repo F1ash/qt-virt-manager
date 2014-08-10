@@ -2,12 +2,6 @@
 #define LXC_OS_BOOTING_H
 
 #include "create_widgets/domain/_qwidget.h"
-#include <QVBoxLayout>
-#include <QGridLayout>
-#include <QSpinBox>
-#include <QCheckBox>
-#include <QLineEdit>
-#include <QLabel>
 
 class LXC_OSBooting : public _QWidget
 {

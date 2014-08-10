@@ -2,9 +2,6 @@
 #define GENERAL_H
 
 #include "create_widgets/domain/_qwidget.h"
-#include <QVBoxLayout>
-#include <QLineEdit>
-#include <QLabel>
 #include <QTextEdit>
 
 class General : public _QWidget

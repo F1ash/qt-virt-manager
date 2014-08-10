@@ -348,11 +348,12 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                 if ( createVirtDomain!=NULL && result ) {
                     // get path for method
                     xml = createVirtDomain->getXMLDescFileName();
+                    bool show = createVirtDomain->getShowing();
                     QStringList data;
                     data.append("New Domain XML'ed");
                     data.append(QString("to <a href='%1'>%1</a>").arg(xml));
                     msgRepeater(data.join(" "));
-                    QDesktopServices::openUrl(QUrl(xml));
+                    if ( show ) QDesktopServices::openUrl(QUrl(xml));
                 };
                 disconnect(createVirtDomain,
                            SIGNAL(errorMsg(QString)),

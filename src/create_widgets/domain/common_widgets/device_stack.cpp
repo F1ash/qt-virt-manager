@@ -44,8 +44,11 @@ DeviceStack::DeviceStack(
         //qDebug()<<item->text();
     };
 
-    connect(deviceList, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(showDevice(QListWidgetItem*)));
+    // double event for selection item
+    //connect(deviceList, SIGNAL(itemClicked(QListWidgetItem*)),
+    //        this, SLOT(showDevice(QListWidgetItem*)));
+    connect(deviceList, SIGNAL(itemSelectionChanged()),
+            this, SLOT(showDevice()));
     listLayout = new QHBoxLayout(this);
     listLayout->addWidget(deviceList, 3);
     listLayout->addWidget(infoWidget, 8);
@@ -71,8 +74,10 @@ DeviceStack::DeviceStack(
 }
 DeviceStack::~DeviceStack()
 {
-    disconnect(deviceList, SIGNAL(itemClicked(QListWidgetItem*)),
-               this, SLOT(showDevice(QListWidgetItem*)));
+    //disconnect(deviceList, SIGNAL(itemClicked(QListWidgetItem*)),
+    //           this, SLOT(showDevice(QListWidgetItem*)));
+    disconnect(deviceList, SIGNAL(itemSelectionChanged()),
+               this, SLOT(showDevice()));
     disconnect(addDevice, SIGNAL(clicked()), this, SLOT(set_Result()));
     disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     delete deviceList;
@@ -213,12 +218,24 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     currDeviceType = item->data(Qt::UserRole).toString();
     if ( item->data(Qt::UserRole) == "interface" ) {
         wdgMap.insert(currDeviceType, new LXC_NetInterface(this, nets));
-    } else if ( item->text().toLower() == "serial" ) {
+    } else if ( currDeviceType == "serial" ) {
         wdgMap.insert(currDeviceType, new CharDevice(this));
+    } else if ( currDeviceType == "parallel" ) {
+        wdgMap.insert(currDeviceType, new CharDevice(this));
+    } else if ( currDeviceType == "channel" ) {
+        wdgMap.insert(currDeviceType, new ChannelDevice(this));
+    } else if ( currDeviceType == "console" ) {
+        wdgMap.insert(currDeviceType, new ConsoleDevice(
+                          this,
+                          currWorkConnect));
     } else {
         wdgMap.insert(currDeviceType, new _QWidget(this));
     };
     infoWidget->layout()->addWidget(wdgMap.value(currDeviceType));
+}
+void DeviceStack::showDevice()
+{
+    showDevice(deviceList->currentItem());
 }
 void DeviceStack::set_Result()
 {

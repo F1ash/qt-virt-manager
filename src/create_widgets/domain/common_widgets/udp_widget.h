@@ -2,14 +2,6 @@
 #define UDP_WIDGET_H
 
 #include "create_widgets/domain/_qwidget.h"
-#include <QLabel>
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QSpinBox>
-#include <QComboBox>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
 
 class UdpWidget : public _QWidget
 {
@@ -21,7 +13,14 @@ public:
 signals:
 
 private:
-
+    QLabel          *hostLabel;
+    QLineEdit       *host;
+    QLabel          *port1Label;
+    QSpinBox        *port1;
+    QLabel          *bindHostLabel;
+    QLineEdit       *bindHost;
+    QLabel          *port2Label;
+    QSpinBox        *port2;
     QGridLayout     *udpLayout;
 
 public slots:

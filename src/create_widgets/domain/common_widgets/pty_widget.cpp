@@ -3,7 +3,6 @@
 PtyWidget::PtyWidget(QWidget *parent) :
     _QWidget(parent)
 {
-
     ptyLayout = new QGridLayout();
 }
 PtyWidget::~PtyWidget()
