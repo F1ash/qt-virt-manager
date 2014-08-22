@@ -213,6 +213,9 @@ void Devices::addDevice()
     } else if ( device=="channel" ) {
         // Channel
         item->setText("Channel");
+    } else if ( device=="smartcard" ) {
+        // SmartCard
+        item->setText("SmartCard");
     } else return;
     item->setData(Qt::UserRole, doc.toString());
     usedDeviceList->addItem(item);

@@ -12,3 +12,7 @@ QString _QWidget::getDevType() const
 {
     return QString();
 }
+QString _QWidget::getDevMode() const
+{
+    return QString();
+}

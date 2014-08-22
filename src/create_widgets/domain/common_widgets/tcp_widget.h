@@ -19,7 +19,7 @@ private:
     QLineEdit       *host;
     QLabel          *portLabel;
     QSpinBox        *port;
-    QLabel          *telnetlabel;
+    QLabel          *telnetLabel;
     QComboBox       *telnet;
     QGridLayout     *tcpLayout;
 

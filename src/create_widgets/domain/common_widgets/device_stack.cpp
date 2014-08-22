@@ -121,6 +121,8 @@ QDomNodeList DeviceStack::getResult() const
         QDomElement _device = doc.createElement(currDeviceType);
         if ( !wdgMap.value(currDeviceType)->getDevType().isEmpty() )
             _device.setAttribute("type", wdgMap.value(currDeviceType)->getDevType());
+        if ( !wdgMap.value(currDeviceType)->getDevMode().isEmpty() )
+            _device.setAttribute("mode", wdgMap.value(currDeviceType)->getDevMode());
         doc.appendChild(_device);
 
         uint j = 0;
@@ -228,6 +230,8 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         wdgMap.insert(currDeviceType, new ConsoleDevice(
                           this,
                           currWorkConnect));
+    } else if ( currDeviceType == "smartcard" ) {
+        wdgMap.insert(currDeviceType, new SmartCardDevice(this));
     } else {
         wdgMap.insert(currDeviceType, new _QWidget(this));
     };

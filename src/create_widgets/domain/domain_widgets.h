@@ -8,6 +8,7 @@
 #include "common_widgets/char_device.h"
 #include "common_widgets/channel_device.h"
 #include "common_widgets/console_device.h"
+#include "common_widgets/smartcard_device.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

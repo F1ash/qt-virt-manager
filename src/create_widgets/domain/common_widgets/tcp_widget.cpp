@@ -14,7 +14,7 @@ TcpWidget::TcpWidget(QWidget *parent) :
     port = new QSpinBox(this);
     port->setRange(0, 65535);
     port->setValue(4555);
-    telnetlabel = new QLabel("Use Telnet:", this);
+    telnetLabel = new QLabel("Use Telnet:", this);
     telnet = new QComboBox(this);
     telnet->addItem("Usual", "raw");
     telnet->addItem("Telnet", "telnet");
@@ -27,7 +27,7 @@ TcpWidget::TcpWidget(QWidget *parent) :
     tcpLayout->addWidget(host, 1, 1);
     tcpLayout->addWidget(portLabel, 1, 2);
     tcpLayout->addWidget(port, 1, 3);
-    tcpLayout->addWidget(telnetlabel, 3, 0);
+    tcpLayout->addWidget(telnetLabel, 3, 0);
     tcpLayout->addWidget(telnet, 3, 1);
     setLayout(tcpLayout);
 }
@@ -45,8 +45,8 @@ TcpWidget::~TcpWidget()
     portLabel = 0;
     delete port;
     port = 0;
-    delete telnetlabel;
-    telnetlabel = 0;
+    delete telnetLabel;
+    telnetLabel = 0;
     delete telnet;
     telnet = 0;
     delete tcpLayout;
@@ -58,17 +58,17 @@ QDomNodeList TcpWidget::getNodeList() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _protocol, _target;
-    _source= doc.createElement("source");
+    _source = doc.createElement("source");
     _source.setAttribute("mode", mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
     _source.setAttribute("host", host->text());
     _source.setAttribute("service", port->value());
     doc.appendChild(_source);
 
-    _protocol= doc.createElement("protocol");
+    _protocol = doc.createElement("protocol");
     _protocol.setAttribute("type", telnet->itemData(telnet->currentIndex(), Qt::UserRole).toString());
     doc.appendChild(_protocol);
 
-    _target= doc.createElement("target");
+    _target = doc.createElement("target");
     _target.setAttribute("port", "0");
     doc.appendChild(_target);
 

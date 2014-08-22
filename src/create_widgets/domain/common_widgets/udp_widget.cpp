@@ -67,7 +67,7 @@ QDomNodeList UdpWidget::getNodeList() const
     _source2.setAttribute("service", port1->value());
     doc.appendChild(_source2);
 
-    _target= doc.createElement("target");
+    _target = doc.createElement("target");
     _target.setAttribute("port", "0");
     doc.appendChild(_target);
 

@@ -7,7 +7,8 @@ PtyWidget::PtyWidget(QWidget *parent) :
 }
 PtyWidget::~PtyWidget()
 {
-
+    delete ptyLayout;
+    ptyLayout = 0;
 }
 
 /* public slots */

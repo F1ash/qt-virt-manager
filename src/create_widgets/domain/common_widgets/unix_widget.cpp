@@ -31,12 +31,12 @@ QDomNodeList UnixWidget::getNodeList() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target;
-    _source= doc.createElement("source");
-     _source.setAttribute("path", path->text());
-     _source.setAttribute("mode", mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
+    _source = doc.createElement("source");
+    _source.setAttribute("path", path->text());
+    _source.setAttribute("mode", mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
     doc.appendChild(_source);
 
-    _target= doc.createElement("target");
+    _target = doc.createElement("target");
     _target.setAttribute("port", 0);
     doc.appendChild(_target);
 

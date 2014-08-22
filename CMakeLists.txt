@@ -102,6 +102,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/unix_widget.h
   src/create_widgets/domain/common_widgets/channel_device.h
   src/create_widgets/domain/common_widgets/console_device.h
+  src/create_widgets/domain/common_widgets/smartcard_device.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -211,6 +212,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/unix_widget.cpp
   src/create_widgets/domain/common_widgets/channel_device.cpp
   src/create_widgets/domain/common_widgets/console_device.cpp
+  src/create_widgets/domain/common_widgets/smartcard_device.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   
