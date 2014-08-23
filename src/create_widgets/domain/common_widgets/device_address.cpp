@@ -1,0 +1,68 @@
+#include "device_address.h"
+
+DeviceAddress::DeviceAddress(QWidget *parent) :
+    QWidget(parent)
+{
+    use = new QCheckBox("Use address", this);
+    type =new QComboBox(this);
+    type->setVisible(false);
+    type->addItem("PCI addresses", "pci");
+    type->addItem("Drive addresses", "drive");
+    type->addItem("Virtio-serial address", "virtio-serial");
+    type->addItem("A CCID address, for smart-cards", "ccid");
+    type->addItem("USB addresses", "usb");
+    type->addItem("On PowerPC", "spapr-vio");
+    type->addItem("s390 guests", "ccw");
+    type->addItem("ISA addresses", "isa");
+    commonLayout = new QVBoxLayout(this);
+    commonLayout->addWidget(use);
+    commonLayout->addWidget(type);
+    commonLayout->insertStretch(-1);
+    setLayout(commonLayout);
+    connect(use, SIGNAL(toggled(bool)),
+            this, SLOT(addressUsed(bool)));
+    connect(type, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(addrTypeChanged(int)));
+}
+DeviceAddress::~DeviceAddress()
+{
+    disconnect(use, SIGNAL(toggled(bool)),
+               this, SLOT(addressUsed(bool)));
+    disconnect(type, SIGNAL(currentIndexChanged(int)),
+               this, SLOT(addrTypeChanged(int)));
+    delete use;
+    use = 0;
+    delete type;
+    type = 0;
+    if ( info!=NULL ) {
+        delete info;
+        info = 0;
+    };
+    delete commonLayout;
+    commonLayout = 0;
+}
+
+/* public slots */
+AttrList DeviceAddress::getAttrList() const
+{
+    AttrList _ret;
+    if ( use->isChecked() && info!=NULL )
+        // get attribute list from current address type
+        _ret = info->getAttrList();
+    return _ret;
+}
+
+/* private slots */
+void DeviceAddress::addressUsed(bool state)
+{
+    type->setVisible(state);
+    if ( info!=NULL ) info->setVisible(state);
+}
+void DeviceAddress::addrTypeChanged(int i)
+{
+    commonLayout->removeWidget(info);
+    if ( i==0 ) {
+
+    } else info = new _Addr(this);
+    commonLayout->insertWidget(2, info, -1);
+}

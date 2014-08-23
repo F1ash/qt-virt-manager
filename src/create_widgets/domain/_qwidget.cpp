@@ -16,3 +16,7 @@ QString _QWidget::getDevMode() const
 {
     return QString();
 }
+QString _QWidget::getDevBus() const
+{
+    return QString();
+}

@@ -1,5 +1,9 @@
 #include "smartcard_device.h"
 
+/*
+ * http://libvirt.org/formatdomain.html#elementsSmartcard
+ */
+
 SmartCardDevice::SmartCardDevice(QWidget *parent) :
     _QWidget(parent)
 {

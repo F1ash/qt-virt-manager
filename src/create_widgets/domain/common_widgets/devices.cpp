@@ -216,6 +216,9 @@ void Devices::addDevice()
     } else if ( device=="smartcard" ) {
         // SmartCard
         item->setText("SmartCard");
+    } else if ( device=="input" ) {
+        // Input
+        item->setText("Input");
     } else return;
     item->setData(Qt::UserRole, doc.toString());
     usedDeviceList->addItem(item);

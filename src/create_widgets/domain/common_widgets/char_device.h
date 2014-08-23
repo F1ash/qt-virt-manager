@@ -1,12 +1,12 @@
 #ifndef CHAR_DEVICE_H
 #define CHAR_DEVICE_H
 
-#include "pty_widget.h"
-#include "dev_widget.h"
-#include "file_widget.h"
-#include "tcp_widget.h"
-#include "udp_widget.h"
-#include "unix_widget.h"
+#include "char_dev_widgets/pty_widget.h"
+#include "char_dev_widgets/dev_widget.h"
+#include "char_dev_widgets/file_widget.h"
+#include "char_dev_widgets/tcp_widget.h"
+#include "char_dev_widgets/udp_widget.h"
+#include "char_dev_widgets/unix_widget.h"
 
 class CharDevice : public _QWidget
 {

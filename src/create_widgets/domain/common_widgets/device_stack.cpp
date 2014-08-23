@@ -123,6 +123,8 @@ QDomNodeList DeviceStack::getResult() const
             _device.setAttribute("type", wdgMap.value(currDeviceType)->getDevType());
         if ( !wdgMap.value(currDeviceType)->getDevMode().isEmpty() )
             _device.setAttribute("mode", wdgMap.value(currDeviceType)->getDevMode());
+        if ( !wdgMap.value(currDeviceType)->getDevBus().isEmpty() )
+            _device.setAttribute("bus", wdgMap.value(currDeviceType)->getDevBus());
         doc.appendChild(_device);
 
         uint j = 0;
@@ -180,25 +182,9 @@ void DeviceStack::readNodeDevicesList()
             sendConnErrors();
         } else {
             while ( nodeDevices[i] != NULL ) {
-                QString caps;
-                char *names[100];
-                ret = virNodeDeviceListCaps(nodeDevices[i], names, 100);
-                //qDebug()<<ret<<"caps number";
-                if ( ret<0 ) {
-                    sendConnErrors();
-                    caps.append(ret);
-                } else {
-                    int j = 0;
-                    while (j<ret) {
-                        caps.append(names[j]);
-                        caps.append(" ");
-                        j++;
-                    };
-                };
-                devices.append( QString("%1\n\t\t(%2)\n\t\t\t(%3)\n(%4)")
-                                .arg(virNodeDeviceGetName(nodeDevices[i]))
-                                .arg(virNodeDeviceGetParent(nodeDevices[i]))
-                                .arg(caps)
+                devices.append( QString("%1\n")
+                                // flags: extra flags; not used yet,
+                                // so callers should always pass 0
                                 .arg(virNodeDeviceGetXMLDesc(nodeDevices[i], 0)));
                 virNodeDeviceFree(nodeDevices[i]);
                 i++;
@@ -207,7 +193,7 @@ void DeviceStack::readNodeDevicesList()
         free(nodeDevices);
     };
     //int devs = virNodeNumOfDevices(currWorkConnect, NULL, 0);
-    //qDebug()<<"Devices("<<devs<<i<<"):\n\t"<<devices.join("\n\t");
+    //qDebug()<<"Devices("<<devs<<i<<"):\n"<<devices.join("\n");
 }
 void DeviceStack::showDevice(QListWidgetItem *item)
 {
@@ -232,6 +218,8 @@ void DeviceStack::showDevice(QListWidgetItem *item)
                           currWorkConnect));
     } else if ( currDeviceType == "smartcard" ) {
         wdgMap.insert(currDeviceType, new SmartCardDevice(this));
+    } else if ( currDeviceType == "input" ) {
+        wdgMap.insert(currDeviceType, new InputDevice(this));
     } else {
         wdgMap.insert(currDeviceType, new _QWidget(this));
     };

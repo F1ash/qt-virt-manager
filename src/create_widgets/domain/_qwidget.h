@@ -32,6 +32,7 @@ public slots:
     virtual QDomNodeList getNodeList() const;
     virtual QString      getDevType() const;
     virtual QString      getDevMode() const;
+    virtual QString      getDevBus() const;
 
 };
 
