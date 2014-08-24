@@ -219,6 +219,12 @@ void Devices::addDevice()
     } else if ( device=="input" ) {
         // Input
         item->setText("Input");
+    } else if ( device=="hub" ) {
+        // Hub
+        item->setText("Hub");
+    } else if ( device=="video" ) {
+        // Video
+        item->setText("Video");
     } else return;
     item->setData(Qt::UserRole, doc.toString());
     usedDeviceList->addItem(item);

@@ -114,6 +114,8 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/address_widgets/spaprvio_addr.h
   src/create_widgets/domain/common_widgets/address_widgets/usb_addr.h
   src/create_widgets/domain/common_widgets/address_widgets/virtioserial_addr.h
+  src/create_widgets/domain/common_widgets/hub_device.h
+  src/create_widgets/domain/common_widgets/video_device.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -235,6 +237,8 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/address_widgets/spaprvio_addr.cpp
   src/create_widgets/domain/common_widgets/address_widgets/usb_addr.cpp
   src/create_widgets/domain/common_widgets/address_widgets/virtioserial_addr.cpp
+  src/create_widgets/domain/common_widgets/hub_device.cpp
+  src/create_widgets/domain/common_widgets/video_device.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

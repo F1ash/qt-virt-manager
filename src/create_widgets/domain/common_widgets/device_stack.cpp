@@ -220,6 +220,10 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         wdgMap.insert(currDeviceType, new SmartCardDevice(this));
     } else if ( currDeviceType == "input" ) {
         wdgMap.insert(currDeviceType, new InputDevice(this));
+    } else if ( currDeviceType == "hub" ) {
+        wdgMap.insert(currDeviceType, new HubDevice(this));
+    } else if ( currDeviceType == "video" ) {
+        wdgMap.insert(currDeviceType, new VideoDevice(this));
     } else {
         wdgMap.insert(currDeviceType, new _QWidget(this));
     };
