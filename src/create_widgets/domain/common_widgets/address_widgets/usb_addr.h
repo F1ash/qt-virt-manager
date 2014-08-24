@@ -9,10 +9,15 @@ class USBAddr : public _Addr
 public:
     explicit USBAddr(QWidget *parent = 0);
 
-signals:
+private:
+    QLabel          *busLabel;
+    QLabel          *portLabel;
+    QLineEdit       *bus;
+    QLineEdit       *port;
+    QGridLayout     *commonlayout;
 
 public slots:
-
+    AttrList getAttrList() const;
 };
 
 #endif // USB_ADDR_H

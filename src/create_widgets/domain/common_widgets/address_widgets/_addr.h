@@ -4,6 +4,10 @@
 #include <QWidget>
 #include <QMap>
 #include <QString>
+#include <QLabel>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QVBoxLayout>
 
 typedef QMap<QString, QString> AttrList;
 

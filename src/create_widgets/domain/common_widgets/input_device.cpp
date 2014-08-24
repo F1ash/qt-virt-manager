@@ -14,9 +14,12 @@ InputDevice::InputDevice(QWidget *parent) :
     type->addItem("Generic Keyboard", "keyboard");
     bus  = new QComboBox(this);
     bus->addItem("Default (USB)", "usb");
-    bus->addItem("PS2/2", "ps2");
+    bus->addItem("PS/2", "ps2");
     bus->addItem("Paravirtualized (XEN)", "xen");
     addr = new DeviceAddress(this);
+    addr->type->clear();
+    addr->type->addItem("Default", "");
+    addr->type->addItem("USB addresses", "usb");
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(info);
     commonLayout->addWidget(type);

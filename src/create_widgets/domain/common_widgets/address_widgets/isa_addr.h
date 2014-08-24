@@ -9,10 +9,15 @@ class IsaAddr : public _Addr
 public:
     explicit IsaAddr(QWidget *parent = 0);
 
-signals:
+private:
+    QLabel          *iobaseLabel;
+    QLabel          *irqLabel;
+    QLineEdit       *iobase;
+    QLineEdit       *irq;
+    QGridLayout     *commonlayout;
 
 public slots:
-
+    AttrList getAttrList() const;
 };
 
 #endif // ISA_ADDR_H

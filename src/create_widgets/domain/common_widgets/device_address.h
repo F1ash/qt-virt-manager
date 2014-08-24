@@ -2,8 +2,6 @@
 #define DEVICE_ADDRESS_H
 
 #include <QCheckBox>
-#include <QComboBox>
-#include <QVBoxLayout>
 #include "address_widgets/pci_addr.h"
 #include "address_widgets/drive_addr.h"
 #include "address_widgets/virtioserial_addr.h"
@@ -20,12 +18,12 @@ class DeviceAddress : public QWidget
 public:
     explicit DeviceAddress(QWidget *parent = 0);
     ~DeviceAddress();
+    QComboBox       *type;
 
 signals:
 
 private:
     QCheckBox       *use;
-    QComboBox       *type;
     QVBoxLayout     *commonLayout;
     _Addr           *info = NULL;
 

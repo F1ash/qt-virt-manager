@@ -9,10 +9,13 @@ class SpaprVioAddr : public _Addr
 public:
     explicit SpaprVioAddr(QWidget *parent = 0);
 
-signals:
+private:
+    QLabel          *regLabel;
+    QLineEdit       *reg;
+    QGridLayout     *commonlayout;
 
 public slots:
-
+    AttrList getAttrList() const;
 };
 
 #endif // SPAPRVIO_ADDR_H

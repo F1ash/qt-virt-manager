@@ -11,8 +11,19 @@ public:
 
 signals:
 
-public slots:
+private:
+    QLabel          *contrLabel;
+    QLabel          *busLabel;
+    QLabel          *targetLabel;
+    QLabel          *unitLabel;
+    QLineEdit       *controller;
+    QLineEdit       *bus;
+    QLineEdit       *target;
+    QLineEdit       *unit;
+    QGridLayout     *commonlayout;
 
+public slots:
+    AttrList getAttrList() const;
 };
 
 #endif // DRIVE_ADDR_H

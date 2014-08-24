@@ -2,6 +2,7 @@
 #define CCW_ADDR_H
 
 #include "_addr.h"
+#include <QSpinBox>
 
 class CCWAddr : public _Addr
 {
@@ -9,10 +10,19 @@ class CCWAddr : public _Addr
 public:
     explicit CCWAddr(QWidget *parent = 0);
 
-signals:
+private:
+    QLabel          *machineLabel;
+    QLabel          *cssidLabel;
+    QLabel          *ssidLabel;
+    QLabel          *devnoLabel;
+    QLineEdit       *machine;
+    QLineEdit       *cssid;
+    QSpinBox        *ssid;
+    QLineEdit       *devno;
+    QGridLayout     *commonlayout;
 
 public slots:
-
+    AttrList getAttrList() const;
 };
 
 #endif // CCW_ADDR_H

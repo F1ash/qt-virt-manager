@@ -9,10 +9,15 @@ class CCIDAddr : public _Addr
 public:
     explicit CCIDAddr(QWidget *parent = 0);
 
-signals:
+private:
+    QLabel          *busLabel;
+    QLabel          *slotLabel;
+    QLineEdit       *bus;
+    QLineEdit       *slot;
+    QGridLayout     *commonlayout;
 
 public slots:
-
+    AttrList getAttrList() const;
 };
 
 #endif // CCID_ADDR_H

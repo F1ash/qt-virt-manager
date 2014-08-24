@@ -9,9 +9,17 @@ class VirtioSerialAddr : public _Addr
 public:
     explicit VirtioSerialAddr(QWidget *parent = 0);
 
-signals:
+private:
+    QLabel          *contrLabel;
+    QLabel          *busLabel;
+    QLabel          *slotLabel;
+    QLineEdit       *controller;
+    QLineEdit       *bus;
+    QLineEdit       *slot;
+    QGridLayout     *commonlayout;
 
 public slots:
+    AttrList getAttrList() const;
 
 };
 

@@ -106,6 +106,14 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/input_device.h
   src/create_widgets/domain/common_widgets/device_address.h
   src/create_widgets/domain/common_widgets/address_widgets/_addr.h
+  src/create_widgets/domain/common_widgets/address_widgets/ccid_addr.h
+  src/create_widgets/domain/common_widgets/address_widgets/ccw_addr.h
+  src/create_widgets/domain/common_widgets/address_widgets/drive_addr.h
+  src/create_widgets/domain/common_widgets/address_widgets/isa_addr.h
+  src/create_widgets/domain/common_widgets/address_widgets/pci_addr.h
+  src/create_widgets/domain/common_widgets/address_widgets/spaprvio_addr.h
+  src/create_widgets/domain/common_widgets/address_widgets/usb_addr.h
+  src/create_widgets/domain/common_widgets/address_widgets/virtioserial_addr.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -219,6 +227,14 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/input_device.cpp
   src/create_widgets/domain/common_widgets/device_address.cpp
   src/create_widgets/domain/common_widgets/address_widgets/_addr.cpp
+  src/create_widgets/domain/common_widgets/address_widgets/ccid_addr.cpp
+  src/create_widgets/domain/common_widgets/address_widgets/ccw_addr.cpp
+  src/create_widgets/domain/common_widgets/address_widgets/drive_addr.cpp
+  src/create_widgets/domain/common_widgets/address_widgets/isa_addr.cpp
+  src/create_widgets/domain/common_widgets/address_widgets/pci_addr.cpp
+  src/create_widgets/domain/common_widgets/address_widgets/spaprvio_addr.cpp
+  src/create_widgets/domain/common_widgets/address_widgets/usb_addr.cpp
+  src/create_widgets/domain/common_widgets/address_widgets/virtioserial_addr.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

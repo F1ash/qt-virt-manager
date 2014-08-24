@@ -46,9 +46,20 @@ DeviceAddress::~DeviceAddress()
 AttrList DeviceAddress::getAttrList() const
 {
     AttrList _ret;
-    if ( use->isChecked() && info!=NULL )
+    if ( use->isChecked() && info!=NULL ) {
         // get attribute list from current address type
         _ret = info->getAttrList();
+        /*
+         * Every address has a mandatory attribute type
+         * that describes which bus the device is on.
+         */
+        QString _type = type->itemData(
+                    type->currentIndex(),
+                    Qt::UserRole)
+                .toString();
+        if ( !_type.isEmpty() )
+            _ret.insert("type", _type);
+    };
     return _ret;
 }
 
@@ -61,8 +72,24 @@ void DeviceAddress::addressUsed(bool state)
 void DeviceAddress::addrTypeChanged(int i)
 {
     commonLayout->removeWidget(info);
-    if ( i==0 ) {
-
+    delete info;
+    info = 0;
+    if ( type->itemData(i, Qt::UserRole).toString()=="pci" ) {
+        info = new PciAddr(this);
+    } else if ( type->itemData(i, Qt::UserRole).toString()=="drive" ) {
+        info = new DriveAddr(this);
+    } else if ( type->itemData(i, Qt::UserRole).toString()=="virtio-serial" ) {
+        info = new VirtioSerialAddr(this);
+    } else if ( type->itemData(i, Qt::UserRole).toString()=="ccid" ) {
+        info = new CCIDAddr(this);
+    } else if ( type->itemData(i, Qt::UserRole).toString()=="usb" ) {
+        info = new USBAddr(this);
+    } else if ( type->itemData(i, Qt::UserRole).toString()=="spapr-vio" ) {
+        info = new SpaprVioAddr(this);
+    } else if ( type->itemData(i, Qt::UserRole).toString()=="ccw" ) {
+        info = new CCWAddr(this);
+    } else if ( type->itemData(i, Qt::UserRole).toString()=="isa" ) {
+        info = new IsaAddr(this);
     } else info = new _Addr(this);
     commonLayout->insertWidget(2, info, -1);
 }
