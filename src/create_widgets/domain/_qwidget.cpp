@@ -20,3 +20,7 @@ QString _QWidget::getDevBus() const
 {
     return QString();
 }
+QString _QWidget::getDevModel() const
+{
+    return QString();
+}

@@ -12,6 +12,7 @@
 #include "common_widgets/input_device.h"
 #include "common_widgets/hub_device.h"
 #include "common_widgets/video_device.h"
+#include "common_widgets/sound_device.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

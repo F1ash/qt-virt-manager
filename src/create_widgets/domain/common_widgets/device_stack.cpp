@@ -125,6 +125,8 @@ QDomNodeList DeviceStack::getResult() const
             _device.setAttribute("mode", wdgMap.value(currDeviceType)->getDevMode());
         if ( !wdgMap.value(currDeviceType)->getDevBus().isEmpty() )
             _device.setAttribute("bus", wdgMap.value(currDeviceType)->getDevBus());
+        if ( !wdgMap.value(currDeviceType)->getDevModel().isEmpty() )
+            _device.setAttribute("model", wdgMap.value(currDeviceType)->getDevModel());
         doc.appendChild(_device);
 
         uint j = 0;
@@ -224,6 +226,8 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         wdgMap.insert(currDeviceType, new HubDevice(this));
     } else if ( currDeviceType == "video" ) {
         wdgMap.insert(currDeviceType, new VideoDevice(this));
+    } else if ( currDeviceType == "sound" ) {
+        wdgMap.insert(currDeviceType, new SoundDevice(this));
     } else {
         wdgMap.insert(currDeviceType, new _QWidget(this));
     };

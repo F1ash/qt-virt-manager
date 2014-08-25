@@ -33,6 +33,7 @@ public slots:
     virtual QString      getDevType() const;
     virtual QString      getDevMode() const;
     virtual QString      getDevBus() const;
+    virtual QString      getDevModel() const;
 
 };
 

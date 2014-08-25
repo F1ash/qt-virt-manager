@@ -225,6 +225,9 @@ void Devices::addDevice()
     } else if ( device=="video" ) {
         // Video
         item->setText("Video");
+    } else if ( device=="sound" ) {
+        // Sound
+        item->setText("Sound");
     } else return;
     item->setData(Qt::UserRole, doc.toString());
     usedDeviceList->addItem(item);
