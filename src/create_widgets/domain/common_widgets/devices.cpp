@@ -196,39 +196,62 @@ void Devices::addDevice()
     //qDebug()<<doc.toString();
     QDomNodeList list = doc.firstChildElement("device").childNodes();
     if ( list.length()==0 ) return;
+    QString device, desc, name;
+    device = list.item(0).nodeName();
     QListWidgetItem *item = new QListWidgetItem(usedDeviceList);
-    QString device = list.item(0).nodeName();
     if ( device=="interface" ) {
         // Network Interface
-        item->setText("Network Interface");
+        name.append(QString("Network Interface %1").arg(desc.toUpper()));
     } else if ( device=="serial" ) {
         // Serial port
-        item->setText("Serial Port");
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Serial Port %1").arg(desc.toUpper()));
     } else if ( device=="parallel" ) {
         // Parallel port
-        item->setText("Parallel Port");
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Parallel Port %1").arg(desc.toUpper()));
     } else if ( device=="console" ) {
         // Console
-        item->setText("Console");
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Console %1").arg(desc.toUpper()));
     } else if ( device=="channel" ) {
         // Channel
-        item->setText("Channel");
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Channel %1").arg(desc.toUpper()));
     } else if ( device=="smartcard" ) {
         // SmartCard
-        item->setText("SmartCard");
+        name.append(QString("SmartCard %1").arg(desc.toUpper()));
     } else if ( device=="input" ) {
         // Input
-        item->setText("Input");
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Input %1").arg(desc.toUpper()));
     } else if ( device=="hub" ) {
         // Hub
-        item->setText("Hub");
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Hub %1").arg(desc.toUpper()));
     } else if ( device=="video" ) {
         // Video
-        item->setText("Video");
+        if (list.item(0).firstChildElement("model").attributes().contains("type"))
+            desc = list.item(0).firstChildElement("model").attributes().namedItem("type").nodeValue();
+        name.append(QString("Video %1").arg(desc.toUpper()));
     } else if ( device=="sound" ) {
         // Sound
-        item->setText("Sound");
+        if (list.item(0).attributes().contains("model"))
+            desc = list.item(0).attributes().namedItem("model").nodeValue();
+        name.append(QString("Sound %1").arg(desc.toUpper()));
+    } else if ( device=="hostdev" ) {
+        // HostDevice
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Host Device %1").arg(desc.toUpper()));
     } else return;
+    item->setText(name);
     item->setData(Qt::UserRole, doc.toString());
     usedDeviceList->addItem(item);
     qDebug()<<"added New Device";

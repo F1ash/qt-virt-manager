@@ -251,6 +251,10 @@ void CreateVirtDomain::buildXMLDescription()
     root.setAttribute("type", type.toLower());
     doc.appendChild(root);
     devices = doc.createElement("devices");
+    _emulator = doc.createElement("emulator");
+    QDomText data = doc.createTextNode(emulator);
+    _emulator.appendChild(data);
+    devices.appendChild(_emulator);
     WidgetList::const_iterator Wdg;
     for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
         if ( NULL==*Wdg ) continue;
@@ -297,11 +301,6 @@ void CreateVirtDomain::buildXMLDescription()
         };
     };
     // append Device description
-    // TODO: remove it into some Device-desc widget
-    _emulator = doc.createElement("emulator");
-    QDomText data = doc.createTextNode(emulator);
-    _emulator.appendChild(data);
-    devices.appendChild(_emulator);
     root.appendChild(devices);
     //qDebug()<<doc.toString();
 

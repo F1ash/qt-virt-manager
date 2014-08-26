@@ -117,6 +117,11 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/hub_device.h
   src/create_widgets/domain/common_widgets/video_device.h
   src/create_widgets/domain/common_widgets/sound_device.h
+  src/create_widgets/domain/common_widgets/host_device.h
+  src/create_widgets/domain/common_widgets/host_dev_widgets/usb_host_device.h
+  src/create_widgets/domain/common_widgets/host_dev_widgets/pci_host_device.h
+  src/create_widgets/domain/common_widgets/host_dev_widgets/scsi_host_device.h
+  src/create_widgets/domain/common_widgets/host_dev_widgets/bch_host_device.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -241,6 +246,11 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/hub_device.cpp
   src/create_widgets/domain/common_widgets/video_device.cpp
   src/create_widgets/domain/common_widgets/sound_device.cpp
+  src/create_widgets/domain/common_widgets/host_device.cpp
+  src/create_widgets/domain/common_widgets/host_dev_widgets/usb_host_device.cpp
+  src/create_widgets/domain/common_widgets/host_dev_widgets/pci_host_device.cpp
+  src/create_widgets/domain/common_widgets/host_dev_widgets/scsi_host_device.cpp
+  src/create_widgets/domain/common_widgets/host_dev_widgets/bch_host_device.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

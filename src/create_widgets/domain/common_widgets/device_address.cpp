@@ -71,9 +71,11 @@ void DeviceAddress::addressUsed(bool state)
 }
 void DeviceAddress::addrTypeChanged(int i)
 {
-    commonLayout->removeWidget(info);
-    delete info;
-    info = 0;
+    if ( info!=NULL ) {
+        commonLayout->removeWidget(info);
+        delete info;
+        info = 0;
+    };
     if ( type->itemData(i, Qt::UserRole).toString()=="pci" ) {
         info = new PciAddr(this);
     } else if ( type->itemData(i, Qt::UserRole).toString()=="drive" ) {

@@ -24,3 +24,7 @@ QString _QWidget::getDevModel() const
 {
     return QString();
 }
+QString _QWidget::getDevManaged() const
+{
+    return QString();
+}

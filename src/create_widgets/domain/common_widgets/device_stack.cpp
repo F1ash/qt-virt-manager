@@ -1,15 +1,13 @@
 #include "device_stack.h"
 #define DEV_LIST QStringList()\
-    <<"Disk"<<"FileSystem"<<"Controller"\
-    <<"USB Host Device"<<"PCI Host Device"<<"SCSI Host Device"<<"Storage"\
+    <<"Disk"<<"FileSystem"<<"Controller"<<"Host Devices"\
     <<"USB Redirection"<<"SmartCard"<<"Network"\
     <<"Input"<<"Hub"<<"Graphics"<<"Video"\
     <<"Console"<<"Serial"<<"Parallel"<<"Channel"\
     <<"Sound"<<"WatchDog"<<"Memory Balloon"\
     <<"RNG"<<"TPM"<<"NVRAM"<<"Panic Notifier"
 #define DEV_TYPE QStringList()\
-    <<"disk"<<"filesystem"<<"controller"\
-    <<"hostdev"<<"hostdev"<<"hostdev"<<"hostdev"\
+    <<"disk"<<"filesystem"<<"controller"<<"hostdev"\
     <<"redirdev"<<"smartcard"<<"interface"\
     <<"input"<<"hub"<<"graphics"<<"video"\
     <<"console"<<"serial"<<"parallel"<<"channel"\
@@ -127,7 +125,11 @@ QDomNodeList DeviceStack::getResult() const
             _device.setAttribute("bus", wdgMap.value(currDeviceType)->getDevBus());
         if ( !wdgMap.value(currDeviceType)->getDevModel().isEmpty() )
             _device.setAttribute("model", wdgMap.value(currDeviceType)->getDevModel());
-        doc.appendChild(_device);
+        if ( !wdgMap.value(currDeviceType)->getDevManaged().isEmpty() )
+            _device.setAttribute("managed", wdgMap.value(currDeviceType)->getDevManaged());
+        // check valid Node
+        if ( !_device.attributes().isEmpty() ) doc.appendChild(_device);
+        else if ( list.count()>0 ) doc.appendChild(_device);
 
         uint j = 0;
         uint count = list.length();
@@ -206,6 +208,7 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     wdgMap.remove(currDeviceType);
     currDeviceType.clear();
     currDeviceType = item->data(Qt::UserRole).toString();
+    // TODO: display devices available for current driver
     if ( item->data(Qt::UserRole) == "interface" ) {
         wdgMap.insert(currDeviceType, new LXC_NetInterface(this, nets));
     } else if ( currDeviceType == "serial" ) {
@@ -228,6 +231,10 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         wdgMap.insert(currDeviceType, new VideoDevice(this));
     } else if ( currDeviceType == "sound" ) {
         wdgMap.insert(currDeviceType, new SoundDevice(this));
+    } else if ( currDeviceType == "hostdev" ) {
+        wdgMap.insert(currDeviceType, new HostDevice(
+                          this,
+                          currWorkConnect));
     } else {
         wdgMap.insert(currDeviceType, new _QWidget(this));
     };

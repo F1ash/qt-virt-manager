@@ -6,6 +6,7 @@
 int main(int argc, char *argv[])
 {
     /*
+     * WARNING:
      * for work askpass need to run
      * application as daemon
      */

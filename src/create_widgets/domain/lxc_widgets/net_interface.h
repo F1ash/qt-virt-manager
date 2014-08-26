@@ -27,6 +27,7 @@ private:
 
 public slots:
     QDomNodeList getNodeList() const;
+    QString      getDevType() const;
 
 private slots:
     void changeUsedNetwork(bool);

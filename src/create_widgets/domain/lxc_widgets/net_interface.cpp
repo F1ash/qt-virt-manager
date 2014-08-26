@@ -55,33 +55,28 @@ LXC_NetInterface::~LXC_NetInterface()
 QDomNodeList LXC_NetInterface::getNodeList() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _interface, _source, _mac;
+    QDomElement _source, _mac;
+    _source= doc.createElement("source");
     if ( !useExistNetwork->isChecked() ) {
-        _interface= doc.createElement("interface");
-        _interface.setAttribute("type", "bridge");
-        doc.appendChild(_interface);
-
-        _source= doc.createElement("source");
         _source.setAttribute("bridge", bridgeName->text());
-        _interface.appendChild(_source);
+        doc.appendChild(_source);
 
         if ( !mac->text().isEmpty() ) {
             _mac= doc.createElement("mac");
             _mac.setAttribute("address", mac->text());
-            _interface.appendChild(_mac);
+            doc.appendChild(_mac);
         };
     } else {
-        _interface= doc.createElement("interface");
-        _interface.setAttribute("type", "network");
-        doc.appendChild(_interface);
-
-        _source= doc.createElement("source");
         _source.setAttribute("network", networks->currentText());
-        _interface.appendChild(_source);
+        doc.appendChild(_source);
     };
 
     //qDebug()<<doc.toString();
     return doc.childNodes();
+}
+QString LXC_NetInterface::getDevType() const
+{
+    return (useExistNetwork->isChecked())? "network" : "bridge";
 }
 
 /* private slots */
