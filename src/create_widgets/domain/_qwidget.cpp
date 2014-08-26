@@ -28,3 +28,31 @@ QString _QWidget::getDevManaged() const
 {
     return QString();
 }
+QString _QWidget::getDevDisplay() const
+{
+    return QString();
+}
+QString _QWidget::getDevXauth() const
+{
+    return QString();
+}
+QString _QWidget::getDevFullScreen() const
+{
+    return QString();
+}
+QString _QWidget::getDevPort() const
+{
+    return QString();
+}
+QString _QWidget::getDevAutoPort() const
+{
+    return QString();
+}
+QString _QWidget::getDevReplaceUser() const
+{
+    return QString();
+}
+QString _QWidget::getDevMultiUser() const
+{
+    return QString();
+}

@@ -250,6 +250,11 @@ void Devices::addDevice()
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
         name.append(QString("Host Device %1").arg(desc.toUpper()));
+    } else if ( device=="graphics" ) {
+        // Graphics
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Display %1").arg(desc.toUpper()));
     } else return;
     item->setText(name);
     item->setData(Qt::UserRole, doc.toString());

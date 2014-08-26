@@ -35,6 +35,13 @@ public slots:
     virtual QString      getDevBus() const;
     virtual QString      getDevModel() const;
     virtual QString      getDevManaged() const;
+    virtual QString      getDevDisplay() const;
+    virtual QString      getDevXauth() const;
+    virtual QString      getDevFullScreen() const;
+    virtual QString      getDevPort() const;
+    virtual QString      getDevAutoPort() const;
+    virtual QString      getDevReplaceUser() const;
+    virtual QString      getDevMultiUser() const;
 
 };
 

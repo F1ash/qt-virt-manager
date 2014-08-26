@@ -127,6 +127,12 @@ QDomNodeList DeviceStack::getResult() const
             _device.setAttribute("model", wdgMap.value(currDeviceType)->getDevModel());
         if ( !wdgMap.value(currDeviceType)->getDevManaged().isEmpty() )
             _device.setAttribute("managed", wdgMap.value(currDeviceType)->getDevManaged());
+        if ( !wdgMap.value(currDeviceType)->getDevDisplay().isEmpty() )
+            _device.setAttribute("display", wdgMap.value(currDeviceType)->getDevDisplay());
+        if ( !wdgMap.value(currDeviceType)->getDevXauth().isEmpty() )
+            _device.setAttribute("xauth", wdgMap.value(currDeviceType)->getDevXauth());
+        if ( !wdgMap.value(currDeviceType)->getDevFullScreen().isEmpty() )
+            _device.setAttribute("fullscreen", wdgMap.value(currDeviceType)->getDevFullScreen());
         // check valid Node
         if ( !_device.attributes().isEmpty() ) doc.appendChild(_device);
         else if ( list.count()>0 ) doc.appendChild(_device);
@@ -235,6 +241,8 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         wdgMap.insert(currDeviceType, new HostDevice(
                           this,
                           currWorkConnect));
+    } else if ( currDeviceType == "graphics" ) {
+        wdgMap.insert(currDeviceType, new GraphicsDevice(this));
     } else {
         wdgMap.insert(currDeviceType, new _QWidget(this));
     };

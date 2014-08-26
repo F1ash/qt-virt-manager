@@ -14,6 +14,7 @@
 #include "common_widgets/video_device.h"
 #include "common_widgets/sound_device.h"
 #include "common_widgets/host_device.h"
+#include "common_widgets/graphics_device.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

@@ -122,6 +122,12 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/host_dev_widgets/pci_host_device.h
   src/create_widgets/domain/common_widgets/host_dev_widgets/scsi_host_device.h
   src/create_widgets/domain/common_widgets/host_dev_widgets/bch_host_device.h
+  src/create_widgets/domain/common_widgets/graphics_device.h
+  src/create_widgets/domain/common_widgets/graph_dev_widgets/sdl_graphics.h
+  src/create_widgets/domain/common_widgets/graph_dev_widgets/vnc_graphics.h
+  src/create_widgets/domain/common_widgets/graph_dev_widgets/rdp_graphics.h
+  src/create_widgets/domain/common_widgets/graph_dev_widgets/desktop_graphics.h
+  src/create_widgets/domain/common_widgets/graph_dev_widgets/spice_graphics.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -251,6 +257,12 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/host_dev_widgets/pci_host_device.cpp
   src/create_widgets/domain/common_widgets/host_dev_widgets/scsi_host_device.cpp
   src/create_widgets/domain/common_widgets/host_dev_widgets/bch_host_device.cpp
+  src/create_widgets/domain/common_widgets/graphics_device.cpp
+  src/create_widgets/domain/common_widgets/graph_dev_widgets/sdl_graphics.cpp
+  src/create_widgets/domain/common_widgets/graph_dev_widgets/vnc_graphics.cpp
+  src/create_widgets/domain/common_widgets/graph_dev_widgets/rdp_graphics.cpp
+  src/create_widgets/domain/common_widgets/graph_dev_widgets/desktop_graphics.cpp
+  src/create_widgets/domain/common_widgets/graph_dev_widgets/spice_graphics.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

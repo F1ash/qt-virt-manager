@@ -16,7 +16,7 @@ public:
 
 private:
     QComboBox       *type;
-    _QWidget         *info = NULL;
+    _QWidget        *info = NULL;
     QVBoxLayout     *commonLayout;
 
 public slots:
