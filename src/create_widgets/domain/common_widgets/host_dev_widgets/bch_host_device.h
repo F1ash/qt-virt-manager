@@ -21,7 +21,7 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    virtual QDomNodeList getNodeList() const;
+    virtual QDomDocument getDevDocument() const;
     virtual QString      getDevType() const;
     virtual QString      getDevMode() const;
 

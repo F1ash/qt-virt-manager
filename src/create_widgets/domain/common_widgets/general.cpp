@@ -60,31 +60,33 @@ General::~General()
 }
 
 /* public slots */
-QDomNodeList General::getNodeList() const
+QDomDocument General::getDevDocument() const
 {
     QDomText data;
     QDomDocument doc = QDomDocument();
-    QDomElement _name, _uuid, _title, _desc;
+    QDomElement _name, _uuid, _title, _desc, _data;
+    _data = doc.createElement("data");
     _name= doc.createElement("name");
     data = doc.createTextNode(name->text());
     _name.appendChild(data);
-    doc.appendChild(_name);
+    _data.appendChild(_name);
 
     _uuid= doc.createElement("uuid");
     data = doc.createTextNode(uuid->text());
     _uuid.appendChild(data);
-    doc.appendChild(_uuid);
+    _data.appendChild(_uuid);
 
     _title= doc.createElement("title");
     data = doc.createTextNode(title->text());
     _title.appendChild(data);
-    doc.appendChild(_title);
+    _data.appendChild(_title);
 
     _desc= doc.createElement("description");
     data = doc.createTextNode(description->toPlainText());
     _desc.appendChild(data);
-    doc.appendChild(_desc);
+    _data.appendChild(_desc);
 
+    doc.appendChild(_data);
     //qDebug()<<doc.toString();
-    return doc.childNodes();
+    return doc;
 }

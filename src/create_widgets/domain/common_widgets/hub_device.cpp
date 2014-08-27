@@ -20,26 +20,28 @@ HubDevice::HubDevice(QWidget *parent) :
 }
 
 /* public slots */
-QDomNodeList HubDevice::getNodeList() const
+QDomDocument HubDevice::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
+    QDomElement _address, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("hub");
     // WARNING: address implemented experimentally
     AttrList l = addr->getAttrList();
     if ( !l.isEmpty() ) {
-        QDomElement _address = doc.createElement("address");
+        _address = doc.createElement("address");
         foreach (QString key, l.keys()) {
             if ( !key.isEmpty() )
                 _address.setAttribute(key, l.value(key));
         };
-        doc.appendChild(_address);
+        _devDesc.appendChild(_address);
     };
-    return doc.childNodes();
-}
-QString HubDevice::getDevType() const
-{
+    _device.appendChild(_devDesc);
     /*
      * The hub element has one mandatory attribute,
      * the type whose value can only be 'usb'.
      */
-    return QString("usb");
+    _devDesc.setAttribute("type", "usb");
+    doc.appendChild(_device);
+    return doc;
 }

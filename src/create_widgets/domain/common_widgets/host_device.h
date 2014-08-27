@@ -20,10 +20,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomNodeList getNodeList() const;
-    QString      getDevType() const;
-    QString      getDevMode() const;
-    QString      getDevManaged() const;
+    QDomDocument getDevDocument() const;
 
 private slots:
     void typeChanged(int);

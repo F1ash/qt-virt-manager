@@ -15,9 +15,10 @@ public:
     explicit CharDevice(
             QWidget *parent = 0,
             virConnectPtr conn = NULL,
-            virDomainPtr domain = NULL
+            virDomainPtr domain = NULL,
+            QString _tag = QString()
             );
-    ~CharDevice();
+
     QComboBox       *devType;
     PtyWidget       *ptyWdg;
     DevWidget       *devWdg;
@@ -30,10 +31,10 @@ public:
 signals:
 
 private:
+    QString          tag;
 
 public slots:
-    QDomNodeList getNodeList() const;
-    QString      getDevType() const;
+    QDomDocument getDevDocument() const;
 
 private slots:
     virtual void devTypeChanged(int);

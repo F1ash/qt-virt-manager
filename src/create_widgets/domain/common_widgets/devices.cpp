@@ -141,7 +141,7 @@ Devices::~Devices()
 }
 
 /* public slots */
-QDomNodeList Devices::getNodeList() const
+QDomDocument Devices::getDevDocument() const
 {
     /*
      * parse usedDeviceList
@@ -164,7 +164,7 @@ QDomNodeList Devices::getNodeList() const
     };
     doc.appendChild(devices);
     //qDebug()<<doc.toString()<<"Device result";
-    return doc.firstChildElement("devices").childNodes();
+    return doc;
 }
 
 /* private slots */
@@ -176,17 +176,7 @@ QDomDocument Devices::choiceNewDevice()
         deviceStack = new DeviceStack(this, currWorkConnect);
     };
     if ( deviceStack->exec()==1 ) {
-        QDomElement device;
-        device = doc.createElement("device");
-        QDomNodeList list = deviceStack->getResult();
-        uint j = 0;
-        uint count = list.length();
-        for (uint i=0; i<count;i++) {
-            //qDebug()<<list.item(j).nodeName()<<i;
-            if (!list.item(j).isNull()) device.appendChild(list.item(j));
-            else ++j;
-        };
-        doc.appendChild(device);
+        doc = deviceStack->getResult();
     };
     return doc;
 }

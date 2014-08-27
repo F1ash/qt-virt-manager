@@ -7,8 +7,7 @@ class UnixWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit UnixWidget(QWidget *parent = 0);
-    ~UnixWidget();
+    explicit UnixWidget(QWidget *parent = 0, QString _tag = "");
 
 signals:
 
@@ -18,9 +17,10 @@ private:
     QLabel          *modeLabel;
     QComboBox       *mode;
     QGridLayout     *unixLayout;
+    QString          tag;
 
 public slots:
-    QDomNodeList getNodeList() const;
+    QDomDocument getDevDocument() const;
     void setPath(QString);
 
 };

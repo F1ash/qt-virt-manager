@@ -17,7 +17,7 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    QDomNodeList getNodeList() const;
+    QDomDocument getDevDocument() const;
 
 private slots:
     void autoPortChanged(bool);

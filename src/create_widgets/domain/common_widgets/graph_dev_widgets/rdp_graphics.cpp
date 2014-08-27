@@ -20,9 +20,9 @@ RDP_Graphics::RDP_Graphics(QWidget *parent) :
 }
 
 /* public slots */
-QDomNodeList RDP_Graphics::getNodeList() const
+QDomDocument RDP_Graphics::getDevDocument() const
 {
-    return QDomNodeList();
+    return QDomDocument();
 }
 
 /* private slots */

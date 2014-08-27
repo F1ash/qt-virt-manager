@@ -43,26 +43,25 @@ InputDevice::~InputDevice()
 }
 
 /* public slots */
-QDomNodeList InputDevice::getNodeList() const
+QDomDocument InputDevice::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
+    QDomElement _address, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("input");
     // WARNING: address implemented experimentally
     AttrList l = addr->getAttrList();
     if ( !l.isEmpty() ) {
-        QDomElement _address = doc.createElement("address");
+        _address = doc.createElement("address");
         foreach (QString key, l.keys()) {
             if ( !key.isEmpty() )
                 _address.setAttribute(key, l.value(key));
         };
-        doc.appendChild(_address);
+        _devDesc.appendChild(_address);
     };
-    return doc.childNodes();
-}
-QString InputDevice::getDevType() const
-{
-    return type->itemData(type->currentIndex(), Qt::UserRole).toString();
-}
-QString InputDevice::getDevBus() const
-{
-    return bus->itemData(bus->currentIndex(), Qt::UserRole).toString();
+    _device.appendChild(_devDesc);
+    _devDesc.setAttribute("type", type->itemData(type->currentIndex(), Qt::UserRole).toString());
+    _devDesc.setAttribute("bus", bus->itemData(bus->currentIndex(), Qt::UserRole).toString());
+    doc.appendChild(_device);
+    return doc;
 }

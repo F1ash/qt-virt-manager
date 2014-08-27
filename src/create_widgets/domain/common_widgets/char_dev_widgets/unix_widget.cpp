@@ -1,7 +1,7 @@
 #include "unix_widget.h"
 
-UnixWidget::UnixWidget(QWidget *parent) :
-    _QWidget(parent)
+UnixWidget::UnixWidget(QWidget *parent, QString _tag) :
+    _QWidget(parent), tag(_tag)
 {
     pathLabel = new QLabel("Path:", this);
     path = new QLineEdit(this);
@@ -16,32 +16,27 @@ UnixWidget::UnixWidget(QWidget *parent) :
     unixLayout->addWidget(mode, 1, 1);
     setLayout(unixLayout);
 }
-UnixWidget::~UnixWidget()
-{
-    delete pathLabel;
-    pathLabel = 0;
-    delete path;
-    path = 0;
-    delete unixLayout;
-    unixLayout = 0;
-}
 
 /* public slots */
-QDomNodeList UnixWidget::getNodeList() const
+QDomDocument UnixWidget::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _source, _target;
+    QDomElement _source, _target, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement(tag);
     _source = doc.createElement("source");
     _source.setAttribute("path", path->text());
     _source.setAttribute("mode", mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
-    doc.appendChild(_source);
+    _devDesc.appendChild(_source);
 
     _target = doc.createElement("target");
     _target.setAttribute("port", 0);
-    doc.appendChild(_target);
+    _devDesc.appendChild(_target);
 
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
     //qDebug()<<doc.toString();
-    return doc.childNodes();
+    return doc;
 }
 void UnixWidget::setPath(QString text)
 {

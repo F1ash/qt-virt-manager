@@ -24,9 +24,9 @@ SDL_Graphics::SDL_Graphics(QWidget *parent) :
 }
 
 /* public slots */
-QDomNodeList SDL_Graphics::getNodeList() const
+QDomDocument SDL_Graphics::getDevDocument() const
 {
-    return QDomNodeList();
+    return QDomDocument();
 }
 QString SDL_Graphics::getDevDisplay() const
 {

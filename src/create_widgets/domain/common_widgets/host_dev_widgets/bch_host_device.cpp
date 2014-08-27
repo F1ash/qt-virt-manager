@@ -29,7 +29,7 @@ BCh_Host_Device::BCh_Host_Device(
 }
 
 /* public slots */
-QDomNodeList BCh_Host_Device::getNodeList() const
+QDomDocument BCh_Host_Device::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _dev;
@@ -52,7 +52,7 @@ QDomNodeList BCh_Host_Device::getNodeList() const
     _dev.appendChild(data);
     _source.appendChild(_dev);
     doc.appendChild(_source);
-    return doc.childNodes();
+    return doc;
 }
 QString BCh_Host_Device::getDevType() const
 {

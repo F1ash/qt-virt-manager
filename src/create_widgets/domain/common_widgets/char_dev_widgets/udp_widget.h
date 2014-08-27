@@ -7,8 +7,7 @@ class UdpWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit UdpWidget(QWidget *parent = 0);
-    ~UdpWidget();
+    explicit UdpWidget(QWidget *parent = 0, QString _tag = "");
 
 signals:
 
@@ -22,9 +21,10 @@ private:
     QLabel          *port2Label;
     QSpinBox        *port2;
     QGridLayout     *udpLayout;
+    QString          tag;
 
 public slots:
-    QDomNodeList getNodeList() const;
+    QDomDocument getDevDocument() const;
 
 };
 

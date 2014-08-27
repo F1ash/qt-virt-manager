@@ -36,10 +36,12 @@ VideoDevice::VideoDevice(QWidget *parent) :
 }
 
 /* public slots */
-QDomNodeList VideoDevice::getNodeList() const
+QDomDocument VideoDevice::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _model, _acceleration;
+    QDomElement _model, _acceleration, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("video");
     _model = doc.createElement("model");
     _model.setAttribute("type", model->currentText().toLower());
     int _vram = vram->value()*1024;
@@ -48,14 +50,14 @@ QDomNodeList VideoDevice::getNodeList() const
      * WARNING: possible to use more then 1 head
      */
     _model.setAttribute("heads", "1");
-    doc.appendChild(_model);
+    _devDesc.appendChild(_model);
     if ( accel2d->isChecked() || accel3d->isChecked() ) {
         _acceleration = doc.createElement("acceleration");
         if ( accel2d->isChecked() )
             _acceleration.setAttribute("accel2d", "yes");
         if ( accel3d->isChecked() )
             _acceleration.setAttribute("accel3d", "yes");
-        doc.appendChild(_acceleration);
+        _devDesc.appendChild(_acceleration);
     };
     // WARNING: address implemented experimentally
     AttrList l = addr->getAttrList();
@@ -65,7 +67,9 @@ QDomNodeList VideoDevice::getNodeList() const
             if ( !key.isEmpty() )
                 _address.setAttribute(key, l.value(key));
         };
-        doc.appendChild(_address);
+        _devDesc.appendChild(_address);
     };
-    return doc.childNodes();
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
+    return doc;
 }

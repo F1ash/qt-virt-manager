@@ -246,7 +246,7 @@ void CreateVirtDomain::buildXMLDescription()
      * then common description append it
      */
     QDomDocument doc = QDomDocument();
-    QDomElement root, devices, _emulator;
+    QDomElement root, devices, _emulator, _element;
     root = doc.createElement("domain");
     root.setAttribute("type", type.toLower());
     doc.appendChild(root);
@@ -261,9 +261,11 @@ void CreateVirtDomain::buildXMLDescription()
         QString property = (*Wdg)->objectName().split(":").last();
         QDomNodeList list;
         if ( property=="Device" ) {
-            list = (*Wdg)->getNodeList();
+            list = (*Wdg)->getDevDocument().firstChildElement("devices").childNodes();
+            _element = devices;
         } else {
-            continue;
+            list = (*Wdg)->getDevDocument().firstChildElement("data").childNodes();
+            _element = root;
         };
         /*
          * current DomNode is removed to root-element
@@ -274,29 +276,7 @@ void CreateVirtDomain::buildXMLDescription()
         uint count = list.length();
         for (uint i=0; i<count;i++) {
             //qDebug()<<list.item(j).nodeName()<<i;
-            if (!list.item(j).isNull()) devices.appendChild(list.item(j));
-            else ++j;
-        };
-    };
-    for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
-        if ( NULL==*Wdg ) continue;
-        QString property = (*Wdg)->objectName().split(":").last();
-        QDomNodeList list;
-        if ( property=="Device" ) {
-            continue;
-        } else {
-            list = (*Wdg)->getNodeList();
-        };
-        /*
-         * current DomNode is removed to root-element
-         * but NULL-elemens not removed
-         * therefore keep to seek on not-NULL next element
-         */
-        uint j = 0;
-        uint count = list.length();
-        for (uint i=0; i<count;i++) {
-            //qDebug()<<list.item(j).nodeName()<<i;
-            if (!list.item(j).isNull()) root.appendChild(list.item(j));
+            if (!list.item(j).isNull()) _element.appendChild(list.item(j));
             else ++j;
         };
     };

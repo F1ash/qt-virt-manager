@@ -14,18 +14,19 @@
 CharDevice::CharDevice(
         QWidget *parent,
         virConnectPtr conn,
-        virDomainPtr domain
+        virDomainPtr domain,
+        QString _tag
         ) :
-    _QWidget(parent, conn, domain)
+    _QWidget(parent, conn, domain), tag(_tag)
 {
     devType = new QComboBox(this);
 
-    ptyWdg  = new PtyWidget(this);
-    devWdg  = new DevWidget(this);
-    fileWdg = new FileWidget(this);
-    tcpWdg  = new TcpWidget(this);
-    udpWdg  = new UdpWidget(this);
-    unixWdg = new UnixWidget(this);
+    ptyWdg  = new PtyWidget(this, tag);
+    devWdg  = new DevWidget(this, tag);
+    fileWdg = new FileWidget(this, tag);
+    tcpWdg  = new TcpWidget(this, tag);
+    udpWdg  = new UdpWidget(this, tag);
+    unixWdg = new UnixWidget(this, tag);
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(devType);
@@ -45,62 +46,36 @@ CharDevice::CharDevice(
         devType->setItemData(i, l.at(i), Qt::UserRole);
     }
 }
-CharDevice::~CharDevice()
-{
-    disconnect(devType, SIGNAL(currentIndexChanged(int)),
-               this, SLOT(devTypeChanged(int)));
-    delete devType;
-    devType = 0;
-
-    delete ptyWdg;
-    ptyWdg = 0;
-    delete devWdg;
-    devWdg = 0;
-    delete fileWdg;
-    fileWdg = 0;
-    delete tcpWdg;
-    tcpWdg = 0;
-    delete udpWdg;
-    udpWdg = 0;
-    delete unixWdg;
-    unixWdg = 0;
-
-    delete commonLayout;
-    commonLayout = 0;
-}
 
 /* public slots */
-QDomNodeList CharDevice::getNodeList() const
+QDomDocument CharDevice::getDevDocument() const
 {
-    QDomNodeList result;
+    QDomDocument doc;
     switch (devType->currentIndex()) {
     case 0:
-        result = ptyWdg->getNodeList();
+        doc = ptyWdg->getDevDocument();
         break;
     case 1:
-        result = devWdg->getNodeList();
+        doc = devWdg->getDevDocument();
         break;
     case 2:
-        result = fileWdg->getNodeList();
+        doc = fileWdg->getDevDocument();
         break;
     case 3:
-        result = tcpWdg->getNodeList();
+        doc = tcpWdg->getDevDocument();
         break;
     case 4:
-        result = udpWdg->getNodeList();
+        doc = udpWdg->getDevDocument();
         break;
     case 5:
-        result = unixWdg->getNodeList();
+        doc = unixWdg->getDevDocument();
         break;
     default:
         break;
-    }
-    return result;
+    };
+    return doc;
 }
-QString CharDevice::getDevType() const
-{
-    return devType->itemData(devType->currentIndex(), Qt::UserRole).toString();
-}
+
 /* private slots */
 void CharDevice::devTypeChanged(int i)
 {

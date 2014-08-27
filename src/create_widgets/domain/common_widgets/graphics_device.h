@@ -19,11 +19,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomNodeList getNodeList() const;
-    QString      getDevType() const;
-    QString      getDevDisplay() const;
-    QString      getDevXauth() const;
-    QString      getDevFullScreen() const;
+    QDomDocument getDevDocument() const;
 
 private slots:
     void typeChanged(int);

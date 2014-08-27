@@ -121,25 +121,26 @@ Memory::~Memory()
 }
 
 /* public slots */
-QDomNodeList Memory::getNodeList() const
+QDomDocument Memory::getDevDocument() const
 {
     QDomText data;
     QDomDocument doc = QDomDocument();
-    QDomElement _memory, _currMemory, _memTune, _memBacking, _el;
+    QDomElement _memory, _currMemory, _memTune, _memBacking, _el, _data;
+    _data = doc.createElement("data");
     _memory= doc.createElement("memory");
     data = doc.createTextNode(QString("%1").arg(maxMemValue->value()));
     _memory.appendChild(data);
     _memory.setAttribute("unit", memUnit);
-    doc.appendChild(_memory);
+    _data.appendChild(_memory);
     _currMemory= doc.createElement("currentMemory");
     data = doc.createTextNode(QString("%1").arg(currMemValue->value()));
     _currMemory.appendChild(data);
     _currMemory.setAttribute("unit", memUnit);
-    doc.appendChild(_currMemory);
+    _data.appendChild(_currMemory);
 
     if ( enableMemBacking->isChecked() ) {
         _memBacking= doc.createElement("memoryBacking");
-        doc.appendChild(_memBacking);
+        _data.appendChild(_memBacking);
         if ( hugepages->isChecked() ) {
             _el = doc.createElement("hugepages");
             _memBacking.appendChild(_el);
@@ -156,7 +157,7 @@ QDomNodeList Memory::getNodeList() const
 
     if ( enableMemTune->isChecked() ) {
         _memTune= doc.createElement("memtune");
-        doc.appendChild(_memTune);
+        _data.appendChild(_memTune);
         if ( hard_limit->value() ) {
             _el = doc.createElement("hard_limit");
             data = doc.createTextNode(QString("%1").arg(hard_limit->value()));
@@ -187,8 +188,9 @@ QDomNodeList Memory::getNodeList() const
         };
     };
 
+    doc.appendChild(_data);
     //qDebug()<<doc.toString();
-    return doc.childNodes();
+    return doc;
 }
 
 /* private slots */

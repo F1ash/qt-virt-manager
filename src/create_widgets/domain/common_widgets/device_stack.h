@@ -10,8 +10,6 @@
 #include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/domain_widgets.h"
 
-typedef QMap<QString, _QWidget*> WidgetMap;
-
 class DeviceStack : public QDialog
 {
     Q_OBJECT
@@ -45,11 +43,10 @@ private:
     virNodeDevice  **nodeDevices = NULL;
     virErrorPtr      virtErrors;
 
-    QString          currDeviceType;
-    WidgetMap        wdgMap;
+    _QWidget        *device = NULL;
 
 public slots:
-    QDomNodeList getResult() const;
+    QDomDocument getResult() const;
 
 private slots:
     void readNetworkList();

@@ -45,7 +45,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomNodeList getNodeList() const;
+    QDomDocument getDevDocument() const;
 
 private slots:
     void changeCurrentMemValue(int);

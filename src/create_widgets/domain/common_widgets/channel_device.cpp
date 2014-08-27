@@ -1,7 +1,7 @@
 #include "channel_device.h"
 
 ChannelDevice::ChannelDevice(QWidget *parent) :
-    CharDevice(parent)
+    CharDevice(parent, NULL, NULL, QString("channel"))
 {
     devType->insertItem(6, "Spice Agent (spicevmc)", "spicevmc");
     chanType = new QComboBox(this);
@@ -16,61 +16,49 @@ ChannelDevice::ChannelDevice(QWidget *parent) :
     //        this, SLOT(chanNameChanged(const QString&)));
     devType->setCurrentIndex(6);
 }
-ChannelDevice::~ChannelDevice()
-{
-    disconnect(chanType, SIGNAL(editTextChanged(const QString&)),
-               this, SLOT(chanNameChanged(const QString&)));
-    delete chanType;
-    chanType = 0;
-}
+
 /* public slots */
-QDomNodeList ChannelDevice::getNodeList() const
+QDomDocument ChannelDevice::getDevDocument() const
 {
-    QDomDocument doc = QDomDocument();
-    QDomElement device, _target;
-    QDomNodeList result, list;
+    QDomDocument doc;
     switch (devType->currentIndex()) {
     case 0:
-        list = ptyWdg->getNodeList();
+        doc = ptyWdg->getDevDocument();
         break;
     case 1:
-        list = devWdg->getNodeList();
+        doc = devWdg->getDevDocument();
         break;
     case 2:
-        list = fileWdg->getNodeList();
+        doc = fileWdg->getDevDocument();
         break;
     case 3:
-        list = tcpWdg->getNodeList();
+        doc = tcpWdg->getDevDocument();
         break;
     case 4:
-        list = udpWdg->getNodeList();
+        doc = udpWdg->getDevDocument();
         break;
     case 5:
-        list = unixWdg->getNodeList();
+        doc = unixWdg->getDevDocument();
         break;
     case 6:
-        /* nothing there */
+        doc = ptyWdg->getDevDocument();
         break;
     default:
         break;
     };
-    device = doc.createElement("device");
-    uint j = 0;
-    uint count = list.length();
-    for (uint i=0; i<count;i++) {
-        //qDebug()<<list.item(j).nodeName()<<i;
-        /* target element create later */
-        if (!list.item(j).isNull() && list.item(j).nodeName()!="target")
-            device.appendChild(list.item(j));
-        else ++j;
-    };
-    _target = doc.createElement("target");
+    QDomElement _target = doc.createElement("target");
     _target.setAttribute("type", "virtio");
     _target.setAttribute("name", chanType->currentText());
-    device.appendChild(_target);
-    doc.appendChild(device);
-    result = doc.firstChildElement("device").childNodes();
-    return result;
+    doc.firstChildElement("device")
+            .firstChildElement("channel")
+            .appendChild(_target);
+    doc.firstChildElement("device")
+            .firstChildElement("channel")
+            .setAttribute("type",
+                          devType->itemData(
+                              devType->currentIndex(),
+                              Qt::UserRole).toString());
+    return doc;
 }
 
 /* private slots */

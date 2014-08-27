@@ -1,7 +1,7 @@
 #include "tcp_widget.h"
 
-TcpWidget::TcpWidget(QWidget *parent) :
-    _QWidget(parent)
+TcpWidget::TcpWidget(QWidget *parent, QString _tag) :
+    _QWidget(parent), tag(_tag)
 {
     modeLabel = new QLabel("Mode:", this);
     mode = new QComboBox(this);
@@ -31,47 +31,30 @@ TcpWidget::TcpWidget(QWidget *parent) :
     tcpLayout->addWidget(telnet, 3, 1);
     setLayout(tcpLayout);
 }
-TcpWidget::~TcpWidget()
-{
-    delete modeLabel;
-    modeLabel = 0;
-    delete mode;
-    mode = 0;
-    delete hostLabel;
-    hostLabel = 0;
-    delete host;
-    host = 0;
-    delete portLabel;
-    portLabel = 0;
-    delete port;
-    port = 0;
-    delete telnetLabel;
-    telnetLabel = 0;
-    delete telnet;
-    telnet = 0;
-    delete tcpLayout;
-    tcpLayout = 0;
-}
 
 /* public slots */
-QDomNodeList TcpWidget::getNodeList() const
+QDomDocument TcpWidget::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _source, _protocol, _target;
+    QDomElement _source, _protocol, _target, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement(tag);
     _source = doc.createElement("source");
     _source.setAttribute("mode", mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
     _source.setAttribute("host", host->text());
     _source.setAttribute("service", port->value());
-    doc.appendChild(_source);
+    _devDesc.appendChild(_source);
 
     _protocol = doc.createElement("protocol");
     _protocol.setAttribute("type", telnet->itemData(telnet->currentIndex(), Qt::UserRole).toString());
-    doc.appendChild(_protocol);
+    _devDesc.appendChild(_protocol);
 
     _target = doc.createElement("target");
     _target.setAttribute("port", "0");
-    doc.appendChild(_target);
+    _devDesc.appendChild(_target);
 
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
     //qDebug()<<doc.toString();
-    return doc.childNodes();
+    return doc;
 }

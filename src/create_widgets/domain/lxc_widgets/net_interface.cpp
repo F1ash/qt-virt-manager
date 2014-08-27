@@ -52,31 +52,30 @@ LXC_NetInterface::~LXC_NetInterface()
 }
 
 /* public slots */
-QDomNodeList LXC_NetInterface::getNodeList() const
+QDomDocument LXC_NetInterface::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _source, _mac;
+    QDomElement _source, _mac, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("interface");
     _source= doc.createElement("source");
     if ( !useExistNetwork->isChecked() ) {
         _source.setAttribute("bridge", bridgeName->text());
-        doc.appendChild(_source);
 
         if ( !mac->text().isEmpty() ) {
             _mac= doc.createElement("mac");
             _mac.setAttribute("address", mac->text());
-            doc.appendChild(_mac);
+            _devDesc.appendChild(_mac);
         };
     } else {
         _source.setAttribute("network", networks->currentText());
-        doc.appendChild(_source);
     };
-
+    _devDesc.appendChild(_source);
+    _devDesc.setAttribute("type", (useExistNetwork->isChecked())? "network" : "bridge");
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
     //qDebug()<<doc.toString();
-    return doc.childNodes();
-}
-QString LXC_NetInterface::getDevType() const
-{
-    return (useExistNetwork->isChecked())? "network" : "bridge";
+    return doc;
 }
 
 /* private slots */

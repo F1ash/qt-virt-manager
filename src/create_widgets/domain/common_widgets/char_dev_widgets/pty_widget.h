@@ -10,16 +10,16 @@ class PtyWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit PtyWidget(QWidget *parent=0);
-    ~PtyWidget();
+    explicit PtyWidget(QWidget *parent=0, QString _tag = "");
 
 signals:
 
 private:
     QGridLayout     *ptyLayout;
+    QString          tag;
 
 public slots:
-    QDomNodeList getNodeList() const;
+    QDomDocument getDevDocument() const;
 
 private slots:
 

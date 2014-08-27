@@ -15,7 +15,7 @@ USB_Host_Device::USB_Host_Device(
 }
 
 /* public slots */
-QDomNodeList USB_Host_Device::getNodeList() const
+QDomDocument USB_Host_Device::getDevDocument() const
 {
     QDomDocument doc;
     QString _Id, vendorId, productId;
@@ -33,7 +33,7 @@ QDomNodeList USB_Host_Device::getNodeList() const
         _source.appendChild(_product);
         doc.appendChild(_source);
     };
-    return doc.childNodes();
+    return doc;
 }
 QString USB_Host_Device::getDevType() const
 {

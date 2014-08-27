@@ -15,9 +15,9 @@ Desktop_Graphics::Desktop_Graphics(QWidget *parent) :
 }
 
 /* public slots */
-QDomNodeList Desktop_Graphics::getNodeList() const
+QDomDocument Desktop_Graphics::getDevDocument() const
 {
-    return QDomNodeList();
+    return QDomDocument();
 }
 QString Desktop_Graphics::getDevDisplay() const
 {

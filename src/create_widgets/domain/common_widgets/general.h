@@ -31,7 +31,7 @@ private:
     QTextEdit       *description;
 
 public slots:
-    QDomNodeList getNodeList() const;
+    QDomDocument getDevDocument() const;
 
 };
 

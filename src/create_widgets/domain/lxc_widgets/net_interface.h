@@ -26,8 +26,7 @@ private:
     QVBoxLayout             *commonLayout;
 
 public slots:
-    QDomNodeList getNodeList() const;
-    QString      getDevType() const;
+    QDomDocument getDevDocument() const;
 
 private slots:
     void changeUsedNetwork(bool);

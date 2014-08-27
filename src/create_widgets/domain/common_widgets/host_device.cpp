@@ -24,21 +24,9 @@ HostDevice::HostDevice(
 }
 
 /* public slots */
-QDomNodeList HostDevice::getNodeList() const
+QDomDocument HostDevice::getDevDocument() const
 {
-    return info->getNodeList();
-}
-QString HostDevice::getDevType() const
-{
-    return info->getDevType();
-}
-QString HostDevice::getDevMode() const
-{
-    return info->getDevMode();
-}
-QString HostDevice::getDevManaged() const
-{
-    return info->getDevManaged();
+    return info->getDevDocument();
 }
 
 /* private slots */

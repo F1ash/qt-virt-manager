@@ -1,7 +1,7 @@
 #include "file_widget.h"
 
-FileWidget::FileWidget(QWidget *parent) :
-    _QWidget(parent)
+FileWidget::FileWidget(QWidget *parent, QString _tag) :
+    _QWidget(parent), tag(_tag)
 {
     pathLabel = new QLabel("Path:", this);
     path = new QLineEdit(this);
@@ -11,29 +11,24 @@ FileWidget::FileWidget(QWidget *parent) :
     fileLayout->addWidget(path, 0, 1);
     setLayout(fileLayout);
 }
-FileWidget::~FileWidget()
-{
-    delete pathLabel;
-    pathLabel = 0;
-    delete path;
-    path = 0;
-    delete fileLayout;
-    fileLayout = 0;
-}
 
 /* public slots */
-QDomNodeList FileWidget::getNodeList() const
+QDomDocument FileWidget::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _source, _target;
+    QDomElement _source, _target, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement(tag);
     _source = doc.createElement("source");
     _source.setAttribute("path", path->text());
-    doc.appendChild(_source);
+    _devDesc.appendChild(_source);
 
     _target = doc.createElement("target");
     _target.setAttribute("port", 0);
-    doc.appendChild(_target);
+    _devDesc.appendChild(_target);
 
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
     //qDebug()<<doc.toString();
-    return doc.childNodes();
+    return doc;
 }

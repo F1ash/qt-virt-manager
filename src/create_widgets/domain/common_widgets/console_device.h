@@ -12,7 +12,6 @@ public:
             virConnectPtr conn = NULL,
             virDomainPtr domain = NULL
             );
-    ~ConsoleDevice();
 
 signals:
 
@@ -20,7 +19,7 @@ private:
     QComboBox       *targetType;
 
 public slots:
-QDomNodeList getNodeList() const;
+QDomDocument getDevDocument() const;
 };
 
 #endif // CONSOLE_DEVICE_H

@@ -17,9 +17,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomNodeList getNodeList() const;
-    QString      getDevType() const;
-    QString      getDevMode() const;
+    QDomDocument getDevDocument() const;
 };
 
 #endif // SMARTCARD_DEVICE_H

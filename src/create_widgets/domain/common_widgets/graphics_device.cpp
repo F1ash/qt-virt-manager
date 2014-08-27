@@ -23,25 +23,9 @@ GraphicsDevice::GraphicsDevice(QWidget *parent) :
 }
 
 /* public slots */
-QDomNodeList GraphicsDevice::getNodeList() const
+QDomDocument GraphicsDevice::getDevDocument() const
 {
-    return info->getNodeList();
-}
-QString GraphicsDevice::getDevType() const
-{
-    return type->itemData(type->currentIndex(), Qt::UserRole).toString();
-}
-QString GraphicsDevice::getDevDisplay() const
-{
-    return info->getDevDisplay();
-}
-QString GraphicsDevice::getDevXauth() const
-{
-    return info->getDevXauth();
-}
-QString GraphicsDevice::getDevFullScreen() const
-{
-    return info->getDevFullScreen();
+    return info->getDevDocument();
 }
 
 /* private slots */

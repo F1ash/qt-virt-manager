@@ -24,27 +24,23 @@ SmartCardDevice::~SmartCardDevice()
 }
 
 /* public slots */
-QDomNodeList SmartCardDevice::getNodeList() const
+QDomDocument SmartCardDevice::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _address;
+    QDomElement _address, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("smartcard");
     _address = doc.createElement("address");
     _address.setAttribute("type", "ccid");
     _address.setAttribute("controller", "0");
     _address.setAttribute("slot", "0");
-    doc.appendChild(_address);
+    _devDesc.appendChild(_address);
 
-    //qDebug()<<doc.toString();
-    return doc.childNodes();
-}
-QString SmartCardDevice::getDevType() const
-{
-    QString _ret;
+    _device.appendChild(_devDesc);
+    _devDesc.setAttribute("mode", mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
     if ( mode->itemData(mode->currentIndex(), Qt::UserRole).toString()=="passthrough" )
-        _ret = QString("spicevmc");
-    return _ret;
-}
-QString SmartCardDevice::getDevMode() const
-{
-    return mode->itemData(mode->currentIndex(), Qt::UserRole).toString();
+        _devDesc.setAttribute("type", "spicevmc");
+    doc.appendChild(_device);
+    //qDebug()<<doc.toString();
+    return doc;
 }

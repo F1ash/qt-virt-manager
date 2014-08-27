@@ -23,8 +23,7 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    QDomNodeList    getNodeList() const;
-    QString         getDevModel() const;
+    QDomDocument    getDevDocument() const;
 
 private slots:
     void modelChanged(QString);

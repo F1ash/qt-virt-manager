@@ -35,11 +35,11 @@ ConsoleDevice::ConsoleDevice(
         virConnectPtr conn,
         virDomainPtr domain
         ) :
-    CharDevice(parent, conn, domain)
+    CharDevice(parent, conn, domain, QString("console"))
 {
     QString connType = QString::fromUtf8(virConnectGetType(currWorkConnect));
     devType->clear();
-    devType->addItem("PseudoTTY (pty)", QVariant("pty"));
+    devType->addItem("PseudoTTY (pty)", "pty");
     targetType = new QComboBox(this);
     if ( connType.toLower()=="lxc" ) {
         targetType->addItem("LXC", "lxc");
@@ -51,22 +51,22 @@ ConsoleDevice::ConsoleDevice(
     };
     commonLayout->insertWidget(1, targetType, -1);
 }
-ConsoleDevice::~ConsoleDevice()
-{
-    delete targetType;
-    targetType = 0;
-}
 
 /* public slots */
-QDomNodeList ConsoleDevice::getNodeList() const
+QDomDocument ConsoleDevice::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _target;
+    QDomElement _target, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("console");
     _target= doc.createElement("target");
     _target.setAttribute("port", 0);
     _target.setAttribute("type", targetType->itemData(targetType->currentIndex(), Qt::UserRole).toString());
-    doc.appendChild(_target);
+    _devDesc.appendChild(_target);
 
+    _device.appendChild(_devDesc);
+    _devDesc.setAttribute("type", "pty");
+    doc.appendChild(_device);
     //qDebug()<<doc.toString();
-    return doc.childNodes();
+    return doc;
 }

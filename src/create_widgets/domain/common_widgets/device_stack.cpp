@@ -103,52 +103,17 @@ DeviceStack::~DeviceStack()
 
     delete commonLayout;
     commonLayout = 0;
-
-    wdgMap.clear();
 }
 
 /* public slots */
-QDomNodeList DeviceStack::getResult() const
+QDomDocument DeviceStack::getResult() const
 {
     qDebug()<<"DeviceStack result";
-    if ( currDeviceType.isEmpty() ) {
-        return QDomNodeList();
-    } else if (wdgMap.value(currDeviceType)!=NULL) {
-        QDomNodeList list = wdgMap.value(currDeviceType)->getNodeList();
-        QDomDocument doc = QDomDocument();
-        QDomElement _device = doc.createElement(currDeviceType);
-        if ( !wdgMap.value(currDeviceType)->getDevType().isEmpty() )
-            _device.setAttribute("type", wdgMap.value(currDeviceType)->getDevType());
-        if ( !wdgMap.value(currDeviceType)->getDevMode().isEmpty() )
-            _device.setAttribute("mode", wdgMap.value(currDeviceType)->getDevMode());
-        if ( !wdgMap.value(currDeviceType)->getDevBus().isEmpty() )
-            _device.setAttribute("bus", wdgMap.value(currDeviceType)->getDevBus());
-        if ( !wdgMap.value(currDeviceType)->getDevModel().isEmpty() )
-            _device.setAttribute("model", wdgMap.value(currDeviceType)->getDevModel());
-        if ( !wdgMap.value(currDeviceType)->getDevManaged().isEmpty() )
-            _device.setAttribute("managed", wdgMap.value(currDeviceType)->getDevManaged());
-        if ( !wdgMap.value(currDeviceType)->getDevDisplay().isEmpty() )
-            _device.setAttribute("display", wdgMap.value(currDeviceType)->getDevDisplay());
-        if ( !wdgMap.value(currDeviceType)->getDevXauth().isEmpty() )
-            _device.setAttribute("xauth", wdgMap.value(currDeviceType)->getDevXauth());
-        if ( !wdgMap.value(currDeviceType)->getDevFullScreen().isEmpty() )
-            _device.setAttribute("fullscreen", wdgMap.value(currDeviceType)->getDevFullScreen());
-        // check valid Node
-        if ( !_device.attributes().isEmpty() ) doc.appendChild(_device);
-        else if ( list.count()>0 ) doc.appendChild(_device);
-
-        uint j = 0;
-        uint count = list.length();
-        for (uint i=0; i<count;i++) {
-            //qDebug()<<list.item(j).nodeName()<<i;
-            if (!list.item(j).isNull()) _device.appendChild(list.item(j));
-            else ++j;
-        };
-
-        //qDebug()<<doc.toString();
-        return doc.childNodes();
-    } else
-        return QDomNodeList();
+    QDomDocument doc;
+    if ( device!=NULL ) {
+        doc = device->getDevDocument();
+    };
+    return doc;
 }
 
 /* private slots */
@@ -208,45 +173,45 @@ void DeviceStack::readNodeDevicesList()
 void DeviceStack::showDevice(QListWidgetItem *item)
 {
     qDebug()<<item->text();
-    infoWidget->layout()->removeWidget(wdgMap.value(currDeviceType));
-    delete wdgMap.value(currDeviceType);
-    wdgMap.insert(currDeviceType, NULL);
-    wdgMap.remove(currDeviceType);
-    currDeviceType.clear();
-    currDeviceType = item->data(Qt::UserRole).toString();
-    // TODO: display devices available for current driver
-    if ( item->data(Qt::UserRole) == "interface" ) {
-        wdgMap.insert(currDeviceType, new LXC_NetInterface(this, nets));
-    } else if ( currDeviceType == "serial" ) {
-        wdgMap.insert(currDeviceType, new CharDevice(this));
-    } else if ( currDeviceType == "parallel" ) {
-        wdgMap.insert(currDeviceType, new CharDevice(this));
-    } else if ( currDeviceType == "channel" ) {
-        wdgMap.insert(currDeviceType, new ChannelDevice(this));
-    } else if ( currDeviceType == "console" ) {
-        wdgMap.insert(currDeviceType, new ConsoleDevice(
-                          this,
-                          currWorkConnect));
-    } else if ( currDeviceType == "smartcard" ) {
-        wdgMap.insert(currDeviceType, new SmartCardDevice(this));
-    } else if ( currDeviceType == "input" ) {
-        wdgMap.insert(currDeviceType, new InputDevice(this));
-    } else if ( currDeviceType == "hub" ) {
-        wdgMap.insert(currDeviceType, new HubDevice(this));
-    } else if ( currDeviceType == "video" ) {
-        wdgMap.insert(currDeviceType, new VideoDevice(this));
-    } else if ( currDeviceType == "sound" ) {
-        wdgMap.insert(currDeviceType, new SoundDevice(this));
-    } else if ( currDeviceType == "hostdev" ) {
-        wdgMap.insert(currDeviceType, new HostDevice(
-                          this,
-                          currWorkConnect));
-    } else if ( currDeviceType == "graphics" ) {
-        wdgMap.insert(currDeviceType, new GraphicsDevice(this));
-    } else {
-        wdgMap.insert(currDeviceType, new _QWidget(this));
+    if ( device!=NULL ) {
+        infoWidget->layout()->removeWidget(device);
+        delete device;
+        device = NULL;
     };
-    infoWidget->layout()->addWidget(wdgMap.value(currDeviceType));
+    QString deviceType = item->data(Qt::UserRole).toString();
+    // TODO: display devices available for current driver
+    if ( deviceType == "interface" ) {
+        device = new LXC_NetInterface(this, nets);
+    } else if ( deviceType == "serial" ) {
+        device = new CharDevice(this, NULL, NULL, deviceType);
+    } else if ( deviceType == "parallel" ) {
+        device = new CharDevice(this, NULL, NULL, deviceType);
+    } else if ( deviceType == "channel" ) {
+        device = new ChannelDevice(this);
+    } else if ( deviceType == "console" ) {
+        device = new ConsoleDevice(
+                          this,
+                          currWorkConnect);
+    } else if ( deviceType == "smartcard" ) {
+        device = new SmartCardDevice(this);
+    } else if ( deviceType == "input" ) {
+        device = new InputDevice(this);
+    } else if ( deviceType == "hub" ) {
+        device = new HubDevice(this);
+    } else if ( deviceType == "video" ) {
+        device = new VideoDevice(this);
+    } else if ( deviceType == "sound" ) {
+        device = new SoundDevice(this);
+    } else if ( deviceType == "hostdev" ) {
+        device = new HostDevice(
+                          this,
+                          currWorkConnect);
+    } else if ( deviceType == "graphics" ) {
+        device = new GraphicsDevice(this);
+    } else {
+        device = new _QWidget(this);
+    };
+    infoWidget->layout()->addWidget(device);
 }
 void DeviceStack::showDevice()
 {
@@ -254,8 +219,7 @@ void DeviceStack::showDevice()
 }
 void DeviceStack::set_Result()
 {
-    setResult( (sender()==addDevice)?1:0 );
-    done(result());
+    done( (sender()==addDevice)?1:0 );
     qDebug()<<"done";
     settings.setValue("DeviceStackGeometry", saveGeometry());
 }

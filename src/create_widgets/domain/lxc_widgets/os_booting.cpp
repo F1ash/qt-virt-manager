@@ -92,14 +92,14 @@ LXC_OSBooting::~LXC_OSBooting()
 }
 
 /* public slots */
-QDomNodeList LXC_OSBooting::getNodeList() const
+QDomDocument LXC_OSBooting::getDevDocument() const
 {
     QDomText data;
     QDomDocument doc = QDomDocument();
-    QDomElement os, type, initElem, idmap, uid, gid;
-
-    os= doc.createElement("os");
-    doc.appendChild(os);
+    QDomElement os, type, initElem, idmap, uid, gid, _data;
+    _data = doc.createElement("data");
+    os = doc.createElement("os");
+    _data.appendChild(os);
 
     type= doc.createElement("type");
     type.setAttribute("arch", arch);
@@ -122,22 +122,22 @@ QDomNodeList LXC_OSBooting::getNodeList() const
     };
 
     if ( nameSpaceEnable->isChecked() ) {
-        idmap= doc.createElement("idmap");
-        doc.appendChild(idmap);
-        uid= doc.createElement("uid");
+        idmap = doc.createElement("idmap");
+        _data.appendChild(idmap);
+        uid = doc.createElement("uid");
         uid.setAttribute("start", uidStart->text());
         uid.setAttribute("target", QString("%1").arg(uidTarget->value()));
         uid.setAttribute("count",QString("%1").arg( uidCount->value()));
         idmap.appendChild(uid);
-        gid= doc.createElement("gid");
+        gid = doc.createElement("gid");
         gid.setAttribute("start", gidStart->text());
         gid.setAttribute("target", QString("%1").arg(gidTarget->value()));
         gid.setAttribute("count", QString("%1").arg(gidCount->value()));
         idmap.appendChild(gid);
     };
-
+    doc.appendChild(_data);
     //qDebug()<<doc.toString();
-    return doc.childNodes();
+    return doc;
 }
 
 /* private slots */

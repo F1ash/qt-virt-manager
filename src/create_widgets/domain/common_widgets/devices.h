@@ -36,10 +36,9 @@ private:
     //virDomain       *currDomain = NULL;
 
     DeviceStack     *deviceStack = NULL;
-    WidgetMap        wdgMap;
 
 public slots:
-    QDomNodeList getNodeList() const;
+    QDomDocument getDevDocument() const;
 
 private slots:
     QDomDocument choiceNewDevice();

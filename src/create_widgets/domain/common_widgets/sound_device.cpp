@@ -40,16 +40,19 @@ SoundDevice::SoundDevice(QWidget *parent) :
 }
 
 /* public slots */
-QDomNodeList SoundDevice::getNodeList() const
+QDomDocument SoundDevice::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
+    QDomElement _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("sound");
     if ( model->currentText()=="ich6" && !defaultICH6reg->isChecked() ) {
         QDomElement _codec = doc.createElement("codec");
         if ( duplexICH6reg->isChecked() )
             _codec.setAttribute("type", "duplex");
         if ( microICH6reg->isChecked() )
             _codec.setAttribute("type", "micro");
-        doc.appendChild(_codec);
+        _devDesc.appendChild(_codec);
     };
     // WARNING: address implemented experimentally
     AttrList l = addr->getAttrList();
@@ -59,13 +62,12 @@ QDomNodeList SoundDevice::getNodeList() const
             if ( !key.isEmpty() )
                 _address.setAttribute(key, l.value(key));
         };
-        doc.appendChild(_address);
+        _devDesc.appendChild(_address);
     };
-    return doc.childNodes();
-}
-QString SoundDevice::getDevModel() const
-{
-    return model->currentText();
+    _device.appendChild(_devDesc);
+    _devDesc.setAttribute("model", model->currentText());
+    doc.appendChild(_device);
+    return doc;
 }
 
 /* private slots */

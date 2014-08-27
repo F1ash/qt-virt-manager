@@ -16,7 +16,7 @@ SCSI_Host_Device::SCSI_Host_Device(
 
 /* public slots */
 /*
-QDomNodeList SCSI_Host_Device::getNodeList() const
+QDomDocument SCSI_Host_Device::getDevDocument() const
 {
     QDomDocument doc;
     QDomElement _source, _address;
@@ -24,7 +24,7 @@ QDomNodeList SCSI_Host_Device::getNodeList() const
     _address = doc.createElement("address");
     _source.appendChild(_address);
     doc.appendChild(_source);
-    return doc.childNodes();
+    return doc;
 }
 QString SCSI_Host_Device::getDevType() const
 {

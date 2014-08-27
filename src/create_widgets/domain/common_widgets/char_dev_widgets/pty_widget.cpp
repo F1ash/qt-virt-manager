@@ -1,19 +1,22 @@
 #include "pty_widget.h"
 
-PtyWidget::PtyWidget(QWidget *parent) :
-    _QWidget(parent)
+PtyWidget::PtyWidget(QWidget *parent, QString _tag) :
+    _QWidget(parent), tag(_tag)
 {
     ptyLayout = new QGridLayout();
 }
-PtyWidget::~PtyWidget()
-{
-    delete ptyLayout;
-    ptyLayout = 0;
-}
 
 /* public slots */
-QDomNodeList PtyWidget::getNodeList() const
+QDomDocument PtyWidget::getDevDocument() const
 {
-    QDomNodeList result;
-    return result;
+    QDomDocument doc = QDomDocument();
+    QDomElement _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement(tag);
+    _devDesc.setAttribute("type", "pty");
+
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
+    //qDebug()<<doc.toString();
+    return doc;
 }

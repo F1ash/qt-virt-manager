@@ -23,7 +23,7 @@ signals:
     void errorMsg(QString);
 
 public slots:
-    QDomNodeList getNodeList() const;
+    QDomDocument getDevDocument() const;
     QString      getDevType() const;
     QString      getDevMode() const;
     QString      getDevManaged() const;

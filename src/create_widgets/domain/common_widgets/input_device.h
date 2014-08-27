@@ -21,9 +21,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomNodeList getNodeList() const;
-    QString      getDevType() const;
-    QString      getDevBus() const;
+    QDomDocument getDevDocument() const;
 
 };
 
