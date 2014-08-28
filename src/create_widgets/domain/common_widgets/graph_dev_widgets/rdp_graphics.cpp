@@ -9,8 +9,8 @@ RDP_Graphics::RDP_Graphics(QWidget *parent) :
     replaceUser = new QCheckBox("Replace\nUser", this);
     multiUser = new QCheckBox("MultiUser", this);
     commonLayout = new QGridLayout();
-    commonLayout->addWidget(autoPort, 0, 0, Qt::AlignTop);
-    commonLayout->addWidget(port, 0, 1, Qt::AlignTop);
+    commonLayout->addWidget(autoPort, 0, 0);
+    commonLayout->addWidget(port, 0, 1);
     commonLayout->addWidget(replaceUser, 1, 0, Qt::AlignTop);
     commonLayout->addWidget(multiUser, 1, 1, Qt::AlignTop);
     setLayout(commonLayout);
@@ -22,7 +22,21 @@ RDP_Graphics::RDP_Graphics(QWidget *parent) :
 /* public slots */
 QDomDocument RDP_Graphics::getDevDocument() const
 {
-    return QDomDocument();
+    QDomDocument doc;
+    QDomElement _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("graphics");
+    _devDesc.setAttribute("type", "rdp");
+    if ( autoPort->isChecked() ) {
+        _devDesc.setAttribute("autoport", "yes");
+    } else {
+        _devDesc.setAttribute("port", port->text());
+    };
+    if ( multiUser->isChecked() ) _devDesc.setAttribute("multiUser", "yes");
+    if ( replaceUser->isChecked() ) _devDesc.setAttribute("replaceUser", "yes");
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
+    return doc;
 }
 
 /* private slots */

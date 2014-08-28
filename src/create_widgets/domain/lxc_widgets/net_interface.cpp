@@ -29,27 +29,6 @@ LXC_NetInterface::LXC_NetInterface(QWidget *parent, QStringList nets) :
     connect(networks, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeUsedNetwork(QString)));
     useExistNetwork->setChecked(true);
 }
-LXC_NetInterface::~LXC_NetInterface()
-{
-    disconnect(useExistNetwork, SIGNAL(toggled(bool)), this, SLOT(changeUsedNetwork(bool)));
-    disconnect(networks, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeUsedNetwork(QString)));
-    delete useExistNetwork;
-    useExistNetwork = 0;
-    delete networks;
-    networks = 0;
-
-    delete bridgeName;
-    bridgeName = 0;
-    delete macLabel;
-    macLabel = 0;
-    delete mac;
-    mac = 0;
-    delete netDescLayout;
-    delete netDescWdg;
-    netDescWdg = 0;
-    delete commonLayout;
-    commonLayout = 0;
-}
 
 /* public slots */
 QDomDocument LXC_NetInterface::getDevDocument() const

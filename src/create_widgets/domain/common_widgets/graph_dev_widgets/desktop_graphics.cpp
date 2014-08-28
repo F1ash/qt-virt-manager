@@ -17,13 +17,14 @@ Desktop_Graphics::Desktop_Graphics(QWidget *parent) :
 /* public slots */
 QDomDocument Desktop_Graphics::getDevDocument() const
 {
-    return QDomDocument();
-}
-QString Desktop_Graphics::getDevDisplay() const
-{
-    return display->text();
-}
-QString Desktop_Graphics::getDevFullScreen() const
-{
-    return (fullscreen->isChecked())? "yes" : "no";
+    QDomDocument doc;
+    QDomElement _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("graphics");
+    _devDesc.setAttribute("type", "desktop");
+    _devDesc.setAttribute("display", display->text());
+    _devDesc.setAttribute("fullscreen", (fullscreen->isChecked())? "yes" : "no");
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
+    return doc;
 }

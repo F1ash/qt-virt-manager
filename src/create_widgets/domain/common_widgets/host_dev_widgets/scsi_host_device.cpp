@@ -19,20 +19,18 @@ SCSI_Host_Device::SCSI_Host_Device(
 QDomDocument SCSI_Host_Device::getDevDocument() const
 {
     QDomDocument doc;
-    QDomElement _source, _address;
+    QDomElement _source, _address, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("hostdev");
     _source = doc.createElement("source");
     _address = doc.createElement("address");
     _source.appendChild(_address);
-    doc.appendChild(_source);
+    _devDesc.appendChild(_source);
+    _devDesc.setAttribute("type", "scsi");
+    _devDesc.setAttribute("mode", "subsystem");
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
     return doc;
-}
-QString SCSI_Host_Device::getDevType() const
-{
-    return QString("scsi");
-}
-QString SCSI_Host_Device::getDevMode() const
-{
-    return QString("subsystem");
 }
 */
 

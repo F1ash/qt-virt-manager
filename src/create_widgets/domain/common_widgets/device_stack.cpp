@@ -207,7 +207,9 @@ void DeviceStack::showDevice(QListWidgetItem *item)
                           this,
                           currWorkConnect);
     } else if ( deviceType == "graphics" ) {
-        device = new GraphicsDevice(this);
+        device = new GraphicsDevice(
+                    this,
+                    currWorkConnect);
     } else {
         device = new _QWidget(this);
     };

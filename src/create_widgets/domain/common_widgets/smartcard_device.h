@@ -8,7 +8,6 @@ class SmartCardDevice : public _QWidget
     Q_OBJECT
 public:
     explicit SmartCardDevice(QWidget *parent = 0);
-    ~SmartCardDevice();
 
 signals:
 

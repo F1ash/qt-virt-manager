@@ -29,8 +29,6 @@ signals:
 
 public slots:
     //QDomDocument getDevDocument() const;
-    //QString      getDevType() const;
-    //QString      getDevMode() const;
 
 private slots:
     void setAvailabledSCSIDevices();

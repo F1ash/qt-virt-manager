@@ -9,7 +9,6 @@ class InputDevice : public _QWidget
     Q_OBJECT
 public:
     explicit InputDevice(QWidget *parent = 0);
-    ~InputDevice();
 
 signals:
 

@@ -15,13 +15,6 @@ SmartCardDevice::SmartCardDevice(QWidget *parent) :
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
 }
-SmartCardDevice::~SmartCardDevice()
-{
-    delete mode;
-    mode = 0;
-    delete commonLayout;
-    commonLayout = 0;
-}
 
 /* public slots */
 QDomDocument SmartCardDevice::getDevDocument() const

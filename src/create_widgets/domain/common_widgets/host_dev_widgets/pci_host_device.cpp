@@ -26,7 +26,9 @@ QDomDocument PCI_Host_Device::getDevDocument() const
         bus.append( (_AddrList.size()>1)? _AddrList.at(1) : "0" );
         slot.append( (_AddrList.size()>2)? _AddrList.at(2) : "0" );
         function.append( (_AddrList.size()>3)? _AddrList.at(3) : "0" );
-        QDomElement _source, _address;
+        QDomElement _source, _address, _device, _devDesc;
+        _device = doc.createElement("device");
+        _devDesc = doc.createElement("hostdev");
         _source = doc.createElement("source");
         _address = doc.createElement("address");
 
@@ -39,22 +41,15 @@ QDomDocument PCI_Host_Device::getDevDocument() const
         _address.setAttribute("function", function);
 
         _source.appendChild(_address);
-        doc.appendChild(_source);
+        _devDesc.appendChild(_source);
+        _device.appendChild(_devDesc);
+        _devDesc.setAttribute("type", "pci");
+        _devDesc.setAttribute("mode", "subsystem");
+        // WARNING: unknown rule to set
+        //_devDesc.setAttribute("managed", "???");
+        doc.appendChild(_device);
     };
     return doc;
-}
-QString PCI_Host_Device::getDevType() const
-{
-    return QString("pci");
-}
-QString PCI_Host_Device::getDevMode() const
-{
-    return QString("subsystem");
-}
-QString PCI_Host_Device::getDevManaged() const
-{
-    // WARNING: unknown rule to set
-    return QString();
 }
 
 /* private slots */

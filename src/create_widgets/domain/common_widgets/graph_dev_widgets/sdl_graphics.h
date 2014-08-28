@@ -22,9 +22,6 @@ private:
 
 public slots:
     QDomDocument getDevDocument() const;
-    QString      getDevDisplay() const;
-    QString      getDevXauth() const;
-    QString      getDevFullScreen() const;
 
 private slots:
     void getPathToXauthority() const;

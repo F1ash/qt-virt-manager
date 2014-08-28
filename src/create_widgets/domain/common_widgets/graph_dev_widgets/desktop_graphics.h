@@ -17,8 +17,6 @@ private:
 
 public slots:
     QDomDocument getDevDocument() const;
-    QString      getDevDisplay() const;
-    QString      getDevFullScreen() const;
 };
 
 #endif // DESKTOP_GRAPHICS_H

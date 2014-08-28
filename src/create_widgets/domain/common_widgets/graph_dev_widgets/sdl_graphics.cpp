@@ -26,19 +26,17 @@ SDL_Graphics::SDL_Graphics(QWidget *parent) :
 /* public slots */
 QDomDocument SDL_Graphics::getDevDocument() const
 {
-    return QDomDocument();
-}
-QString SDL_Graphics::getDevDisplay() const
-{
-    return display->text();
-}
-QString SDL_Graphics::getDevXauth() const
-{
-    return xauth->text();
-}
-QString SDL_Graphics::getDevFullScreen() const
-{
-    return (fullscreen->isChecked())? "yes" : "no";
+    QDomDocument doc;
+    QDomElement _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("graphics");
+    _devDesc.setAttribute("type", "sdl");
+    _devDesc.setAttribute("display", display->text());
+    _devDesc.setAttribute("xauth", xauth->text());
+    _devDesc.setAttribute("fullscreen", (fullscreen->isChecked())? "yes" : "no");
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
+    return doc;
 }
 
 /* private slots */

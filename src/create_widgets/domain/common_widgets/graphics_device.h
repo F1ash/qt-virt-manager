@@ -11,7 +11,9 @@ class GraphicsDevice : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit GraphicsDevice(QWidget *parent = 0);
+    explicit GraphicsDevice(
+            QWidget *parent = 0,
+            virConnectPtr conn = NULL);
 
 private:
     QComboBox       *type;

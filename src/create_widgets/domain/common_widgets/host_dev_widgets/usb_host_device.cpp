@@ -23,7 +23,9 @@ QDomDocument USB_Host_Device::getDevDocument() const
         _Id = devList->selectedItems().first()->data(Qt::UserRole).toString();
         vendorId.append(_Id.split(":").first());
         productId.append(_Id.split(":").last());
-        QDomElement _source, _product, _vendor;
+        QDomElement _source, _product, _vendor, _device, _devDesc;
+        _device = doc.createElement("device");
+        _devDesc = doc.createElement("hostdev");
         _source = doc.createElement("source");
         _vendor = doc.createElement("vendor");
         _vendor.setAttribute("id", vendorId);
@@ -31,22 +33,15 @@ QDomDocument USB_Host_Device::getDevDocument() const
         _product.setAttribute("id", productId);
         _source.appendChild(_vendor);
         _source.appendChild(_product);
-        doc.appendChild(_source);
+        _devDesc.appendChild(_source);
+        _devDesc.setAttribute("type", "usb");
+        _devDesc.setAttribute("mode", "subsystem");
+        // WARNING: see for virt-manager application
+        _devDesc.setAttribute("managed", "yes");
+        _device.appendChild(_devDesc);
+        doc.appendChild(_device);
     };
     return doc;
-}
-QString USB_Host_Device::getDevType() const
-{
-    return QString("usb");
-}
-QString USB_Host_Device::getDevMode() const
-{
-    return QString("subsystem");
-}
-QString USB_Host_Device::getDevManaged() const
-{
-    // WARNING: see for virt-manager application
-    return QString("yes");
 }
 
 /* private slots */

@@ -4,8 +4,10 @@
  * http://libvirt.org/formatdomain.html#elementsGraphics
  */
 
-GraphicsDevice::GraphicsDevice(QWidget *parent) :
-    _QWidget(parent)
+GraphicsDevice::GraphicsDevice(
+        QWidget *parent,
+        virConnectPtr conn) :
+    _QWidget(parent, conn)
 {
     type = new QComboBox(this);
     type->addItem("Displays a window on the host desktop", "sdl");
@@ -40,7 +42,7 @@ void GraphicsDevice::typeChanged(int i)
     if ( _type == "sdl" ) {
         info = new SDL_Graphics(this);
     } else if ( _type == "vnc" ) {
-        info = new VNC_Graphics(this);
+        info = new VNC_Graphics(this, currWorkConnect);
     } else if ( _type == "spice" ) {
         info = new Spice_Graphics(this);
     } else if ( _type == "rdp" ) {

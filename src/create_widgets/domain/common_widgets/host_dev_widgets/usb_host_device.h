@@ -24,9 +24,6 @@ signals:
 
 public slots:
     QDomDocument getDevDocument() const;
-    QString      getDevType() const;
-    QString      getDevMode() const;
-    QString      getDevManaged() const;
 
 private slots:
     void setAvailabledUSBDevices();

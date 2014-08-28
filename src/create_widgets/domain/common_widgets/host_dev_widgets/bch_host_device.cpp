@@ -32,7 +32,9 @@ BCh_Host_Device::BCh_Host_Device(
 QDomDocument BCh_Host_Device::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _source, _dev;
+    QDomElement _source, _dev, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("hostdev");
     _source = doc.createElement("source");
     switch (type->currentIndex()) {
     case 0:
@@ -51,16 +53,12 @@ QDomDocument BCh_Host_Device::getDevDocument() const
     QDomText data = doc.createTextNode(device->text());
     _dev.appendChild(data);
     _source.appendChild(_dev);
-    doc.appendChild(_source);
+    _devDesc.appendChild(_source);
+    _device.appendChild(_devDesc);
+    _devDesc.setAttribute("type", type->itemData(type->currentIndex(), Qt::UserRole).toString());
+    _devDesc.setAttribute("mode", "capabilities");
+    doc.appendChild(_device);
     return doc;
-}
-QString BCh_Host_Device::getDevType() const
-{
-    return type->itemData(type->currentIndex(), Qt::UserRole).toString();
-}
-QString BCh_Host_Device::getDevMode() const
-{
-    return QString("capabilities");
 }
 
 /* private slots */

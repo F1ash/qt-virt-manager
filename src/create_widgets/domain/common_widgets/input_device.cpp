@@ -28,19 +28,6 @@ InputDevice::InputDevice(QWidget *parent) :
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
 }
-InputDevice::~InputDevice()
-{
-    delete info;
-    info = 0;
-    delete type;
-    type = 0;
-    delete bus;
-    bus = 0;
-    delete addr;
-    addr = 0;
-    delete commonLayout;
-    commonLayout = 0;
-}
 
 /* public slots */
 QDomDocument InputDevice::getDevDocument() const
