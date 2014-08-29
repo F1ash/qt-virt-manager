@@ -32,9 +32,6 @@ private:
     QWidget         *listWidget;
     QWidget         *infoWidget;
 
-    //virConnect      *currWorkConnect = NULL;
-    //virDomain       *currDomain = NULL;
-
     DeviceStack     *deviceStack = NULL;
 
 public slots:

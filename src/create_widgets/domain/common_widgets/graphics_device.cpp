@@ -44,7 +44,7 @@ void GraphicsDevice::typeChanged(int i)
     } else if ( _type == "vnc" ) {
         info = new VNC_Graphics(this, currWorkConnect);
     } else if ( _type == "spice" ) {
-        info = new Spice_Graphics(this);
+        info = new Spice_Graphics(this, currWorkConnect);
     } else if ( _type == "rdp" ) {
         info = new RDP_Graphics(this);
     } else if ( _type == "desktop" ) {
