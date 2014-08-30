@@ -23,7 +23,10 @@ DeviceStack::DeviceStack(
     restoreGeometry(settings.value("DeviceStackGeometry").toByteArray());
     infoLayout = new QVBoxLayout(this);
     infoWidget = new QScrollArea(this);
-    infoWidget->setLayout(infoLayout);
+    scrolled = new QWidget(this);
+    scrolled->setLayout(infoLayout);
+    infoWidget->setWidget(scrolled);
+    infoWidget->setWidgetResizable(true);
     deviceList = new QListWidget(this);
     deviceList->addItems(DEV_LIST);
     /* set icons & user data */
@@ -83,6 +86,10 @@ DeviceStack::~DeviceStack()
 
     delete infoLayout;
     infoLayout = 0;
+    if ( scrolled!=NULL ) {
+        delete scrolled;
+        scrolled = NULL;
+    };
     delete infoWidget;
     infoWidget = 0;
 
@@ -172,13 +179,13 @@ void DeviceStack::readNodeDevicesList()
 }
 void DeviceStack::showDevice(QListWidgetItem *item)
 {
-    qDebug()<<item->text();
     if ( device!=NULL ) {
-        infoWidget->layout()->removeWidget(device);
+        infoLayout->removeWidget(device);
         delete device;
         device = NULL;
     };
     QString deviceType = item->data(Qt::UserRole).toString();
+    qDebug()<<item->text()<<deviceType;
     // TODO: display devices available for current driver
     if ( deviceType == "interface" ) {
         device = new LXC_NetInterface(this, nets);
@@ -213,7 +220,7 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     } else {
         device = new _QWidget(this);
     };
-    infoWidget->layout()->addWidget(device);
+    infoLayout->insertWidget(0, device, -1);
 }
 void DeviceStack::showDevice()
 {

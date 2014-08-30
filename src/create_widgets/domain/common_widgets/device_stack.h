@@ -36,6 +36,7 @@ private:
     QVBoxLayout     *commonLayout;
 
     QScrollArea     *infoWidget;
+    QWidget         *scrolled = NULL;
     QWidget         *listWidget;
     QWidget         *buttons;
 

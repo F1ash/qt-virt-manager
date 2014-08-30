@@ -32,8 +32,8 @@ SoundDevice::SoundDevice(QWidget *parent) :
     commonLayout = new QGridLayout(this);
     commonLayout->addWidget(modelLabel, 0, 0);
     commonLayout->addWidget(model, 0, 1);
-    commonLayout->addWidget(regWdg, 1, 0, 2, 2, Qt::AlignTop);
-    commonLayout->addWidget(addr, 3, 0, 5, 2, Qt::AlignTop);
+    commonLayout->addWidget(regWdg, 1, 0, 2, 2);
+    commonLayout->addWidget(addr, 3, 0, 4, 2, Qt::AlignTop);
     setLayout(commonLayout);
     connect(model, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(modelChanged(QString)));

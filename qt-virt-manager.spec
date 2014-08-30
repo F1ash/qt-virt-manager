@@ -21,7 +21,7 @@ BuildRequires:  cmake
 
 %description
 Qt Virtual Machine Manager provides a graphical tool for administering virtual
-machines for KVM, Xen, and LXC. Start, stop, add or remove virtual devices,
+machines for QEMU/KVM, Xen, and LXC. Start, stop, add or remove virtual devices,
 connect to a graphical or serial console, and see resource usage statistics
 for existing VMs on local or remote machines. Uses libvirt as the backend
 management API.
