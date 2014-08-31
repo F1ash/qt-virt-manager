@@ -91,27 +91,49 @@ Spice_Graphics::Spice_Graphics(
     usbredir->addItem("secure");
     usbredir->addItem("insecure");
     usbredir->setEnabled(false);
-    elementsLayout = new QGridLayout();
-    elementsLayout->addWidget(mainLabel, 1, 0);
-    elementsLayout->addWidget(main, 1, 1);
-    elementsLayout->addWidget(displayLabel, 2, 0);
-    elementsLayout->addWidget(display, 2, 1);
-    elementsLayout->addWidget(inputsLabel, 3, 0);
-    elementsLayout->addWidget(inputs, 3, 1);
-    elementsLayout->addWidget(cursorLabel, 4, 0);
-    elementsLayout->addWidget(cursor, 4, 1);
-    elementsLayout->addWidget(playbackLabel, 5, 0);
-    elementsLayout->addWidget(playback, 5, 1);
-    elementsLayout->addWidget(recordLabel, 6, 0);
-    elementsLayout->addWidget(record, 6, 1);
-    elementsLayout->addWidget(smartcardLabel, 7, 0);
-    elementsLayout->addWidget(smartcard, 7, 1);
-    elementsLayout->addWidget(usbredirLabel, 8, 0, Qt::AlignTop);
-    elementsLayout->addWidget(usbredir, 8, 1, Qt::AlignTop);
-    elements = new QWidget(this);
-    elements->setLayout(elementsLayout);
-    elements->setEnabled(false);
+    policyElementsLayout = new QGridLayout();
+    policyElementsLayout->addWidget(mainLabel, 0, 0);
+    policyElementsLayout->addWidget(main, 0, 1);
+    policyElementsLayout->addWidget(displayLabel, 1, 0);
+    policyElementsLayout->addWidget(display, 1, 1);
+    policyElementsLayout->addWidget(inputsLabel, 2, 0);
+    policyElementsLayout->addWidget(inputs, 2, 1);
+    policyElementsLayout->addWidget(cursorLabel, 3, 0);
+    policyElementsLayout->addWidget(cursor, 3, 1);
+    policyElementsLayout->addWidget(playbackLabel, 4, 0);
+    policyElementsLayout->addWidget(playback, 4, 1);
+    policyElementsLayout->addWidget(recordLabel, 5, 0);
+    policyElementsLayout->addWidget(record, 5, 1);
+    policyElementsLayout->addWidget(smartcardLabel, 6, 0);
+    policyElementsLayout->addWidget(smartcard, 6, 1);
+    policyElementsLayout->addWidget(usbredirLabel, 7, 0, Qt::AlignTop);
+    policyElementsLayout->addWidget(usbredir, 7, 1, Qt::AlignTop);
+    policyElements = new QWidget(this);
+    policyElements->setVisible(false);
+    policyElements->setLayout(policyElementsLayout);
+    compress = new QCheckBox("Compress:", this);
+    compressImage = new QCheckBox("Image", this);
+    compressJpeg = new QCheckBox("Jpeg", this);
+    compressZlib = new QCheckBox("Zlib", this);
+    compressPlayback = new QCheckBox("Playback", this);
+    imageElement = new QComboBox(this);
+    jpegElement = new QComboBox(this);
+    zlibElement = new QComboBox(this);
+    playbackElement = new QComboBox(this);
+    compressElementsLayout = new QGridLayout();
+    compressElementsLayout->addWidget(compressImage, 0, 0);
+    compressElementsLayout->addWidget(imageElement, 0, 1);
+    compressElementsLayout->addWidget(compressJpeg, 1, 0);
+    compressElementsLayout->addWidget(jpegElement, 1, 1);
+    compressElementsLayout->addWidget(compressZlib, 2, 0);
+    compressElementsLayout->addWidget(zlibElement, 2, 1);
+    compressElementsLayout->addWidget(compressPlayback, 3, 0);
+    compressElementsLayout->addWidget(playbackElement, 3, 1);
+    compressElements = new QWidget(this);
+    compressElements->setVisible(false);
+    compressElements->setLayout(compressElementsLayout);
     commonLayout = new QGridLayout();
+    commonLayout->setVerticalSpacing(3);
     commonLayout->addWidget(addrLabel, 0, 0);
     commonLayout->addWidget(address, 0, 1);
     commonLayout->addWidget(networks, 1, 1);
@@ -125,7 +147,9 @@ Spice_Graphics::Spice_Graphics(
     commonLayout->addWidget(keymap, 5, 1);
     commonLayout->addWidget(defaultLabel, 6, 0);
     commonLayout->addWidget(defaultPolicy, 6, 1);
-    commonLayout->addWidget(elements, 7, 0, 8, 2, Qt::AlignTop);
+    commonLayout->addWidget(policyElements, 7, 0, 9, 2);
+    commonLayout->addWidget(compress, 10, 0);
+    commonLayout->addWidget(compressElements, 11, 0, 12, 2, Qt::AlignTop);
     setLayout(commonLayout);
     connect(address, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(addressEdit(QString)));
@@ -155,6 +179,8 @@ Spice_Graphics::Spice_Graphics(
             smartcard, SLOT(setEnabled(bool)));
     connect(usbredirLabel, SIGNAL(toggled(bool)),
             usbredir, SLOT(setEnabled(bool)));
+    connect(compress, SIGNAL(toggled(bool)),
+            this, SLOT(compressStateChanged(bool)));
 }
 
 /* public slots */
@@ -176,7 +202,7 @@ QDomDocument Spice_Graphics::getDevDocument() const
         _devDesc.setAttribute("passwd", passw->text());
         _devDesc.setAttribute("keymap", keymap->currentText());
     };
-    if ( elements->isEnabled() ) {
+    if ( policyElements->isEnabled() ) {
         if ( mainLabel->isChecked() ) {
             QDomElement _main = doc.createElement("channel");
             _main.setAttribute("name", "main");
@@ -251,13 +277,13 @@ QDomDocument Spice_Graphics::getDevDocument() const
 void Spice_Graphics::useAutoPort(bool state)
 {
     port->setEnabled(!state);
-    elementsSetRequired( !state && tlsPortLabel->isChecked()
+    policyElementsSetRequired( !state && tlsPortLabel->isChecked()
                          && defaultPolicy->currentIndex()>0 );
 }
 void Spice_Graphics::useTLSPort(bool state)
 {
     tlsPort->setEnabled(state);
-    elementsSetRequired( state && !autoPort->isChecked()
+    policyElementsSetRequired( state && !autoPort->isChecked()
                          && defaultPolicy->currentIndex()>0 );
 }
 void Spice_Graphics::usePassword(bool state)
@@ -282,13 +308,13 @@ void Spice_Graphics::addressEdit(QString s)
         }
     }
 }
-void Spice_Graphics::elementsSetRequired(bool state)
+void Spice_Graphics::policyElementsSetRequired(bool state)
 {
-    elements->setEnabled(state);
+    policyElements->setVisible(state);
 }
 void Spice_Graphics::defaultPolicyChanged(int i)
 {
-    if ( !elements->isEnabled() ) {
+    if ( !policyElements->isVisible() ) {
         main->setCurrentIndex(i);
         display->setCurrentIndex(i);
         inputs->setCurrentIndex(i);
@@ -298,9 +324,13 @@ void Spice_Graphics::defaultPolicyChanged(int i)
         smartcard->setCurrentIndex(i);
         usbredir->setCurrentIndex(i);
     };
-    elementsSetRequired( tlsPortLabel->isChecked()
+    policyElementsSetRequired( tlsPortLabel->isChecked()
                          && !autoPort->isChecked()
                          && defaultPolicy->currentIndex()>0 );
+}
+void Spice_Graphics::compressStateChanged(bool state)
+{
+    compressElements->setVisible(state);
 }
 void Spice_Graphics::readNetworkList()
 {

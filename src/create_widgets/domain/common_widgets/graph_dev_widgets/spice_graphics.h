@@ -32,8 +32,14 @@ private:
                     *playbackLabel, *recordLabel, *smartcardLabel, *usbredirLabel;
     QComboBox       *main, *display, *inputs, *cursor, *playback,
                     *record, *smartcard, *usbredir;
-    QGridLayout     *elementsLayout;
-    QWidget         *elements;
+    QGridLayout     *policyElementsLayout;
+    QWidget         *policyElements;
+    QCheckBox       *compress, *compressImage, *compressJpeg,
+                    *compressZlib, *compressPlayback;
+    QComboBox       *imageElement, *jpegElement,
+                    *zlibElement, *playbackElement;
+    QGridLayout     *compressElementsLayout;
+    QWidget         *compressElements;
     QGridLayout     *commonLayout;
 
     QStringList      nets;
@@ -47,8 +53,9 @@ private slots:
     void useTLSPort(bool);
     void usePassword(bool);
     void addressEdit(QString);
-    void elementsSetRequired(bool);
+    void policyElementsSetRequired(bool);
     void defaultPolicyChanged(int);
+    void compressStateChanged(bool);
     void readNetworkList();
 
     void sendConnErrors();
