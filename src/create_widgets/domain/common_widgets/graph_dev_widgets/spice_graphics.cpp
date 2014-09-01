@@ -43,6 +43,23 @@ Spice_Graphics::Spice_Graphics(
     defaultPolicy->addItem("any");
     defaultPolicy->addItem("secure");
     defaultPolicy->addItem("insecure");
+    baseLayout = new QGridLayout();
+    baseLayout->addWidget(addrLabel, 0, 0);
+    baseLayout->addWidget(address, 0, 1);
+    baseLayout->addWidget(networks, 1, 1);
+    baseLayout->addWidget(autoPort, 2, 0);
+    baseLayout->addWidget(port, 2, 1);
+    baseLayout->addWidget(tlsPortLabel, 3, 0);
+    baseLayout->addWidget(tlsPort, 3, 1);
+    baseLayout->addWidget(usePassw, 4, 0);
+    baseLayout->addWidget(passw, 4, 1);
+    baseLayout->addWidget(keymapLabel, 5, 0);
+    baseLayout->addWidget(keymap, 5, 1);
+    baseLayout->addWidget(defaultLabel, 6, 0);
+    baseLayout->addWidget(defaultPolicy, 6, 1);
+    baseElements = new QWidget(this);
+    baseElements->setLayout(baseLayout);
+
     mainLabel = new QCheckBox("Main:", this);
     main = new QComboBox(this);
     main->addItem("any");
@@ -111,15 +128,34 @@ Spice_Graphics::Spice_Graphics(
     policyElements = new QWidget(this);
     policyElements->setVisible(false);
     policyElements->setLayout(policyElementsLayout);
-    compress = new QCheckBox("Compress:", this);
+
+    compress = new QCheckBox("Compression:", this);
     compressImage = new QCheckBox("Image", this);
     compressJpeg = new QCheckBox("Jpeg", this);
     compressZlib = new QCheckBox("Zlib", this);
     compressPlayback = new QCheckBox("Playback", this);
     imageElement = new QComboBox(this);
+    imageElement->setEnabled(false);
+    imageElement->addItem("auto_glz");
+    imageElement->addItem("auto_lz");
+    imageElement->addItem("quic");
+    imageElement->addItem("glz");
+    imageElement->addItem("lz");
+    imageElement->addItem("off");
     jpegElement = new QComboBox(this);
+    jpegElement->setEnabled(false);
+    jpegElement->addItem("auto");
+    jpegElement->addItem("never");
+    jpegElement->addItem("always");
     zlibElement = new QComboBox(this);
+    zlibElement->setEnabled(false);
+    zlibElement->addItem("auto");
+    zlibElement->addItem("never");
+    zlibElement->addItem("always");
     playbackElement = new QComboBox(this);
+    playbackElement->setEnabled(false);
+    playbackElement->addItem("on");
+    playbackElement->addItem("off");
     compressElementsLayout = new QGridLayout();
     compressElementsLayout->addWidget(compressImage, 0, 0);
     compressElementsLayout->addWidget(imageElement, 0, 1);
@@ -132,24 +168,49 @@ Spice_Graphics::Spice_Graphics(
     compressElements = new QWidget(this);
     compressElements->setVisible(false);
     compressElements->setLayout(compressElementsLayout);
-    commonLayout = new QGridLayout();
-    commonLayout->setVerticalSpacing(3);
-    commonLayout->addWidget(addrLabel, 0, 0);
-    commonLayout->addWidget(address, 0, 1);
-    commonLayout->addWidget(networks, 1, 1);
-    commonLayout->addWidget(autoPort, 2, 0);
-    commonLayout->addWidget(port, 2, 1);
-    commonLayout->addWidget(tlsPortLabel, 3, 0);
-    commonLayout->addWidget(tlsPort, 3, 1);
-    commonLayout->addWidget(usePassw, 4, 0);
-    commonLayout->addWidget(passw, 4, 1);
-    commonLayout->addWidget(keymapLabel, 5, 0);
-    commonLayout->addWidget(keymap, 5, 1);
-    commonLayout->addWidget(defaultLabel, 6, 0);
-    commonLayout->addWidget(defaultPolicy, 6, 1);
-    commonLayout->addWidget(policyElements, 7, 0, 9, 2);
-    commonLayout->addWidget(compress, 10, 0);
-    commonLayout->addWidget(compressElements, 11, 0, 12, 2, Qt::AlignTop);
+
+    addition = new QCheckBox("Addition:", this);
+    streaming = new QCheckBox("Streaming:", this);
+    clipboard = new QCheckBox("Clipboard:", this);
+    mouse = new QCheckBox("Mouse:", this);
+    filetransfer = new QCheckBox("File transfer:", this);
+    streamingElement = new QComboBox(this);
+    streamingElement->setEnabled(false);
+    streamingElement->addItem("filter");
+    streamingElement->addItem("all");
+    streamingElement->addItem("off");
+    clipboardElement = new QComboBox(this);
+    clipboardElement->setEnabled(false);
+    //clipboardElement->addItem("yes");
+    clipboardElement->addItem("no");
+    mouseElement = new QComboBox(this);
+    mouseElement->setEnabled(false);
+    mouseElement->addItem("client");
+    mouseElement->addItem("server");
+    filetransferElement = new QComboBox(this);
+    filetransferElement->setEnabled(false);
+    //filetransferElement->addItem("yes");
+    filetransferElement->addItem("no");
+    additionElementsLayout = new QGridLayout();
+    additionElementsLayout->addWidget(streaming, 0, 0);
+    additionElementsLayout->addWidget(streamingElement, 0, 1);
+    additionElementsLayout->addWidget(clipboard, 1, 0);
+    additionElementsLayout->addWidget(clipboardElement, 1, 1);
+    additionElementsLayout->addWidget(mouse, 2, 0);
+    additionElementsLayout->addWidget(mouseElement, 2, 1);
+    additionElementsLayout->addWidget(filetransfer, 3, 0);
+    additionElementsLayout->addWidget(filetransferElement, 3, 1);
+    additionElements = new QWidget(this);
+    additionElements->setVisible(false);
+    additionElements->setLayout(additionElementsLayout);
+
+    commonLayout = new QVBoxLayout(this);
+    commonLayout->addWidget(baseElements, -1);
+    commonLayout->addWidget(policyElements, -1);
+    commonLayout->addWidget(compress, -1);
+    commonLayout->addWidget(compressElements, -1);
+    commonLayout->addWidget(addition, -1);
+    commonLayout->addWidget(additionElements, -1);
     setLayout(commonLayout);
     connect(address, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(addressEdit(QString)));
@@ -181,6 +242,26 @@ Spice_Graphics::Spice_Graphics(
             usbredir, SLOT(setEnabled(bool)));
     connect(compress, SIGNAL(toggled(bool)),
             this, SLOT(compressStateChanged(bool)));
+    connect(compress, SIGNAL(toggled(bool)),
+            this, SLOT(compressStateChanged(bool)));
+    connect(compressImage, SIGNAL(toggled(bool)),
+            imageElement, SLOT(setEnabled(bool)));
+    connect(compressJpeg, SIGNAL(toggled(bool)),
+            jpegElement, SLOT(setEnabled(bool)));
+    connect(compressZlib, SIGNAL(toggled(bool)),
+            zlibElement, SLOT(setEnabled(bool)));
+    connect(compressPlayback, SIGNAL(toggled(bool)),
+            playbackElement, SLOT(setEnabled(bool)));
+    connect(addition, SIGNAL(toggled(bool)),
+            this, SLOT(additionStateChanged(bool)));
+    connect(streaming, SIGNAL(toggled(bool)),
+            streamingElement, SLOT(setEnabled(bool)));
+    connect(clipboard, SIGNAL(toggled(bool)),
+            clipboardElement, SLOT(setEnabled(bool)));
+    connect(mouse, SIGNAL(toggled(bool)),
+            mouseElement, SLOT(setEnabled(bool)));
+    connect(filetransfer, SIGNAL(toggled(bool)),
+            filetransferElement, SLOT(setEnabled(bool)));
 }
 
 /* public slots */
@@ -268,6 +349,50 @@ QDomDocument Spice_Graphics::getDevDocument() const
             _listen.setAttribute("network", networks->currentText());
             _devDesc.appendChild(_listen);
     };
+    if ( compress->isChecked() ) {
+        if ( compressImage->isChecked() ) {
+            QDomElement _image = doc.createElement("image");
+            _image.setAttribute("compression", imageElement->currentText());
+            _devDesc.appendChild(_image);
+        };
+        if ( compressJpeg->isChecked() ) {
+            QDomElement _jpeg = doc.createElement("jpeg");
+            _jpeg.setAttribute("compression", jpegElement->currentText());
+            _devDesc.appendChild(_jpeg);
+        };
+        if ( compressZlib->isChecked() ) {
+            QDomElement _zlib = doc.createElement("zlib");
+            _zlib.setAttribute("compression", zlibElement->currentText());
+            _devDesc.appendChild(_zlib);
+        };
+        if ( compressPlayback->isChecked() ) {
+            QDomElement _playback = doc.createElement("playback");
+            _playback.setAttribute("compression", playbackElement->currentText());
+            _devDesc.appendChild(_playback);
+        };
+    };
+    if ( addition->isChecked() ) {
+        if ( streaming->isChecked() ) {
+            QDomElement _streaming = doc.createElement("streaming");
+            _streaming.setAttribute("mode", streamingElement->currentText());
+            _devDesc.appendChild(_streaming);
+        };
+        if ( clipboard->isChecked() ) {
+            QDomElement _clipboard = doc.createElement("clipboard");
+            _clipboard.setAttribute("copypaste", clipboardElement->currentText());
+            _devDesc.appendChild(_clipboard);
+        };
+        if ( mouse->isChecked() ) {
+            QDomElement _mouse = doc.createElement("mouse");
+            _mouse.setAttribute("mode", mouseElement->currentText());
+            _devDesc.appendChild(_mouse);
+        };
+        if ( filetransfer->isChecked() ) {
+            QDomElement _filetransfer = doc.createElement("filetransfer");
+            _filetransfer.setAttribute(" enable", filetransferElement->currentText());
+            _devDesc.appendChild(_filetransfer);
+        };
+    };
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
@@ -331,6 +456,10 @@ void Spice_Graphics::defaultPolicyChanged(int i)
 void Spice_Graphics::compressStateChanged(bool state)
 {
     compressElements->setVisible(state);
+}
+void Spice_Graphics::additionStateChanged(bool state)
+{
+    additionElements->setVisible(state);
 }
 void Spice_Graphics::readNetworkList()
 {

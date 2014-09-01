@@ -28,6 +28,8 @@ private:
     QComboBox       *keymap;
     QLabel          *defaultLabel;
     QComboBox       *defaultPolicy;
+    QGridLayout     *baseLayout;
+    QWidget         *baseElements;
     QCheckBox       *mainLabel, *displayLabel, *inputsLabel, *cursorLabel,
                     *playbackLabel, *recordLabel, *smartcardLabel, *usbredirLabel;
     QComboBox       *main, *display, *inputs, *cursor, *playback,
@@ -40,7 +42,13 @@ private:
                     *zlibElement, *playbackElement;
     QGridLayout     *compressElementsLayout;
     QWidget         *compressElements;
-    QGridLayout     *commonLayout;
+    QCheckBox       *addition, *streaming, *clipboard,
+                    *mouse, *filetransfer;
+    QComboBox       *streamingElement, *clipboardElement,
+                    *mouseElement, *filetransferElement;
+    QGridLayout     *additionElementsLayout;
+    QWidget         *additionElements;
+    QVBoxLayout     *commonLayout;
 
     QStringList      nets;
     virErrorPtr      virtErrors;
@@ -56,6 +64,7 @@ private slots:
     void policyElementsSetRequired(bool);
     void defaultPolicyChanged(int);
     void compressStateChanged(bool);
+    void additionStateChanged(bool);
     void readNetworkList();
 
     void sendConnErrors();
