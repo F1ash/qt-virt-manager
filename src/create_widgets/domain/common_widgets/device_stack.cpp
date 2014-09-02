@@ -217,6 +217,10 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         device = new GraphicsDevice(
                     this,
                     currWorkConnect);
+    } else if ( deviceType == "redirdev" ) {
+        device = new RedirDevDevice(
+                    this,
+                    currWorkConnect);
     } else {
         device = new _QWidget(this);
     };

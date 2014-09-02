@@ -77,6 +77,13 @@ void USB_Host_Device::setAvailabledUSBDevices()
         QDomElement capability, product, vendor;
         QDomDocument doc = QDomDocument();
         doc.setContent(_dev);
+        // filter out **** Host Controllers
+        if ( !doc.
+             firstChildElement("device").
+             firstChildElement("parent").
+             firstChild().toText().data().
+             startsWith("usb") ) continue;
+        //
         capability = doc.firstChildElement("device").
                 firstChildElement("capability");
         product = capability.firstChildElement("product");

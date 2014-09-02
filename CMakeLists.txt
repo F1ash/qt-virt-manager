@@ -128,6 +128,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/graph_dev_widgets/rdp_graphics.h
   src/create_widgets/domain/common_widgets/graph_dev_widgets/desktop_graphics.h
   src/create_widgets/domain/common_widgets/graph_dev_widgets/spice_graphics.h
+  src/create_widgets/domain/common_widgets/redirdev_device.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -263,6 +264,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/graph_dev_widgets/rdp_graphics.cpp
   src/create_widgets/domain/common_widgets/graph_dev_widgets/desktop_graphics.cpp
   src/create_widgets/domain/common_widgets/graph_dev_widgets/spice_graphics.cpp
+  src/create_widgets/domain/common_widgets/redirdev_device.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

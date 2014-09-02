@@ -245,6 +245,11 @@ void Devices::addDevice()
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
         name.append(QString("Display %1").arg(desc.toUpper()));
+    } else if ( device=="redirdev" ) {
+        // Redirected devices
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("USB Redirector %1").arg(desc.toUpper()));
     } else return;
     item->setText(name);
     item->setData(Qt::UserRole, doc.toString());
