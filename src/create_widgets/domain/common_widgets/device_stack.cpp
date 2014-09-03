@@ -221,6 +221,10 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         device = new RedirDevDevice(
                     this,
                     currWorkConnect);
+    } else if ( deviceType == "filesystem" ) {
+        device = new FileSystems(
+                    this,
+                    currWorkConnect);
     } else {
         device = new _QWidget(this);
     };

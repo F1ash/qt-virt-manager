@@ -129,6 +129,13 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/graph_dev_widgets/desktop_graphics.h
   src/create_widgets/domain/common_widgets/graph_dev_widgets/spice_graphics.h
   src/create_widgets/domain/common_widgets/redirdev_device.h
+  src/create_widgets/domain/common_widgets/filesystems.h
+  src/create_widgets/domain/common_widgets/fs_type_widgets/_fstype.h
+  src/create_widgets/domain/common_widgets/fs_type_widgets/mount_fstype.h
+  src/create_widgets/domain/common_widgets/fs_type_widgets/file_fstype.h
+  src/create_widgets/domain/common_widgets/fs_type_widgets/block_fstype.h
+  src/create_widgets/domain/common_widgets/fs_type_widgets/ram_fstype.h
+  src/create_widgets/domain/common_widgets/fs_type_widgets/bind_fstype.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -265,6 +272,13 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/graph_dev_widgets/desktop_graphics.cpp
   src/create_widgets/domain/common_widgets/graph_dev_widgets/spice_graphics.cpp
   src/create_widgets/domain/common_widgets/redirdev_device.cpp
+  src/create_widgets/domain/common_widgets/filesystems.cpp
+  src/create_widgets/domain/common_widgets/fs_type_widgets/_fstype.cpp
+  src/create_widgets/domain/common_widgets/fs_type_widgets/mount_fstype.cpp
+  src/create_widgets/domain/common_widgets/fs_type_widgets/file_fstype.cpp
+  src/create_widgets/domain/common_widgets/fs_type_widgets/block_fstype.cpp
+  src/create_widgets/domain/common_widgets/fs_type_widgets/ram_fstype.cpp
+  src/create_widgets/domain/common_widgets/fs_type_widgets/bind_fstype.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

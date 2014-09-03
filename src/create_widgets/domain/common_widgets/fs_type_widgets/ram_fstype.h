@@ -1,0 +1,21 @@
+#ifndef RAM_FSTYPE_H
+#define RAM_FSTYPE_H
+
+#include "_fstype.h"
+
+class RAMFsType : public _FsType
+{
+    Q_OBJECT
+public:
+    explicit RAMFsType(
+            QWidget *parent = 0,
+            QString _type = "lxc");
+
+private:
+    QSpinBox    *usage;
+
+public slots:
+    QDomDocument getDevDocument() const;
+};
+
+#endif // RAM_FSTYPE_H
