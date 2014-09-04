@@ -188,7 +188,9 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     qDebug()<<item->text()<<deviceType;
     // TODO: display devices available for current driver
     if ( deviceType == "interface" ) {
-        device = new LXC_NetInterface(this, nets);
+        device = new NetInterfaces(
+                    this,
+                    currWorkConnect);
     } else if ( deviceType == "serial" ) {
         device = new CharDevice(this, NULL, NULL, deviceType);
     } else if ( deviceType == "parallel" ) {

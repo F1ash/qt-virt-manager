@@ -1,16 +1,18 @@
-#include "filesystems.h"
+#include "net_interfaces.h"
 
 /*
- * http://libvirt.org/formatdomain.html#elementsFilesystems
+ * http://libvirt.org/formatdomain.html#elementsNICS
  */
 
-#define LXC_FS_TYPES QStringList()<<"Mount"<<"File"<<"Block"<<"RAM"<<"Bind"
+#define LXC_NET_TYPES QStringList()<<"Multicast tunnel"<<"TCP tunnel"\
+    <<"PCI Passthrough"
 
-#define QEMU_FS_TYPES QStringList()<<"Mount"
+#define QEMU_NET_TYPES QStringList()<<"Multicast tunnel"<<"TCP tunnel"\
+    <<"PCI Passthrough"<<"Direct attachment to physical interface"
 
-#define XEN_FS_TYPES QStringList()<<"None"
+#define XEN_NET_TYPES QStringList()<<"None"
 
-FileSystems::FileSystems(
+NetInterfaces::NetInterfaces(
         QWidget *parent,
         virConnectPtr conn) :
     _QWidget(parent, conn)
@@ -19,11 +21,11 @@ FileSystems::FileSystems(
     type = new QComboBox(this);
     connType = QString(virConnectGetType(currWorkConnect)).toLower();
     if ( connType=="lxc" ) {
-        type->addItems(LXC_FS_TYPES);
+        type->addItems(LXC_NET_TYPES);
     } else if ( connType=="qemu" ) {
-        type->addItems(QEMU_FS_TYPES);
+        type->addItems(QEMU_NET_TYPES);
     } else if ( connType=="xen" ) {
-        type->addItems(XEN_FS_TYPES);
+        type->addItems(XEN_NET_TYPES);
     };
     typeLayout = new QHBoxLayout(this);
     typeLayout->addWidget(typeLabel);
@@ -41,13 +43,13 @@ FileSystems::FileSystems(
 }
 
 /* public slots */
-QDomDocument FileSystems::getDevDocument() const
+QDomDocument NetInterfaces::getDevDocument() const
 {
     return info->getDevDocument();
 }
 
 /* private slots */
-void FileSystems::typeChanged(int i)
+void NetInterfaces::typeChanged(int i)
 {
     if ( info!=NULL ) {
         commonLayout->removeWidget(info);
@@ -55,16 +57,14 @@ void FileSystems::typeChanged(int i)
         info = NULL;
     };
     QString _type = type->currentText().toLower();
-    if ( _type=="mount" ) {
-        info = new MountFsType(this, connType);
-    } else if ( _type=="file" ) {
-        info = new FileFsType(this, connType);
-    } else if ( _type=="block" ) {
-        info = new BlockFsType(this, connType);
-    } else if ( _type=="ram" ) {
-        info = new RAMFsType(this, connType);
-    } else if ( _type=="bind" ) {
-        info = new BindFsType(this, connType);
+    if ( _type.startsWith("multicast") ) {
+        info = new MultiCast_Tunnel(this);
+    } else if ( _type.startsWith("tcp") ) {
+        info = new TCP_Tunnel(this);
+    } else if ( _type.startsWith("pci") ) {
+        info = new PCI_Passthrough(this, currWorkConnect);
+    } else if ( _type.startsWith("direct") ) {
+        info = new DirectAttachment(this, currWorkConnect);
     } else info = new _QWidget(this);
     commonLayout->insertWidget(1, info, -1);
 }

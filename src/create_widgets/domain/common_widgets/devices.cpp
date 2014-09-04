@@ -191,7 +191,9 @@ void Devices::addDevice()
     QListWidgetItem *item = new QListWidgetItem(usedDeviceList);
     if ( device=="interface" ) {
         // Network Interface
-        name.append(QString("Network Interface %1").arg(desc.toUpper()));
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Network %1").arg(desc.toUpper()));
     } else if ( device=="serial" ) {
         // Serial port
         if (list.item(0).attributes().contains("type"))

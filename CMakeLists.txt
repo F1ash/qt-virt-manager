@@ -136,6 +136,14 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/fs_type_widgets/block_fstype.h
   src/create_widgets/domain/common_widgets/fs_type_widgets/ram_fstype.h
   src/create_widgets/domain/common_widgets/fs_type_widgets/bind_fstype.h
+  src/create_widgets/domain/common_widgets/net_interfaces.h
+  src/create_widgets/domain/common_widgets/net_if_widgets/mac_address.h
+  src/create_widgets/domain/common_widgets/net_if_widgets/nic_model.h
+  src/create_widgets/domain/common_widgets/net_if_widgets/virtual_port.h
+  src/create_widgets/domain/common_widgets/net_if_widgets/multicast_tunnel.h
+  src/create_widgets/domain/common_widgets/net_if_widgets/tcp_tunnel.h
+  src/create_widgets/domain/common_widgets/net_if_widgets/pci_passthrough.h
+  src/create_widgets/domain/common_widgets/net_if_widgets/direct_attachment.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -279,6 +287,14 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/fs_type_widgets/block_fstype.cpp
   src/create_widgets/domain/common_widgets/fs_type_widgets/ram_fstype.cpp
   src/create_widgets/domain/common_widgets/fs_type_widgets/bind_fstype.cpp
+  src/create_widgets/domain/common_widgets/net_interfaces.cpp
+  src/create_widgets/domain/common_widgets/net_if_widgets/mac_address.cpp
+  src/create_widgets/domain/common_widgets/net_if_widgets/nic_model.cpp
+  src/create_widgets/domain/common_widgets/net_if_widgets/virtual_port.cpp
+  src/create_widgets/domain/common_widgets/net_if_widgets/multicast_tunnel.cpp
+  src/create_widgets/domain/common_widgets/net_if_widgets/tcp_tunnel.cpp
+  src/create_widgets/domain/common_widgets/net_if_widgets/pci_passthrough.cpp
+  src/create_widgets/domain/common_widgets/net_if_widgets/direct_attachment.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   
