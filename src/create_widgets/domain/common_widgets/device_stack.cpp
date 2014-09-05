@@ -70,8 +70,9 @@ DeviceStack::DeviceStack(
     commonLayout->addWidget(listWidget);
     commonLayout->addWidget(buttons);
     setLayout(commonLayout);
-    readNetworkList();
-    readNodeDevicesList();
+    // unused at this moment
+    //readNetworkList();
+    //readNodeDevicesList();
 }
 DeviceStack::~DeviceStack()
 {

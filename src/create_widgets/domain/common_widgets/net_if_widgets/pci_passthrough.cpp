@@ -34,12 +34,11 @@ PCI_Passthrough::PCI_Passthrough(
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
     virtPort = new VirtualPort(this);
-    virtPort->type->setText("802.1Qbg");
-    virtPort->type->setReadOnly(true);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(virtPort);
     setLayout(commonLayout);
+    virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
 }
 
 /* public slots */

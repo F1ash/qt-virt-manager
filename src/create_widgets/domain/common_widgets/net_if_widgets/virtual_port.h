@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QGridLayout>
 #include <QVBoxLayout>
 
@@ -17,15 +18,17 @@ class VirtualPort : public QWidget
     Q_OBJECT
 public:
     explicit VirtualPort(QWidget *parent = 0);
-    QLineEdit           *type;
+    QComboBox           *type;
 
 private:
     QCheckBox           *useVirtPort;
     QLabel              *typeLabel, *managerIdLabel,
                         *typeIdLabel, *typeIdVerLabel,
-                        *instanceIdLabel, *profileIdLabel;
-    QLineEdit           *managerId, *typeId, *typeIdVer,
-                        *instanceId, *profileId;
+                        *instanceIdLabel, *interfaceIdLabel,
+                        *profileIdLabel;
+    QLineEdit           *managerId, *typeId,
+                        *typeIdVer, *instanceId,
+                        *interfaceId, *profileId;
     QWidget             *parameters;
     QGridLayout         *parametersLayout;
     QVBoxLayout         *commonLayout;
@@ -35,6 +38,7 @@ public slots:
 
 private slots:
     void useingChanged(bool);
+    void virtPortTypeChanged(int);
 };
 
 #endif // VIRTUAL_PORT_H

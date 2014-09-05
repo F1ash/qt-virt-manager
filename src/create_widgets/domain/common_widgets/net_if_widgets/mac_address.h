@@ -2,6 +2,9 @@
 #define MAC_ADDRESS_H
 
 #include <QWidget>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QGridLayout>
 
 class MAC_Address : public QWidget
 {
@@ -9,11 +12,13 @@ class MAC_Address : public QWidget
 public:
     explicit MAC_Address(QWidget *parent = 0);
 
-signals:
+private:
+    QCheckBox           *useMac;
+    QLineEdit           *mac;
+    QGridLayout         *commonLayout;
 
 public slots:
     QString getMACAddress() const;
-
 };
 
 #endif // MAC_ADDRESS_H

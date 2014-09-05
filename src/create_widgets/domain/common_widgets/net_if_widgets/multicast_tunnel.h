@@ -2,6 +2,7 @@
 #define MULTICAST_TUNNEL_H
 
 #include "create_widgets/domain/_qwidget.h"
+#include "mac_address.h"
 
 class MultiCast_Tunnel : public _QWidget
 {
@@ -13,8 +14,9 @@ public:
 
 private:
     QLabel          *addrLabel, *portLabel,
-                    *macLabel, *typeLabel;
-    QLineEdit       *addr, *mac;
+                    *typeLabel;
+    QLineEdit       *addr;
+    MAC_Address     *mac;
     QSpinBox        *port;
     QGridLayout     *commonLayout;
 

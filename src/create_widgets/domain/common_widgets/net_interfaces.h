@@ -5,6 +5,10 @@
 #include "net_if_widgets/multicast_tunnel.h"
 #include "net_if_widgets/pci_passthrough.h"
 #include "net_if_widgets/direct_attachment.h"
+#include "net_if_widgets/generic_ethernet.h"
+#include "net_if_widgets/userspace_slirp.h"
+#include "net_if_widgets/bridge_to_lan.h"
+#include "net_if_widgets/virtual_network.h"
 
 class NetInterfaces : public _QWidget
 {

@@ -5,10 +5,13 @@
  */
 
 #define LXC_NET_TYPES QStringList()<<"Multicast tunnel"<<"TCP tunnel"\
-    <<"PCI Passthrough"
+    <<"PCI Passthrough"<<"Generic ethernet connection"\
+    <<"Userspace SLIRP stack"<<"Bridge to LAN"<<"Virtual network"
 
 #define QEMU_NET_TYPES QStringList()<<"Multicast tunnel"<<"TCP tunnel"\
-    <<"PCI Passthrough"<<"Direct attachment to physical interface"
+    <<"PCI Passthrough"<<"Direct attachment to physical interface"\
+    <<"Generic ethernet connection"<<"Userspace SLIRP stack"\
+    <<"Bridge to LAN"<<"Virtual network"
 
 #define XEN_NET_TYPES QStringList()<<"None"
 
@@ -65,6 +68,14 @@ void NetInterfaces::typeChanged(int i)
         info = new PCI_Passthrough(this, currWorkConnect);
     } else if ( _type.startsWith("direct") ) {
         info = new DirectAttachment(this, currWorkConnect);
+    } else if ( _type.startsWith("generic") ) {
+        info = new Generic_Ethernet(this, currWorkConnect);
+    } else if ( _type.startsWith("userspace") ) {
+        info = new Userspace_SLIRP(this, currWorkConnect);
+    } else if ( _type.startsWith("bridge") ) {
+        info = new Bridge_to_LAN(this, currWorkConnect);
+    } else if ( _type.startsWith("virtual") ) {
+        info = new Virtual_Network(this, currWorkConnect);
     } else info = new _QWidget(this);
     commonLayout->insertWidget(1, info, -1);
 }

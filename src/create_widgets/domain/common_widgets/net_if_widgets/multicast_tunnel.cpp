@@ -7,21 +7,18 @@ MultiCast_Tunnel::MultiCast_Tunnel(
 {
     addrLabel = new QLabel("Address:", this);
     portLabel = new QLabel("Port:", this);
-    macLabel = new QLabel("MAC:", this);
     addr = new QLineEdit(this);
     addr->setPlaceholderText("230.0.0.1");
     port = new QSpinBox(this);
     port->setRange(0, 65535);
     port->setValue(5558);
-    mac = new QLineEdit(this);
-    mac->setPlaceholderText("11:22:33:44:55:66");
+    mac = new MAC_Address(this);
     commonLayout = new QGridLayout();
     commonLayout->addWidget(addrLabel, 0, 0);
     commonLayout->addWidget(addr, 0, 1);
     commonLayout->addWidget(portLabel, 1, 0);
     commonLayout->addWidget(port, 1, 1);
-    commonLayout->addWidget(macLabel, 2, 0, Qt::AlignTop);
-    commonLayout->addWidget(mac, 2, 1, Qt::AlignTop);
+    commonLayout->addWidget(mac, 2, 0, 3, 2, Qt::AlignTop);
     setLayout(commonLayout);
 }
 
@@ -36,9 +33,9 @@ QDomDocument MultiCast_Tunnel::getDevDocument() const
     _source.setAttribute("address", addr->text());
     _source.setAttribute("port", port->text());
     _devDesc.appendChild(_source);
-    if ( !mac->text().isEmpty() ) {
+    if ( !mac->getMACAddress().isEmpty() ) {
         _mac = doc.createElement("mac");
-        _mac.setAttribute("address", mac->text());
+        _mac.setAttribute("address", mac->getMACAddress());
         _devDesc.appendChild(_mac);
     };
     _devDesc.setAttribute("type", "mcast");

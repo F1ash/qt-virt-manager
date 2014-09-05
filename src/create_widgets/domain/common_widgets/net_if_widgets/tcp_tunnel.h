@@ -2,6 +2,7 @@
 #define TCP_TUNNEL_H
 
 #include "create_widgets/domain/_qwidget.h"
+#include "mac_address.h"
 
 class TCP_Tunnel : public _QWidget
 {
@@ -13,10 +14,11 @@ public:
 
 private:
     QLabel          *addrLabel, *portLabel,
-                    *macLabel, *typeLabel;
-    QLineEdit       *addr, *mac;
+                    *typeLabel;
+    QLineEdit       *addr;
     QSpinBox        *port;
     QComboBox       *type;
+    MAC_Address     *mac;
     QGridLayout     *commonLayout;
 
 public slots:

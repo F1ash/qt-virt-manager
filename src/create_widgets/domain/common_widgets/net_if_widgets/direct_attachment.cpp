@@ -31,13 +31,14 @@ DirectAttachment::DirectAttachment(
     commonLayout->insertStretch(4, -1);
     setLayout(commonLayout);
     setAvailableSources();
+    virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
 }
 
 /* public slots */
 QDomDocument DirectAttachment::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _source, _mac, _virtualport,
+    QDomElement _source, _mac, _virtualport, _model,
             _parameters, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("interface");
@@ -68,6 +69,12 @@ QDomDocument DirectAttachment::getDevDocument() const
         _mac.setAttribute("address", mac->getMACAddress());
         _devDesc.appendChild(_mac);
     };
+
+    if ( !nicModel->getDevModel().isEmpty() ) {
+        _model = doc.createElement("model");
+        _model.setAttribute("type", nicModel->getDevModel());
+        _devDesc.appendChild(_model);
+    };
     _devDesc.setAttribute("type", "direct");
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
@@ -86,12 +93,14 @@ void DirectAttachment::setAvailableSources()
             netSource->insertItem(0, "NetSource detect failed", "");
         } else {
             int i = 0;
-            QDomDocument doc;
-            QString _interface;
             while ( nodeDevices[i] != NULL ) {
+                QDomDocument doc;
+                QString _dev, _interface;
                 // flags: extra flags; not used yet,
                 // so callers should always pass 0
-                doc.setContent(QString(virNodeDeviceGetXMLDesc(nodeDevices[i], 0)));
+                _dev = QString(virNodeDeviceGetXMLDesc(nodeDevices[i], 0));
+                //qDebug()<<_dev;
+                doc.setContent(_dev);
                 _interface = doc.
                         firstChildElement("device").
                         firstChildElement("capability").
