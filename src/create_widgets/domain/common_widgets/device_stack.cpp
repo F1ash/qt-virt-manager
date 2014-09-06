@@ -188,7 +188,11 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     QString deviceType = item->data(Qt::UserRole).toString();
     qDebug()<<item->text()<<deviceType;
     // TODO: display devices available for current driver
-    if ( deviceType == "interface" ) {
+    if ( deviceType == "disk" ) {
+        device = new Disk(
+                    this,
+                    currWorkConnect);
+    } else if ( deviceType == "interface" ) {
         device = new NetInterfaces(
                     this,
                     currWorkConnect);
@@ -244,6 +248,9 @@ void DeviceStack::set_Result()
     settings.setValue("DeviceStackGeometry", saveGeometry());
 }
 
+/* unused without
+ * readNetworkList() & void readNodeDevicesList()
+ */
 void DeviceStack::sendConnErrors()
 {
     virtErrors = virConnGetLastError(currWorkConnect);

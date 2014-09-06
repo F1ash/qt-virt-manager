@@ -18,6 +18,7 @@
 #include "common_widgets/redirdev_device.h"
 #include "common_widgets/filesystems.h"
 #include "common_widgets/net_interfaces.h"
+#include "common_widgets/disk.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

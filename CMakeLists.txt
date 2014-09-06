@@ -129,6 +129,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/graph_dev_widgets/desktop_graphics.h
   src/create_widgets/domain/common_widgets/graph_dev_widgets/spice_graphics.h
   src/create_widgets/domain/common_widgets/redirdev_device.h
+  src/create_widgets/domain/common_widgets/redir_filter.h
   src/create_widgets/domain/common_widgets/filesystems.h
   src/create_widgets/domain/common_widgets/fs_type_widgets/_fstype.h
   src/create_widgets/domain/common_widgets/fs_type_widgets/mount_fstype.h
@@ -148,6 +149,17 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/net_if_widgets/userspace_slirp.h
   src/create_widgets/domain/common_widgets/net_if_widgets/bridge_to_lan.h
   src/create_widgets/domain/common_widgets/net_if_widgets/virtual_network.h
+  src/create_widgets/domain/common_widgets/disk.h
+  src/create_widgets/domain/common_widgets/disk_widgets/_target.h
+  src/create_widgets/domain/common_widgets/disk_widgets/_device.h
+  src/create_widgets/domain/common_widgets/disk_widgets/_read_only.h
+  src/create_widgets/domain/common_widgets/disk_widgets/_startup_policy.h
+  src/create_widgets/domain/common_widgets/disk_widgets/_hosts.h
+  src/create_widgets/domain/common_widgets/disk_widgets/block_disk.h
+  src/create_widgets/domain/common_widgets/disk_widgets/dir_disk.h
+  src/create_widgets/domain/common_widgets/disk_widgets/file_disk.h
+  src/create_widgets/domain/common_widgets/disk_widgets/network_disk.h
+  src/create_widgets/domain/common_widgets/disk_widgets/volume_disk.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -284,6 +296,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/graph_dev_widgets/desktop_graphics.cpp
   src/create_widgets/domain/common_widgets/graph_dev_widgets/spice_graphics.cpp
   src/create_widgets/domain/common_widgets/redirdev_device.cpp
+  src/create_widgets/domain/common_widgets/redir_filter.cpp
   src/create_widgets/domain/common_widgets/filesystems.cpp
   src/create_widgets/domain/common_widgets/fs_type_widgets/_fstype.cpp
   src/create_widgets/domain/common_widgets/fs_type_widgets/mount_fstype.cpp
@@ -303,6 +316,17 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/net_if_widgets/userspace_slirp.cpp
   src/create_widgets/domain/common_widgets/net_if_widgets/bridge_to_lan.cpp
   src/create_widgets/domain/common_widgets/net_if_widgets/virtual_network.cpp
+  src/create_widgets/domain/common_widgets/disk.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/_target.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/_device.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/_read_only.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/_startup_policy.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/_hosts.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/block_disk.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/dir_disk.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/file_disk.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/network_disk.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/volume_disk.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

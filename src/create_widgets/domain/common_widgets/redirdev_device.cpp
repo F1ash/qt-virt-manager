@@ -31,19 +31,13 @@ RedirDevDevice::RedirDevDevice(
     address = new USBAddr(this);
     address->setVisible(false);
 
-    // TODO: implement filter
-    filtered = new QCheckBox("Use filter:", this);
-    filter = new QListWidget(this);
-    filter->setVisible(false);
-    filter->addItem("WARNING:\nDon't implemented");
-    filter->item(0)->setIcon(QIcon::fromTheme("dialog-warning"));
+    filter = new RedirFilter(this);
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(type);
     commonLayout->addWidget(source);
     commonLayout->addWidget(useAddress);
     commonLayout->addWidget(address);
-    commonLayout->addWidget(filtered);
     commonLayout->addWidget(filter);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
@@ -52,17 +46,16 @@ RedirDevDevice::RedirDevDevice(
     typeChanged(0);
     connect(useAddress, SIGNAL(toggled(bool)),
             address, SLOT(setVisible(bool)));
-    connect(filtered, SIGNAL(toggled(bool)),
-            filter, SLOT(setVisible(bool)));
 }
 
 /* public slots */
 QDomDocument RedirDevDevice::getDevDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _address, _source, _device, _devDesc;
+    QDomElement _address, _source, _device, _devDesc, _redirFilter;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("redirdev");
+    _redirFilter = doc.createElement("redirfilter");
 
     QString _type = type->itemData(type->currentIndex(), Qt::UserRole).toString();
     if ( _type == "tcp" ) {
@@ -89,6 +82,31 @@ QDomDocument RedirDevDevice::getDevDocument() const
      */
     _devDesc.setAttribute("bus", "usb");
     _device.appendChild(_devDesc);
+    QStringList _filters = filter->getFiltersList();
+    if ( filter->isFiltered() && !_filters.isEmpty() ) {
+        foreach (QString _f, _filters) {
+            if ( !_f.isEmpty() ) {
+                QString _class, _vendor, _product, _version, _allow;
+                QStringList _split = _f.split(":");
+                if ( _split.count()>4 ) {
+                    _class = _split.at(0);
+                    _vendor = _split.at(1);
+                    _product = _split.at(2);
+                    _version = _split.at(3);
+                    _allow = _split.at(4);
+                    QDomElement _usbDev = doc.createElement("usbdev");
+                    _usbDev.setAttribute("class", _class);
+                    _usbDev.setAttribute("vendor", _vendor);
+                    _usbDev.setAttribute("product", _product);
+                    _usbDev.setAttribute("version", _version);
+                    _usbDev.setAttribute("allow", _allow );
+                    _redirFilter.appendChild(_usbDev);
+                };
+            };
+        };
+    };
+    if ( !_redirFilter.childNodes().isEmpty() )
+        _device.appendChild(_redirFilter);
     doc.appendChild(_device);
     return doc;
 }

@@ -189,7 +189,12 @@ void Devices::addDevice()
     QString device, desc, name;
     device = list.item(0).nodeName();
     QListWidgetItem *item = new QListWidgetItem(usedDeviceList);
-    if ( device=="interface" ) {
+    if ( device=="disk" ) {
+        // Hard drives, floppy disks, CDROMs
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Disk %1").arg(desc.toUpper()));
+    } else if ( device=="interface" ) {
         // Network Interface
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();

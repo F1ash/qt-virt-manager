@@ -1,9 +1,9 @@
 #ifndef REDIRDEV_DEVICE_H
 #define REDIRDEV_DEVICE_H
 
-#include <QListWidget>
 #include "create_widgets/domain/_qwidget.h"
 #include "address_widgets/usb_addr.h"
+#include "redir_filter.h"
 
 class RedirDevDevice : public _QWidget
 {
@@ -25,9 +25,7 @@ private:
     QSpinBox        *port;
     QHBoxLayout     *sourceLayout;
     QWidget         *source;
-
-    QCheckBox       *filtered;
-    QListWidget     *filter;
+    RedirFilter     *filter;
 
     QVBoxLayout     *commonLayout;
 
