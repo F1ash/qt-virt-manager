@@ -17,6 +17,8 @@ HubDevice::HubDevice(QWidget *parent) :
     commonLayout->addWidget(addr);
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
+    connect(addr, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

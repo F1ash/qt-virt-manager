@@ -10,17 +10,15 @@
 #include "address_widgets/spaprvio_addr.h"
 #include "address_widgets/ccw_addr.h"
 #include "address_widgets/isa_addr.h"
+#include "create_widgets/domain/_changed.h"
 
-
-class DeviceAddress : public QWidget
+class DeviceAddress : public _Changed
 {
     Q_OBJECT
 public:
     explicit DeviceAddress(QWidget *parent = 0);
     ~DeviceAddress();
     QComboBox       *type;
-
-signals:
 
 private:
     QCheckBox       *use;

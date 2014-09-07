@@ -86,13 +86,15 @@ set (HEADERS
   
   src/create_widgets/domain/domain_widgets.h
   src/create_widgets/domain/_qwidget.h
+  src/create_widgets/domain/_changed.h
   src/create_widgets/domain/create_virt_domain.h
   src/create_widgets/domain/common_widgets/general.h
   src/create_widgets/domain/common_widgets/memory.h
   src/create_widgets/domain/common_widgets/cpu.h
   src/create_widgets/domain/common_widgets/devices.h
-  src/create_widgets/domain/common_widgets/device_existance_menu.h
-  src/create_widgets/domain/common_widgets/device_stack.h
+  src/create_widgets/domain/common_widgets/devices_widgets/device_data.h
+  src/create_widgets/domain/common_widgets/devices_widgets/device_existance_menu.h
+  src/create_widgets/domain/common_widgets/devices_widgets/device_stack.h
   src/create_widgets/domain/common_widgets/char_device.h
   src/create_widgets/domain/common_widgets/char_dev_widgets/pty_widget.h
   src/create_widgets/domain/common_widgets/char_dev_widgets/dev_widget.h
@@ -150,6 +152,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/net_if_widgets/bridge_to_lan.h
   src/create_widgets/domain/common_widgets/net_if_widgets/virtual_network.h
   src/create_widgets/domain/common_widgets/disk.h
+  src/create_widgets/domain/common_widgets/disk_widgets/_disk.h
   src/create_widgets/domain/common_widgets/disk_widgets/_target.h
   src/create_widgets/domain/common_widgets/disk_widgets/_device.h
   src/create_widgets/domain/common_widgets/disk_widgets/_read_only.h
@@ -254,12 +257,14 @@ set (SOURCES
   
   src/create_widgets/domain/create_virt_domain.cpp
   src/create_widgets/domain/_qwidget.cpp
+  src/create_widgets/domain/_changed.cpp
   src/create_widgets/domain/common_widgets/general.cpp
   src/create_widgets/domain/common_widgets/memory.cpp
   src/create_widgets/domain/common_widgets/cpu.cpp
   src/create_widgets/domain/common_widgets/devices.cpp
-  src/create_widgets/domain/common_widgets/device_existance_menu.cpp
-  src/create_widgets/domain/common_widgets/device_stack.cpp
+  src/create_widgets/domain/common_widgets/devices_widgets/device_data.cpp
+  src/create_widgets/domain/common_widgets/devices_widgets/device_existance_menu.cpp
+  src/create_widgets/domain/common_widgets/devices_widgets/device_stack.cpp
   src/create_widgets/domain/common_widgets/char_device.cpp
   src/create_widgets/domain/common_widgets/char_dev_widgets/pty_widget.cpp
   src/create_widgets/domain/common_widgets/char_dev_widgets/dev_widget.cpp
@@ -317,6 +322,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/net_if_widgets/bridge_to_lan.cpp
   src/create_widgets/domain/common_widgets/net_if_widgets/virtual_network.cpp
   src/create_widgets/domain/common_widgets/disk.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/_disk.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_target.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_device.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_read_only.cpp

@@ -213,7 +213,7 @@ void CreateVirtDomain::timerEvent(QTimerEvent *ev){
             ok = new QPushButton(QIcon::fromTheme("dialog-ok"), "Ok", this);
             ok->setAutoDefault(true);
             connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
-            restore = new QPushButton(QIcon::fromTheme("view-refresh"), "Restore", this);
+            restore = new QPushButton(QIcon::fromTheme("document-revert"), "Restore", this);
             connect(restore, SIGNAL(clicked()), this, SLOT(restoreParameters()));
             cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
             cancel->setAutoDefault(true);

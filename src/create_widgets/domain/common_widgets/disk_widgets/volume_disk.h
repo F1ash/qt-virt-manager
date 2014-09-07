@@ -1,9 +1,10 @@
 #ifndef VOLUME_DISK_H
 #define VOLUME_DISK_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include <QPushButton>
+#include "_disk.h"
 
-class Volume_Disk : public _QWidget
+class Volume_Disk : public _Disk
 {
     Q_OBJECT
 public:
@@ -12,9 +13,9 @@ public:
             virConnectPtr conn = NULL);
 
 private:
-    QGridLayout     *baseLayout;
-    QWidget         *baseWdg;
-    QVBoxLayout     *commonLayout;
+    QLabel          *poolLabel;
+    QPushButton     *volumeLabel;
+    QLineEdit       *pool, *volume;
 
 public slots:
     QDomDocument getDevDocument() const;

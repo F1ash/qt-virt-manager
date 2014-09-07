@@ -3,13 +3,9 @@
 
 #include <QFileDialog>
 #include <QPushButton>
-#include "create_widgets/domain/_qwidget.h"
-#include "_target.h"
-#include "_device.h"
-#include "_read_only.h"
-#include "_startup_policy.h"
+#include "_disk.h"
 
-class Dir_Disk : public _QWidget
+class Dir_Disk : public _Disk
 {
     Q_OBJECT
 public:
@@ -20,13 +16,6 @@ public:
 private:
     QPushButton     *browse;
     QLineEdit       *path;
-    _StartupPolicy  *startupPolicy;
-    _Device         *devType;
-    _Target         *target;
-    _ReadOnly       *readOnly;
-    QGridLayout     *baseLayout;
-    QWidget         *baseWdg;
-    QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument getDevDocument() const;

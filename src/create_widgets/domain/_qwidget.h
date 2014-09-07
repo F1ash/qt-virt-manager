@@ -14,9 +14,9 @@
 #include <QtXml/QDomDocument>
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
-#include <QDebug>
+#include "_changed.h"
 
-class _QWidget : public QWidget
+class _QWidget : public _Changed
 {
     Q_OBJECT
 public:
@@ -30,7 +30,7 @@ public:
 
 public slots:
     virtual QDomDocument getDevDocument() const;
-
+    virtual void         setDeviceData(QString&);
 };
 
 #endif // _QWIDGET_H

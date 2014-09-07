@@ -9,6 +9,9 @@ DeviceExistanceMenu::DeviceExistanceMenu(QWidget *parent, bool valid) :
     if (validItem) {
         delSelDevice = addAction(QIcon::fromTheme("list-remove"), "Del Device");
         connect(delSelDevice, SIGNAL(triggered()), this, SLOT(emitJobSignal()));
+        this->addSeparator();
+        showSelDevice = addAction(QIcon::fromTheme("overview"), "Show Device");
+        connect(showSelDevice, SIGNAL(triggered()), this, SLOT(emitJobSignal()));
     };
 }
 DeviceExistanceMenu::~DeviceExistanceMenu()
@@ -20,6 +23,9 @@ DeviceExistanceMenu::~DeviceExistanceMenu()
         disconnect(delSelDevice, SIGNAL(triggered()), this, SLOT(emitJobSignal()));
         delete delSelDevice;
         delSelDevice = 0;
+        disconnect(showSelDevice, SIGNAL(triggered()), this, SLOT(emitJobSignal()));
+        delete showSelDevice;
+        showSelDevice = 0;
     };
 }
 
@@ -32,6 +38,8 @@ void DeviceExistanceMenu::emitJobSignal()
         result = ADD;
     } else if ( sender()==delSelDevice ) {
         result = DEL;
+    } else if ( sender()==showSelDevice ) {
+        result = SHOW;
     } else
         result = ERROR;
     emit resultSign(result);

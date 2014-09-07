@@ -1,7 +1,7 @@
 #include "device_address.h"
 
 DeviceAddress::DeviceAddress(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     use = new QCheckBox("Use address", this);
     type =new QComboBox(this);
@@ -68,11 +68,14 @@ void DeviceAddress::addressUsed(bool state)
 {
     type->setVisible(state);
     if ( info!=NULL ) info->setVisible(state);
+    emit dataChanged();
 }
 void DeviceAddress::addrTypeChanged(int i)
 {
     if ( info!=NULL ) {
         commonLayout->removeWidget(info);
+        disconnect(info, SIGNAL(dataChanged()),
+                   this, SLOT(stateChanged()));
         delete info;
         info = 0;
     };
@@ -94,4 +97,7 @@ void DeviceAddress::addrTypeChanged(int i)
         info = new IsaAddr(this);
     } else info = new _Addr(this);
     commonLayout->insertWidget(2, info, -1);
+    connect(info, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    emit dataChanged();
 }

@@ -1,8 +1,9 @@
 #ifndef DEVICES_H
 #define DEVICES_H
 
-#include "device_existance_menu.h"
-#include "device_stack.h"
+#include "devices_widgets/device_data.h"
+#include "devices_widgets/device_existance_menu.h"
+#include "devices_widgets/device_stack.h"
 #include <QListWidget>
 #include <QPushButton>
 
@@ -30,7 +31,7 @@ private:
 
     QWidget         *buttons;
     QWidget         *listWidget;
-    QWidget         *infoWidget;
+    DeviceData      *infoWidget;
 
     DeviceStack     *deviceStack = NULL;
 
@@ -41,9 +42,12 @@ private slots:
     QDomDocument choiceNewDevice();
     void addDevice();
     void delDevice();
+    void showDevice();
+    void showDevice(int);
     void showContextMenu(const QPoint&);
     void execDevExistanceMenuResult(Device_Action);
     void detectAttachedDevicesFromXMLDesc();
+    void saveDeviceXMLDescription(QString&);
 
 };
 

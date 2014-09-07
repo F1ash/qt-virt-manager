@@ -8,12 +8,12 @@
 _Target::_Target(QWidget *parent) :
     QWidget(parent)
 {
-    devNameLabel = new QLabel("Logical Device name:", this);
-    devName = new QLineEdit(this);
-    devName->setPlaceholderText("sda");
     busLabel = new QLabel("Bus:", this);
     bus = new QComboBox(this);
     bus->addItems(BUS_TYPES);
+    devNameLabel = new QLabel("Logical Device name:", this);
+    devName = new QLineEdit(this);
+    devName->setPlaceholderText("sda");
     trayLabel = new QCheckBox("Tray status:", this);
     trayLabel->setLayoutDirection(Qt::RightToLeft);
     tray = new QComboBox(this);
@@ -25,10 +25,10 @@ _Target::_Target(QWidget *parent) :
     removable->addItems(QStringList()<<"off"<<"on");
     removable->setEnabled(false);
     commonLayout = new QGridLayout();
-    commonLayout->addWidget(devNameLabel, 0, 0);
-    commonLayout->addWidget(devName, 0, 1);
-    commonLayout->addWidget(busLabel, 1, 0);
-    commonLayout->addWidget(bus, 1, 1);
+    commonLayout->addWidget(busLabel, 0, 0);
+    commonLayout->addWidget(bus, 0, 1);
+    commonLayout->addWidget(devNameLabel, 1, 0);
+    commonLayout->addWidget(devName, 1, 1);
     commonLayout->addWidget(trayLabel, 2, 0);
     commonLayout->addWidget(tray, 2, 1);
     commonLayout->addWidget(removableLabel, 3, 0);

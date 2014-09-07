@@ -3,8 +3,17 @@
 Volume_Disk::Volume_Disk(
         QWidget *parent,
         virConnectPtr conn) :
-    _QWidget(parent, conn)
+    _Disk(parent, conn)
 {
+    poolLabel = new QLabel("Pool:", this);
+    pool = new QLineEdit(this);
+    volumeLabel = new QPushButton("Volume:", this);
+    volume = new QLineEdit(this);
+
+    baseLayout->addWidget(poolLabel, 0, 0);
+    baseLayout->addWidget(pool, 0, 1);
+    baseLayout->addWidget(volumeLabel, 1, 0);
+    baseLayout->addWidget(volume, 1, 1);
 }
 
 /* public slots */

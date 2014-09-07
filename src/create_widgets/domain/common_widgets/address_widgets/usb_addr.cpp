@@ -15,6 +15,10 @@ USBAddr::USBAddr(QWidget *parent) :
     commonlayout->addWidget(bus, 0, 1);
     commonlayout->addWidget(port, 1, 1);
     setLayout(commonlayout);
+    connect(bus, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(port, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
 }
 AttrList USBAddr::getAttrList() const
 {

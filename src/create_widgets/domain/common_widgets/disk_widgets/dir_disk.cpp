@@ -3,27 +3,15 @@
 Dir_Disk::Dir_Disk(
         QWidget *parent,
         virConnectPtr conn) :
-    _QWidget(parent, conn)
+    _Disk(parent, conn)
 {
     browse = new QPushButton("Directory:", this);
     path = new QLineEdit(this);
     path->setPlaceholderText("/var/lib/xen/images/");
-    baseLayout = new QGridLayout();
+
     baseLayout->addWidget(browse, 0, 0);
     baseLayout->addWidget(path, 0, 1);
-    baseWdg = new QWidget(this);
-    baseWdg->setLayout(baseLayout);
-    startupPolicy = new _StartupPolicy(this);
-    devType = new _Device(this);
-    target = new _Target(this);
-    readOnly = new _ReadOnly(this);
-    commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(baseWdg);
-    commonLayout->addWidget(startupPolicy);
-    commonLayout->addWidget(devType);
-    commonLayout->addWidget(target);
-    commonLayout->addWidget(readOnly);
-    setLayout(commonLayout);
+
     connect(browse, SIGNAL(clicked()),
             this, SLOT(setDirPath()));
 }

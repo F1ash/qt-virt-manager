@@ -6,7 +6,7 @@
 Network_Disk::Network_Disk(
         QWidget *parent,
         virConnectPtr conn) :
-    _QWidget(parent, conn)
+    _Disk(parent, conn)
 {
     protocolLabel = new QLabel("Protocol:", this);
     protocol = new QComboBox(this);
@@ -16,26 +16,13 @@ Network_Disk::Network_Disk(
     sourceNameLabel = new QLabel("Source name:", this);
     sourceName = new QLineEdit(this);
     sourceName->setPlaceholderText("Source name or URL path");
-    baseLayout = new QGridLayout();
+
     baseLayout->addWidget(protocolLabel, 0, 0);
     baseLayout->addWidget(protocol, 0, 1);
     baseLayout->addWidget(sourceNameLabel, 1, 0);
     baseLayout->addWidget(sourceName, 1, 1);
-    baseWdg = new QWidget(this);
-    baseWdg->setLayout(baseLayout);
-    hosts = new _Hosts(this);
-    startupPolicy = new _StartupPolicy(this);
-    devType = new _Device(this);
-    target = new _Target(this);
-    readOnly = new _ReadOnly(this);
-    commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(baseWdg);
-    commonLayout->addWidget(hosts);
-    commonLayout->addWidget(startupPolicy);
-    commonLayout->addWidget(devType);
-    commonLayout->addWidget(target);
-    commonLayout->addWidget(readOnly);
-    setLayout(commonLayout);
+
+    hosts->setVisible(true);
     connect(protocol, SIGNAL(currentIndexChanged(int)),
             this, SLOT(protocolTypeChanged(int)));
 }

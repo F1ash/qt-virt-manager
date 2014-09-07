@@ -99,11 +99,15 @@ Devices::Devices(
     listWidget = new QWidget(this);
     listWidget->setLayout(listLayout);
 
-    infoWidget = new QWidget(this);
+    infoWidget = new DeviceData(this, currWorkConnect);
     commonLayout = new QHBoxLayout(this);
     commonLayout->addWidget(listWidget, 3);
     commonLayout->addWidget(infoWidget, 8);
     detectAttachedDevicesFromXMLDesc();
+    connect(usedDeviceList, SIGNAL(currentRowChanged(int)),
+            this, SLOT(showDevice(int)));
+    connect(infoWidget, SIGNAL(saveDeviceXMLDesc(QString&)),
+            this, SLOT(saveDeviceXMLDescription(QString&)));
 }
 Devices::~Devices()
 {
@@ -275,6 +279,18 @@ void Devices::delDevice()
     delete item;
     item = 0;
 }
+void Devices::showDevice()
+{
+    showDevice( usedDeviceList->currentRow() );
+}
+void Devices::showDevice(int i)
+{
+    QString _devName, _devDesc;
+    QListWidgetItem *item = usedDeviceList->item(i);
+    _devName = item->text();
+    _devDesc = item->data(Qt::UserRole).toString();
+    infoWidget->showDevice(_devName, _devDesc);
+}
 void Devices::showContextMenu(const QPoint &pos)
 {
     QListWidgetItem *item = usedDeviceList->itemAt(pos);
@@ -293,6 +309,8 @@ void Devices::execDevExistanceMenuResult(Device_Action ret)
         addDevice();
     } else if ( ret==DEL ) {
         delDevice();
+    } else if ( ret==SHOW ) {
+        showDevice();
     };
 }
 void Devices::detectAttachedDevicesFromXMLDesc()
@@ -300,4 +318,8 @@ void Devices::detectAttachedDevicesFromXMLDesc()
     if ( currDomain!=NULL ) {
         // TODO : read devices from XML domain description
     }
+}
+void Devices::saveDeviceXMLDescription(QString &xmlDesc)
+{
+    usedDeviceList->currentItem()->setData(Qt::UserRole, xmlDesc);
 }

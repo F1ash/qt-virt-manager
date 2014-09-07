@@ -6,7 +6,8 @@
 enum Device_Action {
     ERROR     = -1,
     ADD,
-    DEL
+    DEL,
+    SHOW
 };
 
 class DeviceExistanceMenu : public QMenu
@@ -20,6 +21,7 @@ private:
     bool                 validItem;
     QAction             *addNewDevice;
     QAction             *delSelDevice = NULL;
+    QAction             *showSelDevice = NULL;
     Device_Action        result = ERROR;
 
 signals:

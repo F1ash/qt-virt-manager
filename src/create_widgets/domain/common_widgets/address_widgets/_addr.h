@@ -8,20 +8,18 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QVBoxLayout>
+#include <create_widgets/domain/_changed.h>
 
 typedef QMap<QString, QString> AttrList;
 
-class _Addr : public QWidget
+class _Addr : public _Changed
 {
     Q_OBJECT
 public:
     explicit _Addr(QWidget *parent = 0);
 
-signals:
-
 public slots:
     virtual AttrList getAttrList() const;
-
 };
 
 #endif // _ADDR_H
