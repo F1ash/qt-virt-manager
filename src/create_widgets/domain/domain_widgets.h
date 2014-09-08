@@ -19,6 +19,7 @@
 #include "common_widgets/filesystems.h"
 #include "common_widgets/net_interfaces.h"
 #include "common_widgets/disk.h"
+#include "common_widgets/security_label.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

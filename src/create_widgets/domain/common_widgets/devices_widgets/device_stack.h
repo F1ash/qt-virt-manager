@@ -7,7 +7,6 @@
 #include <QPushButton>
 #include <QStringList>
 #include <QScrollArea>
-#include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/domain_widgets.h"
 // TODO: implement parent class for device widgets
 // with using Type-Info construction

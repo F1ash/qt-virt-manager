@@ -163,6 +163,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/disk_widgets/file_disk.h
   src/create_widgets/domain/common_widgets/disk_widgets/network_disk.h
   src/create_widgets/domain/common_widgets/disk_widgets/volume_disk.h
+  src/create_widgets/domain/common_widgets/security_label.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -333,6 +334,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/disk_widgets/file_disk.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/network_disk.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/volume_disk.cpp
+  src/create_widgets/domain/common_widgets/security_label.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

@@ -309,6 +309,7 @@ void CreateVirtDomain::create_specified_widgets()
                            this,
                            currWorkConnect,
                            currDomain));
+        wdgList.append(new SecurityLabel(this));
     } else if ( type.toLower() == "qemu" ) {
         wdgList.append(new General(this, type, arch, emulator));
         wdgList.append(new Memory(this, memUnit, memValue));
@@ -317,6 +318,7 @@ void CreateVirtDomain::create_specified_widgets()
                            this,
                            currWorkConnect,
                            currDomain));
+        wdgList.append(new SecurityLabel(this));
     } else if ( type.toLower() == "xen" ) {
         wdgList.append(new General(this, type, arch, emulator));
     } else wdgList.clear();

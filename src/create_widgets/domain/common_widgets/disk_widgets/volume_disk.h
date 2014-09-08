@@ -13,12 +13,16 @@ public:
             virConnectPtr conn = NULL);
 
 private:
-    QLabel          *poolLabel;
+    QLabel          *poolLabel, *modeLabel;
     QPushButton     *volumeLabel;
+    QComboBox       *mode;
     QLineEdit       *pool, *volume;
 
 public slots:
     QDomDocument getDevDocument() const;
+
+private slots:
+    void changeModeVisibility(QString);
 };
 
 #endif // VOLUME_DISK_H

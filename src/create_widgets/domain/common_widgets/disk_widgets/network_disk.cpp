@@ -70,7 +70,7 @@ QDomDocument Network_Disk::getDevDocument() const
     if ( readOnly->state() ) {
         QDomElement _readOnly = doc.createElement("readonly");
         _devDesc.appendChild(_readOnly);
-    }
+    };
 
     _devDesc.setAttribute("type", "network");
     _devDesc.setAttribute("device", devType->getDeviceType());

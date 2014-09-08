@@ -7,7 +7,6 @@
 #include <QStringList>
 #include <QScrollArea>
 #include <QMessageBox>
-#include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/domain_widgets.h"
 
 class DeviceData : public QWidget
