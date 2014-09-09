@@ -11,3 +11,5 @@ Known issues:
 
     For use askpass in KDE you need to make symlink:
     # ln -s /usr/bin/ksshaskpass /usr/libexec/openssh/ssh-askpass
+
+    Adding devices implemented partially.
