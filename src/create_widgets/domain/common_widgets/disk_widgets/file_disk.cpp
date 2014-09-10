@@ -12,6 +12,8 @@ File_Disk::File_Disk(
     baseLayout->addWidget(browse, 0, 0);
     baseLayout->addWidget(path, 0, 1);
 
+    secLabel->setVisible(true);
+
     connect(browse, SIGNAL(clicked()),
             this, SLOT(setFilePath()));
 }
@@ -38,6 +40,19 @@ QDomDocument File_Disk::getDevDocument() const
         _target.setAttribute(key, l.value(key));
     };
     _devDesc.appendChild(_target);
+
+    if ( secLabel->isUsed() ) {
+        QDomNodeList _l = secLabel->getDevDocument()
+                .firstChildElement("data")
+                .childNodes();
+        uint j = 0;
+        uint count = _l.length();
+        for (uint i=0; i<count;i++) {
+            //qDebug()<<_l.item(j).nodeName()<<i;
+            if (!_l.item(j).isNull()) _devDesc.appendChild(_l.item(j));
+            else ++j;
+        };
+    };
 
     if ( readOnly->state() ) {
         QDomElement _readOnly = doc.createElement("readonly");

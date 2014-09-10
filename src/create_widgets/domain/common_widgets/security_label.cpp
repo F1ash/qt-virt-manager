@@ -66,6 +66,10 @@ SecurityLabel::SecurityLabel(QWidget *parent) :
 }
 
 /* public slots */
+bool SecurityLabel::isUsed() const
+{
+    return useSecLabel->isChecked();
+}
 QDomDocument SecurityLabel::getDevDocument() const
 {
     QDomDocument doc;

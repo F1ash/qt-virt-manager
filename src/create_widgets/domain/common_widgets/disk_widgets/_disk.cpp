@@ -13,6 +13,8 @@ _Disk::_Disk(
     startupPolicy = new _StartupPolicy(this);
     devType = new _Device(this);
     target = new _Target(this);
+    secLabel = new SecurityLabel(this);
+    secLabel->setVisible(false);
     readOnly = new _ReadOnly(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
@@ -20,6 +22,7 @@ _Disk::_Disk(
     commonLayout->addWidget(startupPolicy);
     commonLayout->addWidget(devType);
     commonLayout->addWidget(target);
+    commonLayout->addWidget(secLabel);
     commonLayout->addWidget(readOnly);
     setLayout(commonLayout);
 }

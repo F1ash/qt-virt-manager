@@ -29,6 +29,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
+    bool            isUsed() const;
     QDomDocument    getDevDocument() const;
 
 private slots:
