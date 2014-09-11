@@ -3,6 +3,7 @@
 
 #include <QPushButton>
 #include "_disk.h"
+#include "virtvolume_dialog.h"
 
 class Volume_Disk : public _Disk
 {
@@ -13,16 +14,20 @@ public:
             virConnectPtr conn = NULL);
 
 private:
-    QLabel          *poolLabel, *modeLabel;
+    QLabel          *poolLabel, *modeLabel,
+                    *pool;
     QPushButton     *volumeLabel;
+    QLineEdit       *volume;
     QComboBox       *mode;
-    QLineEdit       *pool, *volume;
+    VirtVolumeDialog
+                    *volumeDialog = NULL;
 
 public slots:
     QDomDocument getDevDocument() const;
 
 private slots:
     void changeModeVisibility(QString);
+    void getVolumeNames();
 };
 
 #endif // VOLUME_DISK_H

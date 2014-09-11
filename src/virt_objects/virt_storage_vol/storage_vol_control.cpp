@@ -128,6 +128,11 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
         return true;
     };
 }
+QString VirtStorageVolControl::getCurrentVolumeName() const
+{
+    QModelIndex index = storageVolList->currentIndex();
+    return storageVolModel->DataList.at(index.row())->getName();
+}
 
 /* private slots */
 void VirtStorageVolControl::resultReceiver(StorageVolActions act, QStringList data)

@@ -41,6 +41,7 @@ public slots:
     bool getThreadState() const;
     void stopProcessing();
     bool setCurrentStoragePool(virConnect*, QString&, QString&);
+    QString getCurrentVolumeName() const;
 
 private slots:
     void resultReceiver(StorageVolActions, QStringList);

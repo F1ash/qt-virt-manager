@@ -6,9 +6,10 @@ Volume_Disk::Volume_Disk(
     _Disk(parent, conn)
 {
     poolLabel = new QLabel("Pool:", this);
-    pool = new QLineEdit(this);
+    pool = new QLabel(this);
     volumeLabel = new QPushButton("Volume:", this);
     volume = new QLineEdit(this);
+    volume->setReadOnly(true);
     modeLabel = new QLabel("LUN source mode:", this);
     modeLabel->setEnabled(false);
     mode = new QComboBox(this);
@@ -24,6 +25,8 @@ Volume_Disk::Volume_Disk(
 
     connect(devType->devType, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(changeModeVisibility(QString)));
+    connect(volumeLabel, SIGNAL(clicked()),
+            this, SLOT(getVolumeNames()));
 }
 
 /* public slots */
@@ -70,4 +73,18 @@ void Volume_Disk::changeModeVisibility(QString _devType)
 {
     modeLabel->setEnabled( _devType.toLower()=="lun" );
     mode->setEnabled( _devType.toLower()=="lun" );
+}
+void Volume_Disk::getVolumeNames()
+{
+    QStringList _ret;
+    if ( volumeDialog==NULL ) {
+        volumeDialog = new VirtVolumeDialog(this, currWorkConnect);
+    };
+    if ( volumeDialog->exec()==1 ) {
+        _ret = volumeDialog->getResult();
+    };
+    if ( !_ret.isEmpty() ) {
+        pool->setText(_ret.first());
+        volume->setText(_ret.last());
+    };
 }

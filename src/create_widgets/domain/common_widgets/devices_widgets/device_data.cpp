@@ -9,7 +9,7 @@ DeviceData::DeviceData(
     devName = new QLabel(this);
     save = new QPushButton(QIcon::fromTheme("document-save"), "Save", this);
     save->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    revert = new QPushButton(QIcon::fromTheme("document-revert"), "Revert", this);
+    revert = new QPushButton(QIcon::fromTheme("document-revert"), "Reset", this);
     revert->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     revert->setEnabled(false);
     _close = new QPushButton(QIcon::fromTheme("window-close"), "Close", this);
