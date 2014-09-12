@@ -15,6 +15,7 @@
 #include "storage_vol_control_menu.h"
 #include "storage_vol_control_thread.h"
 #include "resize_dialog.h"
+#include "create_widgets/domain/common_widgets/disk_widgets/create_volume.h"
 
 class VirtStorageVolControl : public QMainWindow
 {

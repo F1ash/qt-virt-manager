@@ -42,7 +42,11 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
     virNodeDevice  **nodeDevices = NULL;
     if ( currWorkConnect!=NULL ) {
         unsigned int flags =
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI;
+                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI |
+                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_GENERIC|
+                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_HOST |
+                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_TARGET |
+                VIR_CONNECT_LIST_NODE_DEVICES_CAP_STORAGE;
         int ret = virConnectListAllNodeDevices(currWorkConnect, &nodeDevices, flags);
         if ( ret<0 ) {
             sendConnErrors();
@@ -70,7 +74,7 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
         //qDebug()<<_dev;
         QString devName, devIdentity;
         QDomElement capability, domain, bus, slot, function, vendor, product;
-        QDomDocument doc = QDomDocument();
+        QDomDocument doc;
         doc.setContent(_dev);
         capability = doc.firstChildElement("device").
                 firstChildElement("capability");

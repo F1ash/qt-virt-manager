@@ -50,7 +50,7 @@ private:
     QHBoxLayout     *buttonLayout;
     QVBoxLayout     *commonLayout;
 
-    QTemporaryFile  *xml;
+    QTemporaryFile  *xml = NULL;
     WidgetList       wdgList;
     bool             ready = false;
     uint             timerId = 0;

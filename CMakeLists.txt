@@ -159,6 +159,9 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/disk_widgets/_startup_policy.h
   src/create_widgets/domain/common_widgets/disk_widgets/_hosts.h
   src/create_widgets/domain/common_widgets/disk_widgets/virtvolume_dialog.h
+  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage.h
+  src/create_widgets/domain/common_widgets/disk_widgets/create_pool.h
+  src/create_widgets/domain/common_widgets/disk_widgets/create_volume.h
   src/create_widgets/domain/common_widgets/disk_widgets/block_disk.h
   src/create_widgets/domain/common_widgets/disk_widgets/dir_disk.h
   src/create_widgets/domain/common_widgets/disk_widgets/file_disk.h
@@ -331,6 +334,9 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/disk_widgets/_startup_policy.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_hosts.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/virtvolume_dialog.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/create_pool.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/create_volume.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/block_disk.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/dir_disk.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/file_disk.cpp

@@ -172,10 +172,10 @@ QDomDocument Devices::getDevDocument() const
 }
 
 /* private slots */
-QDomDocument Devices::choiceNewDevice()
+QDomDocument Devices::chooseNewDevice()
 {
     QDomDocument doc = QDomDocument();
-    qDebug()<<"choice New Device";
+    qDebug()<<"choose New Device";
     if ( deviceStack==NULL ) {
         deviceStack = new DeviceStack(this, currWorkConnect);
     };
@@ -186,7 +186,7 @@ QDomDocument Devices::choiceNewDevice()
 }
 void Devices::addDevice()
 {
-    QDomDocument doc = choiceNewDevice();
+    QDomDocument doc = chooseNewDevice();
     //qDebug()<<doc.toString();
     QDomNodeList list = doc.firstChildElement("device").childNodes();
     if ( list.length()==0 ) return;

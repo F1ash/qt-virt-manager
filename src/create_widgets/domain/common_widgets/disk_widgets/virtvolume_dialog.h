@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QMessageBox>
 #include "virt_objects/virt_storage_vol/storage_vol_control.h"
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
@@ -21,9 +22,9 @@ public:
 signals:
 
 private:
-    QPushButton     *choiceVolume;
+    QPushButton     *chooseVolume;
     QPushButton     *cancel;
-    QHBoxLayout     *buttonlayout;
+    QHBoxLayout     *buttonLayout;
     QWidget         *buttons;
 
     QListWidget     *poolList;
@@ -41,6 +42,7 @@ private slots:
     void setPoolList();
     void set_Result();
     void showVolumes(QListWidgetItem*);
+    void showMsg(QString&);
 };
 
 #endif // VIRTVOLUME_DIALOG_H

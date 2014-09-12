@@ -14,6 +14,7 @@
 #include "storage_pool_toolbar.h"
 #include "storage_pool_control_menu.h"
 #include "storage_pool_control_thread.h"
+#include "create_widgets/domain/common_widgets/disk_widgets/create_pool.h"
 
 class VirtStoragePoolControl : public QMainWindow
 {

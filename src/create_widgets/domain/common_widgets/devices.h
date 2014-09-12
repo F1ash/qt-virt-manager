@@ -39,7 +39,7 @@ public slots:
     QDomDocument getDevDocument() const;
 
 private slots:
-    QDomDocument choiceNewDevice();
+    QDomDocument chooseNewDevice();
     void addDevice();
     void delDevice();
     void showDevice();

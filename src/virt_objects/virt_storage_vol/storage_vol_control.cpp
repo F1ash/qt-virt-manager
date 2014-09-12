@@ -110,7 +110,10 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
         virErrorPtr virtErrors = virGetLastError();
         if ( virtErrors!=NULL && virtErrors->code>0 ) {
             QString time = QTime::currentTime().toString();
-            QString msg = QString("%3 VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message).arg(time);
+            QString msg = QString("%3 VirtError(%1) : %2")
+                    .arg(virtErrors->code)
+                    .arg(virtErrors->message)
+                    .arg(time);
             emit storageVolMsg( msg );
             virResetError(virtErrors);
         };
@@ -131,6 +134,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
 QString VirtStorageVolControl::getCurrentVolumeName() const
 {
     QModelIndex index = storageVolList->currentIndex();
+    if ( !index.isValid() ) return QString();
     return storageVolModel->DataList.at(index.row())->getName();
 }
 
@@ -298,10 +302,23 @@ void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
                 args.removeFirst();
                 QString source = args.first();
                 args.removeFirst();
-                QString path;
+                QString path, _poolType;
                 // show SRC Creator widget
                 // get path for method
-                QMessageBox::information(this, "INFO", QString("Manual settings for %2(%1) not implemented yet.").arg(act).arg(source), QMessageBox::Ok);
+                virStoragePoolPtr _pool = virStoragePoolLookupByName(
+                            currWorkConnect, currPoolName.toUtf8().data());
+                QDomDocument doc;
+                doc.setContent(
+                            QString(
+                                virStoragePoolGetXMLDesc(_pool, VIR_STORAGE_XML_INACTIVE))
+                            );
+                _poolType = doc.firstChildElement("pool").attribute("type");
+                CreateVolume *createVolumeDialog = new CreateVolume(this, _poolType);
+                if ( createVolumeDialog->exec()==QDialog::Accepted ) {
+                    path = createVolumeDialog->getStorageXMLDescFileName();
+                };
+                delete createVolumeDialog;
+                createVolumeDialog = NULL;
                 args.prepend(path);
             };
             stVolControlThread->execAction(act, args);

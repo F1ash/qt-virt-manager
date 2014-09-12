@@ -80,11 +80,11 @@ void Volume_Disk::getVolumeNames()
     if ( volumeDialog==NULL ) {
         volumeDialog = new VirtVolumeDialog(this, currWorkConnect);
     };
-    if ( volumeDialog->exec()==1 ) {
+    if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();
-    };
-    if ( !_ret.isEmpty() ) {
-        pool->setText(_ret.first());
-        volume->setText(_ret.last());
+        if ( !_ret.isEmpty() ) {
+            pool->setText(_ret.first());
+            volume->setText(_ret.last());
+        };
     };
 }

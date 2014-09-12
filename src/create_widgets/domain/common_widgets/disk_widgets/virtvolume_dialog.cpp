@@ -18,28 +18,33 @@ VirtVolumeDialog::VirtVolumeDialog(
     listWidget = new QWidget(this);
     listWidget->setLayout(listLayout);
 
-    choiceVolume = new QPushButton(QIcon::fromTheme("dialog-ok"), "Choice Volume", this);
+    chooseVolume = new QPushButton(QIcon::fromTheme("dialog-ok"), "Choose Volume", this);
     cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
-    connect(choiceVolume, SIGNAL(clicked()), this, SLOT(set_Result()));
+    connect(chooseVolume, SIGNAL(clicked()), this, SLOT(set_Result()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
-    buttonlayout = new QHBoxLayout(this);
-    buttonlayout->addWidget(choiceVolume);
-    buttonlayout->addWidget(cancel);
+    buttonLayout = new QHBoxLayout(this);
+    buttonLayout->addWidget(chooseVolume);
+    buttonLayout->addWidget(cancel);
     buttons = new QWidget(this);
-    buttons->setLayout(buttonlayout);
+    buttons->setLayout(buttonLayout);
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(listWidget);
     commonLayout->addWidget(buttons);
     setLayout(commonLayout);
+    connect(volumes, SIGNAL(storageVolMsg(QString&)),
+            this, SLOT(showMsg(QString&)));
 }
 
 /* public slots */
 QStringList VirtVolumeDialog::getResult() const
 {
     QStringList _ret;
-    _ret.append( poolList->currentItem()->text() );
-    _ret.append(volumes->getCurrentVolumeName());
+    QList<QListWidgetItem*> _list = poolList->selectedItems();
+    if ( !_list.isEmpty() ) {
+        _ret.append( _list.at(0)->text() );
+        _ret.append(volumes->getCurrentVolumeName());
+    };
     return _ret;
 }
 
@@ -64,7 +69,9 @@ void VirtVolumeDialog::setPoolList()
 }
 void VirtVolumeDialog::set_Result()
 {
-    done( (sender()==choiceVolume)?1:0 );
+    done( (sender()==chooseVolume)?
+              QDialog::Accepted :
+              QDialog::Rejected);
     //qDebug()<<"done";
 }
 void VirtVolumeDialog::showVolumes(QListWidgetItem *_item)
@@ -75,4 +82,12 @@ void VirtVolumeDialog::showVolumes(QListWidgetItem *_item)
                 currWorkConnect,
                 _connName,
                 _poolName);
+}
+void VirtVolumeDialog::showMsg(QString &msg)
+{
+    QMessageBox::information(
+                this,
+                "Error",
+                msg,
+                QMessageBox::Ok);
 }

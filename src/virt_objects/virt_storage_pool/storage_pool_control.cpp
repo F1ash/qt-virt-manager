@@ -288,7 +288,12 @@ void VirtStoragePoolControl::newVirtStoragePoolFromXML(const QStringList &_args)
                     QString path;
                     // show SRC Creator widget
                     // get path for method
-                    QMessageBox::information(this, "INFO", QString("Manual settings for %2(%1) not implemented yet.").arg(act).arg(source), QMessageBox::Ok);
+                    CreatePool *createPoolDialog = new CreatePool(this);
+                    if ( createPoolDialog->exec()==QDialog::Accepted ) {
+                        path = createPoolDialog->getStorageXMLDescFileName();
+                    };
+                    delete createPoolDialog;
+                    createPoolDialog = NULL;
                     args.prepend(path);
                 };
                 stPoolControlThread->execAction(act, args);

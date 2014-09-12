@@ -115,7 +115,10 @@ bool VirtDomainControl::setCurrentWorkConnect(virConnect *conn)
         virErrorPtr virtErrors = virGetLastError();
         if ( virtErrors!=NULL && virtErrors->code>0 ) {
             QString time = QTime::currentTime().toString();
-            QString msg = QString("%3 VirtError(%1) : %2").arg(virtErrors->code).arg(virtErrors->message).arg(time);
+            QString msg = QString("%3 VirtError(%1) : %2")
+                    .arg(virtErrors->code)
+                    .arg(virtErrors->message)
+                    .arg(time);
             emit domMsg( msg );
             virResetError(virtErrors);
         };
