@@ -6,6 +6,8 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
     setModal(true);
     typeLabel = new QLabel("Pool Type:", this);
     type = new QComboBox(this);
+    connect(type, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(typeChanged(int)));
     stNameLabel = new QLabel("Name:", this);
     stName = new QLineEdit(this);
     suff = new QLabel(".img", this);
@@ -48,7 +50,7 @@ QString _CreateStorage::getStorageXMLDescFileName() const
 }
 
 /* private slots */
-void _CreateStorage::storageTypeChanged(QString _type)
+void _CreateStorage::typeChanged(int i)
 {
 
 }

@@ -2,7 +2,9 @@
 #define CREATE_VOLUME_H
 
 #include <QSpinBox>
-#include "_create_storage.h"
+#include "_create_storage_widgets/_create_storage.h"
+//#include "_create_storage_widgets/_storage_source.h"
+#include "_create_storage_widgets/_storage_target.h"
 
 class CreateVolume : public _CreateStorage
 {
@@ -17,22 +19,15 @@ signals:
 private:
     QString          currPoolType;
 
-    QLabel          *formatLabel;
-    QComboBox       *capLabel, *allocLabel,
-                    *format;
+    QComboBox       *capLabel, *allocLabel;
     QSpinBox        *capacity, *allocation;
-    QGridLayout     *sizeLayout, *permLayout;
-    QWidget         *sizeWdg, *permissions;
-    QCheckBox       *usePerm;
-    QLabel          *ownerLabel, *groupLabel,
-                    *modeLabel, *labelLabel;
-    QLineEdit       *owner, *group, *mode, *label;
+    QGridLayout     *sizeLayout;
+    QWidget         *sizeWdg;
+    //_Storage_Source *source;
+    _Storage_Target *target;
 
 public slots:
     QString getStorageXMLDescFileName() const;
-
-private slots:
-    void formatTypeChanged(int);
 };
 
 #endif // CREATE_VOLUME_H

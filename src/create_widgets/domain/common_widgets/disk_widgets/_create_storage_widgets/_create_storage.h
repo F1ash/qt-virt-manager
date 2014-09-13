@@ -42,7 +42,7 @@ public slots:
     virtual QString getStorageXMLDescFileName() const;
 
 private slots:
-    void storageTypeChanged(QString);
+    virtual void typeChanged(int);
     void set_Result();
 };
 
