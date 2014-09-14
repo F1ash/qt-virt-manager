@@ -20,6 +20,13 @@
 CreatePool::CreatePool(QWidget *parent) :
     _CreateStorage(parent)
 {
+    infoLayout = new QVBoxLayout();
+    scrolled = new QWidget(this);
+    scrolled->setLayout(infoLayout);
+    infoWidget = new QScrollArea(this);
+    infoWidget->setWidget(scrolled);
+    infoWidget->setWidgetResizable(true);
+
     QStringList _text, _data;
     _text = POOL_TYPE_DESC;
     _data = POOL_TYPES;
@@ -34,7 +41,9 @@ CreatePool::CreatePool(QWidget *parent) :
     uuidLayout->addWidget(uuid);
     uuidWdg = new QWidget(this);
     uuidWdg->setLayout(uuidLayout);
-    commonLayout->insertWidget(1, uuidWdg);
+
+    commonLayout->insertWidget(commonLayout->count()-1, uuidWdg, -1);
+    commonLayout->insertWidget(commonLayout->count()-1, infoWidget, -1);
 }
 
 /* public slots */
@@ -47,7 +56,7 @@ QString CreatePool::getStorageXMLDescFileName() const
 void CreatePool::typeChanged(int i)
 {
     if ( info!=NULL ) {
-        commonLayout->removeWidget(info);
+        infoLayout->removeWidget(info);
         delete info;
         info = NULL;
     };
@@ -77,5 +86,5 @@ void CreatePool::typeChanged(int i)
     } else if ( _type=="zfs" ) {
         info = new ZFS_Pool_Stuff(this);
     } else info = new _Pool_Stuff(this);
-    commonLayout->insertWidget(commonLayout->count()-1, info, -1);
+    infoLayout->insertWidget(0, info, -1);
 }

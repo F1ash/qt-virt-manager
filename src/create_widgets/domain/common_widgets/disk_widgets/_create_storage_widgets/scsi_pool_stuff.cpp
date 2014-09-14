@@ -3,6 +3,7 @@
 SCSI_Pool_Stuff::SCSI_Pool_Stuff(QWidget *parent) :
     _Pool_Stuff(parent)
 {
+    source->adapter->setVisible(true);
 }
 
 /* public slots */

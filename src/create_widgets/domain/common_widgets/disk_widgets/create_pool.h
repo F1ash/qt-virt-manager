@@ -1,6 +1,7 @@
 #ifndef CREATE_POOL_H
 #define CREATE_POOL_H
 
+#include <QScrollArea>
 #include "_create_storage_widgets/_create_storage.h"
 #include "_create_storage_widgets/dir_pool_stuff.h"
 #include "_create_storage_widgets/fs_pool_stuff.h"
@@ -28,6 +29,10 @@ private:
     QLineEdit       *uuid;
     QHBoxLayout     *uuidLayout;
     QWidget         *uuidWdg;
+
+    QScrollArea     *infoWidget;
+    QVBoxLayout     *infoLayout;
+    QWidget         *scrolled;
     _Pool_Stuff     *info = NULL;
 
 public slots:

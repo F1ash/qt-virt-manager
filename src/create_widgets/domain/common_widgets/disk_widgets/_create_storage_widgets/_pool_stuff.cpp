@@ -7,7 +7,8 @@ _Pool_Stuff::_Pool_Stuff(QWidget *parent) :
     target = new _Storage_Target(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(source);
-    commonLayout->addWidget(target, -1);
+    commonLayout->addWidget(target);
+    commonLayout->insertStretch(2, -1);
     setLayout(commonLayout);
     target->pathWdg->setVisible(true);
     source->vendorLabel->setVisible(true);
