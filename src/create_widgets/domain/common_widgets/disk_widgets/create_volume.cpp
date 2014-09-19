@@ -37,11 +37,24 @@ CreateVolume::CreateVolume(QWidget *parent, QString _type) :
     target = new _Storage_Target(this, currPoolType);
     target->formatWdg->setVisible(true);
 
+    infoLayout = new QVBoxLayout();
+    //infoLayout->addWidget(source);
+    infoLayout->addWidget(target);
+    infoLayout->addStretch(-1);
+    scrolled = new QWidget(this);
+    scrolled->setLayout(infoLayout);
+    infoWidget = new QScrollArea(this);
+    infoWidget->setWidget(scrolled);
+    infoWidget->setWidgetResizable(true);
+
     commonLayout->insertWidget(commonLayout->count()-1, sizeWdg);
-    //commonLayout->insertWidget(commonLayout->count()-1, source);
-    commonLayout->insertWidget(commonLayout->count()-1, target, -1);
+    commonLayout->insertWidget(commonLayout->count()-1, infoWidget, -1);
+    connect(allocLabel, SIGNAL(currentIndexChanged(int)),
+            capLabel, SLOT(setCurrentIndex(int)));
+    connect(capLabel, SIGNAL(currentIndexChanged(int)),
+            allocLabel, SLOT(setCurrentIndex(int)));
     allocLabel->setCurrentIndex(1);
-    capLabel->setCurrentIndex(1);
+    //capLabel->setCurrentIndex(1);
 }
 
 /* public slots */

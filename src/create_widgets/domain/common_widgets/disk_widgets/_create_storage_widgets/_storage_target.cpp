@@ -66,7 +66,7 @@ _Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
     permLayout->addWidget(label, 3, 1);
     permissions = new QWidget(this);
     permissions->setLayout(permLayout);
-    permissions->setEnabled(false);
+    permissions->setVisible(false);
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(new QLabel("<b>Target</b>"));
@@ -80,7 +80,7 @@ _Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
     connect(format, SIGNAL(currentIndexChanged(int)),
             this, SLOT(formatTypeChanged(int)));
     connect(usePerm, SIGNAL(toggled(bool)),
-            permissions, SLOT(setEnabled(bool)));
+            permissions, SLOT(setVisible(bool)));
 }
 
 /* private slots */

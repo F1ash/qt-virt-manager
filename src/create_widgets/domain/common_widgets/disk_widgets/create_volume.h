@@ -2,6 +2,7 @@
 #define CREATE_VOLUME_H
 
 #include <QSpinBox>
+#include <QScrollArea>
 #include "_create_storage_widgets/_create_storage.h"
 //#include "_create_storage_widgets/_storage_source.h"
 #include "_create_storage_widgets/_storage_target.h"
@@ -25,6 +26,10 @@ private:
     QWidget         *sizeWdg;
     //_Storage_Source *source;
     _Storage_Target *target;
+
+    QScrollArea     *infoWidget;
+    QVBoxLayout     *infoLayout;
+    QWidget         *scrolled;
 
 public slots:
     QString getStorageXMLDescFileName() const;
