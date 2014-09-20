@@ -68,13 +68,17 @@ _Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
     permissions->setLayout(permLayout);
     permissions->setVisible(false);
 
+    encrypt = new Encryption(this);
+
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(new QLabel("<b>Target</b>"));
     commonLayout->addWidget(pathWdg);
     commonLayout->addWidget(formatWdg);
     commonLayout->addWidget(usePerm);
     commonLayout->addWidget(permissions);
+    commonLayout->addWidget(encrypt);
     setLayout(commonLayout);
+    setAutoFillBackground(true);
     pathWdg->setVisible(false);
     formatWdg->setVisible(false);
     connect(format, SIGNAL(currentIndexChanged(int)),

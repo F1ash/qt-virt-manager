@@ -2,6 +2,8 @@
 #define _CREATE_STORAGE_H
 
 #include <QDialog>
+#include <QScrollArea>
+#include <QStackedWidget>
 #include <QLabel>
 #include <QComboBox>
 #include <QLineEdit>
@@ -23,7 +25,9 @@ public:
     QLineEdit           *stName;
     QLabel              *suff;
     QVBoxLayout         *commonLayout;
-    QTemporaryFile      *xml = NULL;
+    QTemporaryFile      *xml;
+    QStackedWidget      *info;
+    QScrollArea         *infoWidget;
 
 signals:
     void errorMsg(QString);
@@ -38,11 +42,13 @@ private:
     QGridLayout         *baseLayout;
     QWidget             *baseWdg;
 
+    QVBoxLayout         *infoLayout;
+    QWidget             *scrolled;
+
 public slots:
     virtual QString getStorageXMLDescFileName() const;
 
 private slots:
-    virtual void typeChanged(int);
     void set_Result();
 };
 

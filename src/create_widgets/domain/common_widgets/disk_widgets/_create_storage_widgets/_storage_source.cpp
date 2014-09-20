@@ -17,11 +17,11 @@ _Storage_Source::_Storage_Source(QWidget *parent) :
     vendorLabel->setVisible(false);
     productLabel = new QLabel("Product:", this);
     productLabel->setVisible(false);
-    device = new QLineEdit(this);
+    device = new _BlockDevices(this);
     device->setVisible(false);
     dir = new QLineEdit(this);
     dir->setVisible(false);
-    host = new QLineEdit(this);
+    host = new _Hosts(this);
     host->setVisible(false);
     named = new QLineEdit(this);
     named->setVisible(false);
@@ -60,4 +60,5 @@ _Storage_Source::_Storage_Source(QWidget *parent) :
     commonLayout->addWidget(productLabel, 9, 0);
     commonLayout->addWidget(product, 9, 1);
     setLayout(commonLayout);
+    setAutoFillBackground(true);
 }

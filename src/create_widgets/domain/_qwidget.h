@@ -21,7 +21,7 @@ class _QWidget : public _Changed
     Q_OBJECT
 public:
     explicit _QWidget(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL,
             virDomainPtr domain = NULL);
 

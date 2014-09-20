@@ -20,6 +20,7 @@
 #include "common_widgets/net_interfaces.h"
 #include "common_widgets/disk.h"
 #include "common_widgets/security_label.h"
+#include "common_widgets/encryption.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

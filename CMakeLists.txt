@@ -163,6 +163,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_storage_source.h
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_adapter.h
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_auth.h
+  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_block_devices.h
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_storage_target.h
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_pool_stuff.h
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/dir_pool_stuff.h
@@ -185,6 +186,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/disk_widgets/network_disk.h
   src/create_widgets/domain/common_widgets/disk_widgets/volume_disk.h
   src/create_widgets/domain/common_widgets/security_label.h
+  src/create_widgets/domain/common_widgets/encryption.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -355,6 +357,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_storage_source.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_adapter.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_auth.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_block_devices.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_storage_target.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_pool_stuff.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/dir_pool_stuff.cpp
@@ -377,6 +380,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/disk_widgets/network_disk.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/volume_disk.cpp
   src/create_widgets/domain/common_widgets/security_label.cpp
+  src/create_widgets/domain/common_widgets/encryption.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

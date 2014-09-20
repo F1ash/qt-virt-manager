@@ -20,12 +20,18 @@
 CreatePool::CreatePool(QWidget *parent) :
     _CreateStorage(parent)
 {
-    infoLayout = new QVBoxLayout();
-    scrolled = new QWidget(this);
-    scrolled->setLayout(infoLayout);
-    infoWidget = new QScrollArea(this);
-    infoWidget->setWidget(scrolled);
-    infoWidget->setWidgetResizable(true);
+    info->addWidget(new Dir_Pool_Stuff(this));
+    info->addWidget(new Fs_Pool_Stuff(this));
+    info->addWidget(new NetFs_Pool_Stuff(this));
+    info->addWidget(new Logical_Pool_Stuff(this));
+    info->addWidget(new Disk_Pool_Stuff(this));
+    info->addWidget(new iSCSI_Pool_Stuff(this));
+    info->addWidget(new SCSI_Pool_Stuff(this));
+    info->addWidget(new MPath_Pool_Stuff(this));
+    info->addWidget(new RBD_Pool_Stuff(this));
+    info->addWidget(new SheepDog_Pool_Stuff(this));
+    info->addWidget(new Gluster_Pool_Stuff(this));
+    info->addWidget(new ZFS_Pool_Stuff(this));
 
     QStringList _text, _data;
     _text = POOL_TYPE_DESC;
@@ -49,42 +55,6 @@ CreatePool::CreatePool(QWidget *parent) :
 /* public slots */
 QString CreatePool::getStorageXMLDescFileName() const
 {
-    return info->getStorageXMLDescFileName();
-}
-
-/* private slots */
-void CreatePool::typeChanged(int i)
-{
-    if ( info!=NULL ) {
-        infoLayout->removeWidget(info);
-        delete info;
-        info = NULL;
-    };
-    QString _type = type->itemData(i, Qt::UserRole).toString();
-    if ( _type=="dir" ) {
-        info = new Dir_Pool_Stuff(this);
-    } else if ( _type=="fs" ) {
-        info = new Fs_Pool_Stuff(this);
-    } else if ( _type=="netfs" ) {
-        info = new NetFs_Pool_Stuff(this);
-    } else if ( _type=="logical" ) {
-        info = new Logical_Pool_Stuff(this);
-    } else if ( _type=="disk" ) {
-        info = new Disk_Pool_Stuff(this);
-    } else if ( _type=="iscsi" ) {
-        info = new iSCSI_Pool_Stuff(this);
-    } else if ( _type=="scsi" ) {
-        info = new SCSI_Pool_Stuff(this);
-    } else if ( _type=="mpath" ) {
-        info = new MPath_Pool_Stuff(this);
-    } else if ( _type=="rbd" ) {
-        info = new RBD_Pool_Stuff(this);
-    } else if ( _type=="sheepdog" ) {
-        info = new SheepDog_Pool_Stuff(this);
-    } else if ( _type=="gluster" ) {
-        info = new Gluster_Pool_Stuff(this);
-    } else if ( _type=="zfs" ) {
-        info = new ZFS_Pool_Stuff(this);
-    } else info = new _Pool_Stuff(this);
-    infoLayout->insertWidget(0, info, -1);
+    _Pool_Stuff *wdg = static_cast<_Pool_Stuff*>(info->currentWidget());
+    return wdg->getStorageXMLDescFileName();
 }

@@ -9,6 +9,7 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include "create_widgets/domain/common_widgets/encryption.h"
 
 class _Storage_Target : public QWidget
 {
@@ -22,6 +23,7 @@ public:
     QCheckBox       *usePerm;
     QLineEdit       *owner, *group, *mode, *label;
     QWidget         *pathWdg, *formatWdg, *permissions;
+    Encryption      *encrypt;
 
 private:
     QLabel          *pathLabel, *formatLabel;

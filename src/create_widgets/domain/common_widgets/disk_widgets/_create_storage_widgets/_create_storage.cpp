@@ -6,8 +6,6 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
     setModal(true);
     typeLabel = new QLabel("Pool Type:", this);
     type = new QComboBox(this);
-    connect(type, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(typeChanged(int)));
     stNameLabel = new QLabel("Name:", this);
     stName = new QLineEdit(this);
     suff = new QLabel(".img", this);
@@ -31,6 +29,15 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
     buttons = new QWidget(this);
     buttons->setLayout(buttonLayout);
 
+    info = new QStackedWidget(this);
+    infoLayout = new QVBoxLayout();
+    infoLayout->addWidget(info);
+    scrolled = new QWidget(this);
+    scrolled->setLayout(infoLayout);
+    infoWidget = new QScrollArea(this);
+    infoWidget->setWidget(scrolled);
+    infoWidget->setWidgetResizable(true);
+
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(buttons);
@@ -41,6 +48,9 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
     xml->setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml")
                          .arg(QDir::tempPath())
                          .arg(QDir::separator()));
+
+    connect(type, SIGNAL(currentIndexChanged(int)),
+            info, SLOT(setCurrentIndex(int)));
 }
 
 /* public slots */
@@ -50,10 +60,6 @@ QString _CreateStorage::getStorageXMLDescFileName() const
 }
 
 /* private slots */
-void _CreateStorage::typeChanged(int i)
-{
-
-}
 void _CreateStorage::set_Result()
 {
     done( (sender()==chooseStorage)?

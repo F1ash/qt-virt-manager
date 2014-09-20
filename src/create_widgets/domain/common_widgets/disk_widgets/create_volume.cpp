@@ -36,16 +36,15 @@ CreateVolume::CreateVolume(QWidget *parent, QString _type) :
     //source = new _Storage_Source(this);
     target = new _Storage_Target(this, currPoolType);
     target->formatWdg->setVisible(true);
+    target->encrypt->setVisible(false);
 
-    infoLayout = new QVBoxLayout();
-    //infoLayout->addWidget(source);
-    infoLayout->addWidget(target);
-    infoLayout->addStretch(-1);
-    scrolled = new QWidget(this);
-    scrolled->setLayout(infoLayout);
-    infoWidget = new QScrollArea(this);
-    infoWidget->setWidget(scrolled);
-    infoWidget->setWidgetResizable(true);
+    infoStuffLayout = new QVBoxLayout();
+    //infoStuffLayout->addWidget(source);
+    infoStuffLayout->addWidget(target);
+    infoStuffLayout->addStretch(-1);
+    infoStuff = new QWidget(this);
+    infoStuff->setLayout(infoStuffLayout);
+    info->addWidget(infoStuff);
 
     commonLayout->insertWidget(commonLayout->count()-1, sizeWdg);
     commonLayout->insertWidget(commonLayout->count()-1, infoWidget, -1);
