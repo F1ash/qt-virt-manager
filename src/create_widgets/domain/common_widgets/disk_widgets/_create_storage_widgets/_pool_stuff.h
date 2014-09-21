@@ -2,6 +2,7 @@
 #define _POOL_STUFF_H
 
 #include <QWidget>
+#include <QtXml/QDomDocument>
 #include "_storage_source.h"
 #include "_storage_target.h"
 
@@ -17,7 +18,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    virtual QString getStorageXMLDescFileName() const;
+    virtual QDomDocument getStorageXMLDesc() const;
 };
 
 #endif // _POOL_STUFF_H

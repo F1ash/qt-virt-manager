@@ -303,6 +303,7 @@ void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
                 QString source = args.first();
                 args.removeFirst();
                 QString path, _poolType;
+                bool show = false;
                 // show SRC Creator widget
                 // get path for method
                 virStoragePoolPtr _pool = virStoragePoolLookupByName(
@@ -316,10 +317,12 @@ void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
                 CreateVolume *createVolumeDialog = new CreateVolume(this, _poolType);
                 if ( createVolumeDialog->exec()==QDialog::Accepted ) {
                     path = createVolumeDialog->getStorageXMLDescFileName();
+                    show = createVolumeDialog->showXMLDescription();
                 };
                 delete createVolumeDialog;
                 createVolumeDialog = NULL;
                 args.prepend(path);
+                if ( show ) QDesktopServices::openUrl(QUrl(path));
             };
             stVolControlThread->execAction(act, args);
         };

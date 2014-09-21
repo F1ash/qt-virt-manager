@@ -14,12 +14,16 @@ _Adapter::_Adapter(QWidget *parent) :
     wwpnLabel = new QLabel("WWPN:", this);
     adapterPrntLabel = new QLabel("Parent", this);
     wwnn = new QLineEdit(this);
+    wwnn->setPlaceholderText("20000000c9831b4b");
     wwpn = new QLineEdit(this);
+    wwpn->setPlaceholderText("10000000c9831b4b");
     adapterPrnt = new QLineEdit(this);
+    adapterPrnt->setPlaceholderText("scsi_host5");
     usePrntAddr = new QCheckBox("Use Parent Address", this);
-    adapterPrntIDLabel = new QLabel("Parent ID:", this);
+    adapterPrntIDLabel = new QLabel("Unique_ID:", this);
     adapterPrntIDLabel->setVisible(false);
     adapterPrntID = new QLineEdit(this);
+    adapterPrntID->setPlaceholderText("1");
     adapterPrntID->setVisible(false);
     addr = new PciAddr(this);
     addr->setVisible(false);
@@ -66,4 +70,6 @@ void _Adapter::usingPrntAddrChanged(bool state)
     addr->setVisible(state);
     nameLabel->setEnabled(!state);
     name->setEnabled(!state);
+    typeLabel->setEnabled(!state);
+    type->setEnabled(!state);
 }

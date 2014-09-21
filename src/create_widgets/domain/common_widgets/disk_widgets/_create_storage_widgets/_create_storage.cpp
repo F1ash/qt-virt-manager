@@ -19,11 +19,13 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
 
+    showAtClose = new QCheckBox("Show XML Description\nat close", this);
     chooseStorage = new QPushButton(QIcon::fromTheme("dialog-ok"), "Choose Storage", this);
     cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
     connect(chooseStorage, SIGNAL(clicked()), this, SLOT(set_Result()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout(this);
+    buttonLayout->addWidget(showAtClose);
     buttonLayout->addWidget(chooseStorage);
     buttonLayout->addWidget(cancel);
     buttons = new QWidget(this);
@@ -58,6 +60,10 @@ QString _CreateStorage::getStorageXMLDescFileName() const
 {
     return QString();
 }
+bool _CreateStorage::showXMLDescription() const
+{
+    return showAtClose->isChecked();
+}
 
 /* private slots */
 void _CreateStorage::set_Result()
@@ -66,4 +72,10 @@ void _CreateStorage::set_Result()
               QDialog::Accepted :
               QDialog::Rejected);
     //qDebug()<<"done";
+    if ( !storageType.isEmpty() ) {
+        settings.beginGroup(storageType);
+        settings.setValue("Geometry", saveGeometry());
+        settings.setValue("ShowAtClose", showAtClose->isChecked());
+        settings.endGroup();
+    };
 }

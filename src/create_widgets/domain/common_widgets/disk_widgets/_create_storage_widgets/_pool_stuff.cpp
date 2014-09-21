@@ -11,16 +11,12 @@ _Pool_Stuff::_Pool_Stuff(QWidget *parent) :
     commonLayout->insertStretch(2, -1);
     setLayout(commonLayout);
     target->pathWdg->setVisible(true);
-    source->vendorLabel->setVisible(true);
-    source->productLabel->setVisible(true);
-    source->vendor->setVisible(true);
-    source->product->setVisible(true);
 }
 
 /* public slots */
-QString _Pool_Stuff::getStorageXMLDescFileName() const
+QDomDocument _Pool_Stuff::getStorageXMLDesc() const
 {
-    return QString();
+    return QDomDocument();
     /*
     QString _poolType = type->itemData(
                 type->currentIndex(),
@@ -129,10 +125,5 @@ QString _Pool_Stuff::getStorageXMLDescFileName() const
     _pool.setAttribute("type", _poolType);
     doc.appendChild(_pool);
     qDebug()<<doc.toString();
-
-    bool read = xml->open();
-    if (read) xml->write(doc.toByteArray(4).data());
-    xml->close();
-    return xml->fileName();
     */
 }

@@ -27,6 +27,7 @@ _BlockDevices::_BlockDevices(QWidget *parent) :
             this, SLOT(delDevice()));
     connect(browse, SIGNAL(clicked()),
             this, SLOT(setBlockDevPath()));
+    setOneDeviceMode(false);
 }
 
 /* public slots */
@@ -38,14 +39,20 @@ QStringList _BlockDevices::getDevicesList() const
     };
     return _list;
 }
+void _BlockDevices::setOneDeviceMode(bool state)
+{
+    oneDeviceMode = state;
+}
 
 /* private slots */
 void _BlockDevices::addDevice()
 {
     if ( !name->text().isEmpty() ) {
         QString _dev = name->text();
-        if ( devices->findItems(_dev, Qt::MatchExactly).isEmpty() )
+        if ( devices->findItems(_dev, Qt::MatchExactly).isEmpty() ) {
+            if ( oneDeviceMode ) devices->clear();
             devices->addItem(_dev);
+        };
         name->clear();
     };
 }

@@ -15,17 +15,20 @@ class _BlockDevices : public QWidget
     Q_OBJECT
 public:
     explicit _BlockDevices(QWidget *parent = 0);
+    QLineEdit       *name;
 
 private:
     QListWidget     *devices;
     QPushButton     *add, *browse, *del;
-    QLineEdit       *name;
     QHBoxLayout     *panelLayout;
     QWidget         *panel;
     QVBoxLayout     *commonLayout;
 
+    bool             oneDeviceMode = false;
+
 public slots:
     QStringList getDevicesList() const;
+    void        setOneDeviceMode(bool);
 
 private slots:
     void addDevice();

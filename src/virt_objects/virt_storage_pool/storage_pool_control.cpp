@@ -286,15 +286,18 @@ void VirtStoragePoolControl::newVirtStoragePoolFromXML(const QStringList &_args)
                     QString source = args.first();
                     args.removeFirst();
                     QString path;
+                    bool show = false;
                     // show SRC Creator widget
                     // get path for method
                     CreatePool *createPoolDialog = new CreatePool(this);
                     if ( createPoolDialog->exec()==QDialog::Accepted ) {
                         path = createPoolDialog->getStorageXMLDescFileName();
+                        show = createPoolDialog->showXMLDescription();
                     };
                     delete createPoolDialog;
                     createPoolDialog = NULL;
                     args.prepend(path);
+                    if ( show ) QDesktopServices::openUrl(QUrl(path));
                 };
                 stPoolControlThread->execAction(act, args);
         };

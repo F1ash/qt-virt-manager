@@ -23,3 +23,13 @@ Encryption::Encryption(QWidget *parent) :
     connect(useEncryption, SIGNAL(toggled(bool)),
             baseWdg, SLOT(setVisible(bool)));
 }
+
+/* public slots */
+bool Encryption::isUsed() const
+{
+    return useEncryption->isChecked();
+}
+QString Encryption::getFormat() const
+{
+    return format->currentText().toLower();
+}

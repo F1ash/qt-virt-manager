@@ -7,6 +7,11 @@
 CreateVolume::CreateVolume(QWidget *parent, QString _type) :
     _CreateStorage(parent), currPoolType(_type)
 {
+    storageType.append("CreateStorageVolume");
+    settings.beginGroup(storageType);
+    restoreGeometry(settings.value("Geometry").toByteArray());
+    showAtClose->setChecked( settings.value("ShowAtClose").toBool() );
+    settings.endGroup();
     type->addItem(currPoolType);
     suff->setVisible(true);
     allocLabel = new QComboBox(this);

@@ -36,12 +36,22 @@ _Hosts::_Hosts(QWidget *parent) :
             this, SLOT(addHost()));
     connect(del, SIGNAL(clicked()),
             this, SLOT(delHost()));
+    setFullHostMode(true);
+    setOneHostMode(false);
 }
 
 /* public slots */
 bool _Hosts::isUsed() const
 {
     return useHosts->isChecked();
+}
+void _Hosts::checkHosts(bool state)
+{
+    useHosts->setChecked(state);
+}
+void _Hosts::setFullHostMode(bool state)
+{
+    hostMode = state;
 }
 QStringList _Hosts::getHostsList() const
 {
@@ -51,15 +61,25 @@ QStringList _Hosts::getHostsList() const
     };
     return _list;
 }
+void _Hosts::setOneHostMode(bool state)
+{
+    oneHostMode = state;
+}
 
 /* private slots */
 void _Hosts::addHost()
 {
-    if ( !name->text().isEmpty() && !port->text().isEmpty() ) {
-        QString _host = QString("%1:%2")
-                .arg(name->text()).arg(port->text());
-        if ( hosts->findItems(_host, Qt::MatchExactly).isEmpty() )
+    if ( !name->text().isEmpty() &&
+         ( !hostMode || !port->text().isEmpty() ) ) {
+        QString _host = name->text();
+        if ( !port->text().isEmpty() ) {
+            _host.append(":");
+            _host.append(port->text());
+        };
+        if ( hosts->findItems(_host, Qt::MatchExactly).isEmpty() ) {
+            if ( oneHostMode ) hosts->clear();
             hosts->addItem(_host);
+        };
         name->clear();
         port->clear();
     };

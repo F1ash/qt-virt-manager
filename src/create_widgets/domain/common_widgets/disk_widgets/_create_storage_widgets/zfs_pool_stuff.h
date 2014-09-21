@@ -12,7 +12,7 @@ public:
 signals:
 
 public slots:
-    QString getStorageXMLDescFileName() const;
+    QDomDocument getStorageXMLDesc() const;
 };
 
 #endif // ZFS_POOL_STUFF_H

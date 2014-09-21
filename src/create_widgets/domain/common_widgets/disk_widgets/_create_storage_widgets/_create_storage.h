@@ -14,6 +14,7 @@
 #include <QStringList>
 #include <QDir>
 #include <QTemporaryFile>
+#include <QSettings>
 #include <QDebug>
 
 class _CreateStorage : public QDialog
@@ -28,6 +29,10 @@ public:
     QTemporaryFile      *xml;
     QStackedWidget      *info;
     QScrollArea         *infoWidget;
+
+    QSettings            settings;
+    QString              storageType;
+    QCheckBox           *showAtClose;
 
 signals:
     void errorMsg(QString);
@@ -47,6 +52,7 @@ private:
 
 public slots:
     virtual QString getStorageXMLDescFileName() const;
+            bool    showXMLDescription() const;
 
 private slots:
     void set_Result();

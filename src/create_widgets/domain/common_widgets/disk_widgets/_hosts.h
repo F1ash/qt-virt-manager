@@ -29,9 +29,15 @@ private:
     QWidget         *baseWdg;
     QVBoxLayout     *commonLayout;
 
+    bool             hostMode = false;
+    bool             oneHostMode = false;
+
 public slots:
     bool        isUsed() const;
+    void        checkHosts(bool);
+    void        setFullHostMode(bool);
     QStringList getHostsList() const;
+    void        setOneHostMode(bool);
 
 private slots:
     void addHost();

@@ -12,7 +12,7 @@ public:
 signals:
 
 public slots:
-    QString getStorageXMLDescFileName() const;
+    QDomDocument getStorageXMLDesc() const;
 };
 
 #endif // MPATH_POOL_STUFF_H

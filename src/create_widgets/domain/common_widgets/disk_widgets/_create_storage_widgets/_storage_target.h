@@ -6,6 +6,8 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QPushButton>
+#include <QFileDialog>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -26,8 +28,8 @@ public:
     Encryption      *encrypt;
 
 private:
-    QLabel          *pathLabel, *formatLabel;
-    QLabel          *ownerLabel, *groupLabel,
+    QPushButton     *pathLabel;
+    QLabel          *formatLabel, *ownerLabel, *groupLabel,
                     *modeLabel, *labelLabel;
     QString          currPoolType;
     QHBoxLayout     *pathLayout;
@@ -37,6 +39,7 @@ private:
 
 private slots:
     void formatTypeChanged(int);
+    void setTargetDirectory();
 };
 
 #endif // _STORAGE_TARGET_H

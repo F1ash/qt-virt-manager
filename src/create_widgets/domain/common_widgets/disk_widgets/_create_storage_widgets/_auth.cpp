@@ -17,11 +17,11 @@ _Storage_Auth::_Storage_Auth(QWidget *parent) :
     authLayout->addWidget(usage, 1, 1);
     authWdg = new QWidget(this);
     authWdg->setLayout(authLayout);
-    authWdg->setEnabled(false);
+    authWdg->setVisible(false);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(auth, 0, Qt::AlignLeft);
-    commonLayout->addWidget(authWdg, -1, Qt::AlignRight);
+    commonLayout->addWidget(authWdg, -1);
     setLayout(commonLayout);
     connect(auth, SIGNAL(toggled(bool)),
-            authWdg, SLOT(setEnabled(bool)));
+            authWdg, SLOT(setVisible(bool)));
 }

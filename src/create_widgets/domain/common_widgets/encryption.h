@@ -22,7 +22,8 @@ private:
     QVBoxLayout         *commonLayout;
 
 public slots:
-
+    bool    isUsed() const;
+    QString getFormat() const;
 };
 
 #endif // ENCRYPTION_H

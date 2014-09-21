@@ -20,6 +20,11 @@
 CreatePool::CreatePool(QWidget *parent) :
     _CreateStorage(parent)
 {
+    storageType.append("CreateStoragePool");
+    settings.beginGroup(storageType);
+    restoreGeometry(settings.value("Geometry").toByteArray());
+    showAtClose->setChecked( settings.value("ShowAtClose").toBool() );
+    settings.endGroup();
     info->addWidget(new Dir_Pool_Stuff(this));
     info->addWidget(new Fs_Pool_Stuff(this));
     info->addWidget(new NetFs_Pool_Stuff(this));
@@ -55,6 +60,42 @@ CreatePool::CreatePool(QWidget *parent) :
 /* public slots */
 QString CreatePool::getStorageXMLDescFileName() const
 {
+    QDomDocument doc, _stuff;
+    QDomElement _pool, _name, _uuid;
+    QDomText _text;
+    _pool = doc.createElement("pool");
+    QString _type = type->itemData(type->currentIndex(), Qt::UserRole).toString();
+    _pool.setAttribute("type", _type);
+    doc.appendChild(_pool);
+    _name = doc.createElement("name");
+    _text = doc.createTextNode(stName->text());
+    _name.appendChild(_text);
+    _pool.appendChild(_name);
+    if ( !uuid->text().isEmpty() ) {
+        _uuid = doc.createElement("uuid");
+        _text = doc.createTextNode(uuid->text());
+        _uuid.appendChild(_text);
+        _pool.appendChild(_uuid);
+    };
+
     _Pool_Stuff *wdg = static_cast<_Pool_Stuff*>(info->currentWidget());
-    return wdg->getStorageXMLDescFileName();
+    _stuff = wdg->getStorageXMLDesc();
+    QDomNodeList list = _stuff.firstChildElement("stuff").childNodes();
+    /*
+     * current DomNode is removed to root-element
+     * but NULL-elemens not removed
+     * therefore keep to seek on not-NULL next element
+     */
+    uint j = 0;
+    uint count = list.length();
+    for (uint i=0; i<count;i++) {
+        //qDebug()<<list.item(j).nodeName()<<i;
+        if (!list.item(j).isNull()) _pool.appendChild(list.item(j));
+        else ++j;
+    };
+
+    bool read = xml->open();
+    if (read) xml->write(doc.toByteArray(4).data());
+    xml->close();
+    return xml->fileName();
 }

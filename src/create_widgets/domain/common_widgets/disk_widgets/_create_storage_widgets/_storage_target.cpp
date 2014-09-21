@@ -16,7 +16,7 @@
 _Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
     QWidget(parent), currPoolType(_type)
 {
-    pathLabel = new QLabel("Path:", this);
+    pathLabel = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
     path = new QLineEdit(this);
     pathLayout = new QHBoxLayout(this);
     pathLayout->addWidget(pathLabel);
@@ -85,6 +85,8 @@ _Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
             this, SLOT(formatTypeChanged(int)));
     connect(usePerm, SIGNAL(toggled(bool)),
             permissions, SLOT(setVisible(bool)));
+    connect(pathLabel, SIGNAL(clicked()),
+            this, SLOT(setTargetDirectory()));
 }
 
 /* private slots */
@@ -92,4 +94,14 @@ void _Storage_Target::formatTypeChanged(int i)
 {
     format->setEditable( i==format->count()-1 );
     format->clearEditText();
+}
+void _Storage_Target::setTargetDirectory()
+{
+    QString _dir = QFileDialog::getExistingDirectory(
+                this,
+                "Get Target Directory",
+                QString("/"));
+    if ( !_dir.isEmpty() ) {
+        path->setText(_dir);
+    };
 }
