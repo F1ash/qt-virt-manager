@@ -1,6 +1,7 @@
 #ifndef FILESYSTEMS_H
 #define FILESYSTEMS_H
 
+#include <QStackedWidget>
 #include "fs_type_widgets/mount_fstype.h"
 #include "fs_type_widgets/file_fstype.h"
 #include "fs_type_widgets/block_fstype.h"
@@ -20,7 +21,7 @@ private:
     QComboBox       *type;
     QHBoxLayout     *typeLayout;
     QWidget         *typeWdg;
-    _QWidget        *info = NULL;
+    QStackedWidget  *info;
     QVBoxLayout     *commonLayout;
 
     QString          connType;
@@ -29,7 +30,7 @@ public slots:
     QDomDocument getDevDocument() const;
 
 private slots:
-    void typeChanged(int);
+    void setWidgets(QString);
 };
 
 #endif // FILESYSTEMS_H

@@ -25,40 +25,25 @@ Disk::Disk(QWidget *parent,
     sourceWdg = new QWidget(this);
     sourceWdg->setLayout(sourceLayout);
 
+    info = new QStackedWidget(this);
+    info->addWidget(new Volume_Disk(this, currWorkConnect));
+    info->addWidget(new Block_Disk(this, currWorkConnect));
+    info->addWidget(new Dir_Disk(this, currWorkConnect));
+    info->addWidget(new File_Disk(this, currWorkConnect));
+    info->addWidget(new Network_Disk(this, currWorkConnect));
+
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(sourceWdg);
+    commonLayout->addWidget(info);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(source, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(sourceChanged(int)));
-    sourceChanged(0);
+            info, SLOT(setCurrentIndex(int)));
 }
 
 /* public slots */
 QDomDocument Disk::getDevDocument() const
 {
-    return info->getDevDocument();
-}
-
-/* private slots */
-void Disk::sourceChanged(int i)
-{
-    if ( info!=NULL ) {
-        commonLayout->removeWidget(info);
-        delete info;
-        info = NULL;
-    };
-    QString _source = source->currentText().toLower();
-    if ( _source.startsWith("storage") ) {
-        info = new Volume_Disk(this, currWorkConnect);
-    } else if ( _source.startsWith("host") ) {
-        info = new Block_Disk(this, currWorkConnect);
-    } else if ( _source.startsWith("directory") ) {
-        info = new Dir_Disk(this, currWorkConnect);
-    } else if ( _source.startsWith("file") ) {
-        info = new File_Disk(this, currWorkConnect);
-    } else if ( _source.startsWith("network") ) {
-        info = new Network_Disk(this, currWorkConnect);
-    } else info = new _QWidget(this);
-    commonLayout->insertWidget(1, info, -1);
+    _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
+    return wdg->getDevDocument();
 }

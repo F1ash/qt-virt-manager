@@ -1,6 +1,7 @@
 #ifndef DISK_H
 #define DISK_H
 
+#include <QStackedWidget>
 #include "disk_widgets/block_disk.h"
 #include "disk_widgets/dir_disk.h"
 #include "disk_widgets/file_disk.h"
@@ -20,14 +21,11 @@ private:
     QComboBox       *source;
     QHBoxLayout     *sourceLayout;
     QWidget         *sourceWdg;
-    _QWidget        *info = NULL;
+    QStackedWidget  *info;
     QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument getDevDocument() const;
-
-private slots:
-    void sourceChanged(int);
 };
 
 #endif // DISK_H

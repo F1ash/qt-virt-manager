@@ -1,6 +1,7 @@
 #ifndef GRAPHICS_DEVICE_H
 #define GRAPHICS_DEVICE_H
 
+#include <QStackedWidget>
 #include "graph_dev_widgets/desktop_graphics.h"
 #include "graph_dev_widgets/rdp_graphics.h"
 #include "graph_dev_widgets/sdl_graphics.h"
@@ -17,14 +18,14 @@ public:
 
 private:
     QComboBox       *type;
-    _QWidget        *info = NULL;
+    QStackedWidget  *info;
     QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument getDevDocument() const;
 
 private slots:
-    void typeChanged(int);
+    void setWidgets(int);
 };
 
 #endif // GRAPHICS_DEVICE_H

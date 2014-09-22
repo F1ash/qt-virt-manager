@@ -15,40 +15,39 @@ GraphicsDevice::GraphicsDevice(
     type->addItem("Use a Spice", "spice");
     type->addItem("Use a RDP", "rdp");
     type->addItem("Reserved for VirtualBox domains", "desktop");
+    info = new QStackedWidget(this);
+    for (uint i=0; i<type->count(); i++) {
+        setWidgets(i);
+    };
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(type);
-    //commonLayout->addStretch(-1);
+    commonLayout->addWidget(info);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(type, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(typeChanged(int)));
-    typeChanged(0);
+            info, SLOT(setCurrentIndex(int)));
 }
 
 /* public slots */
 QDomDocument GraphicsDevice::getDevDocument() const
 {
-    return info->getDevDocument();
+    _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
+    return wdg->getDevDocument();
 }
 
 /* private slots */
-void GraphicsDevice::typeChanged(int i)
+void GraphicsDevice::setWidgets(int i)
 {
     QString _type = type->itemData(i, Qt::UserRole).toString();
-    if ( info!=NULL ) {
-        commonLayout->removeWidget(info);
-        delete info;
-        info = NULL;
-    };
     if ( _type == "sdl" ) {
-        info = new SDL_Graphics(this);
+        info->addWidget(new SDL_Graphics(this));
     } else if ( _type == "vnc" ) {
-        info = new VNC_Graphics(this, currWorkConnect);
+        info->addWidget(new VNC_Graphics(this, currWorkConnect));
     } else if ( _type == "spice" ) {
-        info = new Spice_Graphics(this, currWorkConnect);
+        info->addWidget(new Spice_Graphics(this, currWorkConnect));
     } else if ( _type == "rdp" ) {
-        info = new RDP_Graphics(this);
+        info->addWidget( new RDP_Graphics(this));
     } else if ( _type == "desktop" ) {
-        info = new Desktop_Graphics(this);
-    } else info = new _QWidget(this);
-    commonLayout->insertWidget(1, info, -1);
+        info->addWidget(new Desktop_Graphics(this));
+    };
 }

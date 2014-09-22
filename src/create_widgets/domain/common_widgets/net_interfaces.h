@@ -1,6 +1,7 @@
 #ifndef NET_INTERFACES_H
 #define NET_INTERFACES_H
 
+#include <QStackedWidget>
 #include "net_if_widgets/tcp_tunnel.h"
 #include "net_if_widgets/multicast_tunnel.h"
 #include "net_if_widgets/pci_passthrough.h"
@@ -23,7 +24,7 @@ private:
     QComboBox       *type;
     QHBoxLayout     *typeLayout;
     QWidget         *typeWdg;
-    _QWidget        *info = NULL;
+    QStackedWidget  *info;
     QVBoxLayout     *commonLayout;
 
     QString          connType;
@@ -32,7 +33,7 @@ public slots:
     QDomDocument getDevDocument() const;
 
 private slots:
-    void typeChanged(int);
+    void setWidgets(QString);
 };
 
 #endif // NET_INTERFACES_H

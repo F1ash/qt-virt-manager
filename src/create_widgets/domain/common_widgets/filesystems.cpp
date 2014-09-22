@@ -31,40 +31,39 @@ FileSystems::FileSystems(
     typeWdg = new QWidget(this);
     typeWdg->setLayout(typeLayout);
 
+    info = new QStackedWidget(this);
+    for (uint i=0; i<type->count(); i++) {
+        setWidgets(type->itemText(i));
+    };
+
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(typeWdg);
+    commonLayout->addWidget(info);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(type, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(typeChanged(int)));
-    typeChanged(0);
+            info, SLOT(setCurrentIndex(int)));
 }
 
 /* public slots */
 QDomDocument FileSystems::getDevDocument() const
 {
-    return info->getDevDocument();
+    _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
+    return wdg->getDevDocument();
 }
 
 /* private slots */
-void FileSystems::typeChanged(int i)
+void FileSystems::setWidgets(QString _type)
 {
-    if ( info!=NULL ) {
-        commonLayout->removeWidget(info);
-        delete info;
-        info = NULL;
+    if ( _type.toLower()=="mount" ) {
+        info->addWidget(new MountFsType(this, connType));
+    } else if ( _type.toLower()=="file" ) {
+        info->addWidget(new FileFsType(this, connType));
+    } else if ( _type.toLower()=="block" ) {
+        info->addWidget(new BlockFsType(this, connType));
+    } else if ( _type.toLower()=="ram" ) {
+        info->addWidget(new RAMFsType(this, connType));
+    } else if ( _type.toLower()=="bind" ) {
+        info->addWidget(new BindFsType(this, connType));
     };
-    QString _type = type->currentText().toLower();
-    if ( _type=="mount" ) {
-        info = new MountFsType(this, connType);
-    } else if ( _type=="file" ) {
-        info = new FileFsType(this, connType);
-    } else if ( _type=="block" ) {
-        info = new BlockFsType(this, connType);
-    } else if ( _type=="ram" ) {
-        info = new RAMFsType(this, connType);
-    } else if ( _type=="bind" ) {
-        info = new BindFsType(this, connType);
-    } else info = new _QWidget(this);
-    commonLayout->insertWidget(1, info, -1);
 }

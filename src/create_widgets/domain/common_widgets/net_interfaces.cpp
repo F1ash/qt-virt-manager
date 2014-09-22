@@ -36,46 +36,45 @@ NetInterfaces::NetInterfaces(
     typeWdg = new QWidget(this);
     typeWdg->setLayout(typeLayout);
 
+    info = new QStackedWidget(this);
+    for (uint i=0; i<type->count(); i++) {
+        setWidgets(type->itemText(i).toLower());
+    };
+
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(typeWdg);
+    commonLayout->addWidget(info);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(type, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(typeChanged(int)));
-    typeChanged(0);
+            info, SLOT(setCurrentIndex(int)));
 }
 
 /* public slots */
 QDomDocument NetInterfaces::getDevDocument() const
 {
-    return info->getDevDocument();
+    _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
+    return wdg->getDevDocument();
 }
 
 /* private slots */
-void NetInterfaces::typeChanged(int i)
+void NetInterfaces::setWidgets(QString _type)
 {
-    if ( info!=NULL ) {
-        commonLayout->removeWidget(info);
-        delete info;
-        info = NULL;
-    };
-    QString _type = type->currentText().toLower();
     if ( _type.startsWith("multicast") ) {
-        info = new MultiCast_Tunnel(this);
+        info->addWidget(new MultiCast_Tunnel(this));
     } else if ( _type.startsWith("tcp") ) {
-        info = new TCP_Tunnel(this);
+        info->addWidget(new TCP_Tunnel(this));
     } else if ( _type.startsWith("pci") ) {
-        info = new PCI_Passthrough(this, currWorkConnect);
+        info->addWidget(new PCI_Passthrough(this, currWorkConnect));
     } else if ( _type.startsWith("direct") ) {
-        info = new DirectAttachment(this, currWorkConnect);
+        info->addWidget(new DirectAttachment(this, currWorkConnect));
     } else if ( _type.startsWith("generic") ) {
-        info = new Generic_Ethernet(this, currWorkConnect);
+        info->addWidget(new Generic_Ethernet(this, currWorkConnect));
     } else if ( _type.startsWith("userspace") ) {
-        info = new Userspace_SLIRP(this, currWorkConnect);
+        info->addWidget(new Userspace_SLIRP(this, currWorkConnect));
     } else if ( _type.startsWith("bridge") ) {
-        info = new Bridge_to_LAN(this, currWorkConnect);
+        info->addWidget(new Bridge_to_LAN(this, currWorkConnect));
     } else if ( _type.startsWith("virtual") ) {
-        info = new Virtual_Network(this, currWorkConnect);
-    } else info = new _QWidget(this);
-    commonLayout->insertWidget(1, info, -1);
+        info->addWidget(new Virtual_Network(this, currWorkConnect));
+    };
 }
