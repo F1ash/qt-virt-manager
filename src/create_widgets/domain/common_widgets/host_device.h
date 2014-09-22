@@ -1,6 +1,7 @@
 #ifndef HOST_DEVICE_H
 #define HOST_DEVICE_H
 
+#include <QStackedWidget>
 #include "host_dev_widgets/usb_host_device.h"
 #include "host_dev_widgets/pci_host_device.h"
 #include "host_dev_widgets/scsi_host_device.h"
@@ -16,14 +17,11 @@ public:
 
 private:
     QComboBox       *type;
-    _QWidget        *info = NULL;
+    QStackedWidget  *info;
     QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument getDevDocument() const;
-
-private slots:
-    void typeChanged(int);
 };
 
 #endif // HOST_DEVICE_H

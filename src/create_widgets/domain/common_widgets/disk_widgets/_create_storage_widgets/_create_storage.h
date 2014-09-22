@@ -31,7 +31,7 @@ public:
     QScrollArea         *infoWidget;
 
     QSettings            settings;
-    QString              storageType;
+    QString              settingName;
     QCheckBox           *showAtClose;
 
 signals:

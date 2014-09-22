@@ -28,7 +28,7 @@ signals:
     void errorMsg(QString);
 
 public slots:
-    //QDomDocument getDevDocument() const;
+    QDomDocument getDevDocument() const;
 
 private slots:
     void setAvailabledSCSIDevices();

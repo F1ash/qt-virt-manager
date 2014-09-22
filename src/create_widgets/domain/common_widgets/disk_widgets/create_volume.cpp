@@ -7,8 +7,8 @@
 CreateVolume::CreateVolume(QWidget *parent, QString _type) :
     _CreateStorage(parent), currPoolType(_type)
 {
-    storageType.append("CreateStorageVolume");
-    settings.beginGroup(storageType);
+    settingName.append("CreateStorageVolume");
+    settings.beginGroup(settingName);
     restoreGeometry(settings.value("Geometry").toByteArray());
     showAtClose->setChecked( settings.value("ShowAtClose").toBool() );
     settings.endGroup();

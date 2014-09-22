@@ -20,8 +20,8 @@
 CreatePool::CreatePool(QWidget *parent) :
     _CreateStorage(parent)
 {
-    storageType.append("CreateStoragePool");
-    settings.beginGroup(storageType);
+    settingName.append("CreateStoragePool");
+    settings.beginGroup(settingName);
     restoreGeometry(settings.value("Geometry").toByteArray());
     showAtClose->setChecked( settings.value("ShowAtClose").toBool() );
     settings.endGroup();

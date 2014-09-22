@@ -72,8 +72,8 @@ void _CreateStorage::set_Result()
               QDialog::Accepted :
               QDialog::Rejected);
     //qDebug()<<"done";
-    if ( !storageType.isEmpty() ) {
-        settings.beginGroup(storageType);
+    if ( !settingName.isEmpty() ) {
+        settings.beginGroup(settingName);
         settings.setValue("Geometry", saveGeometry());
         settings.setValue("ShowAtClose", showAtClose->isChecked());
         settings.endGroup();
