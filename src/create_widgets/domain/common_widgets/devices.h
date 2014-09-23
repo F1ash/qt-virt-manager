@@ -13,9 +13,7 @@ class Devices : public _QWidget
 public:
     explicit Devices(
             QWidget *parent = 0,
-            virConnectPtr conn = NULL,
-            virDomainPtr domain = NULL
-            );
+            virConnectPtr conn = NULL);
     ~Devices();
 
 signals:

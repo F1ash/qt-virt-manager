@@ -89,17 +89,20 @@
 CreateVirtDomain::CreateVirtDomain(
         QWidget *parent,
         virConnectPtr conn,
-        virDomainPtr domain) :
-    QDialog(parent), currWorkConnect(conn), currDomain(domain)
+        QString _xmlFileName) :
+    QDialog(parent), currWorkConnect(conn), xmlFileName(_xmlFileName)
 {
     setModal(true);
     setWindowTitle("Domain Settings");
     restoreGeometry(settings.value("DomCreateGeometry").toByteArray());
     xml = new QTemporaryFile(this);
     xml->setAutoRemove(false);
-    xml->setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml")
-                         .arg(QDir::tempPath())
-                         .arg(QDir::separator()));
+    if ( xmlFileName.isEmpty() ) {
+        xml->setFileTemplate(
+                QString("%1%2XML_Desc-XXXXXX.xml")
+                .arg(QDir::tempPath())
+                .arg(QDir::separator()));
+    } else xml->setFileName(xmlFileName);
     setEnabled(false);
     timerId = startTimer(PERIOD);
     readyDataLists();
@@ -195,7 +198,16 @@ void CreateVirtDomain::readCapabilities()
 }
 void CreateVirtDomain::readyDataLists()
 {
-    readCapabilities();
+    if ( xmlFileName.isEmpty() ) {
+        // create/define new VM
+        readCapabilities();
+    } else {
+        // edit exist VM parameters
+        xml->open();
+        xmlDesc.append(xml->readAll().constData());
+        xml->close();
+        //qDebug()<<xmlDesc<<"desc";
+    };
     ready = true;
 }
 void CreateVirtDomain::timerEvent(QTimerEvent *ev){
@@ -307,8 +319,7 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.append(new CPU(this));
         wdgList.append(new Devices(
                            this,
-                           currWorkConnect,
-                           currDomain));
+                           currWorkConnect));
         wdgList.append(new SecurityLabel(this));
     } else if ( type.toLower() == "qemu" ) {
         wdgList.append(new General(this, type, arch, emulator));
@@ -316,8 +327,7 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.append(new CPU(this));
         wdgList.append(new Devices(
                            this,
-                           currWorkConnect,
-                           currDomain));
+                           currWorkConnect));
         wdgList.append(new SecurityLabel(this));
     } else if ( type.toLower() == "xen" ) {
         wdgList.append(new General(this, type, arch, emulator));

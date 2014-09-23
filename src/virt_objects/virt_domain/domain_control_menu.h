@@ -10,8 +10,10 @@ class DomainControlMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit DomainControlMenu(QWidget *parent = 0, QStringList params = QStringList(), bool state = false);
-    ~DomainControlMenu();
+    explicit DomainControlMenu(
+            QWidget *parent = 0,
+            QStringList params = QStringList(),
+            bool state = false);
 
 signals:
     void execMethod(const QStringList&);
@@ -21,6 +23,7 @@ private:
     QAction        *start;
     QAction        *pause;
     QAction        *destroy;
+    QAction        *edit;
     QAction        *reset;
     QAction        *reboot;
     QAction        *shutdown;

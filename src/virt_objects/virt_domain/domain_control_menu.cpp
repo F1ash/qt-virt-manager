@@ -14,6 +14,9 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         destroy = new QAction("Destroy", this);
         destroy->setIcon(QIcon::fromTheme("domain-stop"));
         destroy->setEnabled(parameters[1]=="active");
+        edit = new QAction("Edit", this);
+        edit->setIcon(QIcon::fromTheme("preferences-system"));
+        edit->setEnabled(true);
         reset = new QAction("Reset", this);
         reset->setIcon(QIcon::fromTheme("reset"));
         reset->setEnabled(parameters[1]=="active");
@@ -46,6 +49,8 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         addAction(pause);
         addAction(destroy);
         addSeparator();
+        addAction(edit);
+        addSeparator();
         addAction(reset);
         addAction(reboot);
         addAction(shutdown);
@@ -68,38 +73,8 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
     addAction(reload);
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
 }
-DomainControlMenu::~DomainControlMenu()
-{
-    disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
-    if ( !parameters.isEmpty() ) {
-        delete start;
-        start = 0;
-        delete pause;
-        pause = 0;
-        delete destroy;
-        destroy = 0;
-        delete reset;
-        reset = 0;
-        delete reboot;
-        reboot = 0;
-        delete shutdown;
-        shutdown = 0;
-        delete save;
-        save = 0;
-        delete undefine;
-        undefine = 0;
-        delete autoStart;
-        autoStart = 0;
-        delete getXMLDesc;
-        getXMLDesc = 0;
-        delete display;
-        display = 0;
-        delete migrate;
-        migrate = 0;
-    };
-    delete reload;
-    reload = 0;
-}
+
+/* private slots */
 void DomainControlMenu::emitExecMethod(QAction *action)
 {
     QStringList paramList;
@@ -110,6 +85,8 @@ void DomainControlMenu::emitExecMethod(QAction *action)
             paramList << "pauseVirtDomain";
         } else if ( action == destroy ) {
             paramList << "destroyVirtDomain";
+        } else if ( action == edit ) {
+            paramList << "editVirtDomain";
         } else if ( action == reset ) {
             paramList << "resetVirtDomain";
         } else if ( action == reboot ) {

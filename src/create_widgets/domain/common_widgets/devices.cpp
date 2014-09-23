@@ -67,10 +67,8 @@
 
 Devices::Devices(
         QWidget *parent,
-        virConnectPtr conn,
-        virDomainPtr domain
-        ) :
-    _QWidget(parent, conn, domain)
+        virConnectPtr conn) :
+    _QWidget(parent, conn)
 {
     setObjectName("Computer:Device");
     usedDeviceList = new QListWidget(this);

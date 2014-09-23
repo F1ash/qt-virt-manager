@@ -34,6 +34,9 @@ void DomControlThread::run()
     case DEFINE_DOMAIN :
         result = defineDomain();
         break;
+    case EDIT_DOMAIN :
+        result = getDomainXMLDesc();
+        break;
     case START_DOMAIN :
         result = startDomain();
         break;

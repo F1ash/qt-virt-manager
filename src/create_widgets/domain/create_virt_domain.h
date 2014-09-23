@@ -23,7 +23,7 @@ public:
     explicit CreateVirtDomain(
             QWidget *parent = 0,
             virConnectPtr conn = NULL,
-            virDomainPtr domain = NULL);
+            QString _xmlFileName = QString());
     ~CreateVirtDomain();
 
 signals:
@@ -32,7 +32,7 @@ signals:
 private:
     QSettings        settings;
     virConnect      *currWorkConnect = NULL;
-    virDomain       *currDomain = NULL;
+    QString          xmlFileName, xmlDesc;
     virErrorPtr      virtErrors;
     QString          capabilities;
     QString          type;

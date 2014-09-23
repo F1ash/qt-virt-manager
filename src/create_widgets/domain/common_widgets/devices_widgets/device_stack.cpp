@@ -1,4 +1,5 @@
 #include "device_stack.h"
+
 #define DEV_LIST QStringList()\
     <<"Disk"<<"FileSystem"<<"Controller"<<"Host Devices"\
     <<"USB Redirection"<<"SmartCard"<<"Network"\
@@ -14,6 +15,24 @@
     <<"sound"<<"watchdog"<<"memballoon"\
     <<"rng"<<"tpm"<<"nvram"<<"panic"
 
+#define QEMU_DEVICE_LIST QStringList()\
+    <<"disk"<<"filesystem"<<"hostdev"\
+    <<"redirdev"<<"smartcard"<<"interface"\
+    <<"input"<<"hub"<<"graphics"<<"video"\
+    <<"console"<<"serial"<<"parallel"<<"channel"\
+    <<"sound"<<"watchdog"<<"memballoon"<<"rng"\
+    <<"tpm"<<"panic"
+
+#define LXC_DEVICE_LIST QStringList()\
+    <<"disk"<<"filesystem"<<"hostdev"\
+    <<"smartcard"<<"interface"<<"input"\
+    <<"hub"<<"graphics"<<"video"\
+    <<"console"<<"serial"<<"parallel"<<"channel"\
+    <<"sound"<<"rng"
+
+#define XEN_DEVICE_LIST QStringList()\
+    <<"DON'T_IMPLEMENTED"
+
 DeviceStack::DeviceStack(
         QWidget *parent,
         virConnectPtr conn) :
@@ -27,22 +46,32 @@ DeviceStack::DeviceStack(
     scrolled->setLayout(infoLayout);
     infoWidget->setWidget(scrolled);
     infoWidget->setWidgetResizable(true);
+    QString connType = QString(virConnectGetType(currWorkConnect)).toLower();
+    QStringList devSet, devList, devType;
+    devList = DEV_LIST;
+    devType = DEV_TYPE;
+    if ( connType=="qemu" ) {
+        devSet = QEMU_DEVICE_LIST;
+    } else if ( connType=="lxc" ) {
+        devSet = LXC_DEVICE_LIST;
+    };
     deviceList = new QListWidget(this);
-    deviceList->addItems(DEV_LIST);
     /* set icons & user data */
-    QStringList l = DEV_TYPE;
-    for (int i=0; i<deviceList->count();i++) {
-        QListWidgetItem *item = deviceList->item(i);
-        /*
-        item->setIcon(
-              QIcon::fromTheme(
-                     item->text()
-                     .split(" ")
-                     .first()
-                     .toLower()));
-         */
-        item->setData(Qt::UserRole, QVariant(l.at(i)));
-        //qDebug()<<item->text();
+    for (int i=0; i<devList.count();i++) {
+        if ( devSet.contains(devType.at(i)) ) {
+            deviceList->addItem(devList.at(i));
+            QListWidgetItem *item = deviceList->item(deviceList->count()-1);
+            /*
+            item->setIcon(
+                  QIcon::fromTheme(
+                         item->text()
+                         .split(" ")
+                         .first()
+                         .toLower()));
+             */
+            item->setData(Qt::UserRole, QVariant(devType.at(i)));
+            //qDebug()<<item->text();
+        };
     };
 
     // double event for selection item

@@ -155,7 +155,7 @@ void VirtDomainControl::reloadDomainState()
 /* private slots */
 void VirtDomainControl::resultReceiver(DomActions act, Result data)
 {
-    //qDebug()<<act<<data<<"result";
+    //qDebug()<<act<<data.msg<<"result";
     if ( act == GET_ALL_DOMAIN ) {
         if ( data.msg.count() > domainModel->DataList.count() ) {
             int _diff = data.msg.count() - domainModel->DataList.count();
@@ -188,6 +188,36 @@ void VirtDomainControl::resultReceiver(DomActions act, Result data)
             data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
             msgRepeater(data.msg.join(" "));
             QDesktopServices::openUrl(QUrl(xml));
+        };
+    } else if ( act == EDIT_DOMAIN ) {
+        if ( !data.msg.isEmpty() ) {
+            QString xml = data.msg.first();
+            // show SRC Creator widget in Edit-mode
+            createVirtDomain = new CreateVirtDomain(
+                        this,
+                        currWorkConnect,
+                        xml);
+            connect(createVirtDomain,
+                    SIGNAL(errorMsg(QString)),
+                    this,
+                    SLOT(msgRepeater(QString)));
+            int result = createVirtDomain->exec();
+            if ( createVirtDomain!=NULL && result ) {
+                // get path for method
+                xml = createVirtDomain->getXMLDescFileName();
+                bool show = createVirtDomain->getShowing();
+                QStringList data;
+                data.append("Edited Domain XML'ed");
+                data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+                msgRepeater(data.join(" "));
+                if ( show ) QDesktopServices::openUrl(QUrl(xml));
+            };
+            disconnect(createVirtDomain,
+                       SIGNAL(errorMsg(QString)),
+                       this,
+                       SLOT(msgRepeater(QString)));
+            delete createVirtDomain;
+            createVirtDomain = 0;
         };
     } else if ( act < GET_DOM_XML_DESC ) {
         if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
@@ -258,6 +288,8 @@ void VirtDomainControl::execAction(const QStringList &l)
             domControlThread->execAction(PAUSE_DOMAIN, args);
         } else if ( l.first()=="destroyVirtDomain" ) {
             domControlThread->execAction(DESTROY_DOMAIN, args);
+        } else if ( l.first()=="editVirtDomain" ) {
+            domControlThread->execAction(EDIT_DOMAIN, args);
         } else if ( l.first()=="resetVirtDomain" ) {
             domControlThread->execAction(RESET_DOMAIN, args);
         } else if ( l.first()=="rebootVirtDomain" ) {
