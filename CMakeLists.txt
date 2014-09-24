@@ -187,6 +187,8 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/disk_widgets/volume_disk.h
   src/create_widgets/domain/common_widgets/security_label.h
   src/create_widgets/domain/common_widgets/encryption.h
+  src/create_widgets/domain/common_widgets/emulator.h
+  src/create_widgets/domain/common_widgets/random.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -381,6 +383,8 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/disk_widgets/volume_disk.cpp
   src/create_widgets/domain/common_widgets/security_label.cpp
   src/create_widgets/domain/common_widgets/encryption.cpp
+  src/create_widgets/domain/common_widgets/emulator.cpp
+  src/create_widgets/domain/common_widgets/random.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

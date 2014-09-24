@@ -1,6 +1,7 @@
 #include "device_stack.h"
 
 #define DEV_LIST QStringList()\
+    <<"Emulator"\
     <<"Disk"<<"FileSystem"<<"Controller"<<"Host Devices"\
     <<"USB Redirection"<<"SmartCard"<<"Network"\
     <<"Input"<<"Hub"<<"Graphics"<<"Video"\
@@ -8,6 +9,7 @@
     <<"Sound"<<"WatchDog"<<"Memory Balloon"\
     <<"RNG"<<"TPM"<<"NVRAM"<<"Panic Notifier"
 #define DEV_TYPE QStringList()\
+    <<"emulator"\
     <<"disk"<<"filesystem"<<"controller"<<"hostdev"\
     <<"redirdev"<<"smartcard"<<"interface"\
     <<"input"<<"hub"<<"graphics"<<"video"\
@@ -16,19 +18,21 @@
     <<"rng"<<"tpm"<<"nvram"<<"panic"
 
 #define QEMU_DEVICE_LIST QStringList()\
+    <<"emulator"\
     <<"disk"<<"filesystem"<<"hostdev"\
     <<"redirdev"<<"smartcard"<<"interface"\
     <<"input"<<"hub"<<"graphics"<<"video"\
     <<"console"<<"serial"<<"parallel"<<"channel"\
     <<"sound"<<"watchdog"<<"memballoon"<<"rng"\
-    <<"tpm"<<"panic"
+    <<"tpm"<<"nvram"<<"panic"
 
 #define LXC_DEVICE_LIST QStringList()\
+    <<"emulator"\
     <<"disk"<<"filesystem"<<"hostdev"\
     <<"smartcard"<<"interface"<<"input"\
     <<"hub"<<"graphics"<<"video"\
     <<"console"<<"serial"<<"parallel"<<"channel"\
-    <<"sound"<<"rng"
+    <<"sound"<<"rng"<<"nvram"
 
 #define XEN_DEVICE_LIST QStringList()\
     <<"DON'T_IMPLEMENTED"
@@ -216,7 +220,6 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     };
     QString deviceType = item->data(Qt::UserRole).toString();
     qDebug()<<item->text()<<deviceType;
-    // TODO: display devices available for current driver
     if ( deviceType == "disk" ) {
         device = new Disk(
                     this,
@@ -261,6 +264,12 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         device = new FileSystems(
                     this,
                     currWorkConnect);
+    } else if ( deviceType == "emulator" ) {
+        device = new Emulator(
+                    this,
+                    currWorkConnect);
+    } else if ( deviceType == "rng" ) {
+        device = new Random(this);
     } else {
         device = new _QWidget(this);
     };

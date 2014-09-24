@@ -13,8 +13,8 @@ QDomDocument PtyWidget::getDevDocument() const
     QDomElement _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement(tag);
-    _devDesc.setAttribute("type", "pty");
 
+    _devDesc.setAttribute("type", "pty");
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     //qDebug()<<doc.toString();

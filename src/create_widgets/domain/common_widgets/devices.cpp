@@ -65,10 +65,9 @@
 
 */
 
-Devices::Devices(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+Devices::Devices(QWidget *parent,
+        virConnectPtr conn, QString _xmlDesc) :
+    _QWidget(parent, conn), xmlDesc(_xmlDesc)
 {
     setObjectName("Computer:Device");
     usedDeviceList = new QListWidget(this);
@@ -186,11 +185,14 @@ void Devices::addDevice()
 {
     QDomDocument doc = chooseNewDevice();
     //qDebug()<<doc.toString();
+    addDeviceToUsedDevList(doc);
+}
+void Devices::addDeviceToUsedDevList(QDomDocument &doc)
+{
     QDomNodeList list = doc.firstChildElement("device").childNodes();
     if ( list.length()==0 ) return;
     QString device, desc, name;
     device = list.item(0).nodeName();
-    QListWidgetItem *item = new QListWidgetItem(usedDeviceList);
     if ( device=="disk" ) {
         // Hard drives, floppy disks, CDROMs
         if (list.item(0).attributes().contains("type"))
@@ -264,11 +266,46 @@ void Devices::addDevice()
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
         name.append(QString("Filesystem %1").arg(desc.toUpper()));
+    } else if ( device=="controller" ) {
+        // Controller
+        if (list.item(0).attributes().contains("type"))
+            desc = list.item(0).attributes().namedItem("type").nodeValue();
+        name.append(QString("Controller %1").arg(desc.toUpper()));
+    } else if ( device=="emulator" ) {
+        // Emulator
+        name.append(QString("Emulator"));
+    } else if ( device=="watchdog" ) {
+        // WatchDog
+        if (list.item(0).attributes().contains("model"))
+            desc = list.item(0).attributes().namedItem("model").nodeValue();
+        name.append(QString("WatchDog %1").arg(desc.toUpper()));
+    } else if ( device=="memballoon" ) {
+        // MemBalloon
+        if (list.item(0).attributes().contains("model"))
+            desc = list.item(0).attributes().namedItem("model").nodeValue();
+        name.append(QString("MemBalloon %1").arg(desc.toUpper()));
+    } else if ( device=="rng" ) {
+        // Random
+        if (list.item(0).attributes().contains("model"))
+            desc = list.item(0).attributes().namedItem("model").nodeValue();
+        name.append(QString("RNG %1").arg(desc.toUpper()));
+    } else if ( device=="tpm" ) {
+        // TPM
+        if (list.item(0).attributes().contains("model"))
+            desc = list.item(0).attributes().namedItem("model").nodeValue();
+        name.append(QString("TPM %1").arg(desc.toUpper()));
+    } else if ( device=="nvram" ) {
+        // NVRAM
+        name.append(QString("NVRAM"));
+    } else if ( device=="panic" ) {
+        // Panic
+        name.append(QString("Panic"));
     } else return;
+    QListWidgetItem *item = new QListWidgetItem(usedDeviceList);
     item->setText(name);
     item->setData(Qt::UserRole, doc.toString());
     usedDeviceList->addItem(item);
-    qDebug()<<"added New Device";
+    qDebug()<<"added New Device:"<<name;
 }
 void Devices::delDevice()
 {
@@ -313,8 +350,25 @@ void Devices::execDevExistanceMenuResult(Device_Action ret)
 }
 void Devices::detectAttachedDevicesFromXMLDesc()
 {
-    if ( currDomain!=NULL ) {
-        // TODO : read devices from XML domain description
+    if ( !xmlDesc.isEmpty() ) {
+        // read devices from XML domain description
+        QDomDocument doc;
+        doc.setContent(xmlDesc);
+        QDomNodeList list = doc
+                .firstChildElement("domain")
+                .firstChildElement("devices")
+                .childNodes();
+        uint j = 0;
+        uint count = list.length();
+        for (uint i=0; i<count;i++) {
+            if (!list.item(j).isNull()) {
+                QDomDocument _device;
+                QDomElement _devDesc = _device.createElement("device");
+                _devDesc.appendChild(list.item(j));
+                _device.appendChild(_devDesc);
+                addDeviceToUsedDevList(_device);
+            } else ++j;
+        };
     }
 }
 void Devices::saveDeviceXMLDescription(QString &xmlDesc)

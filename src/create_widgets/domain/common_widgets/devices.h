@@ -13,7 +13,8 @@ class Devices : public _QWidget
 public:
     explicit Devices(
             QWidget *parent = 0,
-            virConnectPtr conn = NULL);
+            virConnectPtr conn = NULL,
+            QString _xmlDesc = QString());
     ~Devices();
 
 signals:
@@ -33,19 +34,22 @@ private:
 
     DeviceStack     *deviceStack = NULL;
 
+    const QString    xmlDesc;
+
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument    getDevDocument() const;
 
 private slots:
-    QDomDocument chooseNewDevice();
-    void addDevice();
-    void delDevice();
-    void showDevice();
-    void showDevice(int);
-    void showContextMenu(const QPoint&);
-    void execDevExistanceMenuResult(Device_Action);
-    void detectAttachedDevicesFromXMLDesc();
-    void saveDeviceXMLDescription(QString&);
+    QDomDocument    chooseNewDevice();
+    void            addDevice();
+    void            addDeviceToUsedDevList(QDomDocument&);
+    void            delDevice();
+    void            showDevice();
+    void            showDevice(int);
+    void            showContextMenu(const QPoint&);
+    void            execDevExistanceMenuResult(Device_Action);
+    void            detectAttachedDevicesFromXMLDesc();
+    void            saveDeviceXMLDescription(QString&);
 
 };
 

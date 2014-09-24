@@ -27,6 +27,7 @@ QDomDocument FileWidget::getDevDocument() const
     _target.setAttribute("port", 0);
     _devDesc.appendChild(_target);
 
+    _devDesc.setAttribute("type", "file");
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     //qDebug()<<doc.toString();

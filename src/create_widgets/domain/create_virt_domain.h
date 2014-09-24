@@ -38,7 +38,6 @@ private:
     QString          type;
     QString          arch;
     QString          os_type;
-    QString          emulator;
     QString          memUnit;
     QString          memValue;
     QTabWidget      *tabWidget;

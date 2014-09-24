@@ -97,12 +97,10 @@ CreateVirtDomain::CreateVirtDomain(
     restoreGeometry(settings.value("DomCreateGeometry").toByteArray());
     xml = new QTemporaryFile(this);
     xml->setAutoRemove(false);
-    if ( xmlFileName.isEmpty() ) {
-        xml->setFileTemplate(
+    xml->setFileTemplate(
                 QString("%1%2XML_Desc-XXXXXX.xml")
                 .arg(QDir::tempPath())
                 .arg(QDir::separator()));
-    } else xml->setFileName(xmlFileName);
     setEnabled(false);
     timerId = startTimer(PERIOD);
     readyDataLists();
@@ -182,30 +180,24 @@ void CreateVirtDomain::readCapabilities()
                firstChildElement("cell").
                firstChildElement("memory").
                attribute("unit", "???");
-    /*  search emulator from guest with system achitecture  */
-    QDomElement el = doc.firstChildElement("capabilities").
-               firstChildElement("guest");
-    while ( !el.isNull() ) {
-        QDomElement _el = el.firstChildElement("arch");
-        if ( !_el.isNull() && arch==_el.attribute("name", "???") ) {
-               emulator = _el.
-                        firstChildElement("emulator").
-                        firstChild().toText().data();
-                break;
-        } else el = el.nextSiblingElement("guest");
-    };
-    qDebug()<<arch<<os_type<<type<<emulator<<memUnit<<memValue;
+    qDebug()<<arch<<os_type<<type<<memUnit<<memValue;
 }
 void CreateVirtDomain::readyDataLists()
 {
+    readCapabilities();
     if ( xmlFileName.isEmpty() ) {
         // create/define new VM
-        readCapabilities();
     } else {
-        // edit exist VM parameters
-        xml->open();
-        xmlDesc.append(xml->readAll().constData());
-        xml->close();
+        // read for edit exist VM parameters
+        QTemporaryFile *_xml =
+                new QTemporaryFile(this);
+        _xml->setFileName(xmlFileName);
+        _xml->setAutoRemove(true);
+        _xml->open();
+        xmlDesc.append(_xml->readAll().constData());
+        _xml->close();
+        delete _xml;
+        _xml = NULL;
         //qDebug()<<xmlDesc<<"desc";
     };
     ready = true;
@@ -258,15 +250,11 @@ void CreateVirtDomain::buildXMLDescription()
      * then common description append it
      */
     QDomDocument doc = QDomDocument();
-    QDomElement root, devices, _emulator, _element;
+    QDomElement root, devices, _element;
     root = doc.createElement("domain");
     root.setAttribute("type", type.toLower());
     doc.appendChild(root);
     devices = doc.createElement("devices");
-    _emulator = doc.createElement("emulator");
-    QDomText data = doc.createTextNode(emulator);
-    _emulator.appendChild(data);
-    devices.appendChild(_emulator);
     WidgetList::const_iterator Wdg;
     for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
         if ( NULL==*Wdg ) continue;
@@ -292,7 +280,6 @@ void CreateVirtDomain::buildXMLDescription()
             else ++j;
         };
     };
-    // append Device description
     root.appendChild(devices);
     //qDebug()<<doc.toString();
 
@@ -313,24 +300,26 @@ void CreateVirtDomain::set_Result()
 void CreateVirtDomain::create_specified_widgets()
 {
     if ( type.toLower() == "lxc" ) {
-        wdgList.append(new General(this, type, arch, emulator));
+        wdgList.append(new General(this, type, arch));
         wdgList.append(new LXC_OSBooting(this, os_type, arch));
         wdgList.append(new Memory(this, memUnit, memValue));
         wdgList.append(new CPU(this));
         wdgList.append(new Devices(
                            this,
-                           currWorkConnect));
+                           currWorkConnect,
+                           xmlDesc));
         wdgList.append(new SecurityLabel(this));
     } else if ( type.toLower() == "qemu" ) {
-        wdgList.append(new General(this, type, arch, emulator));
+        wdgList.append(new General(this, type, arch));
         wdgList.append(new Memory(this, memUnit, memValue));
         wdgList.append(new CPU(this));
         wdgList.append(new Devices(
                            this,
-                           currWorkConnect));
+                           currWorkConnect,
+                           xmlDesc));
         wdgList.append(new SecurityLabel(this));
     } else if ( type.toLower() == "xen" ) {
-        wdgList.append(new General(this, type, arch, emulator));
+        wdgList.append(new General(this, type, arch));
     } else wdgList.clear();
 }
 void CreateVirtDomain::set_specified_Tabs()

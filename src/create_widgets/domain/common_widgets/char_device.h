@@ -1,6 +1,7 @@
 #ifndef CHAR_DEVICE_H
 #define CHAR_DEVICE_H
 
+#include <QStackedWidget>
 #include "char_dev_widgets/pty_widget.h"
 #include "char_dev_widgets/dev_widget.h"
 #include "char_dev_widgets/file_widget.h"
@@ -26,6 +27,7 @@ public:
     TcpWidget       *tcpWdg;
     UdpWidget       *udpWdg;
     UnixWidget      *unixWdg;
+    QStackedWidget  *charDevWdg;
     QVBoxLayout     *commonLayout;
 
 signals:
@@ -35,9 +37,6 @@ private:
 
 public slots:
     QDomDocument getDevDocument() const;
-
-private slots:
-    virtual void devTypeChanged(int);
 };
 
 #endif // CHAR_DEVICE_H

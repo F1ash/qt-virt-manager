@@ -53,6 +53,7 @@ QDomDocument TcpWidget::getDevDocument() const
     _target.setAttribute("port", "0");
     _devDesc.appendChild(_target);
 
+    _devDesc.setAttribute("type", "tcp");
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     //qDebug()<<doc.toString();

@@ -21,6 +21,8 @@
 #include "common_widgets/disk.h"
 #include "common_widgets/security_label.h"
 #include "common_widgets/encryption.h"
+#include "common_widgets/emulator.h"
+#include "common_widgets/random.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

@@ -28,18 +28,20 @@ CharDevice::CharDevice(
     udpWdg  = new UdpWidget(this, tag);
     unixWdg = new UnixWidget(this, tag);
 
+    charDevWdg = new QStackedWidget(this);
+    charDevWdg->addWidget(ptyWdg);
+    charDevWdg->addWidget(devWdg);
+    charDevWdg->addWidget(fileWdg);
+    charDevWdg->addWidget(tcpWdg);
+    charDevWdg->addWidget(udpWdg);
+    charDevWdg->addWidget(unixWdg);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(devType);
-    commonLayout->addWidget(ptyWdg);
-    commonLayout->addWidget(devWdg);
-    commonLayout->addWidget(fileWdg);
-    commonLayout->addWidget(tcpWdg);
-    commonLayout->addWidget(udpWdg);
-    commonLayout->addWidget(unixWdg);
+    commonLayout->addWidget(charDevWdg);
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
     connect(devType, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(devTypeChanged(int)));
+            charDevWdg, SLOT(setCurrentIndex(int)));
     devType->addItems(CHAR_DEV_TYPE);
     QStringList l = CHAR_DEV_TYPE_LIST;
     for (int i=0; i<devType->count();i++) {
@@ -50,39 +52,7 @@ CharDevice::CharDevice(
 /* public slots */
 QDomDocument CharDevice::getDevDocument() const
 {
-    QDomDocument doc;
-    switch (devType->currentIndex()) {
-    case 0:
-        doc = ptyWdg->getDevDocument();
-        break;
-    case 1:
-        doc = devWdg->getDevDocument();
-        break;
-    case 2:
-        doc = fileWdg->getDevDocument();
-        break;
-    case 3:
-        doc = tcpWdg->getDevDocument();
-        break;
-    case 4:
-        doc = udpWdg->getDevDocument();
-        break;
-    case 5:
-        doc = unixWdg->getDevDocument();
-        break;
-    default:
-        break;
-    };
-    return doc;
-}
-
-/* private slots */
-void CharDevice::devTypeChanged(int i)
-{
-    ptyWdg->setVisible(i==0);
-    devWdg->setVisible(i==1);
-    fileWdg->setVisible(i==2);
-    tcpWdg->setVisible(i==3);
-    udpWdg->setVisible(i==4);
-    unixWdg->setVisible(i==5);
+    _QWidget *wdg = static_cast<_QWidget*>(
+                charDevWdg->currentWidget());
+    return wdg->getDevDocument();
 }

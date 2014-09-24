@@ -108,6 +108,12 @@ void DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
         device = new FileSystems(
                     this,
                     currWorkConnect);
+    } else if ( deviceType == "emulator" ) {
+        device = new Emulator(
+                    this,
+                    currWorkConnect);
+    } else if ( deviceType == "rng" ) {
+        device = new Random(this);
     } else {
         device = new _QWidget(this);
     };
