@@ -180,7 +180,7 @@ void CreateVirtDomain::readCapabilities()
                firstChildElement("cell").
                firstChildElement("memory").
                attribute("unit", "???");
-    qDebug()<<arch<<os_type<<type<<memUnit<<memValue;
+    qDebug()<<"in Host:"<<arch<<os_type<<type<<memUnit<<memValue;
 }
 void CreateVirtDomain::readyDataLists()
 {
@@ -300,26 +300,26 @@ void CreateVirtDomain::set_Result()
 void CreateVirtDomain::create_specified_widgets()
 {
     if ( type.toLower() == "lxc" ) {
-        wdgList.append(new General(this, type, arch));
+        wdgList.append(new General(this, type, arch, xmlDesc));
         wdgList.append(new LXC_OSBooting(this, os_type, arch));
-        wdgList.append(new Memory(this, memUnit, memValue));
+        wdgList.append(new Memory(this, memUnit, memValue, xmlDesc));
         wdgList.append(new CPU(this));
         wdgList.append(new Devices(
                            this,
                            currWorkConnect,
                            xmlDesc));
-        wdgList.append(new SecurityLabel(this));
+        wdgList.append(new SecurityLabel(this, xmlDesc));
     } else if ( type.toLower() == "qemu" ) {
-        wdgList.append(new General(this, type, arch));
-        wdgList.append(new Memory(this, memUnit, memValue));
+        wdgList.append(new General(this, type, arch, xmlDesc));
+        wdgList.append(new Memory(this, memUnit, memValue, xmlDesc));
         wdgList.append(new CPU(this));
         wdgList.append(new Devices(
                            this,
                            currWorkConnect,
                            xmlDesc));
-        wdgList.append(new SecurityLabel(this));
+        wdgList.append(new SecurityLabel(this, xmlDesc));
     } else if ( type.toLower() == "xen" ) {
-        wdgList.append(new General(this, type, arch));
+        wdgList.append(new General(this, type, arch, xmlDesc));
     } else wdgList.clear();
 }
 void CreateVirtDomain::set_specified_Tabs()

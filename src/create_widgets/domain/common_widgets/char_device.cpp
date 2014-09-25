@@ -8,9 +8,6 @@
     <<"UDP net console (udp)"\
     <<"Unix socket (unix)"
 
-#define CHAR_DEV_TYPE_LIST QStringList()\
-    <<"pty"<<"dev"<<"file"<<"tcp"<<"udp"<<"unix"
-
 CharDevice::CharDevice(
         QWidget *parent,
         virConnectPtr conn,
@@ -43,10 +40,6 @@ CharDevice::CharDevice(
     connect(devType, SIGNAL(currentIndexChanged(int)),
             charDevWdg, SLOT(setCurrentIndex(int)));
     devType->addItems(CHAR_DEV_TYPE);
-    QStringList l = CHAR_DEV_TYPE_LIST;
-    for (int i=0; i<devType->count();i++) {
-        devType->setItemData(i, l.at(i), Qt::UserRole);
-    }
 }
 
 /* public slots */

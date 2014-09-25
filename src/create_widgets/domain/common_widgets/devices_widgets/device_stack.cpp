@@ -270,6 +270,10 @@ void DeviceStack::showDevice(QListWidgetItem *item)
                     currWorkConnect);
     } else if ( deviceType == "rng" ) {
         device = new Random(this);
+    } else if ( deviceType == "memballoon" ) {
+        device = new MemBalloon(
+                    this,
+                    currWorkConnect);
     } else {
         device = new _QWidget(this);
     };

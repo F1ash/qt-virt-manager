@@ -1,7 +1,8 @@
 #include "security_label.h"
 
-SecurityLabel::SecurityLabel(QWidget *parent) :
-    _QWidget(parent)
+SecurityLabel::SecurityLabel(
+        QWidget *parent, QString _xmlDesc) :
+    _QWidget(parent), xmlDesc(_xmlDesc)
 {
     setObjectName("Security-High");
 
@@ -63,6 +64,7 @@ SecurityLabel::SecurityLabel(QWidget *parent) :
             this, SLOT(addSecLabel()));
     connect(del, SIGNAL(clicked()),
             this, SLOT(delSecLabel()));
+    readXMLDesciption();
 }
 
 /* public slots */
@@ -172,4 +174,11 @@ void SecurityLabel::delSecLabel()
         list->takeItem(list->row(l.at(0)));
     };
     list->clearSelection();
+}
+void SecurityLabel::readXMLDesciption()
+{
+    if ( xmlDesc.isEmpty() ) return;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _domain = doc.firstChildElement("domain");
 }

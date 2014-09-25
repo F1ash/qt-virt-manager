@@ -189,6 +189,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/encryption.h
   src/create_widgets/domain/common_widgets/emulator.h
   src/create_widgets/domain/common_widgets/random.h
+  src/create_widgets/domain/common_widgets/memballoon.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -198,6 +199,10 @@ set (HEADERS
   src/vm_viewer/viewer_toolbar.h
 
   src/vm_viewer/lxc/lxc_viewer.h
+
+  src/state_monitor/domain_state_monitor.h
+  src/state_monitor/domain_monitor_thread.h
+  src/state_monitor/domain_state_viewer.h
 
   # qtermwidget
   src/qtermwidget/lib/Filter.h                
@@ -385,6 +390,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/encryption.cpp
   src/create_widgets/domain/common_widgets/emulator.cpp
   src/create_widgets/domain/common_widgets/random.cpp
+  src/create_widgets/domain/common_widgets/memballoon.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   
@@ -394,6 +400,10 @@ set (SOURCES
   src/vm_viewer/viewer_toolbar.cpp
 
   src/vm_viewer/lxc/lxc_viewer.cpp
+
+  src/state_monitor/domain_state_monitor.cpp
+  src/state_monitor/domain_monitor_thread.cpp
+  src/state_monitor/domain_state_viewer.cpp
 
   # qtermwidget
   src/qtermwidget/lib/BlockArray.cpp

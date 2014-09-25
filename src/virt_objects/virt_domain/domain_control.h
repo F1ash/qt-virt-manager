@@ -27,6 +27,7 @@ public:
 signals:
     void domMsg(QString&);
     void displayRequest(virConnect*, QString, QString);
+    void addToStateMonitor(virConnectPtr, QString&, QString&);
     void domainClosed(QString, QString);
     void migrateToConnect(QStringList&);
 

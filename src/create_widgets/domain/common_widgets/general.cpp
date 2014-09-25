@@ -1,18 +1,25 @@
 #include "general.h"
 
-General::General(QWidget *parent, QString arg1, QString arg2) :
-    _QWidget(parent), type(arg1), arch(arg2)
+General::General(
+        QWidget *parent, QString arg1,
+        QString arg2, QString _xmlDesc) :
+    _QWidget(parent), type(arg1),
+    arch(arg2), xmlDesc(_xmlDesc)
 {
     setObjectName("Domain");
-    typeLabel = new QLabel(QString("Type: %1").arg(type.toUpper()), this);
+    typeLabel = new QLabel(QString("VM Type: %1").arg(type.toUpper()), this);
     archLabel = new QLabel(QString("Host Arch: %1").arg(arch), this);
     nameLabel = new QLabel("Name:", this);
     name = new QLineEdit(this);
+    name->setAlignment(Qt::AlignRight);
     name->setPlaceholderText("Enter VM name");
     uuidLabel = new QLabel("UUID:", this);
-    uuid = new QLabel("", this);
+    uuid = new QLineEdit(this);
+    uuid->setAlignment(Qt::AlignRight);
+    uuid->setPlaceholderText("auto-generate if omitted");
     titleLabel = new QLabel("Title:", this);
     title = new QLineEdit(this);
+    title->setAlignment(Qt::AlignRight);
     title->setPlaceholderText("Enter VM title");
     descLabel = new QLabel("Description:", this);
     description = new QTextEdit(this);
@@ -28,6 +35,7 @@ General::General(QWidget *parent, QString arg1, QString arg2) :
     commonLayout->addWidget(descLabel);
     commonLayout->addWidget(description);
     setLayout(commonLayout);
+    readXMLDesciption();
 }
 
 /* public slots */
@@ -60,4 +68,29 @@ QDomDocument General::getDevDocument() const
     doc.appendChild(_data);
     //qDebug()<<doc.toString();
     return doc;
+}
+
+/* private slots */
+void General::readXMLDesciption()
+{
+    if ( xmlDesc.isEmpty() ) return;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _domain = doc.firstChildElement("domain");
+    name->setText(
+                _domain
+                .firstChildElement("name")
+                .firstChild().toText().data());
+    uuid->setText(
+                _domain
+                .firstChildElement("uuid")
+                .firstChild().toText().data());
+    title->setText(
+                _domain
+                .firstChildElement("title")
+                .firstChild().toText().data());
+    description->setText(
+                _domain
+                .firstChildElement("description")
+                .firstChild().toText().data());
 }

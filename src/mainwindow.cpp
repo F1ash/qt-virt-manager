@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
                    QMainWindow::ForceTabbedDocks
     );
     restoreGeometry(settings.value("Geometry").toByteArray());
+    initDomainStateMonitor();
     initTrayIcon();
     initConnListWidget();
     initToolBar();
@@ -34,6 +35,7 @@ MainWindow::~MainWindow()
                     SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
   disconnect(trayIcon->hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
   disconnect(trayIcon->logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
+  disconnect(trayIcon->monitorAction, SIGNAL(triggered()), domainsStateMonitor, SLOT(changeVisibility()));
   disconnect(trayIcon->closeAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
   disconnect(connListWidget, SIGNAL(removeConnect(QString&)), this, SLOT(removeConnectItem(QString&)));
   disconnect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
@@ -60,6 +62,8 @@ MainWindow::~MainWindow()
   disconnect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
              this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
+  disconnect(domainDockContent, SIGNAL(addToStateMonitor(virConnectPtr,QString&,QString&)),
+             domainsStateMonitor, SLOT(setNewMonitoredDomain(virConnectPtr,QString&,QString&)));
   disconnect(domainDockContent, SIGNAL(domainClosed(QString,QString)),
              this, SLOT(deleteVMDisplay(QString,QString)));
   disconnect(domainDockContent, SIGNAL(migrateToConnect(QStringList&)),
@@ -69,60 +73,64 @@ MainWindow::~MainWindow()
   disconnect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
              this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
 
+  delete domainsStateMonitor;
+  domainsStateMonitor = NULL;
+
   if ( wait_thread!=NULL ) {
       disconnect(wait_thread, SIGNAL(finished()), this, SLOT(closeEvent()));
       disconnect(wait_thread, SIGNAL(refreshProcessingState()), this, SLOT(stopProcessing()));
       delete wait_thread;
-      wait_thread = 0;
+      wait_thread = NULL;
   };
   //qDebug()<<"processing stopped";
   VM_Displayed_Map.clear();
   //qDebug()<<"Viewers cleared";
 
   delete logDockContent;
-  logDockContent = 0;
+  logDockContent = NULL;
   delete logDock;
-  logDock = 0;
+  logDock = NULL;
   //qDebug()<<"LogDock cleared";
 
   delete domainDockContent;
-  domainDockContent = 0;
+  domainDockContent = NULL;
   delete domainDock;
-  domainDock = 0;
+  domainDock = NULL;
   //qDebug()<<"DomDock cleared";
 
   delete networkDockContent;
-  networkDockContent = 0;
+  networkDockContent = NULL;
   delete networkDock;
-  networkDock = 0;
+  networkDock = NULL;
   //qDebug()<<"NetDock cleared";
 
   delete storageVolDockContent;
-  storageVolDockContent = 0;
+  storageVolDockContent = NULL;
   delete storageVolDock;
-  storageVolDock = 0;
+  storageVolDock = NULL;
   //qDebug()<<"SVolDock cleared";
 
   delete storagePoolDockContent;
-  storagePoolDockContent = 0;
+  storagePoolDockContent = NULL;
   delete storagePoolDock;
-  storagePoolDock = 0;
+  storagePoolDock = NULL;
   //qDebug()<<"SPoolDock cleared";
 
   delete connListWidget;
-  connListWidget = 0;
+  connListWidget = NULL;
   //qDebug()<<"ConnListWdg cleared";
 
   delete toolBar;
-  toolBar = 0;
+  toolBar = NULL;
   //qDebug()<<"ToolBar cleared";
 
   delete trayIcon;
-  trayIcon = 0;
+  trayIcon = NULL;
   //qDebug()<<"application stopped";
 }
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
+  domainsStateMonitor->saveCurrentState();
   settings.setValue("Geometry", saveGeometry());
   settings.setValue("State", saveState());
   settings.setValue("ToolBarArea", toolBarArea(toolBar));
@@ -203,6 +211,7 @@ void MainWindow::initTrayIcon()
                       SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
     connect(trayIcon->hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
     connect(trayIcon->logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
+    connect(trayIcon->monitorAction, SIGNAL(triggered()), domainsStateMonitor, SLOT(changeVisibility()));
     connect(trayIcon->closeAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
 }
 void MainWindow::mainWindowUp()
@@ -278,6 +287,10 @@ void MainWindow::initToolBar()
   int area_int = settings.value("ToolBarArea", 4).toInt();
   this->addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
 }
+void MainWindow::initDomainStateMonitor()
+{
+    domainsStateMonitor = new DomainStateMonitor(this);
+}
 void MainWindow::initDockWidgets()
 {
     bool visible;
@@ -326,6 +339,8 @@ void MainWindow::initDockWidgets()
     connect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
     connect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
             this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
+    connect(domainDockContent, SIGNAL(addToStateMonitor(virConnectPtr,QString&,QString&)),
+            domainsStateMonitor, SLOT(setNewMonitoredDomain(virConnectPtr,QString&,QString&)));
     connect(domainDockContent, SIGNAL(domainClosed(QString,QString)),
             this, SLOT(deleteVMDisplay(QString,QString)));
     connect(domainDockContent, SIGNAL(migrateToConnect(QStringList&)),
@@ -404,10 +419,6 @@ void MainWindow::initDockWidgets()
     networkDockContent->setEnabled(false);
     storageVolDockContent->setEnabled(false);
     storagePoolDockContent->setEnabled(false);
-    /*
-     * TODO: add docs for Interfaces, NetFilters, Node(Devices|Info),
-     * Secrets, DomainInfo
-     */
 }
 void MainWindow::editCurrentConnect()
 {

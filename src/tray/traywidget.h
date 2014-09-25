@@ -9,10 +9,10 @@ class TrayIcon : public QSystemTrayIcon
   Q_OBJECT
 public :
   TrayIcon(QWidget *parent);
-  ~TrayIcon();
 
   QAction *hideAction;
   QAction *logUpAction;
+  QAction *monitorAction;
   QAction *closeAction;
 
 private :

@@ -9,9 +9,12 @@ class SecurityLabel : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit SecurityLabel(QWidget *parent = 0);
+    explicit SecurityLabel(
+            QWidget *parent = 0,
+            QString  _xmlDesc = QString());
 
 private:
+    const QString    xmlDesc;
     QCheckBox       *useSecLabel;
     QLabel          *typeLabel, *modelLabel,
                     *relabelLabel;
@@ -39,6 +42,7 @@ private slots:
     QDomDocument readData();
     void addSecLabel();
     void delSecLabel();
+    void readXMLDesciption();
 };
 
 #endif // SECURITY_LABEL_H

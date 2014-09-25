@@ -10,12 +10,14 @@ class General : public _QWidget
 public:
     explicit General(
             QWidget *parent = 0,
-            QString arg1 = "",
-            QString arg2 = "");
+            QString  arg1 = "",
+            QString  arg2 = "",
+            QString  _xmlDesc = QString());
 
 signals:
 
 private:
+    const QString    xmlDesc;
     QVBoxLayout     *commonLayout;
     QLabel          *typeLabel;
     QString          type;
@@ -24,7 +26,7 @@ private:
     QLabel          *nameLabel;
     QLineEdit       *name;
     QLabel          *uuidLabel;
-    QLabel          *uuid;
+    QLineEdit       *uuid;
     QLabel          *titleLabel;
     QLineEdit       *title;
     QLabel          *descLabel;
@@ -33,6 +35,8 @@ private:
 public slots:
     QDomDocument getDevDocument() const;
 
+private slots:
+    void readXMLDesciption();
 };
 
 #endif // GENERAL_H

@@ -1,18 +1,23 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
+#include <QScrollArea>
 #include "create_widgets/domain/_qwidget.h"
 
 class Memory : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit Memory(QWidget *parent = 0, QString arg1 = "", QString arg2 = "");
-    ~Memory();
+    explicit Memory(
+            QWidget *parent = 0,
+            QString  arg1 = "",
+            QString  arg2 = "",
+            QString  _xmlDesc = QString());
 
 signals:
 
 private:
+    const QString    xmlDesc;
     QString          memUnit;
     QString          memValue;
     QLabel          *hostMemory;
@@ -42,15 +47,19 @@ private:
     QGridLayout     *memTuneLayout;
     QWidget         *memTuneWdg;
 
+    QScrollArea     *commonWdg;
+    QVBoxLayout     *scrolledLayout;
+    QWidget         *scrolled;
     QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument getDevDocument() const;
 
 private slots:
-    void changeCurrentMemValue(int);
-    void changeMaximumMemValue(int);
-
+    void         changeCurrentMemValue(int);
+    void         changeMaximumMemValue(int);
+    void         readXMLDesciption();
+    quint64      convertNiBtoKiB(quint64, QString&);
 };
 
 #endif // MEMORY_H

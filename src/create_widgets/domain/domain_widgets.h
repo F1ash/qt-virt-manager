@@ -23,6 +23,7 @@
 #include "common_widgets/encryption.h"
 #include "common_widgets/emulator.h"
 #include "common_widgets/random.h"
+#include "common_widgets/memballoon.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

@@ -1,17 +1,20 @@
 #include "memory.h"
 
-Memory::Memory(QWidget *parent, QString arg1, QString arg2) :
-    _QWidget(parent), memUnit(arg1), memValue(arg2)
+Memory::Memory(
+        QWidget *parent, QString arg1,
+        QString arg2, QString _xmlDesc) :
+    _QWidget(parent), memUnit(arg1),
+    memValue(arg2), xmlDesc(_xmlDesc)
 {
     setObjectName("Memory");
     hostMemory = new QLabel(QString("Host Memory (%1): %2").arg(memUnit).arg(memValue), this);
-    maxMemLabel = new QLabel("Maximum Memory:", this);
+    maxMemLabel = new QLabel("Maximum Memory (KiB):", this);
     maxMemValue = new QSpinBox(this);
-    maxMemValue->setRange(0, memValue.toInt());
+    maxMemValue->setRange(0, memValue.toULongLong());
     connect(maxMemValue, SIGNAL(valueChanged(int)), this, SLOT(changeCurrentMemValue(int)));
-    currMemLabel = new QLabel("Current Memory:", this);
+    currMemLabel = new QLabel("Current Memory (KiB):", this);
     currMemValue = new QSpinBox(this);
-    currMemValue->setRange(0, memValue.toInt());
+    currMemValue->setRange(0, memValue.toULongLong());
     connect(currMemValue, SIGNAL(valueChanged(int)), this, SLOT(changeMaximumMemValue(int)));
     memLayout = new QGridLayout();
     memLayout->addWidget(maxMemLabel, 0, 0);
@@ -30,16 +33,20 @@ Memory::Memory(QWidget *parent, QString arg1, QString arg2) :
     memBackingLayout->addWidget(locked, 2, 1);
     memBackingWdg = new QWidget(this);
     memBackingWdg->setLayout(memBackingLayout);
-    memBackingWdg->setEnabled(false);
+    memBackingWdg->setVisible(false);
     enableMemTune = new QCheckBox("Enable Memory Tuning", this);
     hardLabel = new QLabel("Hard limit (KiB)", this);
     hard_limit = new QSpinBox(this);
+    hard_limit->setRange(0, memValue.toULongLong());
     softLabel = new QLabel("Soft limit (KiB)", this);
     soft_limit = new QSpinBox(this);
+    soft_limit->setRange(0, memValue.toULongLong());
     swapLabel = new QLabel("Swap hard limit (KiB)", this);
     swap_hard_limit = new QSpinBox(this);
+    swap_hard_limit->setRange(0, memValue.toULongLong());
     guaranteeLabel = new QLabel("Min guarantee (KiB)", this);
     min_guarantee = new QSpinBox(this);
+    min_guarantee->setRange(0, memValue.toULongLong());
     memTuneLayout = new QGridLayout();
     memTuneLayout->addWidget(hardLabel, 0, 0);
     memTuneLayout->addWidget(hard_limit, 0, 2);
@@ -51,73 +58,29 @@ Memory::Memory(QWidget *parent, QString arg1, QString arg2) :
     memTuneLayout->addWidget(min_guarantee, 3, 2);
     memTuneWdg = new QWidget(this);
     memTuneWdg->setLayout(memTuneLayout);
-    memTuneWdg->setEnabled(false);
-    commonLayout = new QVBoxLayout();
-    commonLayout->addWidget(hostMemory);
-    commonLayout->addWidget(memWdg);
-    commonLayout->addWidget(enableMemBacking);
-    commonLayout->addWidget(memBackingWdg);
-    commonLayout->addWidget(enableMemTune);
-    commonLayout->addWidget(memTuneWdg);
-    commonLayout->insertStretch(-1);
+    memTuneWdg->setVisible(false);
+
+    scrolledLayout = new QVBoxLayout(this);
+    scrolledLayout->addWidget(hostMemory);
+    scrolledLayout->addWidget(memWdg);
+    scrolledLayout->addWidget(enableMemBacking);
+    scrolledLayout->addWidget(memBackingWdg);
+    scrolledLayout->addWidget(enableMemTune);
+    scrolledLayout->addWidget(memTuneWdg);
+    scrolledLayout->insertStretch(-1);
+    scrolled = new QWidget(this);
+    scrolled->setLayout(scrolledLayout);
+    commonWdg = new QScrollArea(this);
+    commonWdg->setWidget(scrolled);
+    commonWdg->setWidgetResizable(true);
+    commonLayout = new QVBoxLayout(this);
+    commonLayout->addWidget(commonWdg);
     setLayout(commonLayout);
-    connect(enableMemBacking, SIGNAL(toggled(bool)), memBackingWdg, SLOT(setEnabled(bool)));
-    connect(enableMemTune, SIGNAL(toggled(bool)), memTuneWdg, SLOT(setEnabled(bool)));
-}
-Memory::~Memory()
-{
-    disconnect(enableMemBacking, SIGNAL(toggled(bool)), memBackingWdg, SLOT(setEnabled(bool)));
-    disconnect(enableMemTune, SIGNAL(toggled(bool)), memTuneWdg, SLOT(setEnabled(bool)));
-    delete hostMemory;
-    hostMemory = 0;
-    delete maxMemLabel;
-    maxMemLabel = 0;
-    delete currMemLabel;
-    currMemLabel = 0;
-    delete maxMemValue;
-    maxMemValue = 0;
-    delete currMemValue;
-    currMemValue = 0;
-    delete memLayout;
-    memLayout = 0;
-    delete memWdg;
-    memWdg = 0;
-    delete enableMemBacking;
-    enableMemBacking = 0;
-    delete hugepages;
-    hugepages = 0;
-    delete nosharepages;
-    nosharepages = 0;
-    delete locked;
-    locked = 0;
-    delete memBackingLayout;
-    memBackingLayout = 0;
-    delete memBackingWdg;
-    memBackingWdg = 0;
-    delete enableMemTune;
-    enableMemTune = 0;
-    delete hardLabel;
-    hardLabel = 0;
-    delete hard_limit;
-    hard_limit = 0;
-    delete softLabel;
-    softLabel = 0;
-    delete soft_limit;
-    soft_limit = 0;
-    delete swapLabel;
-    swapLabel = 0;
-    delete swap_hard_limit;
-    swap_hard_limit = 0;
-    delete guaranteeLabel;
-    guaranteeLabel = 0;
-    delete min_guarantee;
-    min_guarantee = 0;
-    delete memTuneLayout;
-    memTuneLayout = 0;
-    delete memTuneWdg;
-    memTuneWdg = 0;
-    delete commonLayout;
-    commonLayout = 0;
+    connect(enableMemBacking, SIGNAL(toggled(bool)),
+            memBackingWdg, SLOT(setVisible(bool)));
+    connect(enableMemTune, SIGNAL(toggled(bool)),
+            memTuneWdg, SLOT(setVisible(bool)));
+    readXMLDesciption();
 }
 
 /* public slots */
@@ -130,12 +93,12 @@ QDomDocument Memory::getDevDocument() const
     _memory= doc.createElement("memory");
     data = doc.createTextNode(QString("%1").arg(maxMemValue->value()));
     _memory.appendChild(data);
-    _memory.setAttribute("unit", memUnit);
+    _memory.setAttribute("unit", maxMemValue->suffix());
     _data.appendChild(_memory);
     _currMemory= doc.createElement("currentMemory");
     data = doc.createTextNode(QString("%1").arg(currMemValue->value()));
     _currMemory.appendChild(data);
-    _currMemory.setAttribute("unit", memUnit);
+    _currMemory.setAttribute("unit", currMemValue->suffix());
     _data.appendChild(_currMemory);
 
     if ( enableMemBacking->isChecked() ) {
@@ -201,4 +164,130 @@ void Memory::changeCurrentMemValue(int i)
 void Memory::changeMaximumMemValue(int i)
 {
     if ( maxMemValue->value()<i ) maxMemValue->setValue(i);
+}
+void Memory::readXMLDesciption()
+{
+    if ( xmlDesc.isEmpty() ) return;
+    quint64 _value;
+    QString _unit;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _domain = doc.firstChildElement("domain");
+    _value = _domain
+            .firstChildElement("memory")
+            .firstChild().toText().data()
+            .toULongLong();
+    _unit = _domain
+            .firstChildElement("memory")
+            .attribute("unit");
+    maxMemValue->setValue(
+                convertNiBtoKiB(_value, _unit));
+    _value = _domain
+            .firstChildElement("currentMemory")
+            .firstChild().toText().data()
+            .toULongLong();
+    _unit = _domain
+            .firstChildElement("currentMemory")
+            .attribute("unit");
+    currMemValue->setValue(
+                convertNiBtoKiB(_value, _unit));
+    if ( !_domain.firstChildElement("memoryBacking").isNull() ) {
+        enableMemBacking->setChecked(true);
+        if ( !_domain.firstChildElement("memoryBacking")
+             .firstChildElement("hugepages").isNull() )
+            hugepages->setChecked(true);
+        if ( !_domain.firstChildElement("memoryBacking")
+             .firstChildElement("nosharepages").isNull() )
+            nosharepages->setChecked(true);
+        if ( !_domain.firstChildElement("memoryBacking")
+             .firstChildElement("locked").isNull() )
+            locked->setChecked(true);
+    };
+    if ( !_domain.firstChildElement("memtune").isNull() ) {
+        enableMemTune->setChecked(true);
+        if ( !_domain.firstChildElement("memoryBacking")
+             .firstChildElement("hard_limit").isNull() ) {
+            _value = _domain
+                    .firstChildElement("memoryBacking")
+                    .firstChildElement("hard_limit")
+                    .firstChild().toText().data()
+                    .toULongLong();
+            _unit = _domain
+                    .firstChildElement("memoryBacking")
+                    .firstChildElement("hard_limit")
+                    .attribute("unit");
+            hard_limit->setValue(
+                        convertNiBtoKiB(_value, _unit));
+        };
+        if ( !_domain.firstChildElement("memtune")
+             .firstChildElement("soft_limit").isNull() ) {
+            _value = _domain
+                    .firstChildElement("memoryBacking")
+                    .firstChildElement("soft_limit")
+                    .firstChild().toText().data()
+                    .toULongLong();
+            _unit = _domain
+                    .firstChildElement("memoryBacking")
+                    .firstChildElement("soft_limit")
+                    .attribute("unit");
+            soft_limit->setValue(
+                        convertNiBtoKiB(_value, _unit));
+        };
+        if ( !_domain.firstChildElement("memtune")
+             .firstChildElement("swap_hard_limit").isNull() ) {
+            _value = _domain
+                    .firstChildElement("memoryBacking")
+                    .firstChildElement("swap_hard_limit")
+                    .firstChild().toText().data()
+                    .toULongLong();
+            _unit = _domain
+                    .firstChildElement("memoryBacking")
+                    .firstChildElement("swap_hard_limit")
+                    .attribute("unit");
+            swap_hard_limit->setValue(
+                        convertNiBtoKiB(_value, _unit));
+        };
+        if ( !_domain.firstChildElement("memtune")
+             .firstChildElement("min_guarantee").isNull() ) {
+            _value = _domain
+                    .firstChildElement("memoryBacking")
+                    .firstChildElement("min_guarantee")
+                    .firstChild().toText().data()
+                    .toULongLong();
+            _unit = _domain
+                    .firstChildElement("memoryBacking")
+                    .firstChildElement("min_guarantee")
+                    .attribute("unit");
+            min_guarantee->setValue(
+                        convertNiBtoKiB(_value, _unit));
+        };
+    };
+}
+quint64 Memory::convertNiBtoKiB(quint64 _NiB, QString &_unit)
+{
+    QString bytes = QString("b");
+    if ( _unit=="b" || _unit=="bytes" ) {
+        quint64 _res = _NiB / 1024;
+        return (_res==0)? 1 : _res;
+    } else if ( _unit=="K" || _unit=="KiB" ) {
+        return _NiB;
+    } else if ( _unit=="KB" ) {
+        return convertNiBtoKiB(_NiB*1000, bytes);
+    } else if ( _unit=="M" || _unit=="MiB" ) {
+        return _NiB*1024;
+    } else if ( _unit=="MB" ) {
+        return convertNiBtoKiB(_NiB*1000000, bytes);
+    } else if ( _unit=="G" || _unit=="GiB" ) {
+        return _NiB*1048576;
+    } else if ( _unit=="GB" ) {
+        return convertNiBtoKiB(_NiB*1000000000, bytes);
+    } else if ( _unit=="T" || _unit=="TiB" ) {
+        return _NiB*1073741824;
+    } else if ( _unit=="TB" ) {
+        return convertNiBtoKiB(_NiB*1000000000000, bytes);
+    } else if ( _unit=="E" || _unit=="EiB" ) {
+        return _NiB*1099511627776;
+    } else if ( _unit=="EB" ) {
+        return convertNiBtoKiB(_NiB*1000000000000000, bytes);
+    } else return 0;
 }

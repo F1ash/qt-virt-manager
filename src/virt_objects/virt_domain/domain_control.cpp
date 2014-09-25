@@ -14,7 +14,7 @@ VirtDomainControl::VirtDomainControl(QWidget *parent) :
     domainList->setModel(domainModel);
     domainList->setFocus();
     domainList->setContextMenuPolicy(Qt::CustomContextMenu);
-    //connect(domainList, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(domainDoubleClicked(const QModelIndex&)));
+    connect(domainList, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(domainDoubleClicked(const QModelIndex&)));
     connect(domainList, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(domainClicked(const QPoint&)));
     setCentralWidget(domainList);
     settings.beginGroup("VirtDomainControl");
@@ -44,7 +44,7 @@ VirtDomainControl::~VirtDomainControl()
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
-    //disconnect(domainList, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(domainDoubleClicked(const QModelIndex&)));
+    disconnect(domainList, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(domainDoubleClicked(const QModelIndex&)));
     disconnect(domainList, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(domainClicked(const QPoint&)));
     disconnect(toolBar, SIGNAL(fileForMethod(const QStringList&)), this, SLOT(newVirtDomainFromXML(const QStringList&)));
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
@@ -271,7 +271,8 @@ void VirtDomainControl::domainClicked(const QPoint &p)
 void VirtDomainControl::domainDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<domainModel->DataList.at(index.row())->getName();
+        QString _domainName = domainModel->DataList.at(index.row())->getName();
+        emit addToStateMonitor(currWorkConnect, currConnName, _domainName);
     }
 }
 void VirtDomainControl::execAction(const QStringList &l)

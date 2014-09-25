@@ -16,6 +16,7 @@
 #include "toolbar/toolbar.h"
 #include "wait_thread/wait_thread.h"
 #include "vm_viewer/vm_viewer.h"
+#include "state_monitor/domain_state_monitor.h"
 #include <QDebug>
 
 class MainWindow : public QMainWindow
@@ -37,8 +38,6 @@ private :
     Wait                        *wait_thread = NULL;
     QDockWidget                 *logDock;
     LogDock                     *logDockContent;
-    // TODO: implement common Control widget based on QMainWindow
-    // for connect's resource controls with related widgets
     QDockWidget                 *domainDock;
     VirtDomainControl           *domainDockContent;
     QDockWidget                 *networkDock;
@@ -48,6 +47,7 @@ private :
     QDockWidget                 *storagePoolDock;
     VirtStoragePoolControl      *storagePoolDockContent;
     ViewerMap                    VM_Displayed_Map;
+    DomainStateMonitor          *domainsStateMonitor;
 
 private slots:
     void closeEvent(QCloseEvent*);
@@ -59,6 +59,7 @@ private slots:
     void trayIconActivated(QSystemTrayIcon::ActivationReason);
     void initConnListWidget();
     void initToolBar();
+    void initDomainStateMonitor();
     void editCurrentConnect();
     void createNewConnect();
     void deleteCurrentConnect();
