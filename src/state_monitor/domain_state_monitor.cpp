@@ -1,5 +1,14 @@
 #include "domain_state_monitor.h"
 
+#define CmbBoxStyle QString("\
+QComboBox:hover {\
+    color:          red;\
+    background:     gold;\
+}\
+QComboBox:!hover {\
+    background:     silver;\
+}")
+
 DomainStateMonitor::DomainStateMonitor(QWidget *parent) :
     QMainWindow(parent)
 {
@@ -13,10 +22,16 @@ DomainStateMonitor::DomainStateMonitor(QWidget *parent) :
     setVisible(!settings.value("Visible", false).toBool());
     settings.endGroup();
     monitoredDomainList = new QComboBox(this);
+    monitoredDomainList->setStyleSheet(CmbBoxStyle);
+    monitoredDomainList->setFrame(true);
+    monitoredDomainList->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    monitoredDomainList->setSizePolicy(
+                QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     monitoredDomains = new QStackedWidget(this);
     monitorLayout = new QVBoxLayout();
     monitorLayout->addWidget(monitoredDomainList);
     monitorLayout->addWidget(monitoredDomains);
+    monitorLayout->addStretch(-1);
     monitorWdg = new QWidget(this);
     monitorWdg->setLayout(monitorLayout);
     setCentralWidget(monitorWdg);
@@ -30,7 +45,7 @@ void DomainStateMonitor::setNewMonitoredDomain(
         QString &connName,
         QString &domainName)
 {
-    QString _id = QString("%1 || %2")
+    QString _id = QString("Domain : %1\nConnect: %2")
             .arg(domainName)
             .arg(connName);
     int idx =

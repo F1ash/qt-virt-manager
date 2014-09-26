@@ -203,6 +203,7 @@ set (HEADERS
   src/state_monitor/domain_state_monitor.h
   src/state_monitor/domain_monitor_thread.h
   src/state_monitor/domain_state_viewer.h
+  src/state_monitor/svg_tamplates.h
 
   # qtermwidget
   src/qtermwidget/lib/Filter.h                
@@ -438,7 +439,7 @@ set (DESKTOP_FILE ${PROJECT_NAME}.desktop)
 project (${PROJECT_NAME})
 
 include_directories (${CMAKE_CURRENT_BINARY_DIR} ${SOURCES_DIRS})
-find_package (Qt4 COMPONENTS QtCore QtGui QtXml REQUIRED)
+find_package (Qt4 COMPONENTS QtCore QtGui QtXml QtSvg REQUIRED)
 include (${QT_USE_FILE})
 qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
 QT4_WRAP_UI(UI_SRCS src/qtermwidget/lib/SearchBar.ui)
