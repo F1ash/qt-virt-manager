@@ -9,7 +9,7 @@
     xmlns:xlink='http://www.w3.org/1999/xlink'\
     xmlns:ev='http://www.w3.org/2001/xml-events'\
     width='100' height='100'>\
-    <g stroke='green' stroke-width='3px'></g>\
+    <g stroke='green' stroke-width='1px'></g>\
     <rect fill='white' fill-opacity='0.6'\
         x='0' y='0' width='100%' height='100%'\
         stroke='red' stroke-width='1'/>\
@@ -24,7 +24,7 @@
     xmlns:xlink='http://www.w3.org/1999/xlink'\
     xmlns:ev='http://www.w3.org/2001/xml-events'\
     width='100' height='100'>\
-    <g stroke='green' stroke-width='3px'></g>\
+    <g stroke='green' stroke-width='1px'></g>\
     <rect fill='white' fill-opacity='0.6'\
         x='0' y='0' width='100%' height='100%'\
         stroke='blue' stroke-width='1'/>\

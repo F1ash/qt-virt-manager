@@ -16,6 +16,7 @@ public:
     explicit DomainStateMonitor(QWidget *parent = 0);
 
 signals:
+    void visibilityChanged(bool);
 
 private:
     QSettings        settings;

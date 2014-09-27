@@ -105,19 +105,18 @@ void DomainStateViewer::setData(
         break;
     };
     monitorName->setText(
-                QString("%1<br>(<b>%2</b>)</br>")
-                .arg(domainName).arg(state));
+                QString("State:<br><b>%1</b></br>").arg(state));
 
     QDomElement _l, line;
     QDomText _data;
     _l = cpuPaint.firstChildElement("line");
-    if ( cpuPaint.childNodes().count()>33 ) {
-        cpuPaint.removeChild(cpuPaint.childNodes().at(34));
+    if ( cpuPaint.childNodes().count()>100 ) {
+        cpuPaint.removeChild(cpuPaint.childNodes().at(101));
     };
     while ( !_l.isNull() ) {
         int _xCoordinate = _l.attribute("x1").toInt();
-        _l.setAttribute("x1", _xCoordinate - 3);
-        _l.setAttribute("x2", _xCoordinate - 3);
+        _l.setAttribute("x1", _xCoordinate - 1);
+        _l.setAttribute("x2", _xCoordinate - 1);
         _l = _l.nextSiblingElement("line");
     };
     line = cpuDoc.createElement("line");
@@ -133,13 +132,13 @@ void DomainStateViewer::setData(
     cpuGraphic->load(cpuDoc.toByteArray());
 
     _l = memPaint.firstChildElement("line");
-    if ( memPaint.childNodes().count()>33 ) {
-        memPaint.removeChild(memPaint.childNodes().at(34));
+    if ( memPaint.childNodes().count()>100 ) {
+        memPaint.removeChild(memPaint.childNodes().at(101));
     };
     while ( !_l.isNull() ) {
         int _xCoordinate = _l.attribute("x1").toInt();
-        _l.setAttribute("x1", _xCoordinate - 3);
-        _l.setAttribute("x2", _xCoordinate - 3);
+        _l.setAttribute("x1", _xCoordinate - 1);
+        _l.setAttribute("x2", _xCoordinate - 1);
         _l = _l.nextSiblingElement("line");
     };
     line = memDoc.createElement("line");

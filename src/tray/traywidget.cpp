@@ -8,7 +8,7 @@ TrayIcon::TrayIcon(QWidget *parent = 0)
   hideAction->setIcon (QIcon::fromTheme("down"));
   logUpAction = new QAction(QString("Show Log Viewer"), this);
   logUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
-  monitorAction = new QAction(QString("Domains State Monitor "), this);
+  monitorAction = new QAction(QString("Domains State Monitor"), this);
   monitorAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
   closeAction = new QAction(QString("Exit"), this);
   closeAction->setIcon (QIcon::fromTheme("exit"));
@@ -29,4 +29,10 @@ TrayIcon::TrayIcon(QWidget *parent = 0)
 void TrayIcon::setLogUpActionText(QString &s)
 {
     logUpAction->setText(s);
+}
+void TrayIcon::stateMonitorVisibilityChanged(bool state)
+{
+    monitorAction->setText(
+                QString("%1 Domains State Monitor")
+                .arg( (state)? "Hide" : "Show" ));
 }

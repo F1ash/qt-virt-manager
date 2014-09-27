@@ -95,6 +95,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/devices_widgets/device_data.h
   src/create_widgets/domain/common_widgets/devices_widgets/device_existance_menu.h
   src/create_widgets/domain/common_widgets/devices_widgets/device_stack.h
+  src/create_widgets/domain/common_widgets/devices_widgets/device_restore_menu.h
   src/create_widgets/domain/common_widgets/char_device.h
   src/create_widgets/domain/common_widgets/char_dev_widgets/pty_widget.h
   src/create_widgets/domain/common_widgets/char_dev_widgets/dev_widget.h
@@ -297,6 +298,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/devices_widgets/device_data.cpp
   src/create_widgets/domain/common_widgets/devices_widgets/device_existance_menu.cpp
   src/create_widgets/domain/common_widgets/devices_widgets/device_stack.cpp
+  src/create_widgets/domain/common_widgets/devices_widgets/device_restore_menu.cpp
   src/create_widgets/domain/common_widgets/char_device.cpp
   src/create_widgets/domain/common_widgets/char_dev_widgets/pty_widget.cpp
   src/create_widgets/domain/common_widgets/char_dev_widgets/dev_widget.cpp

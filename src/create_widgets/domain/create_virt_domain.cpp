@@ -217,7 +217,8 @@ void CreateVirtDomain::timerEvent(QTimerEvent *ev){
             ok = new QPushButton(QIcon::fromTheme("dialog-ok"), "Ok", this);
             ok->setAutoDefault(true);
             connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
-            restore = new QPushButton(QIcon::fromTheme("document-revert"), "Restore", this);
+            restore = new QPushButton(QIcon::fromTheme("go-first"), "Restore", this);
+            restore->setToolTip("Restore all");
             connect(restore, SIGNAL(clicked()), this, SLOT(restoreParameters()));
             cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
             cancel->setAutoDefault(true);
@@ -324,7 +325,7 @@ void CreateVirtDomain::create_specified_widgets()
 }
 void CreateVirtDomain::set_specified_Tabs()
 {
-    tabWidget = new QTabWidget(this);
+    if ( NULL==tabWidget ) tabWidget = new QTabWidget(this);
     WidgetList::const_iterator Wdg;
     for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
         if ( NULL!=*Wdg ) {
@@ -336,6 +337,7 @@ void CreateVirtDomain::set_specified_Tabs()
 }
 void CreateVirtDomain::delete_specified_widgets()
 {
+    tabWidget->clear();
     WidgetList::const_iterator Wdg;
     for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
         if ( NULL!=*Wdg ) {
@@ -343,12 +345,24 @@ void CreateVirtDomain::delete_specified_widgets()
         };
     };
     wdgList.clear();
+    commonLayout->removeWidget(tabWidget);
     delete tabWidget;
     tabWidget = 0;
 }
 void CreateVirtDomain::restoreParameters()
 {
-
+    setEnabled(false);
+    tabWidget->clear();
+    WidgetList::const_iterator Wdg;
+    for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
+        if ( NULL!=*Wdg ) {
+            delete *Wdg;
+        };
+    };
+    wdgList.clear();
+    create_specified_widgets();
+    set_specified_Tabs();
+    setEnabled(true);
 }
 
 void CreateVirtDomain::sendConnErrors()

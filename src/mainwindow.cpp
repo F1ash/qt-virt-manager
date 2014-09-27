@@ -72,6 +72,8 @@ MainWindow::~MainWindow()
   disconnect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
   disconnect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
              this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
+  disconnect(domainsStateMonitor, SIGNAL(visibilityChanged(bool)),
+             trayIcon, SLOT(stateMonitorVisibilityChanged(bool)));
 
   delete domainsStateMonitor;
   domainsStateMonitor = NULL;
@@ -204,6 +206,10 @@ void MainWindow::closeEvent()
 {
     this->close();
 }
+void MainWindow::initDomainStateMonitor()
+{
+    domainsStateMonitor = new DomainStateMonitor(this);
+}
 void MainWindow::initTrayIcon()
 {
     trayIcon = new TrayIcon(this);
@@ -213,6 +219,10 @@ void MainWindow::initTrayIcon()
     connect(trayIcon->logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
     connect(trayIcon->monitorAction, SIGNAL(triggered()), domainsStateMonitor, SLOT(changeVisibility()));
     connect(trayIcon->closeAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
+    connect(domainsStateMonitor, SIGNAL(visibilityChanged(bool)),
+            trayIcon, SLOT(stateMonitorVisibilityChanged(bool)));
+    trayIcon->stateMonitorVisibilityChanged(
+                domainsStateMonitor->isVisible());
 }
 void MainWindow::mainWindowUp()
 {
@@ -286,10 +296,6 @@ void MainWindow::initToolBar()
   connect(toolBar, SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
   int area_int = settings.value("ToolBarArea", 4).toInt();
   this->addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
-}
-void MainWindow::initDomainStateMonitor()
-{
-    domainsStateMonitor = new DomainStateMonitor(this);
 }
 void MainWindow::initDockWidgets()
 {

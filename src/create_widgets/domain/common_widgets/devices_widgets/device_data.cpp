@@ -9,9 +9,12 @@ DeviceData::DeviceData(
     devName = new QLabel(this);
     save = new QPushButton(QIcon::fromTheme("document-save"), "Save", this);
     save->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    revert = new QPushButton(QIcon::fromTheme("document-revert"), "Reset", this);
+    revert = new QPushButton(QIcon::fromTheme("document-revert"), "Revert", this);
+    revert->setToolTip("Revert to previous state");
     revert->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    revert->setEnabled(false);
+    restoreMenu = new DeviceRestoreMenu(this);
+    restoreMenu->revertData->setEnabled(false);
+    revert->setMenu(restoreMenu);
     _close = new QPushButton(QIcon::fromTheme("window-close"), "Close", this);
     _close->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     panelLayout = new QHBoxLayout(this);
@@ -33,7 +36,9 @@ DeviceData::DeviceData(
     setLayout(commonLayout);
     connect(save, SIGNAL(clicked()),
             this, SLOT(saveDeviceData()));
-    connect(revert, SIGNAL(clicked()),
+    connect(restoreMenu->revertData, SIGNAL(triggered()),
+            this, SLOT(revertDeviceData()));
+    connect(restoreMenu->resetData, SIGNAL(triggered()),
             this, SLOT(revertDeviceData()));
     connect(_close, SIGNAL(clicked()),
             this, SLOT(_closeDeviceData()));
@@ -51,14 +56,7 @@ QDomDocument DeviceData::getResult() const
 }
 void DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
 {
-    if ( device!=NULL ) {
-        infoLayout->removeWidget(device);
-        disconnect(device, SIGNAL(dataChanged()),
-                   this, SLOT(currentStateChanged()));
-        delete device;
-        device = NULL;
-        setStartState();
-    };
+    if ( device!=NULL ) _closeDeviceData();
     devName->setText(QString("<b>%1</b>").arg(deviceName));
     QDomDocument doc;
     doc.setContent(xmlDesc);
@@ -122,6 +120,7 @@ void DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
         device = new _QWidget(this);
     };
     infoLayout->insertWidget(0, device, -1);
+    DeviceXMLDesc = xmlDesc;
     currentDeviceXMLDesc = xmlDesc;
     device->setDeviceData(xmlDesc);
     connect(device, SIGNAL(dataChanged()),
@@ -132,7 +131,7 @@ void DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
 void DeviceData::currentStateChanged()
 {
     currentStateSaved = false;
-    revert->setEnabled(true);
+    restoreMenu->revertData->setEnabled(true);
 }
 void DeviceData::readNetworkList()
 {
@@ -189,19 +188,26 @@ void DeviceData::readNodeDevicesList()
 }
 void DeviceData::saveDeviceData()
 {
-    // save device data as null-point
+    // save device data as previous state
     if ( NULL!=device ) {
         currentDeviceXMLDesc = device->getDevDocument().toString();
     };
     currentStateSaved = true;
-    revert->setEnabled(false);
+    restoreMenu->revertData->setEnabled(false);
 }
 void DeviceData::revertDeviceData()
 {
-    // restore device data from null-point
-    device->setDeviceData(currentDeviceXMLDesc);
+    QAction *act = static_cast<QAction*>(sender());
+    if ( act==restoreMenu->revertData ) {
+        // revert device data from previous state
+        device->setDeviceData(currentDeviceXMLDesc);
+    } else if ( act==restoreMenu->resetData ) {
+        // restore device data from null-point
+        currentDeviceXMLDesc.clear();
+        device->setDeviceData(DeviceXMLDesc);
+    };
     currentStateSaved = true;
-    revert->setEnabled(false);
+    restoreMenu->revertData->setEnabled(false);
 }
 void DeviceData::_closeDeviceData()
 {
@@ -215,8 +221,10 @@ void DeviceData::_closeDeviceData()
         if ( answer==QMessageBox::Ok )
             saveDeviceData();
     };
-    if ( NULL!=device && !currentDeviceXMLDesc.isEmpty() )
+    if ( NULL!=device && !currentDeviceXMLDesc.isEmpty() ) {
+        // save device data as null-point
         emit saveDeviceXMLDesc(currentDeviceXMLDesc);
+    };
     if ( NULL!=device ) {
         infoLayout->removeWidget(device);
         disconnect(device, SIGNAL(dataChanged()),
@@ -231,7 +239,7 @@ void DeviceData::setStartState()
     devName->clear();
     currentDeviceXMLDesc.clear();
     currentStateSaved = true;
-    revert->setEnabled(false);
+    restoreMenu->revertData->setEnabled(false);
 }
 
 /* unused without

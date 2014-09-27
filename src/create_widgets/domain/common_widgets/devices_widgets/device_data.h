@@ -8,6 +8,7 @@
 #include <QScrollArea>
 #include <QMessageBox>
 #include "create_widgets/domain/domain_widgets.h"
+#include "device_restore_menu.h"
 
 class DeviceData : public QWidget
 {
@@ -25,6 +26,8 @@ private:
     QLabel          *devName;
     QPushButton     *save;
     QPushButton     *revert;
+    DeviceRestoreMenu
+                    *restoreMenu;
     QPushButton     *_close;
     QHBoxLayout     *panelLayout;
     QWidget         *panel;
@@ -36,6 +39,7 @@ private:
     QVBoxLayout     *commonLayout;
 
     bool             currentStateSaved = true;
+    QString          DeviceXMLDesc;
     QString          currentDeviceXMLDesc;
     QStringList      devices;
     QStringList      nets;

@@ -40,6 +40,8 @@ CharDevice::CharDevice(
     connect(devType, SIGNAL(currentIndexChanged(int)),
             charDevWdg, SLOT(setCurrentIndex(int)));
     devType->addItems(CHAR_DEV_TYPE);
+    connect(devType, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */

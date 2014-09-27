@@ -20,6 +20,7 @@ private :
 
 public slots:
   void setLogUpActionText(QString&);
+  void stateMonitorVisibilityChanged(bool);
 };
 
 #endif

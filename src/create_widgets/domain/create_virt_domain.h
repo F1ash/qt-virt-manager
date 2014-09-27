@@ -40,7 +40,7 @@ private:
     QString          os_type;
     QString          memUnit;
     QString          memValue;
-    QTabWidget      *tabWidget;
+    QTabWidget      *tabWidget = NULL;
     QCheckBox       *showDescription;
     QPushButton     *ok;
     QPushButton     *restore;

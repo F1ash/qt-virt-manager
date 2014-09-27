@@ -54,12 +54,12 @@ private slots:
     void closeEvent();
     void changeVisibility();
     void mainWindowUp();
-    void initDockWidgets();
+    void initDomainStateMonitor();
     void initTrayIcon();
     void trayIconActivated(QSystemTrayIcon::ActivationReason);
     void initConnListWidget();
     void initToolBar();
-    void initDomainStateMonitor();
+    void initDockWidgets();
     void editCurrentConnect();
     void createNewConnect();
     void deleteCurrentConnect();

@@ -4,9 +4,11 @@
 QComboBox:hover {\
     color:          red;\
     background:     gold;\
+    min-height:     50px;\
 }\
 QComboBox:!hover {\
     background:     silver;\
+    min-height:     50px;\
 }")
 
 DomainStateMonitor::DomainStateMonitor(QWidget *parent) :
@@ -17,9 +19,9 @@ DomainStateMonitor::DomainStateMonitor(QWidget *parent) :
     setContentsMargins(0, 0, 0, 5);
     setWindowTitle("Domain State Monitor");
     settings.beginGroup("DomainStateMonitor");
-    restoreState(settings.value("State").toByteArray());
+    //restoreState(settings.value("State").toByteArray());
     restoreGeometry(settings.value("Geometry").toByteArray());
-    setVisible(!settings.value("Visible", false).toBool());
+    setVisible(settings.value("Visible", false).toBool());
     settings.endGroup();
     monitoredDomainList = new QComboBox(this);
     monitoredDomainList->setStyleSheet(CmbBoxStyle);
@@ -65,11 +67,12 @@ void DomainStateMonitor::setNewMonitoredDomain(
 void DomainStateMonitor::changeVisibility()
 {
     setVisible(!isVisible());
+    emit visibilityChanged(isVisible());
 }
 void DomainStateMonitor::saveCurrentState()
 {
     settings.beginGroup("DomainStateMonitor");
-    settings.setValue("State", saveState());
+    //settings.setValue("State", saveState());
     settings.setValue("Geometry", saveGeometry());
     settings.setValue("Visible", isVisible());
     settings.endGroup();
@@ -80,7 +83,6 @@ void DomainStateMonitor::saveCurrentState()
 void DomainStateMonitor::closeEvent(QCloseEvent *ev)
 {
     ev->ignore();
-    changeVisibility();
 }
 void DomainStateMonitor::removeClosedViewer()
 {
