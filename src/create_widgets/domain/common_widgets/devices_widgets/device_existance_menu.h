@@ -4,10 +4,9 @@
 #include <QMenu>
 
 enum Device_Action {
-    ERROR     = -1,
+    ERROR = -1,
     ADD,
-    DEL,
-    SHOW
+    DEL
 };
 
 class DeviceExistanceMenu : public QMenu
@@ -15,13 +14,11 @@ class DeviceExistanceMenu : public QMenu
     Q_OBJECT
 public:
     explicit DeviceExistanceMenu(QWidget *parent = 0, bool valid = false);
-    ~DeviceExistanceMenu();
 
 private:
     bool                 validItem;
     QAction             *addNewDevice;
     QAction             *delSelDevice = NULL;
-    QAction             *showSelDevice = NULL;
     Device_Action        result = ERROR;
 
 signals:

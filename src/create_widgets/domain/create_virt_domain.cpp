@@ -250,7 +250,8 @@ void CreateVirtDomain::buildXMLDescription()
      * build Device description
      * then common description append it
      */
-    QDomDocument doc = QDomDocument();
+    this->setEnabled(false);
+    QDomDocument doc;
     QDomElement root, devices, _element;
     root = doc.createElement("domain");
     root.setAttribute("type", type.toLower());
@@ -259,6 +260,7 @@ void CreateVirtDomain::buildXMLDescription()
     WidgetList::const_iterator Wdg;
     for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
         if ( NULL==*Wdg ) continue;
+        tabWidget->setCurrentWidget(*Wdg);
         QString property = (*Wdg)->objectName().split(":").last();
         QDomNodeList list;
         if ( property=="Device" ) {

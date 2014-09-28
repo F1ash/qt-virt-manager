@@ -78,6 +78,13 @@ void DomainStateMonitor::saveCurrentState()
     settings.endGroup();
     settings.sync();
 }
+void DomainStateMonitor::stopMonitoring()
+{
+    while (monitoredDomainList->count()>0) {
+        DomainStateViewer *wdg = static_cast<DomainStateViewer*>(monitoredDomains->widget(0));
+        wdg->closeDomainStateViewer();
+    };
+}
 
 /* private slots */
 void DomainStateMonitor::closeEvent(QCloseEvent *ev)

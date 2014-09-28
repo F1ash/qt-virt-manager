@@ -24,6 +24,7 @@
 #include "common_widgets/emulator.h"
 #include "common_widgets/random.h"
 #include "common_widgets/memballoon.h"
+#include "edit_widgets/emulator_edit.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

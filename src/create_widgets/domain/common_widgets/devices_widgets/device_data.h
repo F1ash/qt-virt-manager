@@ -49,7 +49,8 @@ private:
 
 public slots:
     QDomDocument getResult() const;
-    void showDevice(QString&, QString&);
+    QString      showDevice(QString&, QString&);
+    QString      _closeDeviceData();
 
 private slots:
     void currentStateChanged();
@@ -57,7 +58,6 @@ private slots:
     void readNodeDevicesList();
     void saveDeviceData();
     void revertDeviceData();
-    void _closeDeviceData();
     void setStartState();
 
     void sendConnErrors();

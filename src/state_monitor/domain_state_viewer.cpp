@@ -51,8 +51,6 @@ DomainStateViewer::DomainStateViewer(QWidget *parent,
 }
 
 /* public slots */
-
-/* private slots */
 void DomainStateViewer::closeDomainStateViewer()
 {
     if ( timerId>0 ) {
@@ -60,13 +58,16 @@ void DomainStateViewer::closeDomainStateViewer()
         timerId = 0;
     };
     setEnabled(false);
+    domainMonitorThread->deleteLater();
     virConnectClose(currWorkConn);
     close();
     emit viewerClosed();
 }
+
+/* private slots */
 void DomainStateViewer::timerEvent(QTimerEvent *ev)
 {
-    if ( timerId==ev->timerId() ) {
+    if ( timerId==ev->timerId() && currWorkConn!=NULL ) {
         if ( !domainMonitorThread->isRunning() )
             domainMonitorThread->start();
     }

@@ -5,6 +5,7 @@
  *
     <!- -------------------------- ->
     Devices
+        Emulator
         Hard drives, floppy disks, CDROMs
         Filesystems
         Device Addresses
@@ -71,8 +72,9 @@ Devices::Devices(QWidget *parent,
 {
     setObjectName("Computer:Device");
     usedDeviceList = new QListWidget(this);
+    usedDeviceList->setSelectionMode(QAbstractItemView::SingleSelection);
     usedDeviceList->setContextMenuPolicy(Qt::CustomContextMenu);
-    usedDeviceList->setSortingEnabled(true);
+    usedDeviceList->setSortingEnabled(false);
     connect(usedDeviceList,
             SIGNAL(customContextMenuRequested(const QPoint&)),
             this,
@@ -101,8 +103,10 @@ Devices::Devices(QWidget *parent,
     commonLayout->addWidget(listWidget, 3);
     commonLayout->addWidget(infoWidget, 8);
     detectAttachedDevicesFromXMLDesc();
-    connect(usedDeviceList, SIGNAL(currentRowChanged(int)),
-            this, SLOT(showDevice(int)));
+    connect(usedDeviceList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+            this, SLOT(showDevice(QListWidgetItem*,QListWidgetItem*)));
+    connect(usedDeviceList, SIGNAL(itemSelectionChanged()),
+            this, SLOT(showDevice()));
     connect(infoWidget, SIGNAL(saveDeviceXMLDesc(QString&)),
             this, SLOT(saveDeviceXMLDescription(QString&)));
 }
@@ -148,7 +152,10 @@ QDomDocument Devices::getDevDocument() const
      * parse usedDeviceList
      */
     //qDebug()<<"Device result";
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
+    QString _ret = infoWidget->_closeDeviceData();
+    if ( !_ret.isEmpty() )
+        usedDeviceList->currentItem()->setData(Qt::UserRole, _ret);
     QDomElement devices = doc.createElement("devices");
     for (int i=0; i<usedDeviceList->count(); i++) {
         QDomDocument _doc = QDomDocument();
@@ -301,33 +308,70 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc)
         // Panic
         name.append(QString("Panic"));
     } else return;
-    QListWidgetItem *item = new QListWidgetItem(usedDeviceList);
-    item->setText(name);
-    item->setData(Qt::UserRole, doc.toString());
-    usedDeviceList->addItem(item);
+    // find DeviceName in Order
+    int i = -1;
+    foreach (QString _name, devNameOrder) {
+        if ( name.startsWith(_name) ) {
+            i = devNameOrder.indexOf(_name);
+            break;
+        };
+    };
+    // impossible case, but...
+    if (i<0) return;
+    // inser item by Device Name Order
+    bool inserted = false;
+    do {
+        int row = 0;
+         QList<QListWidgetItem*> _family =
+                usedDeviceList->findItems(
+                     devNameOrder.at(i),
+                     Qt::MatchCaseSensitive | Qt::MatchStartsWith);
+         if ( _family.isEmpty() ) {
+             if ( i>0) {
+                 --i;
+                 continue;
+             };
+         } else {
+             QListWidgetItem *lastItem = _family.last();
+             row = usedDeviceList->row( lastItem ) + 1;
+         };
+         QListWidgetItem *item = new QListWidgetItem();
+         item->setText(name);
+         item->setData(Qt::UserRole, doc.toString());
+         usedDeviceList->insertItem(row, item);
+         //usedDeviceList->insertItem(row, name);
+         //usedDeviceList->item(row)->setData(Qt::UserRole, doc.toString());
+         inserted = true;
+    } while ( !inserted );
     qDebug()<<"added New Device:"<<name;
 }
 void Devices::delDevice()
 {
     //qDebug()<<"Delete"<<usedDeviceList->currentItem()->text();
     QListWidgetItem *item = usedDeviceList->takeItem(usedDeviceList->currentRow());
-    delete item;
-    item = 0;
+    infoWidget->_closeDeviceData();
+    if ( NULL!=item ) {
+        delete item;
+        item = NULL;
+    };
 }
 void Devices::showDevice()
 {
-    showDevice( usedDeviceList->currentRow() );
+    QListWidgetItem *_curr = usedDeviceList->currentItem();
+    if ( NULL!=_curr ) showDevice( _curr, NULL );
 }
-void Devices::showDevice(int i)
+void Devices::showDevice(QListWidgetItem *_curr, QListWidgetItem *_prev)
 {
+    if ( NULL==_curr ) return;
     QString _devName, _devDesc;
-    QListWidgetItem *item = usedDeviceList->item(i);
-    _devName = item->text();
-    _devDesc = item->data(Qt::UserRole).toString();
-    infoWidget->showDevice(_devName, _devDesc);
+    _devName = _curr->text();
+    _devDesc = _curr->data(Qt::UserRole).toString();
+    QString _ret = infoWidget->showDevice(_devName, _devDesc);
+    if ( NULL!=_prev ) _prev->setData(Qt::UserRole, _ret);
 }
 void Devices::showContextMenu(const QPoint &pos)
 {
+    usedDeviceList->clearSelection();
     QListWidgetItem *item = usedDeviceList->itemAt(pos);
     DeviceExistanceMenu *jobMenu = new DeviceExistanceMenu(this, (item!=NULL));
     connect(jobMenu, SIGNAL(resultSign(Device_Action)),
@@ -344,8 +388,6 @@ void Devices::execDevExistanceMenuResult(Device_Action ret)
         addDevice();
     } else if ( ret==DEL ) {
         delDevice();
-    } else if ( ret==SHOW ) {
-        showDevice();
     };
 }
 void Devices::detectAttachedDevicesFromXMLDesc()

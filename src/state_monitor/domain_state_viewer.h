@@ -44,9 +44,9 @@ private:
                          memPaint, memPercent;
 
 public slots:
+    void                 closeDomainStateViewer();
 
 private slots:
-    void                 closeDomainStateViewer();
     void                 timerEvent(QTimerEvent*);
     void                 setData(int, int, int, int);
 };

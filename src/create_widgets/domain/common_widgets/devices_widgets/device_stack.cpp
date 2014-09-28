@@ -60,6 +60,7 @@ DeviceStack::DeviceStack(
         devSet = LXC_DEVICE_LIST;
     };
     deviceList = new QListWidget(this);
+    deviceList->setSortingEnabled(false);
     /* set icons & user data */
     for (int i=0; i<devList.count();i++) {
         if ( devSet.contains(devType.at(i)) ) {

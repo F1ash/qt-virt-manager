@@ -7,6 +7,14 @@
 #include <QListWidget>
 #include <QPushButton>
 
+#define DEVICE_ORDER QStringList()\
+    <<"Emulator"<<"Disk"<<"Filesystem"<<"Controller"\
+    <<"Host Device"<<"USB Redirector"<<"SmartCard"\
+    <<"Network"<<"Input"<<"Hub"<<"Display"<<"Video"\
+    <<"Console"<<"Serial Port"<<"Parallel Port"\
+    <<"Channel"<<"Sound"<<"WatchDog"<<"MemBalloon"\
+    <<"RNG"<<"TPM"<<"NVRAM"<<"Panic"
+
 class Devices : public _QWidget
 {
     Q_OBJECT
@@ -35,6 +43,8 @@ private:
     DeviceStack     *deviceStack = NULL;
 
     const QString    xmlDesc;
+    const QStringList
+                     devNameOrder = DEVICE_ORDER;
 
 public slots:
     QDomDocument    getDevDocument() const;
@@ -45,7 +55,7 @@ private slots:
     void            addDeviceToUsedDevList(QDomDocument&);
     void            delDevice();
     void            showDevice();
-    void            showDevice(int);
+    void            showDevice(QListWidgetItem*,QListWidgetItem*);
     void            showContextMenu(const QPoint&);
     void            execDevExistanceMenuResult(Device_Action);
     void            detectAttachedDevicesFromXMLDesc();

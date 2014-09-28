@@ -160,27 +160,6 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/disk_widgets/_startup_policy.h
   src/create_widgets/domain/common_widgets/disk_widgets/_hosts.h
   src/create_widgets/domain/common_widgets/disk_widgets/virtvolume_dialog.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_create_storage.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_storage_source.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_adapter.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_auth.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_block_devices.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_storage_target.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/dir_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/fs_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/logical_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/netfs_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/disk_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/iscsi_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/gluster_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/mpath_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/rbd_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/scsi_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/sheepdog_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/zfs_pool_stuff.h
-  src/create_widgets/domain/common_widgets/disk_widgets/create_pool.h
-  src/create_widgets/domain/common_widgets/disk_widgets/create_volume.h
   src/create_widgets/domain/common_widgets/disk_widgets/block_disk.h
   src/create_widgets/domain/common_widgets/disk_widgets/dir_disk.h
   src/create_widgets/domain/common_widgets/disk_widgets/file_disk.h
@@ -191,6 +170,28 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/emulator.h
   src/create_widgets/domain/common_widgets/random.h
   src/create_widgets/domain/common_widgets/memballoon.h
+  src/create_widgets/storage/_create_storage_widgets/_create_storage.h
+  src/create_widgets/storage/_create_storage_widgets/_storage_source.h
+  src/create_widgets/storage/_create_storage_widgets/_adapter.h
+  src/create_widgets/storage/_create_storage_widgets/_auth.h
+  src/create_widgets/storage/_create_storage_widgets/_block_devices.h
+  src/create_widgets/storage/_create_storage_widgets/_storage_target.h
+  src/create_widgets/storage/_create_storage_widgets/_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/dir_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/fs_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/logical_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/netfs_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/disk_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/iscsi_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/gluster_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/mpath_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/rbd_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/scsi_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/sheepdog_pool_stuff.h
+  src/create_widgets/storage/_create_storage_widgets/zfs_pool_stuff.h
+  src/create_widgets/storage/create_pool.h
+  src/create_widgets/storage/create_volume.h
+  src/create_widgets/domain/edit_widgets/emulator_edit.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -363,27 +364,6 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/disk_widgets/_startup_policy.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_hosts.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/virtvolume_dialog.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_create_storage.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_storage_source.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_adapter.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_auth.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_block_devices.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_storage_target.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/dir_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/fs_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/logical_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/netfs_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/disk_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/iscsi_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/gluster_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/mpath_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/rbd_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/scsi_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/sheepdog_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/_create_storage_widgets/zfs_pool_stuff.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/create_pool.cpp
-  src/create_widgets/domain/common_widgets/disk_widgets/create_volume.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/block_disk.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/dir_disk.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/file_disk.cpp
@@ -394,6 +374,28 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/emulator.cpp
   src/create_widgets/domain/common_widgets/random.cpp
   src/create_widgets/domain/common_widgets/memballoon.cpp
+  src/create_widgets/storage/_create_storage_widgets/_create_storage.cpp
+  src/create_widgets/storage/_create_storage_widgets/_storage_source.cpp
+  src/create_widgets/storage/_create_storage_widgets/_adapter.cpp
+  src/create_widgets/storage/_create_storage_widgets/_auth.cpp
+  src/create_widgets/storage/_create_storage_widgets/_block_devices.cpp
+  src/create_widgets/storage/_create_storage_widgets/_storage_target.cpp
+  src/create_widgets/storage/_create_storage_widgets/_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/dir_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/fs_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/logical_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/netfs_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/disk_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/iscsi_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/gluster_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/mpath_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/rbd_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/scsi_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/sheepdog_pool_stuff.cpp
+  src/create_widgets/storage/_create_storage_widgets/zfs_pool_stuff.cpp
+  src/create_widgets/storage/create_pool.cpp
+  src/create_widgets/storage/create_volume.cpp
+  src/create_widgets/domain/edit_widgets/emulator_edit.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

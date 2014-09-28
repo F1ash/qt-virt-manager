@@ -174,6 +174,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
   settings.endGroup();
   settings.sync();
   if ( !this->isVisible() ) changeVisibility();
+  domainsStateMonitor->stopMonitoring();
   if ( runningConnectsExist() && wait_thread==NULL ) {
       /*
       QString q;
@@ -199,6 +200,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
   } else if ( !runningConnectsExist() && (wait_thread==NULL || wait_thread->isFinished()) ) {
       ev->accept();
   } else {
+      //  ( runningConnectsExist() && wait_thread!=NULL )
       ev->ignore();
   };
 }
