@@ -86,7 +86,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     } else if ( deviceType == "input" ) {
         device = new InputDevice(this);
     } else if ( deviceType == "hub" ) {
-        device = new HubDevice(this);
+        device = new HubDevice_Edit(this);
     } else if ( deviceType == "video" ) {
         device = new VideoDevice(this);
     } else if ( deviceType == "sound" ) {
