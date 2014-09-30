@@ -20,6 +20,12 @@ VirtioSerialAddr::VirtioSerialAddr(QWidget *parent) :
     commonlayout->addWidget(bus, 1, 1);
     commonlayout->addWidget(slot, 2, 1);
     setLayout(commonlayout);
+    connect(controller, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(bus, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(slot, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
 }
 AttrList VirtioSerialAddr::getAttrList() const
 {

@@ -10,6 +10,8 @@ SpaprVioAddr::SpaprVioAddr(QWidget *parent) :
     commonlayout->addWidget(regLabel, 0, 0);
     commonlayout->addWidget(reg, 0, 1);
     setLayout(commonlayout);
+    connect(reg, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
 }
 AttrList SpaprVioAddr::getAttrList() const
 {

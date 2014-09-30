@@ -26,6 +26,14 @@ CCWAddr::CCWAddr(QWidget *parent) :
     commonlayout->addWidget(ssid, 2, 1);
     commonlayout->addWidget(devno, 3, 1);
     setLayout(commonlayout);
+    connect(machine, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(cssid, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(ssid, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(devno, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
 }
 AttrList CCWAddr::getAttrList() const
 {

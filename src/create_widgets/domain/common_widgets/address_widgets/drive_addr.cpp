@@ -25,6 +25,14 @@ DriveAddr::DriveAddr(QWidget *parent) :
     commonlayout->addWidget(target, 2, 1);
     commonlayout->addWidget(unit, 3, 1);
     setLayout(commonlayout);
+    connect(controller, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(bus, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(target, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(unit, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
 }
 AttrList DriveAddr::getAttrList() const
 {

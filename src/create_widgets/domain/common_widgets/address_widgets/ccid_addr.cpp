@@ -15,6 +15,10 @@ CCIDAddr::CCIDAddr(QWidget *parent) :
     commonlayout->addWidget(bus, 0, 1);
     commonlayout->addWidget(slot, 1, 1);
     setLayout(commonlayout);
+    connect(bus, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(slot, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
 }
 AttrList CCIDAddr::getAttrList() const
 {

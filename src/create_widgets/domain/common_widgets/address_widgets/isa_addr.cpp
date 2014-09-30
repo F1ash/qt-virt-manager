@@ -13,6 +13,10 @@ IsaAddr::IsaAddr(QWidget *parent) :
     commonlayout->addWidget(iobase, 0, 1);
     commonlayout->addWidget(irq, 1, 1);
     setLayout(commonlayout);
+    connect(iobase, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(irq, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
 }
 AttrList IsaAddr::getAttrList() const
 {

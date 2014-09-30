@@ -25,6 +25,14 @@ PciAddr::PciAddr(QWidget *parent) :
     commonlayout->addWidget(slot, 2, 1);
     commonlayout->addWidget(function, 3, 1);
     setLayout(commonlayout);
+    connect(domain, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(bus, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(slot, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(function, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
 }
 AttrList PciAddr::getAttrList() const
 {
