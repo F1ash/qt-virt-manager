@@ -1,12 +1,12 @@
 #include "char_device.h"
 
 #define CHAR_DEV_TYPE QStringList()\
-    <<"Pseudo TTY (pty)"\
-    <<"Physical host character device (dev)"\
-    <<"Output to a file (file)"\
-    <<"TCP net console (tcp)"\
-    <<"UDP net console (udp)"\
-    <<"Unix socket (unix)"
+    <<"Pseudo TTY /pty"\
+    <<"Physical host character device /dev"\
+    <<"Output to a file /file"\
+    <<"TCP net console /tcp"\
+    <<"UDP net console /udp"\
+    <<"Unix socket /unix"
 
 CharDevice::CharDevice(
         QWidget *parent,
@@ -32,6 +32,7 @@ CharDevice::CharDevice(
     charDevWdg->addWidget(tcpWdg);
     charDevWdg->addWidget(udpWdg);
     charDevWdg->addWidget(unixWdg);
+    charDevWdg->addWidget(new _QWidget(this));
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(devType);
     commonLayout->addWidget(charDevWdg);
@@ -50,4 +51,14 @@ QDomDocument CharDevice::getDevDocument() const
     _QWidget *wdg = static_cast<_QWidget*>(
                 charDevWdg->currentWidget());
     return wdg->getDevDocument();
+}
+void CharDevice::setDeviceData(QString &xmlDesc)
+{
+    qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _addr;
+    _device = doc.firstChildElement("device")
+            .firstChildElement(tag);
+    QString _mode, _type;
 }

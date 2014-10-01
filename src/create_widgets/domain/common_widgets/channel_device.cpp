@@ -3,7 +3,7 @@
 ChannelDevice::ChannelDevice(QWidget *parent) :
     CharDevice(parent, NULL, NULL, QString("channel"))
 {
-    devType->insertItem(6, "Spice Agent (spicevmc)", "spicevmc");
+    devType->insertItem(6, "Spice Agent /spicevmc");
     chanType = new QComboBox(this);
     chanType->setEditable(true);
     chanType->addItem("com.redhat.spice.0");
@@ -21,43 +21,18 @@ ChannelDevice::ChannelDevice(QWidget *parent) :
 QDomDocument ChannelDevice::getDevDocument() const
 {
     QDomDocument doc;
-    switch (devType->currentIndex()) {
-    case 0:
-        doc = ptyWdg->getDevDocument();
-        break;
-    case 1:
-        doc = devWdg->getDevDocument();
-        break;
-    case 2:
-        doc = fileWdg->getDevDocument();
-        break;
-    case 3:
-        doc = tcpWdg->getDevDocument();
-        break;
-    case 4:
-        doc = udpWdg->getDevDocument();
-        break;
-    case 5:
-        doc = unixWdg->getDevDocument();
-        break;
-    case 6:
-        doc = ptyWdg->getDevDocument();
-        break;
-    default:
-        break;
-    };
+    CharDevice *wdg = static_cast<CharDevice*>(charDevWdg->currentWidget());
+    doc = wdg->getDevDocument();
     QDomElement _target = doc.createElement("target");
     _target.setAttribute("type", "virtio");
     _target.setAttribute("name", chanType->currentText());
     doc.firstChildElement("device")
             .firstChildElement("channel")
             .appendChild(_target);
+    QString _type = devType->currentText().split("/").last();
     doc.firstChildElement("device")
             .firstChildElement("channel")
-            .setAttribute("type",
-                          devType->itemData(
-                              devType->currentIndex(),
-                              Qt::UserRole).toString());
+            .setAttribute("type", _type);
     return doc;
 }
 
@@ -69,6 +44,8 @@ void ChannelDevice::chanNameChanged(const QString &text)
         devType->setCurrentIndex(6);
     } else {
         devType->setCurrentIndex(5);
-        unixWdg->setPath(QString("/var/lib/libvirt/qemu/channel/target/%1").arg(chanType->currentText()));
+        UnixWidget *wdg = static_cast<UnixWidget*>(charDevWdg->currentWidget());
+        wdg->setPath(QString("/var/lib/libvirt/qemu/channel/target/%1")
+                     .arg(chanType->currentText()));
     }
 }

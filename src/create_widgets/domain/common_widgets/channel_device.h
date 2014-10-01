@@ -8,11 +8,11 @@ class ChannelDevice : public CharDevice
     Q_OBJECT
 public:
     explicit ChannelDevice(QWidget *parent = 0);
+    QComboBox   *chanType;
 
 signals:
 
 private:
-    QComboBox   *chanType;
 
 public slots:
 QDomDocument getDevDocument() const;

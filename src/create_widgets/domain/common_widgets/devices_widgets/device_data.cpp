@@ -82,7 +82,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
                           this,
                           currWorkConnect);
     } else if ( deviceType == "smartcard" ) {
-        device = new SmartCardDevice(this);
+        device = new SmartCardDevice_Edit(this);
     } else if ( deviceType == "input" ) {
         device = new InputDevice(this);
     } else if ( deviceType == "hub" ) {

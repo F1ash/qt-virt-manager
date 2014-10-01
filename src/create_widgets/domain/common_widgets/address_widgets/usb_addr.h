@@ -8,12 +8,12 @@ class USBAddr : public _Addr
     Q_OBJECT
 public:
     explicit USBAddr(QWidget *parent = 0);
+    QLineEdit       *bus;
+    QLineEdit       *port;
 
 private:
     QLabel          *busLabel;
     QLabel          *portLabel;
-    QLineEdit       *bus;
-    QLineEdit       *port;
     QGridLayout     *commonlayout;
 
 public slots:

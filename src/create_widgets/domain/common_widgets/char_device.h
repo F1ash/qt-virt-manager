@@ -21,22 +21,23 @@ public:
             );
 
     QComboBox       *devType;
-    PtyWidget       *ptyWdg;
-    DevWidget       *devWdg;
-    FileWidget      *fileWdg;
-    TcpWidget       *tcpWdg;
-    UdpWidget       *udpWdg;
-    UnixWidget      *unixWdg;
     QStackedWidget  *charDevWdg;
     QVBoxLayout     *commonLayout;
 
 signals:
 
 private:
+    PtyWidget       *ptyWdg;
+    DevWidget       *devWdg;
+    FileWidget      *fileWdg;
+    TcpWidget       *tcpWdg;
+    UdpWidget       *udpWdg;
+    UnixWidget      *unixWdg;
     QString          tag;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument     getDevDocument() const;
+    void             setDeviceData(QString&);
 };
 
 #endif // CHAR_DEVICE_H

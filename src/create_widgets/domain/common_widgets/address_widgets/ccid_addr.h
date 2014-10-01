@@ -8,12 +8,12 @@ class CCIDAddr : public _Addr
     Q_OBJECT
 public:
     explicit CCIDAddr(QWidget *parent = 0);
+    QLineEdit       *bus;
+    QLineEdit       *slot;
 
 private:
     QLabel          *busLabel;
     QLabel          *slotLabel;
-    QLineEdit       *bus;
-    QLineEdit       *slot;
     QGridLayout     *commonlayout;
 
 public slots:

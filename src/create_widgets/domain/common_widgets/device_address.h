@@ -19,17 +19,19 @@ class DeviceAddress : public _Changed
 public:
     explicit DeviceAddress(QWidget *parent = 0);
     QComboBox       *type;
+    QCheckBox       *use;
 
 private:
-    QCheckBox       *use;
     QVBoxLayout     *commonLayout;
     QStackedWidget  *info;
 
 public slots:
-    AttrList getAttrList() const;
+    AttrList         getAttrList() const;
+    QWidget*         getCurrentAddrWidget();
+    void             setCurrentAddrWidget(int);
 
 private slots:
-    void addressUsed(bool);
+    void             addressUsed(bool);
 };
 
 #endif // DEVICE_ADDRESS_H

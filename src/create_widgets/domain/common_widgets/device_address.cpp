@@ -61,6 +61,14 @@ AttrList DeviceAddress::getAttrList() const
     };
     return _ret;
 }
+QWidget *DeviceAddress::getCurrentAddrWidget()
+{
+    return info->currentWidget();
+}
+void DeviceAddress::setCurrentAddrWidget(int i)
+{
+    info->setCurrentIndex(i);
+}
 
 /* private slots */
 void DeviceAddress::addressUsed(bool state)

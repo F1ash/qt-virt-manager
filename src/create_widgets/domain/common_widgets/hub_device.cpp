@@ -9,9 +9,10 @@ HubDevice::HubDevice(QWidget *parent) :
 {
     info = new QLabel("To add USB Hub", this);
     addr = new DeviceAddress(this);
-    addr->type->clear();
-    addr->type->addItem("Default", "");
-    addr->type->addItem("USB addresses", "usb");
+    int idx = addr->type->findText("usb", Qt::MatchContains);
+    addr->type->setCurrentIndex( (idx<0)? 0:idx );
+    addr->type->setEnabled(false);
+    addr->setCurrentAddrWidget(idx);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(info);
     commonLayout->addWidget(addr);

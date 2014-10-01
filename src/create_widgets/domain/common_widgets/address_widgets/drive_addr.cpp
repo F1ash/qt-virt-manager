@@ -29,7 +29,7 @@ DriveAddr::DriveAddr(QWidget *parent) :
             this, SLOT(stateChanged()));
     connect(bus, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
-    connect(target, SIGNAL(valueChanged(int)),
+    connect(target, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
     connect(unit, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
