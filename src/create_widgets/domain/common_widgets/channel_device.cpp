@@ -12,8 +12,6 @@ ChannelDevice::ChannelDevice(QWidget *parent) :
     commonLayout->insertWidget(0, chanType, -1);
     connect(chanType, SIGNAL(editTextChanged(const QString&)),
             this, SLOT(chanNameChanged(const QString&)));
-    //connect(chanType, SIGNAL(currentIndexChanged(const QString&)),
-    //        this, SLOT(chanNameChanged(const QString&)));
     devType->setCurrentIndex(6);
 }
 
@@ -23,6 +21,13 @@ QDomDocument ChannelDevice::getDevDocument() const
     QDomDocument doc;
     CharDevice *wdg = static_cast<CharDevice*>(charDevWdg->currentWidget());
     doc = wdg->getDevDocument();
+    if ( doc.isNull() ) {
+        QDomElement _device, _devDesc;
+        _device = doc.createElement("device");
+        _devDesc = doc.createElement("channel");
+        _device.appendChild(_devDesc);
+        doc.appendChild(_device);
+    };
     QDomElement _target = doc.createElement("target");
     _target.setAttribute("type", "virtio");
     _target.setAttribute("name", chanType->currentText());
@@ -34,6 +39,27 @@ QDomDocument ChannelDevice::getDevDocument() const
             .firstChildElement("channel")
             .setAttribute("type", _type);
     return doc;
+}
+void ChannelDevice::setDeviceData(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _target, _device;
+    _device = doc.firstChildElement("device")
+            .firstChildElement("channel");
+    _target = _device.firstChildElement("target");
+    QString _chanTYpe = _target.attribute("name", "com.redhat.spice.0");
+    int idx = chanType->findText(
+                _chanTYpe,
+                Qt::MatchExactly);
+    chanType->setCurrentIndex( (idx<0)? 0:idx );
+    QString _type, _charDevXMLDesc;
+    _type = _device.attribute("type", "unix");
+    idx = devType->findText(_type, Qt::MatchEndsWith);
+    devType->setCurrentIndex( (idx<0)? 0:idx );
+    _charDevXMLDesc = doc.toString();
+    static_cast<_QWidget*>(charDevWdg->currentWidget())->setDeviceData(_charDevXMLDesc);
 }
 
 /* private slots */

@@ -19,7 +19,8 @@ private:
     QString          tag;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument     getDevDocument() const;
+    void             setDeviceData(QString&);
 
 private slots:
 

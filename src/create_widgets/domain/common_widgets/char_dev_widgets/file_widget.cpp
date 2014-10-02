@@ -10,6 +10,8 @@ FileWidget::FileWidget(QWidget *parent, QString _tag) :
     fileLayout->addWidget(pathLabel, 0, 0);
     fileLayout->addWidget(path, 0, 1);
     setLayout(fileLayout);
+    connect(path, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -32,4 +34,21 @@ QDomDocument FileWidget::getDevDocument() const
     doc.appendChild(_device);
     //qDebug()<<doc.toString();
     return doc;
+}
+void FileWidget::setDeviceData(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _source, _target;
+    _device = doc
+            .firstChildElement("device")
+            .firstChildElement(tag);
+    _source = _device.firstChildElement("source");
+    if ( !_source.isNull() ) {
+        path->setText(_source.attribute("path"));
+    };
+    _target = _device.firstChildElement("target");
+    if ( !_target.isNull() ) {
+    };
 }

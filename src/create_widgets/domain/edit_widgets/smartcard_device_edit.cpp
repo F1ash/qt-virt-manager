@@ -5,6 +5,10 @@ SmartCardDevice_Edit::SmartCardDevice_Edit(QWidget *parent) :
 {
     connect(addr, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
+    connect(mode, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(channel, SIGNAL(dataChanged()),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -40,8 +44,8 @@ void SmartCardDevice_Edit::setDeviceData(QString &xmlDesc)
     idx = addr->type->findText("ccid", Qt::MatchContains);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     _addr = _device.firstChildElement("address");
+    addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
-        addr->use->setChecked(true);
         CCIDAddr *wdg = static_cast<CCIDAddr*>( addr->getCurrentAddrWidget() );
         wdg->bus->setText( _addr.attribute("bus") );
         wdg->slot->setText( _addr.attribute("slot") );

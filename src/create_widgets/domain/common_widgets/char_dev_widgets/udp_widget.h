@@ -25,7 +25,7 @@ private:
 
 public slots:
     QDomDocument getDevDocument() const;
-
+    void         setDeviceData(QString&);
 };
 
 #endif // UDP_WIDGET_H

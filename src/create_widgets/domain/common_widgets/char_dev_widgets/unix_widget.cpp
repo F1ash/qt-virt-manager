@@ -15,6 +15,10 @@ UnixWidget::UnixWidget(QWidget *parent, QString _tag) :
     unixLayout->addWidget(modeLabel, 1, 0);
     unixLayout->addWidget(mode, 1, 1);
     setLayout(unixLayout);
+    connect(path, SIGNAL(textChanged(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(mode, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -42,4 +46,26 @@ QDomDocument UnixWidget::getDevDocument() const
 void UnixWidget::setPath(QString text)
 {
     path->setText(text);
+}
+void UnixWidget::setDeviceData(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _source, _target;
+    _device = doc
+            .firstChildElement("device")
+            .firstChildElement(tag);
+    _source = _device.firstChildElement("source");
+    if ( !_source.isNull() ) {
+        path->setText(_source.attribute("path"));
+        int idx = mode->findData(
+                    _source.attribute("mode"),
+                    Qt::UserRole,
+                    Qt::MatchContains);
+        mode->setCurrentIndex( (idx<0)? 0:idx );
+    };
+    _target = _device.firstChildElement("target");
+    if ( !_target.isNull() ) {
+    };
 }

@@ -20,10 +20,10 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument     getDevDocument() const;
 
 private slots:
-    void         modeTypeChanged(int);
+    void             modeTypeChanged(int);
 };
 
 #endif // SMARTCARD_DEVICE_H

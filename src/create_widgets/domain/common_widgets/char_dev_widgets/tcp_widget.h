@@ -25,7 +25,7 @@ private:
 
 public slots:
     QDomDocument getDevDocument() const;
-
+    void         setDeviceData(QString&);
 };
 
 #endif // TCP_WIDGET_H

@@ -27,6 +27,14 @@ UdpWidget::UdpWidget(QWidget *parent, QString _tag) :
     udpLayout->addWidget(port2Label, 1, 2);
     udpLayout->addWidget(port2, 1, 3);
     setLayout(udpLayout);
+    connect(host, SIGNAL(textChanged(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(bindHost, SIGNAL(textChanged(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(port1, SIGNAL(valueChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(port2, SIGNAL(valueChanged(int)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -57,4 +65,37 @@ QDomDocument UdpWidget::getDevDocument() const
     doc.appendChild(_device);
     //qDebug()<<doc.toString();
     return doc;
+}
+void UdpWidget::setDeviceData(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _source1, _source2;
+    _device = doc
+            .firstChildElement("device")
+            .firstChildElement(tag);
+    _source1 = _device.firstChildElement("source");
+    _source2 = _source1.nextSiblingElement("source");
+    QString _mode;
+    if ( !_source1.isNull() ) {
+        _mode = _source1.attribute("mode");
+        if ( _mode=="bind" ) {
+            bindHost->setText(_source1.attribute("host"));
+            port2->setValue(_source1.attribute("service").toInt());
+        } else {
+            host->setText(_source1.attribute("host"));
+            port1->setValue(_source1.attribute("service").toInt());
+        };
+    };
+    if ( !_source2.isNull() ) {
+        _mode = _source2.attribute("mode");
+        if ( _mode=="bind" ) {
+            bindHost->setText(_source2.attribute("host"));
+            port2->setValue(_source2.attribute("service").toInt());
+        } else {
+            host->setText(_source2.attribute("host"));
+            port1->setValue(_source2.attribute("service").toInt());
+        };
+    };
 }

@@ -30,6 +30,14 @@ TcpWidget::TcpWidget(QWidget *parent, QString _tag) :
     tcpLayout->addWidget(telnetLabel, 3, 0);
     tcpLayout->addWidget(telnet, 3, 1);
     setLayout(tcpLayout);
+    connect(mode, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(host, SIGNAL(textChanged(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(port, SIGNAL(valueChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(telnet, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -40,13 +48,21 @@ QDomDocument TcpWidget::getDevDocument() const
     _device = doc.createElement("device");
     _devDesc = doc.createElement(tag);
     _source = doc.createElement("source");
-    _source.setAttribute("mode", mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
+    _source.setAttribute(
+                "mode",
+                mode->itemData(
+                    mode->currentIndex(),
+                    Qt::UserRole).toString());
     _source.setAttribute("host", host->text());
     _source.setAttribute("service", port->value());
     _devDesc.appendChild(_source);
 
     _protocol = doc.createElement("protocol");
-    _protocol.setAttribute("type", telnet->itemData(telnet->currentIndex(), Qt::UserRole).toString());
+    _protocol.setAttribute(
+                "type",
+                telnet->itemData(
+                    telnet->currentIndex(),
+                    Qt::UserRole).toString());
     _devDesc.appendChild(_protocol);
 
     _target = doc.createElement("target");
@@ -58,4 +74,37 @@ QDomDocument TcpWidget::getDevDocument() const
     doc.appendChild(_device);
     //qDebug()<<doc.toString();
     return doc;
+}
+void TcpWidget::setDeviceData(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _source, _protocol, _target;
+    _device = doc
+            .firstChildElement("device")
+            .firstChildElement(tag);
+    int idx;
+    _source = _device.firstChildElement("source");
+    if ( !_source.isNull() ) {
+        idx = mode->findData(
+                    _source.attribute("mode"),
+                    Qt::UserRole,
+                    Qt::MatchContains);
+        mode->setCurrentIndex( (idx<0)? 0:idx );
+        host->setText(_source.attribute("host"));
+        port->setValue(_source.attribute("service").toInt());
+    };
+    _protocol = _device.firstChildElement("protocol");
+    if ( !_protocol.isNull() ) {
+        idx = telnet->findData(
+                    _protocol.attribute("type"),
+                    Qt::UserRole,
+                    Qt::MatchContains);
+        telnet->setCurrentIndex( (idx<0)? 0:idx );
+    };
+    _target = _device.firstChildElement("target");
+    if ( !_target.isNull() ) {
+
+    };
 }

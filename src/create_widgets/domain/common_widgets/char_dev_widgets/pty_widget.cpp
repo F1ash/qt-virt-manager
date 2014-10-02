@@ -20,3 +20,19 @@ QDomDocument PtyWidget::getDevDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
+void PtyWidget::setDeviceData(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _source, _target;
+    _device = doc
+            .firstChildElement("device")
+            .firstChildElement(tag);
+    _source = _device.firstChildElement("source");
+    if ( !_source.isNull() ) {
+    };
+    _target = _device.firstChildElement("target");
+    if ( !_target.isNull() ) {
+    };
+}

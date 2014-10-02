@@ -19,7 +19,7 @@ private:
 
 public slots:
     QDomDocument getDevDocument() const;
-
+    void         setDeviceData(QString&);
 };
 
 #endif // FILE_WIDGET_H

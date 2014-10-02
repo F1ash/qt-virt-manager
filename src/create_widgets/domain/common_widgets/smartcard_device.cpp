@@ -24,8 +24,6 @@ SmartCardDevice::SmartCardDevice(QWidget *parent) :
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
     connect(mode, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
-    connect(mode, SIGNAL(currentIndexChanged(int)),
             this, SLOT(modeTypeChanged(int)));
 }
 

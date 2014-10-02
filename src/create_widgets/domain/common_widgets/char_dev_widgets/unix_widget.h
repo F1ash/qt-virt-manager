@@ -20,9 +20,9 @@ private:
     QString          tag;
 
 public slots:
-    QDomDocument getDevDocument() const;
-    void setPath(QString);
-
+    QDomDocument     getDevDocument() const;
+    void             setPath(QString);
+    void             setDeviceData(QString&);
 };
 
 #endif // UNIX_WIDGET_H
