@@ -27,6 +27,7 @@
 #include "edit_widgets/emulator_edit.h"
 #include "edit_widgets/hub_device_edit.h"
 #include "edit_widgets/smartcard_device_edit.h"
+#include "edit_widgets/char_device_edit.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

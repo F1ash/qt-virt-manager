@@ -194,6 +194,7 @@ set (HEADERS
   src/create_widgets/domain/edit_widgets/emulator_edit.h
   src/create_widgets/domain/edit_widgets/hub_device_edit.h
   src/create_widgets/domain/edit_widgets/smartcard_device_edit.h
+  src/create_widgets/domain/edit_widgets/char_device_edit.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -400,6 +401,7 @@ set (SOURCES
   src/create_widgets/domain/edit_widgets/emulator_edit.cpp
   src/create_widgets/domain/edit_widgets/hub_device_edit.cpp
   src/create_widgets/domain/edit_widgets/smartcard_device_edit.cpp
+  src/create_widgets/domain/edit_widgets/char_device_edit.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

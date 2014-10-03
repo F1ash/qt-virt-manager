@@ -72,9 +72,9 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
                     this,
                     currWorkConnect);
     } else if ( deviceType == "serial" ) {
-        device = new CharDevice(this, NULL, NULL, deviceType);
+        device = new CharDevice_Edit(this, NULL, NULL, deviceType);
     } else if ( deviceType == "parallel" ) {
-        device = new CharDevice(this, NULL, NULL, deviceType);
+        device = new CharDevice_Edit(this, NULL, NULL, deviceType);
     } else if ( deviceType == "channel" ) {
         device = new ChannelDevice(this);
     } else if ( deviceType == "console" ) {

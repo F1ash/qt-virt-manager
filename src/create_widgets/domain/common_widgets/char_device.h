@@ -17,12 +17,12 @@ public:
             QWidget *parent = 0,
             virConnectPtr conn = NULL,
             virDomainPtr domain = NULL,
-            QString _tag = QString()
-            );
+            QString _tag = QString());
 
     QComboBox       *devType;
     QStackedWidget  *charDevWdg;
     QVBoxLayout     *commonLayout;
+    QString          tag;
 
 signals:
 
@@ -33,11 +33,9 @@ private:
     TcpWidget       *tcpWdg;
     UdpWidget       *udpWdg;
     UnixWidget      *unixWdg;
-    QString          tag;
 
 public slots:
     QDomDocument     getDevDocument() const;
-    void             setDeviceData(QString&);
 };
 
 #endif // CHAR_DEVICE_H

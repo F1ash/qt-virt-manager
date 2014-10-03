@@ -13,6 +13,13 @@ ChannelDevice::ChannelDevice(QWidget *parent) :
     connect(chanType, SIGNAL(editTextChanged(const QString&)),
             this, SLOT(chanNameChanged(const QString&)));
     devType->setCurrentIndex(6);
+    // see for: CharDevice_Edit
+    connect(devType, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    for (uint i=0; i<charDevWdg->count(); i++) {
+        connect(charDevWdg->widget(i), SIGNAL(dataChanged()),
+                this, SLOT(stateChanged()));
+    };
 }
 
 /* public slots */
@@ -49,17 +56,22 @@ void ChannelDevice::setDeviceData(QString &xmlDesc)
     _device = doc.firstChildElement("device")
             .firstChildElement("channel");
     _target = _device.firstChildElement("target");
-    QString _chanTYpe = _target.attribute("name", "com.redhat.spice.0");
+    QString _chanType;
+    while ( !_target.isNull() ) {
+        if ( _target.hasAttribute("name") ) {
+            _chanType = _target.attribute("name", "com.redhat.spice.0");
+            break;
+        };
+        _target = _target.nextSiblingElement("target");
+    };
     int idx = chanType->findText(
-                _chanTYpe,
+                _chanType,
                 Qt::MatchExactly);
     chanType->setCurrentIndex( (idx<0)? 0:idx );
-    QString _type, _charDevXMLDesc;
-    _type = _device.attribute("type", "unix");
+    QString _type = _device.attribute("type", "unix");
     idx = devType->findText(_type, Qt::MatchEndsWith);
     devType->setCurrentIndex( (idx<0)? 0:idx );
-    _charDevXMLDesc = doc.toString();
-    static_cast<_QWidget*>(charDevWdg->currentWidget())->setDeviceData(_charDevXMLDesc);
+    static_cast<_QWidget*>(charDevWdg->currentWidget())->setDeviceData(xmlDesc);
 }
 
 /* private slots */

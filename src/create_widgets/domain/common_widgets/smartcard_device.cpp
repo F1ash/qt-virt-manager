@@ -45,7 +45,9 @@ QDomDocument SmartCardDevice::getDevDocument() const
     };
 
     _device.appendChild(_devDesc);
-    _devDesc.setAttribute("mode", mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
+    _devDesc.setAttribute(
+                "mode",
+                mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
     if ( mode->itemData(mode->currentIndex(), Qt::UserRole).toString()=="passthrough" ) {
         _channel = static_cast<CharDevice*>(
                     channel->charDevWdg->currentWidget())->getDevDocument();
@@ -56,7 +58,8 @@ QDomDocument SmartCardDevice::getDevDocument() const
          */
         QDomNodeList list = _channel
                 .firstChildElement("device")
-                .firstChildElement("channel").childNodes();
+                .firstChildElement("channel")
+                .childNodes();
         uint j = 0;
         uint count = list.length();
         for (uint i=0; i<count;i++) {

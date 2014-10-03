@@ -41,12 +41,6 @@ CharDevice::CharDevice(
     connect(devType, SIGNAL(currentIndexChanged(int)),
             charDevWdg, SLOT(setCurrentIndex(int)));
     devType->addItems(CHAR_DEV_TYPE);
-    connect(devType, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
-    for (uint i=0; i<charDevWdg->count(); i++) {
-        connect(charDevWdg->widget(i), SIGNAL(dataChanged()),
-                this, SLOT(stateChanged()));
-    };
 }
 
 /* public slots */
@@ -55,19 +49,4 @@ QDomDocument CharDevice::getDevDocument() const
     _QWidget *wdg = static_cast<_QWidget*>(
                 charDevWdg->currentWidget());
     return wdg->getDevDocument();
-}
-void CharDevice::setDeviceData(QString &xmlDesc)
-{
-    //qDebug()<<xmlDesc;
-    QDomDocument doc;
-    doc.setContent(xmlDesc);
-    QDomElement _device;
-    _device = doc.firstChildElement("device")
-            .firstChildElement(tag);
-    QString _type, _charDevXMLDesc;
-    _type = _device.attribute("type", "unix");
-    int idx = devType->findText(_type, Qt::MatchEndsWith);
-    devType->setCurrentIndex( (idx<0)? 0:idx );
-    _charDevXMLDesc = doc.toString();
-    static_cast<_QWidget*>(charDevWdg->currentWidget())->setDeviceData(_charDevXMLDesc);
 }
