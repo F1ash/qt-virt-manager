@@ -90,7 +90,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     } else if ( deviceType == "video" ) {
         device = new VideoDevice(this);
     } else if ( deviceType == "sound" ) {
-        device = new SoundDevice(this);
+        device = new SoundDevice_Edit(this);
     } else if ( deviceType == "hostdev" ) {
         device = new HostDevice(
                           this,

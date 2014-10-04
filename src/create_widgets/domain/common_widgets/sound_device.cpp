@@ -26,9 +26,10 @@ SoundDevice::SoundDevice(QWidget *parent) :
     regWdg->setLayout(regWdgLayout);
     regWdg->setVisible(false);
     addr = new DeviceAddress(this);
-    addr->type->clear();
-    addr->type->addItem("Default", "");
-    addr->type->addItem("PCI addresses", "pci");
+    int idx = addr->type->findText("pci", Qt::MatchContains);
+    addr->type->setCurrentIndex( (idx<0)? 0:idx );
+    addr->type->setEnabled(false);
+    addr->setCurrentAddrWidget(idx);
     commonLayout = new QGridLayout(this);
     commonLayout->addWidget(modelLabel, 0, 0);
     commonLayout->addWidget(model, 0, 1);

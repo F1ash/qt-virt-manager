@@ -277,7 +277,7 @@ void CreateVirtDomain::buildXMLDescription()
          */
         uint j = 0;
         uint count = list.length();
-        for (uint i=0; i<count;i++) {
+        for (uint i=0; i<count; i++) {
             //qDebug()<<list.item(j).nodeName()<<i;
             if (!list.item(j).isNull()) _element.appendChild(list.item(j));
             else ++j;

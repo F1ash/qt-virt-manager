@@ -415,5 +415,11 @@ void Devices::detectAttachedDevicesFromXMLDesc()
 }
 void Devices::saveDeviceXMLDescription(QString &xmlDesc)
 {
-    usedDeviceList->currentItem()->setData(Qt::UserRole, xmlDesc);
+    QListWidgetItem *item = usedDeviceList->currentItem();
+    usedDeviceList->removeItemWidget(item);
+    delete item;
+    item = NULL;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    addDeviceToUsedDevList(doc);
 }

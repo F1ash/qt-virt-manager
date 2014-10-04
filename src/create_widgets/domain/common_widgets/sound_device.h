@@ -10,23 +10,23 @@ class SoundDevice : public _QWidget
     Q_OBJECT
 public:
     explicit SoundDevice(QWidget *parent = 0);
-
-private:
-    QLabel          *modelLabel;
     QComboBox       *model;
     QRadioButton    *defaultICH6reg;
     QRadioButton    *duplexICH6reg;
     QRadioButton    *microICH6reg;
+    DeviceAddress   *addr;
+
+private:
+    QLabel          *modelLabel;
     QHBoxLayout     *regWdgLayout;
     QWidget         *regWdg;
-    DeviceAddress   *addr;
     QGridLayout     *commonLayout;
 
 public slots:
-    QDomDocument    getDevDocument() const;
+    QDomDocument     getDevDocument() const;
 
 private slots:
-    void modelChanged(QString);
+    void             modelChanged(QString);
 };
 
 #endif // SOUND_DEVICE_H
