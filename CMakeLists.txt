@@ -90,6 +90,7 @@ set (HEADERS
   src/create_widgets/domain/create_virt_domain.h
   src/create_widgets/domain/common_widgets/general.h
   src/create_widgets/domain/common_widgets/memory.h
+  src/create_widgets/domain/common_widgets/memory_widgets/hugepages.h
   src/create_widgets/domain/common_widgets/cpu.h
   src/create_widgets/domain/common_widgets/devices.h
   src/create_widgets/domain/common_widgets/devices_widgets/device_data.h
@@ -298,6 +299,7 @@ set (SOURCES
   src/create_widgets/domain/_changed.cpp
   src/create_widgets/domain/common_widgets/general.cpp
   src/create_widgets/domain/common_widgets/memory.cpp
+  src/create_widgets/domain/common_widgets/memory_widgets/hugepages.cpp
   src/create_widgets/domain/common_widgets/cpu.cpp
   src/create_widgets/domain/common_widgets/devices.cpp
   src/create_widgets/domain/common_widgets/devices_widgets/device_data.cpp

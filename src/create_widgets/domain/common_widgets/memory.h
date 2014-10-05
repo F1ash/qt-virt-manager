@@ -3,6 +3,7 @@
 
 #include <QScrollArea>
 #include "create_widgets/domain/_qwidget.h"
+#include "memory_widgets/hugepages.h"
 
 class Memory : public _QWidget
 {
@@ -31,6 +32,7 @@ private:
     QCheckBox       *enableMemBacking;
     QCheckBox       *hugepages;
     QCheckBox       *nosharepages;
+    HugePages       *hugePagesList;
     QCheckBox       *locked;
     QGridLayout     *memBackingLayout;
     QWidget         *memBackingWdg;
@@ -53,13 +55,13 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument     getDevDocument() const;
 
 private slots:
-    void         changeCurrentMemValue(int);
-    void         changeMaximumMemValue(int);
-    void         readXMLDesciption();
-    quint64      convertNiBtoKiB(quint64, QString&);
+    void             changeCurrentMemValue(int);
+    void             changeMaximumMemValue(int);
+    void             readXMLDesciption();
+    quint64          convertNiBtoKiB(quint64, QString&);
 };
 
 #endif // MEMORY_H

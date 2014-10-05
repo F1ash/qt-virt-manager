@@ -33,15 +33,15 @@ private:
     bool             oneHostMode = false;
 
 public slots:
-    bool        isUsed() const;
-    void        checkHosts(bool);
-    void        setFullHostMode(bool);
-    QStringList getHostsList() const;
-    void        setOneHostMode(bool);
+    bool             isUsed() const;
+    void             checkHosts(bool);
+    void             setFullHostMode(bool);
+    QStringList      getHostsList() const;
+    void             setOneHostMode(bool);
 
 private slots:
-    void addHost();
-    void delHost();
+    void             addHost();
+    void             delHost();
 };
 
 #endif // _HOSTS_H

@@ -25,12 +25,15 @@ Memory::Memory(
     memWdg->setLayout(memLayout);
     enableMemBacking = new QCheckBox("Enable Memory Backing", this);
     hugepages = new QCheckBox("Hugepages");
+    hugePagesList = new HugePages(this);
+    hugePagesList->setVisible(false);
     nosharepages = new QCheckBox("No share pages");
     locked = new QCheckBox("Locked");
     memBackingLayout = new QGridLayout();
     memBackingLayout->addWidget(hugepages, 0, 1);
     memBackingLayout->addWidget(nosharepages, 1, 1);
     memBackingLayout->addWidget(locked, 2, 1);
+    memBackingLayout->addWidget(hugePagesList, 0, 3, 3, 3);
     memBackingWdg = new QWidget(this);
     memBackingWdg->setLayout(memBackingLayout);
     memBackingWdg->setVisible(false);
@@ -78,6 +81,8 @@ Memory::Memory(
     setLayout(commonLayout);
     connect(enableMemBacking, SIGNAL(toggled(bool)),
             memBackingWdg, SLOT(setVisible(bool)));
+    connect(hugepages, SIGNAL(toggled(bool)),
+            hugePagesList, SLOT(setVisible(bool)));
     connect(enableMemTune, SIGNAL(toggled(bool)),
             memTuneWdg, SLOT(setVisible(bool)));
     readXMLDesciption();
@@ -104,9 +109,20 @@ QDomDocument Memory::getDevDocument() const
     if ( enableMemBacking->isChecked() ) {
         _memBacking= doc.createElement("memoryBacking");
         _data.appendChild(_memBacking);
-        if ( hugepages->isChecked() ) {
+        QStringList pages = hugePagesList->getPagesList();
+        if ( hugepages->isChecked() && !pages.isEmpty() ) {
             _el = doc.createElement("hugepages");
             _memBacking.appendChild(_el);
+            foreach (QString page, pages) {
+                QStringList _split = page.split(":");
+                if ( _split.count()>2 ) {
+                    QDomElement _page = doc.createElement("page");
+                    _el.appendChild(_page);
+                    _page.setAttribute("size", _split.at(0));
+                    _page.setAttribute("unit", _split.at(1).at(0));
+                    _page.setAttribute("nodeset", _split.at(2));
+                };
+            };
         };
         if ( nosharepages->isChecked() ) {
             _el = doc.createElement("nosharepages");
@@ -194,8 +210,24 @@ void Memory::readXMLDesciption()
     if ( !_domain.firstChildElement("memoryBacking").isNull() ) {
         enableMemBacking->setChecked(true);
         if ( !_domain.firstChildElement("memoryBacking")
-             .firstChildElement("hugepages").isNull() )
+             .firstChildElement("hugepages").isNull() ) {
             hugepages->setChecked(true);
+            QDomElement _page = _domain
+                    .firstChildElement("memoryBacking")
+                    .firstChildElement("hugepages")
+                    .firstChildElement("page");
+            while ( !_page.isNull() ) {
+                QString p;
+                p.append(_page.attribute("size"));
+                p.append(":");
+                p.append(_page.attribute("unit", "K"));
+                p.append("iB");
+                p.append(":");
+                p.append(_page.attribute("nodeset"));
+                hugePagesList->setPageList(p);
+                _page = _page.nextSiblingElement("page");
+            };
+        };
         if ( !_domain.firstChildElement("memoryBacking")
              .firstChildElement("nosharepages").isNull() )
             nosharepages->setChecked(true);
