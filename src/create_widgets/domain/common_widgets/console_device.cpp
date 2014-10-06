@@ -61,7 +61,8 @@ QDomDocument ConsoleDevice::getDevDocument() const
     _devDesc = doc.createElement("console");
     _target= doc.createElement("target");
     _target.setAttribute("port", 0);
-    QString _targetType = targetType->itemData(targetType->currentIndex(), Qt::UserRole).toString();
+    QString _targetType = targetType->itemData(
+                targetType->currentIndex(), Qt::UserRole).toString();
     if ( !_targetType.isEmpty() ) _target.setAttribute("type", _targetType);
     _devDesc.appendChild(_target);
 

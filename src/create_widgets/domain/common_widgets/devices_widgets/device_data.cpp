@@ -78,7 +78,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     } else if ( deviceType == "channel" ) {
         device = new ChannelDevice(this);
     } else if ( deviceType == "console" ) {
-        device = new ConsoleDevice(
+        device = new ConsoleDevice_Edit(
                           this,
                           currWorkConnect);
     } else if ( deviceType == "smartcard" ) {

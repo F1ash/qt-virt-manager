@@ -10,13 +10,12 @@ public:
     explicit ConsoleDevice(
             QWidget *parent = 0,
             virConnectPtr conn = NULL,
-            virDomainPtr domain = NULL
-            );
+            virDomainPtr domain = NULL);
+    QComboBox       *targetType;
 
 signals:
 
 private:
-    QComboBox       *targetType;
 
 public slots:
 QDomDocument getDevDocument() const;
