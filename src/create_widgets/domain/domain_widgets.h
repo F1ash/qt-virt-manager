@@ -30,6 +30,7 @@
 #include "edit_widgets/char_device_edit.h"
 #include "edit_widgets/sound_device_edit.h"
 #include "edit_widgets/console_device_edit.h"
+#include "edit_widgets/input_device_edit.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

@@ -9,18 +9,18 @@ class InputDevice : public _QWidget
     Q_OBJECT
 public:
     explicit InputDevice(QWidget *parent = 0);
+    QComboBox       *type;
+    QComboBox       *bus;
+    DeviceAddress   *addr;
 
 signals:
 
 private:
     QLabel          *info;
-    QComboBox       *type;
-    QComboBox       *bus;
-    DeviceAddress   *addr;
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument     getDevDocument() const;
 
 };
 

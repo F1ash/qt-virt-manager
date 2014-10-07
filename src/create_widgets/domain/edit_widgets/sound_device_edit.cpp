@@ -38,8 +38,8 @@ void SoundDevice_Edit::setDeviceData(QString &xmlDesc)
             defaultICH6reg->setChecked(true);
     };
     _addr = _device.firstChildElement("address");
+    addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
-        addr->use->setChecked(true);
         PciAddr *wdg = static_cast<PciAddr*>( addr->getCurrentAddrWidget() );
         wdg->domain->setText( _addr.attribute("domain") );
         wdg->bus->setText( _addr.attribute("bus") );

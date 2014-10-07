@@ -17,9 +17,10 @@ InputDevice::InputDevice(QWidget *parent) :
     bus->addItem("PS/2", "ps2");
     bus->addItem("Paravirtualized (XEN)", "xen");
     addr = new DeviceAddress(this);
-    addr->type->clear();
-    addr->type->addItem("Default", "");
-    addr->type->addItem("USB addresses", "usb");
+    int idx = addr->type->findText("pci", Qt::MatchContains);
+    addr->type->setCurrentIndex( (idx<0)? 0:idx );
+    addr->type->setEnabled(false);
+    addr->setCurrentAddrWidget(idx);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(info);
     commonLayout->addWidget(type);

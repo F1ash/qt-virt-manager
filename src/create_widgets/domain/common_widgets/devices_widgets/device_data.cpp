@@ -84,7 +84,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     } else if ( deviceType == "smartcard" ) {
         device = new SmartCardDevice_Edit(this);
     } else if ( deviceType == "input" ) {
-        device = new InputDevice(this);
+        device = new InputDevice_Edit(this);
     } else if ( deviceType == "hub" ) {
         device = new HubDevice_Edit(this);
     } else if ( deviceType == "video" ) {

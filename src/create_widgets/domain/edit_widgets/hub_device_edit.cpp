@@ -20,8 +20,8 @@ void HubDevice_Edit::setDeviceData(QString &xmlDesc)
     int idx = addr->type->findText(_type, Qt::MatchContains);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     _addr = _device.firstChildElement("address");
+    addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
-        addr->use->setChecked(true);
         USBAddr *wdg = static_cast<USBAddr*>( addr->getCurrentAddrWidget() );
         wdg->bus->setText( _addr.attribute("bus") );
         wdg->port->setText( _addr.attribute("port") );
