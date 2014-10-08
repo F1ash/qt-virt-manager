@@ -25,7 +25,10 @@ void MemBalloon_Edit::setDeviceData(QString &xmlDesc)
             .firstChildElement("memballoon");
     QString _attr;
     _attr = _device.attribute("model");
-    int idx = model->findText( _attr, Qt::MatchContains);
+    int idx = model->findData(
+                _attr,
+                Qt::UserRole,
+                Qt::MatchContains);
     model->setCurrentIndex( (idx<0)? 0:idx );
     _stats = _device.firstChildElement("stats");
     periodLabel->setChecked( !_stats.isNull() );

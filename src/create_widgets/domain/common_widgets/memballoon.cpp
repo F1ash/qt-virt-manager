@@ -3,9 +3,11 @@
 MemBalloon::MemBalloon(QWidget *parent, virConnectPtr conn) :
     _QWidget(parent, conn)
 {
-    modelLabel = new QLabel("Model:", this);
+    modelLabel = new QLabel("Model for:", this);
     model = new QComboBox(this);
-    model->addItems(QStringList()<<"NONE"<<"QEMU"<<"XEN");
+    model->addItem("NONE", "none");
+    model->addItem("QEMU/KVM", "virtio");
+    model->addItem("XEN", "xen");
     periodLabel = new QCheckBox("Period", this);
     periodLabel->setVisible(false);
     period = new QSpinBox(this);
@@ -30,8 +32,8 @@ MemBalloon::MemBalloon(QWidget *parent, virConnectPtr conn) :
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    connect(model, SIGNAL(currentIndexChanged(QString)),
-            this, SLOT(modelChanged(QString)));
+    connect(model, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(modelChanged(int)));
     connect(periodLabel, SIGNAL(toggled(bool)),
             period, SLOT(setEnabled(bool)));
 }
@@ -43,7 +45,12 @@ QDomDocument MemBalloon::getDevDocument() const
     QDomElement _device, _memballoon, _stats, _address;
     _device = doc.createElement("device");
     _memballoon = doc.createElement("memballoon");
-    _memballoon.setAttribute("model", model->currentText().toLower());
+    _memballoon.setAttribute(
+                "model",
+                model->itemData(
+                    model->currentIndex(),
+                    Qt::UserRole)
+                .toString());
     if ( periodLabel->isChecked() ) {
         _stats = doc.createElement("stats");
         _stats.setAttribute("period", period->text());
@@ -66,19 +73,20 @@ QDomDocument MemBalloon::getDevDocument() const
 }
 
 /* private slots */
-void MemBalloon::modelChanged(QString _model)
+void MemBalloon::modelChanged(int idx)
 {
-    if ( _model.toLower()=="none" ) {
+    QString _model = model->itemData(idx, Qt::UserRole).toString();
+    if ( _model=="none" ) {
         periodLabel->setChecked(false);
         periodLabel->setVisible(false);
         period->setVisible(false);
         addr->use->setChecked(false);
         addr->setVisible(false);
-    } else if ( _model.toLower()=="qemu" ) {
+    } else if ( _model=="virtio" ) {
         periodLabel->setVisible(true);
         period->setVisible(true);
         addr->setVisible(true);
-    } else if ( _model.toLower()=="xen" ) {
+    } else if ( _model=="xen" ) {
         periodLabel->setChecked(false);
         periodLabel->setVisible(false);
         period->setVisible(false);

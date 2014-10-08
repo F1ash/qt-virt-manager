@@ -26,7 +26,7 @@ public slots:
     QDomDocument     getDevDocument() const;
 
 private slots:
-    void             modelChanged(QString);
+    void             modelChanged(int);
 };
 
 #endif // MEMBALLOON_H
