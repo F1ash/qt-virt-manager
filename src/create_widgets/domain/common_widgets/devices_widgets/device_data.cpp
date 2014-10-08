@@ -114,7 +114,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     } else if ( deviceType == "rng" ) {
         device = new Random(this);
     } else if ( deviceType == "memballoon" ) {
-        device = new MemBalloon(
+        device = new MemBalloon_Edit(
                     this,
                     currWorkConnect);
     } else {

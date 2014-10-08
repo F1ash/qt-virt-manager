@@ -1,0 +1,44 @@
+#include "memballoon_edit.h"
+
+MemBalloon_Edit::MemBalloon_Edit(
+        QWidget *parent, virConnectPtr conn) :
+    MemBalloon(parent, conn)
+{
+    connect(model, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(periodLabel, SIGNAL(toggled(bool)),
+            this, SLOT(stateChanged()));
+    connect(period, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(addr, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+}
+
+/* public slots */
+void MemBalloon_Edit::setDeviceData(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _addr, _stats;
+    _device = doc.firstChildElement("device")
+            .firstChildElement("memballoon");
+    QString _attr;
+    _attr = _device.attribute("model");
+    int idx = model->findText( _attr, Qt::MatchContains);
+    model->setCurrentIndex( (idx<0)? 0:idx );
+    _stats = _device.firstChildElement("stats");
+    periodLabel->setChecked( !_stats.isNull() );
+    if ( !_stats.isNull() ) {
+        period->setValue( _stats.attribute("period", "0").toInt() );
+    };
+    _addr = _device.firstChildElement("address");
+    addr->use->setChecked(!_addr.isNull());
+    if ( !_addr.isNull() ) {
+        PciAddr *wdg = static_cast<PciAddr*>( addr->getCurrentAddrWidget() );
+        wdg->domain->setText( _addr.attribute("domain") );
+        wdg->bus->setText( _addr.attribute("bus") );
+        wdg->slot->setText( _addr.attribute("slot") );
+        wdg->function->setValue( _addr.attribute("function").toInt() );
+    };
+}

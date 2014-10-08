@@ -20,14 +20,13 @@ MemBalloon::MemBalloon(QWidget *parent, virConnectPtr conn) :
     baseLayout->addWidget(period, 1, 1);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
-    addrLabel = new QCheckBox("Address:", this);
-    addrLabel->setVisible(false);
-    addr = new PciAddr(this);
-    addr->setEnabled(false);
-    addr->setVisible(false);
+    addr = new DeviceAddress(this);
+    int idx = addr->type->findText("pci", Qt::MatchContains);
+    addr->type->setCurrentIndex( (idx<0)? 0:idx );
+    addr->type->setEnabled(false);
+    addr->setCurrentAddrWidget(idx);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
-    commonLayout->addWidget(addrLabel);
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
@@ -35,8 +34,6 @@ MemBalloon::MemBalloon(QWidget *parent, virConnectPtr conn) :
             this, SLOT(modelChanged(QString)));
     connect(periodLabel, SIGNAL(toggled(bool)),
             period, SLOT(setEnabled(bool)));
-    connect(addrLabel, SIGNAL(toggled(bool)),
-            addr, SLOT(setEnabled(bool)));
 }
 
 /* public slots */
@@ -52,7 +49,7 @@ QDomDocument MemBalloon::getDevDocument() const
         _stats.setAttribute("period", period->text());
         _memballoon.appendChild(_stats);
     };
-    if ( addrLabel->isChecked() ) {
+    if ( addr->use->isChecked() ) {
         AttrList l= addr->getAttrList();
         _address = doc.createElement("address");
         foreach (QString key, l.keys()) {
@@ -72,19 +69,19 @@ QDomDocument MemBalloon::getDevDocument() const
 void MemBalloon::modelChanged(QString _model)
 {
     if ( _model.toLower()=="none" ) {
+        periodLabel->setChecked(false);
         periodLabel->setVisible(false);
         period->setVisible(false);
-        addrLabel->setVisible(false);
+        addr->use->setChecked(false);
         addr->setVisible(false);
     } else if ( _model.toLower()=="qemu" ) {
         periodLabel->setVisible(true);
         period->setVisible(true);
-        addrLabel->setVisible(true);
         addr->setVisible(true);
     } else if ( _model.toLower()=="xen" ) {
+        periodLabel->setChecked(false);
         periodLabel->setVisible(false);
         period->setVisible(false);
-        addrLabel->setVisible(true);
         addr->setVisible(true);
     }
 }

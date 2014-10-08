@@ -2,7 +2,7 @@
 #define MEMBALLOON_H
 
 #include "create_widgets/domain/_qwidget.h"
-#include "address_widgets/pci_addr.h"
+#include "device_address.h"
 
 class MemBalloon : public _QWidget
 {
@@ -12,9 +12,9 @@ public:
             QWidget *parent = 0,
             virConnectPtr conn = NULL);
     QComboBox       *model;
-    QCheckBox       *periodLabel, *addrLabel;
+    QCheckBox       *periodLabel;
     QSpinBox        *period;
-    PciAddr         *addr;
+    DeviceAddress   *addr;
 
 private:
     QLabel          *modelLabel;
@@ -26,7 +26,7 @@ public slots:
     QDomDocument     getDevDocument() const;
 
 private slots:
-    void modelChanged(QString);
+    void             modelChanged(QString);
 };
 
 #endif // MEMBALLOON_H
