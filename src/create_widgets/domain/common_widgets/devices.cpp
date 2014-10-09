@@ -348,7 +348,8 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc)
 void Devices::delDevice()
 {
     //qDebug()<<"Delete"<<usedDeviceList->currentItem()->text();
-    QListWidgetItem *item = usedDeviceList->takeItem(usedDeviceList->currentRow());
+    QListWidgetItem *item =
+            usedDeviceList->takeItem(usedDeviceList->currentRow());
     infoWidget->_closeDeviceData();
     if ( NULL!=item ) {
         delete item;
@@ -415,11 +416,15 @@ void Devices::detectAttachedDevicesFromXMLDesc()
 }
 void Devices::saveDeviceXMLDescription(QString &xmlDesc)
 {
-    QListWidgetItem *item = usedDeviceList->currentItem();
-    usedDeviceList->removeItemWidget(item);
-    delete item;
-    item = NULL;
+    /* block/unblock usedDeviceList signals to avoid looping */
+    usedDeviceList->blockSignals(true);
+    QListWidgetItem *item = usedDeviceList->takeItem(usedDeviceList->currentRow());
+    if ( NULL!=item ) {
+        delete item;
+        item = NULL;
+    };
     QDomDocument doc;
     doc.setContent(xmlDesc);
     addDeviceToUsedDevList(doc);
+    usedDeviceList->blockSignals(false);
 }

@@ -180,5 +180,25 @@ void SecurityLabel::readXMLDesciption()
     if ( xmlDesc.isEmpty() ) return;
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QDomElement _domain = doc.firstChildElement("domain");
+    QDomElement _domain, _seclabel;
+    _domain = doc.firstChildElement("domain");
+    _seclabel = _domain.firstChildElement("seclabel");
+    useSecLabel->setChecked( !_seclabel.isNull() );
+    if ( !_seclabel.isNull() ) {
+        QDomNodeList _list = _domain.childNodes();
+        uint j = 0;
+        uint count = _list.length();
+        for (uint i=0; i<count; i++) {
+            if (!_list.item(j).isNull()) {
+                qDebug()<<_list.item(j).toElement().tagName();
+                if ( _list.item(j).toElement().tagName()=="seclabel" ) {
+                    QDomDocument _doc;
+                    _doc.setContent(QString());
+                    _doc.appendChild( _list.item(j) );
+                    list->addItem( _doc.toByteArray(4).data() );
+                } else
+                    ++j;
+            };
+        };
+    };
 }
