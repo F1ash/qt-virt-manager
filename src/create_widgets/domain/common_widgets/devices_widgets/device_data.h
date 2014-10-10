@@ -19,8 +19,8 @@ public:
             virConnectPtr conn = NULL);
 
 signals:
-    void errorMsg(QString);
-    void saveDeviceXMLDesc(QString&);
+    void             errorMsg(QString);
+    void             saveDeviceXMLDesc(QString&);
 
 private:
     QLabel          *devName;
@@ -48,20 +48,20 @@ private:
     virErrorPtr      virtErrors;
 
 public slots:
-    QDomDocument getResult() const;
-    QString      showDevice(QString&, QString&);
-    QString      _closeDeviceData();
+    QDomDocument     getResult() const;
+    QString          showDevice(QString&, QString&);
+    QString          _closeDeviceData();
 
 private slots:
-    void currentStateChanged();
-    void readNetworkList();
-    void readNodeDevicesList();
-    void saveDeviceData();
-    void revertDeviceData();
-    void setStartState();
+    void             currentStateChanged();
+    void             readNetworkList();
+    void             readNodeDevicesList();
+    void             saveDeviceData();
+    void             revertDeviceData();
+    void             setStartState();
 
-    void sendConnErrors();
-    void sendGlobalErrors();
+    void             sendConnErrors();
+    void             sendGlobalErrors();
 };
 
 #endif // DEVICE_DATA_H

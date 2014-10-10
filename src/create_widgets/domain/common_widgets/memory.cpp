@@ -70,14 +70,17 @@ Memory::Memory(
     scrolledLayout->addWidget(memBackingWdg);
     scrolledLayout->addWidget(enableMemTune);
     scrolledLayout->addWidget(memTuneWdg);
-    scrolledLayout->insertStretch(-1);
+    scrolledLayout->addStretch(-1);
     scrolled = new QWidget(this);
     scrolled->setLayout(scrolledLayout);
+    restorePanel = new RestorePanel(this);
     commonWdg = new QScrollArea(this);
     commonWdg->setWidget(scrolled);
     commonWdg->setWidgetResizable(true);
     commonLayout = new QVBoxLayout(this);
+    commonLayout->addWidget(restorePanel, 0, Qt::AlignRight);
     commonLayout->addWidget(commonWdg);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(enableMemBacking, SIGNAL(toggled(bool)),
             memBackingWdg, SLOT(setVisible(bool)));

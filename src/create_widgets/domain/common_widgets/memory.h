@@ -4,6 +4,7 @@
 #include <QScrollArea>
 #include "create_widgets/domain/_qwidget.h"
 #include "memory_widgets/hugepages.h"
+#include "create_widgets/domain/restore_panel.h"
 
 class Memory : public _QWidget
 {
@@ -21,6 +22,7 @@ private:
     const QString    xmlDesc;
     QString          memUnit;
     QString          memValue;
+    RestorePanel    *restorePanel;
     QLabel          *hostMemory;
     QLabel          *maxMemLabel;
     QLabel          *currMemLabel;

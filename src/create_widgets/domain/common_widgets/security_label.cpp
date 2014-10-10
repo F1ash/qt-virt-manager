@@ -46,12 +46,14 @@ SecurityLabel::SecurityLabel(
     listWdg = new QWidget(this);
     listWdg->setLayout(listLayout);
 
+    restorePanel = new RestorePanel(this);
     commonLayout = new QVBoxLayout(this);
+    commonLayout->addWidget(restorePanel, 0, Qt::AlignRight);
     commonLayout->addWidget(useSecLabel);
     commonLayout->addWidget(typeWdg);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(listWdg);
-    commonLayout->insertStretch(4, -1);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     usedStateChanged(false);
     connect(useSecLabel, SIGNAL(toggled(bool)),
@@ -190,7 +192,7 @@ void SecurityLabel::readXMLDesciption()
         uint count = _list.length();
         for (uint i=0; i<count; i++) {
             if (!_list.item(j).isNull()) {
-                qDebug()<<_list.item(j).toElement().tagName();
+                //qDebug()<<_list.item(j).toElement().tagName();
                 if ( _list.item(j).toElement().tagName()=="seclabel" ) {
                     QDomDocument _doc;
                     _doc.setContent(QString());

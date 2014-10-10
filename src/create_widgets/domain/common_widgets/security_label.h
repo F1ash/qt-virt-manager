@@ -4,6 +4,7 @@
 #include <QListWidget>
 #include <QPushButton>
 #include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/domain/restore_panel.h"
 
 class SecurityLabel : public _QWidget
 {
@@ -15,6 +16,7 @@ public:
 
 private:
     const QString    xmlDesc;
+    RestorePanel    *restorePanel;
     QCheckBox       *useSecLabel;
     QLabel          *typeLabel, *modelLabel,
                     *relabelLabel;
@@ -32,17 +34,17 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    bool            isUsed() const;
-    QDomDocument    getDevDocument() const;
+    bool             isUsed() const;
+    QDomDocument     getDevDocument() const;
 
 private slots:
-    void usedStateChanged(bool);
-    void securityTypeChanged(QString);
-    void modelTypeChanged(QString);
-    QDomDocument readData();
-    void addSecLabel();
-    void delSecLabel();
-    void readXMLDesciption();
+    void             usedStateChanged(bool);
+    void             securityTypeChanged(QString);
+    void             modelTypeChanged(QString);
+    QDomDocument     readData();
+    void             addSecLabel();
+    void             delSecLabel();
+    void             readXMLDesciption();
 };
 
 #endif // SECURITY_LABEL_H

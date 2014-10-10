@@ -9,6 +9,7 @@ DeviceData::DeviceData(
     devName = new QLabel(this);
     save = new QPushButton(QIcon::fromTheme("document-save"), "Save", this);
     save->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    save->setToolTip("Save current state");
     revert = new QPushButton(QIcon::fromTheme("document-revert"), "Revert", this);
     revert->setToolTip("Revert to previous state");
     revert->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));

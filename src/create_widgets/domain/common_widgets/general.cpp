@@ -23,7 +23,9 @@ General::General(
     title->setPlaceholderText("Enter VM title");
     descLabel = new QLabel("Description:", this);
     description = new QTextEdit(this);
-    commonLayout = new QVBoxLayout();
+    restorePanel = new RestorePanel(this);
+    commonLayout = new QVBoxLayout(this);
+    commonLayout->addWidget(restorePanel, 0, Qt::AlignRight);
     commonLayout->addWidget(typeLabel);
     commonLayout->addWidget(archLabel);
     commonLayout->addWidget(nameLabel);
