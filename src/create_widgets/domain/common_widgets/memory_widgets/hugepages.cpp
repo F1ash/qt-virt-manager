@@ -62,6 +62,7 @@ void HugePages::addPage()
         size->setValue(0);
         units->setCurrentIndex(0);
         nodeset->clear();
+        emit dataChanged();
     };
 }
 void HugePages::delPage()
@@ -69,6 +70,7 @@ void HugePages::delPage()
     QList<QListWidgetItem*> l = pages->selectedItems();
     if ( !l.isEmpty() ) {
         pages->takeItem(pages->row(l.at(0)));
+        emit dataChanged();
     };
     pages->clearSelection();
 }

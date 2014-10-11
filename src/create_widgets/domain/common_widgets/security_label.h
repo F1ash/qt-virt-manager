@@ -45,6 +45,9 @@ private slots:
     void             addSecLabel();
     void             delSecLabel();
     void             readXMLDesciption();
+    void             resetSecData();
+    void             revertSecData();
+    void             saveSecData();
 };
 
 #endif // SECURITY_LABEL_H

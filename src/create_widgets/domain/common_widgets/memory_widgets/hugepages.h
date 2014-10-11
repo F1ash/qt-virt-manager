@@ -27,6 +27,9 @@ public:
     QWidget         *baseWdg;
     QVBoxLayout     *commonLayout;
 
+signals:
+    void             dataChanged();
+
 public slots:
     QStringList      getPagesList() const;
     void             setPageList(QString&);

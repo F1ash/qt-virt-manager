@@ -89,6 +89,40 @@ Memory::Memory(
     connect(enableMemTune, SIGNAL(toggled(bool)),
             memTuneWdg, SLOT(setVisible(bool)));
     readXMLDesciption();
+    // dataChanged connections
+    connect(maxMemValue, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(currMemValue, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(enableMemBacking, SIGNAL(toggled(bool)),
+            this, SLOT(stateChanged()));
+    connect(hugepages, SIGNAL(toggled(bool)),
+            this, SLOT(stateChanged()));
+    connect(hugePagesList, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(nosharepages, SIGNAL(toggled(bool)),
+            this, SLOT(stateChanged()));
+    connect(locked, SIGNAL(toggled(bool)),
+            this, SLOT(stateChanged()));
+    connect(enableMemTune, SIGNAL(toggled(bool)),
+            this, SLOT(stateChanged()));
+    connect(hard_limit, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(soft_limit, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(swap_hard_limit, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(min_guarantee, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(this, SIGNAL(dataChanged()),
+            restorePanel, SLOT(stateChanged()));
+    // action connections
+    connect(restorePanel, SIGNAL(resetData()),
+            this, SLOT(resetSecData()));
+    connect(restorePanel, SIGNAL(revertData()),
+            this, SLOT(revertSecData()));
+    connect(restorePanel, SIGNAL(saveData()),
+            this, SLOT(saveSecData()));
 }
 
 /* public slots */
@@ -325,4 +359,16 @@ quint64 Memory::convertNiBtoKiB(quint64 _NiB, QString &_unit)
     } else if ( _unit=="EB" ) {
         return convertNiBtoKiB(_NiB*1000000000000000, bytes);
     } else return 0;
+}
+void Memory::resetSecData()
+{
+    restorePanel->stateChanged(false);
+}
+void Memory::revertSecData()
+{
+    restorePanel->stateChanged(false);
+}
+void Memory::saveSecData()
+{
+    restorePanel->stateChanged(false);
 }

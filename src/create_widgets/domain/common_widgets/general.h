@@ -39,6 +39,9 @@ public slots:
 
 private slots:
     void             readXMLDesciption();
+    void             resetSecData();
+    void             revertSecData();
+    void             saveSecData();
 };
 
 #endif // GENERAL_H

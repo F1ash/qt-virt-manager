@@ -64,6 +64,9 @@ private slots:
     void             changeMaximumMemValue(int);
     void             readXMLDesciption();
     quint64          convertNiBtoKiB(quint64, QString&);
+    void             resetSecData();
+    void             revertSecData();
+    void             saveSecData();
 };
 
 #endif // MEMORY_H

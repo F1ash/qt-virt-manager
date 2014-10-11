@@ -38,6 +38,24 @@ General::General(
     commonLayout->addWidget(description);
     setLayout(commonLayout);
     readXMLDesciption();
+    // dataChanged connections
+    connect(name, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(uuid, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(title, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(description, SIGNAL(textChanged()),
+            this, SLOT(stateChanged()));
+    connect(this, SIGNAL(dataChanged()),
+            restorePanel, SLOT(stateChanged()));
+    // action connections
+    connect(restorePanel, SIGNAL(resetData()),
+            this, SLOT(resetSecData()));
+    connect(restorePanel, SIGNAL(revertData()),
+            this, SLOT(revertSecData()));
+    connect(restorePanel, SIGNAL(saveData()),
+            this, SLOT(saveSecData()));
 }
 
 /* public slots */
@@ -95,4 +113,16 @@ void General::readXMLDesciption()
                 _domain
                 .firstChildElement("description")
                 .firstChild().toText().data());
+}
+void General::resetSecData()
+{
+    restorePanel->stateChanged(false);
+}
+void General::revertSecData()
+{
+    restorePanel->stateChanged(false);
+}
+void General::saveSecData()
+{
+    restorePanel->stateChanged(false);
 }

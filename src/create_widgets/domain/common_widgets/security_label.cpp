@@ -67,6 +67,28 @@ SecurityLabel::SecurityLabel(
     connect(del, SIGNAL(clicked()),
             this, SLOT(delSecLabel()));
     readXMLDesciption();
+    // dataChanged connections
+    connect(model, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(label, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(labelTypeLabel, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(relabel, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(type, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(useSecLabel, SIGNAL(toggled(bool)),
+            this, SLOT(stateChanged()));
+    connect(this, SIGNAL(dataChanged()),
+            restorePanel, SLOT(stateChanged()));
+    // action connections
+    connect(restorePanel, SIGNAL(resetData()),
+            this, SLOT(resetSecData()));
+    connect(restorePanel, SIGNAL(revertData()),
+            this, SLOT(revertSecData()));
+    connect(restorePanel, SIGNAL(saveData()),
+            this, SLOT(saveSecData()));
 }
 
 /* public slots */
@@ -203,4 +225,16 @@ void SecurityLabel::readXMLDesciption()
             };
         };
     };
+}
+void SecurityLabel::resetSecData()
+{
+    restorePanel->stateChanged(false);
+}
+void SecurityLabel::revertSecData()
+{
+    restorePanel->stateChanged(false);
+}
+void SecurityLabel::saveSecData()
+{
+    restorePanel->stateChanged(false);
 }

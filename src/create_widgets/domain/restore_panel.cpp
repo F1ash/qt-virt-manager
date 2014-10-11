@@ -26,9 +26,9 @@ RestorePanel::RestorePanel(QWidget *parent) :
 /* public slots */
 void RestorePanel::stateChanged()
 {
-    revert->setEnabled(true);
+    restoreMenu->revertData->setEnabled(true);
 }
 void RestorePanel::stateChanged(bool state)
 {
-    revert->setEnabled(state);
+    restoreMenu->revertData->setEnabled(state);
 }
