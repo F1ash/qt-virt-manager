@@ -35,7 +35,7 @@ private:
     UnixWidget      *unixWdg;
 
 public slots:
-    QDomDocument     getDevDocument() const;
+    QDomDocument     getDataDocument() const;
 };
 
 #endif // CHAR_DEVICE_H

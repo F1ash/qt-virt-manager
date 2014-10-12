@@ -42,7 +42,7 @@ PCI_Passthrough::PCI_Passthrough(
 }
 
 /* public slots */
-QDomDocument PCI_Passthrough::getDevDocument() const
+QDomDocument PCI_Passthrough::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _address, _mac, _driver,

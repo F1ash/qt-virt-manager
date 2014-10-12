@@ -12,7 +12,7 @@ public:
 signals:
 
 public slots:
-    void setDeviceData(QString&);
+    void setDataDescription(QString&);
 };
 
 #endif // SMARTCARD_DEVICE_EDIT_H

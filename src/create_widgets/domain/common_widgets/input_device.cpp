@@ -31,7 +31,7 @@ InputDevice::InputDevice(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument InputDevice::getDevDocument() const
+QDomDocument InputDevice::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _address, _device, _devDesc;

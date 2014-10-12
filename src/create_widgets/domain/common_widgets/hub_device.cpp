@@ -21,7 +21,7 @@ HubDevice::HubDevice(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument HubDevice::getDevDocument() const
+QDomDocument HubDevice::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _address, _device, _devDesc;

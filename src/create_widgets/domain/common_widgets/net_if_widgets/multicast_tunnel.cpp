@@ -23,7 +23,7 @@ MultiCast_Tunnel::MultiCast_Tunnel(
 }
 
 /* public slots */
-QDomDocument MultiCast_Tunnel::getDevDocument() const
+QDomDocument MultiCast_Tunnel::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _mac, _device, _devDesc;

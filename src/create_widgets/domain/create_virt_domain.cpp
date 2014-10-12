@@ -264,10 +264,12 @@ void CreateVirtDomain::buildXMLDescription()
         QString property = (*Wdg)->objectName().split(":").last();
         QDomNodeList list;
         if ( property=="Device" ) {
-            list = (*Wdg)->getDevDocument().firstChildElement("devices").childNodes();
+            list = (*Wdg)->getDataDocument().firstChildElement("devices").childNodes();
             _element = devices;
         } else {
-            list = (*Wdg)->getDevDocument().firstChildElement("data").childNodes();
+            tabWidget->setCurrentWidget(*Wdg);
+            (*Wdg)->closeDataEdit();
+            list = (*Wdg)->getDataDocument().firstChildElement("data").childNodes();
             _element = root;
         };
         /*

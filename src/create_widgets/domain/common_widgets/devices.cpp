@@ -146,14 +146,14 @@ Devices::~Devices()
 }
 
 /* public slots */
-QDomDocument Devices::getDevDocument() const
+QDomDocument Devices::getDataDocument() const
 {
     /*
      * parse usedDeviceList
      */
     //qDebug()<<"Device result";
     QDomDocument doc;
-    QString _ret = infoWidget->_closeDeviceData();
+    QString _ret = infoWidget->closeDataEdit();
     if ( !_ret.isEmpty() )
         usedDeviceList->currentItem()->setData(Qt::UserRole, _ret);
     QDomElement devices = doc.createElement("devices");
@@ -350,7 +350,7 @@ void Devices::delDevice()
     //qDebug()<<"Delete"<<usedDeviceList->currentItem()->text();
     QListWidgetItem *item =
             usedDeviceList->takeItem(usedDeviceList->currentRow());
-    infoWidget->_closeDeviceData();
+    infoWidget->closeDataEdit();
     if ( NULL!=item ) {
         delete item;
         item = NULL;

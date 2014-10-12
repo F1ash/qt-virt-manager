@@ -63,7 +63,7 @@ VNC_Graphics::VNC_Graphics(
 }
 
 /* public slots */
-QDomDocument VNC_Graphics::getDevDocument() const
+QDomDocument VNC_Graphics::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _listen, _device, _devDesc;

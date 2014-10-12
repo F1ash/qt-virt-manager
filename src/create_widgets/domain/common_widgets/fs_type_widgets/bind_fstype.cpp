@@ -18,7 +18,7 @@ BindFsType::BindFsType(QWidget *parent, QString _type) :
 }
 
 /* public slots */
-QDomDocument BindFsType::getDevDocument() const
+QDomDocument BindFsType::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _device, _devDesc;

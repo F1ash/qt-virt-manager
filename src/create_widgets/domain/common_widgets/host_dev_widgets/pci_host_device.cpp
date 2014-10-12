@@ -15,7 +15,7 @@ PCI_Host_Device::PCI_Host_Device(
 }
 
 /* public slots */
-QDomDocument PCI_Host_Device::getDevDocument() const
+QDomDocument PCI_Host_Device::getDataDocument() const
 {
     QDomDocument doc;
     QString _Addr, domain, bus, slot, function, _hex;

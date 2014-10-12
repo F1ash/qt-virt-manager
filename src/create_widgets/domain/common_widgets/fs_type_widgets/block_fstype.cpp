@@ -10,7 +10,7 @@ BlockFsType::BlockFsType(QWidget *parent, QString _type) :
 }
 
 /* public slots */
-QDomDocument BlockFsType::getDevDocument() const
+QDomDocument BlockFsType::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _device, _devDesc;

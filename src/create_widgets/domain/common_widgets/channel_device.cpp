@@ -23,11 +23,11 @@ ChannelDevice::ChannelDevice(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument ChannelDevice::getDevDocument() const
+QDomDocument ChannelDevice::getDataDocument() const
 {
     QDomDocument doc;
     CharDevice *wdg = static_cast<CharDevice*>(charDevWdg->currentWidget());
-    doc = wdg->getDevDocument();
+    doc = wdg->getDataDocument();
     if ( doc.isNull() ) {
         QDomElement _device, _devDesc;
         _device = doc.createElement("device");
@@ -47,7 +47,7 @@ QDomDocument ChannelDevice::getDevDocument() const
             .setAttribute("type", _type);
     return doc;
 }
-void ChannelDevice::setDeviceData(QString &xmlDesc)
+void ChannelDevice::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;
@@ -71,7 +71,7 @@ void ChannelDevice::setDeviceData(QString &xmlDesc)
     QString _type = _device.attribute("type", "unix");
     idx = devType->findText(_type, Qt::MatchEndsWith);
     devType->setCurrentIndex( (idx<0)? 0:idx );
-    static_cast<_QWidget*>(charDevWdg->currentWidget())->setDeviceData(xmlDesc);
+    static_cast<_QWidget*>(charDevWdg->currentWidget())->setDataDescription(xmlDesc);
 }
 
 /* private slots */

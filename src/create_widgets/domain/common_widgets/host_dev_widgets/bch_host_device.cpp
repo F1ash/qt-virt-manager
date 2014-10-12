@@ -29,7 +29,7 @@ BCh_Host_Device::BCh_Host_Device(
 }
 
 /* public slots */
-QDomDocument BCh_Host_Device::getDevDocument() const
+QDomDocument BCh_Host_Device::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _dev, _device, _devDesc;

@@ -24,7 +24,7 @@ SDL_Graphics::SDL_Graphics(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument SDL_Graphics::getDevDocument() const
+QDomDocument SDL_Graphics::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _device, _devDesc;

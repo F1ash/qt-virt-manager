@@ -27,7 +27,7 @@ private:
     QVBoxLayout         *commonLayout;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 };
 
 #endif // PCI_PASSTHROUGH_H

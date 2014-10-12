@@ -8,7 +8,7 @@ Emulator_Edit::Emulator_Edit(QWidget *parent, virConnectPtr conn) :
 }
 
 /* public slots */
-void Emulator_Edit::setDeviceData(QString &xmlDesc)
+void Emulator_Edit::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

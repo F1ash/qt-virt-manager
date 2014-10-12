@@ -54,7 +54,7 @@ private:
     virErrorPtr      virtErrors;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 
 private slots:
     void useAutoPort(bool);

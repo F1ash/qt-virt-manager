@@ -47,7 +47,7 @@ private:
                      devNameOrder = DEVICE_ORDER;
 
 public slots:
-    QDomDocument    getDevDocument() const;
+    QDomDocument    getDataDocument() const;
 
 private slots:
     QDomDocument    chooseNewDevice();

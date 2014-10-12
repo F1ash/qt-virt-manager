@@ -44,9 +44,9 @@ CharDevice::CharDevice(
 }
 
 /* public slots */
-QDomDocument CharDevice::getDevDocument() const
+QDomDocument CharDevice::getDataDocument() const
 {
     _QWidget *wdg = static_cast<_QWidget*>(
                 charDevWdg->currentWidget());
-    return wdg->getDevDocument();
+    return wdg->getDataDocument();
 }

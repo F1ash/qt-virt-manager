@@ -16,7 +16,7 @@ public:
 signals:
 
 public slots:
-    void             setDeviceData(QString&);
+    void             setDataDescription(QString&);
 };
 
 #endif // CHAR_DEVICE_EDIT_H

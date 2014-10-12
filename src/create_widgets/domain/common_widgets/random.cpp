@@ -72,7 +72,7 @@ Random::Random(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument Random::getDevDocument() const
+QDomDocument Random::getDataDocument() const
 {
     QDomDocument doc, _charDevDoc;
     QDomElement _device, _rng, _rate, _backend;
@@ -94,7 +94,7 @@ QDomDocument Random::getDevDocument() const
         if ( _data.toText().data()!="default" )
             _backend.appendChild(_data);
     } else if ( _bkModel=="egd" ) {
-        _charDevDoc = bkEGD->getDevDocument();
+        _charDevDoc = bkEGD->getDataDocument();
         QString _type = _charDevDoc
                 .firstChildElement("device")
                 .firstChildElement("serial")

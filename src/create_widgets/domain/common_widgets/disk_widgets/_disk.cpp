@@ -28,7 +28,7 @@ _Disk::_Disk(
 }
 
 /* public slots */
-QDomDocument _Disk::getDevDocument() const
+QDomDocument _Disk::getDataDocument() const
 {
     return QDomDocument();
 }

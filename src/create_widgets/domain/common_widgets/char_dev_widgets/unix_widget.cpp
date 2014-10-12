@@ -22,7 +22,7 @@ UnixWidget::UnixWidget(QWidget *parent, QString _tag) :
 }
 
 /* public slots */
-QDomDocument UnixWidget::getDevDocument() const
+QDomDocument UnixWidget::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _device, _devDesc;
@@ -47,7 +47,7 @@ void UnixWidget::setPath(QString text)
 {
     path->setText(text);
 }
-void UnixWidget::setDeviceData(QString &xmlDesc)
+void UnixWidget::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

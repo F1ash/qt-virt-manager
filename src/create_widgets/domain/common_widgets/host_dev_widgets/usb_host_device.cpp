@@ -15,7 +15,7 @@ USB_Host_Device::USB_Host_Device(
 }
 
 /* public slots */
-QDomDocument USB_Host_Device::getDevDocument() const
+QDomDocument USB_Host_Device::getDataDocument() const
 {
     QDomDocument doc;
     QString _Id, vendorId, productId;

@@ -38,7 +38,7 @@ UdpWidget::UdpWidget(QWidget *parent, QString _tag) :
 }
 
 /* public slots */
-QDomDocument UdpWidget::getDevDocument() const
+QDomDocument UdpWidget::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source1, _source2, _target, _device, _devDesc;
@@ -66,7 +66,7 @@ QDomDocument UdpWidget::getDevDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void UdpWidget::setDeviceData(QString &xmlDesc)
+void UdpWidget::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

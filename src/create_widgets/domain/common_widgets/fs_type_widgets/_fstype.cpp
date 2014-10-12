@@ -56,7 +56,7 @@ _FsType::_FsType(QWidget *parent,
 }
 
 /* virtual */
-QDomDocument _FsType::getDevDocument() const
+QDomDocument _FsType::getDataDocument() const
 {
     return QDomDocument();
 }

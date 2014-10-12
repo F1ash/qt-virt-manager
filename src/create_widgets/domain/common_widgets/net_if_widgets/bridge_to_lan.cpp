@@ -27,7 +27,7 @@ Bridge_to_LAN::Bridge_to_LAN(
 }
 
 /* public slots */
-QDomDocument Bridge_to_LAN::getDevDocument() const
+QDomDocument Bridge_to_LAN::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source,_target, _mac, _virtualport,

@@ -12,7 +12,7 @@ InputDevice_Edit::InputDevice_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void InputDevice_Edit::setDeviceData(QString &xmlDesc)
+void InputDevice_Edit::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

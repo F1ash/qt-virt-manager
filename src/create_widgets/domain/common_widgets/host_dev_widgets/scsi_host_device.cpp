@@ -15,7 +15,7 @@ SCSI_Host_Device::SCSI_Host_Device(
 }
 
 /* public slots */
-QDomDocument SCSI_Host_Device::getDevDocument() const
+QDomDocument SCSI_Host_Device::getDataDocument() const
 {
     QDomDocument doc;
     QString _Addr, domain, bus, slot, function;

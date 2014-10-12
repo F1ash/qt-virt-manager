@@ -22,7 +22,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 
 private slots:
     void setWidgets(int);

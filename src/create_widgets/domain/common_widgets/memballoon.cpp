@@ -39,7 +39,7 @@ MemBalloon::MemBalloon(QWidget *parent, virConnectPtr conn) :
 }
 
 /* public slots */
-QDomDocument MemBalloon::getDevDocument() const
+QDomDocument MemBalloon::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _device, _memballoon, _stats, _address;

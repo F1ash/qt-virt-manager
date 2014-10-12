@@ -17,7 +17,7 @@ Dir_Disk::Dir_Disk(
 }
 
 /* public slots */
-QDomDocument Dir_Disk::getDevDocument() const
+QDomDocument Dir_Disk::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _device, _devDesc;

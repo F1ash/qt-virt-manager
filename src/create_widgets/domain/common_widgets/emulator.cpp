@@ -20,7 +20,7 @@ Emulator::Emulator(QWidget *parent, virConnectPtr conn) :
 }
 
 /* public slots */
-QDomDocument Emulator::getDevDocument() const
+QDomDocument Emulator::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _device, _emulator;

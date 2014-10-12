@@ -19,7 +19,7 @@ Block_Disk::Block_Disk(
 }
 
 /* public slots */
-QDomDocument Block_Disk::getDevDocument() const
+QDomDocument Block_Disk::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _device, _devDesc;
@@ -42,7 +42,7 @@ QDomDocument Block_Disk::getDevDocument() const
     _devDesc.appendChild(_target);
 
     if ( secLabel->isUsed() ) {
-        QDomNodeList _l = secLabel->getDevDocument()
+        QDomNodeList _l = secLabel->getDataDocument()
                 .firstChildElement("data")
                 .childNodes();
         uint j = 0;

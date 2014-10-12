@@ -25,7 +25,7 @@ Userspace_SLIRP::Userspace_SLIRP(
 }
 
 /* public slots */
-QDomDocument Userspace_SLIRP::getDevDocument() const
+QDomDocument Userspace_SLIRP::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _mac, _device, _devDesc;

@@ -6,11 +6,15 @@ _QWidget::_QWidget(QWidget *parent, virConnectPtr conn, virDomainPtr domain) :
 }
 
 /* public slots */
-QDomDocument _QWidget::getDevDocument() const
+QDomDocument _QWidget::getDataDocument() const
 {
     return QDomDocument();
 }
-void _QWidget::setDeviceData(QString &xmlDesc)
+void _QWidget::setDataDescription(QString &xmlDesc)
 {
 
+}
+QString _QWidget::closeDataEdit()
+{
+    return QString();
 }

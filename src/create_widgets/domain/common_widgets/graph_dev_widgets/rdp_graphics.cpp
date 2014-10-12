@@ -20,7 +20,7 @@ RDP_Graphics::RDP_Graphics(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument RDP_Graphics::getDevDocument() const
+QDomDocument RDP_Graphics::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _device, _devDesc;

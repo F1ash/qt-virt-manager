@@ -15,7 +15,7 @@ private:
     QSpinBox    *usage;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 };
 
 #endif // RAM_FSTYPE_H

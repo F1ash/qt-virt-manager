@@ -32,7 +32,7 @@ Virtual_Network::Virtual_Network(
 }
 
 /* public slots */
-QDomDocument Virtual_Network::getDevDocument() const
+QDomDocument Virtual_Network::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _mac, _virtualport,

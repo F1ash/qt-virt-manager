@@ -23,7 +23,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 };
 
 #endif // BRIDGE_TO_LAN_H

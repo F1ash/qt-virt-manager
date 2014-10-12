@@ -7,7 +7,7 @@ PtyWidget::PtyWidget(QWidget *parent, QString _tag) :
 }
 
 /* public slots */
-QDomDocument PtyWidget::getDevDocument() const
+QDomDocument PtyWidget::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _device, _devDesc;
@@ -20,7 +20,7 @@ QDomDocument PtyWidget::getDevDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void PtyWidget::setDeviceData(QString &xmlDesc)
+void PtyWidget::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

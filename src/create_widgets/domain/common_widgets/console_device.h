@@ -18,7 +18,7 @@ signals:
 private:
 
 public slots:
-QDomDocument getDevDocument() const;
+QDomDocument getDataDocument() const;
 };
 
 #endif // CONSOLE_DEVICE_H

@@ -20,7 +20,7 @@ Generic_Ethernet::Generic_Ethernet(
 }
 
 /* public slots */
-QDomDocument Generic_Ethernet::getDevDocument() const
+QDomDocument Generic_Ethernet::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _target, _script, _device, _devDesc;

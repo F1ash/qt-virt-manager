@@ -30,7 +30,7 @@ Volume_Disk::Volume_Disk(
 }
 
 /* public slots */
-QDomDocument Volume_Disk::getDevDocument() const
+QDomDocument Volume_Disk::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _device, _devDesc;

@@ -59,7 +59,7 @@ General::General(
 }
 
 /* public slots */
-QDomDocument General::getDevDocument() const
+QDomDocument General::getDataDocument() const
 {
     QDomText data;
     QDomDocument doc = QDomDocument();
@@ -89,13 +89,41 @@ QDomDocument General::getDevDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
+QString General::closeDataEdit()
+{
+    if ( !currentStateSaved ) {
+        int answer = QMessageBox::question(
+                    this,
+                    "Save General Data",
+                    "Save last changes?",
+                    QMessageBox::Ok,
+                    QMessageBox::Cancel);
+        if ( answer==QMessageBox::Ok )
+            saveSecData();
+        else
+            revertSecData();
+    };
+    return QString();
+}
 
 /* private slots */
+void General::stateChanged()
+{
+    if ( currentStateSaved ) {
+        currentStateSaved = false;
+    };
+    emit dataChanged();
+}
 void General::readXMLDesciption()
 {
-    if ( xmlDesc.isEmpty() ) return;
+    currentDeviceXMLDesc = xmlDesc;
+    readXMLDesciption(currentDeviceXMLDesc);
+}
+void General::readXMLDesciption(QString &_xmlDesc)
+{
+    //if ( _xmlDesc.isEmpty() ) return;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _domain = doc.firstChildElement("domain");
     name->setText(
                 _domain
@@ -116,13 +144,24 @@ void General::readXMLDesciption()
 }
 void General::resetSecData()
 {
+    readXMLDesciption();
+    currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
 void General::revertSecData()
 {
+    readXMLDesciption(currentDeviceXMLDesc);
+    currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
 void General::saveSecData()
 {
+    QDomDocument doc;
+    QDomElement _domain;
+    doc = this->getDataDocument();
+    _domain = doc.firstChildElement("data");
+    _domain.setTagName("domain");
+    currentDeviceXMLDesc = doc.toString();
+    currentStateSaved = true;
     restorePanel->stateChanged(false);
 }

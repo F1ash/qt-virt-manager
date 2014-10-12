@@ -126,7 +126,7 @@ Memory::Memory(
 }
 
 /* public slots */
-QDomDocument Memory::getDevDocument() const
+QDomDocument Memory::getDataDocument() const
 {
     QDomText data;
     QDomDocument doc = QDomDocument();
@@ -135,12 +135,12 @@ QDomDocument Memory::getDevDocument() const
     _memory= doc.createElement("memory");
     data = doc.createTextNode(QString("%1").arg(maxMemValue->value()));
     _memory.appendChild(data);
-    _memory.setAttribute("unit", maxMemValue->suffix());
+    _memory.setAttribute("unit", "KiB");
     _data.appendChild(_memory);
     _currMemory= doc.createElement("currentMemory");
     data = doc.createTextNode(QString("%1").arg(currMemValue->value()));
     _currMemory.appendChild(data);
-    _currMemory.setAttribute("unit", currMemValue->suffix());
+    _currMemory.setAttribute("unit", "KiB");
     _data.appendChild(_currMemory);
 
     if ( enableMemBacking->isChecked() ) {
@@ -208,8 +208,31 @@ QDomDocument Memory::getDevDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
+QString Memory::closeDataEdit()
+{
+    if ( !currentStateSaved ) {
+        int answer = QMessageBox::question(
+                    this,
+                    "Save Memory Data",
+                    "Save last changes?",
+                    QMessageBox::Ok,
+                    QMessageBox::Cancel);
+        if ( answer==QMessageBox::Ok )
+            saveSecData();
+        else
+            revertSecData();
+    };
+    return QString();
+}
 
 /* private slots */
+void Memory::stateChanged()
+{
+    if ( currentStateSaved ) {
+        currentStateSaved = false;
+    };
+    emit dataChanged();
+}
 void Memory::changeCurrentMemValue(int i)
 {
     if ( currMemValue->value()>i ) currMemValue->setValue(i);
@@ -220,11 +243,16 @@ void Memory::changeMaximumMemValue(int i)
 }
 void Memory::readXMLDesciption()
 {
-    if ( xmlDesc.isEmpty() ) return;
+    currentDeviceXMLDesc = xmlDesc;
+    readXMLDesciption(currentDeviceXMLDesc);
+}
+void Memory::readXMLDesciption(QString &_xmlDesc)
+{
+    //if ( _xmlDesc.isEmpty() ) return;
     quint64 _value;
     QString _unit;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _domain = doc.firstChildElement("domain");
     _value = _domain
             .firstChildElement("memory")
@@ -362,13 +390,24 @@ quint64 Memory::convertNiBtoKiB(quint64 _NiB, QString &_unit)
 }
 void Memory::resetSecData()
 {
+    readXMLDesciption();
+    currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
 void Memory::revertSecData()
 {
+    readXMLDesciption(currentDeviceXMLDesc);
+    currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
 void Memory::saveSecData()
 {
+    QDomDocument doc;
+    QDomElement _domain;
+    doc = this->getDataDocument();
+    _domain = doc.firstChildElement("data");
+    _domain.setTagName("domain");
+    currentDeviceXMLDesc = doc.toString();
+    currentStateSaved = true;
     restorePanel->stateChanged(false);
 }

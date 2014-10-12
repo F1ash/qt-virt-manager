@@ -18,7 +18,7 @@ private:
     QLineEdit       *path;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 
 private slots:
     void setDevPath();

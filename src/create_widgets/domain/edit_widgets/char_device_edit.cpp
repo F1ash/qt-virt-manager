@@ -16,7 +16,7 @@ CharDevice_Edit::CharDevice_Edit(
 }
 
 /* public slots */
-void CharDevice_Edit::setDeviceData(QString &xmlDesc)
+void CharDevice_Edit::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;
@@ -27,5 +27,5 @@ void CharDevice_Edit::setDeviceData(QString &xmlDesc)
     QString _type = _device.attribute("type", "unix");
     int idx = devType->findText(_type, Qt::MatchEndsWith);
     devType->setCurrentIndex( (idx<0)? 0:idx );
-    static_cast<_QWidget*>(charDevWdg->currentWidget())->setDeviceData(xmlDesc);
+    static_cast<_QWidget*>(charDevWdg->currentWidget())->setDataDescription(xmlDesc);
 }

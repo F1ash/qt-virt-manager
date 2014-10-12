@@ -23,7 +23,7 @@ signals:
     void errorMsg(QString);
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 
 private slots:
     void setAvailabledUSBDevices();

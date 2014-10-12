@@ -2,6 +2,7 @@
 #define MEMORY_H
 
 #include <QScrollArea>
+#include <QMessageBox>
 #include "create_widgets/domain/_qwidget.h"
 #include "memory_widgets/hugepages.h"
 #include "create_widgets/domain/restore_panel.h"
@@ -20,6 +21,8 @@ signals:
 
 private:
     const QString    xmlDesc;
+    bool             currentStateSaved = true;
+    QString          currentDeviceXMLDesc;
     QString          memUnit;
     QString          memValue;
     RestorePanel    *restorePanel;
@@ -57,12 +60,15 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument     getDevDocument() const;
+    QDomDocument     getDataDocument() const;
+    QString          closeDataEdit();
 
 private slots:
+    void             stateChanged();
     void             changeCurrentMemValue(int);
     void             changeMaximumMemValue(int);
     void             readXMLDesciption();
+    void             readXMLDesciption(QString&);
     quint64          convertNiBtoKiB(quint64, QString&);
     void             resetSecData();
     void             revertSecData();

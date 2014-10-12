@@ -92,7 +92,7 @@ LXC_OSBooting::~LXC_OSBooting()
 }
 
 /* public slots */
-QDomDocument LXC_OSBooting::getDevDocument() const
+QDomDocument LXC_OSBooting::getDataDocument() const
 {
     QDomText data;
     QDomDocument doc = QDomDocument();

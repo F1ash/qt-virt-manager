@@ -32,7 +32,7 @@ private:
     virErrorPtr      virtErrors;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 
 private slots:
     void usePort(bool);

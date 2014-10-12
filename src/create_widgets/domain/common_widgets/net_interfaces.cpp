@@ -51,10 +51,10 @@ NetInterfaces::NetInterfaces(
 }
 
 /* public slots */
-QDomDocument NetInterfaces::getDevDocument() const
+QDomDocument NetInterfaces::getDataDocument() const
 {
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    return wdg->getDevDocument();
+    return wdg->getDataDocument();
 }
 
 /* private slots */

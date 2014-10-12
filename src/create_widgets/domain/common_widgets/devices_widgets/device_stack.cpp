@@ -153,7 +153,7 @@ QDomDocument DeviceStack::getResult() const
     qDebug()<<"DeviceStack result";
     QDomDocument doc;
     if ( device!=NULL ) {
-        doc = device->getDevDocument();
+        doc = device->getDataDocument();
     };
     return doc;
 }

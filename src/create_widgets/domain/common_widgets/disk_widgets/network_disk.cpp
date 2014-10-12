@@ -28,7 +28,7 @@ Network_Disk::Network_Disk(
 }
 
 /* public slots */
-QDomDocument Network_Disk::getDevDocument() const
+QDomDocument Network_Disk::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _device, _devDesc;

@@ -30,7 +30,7 @@ private:
     QString          connType;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 
 private slots:
     void setWidgets(QString);

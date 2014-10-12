@@ -15,7 +15,7 @@ Desktop_Graphics::Desktop_Graphics(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument Desktop_Graphics::getDevDocument() const
+QDomDocument Desktop_Graphics::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _device, _devDesc;

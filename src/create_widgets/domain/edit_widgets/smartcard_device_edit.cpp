@@ -12,7 +12,7 @@ SmartCardDevice_Edit::SmartCardDevice_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void SmartCardDevice_Edit::setDeviceData(QString &xmlDesc)
+void SmartCardDevice_Edit::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc, channelDoc;
@@ -40,7 +40,7 @@ void SmartCardDevice_Edit::setDeviceData(QString &xmlDesc)
         else ++j;
     };
     _channelXMLDesc = channelDoc.toString();
-    channel->setDeviceData(_channelXMLDesc);
+    channel->setDataDescription(_channelXMLDesc);
     idx = addr->type->findText("ccid", Qt::MatchContains);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     _addr = _device.firstChildElement("address");

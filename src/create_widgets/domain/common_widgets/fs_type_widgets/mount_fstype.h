@@ -12,7 +12,7 @@ public:
             QString _type = QString());
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 
 private slots:
     void getSourcePath();

@@ -3,6 +3,7 @@
 
 #include "create_widgets/domain/_qwidget.h"
 #include <QTextEdit>
+#include <QMessageBox>
 #include "create_widgets/domain/restore_panel.h"
 
 class General : public _QWidget
@@ -19,6 +20,8 @@ signals:
 
 private:
     const QString    xmlDesc;
+    bool             currentStateSaved = true;
+    QString          currentDeviceXMLDesc;
     RestorePanel    *restorePanel;
     QVBoxLayout     *commonLayout;
     QLabel          *typeLabel;
@@ -35,10 +38,13 @@ private:
     QTextEdit       *description;
 
 public slots:
-    QDomDocument     getDevDocument() const;
+    QDomDocument     getDataDocument() const;
+    QString          closeDataEdit();
 
 private slots:
+    void             stateChanged();
     void             readXMLDesciption();
+    void             readXMLDesciption(QString&);
     void             resetSecData();
     void             revertSecData();
     void             saveSecData();

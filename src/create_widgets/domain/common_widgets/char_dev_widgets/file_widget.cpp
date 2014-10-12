@@ -15,7 +15,7 @@ FileWidget::FileWidget(QWidget *parent, QString _tag) :
 }
 
 /* public slots */
-QDomDocument FileWidget::getDevDocument() const
+QDomDocument FileWidget::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _device, _devDesc;
@@ -35,7 +35,7 @@ QDomDocument FileWidget::getDevDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void FileWidget::setDeviceData(QString &xmlDesc)
+void FileWidget::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

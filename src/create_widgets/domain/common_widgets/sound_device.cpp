@@ -41,7 +41,7 @@ SoundDevice::SoundDevice(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument SoundDevice::getDevDocument() const
+QDomDocument SoundDevice::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _device, _devDesc;

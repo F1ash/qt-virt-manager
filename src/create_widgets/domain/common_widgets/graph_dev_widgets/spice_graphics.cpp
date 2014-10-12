@@ -281,7 +281,7 @@ Spice_Graphics::Spice_Graphics(
 }
 
 /* public slots */
-QDomDocument Spice_Graphics::getDevDocument() const
+QDomDocument Spice_Graphics::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _listen, _device, _devDesc;

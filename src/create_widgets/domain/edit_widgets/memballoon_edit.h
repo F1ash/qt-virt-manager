@@ -14,7 +14,7 @@ public:
 signals:
 
 public slots:
-    void setDeviceData(QString&);
+    void setDataDescription(QString&);
 };
 
 #endif // MEMBALLOON_EDIT_H

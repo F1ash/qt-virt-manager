@@ -28,7 +28,7 @@ SmartCardDevice::SmartCardDevice(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument SmartCardDevice::getDevDocument() const
+QDomDocument SmartCardDevice::getDataDocument() const
 {
     QDomDocument doc, _channel;
     QDomElement _device, _devDesc, _address;
@@ -50,7 +50,7 @@ QDomDocument SmartCardDevice::getDevDocument() const
                 mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
     if ( mode->itemData(mode->currentIndex(), Qt::UserRole).toString()=="passthrough" ) {
         _channel = static_cast<CharDevice*>(
-                    channel->charDevWdg->currentWidget())->getDevDocument();
+                    channel->charDevWdg->currentWidget())->getDataDocument();
         /*
          * current DomNode is removed to root-element
          * but NULL-elemens not removed

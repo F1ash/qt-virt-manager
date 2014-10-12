@@ -3,6 +3,7 @@
 
 #include <QListWidget>
 #include <QPushButton>
+#include <QMessageBox>
 #include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/restore_panel.h"
 
@@ -16,6 +17,8 @@ public:
 
 private:
     const QString    xmlDesc;
+    bool             currentStateSaved = true;
+    QString          currentDeviceXMLDesc;
     RestorePanel    *restorePanel;
     QCheckBox       *useSecLabel;
     QLabel          *typeLabel, *modelLabel,
@@ -35,9 +38,11 @@ private:
 
 public slots:
     bool             isUsed() const;
-    QDomDocument     getDevDocument() const;
+    QDomDocument     getDataDocument() const;
+    QString          closeDataEdit();
 
 private slots:
+    void             stateChanged();
     void             usedStateChanged(bool);
     void             securityTypeChanged(QString);
     void             modelTypeChanged(QString);
@@ -45,6 +50,7 @@ private slots:
     void             addSecLabel();
     void             delSecLabel();
     void             readXMLDesciption();
+    void             readXMLDesciption(QString&);
     void             resetSecData();
     void             revertSecData();
     void             saveSecData();

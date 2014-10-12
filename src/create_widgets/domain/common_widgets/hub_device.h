@@ -16,7 +16,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument     getDevDocument() const;
+    QDomDocument     getDataDocument() const;
 };
 
 #endif // HUB_DEVICE_H

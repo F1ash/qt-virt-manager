@@ -25,12 +25,13 @@ public:
             virConnectPtr conn = NULL,
             virDomainPtr domain = NULL);
 
-    virConnect      *currWorkConnect = NULL;
-    virDomain       *currDomain = NULL;
+    virConnect              *currWorkConnect = NULL;
+    virDomain               *currDomain = NULL;
 
 public slots:
-    virtual QDomDocument getDevDocument() const;
-    virtual void         setDeviceData(QString&);
+    virtual QDomDocument     getDataDocument() const;
+    virtual void             setDataDescription(QString&);
+    virtual QString          closeDataEdit();
 };
 
 #endif // _QWIDGET_H

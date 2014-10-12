@@ -46,10 +46,10 @@ FileSystems::FileSystems(
 }
 
 /* public slots */
-QDomDocument FileSystems::getDevDocument() const
+QDomDocument FileSystems::getDataDocument() const
 {
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    return wdg->getDevDocument();
+    return wdg->getDataDocument();
 }
 
 /* private slots */

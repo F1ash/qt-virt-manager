@@ -41,7 +41,7 @@ TcpWidget::TcpWidget(QWidget *parent, QString _tag) :
 }
 
 /* public slots */
-QDomDocument TcpWidget::getDevDocument() const
+QDomDocument TcpWidget::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _protocol, _target, _device, _devDesc;
@@ -75,7 +75,7 @@ QDomDocument TcpWidget::getDevDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void TcpWidget::setDeviceData(QString &xmlDesc)
+void TcpWidget::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

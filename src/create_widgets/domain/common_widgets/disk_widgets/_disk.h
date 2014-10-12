@@ -27,7 +27,7 @@ public:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    virtual QDomDocument getDevDocument() const;
+    virtual QDomDocument getDataDocument() const;
 };
 
 #endif // _DISK_H

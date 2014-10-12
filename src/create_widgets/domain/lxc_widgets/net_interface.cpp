@@ -31,7 +31,7 @@ LXC_NetInterface::LXC_NetInterface(QWidget *parent, QStringList nets) :
 }
 
 /* public slots */
-QDomDocument LXC_NetInterface::getDevDocument() const
+QDomDocument LXC_NetInterface::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _mac, _device, _devDesc;

@@ -21,7 +21,7 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 };
 
 #endif // VIDEO_DEVICE_H

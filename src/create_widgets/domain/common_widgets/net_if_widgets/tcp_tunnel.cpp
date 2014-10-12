@@ -28,7 +28,7 @@ TCP_Tunnel::TCP_Tunnel(
 }
 
 /* public slots */
-QDomDocument TCP_Tunnel::getDevDocument() const
+QDomDocument TCP_Tunnel::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _mac, _device, _devDesc;

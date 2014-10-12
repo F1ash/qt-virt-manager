@@ -42,7 +42,7 @@ DeviceData::DeviceData(
     connect(restoreMenu->resetData, SIGNAL(triggered()),
             this, SLOT(revertDeviceData()));
     connect(_close, SIGNAL(clicked()),
-            this, SLOT(_closeDeviceData()));
+            this, SLOT(closeDataEdit()));
 }
 
 /* public slots */
@@ -51,14 +51,14 @@ QDomDocument DeviceData::getResult() const
     qDebug()<<"DeviceData result";
     QDomDocument doc;
     if ( device!=NULL ) {
-        doc = device->getDevDocument();
+        doc = device->getDataDocument();
     };
     return doc;
 }
 QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
 {
     QString _ret;
-    if ( device!=NULL ) _ret = _closeDeviceData();
+    if ( device!=NULL ) _ret = closeDataEdit();
     devName->setText(QString("<b>%1</b>").arg(deviceName));
     QDomDocument doc;
     doc.setContent(xmlDesc);
@@ -124,12 +124,12 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     infoLayout->insertWidget(0, device, -1);
     DeviceXMLDesc = xmlDesc;
     currentDeviceXMLDesc = xmlDesc;
-    device->setDeviceData(xmlDesc);
+    device->setDataDescription(xmlDesc);
     connect(device, SIGNAL(dataChanged()),
             this, SLOT(currentStateChanged()));
     return _ret;
 }
-QString DeviceData::_closeDeviceData()
+QString DeviceData::closeDataEdit()
 {
     QString _ret;
     if ( !currentStateSaved ) {
@@ -225,7 +225,7 @@ void DeviceData::saveDeviceData()
 {
     // save device data as previous state
     if ( NULL!=device ) {
-        currentDeviceXMLDesc = device->getDevDocument().toString();
+        currentDeviceXMLDesc = device->getDataDocument().toString();
     };
     currentStateSaved = true;
     restoreMenu->revertData->setEnabled(false);
@@ -236,11 +236,11 @@ void DeviceData::revertDeviceData()
     QAction *act = static_cast<QAction*>(sender());
     if ( act==restoreMenu->revertData ) {
         // revert device data from previous state
-        device->setDeviceData(currentDeviceXMLDesc);
+        device->setDataDescription(currentDeviceXMLDesc);
     } else if ( act==restoreMenu->resetData ) {
         // restore device data from null-point
         currentDeviceXMLDesc.clear();
-        device->setDeviceData(DeviceXMLDesc);
+        device->setDataDescription(DeviceXMLDesc);
     };
     currentStateSaved = true;
     restoreMenu->revertData->setEnabled(false);

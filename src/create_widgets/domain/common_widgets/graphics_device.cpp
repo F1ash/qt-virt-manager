@@ -29,10 +29,10 @@ GraphicsDevice::GraphicsDevice(
 }
 
 /* public slots */
-QDomDocument GraphicsDevice::getDevDocument() const
+QDomDocument GraphicsDevice::getDataDocument() const
 {
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    return wdg->getDevDocument();
+    return wdg->getDataDocument();
 }
 
 /* private slots */

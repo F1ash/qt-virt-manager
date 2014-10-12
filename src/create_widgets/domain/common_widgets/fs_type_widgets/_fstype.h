@@ -30,7 +30,7 @@ public:
     QCheckBox       *readOnly;
     QGridLayout     *commonLayout;
 
-    virtual QDomDocument getDevDocument() const;
+    virtual QDomDocument getDataDocument() const;
 
  private slots:
     void driverTypeChanged(QString);

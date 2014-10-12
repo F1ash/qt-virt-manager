@@ -15,7 +15,7 @@ MemBalloon_Edit::MemBalloon_Edit(
 }
 
 /* public slots */
-void MemBalloon_Edit::setDeviceData(QString &xmlDesc)
+void MemBalloon_Edit::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

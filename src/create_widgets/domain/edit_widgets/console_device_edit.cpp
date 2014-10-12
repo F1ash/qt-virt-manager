@@ -9,7 +9,7 @@ ConsoleDevice_Edit::ConsoleDevice_Edit(
 }
 
 /* public slots */
-void ConsoleDevice_Edit::setDeviceData(QString &xmlDesc)
+void ConsoleDevice_Edit::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

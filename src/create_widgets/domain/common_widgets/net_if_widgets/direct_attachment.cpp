@@ -35,7 +35,7 @@ DirectAttachment::DirectAttachment(
 }
 
 /* public slots */
-QDomDocument DirectAttachment::getDevDocument() const
+QDomDocument DirectAttachment::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _mac, _virtualport, _model,

@@ -11,7 +11,7 @@ MountFsType::MountFsType(QWidget *parent,
 }
 
 /* public slots */
-QDomDocument MountFsType::getDevDocument() const
+QDomDocument MountFsType::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _device, _devDesc;

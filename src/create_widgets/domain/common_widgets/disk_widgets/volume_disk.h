@@ -23,7 +23,7 @@ private:
                     *volumeDialog = NULL;
 
 public slots:
-    QDomDocument getDevDocument() const;
+    QDomDocument getDataDocument() const;
 
 private slots:
     void changeModeVisibility(QString);

@@ -10,7 +10,7 @@ FileFsType::FileFsType(QWidget *parent, QString _type) :
 }
 
 /* public slots */
-QDomDocument FileFsType::getDevDocument() const
+QDomDocument FileFsType::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
     QDomElement _source, _target, _device, _devDesc;
