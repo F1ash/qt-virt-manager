@@ -211,6 +211,9 @@ void VirtDomainControl::resultReceiver(DomActions act, Result data)
                 data.append(QString("to <a href='%1'>%1</a>").arg(xml));
                 msgRepeater(data.join(" "));
                 if ( show ) QDesktopServices::openUrl(QUrl(xml));
+                QStringList args;
+                args.append(xml);
+                domControlThread->execAction(DEFINE_DOMAIN, args);
             };
             disconnect(createVirtDomain,
                        SIGNAL(errorMsg(QString)),
@@ -353,6 +356,9 @@ void VirtDomainControl::execAction(const QStringList &l)
         } else if ( l.first()=="displayVirtDomain" ) {
             // send signal with Connect & Domain Names to call VM_Viewer into MainWindow widget
             emit displayRequest(currWorkConnect, currConnName, domainName);
+        } else if ( l.first()=="monitorVirtDomain" ) {
+            // send signal with Connect & Domain Names to add into Domain State Monitor
+            emit addToStateMonitor(currWorkConnect, currConnName, domainName);
         } else if ( l.first()=="reloadVirtDomain" ) {
             domControlThread->execAction(GET_ALL_DOMAIN, args);
         };

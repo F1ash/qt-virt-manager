@@ -41,6 +41,9 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         display = new QAction("display VM", this);
         display->setIcon(QIcon::fromTheme("display"));
         display->setEnabled(parameters[1]=="active");
+        addToMonitor = new QAction("add to State Monitor", this);
+        addToMonitor->setIcon(QIcon::fromTheme("utilities-log-viewer"));
+        addToMonitor->setEnabled(true);
         migrate = new QAction("Migrate", this);
         migrate->setIcon(QIcon::fromTheme("migrate"));
         migrate->setEnabled(parameters[1]=="active");
@@ -62,6 +65,7 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         addAction(getXMLDesc);
         addSeparator();
         addAction(display);
+        addAction(addToMonitor);
         addSeparator();
         addAction(migrate);
         addSeparator();
@@ -104,6 +108,8 @@ void DomainControlMenu::emitExecMethod(QAction *action)
             paramList << "getVirtDomXMLDesc";
         } else if ( action == display ) {
             paramList << "displayVirtDomain";
+        } else if ( action == addToMonitor ) {
+            paramList << "monitorVirtDomain";
         } else if ( action == migrate ) {
             paramList << "migrateVirtDomain";
         } else return;

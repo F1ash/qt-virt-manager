@@ -33,6 +33,7 @@ private:
     QAction        *getXMLDesc;
     QAction        *migrate;
     QAction        *display;
+    QAction        *addToMonitor;
     QAction        *reload;
     QStringList     parameters;
 

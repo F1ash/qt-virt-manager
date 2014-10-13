@@ -227,10 +227,8 @@ Result DomControlThread::defineDomain()
     xmlData = f.readAll();
     f.close();
     virDomainPtr domain = virDomainDefineXML(currWorkConnect, xmlData.data());
-    if ( domain==NULL ) {
-        sendConnErrors();
-        return result;
-    };
+    sendConnErrors();
+    if ( domain==NULL ) return result;
     result.name = QString().fromUtf8( virDomainGetName(domain) );
     result.result = true;
     result.msg.append(QString("'<b>%1</b>' Domain from\n\"%2\"\nis defined.")
