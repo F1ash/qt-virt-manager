@@ -20,7 +20,7 @@ class VirtNetControl : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit VirtNetControl(QWidget *parent = 0);
+    explicit VirtNetControl(QWidget *parent = NULL);
     ~VirtNetControl();
 
 signals:

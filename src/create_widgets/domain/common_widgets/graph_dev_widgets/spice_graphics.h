@@ -8,7 +8,7 @@ class Spice_Graphics : public _QWidget
     Q_OBJECT
 public:
     explicit Spice_Graphics(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
 
 signals:

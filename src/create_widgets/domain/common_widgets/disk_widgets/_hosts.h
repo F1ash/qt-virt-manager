@@ -14,7 +14,7 @@ class _Hosts : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _Hosts(QWidget *parent = 0);
+    explicit _Hosts(QWidget *parent = NULL);
 
 private:
     QCheckBox       *useHosts;

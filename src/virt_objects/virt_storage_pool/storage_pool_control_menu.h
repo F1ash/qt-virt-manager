@@ -10,7 +10,7 @@ class StoragePoolControlMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit StoragePoolControlMenu(QWidget *parent = 0, QStringList params = QStringList(), bool state = false);
+    explicit StoragePoolControlMenu(QWidget *parent = NULL, QStringList params = QStringList(), bool state = false);
     ~StoragePoolControlMenu();
 
 signals:

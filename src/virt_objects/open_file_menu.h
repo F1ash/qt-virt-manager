@@ -13,7 +13,7 @@ class OpenFileMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit OpenFileMenu(QWidget *parent = 0, QString str = "create", QString src = "Network");
+    explicit OpenFileMenu(QWidget *parent = NULL, QString str = "create", QString src = "Network");
     ~OpenFileMenu();
 
 signals:

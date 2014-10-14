@@ -1,6 +1,6 @@
 #include "layout/conn_list_widget.h"
 
-ConnectList::ConnectList(QWidget *parent = 0)
+ConnectList::ConnectList(QWidget *parent = NULL)
     : QTreeView(parent)
 {
   this->setContextMenuPolicy ( Qt::CustomContextMenu );
@@ -23,9 +23,9 @@ ConnectList::~ConnectList()
   disconnect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(connectItemClicked(const QPoint &)));
   disconnect(this, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(connectItemDoubleClicked(const QModelIndex&)));
   delete progressBarDlg;
-  progressBarDlg = 0;
+  progressBarDlg = NULL;
   delete connItemModel;
-  connItemModel = 0;
+  connItemModel = NULL;
   QStringList keys = connects->keys();
   foreach (QString key, keys) {
       disconnect(connects->value(key), SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
@@ -35,7 +35,7 @@ ConnectList::~ConnectList()
   };
   connects->clear();
   delete connects;
-  connects = 0;
+  connects = NULL;
 }
 
 /* public slots */

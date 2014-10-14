@@ -19,7 +19,7 @@ class CreatePool : public _CreateStorage
 {
     Q_OBJECT
 public:
-    explicit CreatePool(QWidget *parent = 0);
+    explicit CreatePool(QWidget *parent = NULL);
 
 signals:
 

@@ -11,7 +11,7 @@ class Wait : public QThread
 {
     Q_OBJECT
 public:
-    Wait(QObject *parent = 0, ConnectList *wdgList = NULL,
+    Wait(QObject *parent = NULL, ConnectList *wdgList = NULL,
          ViewerMap map = ViewerMap());
     ~Wait();
 

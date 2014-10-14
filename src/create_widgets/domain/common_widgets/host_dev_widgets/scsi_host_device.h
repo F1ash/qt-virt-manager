@@ -14,7 +14,7 @@ class SCSI_Host_Device : public _QWidget
     Q_OBJECT
 public:
     explicit SCSI_Host_Device(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
 
 private:

@@ -56,7 +56,7 @@ VirtNetControl::~VirtNetControl()
     stopProcessing();
     netControlThread->terminate();
     delete netControlThread;
-    netControlThread = 0;
+    netControlThread = NULL;
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -64,16 +64,16 @@ VirtNetControl::~VirtNetControl()
     };
 
     delete toolBar;
-    toolBar = 0;
+    toolBar = NULL;
 
     if (virtNetModel!=NULL) {
         delete virtNetModel;
-        virtNetModel = 0;
+        virtNetModel = NULL;
     };
 
     if (virtNetList!=NULL) {
         delete virtNetList;
-        virtNetList = 0;
+        virtNetList = NULL;
     };
 }
 
@@ -280,7 +280,7 @@ void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
                     QDesktopServices::openUrl(QUrl(xml));
                 };
                 delete createVirtNet;
-                createVirtNet = 0;
+                createVirtNet = NULL;
                 //qDebug()<<xml<<"path"<<result;
                 args.prepend(xml);
             };

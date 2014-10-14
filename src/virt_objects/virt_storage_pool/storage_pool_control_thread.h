@@ -25,7 +25,7 @@ class StoragePoolControlThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit StoragePoolControlThread(QObject *parent = 0);
+    explicit StoragePoolControlThread(QObject *parent = NULL);
 
 signals:
     void errorMsg(QString);

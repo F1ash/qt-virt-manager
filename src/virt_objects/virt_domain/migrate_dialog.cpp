@@ -227,91 +227,91 @@ MigrateDialog::~MigrateDialog()
     disconnect(fullNonSharedDiskMigration, SIGNAL(clicked()), this, SLOT(migrDiskRegimeChanged()));
     disconnect(incNonSharedDiskMigration, SIGNAL(clicked()), this, SLOT(migrDiskRegimeChanged()));
     delete Name;
-    Name = 0;
+    Name = NULL;
     delete host;
-    host = 0;
+    host = NULL;
     delete newHost;
-    newHost = 0;
+    newHost = NULL;
     delete connectList;
-    connectList = 0;
+    connectList = NULL;
 
     delete uriLabel;
-    uriLabel = 0;
+    uriLabel = NULL;
     delete uri;
-    uri = 0;
+    uri = NULL;
     delete help;
-    help = 0;
+    help = NULL;
     delete helpText;
-    helpText = 0;
+    helpText = NULL;
     delete connLayout;
-    connLayout = 0;
+    connLayout = NULL;
     delete connectivity;
-    connectivity = 0;
+    connectivity = NULL;
 
     delete nativeMigration;
-    nativeMigration = 0;
+    nativeMigration = NULL;
     delete tunnelMigration;
-    tunnelMigration = 0;
+    tunnelMigration = NULL;
     delete p2pMigration;
-    p2pMigration = 0;
+    p2pMigration = NULL;
     delete maxDownTimeLabel;
     maxDownTimeLabel  =0;
     delete p2pCheck;
-    p2pCheck = 0;
+    p2pCheck = NULL;
     delete unsafeMigration;
-    unsafeMigration = 0;
+    unsafeMigration = NULL;
     delete maxDownCheck;
-    maxDownCheck = 0;
+    maxDownCheck = NULL;
     delete maxDownTime;
-    maxDownTime = 0;
+    maxDownTime = NULL;
     delete bandWdthLabel;
-    bandWdthLabel = 0;
+    bandWdthLabel = NULL;
     delete bandWdthCheck;
-    bandWdthCheck = 0;
+    bandWdthCheck = NULL;
     delete bandwidth;
-    bandwidth = 0;
+    bandwidth = NULL;
     delete liveMigration;
-    liveMigration = 0;
+    liveMigration = NULL;
     delete persistDestMigration;
-    persistDestMigration = 0;
+    persistDestMigration = NULL;
     delete undefineSourceMigration;
-    undefineSourceMigration = 0;
+    undefineSourceMigration = NULL;
     delete pausedMigration;
-    pausedMigration = 0;
+    pausedMigration = NULL;
     delete fullNonSharedDiskMigration;
-    fullNonSharedDiskMigration = 0;
+    fullNonSharedDiskMigration = NULL;
     delete incNonSharedDiskMigration;
-    incNonSharedDiskMigration = 0;
+    incNonSharedDiskMigration = NULL;
     delete offlineMigration;
-    offlineMigration = 0;
+    offlineMigration = NULL;
     delete compressedMigration;
-    compressedMigration = 0;
+    compressedMigration = NULL;
     delete abortOnMigration;
-    abortOnMigration = 0;
+    abortOnMigration = NULL;
     delete advLayout;
-    advLayout = 0;
+    advLayout = NULL;
     delete advanced;
-    advanced = 0;
+    advanced = NULL;
     delete flags;
-    flags = 0;
+    flags = NULL;
     delete splitter;
-    splitter = 0;
+    splitter = NULL;
 
     delete useAdvanced;
-    useAdvanced = 0;
+    useAdvanced = NULL;
 
     delete helpLinkLabel;
-    helpLinkLabel = 0;
+    helpLinkLabel = NULL;
     delete cancel;
-    cancel = 0;
+    cancel = NULL;
     delete ok;
-    ok = 0;
+    ok = NULL;
     delete buttonLayout;
-    buttonLayout = 0;
+    buttonLayout = NULL;
     delete buttons;
-    buttons = 0;
+    buttons = NULL;
     delete commonLayout;
-    commonLayout = 0;
+    commonLayout = NULL;
 }
 
 /* public slots */
@@ -328,7 +328,7 @@ void MigrateDialog::closeEvent(QCloseEvent *ev)
 }
 void MigrateDialog::cancelClicked()
 {
-    exitCode = 0;
+    exitCode = NULL;
     close();
 }
 void MigrateDialog::migrateClicked()

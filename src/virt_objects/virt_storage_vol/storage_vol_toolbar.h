@@ -15,7 +15,7 @@ class StorageVolToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit StorageVolToolBar(QWidget *parent = 0);
+    explicit StorageVolToolBar(QWidget *parent = NULL);
     ~StorageVolToolBar();
 
 signals:

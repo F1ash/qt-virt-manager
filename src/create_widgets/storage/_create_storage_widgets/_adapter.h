@@ -13,7 +13,7 @@ class _Adapter : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _Adapter(QWidget *parent = 0);
+    explicit _Adapter(QWidget *parent = NULL);
     QLineEdit           *name, *wwnn, *wwpn,
                         *adapterPrnt, *adapterPrntID;
     QComboBox           *type;

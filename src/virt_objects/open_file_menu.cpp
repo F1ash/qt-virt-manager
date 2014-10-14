@@ -27,11 +27,11 @@ OpenFileMenu::~OpenFileMenu()
     disconnect(examples, SIGNAL(triggered()), this, SLOT(exampleChoised()));
     disconnect(custom, SIGNAL(triggered()), this, SLOT(customChoised()));
     delete examples;
-    examples = 0;
+    examples = NULL;
     delete custom;
-    custom = 0;
+    custom = NULL;
     delete manual;
-    manual = 0;
+    manual = NULL;
 }
 void OpenFileMenu::exampleChoised()
 {

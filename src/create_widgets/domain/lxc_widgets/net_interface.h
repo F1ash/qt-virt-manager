@@ -7,7 +7,7 @@ class LXC_NetInterface : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit LXC_NetInterface(QWidget *parent = 0, QStringList nets = QStringList());
+    explicit LXC_NetInterface(QWidget *parent = NULL, QStringList nets = QStringList());
 
 signals:
 

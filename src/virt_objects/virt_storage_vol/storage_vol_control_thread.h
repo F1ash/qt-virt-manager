@@ -28,7 +28,7 @@ class StorageVolControlThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit StorageVolControlThread(QObject *parent = 0);
+    explicit StorageVolControlThread(QObject *parent = NULL);
 
 signals:
     void errorMsg(QString);

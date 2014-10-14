@@ -10,7 +10,7 @@ class NIC_Model : public QWidget
 {
     Q_OBJECT
 public:
-    explicit NIC_Model(QWidget *parent = 0);
+    explicit NIC_Model(QWidget *parent = NULL);
 
 private:
     QCheckBox           *useModel;

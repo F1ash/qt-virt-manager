@@ -12,7 +12,7 @@ class HostDevice : public _QWidget
     Q_OBJECT
 public:
     explicit HostDevice(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
 
 private:

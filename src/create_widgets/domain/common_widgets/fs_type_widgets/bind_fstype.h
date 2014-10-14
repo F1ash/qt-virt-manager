@@ -8,7 +8,7 @@ class BindFsType : public _FsType
     Q_OBJECT
 public:
     explicit BindFsType(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             QString _type = "lxc");
 
 public slots:

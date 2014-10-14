@@ -13,11 +13,11 @@ ConnectMenu::ConnectMenu(QWidget *parent)
 ConnectMenu::~ConnectMenu()
 {
   delete edit;
-  edit = 0;
+  edit = NULL;
   delete display;
-  display = 0;
+  display = NULL;
   delete clean;
-  clean = 0;
+  clean = NULL;
   delete act;
-  act = 0;
+  act = NULL;
 }

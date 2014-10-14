@@ -21,7 +21,7 @@ class VirtDomainControl : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit VirtDomainControl(QWidget *parent = 0);
+    explicit VirtDomainControl(QWidget *parent = NULL);
     ~VirtDomainControl();
 
 signals:

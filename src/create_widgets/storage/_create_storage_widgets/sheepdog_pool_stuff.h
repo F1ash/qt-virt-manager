@@ -7,7 +7,7 @@ class SheepDog_Pool_Stuff : public _Pool_Stuff
 {
     Q_OBJECT
 public:
-    explicit SheepDog_Pool_Stuff(QWidget *parent = 0);
+    explicit SheepDog_Pool_Stuff(QWidget *parent = NULL);
 
 signals:
 

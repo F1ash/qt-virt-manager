@@ -21,7 +21,7 @@ class VirtStorageVolControl : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit VirtStorageVolControl(QWidget *parent = 0);
+    explicit VirtStorageVolControl(QWidget *parent = NULL);
     ~VirtStorageVolControl();
 
 signals:

@@ -13,7 +13,7 @@ class DeviceExistanceMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit DeviceExistanceMenu(QWidget *parent = 0, bool valid = false);
+    explicit DeviceExistanceMenu(QWidget *parent = NULL, bool valid = false);
 
 private:
     bool                 validItem;

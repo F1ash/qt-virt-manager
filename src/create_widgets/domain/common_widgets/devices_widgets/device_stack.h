@@ -14,7 +14,7 @@ class DeviceStack : public QDialog
     Q_OBJECT
 public:
     explicit DeviceStack(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
     ~DeviceStack();
 

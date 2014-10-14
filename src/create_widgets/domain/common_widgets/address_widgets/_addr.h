@@ -16,7 +16,7 @@ class _Addr : public _Changed
 {
     Q_OBJECT
 public:
-    explicit _Addr(QWidget *parent = 0);
+    explicit _Addr(QWidget *parent = NULL);
 
 public slots:
     virtual AttrList getAttrList() const;

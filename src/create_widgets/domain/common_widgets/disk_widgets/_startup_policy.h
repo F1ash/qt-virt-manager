@@ -10,7 +10,7 @@ class _StartupPolicy : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _StartupPolicy(QWidget *parent = 0);
+    explicit _StartupPolicy(QWidget *parent = NULL);
 
 private:
     QCheckBox       *startupPolicyLabel;

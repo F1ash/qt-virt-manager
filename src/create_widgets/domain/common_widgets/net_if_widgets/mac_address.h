@@ -10,7 +10,7 @@ class MAC_Address : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MAC_Address(QWidget *parent = 0);
+    explicit MAC_Address(QWidget *parent = NULL);
 
 private:
     QCheckBox           *useMac;

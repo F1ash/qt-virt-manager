@@ -31,19 +31,19 @@ ResizeDialog::~ResizeDialog()
     disconnect(ok, SIGNAL(clicked()), this, SLOT(okClicked()));
     disconnect(cancel, SIGNAL(clicked()), this, SLOT(cancelClicked()));
     delete sizeLabel;
-    sizeLabel = 0;
+    sizeLabel = NULL;
     delete size;
-    size = 0;
+    size = NULL;
     delete ok;
-    ok = 0;
+    ok = NULL;
     delete cancel;
-    cancel = 0;
+    cancel = NULL;
     delete buttonLayout;
-    buttonLayout = 0;
+    buttonLayout = NULL;
     delete buttons;
-    buttons = 0;
+    buttons = NULL;
     delete commonlayout;
-    commonlayout = 0;
+    commonlayout = NULL;
 }
 
 /* private slots */

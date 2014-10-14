@@ -10,7 +10,7 @@ class Block_Disk : public _Disk
     Q_OBJECT
 public:
     explicit Block_Disk(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
 
 private:

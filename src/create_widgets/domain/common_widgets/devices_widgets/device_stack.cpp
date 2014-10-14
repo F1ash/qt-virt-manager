@@ -117,34 +117,34 @@ DeviceStack::~DeviceStack()
     disconnect(addDevice, SIGNAL(clicked()), this, SLOT(set_Result()));
     disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     delete deviceList;
-    deviceList = 0;
+    deviceList = NULL;
 
     delete infoLayout;
-    infoLayout = 0;
+    infoLayout = NULL;
     if ( scrolled!=NULL ) {
         delete scrolled;
         scrolled = NULL;
     };
     delete infoWidget;
-    infoWidget = 0;
+    infoWidget = NULL;
 
     delete listLayout;
-    listLayout = 0;
+    listLayout = NULL;
     delete listWidget;
-    listWidget = 0;
+    listWidget = NULL;
 
     delete addDevice;
-    addDevice = 0;
+    addDevice = NULL;
     delete cancel;
-    cancel = 0;
+    cancel = NULL;
 
     delete buttonlayout;
-    buttonlayout = 0;
+    buttonlayout = NULL;
     delete buttons;
-    buttons = 0;
+    buttons = NULL;
 
     delete commonLayout;
-    commonLayout = 0;
+    commonLayout = NULL;
 }
 
 /* public slots */

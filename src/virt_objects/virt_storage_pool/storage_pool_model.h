@@ -7,7 +7,7 @@ class StoragePoolModel : public Model
 {
     Q_OBJECT
 public:
-    explicit StoragePoolModel(QObject *parent = 0);
+    explicit StoragePoolModel(QObject *parent = NULL);
 };
 
 #endif // STORAGE_POOL_MODEL_H

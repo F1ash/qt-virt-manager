@@ -7,7 +7,7 @@ class LXC_OSBooting : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit LXC_OSBooting(QWidget *parent = 0, QString arg1 = "???", QString arg2 = "???");
+    explicit LXC_OSBooting(QWidget *parent = NULL, QString arg1 = "???", QString arg2 = "???");
     ~LXC_OSBooting();
 
 signals:

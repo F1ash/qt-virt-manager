@@ -8,7 +8,7 @@ class VNC_Graphics : public _QWidget
     Q_OBJECT
 public:
     explicit VNC_Graphics(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
 
 signals:

@@ -15,7 +15,7 @@ class DeviceData : public QWidget
     Q_OBJECT
 public:
     explicit DeviceData(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
 
 signals:

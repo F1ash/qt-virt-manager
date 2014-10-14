@@ -20,7 +20,7 @@ class Devices : public _QWidget
     Q_OBJECT
 public:
     explicit Devices(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL,
             QString _xmlDesc = QString());
     ~Devices();

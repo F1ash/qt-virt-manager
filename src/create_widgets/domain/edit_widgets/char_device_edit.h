@@ -8,7 +8,7 @@ class CharDevice_Edit : public CharDevice
     Q_OBJECT
 public:
     explicit CharDevice_Edit(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL,
             virDomainPtr domain = NULL,
             QString _tag = QString());

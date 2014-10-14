@@ -89,29 +89,29 @@ StorageVolToolBar::~StorageVolToolBar()
     disconnect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
 
     delete create_Action;
-    create_Action = 0;
+    create_Action = NULL;
     delete create_Menu;
-    create_Menu = 0;
+    create_Menu = NULL;
     delete delete_Action;
-    delete_Action = 0;
+    delete_Action = NULL;
     delete download_Action;
-    download_Action = 0;
+    download_Action = NULL;
     delete resize_Action;
-    resize_Action = 0;
+    resize_Action = NULL;
     delete upload_Action;
-    upload_Action = 0;
+    upload_Action = NULL;
     delete wipe_Menu;
-    wipe_Menu = 0;
+    wipe_Menu = NULL;
     delete wipe_Action;
-    wipe_Action = 0;
+    wipe_Action = NULL;
     delete getXMLDesc_Action;
-    getXMLDesc_Action = 0;
+    getXMLDesc_Action = NULL;
     delete stopOverview_Action;
-    stopOverview_Action = 0;
+    stopOverview_Action = NULL;
     delete _autoReload;
-    _autoReload = 0;
+    _autoReload = NULL;
     delete autoReload;
-    autoReload = 0;
+    autoReload = NULL;
 }
 
 /* public slots */

@@ -68,36 +68,36 @@ CreateVirtNetwork::~CreateVirtNetwork()
     disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
     disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     delete networkName;
-    networkName = 0;
+    networkName = NULL;
     delete uuid;
-    uuid = 0;
+    uuid = NULL;
     delete bridgeName;
-    bridgeName = 0;
+    bridgeName = NULL;
     delete stp;
-    stp = 0;
+    stp = NULL;
     delete delayLabel;
-    delayLabel = 0;
+    delayLabel = NULL;
     delete delay;
-    delay = 0;
+    delay = NULL;
     delete bridgeLayout;
-    bridgeLayout = 0;
+    bridgeLayout = NULL;
     delete bridge;
-    bridge = 0;
+    bridge = NULL;
 
     delete ok;
-    ok = 0;
+    ok = NULL;
     delete cancel;
-    cancel = 0;
+    cancel = NULL;
     delete buttonLayout;
-    buttonLayout = 0;
+    buttonLayout = NULL;
     delete buttons;
-    buttons = 0;
+    buttons = NULL;
 
     delete netDescLayout;
-    netDescLayout = 0;
+    netDescLayout = NULL;
 
     delete xml;
-    xml = 0;
+    xml = NULL;
 }
 
 /* public slots */

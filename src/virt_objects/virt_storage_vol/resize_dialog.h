@@ -12,7 +12,7 @@ class ResizeDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ResizeDialog(QWidget *parent = 0, unsigned long long i = 0);
+    explicit ResizeDialog(QWidget *parent = NULL, unsigned long long i = NULL);
     ~ResizeDialog();
 
 private:

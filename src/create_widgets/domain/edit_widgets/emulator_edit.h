@@ -8,7 +8,7 @@ class Emulator_Edit : public Emulator
     Q_OBJECT
 public:
     explicit Emulator_Edit(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
 
 signals:

@@ -7,7 +7,7 @@ class DriveAddr : public _Addr
 {
     Q_OBJECT
 public:
-    explicit DriveAddr(QWidget *parent = 0);
+    explicit DriveAddr(QWidget *parent = NULL);
 
 signals:
 

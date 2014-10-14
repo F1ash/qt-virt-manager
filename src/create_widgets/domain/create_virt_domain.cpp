@@ -110,7 +110,7 @@ CreateVirtDomain::~CreateVirtDomain()
     if ( timerId>0 ) killTimer(timerId);
     settings.setValue("DomCreateGeometry", saveGeometry());
     delete xml;
-    xml = 0;
+    xml = NULL;
     if ( ready ) {
         disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
         disconnect(restore, SIGNAL(clicked()), this, SLOT(restoreParameters()));
@@ -118,19 +118,19 @@ CreateVirtDomain::~CreateVirtDomain()
         delete_specified_widgets();
         settings.setValue("DomCreateShowDesc", showDescription->isChecked());
         delete showDescription;
-        showDescription = 0;
+        showDescription = NULL;
         delete ok;
-        ok = 0;
+        ok = NULL;
         delete restore;
-        restore = 0;
+        restore = NULL;
         delete cancel;
-        cancel = 0;
+        cancel = NULL;
         delete buttonLayout;
-        buttonLayout = 0;
+        buttonLayout = NULL;
         delete buttons;
-        buttons = 0;
+        buttons = NULL;
         delete commonLayout;
-        commonLayout = 0;
+        commonLayout = NULL;
     };
 }
 
@@ -351,7 +351,7 @@ void CreateVirtDomain::delete_specified_widgets()
     wdgList.clear();
     commonLayout->removeWidget(tabWidget);
     delete tabWidget;
-    tabWidget = 0;
+    tabWidget = NULL;
 }
 void CreateVirtDomain::restoreParameters()
 {

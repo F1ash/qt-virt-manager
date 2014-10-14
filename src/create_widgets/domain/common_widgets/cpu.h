@@ -7,7 +7,7 @@ class CPU : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit CPU(QWidget *parent = 0);
+    explicit CPU(QWidget *parent = NULL);
 
 signals:
 

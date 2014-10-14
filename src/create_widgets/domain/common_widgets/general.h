@@ -11,7 +11,7 @@ class General : public _QWidget
     Q_OBJECT
 public:
     explicit General(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             QString  arg1 = "",
             QString  arg2 = "",
             QString  _xmlDesc = QString());

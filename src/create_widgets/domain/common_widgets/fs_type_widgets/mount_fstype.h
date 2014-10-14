@@ -8,7 +8,7 @@ class MountFsType : public _FsType
     Q_OBJECT
 public:
     explicit MountFsType(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             QString _type = QString());
 
 public slots:

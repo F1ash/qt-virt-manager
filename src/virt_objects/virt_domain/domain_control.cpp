@@ -55,13 +55,13 @@ VirtDomainControl::~VirtDomainControl()
 
     if ( createVirtDomain!=NULL ) {
         delete createVirtDomain;
-        createVirtDomain = 0;
+        createVirtDomain = NULL;
     };
 
     stopProcessing();
     domControlThread->terminate();
     delete domControlThread;
-    domControlThread = 0;
+    domControlThread = NULL;
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -69,16 +69,16 @@ VirtDomainControl::~VirtDomainControl()
     };
 
     delete toolBar;
-    toolBar = 0;
+    toolBar = NULL;
 
     if (domainModel!=NULL) {
         delete domainModel;
-        domainModel = 0;
+        domainModel = NULL;
     };
 
     if (domainList!=NULL) {
         delete domainList;
-        domainList = 0;
+        domainList = NULL;
     };
 }
 
@@ -220,7 +220,7 @@ void VirtDomainControl::resultReceiver(DomActions act, Result data)
                        this,
                        SLOT(msgRepeater(QString)));
             delete createVirtDomain;
-            createVirtDomain = 0;
+            createVirtDomain = NULL;
         };
     } else if ( act < GET_DOM_XML_DESC ) {
         if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
@@ -402,7 +402,7 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                            this,
                            SLOT(msgRepeater(QString)));
                 delete createVirtDomain;
-                createVirtDomain = 0;
+                createVirtDomain = NULL;
                 //qDebug()<<xml<<"path"<<result;
                 args.prepend(xml);
             };

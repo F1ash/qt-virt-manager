@@ -42,22 +42,22 @@ StorageVolControlMenu::~StorageVolControlMenu()
     if ( !parameters.isEmpty() ) {
         disconnect(wipe_Menu, SIGNAL(execMethod(const QStringList&)), this, SLOT(emitWipeAction(const QStringList&)));
         delete delete_Action;
-        delete_Action = 0;
+        delete_Action = NULL;
         delete download_Action;
-        download_Action = 0;
+        download_Action = NULL;
         delete resize_Action;
-        resize_Action = 0;
+        resize_Action = NULL;
         delete upload_Action;
-        upload_Action = 0;
+        upload_Action = NULL;
         delete wipe_Menu;
-        wipe_Menu = 0;
+        wipe_Menu = NULL;
         delete wipe_Action;
-        wipe_Action = 0;
+        wipe_Action = NULL;
         delete getXMLDesc_Action;
-        getXMLDesc_Action = 0;
+        getXMLDesc_Action = NULL;
     };
     delete reload;
-    reload = 0;
+    reload = NULL;
 }
 void StorageVolControlMenu::emitExecMethod(QAction *action)
 {

@@ -9,7 +9,7 @@ class Userspace_SLIRP : public _QWidget
     Q_OBJECT
 public:
     explicit Userspace_SLIRP(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
 
 private:

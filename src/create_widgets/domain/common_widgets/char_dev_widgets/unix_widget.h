@@ -7,7 +7,7 @@ class UnixWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit UnixWidget(QWidget *parent = 0, QString _tag = "");
+    explicit UnixWidget(QWidget *parent = NULL, QString _tag = "");
 
 signals:
 

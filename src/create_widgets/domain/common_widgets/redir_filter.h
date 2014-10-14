@@ -13,7 +13,7 @@ class RedirFilter : public QWidget
 {
     Q_OBJECT
 public:
-    explicit RedirFilter(QWidget *parent = 0);
+    explicit RedirFilter(QWidget *parent = NULL);
 
 private:
     QCheckBox       *filtered;

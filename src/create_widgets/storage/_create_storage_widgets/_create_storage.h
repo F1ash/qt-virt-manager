@@ -21,7 +21,7 @@ class _CreateStorage : public QDialog
 {
     Q_OBJECT
 public:
-    explicit _CreateStorage(QWidget *parent = 0);
+    explicit _CreateStorage(QWidget *parent = NULL);
     QComboBox           *type;
     QLineEdit           *stName;
     QLabel              *suff;

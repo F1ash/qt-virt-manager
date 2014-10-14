@@ -7,7 +7,7 @@ class ViewerToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit ViewerToolBar(QWidget *parent = 0);
+    explicit ViewerToolBar(QWidget *parent = NULL);
     ~ViewerToolBar();
 
 signals:

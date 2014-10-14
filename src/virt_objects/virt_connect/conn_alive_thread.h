@@ -40,7 +40,7 @@ class ConnAliveThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit ConnAliveThread(QObject *parent = 0);
+    explicit ConnAliveThread(QObject *parent = NULL);
     ~ConnAliveThread();
 
 signals:

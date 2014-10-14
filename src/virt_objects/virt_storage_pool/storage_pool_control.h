@@ -20,7 +20,7 @@ class VirtStoragePoolControl : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit VirtStoragePoolControl(QWidget *parent = 0);
+    explicit VirtStoragePoolControl(QWidget *parent = NULL);
     ~VirtStoragePoolControl();
 
 signals:

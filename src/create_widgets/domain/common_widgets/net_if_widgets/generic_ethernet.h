@@ -8,7 +8,7 @@ class Generic_Ethernet : public _QWidget
     Q_OBJECT
 public:
     explicit Generic_Ethernet(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
 
 private:

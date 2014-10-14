@@ -22,7 +22,7 @@ ElemConnect::~ElemConnect()
         connAliveThread->setKeepAlive(false);
         connAliveThread->quit();
         delete connAliveThread;
-        connAliveThread = 0;
+        connAliveThread = NULL;
     };
 }
 

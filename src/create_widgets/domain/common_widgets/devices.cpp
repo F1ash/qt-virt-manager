@@ -114,7 +114,7 @@ Devices::~Devices()
 {
     if ( deviceStack!=NULL ) {
         delete deviceStack;
-        deviceStack = 0;
+        deviceStack = NULL;
     };
     disconnect(usedDeviceList,
                SIGNAL(customContextMenuRequested(const QPoint&)),
@@ -123,26 +123,26 @@ Devices::~Devices()
     disconnect(addNewDevice, SIGNAL(clicked()), this, SLOT(addDevice()));
     disconnect(delSelDevice, SIGNAL(clicked()), this, SLOT(delDevice()));
     delete usedDeviceList;
-    usedDeviceList = 0;
+    usedDeviceList = NULL;
     delete addNewDevice;
-    addNewDevice = 0;
+    addNewDevice = NULL;
     delete delSelDevice;
-    delSelDevice = 0;
+    delSelDevice = NULL;
 
     delete buttonlayout;
-    buttonlayout = 0;
+    buttonlayout = NULL;
     delete buttons;
-    buttons = 0;
+    buttons = NULL;
 
     delete listLayout;
-    listLayout = 0;
+    listLayout = NULL;
     delete listWidget;
-    listWidget = 0;
+    listWidget = NULL;
 
     delete infoWidget;
-    infoWidget = 0;
+    infoWidget = NULL;
     delete commonLayout;
-    commonLayout = 0;
+    commonLayout = NULL;
 }
 
 /* public slots */

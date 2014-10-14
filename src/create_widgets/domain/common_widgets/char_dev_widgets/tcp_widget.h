@@ -7,7 +7,7 @@ class TcpWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit TcpWidget(QWidget *parent = 0, QString _tag = "");
+    explicit TcpWidget(QWidget *parent = NULL, QString _tag = "");
 
 signals:
 

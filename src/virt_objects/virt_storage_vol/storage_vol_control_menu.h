@@ -13,7 +13,7 @@ class StorageVolControlMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit StorageVolControlMenu(QWidget *parent = 0, QStringList params = QStringList(), bool state = false);
+    explicit StorageVolControlMenu(QWidget *parent = NULL, QStringList params = QStringList(), bool state = false);
     ~StorageVolControlMenu();
 
 signals:

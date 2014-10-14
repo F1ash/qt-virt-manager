@@ -56,7 +56,7 @@ VirtStoragePoolControl::~VirtStoragePoolControl()
     stopProcessing();
     stPoolControlThread->terminate();
     delete stPoolControlThread;
-    stPoolControlThread = 0;
+    stPoolControlThread = NULL;
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -64,16 +64,16 @@ VirtStoragePoolControl::~VirtStoragePoolControl()
     };
 
     delete toolBar;
-    toolBar = 0;
+    toolBar = NULL;
 
     if (storagePoolModel!=NULL) {
         delete storagePoolModel;
-        storagePoolModel = 0;
+        storagePoolModel = NULL;
     };
 
     if (storagePoolList!=NULL) {
         delete storagePoolList;
-        storagePoolList = 0;
+        storagePoolList = NULL;
     };
 }
 

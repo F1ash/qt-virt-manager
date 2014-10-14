@@ -13,7 +13,7 @@ class DomainStateMonitor : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit DomainStateMonitor(QWidget *parent = 0);
+    explicit DomainStateMonitor(QWidget *parent = NULL);
 
 signals:
     void visibilityChanged(bool);

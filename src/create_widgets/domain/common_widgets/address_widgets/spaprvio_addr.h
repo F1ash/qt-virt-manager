@@ -7,7 +7,7 @@ class SpaprVioAddr : public _Addr
 {
     Q_OBJECT
 public:
-    explicit SpaprVioAddr(QWidget *parent = 0);
+    explicit SpaprVioAddr(QWidget *parent = NULL);
 
 private:
     QLabel          *regLabel;

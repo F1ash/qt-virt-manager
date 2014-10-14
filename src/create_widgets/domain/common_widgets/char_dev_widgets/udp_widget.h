@@ -7,7 +7,7 @@ class UdpWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit UdpWidget(QWidget *parent = 0, QString _tag = "");
+    explicit UdpWidget(QWidget *parent = NULL, QString _tag = "");
 
 signals:
 

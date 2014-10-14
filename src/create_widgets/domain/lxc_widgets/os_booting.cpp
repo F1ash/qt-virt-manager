@@ -56,39 +56,39 @@ LXC_OSBooting::~LXC_OSBooting()
 {
     disconnect(nameSpaceEnable, SIGNAL(toggled(bool)), nameSpaceWidget, SLOT(setEnabled(bool)));
     delete initPathLabel;
-    initPathLabel = 0;
+    initPathLabel = NULL;
     delete initPath;
-    initPath = 0;
+    initPath = NULL;
     delete nameSpaceEnable;
-    nameSpaceEnable = 0;
+    nameSpaceEnable = NULL;
     delete startLabel;
-    startLabel = 0;
+    startLabel = NULL;
     delete targetLabel;
-    targetLabel = 0;
+    targetLabel = NULL;
     delete countLabel;
-    countLabel = 0;
+    countLabel = NULL;
     delete uidStart;
-    uidStart = 0;
+    uidStart = NULL;
     delete gidStart;
-    gidStart = 0;
+    gidStart = NULL;
     delete uidLabel;
-    uidLabel = 0;
+    uidLabel = NULL;
     delete gidLabel;
-    gidLabel = 0;
+    gidLabel = NULL;
     delete uidTarget;
-    uidTarget = 0;
+    uidTarget = NULL;
     delete gidTarget;
-    gidTarget = 0;
+    gidTarget = NULL;
     delete uidCount;
-    uidCount = 0;
+    uidCount = NULL;
     delete gidCount;
-    gidCount = 0;
+    gidCount = NULL;
     delete nameSpaceLayout;
-    nameSpaceLayout = 0;
+    nameSpaceLayout = NULL;
     delete nameSpaceWidget;
-    nameSpaceWidget = 0;
+    nameSpaceWidget = NULL;
     delete commonLayout;
-    commonLayout = 0;
+    commonLayout = NULL;
 }
 
 /* public slots */

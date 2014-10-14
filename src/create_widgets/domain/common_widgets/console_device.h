@@ -8,7 +8,7 @@ class ConsoleDevice : public CharDevice
     Q_OBJECT
 public:
     explicit ConsoleDevice(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL,
             virDomainPtr domain = NULL);
     QComboBox       *targetType;

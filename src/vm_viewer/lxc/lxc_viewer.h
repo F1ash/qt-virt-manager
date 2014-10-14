@@ -17,7 +17,7 @@ class LXC_Viewer : public QTermWidget
 {
     Q_OBJECT
 public:
-    explicit LXC_Viewer(int startnow = 0, QWidget *parent = 0, virConnect *conn = NULL, QString str = QString());
+    explicit LXC_Viewer(int startnow = NULL, QWidget *parent = NULL, virConnect *conn = NULL, QString str = QString());
     ~LXC_Viewer();
 
 signals:

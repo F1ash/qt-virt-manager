@@ -35,9 +35,9 @@ LogDock::~LogDock()
     connect(Log, SIGNAL(anchorClicked(QUrl)), this, SLOT(openLink(QUrl)));
     Log->clear();
     delete Log;
-    Log = 0;
+    Log = NULL;
     delete docLayout;
-    docLayout = 0;
+    docLayout = NULL;
 }
 
 /* public slots */

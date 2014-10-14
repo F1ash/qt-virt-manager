@@ -9,7 +9,7 @@ class SmartCardDevice : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit SmartCardDevice(QWidget *parent = 0);
+    explicit SmartCardDevice(QWidget *parent = NULL);
     DeviceAddress   *addr;
     QComboBox       *mode;
     ChannelDevice   *channel;

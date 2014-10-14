@@ -10,7 +10,7 @@ class Virtual_Network : public _QWidget
     Q_OBJECT
 public:
     explicit Virtual_Network(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
 
 private:

@@ -56,7 +56,7 @@ VirtStorageVolControl::~VirtStorageVolControl()
     stopProcessing();
     stVolControlThread->terminate();
     delete stVolControlThread;
-    stVolControlThread = 0;
+    stVolControlThread = NULL;
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -64,16 +64,16 @@ VirtStorageVolControl::~VirtStorageVolControl()
     };
 
     delete toolBar;
-    toolBar = 0;
+    toolBar = NULL;
 
     if (storageVolModel!=NULL) {
         delete storageVolModel;
-        storageVolModel = 0;
+        storageVolModel = NULL;
     };
 
     if (storageVolList!=NULL) {
         delete storageVolList;
-        storageVolList = 0;
+        storageVolList = NULL;
     };
 }
 

@@ -19,7 +19,7 @@ class ControlThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit ControlThread(QObject *parent = 0);
+    explicit ControlThread(QObject *parent = NULL);
     QStringList      args;
     bool             keep_alive;
     virConnect      *currWorkConnect = NULL;

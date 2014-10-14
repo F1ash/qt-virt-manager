@@ -8,7 +8,7 @@ class VideoDevice : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit VideoDevice(QWidget *parent = 0);
+    explicit VideoDevice(QWidget *parent = NULL);
 
 private:
     QLabel          *modelLabel;

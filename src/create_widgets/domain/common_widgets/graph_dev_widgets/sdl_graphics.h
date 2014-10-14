@@ -9,7 +9,7 @@ class SDL_Graphics : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit SDL_Graphics(QWidget *parent = 0);
+    explicit SDL_Graphics(QWidget *parent = NULL);
 
 private:
     QLabel          *displayLabel;

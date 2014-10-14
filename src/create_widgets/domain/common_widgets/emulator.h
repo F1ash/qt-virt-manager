@@ -8,7 +8,7 @@ class Emulator : public _QWidget
     Q_OBJECT
 public:
     explicit Emulator(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL);
     QComboBox       *emulatores;
 

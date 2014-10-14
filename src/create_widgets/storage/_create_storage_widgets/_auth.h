@@ -12,7 +12,7 @@ class _Storage_Auth : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _Storage_Auth(QWidget *parent = 0);
+    explicit _Storage_Auth(QWidget *parent = NULL);
     QCheckBox       *auth;
     QLineEdit       *userName, *usage;
     QComboBox       *usageType;

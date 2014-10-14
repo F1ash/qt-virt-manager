@@ -11,7 +11,7 @@ class DomainControlMenu : public QMenu
     Q_OBJECT
 public:
     explicit DomainControlMenu(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             QStringList params = QStringList(),
             bool state = false);
 

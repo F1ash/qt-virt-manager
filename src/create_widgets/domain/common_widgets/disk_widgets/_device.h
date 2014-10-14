@@ -10,7 +10,7 @@ class _Device : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _Device(QWidget *parent = 0);
+    explicit _Device(QWidget *parent = NULL);
     QComboBox   *devType;
 
 private:

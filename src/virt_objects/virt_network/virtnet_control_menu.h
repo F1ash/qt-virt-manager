@@ -10,7 +10,7 @@ class VirtNetControlMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit VirtNetControlMenu(QWidget *parent = 0, QStringList params = QStringList(), bool state = false);
+    explicit VirtNetControlMenu(QWidget *parent = NULL, QStringList params = QStringList(), bool state = false);
     ~VirtNetControlMenu();
 
 signals:

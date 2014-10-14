@@ -14,7 +14,7 @@ class StoragePoolToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit StoragePoolToolBar(QWidget *parent = 0);
+    explicit StoragePoolToolBar(QWidget *parent = NULL);
     ~StoragePoolToolBar();
 
 signals:

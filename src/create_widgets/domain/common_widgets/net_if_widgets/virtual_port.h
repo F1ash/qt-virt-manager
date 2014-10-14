@@ -17,7 +17,7 @@ class VirtualPort : public QWidget
 {
     Q_OBJECT
 public:
-    explicit VirtualPort(QWidget *parent = 0);
+    explicit VirtualPort(QWidget *parent = NULL);
     QComboBox           *type;
 
 private:

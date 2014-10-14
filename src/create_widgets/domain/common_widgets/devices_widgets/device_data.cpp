@@ -101,7 +101,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
                     this,
                     currWorkConnect);
     } else if ( deviceType == "redirdev" ) {
-        device = new RedirDevDevice(
+        device = new RedirDevDevice_Edit(
                     this,
                     currWorkConnect);
     } else if ( deviceType == "filesystem" ) {

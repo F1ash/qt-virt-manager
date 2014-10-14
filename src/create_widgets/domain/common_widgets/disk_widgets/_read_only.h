@@ -9,7 +9,7 @@ class _ReadOnly : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _ReadOnly(QWidget *parent = 0);
+    explicit _ReadOnly(QWidget *parent = NULL);
 
 private:
     QCheckBox       *readOnly;

@@ -11,7 +11,7 @@ class CreateVolume : public _CreateStorage
     Q_OBJECT
 public:
     explicit CreateVolume(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             QString _type = QString());
 
 signals:

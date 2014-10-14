@@ -22,7 +22,7 @@ class CreateVirtNetwork : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CreateVirtNetwork(QWidget *parent = 0);
+    explicit CreateVirtNetwork(QWidget *parent = NULL);
     ~CreateVirtNetwork();
 
 signals:

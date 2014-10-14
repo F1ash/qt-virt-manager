@@ -1,6 +1,6 @@
 #include "traywidget.h"
 
-TrayIcon::TrayIcon(QWidget *parent = 0)
+TrayIcon::TrayIcon(QWidget *parent = NULL)
   : QSystemTrayIcon(parent)
 {
   setIcon(QIcon::fromTheme("virtual-engineering"));

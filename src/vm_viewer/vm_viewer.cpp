@@ -55,18 +55,18 @@ VM_Viewer::~VM_Viewer()
                    this,
                    SLOT(closeViewer()));
         delete viewer;
-        viewer = 0;
+        viewer = NULL;
     };
     if ( actionsMenu!=NULL ) {
         delete actionsMenu;
-        actionsMenu = 0;
+        actionsMenu = NULL;
     };
     if ( menuBar!=NULL ) {
         delete menuBar;
-        menuBar = 0;
+        menuBar = NULL;
     };
     delete toolBar;
-    toolBar = 0;
+    toolBar = NULL;
     if ( jobConnect!=NULL ) {
         virConnectClose(jobConnect);
     };

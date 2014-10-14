@@ -10,7 +10,7 @@ class _Pool_Stuff : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _Pool_Stuff(QWidget *parent = 0);
+    explicit _Pool_Stuff(QWidget *parent = NULL);
     _Storage_Source *source;
     _Storage_Target *target;
 

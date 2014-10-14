@@ -20,7 +20,7 @@ class CreateVirtDomain : public QDialog
     Q_OBJECT
 public:
     explicit CreateVirtDomain(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             virConnectPtr conn = NULL,
             QString _xmlFileName = QString());
     ~CreateVirtDomain();

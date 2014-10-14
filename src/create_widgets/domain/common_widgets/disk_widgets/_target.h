@@ -16,7 +16,7 @@ class _Target : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _Target(QWidget *parent = 0);
+    explicit _Target(QWidget *parent = NULL);
 
 private:
     QLabel      *devNameLabel, *busLabel;

@@ -8,7 +8,7 @@ class CCWAddr : public _Addr
 {
     Q_OBJECT
 public:
-    explicit CCWAddr(QWidget *parent = 0);
+    explicit CCWAddr(QWidget *parent = NULL);
 
 private:
     QLabel          *machineLabel;

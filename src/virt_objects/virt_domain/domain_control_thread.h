@@ -27,7 +27,7 @@ class DomControlThread : public ControlThread
 {
     Q_OBJECT
 public:
-    explicit DomControlThread(QObject *parent = 0);
+    explicit DomControlThread(QObject *parent = NULL);
 
 signals:
     void resultData(DomActions, Result);

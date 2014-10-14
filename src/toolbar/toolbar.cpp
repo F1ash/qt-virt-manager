@@ -1,6 +1,6 @@
 #include "toolbar.h"
 
-ToolBar::ToolBar (QWidget *parent = 0) : QToolBar(parent)
+ToolBar::ToolBar (QWidget *parent = NULL) : QToolBar(parent)
 {
   setAllowedAreas(Qt::AllToolBarAreas);
   setMovable(true);
@@ -19,43 +19,43 @@ ToolBar::~ToolBar()
     disconnect(_docsUpAction, SIGNAL(triggered()), this, SLOT(showMenu()));
 
   delete _hideAction;
-  _hideAction = 0;
+  _hideAction = NULL;
   delete _closeOverview;
-  _closeOverview = 0;
+  _closeOverview = NULL;
   delete _exitAction;
-  _exitAction = 0;
+  _exitAction = NULL;
 
   delete _createAction;
-  _createAction = 0;
+  _createAction = NULL;
   delete _deleteAction;
-  _deleteAction = 0;
+  _deleteAction = NULL;
   delete _editAction;
-  _editAction = 0;
+  _editAction = NULL;
   delete _openAction;
-  _openAction = 0;
+  _openAction = NULL;
   delete _showAction;
-  _showAction = 0;
+  _showAction = NULL;
   delete _closeAction;
-  _closeAction = 0;
+  _closeAction = NULL;
   delete _closeAllAction;
-  _closeAllAction = 0;
+  _closeAllAction = NULL;
   delete itemControlMenu;
-  itemControlMenu = 0;
+  itemControlMenu = NULL;
   delete itemControlAction;
-  itemControlAction = 0;
+  itemControlAction = NULL;
 
   delete _logUpAction;
-  _logUpAction = 0;
+  _logUpAction = NULL;
   delete _domUpAction;
-  _domUpAction = 0;
+  _domUpAction = NULL;
   delete _netUpAction;
-  _netUpAction = 0;
+  _netUpAction = NULL;
   delete _storageUpAction;
-  _storageUpAction = 0;
+  _storageUpAction = NULL;
   delete showDocksControlMenu;
-  showDocksControlMenu = 0;
+  showDocksControlMenu = NULL;
   delete _docsUpAction;
-  _docsUpAction = 0;
+  _docsUpAction = NULL;
 }
 void ToolBar::initActions()
 {

@@ -45,20 +45,20 @@ StoragePoolControlMenu::~StoragePoolControlMenu()
     disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
     if ( !parameters.isEmpty() ) {
         delete start;
-        start = 0;
+        start = NULL;
         delete destroy;
-        destroy = 0;
+        destroy = NULL;
         delete undefine;
-        undefine = 0;
+        undefine = NULL;
         delete autoStart;
-        autoStart = 0;
+        autoStart = NULL;
         delete getXMLDesc;
-        getXMLDesc = 0;
+        getXMLDesc = NULL;
         delete overview;
-        overview = 0;
+        overview = NULL;
     };
     delete reload;
-    reload = 0;
+    reload = NULL;
 }
 void StoragePoolControlMenu::emitExecMethod(QAction *action)
 {

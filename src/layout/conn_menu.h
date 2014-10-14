@@ -6,7 +6,7 @@ class ConnectMenu : public QMenu
 {
     Q_OBJECT
 public:
-    ConnectMenu(QWidget *parent = 0);
+    ConnectMenu(QWidget *parent = NULL);
     ~ConnectMenu();
 
     QAction  *edit;

@@ -7,7 +7,7 @@ class SmartCardDevice_Edit : public SmartCardDevice
 {
     Q_OBJECT
 public:
-    explicit SmartCardDevice_Edit(QWidget *parent = 0);
+    explicit SmartCardDevice_Edit(QWidget *parent = NULL);
 
 signals:
 

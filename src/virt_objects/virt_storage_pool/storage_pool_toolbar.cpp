@@ -94,29 +94,29 @@ StoragePoolToolBar::~StoragePoolToolBar()
     disconnect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
 
     delete start_Action;
-    start_Action = 0;
+    start_Action = NULL;
     delete destroy_Action;
-    destroy_Action = 0;
+    destroy_Action = NULL;
     delete create_Menu;
-    create_Menu = 0;
+    create_Menu = NULL;
     delete define_Menu;
-    define_Menu = 0;
+    define_Menu = NULL;
     delete create_Action;
-    create_Action = 0;
+    create_Action = NULL;
     delete define_Action;
-    define_Action = 0;
+    define_Action = NULL;
     delete undefine_Action;
-    undefine_Action = 0;
+    undefine_Action = NULL;
     delete setAutostart_Action;
-    setAutostart_Action = 0;
+    setAutostart_Action = NULL;
     delete getXMLDesc_Action;
-    getXMLDesc_Action = 0;
+    getXMLDesc_Action = NULL;
     delete overview_Action;
-    overview_Action = 0;
+    overview_Action = NULL;
     delete _autoReload;
-    _autoReload = 0;
+    _autoReload = NULL;
     delete autoReload;
-    autoReload = 0;
+    autoReload = NULL;
 }
 
 /* public slots */

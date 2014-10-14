@@ -9,7 +9,7 @@ class SoundDevice : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit SoundDevice(QWidget *parent = 0);
+    explicit SoundDevice(QWidget *parent = NULL);
     QComboBox       *model;
     QRadioButton    *defaultICH6reg;
     QRadioButton    *duplexICH6reg;

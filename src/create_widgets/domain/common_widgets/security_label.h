@@ -12,7 +12,7 @@ class SecurityLabel : public _QWidget
     Q_OBJECT
 public:
     explicit SecurityLabel(
-            QWidget *parent = 0,
+            QWidget *parent = NULL,
             QString  _xmlDesc = QString());
 
 private:
