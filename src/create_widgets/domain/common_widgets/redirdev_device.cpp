@@ -27,25 +27,23 @@ RedirDevDevice::RedirDevDevice(
     source = new QWidget(this);
     source->setLayout(sourceLayout);
 
-    useAddress = new QCheckBox("Use address:", this);
-    address = new USBAddr(this);
-    address->setVisible(false);
+    address = new DeviceAddress(this);
+    int idx = address->type->findText("usb", Qt::MatchContains);
+    address->type->setCurrentIndex( (idx<0)? 0:idx );
+    address->type->setEnabled(false);
+    address->setCurrentAddrWidget(idx);
 
     filter = new RedirFilter(this);
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(type);
     commonLayout->addWidget(source);
-    commonLayout->addWidget(useAddress);
     commonLayout->addWidget(address);
     commonLayout->addWidget(filter);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(type, SIGNAL(currentIndexChanged(int)),
             this, SLOT(typeChanged(int)));
-    typeChanged(0);
-    connect(useAddress, SIGNAL(toggled(bool)),
-            address, SLOT(setVisible(bool)));
 }
 
 /* public slots */
@@ -66,7 +64,7 @@ QDomDocument RedirDevDevice::getDataDocument() const
         _devDesc.appendChild(_source);
     };
     AttrList l = address->getAttrList();
-    if ( useAddress->isChecked() && !l.isEmpty() ) {
+    if ( address->use->isChecked() && !l.isEmpty() ) {
         _address = doc.createElement("address");
         foreach (QString key, l.keys()) {
             if ( !key.isEmpty() )

@@ -210,8 +210,10 @@ void SecurityLabel::addSecLabel()
 {
     QString _list = QString("%1")
             .arg(readData().toByteArray(8).data());
-    if ( list->findItems(_list, Qt::MatchExactly).isEmpty() )
+    if ( list->findItems(_list, Qt::MatchExactly).isEmpty() ) {
         list->addItem(_list);
+        emit dataChanged();
+    };
     label->clear();
 }
 void SecurityLabel::delSecLabel()
@@ -219,6 +221,7 @@ void SecurityLabel::delSecLabel()
     QList<QListWidgetItem*> l = list->selectedItems();
     if ( !l.isEmpty() ) {
         list->takeItem(list->row(l.at(0)));
+        emit dataChanged();
     };
     list->clearSelection();
 }

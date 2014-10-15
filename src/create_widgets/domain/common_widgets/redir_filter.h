@@ -14,9 +14,12 @@ class RedirFilter : public QWidget
     Q_OBJECT
 public:
     explicit RedirFilter(QWidget *parent = NULL);
+    QCheckBox       *filtered;
+
+signals:
+    void             dataChanged();
 
 private:
-    QCheckBox       *filtered;
     QListWidget     *filter;
     QLineEdit       *_class, *_product,
                     *_vendor, *_version;
@@ -29,12 +32,13 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    bool        isFiltered() const;
-    QStringList getFiltersList() const;
+    bool             isFiltered() const;
+    QStringList      getFiltersList() const;
+    void             setFiltersList(QString&, bool);
 
 private slots:
-    void addFilter();
-    void delFilter();
+    void             addFilter();
+    void             delFilter();
 };
 
 #endif // REDIR_FILTER_H

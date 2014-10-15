@@ -61,6 +61,13 @@ QStringList RedirFilter::getFiltersList() const
     };
     return _list;
 }
+void RedirFilter::setFiltersList(QString &_filter, bool _allow)
+{
+    QListWidgetItem *_item = new QListWidgetItem();
+    _item->setText(_filter);
+    _item->setCheckState( (_allow)? Qt::Checked : Qt::Unchecked );
+    filter->insertItem(0, _item);
+}
 
 /* private slots */
 void RedirFilter::addFilter()
@@ -77,6 +84,7 @@ void RedirFilter::addFilter()
         _filterItem->setText(_filter);
         _filterItem->setCheckState(Qt::Unchecked);
         filter->insertItem(filter->count(), _filterItem);
+        emit dataChanged();
     };
     _class->clear();
     _vendor->clear();
@@ -88,6 +96,7 @@ void RedirFilter::delFilter()
     QList<QListWidgetItem*> l = filter->selectedItems();
     if ( !l.isEmpty() ) {
         filter->takeItem(filter->row(l.at(0)));
+        emit dataChanged();
     };
     filter->clearSelection();
 }

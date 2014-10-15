@@ -14,7 +14,7 @@ public:
 signals:
 
 public slots:
-
+    void setDataDescription(QString&);
 };
 
 #endif // REDIRDEV_DEVICE_EDIT_H
