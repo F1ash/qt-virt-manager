@@ -9,15 +9,15 @@ class VideoDevice : public _QWidget
     Q_OBJECT
 public:
     explicit VideoDevice(QWidget *parent = NULL);
-
-private:
-    QLabel          *modelLabel;
-    QLabel          *vramLabel;
     QSpinBox        *vram;
     QCheckBox       *accel2d;
     QCheckBox       *accel3d;
     QComboBox       *model;
     DeviceAddress   *addr;
+
+private:
+    QLabel          *modelLabel;
+    QLabel          *vramLabel;
     QGridLayout     *commonLayout;
 
 public slots:

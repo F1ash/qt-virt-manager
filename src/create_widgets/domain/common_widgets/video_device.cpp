@@ -17,13 +17,14 @@ VideoDevice::VideoDevice(QWidget *parent) :
     model->addItem("QXL");
     vramLabel = new QLabel("VRAM (MiB):", this);
     vram = new QSpinBox(this);
-    vram->setRange(8, 128);
+    vram->setRange(8, 12800);
     accel2d = new QCheckBox("Acceleration 2D", this);
     accel3d = new QCheckBox("Acceleration 3D", this);
     addr = new DeviceAddress(this);
-    addr->type->clear();
-    addr->type->addItem("Default", "");
-    addr->type->addItem("PCI addresses", "pci");
+    int idx = addr->type->findText("pci", Qt::MatchContains);
+    addr->type->setCurrentIndex( (idx<0)? 0:idx );
+    addr->type->setEnabled(false);
+    addr->setCurrentAddrWidget(idx);
     commonLayout = new QGridLayout(this);
     commonLayout->addWidget(modelLabel, 0, 0);
     commonLayout->addWidget(model, 0, 1);
@@ -57,11 +58,11 @@ QDomDocument VideoDevice::getDataDocument() const
             _acceleration.setAttribute("accel2d", "yes");
         if ( accel3d->isChecked() )
             _acceleration.setAttribute("accel3d", "yes");
-        _devDesc.appendChild(_acceleration);
+        _model.appendChild(_acceleration);
     };
     // WARNING: address implemented experimentally
     AttrList l = addr->getAttrList();
-    if ( !l.isEmpty() ) {
+    if ( addr->use->isChecked() && !l.isEmpty() ) {
         QDomElement _address = doc.createElement("address");
         foreach (QString key, l.keys()) {
             if ( !key.isEmpty() )

@@ -24,8 +24,8 @@ private:
     QString          tag;
 
 public slots:
-    QDomDocument getDataDocument() const;
-    void         setDataDescription(QString&);
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // UDP_WIDGET_H

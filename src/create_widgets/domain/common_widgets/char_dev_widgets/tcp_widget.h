@@ -24,8 +24,8 @@ private:
     QString          tag;
 
 public slots:
-    QDomDocument getDataDocument() const;
-    void         setDataDescription(QString&);
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // TCP_WIDGET_H

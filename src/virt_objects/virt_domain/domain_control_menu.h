@@ -16,7 +16,7 @@ public:
             bool state = false);
 
 signals:
-    void execMethod(const QStringList&);
+    void            execMethod(const QStringList&);
 
 private:
     bool            autoReloadState;
@@ -38,7 +38,7 @@ private:
     QStringList     parameters;
 
 private slots:
-    void emitExecMethod(QAction*);
+    void            emitExecMethod(QAction*);
 
 };
 

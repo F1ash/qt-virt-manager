@@ -1,43 +1,43 @@
-#include "sound_device_edit.h"
+#include "video_device_edit.h"
 
-SoundDevice_Edit::SoundDevice_Edit(QWidget *parent) :
-    SoundDevice(parent)
+VideoDevice_Edit::VideoDevice_Edit(QWidget *parent) :
+    VideoDevice(parent)
 {
     connect(model, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));
-    connect(defaultICH6reg, SIGNAL(toggled(bool)),
+    connect(accel2d, SIGNAL(toggled(bool)),
             this, SIGNAL(dataChanged()));
-    connect(duplexICH6reg, SIGNAL(toggled(bool)),
+    connect(accel3d, SIGNAL(toggled(bool)),
             this, SIGNAL(dataChanged()));
-    connect(microICH6reg, SIGNAL(toggled(bool)),
+    connect(vram, SIGNAL(valueChanged(int)),
             this, SIGNAL(dataChanged()));
     connect(addr, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
 }
 
 /* public slots */
-void SoundDevice_Edit::setDataDescription(QString &xmlDesc)
+void VideoDevice_Edit::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QDomElement _device, _codec, _addr;
+    QDomElement _device, _model, _accel, _addr;
     _device = doc.firstChildElement("device")
-            .firstChildElement("sound");
-    QString _model = _device.attribute("model", "");
-    int idx = model->findText(_model, Qt::MatchContains);
+            .firstChildElement("video");
+    _model = _device.firstChildElement("model");
+    QString _type = _model.attribute("type", "Cirrus");
+    int idx = model->findText(_type, Qt::MatchContains);
     model->setCurrentIndex( (idx<0)? 0:idx );
-    _codec = _device.firstChildElement("codec");
-    if ( !_codec.isNull() ) {
-        QString codec = _codec.attribute("type", "");
-        if ( codec=="micro" ) {
-            microICH6reg->setChecked(true);
-        } else if ( codec=="duplex" ) {
-            duplexICH6reg->setChecked(true);
-        } else
-            defaultICH6reg->setChecked(true);
+    vram->setValue(_model.attribute("vram", "0").toInt()/1024);
+    _accel = _model.firstChildElement("acceleration");
+    if ( !_accel.isNull() ) {
+        accel2d->setChecked(
+                    _accel.attribute("accel2d")=="yes");
+        accel3d->setChecked(
+                    _accel.attribute("accel3d")=="yes");
     } else {
-        defaultICH6reg->setChecked(true);
+        accel2d->setChecked(false);
+        accel3d->setChecked(false);
     };
     _addr = _device.firstChildElement("address");
     addr->use->setChecked(!_addr.isNull());

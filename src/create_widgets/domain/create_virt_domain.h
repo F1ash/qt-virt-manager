@@ -26,7 +26,7 @@ public:
     ~CreateVirtDomain();
 
 signals:
-    void errorMsg(QString);
+    void             errorMsg(QString);
 
 private:
     QSettings        settings;
@@ -55,22 +55,22 @@ private:
     uint             counter = 0;
 
 public slots:
-    QString getXMLDescFileName() const;
-    bool getShowing() const;
+    QString          getXMLDescFileName() const;
+    bool             getShowing() const;
 
 private slots:
-    void readCapabilities();
-    void readyDataLists();
-    void timerEvent(QTimerEvent*);
-    void buildXMLDescription();
-    void set_Result();
-    void create_specified_widgets();
-    void set_specified_Tabs();
-    void delete_specified_widgets();
-    void restoreParameters();
+    void             readCapabilities();
+    void             readyDataLists();
+    void             timerEvent(QTimerEvent*);
+    void             buildXMLDescription();
+    void             set_Result();
+    void             create_specified_widgets();
+    void             set_specified_Tabs();
+    void             delete_specified_widgets();
+    void             restoreParameters();
 
-    void sendConnErrors();
-    void sendGlobalErrors();
+    void             sendConnErrors();
+    void             sendGlobalErrors();
 
 };
 

@@ -368,7 +368,17 @@ void Devices::showDevice(QListWidgetItem *_curr, QListWidgetItem *_prev)
     _devName = _curr->text();
     _devDesc = _curr->data(Qt::UserRole).toString();
     QString _ret = infoWidget->showDevice(_devName, _devDesc);
-    if ( NULL!=_prev ) _prev->setData(Qt::UserRole, _ret);
+    if ( NULL!=_prev && !_ret.isEmpty() ) {
+        /* block/unblock usedDeviceList signals to avoid looping */
+        usedDeviceList->blockSignals(true);
+        usedDeviceList->takeItem(usedDeviceList->row(_prev));
+        delete _prev;
+        _prev = NULL;
+        QDomDocument doc;
+        doc.setContent(_ret);
+        addDeviceToUsedDevList(doc);
+        usedDeviceList->blockSignals(false);
+    };
 }
 void Devices::showContextMenu(const QPoint &pos)
 {

@@ -33,6 +33,7 @@
 #include "edit_widgets/input_device_edit.h"
 #include "edit_widgets/memballoon_edit.h"
 #include "edit_widgets/redirdev_device_edit.h"
+#include "edit_widgets/video_device_edit.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

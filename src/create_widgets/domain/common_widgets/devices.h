@@ -47,19 +47,19 @@ private:
                      devNameOrder = DEVICE_ORDER;
 
 public slots:
-    QDomDocument    getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 
 private slots:
-    QDomDocument    chooseNewDevice();
-    void            addDevice();
-    void            addDeviceToUsedDevList(QDomDocument&);
-    void            delDevice();
-    void            showDevice();
-    void            showDevice(QListWidgetItem*,QListWidgetItem*);
-    void            showContextMenu(const QPoint&);
-    void            execDevExistanceMenuResult(Device_Action);
-    void            detectAttachedDevicesFromXMLDesc();
-    void            saveDeviceXMLDescription(QString&);
+    QDomDocument     chooseNewDevice();
+    void             addDevice();
+    void             addDeviceToUsedDevList(QDomDocument&);
+    void             delDevice();
+    void             showDevice();
+    void             showDevice(QListWidgetItem*,QListWidgetItem*);
+    void             showContextMenu(const QPoint&);
+    void             execDevExistanceMenuResult(Device_Action);
+    void             detectAttachedDevicesFromXMLDesc();
+    void             saveDeviceXMLDescription(QString&);
 
 };
 

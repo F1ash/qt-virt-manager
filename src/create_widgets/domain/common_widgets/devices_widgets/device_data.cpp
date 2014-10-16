@@ -89,7 +89,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     } else if ( deviceType == "hub" ) {
         device = new HubDevice_Edit(this);
     } else if ( deviceType == "video" ) {
-        device = new VideoDevice(this);
+        device = new VideoDevice_Edit(this);
     } else if ( deviceType == "sound" ) {
         device = new SoundDevice_Edit(this);
     } else if ( deviceType == "hostdev" ) {
@@ -142,7 +142,7 @@ QString DeviceData::closeDataEdit()
         if ( answer==QMessageBox::Ok )
             saveDeviceData();
     };
-    if ( NULL!=device && !currentDeviceXMLDesc.isEmpty() ) {
+    if ( NULL!=device ) {
         // save device data as null-point
         if ( sender()==_close )
             // quired by current open DeviceData widget
@@ -241,6 +241,7 @@ void DeviceData::revertDeviceData()
         // restore device data from null-point
         currentDeviceXMLDesc.clear();
         device->setDataDescription(DeviceXMLDesc);
+        currentDeviceXMLDesc = DeviceXMLDesc;
     };
     currentStateSaved = true;
     restoreMenu->revertData->setEnabled(false);
