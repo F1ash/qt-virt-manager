@@ -25,7 +25,10 @@ void CharDevice_Edit::setDataDescription(QString &xmlDesc)
     _device = doc.firstChildElement("device")
             .firstChildElement(tag);
     QString _type = _device.attribute("type", "unix");
-    int idx = devType->findText(_type, Qt::MatchEndsWith);
+    int idx = devType->findData(
+                _type,
+                Qt::UserRole,
+                Qt::MatchContains);
     devType->setCurrentIndex( (idx<0)? 0:idx );
     static_cast<_QWidget*>(charDevWdg->currentWidget())->setDataDescription(xmlDesc);
 }

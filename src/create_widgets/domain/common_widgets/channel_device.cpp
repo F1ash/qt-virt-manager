@@ -3,7 +3,7 @@
 ChannelDevice::ChannelDevice(QWidget *parent) :
     CharDevice(parent, NULL, NULL, QString("channel"))
 {
-    devType->insertItem(6, "Spice Agent /spicevmc");
+    devType->insertItem(6, "Spice Agent", "spicevmc");
     chanType = new QComboBox(this);
     chanType->setEditable(true);
     chanType->addItem("com.redhat.spice.0");
@@ -41,7 +41,9 @@ QDomDocument ChannelDevice::getDataDocument() const
     doc.firstChildElement("device")
             .firstChildElement("channel")
             .appendChild(_target);
-    QString _type = devType->currentText().split("/").last();
+    QString _type = devType->itemData(
+                devType->currentIndex(),
+                Qt::UserRole).toString();
     doc.firstChildElement("device")
             .firstChildElement("channel")
             .setAttribute("type", _type);
@@ -69,7 +71,10 @@ void ChannelDevice::setDataDescription(QString &xmlDesc)
                 Qt::MatchExactly);
     chanType->setCurrentIndex( (idx<0)? 0:idx );
     QString _type = _device.attribute("type", "unix");
-    idx = devType->findText(_type, Qt::MatchEndsWith);
+    idx = devType->findData(
+                _type,
+                Qt::UserRole,
+                Qt::MatchContains);
     devType->setCurrentIndex( (idx<0)? 0:idx );
     static_cast<_QWidget*>(charDevWdg->currentWidget())->setDataDescription(xmlDesc);
 }

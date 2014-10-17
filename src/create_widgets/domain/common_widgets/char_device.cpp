@@ -1,13 +1,5 @@
 #include "char_device.h"
 
-#define CHAR_DEV_TYPE QStringList()\
-    <<"Pseudo TTY /pty"\
-    <<"Physical host character device /dev"\
-    <<"Output to a file /file"\
-    <<"TCP net console /tcp"\
-    <<"UDP net console /udp"\
-    <<"Unix socket /unix"
-
 CharDevice::CharDevice(
         QWidget *parent,
         virConnectPtr conn,
@@ -17,6 +9,12 @@ CharDevice::CharDevice(
     _QWidget(parent, conn, domain), tag(_tag)
 {
     devType = new QComboBox(this);
+    devType->addItem("Pseudo TTY", "pty");
+    devType->addItem("Physical host character device", "dev");
+    devType->addItem("Output to a file", "file");
+    devType->addItem("TCP net console", "tcp");
+    devType->addItem("UDP net console", "udp");
+    devType->addItem("Unix socket", "unix");
 
     ptyWdg  = new PtyWidget(this, tag);
     devWdg  = new DevWidget(this, tag);
@@ -40,7 +38,6 @@ CharDevice::CharDevice(
     setLayout(commonLayout);
     connect(devType, SIGNAL(currentIndexChanged(int)),
             charDevWdg, SLOT(setCurrentIndex(int)));
-    devType->addItems(CHAR_DEV_TYPE);
 }
 
 /* public slots */
