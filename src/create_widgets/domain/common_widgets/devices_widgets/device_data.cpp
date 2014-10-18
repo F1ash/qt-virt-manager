@@ -113,7 +113,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
                     this,
                     currWorkConnect);
     } else if ( deviceType == "rng" ) {
-        device = new Random(this);
+        device = new Random_Edit(this);
     } else if ( deviceType == "memballoon" ) {
         device = new MemBalloon_Edit(
                     this,

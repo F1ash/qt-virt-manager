@@ -203,6 +203,7 @@ set (HEADERS
   src/create_widgets/domain/edit_widgets/memballoon_edit.h
   src/create_widgets/domain/edit_widgets/redirdev_device_edit.h
   src/create_widgets/domain/edit_widgets/video_device_edit.h
+  src/create_widgets/domain/edit_widgets/random_edit.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -418,6 +419,7 @@ set (SOURCES
   src/create_widgets/domain/edit_widgets/memballoon_edit.cpp
   src/create_widgets/domain/edit_widgets/redirdev_device_edit.cpp
   src/create_widgets/domain/edit_widgets/video_device_edit.cpp
+  src/create_widgets/domain/edit_widgets/random_edit.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

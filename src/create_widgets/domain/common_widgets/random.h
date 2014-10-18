@@ -31,8 +31,8 @@ public slots:
     QDomDocument     getDataDocument() const;
 
 private slots:
-    void rateChecked(bool);
-    void modelChanged(int);
+    void             rateChecked(bool);
+    void             modelChanged(int);
 };
 
 #endif // RANDOM_H
