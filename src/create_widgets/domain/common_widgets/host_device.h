@@ -14,14 +14,14 @@ public:
     explicit HostDevice(
             QWidget *parent = NULL,
             virConnectPtr conn = NULL);
-
-private:
     QComboBox       *type;
     QStackedWidget  *info;
     QVBoxLayout     *commonLayout;
 
+private:
+
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 };
 
 #endif // HOST_DEVICE_H

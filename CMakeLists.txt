@@ -204,6 +204,11 @@ set (HEADERS
   src/create_widgets/domain/edit_widgets/redirdev_device_edit.h
   src/create_widgets/domain/edit_widgets/video_device_edit.h
   src/create_widgets/domain/edit_widgets/random_edit.h
+  src/create_widgets/domain/edit_widgets/host_device_edit.h
+  src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/usb_host_device_edit.h
+  src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/bch_host_device_edit.h
+  src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/pci_host_device_edit.h
+  src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/scsi_host_device_edit.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -420,6 +425,11 @@ set (SOURCES
   src/create_widgets/domain/edit_widgets/redirdev_device_edit.cpp
   src/create_widgets/domain/edit_widgets/video_device_edit.cpp
   src/create_widgets/domain/edit_widgets/random_edit.cpp
+  src/create_widgets/domain/edit_widgets/host_device_edit.cpp
+  src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/usb_host_device_edit.cpp
+  src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/bch_host_device_edit.cpp
+  src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/pci_host_device_edit.cpp
+  src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/scsi_host_device_edit.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

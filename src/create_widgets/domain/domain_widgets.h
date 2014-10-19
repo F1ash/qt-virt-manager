@@ -35,6 +35,7 @@
 #include "edit_widgets/redirdev_device_edit.h"
 #include "edit_widgets/video_device_edit.h"
 #include "edit_widgets/random_edit.h"
+#include "edit_widgets/host_device_edit.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

@@ -10,14 +10,14 @@ public:
     explicit BCh_Host_Device(
             QWidget *parent = NULL,
             virConnectPtr conn = NULL);
+    QComboBox       *type;
+    QLineEdit       *device;
 
 private:
     QLabel          *attention;
     QLabel          *info;
     QLabel          *typeLabel;
     QLabel          *deviceLabel;
-    QComboBox       *type;
-    QLineEdit       *device;
     QGridLayout     *commonLayout;
 
 public slots:

@@ -93,7 +93,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     } else if ( deviceType == "sound" ) {
         device = new SoundDevice_Edit(this);
     } else if ( deviceType == "hostdev" ) {
-        device = new HostDevice(
+        device = new HostDevice_Edit(
                           this,
                           currWorkConnect);
     } else if ( deviceType == "graphics" ) {
