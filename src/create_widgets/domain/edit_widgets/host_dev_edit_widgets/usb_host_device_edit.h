@@ -9,11 +9,20 @@ class USB_Host_Device_Edit : public _QWidget
     Q_OBJECT
 public:
     explicit USB_Host_Device_Edit(QWidget *parent = NULL);
+    DeviceAddress       *addr;
 
-signals:
+private:
+    QLabel              *vendorLabel, *productLabel;
+    QCheckBox           *startupPolLabel;
+    QLineEdit           *vendor, *product;
+    QComboBox           *startupPolicy;
+    QWidget             *baseWdg;
+    QGridLayout         *baseLayout;
+    QVBoxLayout         *commonLayout;
 
 public slots:
-
+    QDomDocument         getDataDocument() const;
+    void                 setDataDescription(QString&);
 };
 
 #endif // USB_HOST_DEVICE_EDIT_H

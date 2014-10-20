@@ -8,6 +8,10 @@ class DriveAddr : public _Addr
     Q_OBJECT
 public:
     explicit DriveAddr(QWidget *parent = NULL);
+    QLineEdit       *controller;
+    QLineEdit       *bus;
+    QLineEdit       *target;
+    QLineEdit       *unit;
 
 signals:
 
@@ -16,10 +20,6 @@ private:
     QLabel          *busLabel;
     QLabel          *targetLabel;
     QLabel          *unitLabel;
-    QLineEdit       *controller;
-    QLineEdit       *bus;
-    QLineEdit       *target;
-    QLineEdit       *unit;
     QGridLayout     *commonlayout;
 
 public slots:

@@ -12,7 +12,7 @@ BCh_Host_Device_Edit::BCh_Host_Device_Edit(QWidget *parent) :
 /* public slots */
 void BCh_Host_Device_Edit::setDataDescription(QString &xmlDesc)
 {
-    qDebug()<<xmlDesc;
+    //qDebug()<<xmlDesc;
     QDomDocument doc;
     doc.setContent(xmlDesc);
     QDomElement _device, _source, _el;

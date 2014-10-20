@@ -91,7 +91,7 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
      * SCSI devices are described by both the adapter and address elements.
      */
     foreach (QString _dev, devices) {
-        //qDebug()<<_dev;
+        qDebug()<<_dev;
         QString devName, devIdentity;
         QDomElement name, path, parent;
         QDomDocument doc;
