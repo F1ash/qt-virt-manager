@@ -4,11 +4,6 @@
 #include "create_widgets/domain/_qwidget.h"
 #include <QListWidget>
 
-/*
- * WARNING: don't work correctly
- * impossible to check this technically
- */
-
 class SCSI_Host_Device : public _QWidget
 {
     Q_OBJECT

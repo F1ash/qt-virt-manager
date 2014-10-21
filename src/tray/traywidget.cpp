@@ -9,7 +9,7 @@ TrayIcon::TrayIcon(QWidget *parent = NULL)
   logUpAction = new QAction(QString("Show Log Viewer"), this);
   logUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
   monitorAction = new QAction(QString("Domains State Monitor"), this);
-  monitorAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
+  monitorAction->setIcon ( QIcon::fromTheme("utilities-monitor") );
   closeAction = new QAction(QString("Exit"), this);
   closeAction->setIcon (QIcon::fromTheme("exit"));
 

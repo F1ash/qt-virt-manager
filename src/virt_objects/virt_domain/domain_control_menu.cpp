@@ -42,7 +42,7 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         display->setIcon(QIcon::fromTheme("display"));
         display->setEnabled(parameters[1]=="active");
         addToMonitor = new QAction("add to State Monitor", this);
-        addToMonitor->setIcon(QIcon::fromTheme("utilities-log-viewer"));
+        addToMonitor->setIcon(QIcon::fromTheme("utilities-monitor"));
         addToMonitor->setEnabled(true);
         migrate = new QAction("Migrate", this);
         migrate->setIcon(QIcon::fromTheme("migrate"));

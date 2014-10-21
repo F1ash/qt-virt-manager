@@ -21,11 +21,6 @@ QDomDocument SCSI_Host_Device::getDataDocument() const
     QString _Addr, domain, bus, slot, function;
     if ( devList->selectedItems().count()>0 ) {
         _Addr = devList->selectedItems().first()->data(Qt::UserRole).toString();
-        QStringList _AddrList = _Addr.split(":");
-        domain.append( (_AddrList.size()>0)? _AddrList.at(0) : "0" );
-        bus.append( (_AddrList.size()>1)? _AddrList.at(1) : "0" );
-        slot.append( (_AddrList.size()>2)? _AddrList.at(2) : "0" );
-        function.append( (_AddrList.size()>3)? _AddrList.at(3) : "0" );
         QDomElement _source, _adapter, _address, _device, _devDesc;
         _device = doc.createElement("device");
         _devDesc = doc.createElement("hostdev");
@@ -37,6 +32,12 @@ QDomDocument SCSI_Host_Device::getDataDocument() const
                     .split("\n").first());
         _source.appendChild(_adapter);
         _devDesc.appendChild(_source);
+        /*
+        QStringList _AddrList = _Addr.split(":");
+        domain.append( (_AddrList.size()>0)? _AddrList.at(0) : "0" );
+        bus.append( (_AddrList.size()>1)? _AddrList.at(1) : "0" );
+        slot.append( (_AddrList.size()>2)? _AddrList.at(2) : "0" );
+        function.append( (_AddrList.size()>3)? _AddrList.at(3) : "0" );
 
         _address = doc.createElement("address");
         _address.setAttribute("domain", QString("0x%1").arg(domain));
@@ -44,6 +45,7 @@ QDomDocument SCSI_Host_Device::getDataDocument() const
         _address.setAttribute("slot", QString("0x%1").arg(slot));
         _address.setAttribute("function", function);
         _devDesc.appendChild(_address);
+        */
 
         _device.appendChild(_devDesc);
         _devDesc.setAttribute("type", "scsi");
@@ -63,8 +65,8 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
     virNodeDevice  **nodeDevices = NULL;
     if ( currWorkConnect!=NULL ) {
         unsigned int flags =
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_HOST ;
-                //VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI |
+                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI ;
+                //VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_HOST |
                 //VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_GENERIC |
                 //VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_TARGET;
         int ret = virConnectListAllNodeDevices(currWorkConnect, &nodeDevices, flags);
@@ -92,10 +94,11 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
      */
     foreach (QString _dev, devices) {
         qDebug()<<_dev;
-        QString devName, devIdentity;
-        QDomElement name, path, parent;
+        QString devName, devIdentity, host, bus, target, lun;
+        QDomElement name, path, type;
         QDomDocument doc;
         doc.setContent(_dev);
+        /*
         name = doc.firstChildElement("device").
                 firstChildElement("name");
         path = doc.firstChildElement("device").
@@ -115,6 +118,43 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
         devName.append(name.firstChild().toText().data());
         devName.append("\n");
         devName.append(path.firstChild().toText().data());
+        */
+        name = doc.firstChildElement("device").
+                firstChildElement("name");
+        path = doc.firstChildElement("device").
+                firstChildElement("path");
+        type = doc.firstChildElement("device").
+                firstChildElement("capability").
+                firstChildElement("type");
+        host = doc.firstChildElement("device").
+                firstChildElement("capability").
+                firstChildElement("host").
+                firstChild().toText().data();
+        bus = doc.firstChildElement("device").
+                firstChildElement("capability").
+                firstChildElement("bus").
+                firstChild().toText().data();
+        target = doc.firstChildElement("device").
+                firstChildElement("capability").
+                firstChildElement("target").
+                firstChild().toText().data();
+        lun = doc.firstChildElement("device").
+                firstChildElement("capability").
+                firstChildElement("lun").
+                firstChild().toText().data();
+        // devName format: <name_(type)_path>
+        devName.append(name.firstChild().toText().data());
+        devName.append("\t(");
+        devName.append(type.firstChild().toText().data());
+        devName.append(")\n");
+        devName.append(path.firstChild().toText().data());
+        devIdentity.append(host);
+        devIdentity.append(":");
+        devIdentity.append(bus);
+        devIdentity.append(":");
+        devIdentity.append(target);
+        devIdentity.append(":");
+        devIdentity.append(lun);
         if ( devList->findItems(devName,
                                 Qt::MatchExactly |
                                 Qt::MatchCaseSensitive)
@@ -123,8 +163,6 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
             devList->item(0)->setData(Qt::UserRole, devIdentity);
         };
     };
-    //devList->insertItem(0, "WARNING:\nDon't implemented");
-    //devList->item(0)->setIcon(QIcon::fromTheme("dialog-warning").pixmap(32));
     devList->setCurrentRow(0);
 }
 

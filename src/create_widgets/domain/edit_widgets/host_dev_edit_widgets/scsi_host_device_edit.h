@@ -11,6 +11,18 @@ public:
     explicit SCSI_Host_Device_Edit(QWidget *parent = 0);
 
 private:
+    QLabel              *adapterNameLabel;
+    QCheckBox           *adapterAddr;
+    QLineEdit           *adapterName;
+
+    QLabel              *busLabel, *targetLabel,
+                        *unitLabel;
+    QSpinBox            *bus, *target, *unit;
+    QGridLayout         *scsiAddrLayout;
+    QWidget             *scsiAddr;
+
+    QGridLayout         *baseLayout;
+    QWidget             *baseWdg;
 
     DeviceAddress       *addr;
     QVBoxLayout         *commonLayout;
