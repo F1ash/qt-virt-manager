@@ -3,6 +3,7 @@
 
 #include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/common_widgets/device_address.h"
+#include "create_widgets/domain/common_widgets/disk_widgets/_startup_policy.h"
 
 class USB_Host_Device_Edit : public _QWidget
 {
@@ -13,9 +14,8 @@ public:
 
 private:
     QLabel              *vendorLabel, *productLabel;
-    QCheckBox           *startupPolLabel;
     QLineEdit           *vendor, *product;
-    QComboBox           *startupPolicy;
+    _StartupPolicy      *startupPolicy;
     QWidget             *baseWdg;
     QGridLayout         *baseLayout;
     QVBoxLayout         *commonLayout;

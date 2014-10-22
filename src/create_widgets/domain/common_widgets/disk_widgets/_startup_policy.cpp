@@ -14,6 +14,10 @@ _StartupPolicy::_StartupPolicy(QWidget *parent) :
     setLayout(commonLayout);
     connect(startupPolicyLabel, SIGNAL(toggled(bool)),
             startupPolicy, SLOT(setEnabled(bool)));
+    connect(startupPolicyLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(startupPolicy, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -21,7 +25,22 @@ bool _StartupPolicy::isUsed() const
 {
     return startupPolicyLabel->isChecked();
 }
+void _StartupPolicy::setUsage(bool state)
+{
+    startupPolicyLabel->setChecked(state);
+}
 QString _StartupPolicy::getStartupPolicy() const
 {
     return startupPolicy->currentText();
+}
+int _StartupPolicy::findPolicyIndex(QString &_startupPolicy)
+{
+    int idx = startupPolicy->findText(
+                _startupPolicy,
+                Qt::MatchContains);
+    return idx;
+}
+void _StartupPolicy::setPolicyIndex(int idx)
+{
+    startupPolicy->setCurrentIndex(idx);
 }

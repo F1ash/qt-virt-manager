@@ -12,14 +12,20 @@ class _StartupPolicy : public QWidget
 public:
     explicit _StartupPolicy(QWidget *parent = NULL);
 
+signals:
+    void             dataChanged();
+
 private:
     QCheckBox       *startupPolicyLabel;
     QComboBox       *startupPolicy;
     QHBoxLayout     *commonLayout;
 
 public slots:
-    bool    isUsed() const;
-    QString getStartupPolicy() const;
+    bool             isUsed() const;
+    void             setUsage(bool);
+    QString          getStartupPolicy() const;
+    int              findPolicyIndex(QString&);
+    void             setPolicyIndex(int);
 };
 
 #endif // _STARTUP_POLICY_H

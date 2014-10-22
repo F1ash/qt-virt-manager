@@ -17,6 +17,9 @@ public:
     QLineEdit       *userName, *usage;
     QComboBox       *usageType;
 
+signals:
+    void             dataChanged();
+
 private:
     QLabel          *userLabel;
     QGridLayout     *authLayout;

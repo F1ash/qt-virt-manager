@@ -5,19 +5,15 @@ USB_Host_Device_Edit::USB_Host_Device_Edit(QWidget *parent) :
 {
     vendorLabel = new QLabel("Vendor:", this);
     productLabel = new QLabel("Product:", this);
-    startupPolLabel = new QCheckBox("StartUp\nPolicy:", this);
     vendor = new QLineEdit(this);
     product = new QLineEdit(this);
-    startupPolicy = new QComboBox(this);
-    startupPolicy->addItems(QStringList()<<"mandatory"<<"requisite"<<"optional");
-    startupPolicy->setEnabled(false);
+    startupPolicy = new _StartupPolicy(this);
     baseLayout = new QGridLayout();
     baseLayout->addWidget(vendorLabel, 0, 0);
     baseLayout->addWidget(vendor, 0, 1);
     baseLayout->addWidget(productLabel, 1, 0);
     baseLayout->addWidget(product, 1, 1);
-    baseLayout->addWidget(startupPolLabel, 2, 0);
-    baseLayout->addWidget(startupPolicy, 2, 1);
+    baseLayout->addWidget(startupPolicy, 2, 0, 3, 2);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
     addr = new DeviceAddress(this);
@@ -30,13 +26,12 @@ USB_Host_Device_Edit::USB_Host_Device_Edit(QWidget *parent) :
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    connect(startupPolLabel, SIGNAL(toggled(bool)),
-            startupPolicy, SLOT(setEnabled(bool)));
+    // dataChanged signals
     connect(vendor, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
     connect(product, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
-    connect(startupPolLabel, SIGNAL(toggled(bool)),
+    connect(startupPolicy, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(addr, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
@@ -56,8 +51,10 @@ QDomDocument USB_Host_Device_Edit::getDataDocument() const
     _product.setAttribute("id", product->text());
     _source.appendChild(_vendor);
     _source.appendChild(_product);
-    if ( startupPolLabel->isChecked() )
-        _source.setAttribute("startupPolicy", startupPolicy->currentText());
+    if ( startupPolicy->isUsed() )
+        _source.setAttribute(
+                    "startupPolicy",
+                    startupPolicy->getStartupPolicy());
     _devDesc.appendChild(_source);
     _devDesc.setAttribute("type", "usb");
     _devDesc.setAttribute("mode", "subsystem");
@@ -75,11 +72,9 @@ void USB_Host_Device_Edit::setDataDescription(QString &xmlDesc)
             .firstChildElement("hostdev");
     _source = _device.firstChildElement("source");
     QString _startupPolicy = _source.attribute("startupPolicy");
-    startupPolLabel->setChecked(!_startupPolicy.isEmpty());
-    int idx = startupPolicy->findText(
-                _startupPolicy,
-                Qt::MatchContains);
-    startupPolicy->setCurrentIndex( (idx<0)? 0:idx );
+    startupPolicy->setUsage(!_startupPolicy.isEmpty());
+    int idx = startupPolicy->findPolicyIndex(_startupPolicy);
+    startupPolicy->setPolicyIndex( (idx<0)? 0:idx );
     _vendor = _source.firstChildElement("vendor");
     _product = _source.firstChildElement("product");
     vendor->setText(_vendor.attribute("id"));

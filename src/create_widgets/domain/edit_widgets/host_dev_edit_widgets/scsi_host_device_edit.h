@@ -3,6 +3,8 @@
 
 #include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/common_widgets/device_address.h"
+#include "adapter_address.h"
+#include "iscsi_device.h"
 
 class SCSI_Host_Device_Edit : public _QWidget
 {
@@ -11,15 +13,12 @@ public:
     explicit SCSI_Host_Device_Edit(QWidget *parent = 0);
 
 private:
-    QLabel              *adapterNameLabel;
-    QCheckBox           *adapterAddr;
+    QComboBox           *scsiType;
     QLineEdit           *adapterName;
 
-    QLabel              *busLabel, *targetLabel,
-                        *unitLabel;
-    QSpinBox            *bus, *target, *unit;
-    QGridLayout         *scsiAddrLayout;
-    QWidget             *scsiAddr;
+    AdapterAddress      *scsiDevice;
+    ISCSI_Device        *iscsiDevice;
+    QStackedWidget      *scsiDevices;
 
     QGridLayout         *baseLayout;
     QWidget             *baseWdg;
@@ -30,6 +29,9 @@ private:
 public slots:
     QDomDocument         getDataDocument() const;
     void                 setDataDescription(QString&);
+
+private slots:
+    void scsiTypeChanged(int);
 };
 
 #endif // SCSI_HOST_DEVICE_EDIT_H

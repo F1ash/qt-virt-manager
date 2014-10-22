@@ -24,4 +24,12 @@ _Storage_Auth::_Storage_Auth(QWidget *parent) :
     setLayout(commonLayout);
     connect(auth, SIGNAL(toggled(bool)),
             authWdg, SLOT(setVisible(bool)));
+    connect(auth, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(userName, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(usageType, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(usage, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
 }

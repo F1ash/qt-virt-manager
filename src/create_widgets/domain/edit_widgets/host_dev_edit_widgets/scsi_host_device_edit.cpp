@@ -3,31 +3,20 @@
 SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(QWidget *parent) :
     _QWidget(parent)
 {
-    busLabel = new QLabel("Bus:", this);
-    targetLabel = new QLabel("Target:", this);
-    unitLabel = new QLabel("Unit:", this);
-    bus = new QSpinBox(this);
-    target = new QSpinBox(this);
-    unit = new QSpinBox(this);
-    scsiAddrLayout = new QGridLayout();
-    scsiAddrLayout->addWidget(busLabel, 0, 0);
-    scsiAddrLayout->addWidget(bus, 0, 1);
-    scsiAddrLayout->addWidget(targetLabel, 1, 0);
-    scsiAddrLayout->addWidget(target, 1, 1);
-    scsiAddrLayout->addWidget(unitLabel, 2, 0);
-    scsiAddrLayout->addWidget(unit, 2, 1);
-    scsiAddr = new QWidget(this);
-    scsiAddr->setEnabled(false);
-    scsiAddr->setLayout(scsiAddrLayout);
-    adapterNameLabel = new QLabel("<u>Adapter</u>:", this);
-    adapterName = new QLineEdit();
+    scsiType = new QComboBox(this);
+    scsiType->addItem("SCSI Adapter Name", "scsi");
+    scsiType->addItem("iSCSI Device Name", "iscsi");
+    adapterName = new QLineEdit(this);
     adapterName->setPlaceholderText("scsi_hostN");
-    adapterAddr = new QCheckBox("SCSI Device\n address:", this);
+    scsiDevice = new AdapterAddress(this);
+    iscsiDevice = new ISCSI_Device(this);
+    scsiDevices = new QStackedWidget(this);
+    scsiDevices->addWidget(scsiDevice);
+    scsiDevices->addWidget(iscsiDevice);
     baseLayout = new QGridLayout();
-    baseLayout->addWidget(adapterNameLabel, 0, 0);
+    baseLayout->addWidget(scsiType, 0, 0);
     baseLayout->addWidget(adapterName, 0, 1);
-    baseLayout->addWidget(adapterAddr, 1, 0);
-    baseLayout->addWidget(scsiAddr, 1, 1);
+    baseLayout->addWidget(scsiDevices, 1, 0, 2, 2);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
     addr = new DeviceAddress(this);
@@ -40,27 +29,46 @@ SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(QWidget *parent) :
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    connect(adapterAddr, SIGNAL(toggled(bool)),
-            scsiAddr, SLOT(setEnabled(bool)));
+    connect(scsiType, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(scsiTypeChanged(int)));
+    connect(scsiType, SIGNAL(currentIndexChanged(int)),
+            scsiDevices, SLOT(setCurrentIndex(int)));
     // dataChanged signals
-    connect(addr, SIGNAL(dataChanged()),
+    connect(scsiType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));
     connect(adapterName, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
-    connect(adapterAddr, SIGNAL(toggled(bool)),
+    connect(addr, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
-    connect(bus, SIGNAL(valueChanged(int)),
-            this, SLOT(stateChanged()));
-    connect(target, SIGNAL(valueChanged(int)),
-            this, SLOT(stateChanged()));
-    connect(unit, SIGNAL(valueChanged(int)),
-            this, SLOT(stateChanged()));
+    for (uint i=0; i<scsiDevices->count(); i++) {
+        connect(scsiDevices->widget(i), SIGNAL(dataChanged()),
+                this, SLOT(stateChanged()));
+    };
 }
 
 /* public slots */
 QDomDocument SCSI_Host_Device_Edit::getDataDocument() const
 {
-    return QDomDocument();
+    QDomDocument doc;
+    QDomElement _source, _device, _devDesc;
+    _device = doc.createElement("device");
+    _devDesc = doc.createElement("hostdev");
+    _source = doc.createElement("source");
+    AttrList l = addr->getAttrList();
+    if (  addr->use->isChecked() && !l.isEmpty() ) {
+        QDomElement _address = doc.createElement("address");
+        foreach (QString key, l.keys()) {
+            if ( !key.isEmpty() )
+                _address.setAttribute(key, l.value(key));
+        };
+        _source.appendChild(_address);
+    };
+    _devDesc.appendChild(_source);
+    _devDesc.setAttribute("type", "scsi");
+    _devDesc.setAttribute("mode", "subsystem");
+    _device.appendChild(_devDesc);
+    doc.appendChild(_device);
+    return doc;
 }
 void SCSI_Host_Device_Edit::setDataDescription(QString &xmlDesc)
 {
@@ -71,6 +79,7 @@ void SCSI_Host_Device_Edit::setDataDescription(QString &xmlDesc)
     _device = doc.firstChildElement("device")
             .firstChildElement("hostdev");
     _source = _device.firstChildElement("source");
+    QString _protocol = _source.attribute("protocol");
     _addr = _source.firstChildElement("address");
     addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
@@ -80,4 +89,16 @@ void SCSI_Host_Device_Edit::setDataDescription(QString &xmlDesc)
         wdg->target->setText( _addr.attribute("target") );
         wdg->unit->setText( _addr.attribute("unit") );
     };
+}
+
+/* private slots */
+void SCSI_Host_Device_Edit::scsiTypeChanged(int i)
+{
+    QString _type = scsiType->itemData(i, Qt::UserRole).toString();
+    if ( _type=="scsi" ) {
+        adapterName->setPlaceholderText("scsi_hostN");
+    } else if ( _type=="iscsi" ) {
+        adapterName->setPlaceholderText(
+                    "iqn.2014-08.com.example:iscsi-nopool/1");
+    }
 }
