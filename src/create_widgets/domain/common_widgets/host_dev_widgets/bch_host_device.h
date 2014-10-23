@@ -21,10 +21,10 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 
 private slots:
-    void typeChanged(int);
+    void             typeChanged(int);
 };
 
 #endif // BCH_HOST_DEVICE_H

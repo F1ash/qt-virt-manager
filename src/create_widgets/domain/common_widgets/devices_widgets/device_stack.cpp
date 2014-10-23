@@ -150,7 +150,7 @@ DeviceStack::~DeviceStack()
 /* public slots */
 QDomDocument DeviceStack::getResult() const
 {
-    qDebug()<<"DeviceStack result";
+    //qDebug()<<"DeviceStack result";
     QDomDocument doc;
     if ( device!=NULL ) {
         doc = device->getDataDocument();
@@ -220,7 +220,7 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         device = NULL;
     };
     QString deviceType = item->data(Qt::UserRole).toString();
-    qDebug()<<item->text()<<deviceType;
+    //qDebug()<<item->text()<<deviceType;
     if ( deviceType == "disk" ) {
         device = new Disk(
                     this,
@@ -287,7 +287,7 @@ void DeviceStack::showDevice()
 void DeviceStack::set_Result()
 {
     done( (sender()==addDevice)?1:0 );
-    qDebug()<<"done";
+    //qDebug()<<"done";
     settings.setValue("DeviceStackGeometry", saveGeometry());
 }
 

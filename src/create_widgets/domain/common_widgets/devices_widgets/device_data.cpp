@@ -48,7 +48,7 @@ DeviceData::DeviceData(
 /* public slots */
 QDomDocument DeviceData::getResult() const
 {
-    qDebug()<<"DeviceData result";
+    //qDebug()<<"DeviceData result";
     QDomDocument doc;
     if ( device!=NULL ) {
         doc = device->getDataDocument();

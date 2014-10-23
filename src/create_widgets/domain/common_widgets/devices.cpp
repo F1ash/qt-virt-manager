@@ -179,7 +179,7 @@ QDomDocument Devices::getDataDocument() const
 QDomDocument Devices::chooseNewDevice()
 {
     QDomDocument doc = QDomDocument();
-    qDebug()<<"choose New Device";
+    //qDebug()<<"choose New Device";
     if ( deviceStack==NULL ) {
         deviceStack = new DeviceStack(this, currWorkConnect);
     };
@@ -343,7 +343,7 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc)
          //usedDeviceList->item(row)->setData(Qt::UserRole, doc.toString());
          inserted = true;
     } while ( !inserted );
-    qDebug()<<"added New Device:"<<name;
+    //qDebug()<<"added New Device:"<<name;
 }
 void Devices::delDevice()
 {

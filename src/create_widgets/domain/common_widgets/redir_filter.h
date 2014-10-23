@@ -14,13 +14,13 @@ class RedirFilter : public QWidget
     Q_OBJECT
 public:
     explicit RedirFilter(QWidget *parent = NULL);
+    QListWidget     *filter;
     QCheckBox       *filtered;
 
 signals:
     void             dataChanged();
 
 private:
-    QListWidget     *filter;
     QLineEdit       *_class, *_product,
                     *_vendor, *_version;
     QPushButton     *add;

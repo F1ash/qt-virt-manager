@@ -28,6 +28,9 @@ private:
 
 public slots:
 
+private slots:
+    void             usageTypeChanged(int);
+
 };
 
 #endif // _STORAGE_AUTH_H

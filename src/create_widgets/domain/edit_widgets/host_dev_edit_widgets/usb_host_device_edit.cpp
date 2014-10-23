@@ -56,6 +56,15 @@ QDomDocument USB_Host_Device_Edit::getDataDocument() const
                     "startupPolicy",
                     startupPolicy->getStartupPolicy());
     _devDesc.appendChild(_source);
+    AttrList l = addr->getAttrList();
+    if ( addr->use->isChecked() && !l.isEmpty() ) {
+        QDomElement _address = doc.createElement("address");
+        foreach (QString key, l.keys()) {
+            if ( !key.isEmpty() )
+                _address.setAttribute(key, l.value(key));
+        };
+        _devDesc.appendChild(_address);
+    };
     _devDesc.setAttribute("type", "usb");
     _devDesc.setAttribute("mode", "subsystem");
     _device.appendChild(_devDesc);
@@ -79,7 +88,7 @@ void USB_Host_Device_Edit::setDataDescription(QString &xmlDesc)
     _product = _source.firstChildElement("product");
     vendor->setText(_vendor.attribute("id"));
     product->setText(_product.attribute("id"));
-    _addr = _source.firstChildElement("address");
+    _addr = _device.firstChildElement("address");
     addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
         USBAddr *wdg = static_cast<USBAddr*>( addr->getCurrentAddrWidget() );

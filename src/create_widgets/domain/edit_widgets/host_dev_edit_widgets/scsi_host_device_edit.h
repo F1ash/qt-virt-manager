@@ -13,8 +13,9 @@ public:
     explicit SCSI_Host_Device_Edit(QWidget *parent = 0);
 
 private:
+    QLabel              *info, *infoText;
     QComboBox           *scsiType;
-    QLineEdit           *adapterName;
+    QLineEdit           *devName;
 
     AdapterAddress      *scsiDevice;
     ISCSI_Device        *iscsiDevice;

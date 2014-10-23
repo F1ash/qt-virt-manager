@@ -48,6 +48,7 @@ void RedirDevDevice_Edit::setDataDescription(QString &xmlDesc)
     _filter = doc.firstChildElement("device")
             .firstChildElement("redirfilter");
     filter->filtered->setChecked(!_filter.isNull());
+    filter->filter->clear();
     if ( !_filter.isNull() ) {
         QDomNodeList _list = _filter.childNodes();
         uint j = 0;
@@ -71,7 +72,6 @@ void RedirDevDevice_Edit::setDataDescription(QString &xmlDesc)
                     _split.append(":");
                     _split.append(_version);
                     filter->setFiltersList(_split, (_allow=="yes") );
-                    ++j;
                 };
             } else
                 ++j;
