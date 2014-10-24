@@ -89,6 +89,7 @@ set (HEADERS
   src/create_widgets/domain/_changed.h
   src/create_widgets/domain/restore_panel.h
   src/create_widgets/domain/create_virt_domain.h
+  src/create_widgets/domain/common_widgets/os_booting.h
   src/create_widgets/domain/common_widgets/general.h
   src/create_widgets/domain/common_widgets/memory.h
   src/create_widgets/domain/common_widgets/memory_widgets/hugepages.h
@@ -312,6 +313,7 @@ set (SOURCES
   src/create_widgets/domain/_qwidget.cpp
   src/create_widgets/domain/_changed.cpp
   src/create_widgets/domain/restore_panel.cpp
+  src/create_widgets/domain/common_widgets/os_booting.cpp
   src/create_widgets/domain/common_widgets/general.cpp
   src/create_widgets/domain/common_widgets/memory.cpp
   src/create_widgets/domain/common_widgets/memory_widgets/hugepages.cpp

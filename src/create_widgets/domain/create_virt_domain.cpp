@@ -316,6 +316,7 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.append(new SecurityLabel(this, xmlDesc));
     } else if ( type.toLower() == "qemu" ) {
         wdgList.append(new General(this, type, arch, xmlDesc));
+        wdgList.append(new OS_Booting(this, xmlDesc));
         wdgList.append(new Memory(this, memUnit, memValue, xmlDesc));
         wdgList.append(new CPU(this));
         wdgList.append(new Devices(
