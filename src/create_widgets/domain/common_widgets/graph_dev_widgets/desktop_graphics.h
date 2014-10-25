@@ -16,7 +16,8 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // DESKTOP_GRAPHICS_H

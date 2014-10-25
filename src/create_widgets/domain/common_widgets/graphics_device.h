@@ -15,17 +15,17 @@ public:
     explicit GraphicsDevice(
             QWidget *parent = NULL,
             virConnectPtr conn = NULL);
-
-private:
     QComboBox       *type;
     QStackedWidget  *info;
+
+private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 
 private slots:
-    void setWidgets(int);
+    void             setWidgets(int);
 };
 
 #endif // GRAPHICS_DEVICE_H

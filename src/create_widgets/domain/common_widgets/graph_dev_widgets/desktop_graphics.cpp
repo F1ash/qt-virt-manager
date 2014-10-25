@@ -6,12 +6,17 @@ Desktop_Graphics::Desktop_Graphics(QWidget *parent) :
     displayLabel = new QLabel("Display:", this);
     display = new QLineEdit(this);
     display->setPlaceholderText(":0.0");
-    fullscreen = new QCheckBox("Fullscreen:", this);
+    fullscreen = new QCheckBox("Fullscreen", this);
     commonLayout = new QGridLayout();
     commonLayout->addWidget(displayLabel, 0, 0);
     commonLayout->addWidget(display, 0, 1);
     commonLayout->addWidget(fullscreen, 1, 1, Qt::AlignTop);
     setLayout(commonLayout);
+    // dataChanged connections
+    connect(display, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(fullscreen, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -27,4 +32,16 @@ QDomDocument Desktop_Graphics::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void Desktop_Graphics::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    QDomElement _device;
+    doc.setContent(_xmlDesc);
+    _device = doc.firstChildElement("device")
+            .firstChildElement("graphics");
+    display->setText(
+                _device.attribute("display"));
+    fullscreen->setChecked(
+                _device.attribute("fullscreen")=="yes");
 }

@@ -97,7 +97,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
                           this,
                           currWorkConnect);
     } else if ( deviceType == "graphics" ) {
-        device = new GraphicsDevice(
+        device = new GraphicsDevice_Edit(
                     this,
                     currWorkConnect);
     } else if ( deviceType == "redirdev" ) {
