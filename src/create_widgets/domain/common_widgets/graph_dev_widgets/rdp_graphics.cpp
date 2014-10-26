@@ -17,6 +17,15 @@ RDP_Graphics::RDP_Graphics(QWidget *parent) :
     connect(autoPort, SIGNAL(toggled(bool)),
             this, SLOT(autoPortChanged(bool)));
     autoPort->setChecked(true);
+    // dataChanged connections
+    connect(autoPort, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(port, SIGNAL(valueChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(replaceUser, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(multiUser, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -37,6 +46,21 @@ QDomDocument RDP_Graphics::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void RDP_Graphics::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    QDomElement _device;
+    doc.setContent(_xmlDesc);
+    _device = doc.firstChildElement("device")
+            .firstChildElement("graphics");
+    autoPort->setChecked(
+                _device.attribute("autoport")=="yes");
+    port->setValue(_device.attribute("port", "10").toInt());
+    multiUser->setChecked(
+                _device.attribute("multiUser")=="yes");
+    replaceUser->setChecked(
+                _device.attribute("replaceUser")=="yes");
 }
 
 /* private slots */

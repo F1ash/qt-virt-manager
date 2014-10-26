@@ -17,10 +17,11 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void autoPortChanged(bool);
+    void             autoPortChanged(bool);
 };
 
 #endif // RDP_GRAPHICS_H

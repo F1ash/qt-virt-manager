@@ -4,7 +4,10 @@ PCI_Host_Device_Edit::PCI_Host_Device_Edit(QWidget *parent) :
     _QWidget(parent)
 {
     addr = new DeviceAddress(this);
-    int idx = addr->type->findText("pci", Qt::MatchContains);
+    int idx = addr->type->findData(
+                "pci",
+                Qt::UserRole,
+                Qt::MatchContains);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     addr->type->setEnabled(false);
     addr->setCurrentAddrWidget(idx);

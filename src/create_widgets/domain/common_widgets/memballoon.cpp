@@ -23,7 +23,10 @@ MemBalloon::MemBalloon(QWidget *parent, virConnectPtr conn) :
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
     addr = new DeviceAddress(this);
-    int idx = addr->type->findText("pci", Qt::MatchContains);
+    int idx = addr->type->findData(
+                "pci",
+                Qt::UserRole,
+                Qt::MatchContains);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     addr->type->setEnabled(false);
     addr->setCurrentAddrWidget(idx);
@@ -63,7 +66,6 @@ QDomDocument MemBalloon::getDataDocument() const
             if ( !key.isEmpty() )
                 _address.setAttribute(key, l.value(key));
         };
-        _address.setAttribute("type", "pci");
         _memballoon.appendChild(_address);
     };
 

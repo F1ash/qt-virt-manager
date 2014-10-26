@@ -26,7 +26,10 @@ SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(QWidget *parent) :
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
     addr = new DeviceAddress(this);
-    int idx = addr->type->findText("drive", Qt::MatchContains);
+    int idx = addr->type->findData(
+                "drive",
+                Qt::UserRole,
+                Qt::MatchContains);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     addr->type->setEnabled(false);
     addr->setCurrentAddrWidget(idx);

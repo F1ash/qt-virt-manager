@@ -9,7 +9,10 @@ HubDevice::HubDevice(QWidget *parent) :
 {
     info = new QLabel("To add USB Hub", this);
     addr = new DeviceAddress(this);
-    int idx = addr->type->findText("usb", Qt::MatchContains);
+    int idx = addr->type->findData(
+                "usb",
+                Qt::UserRole,
+                Qt::MatchContains);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     addr->type->setEnabled(false);
     addr->setCurrentAddrWidget(idx);
@@ -23,7 +26,7 @@ HubDevice::HubDevice(QWidget *parent) :
 /* public slots */
 QDomDocument HubDevice::getDataDocument() const
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _address, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("hub");

@@ -115,4 +115,3 @@ void CPU::saveSecData()
     currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
-

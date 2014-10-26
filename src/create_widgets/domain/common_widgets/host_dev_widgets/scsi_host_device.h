@@ -20,16 +20,16 @@ private:
 
 signals:
     // TODO: write to Log
-    void errorMsg(QString);
+    void             errorMsg(QString);
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 
 private slots:
-    void setAvailabledSCSIDevices();
+    void             setAvailabledSCSIDevices();
 
-    void sendConnErrors();
-    void sendGlobalErrors();
+    void             sendConnErrors();
+    void             sendGlobalErrors();
 };
 
 #endif // SCSI_HOST_DEVICE_H

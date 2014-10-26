@@ -32,7 +32,7 @@ public slots:
     void                 setDataDescription(QString&);
 
 private slots:
-    void scsiTypeChanged(int);
+    void                 scsiTypeChanged(int);
 };
 
 #endif // SCSI_HOST_DEVICE_EDIT_H

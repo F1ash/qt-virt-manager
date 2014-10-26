@@ -21,7 +21,10 @@ VideoDevice::VideoDevice(QWidget *parent) :
     accel2d = new QCheckBox("Acceleration 2D", this);
     accel3d = new QCheckBox("Acceleration 3D", this);
     addr = new DeviceAddress(this);
-    int idx = addr->type->findText("pci", Qt::MatchContains);
+    int idx = addr->type->findData(
+                "pci",
+                Qt::UserRole,
+                Qt::MatchContains);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     addr->type->setEnabled(false);
     addr->setCurrentAddrWidget(idx);

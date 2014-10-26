@@ -13,7 +13,10 @@ SmartCardDevice::SmartCardDevice(QWidget *parent) :
     channel = new ChannelDevice(this);
     channel->setVisible(false);
     addr = new DeviceAddress(this);
-    int idx = addr->type->findText("ccid", Qt::MatchContains);
+    int idx = addr->type->findData(
+                "ccid",
+                Qt::UserRole,
+                Qt::MatchContains);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     addr->type->setEnabled(false);
     addr->setCurrentAddrWidget(idx);

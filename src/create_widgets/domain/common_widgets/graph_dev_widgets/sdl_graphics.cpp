@@ -9,7 +9,7 @@ SDL_Graphics::SDL_Graphics(QWidget *parent) :
     display->setPlaceholderText(":0.0");
     xauth = new QLineEdit(this);
     xauth->setPlaceholderText("${HOME}/.Xauthority");
-    fullscreen = new QCheckBox("Fullscreen:", this);
+    fullscreen = new QCheckBox("Fullscreen", this);
     browse = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
     commonLayout = new QGridLayout();
     commonLayout->addWidget(displayLabel, 0, 0);
@@ -21,6 +21,13 @@ SDL_Graphics::SDL_Graphics(QWidget *parent) :
     setLayout(commonLayout);
     connect(browse, SIGNAL(clicked()),
             this, SLOT(getPathToXauthority()));
+    // dataChanged connections
+    connect(display, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(xauth, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(fullscreen, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -37,6 +44,20 @@ QDomDocument SDL_Graphics::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void SDL_Graphics::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    QDomElement _device;
+    doc.setContent(_xmlDesc);
+    _device = doc.firstChildElement("device")
+            .firstChildElement("graphics");
+    display->setText(
+                _device.attribute("display"));
+    xauth->setText(
+                _device.attribute("xauth"));
+    fullscreen->setChecked(
+                _device.attribute("fullscreen")=="yes");
 }
 
 /* private slots */

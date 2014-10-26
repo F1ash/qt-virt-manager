@@ -21,10 +21,11 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void getPathToXauthority() const;
+    void             getPathToXauthority() const;
 };
 
 #endif // SDL_GRAPHICS_H

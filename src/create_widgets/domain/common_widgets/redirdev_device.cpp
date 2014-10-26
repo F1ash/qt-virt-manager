@@ -28,7 +28,10 @@ RedirDevDevice::RedirDevDevice(
     source->setLayout(sourceLayout);
 
     address = new DeviceAddress(this);
-    int idx = address->type->findText("usb", Qt::MatchContains);
+    int idx = address->type->findData(
+                "usb",
+                Qt::UserRole,
+                Qt::MatchContains);
     address->type->setCurrentIndex( (idx<0)? 0:idx );
     address->type->setEnabled(false);
     address->setCurrentAddrWidget(idx);
@@ -70,7 +73,6 @@ QDomDocument RedirDevDevice::getDataDocument() const
             if ( !key.isEmpty() )
                 _address.setAttribute(key, l.value(key));
         };
-        _address.setAttribute("type", "usb");
         _devDesc.appendChild(_address);
     };
     _devDesc.setAttribute("type", _type );
