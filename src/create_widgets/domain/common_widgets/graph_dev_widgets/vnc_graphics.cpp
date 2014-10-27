@@ -60,6 +60,23 @@ VNC_Graphics::VNC_Graphics(
             this, SLOT(usePassword(bool)));
     autoPort->setChecked(true);
     usePassw->setChecked(false);
+    // dataChanged connections
+    connect(address, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(networks, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(autoPort, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(port, SIGNAL(valueChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(usePassw, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(passw, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(keymap, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(sharePolicy, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -70,8 +87,10 @@ QDomDocument VNC_Graphics::getDataDocument() const
     _device = doc.createElement("device");
     _devDesc = doc.createElement("graphics");
     _devDesc.setAttribute("type", "vnc");
-    QString _sharePolicy = sharePolicy->itemData(sharePolicy->currentIndex(), Qt::UserRole).toString();
-    if ( !_sharePolicy.isEmpty() ) _devDesc.setAttribute("sharePolicy", _sharePolicy);
+    QString _sharePolicy = sharePolicy->itemData(
+                sharePolicy->currentIndex(), Qt::UserRole).toString();
+    if ( !_sharePolicy.isEmpty() )
+        _devDesc.setAttribute("sharePolicy", _sharePolicy);
     if ( autoPort->isChecked() ) {
         _devDesc.setAttribute("autoport", "yes");
     } else {
@@ -81,14 +100,17 @@ QDomDocument VNC_Graphics::getDataDocument() const
         _devDesc.setAttribute("passwd", passw->text());
         _devDesc.setAttribute("keymap", keymap->currentText());
     };
-    QString _address = address->itemData(address->currentIndex(), Qt::UserRole).toString();
+    QString _address = address->itemData(
+                address->currentIndex(), Qt::UserRole).toString();
     if ( !_address.isEmpty() && _address!="network" ) {
         _listen = doc.createElement("listen");
         _listen.setAttribute("type", "address");
-        if ( _address.isEmpty() ) {
-            _listen.setAttribute("address", address->currentText());
-        } else {
+        if ( _address!="custom" ) {
             _listen.setAttribute("address", _address);
+        } else {
+            _listen.setAttribute(
+                        "address",
+                        address->currentText());
         };
         _devDesc.appendChild(_listen);
     } else if ( _address=="network" && networks->count()>0 ) {
@@ -100,6 +122,60 @@ QDomDocument VNC_Graphics::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void VNC_Graphics::setDataDescription(QString &_xmlDesc)
+{
+    //qDebug()<<_xmlDesc;
+    QDomDocument doc;
+    QDomElement _device, _listen;
+    doc.setContent(_xmlDesc);
+    _device = doc.firstChildElement("device")
+            .firstChildElement("graphics");
+    QString _sharePolicy = _device.attribute("sharePolicy");
+    int idx = sharePolicy->findData(
+                _sharePolicy,
+                Qt::UserRole,
+                Qt::MatchContains);
+    sharePolicy->setCurrentIndex( (idx<0)? 0:idx );
+    autoPort->setChecked(
+                _device.attribute("autoport")=="yes");
+    if ( !autoPort->isChecked() )
+        port->setValue(
+                    _device.attribute("port").toInt());
+    usePassw->setChecked( _device.hasAttribute("passwd") );
+    if ( _device.hasAttribute("passwd") ) {
+        QString _password = _device.attribute("passwd");
+        passw->setText(_password);
+        idx = keymap->findText(
+                    _device.attribute("keymap"),
+                    Qt::MatchContains);
+        keymap->setCurrentIndex( (idx<0)? 0:idx );
+    };
+    _listen = _device.firstChildElement("listen");
+    if ( !_listen.isNull() ) {
+        QString _type, _data;
+        _type = _listen.attribute("type");
+        _data = _listen.attribute(_type);
+        if ( !_type.isEmpty() ) {
+            idx = address->findData(
+                        _type,
+                        Qt::UserRole,
+                        Qt::MatchContains);
+            address->setCurrentIndex( (idx<0)? 3:idx );
+            if ( _type=="address" ) {
+                if ( address->currentIndex()==3 )
+                    address->setEditText(_data);
+            } else if ( _type=="network" ) {
+                idx = networks->findText(
+                            _data,
+                            Qt::MatchContains);
+                networks->setCurrentIndex( (idx<0)? 0:idx );
+            } else
+                address->setCurrentIndex(0);
+        } else
+            address->setCurrentIndex(0);
+    } else
+        address->setCurrentIndex(0);
 }
 
 /* private slots */

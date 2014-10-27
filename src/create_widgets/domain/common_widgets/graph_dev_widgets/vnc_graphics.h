@@ -12,7 +12,7 @@ public:
             virConnectPtr conn = NULL);
 
 signals:
-    void errorMsg(QString);
+    void             errorMsg(QString);
 
 private:
     QLabel          *addrLabel;
@@ -32,16 +32,17 @@ private:
     virErrorPtr      virtErrors;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void usePort(bool);
-    void usePassword(bool);
-    void addressEdit(QString);
-    void readNetworkList();
+    void             usePort(bool);
+    void             usePassword(bool);
+    void             addressEdit(QString);
+    void             readNetworkList();
 
-    void sendConnErrors();
-    void sendGlobalErrors();
+    void             sendConnErrors();
+    void             sendGlobalErrors();
 };
 
 #endif // VNC_GRAPHICS_H

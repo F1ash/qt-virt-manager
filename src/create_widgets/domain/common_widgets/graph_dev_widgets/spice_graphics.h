@@ -54,21 +54,22 @@ private:
     virErrorPtr      virtErrors;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void useAutoPort(bool);
-    void useTLSPort(bool);
-    void usePassword(bool);
-    void addressEdit(QString);
-    void policyElementsSetRequired(bool);
-    void defaultPolicyChanged(int);
-    void compressStateChanged(bool);
-    void additionStateChanged(bool);
-    void readNetworkList();
+    void             useAutoPort(bool);
+    void             useTLSPort(bool);
+    void             usePassword(bool);
+    void             addressEdit(QString);
+    void             policyElementsSetRequired(bool);
+    void             defaultPolicyChanged(int);
+    void             compressStateChanged(bool);
+    void             additionStateChanged(bool);
+    void             readNetworkList();
 
-    void sendConnErrors();
-    void sendGlobalErrors();
+    void             sendConnErrors();
+    void             sendGlobalErrors();
 };
 
 #endif // SPICE_GRAPHICS_H

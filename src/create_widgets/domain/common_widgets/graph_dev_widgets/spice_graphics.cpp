@@ -33,12 +33,12 @@ Spice_Graphics::Spice_Graphics(
     usePassw = new QCheckBox("Password", this);
     passw = new QLineEdit(this);
     passw->setEnabled(false);
-    keymapLabel = new QLabel("Keymap:", this);
+    keymapLabel = new QLabel("Keymap", this);
     keymap = new QComboBox(this);
     keymap->setEditable(true);
     keymap->addItems(KEYMAPs);
     keymap->setEnabled(false);
-    defaultLabel = new QLabel("Default policy:", this);
+    defaultLabel = new QLabel("Default policy", this);
     defaultPolicy = new QComboBox(this);
     defaultPolicy->addItem("any");
     defaultPolicy->addItem("secure");
@@ -60,56 +60,56 @@ Spice_Graphics::Spice_Graphics(
     baseElements = new QWidget(this);
     baseElements->setLayout(baseLayout);
 
-    mainLabel = new QCheckBox("Main:", this);
+    mainLabel = new QCheckBox("Main", this);
     mainLabel->setLayoutDirection(Qt::RightToLeft);
     main = new QComboBox(this);
     main->addItem("any");
     main->addItem("secure");
     main->addItem("insecure");
     main->setEnabled(false);
-    displayLabel = new QCheckBox("Display:", this);
+    displayLabel = new QCheckBox("Display", this);
     displayLabel->setLayoutDirection(Qt::RightToLeft);
     display = new QComboBox(this);
     display->addItem("any");
     display->addItem("secure");
     display->addItem("insecure");
     display->setEnabled(false);
-    inputsLabel = new QCheckBox("Inputs:", this);
+    inputsLabel = new QCheckBox("Inputs", this);
     inputsLabel->setLayoutDirection(Qt::RightToLeft);
     inputs = new QComboBox(this);
     inputs->addItem("any");
     inputs->addItem("secure");
     inputs->addItem("insecure");
     inputs->setEnabled(false);
-    cursorLabel = new QCheckBox("Cursor:", this);
+    cursorLabel = new QCheckBox("Cursor", this);
     cursorLabel->setLayoutDirection(Qt::RightToLeft);
     cursor = new QComboBox(this);
     cursor->addItem("any");
     cursor->addItem("secure");
     cursor->addItem("insecure");
     cursor->setEnabled(false);
-    playbackLabel = new QCheckBox("Playback:", this);
+    playbackLabel = new QCheckBox("Playback", this);
     playbackLabel->setLayoutDirection(Qt::RightToLeft);
     playback = new QComboBox(this);
     playback->addItem("any");
     playback->addItem("secure");
     playback->addItem("insecure");
     playback->setEnabled(false);
-    recordLabel = new QCheckBox("Record:", this);
+    recordLabel = new QCheckBox("Record", this);
     recordLabel->setLayoutDirection(Qt::RightToLeft);
     record = new QComboBox(this);
     record->addItem("any");
     record->addItem("secure");
     record->addItem("insecure");
     record->setEnabled(false);
-    smartcardLabel = new QCheckBox("Smartcard:", this);
+    smartcardLabel = new QCheckBox("Smartcard", this);
     smartcardLabel->setLayoutDirection(Qt::RightToLeft);
     smartcard = new QComboBox(this);
     smartcard->addItem("any");
     smartcard->addItem("secure");
     smartcard->addItem("insecure");
     smartcard->setEnabled(false);
-    usbredirLabel = new QCheckBox("Usbredir:", this);
+    usbredirLabel = new QCheckBox("Usbredir", this);
     usbredirLabel->setLayoutDirection(Qt::RightToLeft);
     usbredir = new QComboBox(this);
     usbredir->addItem("any");
@@ -137,7 +137,7 @@ Spice_Graphics::Spice_Graphics(
     policyElements->setVisible(false);
     policyElements->setLayout(policyElementsLayout);
 
-    compress = new QCheckBox("Compression:", this);
+    compress = new QCheckBox("Compression", this);
     compressImage = new QCheckBox("Image", this);
     compressImage->setLayoutDirection(Qt::RightToLeft);
     compressJpeg = new QCheckBox("Jpeg", this);
@@ -181,14 +181,14 @@ Spice_Graphics::Spice_Graphics(
     compressElements->setVisible(false);
     compressElements->setLayout(compressElementsLayout);
 
-    addition = new QCheckBox("Addition:", this);
-    streaming = new QCheckBox("Streaming:", this);
+    addition = new QCheckBox("Addition", this);
+    streaming = new QCheckBox("Streaming", this);
     streaming->setLayoutDirection(Qt::RightToLeft);
-    clipboard = new QCheckBox("Clipboard:", this);
+    clipboard = new QCheckBox("Clipboard", this);
     clipboard->setLayoutDirection(Qt::RightToLeft);
-    mouse = new QCheckBox("Mouse:", this);
+    mouse = new QCheckBox("Mouse", this);
     mouse->setLayoutDirection(Qt::RightToLeft);
-    filetransfer = new QCheckBox("File transfer:", this);
+    filetransfer = new QCheckBox("File transfer", this);
     streamingElement = new QComboBox(this);
     streamingElement->setEnabled(false);
     streamingElement->addItem("filter");
@@ -278,6 +278,31 @@ Spice_Graphics::Spice_Graphics(
             mouseElement, SLOT(setEnabled(bool)));
     connect(filetransfer, SIGNAL(toggled(bool)),
             filetransferElement, SLOT(setEnabled(bool)));
+    // dataChanged connections
+    connect(address, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(networks, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(autoPort, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(port, SIGNAL(valueChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(tlsPortLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(tlsPort, SIGNAL(valueChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(usePassw, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(passw, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(keymap, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(defaultPolicy, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(compress, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(addition, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -288,7 +313,8 @@ QDomDocument Spice_Graphics::getDataDocument() const
     _device = doc.createElement("device");
     _devDesc = doc.createElement("graphics");
     _devDesc.setAttribute("type", "spice");
-    if ( tlsPortLabel->isChecked() ) _devDesc.setAttribute("tlsPort", tlsPort->text());
+    if ( tlsPortLabel->isChecked() )
+        _devDesc.setAttribute("tlsPort", tlsPort->text());
     _devDesc.setAttribute("defaultPolicy", defaultPolicy->currentText());
     if ( autoPort->isChecked() ) {
         _devDesc.setAttribute("autoport", "yes");
@@ -349,14 +375,17 @@ QDomDocument Spice_Graphics::getDataDocument() const
             _devDesc.appendChild(_usbredir);
         };
     };
-    QString _address = address->itemData(address->currentIndex(), Qt::UserRole).toString();
+    QString _address = address->itemData(
+                address->currentIndex(), Qt::UserRole).toString();
     if ( !_address.isEmpty() && _address!="network" ) {
         _listen = doc.createElement("listen");
         _listen.setAttribute("type", "address");
-        if ( _address.isEmpty() ) {
-            _listen.setAttribute("address", address->currentText());
-        } else {
+        if ( _address!="custom" ) {
             _listen.setAttribute("address", _address);
+        } else {
+            _listen.setAttribute(
+                        "address",
+                        address->currentText());
         };
         _devDesc.appendChild(_listen);
     } else if ( _address=="network" && networks->count()>0 ) {
@@ -412,6 +441,64 @@ QDomDocument Spice_Graphics::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void Spice_Graphics::setDataDescription(QString &_xmlDesc)
+{
+    //qDebug()<<_xmlDesc;
+    QDomDocument doc;
+    QDomElement _device, _listen;
+    doc.setContent(_xmlDesc);
+    _device = doc.firstChildElement("device")
+            .firstChildElement("graphics");
+    QString _defaultPolicy = _device.attribute("defaultPolicy");
+    int idx = defaultPolicy->findData(
+                _defaultPolicy,
+                Qt::UserRole,
+                Qt::MatchContains);
+    defaultPolicy->setCurrentIndex( (idx<0)? 0:idx );
+    autoPort->setChecked(
+                _device.attribute("autoport")=="yes");
+    if ( !autoPort->isChecked() )
+        port->setValue(
+                    _device.attribute("port").toInt());
+    tlsPortLabel->setChecked( _device.hasAttribute("tlsPort") );
+    if ( tlsPortLabel->isChecked() )
+        tlsPort->setValue(
+                    _device.attribute("tlsPort").toInt());
+    usePassw->setChecked( _device.hasAttribute("passwd") );
+    if ( _device.hasAttribute("passwd") ) {
+        QString _password = _device.attribute("passwd");
+        passw->setText(_password);
+        idx = keymap->findText(
+                    _device.attribute("keymap"),
+                    Qt::MatchContains);
+        keymap->setCurrentIndex( (idx<0)? 0:idx );
+    };
+    _listen = _device.firstChildElement("listen");
+    if ( !_listen.isNull() ) {
+        QString _type, _data;
+        _type = _listen.attribute("type");
+        _data = _listen.attribute(_type);
+        if ( !_type.isEmpty() ) {
+            idx = address->findData(
+                        _type,
+                        Qt::UserRole,
+                        Qt::MatchContains);
+            address->setCurrentIndex( (idx<0)? 3:idx );
+            if ( _type=="address" ) {
+                if ( address->currentIndex()==3 )
+                    address->setEditText(_data);
+            } else if ( _type=="network" ) {
+                idx = networks->findText(
+                            _data,
+                            Qt::MatchContains);
+                networks->setCurrentIndex( (idx<0)? 0:idx );
+            } else
+                address->setCurrentIndex(0);
+        } else
+            address->setCurrentIndex(0);
+    } else
+        address->setCurrentIndex(0);
 }
 
 /* private slots */
