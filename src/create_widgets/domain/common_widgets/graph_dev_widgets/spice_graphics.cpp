@@ -299,9 +299,73 @@ Spice_Graphics::Spice_Graphics(
             this, SIGNAL(dataChanged()));
     connect(defaultPolicy, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));
+    connect(mainLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(displayLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(inputsLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(cursorLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(playbackLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(recordLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(smartcardLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(usbredirLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(main, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(display, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(inputs, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(cursor, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(playback, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(record, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(smartcard, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(usbredir, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
     connect(compress, SIGNAL(toggled(bool)),
             this, SIGNAL(dataChanged()));
+    connect(compressImage, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(compressJpeg, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(compressZlib, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(compressPlayback, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(imageElement, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(jpegElement, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(zlibElement, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(playbackElement, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
     connect(addition, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(streaming, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(clipboard, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(mouse, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(filetransfer, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(streamingElement, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(clipboardElement, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(mouseElement, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(filetransferElement, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));
 }
 
@@ -325,7 +389,7 @@ QDomDocument Spice_Graphics::getDataDocument() const
         _devDesc.setAttribute("passwd", passw->text());
         _devDesc.setAttribute("keymap", keymap->currentText());
     };
-    if ( policyElements->isEnabled() ) {
+    if ( policyElements->isVisible() ) {
         if ( mainLabel->isChecked() ) {
             QDomElement _main = doc.createElement("channel");
             _main.setAttribute("name", "main");
@@ -446,18 +510,13 @@ void Spice_Graphics::setDataDescription(QString &_xmlDesc)
 {
     //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    QDomElement _device, _listen;
+    int idx;
+    QDomElement _device, _listen,
+            _streaming, _clipboard, _mouse, _filetransfer,
+            _image, _jpeg, _zlib, _playback, _channel;
     doc.setContent(_xmlDesc);
     _device = doc.firstChildElement("device")
             .firstChildElement("graphics");
-    QString _defaultPolicy = _device.attribute("defaultPolicy");
-    int idx = defaultPolicy->findData(
-                _defaultPolicy,
-                Qt::UserRole,
-                Qt::MatchContains);
-    defaultPolicy->setCurrentIndex( (idx<0)? 0:idx );
-    autoPort->setChecked(
-                _device.attribute("autoport")=="yes");
     if ( !autoPort->isChecked() )
         port->setValue(
                     _device.attribute("port").toInt());
@@ -499,6 +558,42 @@ void Spice_Graphics::setDataDescription(QString &_xmlDesc)
             address->setCurrentIndex(0);
     } else
         address->setCurrentIndex(0);
+    QString _defaultPolicy = _device.attribute("defaultPolicy");
+    idx = defaultPolicy->findText(
+                _defaultPolicy, Qt::MatchContains);
+    defaultPolicy->setCurrentIndex( (idx<0)? 0:idx );
+    autoPort->setChecked(
+                _device.attribute("autoport")=="yes");
+    _channel = _device.firstChildElement("channel");
+    while ( !_channel.isNull() ) {
+        QString _name, _mode;
+        _name = _channel.attribute("name");
+        _mode = _channel.attribute("mode");
+    };
+    _streaming = _device.firstChildElement("streaming");
+    _clipboard = _device.firstChildElement("clipboard");
+    _mouse = _device.firstChildElement("mouse");
+    _filetransfer = _device.firstChildElement("filetransfer"),
+    _image = _device.firstChildElement("image");
+    _jpeg = _device.firstChildElement("jpeg");
+    _zlib = _device.firstChildElement("zlib");
+    _playback = _device.firstChildElement("playback ");
+    if ( !_streaming.isNull() ||
+         !_clipboard.isNull() ||
+         !_mouse.isNull()     ||
+         !_filetransfer.isNull() ) {
+        addition->setChecked(true);
+    } else {
+        addition->setChecked(false);
+    };
+    if ( !_image.isNull() ||
+         !_jpeg.isNull()  ||
+         !_zlib.isNull()  ||
+         !_playback.isNull() ) {
+        compress->setChecked(true);
+    } else {
+        compress->setChecked(false);
+    };
 }
 
 /* private slots */
