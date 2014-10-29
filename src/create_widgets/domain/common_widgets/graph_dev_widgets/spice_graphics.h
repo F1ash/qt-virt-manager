@@ -12,7 +12,7 @@ public:
             virConnectPtr conn = NULL);
 
 signals:
-    void errorMsg(QString);
+    void             errorMsg(QString);
 
 private:
     QLabel          *addrLabel;

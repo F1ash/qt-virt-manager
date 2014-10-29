@@ -389,7 +389,7 @@ QDomDocument Spice_Graphics::getDataDocument() const
         _devDesc.setAttribute("passwd", passw->text());
         _devDesc.setAttribute("keymap", keymap->currentText());
     };
-    if ( policyElements->isVisible() ) {
+    if ( policyElements->isVisibleTo(parentWidget()) ) {
         if ( mainLabel->isChecked() ) {
             QDomElement _main = doc.createElement("channel");
             _main.setAttribute("name", "main");
@@ -498,7 +498,7 @@ QDomDocument Spice_Graphics::getDataDocument() const
         };
         if ( filetransfer->isChecked() ) {
             QDomElement _filetransfer = doc.createElement("filetransfer");
-            _filetransfer.setAttribute(" enable", filetransferElement->currentText());
+            _filetransfer.setAttribute("enable", filetransferElement->currentText());
             _devDesc.appendChild(_filetransfer);
         };
     };
@@ -566,9 +566,40 @@ void Spice_Graphics::setDataDescription(QString &_xmlDesc)
                 _device.attribute("autoport")=="yes");
     _channel = _device.firstChildElement("channel");
     while ( !_channel.isNull() ) {
+        QComboBox *obj = NULL;
         QString _name, _mode;
         _name = _channel.attribute("name");
         _mode = _channel.attribute("mode");
+        if ( _name=="main" ) {
+            mainLabel->setChecked(true);
+            obj = main;
+        } else if ( _name=="display" ) {
+            displayLabel->setChecked(true);
+            obj = display;
+        } else if ( _name=="inputs" ) {
+            inputsLabel->setChecked(true);
+            obj = inputs;
+        } else if ( _name=="cursor" ) {
+            cursorLabel->setChecked(true);
+            obj = cursor;
+        } else if ( _name=="playback" ) {
+            playbackLabel->setChecked(true);
+            obj = playback;
+        } else if ( _name=="record" ) {
+            recordLabel->setChecked(true);
+            obj = record;
+        } else if ( _name=="smartcard" ) {
+            smartcardLabel->setChecked(true);
+            obj = smartcard;
+        } else if ( _name=="usbredir" ) {
+            usbredirLabel->setChecked(true);
+            obj = usbredir;
+        };
+        if ( NULL!=obj ) {
+            idx = obj->findText(_mode, Qt::MatchContains);
+            obj->setCurrentIndex( (idx<0)? 0:idx);
+        };
+        _channel = _channel.nextSiblingElement("channel");
     };
     _streaming = _device.firstChildElement("streaming");
     _clipboard = _device.firstChildElement("clipboard");
@@ -578,11 +609,39 @@ void Spice_Graphics::setDataDescription(QString &_xmlDesc)
     _jpeg = _device.firstChildElement("jpeg");
     _zlib = _device.firstChildElement("zlib");
     _playback = _device.firstChildElement("playback ");
+    streaming->setChecked( !_streaming.isNull() );
+    clipboard->setChecked( !_clipboard.isNull() );
+    mouse->setChecked( !_mouse.isNull() );
+    filetransfer->setChecked( !_filetransfer.isNull() );
+    compressImage->setChecked( !_image.isNull() );
+    compressJpeg->setChecked( !_jpeg.isNull() );
+    compressZlib->setChecked( !_zlib.isNull() );
+    compressPlayback->setChecked( !_playback.isNull() );
     if ( !_streaming.isNull() ||
          !_clipboard.isNull() ||
          !_mouse.isNull()     ||
          !_filetransfer.isNull() ) {
         addition->setChecked(true);
+        if ( !_streaming.isNull() ) {
+            idx = streamingElement->findText(
+                        _streaming.attribute("mode"));
+            streamingElement->setCurrentIndex( (idx<0)? 0:idx );
+        };
+        if ( !_clipboard.isNull() ) {
+            idx = clipboardElement->findText(
+                        _clipboard.attribute("copypaste"));
+            clipboardElement->setCurrentIndex( (idx<0)? 0:idx );
+        };
+        if ( !_mouse.isNull() ) {
+            idx = mouseElement->findText(
+                        _mouse.attribute("mode"));
+            mouseElement->setCurrentIndex( (idx<0)? 0:idx );
+        };
+        if ( !_filetransfer.isNull() ) {
+            idx = filetransferElement->findText(
+                        _filetransfer.attribute("enable"));
+            filetransferElement->setCurrentIndex( (idx<0)? 0:idx );
+        }
     } else {
         addition->setChecked(false);
     };
@@ -591,6 +650,26 @@ void Spice_Graphics::setDataDescription(QString &_xmlDesc)
          !_zlib.isNull()  ||
          !_playback.isNull() ) {
         compress->setChecked(true);
+        if ( !_image.isNull() ) {
+            idx = imageElement->findText(
+                        _image.attribute("compression"));
+            imageElement->setCurrentIndex( (idx<0)? 0:idx );
+        };
+        if ( !_jpeg.isNull() ) {
+            idx = jpegElement->findText(
+                        _jpeg.attribute("compression"));
+            jpegElement->setCurrentIndex( (idx<0)? 0:idx );
+        };
+        if ( !_zlib.isNull() ) {
+            idx = zlibElement->findText(
+                        _zlib.attribute("compression"));
+            zlibElement->setCurrentIndex( (idx<0)? 0:idx );
+        };
+        if ( !_playback.isNull() ) {
+            idx = playbackElement->findText(
+                        _playback.attribute("compression"));
+            playbackElement->setCurrentIndex( (idx<0)? 0:idx );
+        }
     } else {
         compress->setChecked(false);
     };
