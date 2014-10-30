@@ -14,12 +14,29 @@ MAC_Address::MAC_Address(QWidget *parent) :
     setLayout(commonLayout);
     connect(useMac, SIGNAL(toggled(bool)),
             mac, SLOT(setEnabled(bool)));
+    // dataChanged connects
+    connect(useMac, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(mac, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
+bool MAC_Address::isUsed() const
+{
+    return useMac->isChecked();
+}
+void MAC_Address::setUsage(bool state)
+{
+    useMac->setChecked(state);
+}
 QString MAC_Address::getMACAddress() const
 {
     if ( mac->isEnabled() )
         return mac->text();
     else return QString();
+}
+void MAC_Address::setMACAddress(QString &_addr)
+{
+    mac->setText(_addr);
 }

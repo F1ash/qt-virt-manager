@@ -20,6 +20,13 @@ MultiCast_Tunnel::MultiCast_Tunnel(
     commonLayout->addWidget(port, 1, 1);
     commonLayout->addWidget(mac, 2, 0, 3, 2, Qt::AlignTop);
     setLayout(commonLayout);
+    // dataChanged connects
+    connect(addr, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(port, SIGNAL(valueChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(mac, SIGNAL(dataChanged()),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -33,7 +40,7 @@ QDomDocument MultiCast_Tunnel::getDataDocument() const
     _source.setAttribute("address", addr->text());
     _source.setAttribute("port", port->text());
     _devDesc.appendChild(_source);
-    if ( !mac->getMACAddress().isEmpty() ) {
+    if ( mac->isUsed() ) {
         _mac = doc.createElement("mac");
         _mac.setAttribute("address", mac->getMACAddress());
         _devDesc.appendChild(_mac);
@@ -42,4 +49,24 @@ QDomDocument MultiCast_Tunnel::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void MultiCast_Tunnel::setDataDescription(QString &xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _source, _mac;
+    _device = doc.firstChildElement("device")
+            .firstChildElement("interface");
+    _source = _device.firstChildElement("source");
+    _mac = _device.firstChildElement("mac");
+    QString _attr;
+    _attr = _source.attribute("address");
+    addr->setText(_attr);
+    _attr = _source.attribute("port");
+    port->setValue(_attr.toInt());
+    mac->setUsage(!_mac.isNull());
+    if ( !_mac.isNull() ) {
+        _attr = _mac.attribute("address");
+        mac->setMACAddress(_attr);
+    };
 }

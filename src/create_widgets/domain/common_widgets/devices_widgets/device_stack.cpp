@@ -286,7 +286,9 @@ void DeviceStack::showDevice()
 }
 void DeviceStack::set_Result()
 {
-    done( (sender()==addDevice)?1:0 );
+    setResult( (sender()==addDevice)?
+                   QDialog::Accepted : QDialog::Rejected );
+    done(result());
     //qDebug()<<"done";
     settings.setValue("DeviceStackGeometry", saveGeometry());
 }

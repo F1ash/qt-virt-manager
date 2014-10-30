@@ -213,6 +213,7 @@ set (HEADERS
   src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/adapter_address.h
   src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/iscsi_device.h
   src/create_widgets/domain/edit_widgets/graphics_device_edit.h
+  src/create_widgets/domain/edit_widgets/net_interfaces_edit.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -438,6 +439,7 @@ set (SOURCES
   src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/adapter_address.cpp
   src/create_widgets/domain/edit_widgets/host_dev_edit_widgets/iscsi_device.cpp
   src/create_widgets/domain/edit_widgets/graphics_device_edit.cpp
+  src/create_widgets/domain/edit_widgets/net_interfaces_edit.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

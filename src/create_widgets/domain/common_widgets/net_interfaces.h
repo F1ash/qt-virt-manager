@@ -18,22 +18,22 @@ public:
     explicit NetInterfaces(
             QWidget *parent = NULL,
             virConnectPtr conn = NULL);
+    QComboBox       *type;
+    QStackedWidget  *info;
 
 private:
     QLabel          *typeLabel;
-    QComboBox       *type;
     QHBoxLayout     *typeLayout;
     QWidget         *typeWdg;
-    QStackedWidget  *info;
     QVBoxLayout     *commonLayout;
 
     QString          connType;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 
 private slots:
-    void setWidgets(QString);
+    void             setWidgets(QString);
 };
 
 #endif // NET_INTERFACES_H

@@ -22,6 +22,7 @@ Bridge_to_LAN::Bridge_to_LAN(
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(mac);
     commonLayout->addWidget(virtPort);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     virtPort->type->setCurrentIndex( virtPort->type->findText("Open vSwitch") );
 }

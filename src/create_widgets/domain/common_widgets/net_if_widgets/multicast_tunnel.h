@@ -21,7 +21,8 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // MULTICAST_TUNNEL_H

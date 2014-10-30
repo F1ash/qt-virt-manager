@@ -12,13 +12,19 @@ class MAC_Address : public QWidget
 public:
     explicit MAC_Address(QWidget *parent = NULL);
 
+signals:
+    void                 dataChanged();
+
 private:
     QCheckBox           *useMac;
     QLineEdit           *mac;
     QGridLayout         *commonLayout;
 
 public slots:
-    QString getMACAddress() const;
+    bool                 isUsed() const;
+    void                 setUsage(bool);
+    QString              getMACAddress() const;
+    void                 setMACAddress(QString&);
 };
 
 #endif // MAC_ADDRESS_H

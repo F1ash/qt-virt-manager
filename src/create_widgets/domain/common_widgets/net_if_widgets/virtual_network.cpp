@@ -23,6 +23,7 @@ Virtual_Network::Virtual_Network(
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(mac);
     commonLayout->addWidget(virtPort);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(network, SIGNAL(currentIndexChanged(int)),
             this, SLOT(networkChanged(int)));

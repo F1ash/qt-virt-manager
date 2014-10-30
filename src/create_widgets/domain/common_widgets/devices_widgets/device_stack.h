@@ -19,7 +19,7 @@ public:
     ~DeviceStack();
 
 signals:
-    void errorMsg(QString);
+    void             errorMsg(QString);
 
 private:
     QSettings        settings;
@@ -46,17 +46,17 @@ private:
     _QWidget        *device = NULL;
 
 public slots:
-    QDomDocument getResult() const;
+    QDomDocument     getResult() const;
 
 private slots:
-    void readNetworkList();
-    void readNodeDevicesList();
-    void showDevice(QListWidgetItem*);
-    void showDevice();
-    void set_Result();
+    void             readNetworkList();
+    void             readNodeDevicesList();
+    void             showDevice(QListWidgetItem*);
+    void             showDevice();
+    void             set_Result();
 
-    void sendConnErrors();
-    void sendGlobalErrors();
+    void             sendConnErrors();
+    void             sendGlobalErrors();
 
 };
 

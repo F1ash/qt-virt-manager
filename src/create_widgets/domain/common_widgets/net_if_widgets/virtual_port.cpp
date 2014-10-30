@@ -44,6 +44,7 @@ VirtualPort::VirtualPort(QWidget *parent) :
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(useVirtPort);
     commonLayout->addWidget(parameters);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(useVirtPort, SIGNAL(toggled(bool)),
             this, SLOT(useingChanged(bool)));
@@ -51,9 +52,34 @@ VirtualPort::VirtualPort(QWidget *parent) :
             this, SLOT(virtPortTypeChanged(int)));
     // set empty type for the general case
     type->setCurrentIndex(type->count()-1);
+    // dataChanged connects
+    connect(useVirtPort, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(type, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(managerId, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(typeId, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(typeIdVer, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(instanceId, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(interfaceId, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(profileId, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
+bool VirtualPort::isUsed() const
+{
+    return useVirtPort->isChecked();
+}
+void VirtualPort::setUsage(bool state)
+{
+    useVirtPort->setChecked(state);
+}
 ParameterList VirtualPort::getParameterList() const
 {
     ParameterList _ret;

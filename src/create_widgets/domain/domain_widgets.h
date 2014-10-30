@@ -38,6 +38,7 @@
 #include "edit_widgets/random_edit.h"
 #include "edit_widgets/host_device_edit.h"
 #include "edit_widgets/graphics_device_edit.h"
+#include "edit_widgets/net_interfaces_edit.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

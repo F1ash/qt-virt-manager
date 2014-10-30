@@ -37,6 +37,7 @@ PCI_Passthrough::PCI_Passthrough(
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(virtPort);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
 }

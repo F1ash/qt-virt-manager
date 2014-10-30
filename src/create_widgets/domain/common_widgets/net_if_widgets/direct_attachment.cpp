@@ -28,7 +28,7 @@ DirectAttachment::DirectAttachment(
     commonLayout->addWidget(mac);
     commonLayout->addWidget(nicModel);
     commonLayout->addWidget(virtPort);
-    commonLayout->insertStretch(4, -1);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     setAvailableSources();
     virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );

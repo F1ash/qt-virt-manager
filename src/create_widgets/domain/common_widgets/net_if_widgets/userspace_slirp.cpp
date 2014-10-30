@@ -15,23 +15,29 @@ Userspace_SLIRP::Userspace_SLIRP(
     _QWidget(parent, conn)
 {
     mac = new MAC_Address(this);
+    infoIcon = new QLabel(this);
+    infoIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(32));
     info = new QLabel(this);
-    info->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(32));
     info->setText(INFO);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(mac);
+    commonLayout->addWidget(infoIcon);
     commonLayout->addWidget(info);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
+    // dataChanged connects
+    connect(mac, SIGNAL(dataChanged()),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
 QDomDocument Userspace_SLIRP::getDataDocument() const
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _mac, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("interface");
-    if ( !mac->getMACAddress().isEmpty() ) {
+    if ( mac->isUsed() ) {
         _mac = doc.createElement("mac");
         _mac.setAttribute("address", mac->getMACAddress());
         _devDesc.appendChild(_mac);
@@ -40,4 +46,19 @@ QDomDocument Userspace_SLIRP::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void Userspace_SLIRP::setDataDescription(QString &xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _mac;
+    _device = doc.firstChildElement("device")
+            .firstChildElement("interface");
+    _mac = _device.firstChildElement("mac");
+    QString _attr;
+    mac->setUsage(!_mac.isNull());
+    if ( !_mac.isNull() ) {
+        _attr = _mac.attribute("address");
+        mac->setMACAddress(_attr);
+    };
 }

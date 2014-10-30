@@ -22,7 +22,8 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // TCP_TUNNEL_H

@@ -19,6 +19,12 @@ class VirtualPort : public QWidget
 public:
     explicit VirtualPort(QWidget *parent = NULL);
     QComboBox           *type;
+    QLineEdit           *managerId, *typeId,
+                        *typeIdVer, *instanceId,
+                        *interfaceId, *profileId;
+
+signals:
+    void                 dataChanged();
 
 private:
     QCheckBox           *useVirtPort;
@@ -26,19 +32,18 @@ private:
                         *typeIdLabel, *typeIdVerLabel,
                         *instanceIdLabel, *interfaceIdLabel,
                         *profileIdLabel;
-    QLineEdit           *managerId, *typeId,
-                        *typeIdVer, *instanceId,
-                        *interfaceId, *profileId;
     QWidget             *parameters;
     QGridLayout         *parametersLayout;
     QVBoxLayout         *commonLayout;
 
 public slots:
-    ParameterList getParameterList() const;
+    bool                 isUsed() const;
+    void                 setUsage(bool);
+    ParameterList        getParameterList() const;
 
 private slots:
-    void useingChanged(bool);
-    void virtPortTypeChanged(int);
+    void                 useingChanged(bool);
+    void                 virtPortTypeChanged(int);
 };
 
 #endif // VIRTUAL_PORT_H

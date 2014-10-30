@@ -183,8 +183,12 @@ QDomDocument Devices::chooseNewDevice()
     if ( deviceStack==NULL ) {
         deviceStack = new DeviceStack(this, currWorkConnect);
     };
-    if ( deviceStack->exec()==1 ) {
+    if ( deviceStack->exec()==QDialog::Accepted ) {
         doc = deviceStack->getResult();
+    };
+    if ( NULL!=deviceStack ) {
+        delete deviceStack;
+        deviceStack = NULL;
     };
     return doc;
 }

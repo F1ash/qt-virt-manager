@@ -69,7 +69,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
                     this,
                     currWorkConnect);
     } else if ( deviceType == "interface" ) {
-        device = new NetInterfaces(
+        device = new NetInterfaces_Edit(
                     this,
                     currWorkConnect);
     } else if ( deviceType == "serial" ) {

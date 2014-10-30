@@ -14,11 +14,13 @@ public:
 
 private:
     MAC_Address     *mac;
+    QLabel          *infoIcon;
     QLabel          *info;
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // USERSPACE_SLIRP_H
