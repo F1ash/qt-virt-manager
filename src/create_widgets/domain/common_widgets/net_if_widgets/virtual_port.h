@@ -40,6 +40,7 @@ public slots:
     bool                 isUsed() const;
     void                 setUsage(bool);
     ParameterList        getParameterList() const;
+    void                 setParameterList(ParameterList&);
 
 private slots:
     void                 useingChanged(bool);

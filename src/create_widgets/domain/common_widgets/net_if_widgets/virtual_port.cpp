@@ -110,6 +110,38 @@ ParameterList VirtualPort::getParameterList() const
     };
     return _ret;
 }
+void VirtualPort::setParameterList(ParameterList &_list)
+{
+    if ( _list.keys().contains("type") ) {
+        int idx = type->findData(
+                    _list.value("type"),
+                    Qt::UserRole,
+                    Qt::MatchContains);
+        idx = (idx<0)? type->count()-1:idx;
+        type->setCurrentIndex( idx );
+        if ( idx == type->count()-1 ) {
+            type->setEditText(_list.value("type"));
+        };
+    };
+    if ( _list.keys().contains("managerid") ) {
+        managerId->setText(_list.value("managerid"));
+    };
+    if ( _list.keys().contains("typeid") ) {
+        typeId->setText(_list.value("typeid"));
+    };
+    if ( _list.keys().contains("typeidver") ) {
+        typeIdVer->setText(_list.value("typeidver"));
+    };
+    if ( _list.keys().contains("instanceid") ) {
+        instanceId->setText(_list.value("instanceid"));
+    };
+    if ( _list.keys().contains("interfaceid") ) {
+        interfaceId->setText(_list.value("interfaceid"));
+    };
+    if ( _list.keys().contains("profileid") ) {
+        profileId->setText(_list.value("profileid"));
+    };
+}
 
 /* private slots */
 void VirtualPort::useingChanged(bool state)
