@@ -30,6 +30,17 @@ Virtual_Network::Virtual_Network(
     // set empty type for the general case
     //virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
     setAvailableVirtNetworks();
+    // dataChanged connections
+    connect(network, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(network, SIGNAL(editTextChanged(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(target, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(mac, SIGNAL(dataChanged()),
+            this, SIGNAL(dataChanged()));
+    connect(virtPort, SIGNAL(dataChanged()),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
@@ -75,6 +86,58 @@ QDomDocument Virtual_Network::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void Virtual_Network::setDataDescription(QString &xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _source, _target, _mac, _virtport;
+    _device = doc.firstChildElement("device")
+            .firstChildElement("interface");
+    _source = _device.firstChildElement("source");
+    _target = _device.firstChildElement("target");
+    _mac = _device.firstChildElement("mac");
+    _virtport = _device.firstChildElement("virtualport");
+    QString _attr;
+    _attr = _source.attribute("network");
+    int idx = network->findText(_attr, Qt::MatchContains);
+    idx = (idx<0)? network->count()-1:idx;
+    network->setCurrentIndex( idx );
+    if ( idx==network->count()-1 ) {
+        network->setEditText(_attr);
+    };
+    _attr = _target.attribute("dev");
+    target->setText(_attr);
+    mac->setUsage(!_mac.isNull());
+    if ( !_mac.isNull() ) {
+        _attr = _mac.attribute("address");
+        mac->setMACAddress(_attr);
+    };
+    virtPort->setUsage( !_virtport.isNull() );
+    if ( !_virtport.isNull() ) {
+        ParameterList _list;
+        _list.insert("type", _virtport.attribute("type"));
+        QDomElement _params = _virtport.firstChildElement("parameters");
+        if ( _params.hasAttribute("managerid") ) {
+            _list.insert("managerid", _params.attribute("managerid"));
+        };
+        if ( _params.hasAttribute("typeid") ) {
+            _list.insert("typeid", _params.attribute("typeid"));
+        };
+        if ( _params.hasAttribute("typeidver") ) {
+            _list.insert("typeidver", _params.attribute("typeidver"));
+        };
+        if ( _params.hasAttribute("instanceId") ) {
+            _list.insert("instanceid", _params.attribute("instanceid"));
+        };
+        if ( _params.hasAttribute("interfaceid") ) {
+            _list.insert("interfaceid", _params.attribute("interfaceid"));
+        };
+        if ( _params.hasAttribute("profileid") ) {
+            _list.insert("profileid", _params.attribute("profileid"));
+        };
+        virtPort->setParameterList(_list);
+    };
 }
 
 /* private slots */

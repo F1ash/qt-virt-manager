@@ -57,6 +57,8 @@ VirtualPort::VirtualPort(QWidget *parent) :
             this, SIGNAL(dataChanged()));
     connect(type, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));
+    connect(type, SIGNAL(editTextChanged(QString)),
+            this, SIGNAL(dataChanged()));
     connect(managerId, SIGNAL(textEdited(QString)),
             this, SIGNAL(dataChanged()));
     connect(typeId, SIGNAL(textEdited(QString)),

@@ -24,11 +24,12 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void networkChanged(int);
-    void setAvailableVirtNetworks();
+    void             networkChanged(int);
+    void             setAvailableVirtNetworks();
 };
 
 #endif // VIRTUAL_NETWORK_H
