@@ -14,11 +14,6 @@ NetInterfaces_Edit::NetInterfaces_Edit(
 }
 
 /* public slots */
-QDomDocument NetInterfaces_Edit::getDataDocument() const
-{
-    _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    return ( NULL!=wdg )? wdg->getDataDocument():QDomDocument();
-}
 void NetInterfaces_Edit::setDataDescription(QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;

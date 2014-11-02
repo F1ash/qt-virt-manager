@@ -3,6 +3,7 @@
 
 #include "create_widgets/domain/_qwidget.h"
 #include "mac_address.h"
+#include "create_widgets/domain/common_widgets/device_address.h"
 
 class Userspace_SLIRP : public _QWidget
 {
@@ -16,6 +17,7 @@ private:
     MAC_Address     *mac;
     QLabel          *infoIcon;
     QLabel          *info;
+    DeviceAddress   *addr;
     QVBoxLayout     *commonLayout;
 
 public slots:

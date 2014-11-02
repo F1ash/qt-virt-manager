@@ -2,6 +2,7 @@
 #define GENERIC_ETHERNET_H
 
 #include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/domain/common_widgets/device_address.h"
 
 class Generic_Ethernet : public _QWidget
 {
@@ -14,7 +15,10 @@ public:
 private:
     QLabel          *targetLabel, *scriptLabel;
     QLineEdit       *target, *script;
-    QGridLayout     *commonLayout;
+    QGridLayout     *baseLayout;
+    QWidget         *baseWdg;
+    DeviceAddress   *addr;
+    QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument     getDataDocument() const;

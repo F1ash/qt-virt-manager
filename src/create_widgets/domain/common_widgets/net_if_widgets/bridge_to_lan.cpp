@@ -16,14 +16,22 @@ Bridge_to_LAN::Bridge_to_LAN(
     baseLayout->addWidget(bridge, 0, 1);
     baseLayout->addWidget(targetLabel, 1, 0);
     baseLayout->addWidget(target, 1, 1);
-    mac = new MAC_Address(this);
-    virtPort = new VirtualPort(this);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
+    mac = new MAC_Address(this);
+    virtPort = new VirtualPort(this);
+    addr = new DeviceAddress(this);
+    int idx = addr->type->findData(
+                "pci",
+                Qt::UserRole,
+                Qt::MatchContains);
+    addr->type->setCurrentIndex( (idx<0)? 0:idx );
+    addr->type->setEnabled(false);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(mac);
     commonLayout->addWidget(virtPort);
+    commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     virtPort->type->setCurrentIndex( virtPort->type->findText("Open vSwitch") );
@@ -36,12 +44,14 @@ Bridge_to_LAN::Bridge_to_LAN(
             this, SIGNAL(dataChanged()));
     connect(virtPort, SIGNAL(dataChanged()),
             this, SIGNAL(dataChanged()));
+    connect(addr, SIGNAL(dataChanged()),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
 QDomDocument Bridge_to_LAN::getDataDocument() const
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _source,_target, _mac, _virtualport,
             _parameters, _device, _devDesc;
     _device = doc.createElement("device");
@@ -76,6 +86,15 @@ QDomDocument Bridge_to_LAN::getDataDocument() const
         };
         _devDesc.appendChild(_virtualport);
     };
+    AttrList _l = addr->getAttrList();
+    if ( !_l.isEmpty() ) {
+        QDomElement _address = doc.createElement("address");
+        foreach (QString key, _l.keys()) {
+            if ( !key.isEmpty() )
+            _address.setAttribute(key, _l.value(key));
+        };
+        _devDesc.appendChild(_address);
+    };
     _devDesc.setAttribute("type", "bridge");
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
@@ -85,7 +104,8 @@ void Bridge_to_LAN::setDataDescription(QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QDomElement _device, _source, _target, _mac, _virtport;
+    QDomElement _device, _source, _target, _mac,
+            _virtport, _addr;
     _device = doc.firstChildElement("device")
             .firstChildElement("interface");
     _source = _device.firstChildElement("source");
@@ -126,5 +146,20 @@ void Bridge_to_LAN::setDataDescription(QString &xmlDesc)
             _list.insert("profileid", _params.attribute("profileid"));
         };
         virtPort->setParameterList(_list);
+    };
+    _addr = _device.firstChildElement("address");
+    addr->use->setChecked( !_addr.isNull() );
+    if ( !_addr.isNull() ) {
+        int idx = addr->type->findData(
+                    "pci",
+                    Qt::UserRole,
+                    Qt::MatchContains);
+        addr->type->setCurrentIndex( (idx<0)? 0:idx );
+        addr->type->setEnabled(false);
+        PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
+        wdg->domain->setText( _addr.attribute("domain") );
+        wdg->bus->setText( _addr.attribute("bus") );
+        wdg->slot->setText( _addr.attribute("slot") );
+        wdg->function->setValue( _addr.attribute("function").toInt() );
     };
 }

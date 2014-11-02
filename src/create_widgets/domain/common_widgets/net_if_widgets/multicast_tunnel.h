@@ -3,6 +3,7 @@
 
 #include "create_widgets/domain/_qwidget.h"
 #include "mac_address.h"
+#include "create_widgets/domain/common_widgets/device_address.h"
 
 class MultiCast_Tunnel : public _QWidget
 {
@@ -15,10 +16,13 @@ public:
 private:
     QLabel          *addrLabel, *portLabel,
                     *typeLabel;
-    QLineEdit       *addr;
-    MAC_Address     *mac;
+    QLineEdit       *ipAddr;
     QSpinBox        *port;
-    QGridLayout     *commonLayout;
+    QGridLayout     *baseLayout;
+    QWidget         *baseWdg;
+    MAC_Address     *mac;
+    DeviceAddress   *addr;
+    QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument     getDataDocument() const;

@@ -19,14 +19,24 @@ Userspace_SLIRP::Userspace_SLIRP(
     infoIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(32));
     info = new QLabel(this);
     info->setText(INFO);
+    addr = new DeviceAddress(this);
+    int idx = addr->type->findData(
+                "pci",
+                Qt::UserRole,
+                Qt::MatchContains);
+    addr->type->setCurrentIndex( (idx<0)? 0:idx );
+    addr->type->setEnabled(false);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(mac);
     commonLayout->addWidget(infoIcon);
     commonLayout->addWidget(info);
+    commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     // dataChanged connects
     connect(mac, SIGNAL(dataChanged()),
+            this, SIGNAL(dataChanged()));
+    connect(addr, SIGNAL(dataChanged()),
             this, SIGNAL(dataChanged()));
 }
 
@@ -42,6 +52,15 @@ QDomDocument Userspace_SLIRP::getDataDocument() const
         _mac.setAttribute("address", mac->getMACAddress());
         _devDesc.appendChild(_mac);
     };
+    AttrList _l = addr->getAttrList();
+    if ( !_l.isEmpty() ) {
+        QDomElement _address = doc.createElement("address");
+        foreach (QString key, _l.keys()) {
+            if ( !key.isEmpty() )
+            _address.setAttribute(key, _l.value(key));
+        };
+        _devDesc.appendChild(_address);
+    };
     _devDesc.setAttribute("type", "user");
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
@@ -51,7 +70,7 @@ void Userspace_SLIRP::setDataDescription(QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QDomElement _device, _mac;
+    QDomElement _device, _mac, _addr;
     _device = doc.firstChildElement("device")
             .firstChildElement("interface");
     _mac = _device.firstChildElement("mac");
@@ -60,5 +79,20 @@ void Userspace_SLIRP::setDataDescription(QString &xmlDesc)
     if ( !_mac.isNull() ) {
         _attr = _mac.attribute("address");
         mac->setMACAddress(_attr);
+    };
+    _addr = _device.firstChildElement("address");
+    addr->use->setChecked( !_addr.isNull() );
+    if ( !_addr.isNull() ) {
+        int idx = addr->type->findData(
+                    "pci",
+                    Qt::UserRole,
+                    Qt::MatchContains);
+        addr->type->setCurrentIndex( (idx<0)? 0:idx );
+        addr->type->setEnabled(false);
+        PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
+        wdg->domain->setText( _addr.attribute("domain") );
+        wdg->bus->setText( _addr.attribute("bus") );
+        wdg->slot->setText( _addr.attribute("slot") );
+        wdg->function->setValue( _addr.attribute("function").toInt() );
     };
 }

@@ -4,6 +4,7 @@
 #include "create_widgets/domain/_qwidget.h"
 #include "mac_address.h"
 #include "virtual_port.h"
+#include "create_widgets/domain/common_widgets/device_address.h"
 
 class Bridge_to_LAN : public _QWidget
 {
@@ -20,6 +21,7 @@ private:
     QWidget         *baseWdg;
     MAC_Address     *mac;
     VirtualPort     *virtPort;
+    DeviceAddress   *addr;
     QVBoxLayout     *commonLayout;
 
 public slots:

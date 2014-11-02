@@ -14,8 +14,7 @@ public:
 signals:
 
 public slots:
-    QDomDocument     getDataDocument() const;
-    void             setDataDescription(QString&);
+    void         setDataDescription(QString&);
 };
 
 #endif // NET_INTERFACES_EDIT_H

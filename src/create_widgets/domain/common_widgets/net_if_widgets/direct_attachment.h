@@ -1,10 +1,9 @@
-#ifndef DIRECTAT_TACHMENT_H
-#define DIRECTAT_TACHMENT_H
+#ifndef DIRECT_ATTACHMENT_H
+#define DIRECT_ATTACHMENT_H
 
 #include "create_widgets/domain/_qwidget.h"
 #include "virtual_port.h"
-#include "nic_model.h"
-#include "mac_address.h"
+#include "create_widgets/domain/common_widgets/device_address.h"
 
 class DirectAttachment : public _QWidget
 {
@@ -19,16 +18,16 @@ private:
     QComboBox           *netSource, *sourceMode;
     QWidget             *baseWdg;
     QGridLayout         *baseLayout;
-    MAC_Address         *mac;
-    NIC_Model           *nicModel;
     VirtualPort         *virtPort;
+    DeviceAddress       *addr;
     QVBoxLayout         *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument         getDataDocument() const;
+    void                 setDataDescription(QString&);
 
 private slots:
-    void setAvailableSources();
+    void                 setAvailableSources();
 };
 
-#endif // DIRECTAT_TACHMENT_H
+#endif // DIRECT_ATTACHMENT_H

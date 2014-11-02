@@ -12,13 +12,19 @@ class NIC_Model : public QWidget
 public:
     explicit NIC_Model(QWidget *parent = NULL);
 
+signals:
+    void                 dataChanged();
+
 private:
     QCheckBox           *useModel;
     QComboBox           *model;
     QGridLayout         *commonLayout;
 
 public slots:
-    QString getDevModel() const;
+    bool                 isUsed() const;
+    void                 setUsage(bool);
+    QString              getDevModel() const;
+    void                 setDevModel(QString&);
 };
 
 #endif // NIC_MODEL_H

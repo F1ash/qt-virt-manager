@@ -2,8 +2,10 @@
 #define VIRTUAL_NETWORK_H
 
 #include "create_widgets/domain/_qwidget.h"
+#include "nic_model.h"
 #include "mac_address.h"
 #include "virtual_port.h"
+#include "create_widgets/domain/common_widgets/device_address.h"
 
 class Virtual_Network : public _QWidget
 {
@@ -20,7 +22,9 @@ private:
     QGridLayout     *baseLayout;
     QWidget         *baseWdg;
     MAC_Address     *mac;
+    NIC_Model       *nicModel;
     VirtualPort     *virtPort;
+    DeviceAddress   *addr;
     QVBoxLayout     *commonLayout;
 
 public slots:

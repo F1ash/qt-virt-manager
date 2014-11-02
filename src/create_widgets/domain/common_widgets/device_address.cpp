@@ -33,6 +33,9 @@ DeviceAddress::DeviceAddress(QWidget *parent) :
     connect(use, SIGNAL(toggled(bool)),
             this, SLOT(addressUsed(bool)));
     connect(type, SIGNAL(currentIndexChanged(int)),
+            info, SLOT(setCurrentIndex(int)));
+    // dataChanged signals
+    connect(type, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));
     for (uint i=0; i<info->count(); i++) {
         connect(info->widget(i), SIGNAL(dataChanged()),

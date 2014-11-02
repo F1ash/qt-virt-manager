@@ -4,6 +4,7 @@
 #include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/common_widgets/address_widgets/pci_addr.h"
 #include "virtual_port.h"
+#include "create_widgets/domain/common_widgets/device_address.h"
 
 class PCI_Passthrough : public _QWidget
 {
@@ -20,14 +21,16 @@ private:
                         *pciAddrLabel;
     QComboBox           *driver;
     QLineEdit           *mac;
-    PciAddr             *addr;
-    VirtualPort         *virtPort;
-    QWidget             *baseWdg;
+    PciAddr             *pciAddr;
     QGridLayout         *baseLayout;
+    QWidget             *baseWdg;
+    VirtualPort         *virtPort;
+    DeviceAddress       *addr;
     QVBoxLayout         *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument         getDataDocument() const;
+    void                 setDataDescription(QString&);
 };
 
 #endif // PCI_PASSTHROUGH_H

@@ -18,12 +18,30 @@ NIC_Model::NIC_Model(QWidget *parent) :
     setLayout(commonLayout);
     connect(useModel, SIGNAL(toggled(bool)),
             model, SLOT(setEnabled(bool)));
+    // dataChanged connections
+    connect(useModel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(model, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
+bool NIC_Model::isUsed() const
+{
+    return useModel->isChecked();
+}
+void NIC_Model::setUsage(bool state)
+{
+    useModel->setChecked(state);
+}
 QString NIC_Model::getDevModel() const
 {
     if ( model->isEnabled() )
         return model->currentText();
     else return QString();
+}
+void NIC_Model::setDevModel(QString &_dev)
+{
+    int idx = model->findText(_dev, Qt::MatchContains);
+    model->setCurrentIndex( (idx<0)? 0:idx );
 }
