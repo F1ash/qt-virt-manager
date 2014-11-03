@@ -12,10 +12,10 @@ public:
             QString _type = "lxc");
 
 private:
-    QSpinBox    *usage;
+    QSpinBox        *usage;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 };
 
 #endif // RAM_FSTYPE_H

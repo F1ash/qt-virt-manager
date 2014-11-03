@@ -105,7 +105,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
                     this,
                     currWorkConnect);
     } else if ( deviceType == "filesystem" ) {
-        device = new FileSystems(
+        device = new FileSystems_Edit(
                     this,
                     currWorkConnect);
     } else if ( deviceType == "emulator" ) {

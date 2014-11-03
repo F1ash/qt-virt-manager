@@ -15,13 +15,13 @@ public:
     explicit FileSystems(
             QWidget *parent = NULL,
             virConnectPtr conn = NULL);
+    QComboBox       *type;
+    QStackedWidget  *info;
 
 private:
     QLabel          *typeLabel;
-    QComboBox       *type;
     QHBoxLayout     *typeLayout;
     QWidget         *typeWdg;
-    QStackedWidget  *info;
     QVBoxLayout     *commonLayout;
 
     QString          connType;

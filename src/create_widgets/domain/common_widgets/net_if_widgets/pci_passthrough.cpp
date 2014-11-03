@@ -49,6 +49,12 @@ PCI_Passthrough::PCI_Passthrough(
     setLayout(commonLayout);
     virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
     // dataChanged connections
+    connect(driver, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(mac, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(pciAddr, SIGNAL(dataChanged()),
+            this, SIGNAL(dataChanged()));
     connect(virtPort, SIGNAL(dataChanged()),
             this, SIGNAL(dataChanged()));
     connect(addr, SIGNAL(dataChanged()),
@@ -119,15 +125,26 @@ void PCI_Passthrough::setDataDescription(QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QDomElement _device, _source, _mac, _virtport, _addr;
+    QDomElement _device, _source, _driver, _address,
+            _mac, _virtport, _addr;
     _device = doc.firstChildElement("device")
             .firstChildElement("interface");
     _source = _device.firstChildElement("source");
+    _driver = _device.firstChildElement("driver");
     _mac = _device.firstChildElement("mac");
     _virtport = _device.firstChildElement("virtualport");
     QString _attr;
-    int idx;
-
+    _attr = _driver.attribute("name");
+    int idx = driver->findText(_attr, Qt::MatchContains);
+    driver->setCurrentIndex( (idx<0)? 0:idx );
+    if ( !_mac.isNull() ) mac->setText(_mac.attribute("address"));
+    _address = _source.firstChildElement("address");
+    if ( !_address.isNull() ) {
+        pciAddr->domain->setText( _address.attribute("domain") );
+        pciAddr->bus->setText( _address.attribute("bus") );
+        pciAddr->slot->setText( _address.attribute("slot") );
+        pciAddr->function->setValue( _address.attribute("function").toInt() );
+    };
     virtPort->setUsage( !_virtport.isNull() );
     if ( !_virtport.isNull() ) {
         ParameterList _list;
