@@ -306,7 +306,7 @@ void CreateVirtDomain::create_specified_widgets()
 {
     if ( type.toLower() == "lxc" ) {
         wdgList.append(new General(this, type, arch, xmlDesc));
-        wdgList.append(new LXC_OSBooting(this, os_type, arch));
+        wdgList.append(new OS_Booting(this, xmlDesc));
         wdgList.append(new Memory(this, memUnit, memValue, xmlDesc));
         wdgList.append(new CPU(this, xmlDesc));
         wdgList.append(new Devices(

@@ -16,6 +16,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // RAM_FSTYPE_H

@@ -27,11 +27,16 @@ _FsType::_FsType(QWidget *parent,
     accessMode->addItem("passthrough");
     accessMode->addItem("mapped");
     accessMode->addItem("squash");
-    /*
-     * Currently this only works with type='mount' for the QEMU/KVM driver.
-     */
-    accessModeLabel->setVisible( connType=="qemu" );
-    accessMode->setVisible( connType=="qemu" );
+    driverAttrLayout = new QGridLayout();
+    driverAttrLayout->addWidget(wrPolicyLabel, 0, 0);
+    driverAttrLayout->addWidget(wrPolicy, 0, 1);
+    driverAttrLayout->addWidget(formatLabel, 1, 0);
+    driverAttrLayout->addWidget(format, 1, 1);
+    driverAttrLayout->addWidget(accessModeLabel, 2, 0, Qt::AlignTop);
+    driverAttrLayout->addWidget(accessMode, 2, 1, Qt::AlignTop);
+    driverAttrWdg = new QWidget(this);
+    driverAttrWdg->setLayout(driverAttrLayout);
+    driverAttrWdg->setVisible(false);
     source = new QLineEdit(this);
     target = new QLineEdit(this);
     readOnly = new QCheckBox("Export filesystem readonly", this);
@@ -39,17 +44,12 @@ _FsType::_FsType(QWidget *parent,
     commonLayout = new QGridLayout();
     commonLayout->addWidget(driverLabel, 0, 0);
     commonLayout->addWidget(driver, 0, 1);
-    commonLayout->addWidget(wrPolicyLabel, 1, 0);
-    commonLayout->addWidget(wrPolicy, 1, 1);
-    commonLayout->addWidget(formatLabel, 2, 0);
-    commonLayout->addWidget(format, 2, 1);
-    commonLayout->addWidget(accessModeLabel, 3, 0);
-    commonLayout->addWidget(accessMode, 3, 1);
+    commonLayout->addWidget(driverAttrWdg, 1, 0, 2, 2);
     commonLayout->addWidget(sourceLabel, 4, 0);
     commonLayout->addWidget(source, 4, 1);
     commonLayout->addWidget(targetLabel, 5, 0, Qt::AlignCenter);
-    commonLayout->addWidget(target, 5, 1);
-    commonLayout->addWidget(readOnly, 6, 1);
+    commonLayout->addWidget(target, 5, 1, Qt::AlignTop);
+    commonLayout->addWidget(readOnly, 6, 1, Qt::AlignTop);
     setLayout(commonLayout);
     connect(driver, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(driverTypeChanged(QString)));
@@ -65,12 +65,18 @@ QDomDocument _FsType::getDataDocument() const
 void _FsType::driverTypeChanged(QString _type)
 {
     format->clear();
+    driverAttrWdg->setVisible( _type!="default" );
+    /*
+     * Currently this only works with type='mount' for the QEMU/KVM driver.
+     */
+    accessModeLabel->setVisible( connType=="qemu" );
+    accessMode->setVisible( connType=="qemu" );
     /*
      * LXC supports a type of "loop", with a format of "raw" or "nbd" with any format.
      * QEMU supports a type of "path" or "handle", but no formats.
      */
-    formatLabel->setVisible( connType=="lxc" && _type!="default" );
-    format->setVisible( connType=="lxc" && _type!="default" );
+    formatLabel->setVisible( connType=="lxc" );
+    format->setVisible( connType=="lxc" );
     if ( _type=="loop" ) {
         format->addItem("raw");
     } else if ( _type=="nbd" ) {

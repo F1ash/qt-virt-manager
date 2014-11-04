@@ -28,12 +28,15 @@ public:
                     *format, *accessMode;
     QLineEdit       *source, *target;
     QCheckBox       *readOnly;
+    QGridLayout     *driverAttrLayout;
+    QWidget         *driverAttrWdg;
     QGridLayout     *commonLayout;
 
-    virtual QDomDocument getDataDocument() const;
+    virtual QDomDocument
+                     getDataDocument() const;
 
  private slots:
-    void driverTypeChanged(QString);
+    void             driverTypeChanged(QString);
 };
 
 #endif // _FSTYPE_H

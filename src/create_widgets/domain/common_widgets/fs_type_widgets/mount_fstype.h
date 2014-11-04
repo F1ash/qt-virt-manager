@@ -12,11 +12,11 @@ public:
             QString _type = QString());
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void getSourcePath();
-    void driverTypeChanged(QString);
+    void             getSourcePath();
 };
 
 #endif // MOUNT_FSTYPE_H

@@ -12,7 +12,8 @@ public:
             QString _type = "lxc");
 
 public slots:
-QDomDocument getDataDocument() const;
+QDomDocument     getDataDocument() const;
+void             setDataDescription(QString&);
 };
 
 #endif // BIND_FSTYPE_H

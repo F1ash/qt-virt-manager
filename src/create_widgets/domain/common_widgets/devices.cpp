@@ -103,8 +103,8 @@ Devices::Devices(QWidget *parent,
     commonLayout->addWidget(listWidget, 3);
     commonLayout->addWidget(infoWidget, 8);
     detectAttachedDevicesFromXMLDesc();
-    connect(usedDeviceList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
-            this, SLOT(showDevice(QListWidgetItem*,QListWidgetItem*)));
+    //connect(usedDeviceList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+    //        this, SLOT(showDevice(QListWidgetItem*,QListWidgetItem*)));
     connect(usedDeviceList, SIGNAL(itemSelectionChanged()),
             this, SLOT(showDevice()));
     connect(infoWidget, SIGNAL(saveDeviceXMLDesc(QString&)),
@@ -322,7 +322,7 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc)
     };
     // impossible case, but...
     if (i<0) return;
-    // inser item by Device Name Order
+    // insert item by Device Name Order
     bool inserted = false;
     do {
         int row = 0;

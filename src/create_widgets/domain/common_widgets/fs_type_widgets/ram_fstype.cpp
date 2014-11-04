@@ -21,6 +21,11 @@ RAMFsType::RAMFsType(QWidget *parent, QString _type) :
     usage->setRange(0, 1024);
     commonLayout->addWidget(usage, 4, 1);
     target->setPlaceholderText("Target guest directory");
+    // dataChanged connections
+    connect(usage, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(target, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
@@ -40,4 +45,18 @@ QDomDocument RAMFsType::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void RAMFsType::setDataDescription(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _source, _target, _device;
+    _device = doc.firstChildElement("device")
+            .firstChildElement("filesystem");
+    _source = _device.firstChildElement("source");
+    _target = _device.firstChildElement("target");
+    usage->setValue(
+                _source.attribute("usage").toInt()/1024);
+    target->setText(_target.attribute("dir"));
 }

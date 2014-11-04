@@ -7,18 +7,35 @@ BlockFsType::BlockFsType(QWidget *parent, QString _type) :
     target->setPlaceholderText("Target guest directory");
     connect(sourceLabel, SIGNAL(clicked()),
             this, SLOT(getSourcePath()));
+    // dataChanged connections
+    connect(source, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(target, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(readOnly, SIGNAL(toggled(bool)),
+            this, SLOT(stateChanged()));
+    // Currently this only works with type='mount' for the QEMU/KVM driver.
+    //connect(accessMode, SIGNAL(currentIndexChanged(int)),
+    //        this, SLOT(stateChanged()));
+    connect(driver, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(wrPolicy, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(format, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
 QDomDocument BlockFsType::getDataDocument() const
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _source, _target, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("filesystem");
-    if ( connType=="qemu" && accessMode->currentText()!="default" ) {
-        _devDesc.setAttribute("accessmode", accessMode->currentText());
-    };
+    // Currently this only works with type='mount' for the QEMU/KVM driver.
+    //if ( connType=="qemu" && accessMode->currentText()!="default" ) {
+    //    _devDesc.setAttribute("accessmode", accessMode->currentText());
+    //};
     if ( connType=="qemu" && driver->currentText()!="default" ) {
         QDomElement _driver = doc.createElement("driver");
         _devDesc.appendChild(_driver);
@@ -48,6 +65,50 @@ QDomDocument BlockFsType::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
+void BlockFsType::setDataDescription(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    int idx;
+    doc.setContent(xmlDesc);
+    QDomElement _source, _target, _driver,
+            _readOnly, _device;
+    _device = doc.firstChildElement("device")
+            .firstChildElement("filesystem");
+    _driver = _device.firstChildElement("driver");
+    _source = _device.firstChildElement("source");
+    _target = _device.firstChildElement("target");
+    _readOnly = _device.firstChildElement("readonly");
+    /* Currently this only works with type='mount' for the QEMU/KVM driver.
+    if ( connType=="qemu" ) {
+        idx = accessMode->findText(
+                    _device.attribute("accessmode"), Qt::MatchContains);
+        accessMode->setCurrentIndex( (idx<0)? 0:idx );
+    };
+    */
+    if ( connType=="qemu" && !_driver.isNull() ) {
+        idx = driver->findText(
+                    _driver.attribute("type"), Qt::MatchContains);
+        driver->setCurrentIndex( (idx<0)? 0:idx );
+        idx = wrPolicy->findText(
+                    _driver.attribute("wrpolicy"), Qt::MatchContains);
+        wrPolicy->setCurrentIndex( (idx<0)? 0:idx );
+    } else if ( connType=="lxc" && !_driver.isNull() ) {
+        idx = driver->findText(
+                    _driver.attribute("type"), Qt::MatchContains);
+        driver->setCurrentIndex( (idx<0)? 0:idx );
+        idx = wrPolicy->findText(
+                    _driver.attribute("wrpolicy"), Qt::MatchContains);
+        wrPolicy->setCurrentIndex( (idx<0)? 0:idx );
+        idx = format->findText(
+                    _driver.attribute("format"), Qt::MatchContains);
+        format->setCurrentIndex( (idx<0)? 0:idx );
+    } else if ( _driver.isNull() )
+        driver->setCurrentIndex(0);
+    source->setText(_source.attribute("dev"));
+    target->setText(_target.attribute("dir"));
+    readOnly->setChecked( !_readOnly.isNull() );
+}
 
 /* private slots */
 void BlockFsType::getSourcePath()
@@ -57,19 +118,4 @@ void BlockFsType::getSourcePath()
                 "Source Path",
                 "/dev");
     if ( !fileName.isEmpty() ) source->setText(fileName);
-}
-void BlockFsType::driverTypeChanged(QString _type)
-{
-    format->clear();
-    /*
-     * LXC supports a type of "loop", with a format of "raw" or "nbd" with any format.
-     * QEMU supports a type of "path" or "handle", but no formats.
-     */
-    formatLabel->setVisible( connType=="lxc" && _type!="default" );
-    format->setVisible( connType=="lxc" && _type!="default" );
-    if ( _type=="loop" ) {
-        format->addItem("raw");
-    } else if ( _type=="nbd" ) {
-        format->addItems(FORMAT_TYPES);
-    }
 }

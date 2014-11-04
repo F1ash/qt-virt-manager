@@ -27,10 +27,10 @@ private:
     QString          connType;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 
 private slots:
-    void setWidgets(QString);
+    void             setWidgets(QString);
 };
 
 #endif // FILESYSTEMS_H
