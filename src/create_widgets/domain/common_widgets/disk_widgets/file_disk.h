@@ -12,16 +12,17 @@ public:
     explicit File_Disk(
             QWidget *parent = NULL,
             virConnectPtr conn = NULL);
+    QLineEdit       *path;
 
 private:
     QPushButton     *browse;
-    QLineEdit       *path;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void setFilePath();
+    void             setFilePath();
 };
 
 #endif // FILE_DISK_H

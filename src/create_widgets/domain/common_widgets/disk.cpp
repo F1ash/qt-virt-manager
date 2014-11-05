@@ -4,21 +4,22 @@
  * http://libvirt.org/formatdomain.html#elementsDisks
  */
 
-#define DISK_TYPES QStringList()\
-    <<"Storage Volume to use as the disk"\
-    <<"Host Device to serve as the disk"\
-    <<"Directory to use as the disk"\
-    <<"File holding the disk"\
-    <<"Network volume/image to use as the disk"
-
-
 Disk::Disk(QWidget *parent,
         virConnectPtr conn) :
     _QWidget(parent, conn)
 {
     sourceLabel = new QLabel("Source:", this);
     source = new QComboBox(this);
-    source->addItems(DISK_TYPES);
+    source->addItem(
+                "Storage Volume to use as the disk", "volume");
+    source->addItem(
+                "Host Device to serve as the disk", "block");
+    source->addItem(
+                "Directory to use as the disk", "dir");
+    source->addItem(
+                "File holding the disk", "file");
+    source->addItem(
+                "Network volume/image to use as the disk", "network");
     sourceLayout = new QHBoxLayout(this);
     sourceLayout->addWidget(sourceLabel);
     sourceLayout->addWidget(source);

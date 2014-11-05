@@ -169,6 +169,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/disk_widgets/network_disk.h
   src/create_widgets/domain/common_widgets/disk_widgets/volume_disk.h
   src/create_widgets/domain/common_widgets/security_label.h
+  src/create_widgets/domain/common_widgets/sec_label_widgets/sec_labels.h
   src/create_widgets/domain/common_widgets/encryption.h
   src/create_widgets/domain/common_widgets/emulator.h
   src/create_widgets/domain/common_widgets/random.h
@@ -215,6 +216,7 @@ set (HEADERS
   src/create_widgets/domain/edit_widgets/graphics_device_edit.h
   src/create_widgets/domain/edit_widgets/net_interfaces_edit.h
   src/create_widgets/domain/edit_widgets/filesystems_edit.h
+  src/create_widgets/domain/edit_widgets/disk_edit.h
   src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
@@ -396,6 +398,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/disk_widgets/network_disk.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/volume_disk.cpp
   src/create_widgets/domain/common_widgets/security_label.cpp
+  src/create_widgets/domain/common_widgets/sec_label_widgets/sec_labels.cpp
   src/create_widgets/domain/common_widgets/encryption.cpp
   src/create_widgets/domain/common_widgets/emulator.cpp
   src/create_widgets/domain/common_widgets/random.cpp
@@ -442,6 +445,7 @@ set (SOURCES
   src/create_widgets/domain/edit_widgets/graphics_device_edit.cpp
   src/create_widgets/domain/edit_widgets/net_interfaces_edit.cpp
   src/create_widgets/domain/edit_widgets/filesystems_edit.cpp
+  src/create_widgets/domain/edit_widgets/disk_edit.cpp
   src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   

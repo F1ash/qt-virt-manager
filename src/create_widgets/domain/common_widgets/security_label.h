@@ -1,11 +1,8 @@
 #ifndef SECURITY_LABEL_H
 #define SECURITY_LABEL_H
 
-#include <QListWidget>
-#include <QPushButton>
-#include <QMessageBox>
-#include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/restore_panel.h"
+#include "sec_label_widgets/sec_labels.h"
 
 class SecurityLabel : public _QWidget
 {
@@ -20,35 +17,18 @@ private:
     bool             currentStateSaved = true;
     QString          currentDeviceXMLDesc;
     RestorePanel    *restorePanel;
-    QCheckBox       *useSecLabel;
-    QLabel          *typeLabel, *modelLabel,
-                    *relabelLabel;
-    QComboBox       *type, *model, *relabel,
-                    *labelTypeLabel;
-    QLineEdit       *label;
-    QHBoxLayout     *typeLayout;
-    QWidget         *typeWdg;
-    QListWidget     *list;
-    QPushButton     *add, *del;
-    QGridLayout     *listLayout;
-    QWidget         *listWdg;
-    QGridLayout     *baseLayout;
-    QWidget         *baseWdg;
+    SecLabels       *secLabels;
     QVBoxLayout     *commonLayout;
 
 public slots:
     bool             isUsed() const;
+    void             setUsage(bool);
     QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
     QString          closeDataEdit();
 
 private slots:
     void             stateChanged();
-    void             usedStateChanged(bool);
-    void             securityTypeChanged(QString);
-    void             modelTypeChanged(QString);
-    QDomDocument     readData();
-    void             addSecLabel();
-    void             delSecLabel();
     void             readXMLDesciption();
     void             readXMLDesciption(QString&);
     void             resetSecData();

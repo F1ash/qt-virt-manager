@@ -15,17 +15,17 @@ public:
     explicit Disk(
             QWidget *parent = NULL,
             virConnectPtr conn = NULL);
+    QComboBox       *source;
+    QStackedWidget  *info;
 
 private:
     QLabel          *sourceLabel;
-    QComboBox       *source;
     QHBoxLayout     *sourceLayout;
     QWidget         *sourceWdg;
-    QStackedWidget  *info;
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 };
 
 #endif // DISK_H

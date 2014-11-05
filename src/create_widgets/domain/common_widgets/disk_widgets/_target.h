@@ -17,16 +17,16 @@ class _Target : public QWidget
     Q_OBJECT
 public:
     explicit _Target(QWidget *parent = NULL);
-
-private:
-    QLabel      *devNameLabel, *busLabel;
     QCheckBox   *trayLabel, *removableLabel;
     QLineEdit   *devName;
     QComboBox   *bus, *tray, *removable;
+
+private:
+    QLabel      *devNameLabel, *busLabel;
     QGridLayout *commonLayout;
 
 public slots:
-    TargetAttrs getTargetAttrs() const;
+    TargetAttrs  getTargetAttrs() const;
 };
 
 #endif // _TARGET_H

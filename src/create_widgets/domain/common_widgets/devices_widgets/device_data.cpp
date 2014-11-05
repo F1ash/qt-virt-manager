@@ -65,7 +65,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     QString deviceType = doc.firstChildElement("device").
             firstChild().nodeName();
     if ( deviceType == "disk" ) {
-        device = new Disk(
+        device = new Disk_Edit(
                     this,
                     currWorkConnect);
     } else if ( deviceType == "interface" ) {

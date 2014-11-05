@@ -40,6 +40,7 @@
 #include "edit_widgets/graphics_device_edit.h"
 #include "edit_widgets/net_interfaces_edit.h"
 #include "edit_widgets/filesystems_edit.h"
+#include "edit_widgets/disk_edit.h"
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"

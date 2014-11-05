@@ -18,7 +18,7 @@ private:
     QHBoxLayout *commonLayout;
 
 public slots:
-    QString getDeviceType() const;
+    QString      getDeviceType() const;
 };
 
 #endif // _DEVICE_H

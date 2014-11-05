@@ -7,7 +7,7 @@
 #include "_device.h"
 #include "_read_only.h"
 #include "_startup_policy.h"
-#include "create_widgets/domain/common_widgets/security_label.h"
+#include "create_widgets/domain/common_widgets/sec_label_widgets/sec_labels.h"
 
 class _Disk : public _QWidget
 {
@@ -20,14 +20,11 @@ public:
     _StartupPolicy  *startupPolicy;
     _Device         *devType;
     _Target         *target;
-    SecurityLabel   *secLabel;
+    SecLabels       *secLabels;
     _ReadOnly       *readOnly;
     QGridLayout     *baseLayout;
     QWidget         *baseWdg;
     QVBoxLayout     *commonLayout;
-
-public slots:
-    virtual QDomDocument getDataDocument() const;
 };
 
 #endif // _DISK_H

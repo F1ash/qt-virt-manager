@@ -12,7 +12,7 @@ Block_Disk::Block_Disk(
     baseLayout->addWidget(browse, 0, 0);
     baseLayout->addWidget(path, 0, 1);
 
-    secLabel->setVisible(true);
+    secLabels->setVisible(true);
 
     connect(browse, SIGNAL(clicked()),
             this, SLOT(setDevPath()));
@@ -41,8 +41,8 @@ QDomDocument Block_Disk::getDataDocument() const
     };
     _devDesc.appendChild(_target);
 
-    if ( secLabel->isUsed() ) {
-        QDomNodeList _l = secLabel->getDataDocument()
+    if ( secLabels->isUsed() ) {
+        QDomNodeList _l = secLabels->getDataDocument()
                 .firstChildElement("data")
                 .childNodes();
         uint j = 0;

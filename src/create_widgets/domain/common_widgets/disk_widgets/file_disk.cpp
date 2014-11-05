@@ -12,16 +12,19 @@ File_Disk::File_Disk(
     baseLayout->addWidget(browse, 0, 0);
     baseLayout->addWidget(path, 0, 1);
 
-    secLabel->setVisible(true);
+    secLabels->setVisible(true);
 
     connect(browse, SIGNAL(clicked()),
             this, SLOT(setFilePath()));
+    // dataChanged connections
+    connect(secLabels, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
 QDomDocument File_Disk::getDataDocument() const
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _source, _target, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("disk");
@@ -41,8 +44,8 @@ QDomDocument File_Disk::getDataDocument() const
     };
     _devDesc.appendChild(_target);
 
-    if ( secLabel->isUsed() ) {
-        QDomNodeList _l = secLabel->getDataDocument()
+    if ( secLabels->isUsed() ) {
+        QDomNodeList _l = secLabels->getDataDocument()
                 .firstChildElement("data")
                 .childNodes();
         uint j = 0;
@@ -64,6 +67,36 @@ QDomDocument File_Disk::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void File_Disk::setDataDescription(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _source, _target,
+            _readOnly, _secLabel, _driver;
+    _device = doc.firstChildElement("device")
+            .firstChildElement("disk");
+    _source = _device.firstChildElement("source");
+    _target = _device.firstChildElement("target");
+    _readOnly = _device.firstChildElement("readonly");
+    _secLabel = _device.firstChildElement("seclabel");
+    _driver = _device.firstChildElement("driver");
+    QString _attr;
+    _attr = _source.attribute("file");
+    path->setText(_attr);
+    _attr = _target.attribute("dev");
+    target->devName->setText(_attr);
+    readOnly->readOnly->setChecked( !_readOnly.isNull() );
+    secLabels->setUsage( !_secLabel.isNull() );
+    if ( !_secLabel.isNull() ) {
+        QDomDocument _doc;
+        _doc.setContent(QString());
+        _doc.appendChild(_device);
+        _device.setTagName("domain");
+        QString _xmlDesc = _doc.toString();
+        secLabels->readXMLDesciption(_xmlDesc);
+    };
 }
 
 /* private slots */
