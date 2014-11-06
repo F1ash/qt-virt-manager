@@ -12,6 +12,9 @@ public:
     explicit _ReadOnly(QWidget *parent = NULL);
     QCheckBox       *readOnly;
 
+signals:
+    void             dataChanged();
+
 private:
     QHBoxLayout     *commonLayout;
 

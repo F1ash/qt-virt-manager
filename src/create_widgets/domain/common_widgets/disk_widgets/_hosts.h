@@ -16,6 +16,9 @@ class _Hosts : public QWidget
 public:
     explicit _Hosts(QWidget *parent = NULL);
 
+signals:
+    void             dataChanged();
+
 private:
     QCheckBox       *useHosts;
     QListWidget     *hosts;

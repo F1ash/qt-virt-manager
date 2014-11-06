@@ -13,12 +13,16 @@ public:
     explicit _Device(QWidget *parent = NULL);
     QComboBox   *devType;
 
+signals:
+    void         dataChanged();
+
 private:
     QLabel      *devTypeLabel;
     QHBoxLayout *commonLayout;
 
 public slots:
     QString      getDeviceType() const;
+    void         setDeviceType(QString&);
 };
 
 #endif // _DEVICE_H

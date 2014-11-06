@@ -38,6 +38,19 @@ _Target::_Target(QWidget *parent) :
             tray, SLOT(setEnabled(bool)));
     connect(removableLabel, SIGNAL(toggled(bool)),
             removable, SLOT(setEnabled(bool)));
+    // dataChanged connections
+    connect(bus, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(devName, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(trayLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(tray, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
+    connect(removableLabel, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
+    connect(removable, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */

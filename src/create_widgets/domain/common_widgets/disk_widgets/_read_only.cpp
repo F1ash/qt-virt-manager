@@ -9,6 +9,8 @@ _ReadOnly::_ReadOnly(QWidget *parent) :
     commonLayout->addWidget(readOnly);
     commonLayout->setAlignment(Qt::AlignLeft);
     setLayout(commonLayout);
+    connect(readOnly, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */

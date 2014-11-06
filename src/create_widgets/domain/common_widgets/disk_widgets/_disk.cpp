@@ -25,4 +25,17 @@ _Disk::_Disk(
     commonLayout->addWidget(secLabels);
     commonLayout->addWidget(readOnly);
     setLayout(commonLayout);
+    // dataChanged connections
+    connect(hosts, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(target, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(devType, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(startupPolicy, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(secLabels, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(readOnly, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
 }

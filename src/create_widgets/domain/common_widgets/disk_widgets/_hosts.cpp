@@ -82,6 +82,7 @@ void _Hosts::addHost()
         };
         name->clear();
         port->clear();
+        emit dataChanged();
     };
 }
 void _Hosts::delHost()
@@ -89,6 +90,7 @@ void _Hosts::delHost()
     QList<QListWidgetItem*> l = hosts->selectedItems();
     if ( !l.isEmpty() ) {
         hosts->takeItem(hosts->row(l.at(0)));
+        emit dataChanged();
     };
     hosts->clearSelection();
 }

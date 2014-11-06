@@ -17,10 +17,19 @@ _Device::_Device(QWidget *parent) :
     commonLayout->addWidget(devTypeLabel);
     commonLayout->addWidget(devType);
     setLayout(commonLayout);
+    //  dataChanged connections
+    connect(devType, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */
 QString _Device::getDeviceType() const
 {
     return devType->currentText().toLower();
+}
+void _Device::setDeviceType(QString &_type)
+{
+    int idx = devType->findText(
+                _type, Qt::MatchContains);
+    devType->setCurrentIndex( (idx<0)? 0:idx );
 }

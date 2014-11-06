@@ -21,6 +21,9 @@ public:
     QLineEdit   *devName;
     QComboBox   *bus, *tray, *removable;
 
+signals:
+    void         dataChanged();
+
 private:
     QLabel      *devNameLabel, *busLabel;
     QGridLayout *commonLayout;
