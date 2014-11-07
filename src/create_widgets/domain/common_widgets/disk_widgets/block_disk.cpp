@@ -16,6 +16,9 @@ Block_Disk::Block_Disk(
 
     connect(browse, SIGNAL(clicked()),
             this, SLOT(setDevPath()));
+    // dataChanged connections
+    connect(path, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
@@ -64,6 +67,63 @@ QDomDocument Block_Disk::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void Block_Disk::setDataDescription(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _source, _target,
+            _readOnly, _secLabel, _driver;
+    _device = doc.firstChildElement("device")
+            .firstChildElement("disk");
+    _source = _device.firstChildElement("source");
+    _target = _device.firstChildElement("target");
+    _readOnly = _device.firstChildElement("readonly");
+    _secLabel = _device.firstChildElement("seclabel");
+    _driver = _device.firstChildElement("driver");
+    QString _attr;
+    int idx;
+    _attr = _source.attribute("dev");
+    path->setText(_attr);
+    _attr = _source.attribute("device");
+    devType->setDeviceType(_attr);
+    if ( _source.hasAttribute("startupPolicy") ) {
+        startupPolicy->setUsage(true);
+        _attr = _source.attribute("startupPolicy");
+        idx = startupPolicy->findPolicyIndex(_attr);
+        startupPolicy->setPolicyIndex( (idx<0)? 0:idx );
+    } else
+        startupPolicy->setUsage(false);
+    _attr = _target.attribute("dev");
+    target->devName->setText(_attr);
+    _attr = _target.attribute("bus");
+    idx = target->bus->findText(_attr, Qt::MatchContains);
+    target->bus->setCurrentIndex( (idx<0)? 0:idx );
+    if ( _target.hasAttribute("tray") ) {
+        target->trayLabel->setChecked(true);
+        _attr = _target.attribute("tray");
+        idx = target->tray->findText(_attr, Qt::MatchContains);
+        target->tray->setCurrentIndex( (idx<0)? 0:idx );
+    } else
+        target->trayLabel->setChecked(false);
+    if ( _target.hasAttribute("removable") ) {
+        target->removableLabel->setChecked(true);
+        _attr = _target.attribute("removable");
+        idx = target->removable->findText(_attr, Qt::MatchContains);
+        target->removable->setCurrentIndex( (idx<0)? 0:idx );
+    } else
+        target->removableLabel->setChecked(false);
+    secLabels->setUsage( !_secLabel.isNull() );
+    if ( !_secLabel.isNull() ) {
+        QDomDocument _doc;
+        _doc.setContent(QString());
+        _doc.appendChild(_device);
+        _device.setTagName("domain");
+        QString _xmlDesc = _doc.toString();
+        secLabels->readXMLDesciption(_xmlDesc);
+    };
+    readOnly->readOnly->setChecked( !_readOnly.isNull() );
 }
 
 /* private slots */

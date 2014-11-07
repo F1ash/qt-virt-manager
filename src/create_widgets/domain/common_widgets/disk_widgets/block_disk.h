@@ -18,10 +18,11 @@ private:
     QLineEdit       *path;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void setDevPath();
+    void             setDevPath();
 };
 
 #endif // BLOCK_DISK_H
