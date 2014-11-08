@@ -23,11 +23,12 @@ private:
                     *volumeDialog = NULL;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void changeModeVisibility(QString);
-    void getVolumeNames();
+    void             changeModeVisibility(QString);
+    void             getVolumeNames();
 };
 
 #endif // VOLUME_DISK_H

@@ -16,6 +16,8 @@ Volume_Disk::Volume_Disk(
     mode->addItems(QStringList()<<"Host"<<"Direct");
     mode->setEnabled(false);
 
+    secLabels->setVisible(true);
+
     baseLayout->addWidget(poolLabel, 0, 0);
     baseLayout->addWidget(pool, 0, 1);
     baseLayout->addWidget(volumeLabel, 1, 0);
@@ -27,6 +29,9 @@ Volume_Disk::Volume_Disk(
             this, SLOT(changeModeVisibility(QString)));
     connect(volumeLabel, SIGNAL(clicked()),
             this, SLOT(getVolumeNames()));
+    // dataChanged connections
+    connect(volume, SIGNAL(textChanged(QString)),
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
@@ -56,6 +61,19 @@ QDomDocument Volume_Disk::getDataDocument() const
     };
     _devDesc.appendChild(_target);
 
+    if ( secLabels->isUsed() ) {
+        QDomNodeList _l = secLabels->getDataDocument()
+                .firstChildElement("data")
+                .childNodes();
+        uint j = 0;
+        uint count = _l.length();
+        for (uint i=0; i<count;i++) {
+            //qDebug()<<_l.item(j).nodeName()<<i;
+            if (!_l.item(j).isNull()) _devDesc.appendChild(_l.item(j));
+            else ++j;
+        };
+    };
+
     if ( readOnly->state() ) {
         QDomElement _readOnly = doc.createElement("readonly");
         _devDesc.appendChild(_readOnly);
@@ -66,6 +84,70 @@ QDomDocument Volume_Disk::getDataDocument() const
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;
+}
+void Volume_Disk::setDataDescription(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _device, _source, _target,
+            _readOnly, _secLabel, _driver;
+    _device = doc.firstChildElement("device")
+            .firstChildElement("disk");
+    _source = _device.firstChildElement("source");
+    _target = _device.firstChildElement("target");
+    _readOnly = _device.firstChildElement("readonly");
+    _secLabel = _device.firstChildElement("seclabel");
+    _driver = _device.firstChildElement("driver");
+    QString _attr;
+    int idx;
+    _attr = _device.attribute("device");
+    devType->setDeviceType(_attr);
+    _attr = _source.attribute("pool");
+    pool->setText(_attr);
+    _attr = _source.attribute("volume");
+    volume->setText(_attr);
+    if ( _source.hasAttribute("mode") ) {
+        idx = mode->findText(
+                    _source.attribute("mode"), Qt::MatchContains);
+        mode->setCurrentIndex( (idx<0)? 0:idx );
+    };
+    if ( _source.hasAttribute("startupPolicy") ) {
+        startupPolicy->setUsage(true);
+        _attr = _source.attribute("startupPolicy");
+        idx = startupPolicy->findPolicyIndex(_attr);
+        startupPolicy->setPolicyIndex( (idx<0)? 0:idx );
+    } else
+        startupPolicy->setUsage(false);
+    _attr = _target.attribute("dev");
+    target->devName->setText(_attr);
+    _attr = _target.attribute("bus");
+    idx = target->bus->findText(_attr, Qt::MatchContains);
+    target->bus->setCurrentIndex( (idx<0)? 0:idx );
+    if ( _target.hasAttribute("tray") ) {
+        target->trayLabel->setChecked(true);
+        _attr = _target.attribute("tray");
+        idx = target->tray->findText(_attr, Qt::MatchContains);
+        target->tray->setCurrentIndex( (idx<0)? 0:idx );
+    } else
+        target->trayLabel->setChecked(false);
+    if ( _target.hasAttribute("removable") ) {
+        target->removableLabel->setChecked(true);
+        _attr = _target.attribute("removable");
+        idx = target->removable->findText(_attr, Qt::MatchContains);
+        target->removable->setCurrentIndex( (idx<0)? 0:idx );
+    } else
+        target->removableLabel->setChecked(false);
+    secLabels->setUsage( !_secLabel.isNull() );
+    if ( !_secLabel.isNull() ) {
+        QDomDocument _doc;
+        _doc.setContent(QString());
+        _doc.appendChild(_device);
+        _device.setTagName("domain");
+        QString _xmlDesc = _doc.toString();
+        secLabels->readXMLDesciption(_xmlDesc);
+    };
+    readOnly->readOnly->setChecked( !_readOnly.isNull() );
 }
 
 /* private slots */

@@ -84,10 +84,10 @@ void Block_Disk::setDataDescription(QString &xmlDesc)
     _driver = _device.firstChildElement("driver");
     QString _attr;
     int idx;
+    _attr = _device.attribute("device");
+    devType->setDeviceType(_attr);
     _attr = _source.attribute("dev");
     path->setText(_attr);
-    _attr = _source.attribute("device");
-    devType->setDeviceType(_attr);
     if ( _source.hasAttribute("startupPolicy") ) {
         startupPolicy->setUsage(true);
         _attr = _source.attribute("startupPolicy");
