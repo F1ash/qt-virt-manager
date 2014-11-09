@@ -41,6 +41,8 @@ public slots:
     void             setFullHostMode(bool);
     QStringList      getHostsList() const;
     void             setOneHostMode(bool);
+    void             setHostItem(QString&);
+    void             clearHostList();
 
 private slots:
     void             addHost();

@@ -65,6 +65,14 @@ void _Hosts::setOneHostMode(bool state)
 {
     oneHostMode = state;
 }
+void _Hosts::setHostItem(QString &_item)
+{
+    hosts->addItem(_item);
+}
+void _Hosts::clearHostList()
+{
+    hosts->clear();
+}
 
 /* private slots */
 void _Hosts::addHost()

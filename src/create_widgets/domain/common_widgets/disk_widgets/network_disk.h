@@ -17,10 +17,11 @@ private:
     QLineEdit       *sourceName;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void protocolTypeChanged(int);
+    void             protocolTypeChanged(int);
 };
 
 #endif // NETWORK_DISK_H
