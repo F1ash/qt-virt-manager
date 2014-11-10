@@ -16,16 +16,22 @@ Network_Disk::Network_Disk(
     sourceNameLabel = new QLabel("Source name:", this);
     sourceName = new QLineEdit(this);
     sourceName->setPlaceholderText("Source name or URL path");
+    auth = new _Storage_Auth(this);
 
     baseLayout->addWidget(protocolLabel, 0, 0);
     baseLayout->addWidget(protocol, 0, 1);
     baseLayout->addWidget(sourceNameLabel, 1, 0);
     baseLayout->addWidget(sourceName, 1, 1);
+    baseLayout->addWidget(auth, 2, 0, 4, 2);
 
     hosts->setVisible(true);
     startupPolicy->setVisible(false);
     connect(protocol, SIGNAL(currentIndexChanged(int)),
             this, SLOT(protocolTypeChanged(int)));
+    connect(protocol, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(protocolTypeChanged(QString)));
+    connect(auth, SIGNAL(dataChanged()),
+            this, SLOT(authUsageTypeChanged()));
     // dataChanged connections
     connect(protocol, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));
@@ -33,13 +39,16 @@ Network_Disk::Network_Disk(
             this, SLOT(stateChanged()));
     connect(sourceName, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
+    connect(auth, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
 QDomDocument Network_Disk::getDataDocument() const
 {
     QDomDocument doc;
-    QDomElement _source, _target, _device, _devDesc;
+    QDomElement _source, _auth, _secret,
+            _target, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("disk");
 
@@ -47,6 +56,22 @@ QDomDocument Network_Disk::getDataDocument() const
     _source.setAttribute("protocol", protocol->currentText());
     if ( !sourceName->text().isEmpty() )
         _source.setAttribute("name", sourceName->text());
+
+    if ( auth->auth->isChecked() ) {
+        _auth = doc.createElement("auth");
+        _auth.setAttribute(
+                    "username", auth->userName->text());
+        _secret = doc.createElement("secret");
+        if ( protocol->currentText()=="iscsi" ) {
+            _secret.setAttribute("type", "iscsi");
+        } else
+            _secret.setAttribute("type", "ceph");
+        _secret.setAttribute(
+                    auth->usageType->currentText().toLower(),
+                    auth->usage->text());
+        _auth.appendChild(_secret);
+        _devDesc.appendChild(_auth);
+    };
     //if ( startupPolicy->isUsed() )
     //    _source.setAttribute("startupPolicy",
     //                         startupPolicy->getStartupPolicy());
@@ -91,8 +116,8 @@ void Network_Disk::setDataDescription(QString &xmlDesc)
     //qDebug()<<xmlDesc;
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QDomElement _device, _source, _host,
-            _target, _readOnly, _driver;
+    QDomElement _device, _source, _host, _auth,
+            _secret, _target, _readOnly, _driver;
     _device = doc.firstChildElement("device")
             .firstChildElement("disk");
     _source = _device.firstChildElement("source");
@@ -113,6 +138,27 @@ void Network_Disk::setDataDescription(QString &xmlDesc)
         protocol->setCurrentIndex(idx);
     _attr = _source.attribute("name");
     sourceName->setText(_attr);
+    _auth = _device.firstChildElement("auth");
+    auth->auth->setChecked( !_auth.isNull() );
+    if ( !_auth.isNull() ) {
+        auth->userName->setText(
+                    _auth.attribute("username"));
+        _secret = _auth.firstChildElement("secret");
+        if ( !_secret.isNull() ) {
+            QString _u;
+            if ( _secret.hasAttribute("usage") ) {
+                idx = auth->usageType->findText(
+                            "usage", Qt::MatchContains);
+                _u = _secret.attribute("usage");
+            } else if ( _secret.hasAttribute("uuid") ) {
+                idx = auth->usageType->findText(
+                            "uuid", Qt::MatchContains);
+                _u = _secret.attribute("uuid");
+            };
+            auth->usageType->setCurrentIndex( (idx<0)? 0:idx );
+            auth->usage->setText(_u);
+        };
+    };
     _attr = _target.attribute("dev");
     target->devName->setText(_attr);
     _host = _source.firstChildElement("host");
@@ -151,4 +197,24 @@ void Network_Disk::protocolTypeChanged(int i)
 {
     protocol->setEditable( i==protocol->count()-1 );
     protocol->clearEditText();
+}
+void Network_Disk::protocolTypeChanged(QString _type)
+{
+    auth->auth->setChecked( _type=="iscsi" || _type=="rbd" );
+    if ( _type=="rbd" && auth->usageType->currentText().toLower()=="usage" )
+        auth->usage->setPlaceholderText("mypassid");
+    else if ( _type=="iscsi" && auth->usageType->currentText().toLower()=="usage" )
+        auth->usage->setPlaceholderText("libvirtiscsi");
+    else
+        auth->usage->setPlaceholderText("c4dbe20b-b1a3-4ac1-b6e6-2ac97852ebb6");
+}
+void Network_Disk::authUsageTypeChanged()
+{
+    QString _type = protocol->currentText().toLower();
+    if ( _type=="rbd" && auth->usageType->currentText().toLower()=="usage" )
+        auth->usage->setPlaceholderText("mypassid");
+    else if ( _type=="iscsi" && auth->usageType->currentText().toLower()=="usage" )
+        auth->usage->setPlaceholderText("libvirtiscsi");
+    else
+        auth->usage->setPlaceholderText("c4dbe20b-b1a3-4ac1-b6e6-2ac97852ebb6");
 }

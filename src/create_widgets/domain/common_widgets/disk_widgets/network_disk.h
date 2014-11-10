@@ -2,6 +2,7 @@
 #define NETWORK_DISK_H
 
 #include "_disk.h"
+#include "create_widgets/storage/_create_storage_widgets/_auth.h"
 
 class Network_Disk : public _Disk
 {
@@ -12,9 +13,11 @@ public:
             virConnectPtr conn = NULL);
 
 private:
-    QLabel          *protocolLabel, *sourceNameLabel;
+    QLabel          *protocolLabel, *sourceNameLabel,
+                    *authLabel;
     QComboBox       *protocol;
     QLineEdit       *sourceName;
+    _Storage_Auth   *auth;
 
 public slots:
     QDomDocument     getDataDocument() const;
@@ -22,6 +25,8 @@ public slots:
 
 private slots:
     void             protocolTypeChanged(int);
+    void             protocolTypeChanged(QString);
+    void             authUsageTypeChanged();
 };
 
 #endif // NETWORK_DISK_H
