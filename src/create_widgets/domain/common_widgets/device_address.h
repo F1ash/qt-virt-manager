@@ -20,10 +20,10 @@ public:
     explicit DeviceAddress(QWidget *parent = NULL);
     QComboBox       *type;
     QCheckBox       *use;
+    QStackedWidget  *info;
 
 private:
     QVBoxLayout     *commonLayout;
-    QStackedWidget  *info;
 
 public slots:
     AttrList         getAttrList() const;

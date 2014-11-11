@@ -73,8 +73,8 @@ QDomDocument Network_Disk::getDataDocument() const
         _devDesc.appendChild(_auth);
     };
     //if ( startupPolicy->isUsed() )
-    //    _source.setAttribute("startupPolicy",
-    //                         startupPolicy->getStartupPolicy());
+    //    _source.setAttribute(
+    //                "startupPolicy", startupPolicy->getStartupPolicy());
     if ( hosts->isUsed() ) {
         foreach (QString _h, hosts->getHostsList()) {
             if ( !_h.isEmpty() ) {
@@ -105,6 +105,17 @@ QDomDocument Network_Disk::getDataDocument() const
         _devDesc.appendChild(_readOnly);
     };
 
+    if ( addr->use->isChecked() &&
+         addr->getCurrentAddrWidget()->isEnabled() ) {
+        QDomElement _addr = doc.createElement("address");
+        AttrList _l = addr->getAttrList();
+        foreach (QString _attr, _l.keys()) {
+            if ( !_attr.isEmpty() )
+                _addr.setAttribute( _attr, _l.value(_attr) );
+        };
+        _devDesc.appendChild(_addr);
+    };
+
     _devDesc.setAttribute("type", "network");
     _devDesc.setAttribute("device", devType->getDeviceType());
     _device.appendChild(_devDesc);
@@ -117,12 +128,13 @@ void Network_Disk::setDataDescription(QString &xmlDesc)
     QDomDocument doc;
     doc.setContent(xmlDesc);
     QDomElement _device, _source, _host, _auth,
-            _secret, _target, _readOnly, _driver;
+            _secret, _target, _readOnly, _addr, _driver;
     _device = doc.firstChildElement("device")
             .firstChildElement("disk");
     _source = _device.firstChildElement("source");
     _target = _device.firstChildElement("target");
     _readOnly = _device.firstChildElement("readonly");
+    _addr = _device.firstChildElement("address");
     _driver = _device.firstChildElement("driver");
     QString _attr;
     int idx;
@@ -190,6 +202,28 @@ void Network_Disk::setDataDescription(QString &xmlDesc)
     } else
         target->removableLabel->setChecked(false);
     readOnly->readOnly->setChecked( !_readOnly.isNull() );
+    addr->use->setChecked( !_addr.isNull() );
+    if ( !_addr.isNull() ) {
+        _attr = _addr.attribute("type");
+        idx = addr->type->findData(
+                    _attr,
+                    Qt::UserRole,
+                    Qt::MatchContains);
+        addr->type->setCurrentIndex( (idx<0)? 0:idx );
+        if ( _attr=="pci" ) {
+            PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
+            wdg->domain->setText( _addr.attribute("domain") );
+            wdg->bus->setText( _addr.attribute("bus") );
+            wdg->slot->setText( _addr.attribute("slot") );
+            wdg->function->setValue( _addr.attribute("function").toInt() );
+        } else if ( _attr=="drive" ) {
+            DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
+            wdg->controller->setText( _addr.attribute("controller") );
+            wdg->bus->setText( _addr.attribute("bus") );
+            wdg->target->setText( _addr.attribute("target") );
+            wdg->unit->setText( _addr.attribute("unit") );
+        };
+    };
 }
 
 /* private slots */

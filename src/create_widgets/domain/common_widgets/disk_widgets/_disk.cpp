@@ -16,6 +16,13 @@ _Disk::_Disk(
     secLabels = new SecLabels(this);
     secLabels->setVisible(false);
     readOnly = new _ReadOnly(this);
+    addr = new DeviceAddress(this);
+    addr->info->widget(2)->setEnabled(false);
+    addr->info->widget(3)->setEnabled(false);
+    addr->info->widget(4)->setEnabled(false);
+    addr->info->widget(5)->setEnabled(false);
+    addr->info->widget(6)->setEnabled(false);
+    addr->info->widget(7)->setEnabled(false);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(hosts);
@@ -24,6 +31,8 @@ _Disk::_Disk(
     commonLayout->addWidget(target);
     commonLayout->addWidget(secLabels);
     commonLayout->addWidget(readOnly);
+    commonLayout->addWidget(addr);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     // dataChanged connections
     connect(hosts, SIGNAL(dataChanged()),
@@ -37,5 +46,7 @@ _Disk::_Disk(
     connect(secLabels, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(readOnly, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(addr, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
 }

@@ -8,6 +8,7 @@
 #include "_read_only.h"
 #include "_startup_policy.h"
 #include "create_widgets/domain/common_widgets/sec_label_widgets/sec_labels.h"
+#include "create_widgets/domain/common_widgets/device_address.h"
 
 class _Disk : public _QWidget
 {
@@ -22,6 +23,7 @@ public:
     _Target         *target;
     SecLabels       *secLabels;
     _ReadOnly       *readOnly;
+    DeviceAddress   *addr;
     QGridLayout     *baseLayout;
     QWidget         *baseWdg;
     QVBoxLayout     *commonLayout;
