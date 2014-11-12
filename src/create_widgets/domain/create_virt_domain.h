@@ -2,7 +2,7 @@
 #define CREATE_VIRT_DOMAIN_H
 
 #include <QDialog>
-#include <QList>
+#include <QMap>
 #include <QSettings>
 #include <QDir>
 #include <QTemporaryFile>
@@ -13,7 +13,7 @@
 #include "common_widgets/devices.h"
 #include <QDebug>
 
-typedef QList<_QWidget*> WidgetList;
+typedef QMap<QString, _QWidget*> WidgetList;
 
 class CreateVirtDomain : public QDialog
 {
@@ -35,10 +35,6 @@ private:
     virErrorPtr      virtErrors;
     QString          capabilities;
     QString          type;
-    QString          arch;
-    QString          os_type;
-    QString          memUnit;
-    QString          memValue;
     QTabWidget      *tabWidget = NULL;
     QCheckBox       *showDescription;
     QPushButton     *ok;

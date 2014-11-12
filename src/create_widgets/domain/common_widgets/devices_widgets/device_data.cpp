@@ -109,9 +109,7 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
                     this,
                     currWorkConnect);
     } else if ( deviceType == "emulator" ) {
-        device = new Emulator_Edit(
-                    this,
-                    currWorkConnect);
+        device = new Emulator_Edit(this);
     } else if ( deviceType == "rng" ) {
         device = new Random_Edit(this);
     } else if ( deviceType == "memballoon" ) {

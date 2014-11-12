@@ -13,8 +13,7 @@ class Memory : public _QWidget
 public:
     explicit Memory(
             QWidget *parent = NULL,
-            QString  arg1 = "",
-            QString  arg2 = "",
+            QString  _caps  = "",
             QString  _xmlDesc = QString());
 
 signals:
@@ -23,6 +22,7 @@ private:
     const QString    xmlDesc;
     bool             currentStateSaved = true;
     QString          currentDeviceXMLDesc;
+    QString          capabilities;
     QString          memUnit;
     QString          memValue;
     RestorePanel    *restorePanel;
@@ -64,6 +64,7 @@ public slots:
     QString          closeDataEdit();
 
 private slots:
+    void             readCapabilities();
     void             stateChanged();
     void             changeCurrentMemValue(int);
     void             changeMaximumMemValue(int);

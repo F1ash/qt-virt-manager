@@ -1,12 +1,11 @@
 #include "memory.h"
 
 Memory::Memory(
-        QWidget *parent, QString arg1,
-        QString arg2, QString _xmlDesc) :
-    _QWidget(parent), memUnit(arg1),
-    memValue(arg2), xmlDesc(_xmlDesc)
+        QWidget *parent, QString _caps, QString _xmlDesc) :
+    _QWidget(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("Memory");
+    readCapabilities();
     hostMemory = new QLabel(QString("Host Memory (%1): %2").arg(memUnit).arg(memValue), this);
     maxMemLabel = new QLabel("Maximum Memory (KiB):", this);
     maxMemValue = new QSpinBox(this);
@@ -226,6 +225,25 @@ QString Memory::closeDataEdit()
 }
 
 /* private slots */
+void Memory::readCapabilities()
+{
+    QDomDocument doc;
+    doc.setContent(capabilities);
+    memValue = doc.firstChildElement("capabilities").
+               firstChildElement("host").
+               firstChildElement("topology").
+               firstChildElement("cells").
+               firstChildElement("cell").
+               firstChildElement("memory").
+               firstChild().toText().data();
+    memUnit = doc.firstChildElement("capabilities").
+               firstChildElement("host").
+               firstChildElement("topology").
+               firstChildElement("cells").
+               firstChildElement("cell").
+               firstChildElement("memory").
+               attribute("unit", "???");
+}
 void Memory::stateChanged()
 {
     if ( currentStateSaved ) {

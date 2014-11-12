@@ -266,9 +266,9 @@ void DeviceStack::showDevice(QListWidgetItem *item)
                     this,
                     currWorkConnect);
     } else if ( deviceType == "emulator" ) {
-        device = new Emulator(
-                    this,
-                    currWorkConnect);
+        //device = new Emulator(
+        //            this,
+        //            currWorkConnect);
     } else if ( deviceType == "rng" ) {
         device = new Random(this);
     } else if ( deviceType == "memballoon" ) {

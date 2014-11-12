@@ -12,8 +12,7 @@ class General : public _QWidget
 public:
     explicit General(
             QWidget *parent = NULL,
-            QString  arg1 = "",
-            QString  arg2 = "",
+            QString  _caps  = "",
             QString  _xmlDesc = QString());
 
 signals:
@@ -24,10 +23,12 @@ private:
     QString          currentDeviceXMLDesc;
     RestorePanel    *restorePanel;
     QVBoxLayout     *commonLayout;
+    QString          capabilities;
     QLabel          *typeLabel;
-    QString          type;
     QLabel          *archLabel;
+    QString          type;
     QString          arch;
+    QString          os_type;
     QLabel          *nameLabel;
     QLineEdit       *name;
     QLabel          *uuidLabel;
@@ -40,8 +41,10 @@ private:
 public slots:
     QDomDocument     getDataDocument() const;
     QString          closeDataEdit();
+    void             changeArch(QString&);
 
 private slots:
+    void             readCapabilities();
     void             stateChanged();
     void             readXMLDesciption();
     void             readXMLDesciption(QString&);

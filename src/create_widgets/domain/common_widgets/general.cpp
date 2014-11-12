@@ -1,12 +1,10 @@
 #include "general.h"
 
-General::General(
-        QWidget *parent, QString arg1,
-        QString arg2, QString _xmlDesc) :
-    _QWidget(parent), type(arg1),
-    arch(arg2), xmlDesc(_xmlDesc)
+General::General(QWidget *parent, QString _caps, QString _xmlDesc) :
+    _QWidget(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("Domain");
+    readCapabilities();
     typeLabel = new QLabel(QString("VM Type: %1").arg(type.toUpper()), this);
     archLabel = new QLabel(QString("Host Arch: %1").arg(arch), this);
     nameLabel = new QLabel("Name:", this);
@@ -105,8 +103,35 @@ QString General::closeDataEdit()
     };
     return QString();
 }
+void General::changeArch(QString &_arch)
+{
+    type = _arch;
+    typeLabel->setText(QString("VM Type: %1").arg(type.toUpper()));
+}
 
 /* private slots */
+void General::readCapabilities()
+{
+    QDomDocument doc;
+    doc.setContent(capabilities);
+    QDomElement _domain = doc.
+            firstChildElement("capabilities").
+            firstChildElement("guest").
+            firstChildElement("arch").
+            firstChildElement("domain");
+    if ( !_domain.isNull() ) {
+        type = _domain.attribute("type");
+    };
+    arch = doc.firstChildElement("capabilities").
+               firstChildElement("host").
+               firstChildElement("cpu").
+               firstChildElement("arch").
+               firstChild().toText().data();
+    os_type = doc.firstChildElement("capabilities").
+               firstChildElement("guest").
+               firstChildElement("os_type").
+               firstChild().toText().data();
+}
 void General::stateChanged()
 {
     if ( currentStateSaved ) {

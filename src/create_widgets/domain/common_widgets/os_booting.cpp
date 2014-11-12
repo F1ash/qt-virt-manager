@@ -1,14 +1,16 @@
 #include "os_booting.h"
 
-OS_Booting::OS_Booting(
-        QWidget *parent, QString _xmlDesc) :
-    _QWidget(parent), xmlDesc(_xmlDesc)
+OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
+    _QWidget(parent), capabilities(_caps),xmlDesc(_xmlDesc)
 {
     setObjectName("OS_Booting");
+    readCapabilities();
+    architecture = new _Arch(this, capabilities);
     // workaround
     editor = new QTextEdit(this);
     //
     scrolledLayout = new QVBoxLayout(this);
+    scrolledLayout->addWidget(architecture);
     scrolledLayout->addWidget(editor);
     scrolledLayout->addStretch(-1);
     scrolled = new QWidget(this);
@@ -35,6 +37,12 @@ OS_Booting::OS_Booting(
             this, SLOT(revertSecData()));
     connect(restorePanel, SIGNAL(saveData()),
             this, SLOT(saveSecData()));
+    connect(architecture, SIGNAL(domainType(QString&)),
+            this, SIGNAL(domainType(QString&)));
+    connect(architecture, SIGNAL(osType(QString&)),
+            this, SLOT(changeOSType(QString&)));
+    connect(architecture, SIGNAL(emulatorType(QString&)),
+            this, SIGNAL(emulatorType(QString&)));
 }
 
 /* public slots */
@@ -67,6 +75,28 @@ QString OS_Booting::closeDataEdit()
 }
 
 /* private slots */
+void OS_Booting::readCapabilities()
+{
+    QDomDocument doc;
+    doc.setContent(capabilities);
+    QDomElement _domain = doc.
+            firstChildElement("capabilities").
+            firstChildElement("guest").
+            firstChildElement("arch").
+            firstChildElement("domain");
+    if ( !_domain.isNull() ) {
+        type = _domain.attribute("type");
+    };
+    arch = doc.firstChildElement("capabilities").
+               firstChildElement("host").
+               firstChildElement("cpu").
+               firstChildElement("arch").
+               firstChild().toText().data();
+    os_type = doc.firstChildElement("capabilities").
+               firstChildElement("guest").
+               firstChildElement("os_type").
+               firstChild().toText().data();
+}
 void OS_Booting::stateChanged()
 {
     if ( currentStateSaved ) {
@@ -115,4 +145,9 @@ void OS_Booting::saveSecData()
     currentDeviceXMLDesc = doc.toString();
     currentStateSaved = true;
     restorePanel->stateChanged(false);
+}
+void OS_Booting::changeOSType(QString &_type)
+{
+    os_type = _type;
+    //qDebug()<<os_type;
 }

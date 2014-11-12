@@ -147,40 +147,19 @@ bool CreateVirtDomain::getShowing() const
 /* private slots */
 void CreateVirtDomain::readCapabilities()
 {
-    QString capabilities;
-    capabilities = QString("%1").arg(virConnectGetCapabilities(currWorkConnect));
+    capabilities = QString("%1")
+            .arg(virConnectGetCapabilities(currWorkConnect));
     //qDebug()<<capabilities;
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     doc.setContent(capabilities);
-    arch = doc.firstChildElement("capabilities").
-               firstChildElement("host").
-               firstChildElement("cpu").
-               firstChildElement("arch").
-               firstChild().toText().data();
-    os_type = doc.firstChildElement("capabilities").
-               firstChildElement("guest").
-               firstChildElement("os_type").
-               firstChild().toText().data();
-    type = doc.firstChildElement("capabilities").
-               firstChildElement("guest").
-               firstChildElement("arch").
-               firstChildElement("domain").
-               attribute("type", "???");
-    memValue = doc.firstChildElement("capabilities").
-               firstChildElement("host").
-               firstChildElement("topology").
-               firstChildElement("cells").
-               firstChildElement("cell").
-               firstChildElement("memory").
-               firstChild().toText().data();
-    memUnit = doc.firstChildElement("capabilities").
-               firstChildElement("host").
-               firstChildElement("topology").
-               firstChildElement("cells").
-               firstChildElement("cell").
-               firstChildElement("memory").
-               attribute("unit", "???");
-    qDebug()<<"in Host:"<<arch<<os_type<<type<<memUnit<<memValue;
+    QDomElement _domain = doc.
+            firstChildElement("capabilities").
+            firstChildElement("guest").
+            firstChildElement("arch").
+            firstChildElement("domain");
+    if ( !_domain.isNull() ) {
+        type = _domain.attribute("type");
+    };
 }
 void CreateVirtDomain::readyDataLists()
 {
@@ -257,19 +236,19 @@ void CreateVirtDomain::buildXMLDescription()
     root.setAttribute("type", type.toLower());
     doc.appendChild(root);
     devices = doc.createElement("devices");
-    WidgetList::const_iterator Wdg;
-    for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
-        if ( NULL==*Wdg ) continue;
-        tabWidget->setCurrentWidget(*Wdg);
-        QString property = (*Wdg)->objectName().split(":").last();
+    foreach (QString key, wdgList.keys()) {
+        _QWidget *Wdg = static_cast<_QWidget*>(
+                    wdgList.value(key));
+        if ( NULL==Wdg ) continue;
+        tabWidget->setCurrentWidget(Wdg);
         QDomNodeList list;
-        if ( property=="Device" ) {
-            list = (*Wdg)->getDataDocument().firstChildElement("devices").childNodes();
+        if ( key=="Computer" ) {
+            list = Wdg->getDataDocument().firstChildElement("devices").childNodes();
             _element = devices;
         } else {
-            tabWidget->setCurrentWidget(*Wdg);
-            (*Wdg)->closeDataEdit();
-            list = (*Wdg)->getDataDocument().firstChildElement("data").childNodes();
+            tabWidget->setCurrentWidget(Wdg);
+            Wdg->closeDataEdit();
+            list = Wdg->getDataDocument().firstChildElement("data").childNodes();
             _element = root;
         };
         /*
@@ -304,49 +283,53 @@ void CreateVirtDomain::set_Result()
 }
 void CreateVirtDomain::create_specified_widgets()
 {
-    if ( type.toLower() == "lxc" ) {
-        wdgList.append(new General(this, type, arch, xmlDesc));
-        wdgList.append(new OS_Booting(this, xmlDesc));
-        wdgList.append(new Memory(this, memUnit, memValue, xmlDesc));
-        wdgList.append(new CPU(this, xmlDesc));
-        wdgList.append(new Devices(
-                           this,
-                           currWorkConnect,
-                           xmlDesc));
-        wdgList.append(new SecurityLabel(this, xmlDesc));
-    } else if ( type.toLower() == "qemu" ) {
-        wdgList.append(new General(this, type, arch, xmlDesc));
-        wdgList.append(new OS_Booting(this, xmlDesc));
-        wdgList.append(new Memory(this, memUnit, memValue, xmlDesc));
-        wdgList.append(new CPU(this, xmlDesc));
-        wdgList.append(new Devices(
-                           this,
-                           currWorkConnect,
-                           xmlDesc));
-        wdgList.append(new SecurityLabel(this, xmlDesc));
-    } else if ( type.toLower() == "xen" ) {
-        wdgList.append(new General(this, type, arch, xmlDesc));
+    if ( !type.isEmpty() ) {
+        wdgList.insert("General", new General(this, capabilities, xmlDesc));
+        wdgList.insert("OS_Booting", new OS_Booting(this, capabilities, xmlDesc));
+        wdgList.insert("Memory", new Memory(this, capabilities, xmlDesc));
+        wdgList.insert("CPU", new CPU(this, xmlDesc));
+        wdgList.insert("Computer",
+                       new Devices(this, currWorkConnect, xmlDesc));
+        wdgList.insert("SecurityLabel", new SecurityLabel(this, xmlDesc));
+        connect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
+                wdgList.value("General"), SLOT(changeArch(QString&)));
+        connect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
+                wdgList.value("Computer"), SLOT(setEmulator(QString&)));
+        static_cast<OS_Booting*>(wdgList.value("OS_Booting"))->architecture->setItems();
     } else wdgList.clear();
 }
 void CreateVirtDomain::set_specified_Tabs()
 {
     if ( NULL==tabWidget ) tabWidget = new QTabWidget(this);
-    WidgetList::const_iterator Wdg;
-    for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
-        if ( NULL!=*Wdg ) {
-            qDebug()<<(*Wdg)->objectName();
-            QString name = (*Wdg)->objectName().split(":").first();
-            tabWidget->addTab(*Wdg, QIcon::fromTheme(name.toLower()), name);
+    foreach (QString key, wdgList.keys()) {
+        uint idx;
+        _QWidget *Wdg = static_cast<_QWidget*>(
+                    wdgList.value(key));
+        if ( NULL!=Wdg ) {
+            if ( key=="General" ) idx = 0;
+            else if ( key=="OS_Booting" ) idx = 1;
+            else if ( key=="Memory" ) idx = 2;
+            else if ( key=="CPU" ) idx = 3;
+            else if ( key=="Computer" ) idx = 4;
+            else if ( key=="SecurityLabel" ) idx = 5;
+            else continue;
+            tabWidget->insertTab(idx , Wdg, QIcon::fromTheme(key.toLower()), key);
         };
     };
+    tabWidget->setCurrentIndex(0);
 }
 void CreateVirtDomain::delete_specified_widgets()
 {
     tabWidget->clear();
-    WidgetList::const_iterator Wdg;
-    for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
-        if ( NULL!=*Wdg ) {
-            delete *Wdg;
+    disconnect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
+               wdgList.value("General"), SLOT(changeArch(QString&)));
+    disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
+               wdgList.value("Computer"), SLOT(setEmulator(QString&)));
+    foreach (QString key, wdgList.keys()) {
+        _QWidget *Wdg = static_cast<_QWidget*>(
+                    wdgList.value(key));
+        if ( NULL!=Wdg ) {
+            delete Wdg;
         };
     };
     wdgList.clear();
@@ -358,10 +341,15 @@ void CreateVirtDomain::restoreParameters()
 {
     setEnabled(false);
     tabWidget->clear();
-    WidgetList::const_iterator Wdg;
-    for (Wdg=wdgList.constBegin(); Wdg!=wdgList.constEnd(); Wdg++) {
-        if ( NULL!=*Wdg ) {
-            delete *Wdg;
+    disconnect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
+               wdgList.value("General"), SLOT(changeArch(QString&)));
+    disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
+               wdgList.value("Computer"), SLOT(setEmulator(QString&)));
+    foreach (QString key, wdgList.keys()) {
+        _QWidget *Wdg = static_cast<_QWidget*>(
+                    wdgList.value(key));
+        if ( NULL!=Wdg ) {
+            delete Wdg;
         };
     };
     wdgList.clear();

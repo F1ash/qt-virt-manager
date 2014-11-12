@@ -174,11 +174,30 @@ QDomDocument Devices::getDataDocument() const
     //qDebug()<<doc.toString()<<"Device result";
     return doc;
 }
+void Devices::setEmulator(QString &_emulator)
+{
+    QList<QListWidgetItem*> _family =
+            usedDeviceList->findItems(
+                "emulator", Qt::MatchContains);
+    QDomDocument doc;
+    QDomElement _dev, _emul;
+    _dev = doc.createElement("device");
+    _emul = doc.createElement("emulator");
+    QDomText data = doc.createTextNode(_emulator);
+    _emul.appendChild(data);
+    _dev.appendChild(_emul);
+    doc.appendChild(_dev);
+    if ( !_family.isEmpty() ) {
+        usedDeviceList->takeItem(usedDeviceList->row(_family.at(0)));
+        //_family.at(0)->setData(Qt::UserRole, doc.toString());
+    };
+    addDeviceToUsedDevList(doc);
+}
 
 /* private slots */
 QDomDocument Devices::chooseNewDevice()
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     //qDebug()<<"choose New Device";
     if ( deviceStack==NULL ) {
         deviceStack = new DeviceStack(this, currWorkConnect);
