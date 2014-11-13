@@ -1,7 +1,7 @@
 #include "os_booting.h"
 
-LXC_OSBooting::LXC_OSBooting(QWidget *parent, QString arg1, QString arg2) :
-    _QWidget(parent), os_type(arg1), arch(arg2)
+LXC_OSBooting::LXC_OSBooting(QWidget *parent, QString _caps) :
+    _QWidget(parent), capabilities(_caps)
 {
     setObjectName("Booting");
     initPathLabel = new QLabel("Init path (Ex.: /sbin/init, /bin/sh, etc.):", this);
@@ -43,69 +43,61 @@ LXC_OSBooting::LXC_OSBooting(QWidget *parent, QString arg1, QString arg2) :
     nameSpaceWidget = new QWidget(this);
     nameSpaceWidget->setLayout(nameSpaceLayout);
     nameSpaceWidget->setEnabled(false);
+    architecture = new _Arch(this, capabilities);
     commonLayout = new QVBoxLayout();
+    commonLayout->addWidget(architecture);
     commonLayout->addWidget(initPathLabel);
     commonLayout->addWidget(initPath);
     commonLayout->addWidget(nameSpaceEnable);
     commonLayout->addWidget(nameSpaceWidget);
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
-    connect(nameSpaceEnable, SIGNAL(toggled(bool)), nameSpaceWidget, SLOT(setEnabled(bool)));
-}
-LXC_OSBooting::~LXC_OSBooting()
-{
-    disconnect(nameSpaceEnable, SIGNAL(toggled(bool)), nameSpaceWidget, SLOT(setEnabled(bool)));
-    delete initPathLabel;
-    initPathLabel = NULL;
-    delete initPath;
-    initPath = NULL;
-    delete nameSpaceEnable;
-    nameSpaceEnable = NULL;
-    delete startLabel;
-    startLabel = NULL;
-    delete targetLabel;
-    targetLabel = NULL;
-    delete countLabel;
-    countLabel = NULL;
-    delete uidStart;
-    uidStart = NULL;
-    delete gidStart;
-    gidStart = NULL;
-    delete uidLabel;
-    uidLabel = NULL;
-    delete gidLabel;
-    gidLabel = NULL;
-    delete uidTarget;
-    uidTarget = NULL;
-    delete gidTarget;
-    gidTarget = NULL;
-    delete uidCount;
-    uidCount = NULL;
-    delete gidCount;
-    gidCount = NULL;
-    delete nameSpaceLayout;
-    nameSpaceLayout = NULL;
-    delete nameSpaceWidget;
-    nameSpaceWidget = NULL;
-    delete commonLayout;
-    commonLayout = NULL;
+    connect(nameSpaceEnable, SIGNAL(toggled(bool)),
+            nameSpaceWidget, SLOT(setEnabled(bool)));
+    connect(architecture, SIGNAL(domainType(QString&)),
+            this, SIGNAL(domainType(QString&)));
+    connect(architecture, SIGNAL(osType(QString&)),
+            this, SIGNAL(osType(QString&)));
+    connect(architecture, SIGNAL(osType(QString&)),
+            this, SLOT(changeOSType(QString&)));
+    connect(architecture, SIGNAL(archType(QString&)),
+            this, SLOT(changeArch(QString&)));
+    connect(architecture, SIGNAL(emulatorType(QString&)),
+            this, SIGNAL(emulatorType(QString&)));
+    architecture->setItems();
+    // dataChanged connectins
+    connect(architecture, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(initPath, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(nameSpaceEnable, SIGNAL(toggled(bool)),
+            this, SLOT(stateChanged()));
+    connect(uidTarget, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(uidCount, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(gidTarget, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(gidCount, SIGNAL(valueChanged(int)),
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
 QDomDocument LXC_OSBooting::getDataDocument() const
 {
     QDomText data;
-    QDomDocument doc = QDomDocument();
-    QDomElement os, type, initElem, idmap, uid, gid, _data;
+    QDomDocument doc;
+    QDomElement _os, _type, _initElem,
+            _idmap, _uid, _gid, _data;
     _data = doc.createElement("data");
-    os = doc.createElement("os");
-    _data.appendChild(os);
+    _os = doc.createElement("os");
+    _data.appendChild(_os);
 
-    type= doc.createElement("type");
-    type.setAttribute("arch", arch);
+    _type = doc.createElement("type");
+    _type.setAttribute("arch", arch);
     data = doc.createTextNode(os_type);
-    type.appendChild(data);
-    os.appendChild(type);
+    _type.appendChild(data);
+    _os.appendChild(_type);
 
     QStringList cmd = initPath->text().split(" ");
     if ( cmd.length() && !cmd.first().isEmpty() ) {
@@ -113,32 +105,93 @@ QDomDocument LXC_OSBooting::getDataDocument() const
             QString tagName;
             if ( i == 0 ) tagName = "init";
             else tagName = "initarg";
-            initElem = doc.createElement(tagName);
+            _initElem = doc.createElement(tagName);
             data = doc.createTextNode(cmd.at(i));
-            initElem.appendChild(data);
-            os.appendChild(initElem);
+            _initElem.appendChild(data);
+            _os.appendChild(_initElem);
             //qDebug()<<tagName<<cmd.at(i);
         };
     };
 
     if ( nameSpaceEnable->isChecked() ) {
-        idmap = doc.createElement("idmap");
-        _data.appendChild(idmap);
-        uid = doc.createElement("uid");
-        uid.setAttribute("start", uidStart->text());
-        uid.setAttribute("target", QString("%1").arg(uidTarget->value()));
-        uid.setAttribute("count",QString("%1").arg( uidCount->value()));
-        idmap.appendChild(uid);
-        gid = doc.createElement("gid");
-        gid.setAttribute("start", gidStart->text());
-        gid.setAttribute("target", QString("%1").arg(gidTarget->value()));
-        gid.setAttribute("count", QString("%1").arg(gidCount->value()));
-        idmap.appendChild(gid);
+        _idmap = doc.createElement("idmap");
+        _data.appendChild(_idmap);
+        _uid = doc.createElement("uid");
+        _uid.setAttribute("start", uidStart->text());
+        _uid.setAttribute("target", QString("%1").arg(uidTarget->value()));
+        _uid.setAttribute("count",QString("%1").arg( uidCount->value()));
+        _idmap.appendChild(_uid);
+        _gid = doc.createElement("gid");
+        _gid.setAttribute("start", gidStart->text());
+        _gid.setAttribute("target", QString("%1").arg(gidTarget->value()));
+        _gid.setAttribute("count", QString("%1").arg(gidCount->value()));
+        _idmap.appendChild(_gid);
     };
     doc.appendChild(_data);
     //qDebug()<<doc.toString();
     return doc;
 }
+void LXC_OSBooting::setDataDescription(QString &xmlDesc)
+{
+    //qDebug()<<xmlDesc;
+    QDomDocument doc;
+    doc.setContent(xmlDesc);
+    QDomElement _os, _type, _init, _initarg,
+            _idmap, _uid, _gid;
+    _os = doc
+            .firstChildElement("domain")
+            .firstChildElement("os");
+    _type = _os.firstChildElement("type");
+    _init = _os.firstChildElement("init");
+    _idmap = doc
+            .firstChildElement("domain")
+            .firstChildElement("idmap");
+    QString _attr;
+    if ( !_init.isNull() ) {
+        _attr.append(
+                    _init.firstChild().toText().data());
+        _initarg = _os.firstChildElement("initarg");
+        while ( !_initarg.isNull() ) {
+            _attr.append(" ");
+            _attr.append(
+                        _initarg.firstChild().toText().data());
+            _initarg = _initarg.nextSiblingElement("initarg");
+        };
+        initPath->setText(_attr);
+    };
+    nameSpaceEnable->setChecked( !_idmap.isNull() );
+    if ( !_idmap.isNull() ) {
+        _uid = _idmap.firstChildElement("uid");
+        _gid = _idmap.firstChildElement("gid");
+        if ( !_uid.isNull() ) {
+            uidTarget->setValue(
+                        _uid.attribute("target").toInt());
+            uidCount->setValue(
+                        _uid.attribute("count").toInt());
+        };
+        if ( !_gid.isNull() ) {
+            gidTarget->setValue(
+                        _gid.attribute("target").toInt());
+            gidCount->setValue(
+                        _gid.attribute("count").toInt());
+        };
+    };
+    if ( !_type.isNull() ) {
+        _attr = _type.attribute("arch");
+        architecture->setArch(_attr);
+    };
+}
+void LXC_OSBooting::setInitState()
+{
+    if ( this->isEnabled() ) architecture->setItems();
+}
 
 /* private slots */
-
+void LXC_OSBooting::changeArch(QString &_arch)
+{
+    arch = _arch;
+}
+void LXC_OSBooting::changeOSType(QString &_os_type)
+{
+    os_type = _os_type;
+}

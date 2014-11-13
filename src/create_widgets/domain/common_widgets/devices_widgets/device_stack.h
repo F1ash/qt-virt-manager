@@ -19,7 +19,6 @@ public:
     ~DeviceStack();
 
 signals:
-    void             errorMsg(QString);
 
 private:
     QSettings        settings;
@@ -49,15 +48,9 @@ public slots:
     QDomDocument     getResult() const;
 
 private slots:
-    void             readNetworkList();
-    void             readNodeDevicesList();
     void             showDevice(QListWidgetItem*);
     void             showDevice();
     void             set_Result();
-
-    void             sendConnErrors();
-    void             sendGlobalErrors();
-
 };
 
 #endif // DEVICE_STACK_H

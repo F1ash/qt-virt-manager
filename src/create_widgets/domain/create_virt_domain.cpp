@@ -295,7 +295,6 @@ void CreateVirtDomain::create_specified_widgets()
                 wdgList.value("General"), SLOT(changeArch(QString&)));
         connect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
                 wdgList.value("Computer"), SLOT(setEmulator(QString&)));
-        static_cast<OS_Booting*>(wdgList.value("OS_Booting"))->architecture->setItems();
     } else wdgList.clear();
 }
 void CreateVirtDomain::set_specified_Tabs()
@@ -356,22 +355,4 @@ void CreateVirtDomain::restoreParameters()
     create_specified_widgets();
     set_specified_Tabs();
     setEnabled(true);
-}
-
-void CreateVirtDomain::sendConnErrors()
-{
-    virtErrors = virConnGetLastError(currWorkConnect);
-    if ( virtErrors!=NULL && virtErrors->code>0 ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-        virResetError(virtErrors);
-    } else sendGlobalErrors();
-}
-void CreateVirtDomain::sendGlobalErrors()
-{
-    virtErrors = virGetLastError();
-    if ( virtErrors!=NULL && virtErrors->code>0 )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-    virResetLastError();
 }

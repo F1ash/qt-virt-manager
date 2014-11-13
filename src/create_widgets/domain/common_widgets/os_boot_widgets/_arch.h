@@ -1,13 +1,13 @@
 #ifndef _ARCH_H
 #define _ARCH_H
 
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/domain/_qwidget.h"
 #include <QLabel>
 #include <QComboBox>
 #include <QGridLayout>
 #include <QDomDocument>
 
-class _Arch : public QWidget
+class _Arch : public _QWidget
 {
     Q_OBJECT
 public:
@@ -16,6 +16,7 @@ public:
 
 signals:
     void             domainType(QString&);
+    void             archType(QString&);
     void             osType(QString&);
     void             emulatorType(QString&);
 
@@ -28,6 +29,7 @@ private:
 
 public slots:
     void             setItems();
+    void             setArch(const QString&);
 
 private slots:
     void             archChanged(const QString&);

@@ -10,17 +10,19 @@ class TrayIcon : public QSystemTrayIcon
 public :
   TrayIcon(QWidget *parent);
 
-  QAction *hideAction;
-  QAction *logUpAction;
-  QAction *monitorAction;
-  QAction *closeAction;
+  QAction   *hideAction;
+  QAction   *logUpAction;
+  QAction   *monitorAction;
+  QAction   *taskUpAction;
+  QAction   *closeAction;
 
 private :
-  QMenu *trayIconMenu;
+  QMenu     *trayIconMenu;
 
 public slots:
-  void setLogUpActionText(QString&);
-  void stateMonitorVisibilityChanged(bool);
+  void       setLogUpActionText(QString&);
+  void       stateMonitorVisibilityChanged(bool);
+  void       stateTaskBarVisibilityChanged(bool);
 };
 
 #endif

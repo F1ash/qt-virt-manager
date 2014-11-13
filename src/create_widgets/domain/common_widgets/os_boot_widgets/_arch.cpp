@@ -1,7 +1,7 @@
 #include "_arch.h"
 
 _Arch::_Arch(QWidget *parent, QString _caps) :
-    QWidget(parent), capabilities(_caps)
+    _QWidget(parent), capabilities(_caps)
 {
     doc.setContent(capabilities);
     archLabel = new QLabel("Architectures:", this);
@@ -16,11 +16,17 @@ _Arch::_Arch(QWidget *parent, QString _caps) :
     setLayout(commonLayout);
     connect(arch, SIGNAL(currentIndexChanged(const QString&)),
             this, SLOT(archChanged(const QString&)));
+    // dataChanged connections
+    connect(arch, SIGNAL(currentIndexChanged(const QString&)),
+            this, SLOT(stateChanged()));
+    connect(machines, SIGNAL(currentIndexChanged(const QString&)),
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
 void _Arch::setItems()
 {
+    arch->clear();
     QDomElement _el = doc
             .firstChildElement("capabilities")
             .firstChildElement("guest");
@@ -32,11 +38,17 @@ void _Arch::setItems()
         _el = _el.nextSiblingElement("guest");
     };
 }
+void _Arch::setArch(const QString &_arch)
+{
+    int idx = arch->findText(_arch, Qt::MatchContains);
+    arch->setCurrentIndex( (idx<0)? 0:idx );
+}
 
 /* private slots */
 void _Arch::archChanged(const QString &_arch)
 {
-    QString _domType, _osType, _emulType;
+    QString _domType, _osType, _emulType, _Arch;
+    _Arch = _arch;
     machines->clear();
     QDomElement _el = doc
             .firstChildElement("capabilities")
@@ -88,6 +100,7 @@ void _Arch::archChanged(const QString &_arch)
         _el = _el.nextSiblingElement("guest");
     };
     emit domainType(_domType);
+    emit archType(_Arch);
     emit osType(_osType);
     emit emulatorType(_emulType);
 }

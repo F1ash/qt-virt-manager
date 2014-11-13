@@ -44,11 +44,8 @@
 
 /* LXC WIDGETS HEADERS */
 #include "lxc_widgets/os_booting.h"
-#include "lxc_widgets/net_interface.h"
-
 
 /* QEMU WIDGETS HEADERS */
-
 
 /* XEN WIDGETS HEADERS */
 

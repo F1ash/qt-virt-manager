@@ -1,17 +1,31 @@
 #include "os_booting.h"
 
 OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
-    _QWidget(parent), capabilities(_caps),xmlDesc(_xmlDesc)
+    _QWidget(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("OS_Booting");
     readCapabilities();
-    architecture = new _Arch(this, capabilities);
-    // workaround
-    editor = new QTextEdit(this);
-    //
+    bootType = new QComboBox(this);
+    bootType->addItem("BIOS bootloader", "bios");
+    bootType->addItem("Host bootloader", "host");
+    bootType->addItem("Direct kernel boot", "kernel");
+    bootType->addItem("Container boot", "container");
+    bootSet = new QStackedWidget(this);
+    bootSet->addWidget(new BIOS_Boot(this, capabilities));
+    bootSet->addWidget(new Host_Boot(this));
+    bootSet->addWidget(new Direct_Kernel_Boot(this));
+    bootSet->addWidget(new LXC_OSBooting(this, capabilities));
+    bootSet->widget(0)->setEnabled(type.toLower()!="lxc");
+    bootSet->widget(1)->setEnabled(type.toLower()!="lxc");
+    bootSet->widget(2)->setEnabled(type.toLower()!="lxc");
+    bootSet->widget(3)->setEnabled(type.toLower()=="lxc");
+    connect(bootType, SIGNAL(currentIndexChanged(int)),
+            bootSet, SLOT(setCurrentIndex(int)));
+    connect(bootType, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(changeBootType()));
     scrolledLayout = new QVBoxLayout(this);
-    scrolledLayout->addWidget(architecture);
-    scrolledLayout->addWidget(editor);
+    scrolledLayout->addWidget(bootType, 0, Qt::AlignLeft);
+    scrolledLayout->addWidget(bootSet);
     scrolledLayout->addStretch(-1);
     scrolled = new QWidget(this);
     scrolled->setLayout(scrolledLayout);
@@ -26,8 +40,6 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
     setLayout(commonLayout);
     readXMLDesciption();
     // dataChanged connections
-    connect(editor, SIGNAL(textChanged()),
-            this, SIGNAL(dataChanged()));
     connect(this, SIGNAL(dataChanged()),
             restorePanel, SLOT(stateChanged()));
     // action connections
@@ -37,25 +49,24 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
             this, SLOT(revertSecData()));
     connect(restorePanel, SIGNAL(saveData()),
             this, SLOT(saveSecData()));
-    connect(architecture, SIGNAL(domainType(QString&)),
-            this, SIGNAL(domainType(QString&)));
-    connect(architecture, SIGNAL(osType(QString&)),
-            this, SLOT(changeOSType(QString&)));
-    connect(architecture, SIGNAL(emulatorType(QString&)),
-            this, SIGNAL(emulatorType(QString&)));
+    for (uint i=0; i<bootSet->count(); i++) {
+        connect(bootSet->widget(i), SIGNAL(domainType(QString&)),
+                this, SIGNAL(domainType(QString&)));
+        connect(bootSet->widget(i), SIGNAL(osType(QString&)),
+                this, SLOT(changeOSType(QString&)));
+        connect(bootSet->widget(i), SIGNAL(emulatorType(QString&)),
+                this, SIGNAL(emulatorType(QString&)));
+        connect(bootSet->widget(i), SIGNAL(dataChanged()),
+                this, SLOT(stateChanged()));
+    };
 }
 
 /* public slots */
 QDomDocument OS_Booting::getDataDocument() const
 {
-    QDomDocument doc, _osDesc;
-    QDomElement _data;
-    _data = doc.createElement("data");
-    _osDesc.setContent(editor->toPlainText());
-    _data.appendChild(_osDesc);
-    doc.appendChild(_data);
-    //qDebug()<<doc.toString();
-    return doc;
+    _QWidget *wdg = static_cast<_QWidget*>(
+                bootSet->currentWidget());
+    return wdg->getDataDocument();
 }
 QString OS_Booting::closeDataEdit()
 {
@@ -109,19 +120,32 @@ void OS_Booting::readXMLDesciption()
     currentDeviceXMLDesc = xmlDesc;
     readXMLDesciption(currentDeviceXMLDesc);
 }
-void OS_Booting::readXMLDesciption(QString &_xmlDesc)
+void OS_Booting::readXMLDesciption(QString &xmlDesc)
 {
     //if ( _xmlDesc.isEmpty() ) return;
-    QDomDocument doc, _osDesc;
-    QDomElement _domain, _os;
-    doc.setContent(_xmlDesc);
+    QDomDocument doc;
+    QDomElement _domain, _os, _type;
+    doc.setContent(xmlDesc);
     _domain = doc.firstChildElement("domain");
     _os = _domain.firstChildElement("os");
-    _osDesc.setContent(QString(""));
-    _osDesc.appendChild(_os);
-    QString _description = QString(
-                _osDesc.toDocument().toByteArray(4).data());
-    editor->setText(_description);
+    _type = _os.firstChildElement("type");
+    QString _bootType;
+    if ( !_domain.firstChildElement("bootloader").isNull() ) {
+        _bootType.append("host");
+    } else if ( !_type.isNull() &&
+                _type.firstChild().toText().data()=="exe" ) {
+        _bootType.append("container");
+    } else if ( !_type.isNull() &&
+                !_os.firstChildElement("kernel")
+                .isNull() ) {
+        _bootType.append("kernel");
+    };
+    int idx = bootType->findData(
+                _bootType,
+                Qt::UserRole,
+                Qt::MatchContains);
+    bootType->setCurrentIndex( (idx<0)? 0:idx );
+    static_cast<_QWidget*>(bootSet->currentWidget())->setDataDescription(xmlDesc);
 }
 void OS_Booting::resetSecData()
 {
@@ -150,4 +174,11 @@ void OS_Booting::changeOSType(QString &_type)
 {
     os_type = _type;
     //qDebug()<<os_type;
+}
+void OS_Booting::changeBootType()
+{
+    QString _empty;
+    emit emulatorType(_empty);
+    emit domainType(_empty);
+    static_cast<_QWidget*>(bootSet->currentWidget())->setInitState();
 }

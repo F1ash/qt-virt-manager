@@ -32,6 +32,7 @@ public slots:
     virtual QDomDocument     getDataDocument() const;
     virtual void             setDataDescription(QString&);
     virtual QString          closeDataEdit();
+    virtual void             setInitState();
 };
 
 #endif // _QWIDGET_H

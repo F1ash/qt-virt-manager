@@ -91,6 +91,9 @@ set (HEADERS
   src/create_widgets/domain/create_virt_domain.h
   src/create_widgets/domain/common_widgets/os_booting.h
   src/create_widgets/domain/common_widgets/os_boot_widgets/_arch.h
+  src/create_widgets/domain/common_widgets/os_boot_widgets/bios_boot.h
+  src/create_widgets/domain/common_widgets/os_boot_widgets/host_boot.h
+  src/create_widgets/domain/common_widgets/os_boot_widgets/direct_kernel_boot.h
   src/create_widgets/domain/common_widgets/general.h
   src/create_widgets/domain/common_widgets/memory.h
   src/create_widgets/domain/common_widgets/memory_widgets/hugepages.h
@@ -218,7 +221,6 @@ set (HEADERS
   src/create_widgets/domain/edit_widgets/net_interfaces_edit.h
   src/create_widgets/domain/edit_widgets/filesystems_edit.h
   src/create_widgets/domain/edit_widgets/disk_edit.h
-  src/create_widgets/domain/lxc_widgets/net_interface.h
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
   src/create_widgets/network/create_virt_network.h
@@ -232,6 +234,8 @@ set (HEADERS
   src/state_monitor/domain_monitor_thread.h
   src/state_monitor/domain_state_viewer.h
   src/state_monitor/svg_tamplates.h
+
+  src/task_bar/task_bar.h
 
   # qtermwidget
   src/qtermwidget/lib/Filter.h                
@@ -321,6 +325,9 @@ set (SOURCES
   src/create_widgets/domain/restore_panel.cpp
   src/create_widgets/domain/common_widgets/os_booting.cpp
   src/create_widgets/domain/common_widgets/os_boot_widgets/_arch.cpp
+  src/create_widgets/domain/common_widgets/os_boot_widgets/bios_boot.cpp
+  src/create_widgets/domain/common_widgets/os_boot_widgets/host_boot.cpp
+  src/create_widgets/domain/common_widgets/os_boot_widgets/direct_kernel_boot.cpp
   src/create_widgets/domain/common_widgets/general.cpp
   src/create_widgets/domain/common_widgets/memory.cpp
   src/create_widgets/domain/common_widgets/memory_widgets/hugepages.cpp
@@ -448,7 +455,6 @@ set (SOURCES
   src/create_widgets/domain/edit_widgets/net_interfaces_edit.cpp
   src/create_widgets/domain/edit_widgets/filesystems_edit.cpp
   src/create_widgets/domain/edit_widgets/disk_edit.cpp
-  src/create_widgets/domain/lxc_widgets/net_interface.cpp
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   
   src/create_widgets/network/create_virt_network.cpp
@@ -461,6 +467,8 @@ set (SOURCES
   src/state_monitor/domain_state_monitor.cpp
   src/state_monitor/domain_monitor_thread.cpp
   src/state_monitor/domain_state_viewer.cpp
+
+  src/task_bar/task_bar.cpp
 
   # qtermwidget
   src/qtermwidget/lib/BlockArray.cpp

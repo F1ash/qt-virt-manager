@@ -2,11 +2,15 @@
 #define OS_BOOTING_H
 
 #include <QScrollArea>
+#include <QStackedWidget>
 #include <QMessageBox>
-#include <QTextEdit>
 #include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/restore_panel.h"
+#include "create_widgets/domain/lxc_widgets/os_booting.h"
 #include "os_boot_widgets/_arch.h"
+#include "os_boot_widgets/bios_boot.h"
+#include "os_boot_widgets/host_boot.h"
+#include "os_boot_widgets/direct_kernel_boot.h"
 
 class OS_Booting : public _QWidget
 {
@@ -16,7 +20,6 @@ public:
             QWidget *parent = NULL,
             QString  _caps  = "",
             QString  _xmlDesc = QString());
-    _Arch           *architecture;
 
 signals:
     void             archChanged(QString&);
@@ -31,7 +34,8 @@ private:
     QString          type;
     QString          arch;
     QString          os_type;
-    QTextEdit       *editor;
+    QComboBox       *bootType;
+    QStackedWidget  *bootSet;
     RestorePanel    *restorePanel;
 
     QScrollArea     *commonWdg;
@@ -52,6 +56,7 @@ private slots:
     void             revertSecData();
     void             saveSecData();
     void             changeOSType(QString&);
+    void             changeBootType();
 };
 
 #endif // OS_BOOTING_H

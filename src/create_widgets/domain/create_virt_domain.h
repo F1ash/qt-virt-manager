@@ -64,10 +64,6 @@ private slots:
     void             set_specified_Tabs();
     void             delete_specified_widgets();
     void             restoreParameters();
-
-    void             sendConnErrors();
-    void             sendGlobalErrors();
-
 };
 
 #endif // CREATE_VIRT_DOMAIN_H

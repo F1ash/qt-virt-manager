@@ -364,6 +364,7 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc)
          usedDeviceList->insertItem(row, item);
          //usedDeviceList->insertItem(row, name);
          //usedDeviceList->item(row)->setData(Qt::UserRole, doc.toString());
+         showDevice(item, NULL);
          inserted = true;
     } while ( !inserted );
     //qDebug()<<"added New Device:"<<name;

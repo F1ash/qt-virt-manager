@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
                    QMainWindow::ForceTabbedDocks
     );
     restoreGeometry(settings.value("Geometry").toByteArray());
+    initTaskBar();
     initDomainStateMonitor();
     initTrayIcon();
     initConnListWidget();
@@ -36,6 +37,7 @@ MainWindow::~MainWindow()
   disconnect(trayIcon->hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
   disconnect(trayIcon->logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
   disconnect(trayIcon->monitorAction, SIGNAL(triggered()), domainsStateMonitor, SLOT(changeVisibility()));
+  disconnect(trayIcon->taskUpAction, SIGNAL(triggered()), taskBar, SLOT(changeVisibility()));
   disconnect(trayIcon->closeAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
   disconnect(connListWidget, SIGNAL(removeConnect(QString&)), this, SLOT(removeConnectItem(QString&)));
   disconnect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
@@ -74,9 +76,14 @@ MainWindow::~MainWindow()
              this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
   disconnect(domainsStateMonitor, SIGNAL(visibilityChanged(bool)),
              trayIcon, SLOT(stateMonitorVisibilityChanged(bool)));
+  disconnect(taskBar, SIGNAL(visibilityChanged(bool)),
+             trayIcon, SLOT(stateTaskBarVisibilityChanged(bool)));
 
   delete domainsStateMonitor;
   domainsStateMonitor = NULL;
+
+  delete taskBar;
+  taskBar = NULL;
 
   if ( wait_thread!=NULL ) {
       disconnect(wait_thread, SIGNAL(finished()), this, SLOT(closeEvent()));
@@ -132,6 +139,7 @@ MainWindow::~MainWindow()
 }
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
+  taskBar->saveCurrentState();
   domainsStateMonitor->saveCurrentState();
   settings.setValue("Geometry", saveGeometry());
   settings.setValue("State", saveState());
@@ -175,6 +183,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
   settings.sync();
   if ( !this->isVisible() ) changeVisibility();
   domainsStateMonitor->stopMonitoring();
+  taskBar->stopTaskComputing();
   if ( runningConnectsExist() && wait_thread==NULL ) {
       /*
       QString q;
@@ -208,6 +217,10 @@ void MainWindow::closeEvent()
 {
     this->close();
 }
+void MainWindow::initTaskBar()
+{
+    taskBar = new TaskBar(this);
+}
 void MainWindow::initDomainStateMonitor()
 {
     domainsStateMonitor = new DomainStateMonitor(this);
@@ -220,11 +233,16 @@ void MainWindow::initTrayIcon()
     connect(trayIcon->hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
     connect(trayIcon->logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
     connect(trayIcon->monitorAction, SIGNAL(triggered()), domainsStateMonitor, SLOT(changeVisibility()));
+    connect(trayIcon->taskUpAction, SIGNAL(triggered()), taskBar, SLOT(changeVisibility()));
     connect(trayIcon->closeAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
     connect(domainsStateMonitor, SIGNAL(visibilityChanged(bool)),
             trayIcon, SLOT(stateMonitorVisibilityChanged(bool)));
+    connect(taskBar, SIGNAL(visibilityChanged(bool)),
+            trayIcon, SLOT(stateTaskBarVisibilityChanged(bool)));
     trayIcon->stateMonitorVisibilityChanged(
                 domainsStateMonitor->isVisible());
+    trayIcon->stateTaskBarVisibilityChanged(
+                taskBar->isVisible());
 }
 void MainWindow::mainWindowUp()
 {

@@ -54,14 +54,9 @@ public slots:
 
 private slots:
     void             currentStateChanged();
-    void             readNetworkList();
-    void             readNodeDevicesList();
     void             saveDeviceData();
     void             revertDeviceData();
     void             setStartState();
-
-    void             sendConnErrors();
-    void             sendGlobalErrors();
 };
 
 #endif // DEVICE_DATA_H

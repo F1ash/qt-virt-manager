@@ -166,59 +166,6 @@ void DeviceData::currentStateChanged()
     currentStateSaved = false;
     restoreMenu->revertData->setEnabled(true);
 }
-void DeviceData::readNetworkList()
-{
-    virNetworkPtr *networks = NULL;
-    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks(currWorkConnect, &networks, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-    } else {
-        int i = 0;
-        while ( networks[i] != NULL ) {
-            nets.append( virNetworkGetName(networks[i]) );
-            virNetworkFree(networks[i]);
-            i++;
-        };
-    };
-    free(networks);
-}
-void DeviceData::readNodeDevicesList()
-{
-    int i = 0;
-    if ( currWorkConnect!=NULL ) {
-        unsigned int flags =
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SYSTEM |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_PCI_DEV |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_USB_DEV |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_USB_INTERFACE |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_NET |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_HOST |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_TARGET |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_STORAGE |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_FC_HOST |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_VPORTS |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_GENERIC;
-        int ret = virConnectListAllNodeDevices(currWorkConnect, &nodeDevices, flags);
-        if ( ret<0 ) {
-            sendConnErrors();
-        } else {
-            while ( nodeDevices[i] != NULL ) {
-                devices.append( QString("%1\n")
-                                // flags: extra flags; not used yet,
-                                // so callers should always pass 0
-                                .arg(virNodeDeviceGetXMLDesc(nodeDevices[i], 0)));
-                virNodeDeviceFree(nodeDevices[i]);
-                i++;
-            };
-        };
-        free(nodeDevices);
-    };
-    //int devs = virNodeNumOfDevices(currWorkConnect, NULL, 0);
-    //qDebug()<<"Devices("<<devs<<i<<"):\n"<<devices.join("\n");
-}
 void DeviceData::saveDeviceData()
 {
     // save device data as previous state
@@ -251,25 +198,4 @@ void DeviceData::setStartState()
     currentDeviceXMLDesc.clear();
     currentStateSaved = true;
     restoreMenu->revertData->setEnabled(false);
-}
-
-/* unused without
- * readNetworkList() & void readNodeDevicesList()
- */
-void DeviceData::sendConnErrors()
-{
-    virtErrors = virConnGetLastError(currWorkConnect);
-    if ( virtErrors!=NULL && virtErrors->code>0 ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-        virResetError(virtErrors);
-    } else sendGlobalErrors();
-}
-void DeviceData::sendGlobalErrors()
-{
-    virtErrors = virGetLastError();
-    if ( virtErrors!=NULL && virtErrors->code>0 )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-    virResetLastError();
 }

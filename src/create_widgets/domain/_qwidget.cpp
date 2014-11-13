@@ -18,3 +18,7 @@ QString _QWidget::closeDataEdit()
 {
     return QString();
 }
+void _QWidget::setInitState()
+{
+
+}

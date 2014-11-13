@@ -17,6 +17,7 @@
 #include "wait_thread/wait_thread.h"
 #include "vm_viewer/vm_viewer.h"
 #include "state_monitor/domain_state_monitor.h"
+#include "task_bar/task_bar.h"
 #include <QDebug>
 
 class MainWindow : public QMainWindow
@@ -48,12 +49,14 @@ private :
     VirtStoragePoolControl      *storagePoolDockContent;
     ViewerMap                    VM_Displayed_Map;
     DomainStateMonitor          *domainsStateMonitor;
+    TaskBar                     *taskBar;
 
 private slots:
     void closeEvent(QCloseEvent*);
     void closeEvent();
     void changeVisibility();
     void mainWindowUp();
+    void initTaskBar();
     void initDomainStateMonitor();
     void initTrayIcon();
     void trayIconActivated(QSystemTrayIcon::ActivationReason);

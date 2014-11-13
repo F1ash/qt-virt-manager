@@ -104,9 +104,6 @@ DeviceStack::DeviceStack(
     commonLayout->addWidget(listWidget);
     commonLayout->addWidget(buttons);
     setLayout(commonLayout);
-    // unused at this moment
-    //readNetworkList();
-    //readNodeDevicesList();
 }
 DeviceStack::~DeviceStack()
 {
@@ -159,59 +156,6 @@ QDomDocument DeviceStack::getResult() const
 }
 
 /* private slots */
-void DeviceStack::readNetworkList()
-{
-    virNetworkPtr *networks = NULL;
-    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks(currWorkConnect, &networks, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-    } else {
-        int i = 0;
-        while ( networks[i] != NULL ) {
-            nets.append( virNetworkGetName(networks[i]) );
-            virNetworkFree(networks[i]);
-            i++;
-        };
-    };
-    free(networks);
-}
-void DeviceStack::readNodeDevicesList()
-{
-    int i = 0;
-    if ( currWorkConnect!=NULL ) {
-        unsigned int flags =
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SYSTEM |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_PCI_DEV |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_USB_DEV |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_USB_INTERFACE |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_NET |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_HOST |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_TARGET |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_STORAGE |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_FC_HOST |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_VPORTS |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_GENERIC;
-        int ret = virConnectListAllNodeDevices(currWorkConnect, &nodeDevices, flags);
-        if ( ret<0 ) {
-            sendConnErrors();
-        } else {
-            while ( nodeDevices[i] != NULL ) {
-                devices.append( QString("%1\n")
-                                // flags: extra flags; not used yet,
-                                // so callers should always pass 0
-                                .arg(virNodeDeviceGetXMLDesc(nodeDevices[i], 0)));
-                virNodeDeviceFree(nodeDevices[i]);
-                i++;
-            };
-        };
-        free(nodeDevices);
-    };
-    //int devs = virNodeNumOfDevices(currWorkConnect, NULL, 0);
-    //qDebug()<<"Devices("<<devs<<i<<"):\n"<<devices.join("\n");
-}
 void DeviceStack::showDevice(QListWidgetItem *item)
 {
     if ( device!=NULL ) {
@@ -266,6 +210,7 @@ void DeviceStack::showDevice(QListWidgetItem *item)
                     this,
                     currWorkConnect);
     } else if ( deviceType == "emulator" ) {
+        device = new _QWidget(this);
         //device = new Emulator(
         //            this,
         //            currWorkConnect);
@@ -291,25 +236,4 @@ void DeviceStack::set_Result()
     done(result());
     //qDebug()<<"done";
     settings.setValue("DeviceStackGeometry", saveGeometry());
-}
-
-/* unused without
- * readNetworkList() & void readNodeDevicesList()
- */
-void DeviceStack::sendConnErrors()
-{
-    virtErrors = virConnGetLastError(currWorkConnect);
-    if ( virtErrors!=NULL && virtErrors->code>0 ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-        virResetError(virtErrors);
-    } else sendGlobalErrors();
-}
-void DeviceStack::sendGlobalErrors()
-{
-    virtErrors = virGetLastError();
-    if ( virtErrors!=NULL && virtErrors->code>0 )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-    virResetLastError();
 }

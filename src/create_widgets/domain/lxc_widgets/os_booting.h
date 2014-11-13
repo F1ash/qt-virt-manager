@@ -2,17 +2,24 @@
 #define LXC_OS_BOOTING_H
 
 #include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/domain/common_widgets/os_boot_widgets/_arch.h"
 
 class LXC_OSBooting : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit LXC_OSBooting(QWidget *parent = NULL, QString arg1 = "???", QString arg2 = "???");
-    ~LXC_OSBooting();
+    explicit LXC_OSBooting(
+            QWidget *parent = NULL,
+            QString  _caps  = "");
+    _Arch           *architecture;
 
 signals:
+    void             domainType(QString&);
+    void             osType(QString&);
+    void             emulatorType(QString&);
 
 private:
+    QString          capabilities;
     QString          arch;
     QString          os_type;
     QLabel          *initPathLabel;
@@ -36,8 +43,13 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QDomDocument getDataDocument() const;
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
+    void             setInitState();
 
+private slots:
+    void             changeArch(QString&);
+    void             changeOSType(QString&);
 };
 
 #endif // LXC_OS_BOOTING_H
