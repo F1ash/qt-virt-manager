@@ -4,7 +4,7 @@ ConnItemModel::ConnItemModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
     activeIcon = QIcon::fromTheme("run");
-    no_activeIcon = QIcon::fromTheme("job");
+    no_activeIcon = QIcon::fromTheme("network-server");
     rootIdx = QModelIndex();
 }
 ConnItemModel::~ConnItemModel()

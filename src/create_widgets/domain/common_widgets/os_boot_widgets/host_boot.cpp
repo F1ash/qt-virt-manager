@@ -5,8 +5,9 @@ Host_Boot::Host_Boot(QWidget *parent) :
 {
     loaderLabel = new QLabel("Boot loader:", this);
     argsLabel = new QLabel("Boot loader args:", this);
-    loader = new QLineEdit(this);
-    loader->setPlaceholderText("/usr/bin/pygrub");
+    loader = new Path_To_File(this);
+    QString _placeHolderText = QString("/usr/bin/pygrub");
+    loader->setPlaceholderText(_placeHolderText);
     args = new QLineEdit(this);
     args->setPlaceholderText("--append single");
     commonLayout = new QVBoxLayout(this);
@@ -17,7 +18,7 @@ Host_Boot::Host_Boot(QWidget *parent) :
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
     // dataChanged connections
-    connect(loader, SIGNAL(textEdited(QString)),
+    connect(loader, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(args, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
@@ -35,7 +36,7 @@ QDomDocument Host_Boot::getDataDocument() const
     _data.appendChild(_bootloader);
     _data.appendChild(_bootloader_args);
 
-    data = doc.createTextNode(loader->text());
+    data = doc.createTextNode(loader->getPath());
     _bootloader.appendChild(data);
     data = doc.createTextNode(args->text());
     _bootloader_args.appendChild(data);
@@ -55,14 +56,17 @@ void Host_Boot::setDataDescription(QString &_xmlDesc)
     _bootloader_args = doc
             .firstChildElement("domain")
             .firstChildElement("bootloader_args");
+    QString _attr;
     if ( !_bootloader.isNull() ) {
-        loader->setText(
-                    _bootloader
-                    .firstChild().toText().data());
-    };
+        _attr = _bootloader
+                .firstChild().toText().data();
+        loader->setPath(_attr);
+    } else
+        loader->clear();
     if ( !_bootloader_args.isNull() ) {
-        args->setText(
-                    _bootloader_args
-                    .firstChild().toText().data());
-    };
+        _attr = _bootloader_args
+                .firstChild().toText().data();
+        args->setText(_attr);
+    } else
+        args->clear();
 }

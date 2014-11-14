@@ -15,6 +15,7 @@ public:
 
 signals:
     void             visibilityChanged(bool);
+    void             taskMsg(QString&);
 
 private:
     QSettings        settings;
@@ -24,6 +25,7 @@ public slots:
     void             changeVisibility();
     void             saveCurrentState();
     void             stopTaskComputing();
+    void             addNewTask();
 
 private slots:
     void             closeEvent(QCloseEvent*);

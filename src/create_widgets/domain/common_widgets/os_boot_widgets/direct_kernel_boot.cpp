@@ -8,16 +8,20 @@ Direct_Kernel_Boot::Direct_Kernel_Boot(QWidget *parent) :
     initrdLabel = new QLabel("Initrd path:", this);
     cmdlineLabel = new QLabel("Command line:", this);
     dtbLabel = new QLabel("Path to the (optional) device tree binary:", this);
-    loader = new QLineEdit(this);
-    loader->setPlaceholderText("/usr/lib/xen/boot/hvmloader");
-    kernel = new QLineEdit(this);
-    kernel->setPlaceholderText("/root/f21-i386-vmlinuz");
-    initrd = new QLineEdit(this);
-    initrd->setPlaceholderText("/root/f21-i386-initrd");
+    loader = new Path_To_File(this);
+    QString _placeHolderText = QString("/usr/lib/xen/boot/hvmloader");
+    loader->setPlaceholderText(_placeHolderText);
+    kernel = new Path_To_File(this);
+    _placeHolderText = QString("/root/f21-i386-vmlinuz");
+    kernel->setPlaceholderText(_placeHolderText);
+    initrd = new Path_To_File(this);
+    _placeHolderText = QString("/root/f21-i386-initrd");
+    initrd->setPlaceholderText(_placeHolderText);
     cmdline = new QLineEdit(this);
     cmdline->setPlaceholderText("console=ttyS0 ks=http://example.com/f21-i386/os/");
-    dtb = new QLineEdit(this);
-    dtb->setPlaceholderText("/root/ppc.dtb");
+    dtb = new Path_To_File(this);
+    _placeHolderText = QString("/root/ppc.dtb");
+    dtb->setPlaceholderText(_placeHolderText);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(loaderLabel);
     commonLayout->addWidget(loader);
@@ -32,15 +36,15 @@ Direct_Kernel_Boot::Direct_Kernel_Boot(QWidget *parent) :
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
     // dataChanged connections
-    connect(loader, SIGNAL(textEdited(QString)),
+    connect(loader, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
-    connect(kernel, SIGNAL(textEdited(QString)),
+    connect(kernel, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
-    connect(initrd, SIGNAL(textEdited(QString)),
+    connect(initrd, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(cmdline, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
-    connect(dtb, SIGNAL(textEdited(QString)),
+    connect(dtb, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
 }
 
@@ -69,15 +73,15 @@ QDomDocument Direct_Kernel_Boot::getDataDocument() const
 
     data = doc.createTextNode(os_type);
     _type.appendChild(data);
-    data = doc.createTextNode(loader->text());
+    data = doc.createTextNode(loader->getPath());
     _loader.appendChild(data);
-    data = doc.createTextNode(kernel->text());
+    data = doc.createTextNode(kernel->getPath());
     _kernel.appendChild(data);
-    data = doc.createTextNode(initrd->text());
+    data = doc.createTextNode(initrd->getPath());
     _initrd.appendChild(data);
     data = doc.createTextNode(cmdline->text());
     _cmdline.appendChild(data);
-    data = doc.createTextNode(dtb->text());
+    data = doc.createTextNode(dtb->getPath());
     _dtb.appendChild(data);
 
     doc.appendChild(_data);
@@ -100,10 +104,11 @@ void Direct_Kernel_Boot::setDataDescription(QString &_xmlDesc)
     _initrd = _os.firstChildElement("initrd");
     _cmdline = _os.firstChildElement("cmdline");
     _dtb = _os.firstChildElement("dtb");
+    QString _attr;
     if ( !_loader.isNull() ) {
-        loader->setText(
-                    _loader
-                    .firstChild().toText().data());
+        _attr = _loader
+                .firstChild().toText().data();
+        loader->setPath(_attr);
     } else
         loader->clear();
     if ( !_type.isNull() ) {
@@ -112,15 +117,15 @@ void Direct_Kernel_Boot::setDataDescription(QString &_xmlDesc)
     } else
         os_type.clear();
     if ( !_kernel.isNull() ) {
-        kernel->setText(
-                    _kernel
-                    .firstChild().toText().data());
+        _attr = _kernel
+                .firstChild().toText().data();
+        kernel->setPath(_attr);
     } else
         kernel->clear();
     if ( !_initrd.isNull() ) {
-        initrd->setText(
-                    _initrd
-                    .firstChild().toText().data());
+        _attr = _initrd
+                .firstChild().toText().data();
+        initrd->setPath(_attr);
     } else
         initrd->clear();
     if ( !_cmdline.isNull() ) {
@@ -130,9 +135,9 @@ void Direct_Kernel_Boot::setDataDescription(QString &_xmlDesc)
     } else
         cmdline->clear();
     if ( !_dtb.isNull() ) {
-        dtb->setText(
-                    _dtb
-                    .firstChild().toText().data());
+        _attr = _dtb
+                .firstChild().toText().data();
+        dtb->setPath(_attr);
     } else
         dtb->clear();
 }

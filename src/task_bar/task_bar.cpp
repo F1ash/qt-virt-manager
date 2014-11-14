@@ -24,6 +24,7 @@ void TaskBar::changeVisibility()
 {
     setVisible(!isVisible());
     emit visibilityChanged(isVisible());
+    //addNewTask();
 }
 void TaskBar::saveCurrentState()
 {
@@ -36,6 +37,15 @@ void TaskBar::saveCurrentState()
 }
 void TaskBar::stopTaskComputing()
 {
+}
+void TaskBar::addNewTask()
+{
+    QListWidgetItem *_item = new QListWidgetItem();
+    QString _name = QString("%1 Task").arg(taskList->count());
+    _item->setText(_name);
+    _item->setIcon(QIcon::fromTheme("run"));
+    //taskList->addItem(_item);
+    //emit taskMsg(_name);
 }
 
 /* private slots */

@@ -2,14 +2,15 @@
 #define DIRECT_KERNEL_BOOT_H
 
 #include "create_widgets/domain/_qwidget.h"
+#include "path_to_file.h"
 
 class Direct_Kernel_Boot : public _QWidget
 {
     Q_OBJECT
 public:
     explicit Direct_Kernel_Boot(QWidget *parent = 0);
-    QLineEdit       *loader, *kernel,
-                    *initrd, *cmdline, *dtb;
+    QLineEdit       *cmdline;
+    Path_To_File    *loader, *kernel, *initrd, *dtb;
 
 signals:
     void             domainType(QString&);

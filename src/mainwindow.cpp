@@ -78,6 +78,8 @@ MainWindow::~MainWindow()
              trayIcon, SLOT(stateMonitorVisibilityChanged(bool)));
   disconnect(taskBar, SIGNAL(visibilityChanged(bool)),
              trayIcon, SLOT(stateTaskBarVisibilityChanged(bool)));
+  disconnect(taskBar, SIGNAL(taskMsg(QString&)),
+             this, SLOT(writeToErrorLog(QString&)));
 
   delete domainsStateMonitor;
   domainsStateMonitor = NULL;
@@ -220,6 +222,8 @@ void MainWindow::closeEvent()
 void MainWindow::initTaskBar()
 {
     taskBar = new TaskBar(this);
+    connect(taskBar, SIGNAL(taskMsg(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
 }
 void MainWindow::initDomainStateMonitor()
 {
