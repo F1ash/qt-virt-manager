@@ -29,7 +29,6 @@ void TaskBar::changeVisibility()
 void TaskBar::saveCurrentState()
 {
     settings.beginGroup("TaskBar");
-    //settings.setValue("State", saveState());
     settings.setValue("Geometry", saveGeometry());
     settings.setValue("Visible", isVisible());
     settings.endGroup();

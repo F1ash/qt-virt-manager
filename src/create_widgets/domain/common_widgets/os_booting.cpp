@@ -5,11 +5,7 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
 {
     setObjectName("OS_Booting");
     readCapabilities();
-    bootType = new QComboBox(this);
-    bootType->addItem("BIOS bootloader", "bios");
-    bootType->addItem("Host bootloader", "host");
-    bootType->addItem("Direct kernel boot", "kernel");
-    bootType->addItem("Container boot", "container");
+    bootType = new BootType(this);
     bootSet = new QStackedWidget(this);
     bootSet->addWidget(new BIOS_Boot(this, capabilities));
     bootSet->addWidget(new Host_Boot(this));
@@ -19,12 +15,12 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
     bootSet->widget(1)->setEnabled(type.toLower()!="lxc");
     bootSet->widget(2)->setEnabled(type.toLower()!="lxc");
     bootSet->widget(3)->setEnabled(type.toLower()=="lxc");
-    connect(bootType, SIGNAL(currentIndexChanged(int)),
+    connect(bootType->bootType, SIGNAL(currentIndexChanged(int)),
             bootSet, SLOT(setCurrentIndex(int)));
-    connect(bootType, SIGNAL(currentIndexChanged(int)),
+    connect(bootType->bootType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(changeBootType()));
     scrolledLayout = new QVBoxLayout(this);
-    scrolledLayout->addWidget(bootType, 0, Qt::AlignLeft);
+    scrolledLayout->addWidget(bootType);
     scrolledLayout->addWidget(bootSet);
     scrolledLayout->addStretch(-1);
     scrolled = new QWidget(this);
@@ -42,13 +38,15 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
     // dataChanged connections
     connect(this, SIGNAL(dataChanged()),
             restorePanel, SLOT(stateChanged()));
+    connect(bootType->osType, SIGNAL(textEdited(QString)),
+            this, SIGNAL(dataChanged()));
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
-            this, SLOT(resetSecData()));
+            this, SLOT(resetBootData()));
     connect(restorePanel, SIGNAL(revertData()),
-            this, SLOT(revertSecData()));
+            this, SLOT(revertBootData()));
     connect(restorePanel, SIGNAL(saveData()),
-            this, SLOT(saveSecData()));
+            this, SLOT(saveBootData()));
     for (uint i=0; i<bootSet->count(); i++) {
         connect(bootSet->widget(i), SIGNAL(domainType(QString&)),
                 this, SIGNAL(domainType(QString&)));
@@ -64,9 +62,31 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
 /* public slots */
 QDomDocument OS_Booting::getDataDocument() const
 {
+    QDomDocument doc;
     _QWidget *wdg = static_cast<_QWidget*>(
                 bootSet->currentWidget());
-    return wdg->getDataDocument();
+    doc = wdg->getDataDocument();
+    QDomElement _os, _type;
+    _os = doc
+            .firstChildElement("data")
+            .firstChildElement("os");
+    if ( bootType->osType->isEnabled() ) {
+        if ( !_os.isNull() ) {
+            _type = _os
+                    .firstChildElement("type");
+            if ( !bootType->osType->text().isEmpty() ) {
+                if ( _type.isNull() ) {
+                    _type = doc.createElement("type");
+                    _os.appendChild(_type);
+                };
+                QDomText _text = doc.createTextNode(
+                            bootType->osType->text());
+                _type.appendChild(_text);
+            };
+        };
+    };
+    qDebug()<<doc.toString();
+    return doc;
 }
 QString OS_Booting::closeDataEdit()
 {
@@ -78,9 +98,9 @@ QString OS_Booting::closeDataEdit()
                     QMessageBox::Ok,
                     QMessageBox::Cancel);
         if ( answer==QMessageBox::Ok )
-            saveSecData();
+            saveBootData();
         else
-            revertSecData();
+            revertBootData();
     };
     return QString();
 }
@@ -122,7 +142,7 @@ void OS_Booting::readXMLDesciption()
 }
 void OS_Booting::readXMLDesciption(QString &xmlDesc)
 {
-    //if ( _xmlDesc.isEmpty() ) return;
+    qDebug()<<xmlDesc;
     QDomDocument doc;
     QDomElement _domain, _os, _type;
     doc.setContent(xmlDesc);
@@ -140,26 +160,30 @@ void OS_Booting::readXMLDesciption(QString &xmlDesc)
                 .isNull() ) {
         _bootType.append("kernel");
     };
-    int idx = bootType->findData(
+    if ( !_type.isNull() ) {
+        QString _t = _type.firstChild().toText().data();
+        changeOSType(_t);
+    };
+    int idx = bootType->bootType->findData(
                 _bootType,
                 Qt::UserRole,
                 Qt::MatchContains);
-    bootType->setCurrentIndex( (idx<0)? 0:idx );
+    bootType->bootType->setCurrentIndex( (idx<0)? 0:idx );
     static_cast<_QWidget*>(bootSet->currentWidget())->setDataDescription(xmlDesc);
 }
-void OS_Booting::resetSecData()
+void OS_Booting::resetBootData()
 {
     readXMLDesciption();
     currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
-void OS_Booting::revertSecData()
+void OS_Booting::revertBootData()
 {
     readXMLDesciption(currentDeviceXMLDesc);
     currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
-void OS_Booting::saveSecData()
+void OS_Booting::saveBootData()
 {
     QDomDocument doc;
     QDomElement _os;
@@ -174,11 +198,16 @@ void OS_Booting::changeOSType(QString &_type)
 {
     os_type = _type;
     //qDebug()<<os_type;
+    bootType->osType->setText(os_type);
 }
 void OS_Booting::changeBootType()
 {
-    QString _empty;
+    QString _empty, _type;
     emit emulatorType(_empty);
     emit domainType(_empty);
     static_cast<_QWidget*>(bootSet->currentWidget())->setInitState();
+    _type = bootType->bootType->itemData(
+                bootType->bootType->currentIndex(), Qt::UserRole)
+            .toString();
+    bootType->osType->setEnabled( _type!="host" );
 }

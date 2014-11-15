@@ -4,7 +4,7 @@ LXC_OSBooting::LXC_OSBooting(QWidget *parent, QString _caps) :
     _QWidget(parent), capabilities(_caps)
 {
     setObjectName("Booting");
-    initPathLabel = new QLabel("Init path (Ex.: /sbin/init, /bin/sh, etc.):", this);
+    initPathLabel = new QLabel("Init path (Ex.: /sbin/init, /bin/sh, etc.) and arguments:", this);
     initPath = new QLineEdit(this);
     initPath->setPlaceholderText("Enter Init Path");
     nameSpaceEnable = new QCheckBox("Enable User Namespace", this);

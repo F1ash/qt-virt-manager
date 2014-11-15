@@ -11,6 +11,7 @@
 #include "os_boot_widgets/bios_boot.h"
 #include "os_boot_widgets/host_boot.h"
 #include "os_boot_widgets/direct_kernel_boot.h"
+#include "os_boot_widgets/boot_type.h"
 
 class OS_Booting : public _QWidget
 {
@@ -34,7 +35,7 @@ private:
     QString          type;
     QString          arch;
     QString          os_type;
-    QComboBox       *bootType;
+    BootType        *bootType;
     QStackedWidget  *bootSet;
     RestorePanel    *restorePanel;
 
@@ -52,9 +53,9 @@ private slots:
     void             stateChanged();
     void             readXMLDesciption();
     void             readXMLDesciption(QString&);
-    void             resetSecData();
-    void             revertSecData();
-    void             saveSecData();
+    void             resetBootData();
+    void             revertBootData();
+    void             saveBootData();
     void             changeOSType(QString&);
     void             changeBootType();
 };
