@@ -18,7 +18,6 @@ signals:
     void             emulatorType(QString&);
 
 private:
-    QString          os_type;
     QLabel          *loaderLabel, *kernelLabel,
                     *initrdLabel, *cmdlineLabel,
                     *dtbLabel;

@@ -58,8 +58,6 @@ LXC_OSBooting::LXC_OSBooting(QWidget *parent, QString _caps) :
             this, SIGNAL(domainType(QString&)));
     connect(architecture, SIGNAL(osType(QString&)),
             this, SIGNAL(osType(QString&)));
-    connect(architecture, SIGNAL(osType(QString&)),
-            this, SLOT(changeOSType(QString&)));
     connect(architecture, SIGNAL(archType(QString&)),
             this, SLOT(changeArch(QString&)));
     connect(architecture, SIGNAL(emulatorType(QString&)),
@@ -95,8 +93,6 @@ QDomDocument LXC_OSBooting::getDataDocument() const
 
     _type = doc.createElement("type");
     _type.setAttribute("arch", arch);
-    data = doc.createTextNode(os_type);
-    _type.appendChild(data);
     _os.appendChild(_type);
 
     QStringList cmd = initPath->text().split(" ");
@@ -190,8 +186,4 @@ void LXC_OSBooting::setInitState()
 void LXC_OSBooting::changeArch(QString &_arch)
 {
     arch = _arch;
-}
-void LXC_OSBooting::changeOSType(QString &_os_type)
-{
-    os_type = _os_type;
 }

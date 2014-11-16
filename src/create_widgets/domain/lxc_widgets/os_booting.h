@@ -21,7 +21,6 @@ signals:
 private:
     QString          capabilities;
     QString          arch;
-    QString          os_type;
     QLabel          *initPathLabel;
     QLineEdit       *initPath;
 
@@ -49,7 +48,6 @@ public slots:
 
 private slots:
     void             changeArch(QString&);
-    void             changeOSType(QString&);
 };
 
 #endif // LXC_OS_BOOTING_H

@@ -15,6 +15,7 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
     bootSet->widget(1)->setEnabled(type.toLower()!="lxc");
     bootSet->widget(2)->setEnabled(type.toLower()!="lxc");
     bootSet->widget(3)->setEnabled(type.toLower()=="lxc");
+    bootType->osType->setEnabled(type.toLower()!="lxc");
     connect(bootType->bootType, SIGNAL(currentIndexChanged(int)),
             bootSet, SLOT(setCurrentIndex(int)));
     connect(bootType->bootType, SIGNAL(currentIndexChanged(int)),
@@ -85,7 +86,7 @@ QDomDocument OS_Booting::getDataDocument() const
             };
         };
     };
-    qDebug()<<doc.toString();
+    //qDebug()<<doc.toString();
     return doc;
 }
 QString OS_Booting::closeDataEdit()
@@ -142,7 +143,7 @@ void OS_Booting::readXMLDesciption()
 }
 void OS_Booting::readXMLDesciption(QString &xmlDesc)
 {
-    qDebug()<<xmlDesc;
+    //qDebug()<<xmlDesc;
     QDomDocument doc;
     QDomElement _domain, _os, _type;
     doc.setContent(xmlDesc);
@@ -209,5 +210,6 @@ void OS_Booting::changeBootType()
     _type = bootType->bootType->itemData(
                 bootType->bootType->currentIndex(), Qt::UserRole)
             .toString();
-    bootType->osType->setEnabled( _type!="host" );
+    bootType->osType->setEnabled(
+                _type!="host" && bootSet->currentWidget()->isEnabled());
 }

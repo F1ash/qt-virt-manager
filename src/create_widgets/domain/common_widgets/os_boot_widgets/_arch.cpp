@@ -43,6 +43,15 @@ void _Arch::setArch(const QString &_arch)
     int idx = arch->findText(_arch, Qt::MatchContains);
     arch->setCurrentIndex( (idx<0)? 0:idx );
 }
+void _Arch::setMachine(const QString &_mach)
+{
+    int idx = machines->findText(_mach, Qt::MatchContains);
+    machines->setCurrentIndex( (idx<0)? 0:idx );
+}
+QString _Arch::getMachine() const
+{
+    return machines->currentText();
+}
 
 /* private slots */
 void _Arch::archChanged(const QString &_arch)

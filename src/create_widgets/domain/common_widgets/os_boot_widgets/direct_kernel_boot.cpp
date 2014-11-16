@@ -71,8 +71,6 @@ QDomDocument Direct_Kernel_Boot::getDataDocument() const
     _os.appendChild(_cmdline);
     _os.appendChild(_dtb);
 
-    data = doc.createTextNode(os_type);
-    _type.appendChild(data);
     data = doc.createTextNode(loader->getPath());
     _loader.appendChild(data);
     data = doc.createTextNode(kernel->getPath());
@@ -111,11 +109,6 @@ void Direct_Kernel_Boot::setDataDescription(QString &_xmlDesc)
         loader->setPath(_attr);
     } else
         loader->clear();
-    if ( !_type.isNull() ) {
-        os_type = _type
-                .firstChild().toText().data();
-    } else
-        os_type.clear();
     if ( !_kernel.isNull() ) {
         _attr = _kernel
                 .firstChild().toText().data();
