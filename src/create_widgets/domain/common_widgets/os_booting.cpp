@@ -71,7 +71,10 @@ QDomDocument OS_Booting::getDataDocument() const
     _os = doc
             .firstChildElement("data")
             .firstChildElement("os");
-    if ( bootType->osType->isEnabled() ) {
+    QString _bootType = bootType->bootType->itemData(
+                bootType->bootType->currentIndex(), Qt::UserRole)
+            .toString();
+    if ( _bootType!="host" ) {
         if ( !_os.isNull() ) {
             _type = _os
                     .firstChildElement("type");

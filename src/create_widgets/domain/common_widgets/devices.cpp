@@ -154,11 +154,13 @@ QDomDocument Devices::getDataDocument() const
     //qDebug()<<"Device result";
     QDomDocument doc;
     QString _ret = infoWidget->closeDataEdit();
-    if ( !_ret.isEmpty() )
-        usedDeviceList->currentItem()->setData(Qt::UserRole, _ret);
+    if ( !_ret.isEmpty() ) {
+        QListWidgetItem *_item = usedDeviceList->currentItem();
+        if ( NULL!=_item ) _item->setData(Qt::UserRole, _ret);
+    };
     QDomElement devices = doc.createElement("devices");
     for (int i=0; i<usedDeviceList->count(); i++) {
-        QDomDocument _doc = QDomDocument();
+        QDomDocument _doc;
         _doc.setContent(usedDeviceList->item(i)->data(Qt::UserRole).toString());
         QDomNodeList list = _doc.firstChildElement("device").childNodes();
         int j = 0;
@@ -452,10 +454,13 @@ void Devices::saveDeviceXMLDescription(QString &xmlDesc)
 {
     /* block/unblock usedDeviceList signals to avoid looping */
     usedDeviceList->blockSignals(true);
-    QListWidgetItem *item = usedDeviceList->takeItem(usedDeviceList->currentRow());
-    if ( NULL!=item ) {
-        delete item;
-        item = NULL;
+    int idx = usedDeviceList->currentRow();
+    if ( idx>=0 ) {
+        QListWidgetItem *item = usedDeviceList->takeItem(idx);
+        if ( NULL!=item ) {
+            delete item;
+            item = NULL;
+        };
     };
     QDomDocument doc;
     doc.setContent(xmlDesc);

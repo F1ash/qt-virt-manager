@@ -42,7 +42,7 @@ DeviceData::DeviceData(
     connect(restoreMenu->resetData, SIGNAL(triggered()),
             this, SLOT(revertDeviceData()));
     connect(_close, SIGNAL(clicked()),
-            this, SLOT(closeDataEdit()));
+            this, SLOT(_closeDataEdit()));
 }
 
 /* public slots */
@@ -142,12 +142,7 @@ QString DeviceData::closeDataEdit()
     };
     if ( NULL!=device ) {
         // save device data as null-point
-        if ( sender()==_close )
-            // quired by current open DeviceData widget
-            emit saveDeviceXMLDesc(currentDeviceXMLDesc);
-        else
-            // quired by new open DeviceData widget
-            _ret = currentDeviceXMLDesc;
+        _ret = currentDeviceXMLDesc;
     };
     if ( NULL!=device ) {
         infoLayout->removeWidget(device);
@@ -165,6 +160,31 @@ void DeviceData::currentStateChanged()
 {
     currentStateSaved = false;
     restoreMenu->revertData->setEnabled(true);
+}
+void DeviceData::_closeDataEdit()
+{
+    if ( !currentStateSaved ) {
+        int answer = QMessageBox::question(
+                    this,
+                    "Save Device Data",
+                    "Save last changes?",
+                    QMessageBox::Ok,
+                    QMessageBox::Cancel);
+        if ( answer==QMessageBox::Ok )
+            saveDeviceData();
+    };
+    if ( NULL!=device ) {
+        // save device data as null-point
+        emit saveDeviceXMLDesc(currentDeviceXMLDesc);
+    };
+    if ( NULL!=device ) {
+        infoLayout->removeWidget(device);
+        disconnect(device, SIGNAL(dataChanged()),
+                   this, SLOT(currentStateChanged()));
+        delete device;
+        device = NULL;
+    };
+    setStartState();
 }
 void DeviceData::saveDeviceData()
 {

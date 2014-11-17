@@ -231,7 +231,7 @@ void CreateVirtDomain::buildXMLDescription()
      */
     this->setEnabled(false);
     QDomDocument doc;
-    QDomElement root, devices, _element;
+    QDomElement root, devices, _element, _el;
     root = doc.createElement("domain");
     root.setAttribute("type", type.toLower());
     doc.appendChild(root);
@@ -243,12 +243,14 @@ void CreateVirtDomain::buildXMLDescription()
         tabWidget->setCurrentWidget(Wdg);
         QDomNodeList list;
         if ( key=="Computer" ) {
-            list = Wdg->getDataDocument().firstChildElement("devices").childNodes();
+            _el = Wdg->getDataDocument().firstChildElement("devices");
+            if ( !_el.isNull() ) list = _el.childNodes();
             _element = devices;
         } else {
             tabWidget->setCurrentWidget(Wdg);
             Wdg->closeDataEdit();
-            list = Wdg->getDataDocument().firstChildElement("data").childNodes();
+            _el = Wdg->getDataDocument().firstChildElement("data");
+            if ( !_el.isNull() ) list = _el.childNodes();
             _element = root;
         };
         /*

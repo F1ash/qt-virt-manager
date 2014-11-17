@@ -4,6 +4,7 @@
 #include "create_widgets/domain/_qwidget.h"
 #include "_arch.h"
 #include "path_to_file.h"
+#include "boot_menu.h"
 
 class BIOS_Boot : public _QWidget
 {
@@ -24,6 +25,7 @@ private:
     QString          arch;
     QString          capabilities;
     QLabel          *loaderLabel;
+    BootMenu        *bootMenu;
     QVBoxLayout     *commonLayout;
 
 public slots:

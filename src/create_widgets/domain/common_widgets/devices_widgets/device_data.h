@@ -54,6 +54,7 @@ public slots:
 
 private slots:
     void             currentStateChanged();
+    void             _closeDataEdit();
     void             saveDeviceData();
     void             revertDeviceData();
     void             setStartState();
