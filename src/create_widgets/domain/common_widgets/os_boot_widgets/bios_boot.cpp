@@ -6,14 +6,16 @@ BIOS_Boot::BIOS_Boot(QWidget *parent, QString _caps) :
     architecture = new _Arch(this, capabilities);
     loaderLabel = new QLabel("Boot loader path:", this);
     loader = new Path_To_File(this);
-    bootMenu = new BootMenu(this);
     QString _placeHolderText = QString("/usr/lib/xen/boot/hvmloader");
     loader->setPlaceholderText(_placeHolderText);
+    bootMenu = new BootMenu(this);
+    bootDevices = new Boot_Devices(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(architecture);
     commonLayout->addWidget(loaderLabel);
     commonLayout->addWidget(loader);
     commonLayout->addWidget(bootMenu);
+    commonLayout->addWidget(bootDevices);
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
     connect(architecture, SIGNAL(domainType(QString&)),
@@ -31,6 +33,8 @@ BIOS_Boot::BIOS_Boot(QWidget *parent, QString _caps) :
     connect(loader, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(bootMenu, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(bootDevices, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
 }
 
@@ -98,12 +102,11 @@ void BIOS_Boot::setDataDescription(QString &xmlDesc)
         architecture->setArch(_attr);
         _attr = _type.attribute("machine");
         architecture->setMachine(_attr);
-
     };
     if ( !_loader.isNull() ) {
         _attr = _loader.firstChild().toText().data();
         loader->setPath(_attr);
-    };
+    } else loader->clear();
     bootMenu->menu->setChecked( !_bootMenu.isNull() );
     if ( !_bootMenu.isNull() ) {
         bootMenu->menu->setChecked(
@@ -124,4 +127,46 @@ void BIOS_Boot::setInitState()
 void BIOS_Boot::changeArch(QString &_arch)
 {
     arch = _arch;
+}
+void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
+{
+    //qDebug()<<_doc.toString();
+    QDomNodeList _devices;
+    _devices = _doc
+            .firstChildElement("devices")
+            .childNodes();
+    /*
+     * It can be tricky to configure in the desired way,
+     * which is why per-device boot elements (see disks,
+     * network interfaces, and USB and PCI devices) were introduced
+     * and they are the preferred way providing full control over booting order.
+     */
+    bootDevices->devices->clear();
+    uint count = _devices.length();
+    for (uint i=0; i<count; i++) {
+        //qDebug()<<_devices.item(i).nodeName()<<i;
+        if (!_devices.item(i).isNull()) {
+            QString _devName = _devices.item(i).nodeName();
+            QDomElement _el;
+            bool _used = false;
+            int _order = count;
+            _el = _devices.item(i).toElement();
+            QString _devType = _el.attribute("type");
+            if ( _devName=="hostdev" ) {
+                if ( _devType=="pci" || _devType=="usb" ) {
+                } else continue;
+            } else if ( _devName=="disk" ) {
+            } else if ( _devName=="interface" ) {
+            } else continue;
+            _devName.append(" ");
+            _devName.append(_devType);
+            _used = !_el.firstChildElement("boot").isNull();
+            if (_used)
+                _order = _el
+                        .firstChildElement("boot")
+                        .attribute("order").toInt();
+            bootDevices->addNewDevice(
+                        _devName, _used, _order);
+        };
+    };
 }

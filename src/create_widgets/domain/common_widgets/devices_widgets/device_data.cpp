@@ -42,7 +42,7 @@ DeviceData::DeviceData(
     connect(restoreMenu->resetData, SIGNAL(triggered()),
             this, SLOT(revertDeviceData()));
     connect(_close, SIGNAL(clicked()),
-            this, SLOT(_closeDataEdit()));
+            this, SLOT(closeDataEdit()));
 }
 
 /* public slots */
@@ -55,10 +55,9 @@ QDomDocument DeviceData::getResult() const
     };
     return doc;
 }
-QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
+void DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
 {
-    QString _ret;
-    if ( device!=NULL ) _ret = closeDataEdit();
+    if ( device!=NULL ) closeDataEdit();
     devName->setText(QString("<b>%1</b>").arg(deviceName));
     QDomDocument doc;
     doc.setContent(xmlDesc);
@@ -125,11 +124,9 @@ QString DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     device->setDataDescription(xmlDesc);
     connect(device, SIGNAL(dataChanged()),
             this, SLOT(currentStateChanged()));
-    return _ret;
 }
-QString DeviceData::closeDataEdit()
+void DeviceData::closeDataEdit()
 {
-    QString _ret;
     if ( !currentStateSaved ) {
         int answer = QMessageBox::question(
                     this,
@@ -139,10 +136,10 @@ QString DeviceData::closeDataEdit()
                     QMessageBox::Cancel);
         if ( answer==QMessageBox::Ok )
             saveDeviceData();
-    };
-    if ( NULL!=device ) {
-        // save device data as null-point
-        _ret = currentDeviceXMLDesc;
+        if ( NULL!=device ) {
+            // save device data as null-point
+            emit saveDeviceXMLDesc(currentDeviceXMLDesc);
+        };
     };
     if ( NULL!=device ) {
         infoLayout->removeWidget(device);
@@ -152,7 +149,6 @@ QString DeviceData::closeDataEdit()
         device = NULL;
     };
     setStartState();
-    return _ret;
 }
 
 /* private slots */
@@ -160,31 +156,6 @@ void DeviceData::currentStateChanged()
 {
     currentStateSaved = false;
     restoreMenu->revertData->setEnabled(true);
-}
-void DeviceData::_closeDataEdit()
-{
-    if ( !currentStateSaved ) {
-        int answer = QMessageBox::question(
-                    this,
-                    "Save Device Data",
-                    "Save last changes?",
-                    QMessageBox::Ok,
-                    QMessageBox::Cancel);
-        if ( answer==QMessageBox::Ok )
-            saveDeviceData();
-    };
-    if ( NULL!=device ) {
-        // save device data as null-point
-        emit saveDeviceXMLDesc(currentDeviceXMLDesc);
-    };
-    if ( NULL!=device ) {
-        infoLayout->removeWidget(device);
-        disconnect(device, SIGNAL(dataChanged()),
-                   this, SLOT(currentStateChanged()));
-        delete device;
-        device = NULL;
-    };
-    setStartState();
 }
 void DeviceData::saveDeviceData()
 {

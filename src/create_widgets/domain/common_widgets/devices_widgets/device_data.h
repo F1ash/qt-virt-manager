@@ -49,12 +49,11 @@ private:
 
 public slots:
     QDomDocument     getResult() const;
-    QString          showDevice(QString&, QString&);
-    QString          closeDataEdit();
+    void             showDevice(QString&, QString&);
+    void             closeDataEdit();
 
 private slots:
     void             currentStateChanged();
-    void             _closeDataEdit();
     void             saveDeviceData();
     void             revertDeviceData();
     void             setStartState();

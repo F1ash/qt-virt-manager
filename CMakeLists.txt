@@ -92,6 +92,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/os_booting.h
   src/create_widgets/domain/common_widgets/os_boot_widgets/_arch.h
   src/create_widgets/domain/common_widgets/os_boot_widgets/boot_menu.h
+  src/create_widgets/domain/common_widgets/os_boot_widgets/boot_devices.h
   src/create_widgets/domain/common_widgets/os_boot_widgets/path_to_file.h
   src/create_widgets/domain/common_widgets/os_boot_widgets/boot_type.h
   src/create_widgets/domain/common_widgets/os_boot_widgets/bios_boot.h
@@ -329,6 +330,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/os_booting.cpp
   src/create_widgets/domain/common_widgets/os_boot_widgets/_arch.cpp
   src/create_widgets/domain/common_widgets/os_boot_widgets/boot_menu.cpp
+  src/create_widgets/domain/common_widgets/os_boot_widgets/boot_devices.cpp
   src/create_widgets/domain/common_widgets/os_boot_widgets/path_to_file.cpp
   src/create_widgets/domain/common_widgets/os_boot_widgets/boot_type.cpp
   src/create_widgets/domain/common_widgets/os_boot_widgets/bios_boot.cpp

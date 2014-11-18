@@ -47,6 +47,7 @@ private:
 public slots:
     QDomDocument     getDataDocument() const;
     QString          closeDataEdit();
+    void             searchBootableDevices(QDomDocument&);
 
 private slots:
     void             readCapabilities();

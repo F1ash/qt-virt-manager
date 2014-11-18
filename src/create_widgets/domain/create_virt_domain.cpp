@@ -297,6 +297,8 @@ void CreateVirtDomain::create_specified_widgets()
                 wdgList.value("General"), SLOT(changeArch(QString&)));
         connect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
                 wdgList.value("Computer"), SLOT(setEmulator(QString&)));
+        connect(wdgList.value("Computer"), SIGNAL(devicesChanged(QDomDocument&)),
+                wdgList.value("OS_Booting"), SLOT(searchBootableDevices(QDomDocument&)));
     } else wdgList.clear();
 }
 void CreateVirtDomain::set_specified_Tabs()
@@ -326,6 +328,8 @@ void CreateVirtDomain::delete_specified_widgets()
                wdgList.value("General"), SLOT(changeArch(QString&)));
     disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
                wdgList.value("Computer"), SLOT(setEmulator(QString&)));
+    disconnect(wdgList.value("Computer"), SIGNAL(devicesChanged(QDomDocument&)),
+               wdgList.value("OS_Booting"), SLOT(searchBootableDevices(QDomDocument&)));
     foreach (QString key, wdgList.keys()) {
         _QWidget *Wdg = static_cast<_QWidget*>(
                     wdgList.value(key));

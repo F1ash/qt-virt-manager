@@ -108,6 +108,11 @@ QString OS_Booting::closeDataEdit()
     };
     return QString();
 }
+void OS_Booting::searchBootableDevices(QDomDocument &_doc)
+{
+    BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
+    if ( NULL!=wdg ) wdg->searchBootableDevices(_doc);
+}
 
 /* private slots */
 void OS_Booting::readCapabilities()

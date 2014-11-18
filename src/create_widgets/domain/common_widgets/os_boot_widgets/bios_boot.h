@@ -5,6 +5,7 @@
 #include "_arch.h"
 #include "path_to_file.h"
 #include "boot_menu.h"
+#include "boot_devices.h"
 
 class BIOS_Boot : public _QWidget
 {
@@ -26,12 +27,14 @@ private:
     QString          capabilities;
     QLabel          *loaderLabel;
     BootMenu        *bootMenu;
+    Boot_Devices    *bootDevices;
     QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument     getDataDocument() const;
     void             setDataDescription(QString&);
     void             setInitState();
+    void             searchBootableDevices(QDomDocument&);
 
 private slots:
     void             changeArch(QString&);

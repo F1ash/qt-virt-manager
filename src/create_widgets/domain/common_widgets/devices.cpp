@@ -153,11 +153,11 @@ QDomDocument Devices::getDataDocument() const
      */
     //qDebug()<<"Device result";
     QDomDocument doc;
-    QString _ret = infoWidget->closeDataEdit();
-    if ( !_ret.isEmpty() ) {
-        QListWidgetItem *_item = usedDeviceList->currentItem();
-        if ( NULL!=_item ) _item->setData(Qt::UserRole, _ret);
-    };
+    infoWidget->closeDataEdit();
+    //if ( !_ret.isEmpty() ) {
+    //    QListWidgetItem *_item = usedDeviceList->currentItem();
+    //    if ( NULL!=_item ) _item->setData(Qt::UserRole, _ret);
+    //};
     QDomElement devices = doc.createElement("devices");
     for (int i=0; i<usedDeviceList->count(); i++) {
         QDomDocument _doc;
@@ -190,8 +190,12 @@ void Devices::setEmulator(QString &_emulator)
     _dev.appendChild(_emul);
     doc.appendChild(_dev);
     if ( !_family.isEmpty() ) {
-        usedDeviceList->takeItem(usedDeviceList->row(_family.at(0)));
-        //_family.at(0)->setData(Qt::UserRole, doc.toString());
+        QListWidgetItem *item = usedDeviceList->takeItem(
+                    usedDeviceList->row(_family.at(0)));
+        if ( NULL!=item ) {
+            delete item;
+            item = NULL;
+        };
     };
     addDeviceToUsedDevList(doc);
 }
@@ -370,6 +374,8 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc)
          inserted = true;
     } while ( !inserted );
     //qDebug()<<"added New Device:"<<name;
+    QDomDocument _doc = getDataDocument();
+    emit devicesChanged(_doc);
 }
 void Devices::delDevice()
 {
@@ -381,6 +387,8 @@ void Devices::delDevice()
         delete item;
         item = NULL;
     };
+    QDomDocument _doc = getDataDocument();
+    emit devicesChanged(_doc);
 }
 void Devices::showDevice()
 {
@@ -393,18 +401,7 @@ void Devices::showDevice(QListWidgetItem *_curr, QListWidgetItem *_prev)
     QString _devName, _devDesc;
     _devName = _curr->text();
     _devDesc = _curr->data(Qt::UserRole).toString();
-    QString _ret = infoWidget->showDevice(_devName, _devDesc);
-    if ( NULL!=_prev && !_ret.isEmpty() ) {
-        /* block/unblock usedDeviceList signals to avoid looping */
-        usedDeviceList->blockSignals(true);
-        usedDeviceList->takeItem(usedDeviceList->row(_prev));
-        delete _prev;
-        _prev = NULL;
-        QDomDocument doc;
-        doc.setContent(_ret);
-        addDeviceToUsedDevList(doc);
-        usedDeviceList->blockSignals(false);
-    };
+    infoWidget->showDevice(_devName, _devDesc);
 }
 void Devices::showContextMenu(const QPoint &pos)
 {
@@ -462,8 +459,10 @@ void Devices::saveDeviceXMLDescription(QString &xmlDesc)
             item = NULL;
         };
     };
-    QDomDocument doc;
+    QDomDocument doc, _doc;
     doc.setContent(xmlDesc);
     addDeviceToUsedDevList(doc);
     usedDeviceList->blockSignals(false);
+    _doc = getDataDocument();
+    emit devicesChanged(_doc);
 }

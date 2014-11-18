@@ -26,6 +26,7 @@ public:
     ~Devices();
 
 signals:
+    void             devicesChanged(QDomDocument&);
 
 private:
     QListWidget     *usedDeviceList;
