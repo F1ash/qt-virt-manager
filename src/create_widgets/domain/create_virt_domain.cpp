@@ -244,6 +244,7 @@ void CreateVirtDomain::buildXMLDescription()
         QDomNodeList list;
         if ( key=="Computer" ) {
             _el = Wdg->getDataDocument().firstChildElement("devices");
+            setBootOrder(&_el);
             if ( !_el.isNull() ) list = _el.childNodes();
             _element = devices;
         } else {
@@ -361,4 +362,25 @@ void CreateVirtDomain::restoreParameters()
     create_specified_widgets();
     set_specified_Tabs();
     setEnabled(true);
+}
+void CreateVirtDomain::setBootOrder(QDomElement *_devices)
+{
+    OS_Booting *Wdg = static_cast<OS_Booting*>(
+                wdgList.value("OS_Booting"));
+    if ( NULL!=Wdg ) {
+        BootOrderList list = Wdg->getBootOrder();
+        foreach (BootOrder _data, list) {
+            //qDebug()<<_data.deviceDesc<<_data.usage<<_data.order;
+            QDomDocument _doc;
+            _doc.setContent(_data.deviceDesc);
+            QDomElement _dev = _devices->firstChildElement();
+            while ( !_dev.isNull() ) {
+                if ( !_doc.firstChildElement(_dev.tagName()).isNull() ) {
+                    qDebug()<<_dev.tagName();
+                    break;
+                };
+                _dev = _dev.nextSiblingElement();
+            };
+        };
+    };
 }

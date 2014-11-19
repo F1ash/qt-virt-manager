@@ -113,6 +113,19 @@ void OS_Booting::searchBootableDevices(QDomDocument &_doc)
     BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
     if ( NULL!=wdg ) wdg->searchBootableDevices(_doc);
 }
+BootOrderList OS_Booting::getBootOrder() const
+{
+    BootOrderList _ret;
+    int idx = bootSet->currentIndex();
+    if ( idx==0 ) {
+        BIOS_Boot *wdg = static_cast<BIOS_Boot*>(
+                    bootSet->currentWidget());
+        if ( NULL!=wdg ) {
+            _ret = wdg->getBootOrderData();
+        };
+    };
+    return _ret;
+}
 
 /* private slots */
 void OS_Booting::readCapabilities()

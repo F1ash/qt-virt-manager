@@ -122,12 +122,6 @@ void BIOS_Boot::setInitState()
 {
     if ( this->isEnabled() ) architecture->setItems();
 }
-
-/* private slots */
-void BIOS_Boot::changeArch(QString &_arch)
-{
-    arch = _arch;
-}
 void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
 {
     //qDebug()<<_doc.toString();
@@ -143,30 +137,49 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
      */
     bootDevices->devices->clear();
     uint count = _devices.length();
+    uint j = 0;
     for (uint i=0; i<count; i++) {
-        //qDebug()<<_devices.item(i).nodeName()<<i;
-        if (!_devices.item(i).isNull()) {
-            QString _devName = _devices.item(i).nodeName();
+        //qDebug()<<_devices.item(j).nodeName()<<i;
+        if (!_devices.item(j).isNull()) {
             QDomElement _el;
-            bool _used = false;
-            int _order = count;
-            _el = _devices.item(i).toElement();
+            _el = _devices.item(j).toElement();
+            QString _devName = _el.tagName();
             QString _devType = _el.attribute("type");
             if ( _devName=="hostdev" ) {
                 if ( _devType=="pci" || _devType=="usb" ) {
-                } else continue;
+                } else {
+                    ++j;
+                    continue;
+                };
             } else if ( _devName=="disk" ) {
             } else if ( _devName=="interface" ) {
-            } else continue;
-            _devName.append(" ");
-            _devName.append(_devType);
-            _used = !_el.firstChildElement("boot").isNull();
-            if (_used)
-                _order = _el
-                        .firstChildElement("boot")
-                        .attribute("order").toInt();
-            bootDevices->addNewDevice(
-                        _devName, _used, _order);
-        };
+            } else {
+                ++j;
+                continue;
+            };
+            bootDevices->addNewDevice(_el);
+        } else ++j;
     };
+}
+BootOrderList BIOS_Boot::getBootOrderData() const
+{
+    BootOrderList _ret;
+    int count = bootDevices->devices->count();
+    for (int i=0; i<count; i++) {
+        BootOrder _data;
+        _data.deviceDesc = bootDevices->devices->item(i)->data(
+                    Qt::UserRole).toString();
+        _data.order = i;
+        _data.usage =
+                bootDevices->devices->item(i)->checkState()
+                ==Qt::Checked;
+        _ret.append(_data);
+    };
+    return _ret;
+}
+
+/* private slots */
+void BIOS_Boot::changeArch(QString &_arch)
+{
+    arch = _arch;
 }

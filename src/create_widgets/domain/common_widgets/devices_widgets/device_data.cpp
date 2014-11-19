@@ -134,12 +134,14 @@ void DeviceData::closeDataEdit()
                     "Save last changes?",
                     QMessageBox::Ok,
                     QMessageBox::Cancel);
-        if ( answer==QMessageBox::Ok )
+        if ( answer==QMessageBox::Ok ) {
             saveDeviceData();
-        if ( NULL!=device ) {
-            // save device data as null-point
-            emit saveDeviceXMLDesc(currentDeviceXMLDesc);
-        };
+            if ( NULL!=device ) {
+                // save device data as null-point
+                emit saveDeviceXMLDesc(currentDeviceXMLDesc);
+            };
+        } else
+            setStartState();
     };
     if ( NULL!=device ) {
         infoLayout->removeWidget(device);
@@ -148,7 +150,6 @@ void DeviceData::closeDataEdit()
         delete device;
         device = NULL;
     };
-    setStartState();
 }
 
 /* private slots */

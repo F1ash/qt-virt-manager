@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include <QPushButton>
 #include <QGridLayout>
+#include <QDomDocument>
 #include <QDebug>
 
 class Boot_Devices : public QWidget
@@ -22,7 +23,7 @@ private:
     QGridLayout     *commonLayout;
 
 public slots:
-    void             addNewDevice(QString&, bool, int);
+    void             addNewDevice(QDomElement&);
 
 private slots:
     void             itemUp();

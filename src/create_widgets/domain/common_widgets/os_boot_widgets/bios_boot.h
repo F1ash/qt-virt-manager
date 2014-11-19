@@ -6,6 +6,15 @@
 #include "path_to_file.h"
 #include "boot_menu.h"
 #include "boot_devices.h"
+#include <QList>
+
+struct BootOrder {
+    QString     deviceDesc;
+    bool        usage = false;
+    int         order = -1;
+};
+
+typedef QList<BootOrder> BootOrderList;
 
 class BIOS_Boot : public _QWidget
 {
@@ -35,6 +44,7 @@ public slots:
     void             setDataDescription(QString&);
     void             setInitState();
     void             searchBootableDevices(QDomDocument&);
+    BootOrderList    getBootOrderData() const;
 
 private slots:
     void             changeArch(QString&);

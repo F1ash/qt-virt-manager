@@ -21,13 +21,32 @@ Boot_Devices::Boot_Devices(QWidget *parent) :
 }
 
 /* public slots */
-void Boot_Devices::addNewDevice(QString &_devName, bool _used, int _order)
+void Boot_Devices::addNewDevice(QDomElement &_el)
 {
+    QString _devName = _el.tagName();
     //qDebug()<<_devName;
+    QString _devType = _el.attribute("type");
+    _devName.append(" ");
+    _devName.append(_devType);
+    int _order = devices->count()+1;
+    bool _used = !_el.firstChildElement("boot").isNull();
+    if (_used)
+        _order = _el
+                .firstChildElement("boot")
+                .attribute("order").toInt();
+    QDomDocument doc;
+    doc.setContent(QString());
+    doc.appendChild(_el);
+    QString _data = doc.toDocument().toString();
+    if ( !_el.firstChildElement("boot").isNull() ) {
+        _el.removeChild(_el.firstChildElement("boot"));
+    };
+    //qDebug()<<doc.toDocument().toString();
     QListWidgetItem *_item = new QListWidgetItem();
     _item->setText(_devName);
-    _item->setCheckState( (_used)? Qt::Checked:Qt::Unchecked);
+    _item->setCheckState( (_used)? Qt::Checked:Qt::Unchecked );
     _item->setIcon(QIcon::fromTheme("computer"));
+    _item->setData(Qt::UserRole, _data);
     devices->insertItem(_order, _item);
 }
 
