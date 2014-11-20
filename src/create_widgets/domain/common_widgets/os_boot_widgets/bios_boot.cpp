@@ -169,7 +169,7 @@ BootOrderList BIOS_Boot::getBootOrderData() const
         BootOrder _data;
         _data.deviceDesc = bootDevices->devices->item(i)->data(
                     Qt::UserRole).toString();
-        _data.order = i;
+        _data.order = i+1;
         _data.usage =
                 bootDevices->devices->item(i)->checkState()
                 ==Qt::Checked;

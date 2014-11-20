@@ -75,10 +75,8 @@ Devices::Devices(QWidget *parent,
     usedDeviceList->setSelectionMode(QAbstractItemView::SingleSelection);
     usedDeviceList->setContextMenuPolicy(Qt::CustomContextMenu);
     usedDeviceList->setSortingEnabled(false);
-    connect(usedDeviceList,
-            SIGNAL(customContextMenuRequested(const QPoint&)),
-            this,
-            SLOT(showContextMenu(const QPoint&)));
+    connect(usedDeviceList, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(showContextMenu(const QPoint&)));
     addNewDevice = new QPushButton(QIcon::fromTheme("list-add"), "", this);
     addNewDevice->setToolTip("Add Device");
     connect(addNewDevice, SIGNAL(clicked()), this, SLOT(addDevice()));
@@ -198,6 +196,11 @@ void Devices::setEmulator(QString &_emulator)
         };
     };
     addDeviceToUsedDevList(doc);
+}
+void Devices::initBootDevices()
+{
+    QDomDocument _doc = getDataDocument();
+    emit devicesChanged(_doc);
 }
 
 /* private slots */
@@ -374,8 +377,7 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc)
          inserted = true;
     } while ( !inserted );
     //qDebug()<<"added New Device:"<<name;
-    QDomDocument _doc = getDataDocument();
-    emit devicesChanged(_doc);
+    initBootDevices();
 }
 void Devices::delDevice()
 {
@@ -387,8 +389,7 @@ void Devices::delDevice()
         delete item;
         item = NULL;
     };
-    QDomDocument _doc = getDataDocument();
-    emit devicesChanged(_doc);
+    initBootDevices();
 }
 void Devices::showDevice()
 {
@@ -459,10 +460,9 @@ void Devices::saveDeviceXMLDescription(QString &xmlDesc)
             item = NULL;
         };
     };
-    QDomDocument doc, _doc;
+    QDomDocument doc;
     doc.setContent(xmlDesc);
     addDeviceToUsedDevList(doc);
     usedDeviceList->blockSignals(false);
-    _doc = getDataDocument();
-    emit devicesChanged(_doc);
+    initBootDevices();
 }

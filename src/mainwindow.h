@@ -85,7 +85,6 @@ private slots:
     void deleteVMDisplay();
     void deleteVMDisplay(QString, QString);
     void buildMigrateArgs(QStringList&);
-
 };
 
 #endif // MAINWINDOW_H

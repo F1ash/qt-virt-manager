@@ -28,6 +28,7 @@ public slots:
 private slots:
     void             itemUp();
     void             itemDown();
+    void             orderChanged(QListWidgetItem*);
 };
 
 #endif // BOOT_DEVICES_H

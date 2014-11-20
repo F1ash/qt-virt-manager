@@ -16,6 +16,8 @@ Boot_Devices::Boot_Devices(QWidget *parent) :
     // dataChanged connections
     connect(devices, SIGNAL(itemChanged(QListWidgetItem*)),
             this, SIGNAL(dataChanged()));
+    connect(devices, SIGNAL(itemChanged(QListWidgetItem*)),
+            this, SLOT(orderChanged(QListWidgetItem*)));
     connect(devices, SIGNAL(currentRowChanged(int)),
             this, SIGNAL(dataChanged()));
 }
@@ -33,7 +35,7 @@ void Boot_Devices::addNewDevice(QDomElement &_el)
     if (_used)
         _order = _el
                 .firstChildElement("boot")
-                .attribute("order").toInt();
+                .attribute("order").toInt()-1;
     QDomDocument doc;
     doc.setContent(QString());
     doc.appendChild(_el);
@@ -50,7 +52,7 @@ void Boot_Devices::addNewDevice(QDomElement &_el)
     devices->insertItem(_order, _item);
 }
 
-/* public slots */
+/* private slots */
 void Boot_Devices::itemUp()
 {
     int idx = devices->row( devices->currentItem() );
@@ -58,6 +60,7 @@ void Boot_Devices::itemUp()
         QListWidgetItem *_item = devices->takeItem(idx);
         devices->insertItem(idx-1, _item);
         devices->setCurrentItem(_item);
+        orderChanged(_item);
     };
 }
 void Boot_Devices::itemDown()
@@ -67,5 +70,36 @@ void Boot_Devices::itemDown()
         QListWidgetItem *_item = devices->takeItem(idx);
         devices->insertItem(idx+1, _item);
         devices->setCurrentItem(_item);
+        orderChanged(_item);
+    };
+}
+void Boot_Devices::orderChanged(QListWidgetItem *_item)
+{
+    bool sorted = false;
+    int idx = devices->row( _item );
+    if ( _item->checkState()==Qt::Checked ) {
+        while (not sorted) {
+            if ( idx-1<0 ) sorted = true;
+            else {
+                if ( devices->item(idx-1)->checkState()==Qt::Unchecked ) {
+                    devices->setCurrentItem(_item);
+                    itemUp();
+                } else
+                    sorted = true;
+            };
+            idx = devices->row( _item );
+        };
+    } else {
+        while (not sorted) {
+            if ( idx==devices->count()-1 ) sorted = true;
+            else {
+                if ( devices->item(idx+1)->checkState()==Qt::Checked ) {
+                    devices->setCurrentItem(_item);
+                    itemDown();
+                } else
+                    sorted = true;
+            };
+            idx = devices->row( _item );
+        };
     };
 }

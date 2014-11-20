@@ -97,7 +97,7 @@ QString OS_Booting::closeDataEdit()
     if ( !currentStateSaved ) {
         int answer = QMessageBox::question(
                     this,
-                    "Save Memory Data",
+                    "Save OS_Booting",
                     "Save last changes?",
                     QMessageBox::Ok,
                     QMessageBox::Cancel);

@@ -50,6 +50,7 @@ private:
 public slots:
     QDomDocument     getDataDocument() const;
     void             setEmulator(QString&);
+    void             initBootDevices();
 
 private slots:
     QDomDocument     chooseNewDevice();

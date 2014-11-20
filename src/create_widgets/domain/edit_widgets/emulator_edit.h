@@ -14,7 +14,6 @@ signals:
 
 public slots:
     void setDataDescription(QString&);
-
 };
 
 #endif // EMULATOR_EDIT_H

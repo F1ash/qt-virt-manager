@@ -314,8 +314,10 @@ void CreateVirtDomain::set_specified_Tabs()
             else if ( key=="OS_Booting" ) idx = 1;
             else if ( key=="Memory" ) idx = 2;
             else if ( key=="CPU" ) idx = 3;
-            else if ( key=="Computer" ) idx = 4;
-            else if ( key=="SecurityLabel" ) idx = 5;
+            else if ( key=="Computer" ) {
+                idx = 4;
+                static_cast<Devices*>(Wdg)->initBootDevices();
+            } else if ( key=="SecurityLabel" ) idx = 5;
             else continue;
             tabWidget->insertTab(idx , Wdg, QIcon::fromTheme(key.toLower()), key);
         };
@@ -371,12 +373,32 @@ void CreateVirtDomain::setBootOrder(QDomElement *_devices)
         BootOrderList list = Wdg->getBootOrder();
         foreach (BootOrder _data, list) {
             //qDebug()<<_data.deviceDesc<<_data.usage<<_data.order;
-            QDomDocument _doc;
+            QDomDocument _doc, _doc1;
             _doc.setContent(_data.deviceDesc);
             QDomElement _dev = _devices->firstChildElement();
             while ( !_dev.isNull() ) {
                 if ( !_doc.firstChildElement(_dev.tagName()).isNull() ) {
-                    qDebug()<<_dev.tagName();
+                    //qDebug()<<_dev.tagName();
+                    QDomElement _el, _el1;
+                    _el = _doc.firstChildElement(_dev.tagName());
+                    if ( !_el.firstChildElement("boot").isNull() ) {
+                        _el.removeChild(_el.firstChildElement("boot"));
+                    };
+                    if ( !_dev.firstChildElement("boot").isNull() ) {
+                        _dev.removeChild(_dev.firstChildElement("boot"));
+                    };
+                    _el1 = _dev;
+                    _doc1.setContent(QString());
+                    _doc1.appendChild(_el1);
+                    //qDebug()<<_doc.toDocument().toString()<<_doc1.toDocument().toString();
+                    if ( _doc.toDocument().toString()==_doc1.toDocument().toString() ) {
+                        if ( _data.usage ) {
+                            QDomElement _boot = _doc.createElement("boot");
+                            _boot.setAttribute("order", _data.order);
+                            _dev.appendChild(_boot);
+                        };
+                    };
+                    _devices->appendChild(_dev);
                     break;
                 };
                 _dev = _dev.nextSiblingElement();

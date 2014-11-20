@@ -18,9 +18,6 @@ public:
 private:
     QLabel          *typeLabel;
     QHBoxLayout     *commonLayout;
-
-public slots:
-
 };
 
 #endif // BOOT_TYPE_H
