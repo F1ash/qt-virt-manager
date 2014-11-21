@@ -25,6 +25,8 @@ public:
             QString  _caps  = "");
     _Arch           *architecture;
     Path_To_File    *loader;
+    Path_To_File    *nvram;
+    Path_To_File    *nvramTemplate;
 
 signals:
     void             domainType(QString&);
@@ -34,7 +36,8 @@ signals:
 private:
     QString          arch;
     QString          capabilities;
-    QLabel          *loaderLabel;
+    QLabel          *loaderLabel, *nvramLabel,
+                    *templateLabel;
     BootMenu        *bootMenu;
     Boot_Devices    *bootDevices;
     QVBoxLayout     *commonLayout;

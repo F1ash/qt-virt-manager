@@ -8,6 +8,14 @@ BIOS_Boot::BIOS_Boot(QWidget *parent, QString _caps) :
     loader = new Path_To_File(this);
     QString _placeHolderText = QString("/usr/lib/xen/boot/hvmloader");
     loader->setPlaceholderText(_placeHolderText);
+    nvramLabel = new QLabel("NVRAM:", this);
+    nvram = new Path_To_File(this);
+    _placeHolderText = QString("/var/lib/libvirt/nvram/guest_VARS.fd");
+    nvram->setPlaceholderText(_placeHolderText);
+    templateLabel = new QLabel("NVRAM template (optional):", this);
+    nvramTemplate = new Path_To_File(this);
+    _placeHolderText = QString("/usr/share/OVMF/OVMF_VARS.fd");
+    nvramTemplate->setPlaceholderText(_placeHolderText);
     bootMenu = new BootMenu(this);
     bootDevices = new Boot_Devices(this);
     commonLayout = new QVBoxLayout(this);
@@ -16,6 +24,10 @@ BIOS_Boot::BIOS_Boot(QWidget *parent, QString _caps) :
     commonLayout->addWidget(loader);
     commonLayout->addWidget(bootMenu);
     commonLayout->addWidget(bootDevices);
+    commonLayout->addWidget(nvramLabel);
+    commonLayout->addWidget(nvram);
+    commonLayout->addWidget(templateLabel);
+    commonLayout->addWidget(nvramTemplate);
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
     connect(architecture, SIGNAL(domainType(QString&)),
@@ -36,6 +48,10 @@ BIOS_Boot::BIOS_Boot(QWidget *parent, QString _caps) :
             this, SLOT(stateChanged()));
     connect(bootDevices, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
+    connect(nvram, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(nvramTemplate, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
@@ -44,7 +60,7 @@ QDomDocument BIOS_Boot::getDataDocument() const
     QDomText data;
     QDomDocument doc;
     QDomElement _os, _type, _loader, _data,
-            _boot, _bootMenu;
+            _boot, _bootMenu, _nvram;
     _data = doc.createElement("data");
     _os = doc.createElement("os");
     _data.appendChild(_os);
@@ -78,6 +94,14 @@ QDomDocument BIOS_Boot::getDataDocument() const
                 bootMenu->timeOut->value());
     _os.appendChild(_bootMenu);
 
+    if ( !nvram->getPath().isEmpty() && !nvramTemplate->getPath().isEmpty() ) {
+        _nvram = doc.createElement("nvram");
+        data = doc.createTextNode(nvram->getPath());
+        _nvram.appendChild(data);
+        _nvram.setAttribute("template", nvramTemplate->getPath());
+        _os.appendChild(_nvram);
+    };
+
     doc.appendChild(_data);
     //qDebug()<<doc.toString();
     return doc;
@@ -88,7 +112,7 @@ void BIOS_Boot::setDataDescription(QString &xmlDesc)
     QDomDocument doc;
     doc.setContent(xmlDesc);
     QDomElement _os, _type, _loader,
-            _boot, _bootMenu;
+            _boot, _bootMenu, _nvram;
     _os = doc
             .firstChildElement("domain")
             .firstChildElement("os");
@@ -96,6 +120,7 @@ void BIOS_Boot::setDataDescription(QString &xmlDesc)
     _loader = _os.firstChildElement("loader");
     _bootMenu = _os.firstChildElement("bootmenu");
     _boot = _os.firstChildElement("boot");
+    _nvram = _os.firstChildElement("nvram");
     QString _attr;
     if ( !_type.isNull() ) {
         _attr = _type.attribute("arch");
@@ -116,6 +141,15 @@ void BIOS_Boot::setDataDescription(QString &xmlDesc)
     };
     while ( !_boot.isNull() ) {
         _boot = _boot.nextSiblingElement("boot");
+    };
+    if ( !_nvram.isNull() ) {
+        _attr = _nvram.firstChild().toText().data();
+        nvram->setPath(_attr);
+        _attr = _nvram.attribute("template");
+        nvramTemplate->setPath(_attr);
+    } else {
+        nvram->clear();
+        nvramTemplate->clear();
     };
 }
 void BIOS_Boot::setInitState()

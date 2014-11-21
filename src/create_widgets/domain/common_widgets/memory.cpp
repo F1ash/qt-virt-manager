@@ -79,7 +79,6 @@ Memory::Memory(
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(restorePanel, 0, Qt::AlignRight);
     commonLayout->addWidget(commonWdg);
-    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(enableMemBacking, SIGNAL(toggled(bool)),
             memBackingWdg, SLOT(setVisible(bool)));
