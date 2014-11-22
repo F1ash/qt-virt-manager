@@ -1,14 +1,12 @@
 #include "cpu.h"
 
-CPU::CPU(QWidget *parent, QString _xmlDesc) :
-    _QWidget(parent), xmlDesc(_xmlDesc)
+CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
+    _QWidget(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("CPU");
-    // workaround
-    editor = new QTextEdit(this);
-    //
+    cpuAlloc = new CPU_Allocation(this, capabilities);
     scrolledLayout = new QVBoxLayout(this);
-    scrolledLayout->addWidget(editor);
+    scrolledLayout->addWidget(cpuAlloc);
     scrolledLayout->addStretch(-1);
     scrolled = new QWidget(this);
     scrolled->setLayout(scrolledLayout);
@@ -19,11 +17,10 @@ CPU::CPU(QWidget *parent, QString _xmlDesc) :
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(restorePanel, 0, Qt::AlignRight);
     commonLayout->addWidget(commonWdg);
-    commonLayout->addStretch(-1);
     setLayout(commonLayout);
     readXMLDesciption();
     // dataChanged connections
-    connect(editor, SIGNAL(textChanged()),
+    connect(cpuAlloc, SIGNAL(dataChanged()),
             this, SIGNAL(dataChanged()));
     connect(this, SIGNAL(dataChanged()),
             restorePanel, SLOT(stateChanged()));
@@ -39,11 +36,29 @@ CPU::CPU(QWidget *parent, QString _xmlDesc) :
 /* public slots */
 QDomDocument CPU::getDataDocument() const
 {
-    QDomDocument doc, _cpuDesc;
-    QDomElement _data;
+    QDomDocument doc;
+    QDomText data;
+    QDomElement _data, _vcpu, _cpu;
     _data = doc.createElement("data");
-    _cpuDesc.setContent(editor->toPlainText());
-    _data.appendChild(_cpuDesc);
+    _vcpu = doc.createElement("vcpu");
+    data = doc.createTextNode(cpuAlloc->vcpu->text());
+    _vcpu.appendChild(data);
+    if ( cpuAlloc->placementLabel->isChecked() ) {
+        _vcpu.setAttribute(
+                    "placement",
+                    cpuAlloc->placement->currentText());
+    };
+    if ( cpuAlloc->cpusetLabel->isChecked() ) {
+        _vcpu.setAttribute(
+                    "cpuset",
+                    cpuAlloc->cpuset->text());
+    };
+    if ( cpuAlloc->currLabel->isChecked() ) {
+        _vcpu.setAttribute(
+                    "current",
+                    cpuAlloc->current->text());
+    };
+    _data.appendChild(_vcpu);
     doc.appendChild(_data);
     //qDebug()<<doc.toString();
     return doc;
@@ -53,7 +68,7 @@ QString CPU::closeDataEdit()
     if ( !currentStateSaved ) {
         int answer = QMessageBox::question(
                     this,
-                    "Save Memory Data",
+                    "Save CPU Data",
                     "Save last changes?",
                     QMessageBox::Ok,
                     QMessageBox::Cancel);
@@ -63,6 +78,12 @@ QString CPU::closeDataEdit()
             revertSecData();
     };
     return QString();
+}
+void CPU::setMaxVCPU(QString &_vcpu)
+{
+    //qDebug()<<_vcpu;
+    cpuAlloc->vcpu->setRange(1, _vcpu.toInt());
+    cpuAlloc->current->setRange(1, _vcpu.toInt());
 }
 
 /* private slots */
@@ -80,17 +101,32 @@ void CPU::readXMLDesciption()
 }
 void CPU::readXMLDesciption(QString &_xmlDesc)
 {
-    //if ( _xmlDesc.isEmpty() ) return;
-    QDomDocument doc, _cpuDesc;
-    QDomElement _domain, _cpu;
+    //qDebug()<<_xmlDesc;
+    QDomDocument doc;
+    QDomElement _domain, _cpu, _vcpu;
     doc.setContent(_xmlDesc);
     _domain = doc.firstChildElement("domain");
+    _vcpu = _domain.firstChildElement("vcpu");
     _cpu = _domain.firstChildElement("cpu");
-    _cpuDesc.setContent(QString(""));
-    _cpuDesc.appendChild(_cpu);
-    QString _description = QString(
-                _cpuDesc.toDocument().toByteArray(4).data());
-    editor->setText(_description);
+    QString _attr;
+    if ( !_vcpu.isNull() ) {
+        _attr = _vcpu.firstChild().toText().data();
+        cpuAlloc->vcpu->setValue(_attr.toInt());
+        _attr = _vcpu.attribute("placement");
+        cpuAlloc->placementLabel->setChecked( !_attr.isNull() );
+        if ( !_attr.isNull() )
+            cpuAlloc->setPlacement(_attr);
+        _attr = _vcpu.attribute("cpuset");
+        cpuAlloc->cpusetLabel->setChecked( !_attr.isNull() );
+        if ( !_attr.isNull() )
+            cpuAlloc->cpuset->setText(_attr);
+        else
+            cpuAlloc->cpuset->clear();
+        _attr = _vcpu.attribute("current");
+        cpuAlloc->currLabel->setChecked( !_attr.isNull() );
+        if ( !_attr.isNull() )
+            cpuAlloc->current->setValue(_attr.toInt());
+    };
 }
 void CPU::resetSecData()
 {

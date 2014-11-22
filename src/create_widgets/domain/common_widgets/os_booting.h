@@ -26,6 +26,7 @@ signals:
     void             archChanged(QString&);
     void             domainType(QString&);
     void             emulatorType(QString&);
+    void             maxVCPU(QString&);
 
 private:
     const QString    xmlDesc;
@@ -49,6 +50,7 @@ public slots:
     QString          closeDataEdit();
     void             searchBootableDevices(QDomDocument&);
     BootOrderList    getBootOrder() const;
+    void             initMaxVCPU();
 
 private slots:
     void             readCapabilities();

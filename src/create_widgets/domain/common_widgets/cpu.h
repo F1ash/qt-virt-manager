@@ -3,9 +3,9 @@
 
 #include <QScrollArea>
 #include <QMessageBox>
-#include <QTextEdit>
 #include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/restore_panel.h"
+#include "cpu_widgets/cpu_allocation.h"
 
 class CPU : public _QWidget
 {
@@ -13,15 +13,17 @@ class CPU : public _QWidget
 public:
     explicit CPU(
             QWidget *parent = NULL,
+            QString  _caps  = "",
             QString  _xmlDesc = QString());
+    CPU_Allocation  *cpuAlloc;
 
 signals:
 
 private:
     const QString    xmlDesc;
+    QString          capabilities;
     bool             currentStateSaved = true;
     QString          currentDeviceXMLDesc;
-    QTextEdit       *editor;
     RestorePanel    *restorePanel;
 
     QScrollArea     *commonWdg;
@@ -32,6 +34,7 @@ private:
 public slots:
     QDomDocument     getDataDocument() const;
     QString          closeDataEdit();
+    void             setMaxVCPU(QString&);
 
 private slots:
     void             stateChanged();

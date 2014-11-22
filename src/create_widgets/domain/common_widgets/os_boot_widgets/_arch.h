@@ -19,6 +19,7 @@ signals:
     void             archType(QString&);
     void             osType(QString&);
     void             emulatorType(QString&);
+    void             maxVCPU(QString&);
 
 private:
     QString          capabilities;
@@ -35,6 +36,7 @@ public slots:
 
 private slots:
     void             archChanged(const QString&);
+    void             machineChanged(const QString&);
 };
 
 #endif // _ARCH_H

@@ -58,6 +58,9 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
         connect(bootSet->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));
     };
+    BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
+    connect(wdg->architecture, SIGNAL(maxVCPU(QString&)),
+            this, SIGNAL(maxVCPU(QString&)));
 }
 
 /* public slots */
@@ -125,6 +128,11 @@ BootOrderList OS_Booting::getBootOrder() const
         };
     };
     return _ret;
+}
+void OS_Booting::initMaxVCPU()
+{
+    BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
+    wdg->architecture->setItems();
 }
 
 /* private slots */

@@ -290,7 +290,7 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.insert("General", new General(this, capabilities, xmlDesc));
         wdgList.insert("OS_Booting", new OS_Booting(this, capabilities, xmlDesc));
         wdgList.insert("Memory", new Memory(this, capabilities, xmlDesc));
-        wdgList.insert("CPU", new CPU(this, xmlDesc));
+        wdgList.insert("CPU", new CPU(this, capabilities, xmlDesc));
         wdgList.insert("Computer",
                        new Devices(this, currWorkConnect, xmlDesc));
         wdgList.insert("SecurityLabel", new SecurityLabel(this, xmlDesc));
@@ -300,6 +300,8 @@ void CreateVirtDomain::create_specified_widgets()
                 wdgList.value("Computer"), SLOT(setEmulator(QString&)));
         connect(wdgList.value("Computer"), SIGNAL(devicesChanged(QDomDocument&)),
                 wdgList.value("OS_Booting"), SLOT(searchBootableDevices(QDomDocument&)));
+        connect(wdgList.value("OS_Booting"), SIGNAL(maxVCPU(QString&)),
+                wdgList.value("CPU"), SLOT(setMaxVCPU(QString&)));
     } else wdgList.clear();
 }
 void CreateVirtDomain::set_specified_Tabs()
@@ -311,8 +313,10 @@ void CreateVirtDomain::set_specified_Tabs()
                     wdgList.value(key));
         if ( NULL!=Wdg ) {
             if ( key=="General" ) idx = 0;
-            else if ( key=="OS_Booting" ) idx = 1;
-            else if ( key=="Memory" ) idx = 2;
+            else if ( key=="OS_Booting" ) {
+                idx = 1;
+                static_cast<OS_Booting*>(Wdg)->initMaxVCPU();
+            } else if ( key=="Memory" ) idx = 2;
             else if ( key=="CPU" ) idx = 3;
             else if ( key=="Computer" ) {
                 idx = 4;
@@ -333,6 +337,8 @@ void CreateVirtDomain::delete_specified_widgets()
                wdgList.value("Computer"), SLOT(setEmulator(QString&)));
     disconnect(wdgList.value("Computer"), SIGNAL(devicesChanged(QDomDocument&)),
                wdgList.value("OS_Booting"), SLOT(searchBootableDevices(QDomDocument&)));
+    disconnect(wdgList.value("OS_Booting"), SIGNAL(maxVCPU(QString&)),
+               wdgList.value("CPU"), SLOT(setMaxVCPU(QString&)));
     foreach (QString key, wdgList.keys()) {
         _QWidget *Wdg = static_cast<_QWidget*>(
                     wdgList.value(key));
