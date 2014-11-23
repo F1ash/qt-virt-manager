@@ -6,6 +6,7 @@
 #include "create_widgets/domain/_qwidget.h"
 #include "create_widgets/domain/restore_panel.h"
 #include "cpu_widgets/cpu_allocation.h"
+#include "cpu_widgets/logical_host_cpu.h"
 
 class CPU : public _QWidget
 {
@@ -26,6 +27,7 @@ private:
     QString          currentDeviceXMLDesc;
     RestorePanel    *restorePanel;
 
+    LogicalHostCPU  *logicCPULabel;
     QScrollArea     *commonWdg;
     QVBoxLayout     *scrolledLayout;
     QWidget         *scrolled;
@@ -40,9 +42,9 @@ private slots:
     void             stateChanged();
     void             readXMLDesciption();
     void             readXMLDesciption(QString&);
-    void             resetSecData();
-    void             revertSecData();
-    void             saveSecData();
+    void             resetCPUData();
+    void             revertCPUData();
+    void             saveCPUData();
 };
 
 #endif // CPU_H

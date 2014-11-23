@@ -48,9 +48,9 @@ private slots:
     void             stateChanged();
     void             readXMLDesciption();
     void             readXMLDesciption(QString&);
-    void             resetSecData();
-    void             revertSecData();
-    void             saveSecData();
+    void             resetGenData();
+    void             revertGenData();
+    void             saveGenData();
 };
 
 #endif // GENERAL_H

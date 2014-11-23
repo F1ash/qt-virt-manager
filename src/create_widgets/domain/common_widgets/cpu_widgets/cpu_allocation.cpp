@@ -40,6 +40,8 @@ CPU_Allocation::CPU_Allocation(QWidget *parent, QString _caps) :
     setLayout(commonLayout);
     connect(vcpu, SIGNAL(valueChanged(int)),
             this, SLOT(vcpuValueChanged(int)));
+    connect(current, SIGNAL(valueChanged(int)),
+            this, SIGNAL(currentVCPU(int)));
     connect(cpusetLabel, SIGNAL(toggled(bool)),
             cpuset, SLOT(setEnabled(bool)));
     connect(currLabel, SIGNAL(toggled(bool)),
@@ -48,8 +50,6 @@ CPU_Allocation::CPU_Allocation(QWidget *parent, QString _caps) :
             this, SLOT(placementStateChanged(bool)));
     // dataChanged connections
     connect(vcpu, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
-    connect(current, SIGNAL(valueChanged(int)),
             this, SIGNAL(dataChanged()));
     connect(cpuset, SIGNAL(textChanged(QString)),
             this, SIGNAL(dataChanged()));

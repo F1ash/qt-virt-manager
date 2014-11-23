@@ -26,10 +26,12 @@ public:
 
 signals:
     void             dataChanged();
+    void             currentVCPU(int);
 
 private:
     QString          capabilities;
     QString          type;
+    QString          cores;
     QLabel          *vcpuLabel;
     QGridLayout     *commonLayout;
 

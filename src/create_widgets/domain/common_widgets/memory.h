@@ -71,9 +71,9 @@ private slots:
     void             readXMLDesciption();
     void             readXMLDesciption(QString&);
     quint64          convertNiBtoKiB(quint64, QString&);
-    void             resetSecData();
-    void             revertSecData();
-    void             saveSecData();
+    void             resetMemData();
+    void             revertMemData();
+    void             saveMemData();
 };
 
 #endif // MEMORY_H

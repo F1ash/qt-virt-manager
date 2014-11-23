@@ -132,7 +132,8 @@ BootOrderList OS_Booting::getBootOrder() const
 void OS_Booting::initMaxVCPU()
 {
     BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
-    wdg->architecture->setItems();
+    wdg->architecture->machineChanged(
+                wdg->architecture->getMachine());
 }
 
 /* private slots */

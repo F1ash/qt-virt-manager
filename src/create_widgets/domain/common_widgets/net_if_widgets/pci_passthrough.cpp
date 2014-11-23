@@ -6,7 +6,8 @@ PCI_Passthrough::PCI_Passthrough(
     _QWidget(parent, conn)
 {
     attentionIcon = new QLabel(this);
-    attentionIcon->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(32));
+    attentionIcon->setPixmap(QIcon::fromTheme("dialog-warning")
+                             .pixmap(this->font().SizeResolved));
     attention = new QLabel("WARNING: only for SR-IOV\n(Single Root I/O Virtualization)", this);
     driverLabel = new QLabel("Driver:", this);
     driver = new QComboBox(this);

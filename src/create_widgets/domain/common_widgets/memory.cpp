@@ -116,11 +116,11 @@ Memory::Memory(
             restorePanel, SLOT(stateChanged()));
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
-            this, SLOT(resetSecData()));
+            this, SLOT(resetMemData()));
     connect(restorePanel, SIGNAL(revertData()),
-            this, SLOT(revertSecData()));
+            this, SLOT(revertMemData()));
     connect(restorePanel, SIGNAL(saveData()),
-            this, SLOT(saveSecData()));
+            this, SLOT(saveMemData()));
 }
 
 /* public slots */
@@ -216,9 +216,9 @@ QString Memory::closeDataEdit()
                     QMessageBox::Ok,
                     QMessageBox::Cancel);
         if ( answer==QMessageBox::Ok )
-            saveSecData();
+            saveMemData();
         else
-            revertSecData();
+            revertMemData();
     };
     return QString();
 }
@@ -405,19 +405,19 @@ quint64 Memory::convertNiBtoKiB(quint64 _NiB, QString &_unit)
         return convertNiBtoKiB(_NiB*1000000000000000, bytes);
     } else return 0;
 }
-void Memory::resetSecData()
+void Memory::resetMemData()
 {
     readXMLDesciption();
     currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
-void Memory::revertSecData()
+void Memory::revertMemData()
 {
     readXMLDesciption(currentDeviceXMLDesc);
     currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
-void Memory::saveSecData()
+void Memory::saveMemData()
 {
     QDomDocument doc;
     QDomElement _domain;

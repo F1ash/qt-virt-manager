@@ -47,17 +47,66 @@ void _Arch::setItems()
 }
 void _Arch::setArch(const QString &_arch)
 {
+    //qDebug()<<_arch;
     int idx = arch->findText(_arch, Qt::MatchContains);
     arch->setCurrentIndex( (idx<0)? 0:idx );
 }
 void _Arch::setMachine(const QString &_mach)
 {
+    //qDebug()<<_mach;
     int idx = machines->findText(_mach, Qt::MatchContains);
     machines->setCurrentIndex( (idx<0)? 0:idx );
 }
 QString _Arch::getMachine() const
 {
     return machines->currentText();
+}
+void _Arch::machineChanged(const QString &_machine)
+{
+    QString _arch, _vcpu;
+    _arch = arch->currentText();
+    QDomElement _el = doc
+            .firstChildElement("capabilities")
+            .firstChildElement("guest");
+    while ( !_el.isNull() ) {
+        if ( _el
+             .firstChildElement("arch")
+             .attribute("name")==_arch ) {
+            QDomElement _domain, _ell;
+            _domain = _el
+                    .firstChildElement("arch")
+                    .firstChildElement("domain");
+            bool exist = false;
+            while ( !_domain.isNull() ) {
+                QString _domType = _domain.attribute("type");
+                // WARNING: in this application
+                // KVM has the advantage over QEMU
+                if ( _domType=="kvm" ) {
+                    _ell = _domain
+                            .firstChildElement("machine");
+                    exist = true;
+                    break;
+                };
+                _domain = _domain.nextSiblingElement("domain");
+            };
+            if ( !exist ) {
+                _ell = _el
+                        .firstChildElement("arch")
+                        .firstChildElement("machine");
+            };
+            while ( !_ell.isNull() ) {
+                if ( machines->currentText()==_machine ) {
+                    _vcpu = _ell.attribute("maxCpus");
+                    break;
+                };
+                _ell = _ell.nextSiblingElement("machine");
+            };
+            break;
+        };
+        _el = _el.nextSiblingElement("guest");
+    };
+    //qDebug()<<_vcpu;
+    emit maxVCPU(_vcpu);
 }
 
 /* private slots */
@@ -119,51 +168,4 @@ void _Arch::archChanged(const QString &_arch)
     emit archType(_Arch);
     emit osType(_osType);
     emit emulatorType(_emulType);
-}
-void _Arch::machineChanged(const QString &_machine)
-{
-    QString _arch, _vcpu;
-    _arch = arch->currentText();
-    QDomElement _el = doc
-            .firstChildElement("capabilities")
-            .firstChildElement("guest");
-    while ( !_el.isNull() ) {
-        if ( _el
-             .firstChildElement("arch")
-             .attribute("name")==_arch ) {
-            QDomElement _domain, _ell;
-            _domain = _el
-                    .firstChildElement("arch")
-                    .firstChildElement("domain");
-            bool exist = false;
-            while ( !_domain.isNull() ) {
-                QString _domType = _domain.attribute("type");
-                // WARNING: in this application
-                // KVM has the advantage over QEMU
-                if ( _domType=="kvm" ) {
-                    _ell = _domain
-                            .firstChildElement("machine");
-                    exist = true;
-                    break;
-                };
-                _domain = _domain.nextSiblingElement("domain");
-            };
-            if ( !exist ) {
-                _ell = _el
-                        .firstChildElement("arch")
-                        .firstChildElement("machine");
-            };
-            while ( !_ell.isNull() ) {
-                if ( machines->currentText()==_machine ) {
-                    _vcpu = _ell.attribute("maxCpus");
-                    break;
-                };
-                _ell = _ell.nextSiblingElement("machine");
-            };
-            break;
-        };
-        _el = _el.nextSiblingElement("guest");
-    };
-    //qDebug()<<_vcpu;
-    emit maxVCPU(_vcpu);
 }

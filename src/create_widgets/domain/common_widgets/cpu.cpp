@@ -4,8 +4,10 @@ CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
     _QWidget(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("CPU");
+    logicCPULabel = new LogicalHostCPU(this, capabilities);
     cpuAlloc = new CPU_Allocation(this, capabilities);
     scrolledLayout = new QVBoxLayout(this);
+    scrolledLayout->addWidget(logicCPULabel);
     scrolledLayout->addWidget(cpuAlloc);
     scrolledLayout->addStretch(-1);
     scrolled = new QWidget(this);
@@ -19,6 +21,8 @@ CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
     commonLayout->addWidget(commonWdg);
     setLayout(commonLayout);
     readXMLDesciption();
+    connect(cpuAlloc, SIGNAL(currentVCPU(int)),
+            logicCPULabel, SLOT(changeInfoVisibility(int)));
     // dataChanged connections
     connect(cpuAlloc, SIGNAL(dataChanged()),
             this, SIGNAL(dataChanged()));
@@ -26,11 +30,11 @@ CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
             restorePanel, SLOT(stateChanged()));
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
-            this, SLOT(resetSecData()));
+            this, SLOT(resetCPUData()));
     connect(restorePanel, SIGNAL(revertData()),
-            this, SLOT(revertSecData()));
+            this, SLOT(revertCPUData()));
     connect(restorePanel, SIGNAL(saveData()),
-            this, SLOT(saveSecData()));
+            this, SLOT(saveCPUData()));
 }
 
 /* public slots */
@@ -73,9 +77,9 @@ QString CPU::closeDataEdit()
                     QMessageBox::Ok,
                     QMessageBox::Cancel);
         if ( answer==QMessageBox::Ok )
-            saveSecData();
+            saveCPUData();
         else
-            revertSecData();
+            revertCPUData();
     };
     return QString();
 }
@@ -83,7 +87,6 @@ void CPU::setMaxVCPU(QString &_vcpu)
 {
     //qDebug()<<_vcpu;
     cpuAlloc->vcpu->setRange(1, _vcpu.toInt());
-    cpuAlloc->current->setRange(1, _vcpu.toInt());
 }
 
 /* private slots */
@@ -127,20 +130,23 @@ void CPU::readXMLDesciption(QString &_xmlDesc)
         if ( !_attr.isNull() )
             cpuAlloc->current->setValue(_attr.toInt());
     };
+    if ( !_cpu.isNull() ) {
+
+    };
 }
-void CPU::resetSecData()
+void CPU::resetCPUData()
 {
     readXMLDesciption();
     currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
-void CPU::revertSecData()
+void CPU::revertCPUData()
 {
     readXMLDesciption(currentDeviceXMLDesc);
     currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
-void CPU::saveSecData()
+void CPU::saveCPUData()
 {
     QDomDocument doc;
     QDomElement _cpu;

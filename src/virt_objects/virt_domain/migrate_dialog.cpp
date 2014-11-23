@@ -96,7 +96,7 @@ MigrateDialog::MigrateDialog(QWidget *parent,
     if ( icon.isNull() ) {
         help->setText("Help:");
     } else {
-        help->setPixmap(icon.pixmap(22));
+        help->setPixmap(icon.pixmap(this->font().SizeResolved));
     };
     helpText = new QTextBrowser(this);
     connLayout->addWidget(uriLabel, 0, 0, Qt::AlignRight);

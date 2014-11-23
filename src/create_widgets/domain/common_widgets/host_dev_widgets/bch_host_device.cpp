@@ -15,7 +15,8 @@ BCh_Host_Device::BCh_Host_Device(
     device->setPlaceholderText("/dev/sdf1");
     info = new QLabel("The device as seen from the host", this);
     attention = new QLabel(this);
-    attention->setPixmap(QIcon::fromTheme("dialog-warning").pixmap(32));
+    attention->setPixmap(QIcon::fromTheme("dialog-warning")
+                         .pixmap(this->font().SizeResolved));
     commonLayout = new QGridLayout();
     commonLayout->addWidget(typeLabel, 0, 0);
     commonLayout->addWidget(type, 0, 1);

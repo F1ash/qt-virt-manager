@@ -49,11 +49,11 @@ General::General(QWidget *parent, QString _caps, QString _xmlDesc) :
             restorePanel, SLOT(stateChanged()));
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
-            this, SLOT(resetSecData()));
+            this, SLOT(resetGenData()));
     connect(restorePanel, SIGNAL(revertData()),
-            this, SLOT(revertSecData()));
+            this, SLOT(revertGenData()));
     connect(restorePanel, SIGNAL(saveData()),
-            this, SLOT(saveSecData()));
+            this, SLOT(saveGenData()));
 }
 
 /* public slots */
@@ -97,9 +97,9 @@ QString General::closeDataEdit()
                     QMessageBox::Ok,
                     QMessageBox::Cancel);
         if ( answer==QMessageBox::Ok )
-            saveSecData();
+            saveGenData();
         else
-            revertSecData();
+            revertGenData();
     };
     return QString();
 }
@@ -167,19 +167,19 @@ void General::readXMLDesciption(QString &_xmlDesc)
                 .firstChildElement("description")
                 .firstChild().toText().data());
 }
-void General::resetSecData()
+void General::resetGenData()
 {
     readXMLDesciption();
     currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
-void General::revertSecData()
+void General::revertGenData()
 {
     readXMLDesciption(currentDeviceXMLDesc);
     currentStateSaved = true;
     restorePanel->stateChanged(false);
 }
-void General::saveSecData()
+void General::saveGenData()
 {
     QDomDocument doc;
     QDomElement _domain;
