@@ -6,9 +6,13 @@ CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
     setObjectName("CPU");
     logicCPULabel = new LogicalHostCPU(this, capabilities);
     cpuAlloc = new CPU_Allocation(this, capabilities);
+    cpuModel = new CPU_Model(this);
+    cpuTopology = new CPU_Topology(this);
     scrolledLayout = new QVBoxLayout(this);
     scrolledLayout->addWidget(logicCPULabel);
     scrolledLayout->addWidget(cpuAlloc);
+    scrolledLayout->addWidget(cpuModel);
+    scrolledLayout->addWidget(cpuTopology);
     scrolledLayout->addStretch(-1);
     scrolled = new QWidget(this);
     scrolled->setLayout(scrolledLayout);

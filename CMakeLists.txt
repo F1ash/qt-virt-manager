@@ -104,6 +104,8 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/cpu.h
   src/create_widgets/domain/common_widgets/cpu_widgets/cpu_allocation.h
   src/create_widgets/domain/common_widgets/cpu_widgets/logical_host_cpu.h
+  src/create_widgets/domain/common_widgets/cpu_widgets/cpu_model.h
+  src/create_widgets/domain/common_widgets/cpu_widgets/cpu_topology.h
   src/create_widgets/domain/common_widgets/devices.h
   src/create_widgets/domain/common_widgets/devices_widgets/device_data.h
   src/create_widgets/domain/common_widgets/devices_widgets/device_existance_menu.h
@@ -344,6 +346,8 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/cpu.cpp
   src/create_widgets/domain/common_widgets/cpu_widgets/cpu_allocation.cpp
   src/create_widgets/domain/common_widgets/cpu_widgets/logical_host_cpu.cpp
+  src/create_widgets/domain/common_widgets/cpu_widgets/cpu_model.cpp
+  src/create_widgets/domain/common_widgets/cpu_widgets/cpu_topology.cpp
   src/create_widgets/domain/common_widgets/devices.cpp
   src/create_widgets/domain/common_widgets/devices_widgets/device_data.cpp
   src/create_widgets/domain/common_widgets/devices_widgets/device_existance_menu.cpp

@@ -7,6 +7,8 @@
 #include "create_widgets/domain/restore_panel.h"
 #include "cpu_widgets/cpu_allocation.h"
 #include "cpu_widgets/logical_host_cpu.h"
+#include "cpu_widgets/cpu_model.h"
+#include "cpu_widgets/cpu_topology.h"
 
 class CPU : public _QWidget
 {
@@ -28,6 +30,8 @@ private:
     RestorePanel    *restorePanel;
 
     LogicalHostCPU  *logicCPULabel;
+    CPU_Model       *cpuModel;
+    CPU_Topology    *cpuTopology;
     QScrollArea     *commonWdg;
     QVBoxLayout     *scrolledLayout;
     QWidget         *scrolled;
