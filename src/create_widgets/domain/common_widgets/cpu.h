@@ -41,6 +41,7 @@ public slots:
     QDomDocument     getDataDocument() const;
     QString          closeDataEdit();
     void             setMaxVCPU(QString&);
+    void             changeArch(QString&);
 
 private slots:
     void             stateChanged();

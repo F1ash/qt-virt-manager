@@ -302,6 +302,8 @@ void CreateVirtDomain::create_specified_widgets()
                 wdgList.value("OS_Booting"), SLOT(searchBootableDevices(QDomDocument&)));
         connect(wdgList.value("OS_Booting"), SIGNAL(maxVCPU(QString&)),
                 wdgList.value("CPU"), SLOT(setMaxVCPU(QString&)));
+        connect(wdgList.value("OS_Booting"), SIGNAL(archChanged(QString&)),
+                wdgList.value("CPU"), SLOT(changeArch(QString&)));
     } else wdgList.clear();
 }
 void CreateVirtDomain::set_specified_Tabs()
@@ -339,6 +341,8 @@ void CreateVirtDomain::delete_specified_widgets()
                wdgList.value("OS_Booting"), SLOT(searchBootableDevices(QDomDocument&)));
     disconnect(wdgList.value("OS_Booting"), SIGNAL(maxVCPU(QString&)),
                wdgList.value("CPU"), SLOT(setMaxVCPU(QString&)));
+    disconnect(wdgList.value("OS_Booting"), SIGNAL(archChanged(QString&)),
+               wdgList.value("CPU"), SLOT(changeArch(QString&)));
     foreach (QString key, wdgList.keys()) {
         _QWidget *Wdg = static_cast<_QWidget*>(
                     wdgList.value(key));

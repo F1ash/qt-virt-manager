@@ -92,6 +92,10 @@ void CPU::setMaxVCPU(QString &_vcpu)
     //qDebug()<<_vcpu;
     cpuAlloc->vcpu->setRange(1, _vcpu.toInt());
 }
+void CPU::changeArch(QString &_arch)
+{
+    cpuModel->archChanged(_arch);
+}
 
 /* private slots */
 void CPU::stateChanged()

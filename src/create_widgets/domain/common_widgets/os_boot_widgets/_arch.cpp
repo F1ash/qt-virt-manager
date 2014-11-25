@@ -57,6 +57,10 @@ void _Arch::setMachine(const QString &_mach)
     int idx = machines->findText(_mach, Qt::MatchContains);
     machines->setCurrentIndex( (idx<0)? 0:idx );
 }
+QString _Arch::getArch() const
+{
+    return arch->currentText();
+}
 QString _Arch::getMachine() const
 {
     return machines->currentText();
@@ -108,8 +112,6 @@ void _Arch::machineChanged(const QString &_machine)
     //qDebug()<<_vcpu;
     emit maxVCPU(_vcpu);
 }
-
-/* private slots */
 void _Arch::archChanged(const QString &_arch)
 {
     QString _domType, _osType, _emulType, _Arch;

@@ -61,6 +61,8 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
     BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
     connect(wdg->architecture, SIGNAL(maxVCPU(QString&)),
             this, SIGNAL(maxVCPU(QString&)));
+    connect(wdg->architecture, SIGNAL(archType(QString&)),
+            this, SIGNAL(archChanged(QString&)));
 }
 
 /* public slots */
@@ -134,6 +136,8 @@ void OS_Booting::initMaxVCPU()
     BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
     wdg->architecture->machineChanged(
                 wdg->architecture->getMachine());
+    wdg->architecture->archChanged(
+                wdg->architecture->getArch());
 }
 
 /* private slots */

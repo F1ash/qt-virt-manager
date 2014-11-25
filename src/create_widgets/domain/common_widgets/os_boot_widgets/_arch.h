@@ -32,10 +32,9 @@ public slots:
     void             setItems();
     void             setArch(const QString&);
     void             setMachine(const QString&);
+    QString          getArch() const;
     QString          getMachine() const;
     void             machineChanged(const QString&);
-
-private slots:
     void             archChanged(const QString&);
 };
 
