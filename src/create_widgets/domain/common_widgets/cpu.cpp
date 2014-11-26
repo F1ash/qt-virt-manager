@@ -27,8 +27,12 @@ CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
     readXMLDesciption();
     connect(cpuAlloc, SIGNAL(currentVCPU(int)),
             logicCPULabel, SLOT(changeInfoVisibility(int)));
+    connect(cpuModel, SIGNAL(cpuUseElements(bool)),
+            cpuTopology, SLOT(setUsage(bool)));
     // dataChanged connections
     connect(cpuAlloc, SIGNAL(dataChanged()),
+            this, SIGNAL(dataChanged()));
+    connect(cpuModel, SIGNAL(dataChanged()),
             this, SIGNAL(dataChanged()));
     connect(this, SIGNAL(dataChanged()),
             restorePanel, SLOT(stateChanged()));
@@ -46,7 +50,8 @@ QDomDocument CPU::getDataDocument() const
 {
     QDomDocument doc;
     QDomText data;
-    QDomElement _data, _vcpu, _cpu;
+    QDomElement _data, _vcpu, _cpu, _model,
+            _topology, _feature;
     _data = doc.createElement("data");
     _vcpu = doc.createElement("vcpu");
     data = doc.createTextNode(cpuAlloc->vcpu->text());
@@ -67,6 +72,36 @@ QDomDocument CPU::getDataDocument() const
                     cpuAlloc->current->text());
     };
     _data.appendChild(_vcpu);
+    QString _attr;
+    if ( cpuModel->isUsed() ) {
+        _cpu = doc.createElement("cpu");
+        if ( cpuModel->copyHostCPU->isChecked() ) {
+            _cpu.setAttribute("mode", "host-passthrough");
+        } else {
+            if ( !cpuModel->getMode().isEmpty() )
+                _cpu.setAttribute(
+                            "mode", cpuModel->getMode());
+            if ( !cpuModel->getMatch().isEmpty() )
+                _cpu.setAttribute( "match", cpuModel->getMatch() );
+            _model = doc.createElement("model");
+            _attr = cpuModel->getModel();
+            if ( !_attr.isEmpty() ) {
+                data = doc.createTextNode(_attr);
+                _model.appendChild(data);
+            };
+            _attr = ( cpuModel->allowFallback->isChecked() )?
+                        "allow":"forbid";
+            _model.setAttribute("fallback", _attr);
+            _cpu.appendChild(_model);
+            if ( cpuTopology->isUsed() ) {
+                _topology = doc.createElement("topology");
+                _cpu.appendChild(_topology);
+            };
+            //_feature = doc.createElement("feature");
+            //_cpu.appendChild(_feature);
+        };
+    };
+    if ( !_cpu.isNull() ) _data.appendChild(_cpu);
     doc.appendChild(_data);
     //qDebug()<<doc.toString();
     return doc;
@@ -114,7 +149,8 @@ void CPU::readXMLDesciption(QString &_xmlDesc)
 {
     //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    QDomElement _domain, _cpu, _vcpu;
+    QDomElement _domain, _cpu, _vcpu, _model,
+            _topology, _feature;
     doc.setContent(_xmlDesc);
     _domain = doc.firstChildElement("domain");
     _vcpu = _domain.firstChildElement("vcpu");
@@ -138,8 +174,35 @@ void CPU::readXMLDesciption(QString &_xmlDesc)
         if ( !_attr.isNull() )
             cpuAlloc->current->setValue(_attr.toInt());
     };
+    cpuModel->setUsage(false);
     if ( !_cpu.isNull() ) {
-
+        _attr = _cpu.attribute("mode");
+        cpuModel->copyHostCPU->setChecked( _attr=="host-passthrough" );
+        cpuModel->setUsage(true);
+        if ( _attr!="host-passthrough" ) {
+            _model = _cpu.firstChildElement("model");
+            if ( !_model.isNull() ) {
+                cpuModel->setUsage(true);
+                _attr = _model.firstChild().toText().data();
+                cpuModel->setModel( _attr );
+                _attr = _model.attribute("fallback");
+                cpuModel->allowFallback->setChecked( _attr=="allow" );
+            };
+            if ( _cpu.hasAttribute("match") ) {
+                cpuModel->setUsage(true);
+                _attr = _cpu.attribute("match");
+                cpuModel->setMatch( _attr );
+            };
+            _feature = _cpu.firstChildElement("feature");
+            if ( !_feature.isNull() ) {
+                cpuModel->setUsage(true);
+            };
+            _topology = _cpu.firstChildElement("topology");
+            if ( !_topology.isNull() ) {
+                cpuModel->setUsage(true);
+            };
+        } else
+            cpuModel->setUsage(true);
     };
 }
 void CPU::resetCPUData()

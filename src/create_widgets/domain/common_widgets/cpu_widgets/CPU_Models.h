@@ -1,6 +1,10 @@
 #ifndef CPU_MODELS_H
 #define CPU_MODELS_H
 
+/*
+ * /usr/share/libvirt/cpu_map.xml
+ */
+
 #define CPU_MODELS QString("\
 <cpus>\
   <arch name='x86'>\

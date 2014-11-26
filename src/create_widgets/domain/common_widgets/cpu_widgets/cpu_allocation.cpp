@@ -59,6 +59,8 @@ CPU_Allocation::CPU_Allocation(QWidget *parent, QString _caps) :
             this, SIGNAL(dataChanged()));
     connect(currLabel, SIGNAL(toggled(bool)),
             this, SIGNAL(dataChanged()));
+    connect(current, SIGNAL(valueChanged(int)),
+            this, SIGNAL(dataChanged()));
     connect(placementLabel, SIGNAL(toggled(bool)),
             this, SIGNAL(dataChanged()));
 }
