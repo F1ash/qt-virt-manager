@@ -71,6 +71,10 @@ void CPU_Allocation::setPlacement(QString &_mode)
     int idx = placement->findText(_mode, Qt::MatchContains);
     placement->setCurrentIndex( (idx<0)? 0:idx );
 }
+void CPU_Allocation::setMaxVCPU(int i)
+{
+    vcpu->setValue(i);
+}
 
 /* private slots */
 void CPU_Allocation::vcpuValueChanged(int i)

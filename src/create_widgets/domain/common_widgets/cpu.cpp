@@ -29,10 +29,16 @@ CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
             logicCPULabel, SLOT(changeInfoVisibility(int)));
     connect(cpuModel, SIGNAL(cpuUseElements(bool)),
             cpuTopology, SLOT(setUsage(bool)));
+    connect(cpuTopology, SIGNAL(valueChanged(int)),
+            cpuAlloc, SLOT(setMaxVCPU(int)));
+    connect(cpuTopology, SIGNAL(useTopology(bool)),
+            cpuAlloc->vcpu, SLOT(setDisabled(bool)));
     // dataChanged connections
     connect(cpuAlloc, SIGNAL(dataChanged()),
             this, SIGNAL(dataChanged()));
     connect(cpuModel, SIGNAL(dataChanged()),
+            this, SIGNAL(dataChanged()));
+    connect(cpuTopology, SIGNAL(dataChanged()),
             this, SIGNAL(dataChanged()));
     connect(this, SIGNAL(dataChanged()),
             restorePanel, SLOT(stateChanged()));
@@ -95,6 +101,15 @@ QDomDocument CPU::getDataDocument() const
             _cpu.appendChild(_model);
             if ( cpuTopology->isUsed() ) {
                 _topology = doc.createElement("topology");
+                _topology.setAttribute(
+                            "sockets",
+                            cpuTopology->sockets->value());
+                _topology.setAttribute(
+                            "cores",
+                            cpuTopology->cores->value());
+                _topology.setAttribute(
+                            "threads",
+                            cpuTopology->threads->value());
                 _cpu.appendChild(_topology);
             };
             //_feature = doc.createElement("feature");
@@ -126,6 +141,7 @@ void CPU::setMaxVCPU(QString &_vcpu)
 {
     //qDebug()<<_vcpu;
     cpuAlloc->vcpu->setRange(1, _vcpu.toInt());
+    cpuTopology->setMaxVCPU(_vcpu.toInt());
 }
 void CPU::changeArch(QString &_arch)
 {
@@ -200,6 +216,13 @@ void CPU::readXMLDesciption(QString &_xmlDesc)
             _topology = _cpu.firstChildElement("topology");
             if ( !_topology.isNull() ) {
                 cpuModel->setUsage(true);
+                cpuTopology->setUsage(true);
+                cpuTopology->sockets->setValue(
+                            _topology.attribute("sockets").toInt());
+                cpuTopology->cores->setValue(
+                            _topology.attribute("cores").toInt());
+                cpuTopology->threads->setValue(
+                            _topology.attribute("threads").toInt());
             };
         } else
             cpuModel->setUsage(true);

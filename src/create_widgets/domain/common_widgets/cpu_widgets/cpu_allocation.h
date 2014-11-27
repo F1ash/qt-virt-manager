@@ -37,6 +37,7 @@ private:
 
 public slots:
     void             setPlacement(QString&);
+    void             setMaxVCPU(int);
 
 private slots:
     void             vcpuValueChanged(int);
