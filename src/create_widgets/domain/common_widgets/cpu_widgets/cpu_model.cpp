@@ -112,21 +112,20 @@ QString CPU_Model::getMatch() const
 }
 void CPU_Model::setModel(QString &_model)
 {
+    int idx;
     currModel = _model;
-    int idx = model->findText(_model, Qt::MatchExactly);
-    //qDebug()<<_model<<"model"<<idx;
+    if ( _model.isEmpty() ) {
+        idx = 0;
+        model->setCurrentIndex(idx);
+        return;
+    };
+    idx = model->findText(_model, Qt::MatchExactly);
     if ( idx<0 ) {
-        if ( _model.isEmpty() ) {
-            idx = 0;
-            model->setCurrentIndex(idx);
-        } else {
-            idx = 1;
-            model->setCurrentIndex(idx);
-            model->setEditText(_model);
-        };
+        idx = 1;
+        model->setCurrentIndex(idx);
+        model->setEditText(_model);
     } else
         model->setCurrentIndex(idx);
-    //qDebug()<<_model<<"model"<<idx;
 }
 void CPU_Model::setMatch(QString &_match)
 {

@@ -23,9 +23,10 @@ signals:
 
 private:
     int              MaxVCPU = 1;
+    bool             overload = false;
     QCheckBox       *use;
     QLabel          *socketsLabel, *coresLabel,
-                    *threadsLabel;
+                    *threadsLabel, *infoIcon, *info;
     QGridLayout     *baseLayout;
     QWidget         *baseWdg;
     QHBoxLayout     *commonLayout;
@@ -37,6 +38,7 @@ public slots:
 
 private slots:
     void             newValue(int);
+    void             changeInfoVisibility(bool);
 };
 
 #endif // CPU_TOPOLOGY_H

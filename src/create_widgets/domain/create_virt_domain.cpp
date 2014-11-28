@@ -288,6 +288,7 @@ void CreateVirtDomain::create_specified_widgets()
 {
     if ( !type.isEmpty() ) {
         wdgList.insert("General", new General(this, capabilities, xmlDesc));
+        wdgList.insert("Misc.", new Misc_Settings(this, capabilities, xmlDesc));
         wdgList.insert("OS_Booting", new OS_Booting(this, capabilities, xmlDesc));
         wdgList.insert("Memory", new Memory(this, capabilities, xmlDesc));
         wdgList.insert("CPU", new CPU(this, capabilities, xmlDesc));
@@ -315,17 +316,25 @@ void CreateVirtDomain::set_specified_Tabs()
                     wdgList.value(key));
         if ( NULL!=Wdg ) {
             if ( key=="General" ) idx = 0;
+            else if ( key=="Misc." ) idx = 1;
             else if ( key=="OS_Booting" ) {
-                idx = 1;
+                idx = 2;
                 static_cast<OS_Booting*>(Wdg)->initMaxVCPU();
-            } else if ( key=="Memory" ) idx = 2;
-            else if ( key=="CPU" ) idx = 3;
+            } else if ( key=="Memory" ) idx = 3;
+            else if ( key=="CPU" ) idx = 4;
             else if ( key=="Computer" ) {
-                idx = 4;
+                idx = 5;
                 static_cast<Devices*>(Wdg)->initBootDevices();
-            } else if ( key=="SecurityLabel" ) idx = 5;
+            } else if ( key=="SecurityLabel" ) idx = 6;
             else continue;
-            tabWidget->insertTab(idx , Wdg, QIcon::fromTheme(key.toLower()), key);
+            tabWidget->insertTab(
+                        idx,
+                        Wdg,
+                        QIcon::fromTheme(Wdg->objectName()
+                                         .toLower()
+                                         .split(":")
+                                         .first()),
+                        key);
         };
     };
     tabWidget->setCurrentIndex(0);

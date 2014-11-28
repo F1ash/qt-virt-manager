@@ -13,6 +13,12 @@ CPU_Topology::CPU_Topology(QWidget *parent) :
     cores->setMinimum(1);
     threads = new QSpinBox(this);
     threads->setMinimum(1);
+    infoIcon = new QLabel(this);
+    infoIcon->setPixmap(
+                QIcon::fromTheme("dialog-warning")
+                .pixmap(this->font().SizeResolved));
+    info = new QLabel("<b>Number of CPU overload</b>", this);
+    changeInfoVisibility(false);
     baseLayout = new QGridLayout();
     baseLayout->addWidget(socketsLabel, 0, 0);
     baseLayout->addWidget(sockets, 1, 0);
@@ -20,6 +26,8 @@ CPU_Topology::CPU_Topology(QWidget *parent) :
     baseLayout->addWidget(cores, 1, 1);
     baseLayout->addWidget(threadsLabel, 0, 2);
     baseLayout->addWidget(threads, 1, 2);
+    baseLayout->addWidget(infoIcon, 0, 3, Qt::AlignHCenter);
+    baseLayout->addWidget(info, 1, 3);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
     baseWdg->setEnabled(false);
@@ -52,7 +60,7 @@ CPU_Topology::CPU_Topology(QWidget *parent) :
 /* public slots */
 bool CPU_Topology::isUsed() const
 {
-    return use->isChecked();
+    return use->isChecked() && !overload;
 }
 void CPU_Topology::setUsage(bool state)
 {
@@ -62,22 +70,33 @@ void CPU_Topology::setUsage(bool state)
 void CPU_Topology::setMaxVCPU(int i)
 {
     MaxVCPU = i;
+    newValue(i);
+    /*
+    overload = MaxVCPU<sockets->value()*cores->value()*threads->value();
+    changeInfoVisibility( overload );
     if ( i<sockets->value()*cores->value()*threads->value() ) {
         sockets->setValue(1);
         cores->setValue(1);
         threads->setValue(1);
     };
+    */
 }
 
 /* private slots */
 void CPU_Topology::newValue(int i)
 {
-    if ( MaxVCPU<sockets->value()*cores->value()*threads->value() ) {
-        QSpinBox *wdg = static_cast<QSpinBox*>(sender());
-        wdg->setValue(i-1);
+    uint _value = sockets->value()*cores->value()*threads->value();
+    overload = MaxVCPU<_value;
+    if ( overload ) {
+        //QSpinBox *wdg = static_cast<QSpinBox*>(sender());
+        //wdg->setValue(i-1);
     } else {
-        uint _value = sockets->value()*
-                cores->value()*threads->value();
         emit valueChanged(_value);
     };
+    changeInfoVisibility(overload);
+}
+void CPU_Topology::changeInfoVisibility(bool state)
+{
+    infoIcon->setVisible(state);
+    info->setVisible(state);
 }

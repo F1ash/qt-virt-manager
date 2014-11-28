@@ -223,7 +223,8 @@ void CPU::readXMLDesciption(QString &_xmlDesc)
                             _topology.attribute("cores").toInt());
                 cpuTopology->threads->setValue(
                             _topology.attribute("threads").toInt());
-            };
+            } else
+                cpuTopology->setUsage(false);
         } else
             cpuModel->setUsage(true);
     };

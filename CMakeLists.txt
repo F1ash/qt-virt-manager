@@ -186,6 +186,10 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/emulator.h
   src/create_widgets/domain/common_widgets/random.h
   src/create_widgets/domain/common_widgets/memballoon.h
+  src/create_widgets/domain/common_widgets/misc_settings.h
+  src/create_widgets/domain/common_widgets/misc_settings_widgets/events.h
+  src/create_widgets/domain/common_widgets/misc_settings_widgets/power.h
+  src/create_widgets/domain/common_widgets/misc_settings_widgets/hv_features.h
   src/create_widgets/storage/_create_storage_widgets/_create_storage.h
   src/create_widgets/storage/_create_storage_widgets/_storage_source.h
   src/create_widgets/storage/_create_storage_widgets/_adapter.h
@@ -428,6 +432,10 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/emulator.cpp
   src/create_widgets/domain/common_widgets/random.cpp
   src/create_widgets/domain/common_widgets/memballoon.cpp
+  src/create_widgets/domain/common_widgets/misc_settings.cpp
+  src/create_widgets/domain/common_widgets/misc_settings_widgets/events.cpp
+  src/create_widgets/domain/common_widgets/misc_settings_widgets/power.cpp
+  src/create_widgets/domain/common_widgets/misc_settings_widgets/hv_features.cpp
   src/create_widgets/storage/_create_storage_widgets/_create_storage.cpp
   src/create_widgets/storage/_create_storage_widgets/_storage_source.cpp
   src/create_widgets/storage/_create_storage_widgets/_adapter.cpp

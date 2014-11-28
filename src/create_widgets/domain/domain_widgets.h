@@ -25,6 +25,7 @@
 #include "common_widgets/emulator.h"
 #include "common_widgets/random.h"
 #include "common_widgets/memballoon.h"
+#include "common_widgets/misc_settings.h"
 #include "edit_widgets/emulator_edit.h"
 #include "edit_widgets/hub_device_edit.h"
 #include "edit_widgets/smartcard_device_edit.h"
