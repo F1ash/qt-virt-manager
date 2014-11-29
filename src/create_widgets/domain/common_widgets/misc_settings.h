@@ -25,6 +25,9 @@ private:
     bool             currentStateSaved = true;
     QString          currentDeviceXMLDesc;
     QString          capabilities;
+    QString          type;
+    QLabel          *eventsLabel;
+    QCheckBox       *powerLabel, *featuresLabel;
     Events          *eventsWdg;
     Power           *powerWdg;
     HV_Features     *featuresWdg;

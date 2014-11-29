@@ -20,7 +20,7 @@ signals:
 
 private:
     QString          capabilities;
-    int              cores;
+    int              cores = 1;
     QLabel          *logicCPULabel;
     QLabel          *icon;
     QLabel          *info;

@@ -133,11 +133,19 @@ BootOrderList OS_Booting::getBootOrder() const
 }
 void OS_Booting::initMaxVCPU()
 {
-    BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
-    wdg->architecture->machineChanged(
-                wdg->architecture->getMachine());
-    wdg->architecture->archChanged(
-                wdg->architecture->getArch());
+    if ( type.toLower()=="lxc" ) {
+        LXC_OSBooting *wdg = static_cast<LXC_OSBooting*>(bootSet->widget(3));
+        wdg->architecture->machineChanged(
+                    wdg->architecture->getMachine());
+        wdg->architecture->archChanged(
+                    wdg->architecture->getArch());
+    } else {
+        BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
+        wdg->architecture->machineChanged(
+                    wdg->architecture->getMachine());
+        wdg->architecture->archChanged(
+                    wdg->architecture->getArch());
+    };
 }
 
 /* private slots */

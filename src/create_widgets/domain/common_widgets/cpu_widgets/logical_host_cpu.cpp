@@ -12,8 +12,8 @@ LogicalHostCPU::LogicalHostCPU(
             .firstChildElement("cpu")
             .firstChildElement("topology")
             .attribute("cores").toInt();
-    QString _label = QString("Logical host CPUs: %1")
-            .arg( (cores>0)? QString("%1").arg(cores):"?");
+    cores = (cores>0)? cores : 1 ;
+    QString _label = QString("Logical host CPUs: %1").arg(cores);
     logicCPULabel = new QLabel(_label, this);
     icon = new QLabel(this);
     icon->setVisible(false);
