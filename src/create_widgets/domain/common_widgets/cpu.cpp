@@ -1,7 +1,7 @@
 #include "cpu.h"
 
 CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
-    _QWidget(parent), capabilities(_caps), xmlDesc(_xmlDesc)
+    _Tab(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("CPU");
     logicCPULabel = new LogicalHostCPU(this, capabilities);
@@ -44,11 +44,11 @@ CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
             restorePanel, SLOT(stateChanged()));
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
-            this, SLOT(resetCPUData()));
+            this, SLOT(resetData()));
     connect(restorePanel, SIGNAL(revertData()),
-            this, SLOT(revertCPUData()));
+            this, SLOT(revertData()));
     connect(restorePanel, SIGNAL(saveData()),
-            this, SLOT(saveCPUData()));
+            this, SLOT(saveData()));
 }
 
 /* public slots */
@@ -121,22 +121,6 @@ QDomDocument CPU::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-QString CPU::closeDataEdit()
-{
-    if ( !currentStateSaved ) {
-        int answer = QMessageBox::question(
-                    this,
-                    "Save CPU Data",
-                    "Save last changes?",
-                    QMessageBox::Ok,
-                    QMessageBox::Cancel);
-        if ( answer==QMessageBox::Ok )
-            saveCPUData();
-        else
-            revertCPUData();
-    };
-    return QString();
-}
 void CPU::setMaxVCPU(QString &_vcpu)
 {
     //qDebug()<<_vcpu;
@@ -149,13 +133,6 @@ void CPU::changeArch(QString &_arch)
 }
 
 /* private slots */
-void CPU::stateChanged()
-{
-    if ( currentStateSaved ) {
-        currentStateSaved = false;
-    };
-    emit dataChanged();
-}
 void CPU::readXMLDesciption()
 {
     currentDeviceXMLDesc = xmlDesc;
@@ -214,41 +191,17 @@ void CPU::readXMLDesciption(QString &_xmlDesc)
                 cpuModel->setUsage(true);
             };
             _topology = _cpu.firstChildElement("topology");
+            cpuTopology->setUsage( !_topology.isNull() );
             if ( !_topology.isNull() ) {
                 cpuModel->setUsage(true);
-                cpuTopology->setUsage(true);
                 cpuTopology->sockets->setValue(
                             _topology.attribute("sockets").toInt());
                 cpuTopology->cores->setValue(
                             _topology.attribute("cores").toInt());
                 cpuTopology->threads->setValue(
                             _topology.attribute("threads").toInt());
-            } else
-                cpuTopology->setUsage(false);
+            };
         } else
             cpuModel->setUsage(true);
     };
-}
-void CPU::resetCPUData()
-{
-    readXMLDesciption();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void CPU::revertCPUData()
-{
-    readXMLDesciption(currentDeviceXMLDesc);
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void CPU::saveCPUData()
-{
-    QDomDocument doc;
-    QDomElement _cpu;
-    doc = this->getDataDocument();
-    _cpu = doc.firstChildElement("data");
-    _cpu.setTagName("domain");
-    currentDeviceXMLDesc = doc.toString();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
 }

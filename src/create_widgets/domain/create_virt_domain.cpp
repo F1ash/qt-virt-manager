@@ -310,32 +310,50 @@ void CreateVirtDomain::create_specified_widgets()
 void CreateVirtDomain::set_specified_Tabs()
 {
     if ( NULL==tabWidget ) tabWidget = new QTabWidget(this);
-    foreach (QString key, wdgList.keys()) {
-        uint idx;
-        _QWidget *Wdg = static_cast<_QWidget*>(
-                    wdgList.value(key));
-        if ( NULL!=Wdg ) {
-            if ( key=="General" ) idx = 0;
-            else if ( key=="Misc." ) idx = 1;
-            else if ( key=="OS_Booting" ) {
-                idx = 2;
-                static_cast<OS_Booting*>(Wdg)->initMaxVCPU();
-            } else if ( key=="Memory" ) idx = 3;
-            else if ( key=="CPU" ) idx = 4;
-            else if ( key=="Computer" ) {
-                idx = 5;
-                static_cast<Devices*>(Wdg)->initBootDevices();
-            } else if ( key=="SecurityLabel" ) idx = 6;
-            else continue;
-            tabWidget->insertTab(
-                        idx,
-                        Wdg,
-                        QIcon::fromTheme(Wdg->objectName()
-                                         .toLower()
-                                         .split(":")
-                                         .first()),
-                        key);
+    for (uint idx=0; idx<wdgList.count(); idx++ ) {
+        QString key;
+        switch (idx) {
+        case 0:
+            key = "General";
+            break;
+        case 1:
+            key = "Misc.";
+            break;
+        case 2:
+            key = "OS_Booting";
+            break;
+        case 3:
+            key = "CPU";
+            break;
+        case 4:
+            key = "Memory";
+            break;
+        case 5:
+            key = "Computer";
+            break;
+        case 6:
+            key = "SecurityLabel";
+            break;
+        default:
+            break;
         };
+        _QWidget *Wdg = static_cast<_QWidget*>(wdgList.value(key));
+        if ( NULL!=Wdg ) {
+            if ( idx == 2 ) {
+                static_cast<OS_Booting*>(Wdg)->initMaxVCPU();
+            } else if ( idx == 5 ) {
+                static_cast<Devices*>(Wdg)->initBootDevices();
+            };
+        } else
+            continue;
+        tabWidget->insertTab(
+                    idx,
+                    Wdg,
+                    QIcon::fromTheme(Wdg->objectName()
+                                     .toLower()
+                                     .split(":")
+                                     .first()),
+                    key);
     };
     tabWidget->setCurrentIndex(0);
 }

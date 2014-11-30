@@ -2,15 +2,13 @@
 #define CPU_H
 
 #include <QScrollArea>
-#include <QMessageBox>
-#include "create_widgets/domain/_qwidget.h"
-#include "create_widgets/domain/restore_panel.h"
+#include "create_widgets/domain/_tab.h"
 #include "cpu_widgets/cpu_allocation.h"
 #include "cpu_widgets/logical_host_cpu.h"
 #include "cpu_widgets/cpu_model.h"
 #include "cpu_widgets/cpu_topology.h"
 
-class CPU : public _QWidget
+class CPU : public _Tab
 {
     Q_OBJECT
 public:
@@ -25,9 +23,6 @@ signals:
 private:
     const QString    xmlDesc;
     QString          capabilities;
-    bool             currentStateSaved = true;
-    QString          currentDeviceXMLDesc;
-    RestorePanel    *restorePanel;
 
     LogicalHostCPU  *logicCPULabel;
     CPU_Model       *cpuModel;
@@ -35,21 +30,15 @@ private:
     QScrollArea     *commonWdg;
     QVBoxLayout     *scrolledLayout;
     QWidget         *scrolled;
-    QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument     getDataDocument() const;
-    QString          closeDataEdit();
     void             setMaxVCPU(QString&);
     void             changeArch(QString&);
 
 private slots:
-    void             stateChanged();
     void             readXMLDesciption();
     void             readXMLDesciption(QString&);
-    void             resetCPUData();
-    void             revertCPUData();
-    void             saveCPUData();
 };
 
 #endif // CPU_H

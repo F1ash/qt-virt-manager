@@ -1,7 +1,7 @@
 #include "general.h"
 
 General::General(QWidget *parent, QString _caps, QString _xmlDesc) :
-    _QWidget(parent), capabilities(_caps), xmlDesc(_xmlDesc)
+    _Tab(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("Domain");
     readCapabilities();
@@ -49,11 +49,11 @@ General::General(QWidget *parent, QString _caps, QString _xmlDesc) :
             restorePanel, SLOT(stateChanged()));
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
-            this, SLOT(resetGenData()));
+            this, SLOT(resetData()));
     connect(restorePanel, SIGNAL(revertData()),
-            this, SLOT(revertGenData()));
+            this, SLOT(revertData()));
     connect(restorePanel, SIGNAL(saveData()),
-            this, SLOT(saveGenData()));
+            this, SLOT(saveData()));
 }
 
 /* public slots */
@@ -87,22 +87,6 @@ QDomDocument General::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-QString General::closeDataEdit()
-{
-    if ( !currentStateSaved ) {
-        int answer = QMessageBox::question(
-                    this,
-                    "Save General Data",
-                    "Save last changes?",
-                    QMessageBox::Ok,
-                    QMessageBox::Cancel);
-        if ( answer==QMessageBox::Ok )
-            saveGenData();
-        else
-            revertGenData();
-    };
-    return QString();
-}
 void General::changeArch(QString &_arch)
 {
     type = _arch;
@@ -132,13 +116,6 @@ void General::readCapabilities()
                firstChildElement("os_type").
                firstChild().toText().data();
 }
-void General::stateChanged()
-{
-    if ( currentStateSaved ) {
-        currentStateSaved = false;
-    };
-    emit dataChanged();
-}
 void General::readXMLDesciption()
 {
     currentDeviceXMLDesc = xmlDesc;
@@ -166,27 +143,4 @@ void General::readXMLDesciption(QString &_xmlDesc)
                 _domain
                 .firstChildElement("description")
                 .firstChild().toText().data());
-}
-void General::resetGenData()
-{
-    readXMLDesciption();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void General::revertGenData()
-{
-    readXMLDesciption(currentDeviceXMLDesc);
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void General::saveGenData()
-{
-    QDomDocument doc;
-    QDomElement _domain;
-    doc = this->getDataDocument();
-    _domain = doc.firstChildElement("data");
-    _domain.setTagName("domain");
-    currentDeviceXMLDesc = doc.toString();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
 }

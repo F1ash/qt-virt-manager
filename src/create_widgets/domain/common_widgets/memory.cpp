@@ -2,7 +2,7 @@
 
 Memory::Memory(
         QWidget *parent, QString _caps, QString _xmlDesc) :
-    _QWidget(parent), capabilities(_caps), xmlDesc(_xmlDesc)
+    _Tab(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("Memory");
     readCapabilities();
@@ -116,18 +116,18 @@ Memory::Memory(
             restorePanel, SLOT(stateChanged()));
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
-            this, SLOT(resetMemData()));
+            this, SLOT(resetData()));
     connect(restorePanel, SIGNAL(revertData()),
-            this, SLOT(revertMemData()));
+            this, SLOT(revertData()));
     connect(restorePanel, SIGNAL(saveData()),
-            this, SLOT(saveMemData()));
+            this, SLOT(saveData()));
 }
 
 /* public slots */
 QDomDocument Memory::getDataDocument() const
 {
     QDomText data;
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _memory, _currMemory, _memTune, _memBacking, _el, _data;
     _data = doc.createElement("data");
     _memory= doc.createElement("memory");
@@ -135,14 +135,14 @@ QDomDocument Memory::getDataDocument() const
     _memory.appendChild(data);
     _memory.setAttribute("unit", "KiB");
     _data.appendChild(_memory);
-    _currMemory= doc.createElement("currentMemory");
+    _currMemory = doc.createElement("currentMemory");
     data = doc.createTextNode(QString("%1").arg(currMemValue->value()));
     _currMemory.appendChild(data);
     _currMemory.setAttribute("unit", "KiB");
     _data.appendChild(_currMemory);
 
     if ( enableMemBacking->isChecked() ) {
-        _memBacking= doc.createElement("memoryBacking");
+        _memBacking = doc.createElement("memoryBacking");
         _data.appendChild(_memBacking);
         QStringList pages = hugePagesList->getPagesList();
         if ( hugepages->isChecked() && !pages.isEmpty() ) {
@@ -170,7 +170,7 @@ QDomDocument Memory::getDataDocument() const
     };
 
     if ( enableMemTune->isChecked() ) {
-        _memTune= doc.createElement("memtune");
+        _memTune = doc.createElement("memtune");
         _data.appendChild(_memTune);
         if ( hard_limit->value() ) {
             _el = doc.createElement("hard_limit");
@@ -206,22 +206,6 @@ QDomDocument Memory::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-QString Memory::closeDataEdit()
-{
-    if ( !currentStateSaved ) {
-        int answer = QMessageBox::question(
-                    this,
-                    "Save Memory Data",
-                    "Save last changes?",
-                    QMessageBox::Ok,
-                    QMessageBox::Cancel);
-        if ( answer==QMessageBox::Ok )
-            saveMemData();
-        else
-            revertMemData();
-    };
-    return QString();
-}
 
 /* private slots */
 void Memory::readCapabilities()
@@ -243,13 +227,6 @@ void Memory::readCapabilities()
                firstChildElement("memory").
                attribute("unit", "???");
 }
-void Memory::stateChanged()
-{
-    if ( currentStateSaved ) {
-        currentStateSaved = false;
-    };
-    emit dataChanged();
-}
 void Memory::changeCurrentMemValue(int i)
 {
     if ( currMemValue->value()>i ) currMemValue->setValue(i);
@@ -265,7 +242,6 @@ void Memory::readXMLDesciption()
 }
 void Memory::readXMLDesciption(QString &_xmlDesc)
 {
-    //if ( _xmlDesc.isEmpty() ) return;
     quint64 _value;
     QString _unit;
     QDomDocument doc;
@@ -289,13 +265,14 @@ void Memory::readXMLDesciption(QString &_xmlDesc)
             .attribute("unit");
     currMemValue->setValue(
                 convertNiBtoKiB(_value, _unit));
-    if ( !_domain.firstChildElement("memoryBacking").isNull() ) {
-        enableMemBacking->setChecked(true);
-        if ( !_domain.firstChildElement("memoryBacking")
+    QDomElement _memoryBacking = _domain.firstChildElement("memoryBacking");
+    enableMemBacking->setChecked( !_memoryBacking.isNull() );
+    if ( !_memoryBacking.isNull() ) {
+        hugepages->setChecked( !_memoryBacking
+                               .firstChildElement("hugepages").isNull() );
+        if ( !_memoryBacking
              .firstChildElement("hugepages").isNull() ) {
-            hugepages->setChecked(true);
-            QDomElement _page = _domain
-                    .firstChildElement("memoryBacking")
+            QDomElement _page = _memoryBacking
                     .firstChildElement("hugepages")
                     .firstChildElement("page");
             while ( !_page.isNull() ) {
@@ -310,66 +287,57 @@ void Memory::readXMLDesciption(QString &_xmlDesc)
                 _page = _page.nextSiblingElement("page");
             };
         };
-        if ( !_domain.firstChildElement("memoryBacking")
-             .firstChildElement("nosharepages").isNull() )
-            nosharepages->setChecked(true);
-        if ( !_domain.firstChildElement("memoryBacking")
-             .firstChildElement("locked").isNull() )
-            locked->setChecked(true);
+        nosharepages->setChecked( !_memoryBacking
+             .firstChildElement("nosharepages").isNull() );
+        locked->setChecked( !_memoryBacking
+             .firstChildElement("locked").isNull() );
     };
-    if ( !_domain.firstChildElement("memtune").isNull() ) {
-        enableMemTune->setChecked(true);
-        if ( !_domain.firstChildElement("memoryBacking")
+    QDomElement _memTune = _domain.firstChildElement("memtune");
+    enableMemTune->setChecked( !_memTune.isNull() );
+    if ( !_memTune.isNull() ) {
+        if ( !_memTune
              .firstChildElement("hard_limit").isNull() ) {
-            _value = _domain
-                    .firstChildElement("memoryBacking")
+            _value = _memTune
                     .firstChildElement("hard_limit")
                     .firstChild().toText().data()
                     .toULongLong();
-            _unit = _domain
-                    .firstChildElement("memoryBacking")
+            _unit = _memTune
                     .firstChildElement("hard_limit")
                     .attribute("unit");
             hard_limit->setValue(
                         convertNiBtoKiB(_value, _unit));
         };
-        if ( !_domain.firstChildElement("memtune")
+        if ( !_memTune
              .firstChildElement("soft_limit").isNull() ) {
-            _value = _domain
-                    .firstChildElement("memoryBacking")
+            _value = _memTune
                     .firstChildElement("soft_limit")
                     .firstChild().toText().data()
                     .toULongLong();
-            _unit = _domain
-                    .firstChildElement("memoryBacking")
+            _unit = _memTune
                     .firstChildElement("soft_limit")
                     .attribute("unit");
             soft_limit->setValue(
                         convertNiBtoKiB(_value, _unit));
         };
-        if ( !_domain.firstChildElement("memtune")
+        if ( !_memTune
              .firstChildElement("swap_hard_limit").isNull() ) {
-            _value = _domain
-                    .firstChildElement("memoryBacking")
+            _value = _memTune
                     .firstChildElement("swap_hard_limit")
                     .firstChild().toText().data()
                     .toULongLong();
-            _unit = _domain
-                    .firstChildElement("memoryBacking")
+            _unit = _memTune
                     .firstChildElement("swap_hard_limit")
                     .attribute("unit");
             swap_hard_limit->setValue(
                         convertNiBtoKiB(_value, _unit));
         };
-        if ( !_domain.firstChildElement("memtune")
+        if ( !_memTune
              .firstChildElement("min_guarantee").isNull() ) {
-            _value = _domain
-                    .firstChildElement("memoryBacking")
+            _value = _memTune
                     .firstChildElement("min_guarantee")
                     .firstChild().toText().data()
                     .toULongLong();
-            _unit = _domain
-                    .firstChildElement("memoryBacking")
+            _unit = _memTune
                     .firstChildElement("min_guarantee")
                     .attribute("unit");
             min_guarantee->setValue(
@@ -404,27 +372,4 @@ quint64 Memory::convertNiBtoKiB(quint64 _NiB, QString &_unit)
     } else if ( _unit=="EB" ) {
         return convertNiBtoKiB(_NiB*1000000000000000, bytes);
     } else return 0;
-}
-void Memory::resetMemData()
-{
-    readXMLDesciption();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void Memory::revertMemData()
-{
-    readXMLDesciption(currentDeviceXMLDesc);
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void Memory::saveMemData()
-{
-    QDomDocument doc;
-    QDomElement _domain;
-    doc = this->getDataDocument();
-    _domain = doc.firstChildElement("data");
-    _domain.setTagName("domain");
-    currentDeviceXMLDesc = doc.toString();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
 }

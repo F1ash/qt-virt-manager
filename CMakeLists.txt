@@ -89,6 +89,7 @@ set (HEADERS
   src/create_widgets/domain/_changed.h
   src/create_widgets/domain/restore_panel.h
   src/create_widgets/domain/create_virt_domain.h
+  src/create_widgets/domain/_tab.h
   src/create_widgets/domain/common_widgets/os_booting.h
   src/create_widgets/domain/common_widgets/os_boot_widgets/_arch.h
   src/create_widgets/domain/common_widgets/os_boot_widgets/boot_menu.h
@@ -335,6 +336,7 @@ set (SOURCES
   src/create_widgets/domain/_qwidget.cpp
   src/create_widgets/domain/_changed.cpp
   src/create_widgets/domain/restore_panel.cpp
+  src/create_widgets/domain/_tab.cpp
   src/create_widgets/domain/common_widgets/os_booting.cpp
   src/create_widgets/domain/common_widgets/os_boot_widgets/_arch.cpp
   src/create_widgets/domain/common_widgets/os_boot_widgets/boot_menu.cpp

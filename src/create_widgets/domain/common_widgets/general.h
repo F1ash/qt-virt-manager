@@ -1,12 +1,10 @@
 #ifndef GENERAL_H
 #define GENERAL_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/domain/_tab.h"
 #include <QTextEdit>
-#include <QMessageBox>
-#include "create_widgets/domain/restore_panel.h"
 
-class General : public _QWidget
+class General : public _Tab
 {
     Q_OBJECT
 public:
@@ -19,10 +17,6 @@ signals:
 
 private:
     const QString    xmlDesc;
-    bool             currentStateSaved = true;
-    QString          currentDeviceXMLDesc;
-    RestorePanel    *restorePanel;
-    QVBoxLayout     *commonLayout;
     QString          capabilities;
     QLabel          *typeLabel;
     QLabel          *archLabel;
@@ -40,17 +34,12 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
-    QString          closeDataEdit();
     void             changeArch(QString&);
 
 private slots:
     void             readCapabilities();
-    void             stateChanged();
     void             readXMLDesciption();
     void             readXMLDesciption(QString&);
-    void             resetGenData();
-    void             revertGenData();
-    void             saveGenData();
 };
 
 #endif // GENERAL_H

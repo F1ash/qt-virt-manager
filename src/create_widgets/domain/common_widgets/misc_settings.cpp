@@ -1,7 +1,7 @@
 #include "misc_settings.h"
 
 Misc_Settings::Misc_Settings(QWidget *parent, QString _caps, QString _xmlDesc) :
-    _QWidget(parent), capabilities(_caps), xmlDesc(_xmlDesc)
+    _Tab(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("Misc.");
     readCapabilities();
@@ -39,11 +39,11 @@ Misc_Settings::Misc_Settings(QWidget *parent, QString _caps, QString _xmlDesc) :
     readXMLDesciption();
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
-            this, SLOT(resetMiscData()));
+            this, SLOT(resetData()));
     connect(restorePanel, SIGNAL(revertData()),
-            this, SLOT(revertMiscData()));
+            this, SLOT(revertData()));
     connect(restorePanel, SIGNAL(saveData()),
-            this, SLOT(saveMiscData()));
+            this, SLOT(saveData()));
     // dataChanged connections
     connect(powerLabel, SIGNAL(toggled(bool)),
             this, SIGNAL(dataChanged()));
@@ -122,22 +122,6 @@ QDomDocument Misc_Settings::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-QString Misc_Settings::closeDataEdit()
-{
-    if ( !currentStateSaved ) {
-        int answer = QMessageBox::question(
-                    this,
-                    "Save Misc. Data",
-                    "Save last changes?",
-                    QMessageBox::Ok,
-                    QMessageBox::Cancel);
-        if ( answer==QMessageBox::Ok )
-            saveMiscData();
-        else
-            revertMiscData();
-    };
-    return QString();
-}
 
 /* private slots */
 void Misc_Settings::readCapabilities()
@@ -152,13 +136,6 @@ void Misc_Settings::readCapabilities()
     if ( !_domain.isNull() ) {
         type = _domain.attribute("type");
     };
-}
-void Misc_Settings::stateChanged()
-{
-    if ( currentStateSaved ) {
-        currentStateSaved = false;
-    };
-    emit dataChanged();
 }
 void Misc_Settings::readXMLDesciption()
 {
@@ -230,27 +207,4 @@ void Misc_Settings::readXMLDesciption(QString &xmlDesc)
         _doc.appendChild(_features);
         featuresWdg->setFeatures(_doc);
     };
-}
-void Misc_Settings::resetMiscData()
-{
-    readXMLDesciption();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void Misc_Settings::revertMiscData()
-{
-    readXMLDesciption(currentDeviceXMLDesc);
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void Misc_Settings::saveMiscData()
-{
-    QDomDocument doc;
-    QDomElement _os;
-    doc = this->getDataDocument();
-    _os = doc.firstChildElement("data");
-    _os.setTagName("domain");
-    currentDeviceXMLDesc = doc.toString();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
 }

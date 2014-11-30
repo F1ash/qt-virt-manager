@@ -2,7 +2,7 @@
 
 SecurityLabel::SecurityLabel(
         QWidget *parent, QString _xmlDesc) :
-    _QWidget(parent), xmlDesc(_xmlDesc)
+    _Tab(parent), xmlDesc(_xmlDesc)
 {
     setObjectName("Security-High");
 
@@ -21,11 +21,11 @@ SecurityLabel::SecurityLabel(
             restorePanel, SLOT(stateChanged()));
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
-            this, SLOT(resetSecData()));
+            this, SLOT(resetData()));
     connect(restorePanel, SIGNAL(revertData()),
-            this, SLOT(revertSecData()));
+            this, SLOT(revertData()));
     connect(restorePanel, SIGNAL(saveData()),
-            this, SLOT(saveSecData()));
+            this, SLOT(saveData()));
 }
 
 /* public slots */
@@ -46,31 +46,8 @@ void SecurityLabel::setDataDescription(QString &_xmlDesc)
     currentDeviceXMLDesc = _xmlDesc;
     readXMLDesciption(currentDeviceXMLDesc);
 }
-QString SecurityLabel::closeDataEdit()
-{
-    if ( !currentStateSaved ) {
-        int answer = QMessageBox::question(
-                    this,
-                    "Save Security Label Data",
-                    "Save last changes?",
-                    QMessageBox::Ok,
-                    QMessageBox::Cancel);
-        if ( answer==QMessageBox::Ok )
-            saveSecData();
-        else
-            revertSecData();
-    };
-    return QString();
-}
 
 /* private slots */
-void SecurityLabel::stateChanged()
-{
-    if ( currentStateSaved ) {
-        currentStateSaved = false;
-    };
-    emit dataChanged();
-}
 void SecurityLabel::readXMLDesciption()
 {
     currentDeviceXMLDesc = xmlDesc;
@@ -78,30 +55,6 @@ void SecurityLabel::readXMLDesciption()
 }
 void SecurityLabel::readXMLDesciption(QString &_xmlDesc)
 {
-    //if ( _xmlDesc.isEmpty() ) return;
     //qDebug()<<_xmlDesc;
     secLabels->readXMLDesciption(_xmlDesc);
-}
-void SecurityLabel::resetSecData()
-{
-    readXMLDesciption();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void SecurityLabel::revertSecData()
-{
-    readXMLDesciption(currentDeviceXMLDesc);
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void SecurityLabel::saveSecData()
-{
-    QDomDocument doc;
-    QDomElement _domain;
-    doc = this->getDataDocument();
-    _domain = doc.firstChildElement("data");
-    _domain.setTagName("domain");
-    currentDeviceXMLDesc = doc.toString();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
 }

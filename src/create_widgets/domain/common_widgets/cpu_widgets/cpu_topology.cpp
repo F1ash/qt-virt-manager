@@ -60,6 +60,7 @@ CPU_Topology::CPU_Topology(QWidget *parent) :
 /* public slots */
 bool CPU_Topology::isUsed() const
 {
+    // if overload, then topology not valid
     return use->isChecked() && !overload;
 }
 void CPU_Topology::setUsage(bool state)
@@ -70,16 +71,7 @@ void CPU_Topology::setUsage(bool state)
 void CPU_Topology::setMaxVCPU(int i)
 {
     MaxVCPU = i;
-    newValue(i);
-    /*
-    overload = MaxVCPU<sockets->value()*cores->value()*threads->value();
-    changeInfoVisibility( overload );
-    if ( i<sockets->value()*cores->value()*threads->value() ) {
-        sockets->setValue(1);
-        cores->setValue(1);
-        threads->setValue(1);
-    };
-    */
+    if ( use->isChecked() ) newValue(i);
 }
 
 /* private slots */

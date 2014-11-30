@@ -3,9 +3,7 @@
 
 #include <QScrollArea>
 #include <QStackedWidget>
-#include <QMessageBox>
-#include "create_widgets/domain/_qwidget.h"
-#include "create_widgets/domain/restore_panel.h"
+#include "create_widgets/domain/_tab.h"
 #include "create_widgets/domain/lxc_widgets/os_booting.h"
 #include "os_boot_widgets/_arch.h"
 #include "os_boot_widgets/bios_boot.h"
@@ -13,7 +11,7 @@
 #include "os_boot_widgets/direct_kernel_boot.h"
 #include "os_boot_widgets/boot_type.h"
 
-class OS_Booting : public _QWidget
+class OS_Booting : public _Tab
 {
     Q_OBJECT
 public:
@@ -30,36 +28,27 @@ signals:
 
 private:
     const QString    xmlDesc;
-    bool             currentStateSaved = true;
-    QString          currentDeviceXMLDesc;
     QString          capabilities;
     QString          type;
     QString          arch;
     QString          os_type;
     BootType        *bootType;
     QStackedWidget  *bootSet;
-    RestorePanel    *restorePanel;
 
     QScrollArea     *commonWdg;
     QVBoxLayout     *scrolledLayout;
     QWidget         *scrolled;
-    QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument     getDataDocument() const;
-    QString          closeDataEdit();
     void             searchBootableDevices(QDomDocument&);
     BootOrderList    getBootOrder() const;
     void             initMaxVCPU();
 
 private slots:
     void             readCapabilities();
-    void             stateChanged();
     void             readXMLDesciption();
     void             readXMLDesciption(QString&);
-    void             resetBootData();
-    void             revertBootData();
-    void             saveBootData();
     void             changeOSType(QString&);
     void             changeBootType();
 };

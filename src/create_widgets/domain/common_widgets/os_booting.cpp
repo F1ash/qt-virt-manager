@@ -1,7 +1,7 @@
 #include "os_booting.h"
 
 OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
-    _QWidget(parent), capabilities(_caps), xmlDesc(_xmlDesc)
+    _Tab(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("OS_Booting");
     readCapabilities();
@@ -43,11 +43,11 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
             this, SIGNAL(dataChanged()));
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
-            this, SLOT(resetBootData()));
+            this, SLOT(resetData()));
     connect(restorePanel, SIGNAL(revertData()),
-            this, SLOT(revertBootData()));
+            this, SLOT(revertData()));
     connect(restorePanel, SIGNAL(saveData()),
-            this, SLOT(saveBootData()));
+            this, SLOT(saveData()));
     for (uint i=0; i<bootSet->count(); i++) {
         connect(bootSet->widget(i), SIGNAL(domainType(QString&)),
                 this, SIGNAL(domainType(QString&)));
@@ -96,22 +96,6 @@ QDomDocument OS_Booting::getDataDocument() const
     };
     //qDebug()<<doc.toString();
     return doc;
-}
-QString OS_Booting::closeDataEdit()
-{
-    if ( !currentStateSaved ) {
-        int answer = QMessageBox::question(
-                    this,
-                    "Save OS_Booting",
-                    "Save last changes?",
-                    QMessageBox::Ok,
-                    QMessageBox::Cancel);
-        if ( answer==QMessageBox::Ok )
-            saveBootData();
-        else
-            revertBootData();
-    };
-    return QString();
 }
 void OS_Booting::searchBootableDevices(QDomDocument &_doc)
 {
@@ -171,13 +155,6 @@ void OS_Booting::readCapabilities()
                firstChildElement("os_type").
                firstChild().toText().data();
 }
-void OS_Booting::stateChanged()
-{
-    if ( currentStateSaved ) {
-        currentStateSaved = false;
-    };
-    emit dataChanged();
-}
 void OS_Booting::readXMLDesciption()
 {
     currentDeviceXMLDesc = xmlDesc;
@@ -213,29 +190,6 @@ void OS_Booting::readXMLDesciption(QString &xmlDesc)
                 Qt::MatchContains);
     bootType->bootType->setCurrentIndex( (idx<0)? 0:idx );
     static_cast<_QWidget*>(bootSet->currentWidget())->setDataDescription(xmlDesc);
-}
-void OS_Booting::resetBootData()
-{
-    readXMLDesciption();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void OS_Booting::revertBootData()
-{
-    readXMLDesciption(currentDeviceXMLDesc);
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
-}
-void OS_Booting::saveBootData()
-{
-    QDomDocument doc;
-    QDomElement _os;
-    doc = this->getDataDocument();
-    _os = doc.firstChildElement("data");
-    _os.setTagName("domain");
-    currentDeviceXMLDesc = doc.toString();
-    currentStateSaved = true;
-    restorePanel->stateChanged(false);
 }
 void OS_Booting::changeOSType(QString &_type)
 {
