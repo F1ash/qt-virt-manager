@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
      * for work askpass need to run
      * application as daemon
      */
-    /*
+
     pid_t pid, sid;
 
     //Fork the Parent Process
@@ -32,14 +32,14 @@ int main(int argc, char *argv[])
     //Change Directory
     //If we cant find the directory we exit with failure.
     if ((chdir("/")) < 0) { exit(EXIT_FAILURE); }
-    */
 
-    /*
+
+
     //Close Standard File Descriptors
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
-    */
+
 
     // init GUI
     QApplication a(argc, argv, QApplication::GuiClient);

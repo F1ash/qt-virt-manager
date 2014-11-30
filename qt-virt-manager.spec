@@ -1,7 +1,7 @@
 %global cmake_build_dir build-cmake
 
 Name:           qt-virt-manager
-Version:        0.1.7
+Version:        0.5.12
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -21,10 +21,10 @@ BuildRequires:  cmake
 
 %description
 Qt Virtual Machine Manager provides a graphical tool for administering virtual
-machines for QEMU/KVM, Xen, and LXC. Start, stop, add or remove virtual devices,
-connect to a graphical or serial console, and see resource usage statistics
-for existing VMs on local or remote machines. Uses libvirt as the backend
-management API.
+machines for QEMU/KVM, Xen, and LXC and other Virtual Entities.
+Start, stop, add or remove virtual devices, connect to a graphical or serial console,
+and see resource usage statistics for existing VMs on local or remote machines.
+Uses libvirt as the backend management API.
 
 %prep
 %setup -q
@@ -51,6 +51,10 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/%{name}
 
 %changelog
+* Sun Nov 30 2014 Fl@sh <kaperang07@gmail.com> - 0.5.12-1
+- description enhanced;
+- version updated;
+
 * Thu Jul 10 2014 Fl@sh <kaperang07@gmail.com> - 0.1.7-1
 - version updated;
 

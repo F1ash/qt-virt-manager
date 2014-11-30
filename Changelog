@@ -30,3 +30,8 @@ some prepears for LXC-terminal:
     get pty file descriptors;
     added socket notifier (for read pty);
 some fixes & improvements;
+
+v 0.5.12:
+implemented the Domain Create/Edit widget;
+implemented the Pool/Volume Storage Create/Edit;
+implemented the Simple Domain State Monitor;
