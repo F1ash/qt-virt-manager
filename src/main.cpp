@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
 
     // init GUI
-    QApplication a(argc, argv, QApplication::GuiClient);
+    QApplication a(argc, argv);
     QString name = QString("qt-virt-manager");
     a.setOrganizationName(name);
     a.setApplicationName(name);

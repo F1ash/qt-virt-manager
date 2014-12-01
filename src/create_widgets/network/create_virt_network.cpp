@@ -60,7 +60,10 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
 
     xml = new QTemporaryFile(this);
     xml->setAutoRemove(false);
-    xml->setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml").arg(QDir::tempPath()).arg(QDir::separator()));
+    xml->setFileTemplate(
+                QString("%1%2XML_Desc-XXXXXX.xml")
+                .arg(QDir::tempPath())
+                .arg(QDir::separator()));
 }
 CreateVirtNetwork::~CreateVirtNetwork()
 {

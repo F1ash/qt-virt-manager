@@ -23,7 +23,7 @@ public:
     const QString        domainName;
 
 signals:
-    void viewerClosed();
+    void                 viewerClosed();
 
 private:
     virConnectPtr        currWorkConn;

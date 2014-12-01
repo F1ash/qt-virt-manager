@@ -6,7 +6,6 @@
 #include <QPushButton>
 #include <QDir>
 #include <QTemporaryFile>
-#include "libvirt/libvirt.h"
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QCheckBox>
@@ -14,9 +13,20 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QSpinBox>
+#include "network_widgets/bridge_widget.h"
+#include "network_widgets/domain_widget.h"
+#include "network_widgets/forward_widget.h"
 #include <QDebug>
 
-#define FORWARD_TYPE QStringList()<<"network"<<"bridge"<<"hostdev"<<"mcast"<<"server"<<"user"<<"direct"<<"ethernet"
+#define FORWARD_TYPE QStringList()\
+    <<"network"\
+    <<"bridge"\
+    <<"hostdev"\
+    <<"mcast"\
+    <<"server"\
+    <<"user"\
+    <<"direct"\
+    <<"ethernet"
 
 class CreateVirtNetwork : public QDialog
 {
@@ -29,6 +39,9 @@ signals:
 
 private:
     QSettings        settings;
+    Bridge_Widget   *bridgeWdg;
+    Domain_Widget   *domainWdg;
+    Forward_Widget  *forwardWdg;
     QWidget         *bridge;
     QGridLayout     *bridgeLayout;
     QLineEdit       *bridgeName;
@@ -52,11 +65,11 @@ private:
     QTemporaryFile  *xml;
 
 public slots:
-    QString getXMLDescFileName() const;
+    QString          getXMLDescFileName() const;
 
 private slots:
-    void buildXMLDescription();
-    void set_Result();
+    void             buildXMLDescription();
+    void             set_Result();
 
 };
 

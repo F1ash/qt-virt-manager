@@ -1,0 +1,14 @@
+
+
+if (WIN32)
+    find_package (Qt4 COMPONENTS QtMain QtCore QtGui QtXml QtSvg REQUIRED)
+else (WIN32)
+    find_package (Qt4 COMPONENTS QtCore QtGui QtXml QtSvg REQUIRED)
+endif (WIN32)
+
+include (${QT_USE_FILE})
+qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
+QT4_WRAP_UI(UI_SRCS src/qtermwidget/lib/SearchBar.ui)
+
+set (QT4_BUILD 1)
+set (BUILD_PROJECT_LIBRARIES ${QT_LIBRARIES})

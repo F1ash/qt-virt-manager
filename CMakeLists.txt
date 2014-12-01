@@ -6,6 +6,30 @@ endif ()
 cmake_minimum_required (VERSION 2.8.3)
 include(CheckFunctionExists)
 
+##
+if ( NOT DEFAULT_ENCODING )
+  set ( DEFAULT_ENCODING "UTF-8" )
+endif ( NOT DEFAULT_ENCODING )
+
+if ( NOT BUILD_QT_VERSION )
+  set (BUILD_QT_VERSION 4)
+endif ( NOT BUILD_QT_VERSION )
+
+if ( BUILD_QT_VERSION STREQUAL 4 )
+    set (QT4_BUILD 1)
+    set (QT5_BUILD 0)
+    set (PROJ_PREFIX qt4)
+else ( BUILD_QT_VERSION STREQUAL 4 )
+    set (QT4_BUILD 0)
+    set (QT5_BUILD 1)
+    set (PROJ_PREFIX qt5)
+endif ( BUILD_QT_VERSION STREQUAL 4 )
+
+message (STATUS "Build with QT version: ${BUILD_QT_VERSION}")
+message (STATUS "QT4 build: ${QT4_BUILD}")
+message (STATUS "QT5 build: ${QT5_BUILD}")
+##
+
 IF (NOT LIB_SUFFIX)
     MESSAGE(STATUS "")
     MESSAGE(STATUS "LIB_SUFFIX variable is not defined. It will be autodetected now.")
@@ -31,8 +55,7 @@ IF (NOT LIB_SUFFIX)
     MESSAGE(STATUS "")
 ENDIF (NOT LIB_SUFFIX)
 
-
-set (PROJECT_NAME qt-virt-manager)
+set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
 set (PROJECT_VERSION 1.0.0)
 set (HEADERS 
   src/mainwindow.h
@@ -237,6 +260,9 @@ set (HEADERS
   src/create_widgets/domain/lxc_widgets/os_booting.h
   
   src/create_widgets/network/create_virt_network.h
+  src/create_widgets/network/network_widgets/bridge_widget.h
+  src/create_widgets/network/network_widgets/domain_widget.h
+  src/create_widgets/network/network_widgets/forward_widget.h
 
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
@@ -484,6 +510,9 @@ set (SOURCES
   src/create_widgets/domain/lxc_widgets/os_booting.cpp
   
   src/create_widgets/network/create_virt_network.cpp
+  src/create_widgets/network/network_widgets/bridge_widget.cpp
+  src/create_widgets/network/network_widgets/domain_widget.cpp
+  src/create_widgets/network/network_widgets/forward_widget.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp
@@ -524,17 +553,18 @@ set (SOURCES
   src/qtermwidget/lib/Filter.cpp
 )
 set (SOURCES_DIRS src)
-set (DESKTOP_FILE ${PROJECT_NAME}.desktop)
+set (DESKTOP_FILE qt-virt-manager.desktop)
 
 project (${PROJECT_NAME})
-
 include_directories (${CMAKE_CURRENT_BINARY_DIR} ${SOURCES_DIRS})
-find_package (Qt4 COMPONENTS QtCore QtGui QtXml QtSvg REQUIRED)
-include (${QT_USE_FILE})
-qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
-QT4_WRAP_UI(UI_SRCS src/qtermwidget/lib/SearchBar.ui)
-set (BUILD_PROJECT_LIBRARIES ${QT_LIBRARIES})
 
+##
+if ( QT4_BUILD )
+    include("CMakeQt4.txt")
+else ( QT4_BUILD )
+    include("CMakeQt5.txt")
+endif( QT4_BUILD )
+##
 
 # dirs
 set ( KB_LAYOUT_DIR ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME}/kb-layouts/ )
@@ -566,7 +596,8 @@ target_link_libraries (${PROJECT_NAME}
 )
 
 install (TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-install (FILES ${DESKTOP_FILE} DESTINATION ${SHARE_INSTALL_PREFIX}/applications)
+install (FILES ${DESKTOP_FILE}
+  DESTINATION ${SHARE_INSTALL_PREFIX}/applications/${PROJECT_NAME}.desktop)
 install (DIRECTORY src/misc src/icons
   DESTINATION ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME})
 # keyboard layouts
