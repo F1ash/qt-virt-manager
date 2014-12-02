@@ -9,8 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Qt VirtManager");
     QStringList searchThemePath;
     // TODO: make a cross platform here
+    QString qt_ver = QString( QT_VERSION_STR ).split(".").first();
     searchThemePath.append(QIcon::themeSearchPaths());
-    searchThemePath.insert(0, "/usr/share/qt-virt-manager/");
+    searchThemePath.insert(
+                0, QString("/usr/share/qt%1-virt-manager/").arg(qt_ver));
     QIcon::setThemeSearchPaths(searchThemePath);
     //
     QIcon::setThemeName("icons");

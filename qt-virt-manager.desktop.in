@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Qt@BUILD_QT_VERSION@ VirtManager
+GenericName=Qt@BUILD_QT_VERSION@ Virtual Machine Manager
+Type=Application
+Categories=Development;System;Qt;
+Icon=/usr/share/@PROJ_PREFIX@-virt-manager/icons/256x256/apps/virtual-engineering.png
+Exec=@PROJ_PREFIX@-virt-manager
+Terminal=false
+StartupNotify=true

@@ -595,16 +595,18 @@ target_link_libraries (${PROJECT_NAME}
     util
 )
 
-install (TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-install (FILES ${DESKTOP_FILE}
-  DESTINATION ${SHARE_INSTALL_PREFIX}/applications/${PROJECT_NAME}.desktop)
-install (DIRECTORY src/misc src/icons
-  DESTINATION ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME})
+configure_file ( ${DESKTOP_FILE}.in ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE} )
+install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE}
+    DESTINATION ${SHARE_INSTALL_PREFIX}/applications
+    RENAME ${PROJECT_NAME}.desktop )
+install ( TARGETS ${PROJECT_NAME}
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
+install ( DIRECTORY src/misc src/icons
+    DESTINATION ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME} )
 # keyboard layouts
-install(DIRECTORY src/qtermwidget/lib/kb-layouts/
-  DESTINATION ${KB_LAYOUT_DIR} FILES_MATCHING PATTERN "*.keytab" )
+install ( DIRECTORY src/qtermwidget/lib/kb-layouts/
+    DESTINATION ${KB_LAYOUT_DIR} FILES_MATCHING PATTERN "*.keytab" )
 # color schemes
-install(DIRECTORY src/qtermwidget/lib/color-schemes/
-  DESTINATION ${COLORSCHEMES_DIR} FILES_MATCHING PATTERN "*.*schem*")
-
+install ( DIRECTORY src/qtermwidget/lib/color-schemes/
+    DESTINATION ${COLORSCHEMES_DIR} FILES_MATCHING PATTERN "*.*schem*" )
 # * end
