@@ -1,4 +1,5 @@
 %global cmake_build_dir build-cmake
+%global debug_package %{nil}
 %bcond_without qt4
 %bcond_without qt5
 
