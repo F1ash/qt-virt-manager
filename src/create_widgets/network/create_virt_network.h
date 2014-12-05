@@ -6,27 +6,10 @@
 #include <QPushButton>
 #include <QDir>
 #include <QTemporaryFile>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QLabel>
-#include <QSpinBox>
 #include "network_widgets/bridge_widget.h"
 #include "network_widgets/domain_widget.h"
 #include "network_widgets/forward_widget.h"
 #include <QDebug>
-
-#define FORWARD_TYPE QStringList()\
-    <<"network"\
-    <<"bridge"\
-    <<"hostdev"\
-    <<"mcast"\
-    <<"server"\
-    <<"user"\
-    <<"direct"\
-    <<"ethernet"
 
 class CreateVirtNetwork : public QDialog
 {
@@ -36,31 +19,23 @@ public:
     ~CreateVirtNetwork();
 
 signals:
+    void             errorMsg(QString);
 
 private:
     QSettings        settings;
+    QWidget         *baseWdg;
+    QLabel          *netNameLabel, *uuidLabel;
+    QLineEdit       *networkName, *uuid;
+    QGridLayout     *baseLayout;
     Bridge_Widget   *bridgeWdg;
     Domain_Widget   *domainWdg;
     Forward_Widget  *forwardWdg;
-    QWidget         *bridge;
-    QGridLayout     *bridgeLayout;
-    QLineEdit       *bridgeName;
-    QCheckBox       *stp;
-    QLabel          *delayLabel;
-    QSpinBox        *delay;
-
-    QVBoxLayout     *netDescLayout;
-    QLineEdit       *networkName;
-    QLabel          *uuid;
-    QLineEdit       *source;
-    QLineEdit       *target;
-    QLineEdit       *address;
-    QLineEdit       *mac;
 
     QPushButton     *ok;
     QPushButton     *cancel;
     QHBoxLayout     *buttonLayout;
     QWidget         *buttons;
+    QVBoxLayout     *netDescLayout;
 
     QTemporaryFile  *xml;
 

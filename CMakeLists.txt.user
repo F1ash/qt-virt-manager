@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 3.2.2, 2014-12-02T20:15:39. -->
+<!-- Written by QtCreator 3.2.2, 2014-12-05T19:32:58. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -63,7 +63,7 @@
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{d5e1738d-a6d2-45fe-8bcf-a7e4706ee4ba}</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
-   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">2</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">3</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
     <value type="bool" key="CMakeProjectManager.CMakeBuildConfiguration.UseNinja">false</value>
     <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/Flash/qt-virt-manager-build</value>

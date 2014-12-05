@@ -18,26 +18,24 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     setModal(true);
     setWindowTitle("Network Settings");
     restoreGeometry(settings.value("NetCreateGeometry").toByteArray());
-    bridgeLayout = new QGridLayout();
-    bridgeName = new QLineEdit(this);
-    bridgeName->setPlaceholderText("Enter bridge name");
-    stp = new QCheckBox("Spanning Tree Protocol", this);
-    stp->setChecked(true); // default state
-    delayLabel = new QLabel("Delay", this);
-    delay = new QSpinBox(this);
-    delay->setRange(0, 360);
-    bridgeLayout->addWidget(bridgeName, 0, 0, 1, 2);
-    bridgeLayout->addWidget(stp, 2, 0, 3, 2);
-    bridgeLayout->addWidget(delayLabel, 4, 0, 5, 1);
-    bridgeLayout->addWidget(delay, 4, 1, 5, 2);
-    bridge = new QWidget(this);
-    bridge->setLayout(bridgeLayout);
 
-    netDescLayout = new QVBoxLayout();
+    netNameLabel = new QLabel("Name:", this);
     networkName = new QLineEdit(this);
     networkName->setPlaceholderText("Enter Network Name");
-    uuid = new QLabel("UUID:");
+    uuidLabel = new QLabel("UUID:");
+    uuid = new QLineEdit(this);
+    uuid->setPlaceholderText("if omitted, then auto generated");
+    baseLayout = new QGridLayout();
+    baseLayout->addWidget(netNameLabel, 0, 0);
+    baseLayout->addWidget(networkName, 0, 1);
+    baseLayout->addWidget(uuidLabel, 1, 0);
+    baseLayout->addWidget(uuid, 1, 1);
+    baseWdg = new QWidget(this);
+    baseWdg->setLayout(baseLayout);
 
+    bridgeWdg = new Bridge_Widget(this);
+    domainWdg = new Domain_Widget(this);
+    forwardWdg = new Forward_Widget(this);
 
     ok = new QPushButton("Ok", this);
     ok->setAutoDefault(true);
@@ -51,10 +49,12 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     buttons = new QWidget(this);
     buttons->setLayout(buttonLayout);
 
-    netDescLayout->addWidget(networkName);
-    netDescLayout->addWidget(uuid);
-    netDescLayout->addWidget(bridge);
-    netDescLayout->insertStretch(-1);
+    netDescLayout = new QVBoxLayout(this);
+    netDescLayout->addWidget(baseWdg);
+    netDescLayout->addWidget(bridgeWdg);
+    netDescLayout->addWidget(domainWdg);
+    netDescLayout->addWidget(forwardWdg);
+    netDescLayout->addStretch(-1);
     netDescLayout->addWidget(buttons);
     setLayout(netDescLayout);
 
@@ -74,18 +74,15 @@ CreateVirtNetwork::~CreateVirtNetwork()
     networkName = NULL;
     delete uuid;
     uuid = NULL;
-    delete bridgeName;
-    bridgeName = NULL;
-    delete stp;
-    stp = NULL;
-    delete delayLabel;
-    delayLabel = NULL;
-    delete delay;
-    delay = NULL;
-    delete bridgeLayout;
-    bridgeLayout = NULL;
-    delete bridge;
-    bridge = NULL;
+
+    delete bridgeWdg;
+    bridgeWdg = NULL;
+
+    delete domainWdg;
+    domainWdg = NULL;
+
+    delete forwardWdg;
+    forwardWdg = NULL;
 
     delete ok;
     ok = NULL;
