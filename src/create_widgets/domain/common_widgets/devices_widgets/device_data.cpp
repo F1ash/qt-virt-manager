@@ -131,7 +131,7 @@ void DeviceData::closeDataEdit()
         int answer = QMessageBox::question(
                     this,
                     "Save Device Data",
-                    "Save last changes?",
+                    "In Devices:\nSave last changes?",
                     QMessageBox::Ok,
                     QMessageBox::Cancel);
         if ( answer==QMessageBox::Ok ) {

@@ -62,21 +62,24 @@ QDomDocument File_Disk::getDataDocument() const
         _devDesc.appendChild(_readOnly);
     };
 
-    if ( addr->use->isChecked() &&
-         addr->getCurrentAddrWidget()->isEnabled() ) {
-        QDomElement _addr = doc.createElement("address");
+    if ( addr->use->isChecked() ) {
         AttrList _l = addr->getAttrList();
-        foreach (QString _attr, _l.keys()) {
-            if ( !_attr.isEmpty() )
-                _addr.setAttribute( _attr, _l.value(_attr) );
+        // attribute "type" is always present
+        if ( _l.count()>1 ) {
+            QDomElement _addr = doc.createElement("address");
+            foreach (QString _attr, _l.keys()) {
+                if ( !_attr.isEmpty() )
+                    _addr.setAttribute( _attr, _l.value(_attr) );
+            };
+            _devDesc.appendChild(_addr);
         };
-        _devDesc.appendChild(_addr);
     };
 
     _devDesc.setAttribute("type", "file");
     _devDesc.setAttribute("device", devType->getDeviceType());
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
+    //qDebug()<<doc.toByteArray(4).data();
     return doc;
 }
 void File_Disk::setDataDescription(QString &xmlDesc)

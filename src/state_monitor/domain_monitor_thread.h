@@ -17,7 +17,7 @@ public:
             QString _domainName = QString());
 
 signals:
-    void dataChanged(int, int, int, int);
+    void                 dataChanged(int, int, int, int);
 
 private:
     virConnectPtr        currWorkConn;

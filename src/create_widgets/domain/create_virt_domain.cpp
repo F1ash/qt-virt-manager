@@ -427,8 +427,8 @@ void CreateVirtDomain::setBootOrder(QDomElement *_devices)
                     _el1 = _dev;
                     _doc1.setContent(QString());
                     _doc1.appendChild(_el1);
-                    //qDebug()<<_doc.toDocument().toString()<<_doc1.toDocument().toString();
-                    if ( _doc.toDocument().toString()==_doc1.toDocument().toString() ) {
+                    //qDebug()<<_doc.toString()<<_doc1.toString();
+                    if ( _doc.toString()==_doc1.toString() ) {
                         if ( _data.usage ) {
                             QDomElement _boot = _doc.createElement("boot");
                             _boot.setAttribute("order", _data.order);

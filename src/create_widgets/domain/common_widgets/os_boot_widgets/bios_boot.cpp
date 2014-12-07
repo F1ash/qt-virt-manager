@@ -160,6 +160,7 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
 {
     //qDebug()<<_doc.toString();
     QDomNodeList _devices;
+    QList<QDomElement> _bootable;
     _devices = _doc
             .firstChildElement("devices")
             .childNodes();
@@ -169,9 +170,9 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
      * network interfaces, and USB and PCI devices) were introduced
      * and they are the preferred way providing full control over booting order.
      */
-    bootDevices->devices->clear();
     uint count = _devices.length();
     uint j = 0;
+    //search bootable devices
     for (uint i=0; i<count; i++) {
         //qDebug()<<_devices.item(j).nodeName()<<i;
         if (!_devices.item(j).isNull()) {
@@ -191,8 +192,60 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
                 ++j;
                 continue;
             };
-            bootDevices->addNewDevice(_el);
-        } else ++j;
+            _bootable.append(_el);
+        };
+        ++j;
+    };
+    count = bootDevices->devices->count();
+    QList<int> _unexist;
+    // search exist bootable devices
+    for (uint i=0; i<count; i++) {
+        QDomDocument _doc1;
+        _doc1.setContent(
+                    bootDevices->devices->item(i)->data(Qt::UserRole)
+                    .toString());
+        QDomElement _boot = _doc1.firstChildElement()
+                .firstChildElement("boot");
+        if ( !_boot.isNull() ) {
+            _doc1.firstChildElement().removeChild(_boot);
+        };
+        bool exist = false;
+        uint j=0;
+        while ( j<_bootable.count() ) {
+            QDomElement _el = _bootable.at(j);
+            if ( !_el.firstChildElement("boot").isNull() ) {
+                _el.removeChild(_el.firstChildElement("boot"));
+            };
+            QDomDocument _doc2;
+            _doc2.setContent(QString());
+            _doc2.appendChild(_el);
+            //qDebug()<<_doc1.toString()<<_doc2.toString();
+            exist = ( _doc1.toString()==_doc2.toString() );
+            if (exist) {
+                break;
+            } else {
+                ++j;
+            };
+        };
+        if (exist) {
+            //qDebug()<<_doc1.toString()<<"exist"<<i;
+            _bootable.removeAt(j);
+        } else {
+            //qDebug()<<_doc1.toString()<<"unexist"<<i;
+            _unexist.append(i);
+        };
+    };
+    // clear unexist bootable devices
+    for (uint i=_unexist.count(); i>0; i--) {
+        QListWidgetItem *_item = bootDevices->devices->takeItem(_unexist.at(i-1));
+        delete _item;
+        _item = NULL;
+    };
+    // append new bootable devices
+    for (uint i=0; i<_bootable.count(); i++) {
+        QDomElement _el = _bootable.at(i);
+        bootDevices->addNewDevice(_el);
+        //qDebug()<<_el.attribute("type");
     };
 }
 BootOrderList BIOS_Boot::getBootOrderData() const
