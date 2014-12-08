@@ -79,7 +79,7 @@ QDomDocument File_Disk::getDataDocument() const
     _devDesc.setAttribute("device", devType->getDeviceType());
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
-    //qDebug()<<doc.toByteArray(4).data();
+    //qDebug()<<doc.toByteArray(4).data()<<"file_disk";
     return doc;
 }
 void File_Disk::setDataDescription(QString &xmlDesc)
@@ -152,7 +152,9 @@ void File_Disk::setDataDescription(QString &xmlDesc)
             wdg->domain->setText( _addr.attribute("domain") );
             wdg->bus->setText( _addr.attribute("bus") );
             wdg->slot->setText( _addr.attribute("slot") );
-            wdg->function->setValue( _addr.attribute("function").toInt() );
+            wdg->function->setValue(
+                        _addr.attribute("function")
+                        .split("x").last().toInt() );
         } else if ( _attr=="drive" ) {
             DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
             wdg->controller->setText( _addr.attribute("controller") );

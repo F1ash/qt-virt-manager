@@ -44,6 +44,6 @@ AttrList PciAddr::getAttrList() const
     if ( !slot->text().isEmpty() )
         attrs.insert("slot", slot->text());
     if ( !function->text().isEmpty() )
-        attrs.insert("function", function->text());
+        attrs.insert("function", QString("0x%1").arg(function->text()));
     return attrs;
 }
