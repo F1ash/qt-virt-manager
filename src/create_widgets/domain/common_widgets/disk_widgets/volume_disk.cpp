@@ -173,7 +173,8 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
             wdg->domain->setText( _addr.attribute("domain") );
             wdg->bus->setText( _addr.attribute("bus") );
             wdg->slot->setText( _addr.attribute("slot") );
-            wdg->function->setValue( _addr.attribute("function").toInt() );
+            wdg->function->setValue( _addr.attribute("function")
+                                     .split("x").last().toInt() );
         } else if ( _attr=="drive" ) {
             DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
             wdg->controller->setText( _addr.attribute("controller") );

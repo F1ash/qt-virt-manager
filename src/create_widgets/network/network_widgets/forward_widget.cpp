@@ -22,11 +22,22 @@ Forward_Widget::Forward_Widget(QWidget *parent) :
     forwards = new QWidget(this);
     forwards->setLayout(frwdLayout);
     forwards->setEnabled(false);
+    frwdModeSet = new QStackedWidget(this);
+    frwdModeSet->addWidget(new NAT_Mode_widget(this));
+    frwdModeSet->addWidget(new ROUTE_Mode_widget(this));
+    frwdModeSet->addWidget(new BRIDGE_Mode_widget(this));
+    frwdModeSet->addWidget(new PRIVATE_Mode_widget(this));
+    frwdModeSet->addWidget(new VEPA_Mode_widget(this));
+    frwdModeSet->addWidget(new PASSTHROUGH_Mode_widget(this));
+    frwdModeSet->addWidget(new HOSTDEV_Mode_widget(this));
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(title);
     commonLayout->addWidget(forwards);
+    commonLayout->addWidget(frwdModeSet);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(title, SIGNAL(toggled(bool)),
             forwards, SLOT(setEnabled(bool)));
+    connect(mode, SIGNAL(currentIndexChanged(int)),
+            frwdModeSet, SLOT(setCurrentIndex(int)));
 }

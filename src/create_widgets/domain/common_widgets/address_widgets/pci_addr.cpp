@@ -15,6 +15,7 @@ PciAddr::PciAddr(QWidget *parent) :
     slot->setPlaceholderText("a hex value between 0x0 and 0x1f, inclusive");
     function = new QSpinBox(this);
     function->setRange(0, 7);
+    function->setPrefix("0x");
     commonlayout = new QGridLayout();
     commonlayout->addWidget(domainLabel, 0, 0);
     commonlayout->addWidget(busLabel, 1, 0);
@@ -44,6 +45,6 @@ AttrList PciAddr::getAttrList() const
     if ( !slot->text().isEmpty() )
         attrs.insert("slot", slot->text());
     if ( !function->text().isEmpty() )
-        attrs.insert("function", QString("0x%1").arg(function->text()));
+        attrs.insert("function", QString("0x%1").arg(function->value()));
     return attrs;
 }

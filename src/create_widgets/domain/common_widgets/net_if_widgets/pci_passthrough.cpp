@@ -144,7 +144,8 @@ void PCI_Passthrough::setDataDescription(QString &xmlDesc)
         pciAddr->domain->setText( _address.attribute("domain") );
         pciAddr->bus->setText( _address.attribute("bus") );
         pciAddr->slot->setText( _address.attribute("slot") );
-        pciAddr->function->setValue( _address.attribute("function").toInt() );
+        pciAddr->function->setValue( _address.attribute("function")
+                                     .split("x").last().toInt() );
     };
     virtPort->setUsage( !_virtport.isNull() );
     if ( !_virtport.isNull() ) {
@@ -184,6 +185,7 @@ void PCI_Passthrough::setDataDescription(QString &xmlDesc)
         wdg->domain->setText( _addr.attribute("domain") );
         wdg->bus->setText( _addr.attribute("bus") );
         wdg->slot->setText( _addr.attribute("slot") );
-        wdg->function->setValue( _addr.attribute("function").toInt() );
+        wdg->function->setValue( _addr.attribute("function")
+                                 .split("x").last().toInt() );
     };
 }

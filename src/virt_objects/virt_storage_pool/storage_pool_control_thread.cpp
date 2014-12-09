@@ -257,7 +257,7 @@ QStringList StoragePoolControlThread::undefineStoragePool()
     */
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
     if ( storagePool!=NULL ) {
-        deleted = (virStoragePoolDestroy(storagePool)+1) ? true : false;
+        deleted = (virStoragePoolUndefine(storagePool)+1) ? true : false;
         if (!deleted) sendConnErrors();
         virStoragePoolFree(storagePool);
     } else sendConnErrors();

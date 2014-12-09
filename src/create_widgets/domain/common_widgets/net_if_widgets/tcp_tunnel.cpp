@@ -116,6 +116,7 @@ void TCP_Tunnel::setDataDescription(QString &xmlDesc)
         wdg->domain->setText( _addr.attribute("domain") );
         wdg->bus->setText( _addr.attribute("bus") );
         wdg->slot->setText( _addr.attribute("slot") );
-        wdg->function->setValue( _addr.attribute("function").toInt() );
+        wdg->function->setValue( _addr.attribute("function")
+                                 .split("x").last().toInt() );
     };
 }

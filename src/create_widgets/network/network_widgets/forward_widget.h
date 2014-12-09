@@ -2,6 +2,14 @@
 #define FORWARD_WIDGET_H
 
 #include "create_widgets/domain/_qwidget.h"
+#include "nat_mode_widget.h"
+#include "route_mode_widget.h"
+#include "bridge_mode_widget.h"
+#include "private_mode_widget.h"
+#include "vepa_mode_widget.h"
+#include "passthrough_mode_widget.h"
+#include "hostdev_mode_widget.h"
+#include <QStackedWidget>
 
 class Forward_Widget : public _QWidget
 {
@@ -17,6 +25,7 @@ private:
     QLabel          *modeLabel;
     QGridLayout     *frwdLayout;
     QWidget         *forwards;
+    QStackedWidget  *frwdModeSet;
     QVBoxLayout     *commonLayout;
 
 public slots:

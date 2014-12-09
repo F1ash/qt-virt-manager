@@ -263,6 +263,13 @@ set (HEADERS
   src/create_widgets/network/network_widgets/bridge_widget.h
   src/create_widgets/network/network_widgets/domain_widget.h
   src/create_widgets/network/network_widgets/forward_widget.h
+  src/create_widgets/network/network_widgets/nat_mode_widget.h
+  src/create_widgets/network/network_widgets/route_mode_widget.h
+  src/create_widgets/network/network_widgets/bridge_mode_widget.h
+  src/create_widgets/network/network_widgets/private_mode_widget.h
+  src/create_widgets/network/network_widgets/vepa_mode_widget.h
+  src/create_widgets/network/network_widgets/passthrough_mode_widget.h
+  src/create_widgets/network/network_widgets/hostdev_mode_widget.h
 
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
@@ -513,6 +520,13 @@ set (SOURCES
   src/create_widgets/network/network_widgets/bridge_widget.cpp
   src/create_widgets/network/network_widgets/domain_widget.cpp
   src/create_widgets/network/network_widgets/forward_widget.cpp
+  src/create_widgets/network/network_widgets/nat_mode_widget.cpp
+  src/create_widgets/network/network_widgets/route_mode_widget.cpp
+  src/create_widgets/network/network_widgets/bridge_mode_widget.cpp
+  src/create_widgets/network/network_widgets/private_mode_widget.cpp
+  src/create_widgets/network/network_widgets/vepa_mode_widget.cpp
+  src/create_widgets/network/network_widgets/passthrough_mode_widget.cpp
+  src/create_widgets/network/network_widgets/hostdev_mode_widget.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp
