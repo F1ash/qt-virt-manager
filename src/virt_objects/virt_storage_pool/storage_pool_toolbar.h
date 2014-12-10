@@ -8,6 +8,7 @@
 #include <QTimerEvent>
 #include <QSettings>
 #include "virt_objects/open_file_menu.h"
+#include "delete_pool_menu.h"
 #include <QDebug>
 
 class StoragePoolToolBar : public QToolBar
@@ -18,8 +19,8 @@ public:
     ~StoragePoolToolBar();
 
 signals:
-    void fileForMethod(const QStringList&);
-    void execMethod(const QStringList&);
+    void             fileForMethod(const QStringList&);
+    void             execMethod(const QStringList&);
 
 private:
     QAction         *start_Action;
@@ -30,8 +31,11 @@ private:
     QAction         *define_Action;
     QAction         *undefine_Action;
     QAction         *setAutostart_Action;
+    QAction         *delete_Action;
     QAction         *getXMLDesc_Action;
     QAction         *overview_Action;
+    Delete_Pool_Menu
+                    *delete_Menu;
     QPushButton     *_autoReload;
     QAction         *autoReload;
 
@@ -40,19 +44,18 @@ private:
     int              timerId;
 
 private slots:
-    void timerEvent(QTimerEvent*);
-    void repeatParameters(QStringList&);
-    void showHoveredMenu();
-    void showMenu();
-    void detectTriggerredAction(QAction*);
-    void changeAutoReloadState(bool);
+    void             timerEvent(QTimerEvent*);
+    void             repeatParameters(QStringList&);
+    void             showHoveredMenu();
+    void             showMenu();
+    void             detectTriggerredAction(QAction*);
+    void             changeAutoReloadState(bool);
 
 public slots:
-    Qt::ToolBarArea get_ToolBarArea(int) const;
-    void enableAutoReload();
-    void stopProcessing();
-    bool getAutoReloadState() const;
-
+    Qt::ToolBarArea  get_ToolBarArea(int) const;
+    void             enableAutoReload();
+    void             stopProcessing();
+    bool             getAutoReloadState() const;
 };
 
 #endif // STORAGE_POOL_TOOLBAR_H

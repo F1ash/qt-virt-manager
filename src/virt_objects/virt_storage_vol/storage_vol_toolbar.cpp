@@ -71,9 +71,12 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
 
     connect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
 
-    connect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)), this, SLOT(emitWipeAction(const QStringList&)));
-    connect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
+    connect(create_Menu, SIGNAL(fileForMethod(QStringList&)),
+            this, SLOT(repeatParameters(QStringList&)));
+    connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)),
+            this, SIGNAL(execMethod(const QStringList&)));
+    connect(this, SIGNAL(actionTriggered(QAction*)),
+            this, SLOT(detectTriggerredAction(QAction*)));
 }
 StorageVolToolBar::~StorageVolToolBar()
 {
@@ -81,12 +84,17 @@ StorageVolToolBar::~StorageVolToolBar()
     settings.setValue("UpdateTime", interval);
     settings.setValue("AutoReload", _autoReload->isChecked());
     settings.endGroup();
-    disconnect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
-    disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    disconnect(wipe_Menu, SIGNAL(execMethod(const QStringList&)), this, SLOT(emitWipeAction(const QStringList&)));
-    disconnect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
+    disconnect(_autoReload, SIGNAL(toggled(bool)),
+               this, SLOT(changeAutoReloadState(bool)));
+    disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)),
+               this, SLOT(repeatParameters(QStringList&)));
+    disconnect(wipe_Menu, SIGNAL(execMethod(const QStringList&)),
+               this, SIGNAL(execMethod(const QStringList&)));
+    disconnect(this, SIGNAL(actionTriggered(QAction*)),
+               this, SLOT(detectTriggerredAction(QAction*)));
 
-    disconnect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+    disconnect(create_Action, SIGNAL(triggered()),
+               this, SLOT(showMenu()));
 
     delete create_Action;
     create_Action = NULL;
@@ -196,10 +204,6 @@ void StorageVolToolBar::detectTriggerredAction(QAction *action)
         parameters << "stopOverViewVirtStoragePool";
     } else return;
     emit execMethod(parameters);
-}
-void StorageVolToolBar::emitWipeAction(const QStringList &args)
-{
-    emit execMethod(args);
 }
 void StorageVolToolBar::changeAutoReloadState(bool state)
 {

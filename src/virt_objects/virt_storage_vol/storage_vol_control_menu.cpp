@@ -16,7 +16,8 @@ StorageVolControlMenu::StorageVolControlMenu(QWidget *parent, QStringList params
         wipe_Action = new QAction("Wipe", this);
         wipe_Action->setIcon(QIcon::fromTheme("storageVol-wipe"));
         wipe_Action->setMenu(wipe_Menu);
-        connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)), this, SLOT(emitWipeAction(const QStringList&)));
+        connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)),
+                this, SIGNAL(execMethod(const QStringList&)));
         getXMLDesc_Action = new QAction("get XML Description", this);
         getXMLDesc_Action->setIcon(QIcon::fromTheme("storageVol-xml"));
 
@@ -40,7 +41,8 @@ StorageVolControlMenu::~StorageVolControlMenu()
 {
     disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
     if ( !parameters.isEmpty() ) {
-        disconnect(wipe_Menu, SIGNAL(execMethod(const QStringList&)), this, SLOT(emitWipeAction(const QStringList&)));
+        disconnect(wipe_Menu, SIGNAL(execMethod(const QStringList&)),
+                   this, SIGNAL(execMethod(const QStringList&)));
         delete delete_Action;
         delete_Action = NULL;
         delete download_Action;
@@ -83,8 +85,4 @@ void StorageVolControlMenu::emitExecMethod(QAction *action)
     } else return;
     //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);
-}
-void StorageVolControlMenu::emitWipeAction(const QStringList &args)
-{
-    emit execMethod(args);
 }

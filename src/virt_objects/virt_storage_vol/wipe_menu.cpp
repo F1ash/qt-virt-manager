@@ -27,29 +27,6 @@ WipeMenu::WipeMenu(QWidget *parent) :
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
     connect(this, SIGNAL(hovered(QAction*)), this, SLOT(showActionToolTip(QAction*)));
 }
-WipeMenu::~WipeMenu()
-{
-    disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
-    disconnect(this, SIGNAL(hovered(QAction*)), this, SLOT(showActionToolTip(QAction*)));
-    delete algorithm_ZERO;
-    algorithm_ZERO = 0;
-    delete algorithm_NNSA;
-    algorithm_NNSA = 0;
-    delete algorithm_DOD;
-    algorithm_DOD = 0;
-    delete algorithm_BSI;
-    algorithm_BSI = 0;
-    delete algorithm_GUTMANN;
-    algorithm_GUTMANN = 0;
-    delete algorithm_SCHNEIER;
-    algorithm_SCHNEIER = 0;
-    delete algorithm_PFITZNER7;
-    algorithm_PFITZNER7 = 0;
-    delete algorithm_PFITZNER33;
-    algorithm_PFITZNER33 = 0;
-    delete algorithm_RANDOM;
-    algorithm_RANDOM = 0;
-}
 
 /* private slots */
 void WipeMenu::emitExecMethod(QAction *action)

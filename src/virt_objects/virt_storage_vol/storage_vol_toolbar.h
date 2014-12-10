@@ -19,8 +19,8 @@ public:
     ~StorageVolToolBar();
 
 signals:
-    void fileForMethod(const QStringList&);
-    void execMethod(const QStringList&);
+    void             fileForMethod(const QStringList&);
+    void             execMethod(const QStringList&);
 
 private:
     OpenFileMenu    *create_Menu;
@@ -41,19 +41,17 @@ private:
     int              timerId = 0;
 
 private slots:
-    void timerEvent(QTimerEvent*);
-    void repeatParameters(QStringList&);
-    void showMenu();
-    void detectTriggerredAction(QAction*);
-    void emitWipeAction(const QStringList&);
-    void changeAutoReloadState(bool);
+    void             timerEvent(QTimerEvent*);
+    void             repeatParameters(QStringList&);
+    void             showMenu();
+    void             detectTriggerredAction(QAction*);
+    void             changeAutoReloadState(bool);
 
 public slots:
-    Qt::ToolBarArea get_ToolBarArea(int) const;
-    void enableAutoReload();
-    void stopProcessing();
-    bool getAutoReloadState() const;
-
+    Qt::ToolBarArea  get_ToolBarArea(int) const;
+    void             enableAutoReload();
+    void             stopProcessing();
+    bool             getAutoReloadState() const;
 };
 
 #endif // STORAGE_VOL_TOOLBAR_H

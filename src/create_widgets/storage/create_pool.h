@@ -30,7 +30,7 @@ private:
     QWidget         *uuidWdg;
 
 public slots:
-    QString getStorageXMLDescFileName() const;
+    QString          getStorageXMLDescFileName() const;
 };
 
 #endif // CREATE_POOL_H

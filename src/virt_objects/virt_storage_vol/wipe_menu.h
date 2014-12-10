@@ -9,10 +9,9 @@ class WipeMenu : public QMenu
     Q_OBJECT
 public:
     explicit WipeMenu(QWidget *parent = NULL);
-    ~WipeMenu();
 
 signals:
-    void execMethod(const QStringList&);
+    void             execMethod(const QStringList&);
 
 private:
     QAction         *algorithm_ZERO;
@@ -26,9 +25,8 @@ private:
     QAction         *algorithm_RANDOM;
 
 private slots:
-    void emitExecMethod(QAction*);
-    void showActionToolTip(QAction*);
-
+    void             emitExecMethod(QAction*);
+    void             showActionToolTip(QAction*);
 };
 
 #endif // WIPE_MENU_H

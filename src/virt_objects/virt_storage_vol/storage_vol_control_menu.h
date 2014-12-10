@@ -17,7 +17,7 @@ public:
     ~StorageVolControlMenu();
 
 signals:
-    void execMethod(const QStringList&);
+    void            execMethod(const QStringList&);
 
 private:
     bool            autoReloadState;
@@ -32,9 +32,7 @@ private:
     QStringList     parameters;
 
 private slots:
-    void emitExecMethod(QAction*);
-    void emitWipeAction(const QStringList&);
-
+    void            emitExecMethod(QAction*);
 };
 
 #endif // STORAGE_VOL_CONTROL_MENU_H

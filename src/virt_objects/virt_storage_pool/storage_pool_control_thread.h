@@ -17,6 +17,7 @@ enum StoragePoolActions {
     DESTROY_StPOOL,
     UNDEFINE_StPOOL,
     CHANGE_StPOOL_AUTOSTART,
+    DELETE_StPOOL,
     GET_StPOOL_XML_DESC,
     StPOOL_EMPTY_ACTION
 };
@@ -28,8 +29,8 @@ public:
     explicit StoragePoolControlThread(QObject *parent = NULL);
 
 signals:
-    void errorMsg(QString);
-    void resultData(StoragePoolActions, QStringList);
+    void                  errorMsg(QString);
+    void                  resultData(StoragePoolActions, QStringList);
 
 private:
     StoragePoolActions    action;
@@ -39,23 +40,24 @@ private:
     virErrorPtr           virtErrors;
 
 public slots:
-    bool setCurrentWorkConnect(virConnectPtr);
-    void stop();
-    void execAction(StoragePoolActions, QStringList);
+    bool                  setCurrentWorkConnect(virConnectPtr);
+    void                  stop();
+    void                  execAction(StoragePoolActions, QStringList);
 
 private slots:
-    void run();
-    QStringList getAllStoragePoolList();
-    QStringList createStoragePool();
-    QStringList defineStoragePool();
-    QStringList startStoragePool();
-    QStringList destroyStoragePool();
-    QStringList undefineStoragePool();
-    QStringList changeAutoStartStoragePool();
-    QStringList getStoragePoolXMLDesc();
+    void                  run();
+    QStringList           getAllStoragePoolList();
+    QStringList           createStoragePool();
+    QStringList           defineStoragePool();
+    QStringList           startStoragePool();
+    QStringList           destroyStoragePool();
+    QStringList           undefineStoragePool();
+    QStringList           changeAutoStartStoragePool();
+    QStringList           deleteStoragePool();
+    QStringList           getStoragePoolXMLDesc();
 
-    void sendConnErrors();
-    void sendGlobalErrors();
+    void                  sendConnErrors();
+    void                  sendGlobalErrors();
 
 };
 

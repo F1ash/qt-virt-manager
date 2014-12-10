@@ -47,7 +47,7 @@ QDomDocument Dir_Pool_Stuff::getStorageXMLDesc() const
         _perm.appendChild(_label);
     };
     if ( target->encrypt->isUsed() ) {
-        _encrypt = doc.createElement("encrypt");
+        _encrypt = doc.createElement("encryption");
         _target.appendChild(_encrypt);
         _encrypt.setAttribute(
                     "format",

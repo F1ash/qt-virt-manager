@@ -16,6 +16,12 @@ StoragePoolControlMenu::StoragePoolControlMenu(QWidget *parent, QStringList para
         autoStart = new QAction("change AutoStart", this);
         autoStart->setIcon(QIcon::fromTheme("storagePool-autostart"));
         autoStart->setEnabled(parameters.last()=="yes");
+        delete_Menu = new Delete_Pool_Menu(this);
+        delete_Action = new QAction("Delete", this);
+        delete_Action->setIcon(QIcon::fromTheme("storageVol-delete"));
+        delete_Action->setMenu(delete_Menu);
+        connect(delete_Menu, SIGNAL(execMethod(const QStringList&)),
+                this, SIGNAL(execMethod(const QStringList&)));
         getXMLDesc = new QAction("get XML Description", this);
         getXMLDesc->setIcon(QIcon::fromTheme("storagePool-xml"));
         getXMLDesc->setEnabled(true);
@@ -27,6 +33,7 @@ StoragePoolControlMenu::StoragePoolControlMenu(QWidget *parent, QStringList para
         addAction(destroy);
         addAction(undefine);
         addAction(autoStart);
+        addAction(delete_Action);
         addSeparator();
         addAction(getXMLDesc);
         addSeparator();
@@ -44,6 +51,8 @@ StoragePoolControlMenu::~StoragePoolControlMenu()
 {
     disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
     if ( !parameters.isEmpty() ) {
+        disconnect(delete_Menu, SIGNAL(execMethod(const QStringList&)),
+                   this, SIGNAL(execMethod(const QStringList&)));
         delete start;
         start = NULL;
         delete destroy;
@@ -52,6 +61,10 @@ StoragePoolControlMenu::~StoragePoolControlMenu()
         undefine = NULL;
         delete autoStart;
         autoStart = NULL;
+        delete delete_Menu;
+        delete_Menu = NULL;
+        delete delete_Action;
+        delete_Action = NULL;
         delete getXMLDesc;
         getXMLDesc = NULL;
         delete overview;

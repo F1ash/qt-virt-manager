@@ -261,6 +261,11 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
                  ? "0" : "1";
             args.append(autostartState);
             stPoolControlThread->execAction(CHANGE_StPOOL_AUTOSTART, args);
+        } else if ( l.first()=="deleteVirtStoragePool" ) {
+            if ( l.count()>1 ) {
+                args.append(l.at(1));
+                stPoolControlThread->execAction(DELETE_StPOOL, args);
+            };
         } else if ( l.first()=="getVirtStoragePoolXMLDesc" ) {
             stPoolControlThread->execAction(GET_StPOOL_XML_DESC, args);
         } else if ( l.first()=="overviewVirtStoragePool" ) {

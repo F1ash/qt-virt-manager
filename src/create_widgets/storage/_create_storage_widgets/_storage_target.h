@@ -38,8 +38,8 @@ private:
     QVBoxLayout     *commonLayout;
 
 private slots:
-    void formatTypeChanged(int);
-    void setTargetDirectory();
+    void             formatTypeChanged(int);
+    void             setTargetDirectory();
 };
 
 #endif // _STORAGE_TARGET_H
