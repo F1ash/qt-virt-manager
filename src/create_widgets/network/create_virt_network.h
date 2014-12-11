@@ -26,6 +26,7 @@ private:
     QWidget         *baseWdg;
     QLabel          *netNameLabel, *uuidLabel;
     QLineEdit       *networkName, *uuid;
+    QCheckBox       *ipv6, *trustGuestRxFilters;
     QGridLayout     *baseLayout;
     Bridge_Widget   *bridgeWdg;
     Domain_Widget   *domainWdg;
@@ -45,6 +46,7 @@ public slots:
 private slots:
     void             buildXMLDescription();
     void             set_Result();
+    void             networkTypeChanged(bool);
 
 };
 

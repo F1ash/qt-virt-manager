@@ -30,6 +30,7 @@ Forward_Widget::Forward_Widget(QWidget *parent) :
     frwdModeSet->addWidget(new VEPA_Mode_widget(this));
     frwdModeSet->addWidget(new PASSTHROUGH_Mode_widget(this));
     frwdModeSet->addWidget(new HOSTDEV_Mode_widget(this));
+    frwdModeSet->setEnabled(false);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(title);
     commonLayout->addWidget(forwards);
@@ -38,6 +39,16 @@ Forward_Widget::Forward_Widget(QWidget *parent) :
     setLayout(commonLayout);
     connect(title, SIGNAL(toggled(bool)),
             forwards, SLOT(setEnabled(bool)));
+    connect(title, SIGNAL(toggled(bool)),
+            frwdModeSet, SLOT(setEnabled(bool)));
     connect(mode, SIGNAL(currentIndexChanged(int)),
             frwdModeSet, SLOT(setCurrentIndex(int)));
+    connect(mode, SIGNAL(currentIndexChanged(const QString&)),
+            this, SLOT(modeChanged(const QString&)));
+}
+
+/* private slots */
+void Forward_Widget::modeChanged(const QString &_mode)
+{
+    emit optionalsNeed( _mode=="nat" || _mode=="route" );
 }

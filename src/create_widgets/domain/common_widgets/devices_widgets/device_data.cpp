@@ -55,7 +55,7 @@ QDomDocument DeviceData::getResult() const
     };
     return doc;
 }
-void DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
+void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
 {
     if ( device!=NULL ) closeDataEdit();
     devName->setText(QString("<b>%1</b>").arg(deviceName));
@@ -121,6 +121,7 @@ void DeviceData::showDevice(QString &deviceName, QString &xmlDesc)
     infoLayout->insertWidget(0, device, -1);
     DeviceXMLDesc = xmlDesc;
     currentDeviceXMLDesc = xmlDesc;
+    currentItemRow = idx;
     device->setDataDescription(xmlDesc);
     connect(device, SIGNAL(dataChanged()),
             this, SLOT(currentStateChanged()));
@@ -138,7 +139,7 @@ void DeviceData::closeDataEdit()
             saveDeviceData();
             if ( NULL!=device ) {
                 // save device data as null-point
-                emit saveDeviceXMLDesc(currentDeviceXMLDesc);
+                emit saveDeviceXMLDesc(currentItemRow, currentDeviceXMLDesc);
             };
         } else
             setStartState();
@@ -188,6 +189,7 @@ void DeviceData::setStartState()
     devName->clear();
     DeviceXMLDesc.clear();
     currentDeviceXMLDesc.clear();
+    currentItemRow = -1;
     currentStateSaved = true;
     restoreMenu->revertData->setEnabled(false);
 }

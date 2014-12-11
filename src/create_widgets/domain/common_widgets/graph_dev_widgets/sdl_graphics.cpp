@@ -24,7 +24,7 @@ SDL_Graphics::SDL_Graphics(QWidget *parent) :
     // dataChanged connections
     connect(display, SIGNAL(textEdited(QString)),
             this, SIGNAL(dataChanged()));
-    connect(xauth, SIGNAL(textEdited(QString)),
+    connect(xauth, SIGNAL(textChanged(QString)),
             this, SIGNAL(dataChanged()));
     connect(fullscreen, SIGNAL(toggled(bool)),
             this, SIGNAL(dataChanged()));
@@ -43,6 +43,7 @@ QDomDocument SDL_Graphics::getDataDocument() const
     _devDesc.setAttribute("fullscreen", (fullscreen->isChecked())? "yes" : "no");
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
+    //qDebug()<<doc.toString();
     return doc;
 }
 void SDL_Graphics::setDataDescription(QString &_xmlDesc)

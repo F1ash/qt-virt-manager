@@ -16,12 +16,13 @@ class Forward_Widget : public _QWidget
     Q_OBJECT
 public:
     explicit Forward_Widget(QWidget *parent = 0);
+    QCheckBox       *title;
     QComboBox       *mode;
 
 signals:
+    void             optionalsNeed(bool);
 
 private:
-    QCheckBox       *title;
     QLabel          *modeLabel;
     QGridLayout     *frwdLayout;
     QWidget         *forwards;
@@ -30,6 +31,8 @@ private:
 
 public slots:
 
+private slots:
+    void             modeChanged(const QString&);
 };
 
 #endif // FORWARD_WIDGET_H

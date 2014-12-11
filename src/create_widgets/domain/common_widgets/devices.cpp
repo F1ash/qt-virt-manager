@@ -105,8 +105,8 @@ Devices::Devices(QWidget *parent,
     //        this, SLOT(showDevice(QListWidgetItem*,QListWidgetItem*)));
     connect(usedDeviceList, SIGNAL(itemSelectionChanged()),
             this, SLOT(showDevice()));
-    connect(infoWidget, SIGNAL(saveDeviceXMLDesc(QString&)),
-            this, SLOT(saveDeviceXMLDescription(QString&)));
+    connect(infoWidget, SIGNAL(saveDeviceXMLDesc(int, QString&)),
+            this, SLOT(saveDeviceXMLDescription(int, QString&)));
 }
 Devices::~Devices()
 {
@@ -152,10 +152,6 @@ QDomDocument Devices::getDataDocument() const
     //qDebug()<<"Device result";
     QDomDocument doc;
     infoWidget->closeDataEdit();
-    //if ( !_ret.isEmpty() ) {
-    //    QListWidgetItem *_item = usedDeviceList->currentItem();
-    //    if ( NULL!=_item ) _item->setData(Qt::UserRole, _ret);
-    //};
     QDomElement devices = doc.createElement("devices");
     for (int i=0; i<usedDeviceList->count(); i++) {
         QDomDocument _doc;
@@ -398,11 +394,13 @@ void Devices::showDevice()
 }
 void Devices::showDevice(QListWidgetItem *_curr, QListWidgetItem *_prev)
 {
+    if ( NULL!=_prev ) infoWidget->closeDataEdit();
     if ( NULL==_curr ) return;
     QString _devName, _devDesc;
     _devName = _curr->text();
     _devDesc = _curr->data(Qt::UserRole).toString();
-    infoWidget->showDevice(_devName, _devDesc);
+    int idx = usedDeviceList->row(_curr);
+    infoWidget->showDevice(idx, _devName, _devDesc);
 }
 void Devices::showContextMenu(const QPoint &pos)
 {
@@ -448,11 +446,10 @@ void Devices::detectAttachedDevicesFromXMLDesc()
         };
     }
 }
-void Devices::saveDeviceXMLDescription(QString &xmlDesc)
+void Devices::saveDeviceXMLDescription(int idx, QString &xmlDesc)
 {
     /* block/unblock usedDeviceList signals to avoid looping */
     usedDeviceList->blockSignals(true);
-    int idx = usedDeviceList->currentRow();
     if ( idx>=0 ) {
         QListWidgetItem *item = usedDeviceList->takeItem(idx);
         if ( NULL!=item ) {
@@ -463,6 +460,6 @@ void Devices::saveDeviceXMLDescription(QString &xmlDesc)
     QDomDocument doc;
     doc.setContent(xmlDesc);
     addDeviceToUsedDevList(doc);
-    usedDeviceList->blockSignals(false);
     initBootDevices();
+    usedDeviceList->blockSignals(false);
 }

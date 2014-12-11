@@ -25,11 +25,15 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     uuidLabel = new QLabel("UUID:");
     uuid = new QLineEdit(this);
     uuid->setPlaceholderText("if omitted, then auto generated");
+    ipv6 = new QCheckBox("Use ipv6", this);
+    trustGuestRxFilters = new QCheckBox("trustGuestRxFilters", this);
     baseLayout = new QGridLayout();
     baseLayout->addWidget(netNameLabel, 0, 0);
     baseLayout->addWidget(networkName, 0, 1);
     baseLayout->addWidget(uuidLabel, 1, 0);
     baseLayout->addWidget(uuid, 1, 1);
+    baseLayout->addWidget(ipv6, 2, 0);
+    baseLayout->addWidget(trustGuestRxFilters, 2, 1);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
 
@@ -64,6 +68,12 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
                 QString("%1%2XML_Desc-XXXXXX.xml")
                 .arg(QDir::tempPath())
                 .arg(QDir::separator()));
+    connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
+            bridgeWdg->title, SLOT(setChecked(bool)));
+    connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
+            domainWdg->title, SLOT(setChecked(bool)));
+    connect(forwardWdg->title, SIGNAL(toggled(bool)),
+            this, SLOT(networkTypeChanged(bool)));
 }
 CreateVirtNetwork::~CreateVirtNetwork()
 {
@@ -120,4 +130,12 @@ void CreateVirtNetwork::set_Result()
         setResult(QDialog::Rejected);
     };
     done(result());
+}
+void CreateVirtNetwork::networkTypeChanged(bool state)
+{
+    bool _state =
+            forwardWdg->mode->currentText()=="nat" ||
+            forwardWdg->mode->currentText()=="route";
+    bridgeWdg->title->setChecked(!state || _state);
+    domainWdg->title->setChecked(!state || _state);
 }

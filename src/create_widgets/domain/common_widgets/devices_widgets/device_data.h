@@ -20,7 +20,7 @@ public:
 
 signals:
     void             errorMsg(QString);
-    void             saveDeviceXMLDesc(QString&);
+    void             saveDeviceXMLDesc(int, QString&);
 
 private:
     QLabel          *devName;
@@ -41,15 +41,14 @@ private:
     bool             currentStateSaved = true;
     QString          DeviceXMLDesc;
     QString          currentDeviceXMLDesc;
-    QStringList      devices;
-    QStringList      nets;
+    int              currentItemRow = -1;
     virConnectPtr    currWorkConnect = NULL;
     virNodeDevice  **nodeDevices = NULL;
     virErrorPtr      virtErrors;
 
 public slots:
     QDomDocument     getResult() const;
-    void             showDevice(QString&, QString&);
+    void             showDevice(int, QString&, QString&);
     void             closeDataEdit();
 
 private slots:

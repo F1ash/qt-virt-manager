@@ -62,7 +62,7 @@ private slots:
     void             showContextMenu(const QPoint&);
     void             execDevExistanceMenuResult(Device_Action);
     void             detectAttachedDevicesFromXMLDesc();
-    void             saveDeviceXMLDescription(QString&);
+    void             saveDeviceXMLDescription(int, QString&);
 
 };
 
