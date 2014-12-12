@@ -7,6 +7,7 @@
 CreateVolume::CreateVolume(QWidget *parent, QString _type) :
     _CreateStorage(parent), currPoolType(_type)
 {
+    setUrl("http://libvirt.org/formatstorage.html");
     settingName.append("CreateStorageVolume");
     settings.beginGroup(settingName);
     restoreGeometry(settings.value("Geometry").toByteArray());

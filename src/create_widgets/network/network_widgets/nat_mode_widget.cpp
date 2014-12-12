@@ -42,4 +42,22 @@ NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
             addrWdg, SLOT(setEnabled(bool)));
     connect(portRange, SIGNAL(toggled(bool)),
             portWdg, SLOT(setEnabled(bool)));
+    connect(portStart, SIGNAL(valueChanged(int)),
+            this, SLOT(portStartChanged(int)));
+    connect(portEnd, SIGNAL(valueChanged(int)),
+            this, SLOT(portEndChanged(int)));
+}
+
+/* private slots */
+void NAT_Mode_widget::portStartChanged(int _value)
+{
+    if ( _value>portEnd->value() ) {
+        portEnd->setValue(_value);
+    };
+}
+void NAT_Mode_widget::portEndChanged(int _value)
+{
+    if ( _value<portStart->value() ) {
+        portStart->setValue(_value);
+    };
 }

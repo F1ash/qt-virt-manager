@@ -35,10 +35,11 @@ public:
     QCheckBox           *showAtClose;
 
 signals:
-    void errorMsg(QString);
+    void                 errorMsg(QString);
 
 private:
     QLabel              *typeLabel, *stNameLabel;
+    QLabel              *about;
     QPushButton         *chooseStorage;
     QPushButton         *cancel;
     QHBoxLayout         *buttonLayout;
@@ -51,11 +52,12 @@ private:
     QWidget             *scrolled;
 
 public slots:
-    virtual QString getStorageXMLDescFileName() const;
-            bool    showXMLDescription() const;
+    virtual QString      getStorageXMLDescFileName() const;
+            bool         showXMLDescription() const;
+            void         setUrl(QString);
 
 private slots:
-    void set_Result();
+    void                 set_Result();
 };
 
 #endif // _CREATE_STORAGE_H

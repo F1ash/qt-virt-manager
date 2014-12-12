@@ -19,12 +19,15 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
 
+    about = new QLabel(this);
+    about->setOpenExternalLinks(true);
     showAtClose = new QCheckBox("Show XML Description\nat close", this);
     chooseStorage = new QPushButton(QIcon::fromTheme("dialog-ok"), "Choose Storage", this);
     cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
     connect(chooseStorage, SIGNAL(clicked()), this, SLOT(set_Result()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout(this);
+    buttonLayout->addWidget(about);
     buttonLayout->addWidget(showAtClose);
     buttonLayout->addWidget(chooseStorage);
     buttonLayout->addWidget(cancel);
@@ -63,6 +66,13 @@ QString _CreateStorage::getStorageXMLDescFileName() const
 bool _CreateStorage::showXMLDescription() const
 {
     return showAtClose->isChecked();
+}
+void _CreateStorage::setUrl(QString _url)
+{
+    about->setText(
+                QString("<a href='%1'>About</a>")
+                .arg(_url));
+    about->setToolTip(_url);
 }
 
 /* private slots */

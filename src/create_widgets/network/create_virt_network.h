@@ -32,6 +32,7 @@ private:
     Domain_Widget   *domainWdg;
     Forward_Widget  *forwardWdg;
 
+    QLabel          *about;
     QPushButton     *ok;
     QPushButton     *cancel;
     QHBoxLayout     *buttonLayout;

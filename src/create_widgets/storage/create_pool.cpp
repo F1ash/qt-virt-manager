@@ -20,6 +20,7 @@
 CreatePool::CreatePool(QWidget *parent) :
     _CreateStorage(parent)
 {
+    setUrl("http://libvirt.org/formatstorage.html");
     settingName.append("CreateStoragePool");
     settings.beginGroup(settingName);
     restoreGeometry(settings.value("Geometry").toByteArray());

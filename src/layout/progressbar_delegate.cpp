@@ -7,13 +7,11 @@ ProgressBarDelegate::ProgressBarDelegate(QObject *parent) :
 void ProgressBarDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (index.column() == 2) {
-        int progress = 0;
         QString State;
         bool ok = false;
-        index.data().toInt(&ok);
+        int progress = index.data().toInt(&ok);
         if ( ok ) {
-            progress = index.data().toInt();
-            State = QString::number(progress) + "%";
+            State = (progress==100)? "Complete":"Connect...";
         } else
             State = index.data().toString();
 

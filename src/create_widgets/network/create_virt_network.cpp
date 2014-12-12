@@ -41,6 +41,9 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     domainWdg = new Domain_Widget(this);
     forwardWdg = new Forward_Widget(this);
 
+    about = new QLabel("<a href='http://libvirt.org/formatnetwork.html'>About</a>", this);
+    about->setOpenExternalLinks(true);
+    about->setToolTip("http://libvirt.org/formatnetwork.html");
     ok = new QPushButton("Ok", this);
     ok->setAutoDefault(true);
     connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
@@ -48,6 +51,7 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     cancel->setAutoDefault(true);
     connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(about);
     buttonLayout->addWidget(ok);
     buttonLayout->addWidget(cancel);
     buttons = new QWidget(this);
@@ -94,6 +98,8 @@ CreateVirtNetwork::~CreateVirtNetwork()
     delete forwardWdg;
     forwardWdg = NULL;
 
+    delete about;
+    about = NULL;
     delete ok;
     ok = NULL;
     delete cancel;

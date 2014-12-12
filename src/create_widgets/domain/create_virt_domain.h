@@ -37,6 +37,7 @@ private:
     QString          type;
     QTabWidget      *tabWidget = NULL;
     QCheckBox       *showDescription;
+    QLabel          *about;
     QPushButton     *ok;
     QPushButton     *restore;
     QPushButton     *cancel;

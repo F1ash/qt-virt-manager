@@ -117,6 +117,8 @@ CreateVirtDomain::~CreateVirtDomain()
         disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
         delete_specified_widgets();
         settings.setValue("DomCreateShowDesc", showDescription->isChecked());
+        delete about;
+        about = NULL;
         delete showDescription;
         showDescription = NULL;
         delete ok;
@@ -191,6 +193,9 @@ void CreateVirtDomain::timerEvent(QTimerEvent *ev){
             commonLayout = new QVBoxLayout(this);
             create_specified_widgets();
             set_specified_Tabs();
+            about = new QLabel("<a href='http://libvirt.org/formatdomain.html'>About</a>", this);
+            about->setToolTip("http://libvirt.org/formatdomain.html");
+            about->setOpenExternalLinks(true);
             showDescription = new QCheckBox("Show XML Description\nat close", this);
             showDescription->setChecked(settings.value("DomCreateShowDesc").toBool());
             ok = new QPushButton(QIcon::fromTheme("dialog-ok"), "Ok", this);
@@ -203,6 +208,7 @@ void CreateVirtDomain::timerEvent(QTimerEvent *ev){
             cancel->setAutoDefault(true);
             connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
             buttonLayout = new QHBoxLayout();
+            buttonLayout->addWidget(about);
             buttonLayout->addWidget(showDescription);
             buttonLayout->addWidget(ok);
             buttonLayout->addWidget(restore);

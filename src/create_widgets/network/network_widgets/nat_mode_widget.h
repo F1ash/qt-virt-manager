@@ -23,6 +23,10 @@ private:
     QHBoxLayout     *devLayout, *addrLayout, *portLayout;
     QWidget         *devWdg, *addrWdg, *portWdg;
     QVBoxLayout     *commonLayout;
+
+private slots:
+    void             portStartChanged(int);
+    void             portEndChanged(int);
 };
 
 #endif // NAT_MODE_WIDGET_H
