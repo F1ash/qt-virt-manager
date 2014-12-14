@@ -16,7 +16,7 @@ BCh_Host_Device::BCh_Host_Device(
     info = new QLabel("The device as seen from the host", this);
     attention = new QLabel(this);
     attention->setPixmap(QIcon::fromTheme("dialog-warning")
-                         .pixmap(this->font().SizeResolved));
+                         .pixmap(this->fontInfo().pixelSize()));
     commonLayout = new QGridLayout();
     commonLayout->addWidget(typeLabel, 0, 0);
     commonLayout->addWidget(type, 0, 1);

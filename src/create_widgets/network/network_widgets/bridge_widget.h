@@ -12,11 +12,12 @@ public:
     QLineEdit       *bridgeName;
     QCheckBox       *stp;
     QSpinBox        *delay;
+    QComboBox       *macTableManager;
 
 private:
-    QLabel          *delayLabel;
-    QWidget         *bridge;
-    QGridLayout     *bridgeLayout;
+    QLabel          *delayLabel,* macTabLabel;
+    QHBoxLayout     *bridgeLt, *stpLt, *macTabLt;
+    QWidget         *bridgeWdg, *stpWdg, *macTabWdg;
     QVBoxLayout     *commonLayout;
 };
 

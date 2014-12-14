@@ -3,11 +3,10 @@
 LogDock::LogDock(QWidget *parent) :
     QWidget(parent)
 {
-    docLayout = new QVBoxLayout(this);
     dockIcon = new QLabel(this);
     dockIcon->setPixmap(
                 QIcon::fromTheme("document-properties")
-                .pixmap(this->font().SizeResolved));
+                .pixmap(this->fontInfo().pixelSize()));
     currentTime = new QLabel(this);
     saveLog = new QPushButton(QIcon::fromTheme("document-save"), "", this);
     saveLog->setToolTip("Save Log to File");
@@ -30,6 +29,7 @@ LogDock::LogDock(QWidget *parent) :
     connect(Log, SIGNAL(anchorClicked(QUrl)),
             this, SLOT(openLink(QUrl)));
 
+    docLayout = new QVBoxLayout(this);
     docLayout->addWidget(title);
     docLayout->addWidget(Log);
     setLayout(docLayout);
@@ -75,7 +75,9 @@ void LogDock::appendErrorMsg(QString &msg)
 void LogDock::timerEvent(QTimerEvent *ev)
 {
     if ( timerId==ev->timerId() )
-        currentTime->setText(QString("Current Time: <b>%1</b>").arg(QTime::currentTime().toString()));
+        currentTime->setText(
+                    QString("Current Time: <b>%1</b>")
+                    .arg(QTime::currentTime().toString()));
 }
 void LogDock::openLink(QUrl url)
 {

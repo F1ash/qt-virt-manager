@@ -18,7 +18,7 @@ LogicalHostCPU::LogicalHostCPU(
     icon = new QLabel(this);
     icon->setVisible(false);
     icon->setPixmap(QIcon::fromTheme("dialog-warning")
-                    .pixmap(this->font().SizeResolved));
+                    .pixmap(this->fontInfo().pixelSize()));
     info = new QLabel("Overcommitting vCPUs can hurt performance", this);
     info->setVisible(false);
     commonLayout = new QHBoxLayout(this);

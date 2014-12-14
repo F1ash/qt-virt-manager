@@ -16,7 +16,7 @@ CPU_Topology::CPU_Topology(QWidget *parent) :
     infoIcon = new QLabel(this);
     infoIcon->setPixmap(
                 QIcon::fromTheme("dialog-warning")
-                .pixmap(this->font().SizeResolved));
+                .pixmap(this->fontInfo().pixelSize()));
     info = new QLabel("<b>Number of CPU overload</b>", this);
     changeInfoVisibility(false);
     baseLayout = new QGridLayout();

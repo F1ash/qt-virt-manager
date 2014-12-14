@@ -5,7 +5,7 @@ SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(QWidget *parent) :
 {
     info = new QLabel(this);
     info->setPixmap(QIcon::fromTheme("dialog-warning")
-                    .pixmap(this->font().SizeResolved));
+                    .pixmap(this->fontInfo().pixelSize()));
     infoText = new QLabel(this);
     infoText->setText("For SCSI devices, user\nis responsible to make sure\nthe device is not used by host");
     scsiType = new QComboBox(this);

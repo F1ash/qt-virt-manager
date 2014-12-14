@@ -17,7 +17,7 @@ Userspace_SLIRP::Userspace_SLIRP(
     mac = new MAC_Address(this);
     infoIcon = new QLabel(this);
     infoIcon->setPixmap(QIcon::fromTheme("dialog-warning")
-                        .pixmap(this->font().SizeResolved));
+                        .pixmap(this->fontInfo().pixelSize()));
     info = new QLabel(this);
     info->setText(INFO);
     addr = new DeviceAddress(this);
