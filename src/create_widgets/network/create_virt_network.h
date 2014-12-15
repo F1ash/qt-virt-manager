@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QSettings>
+#include <QScrollArea>
 #include <QPushButton>
 #include <QDir>
 #include <QTemporaryFile>
@@ -23,6 +24,9 @@ signals:
 
 private:
     QSettings        settings;
+    QScrollArea     *scroll;
+    QWidget         *scrolled;
+    QVBoxLayout     *scrollLayout;
     QWidget         *baseWdg;
     QLabel          *netNameLabel, *uuidLabel;
     QLineEdit       *networkName, *uuid;
@@ -32,6 +36,7 @@ private:
     Domain_Widget   *domainWdg;
     Forward_Widget  *forwardWdg;
 
+    QCheckBox       *showDescription;
     QLabel          *about;
     QPushButton     *ok;
     QPushButton     *cancel;
@@ -43,12 +48,12 @@ private:
 
 public slots:
     QString          getXMLDescFileName() const;
+    bool             getShowing() const;
 
 private slots:
     void             buildXMLDescription();
     void             set_Result();
     void             networkTypeChanged(bool);
-
 };
 
 #endif // CREATE_VIRT_NETWORK_H

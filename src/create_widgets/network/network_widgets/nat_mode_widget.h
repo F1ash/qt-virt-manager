@@ -1,27 +1,23 @@
 #ifndef NAT_MODE_WIDGET_H
 #define NAT_MODE_WIDGET_H
 
-#include <QWidget>
-#include <QLabel>
+#include "create_widgets/domain/_qwidget.h"
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QSpinBox>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 
-class NAT_Mode_widget : public QWidget
+class NAT_Mode_widget : public _QWidget
 {
     Q_OBJECT
 public:
     explicit NAT_Mode_widget(QWidget *parent = 0);
-    QLineEdit       *dev, *ipStart, *ipEnd;
+    QLineEdit       *ipStart, *ipEnd;
     QSpinBox        *portStart, *portEnd;
     QCheckBox       *addrRange, *portRange;
 
 private:
-    QLabel          *devLabel;
-    QHBoxLayout     *devLayout, *addrLayout, *portLayout;
-    QWidget         *devWdg, *addrWdg, *portWdg;
+    QHBoxLayout     *addrLayout, *portLayout;
+    QWidget         *addrWdg, *portWdg;
     QVBoxLayout     *commonLayout;
 
 private slots:

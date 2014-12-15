@@ -1,13 +1,8 @@
 #include "nat_mode_widget.h"
 
 NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
-    QWidget(parent)
+    _QWidget(parent)
 {
-    devLabel = new QLabel("Dev name:", this);
-    dev = new QLineEdit(this);
-    devLayout = new QHBoxLayout(this);
-    devLayout->addWidget(devLabel);
-    devLayout->addWidget(dev);
     addrRange = new QCheckBox("Use Address Range", this);
     ipStart = new QLineEdit(this);
     ipEnd = new QLineEdit(this);
@@ -22,8 +17,6 @@ NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
     portLayout = new QHBoxLayout();
     portLayout->addWidget(portStart);
     portLayout->addWidget(portEnd);
-    devWdg = new QWidget(this);
-    devWdg->setLayout(devLayout);
     addrWdg = new QWidget(this);
     addrWdg->setLayout(addrLayout);
     addrWdg->setEnabled(false);
@@ -31,7 +24,6 @@ NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
     portWdg->setLayout(portLayout);
     portWdg->setEnabled(false);
     commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(devWdg);
     commonLayout->addWidget(addrRange);
     commonLayout->addWidget(addrWdg);
     commonLayout->addWidget(portRange);

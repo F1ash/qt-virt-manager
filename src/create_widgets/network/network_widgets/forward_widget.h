@@ -18,18 +18,23 @@ public:
     explicit Forward_Widget(QWidget *parent = 0);
     QCheckBox       *title;
     QComboBox       *mode;
+    QCheckBox       *devLabel;
+    QLineEdit       *dev;
 
 signals:
     void             optionalsNeed(bool);
 
 private:
     QLabel          *modeLabel;
+    QHBoxLayout     *devLayout;
+    QWidget         *devWdg;
     QGridLayout     *frwdLayout;
     QWidget         *forwards;
     QStackedWidget  *frwdModeSet;
     QVBoxLayout     *commonLayout;
 
 public slots:
+    QDomDocument     getDataDocument() const;
 
 private slots:
     void             modeChanged(const QString&);

@@ -29,7 +29,7 @@ private:
     int               timerId;
     QSize             _size;
     QVBoxLayout      *docLayout;
-    QLabel           *currentTime, *dockIcon;
+    QLabel           *currentTime;
     QPushButton      *saveLog;
     QHBoxLayout      *titleLayout;
     QWidget          *title;

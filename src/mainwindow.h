@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDockWidget>
 #include <QTimer>
 #include <QSettings>
 #include <QCloseEvent>
@@ -18,6 +17,8 @@
 #include "vm_viewer/vm_viewer.h"
 #include "state_monitor/domain_state_monitor.h"
 #include "task_bar/task_bar.h"
+#include "dock_head_widgets/dock_widget.h"
+#include "dock_head_widgets/dock_head_widget.h"
 #include <QDebug>
 
 class MainWindow : public QMainWindow
@@ -37,19 +38,25 @@ private :
     TrayIcon                    *trayIcon;
     ToolBar                     *toolBar;
     Wait                        *wait_thread = NULL;
-    QDockWidget                 *logDock;
+    DockWidget                  *logDock;
     LogDock                     *logDockContent;
-    QDockWidget                 *domainDock;
+    DockWidget                  *domainDock;
     VirtDomainControl           *domainDockContent;
-    QDockWidget                 *networkDock;
+    DockWidget                  *networkDock;
     VirtNetControl              *networkDockContent;
-    QDockWidget                 *storageVolDock;
+    DockWidget                  *storageVolDock;
     VirtStorageVolControl       *storageVolDockContent;
-    QDockWidget                 *storagePoolDock;
+    DockWidget                  *storagePoolDock;
     VirtStoragePoolControl      *storagePoolDockContent;
     ViewerMap                    VM_Displayed_Map;
     DomainStateMonitor          *domainsStateMonitor;
     TaskBar                     *taskBar;
+
+    DockHeadWidget              *logHeadWdg;
+    DockHeadWidget              *domHeadWdg;
+    DockHeadWidget              *netHeadWdg;
+    DockHeadWidget              *poolHeadWdg;
+    DockHeadWidget              *volumeHeadWdg;
 
 private slots:
     void closeEvent(QCloseEvent*);

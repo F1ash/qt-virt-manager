@@ -1,10 +1,9 @@
 #ifndef VEPA_MODE_WIDGET_H
 #define VEPA_MODE_WIDGET_H
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include "create_widgets/domain/_qwidget.h"
 
-class VEPA_Mode_widget : public QWidget
+class VEPA_Mode_widget : public _QWidget
 {
     Q_OBJECT
 public:
@@ -13,6 +12,7 @@ public:
 signals:
 
 private:
+    QLabel          *info;
     QVBoxLayout     *commonLayout;
 
 public slots:

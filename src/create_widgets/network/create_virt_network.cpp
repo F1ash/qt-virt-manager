@@ -1,17 +1,5 @@
 #include "create_virt_network.h"
 
-/*
- * INTERFACE TYPES:
- * network
- * bridge
- * direct
- * user             ( for usermod VMs only [KVM-?] )
- * - ethernet       ( requires special knowledge the user )
- * hostdev
- * mcast
- * server/client
- */
-
 CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     QDialog(parent)
 {
@@ -41,6 +29,8 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     domainWdg = new Domain_Widget(this);
     forwardWdg = new Forward_Widget(this);
 
+    showDescription = new QCheckBox("Show XML Description\nat close", this);
+    showDescription->setChecked(settings.value("NetCreateShowDesc").toBool());
     about = new QLabel("<a href='http://libvirt.org/formatnetwork.html'>About</a>", this);
     about->setOpenExternalLinks(true);
     about->setToolTip("http://libvirt.org/formatnetwork.html");
@@ -52,16 +42,25 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(about);
+    buttonLayout->addWidget(showDescription);
     buttonLayout->addWidget(ok);
     buttonLayout->addWidget(cancel);
     buttons = new QWidget(this);
     buttons->setLayout(buttonLayout);
 
+    scrollLayout = new QVBoxLayout(this);
+    scrollLayout->addWidget(bridgeWdg);
+    scrollLayout->addWidget(domainWdg);
+    scrollLayout->addWidget(forwardWdg);
+    scrollLayout->setContentsMargins(3, 0, 3, 0);
+    scrollLayout->addStretch(-1);
+    scrolled = new QWidget(this);
+    scrolled->setLayout(scrollLayout);
+    scroll = new QScrollArea(this);
+    scroll->setWidget(scrolled);
     netDescLayout = new QVBoxLayout(this);
     netDescLayout->addWidget(baseWdg);
-    netDescLayout->addWidget(bridgeWdg);
-    netDescLayout->addWidget(domainWdg);
-    netDescLayout->addWidget(forwardWdg);
+    netDescLayout->addWidget(scroll);
     netDescLayout->addStretch(-1);
     netDescLayout->addWidget(buttons);
     setLayout(netDescLayout);
@@ -98,8 +97,17 @@ CreateVirtNetwork::~CreateVirtNetwork()
     delete forwardWdg;
     forwardWdg = NULL;
 
+    delete scrollLayout;
+    scrollLayout = NULL;
+    delete scrolled;
+    scrolled = NULL;
+    delete scroll;
+    scroll = NULL;
+
     delete about;
     about = NULL;
+    delete showDescription;
+    showDescription = NULL;
     delete ok;
     ok = NULL;
     delete cancel;
@@ -121,11 +129,79 @@ QString CreateVirtNetwork::getXMLDescFileName() const
 {
     return xml->fileName();
 }
+bool CreateVirtNetwork::getShowing() const
+{
+    return showDescription->isChecked();
+}
 
 /* private slots */
 void CreateVirtNetwork::buildXMLDescription()
 {
+    this->setEnabled(false);
+    QDomDocument doc;
+    //qDebug()<<doc.toString();
+    QDomElement _xmlDesc, _name, _uuid, _bridge, _domain,
+            _forward, _nat, _addrRange, _portRange;
+    QDomText data;
 
+    _xmlDesc = doc.createElement("network");
+    _xmlDesc.setAttribute(
+                "ipv6",
+                (ipv6->isChecked())? "yes":"no");
+    _xmlDesc.setAttribute(
+                "trustGuestRxFilters",
+                (trustGuestRxFilters->isChecked())? "yes":"no");
+    _name = doc.createElement("name");
+    data = doc.createTextNode(networkName->text());
+    _name.appendChild(data);
+    _uuid = doc.createElement("uuid");
+    data = doc.createTextNode(uuid->text());
+    _uuid.appendChild(data);
+    _xmlDesc.appendChild(_name);
+    _xmlDesc.appendChild(_uuid);
+
+    if ( bridgeWdg->title->isChecked() ) {
+        _bridge = doc.createElement("bridge");
+        _bridge.setAttribute(
+                    "name",
+                    bridgeWdg->bridgeName->text());
+        _bridge.setAttribute(
+                    "stp",
+                    (bridgeWdg->stp->isChecked())? "on":"off");
+        _bridge.setAttribute(
+                    "delay",
+                    bridgeWdg->delay->value());
+        _bridge.setAttribute(
+                    "macTableManager",
+                    bridgeWdg->macTableManager->currentText());
+        _xmlDesc.appendChild(_bridge);
+    };
+    if ( domainWdg->title->isChecked() ) {
+        _domain = doc.createElement("domain");
+        _domain.setAttribute(
+                    "name",
+                    domainWdg->domain->text());
+        _xmlDesc.appendChild(_domain);
+    };
+    if ( forwardWdg->title->isChecked() ) {
+        _forward = doc.createElement("forward");
+        _forward.setAttribute(
+                    "mode",
+                    forwardWdg->mode->currentText());
+        if ( forwardWdg->devLabel->isChecked() ) {
+            _forward.setAttribute(
+                        "dev",
+                        forwardWdg->dev->text());
+        };
+        _forward.appendChild(
+                    forwardWdg->getDataDocument());
+        _xmlDesc.appendChild(_forward);
+    };
+    doc.appendChild(_xmlDesc);
+
+    bool read = xml->open();
+    if (read) xml->write(doc.toByteArray(4).data());
+    xml->close();
 }
 void CreateVirtNetwork::set_Result()
 {

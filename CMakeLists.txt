@@ -70,6 +70,10 @@ set (HEADERS
   src/layout/conn_item_index.h
   src/layout/conn_item_model.h
   src/layout/progressbar_delegate.h
+
+  src/dock_head_widgets/dock_head_widget.h
+  src/dock_head_widgets/bar_name.h
+  src/dock_head_widgets/dock_widget.h
   
   src/virt_objects/open_file_menu.h
   src/virt_objects/index.h
@@ -329,6 +333,10 @@ set (SOURCES
   src/layout/conn_item_index.cpp
   src/layout/conn_item_model.cpp
   src/layout/progressbar_delegate.cpp
+
+  src/dock_head_widgets/dock_head_widget.cpp
+  src/dock_head_widgets/bar_name.cpp
+  src/dock_head_widgets/dock_widget.cpp
   
   src/virt_objects/open_file_menu.cpp
   src/virt_objects/index.cpp

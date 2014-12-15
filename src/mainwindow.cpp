@@ -327,7 +327,7 @@ void MainWindow::initDockWidgets()
 {
     bool visible;
     Qt::DockWidgetArea area;
-    logDock = new QDockWidget(this);
+    logDock = new DockWidget(this);
     logDock->setObjectName("logDock");
     logDock->setWindowTitle("Log");
     logDock->setFeatures(
@@ -335,6 +335,13 @@ void MainWindow::initDockWidgets()
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
+    logHeadWdg = new DockHeadWidget(this, "Events & Errors");
+    logHeadWdg->setTabBarName("document-properties");
+    logDock->setTitleBarWidget(logHeadWdg);
+    connect(logHeadWdg, SIGNAL(floatChanged(bool)),
+            logDock, SLOT(_setFloating(bool)));
+    connect(logDock, SIGNAL(topLevelChanged(bool)),
+            logHeadWdg, SLOT(floatStateChanged(bool)));
     logDockContent = new LogDock(this);
     logDock->setWidget( logDockContent );
     settings.beginGroup("LogDock");
@@ -347,7 +354,7 @@ void MainWindow::initDockWidgets()
     settings.endGroup();
     addDockWidget(area, logDock);
 
-    domainDock = new QDockWidget(this);
+    domainDock = new DockWidget(this);
     domainDock->setObjectName("domainDock");
     domainDock->setWindowTitle("Domain");
     domainDock->setWindowIcon(QIcon::fromTheme("domain"));
@@ -356,6 +363,13 @@ void MainWindow::initDockWidgets()
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
+    domHeadWdg = new DockHeadWidget(this, "Virtual Machines");
+    domHeadWdg->setTabBarName("domain");
+    domainDock->setTitleBarWidget(domHeadWdg);
+    connect(domHeadWdg, SIGNAL(floatChanged(bool)),
+            domainDock, SLOT(_setFloating(bool)));
+    connect(domainDock, SIGNAL(topLevelChanged(bool)),
+            domHeadWdg, SLOT(floatStateChanged(bool)));
     domainDockContent = new VirtDomainControl(this);
     domainDock->setWidget( domainDockContent );
     settings.beginGroup("DomainDock");
@@ -378,7 +392,7 @@ void MainWindow::initDockWidgets()
     connect(domainDockContent, SIGNAL(migrateToConnect(QStringList&)),
             this, SLOT(buildMigrateArgs(QStringList&)));
 
-    networkDock = new QDockWidget(this);
+    networkDock = new DockWidget(this);
     networkDock->setObjectName("networkDock");
     networkDock->setWindowTitle("Network");
     networkDock->setWindowIcon(QIcon::fromTheme("network"));
@@ -387,6 +401,13 @@ void MainWindow::initDockWidgets()
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
+    netHeadWdg = new DockHeadWidget(this, "Virtual Networks");
+    netHeadWdg->setTabBarName("network");
+    networkDock->setTitleBarWidget(netHeadWdg);
+    connect(netHeadWdg, SIGNAL(floatChanged(bool)),
+            networkDock, SLOT(_setFloating(bool)));
+    connect(networkDock, SIGNAL(topLevelChanged(bool)),
+            netHeadWdg, SLOT(floatStateChanged(bool)));
     networkDockContent = new VirtNetControl(this);
     networkDock->setWidget( networkDockContent );
     settings.beginGroup("NetworkDock");
@@ -401,7 +422,7 @@ void MainWindow::initDockWidgets()
     connect(toolBar->_netUpAction, SIGNAL(triggered(bool)), networkDock, SLOT(setVisible(bool)));
     connect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
 
-    storageVolDock = new QDockWidget(this);
+    storageVolDock = new DockWidget(this);
     storageVolDock->setObjectName("storageVolDock");
     storageVolDock->setWindowTitle("StorageVol");
     storageVolDock->setFeatures(
@@ -409,6 +430,13 @@ void MainWindow::initDockWidgets()
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
+    volumeHeadWdg = new DockHeadWidget(this, "Storage Volumes");
+    volumeHeadWdg->setTabBarName("storage");
+    storageVolDock->setTitleBarWidget(volumeHeadWdg);
+    connect(volumeHeadWdg, SIGNAL(floatChanged(bool)),
+            storageVolDock, SLOT(_setFloating(bool)));
+    connect(storageVolDock, SIGNAL(topLevelChanged(bool)),
+            volumeHeadWdg, SLOT(floatStateChanged(bool)));
     storageVolDockContent = new VirtStorageVolControl(this);
     storageVolDock->setWidget( storageVolDockContent );
     settings.beginGroup("StorageVolDock");
@@ -423,7 +451,7 @@ void MainWindow::initDockWidgets()
     connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
     connect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
 
-    storagePoolDock = new QDockWidget(this);
+    storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
     storagePoolDock->setWindowTitle("StoragePool");
     storagePoolDock->setFeatures(
@@ -431,6 +459,13 @@ void MainWindow::initDockWidgets()
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
+    poolHeadWdg = new DockHeadWidget(this, "Storage Pools");
+    poolHeadWdg->setTabBarName("storage");
+    storagePoolDock->setTitleBarWidget(poolHeadWdg);
+    connect(poolHeadWdg, SIGNAL(floatChanged(bool)),
+            storagePoolDock, SLOT(_setFloating(bool)));
+    connect(storagePoolDock, SIGNAL(topLevelChanged(bool)),
+            poolHeadWdg, SLOT(floatStateChanged(bool)));
     storagePoolDockContent = new VirtStoragePoolControl(this);
     storagePoolDock->setWidget( storagePoolDockContent );
     settings.beginGroup("StoragePoolDock");

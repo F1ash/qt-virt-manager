@@ -1,24 +1,19 @@
 #ifndef ROUTE_MODE_WIDGET_H
 #define ROUTE_MODE_WIDGET_H
 
-#include <QWidget>
-#include <QLabel>
-#include <QLineEdit>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+#include "create_widgets/domain/_qwidget.h"
 
-class ROUTE_Mode_widget : public QWidget
+class ROUTE_Mode_widget : public _QWidget
 {
     Q_OBJECT
 public:
     explicit ROUTE_Mode_widget(QWidget *parent = 0);
-    QLineEdit       *dev;
 
 private:
-    QLabel          *devLabel;
-    QHBoxLayout     *devLayout;
-    QWidget         *devWdg;
     QVBoxLayout     *commonLayout;
+
+public slots:
+    QDomDocument     getDataDocument() const;
 };
 
 #endif // ROUTE_MODE_WIDGET_H

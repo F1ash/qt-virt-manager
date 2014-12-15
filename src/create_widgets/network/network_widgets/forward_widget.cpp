@@ -16,9 +16,18 @@ Forward_Widget::Forward_Widget(QWidget *parent) :
     modeLabel = new QLabel("Mode:", this);
     mode = new QComboBox(this);
     mode->addItems(FORWARD_MODE);
+    devLabel = new QCheckBox("Dev name:", this);
+    dev = new QLineEdit(this);
+    dev->setPlaceholderText("eth0 | enp2s0 | wlp3s0");
+    devLayout = new QHBoxLayout(this);
+    devLayout->addWidget(devLabel);
+    devLayout->addWidget(dev);
+    devWdg = new QWidget(this);
+    devWdg->setLayout(devLayout);
     frwdLayout = new QGridLayout();
     frwdLayout->addWidget(modeLabel, 0, 0);
     frwdLayout->addWidget(mode, 0, 1);
+    frwdLayout->addWidget(devWdg, 1, 0, 2, 2);
     forwards = new QWidget(this);
     forwards->setLayout(frwdLayout);
     forwards->setEnabled(false);
@@ -47,8 +56,21 @@ Forward_Widget::Forward_Widget(QWidget *parent) :
             this, SLOT(modeChanged(const QString&)));
 }
 
+/* public slots */
+QDomDocument Forward_Widget::getDataDocument() const
+{
+    _QWidget *wdg = static_cast<_QWidget*>(
+                frwdModeSet->currentWidget());
+    return wdg->getDataDocument();
+}
+
 /* private slots */
 void Forward_Widget::modeChanged(const QString &_mode)
 {
-    emit optionalsNeed( _mode=="nat" || _mode=="route" );
+    bool state = ( _mode=="nat" || _mode=="route" );
+    emit optionalsNeed(state);
+    devWdg->setEnabled(state);
+    if ( !state ) {
+        devLabel->setChecked(false);
+    };
 }

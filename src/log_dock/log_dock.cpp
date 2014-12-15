@@ -3,19 +3,18 @@
 LogDock::LogDock(QWidget *parent) :
     QWidget(parent)
 {
-    dockIcon = new QLabel(this);
-    dockIcon->setPixmap(
-                QIcon::fromTheme("document-properties")
-                .pixmap(this->fontInfo().pixelSize()));
+    int _size = this->fontInfo().pixelSize();
     currentTime = new QLabel(this);
     saveLog = new QPushButton(QIcon::fromTheme("document-save"), "", this);
     saveLog->setToolTip("Save Log to File");
+    saveLog->setMaximumSize(QSize(_size, _size));
     titleLayout = new QHBoxLayout();
-    titleLayout->addWidget(dockIcon, 0, Qt::AlignLeft);
     titleLayout->addWidget(currentTime, 0, Qt::AlignRight);
     titleLayout->addWidget(saveLog, 0, Qt::AlignRight);
     title = new QWidget(this);
     title->setLayout(titleLayout);
+    titleLayout->setMargin(0);
+    title->setContentsMargins(0, 0, 10, 0);
 
     Log = new QTextBrowser(this);
     Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
@@ -33,6 +32,8 @@ LogDock::LogDock(QWidget *parent) :
     docLayout->addWidget(title);
     docLayout->addWidget(Log);
     setLayout(docLayout);
+    docLayout->setMargin(0);
+    setContentsMargins(0, 0, 0, 0);
     timerId = startTimer(1000);
     connect(saveLog, SIGNAL(clicked()),
             this, SLOT(saveLogToFile()));
@@ -45,8 +46,6 @@ LogDock::~LogDock()
     };
     disconnect(saveLog, SIGNAL(clicked()),
                this, SLOT(saveLogToFile()));
-    delete dockIcon;
-    dockIcon = NULL;
     delete currentTime;
     currentTime = 0;
     delete saveLog;
