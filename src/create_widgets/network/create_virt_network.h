@@ -10,6 +10,7 @@
 #include "network_widgets/bridge_widget.h"
 #include "network_widgets/domain_widget.h"
 #include "network_widgets/forward_widget.h"
+#include "network_widgets/addressing_widget.h"
 #include <QDebug>
 
 class CreateVirtNetwork : public QDialog
@@ -34,6 +35,8 @@ private:
     QGridLayout     *baseLayout;
     Bridge_Widget   *bridgeWdg;
     Domain_Widget   *domainWdg;
+    Addressing_Widget
+                    *addressingWdg;
     Forward_Widget  *forwardWdg;
 
     QCheckBox       *showDescription;

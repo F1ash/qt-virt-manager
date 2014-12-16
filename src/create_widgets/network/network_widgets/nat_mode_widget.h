@@ -11,14 +11,17 @@ class NAT_Mode_widget : public _QWidget
     Q_OBJECT
 public:
     explicit NAT_Mode_widget(QWidget *parent = 0);
+
+private:
     QLineEdit       *ipStart, *ipEnd;
     QSpinBox        *portStart, *portEnd;
     QCheckBox       *addrRange, *portRange;
-
-private:
     QHBoxLayout     *addrLayout, *portLayout;
     QWidget         *addrWdg, *portWdg;
     QVBoxLayout     *commonLayout;
+
+public slots:
+    QDomDocument     getDataDocument() const;
 
 private slots:
     void             portStartChanged(int);

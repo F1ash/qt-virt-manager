@@ -40,6 +40,33 @@ NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
             this, SLOT(portEndChanged(int)));
 }
 
+/* public slots */
+QDomDocument NAT_Mode_widget::getDataDocument() const
+{
+    QDomDocument doc;
+    QDomElement _xmlDesc, _addrRange, _portRange;
+    _xmlDesc = doc.createElement("nat");
+    if ( addrRange->isChecked() ) {
+        _addrRange = doc.createElement("address");
+        _addrRange.setAttribute(
+                    "start", ipStart->text());
+        _addrRange.setAttribute(
+                    "end", ipEnd->text());
+        _xmlDesc.appendChild(_addrRange);
+    };
+    if ( portRange->isChecked() ) {
+        _portRange = doc.createElement("port");
+        _portRange.setAttribute(
+                    "start", portStart->text());
+        _portRange.setAttribute(
+                    "end", portEnd->text());
+        _xmlDesc.appendChild(_portRange);
+    };
+    if ( _xmlDesc.hasAttributes() || _xmlDesc.hasChildNodes() )
+        doc.appendChild(_xmlDesc);
+    return doc;
+}
+
 /* private slots */
 void NAT_Mode_widget::portStartChanged(int _value)
 {

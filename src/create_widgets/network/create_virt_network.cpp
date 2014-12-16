@@ -27,6 +27,7 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
 
     bridgeWdg = new Bridge_Widget(this);
     domainWdg = new Domain_Widget(this);
+    addressingWdg = new Addressing_Widget(this);
     forwardWdg = new Forward_Widget(this);
 
     showDescription = new QCheckBox("Show XML Description\nat close", this);
@@ -51,6 +52,7 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     scrollLayout = new QVBoxLayout(this);
     scrollLayout->addWidget(bridgeWdg);
     scrollLayout->addWidget(domainWdg);
+    scrollLayout->addWidget(addressingWdg);
     scrollLayout->addWidget(forwardWdg);
     scrollLayout->setContentsMargins(3, 0, 3, 0);
     scrollLayout->addStretch(-1);
@@ -93,6 +95,9 @@ CreateVirtNetwork::~CreateVirtNetwork()
 
     delete domainWdg;
     domainWdg = NULL;
+
+    delete addressingWdg;
+    addressingWdg = NULL;
 
     delete forwardWdg;
     forwardWdg = NULL;
@@ -140,8 +145,8 @@ void CreateVirtNetwork::buildXMLDescription()
     this->setEnabled(false);
     QDomDocument doc;
     //qDebug()<<doc.toString();
-    QDomElement _xmlDesc, _name, _uuid, _bridge, _domain,
-            _forward, _nat, _addrRange, _portRange;
+    QDomElement _xmlDesc, _name, _uuid, _bridge,
+            _domain, _forward;
     QDomText data;
 
     _xmlDesc = doc.createElement("network");
@@ -177,11 +182,17 @@ void CreateVirtNetwork::buildXMLDescription()
         _xmlDesc.appendChild(_bridge);
     };
     if ( domainWdg->title->isChecked() ) {
-        _domain = doc.createElement("domain");
-        _domain.setAttribute(
-                    "name",
-                    domainWdg->domain->text());
-        _xmlDesc.appendChild(_domain);
+        if ( !domainWdg->domain->text().isEmpty() ) {
+            _domain = doc.createElement("domain");
+            _domain.setAttribute(
+                        "name",
+                        domainWdg->domain->text());
+            _xmlDesc.appendChild(_domain);
+        };
+    };
+    if ( addressingWdg->isUsed() ) {
+        _xmlDesc.appendChild(
+                    addressingWdg->getDataDocument());
     };
     if ( forwardWdg->title->isChecked() ) {
         _forward = doc.createElement("forward");
