@@ -1,28 +1,27 @@
 #include "addressing_widget.h"
 
-Addressing_Widget::Addressing_Widget(QWidget *parent) :
-    _QWidget(parent)
+Addressing_Widget::Addressing_Widget(QWidget *parent, QString tag) :
+    _Checked_Widget(parent, tag)
 {
-    usage = new QCheckBox("Addressing", this);
-    baseLayout = new QVBoxLayout(this);
-    baseWdg = new QWidget(this);
-    baseWdg->setLayout(baseLayout);
-    baseWdg->setVisible(false);
-    commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(usage);
-    commonLayout->addWidget(baseWdg);
-    commonLayout->addStretch(-1);
-    setLayout(commonLayout);
-    connect(usage, SIGNAL(toggled(bool)),
-            baseWdg, SLOT(setVisible(bool)));
+    dns = new DNS_Widget(this);
+    ip = new IP_Widget(this);
+    mac = new MAC_Widget(this);
+    baseLayout->addWidget(dns);
+    baseLayout->addWidget(ip);
+    baseLayout->addWidget(mac);
+    baseLayout->addStretch(-1);
 }
 
 /* public slots */
-bool Addressing_Widget::isUsed() const
+QDomDocument Addressing_Widget::getDataDocument() const
 {
-    return usage->isChecked();
-}
-void Addressing_Widget::setUsage(bool state)
-{
-    usage->setChecked(state);
+    QDomDocument doc;
+    doc.setContent(QString());
+    if ( dns->isUsed() )
+        doc.appendChild(dns->getDataDocument());
+    if ( ip->isUsed() )
+        doc.appendChild(ip->getDataDocument());
+    if ( mac->isUsed() )
+        doc.appendChild(mac->getDataDocument());
+    return doc;
 }
