@@ -12,7 +12,8 @@ class Addressing_Widget : public _Checked_Widget
 {
     Q_OBJECT
 public:
-    explicit Addressing_Widget(QWidget *parent = NULL,
+    explicit Addressing_Widget(
+            QWidget *parent = NULL,
             QString tag = "Addressing");
 
 private:

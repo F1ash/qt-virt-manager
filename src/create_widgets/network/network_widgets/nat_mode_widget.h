@@ -10,7 +10,7 @@ class NAT_Mode_widget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit NAT_Mode_widget(QWidget *parent = 0);
+    explicit NAT_Mode_widget(QWidget *parent = NULL);
 
 private:
     QLineEdit       *ipStart, *ipEnd;

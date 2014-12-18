@@ -1,7 +1,7 @@
 #ifndef FORWARD_WIDGET_H
 #define FORWARD_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "_checked_widget.h"
 #include "nat_mode_widget.h"
 #include "route_mode_widget.h"
 #include "bridge_mode_widget.h"
@@ -11,12 +11,13 @@
 #include "hostdev_mode_widget.h"
 #include <QStackedWidget>
 
-class Forward_Widget : public _QWidget
+class Forward_Widget : public _Checked_Widget
 {
     Q_OBJECT
 public:
-    explicit Forward_Widget(QWidget *parent = 0);
-    QCheckBox       *title;
+    explicit Forward_Widget(
+            QWidget *parent = NULL,
+            QString  tag = "Forwards");
     QComboBox       *mode;
     QCheckBox       *devLabel;
     QLineEdit       *dev;
@@ -31,7 +32,6 @@ private:
     QGridLayout     *frwdLayout;
     QWidget         *forwards;
     QStackedWidget  *frwdModeSet;
-    QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument     getDataDocument() const;

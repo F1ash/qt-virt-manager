@@ -1,18 +1,16 @@
 #ifndef DOMAIN_WIDGET_H
 #define DOMAIN_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "_checked_widget.h"
 
-class Domain_Widget : public _QWidget
+class Domain_Widget : public _Checked_Widget
 {
     Q_OBJECT
 public:
-    explicit Domain_Widget(QWidget *parent = 0);
-    QCheckBox       *title;
+    explicit Domain_Widget(
+            QWidget *parent = NULL,
+            QString  tag = "DNS Domain");
     QLineEdit       *domain;
-
-private:
-    QVBoxLayout     *commonLayout;
 };
 
 #endif // DOMAIN_WIDGET_H

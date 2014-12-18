@@ -9,14 +9,16 @@ _Checked_Widget::_Checked_Widget(
     baseLayout->setContentsMargins(3, 0, 3, 0);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
-    baseWdg->setEnabled(false);
+    baseWdg->setVisible(false);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(usage);
     commonLayout->addWidget(baseWdg);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(usage, SIGNAL(toggled(bool)),
-            baseWdg, SLOT(setEnabled(bool)));
+            baseWdg, SLOT(setVisible(bool)));
+    connect(usage, SIGNAL(toggled(bool)),
+            this, SIGNAL(toggled(bool)));
 }
 
 /* public slots */

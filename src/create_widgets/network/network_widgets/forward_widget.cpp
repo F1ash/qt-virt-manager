@@ -9,17 +9,17 @@
     <<"passthrough"\
     <<"hostdev"
 
-Forward_Widget::Forward_Widget(QWidget *parent) :
-    _QWidget(parent)
+Forward_Widget::Forward_Widget(
+        QWidget *parent, QString tag) :
+    _Checked_Widget(parent, tag)
 {
-    title = new QCheckBox("Forwards", this);
     modeLabel = new QLabel("Mode:", this);
     mode = new QComboBox(this);
     mode->addItems(FORWARD_MODE);
     devLabel = new QCheckBox("Dev name:", this);
     dev = new QLineEdit(this);
     dev->setPlaceholderText("eth0 | enp2s0 | wlp3s0");
-    devLayout = new QHBoxLayout(this);
+    devLayout = new QHBoxLayout();
     devLayout->addWidget(devLabel);
     devLayout->addWidget(dev);
     devWdg = new QWidget(this);
@@ -40,15 +40,11 @@ Forward_Widget::Forward_Widget(QWidget *parent) :
     frwdModeSet->addWidget(new PASSTHROUGH_Mode_widget(this));
     frwdModeSet->addWidget(new HOSTDEV_Mode_widget(this));
     frwdModeSet->setEnabled(false);
-    commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(title);
-    commonLayout->addWidget(forwards);
-    commonLayout->addWidget(frwdModeSet);
-    commonLayout->addStretch(-1);
-    setLayout(commonLayout);
-    connect(title, SIGNAL(toggled(bool)),
+    baseLayout->addWidget(forwards);
+    baseLayout->addWidget(frwdModeSet);
+    connect(this, SIGNAL(toggled(bool)),
             forwards, SLOT(setEnabled(bool)));
-    connect(title, SIGNAL(toggled(bool)),
+    connect(this, SIGNAL(toggled(bool)),
             frwdModeSet, SLOT(setEnabled(bool)));
     connect(mode, SIGNAL(currentIndexChanged(int)),
             frwdModeSet, SLOT(setCurrentIndex(int)));

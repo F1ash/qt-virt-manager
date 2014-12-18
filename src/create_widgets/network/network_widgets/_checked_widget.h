@@ -13,6 +13,9 @@ public:
     const QString        tag;
     QVBoxLayout         *baseLayout;
 
+signals:
+    void                 toggled(bool);
+
 private:
     QCheckBox           *usage;
     QWidget             *baseWdg;

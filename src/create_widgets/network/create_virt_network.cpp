@@ -59,11 +59,11 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     scrolled = new QWidget(this);
     scrolled->setLayout(scrollLayout);
     scroll = new QScrollArea(this);
+    scroll->setWidgetResizable(true);
     scroll->setWidget(scrolled);
     netDescLayout = new QVBoxLayout(this);
     netDescLayout->addWidget(baseWdg);
     netDescLayout->addWidget(scroll);
-    netDescLayout->addStretch(-1);
     netDescLayout->addWidget(buttons);
     setLayout(netDescLayout);
 
@@ -74,10 +74,10 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
                 .arg(QDir::tempPath())
                 .arg(QDir::separator()));
     connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
-            bridgeWdg->title, SLOT(setChecked(bool)));
+            bridgeWdg, SLOT(setUsage(bool)));
     connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
-            domainWdg->title, SLOT(setChecked(bool)));
-    connect(forwardWdg->title, SIGNAL(toggled(bool)),
+            domainWdg, SLOT(setUsage(bool)));
+    connect(forwardWdg, SIGNAL(toggled(bool)),
             this, SLOT(networkTypeChanged(bool)));
 }
 CreateVirtNetwork::~CreateVirtNetwork()
@@ -165,7 +165,7 @@ void CreateVirtNetwork::buildXMLDescription()
     _xmlDesc.appendChild(_name);
     _xmlDesc.appendChild(_uuid);
 
-    if ( bridgeWdg->title->isChecked() ) {
+    if ( bridgeWdg->isUsed() ) {
         _bridge = doc.createElement("bridge");
         _bridge.setAttribute(
                     "name",
@@ -181,7 +181,7 @@ void CreateVirtNetwork::buildXMLDescription()
                     bridgeWdg->macTableManager->currentText());
         _xmlDesc.appendChild(_bridge);
     };
-    if ( domainWdg->title->isChecked() ) {
+    if ( domainWdg->isUsed() ) {
         if ( !domainWdg->domain->text().isEmpty() ) {
             _domain = doc.createElement("domain");
             _domain.setAttribute(
@@ -194,7 +194,7 @@ void CreateVirtNetwork::buildXMLDescription()
         _xmlDesc.appendChild(
                     addressingWdg->getDataDocument());
     };
-    if ( forwardWdg->title->isChecked() ) {
+    if ( forwardWdg->isUsed() ) {
         _forward = doc.createElement("forward");
         _forward.setAttribute(
                     "mode",
@@ -229,6 +229,6 @@ void CreateVirtNetwork::networkTypeChanged(bool state)
     bool _state =
             forwardWdg->mode->currentText()=="nat" ||
             forwardWdg->mode->currentText()=="route";
-    bridgeWdg->title->setChecked(!state || _state);
-    domainWdg->title->setChecked(!state || _state);
+    bridgeWdg->setUsage(!state || _state);
+    domainWdg->setUsage(!state || _state);
 }
