@@ -1,7 +1,7 @@
 #ifndef DNS_WIDGET_H
 #define DNS_WIDGET_H
 
-#include "_checked_widget.h"
+#include "forwarder.h"
 
 class DNS_Widget : public _Checked_Widget
 {
@@ -12,6 +12,8 @@ public:
             QString tag = "DNS");
 
 private:
+    QCheckBox           *forwardPlainNames;
+    Forwarder           *forwarder;
 
 public slots:
     QDomDocument         getDataDocument() const;

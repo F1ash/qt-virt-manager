@@ -2,6 +2,7 @@
 if (NOT CMAKE_INSTALL_PREFIX)
  set (CMAKE_INSTALL_PREFIX /usr)
 endif ()
+list(APPEND CMAKE_PREFIX_PATH . ./cmake)
 
 cmake_minimum_required (VERSION 2.8.3)
 include(CheckFunctionExists)
@@ -266,6 +267,8 @@ set (HEADERS
   
   src/create_widgets/network/create_virt_network.h
   src/create_widgets/network/network_widgets/_checked_widget.h
+  src/create_widgets/network/network_widgets/_list_widget.h
+  src/create_widgets/network/network_widgets/forwarder.h
   src/create_widgets/network/network_widgets/bridge_widget.h
   src/create_widgets/network/network_widgets/domain_widget.h
   src/create_widgets/network/network_widgets/addressing_widget.h
@@ -533,6 +536,8 @@ set (SOURCES
   
   src/create_widgets/network/create_virt_network.cpp
   src/create_widgets/network/network_widgets/_checked_widget.cpp
+  src/create_widgets/network/network_widgets/_list_widget.cpp
+  src/create_widgets/network/network_widgets/forwarder.cpp
   src/create_widgets/network/network_widgets/bridge_widget.cpp
   src/create_widgets/network/network_widgets/domain_widget.cpp
   src/create_widgets/network/network_widgets/addressing_widget.cpp
@@ -599,6 +604,9 @@ else ( QT4_BUILD )
     include("CMakeQt5.txt")
 endif( QT4_BUILD )
 ##
+find_package(LibVirt REQUIRED)
+include_directories(${LibVirt_INCLUDE_DIRS})
+list(APPEND BUILD_PROJECT_LIBRARIES ${LibVirt_LIBRARIES})
 
 # dirs
 set ( KB_LAYOUT_DIR ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME}/kb-layouts/ )
@@ -625,7 +633,6 @@ endif (HAVE_UPDWTMPX)
 add_executable (${PROJECT_NAME} ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS})
 target_link_libraries (${PROJECT_NAME}
     ${BUILD_PROJECT_LIBRARIES}
-    virt
     util
 )
 
