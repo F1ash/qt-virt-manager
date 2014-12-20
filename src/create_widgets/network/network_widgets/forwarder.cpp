@@ -12,9 +12,28 @@ Forwarder::Forwarder(QWidget *parent, QString tag) :
 QDomDocument Forwarder::getDataDocument() const
 {
     QDomDocument doc;
+    for (uint i=0; i<list->count(); i++) {
+        QDomElement _el;
+        _el = doc.createElement("forwarder");
+        _el.setAttribute(
+                    "addr",
+                    list->item(i)->text());
+        doc.appendChild(_el);
+    };
     return doc;
 }
 void Forwarder::addItem()
 {
-
+    QString _text = frwds->text();
+    if ( !_text.isEmpty() ) {
+        bool exist = false;
+        for (uint i=0; i<list->count(); i++) {
+            if ( _text==list->item(i)->text() ) {
+                exist = true;
+                break;
+            }
+        };
+        if ( !exist ) list->addItem(_text);
+        frwds->clear();
+    };
 }

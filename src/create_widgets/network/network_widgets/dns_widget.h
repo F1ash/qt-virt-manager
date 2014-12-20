@@ -9,14 +9,14 @@ class DNS_Widget : public _Checked_Widget
 public:
     DNS_Widget(
             QWidget *parent = NULL,
-            QString tag = "DNS");
+            QString  tag = "DNS");
 
 private:
-    QCheckBox           *forwardPlainNames;
-    Forwarder           *forwarder;
+    QCheckBox       *forwardPlainNames;
+    Forwarder       *forwarder;
 
 public slots:
-    QDomDocument         getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 };
 
 #endif // DNS_WIDGET_H

@@ -83,6 +83,7 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
 CreateVirtNetwork::~CreateVirtNetwork()
 {
     settings.setValue("NetCreateGeometry", saveGeometry());
+    settings.setValue("NetCreateShowDesc", showDescription->isChecked());
     disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
     disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     delete networkName;

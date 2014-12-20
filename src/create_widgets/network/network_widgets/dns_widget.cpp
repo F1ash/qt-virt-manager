@@ -13,5 +13,15 @@ DNS_Widget::DNS_Widget(QWidget *parent, QString tag) :
 QDomDocument DNS_Widget::getDataDocument() const
 {
     QDomDocument doc;
+    QDomElement _dns;
+    _dns = doc.createElement("dns");
+    _dns.setAttribute(
+                "forwardPlainNames",
+                (forwardPlainNames->isChecked())? "yes":"no");
+    if ( forwarder->isUsed() ) {
+        _dns.appendChild(
+                    forwarder->getDataDocument());
+    };
+    doc.appendChild(_dns);
     return doc;
 }
