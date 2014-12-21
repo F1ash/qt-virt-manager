@@ -6,7 +6,7 @@ _Checked_Widget::_Checked_Widget(
 {
     usage = new QCheckBox(tag, this);
     baseLayout = new QVBoxLayout(this);
-    baseLayout->setContentsMargins(3, 0, 3, 0);
+    baseLayout->setContentsMargins(1, 5, 1, 5);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
     baseWdg->setVisible(false);
