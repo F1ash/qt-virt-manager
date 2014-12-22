@@ -12,7 +12,7 @@ Host_DNS::Host_DNS(QWidget *parent, QString tag) :
     ipWidget = new QWidget(this);
     ipWidget->setLayout(ipLayout);
     hostName = new QLineEdit(this);
-    hostName->setPlaceholderText("Host Name");
+    hostName->setPlaceholderText("DNS Host Name");
     baseLayout->insertWidget(0, ipWidget);
     panelLayout->insertWidget(1, hostName);
 }

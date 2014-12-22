@@ -6,9 +6,11 @@ DNS_Widget::DNS_Widget(QWidget *parent, QString tag) :
     forwardPlainNames = new QCheckBox("forwardPlainNames", this);
     forwarder = new Forwarder(this);
     hosts = new Host_DNS(this);
+    txts = new TXT_DNS(this);
     baseLayout->addWidget(forwardPlainNames);
     baseLayout->addWidget(forwarder);
     baseLayout->addWidget(hosts);
+    baseLayout->addWidget(txts);
 }
 
 /* public slots */
@@ -27,6 +29,10 @@ QDomDocument DNS_Widget::getDataDocument() const
     if ( hosts->isUsed() ) {
         _dns.appendChild(
                     hosts->getDataDocument());
+    };
+    if ( txts->isUsed() ) {
+        _dns.appendChild(
+                    txts->getDataDocument());
     };
     doc.appendChild(_dns);
     return doc;

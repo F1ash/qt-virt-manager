@@ -3,6 +3,7 @@
 
 #include "forwarder.h"
 #include "host_dns.h"
+#include "txt_dns.h"
 
 class DNS_Widget : public _Checked_Widget
 {
@@ -16,6 +17,7 @@ private:
     QCheckBox       *forwardPlainNames;
     Forwarder       *forwarder;
     Host_DNS        *hosts;
+    TXT_DNS         *txts;
 
 public slots:
     QDomDocument     getDataDocument() const;
