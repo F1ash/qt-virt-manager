@@ -30,6 +30,10 @@ void _Checked_Widget::setUsage(bool state)
 {
     usage->setChecked(state);
 }
+void _Checked_Widget::setFreez(bool state)
+{
+    usage->setDisabled(state);
+}
 QDomDocument _Checked_Widget::getDataDocument() const
 {
     return QDomDocument();

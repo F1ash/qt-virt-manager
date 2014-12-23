@@ -9,13 +9,13 @@ class MAC_Widget : public _Checked_Widget
 public:
     MAC_Widget(
             QWidget *parent = NULL,
-            QString tag = "MAC");
+            QString  tag = "MAC");
 
 private:
-    QLineEdit   *mac;
+    QLineEdit       *mac;
 
 public slots:
-    QDomDocument         getDataDocument() const;
+    QDomDocument     getDataDocument() const;
 };
 
 #endif // MAC_WIDGET_H

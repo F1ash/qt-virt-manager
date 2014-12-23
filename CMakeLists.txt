@@ -271,6 +271,9 @@ set (HEADERS
   src/create_widgets/network/network_widgets/forwarder.h
   src/create_widgets/network/network_widgets/host_dns.h
   src/create_widgets/network/network_widgets/txt_dns.h
+  src/create_widgets/network/network_widgets/srv_dns.h
+  src/create_widgets/network/network_widgets/_ipv4.h
+  src/create_widgets/network/network_widgets/_ipv6.h
   src/create_widgets/network/network_widgets/bridge_widget.h
   src/create_widgets/network/network_widgets/domain_widget.h
   src/create_widgets/network/network_widgets/addressing_widget.h
@@ -542,6 +545,9 @@ set (SOURCES
   src/create_widgets/network/network_widgets/forwarder.cpp
   src/create_widgets/network/network_widgets/host_dns.cpp
   src/create_widgets/network/network_widgets/txt_dns.cpp
+  src/create_widgets/network/network_widgets/srv_dns.cpp
+  src/create_widgets/network/network_widgets/_ipv4.cpp
+  src/create_widgets/network/network_widgets/_ipv6.cpp
   src/create_widgets/network/network_widgets/bridge_widget.cpp
   src/create_widgets/network/network_widgets/domain_widget.cpp
   src/create_widgets/network/network_widgets/addressing_widget.cpp

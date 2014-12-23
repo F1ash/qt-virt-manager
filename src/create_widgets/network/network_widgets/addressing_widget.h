@@ -23,6 +23,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
+    void             ipv6Changed(bool);
 };
 
 #endif // ADDRESSING_WIDGET_H

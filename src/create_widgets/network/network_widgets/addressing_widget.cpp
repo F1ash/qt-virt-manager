@@ -25,3 +25,13 @@ QDomDocument Addressing_Widget::getDataDocument() const
         doc.appendChild(mac->getDataDocument());
     return doc;
 }
+void Addressing_Widget::ipv6Changed(bool state)
+{
+    this->setUsage(state);
+    this->setFreez(state);
+    dns->setUsage(false);
+    ip->setUsage(false);
+    mac->setUsage(state);
+    dns->setDisabled(state);
+    ip->setDisabled(state);
+}

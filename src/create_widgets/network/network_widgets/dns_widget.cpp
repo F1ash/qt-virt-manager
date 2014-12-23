@@ -7,10 +7,12 @@ DNS_Widget::DNS_Widget(QWidget *parent, QString tag) :
     forwarder = new Forwarder(this);
     hosts = new Host_DNS(this);
     txts = new TXT_DNS(this);
+    srvs = new SRV_DNS(this);
     baseLayout->addWidget(forwardPlainNames);
     baseLayout->addWidget(forwarder);
     baseLayout->addWidget(hosts);
     baseLayout->addWidget(txts);
+    baseLayout->addWidget(srvs);
 }
 
 /* public slots */
@@ -33,6 +35,10 @@ QDomDocument DNS_Widget::getDataDocument() const
     if ( txts->isUsed() ) {
         _dns.appendChild(
                     txts->getDataDocument());
+    };
+    if ( srvs->isUsed() ) {
+        _dns.appendChild(
+                    srvs->getDataDocument());
     };
     doc.appendChild(_dns);
     return doc;

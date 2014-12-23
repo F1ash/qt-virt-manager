@@ -13,7 +13,7 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     uuidLabel = new QLabel("UUID:");
     uuid = new QLineEdit(this);
     uuid->setPlaceholderText("if omitted, then auto generated");
-    ipv6 = new QCheckBox("Use ipv6", this);
+    ipv6 = new QCheckBox("Use IPv6", this);
     trustGuestRxFilters = new QCheckBox("trustGuestRxFilters", this);
     baseLayout = new QGridLayout();
     baseLayout->addWidget(netNameLabel, 0, 0);
@@ -79,6 +79,8 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
             domainWdg, SLOT(setUsage(bool)));
     connect(forwardWdg, SIGNAL(toggled(bool)),
             this, SLOT(networkTypeChanged(bool)));
+    connect(ipv6, SIGNAL(toggled(bool)),
+            this, SLOT(ipv6Changed(bool)));
 }
 CreateVirtNetwork::~CreateVirtNetwork()
 {
@@ -151,9 +153,9 @@ void CreateVirtNetwork::buildXMLDescription()
     QDomText data;
 
     _xmlDesc = doc.createElement("network");
-    _xmlDesc.setAttribute(
-                "ipv6",
-                (ipv6->isChecked())? "yes":"no");
+    if ( ipv6->isChecked() ) {
+        _xmlDesc.setAttribute("ipv6", "yes");
+    };
     _xmlDesc.setAttribute(
                 "trustGuestRxFilters",
                 (trustGuestRxFilters->isChecked())? "yes":"no");
@@ -232,4 +234,14 @@ void CreateVirtNetwork::networkTypeChanged(bool state)
             forwardWdg->mode->currentText()=="route";
     bridgeWdg->setUsage(!state || _state);
     domainWdg->setUsage(!state || _state);
+}
+void CreateVirtNetwork::ipv6Changed(bool state)
+{
+    bridgeWdg->setUsage(state);
+    bridgeWdg->setFreez(state);
+    domainWdg->setUsage(false);
+    forwardWdg->setUsage(false);
+    domainWdg->setDisabled(state);
+    forwardWdg->setDisabled(state);
+    addressingWdg->ipv6Changed(state);
 }

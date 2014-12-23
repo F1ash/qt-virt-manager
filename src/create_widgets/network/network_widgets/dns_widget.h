@@ -4,6 +4,7 @@
 #include "forwarder.h"
 #include "host_dns.h"
 #include "txt_dns.h"
+#include "srv_dns.h"
 
 class DNS_Widget : public _Checked_Widget
 {
@@ -18,6 +19,7 @@ private:
     Forwarder       *forwarder;
     Host_DNS        *hosts;
     TXT_DNS         *txts;
+    SRV_DNS         *srvs;
 
 public slots:
     QDomDocument     getDataDocument() const;

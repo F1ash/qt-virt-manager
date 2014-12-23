@@ -57,6 +57,7 @@ private slots:
     void             buildXMLDescription();
     void             set_Result();
     void             networkTypeChanged(bool);
+    void             ipv6Changed(bool);
 };
 
 #endif // CREATE_VIRT_NETWORK_H
