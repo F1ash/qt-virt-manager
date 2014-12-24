@@ -13,7 +13,10 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     uuidLabel = new QLabel("UUID:");
     uuid = new QLineEdit(this);
     uuid->setPlaceholderText("if omitted, then auto generated");
-    ipv6 = new QCheckBox("Use IPv6", this);
+    /*
+     * http://libvirt.org/formatnetwork.html#examplesNoGateway
+     */
+    ipv6 = new QCheckBox("For guest-to-guest IPv6", this);
     trustGuestRxFilters = new QCheckBox("trustGuestRxFilters", this);
     baseLayout = new QGridLayout();
     baseLayout->addWidget(netNameLabel, 0, 0);

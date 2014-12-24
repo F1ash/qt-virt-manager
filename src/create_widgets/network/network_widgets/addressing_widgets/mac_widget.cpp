@@ -6,7 +6,7 @@ MAC_Widget::MAC_Widget(QWidget *parent, QString tag) :
     mac = new QLineEdit(this);
     mac->setPlaceholderText("52:54:00:1C:DA:2F");
     mac->setMinimumWidth(150);
-    baseLayout->addWidget(mac, 0, Qt::AlignRight);
+    baseLayout->addWidget(mac, 0, Qt::AlignLeft);
 }
 
 /* public slots */

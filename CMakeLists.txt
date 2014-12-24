@@ -268,26 +268,29 @@ set (HEADERS
   src/create_widgets/network/create_virt_network.h
   src/create_widgets/network/network_widgets/_checked_widget.h
   src/create_widgets/network/network_widgets/_list_widget.h
-  src/create_widgets/network/network_widgets/forwarder.h
-  src/create_widgets/network/network_widgets/host_dns.h
-  src/create_widgets/network/network_widgets/txt_dns.h
-  src/create_widgets/network/network_widgets/srv_dns.h
-  src/create_widgets/network/network_widgets/_ipv4.h
-  src/create_widgets/network/network_widgets/_ipv6.h
   src/create_widgets/network/network_widgets/bridge_widget.h
   src/create_widgets/network/network_widgets/domain_widget.h
   src/create_widgets/network/network_widgets/addressing_widget.h
-  src/create_widgets/network/network_widgets/dns_widget.h
-  src/create_widgets/network/network_widgets/ip_widget.h
-  src/create_widgets/network/network_widgets/mac_widget.h
+  src/create_widgets/network/network_widgets/addressing_widgets/dns_widget.h
+  src/create_widgets/network/network_widgets/addressing_widgets/dns_widgets/forwarder.h
+  src/create_widgets/network/network_widgets/addressing_widgets/dns_widgets/host_dns.h
+  src/create_widgets/network/network_widgets/addressing_widgets/dns_widgets/txt_dns.h
+  src/create_widgets/network/network_widgets/addressing_widgets/dns_widgets/srv_dns.h
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widget.h
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/addtab.h
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipvx.h
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipv4.h
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipv6.h
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ip_widget.h
+  src/create_widgets/network/network_widgets/addressing_widgets/mac_widget.h
   src/create_widgets/network/network_widgets/forward_widget.h
-  src/create_widgets/network/network_widgets/nat_mode_widget.h
-  src/create_widgets/network/network_widgets/route_mode_widget.h
-  src/create_widgets/network/network_widgets/bridge_mode_widget.h
-  src/create_widgets/network/network_widgets/private_mode_widget.h
-  src/create_widgets/network/network_widgets/vepa_mode_widget.h
-  src/create_widgets/network/network_widgets/passthrough_mode_widget.h
-  src/create_widgets/network/network_widgets/hostdev_mode_widget.h
+  src/create_widgets/network/network_widgets/forward_mode_widgets/nat_mode_widget.h
+  src/create_widgets/network/network_widgets/forward_mode_widgets/route_mode_widget.h
+  src/create_widgets/network/network_widgets/forward_mode_widgets/bridge_mode_widget.h
+  src/create_widgets/network/network_widgets/forward_mode_widgets/private_mode_widget.h
+  src/create_widgets/network/network_widgets/forward_mode_widgets/vepa_mode_widget.h
+  src/create_widgets/network/network_widgets/forward_mode_widgets/passthrough_mode_widget.h
+  src/create_widgets/network/network_widgets/forward_mode_widgets/hostdev_mode_widget.h
 
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
@@ -542,26 +545,29 @@ set (SOURCES
   src/create_widgets/network/create_virt_network.cpp
   src/create_widgets/network/network_widgets/_checked_widget.cpp
   src/create_widgets/network/network_widgets/_list_widget.cpp
-  src/create_widgets/network/network_widgets/forwarder.cpp
-  src/create_widgets/network/network_widgets/host_dns.cpp
-  src/create_widgets/network/network_widgets/txt_dns.cpp
-  src/create_widgets/network/network_widgets/srv_dns.cpp
-  src/create_widgets/network/network_widgets/_ipv4.cpp
-  src/create_widgets/network/network_widgets/_ipv6.cpp
   src/create_widgets/network/network_widgets/bridge_widget.cpp
   src/create_widgets/network/network_widgets/domain_widget.cpp
   src/create_widgets/network/network_widgets/addressing_widget.cpp
-  src/create_widgets/network/network_widgets/dns_widget.cpp
-  src/create_widgets/network/network_widgets/ip_widget.cpp
-  src/create_widgets/network/network_widgets/mac_widget.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/dns_widget.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/dns_widgets/forwarder.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/dns_widgets/host_dns.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/dns_widgets/txt_dns.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/dns_widgets/srv_dns.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widget.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/addtab.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipvx.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipv4.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipv6.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ip_widget.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/mac_widget.cpp
   src/create_widgets/network/network_widgets/forward_widget.cpp
-  src/create_widgets/network/network_widgets/nat_mode_widget.cpp
-  src/create_widgets/network/network_widgets/route_mode_widget.cpp
-  src/create_widgets/network/network_widgets/bridge_mode_widget.cpp
-  src/create_widgets/network/network_widgets/private_mode_widget.cpp
-  src/create_widgets/network/network_widgets/vepa_mode_widget.cpp
-  src/create_widgets/network/network_widgets/passthrough_mode_widget.cpp
-  src/create_widgets/network/network_widgets/hostdev_mode_widget.cpp
+  src/create_widgets/network/network_widgets/forward_mode_widgets/nat_mode_widget.cpp
+  src/create_widgets/network/network_widgets/forward_mode_widgets/route_mode_widget.cpp
+  src/create_widgets/network/network_widgets/forward_mode_widgets/bridge_mode_widget.cpp
+  src/create_widgets/network/network_widgets/forward_mode_widgets/private_mode_widget.cpp
+  src/create_widgets/network/network_widgets/forward_mode_widgets/vepa_mode_widget.cpp
+  src/create_widgets/network/network_widgets/forward_mode_widgets/passthrough_mode_widget.cpp
+  src/create_widgets/network/network_widgets/forward_mode_widgets/hostdev_mode_widget.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp

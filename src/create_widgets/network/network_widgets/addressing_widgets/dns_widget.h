@@ -1,10 +1,10 @@
 #ifndef DNS_WIDGET_H
 #define DNS_WIDGET_H
 
-#include "forwarder.h"
-#include "host_dns.h"
-#include "txt_dns.h"
-#include "srv_dns.h"
+#include "dns_widgets/forwarder.h"
+#include "dns_widgets/host_dns.h"
+#include "dns_widgets/txt_dns.h"
+#include "dns_widgets/srv_dns.h"
 
 class DNS_Widget : public _Checked_Widget
 {

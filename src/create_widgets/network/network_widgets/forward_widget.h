@@ -2,13 +2,13 @@
 #define FORWARD_WIDGET_H
 
 #include "_checked_widget.h"
-#include "nat_mode_widget.h"
-#include "route_mode_widget.h"
-#include "bridge_mode_widget.h"
-#include "private_mode_widget.h"
-#include "vepa_mode_widget.h"
-#include "passthrough_mode_widget.h"
-#include "hostdev_mode_widget.h"
+#include "forward_mode_widgets/nat_mode_widget.h"
+#include "forward_mode_widgets/route_mode_widget.h"
+#include "forward_mode_widgets/bridge_mode_widget.h"
+#include "forward_mode_widgets/private_mode_widget.h"
+#include "forward_mode_widgets/vepa_mode_widget.h"
+#include "forward_mode_widgets/passthrough_mode_widget.h"
+#include "forward_mode_widgets/hostdev_mode_widget.h"
 #include <QStackedWidget>
 
 class Forward_Widget : public _Checked_Widget

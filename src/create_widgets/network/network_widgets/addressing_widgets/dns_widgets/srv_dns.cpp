@@ -19,7 +19,7 @@ SRV_DNS::SRV_DNS(QWidget *parent, QString tag) :
     protocol = new QComboBox(this);
     protocol->addItems(QStringList()<<"tcp"<<"udp");
     port = new QSpinBox(this);
-    port->setRange(0, 65536);
+    port->setRange(0, 65535);
     priority = new QSpinBox(this);
     priority->setRange(0, 1000);
     weight = new QSpinBox(this);

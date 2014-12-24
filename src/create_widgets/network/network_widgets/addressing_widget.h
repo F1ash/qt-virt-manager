@@ -2,9 +2,9 @@
 #define ADDRESSING_WIDGET_H
 
 #include "_checked_widget.h"
-#include "dns_widget.h"
-#include "ip_widget.h"
-#include "mac_widget.h"
+#include "addressing_widgets/dns_widget.h"
+#include "addressing_widgets/ip_widget.h"
+#include "addressing_widgets/mac_widget.h"
 #include <QLineEdit>
 #include <QSpinBox>
 
