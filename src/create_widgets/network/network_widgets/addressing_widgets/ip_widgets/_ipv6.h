@@ -14,7 +14,6 @@ public:
 private:
 
 public slots:
-    QDomDocument     getDataDocument() const;
     void             setStaticRouteMode(bool);
 };
 

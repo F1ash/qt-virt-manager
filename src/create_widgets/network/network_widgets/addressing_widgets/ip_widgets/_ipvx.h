@@ -1,7 +1,7 @@
 #ifndef _IPVX_H
 #define _IPVX_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "dhcp_widget.h"
 #include <QDebug>
 
 class _IPvX : public _QWidget
@@ -13,6 +13,7 @@ public:
             bool    *hasDHCP = NULL);
     QLineEdit       *address, *gateway;
     QSpinBox        *prefix, *metric;
+    DHCP_Widget     *useDHCP;
     QVBoxLayout     *commonLayout;
 
 signals:
@@ -20,7 +21,6 @@ signals:
 
 private:
     bool            *HasDHCP;
-    QCheckBox       *useDHCP;
     QLabel          *addressL, *prefixL,
                     *gatewayL, *metricL;
     QGridLayout     *baselayout, *gatewayLayout;

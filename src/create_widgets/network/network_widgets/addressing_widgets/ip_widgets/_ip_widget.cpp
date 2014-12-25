@@ -34,9 +34,44 @@ _IP_Widget::_IP_Widget(
 QDomDocument _IP_Widget::getDataDocument() const
 {
     QDomDocument doc;
-    _QWidget *wdg = static_cast<_QWidget*>(
-                sets->currentWidget());
-    if ( NULL!=wdg ) doc = wdg->getDataDocument();
+    QDomElement _addrElement;
+    QString _tag;
+    _tag = QString( ( staticRoute->isChecked() )? "route":"ip" );
+    _addrElement = doc.createElement(_tag);
+    if ( staticRoute->isChecked() ) {
+        if ( ipv6->isChecked() )
+            _addrElement.setAttribute("family", "ipv6");
+        _IPvX *wdg = static_cast<_IPvX*>(sets->currentWidget());
+        if ( NULL!=wdg ) {
+            _addrElement.setAttribute(
+                        "address",
+                        wdg->address->text());
+            _addrElement.setAttribute(
+                        "prefix",
+                        wdg->prefix->value());
+            _addrElement.setAttribute(
+                        "gateway",
+                        wdg->gateway->text());
+            _addrElement.setAttribute(
+                        "metric",
+                        wdg->metric->value());
+        };
+    } else {
+        if ( ipv6->isChecked() )
+            _addrElement.setAttribute("family", "ipv6");
+        _IPvX *wdg = static_cast<_IPvX*>(sets->currentWidget());
+        if ( NULL!=wdg ) {
+            _addrElement.setAttribute(
+                        "address",
+                        wdg->address->text());
+            _addrElement.setAttribute(
+                        "prefix",
+                        wdg->prefix->value());
+            _addrElement.appendChild(
+                        wdg->useDHCP->getDataDocument());
+        };
+    };
+    doc.appendChild(_addrElement);
     return doc;
 }
 void _IP_Widget::updateDHCPUsage()

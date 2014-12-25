@@ -24,6 +24,7 @@ private:
 public slots:
     bool                 isUsed() const;
     void                 setUsage(bool);
+    void                 setCheckState( Qt::CheckState );
     void                 setFreez(bool);
     virtual QDomDocument getDataDocument() const;
 };

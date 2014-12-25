@@ -282,6 +282,9 @@ set (HEADERS
   src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipv4.h
   src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipv6.h
   src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ip_widget.h
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/dhcp_widget.h
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/dhcp_widgets/dhcp_host.h
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/dhcp_widgets/dhcp_range.h
   src/create_widgets/network/network_widgets/addressing_widgets/mac_widget.h
   src/create_widgets/network/network_widgets/forward_widget.h
   src/create_widgets/network/network_widgets/forward_mode_widgets/nat_mode_widget.h
@@ -559,6 +562,9 @@ set (SOURCES
   src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipv4.cpp
   src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipv6.cpp
   src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ip_widget.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/dhcp_widget.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/dhcp_widgets/dhcp_host.cpp
+  src/create_widgets/network/network_widgets/addressing_widgets/ip_widgets/dhcp_widgets/dhcp_range.cpp
   src/create_widgets/network/network_widgets/addressing_widgets/mac_widget.cpp
   src/create_widgets/network/network_widgets/forward_widget.cpp
   src/create_widgets/network/network_widgets/forward_mode_widgets/nat_mode_widget.cpp

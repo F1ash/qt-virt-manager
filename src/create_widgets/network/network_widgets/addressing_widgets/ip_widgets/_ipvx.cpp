@@ -28,7 +28,7 @@ _IPvX::_IPvX(QWidget *parent, bool *hasDHCP) :
     gatewayWidget = new QWidget(this);
     gatewayWidget->setLayout(gatewayLayout);
     gatewayWidget->setEnabled(false);
-    useDHCP = new QCheckBox("Use DHCP", this);
+    useDHCP = new DHCP_Widget(this, "Use DHCP");
     useDHCP->setDisabled(*HasDHCP);
     //qDebug()<<(*HasDHCP);
     commonLayout = new QVBoxLayout(this);
@@ -51,19 +51,19 @@ void _IPvX::setGatewayEnabled(bool state)
 }
 void _IPvX::setDHCPState(bool state)
 {
-    useDHCP->setChecked(state);
+    useDHCP->setUsage(state);
 }
 void _IPvX::setDHCPEnabled(bool state)
 {
     useDHCP->setCheckState( Qt::Unchecked );
-    if ( !(*HasDHCP) ) useDHCP->setEnabled(state);
+    if ( !(*HasDHCP) ) useDHCP->setFreez(!state);
 }
 void _IPvX::updateDHCPUsage()
 {
     if ( *HasDHCP ) {
-        useDHCP->setEnabled(useDHCP->isChecked());
+        useDHCP->setFreez(!useDHCP->isUsed());
     } else {
-        useDHCP->setEnabled(true);
+        useDHCP->setFreez(false);
     };
 }
 

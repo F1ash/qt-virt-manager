@@ -30,6 +30,10 @@ void _Checked_Widget::setUsage(bool state)
 {
     usage->setChecked(state);
 }
+void _Checked_Widget::setCheckState(Qt::CheckState _state)
+{
+    usage->setCheckState(_state);
+}
 void _Checked_Widget::setFreez(bool state)
 {
     usage->setDisabled(state);

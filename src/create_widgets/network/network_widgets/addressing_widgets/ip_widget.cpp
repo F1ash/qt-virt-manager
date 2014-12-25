@@ -18,6 +18,7 @@ IP_Widget::IP_Widget(QWidget *parent, QString tag) :
 QDomDocument IP_Widget::getDataDocument() const
 {
     QDomDocument doc;
+    doc.setContent(QString());
     for (uint i=0; i<ipSet->count(); i++) {
         _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
         if ( NULL==wdg ) continue;
