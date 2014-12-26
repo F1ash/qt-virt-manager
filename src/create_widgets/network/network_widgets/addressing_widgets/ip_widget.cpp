@@ -44,7 +44,7 @@ void IP_Widget::showCustomMenu(QPoint pos)
     AddTab *addMenu = new AddTab(this);
     connect(addMenu->addTabAction, SIGNAL(triggered()),
             this, SLOT(addTab()));
-    addMenu->move(this->mapToGlobal(pos));
+    addMenu->move(ipSet->mapToGlobal(pos));
     addMenu->exec();
     disconnect(addMenu->addTabAction, SIGNAL(triggered()),
                this, SLOT(addTab()));

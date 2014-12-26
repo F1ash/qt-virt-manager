@@ -305,7 +305,7 @@ set (HEADERS
   src/state_monitor/domain_state_viewer.h
   src/state_monitor/svg_tamplates.h
 
-  src/task_bar/task_bar.h
+  src/task_warehouse/task_warehouse.h
 
   # qtermwidget
   src/qtermwidget/lib/Filter.h                
@@ -584,7 +584,7 @@ set (SOURCES
   src/state_monitor/domain_monitor_thread.cpp
   src/state_monitor/domain_state_viewer.cpp
 
-  src/task_bar/task_bar.cpp
+  src/task_warehouse/task_warehouse.cpp
 
   # qtermwidget
   src/qtermwidget/lib/BlockArray.cpp

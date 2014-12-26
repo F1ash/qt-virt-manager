@@ -22,7 +22,7 @@ private :
 public slots:
   void       setLogUpActionText(QString&);
   void       stateMonitorVisibilityChanged(bool);
-  void       stateTaskBarVisibilityChanged(bool);
+  void       stateTaskWareHouseVisibilityChanged(bool);
 };
 
 #endif

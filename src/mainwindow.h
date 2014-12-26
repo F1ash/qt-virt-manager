@@ -16,7 +16,7 @@
 #include "wait_thread/wait_thread.h"
 #include "vm_viewer/vm_viewer.h"
 #include "state_monitor/domain_state_monitor.h"
-#include "task_bar/task_bar.h"
+#include "task_warehouse/task_warehouse.h"
 #include "dock_head_widgets/dock_widget.h"
 #include "dock_head_widgets/dock_head_widget.h"
 #include <QDebug>
@@ -50,7 +50,7 @@ private :
     VirtStoragePoolControl      *storagePoolDockContent;
     ViewerMap                    VM_Displayed_Map;
     DomainStateMonitor          *domainsStateMonitor;
-    TaskBar                     *taskBar;
+    TaskWareHouse               *taskWrHouse;
 
     DockHeadWidget              *logHeadWdg;
     DockHeadWidget              *domHeadWdg;
@@ -63,7 +63,7 @@ private slots:
     void closeEvent();
     void changeVisibility();
     void mainWindowUp();
-    void initTaskBar();
+    void initTaskWareHouse();
     void initDomainStateMonitor();
     void initTrayIcon();
     void trayIconActivated(QSystemTrayIcon::ActivationReason);

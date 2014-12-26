@@ -30,6 +30,7 @@ signals:
     void addToStateMonitor(virConnectPtr, QString&, QString&);
     void domainClosed(QString, QString);
     void migrateToConnect(QStringList&);
+    void addNewTask(QStringList&);
 
 private:
     QString                  currConnName;

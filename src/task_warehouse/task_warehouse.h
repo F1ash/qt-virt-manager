@@ -1,23 +1,25 @@
-#ifndef TASK_BAR_H
-#define TASK_BAR_H
+#ifndef TASK_WAREHOUSE_H
+#define TASK_WAREHOUSE_H
 
 #include <QMainWindow>
 #include <QSettings>
 #include <QCloseEvent>
 #include <QListWidget>
+#include <QThreadPool>
 #include <QVBoxLayout>
 
-class TaskBar : public QMainWindow
+class TaskWareHouse : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit TaskBar(QWidget *parent = NULL);
+    explicit TaskWareHouse(QWidget *parent = NULL);
 
 signals:
     void             visibilityChanged(bool);
     void             taskMsg(QString&);
 
 private:
+    uint             counter = 0;
     QSettings        settings;
     QListWidget     *taskList;
 
@@ -25,10 +27,10 @@ public slots:
     void             changeVisibility();
     void             saveCurrentState();
     void             stopTaskComputing();
-    void             addNewTask();
+    void             addNewTask(QStringList&);
 
 private slots:
     void             closeEvent(QCloseEvent*);
 };
 
-#endif // TASK_BAR_H
+#endif // TASK_WAREHOUSE_H

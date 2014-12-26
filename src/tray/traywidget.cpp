@@ -10,7 +10,7 @@ TrayIcon::TrayIcon(QWidget *parent = NULL)
   logUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
   monitorAction = new QAction(QString("Domains State Monitor"), this);
   monitorAction->setIcon ( QIcon::fromTheme("utilities-monitor") );
-  taskUpAction = new QAction(QString("Task Bar"), this);
+  taskUpAction = new QAction(QString("Task WareHouse"), this);
   taskUpAction->setIcon ( QIcon::fromTheme("job") );
   closeAction = new QAction(QString("Exit"), this);
   closeAction->setIcon (QIcon::fromTheme("exit"));
@@ -39,9 +39,9 @@ void TrayIcon::stateMonitorVisibilityChanged(bool state)
                 QString("%1 Domains State Monitor")
                 .arg( (state)? "Hide" : "Show" ));
 }
-void TrayIcon::stateTaskBarVisibilityChanged(bool state)
+void TrayIcon::stateTaskWareHouseVisibilityChanged(bool state)
 {
     taskUpAction->setText(
-                QString("%1 Task Bar")
+                QString("%1 Task WareHouse")
                 .arg( (state)? "Hide" : "Show" ));
 }

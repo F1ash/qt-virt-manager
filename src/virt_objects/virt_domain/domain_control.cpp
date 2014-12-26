@@ -280,6 +280,8 @@ void VirtDomainControl::domainDoubleClicked(const QModelIndex &index)
 }
 void VirtDomainControl::execAction(const QStringList &l)
 {
+    QStringList e = l;
+    emit addNewTask( e );
     QStringList args;
     QModelIndex idx = domainList->currentIndex();
     if ( idx.isValid() ) {
