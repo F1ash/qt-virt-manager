@@ -391,8 +391,8 @@ void MainWindow::initDockWidgets()
             this, SLOT(deleteVMDisplay(QString,QString)));
     connect(domainDockContent, SIGNAL(migrateToConnect(QStringList&)),
             this, SLOT(buildMigrateArgs(QStringList&)));
-    connect(domainDockContent, SIGNAL(addNewTask(QStringList&)),
-            taskWrHouse, SLOT(addNewTask(QStringList&)));
+    connect(domainDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
 
     networkDock = new DockWidget(this);
     networkDock->setObjectName("networkDock");

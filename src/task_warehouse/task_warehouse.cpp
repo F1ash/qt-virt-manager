@@ -7,7 +7,7 @@ TaskWareHouse::TaskWareHouse(QWidget *parent) :
                   (QSizePolicy::MinimumExpanding,
                    QSizePolicy::MinimumExpanding));
     setContentsMargins(0, 0, 0, 5);
-    setWindowTitle("Task Bar");
+    setWindowTitle("Task WareHouse");
     settings.beginGroup("TaskWareHouse");
     QByteArray _geometry = settings.value("Geometry").toByteArray();
     if ( !_geometry.isEmpty() ) {
@@ -19,6 +19,7 @@ TaskWareHouse::TaskWareHouse(QWidget *parent) :
     settings.endGroup();
     taskList = new QListWidget(this);
     setCentralWidget(taskList);
+    threadPool = new THREAD_POOL;
 }
 
 /* public slots */
@@ -39,7 +40,7 @@ void TaskWareHouse::saveCurrentState()
 void TaskWareHouse::stopTaskComputing()
 {
 }
-void TaskWareHouse::addNewTask(QStringList &_taskDesc)
+void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
 {
     /* TaskDescription:
      * state icon
@@ -66,4 +67,12 @@ void TaskWareHouse::addNewTask(QStringList &_taskDesc)
 void TaskWareHouse::closeEvent(QCloseEvent *ev)
 {
     ev->ignore();
+}
+void TaskWareHouse::taskStateReceiver(uint, bool)
+{
+
+}
+void TaskWareHouse::taskResultReceiver(uint, int, Result)
+{
+
 }

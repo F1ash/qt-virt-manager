@@ -22,20 +22,21 @@ public:
     explicit ControlThread(QObject *parent = NULL);
     QStringList      args;
     bool             keep_alive;
+    uint             number;
     virConnect      *currWorkConnect = NULL;
     virErrorPtr      virtErrors;
 
 signals:
-    void errorMsg(QString);
+    void             errorMsg(QString);
 
 public slots:
-    bool setCurrentWorkConnect(virConnectPtr);
-    void stop();
+    bool             setCurrentWorkConnect(virConnectPtr, uint i=0);
+    void             stop();
 
-    void sendConnErrors();
-    void sendGlobalErrors();
+    void             sendConnErrors();
+    void             sendGlobalErrors();
 
-    virtual void run();
+    virtual void     run();
 
 };
 

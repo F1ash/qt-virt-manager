@@ -5,8 +5,14 @@
 #include <QSettings>
 #include <QCloseEvent>
 #include <QListWidget>
-#include <QThreadPool>
+#include <QMap>
 #include <QVBoxLayout>
+#include "virt_objects/virt_domain/domain_control_thread.h"
+#include "virt_objects/virt_network/net_control_thread.h"
+#include "virt_objects/virt_storage_pool/storage_pool_control_thread.h"
+#include "virt_objects/virt_storage_vol/storage_vol_control_thread.h"
+
+typedef QMap<QString, QThread*> THREAD_POOL;
 
 class TaskWareHouse : public QMainWindow
 {
@@ -20,6 +26,7 @@ signals:
 
 private:
     uint             counter = 0;
+    THREAD_POOL     *threadPool;
     QSettings        settings;
     QListWidget     *taskList;
 
@@ -27,10 +34,12 @@ public slots:
     void             changeVisibility();
     void             saveCurrentState();
     void             stopTaskComputing();
-    void             addNewTask(QStringList&);
+    void             addNewTask(virConnectPtr, QStringList&);
 
 private slots:
     void             closeEvent(QCloseEvent*);
+    void             taskStateReceiver(uint, bool);
+    void             taskResultReceiver(uint, int, Result);
 };
 
 #endif // TASK_WAREHOUSE_H
