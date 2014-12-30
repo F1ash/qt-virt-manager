@@ -14,6 +14,7 @@ bool ControlThread::setCurrentWorkConnect(virConnectPtr conn, uint i)
     currWorkConnect = conn;
     //qDebug()<<"net_thread"<<currWorkConnect;
 }
+void ControlThread::execAction(int i, QStringList _str) { }
 void ControlThread::stop() { keep_alive = false; }
 
 /* private slots */

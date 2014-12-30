@@ -30,33 +30,33 @@ public:
     explicit DomControlThread(QObject *parent = NULL);
 
 signals:
-    void resultData(DomActions, Result);
+    void             resultData(DomActions, Result);
 
 private:
-    DomActions      action;
-    virConnectPtr   destConnect = NULL;
+    DomActions       action;
+    virConnectPtr    destConnect = NULL;
 
 public slots:
-    void execAction(DomActions, QStringList);
-    void setMigrateConnect(virConnectPtr);
+    void             execAction(DomActions, QStringList);
+    void             setMigrateConnect(virConnectPtr);
 
 private slots:
-    void run();
-    Result getAllDomainList();
-    Result createDomain();
-    Result defineDomain();
-    Result startDomain();
-    Result pauseDomain();
-    Result destroyDomain();
-    Result resetDomain();
-    Result rebootDomain();
-    Result shutdownDomain();
-    Result saveDomain();
-    Result restoreDomain();
-    Result undefineDomain();
-    Result changeAutoStartDomain();
-    Result getDomainXMLDesc();
-    Result migrateDomain();
+    void             run();
+    Result           getAllDomainList();
+    Result           createDomain();
+    Result           defineDomain();
+    Result           startDomain();
+    Result           pauseDomain();
+    Result           destroyDomain();
+    Result           resetDomain();
+    Result           rebootDomain();
+    Result           shutdownDomain();
+    Result           saveDomain();
+    Result           restoreDomain();
+    Result           undefineDomain();
+    Result           changeAutoStartDomain();
+    Result           getDomainXMLDesc();
+    Result           migrateDomain();
 
 };
 

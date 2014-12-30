@@ -2,6 +2,7 @@
 #define TASK_WAREHOUSE_H
 
 #include <QMainWindow>
+#include <QString>
 #include <QSettings>
 #include <QCloseEvent>
 #include <QListWidget>

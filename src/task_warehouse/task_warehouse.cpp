@@ -50,17 +50,52 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
      * connection name
      * parameters
      */
-    ++counter;
-    QListWidgetItem *_item = new QListWidgetItem();
-    QString _name = QString("#%1 %2 %3")
-            .arg(counter)
-            .arg(_taskDesc[0])
-            .arg(_taskDesc[1]);
-    _item->setText(_name);
-    _item->setIcon(QIcon::fromTheme("run"));
-    taskList->addItem(_item);
-    QString _msg = _taskDesc.join(" ");
-    emit taskMsg(_msg);
+    //qDebug()<<_taskDesc<<"addNewTask";
+    if ( _taskDesc.count()>1 ) {
+        ++counter;
+        QString _number = QString("");
+        QString _name = QString("#%1 %2 <%3>")
+                .arg(_number.sprintf("%08d", counter))
+                .arg(_taskDesc[0])
+                .arg(_taskDesc[1]);
+        QListWidgetItem *_item = new QListWidgetItem();
+        _item->setText(_name);
+        _item->setIcon(QIcon::fromTheme("run"));
+        taskList->addItem(_item);
+        QString _msg = _taskDesc.join(" ");
+        emit taskMsg(_msg);
+    };
+    ControlThread *actThread = NULL;
+    if ( _taskDesc[0].contains("Domain") ) {
+        actThread = new DomControlThread(this);
+    } else if ( _taskDesc[0].contains("Network") ) {
+
+    } else if ( _taskDesc[0].contains("StoragePool") ) {
+
+    } else if ( _taskDesc[0].contains("StorageVol") ) {
+
+    } else return;
+    virConnectPtr currWorkConnect = _conn;
+    int ret = virConnectRef(currWorkConnect);
+    if ( ret<0 ) {
+        virErrorPtr virtErrors = virGetLastError();
+        if ( virtErrors!=NULL && virtErrors->code>0 ) {
+            /*
+            QString time = QTime::currentTime().toString();
+            QString msg = QString("%3 VirtError(%1) : %2")
+                    .arg(virtErrors->code)
+                    .arg(virtErrors->message)
+                    .arg(time);
+            emit domMsg( msg );
+            */
+            virResetError(virtErrors);
+        };
+        currWorkConnect = NULL;
+    } else if ( NULL!=actThread ) {
+        actThread->setCurrentWorkConnect(currWorkConnect, counter);
+        actThread->execAction(GET_ALL_DOMAIN, QStringList());
+        qDebug()<<_taskDesc<<"addNewTask";
+    };
 }
 
 /* private slots */

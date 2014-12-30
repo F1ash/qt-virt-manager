@@ -362,10 +362,10 @@ void VirtDomainControl::execAction(const QStringList &l)
             // send signal with Connect & Domain Names to add into Domain State Monitor
             emit addToStateMonitor(currWorkConnect, currConnName, domainName);
         } else if ( l.first()=="reloadVirtDomain" ) {
-            domControlThread->execAction(GET_ALL_DOMAIN, args);
+            //domControlThread->execAction(GET_ALL_DOMAIN, args);
         };
     } else if ( l.first()=="reloadVirtDomain" ) {
-        domControlThread->execAction(GET_ALL_DOMAIN, args);
+        //domControlThread->execAction(GET_ALL_DOMAIN, args);
     };
 }
 void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)

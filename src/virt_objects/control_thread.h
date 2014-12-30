@@ -31,6 +31,7 @@ signals:
 
 public slots:
     bool             setCurrentWorkConnect(virConnectPtr, uint i=0);
+    virtual void     execAction(int, QStringList);
     void             stop();
 
     void             sendConnErrors();
