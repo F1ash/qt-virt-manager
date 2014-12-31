@@ -25,7 +25,8 @@ public:
     ~VirtStorageVolControl();
 
 signals:
-    void storageVolMsg(QString&);
+    void                       storageVolMsg(QString&);
+    void                       addNewTask(virConnectPtr, QStringList&);
 
 private:
     QString                    currConnName;
@@ -45,7 +46,7 @@ public slots:
     QString getCurrentVolumeName() const;
 
 private slots:
-    void resultReceiver(StorageVolActions, QStringList);
+    void resultReceiver(Actions, QStringList);
     void msgRepeater(QString);
     void changeDockVisibility();
 

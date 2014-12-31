@@ -421,8 +421,12 @@ void MainWindow::initDockWidgets()
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, networkDock);
-    connect(toolBar->_netUpAction, SIGNAL(triggered(bool)), networkDock, SLOT(setVisible(bool)));
-    connect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+    connect(toolBar->_netUpAction, SIGNAL(triggered(bool)),
+            networkDock, SLOT(setVisible(bool)));
+    connect(networkDockContent, SIGNAL(netMsg(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
+    connect(networkDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
 
     storageVolDock = new DockWidget(this);
     storageVolDock->setObjectName("storageVolDock");
@@ -450,8 +454,12 @@ void MainWindow::initDockWidgets()
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, storageVolDock);
-    connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
-    connect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+    connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
+            storageVolDock, SLOT(setVisible(bool)));
+    connect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
+    connect(storageVolDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
 
     storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
@@ -479,10 +487,14 @@ void MainWindow::initDockWidgets()
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, storagePoolDock);
-    connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
-    connect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+    connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
+            storagePoolDock, SLOT(setVisible(bool)));
+    connect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
     connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
             this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
+    connect(storagePoolDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
 
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);

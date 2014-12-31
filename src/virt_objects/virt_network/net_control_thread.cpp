@@ -3,11 +3,10 @@
 NetControlThread::NetControlThread(QObject *parent) :
     ControlThread(parent)
 {
-    qRegisterMetaType<NetActions>("NetActions");
 }
 
 /* public slots */
-void NetControlThread::execAction(NetActions act, QStringList _args)
+void NetControlThread::execAction(Actions act, QStringList _args)
 {
     if ( keep_alive && !isRunning() ) {
         action = act;
@@ -21,34 +20,37 @@ void NetControlThread::run()
 {
     Result result;
     switch (action) {
-    case GET_ALL_NETWORK :
+    case GET_ALL_ENTITY :
         result = getAllNetworkList();
         break;
-    case CREATE_NETWORK :
+    case CREATE_ENTITY :
         result = createNetwork();
         break;
-    case DEFINE_NETWORK :
+    case DEFINE_ENTITY :
         result = defineNetwork();
         break;
-    case START_NETWORK :
+    case START_ENTITY :
         result = startNetwork();
         break;
-    case DESTROY_NETWORK :
+    case DESTROY_ENTITY :
         result = destroyNetwork();
         break;
-    case UNDEFINE_NETWORK :
+    case UNDEFINE_ENTITY :
         result = undefineNetwork();
         break;
-    case CHANGE_NET_AUTOSTART :
+    case CHANGE_ENTITY_AUTOSTART :
         result = changeAutoStartNetwork();
         break;
-    case GET_NET_XML_DESC :
+    case GET_XML_DESCRIPTION :
         result = getVirtNetXMLDesc();
         break;
     default:
         break;
     };
-    emit resultData(action, result);
+    result.type   = "network";
+    result.number = number;
+    result.action = action;
+    emit resultData(result);
 }
 Result NetControlThread::getAllNetworkList()
 {

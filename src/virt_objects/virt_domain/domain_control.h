@@ -25,12 +25,12 @@ public:
     ~VirtDomainControl();
 
 signals:
-    void domMsg(QString&);
-    void displayRequest(virConnect*, QString, QString);
-    void addToStateMonitor(virConnectPtr, QString&, QString&);
-    void domainClosed(QString, QString);
-    void migrateToConnect(QStringList&);
-    void addNewTask(virConnectPtr, QStringList&);
+    void                     domMsg(QString&);
+    void                     displayRequest(virConnect*, QString, QString);
+    void                     addToStateMonitor(virConnectPtr, QString&, QString&);
+    void                     domainClosed(QString, QString);
+    void                     migrateToConnect(QStringList&);
+    void                     addNewTask(virConnectPtr, QStringList&);
 
 private:
     QString                  currConnName;
@@ -53,7 +53,7 @@ public slots:
     void                     reloadDomainState();
 
 private slots:
-    void                     resultReceiver(DomActions, Result);
+    void                     resultReceiver(Result);
     void                     msgRepeater(QString);
     void                     changeDockVisibility();
 

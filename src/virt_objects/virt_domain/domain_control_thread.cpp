@@ -3,16 +3,17 @@
 DomControlThread::DomControlThread(QObject *parent) :
     ControlThread(parent)
 {
-    qRegisterMetaType<DomActions>("DomActions");
 }
 
 /* public slots */
-void DomControlThread::execAction(DomActions act, QStringList _args)
+void DomControlThread::execAction(Actions act, QStringList _args)
 {
+    qDebug()<<"called";
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;
         start();
+        qDebug()<<"runned";
     };
 }
 void DomControlThread::setMigrateConnect(virConnectPtr conn)
@@ -25,58 +26,61 @@ void DomControlThread::run()
 {
     Result result;
     switch (action) {
-    case GET_ALL_DOMAIN :
+    case GET_ALL_ENTITY :
         result = getAllDomainList();
         break;
-    case CREATE_DOMAIN :
+    case CREATE_ENTITY :
         result = createDomain();
         break;
-    case DEFINE_DOMAIN :
+    case DEFINE_ENTITY :
         result = defineDomain();
         break;
-    case EDIT_DOMAIN :
+    case EDIT_ENTITY :
         result = getDomainXMLDesc();
         break;
-    case START_DOMAIN :
+    case START_ENTITY :
         result = startDomain();
         break;
-    case PAUSE_DOMAIN :
+    case PAUSE_ENTITY :
         result = pauseDomain();
         break;
-    case DESTROY_DOMAIN :
+    case DESTROY_ENTITY :
         result = destroyDomain();
         break;
-    case RESET_DOMAIN :
+    case RESET_ENTITY :
         result = resetDomain();
         break;
-    case REBOOT_DOMAIN :
+    case REBOOT_ENTITY :
         result = rebootDomain();
         break;
-    case SHUTDOWN_DOMAIN :
+    case SHUTDOWN_ENTITY :
         result = shutdownDomain();
         break;
-    case SAVE_DOMAIN :
+    case SAVE_ENTITY :
         result = saveDomain();
         break;
-    case RESTORE_DOMAIN :
+    case RESTORE_ENTITY :
         result = restoreDomain();
         break;
-    case UNDEFINE_DOMAIN :
+    case UNDEFINE_ENTITY :
         result = undefineDomain();
         break;
-    case CHANGE_DOM_AUTOSTART :
+    case CHANGE_ENTITY_AUTOSTART :
         result = changeAutoStartDomain();
         break;
-    case GET_DOM_XML_DESC :
+    case GET_XML_DESCRIPTION :
         result = getDomainXMLDesc();
         break;
-    case MIGRATE_DOMAIN :
+    case MIGRATE_ENTITY :
         result = migrateDomain();
         break;
     default:
         break;
     };
-    emit resultData(action, result);
+    result.type   = "domain";
+    result.number = number;
+    result.action = action;
+    emit resultData(result);
 }
 Result DomControlThread::getAllDomainList()
 {
@@ -411,7 +415,10 @@ Result DomControlThread::restoreDomain()
     };
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 restored.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(
+                QString("'<b>%1</b>' Domain %2 restored.")
+                .arg(name)
+                .arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::undefineDomain()

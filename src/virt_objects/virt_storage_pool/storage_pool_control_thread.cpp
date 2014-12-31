@@ -1,20 +1,13 @@
 #include "storage_pool_control_thread.h"
 
 StoragePoolControlThread::StoragePoolControlThread(QObject *parent) :
-    QThread(parent)
+    ControlThread(parent)
 {
-    qRegisterMetaType<StoragePoolActions>("StoragePoolActions");
 }
 
 /* public slots */
-bool StoragePoolControlThread::setCurrentWorkConnect(virConnectPtr conn)
-{
-    keep_alive = true;
-    currWorkConnect = conn;
-    //qDebug()<<"net_thread"<<currWorkConnect;
-}
 void StoragePoolControlThread::stop() { keep_alive = false; }
-void StoragePoolControlThread::execAction(StoragePoolActions act, QStringList _args)
+void StoragePoolControlThread::execAction(Actions act, QStringList _args)
 {
     if ( keep_alive && !isRunning() ) {
         action = act;
@@ -28,31 +21,31 @@ void StoragePoolControlThread::run()
 {
     QStringList result;
     switch (action) {
-    case GET_ALL_StPOOL :
+    case GET_ALL_ENTITY :
         result.append(getAllStoragePoolList());
         break;
-    case CREATE_StPOOL :
+    case CREATE_ENTITY :
         result.append(createStoragePool());
         break;
-    case DEFINE_StPOOL :
+    case DEFINE_ENTITY :
         result.append(defineStoragePool());
         break;
-    case START_StPOOL :
+    case START_ENTITY :
         result.append(startStoragePool());
         break;
-    case DESTROY_StPOOL :
+    case DESTROY_ENTITY :
         result.append(destroyStoragePool());
         break;
-    case UNDEFINE_StPOOL :
+    case UNDEFINE_ENTITY :
         result.append(undefineStoragePool());
         break;
-    case CHANGE_StPOOL_AUTOSTART :
+    case CHANGE_ENTITY_AUTOSTART :
         result.append(changeAutoStartStoragePool());
         break;
-    case DELETE_StPOOL :
+    case DELETE_ENTITY :
         result.append(deleteStoragePool());
         break;
-    case GET_StPOOL_XML_DESC :
+    case GET_XML_DESCRIPTION :
         result.append(getStoragePoolXMLDesc());
         break;
     default:
@@ -278,22 +271,4 @@ QStringList StoragePoolControlThread::getStoragePoolXMLDesc()
     result.append(QString("'<b>%1</b>' StoragePool %2 XML'ed")
                   .arg(name).arg((read)?"":"don't"));
     return result;
-}
-
-void StoragePoolControlThread::sendConnErrors()
-{
-    virtErrors = virConnGetLastError(currWorkConnect);
-    if ( virtErrors!=NULL && virtErrors->code>0 ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-        virResetError(virtErrors);
-    } else sendGlobalErrors();
-}
-void StoragePoolControlThread::sendGlobalErrors()
-{
-    virtErrors = virGetLastError();
-    if ( virtErrors!=NULL && virtErrors->code>0 )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-    virResetLastError();
 }

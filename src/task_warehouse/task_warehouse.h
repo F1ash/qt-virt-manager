@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include <QSettings>
+#include <QTime>
 #include <QCloseEvent>
 #include <QListWidget>
 #include <QMap>
@@ -13,7 +14,7 @@
 #include "virt_objects/virt_storage_pool/storage_pool_control_thread.h"
 #include "virt_objects/virt_storage_vol/storage_vol_control_thread.h"
 
-typedef QMap<QString, QThread*> THREAD_POOL;
+typedef QMap<QString, ControlThread*> THREAD_POOL;
 
 class TaskWareHouse : public QMainWindow
 {
@@ -39,8 +40,9 @@ public slots:
 
 private slots:
     void             closeEvent(QCloseEvent*);
+    void             msgRepeater(QString);
     void             taskStateReceiver(uint, bool);
-    void             taskResultReceiver(uint, int, Result);
+    void             taskResultReceiver(Result);
 };
 
 #endif // TASK_WAREHOUSE_H

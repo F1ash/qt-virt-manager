@@ -127,7 +127,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
         stVolControlThread->setCurrentStoragePoolName(currWorkConnect, currPoolName);
         toolBar->enableAutoReload();
         // for initiation content
-        stVolControlThread->execAction(GET_ALL_StVOL, QStringList());
+        stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
         return true;
     };
 }
@@ -139,10 +139,10 @@ QString VirtStorageVolControl::getCurrentVolumeName() const
 }
 
 /* private slots */
-void VirtStorageVolControl::resultReceiver(StorageVolActions act, QStringList data)
+void VirtStorageVolControl::resultReceiver(Actions act, QStringList data)
 {
     //qDebug()<<act<<data<<"result";
-    if ( act == GET_ALL_StVOL ) {
+    if ( act == GET_ALL_ENTITY ) {
         int chain  = storageVolModel->columnCount();
         int chains = data.count()/chain;
         if ( chains > storageVolModel->DataList.count() ) {
@@ -164,28 +164,28 @@ void VirtStorageVolControl::resultReceiver(StorageVolActions act, QStringList da
                 storageVolModel->setData(storageVolModel->index(i,j), data.at(i*chain+j), Qt::EditRole);
             };
         };
-    } else if ( act == CREATE_StVOL ) {
+    } else if ( act == CREATE_ENTITY ) {
         if ( !data.isEmpty() ) {
             msgRepeater(data.join(" "));
-            stVolControlThread->execAction(GET_ALL_StVOL, QStringList());
+            stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
         };
-    } else if ( act == DELETE_StVOL ) {
+    } else if ( act == DELETE_ENTITY ) {
         if ( !data.isEmpty() ) {
             msgRepeater(data.join(" "));
-            stVolControlThread->execAction(GET_ALL_StVOL, QStringList());
+            stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
         };
-    } else if ( act == DOWNLOAD_StVOL ) {
+    } else if ( act == DOWNLOAD_ENTITY ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
-    } else if ( act == UPLOAD_StVOL ) {
+    } else if ( act == UPLOAD_ENTITY ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
-    } else if ( act == RESIZE_StVOL ) {
+    } else if ( act == RESIZE_ENTITY ) {
         if ( !data.isEmpty() ) {
             msgRepeater(data.join(" "));
-            stVolControlThread->execAction(GET_ALL_StVOL, QStringList());
+            stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
         };
-    } else if ( act == WIPE_StVOL ) {
+    } else if ( act == WIPE_ENTITY ) {
         if ( !data.isEmpty() ) msgRepeater(data.join(" "));
-    } else if ( act == GET_StVOL_XML_DESC ) {
+    } else if ( act == GET_XML_DESCRIPTION ) {
         if ( !data.isEmpty() ) {
             QString xml = data.first();
             data.removeFirst();
@@ -239,21 +239,23 @@ void VirtStorageVolControl::storageVolDoubleClicked(const QModelIndex &index)
 }
 void VirtStorageVolControl::execAction(const QStringList &l)
 {
+    QStringList e = l;
+    emit addNewTask(currWorkConnect, e);
     QStringList args;
     QModelIndex idx = storageVolList->currentIndex();
     if ( idx.isValid() && storageVolModel->DataList.count() ) {
         QString storageVolName = storageVolModel->DataList.at(idx.row())->getName();
         args.append(storageVolName);
         if        ( l.first()=="getVirtStorageVolList" ) {
-            stVolControlThread->execAction(GET_ALL_StVOL, args);
+            stVolControlThread->execAction(GET_ALL_ENTITY, args);
         } else if ( l.first()=="deleteVirtStorageVol" ) {
-            stVolControlThread->execAction(DELETE_StVOL, args);
+            stVolControlThread->execAction(DELETE_ENTITY, args);
         } else if ( l.first()=="downloadVirtStorageVol" ) {
             QString path = QFileDialog::getSaveFileName(this, "Save to", "~");
             if ( !path.isEmpty() ) {
                 args.append(path);
                 args.append(storageVolModel->DataList.at(idx.row())->getCurrSize());
-                stVolControlThread->execAction(DOWNLOAD_StVOL, args);
+                stVolControlThread->execAction(DOWNLOAD_ENTITY, args);
             } else return;
         } else if ( l.first()=="resizeVirtStorageVol" ) {
             ResizeDialog *resizeDialog = new ResizeDialog(this,
@@ -266,35 +268,35 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             } else {
                 return;
             };
-            stVolControlThread->execAction(RESIZE_StVOL, args);
+            stVolControlThread->execAction(RESIZE_ENTITY, args);
         } else if ( l.first()=="uploadVirtStorageVol" ) {
             QString path = QFileDialog::getOpenFileName(this, "Read from", "~");
             if ( !path.isEmpty() ) {
                 args.append(path);
-                stVolControlThread->execAction(UPLOAD_StVOL, args);
+                stVolControlThread->execAction(UPLOAD_ENTITY, args);
             } else return;
         } else if ( l.first()=="wipeVirtStorageVol" ) {
             args.append( (l.count()>1) ? l.at(1) : "0" );
-            stVolControlThread->execAction(WIPE_StVOL, args);
+            stVolControlThread->execAction(WIPE_ENTITY, args);
         } else if ( l.first()=="getVirtStorageVolXMLDesc" ) {
-            stVolControlThread->execAction(GET_StVOL_XML_DESC, args);
+            stVolControlThread->execAction(GET_XML_DESCRIPTION, args);
         } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
             stopProcessing();
         } else if ( l.first()=="reloadVirtStoragePool" ) {
-            stVolControlThread->execAction(GET_ALL_StVOL, args);
+            stVolControlThread->execAction(GET_ALL_ENTITY, args);
         };
     } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
         stopProcessing();
     } else if ( l.first()=="reloadVirtStoragePool" ) {
-        stVolControlThread->execAction(GET_ALL_StVOL, args);
+        stVolControlThread->execAction(GET_ALL_ENTITY, args);
     };
 }
 void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
 {
-    StorageVolActions act;
+    Actions act;
     if ( !_args.isEmpty() ) {
-        if ( _args.first().startsWith("create") ) act = CREATE_StVOL;
-        else act = StVOL_EMPTY_ACTION;
+        if ( _args.first().startsWith("create") ) act = CREATE_ENTITY;
+        else act = _EMPTY_ACTION;
         QStringList args = _args;
         args.removeFirst();
         if ( !args.isEmpty() ) {

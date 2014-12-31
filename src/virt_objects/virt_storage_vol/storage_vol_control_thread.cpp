@@ -1,9 +1,8 @@
 #include "storage_vol_control_thread.h"
 
 StorageVolControlThread::StorageVolControlThread(QObject *parent) :
-    QThread(parent)
+    ControlThread(parent)
 {
-    qRegisterMetaType<StorageVolActions>("StorageVolActions");
 }
 
 /* public slots */
@@ -31,7 +30,7 @@ void StorageVolControlThread::stop()
     //        <<"\n\tPool\t\t"<<currStoragePool
     //        <<"\n\tName\t\t"<<currPoolName;
 }
-void StorageVolControlThread::execAction(StorageVolActions act, QStringList _args)
+void StorageVolControlThread::execAction(Actions act, QStringList _args)
 {
     if ( keep_alive && !isRunning() ) {
         action = act;
@@ -49,28 +48,28 @@ void StorageVolControlThread::run()
 {
     QStringList result;
     switch (action) {
-    case GET_ALL_StVOL :
+    case GET_ALL_ENTITY :
         result.append(getAllStorageVolList());
         break;
-    case CREATE_StVOL :
+    case CREATE_ENTITY:
         result.append(createStorageVol());
         break;
-    case DELETE_StVOL :
+    case DELETE_ENTITY :
         result.append(deleteStorageVol());
         break;
-    case DOWNLOAD_StVOL :
+    case DOWNLOAD_ENTITY :
         result.append(downloadStorageVol());
         break;
-    case UPLOAD_StVOL :
+    case UPLOAD_ENTITY :
         result.append(uploadStorageVol());
         break;
-    case RESIZE_StVOL :
+    case RESIZE_ENTITY :
         result.append(resizeStorageVol());
         break;
-    case WIPE_StVOL :
+    case WIPE_ENTITY :
         result.append(wipeStorageVol());
         break;
-    case GET_StVOL_XML_DESC :
+    case GET_XML_DESCRIPTION :
         result.append(getStorageVolXMLDesc());
         break;
     default:
@@ -402,22 +401,4 @@ QStringList StorageVolControlThread::getStorageVolXMLDesc()
     free(Returns);
     result.append(QString("'<b>%1</b>' StorageVol %2 XML'ed").arg(name).arg((read)?"":"don't"));
     return result;
-}
-
-void StorageVolControlThread::sendConnErrors()
-{
-    virtErrors = virConnGetLastError( currWorkConnect );
-    if ( virtErrors!=NULL && virtErrors->code>0 ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-        virResetError(virtErrors);
-    } else sendGlobalErrors();
-}
-void StorageVolControlThread::sendGlobalErrors()
-{
-    virtErrors = virGetLastError();
-    if ( virtErrors!=NULL && virtErrors->code>0 )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-    virResetLastError();
 }

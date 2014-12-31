@@ -24,37 +24,34 @@ public:
     ~VirtNetControl();
 
 signals:
-    void netMsg(QString&);
+    void                 netMsg(QString&);
+    void                 addNewTask(virConnectPtr, QStringList&);
 
 private:
-    QString                 currConnName;
-    QSettings               settings;
-    VirtNetModel           *virtNetModel = NULL;
-    QTreeView              *virtNetList = NULL;
-    VirtNetToolBar         *toolBar;
+    QString              currConnName;
+    QSettings            settings;
+    VirtNetModel        *virtNetModel = NULL;
+    QTreeView           *virtNetList = NULL;
+    VirtNetToolBar      *toolBar;
 
-    virConnect             *currWorkConnect = NULL;
-    NetControlThread       *netControlThread = NULL;
+    virConnect          *currWorkConnect = NULL;
+    NetControlThread    *netControlThread = NULL;
 
 public slots:
-    bool getThreadState() const;
-    void stopProcessing();
-    bool setCurrentWorkConnect(virConnect*);
-    void setListHeader(QString&);
+    bool                 getThreadState() const;
+    void                 stopProcessing();
+    bool                 setCurrentWorkConnect(virConnect*);
+    void                 setListHeader(QString&);
 
 private slots:
-    void resultReceiver(NetActions, Result);
-    void msgRepeater(QString);
-    void changeDockVisibility();
+    void                 resultReceiver(Result);
+    void                 msgRepeater(QString);
+    void                 changeDockVisibility();
 
-    void networkClicked(const QPoint&);
-    void networkDoubleClicked(const QModelIndex&);
-    void execAction(const QStringList&);
-    void newVirtNetworkFromXML(const QStringList&);
-
-    // TODO: virNetworkUpdate()
-    // Update the definition of an existing network,
-    // either its live running state, its persistent configuration, or both.
+    void                 networkClicked(const QPoint&);
+    void                 networkDoubleClicked(const QModelIndex&);
+    void                 execAction(const QStringList&);
+    void                 newVirtNetworkFromXML(const QStringList&);
 };
 
 #endif // VIRTNET_CONTROL_H

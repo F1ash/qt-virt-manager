@@ -24,8 +24,9 @@ public:
     ~VirtStoragePoolControl();
 
 signals:
-    void storagePoolMsg(QString&);
-    void currPool(virConnect*, QString&, QString&);
+    void                       storagePoolMsg(QString&);
+    void                       currPool(virConnect*, QString&, QString&);
+    void                       addNewTask(virConnectPtr, QStringList&);
 
 private:
     QString                    currConnName;
@@ -44,7 +45,7 @@ public slots:
     void setListHeader(QString&);
 
 private slots:
-    void resultReceiver(StoragePoolActions, QStringList);
+    void resultReceiver(Actions, QStringList);
     void msgRepeater(QString);
     void changeDockVisibility();
 

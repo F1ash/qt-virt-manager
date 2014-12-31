@@ -1,48 +1,26 @@
 #ifndef STORAGE_POOL_CONTROL_THREAD_H
 #define STORAGE_POOL_CONTROL_THREAD_H
 
-#include <QThread>
-#include <QDir>
-#include <QTemporaryFile>
-#include <QStringList>
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
-#include <QDebug>
+#include "virt_objects/control_thread.h"
 
-enum StoragePoolActions {
-    GET_ALL_StPOOL,
-    CREATE_StPOOL,
-    DEFINE_StPOOL,
-    START_StPOOL,
-    DESTROY_StPOOL,
-    UNDEFINE_StPOOL,
-    CHANGE_StPOOL_AUTOSTART,
-    DELETE_StPOOL,
-    GET_StPOOL_XML_DESC,
-    StPOOL_EMPTY_ACTION
-};
-
-class StoragePoolControlThread : public QThread
+class StoragePoolControlThread : public ControlThread
 {
     Q_OBJECT
 public:
     explicit StoragePoolControlThread(QObject *parent = NULL);
 
 signals:
-    void                  errorMsg(QString);
-    void                  resultData(StoragePoolActions, QStringList);
+    void                  resultData(Actions, QStringList);
 
 private:
-    StoragePoolActions    action;
     QStringList           args;
     bool                  keep_alive;
     virConnect           *currWorkConnect = NULL;
     virErrorPtr           virtErrors;
 
 public slots:
-    bool                  setCurrentWorkConnect(virConnectPtr);
     void                  stop();
-    void                  execAction(StoragePoolActions, QStringList);
+    void                  execAction(Actions, QStringList);
 
 private slots:
     void                  run();
@@ -55,10 +33,6 @@ private slots:
     QStringList           changeAutoStartStoragePool();
     QStringList           deleteStoragePool();
     QStringList           getStoragePoolXMLDesc();
-
-    void                  sendConnErrors();
-    void                  sendGlobalErrors();
-
 };
 
 #endif // STORAGE_POOL_CONTROL_THREAD_H

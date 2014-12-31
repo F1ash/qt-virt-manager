@@ -50,51 +50,71 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
      * connection name
      * parameters
      */
-    //qDebug()<<_taskDesc<<"addNewTask";
+    qDebug()<<_taskDesc<<"addNewTask";
+    QString currConnName = _taskDesc.takeFirst();
+    int ACT = _taskDesc.takeFirst().toInt();
+    ++counter;
+    QString _number = QString("").sprintf("%08d", counter);
     if ( _taskDesc.count()>1 ) {
-        ++counter;
-        QString _number = QString("");
         QString _name = QString("#%1 %2 <%3>")
-                .arg(_number.sprintf("%08d", counter))
+                .arg(_number)
                 .arg(_taskDesc[0])
                 .arg(_taskDesc[1]);
         QListWidgetItem *_item = new QListWidgetItem();
         _item->setText(_name);
         _item->setIcon(QIcon::fromTheme("run"));
         taskList->addItem(_item);
-        QString _msg = _taskDesc.join(" ");
-        emit taskMsg(_msg);
     };
-    ControlThread *actThread = NULL;
+    ControlThread *cThread = NULL;
     if ( _taskDesc[0].contains("Domain") ) {
-        actThread = new DomControlThread(this);
+        threadPool->insert(
+                    _number,
+                    new DomControlThread(this));
+        cThread = static_cast<ControlThread*>(
+                    threadPool->value(_number));
     } else if ( _taskDesc[0].contains("Network") ) {
-
+        threadPool->insert(
+                    _number,
+                    new NetControlThread(this));
+        cThread = static_cast<ControlThread*>(
+                    threadPool->value(_number));
     } else if ( _taskDesc[0].contains("StoragePool") ) {
-
+        threadPool->insert(
+                    _number,
+                    new StoragePoolControlThread(this));
+        cThread = static_cast<ControlThread*>(
+                    threadPool->value(_number));
     } else if ( _taskDesc[0].contains("StorageVol") ) {
-
+        threadPool->insert(
+                    _number,
+                    new StorageVolControlThread(this));
+        cThread = static_cast<ControlThread*>(
+                    threadPool->value(_number));
     } else return;
     virConnectPtr currWorkConnect = _conn;
     int ret = virConnectRef(currWorkConnect);
     if ( ret<0 ) {
         virErrorPtr virtErrors = virGetLastError();
         if ( virtErrors!=NULL && virtErrors->code>0 ) {
-            /*
             QString time = QTime::currentTime().toString();
             QString msg = QString("%3 VirtError(%1) : %2")
                     .arg(virtErrors->code)
                     .arg(virtErrors->message)
                     .arg(time);
-            emit domMsg( msg );
-            */
             virResetError(virtErrors);
+            msgRepeater( msg );
         };
         currWorkConnect = NULL;
-    } else if ( NULL!=actThread ) {
-        actThread->setCurrentWorkConnect(currWorkConnect, counter);
-        actThread->execAction(GET_ALL_DOMAIN, QStringList());
-        qDebug()<<_taskDesc<<"addNewTask";
+    } else if ( NULL!=cThread ) {
+        _taskDesc.removeFirst();
+        qDebug()<<ACT<<_taskDesc;
+        connect(cThread, SIGNAL(errorMsg(QString)),
+                this, SLOT(msgRepeater(QString)));
+        connect(cThread, SIGNAL(resultData(Result)),
+                this, SLOT(taskResultReceiver(Result)));
+        cThread->setCurrentWorkConnect(
+                    currWorkConnect, counter, currConnName);
+        cThread->execAction(static_cast<Actions>(ACT), _taskDesc);
     };
 }
 
@@ -103,11 +123,19 @@ void TaskWareHouse::closeEvent(QCloseEvent *ev)
 {
     ev->ignore();
 }
+void TaskWareHouse::msgRepeater(QString msg)
+{
+    QString time = QTime::currentTime().toString();
+    //QString title = QString("Connect '%1'").arg(currConnName);
+    //QString errorMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
+    QString errorMsg = QString("<b>%1 :</b><br>%2").arg(time).arg(msg);
+    emit taskMsg(errorMsg);
+}
 void TaskWareHouse::taskStateReceiver(uint, bool)
 {
 
 }
-void TaskWareHouse::taskResultReceiver(uint, int, Result)
+void TaskWareHouse::taskResultReceiver(Result)
 {
 
 }
