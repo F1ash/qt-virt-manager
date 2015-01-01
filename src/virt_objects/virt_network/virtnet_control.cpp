@@ -145,8 +145,6 @@ void VirtNetControl::setListHeader(QString &connName)
     currConnName = connName;
     setEnabled(true);
 }
-
-/* private slots */
 void VirtNetControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.name<<"result";
@@ -198,6 +196,8 @@ void VirtNetControl::resultReceiver(Result data)
         };
     };
 }
+
+/* private slots */
 void VirtNetControl::msgRepeater(QString msg)
 {
     QString time = QTime::currentTime().toString();
@@ -250,16 +250,19 @@ void VirtNetControl::execAction(const QStringList &l)
             //netControlThread->execAction(START_NETWORK, args);
             args.prepend(l.first());
             args.prepend(QString::number(START_ENTITY));
+            args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="destroyVirtNetwork" ) {
             //netControlThread->execAction(DESTROY_NETWORK, args);
             args.prepend(l.first());
             args.prepend(QString::number(DESTROY_ENTITY));
+            args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="undefineVirtNetwork" ) {
             //netControlThread->execAction(UNDEFINE_NETWORK, args);
             args.prepend(l.first());
             args.prepend(QString::number(UNDEFINE_ENTITY));
+            args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="setAutostartVirtNetwork" ) {
             /* set the opposite value */
@@ -270,22 +273,26 @@ void VirtNetControl::execAction(const QStringList &l)
             //netControlThread->execAction(CHANGE_NET_AUTOSTART, args);
             args.prepend(l.first());
             args.prepend(QString::number(CHANGE_ENTITY_AUTOSTART));
+            args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="getVirtNetXMLDesc" ) {
             //netControlThread->execAction(GET_NET_XML_DESC, args);
             args.prepend(l.first());
             args.prepend(QString::number(GET_XML_DESCRIPTION));
+            args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="reloadVirtNetwork" ) {
             //netControlThread->execAction(GET_ALL_NETWORK, args);
             args.prepend(l.first());
             args.prepend(QString::number(GET_ALL_ENTITY));
+            args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         };
     } else if ( l.first()=="reloadVirtNetwork" ) {
         //netControlThread->execAction(GET_ALL_NETWORK, args);
         args.prepend(l.first());
         args.prepend(QString::number(GET_ALL_ENTITY));
+        args.prepend(currConnName);
         emit addNewTask(currWorkConnect, args);
     };
 }
@@ -322,6 +329,7 @@ void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
             };
             //netControlThread->execAction(act, args);
             args.prepend(QString::number(act));
+            args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         };
     };

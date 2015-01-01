@@ -51,9 +51,9 @@ public slots:
     virConnect*              getConnect() const;
     void                     execMigrateAction(virConnectPtr, QStringList&);
     void                     reloadDomainState();
+    void                     resultReceiver(Result);
 
 private slots:
-    void                     resultReceiver(Result);
     void                     msgRepeater(QString);
     void                     changeDockVisibility();
 

@@ -393,6 +393,8 @@ void MainWindow::initDockWidgets()
             this, SLOT(buildMigrateArgs(QStringList&)));
     connect(domainDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+    connect(taskWrHouse, SIGNAL(domResult(Result)),
+            domainDockContent, SLOT(resultReceiver(Result)));
 
     networkDock = new DockWidget(this);
     networkDock->setObjectName("networkDock");
@@ -427,6 +429,8 @@ void MainWindow::initDockWidgets()
             this, SLOT(writeToErrorLog(QString&)));
     connect(networkDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+    connect(taskWrHouse, SIGNAL(netResult(Result)),
+            networkDockContent, SLOT(resultReceiver(Result)));
 
     storageVolDock = new DockWidget(this);
     storageVolDock->setObjectName("storageVolDock");
@@ -460,6 +464,8 @@ void MainWindow::initDockWidgets()
             this, SLOT(writeToErrorLog(QString&)));
     connect(storageVolDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+    connect(taskWrHouse, SIGNAL(volResult(Result)),
+            storageVolDockContent, SLOT(resultReceiver(Result)));
 
     storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
@@ -495,6 +501,8 @@ void MainWindow::initDockWidgets()
             this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
     connect(storagePoolDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+    connect(taskWrHouse, SIGNAL(poolResult(Result)),
+            storagePoolDockContent, SLOT(resultReceiver(Result)));
 
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);

@@ -25,6 +25,10 @@ public:
 signals:
     void             visibilityChanged(bool);
     void             taskMsg(QString&);
+    void             domResult(Result);
+    void             netResult(Result);
+    void             poolResult(Result);
+    void             volResult(Result);
 
 private:
     uint             counter = 0;

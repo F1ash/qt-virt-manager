@@ -31,8 +31,10 @@ VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
     stVolControlThread = new StorageVolControlThread(this);
     connect(stVolControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
     connect(stVolControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    connect(stVolControlThread, SIGNAL(resultData(StorageVolActions, QStringList)), this, SLOT(resultReceiver(StorageVolActions, QStringList)));
-    connect(stVolControlThread, SIGNAL(errorMsg(QString)), this, SLOT(msgRepeater(QString)));
+    connect(stVolControlThread, SIGNAL(resultData(Result)),
+            this, SLOT(resultReceiver(Result)));
+    connect(stVolControlThread, SIGNAL(errorMsg(QString)),
+            this, SLOT(msgRepeater(QString)));
 }
 VirtStorageVolControl::~VirtStorageVolControl()
 {
@@ -50,8 +52,10 @@ VirtStorageVolControl::~VirtStorageVolControl()
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
     disconnect(stVolControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
     disconnect(stVolControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    disconnect(stVolControlThread, SIGNAL(resultData(StorageVolActions, QStringList)), this, SLOT(resultReceiver(StorageVolActions, QStringList)));
-    disconnect(stVolControlThread, SIGNAL(errorMsg(QString)), this, SLOT(msgRepeater(QString)));
+    disconnect(stVolControlThread, SIGNAL(resultData(Result)),
+               this, SLOT(resultReceiver(Result)));
+    disconnect(stVolControlThread, SIGNAL(errorMsg(QString)),
+               this, SLOT(msgRepeater(QString)));
 
     stopProcessing();
     stVolControlThread->terminate();
@@ -137,14 +141,12 @@ QString VirtStorageVolControl::getCurrentVolumeName() const
     if ( !index.isValid() ) return QString();
     return storageVolModel->DataList.at(index.row())->getName();
 }
-
-/* private slots */
-void VirtStorageVolControl::resultReceiver(Actions act, QStringList data)
+void VirtStorageVolControl::resultReceiver(Result data)
 {
     //qDebug()<<act<<data<<"result";
-    if ( act == GET_ALL_ENTITY ) {
+    if ( data.action == GET_ALL_ENTITY ) {
         int chain  = storageVolModel->columnCount();
-        int chains = data.count()/chain;
+        int chains = data.msg.count()/chain;
         if ( chains > storageVolModel->DataList.count() ) {
             int _diff = chains - storageVolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -161,40 +163,42 @@ void VirtStorageVolControl::resultReceiver(Actions act, QStringList data)
         };
         for (int i = 0; i<chains; i++) {
             for (int j = 0; j<chain; j++) {
-                storageVolModel->setData(storageVolModel->index(i,j), data.at(i*chain+j), Qt::EditRole);
+                storageVolModel->setData(storageVolModel->index(i,j), data.msg.at(i*chain+j), Qt::EditRole);
             };
         };
-    } else if ( act == CREATE_ENTITY ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
+    } else if ( data.action == CREATE_ENTITY ) {
+        if ( !data.msg.isEmpty() ) {
+            msgRepeater(data.msg.join(" "));
             stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
         };
-    } else if ( act == DELETE_ENTITY ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
+    } else if ( data.action == DELETE_ENTITY ) {
+        if ( !data.msg.isEmpty() ) {
+            msgRepeater(data.msg.join(" "));
             stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
         };
-    } else if ( act == DOWNLOAD_ENTITY ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
-    } else if ( act == UPLOAD_ENTITY ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
-    } else if ( act == RESIZE_ENTITY ) {
-        if ( !data.isEmpty() ) {
-            msgRepeater(data.join(" "));
+    } else if ( data.action == DOWNLOAD_ENTITY ) {
+        if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
+    } else if ( data.action == UPLOAD_ENTITY ) {
+        if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
+    } else if ( data.action == RESIZE_ENTITY ) {
+        if ( !data.msg.isEmpty() ) {
+            msgRepeater(data.msg.join(" "));
             stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
         };
-    } else if ( act == WIPE_ENTITY ) {
-        if ( !data.isEmpty() ) msgRepeater(data.join(" "));
-    } else if ( act == GET_XML_DESCRIPTION ) {
-        if ( !data.isEmpty() ) {
-            QString xml = data.first();
-            data.removeFirst();
-            data.append(QString("to <a href='%1'>%1</a>").arg(xml));
-            msgRepeater(data.join(" "));
+    } else if ( data.action == WIPE_ENTITY ) {
+        if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
+    } else if ( data.action == GET_XML_DESCRIPTION ) {
+        if ( !data.msg.isEmpty() ) {
+            QString xml = data.msg.first();
+            data.msg.removeFirst();
+            data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+            msgRepeater(data.msg.join(" "));
             QDesktopServices::openUrl(QUrl(xml));
         };
     };
 }
+
+/* private slots */
 void VirtStorageVolControl::msgRepeater(QString msg)
 {
     QString time = QTime::currentTime().toString();
@@ -239,23 +243,33 @@ void VirtStorageVolControl::storageVolDoubleClicked(const QModelIndex &index)
 }
 void VirtStorageVolControl::execAction(const QStringList &l)
 {
-    QStringList e = l;
-    emit addNewTask(currWorkConnect, e);
     QStringList args;
     QModelIndex idx = storageVolList->currentIndex();
     if ( idx.isValid() && storageVolModel->DataList.count() ) {
         QString storageVolName = storageVolModel->DataList.at(idx.row())->getName();
         args.append(storageVolName);
         if        ( l.first()=="getVirtStorageVolList" ) {
-            stVolControlThread->execAction(GET_ALL_ENTITY, args);
+            //stVolControlThread->execAction(GET_ALL_ENTITY, args);
+            args.prepend(l.first());
+            args.prepend(QString::number(START_ENTITY));
+            args.prepend(currConnName);
+            emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="deleteVirtStorageVol" ) {
-            stVolControlThread->execAction(DELETE_ENTITY, args);
+            //stVolControlThread->execAction(DELETE_ENTITY, args);
+            args.prepend(l.first());
+            args.prepend(QString::number(START_ENTITY));
+            args.prepend(currConnName);
+            emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="downloadVirtStorageVol" ) {
             QString path = QFileDialog::getSaveFileName(this, "Save to", "~");
             if ( !path.isEmpty() ) {
                 args.append(path);
                 args.append(storageVolModel->DataList.at(idx.row())->getCurrSize());
-                stVolControlThread->execAction(DOWNLOAD_ENTITY, args);
+                //stVolControlThread->execAction(DOWNLOAD_ENTITY, args);
+                args.prepend(l.first());
+                args.prepend(QString::number(START_ENTITY));
+                args.prepend(currConnName);
+                emit addNewTask(currWorkConnect, args);
             } else return;
         } else if ( l.first()=="resizeVirtStorageVol" ) {
             ResizeDialog *resizeDialog = new ResizeDialog(this,
@@ -268,27 +282,51 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             } else {
                 return;
             };
-            stVolControlThread->execAction(RESIZE_ENTITY, args);
+            //stVolControlThread->execAction(RESIZE_ENTITY, args);
+            args.prepend(l.first());
+            args.prepend(QString::number(START_ENTITY));
+            args.prepend(currConnName);
+            emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="uploadVirtStorageVol" ) {
             QString path = QFileDialog::getOpenFileName(this, "Read from", "~");
             if ( !path.isEmpty() ) {
                 args.append(path);
-                stVolControlThread->execAction(UPLOAD_ENTITY, args);
+                //stVolControlThread->execAction(UPLOAD_ENTITY, args);
+                args.prepend(l.first());
+                args.prepend(QString::number(START_ENTITY));
+                args.prepend(currConnName);
+                emit addNewTask(currWorkConnect, args);
             } else return;
         } else if ( l.first()=="wipeVirtStorageVol" ) {
             args.append( (l.count()>1) ? l.at(1) : "0" );
-            stVolControlThread->execAction(WIPE_ENTITY, args);
+            //stVolControlThread->execAction(WIPE_ENTITY, args);
+            args.prepend(l.first());
+            args.prepend(QString::number(START_ENTITY));
+            args.prepend(currConnName);
+            emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="getVirtStorageVolXMLDesc" ) {
-            stVolControlThread->execAction(GET_XML_DESCRIPTION, args);
+            //stVolControlThread->execAction(GET_XML_DESCRIPTION, args);
+            args.prepend(l.first());
+            args.prepend(QString::number(START_ENTITY));
+            args.prepend(currConnName);
+            emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
             stopProcessing();
         } else if ( l.first()=="reloadVirtStoragePool" ) {
-            stVolControlThread->execAction(GET_ALL_ENTITY, args);
+            //stVolControlThread->execAction(GET_ALL_ENTITY, args);
+            args.prepend(l.first());
+            args.prepend(QString::number(START_ENTITY));
+            args.prepend(currConnName);
+            emit addNewTask(currWorkConnect, args);
         };
     } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
         stopProcessing();
     } else if ( l.first()=="reloadVirtStoragePool" ) {
-        stVolControlThread->execAction(GET_ALL_ENTITY, args);
+        //stVolControlThread->execAction(GET_ALL_ENTITY, args);
+        args.prepend(l.first());
+        args.prepend(QString::number(START_ENTITY));
+        args.prepend(currConnName);
+        emit addNewTask(currWorkConnect, args);
     };
 }
 void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
@@ -326,7 +364,10 @@ void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
                 args.prepend(path);
                 if ( show ) QDesktopServices::openUrl(QUrl(path));
             };
-            stVolControlThread->execAction(act, args);
+            //stVolControlThread->execAction(act, args);
+            args.prepend(QString::number(act));
+            args.prepend(currConnName);
+            emit addNewTask(currWorkConnect, args);
         };
     };
 }

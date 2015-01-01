@@ -39,21 +39,20 @@ private:
     StoragePoolControlThread  *stPoolControlThread = NULL;
 
 public slots:
-    bool getThreadState() const;
-    void stopProcessing();
-    bool setCurrentWorkConnect(virConnect*);
-    void setListHeader(QString&);
+    bool                       getThreadState() const;
+    void                       stopProcessing();
+    bool                       setCurrentWorkConnect(virConnect*);
+    void                       setListHeader(QString&);
+    void                       resultReceiver(Result);
 
 private slots:
-    void resultReceiver(Actions, QStringList);
-    void msgRepeater(QString);
-    void changeDockVisibility();
+    void                       msgRepeater(QString);
+    void                       changeDockVisibility();
 
-    void storagePoolClicked(const QPoint&);
-    void storagePoolDoubleClicked(const QModelIndex&);
-    void execAction(const QStringList&);
-    void newVirtStoragePoolFromXML(const QStringList&);
-
+    void                       storagePoolClicked(const QPoint&);
+    void                       storagePoolDoubleClicked(const QModelIndex&);
+    void                       execAction(const QStringList&);
+    void                       newVirtStoragePoolFromXML(const QStringList&);
 };
 
 #endif // STORAGE_POOL_CONTROL_H

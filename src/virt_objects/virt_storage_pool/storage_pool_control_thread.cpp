@@ -19,42 +19,46 @@ void StoragePoolControlThread::execAction(Actions act, QStringList _args)
 /* private slots */
 void StoragePoolControlThread::run()
 {
-    QStringList result;
+    Result result;
     switch (action) {
     case GET_ALL_ENTITY :
-        result.append(getAllStoragePoolList());
+        result = getAllStoragePoolList();
         break;
     case CREATE_ENTITY :
-        result.append(createStoragePool());
+        result = createStoragePool();
         break;
     case DEFINE_ENTITY :
-        result.append(defineStoragePool());
+        result = defineStoragePool();
         break;
     case START_ENTITY :
-        result.append(startStoragePool());
+        result = startStoragePool();
         break;
     case DESTROY_ENTITY :
-        result.append(destroyStoragePool());
+        result = destroyStoragePool();
         break;
     case UNDEFINE_ENTITY :
-        result.append(undefineStoragePool());
+        result = undefineStoragePool();
         break;
     case CHANGE_ENTITY_AUTOSTART :
-        result.append(changeAutoStartStoragePool());
+        result = changeAutoStartStoragePool();
         break;
     case DELETE_ENTITY :
-        result.append(deleteStoragePool());
+        result = deleteStoragePool();
         break;
     case GET_XML_DESCRIPTION :
-        result.append(getStoragePoolXMLDesc());
+        result = getStoragePoolXMLDesc();
         break;
     default:
         break;
     };
-    emit resultData(action, result);
+    result.type   = "pool";
+    result.number = number;
+    result.action = action;
+    emit resultData(result);
 }
-QStringList StoragePoolControlThread::getAllStoragePoolList()
+Result StoragePoolControlThread::getAllStoragePoolList()
 {
+    Result result;
     QStringList storagePoolList;
     if ( currWorkConnect!=NULL && keep_alive ) {
         virStoragePoolPtr *storagePool;
@@ -64,7 +68,9 @@ QStringList StoragePoolControlThread::getAllStoragePoolList()
         if ( ret<0 ) {
             sendConnErrors();
             free(storagePool);
-            return storagePoolList;
+            result.result = false;
+            result.msg = storagePoolList;
+            return result;
         };
 
         int i = 0;
@@ -85,18 +91,25 @@ QStringList StoragePoolControlThread::getAllStoragePoolList()
             i++;
         };
         free(storagePool);
+    } else {
+        result.result = false;
+        result.msg = storagePoolList;
+        return result;
     };
-    return storagePoolList;
+    result.result = true;
+    result.msg = storagePoolList;
+    return result;
 }
-QStringList StoragePoolControlThread::createStoragePool()
+Result StoragePoolControlThread::createStoragePool()
 {
-    QStringList result;
+    Result result;
     QString path = args.first();
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
         emit errorMsg( QString("File \"%1\"\nnot opened.").arg(path) );
+        result.result = false;
         return result;
     };
     xmlData = f.readAll();
@@ -106,22 +119,26 @@ QStringList StoragePoolControlThread::createStoragePool()
     virStoragePoolPtr storagePool = virStoragePoolCreateXML(currWorkConnect, xmlData.data(), flags);
     if ( storagePool==NULL ) {
         sendConnErrors();
+        result.result = false;
         return result;
     };
-    result.append(QString("'<b>%1</b>' StoragePool from\n\"%2\"\nis Created.")
-                  .arg(virStoragePoolGetName(storagePool)).arg(path));
+    result.name = QString().fromUtf8( virStoragePoolGetName(storagePool) );
+    result.msg.append(QString("'<b>%1</b>' StoragePool from\n\"%2\"\nis Created.")
+                  .arg(result.name).arg(path));
     virStoragePoolFree(storagePool);
+    result.result = true;
     return result;
 }
-QStringList StoragePoolControlThread::defineStoragePool()
+Result StoragePoolControlThread::defineStoragePool()
 {
-    QStringList result;
+    Result result;
     QString path = args.first();
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
         emit errorMsg( QString("File \"%1\"\nnot opened.").arg(path) );
+        result.result = false;
         return result;
     };
     xmlData = f.readAll();
@@ -131,17 +148,20 @@ QStringList StoragePoolControlThread::defineStoragePool()
     virStoragePoolPtr storagePool = virStoragePoolDefineXML(currWorkConnect, xmlData.data(), flags);
     if ( storagePool==NULL ) {
         sendConnErrors();
+        result.result = false;
         return result;
     };
-    result.append(
+    result.name = QString().fromUtf8( virStoragePoolGetName(storagePool) );
+    result.msg.append(
                 QString("'<b>%1</b>' StoragePool from\n\"%2\"\nis Defined.")
-                .arg(virStoragePoolGetName(storagePool)).arg(path));
+                .arg(result.name).arg(path));
     virStoragePoolFree(storagePool);
+    result.result = true;
     return result;
 }
-QStringList StoragePoolControlThread::startStoragePool()
+Result StoragePoolControlThread::startStoragePool()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                          VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
@@ -154,13 +174,15 @@ QStringList StoragePoolControlThread::startStoragePool()
         if (!started) sendConnErrors();
         virStoragePoolFree(storagePool);
     } else sendConnErrors();
-    result.append(QString("'<b>%1</b>' StoragePool %2 Started.")
+    result.msg.append(QString("'<b>%1</b>' StoragePool %2 Started.")
                   .arg(name).arg((started)?"":"don't"));
+    result.name = name;
+    result.result = started;
     return result;
 }
-QStringList StoragePoolControlThread::destroyStoragePool()
+Result StoragePoolControlThread::destroyStoragePool()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     bool deleted = false;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
@@ -169,13 +191,15 @@ QStringList StoragePoolControlThread::destroyStoragePool()
         if (!deleted) sendConnErrors();
         virStoragePoolFree(storagePool);
     } else sendConnErrors();
-    result.append(QString("'<b>%1</b>' StoragePool %2 Destroyed.")
+    result.msg.append(QString("'<b>%1</b>' StoragePool %2 Destroyed.")
                   .arg(name).arg((deleted)?"":"don't"));
+    result.name = name;
+    result.result = deleted;
     return result;
 }
-QStringList StoragePoolControlThread::undefineStoragePool()
+Result StoragePoolControlThread::undefineStoragePool()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     bool deleted = false;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
@@ -184,23 +208,28 @@ QStringList StoragePoolControlThread::undefineStoragePool()
         if (!deleted) sendConnErrors();
         virStoragePoolFree(storagePool);
     } else sendConnErrors();
-    result.append(QString("'<b>%1</b>' StoragePool %2 Undefined.").arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' StoragePool %2 Undefined.")
+                  .arg(name).arg((deleted)?"":"don't"));
+    result.name = name;
+    result.result = deleted;
     return result;
 }
-QStringList StoragePoolControlThread::changeAutoStartStoragePool()
+Result StoragePoolControlThread::changeAutoStartStoragePool()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     int autostart;
     if ( args.count()<2 || args.at(1).isEmpty() ) {
-        result.append("Incorrect parameters.");
+        result.msg.append("Incorrect parameters.");
+        result.result = false;
         return result;
     } else {
         bool converted;
         int res = args.at(1).toInt(&converted);
         if (converted) autostart = (res) ? 1 : 0;
         else {
-            result.append("Incorrect parameters.");
+            result.msg.append("Incorrect parameters.");
+            result.result = false;
             return result;
         };
     };
@@ -211,17 +240,20 @@ QStringList StoragePoolControlThread::changeAutoStartStoragePool()
         if (!set) sendConnErrors();
         virStoragePoolFree(storagePool);
     } else sendConnErrors();
-    result.append(QString("'<b>%1</b>' StoragePool autostart %2 Set.")
+    result.msg.append(QString("'<b>%1</b>' StoragePool autostart %2 Set.")
                   .arg(name).arg((set)?"":"don't"));
+    result.name = name;
+    result.result = set;
     return result;
 }
-QStringList StoragePoolControlThread::deleteStoragePool()
+Result StoragePoolControlThread::deleteStoragePool()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     uint flags = VIR_STORAGE_POOL_DELETE_NORMAL;
     if ( args.count()<2 || args.at(1).isEmpty() ) {
-        result.append("Incorrect parameters.");
+        result.msg.append("Incorrect parameters.");
+        result.result = false;
         return result;
     } else {
         bool converted;
@@ -231,7 +263,8 @@ QStringList StoragePoolControlThread::deleteStoragePool()
                         VIR_STORAGE_POOL_DELETE_ZEROED :
                         VIR_STORAGE_POOL_DELETE_NORMAL;
         else {
-            result.append("Incorrect parameters.");
+            result.msg.append("Incorrect parameters.");
+            result.result = false;
             return result;
         };
     };
@@ -242,13 +275,15 @@ QStringList StoragePoolControlThread::deleteStoragePool()
         if (!deleted) sendConnErrors();
         virStoragePoolFree(storagePool);
     } else sendConnErrors();
-    result.append(QString("'<b>%1</b>' StoragePool %2 Deleted.")
+    result.msg.append(QString("'<b>%1</b>' StoragePool %2 Deleted.")
                   .arg(name).arg((deleted)?"":"don't"));
+    result.name = name;
+    result.result = deleted;
     return result;
 }
-QStringList StoragePoolControlThread::getStoragePoolXMLDesc()
+Result StoragePoolControlThread::getStoragePoolXMLDesc()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     bool read = false;
     char *Returns = NULL;
@@ -265,10 +300,12 @@ QStringList StoragePoolControlThread::getStoragePoolXMLDesc()
                       .arg(QDir::tempPath()).arg(QDir::separator()));
     read = f.open();
     if (read) f.write(Returns);
-    result.append(f.fileName());
+    result.msg.append(f.fileName());
     f.close();
     free(Returns);
-    result.append(QString("'<b>%1</b>' StoragePool %2 XML'ed")
+    result.msg.append(QString("'<b>%1</b>' StoragePool %2 XML'ed")
                   .arg(name).arg((read)?"":"don't"));
+    result.name = name;
+    result.result = read;
     return result;
 }

@@ -8,12 +8,10 @@ DomControlThread::DomControlThread(QObject *parent) :
 /* public slots */
 void DomControlThread::execAction(Actions act, QStringList _args)
 {
-    qDebug()<<"called";
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;
         start();
-        qDebug()<<"runned";
     };
 }
 void DomControlThread::setMigrateConnect(virConnectPtr conn)

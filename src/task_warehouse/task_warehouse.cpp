@@ -55,16 +55,16 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
     int ACT = _taskDesc.takeFirst().toInt();
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
-    if ( _taskDesc.count()>1 ) {
+    if ( _taskDesc.count()>0 ) {
         QString _name = QString("#%1 %2 <%3>")
                 .arg(_number)
                 .arg(_taskDesc[0])
-                .arg(_taskDesc[1]);
+                .arg( (_taskDesc.count()>1)? _taskDesc[1]:".");
         QListWidgetItem *_item = new QListWidgetItem();
         _item->setText(_name);
         _item->setIcon(QIcon::fromTheme("run"));
         taskList->addItem(_item);
-    };
+    } else return;
     ControlThread *cThread = NULL;
     if ( _taskDesc[0].contains("Domain") ) {
         threadPool->insert(
@@ -107,7 +107,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
         currWorkConnect = NULL;
     } else if ( NULL!=cThread ) {
         _taskDesc.removeFirst();
-        qDebug()<<ACT<<_taskDesc;
+        //qDebug()<<ACT<<_taskDesc;
         connect(cThread, SIGNAL(errorMsg(QString)),
                 this, SLOT(msgRepeater(QString)));
         connect(cThread, SIGNAL(resultData(Result)),
@@ -135,7 +135,15 @@ void TaskWareHouse::taskStateReceiver(uint, bool)
 {
 
 }
-void TaskWareHouse::taskResultReceiver(Result)
+void TaskWareHouse::taskResultReceiver(Result data)
 {
-
+    if ( data.type=="domain" ) {
+        emit domResult(data);
+    } else if ( data.type=="network" ) {
+        emit netResult(data);
+    } else if ( data.type=="pool" ) {
+        emit poolResult(data);
+    } else if ( data.type=="volume" ) {
+        emit volResult(data);
+    };
 }

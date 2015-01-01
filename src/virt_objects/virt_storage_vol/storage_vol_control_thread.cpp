@@ -46,40 +46,43 @@ void StorageVolControlThread::execAction(Actions act, QStringList _args)
 /* private slots */
 void StorageVolControlThread::run()
 {
-    QStringList result;
+    Result result;
     switch (action) {
     case GET_ALL_ENTITY :
-        result.append(getAllStorageVolList());
+        result = getAllStorageVolList();
         break;
     case CREATE_ENTITY:
-        result.append(createStorageVol());
+        result = createStorageVol();
         break;
     case DELETE_ENTITY :
-        result.append(deleteStorageVol());
+        result = deleteStorageVol();
         break;
     case DOWNLOAD_ENTITY :
-        result.append(downloadStorageVol());
+        result = downloadStorageVol();
         break;
     case UPLOAD_ENTITY :
-        result.append(uploadStorageVol());
+        result = uploadStorageVol();
         break;
     case RESIZE_ENTITY :
-        result.append(resizeStorageVol());
+        result = resizeStorageVol();
         break;
     case WIPE_ENTITY :
-        result.append(wipeStorageVol());
+        result = wipeStorageVol();
         break;
     case GET_XML_DESCRIPTION :
-        result.append(getStorageVolXMLDesc());
+        result = getStorageVolXMLDesc();
         break;
     default:
         break;
     };
-    //qDebug()<<result<<"stVolThread res";
-    emit resultData(action, result);
+    result.type   = "volume";
+    result.number = number;
+    result.action = action;
+    emit resultData(result);
 }
-QStringList StorageVolControlThread::getAllStorageVolList()
+Result StorageVolControlThread::getAllStorageVolList()
 {
+    Result result;
     QStringList storageVolList;
     if ( currStoragePool==NULL ) {
         if ( currWorkConnect!=NULL && keep_alive ) {
@@ -93,7 +96,9 @@ QStringList StorageVolControlThread::getAllStorageVolList()
         int ret = virStoragePoolListAllVolumes( currStoragePool, &storageVol, flags );
         if ( ret<0 ) {
             sendConnErrors();
-            return storageVolList;
+            result.result = false;
+            result.msg = storageVolList;
+            return result;
         };
 
         int i = 0;
@@ -139,33 +144,42 @@ QStringList StorageVolControlThread::getAllStorageVolList()
         };
         free(storageVol);
     };
-    return storageVolList;
+    result.result = true;
+    result.msg = storageVolList;
+    return result;
 }
-QStringList StorageVolControlThread::createStorageVol()
+Result StorageVolControlThread::createStorageVol()
 {
-    QStringList result;
+    Result result;
     QString path = args.first();
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
         emit errorMsg( QString("File \"%1\"\nnot opened.").arg(path) );
+        result.result = false;
         return result;
     };
     xmlData = f.readAll();
     f.close();
-    virStorageVolPtr storageVol = virStorageVolCreateXML(currStoragePool, xmlData.data(), VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA);
+    virStorageVolPtr storageVol = virStorageVolCreateXML(
+                currStoragePool, xmlData.data(), VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA);
     if ( storageVol==NULL ) {
         sendConnErrors();
+        result.result = false;
         return result;
     };
-    result.append(QString("'<b>%1</b>' StorageVol from\n\"%2\"\nis created.").arg(virStorageVolGetName(storageVol)).arg(path));
+    result.name = QString().fromUtf8( virStorageVolGetName(storageVol) );
+    result.msg
+            .append(QString("'<b>%1</b>' StorageVol from\n\"%2\"\nis created.")
+                    .arg(result.name).arg(path));
     virStorageVolFree(storageVol);
+    result.result = true;
     return result;
 }
-QStringList StorageVolControlThread::deleteStorageVol()
+Result StorageVolControlThread::deleteStorageVol()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
 
     // flags: extra flags; not used yet, so callers should always pass 0
@@ -177,12 +191,15 @@ QStringList StorageVolControlThread::deleteStorageVol()
         if (!deleted) sendConnErrors();
         virStorageVolFree(storageVol);
     } else sendConnErrors();
-    result.append(QString("'<b>%1</b>' StorageVol %2 Deleted.").arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' StorageVol %2 Deleted.")
+                      .arg(name).arg((deleted)?"":"don't"));
+    result.name = name;
+    result.result = deleted;
     return result;
 }
-QStringList StorageVolControlThread::downloadStorageVol()
+Result StorageVolControlThread::downloadStorageVol()
 {
-    QStringList result;
+    Result result;
     QString name, path;
     name = args.first();
     args.removeFirst();
@@ -228,15 +245,17 @@ QStringList StorageVolControlThread::downloadStorageVol()
     } else sendConnErrors();
     if ( stream!=NULL ) virStreamFree(stream);
     f->close();
-    delete f; f = 0;
-    result.append(QString("'<b>%1</b>' StorageVol %2 Downloaded into %3 (%4).")
+    delete f; f = NULL;
+    result.msg.append(QString("'<b>%1</b>' StorageVol %2 Downloaded into %3 (%4).")
                   .arg(name).arg((downloaded)?"":"don't")
                   .arg(path).arg(length));
+    result.name = name;
+    result.result = downloaded;
     return result;
 }
-QStringList StorageVolControlThread::resizeStorageVol()
+Result StorageVolControlThread::resizeStorageVol()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
     args.removeFirst();
 
@@ -258,13 +277,15 @@ QStringList StorageVolControlThread::resizeStorageVol()
         } else resized = true;
         virStorageVolFree(storageVol);
     } else sendConnErrors();
-    result.append(QString("'<b>%1</b>' StorageVol %2 Resized to %3 (bytes).")
+    result.msg.append(QString("'<b>%1</b>' StorageVol %2 Resized to %3 (bytes).")
                   .arg(name).arg((resized)?"":"don't").arg(capacity));
+    result.name = name;
+    result.result = resized;
     return result;
 }
-QStringList StorageVolControlThread::uploadStorageVol()
+Result StorageVolControlThread::uploadStorageVol()
 {
-    QStringList result;
+    Result result;
     QString name, path;
     name = args.first();
     args.removeFirst();
@@ -315,14 +336,16 @@ QStringList StorageVolControlThread::uploadStorageVol()
     if ( stream!=NULL ) virStreamFree(stream);
     f->close();
     delete f; f = 0;
-    result.append(QString("'<b>%1</b>' StorageVol %2 Uploaded from %3 (%4).")
+    result.msg.append(QString("'<b>%1</b>' StorageVol %2 Uploaded from %3 (%4).")
                   .arg(name).arg((uploaded)?"":"don't")
                   .arg(path).arg(length));
+    result.name = name;
+    result.result = uploaded;
     return result;
 }
-QStringList StorageVolControlThread::wipeStorageVol()
+Result StorageVolControlThread::wipeStorageVol()
 {
-    QStringList result;
+    Result result;
     QString name, algorithm;
     name = args.first();
     args.removeFirst();
@@ -372,12 +395,15 @@ QStringList StorageVolControlThread::wipeStorageVol()
         algorithm.append("NONE");
         break;
     };
-    result.append(QString("'<b>%1</b>' StorageVol %2 Wiped with %3 algorithm.").arg(name).arg((wiped)?"":"don't").arg(algorithm));
+    result.msg.append(QString("'<b>%1</b>' StorageVol %2 Wiped with %3 algorithm.")
+                  .arg(name).arg((wiped)?"":"don't").arg(algorithm));
+    result.name = name;
+    result.result = wiped;
     return result;
 }
-QStringList StorageVolControlThread::getStorageVolXMLDesc()
+Result StorageVolControlThread::getStorageVolXMLDesc()
 {
-    QStringList result;
+    Result result;
     QString name = args.first();
 
     bool read = false;
@@ -393,12 +419,16 @@ QStringList StorageVolControlThread::getStorageVolXMLDesc()
     } else sendConnErrors();
     QTemporaryFile f;
     f.setAutoRemove(false);
-    f.setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml").arg(QDir::tempPath()).arg(QDir::separator()));
+    f.setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml")
+                      .arg(QDir::tempPath()).arg(QDir::separator()));
     read = f.open();
     if (read) f.write(Returns);
-    result.append(f.fileName());
+    result.msg.append(f.fileName());
     f.close();
     free(Returns);
-    result.append(QString("'<b>%1</b>' StorageVol %2 XML'ed").arg(name).arg((read)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' StorageVol %2 XML'ed")
+                  .arg(name).arg((read)?"":"don't"));
+    result.name = name;
+    result.result = read;
     return result;
 }

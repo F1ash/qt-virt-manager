@@ -42,9 +42,9 @@ public slots:
     void                 stopProcessing();
     bool                 setCurrentWorkConnect(virConnect*);
     void                 setListHeader(QString&);
+    void                 resultReceiver(Result);
 
 private slots:
-    void                 resultReceiver(Result);
     void                 msgRepeater(QString);
     void                 changeDockVisibility();
 

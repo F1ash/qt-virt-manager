@@ -157,8 +157,6 @@ void VirtDomainControl::reloadDomainState()
 {
     domControlThread->execAction(GET_ALL_ENTITY, QStringList());
 }
-
-/* private slots */
 void VirtDomainControl::resultReceiver(Result data)
 {
     //qDebug()<<data.number<<data.action<<data.msg<<"result";
@@ -242,6 +240,8 @@ void VirtDomainControl::resultReceiver(Result data)
         };
     };
 }
+
+/* private slots */
 void VirtDomainControl::msgRepeater(QString msg)
 {
     QString time = QTime::currentTime().toString();

@@ -44,9 +44,9 @@ public slots:
     void stopProcessing();
     bool setCurrentStoragePool(virConnect*, QString&, QString&);
     QString getCurrentVolumeName() const;
+    void resultReceiver(Result);
 
 private slots:
-    void resultReceiver(Actions, QStringList);
     void msgRepeater(QString);
     void changeDockVisibility();
 

@@ -10,13 +10,8 @@ public:
     explicit StoragePoolControlThread(QObject *parent = NULL);
 
 signals:
-    void                  resultData(Actions, QStringList);
 
 private:
-    QStringList           args;
-    bool                  keep_alive;
-    virConnect           *currWorkConnect = NULL;
-    virErrorPtr           virtErrors;
 
 public slots:
     void                  stop();
@@ -24,15 +19,15 @@ public slots:
 
 private slots:
     void                  run();
-    QStringList           getAllStoragePoolList();
-    QStringList           createStoragePool();
-    QStringList           defineStoragePool();
-    QStringList           startStoragePool();
-    QStringList           destroyStoragePool();
-    QStringList           undefineStoragePool();
-    QStringList           changeAutoStartStoragePool();
-    QStringList           deleteStoragePool();
-    QStringList           getStoragePoolXMLDesc();
+    Result                getAllStoragePoolList();
+    Result                createStoragePool();
+    Result                defineStoragePool();
+    Result                startStoragePool();
+    Result                destroyStoragePool();
+    Result                undefineStoragePool();
+    Result                changeAutoStartStoragePool();
+    Result                deleteStoragePool();
+    Result                getStoragePoolXMLDesc();
 };
 
 #endif // STORAGE_POOL_CONTROL_THREAD_H

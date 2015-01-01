@@ -12,15 +12,10 @@ public:
     explicit StorageVolControlThread(QObject *parent = NULL);
 
 signals:
-    void                  resultData(Actions, QStringList);
 
 private:
-    QStringList           args;
     QString               currPoolName;
-    bool                  keep_alive;
-    virConnect           *currWorkConnect = NULL;
     virStoragePool       *currStoragePool = NULL;
-    virErrorPtr           virtErrors;
 
 public slots:
     bool                  setCurrentStoragePoolName(virConnect*, QString&);
@@ -29,15 +24,14 @@ public slots:
 
 private slots:
     void                  run();
-    QStringList           getAllStorageVolList();
-    QStringList           createStorageVol();
-    QStringList           downloadStorageVol();
-    QStringList           deleteStorageVol();
-    QStringList           uploadStorageVol();
-    QStringList           resizeStorageVol();
-    QStringList           wipeStorageVol();
-    QStringList           getStorageVolXMLDesc();
-
+    Result                getAllStorageVolList();
+    Result                createStorageVol();
+    Result                downloadStorageVol();
+    Result                deleteStorageVol();
+    Result                uploadStorageVol();
+    Result                resizeStorageVol();
+    Result                wipeStorageVol();
+    Result                getStorageVolXMLDesc();
 };
 
 #endif // STORAGE_VOL_CONTROL_THREAD_H
