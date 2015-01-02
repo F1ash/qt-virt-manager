@@ -45,7 +45,6 @@ public slots:
 private slots:
     void             closeEvent(QCloseEvent*);
     void             msgRepeater(QString);
-    void             taskStateReceiver(uint, bool);
     void             taskResultReceiver(Result);
 };
 

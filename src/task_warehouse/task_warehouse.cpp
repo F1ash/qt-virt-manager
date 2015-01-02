@@ -50,7 +50,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
      * connection name
      * parameters
      */
-    qDebug()<<_taskDesc<<"addNewTask";
+    //qDebug()<<_taskDesc<<"addNewTask";
     QString currConnName = _taskDesc.takeFirst();
     int ACT = _taskDesc.takeFirst().toInt();
     ++counter;
@@ -62,35 +62,34 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
                 .arg( (_taskDesc.count()>1)? _taskDesc[1]:".");
         QListWidgetItem *_item = new QListWidgetItem();
         _item->setText(_name);
-        _item->setIcon(QIcon::fromTheme("run"));
+        _item->setIcon(QIcon::fromTheme("ledlightgreen"));
         taskList->addItem(_item);
     } else return;
-    ControlThread *cThread = NULL;
     if ( _taskDesc[0].contains("Domain") ) {
         threadPool->insert(
                     _number,
                     new DomControlThread(this));
-        cThread = static_cast<ControlThread*>(
-                    threadPool->value(_number));
     } else if ( _taskDesc[0].contains("Network") ) {
         threadPool->insert(
                     _number,
                     new NetControlThread(this));
-        cThread = static_cast<ControlThread*>(
-                    threadPool->value(_number));
     } else if ( _taskDesc[0].contains("StoragePool") ) {
         threadPool->insert(
                     _number,
                     new StoragePoolControlThread(this));
-        cThread = static_cast<ControlThread*>(
-                    threadPool->value(_number));
     } else if ( _taskDesc[0].contains("StorageVol") ) {
         threadPool->insert(
                     _number,
                     new StorageVolControlThread(this));
-        cThread = static_cast<ControlThread*>(
+        StorageVolControlThread *cThread =
+                static_cast<StorageVolControlThread*>(
                     threadPool->value(_number));
+        QString poolname = _taskDesc.last();
+        cThread->setCurrentStoragePoolName(
+                    _conn, poolname);
     } else return;
+    ControlThread *cThread = static_cast<ControlThread*>(
+                threadPool->value(_number));
     virConnectPtr currWorkConnect = _conn;
     int ret = virConnectRef(currWorkConnect);
     if ( ret<0 ) {
@@ -131,10 +130,6 @@ void TaskWareHouse::msgRepeater(QString msg)
     QString errorMsg = QString("<b>%1 :</b><br>%2").arg(time).arg(msg);
     emit taskMsg(errorMsg);
 }
-void TaskWareHouse::taskStateReceiver(uint, bool)
-{
-
-}
 void TaskWareHouse::taskResultReceiver(Result data)
 {
     if ( data.type=="domain" ) {
@@ -145,5 +140,30 @@ void TaskWareHouse::taskResultReceiver(Result data)
         emit poolResult(data);
     } else if ( data.type=="volume" ) {
         emit volResult(data);
+    } else return;
+    QString _number = QString("").sprintf("%08d", data.number);
+    ControlThread *cThread = static_cast<ControlThread*>(
+                threadPool->value(_number));
+    if ( NULL!=cThread ) {
+        disconnect(cThread, SIGNAL(errorMsg(QString)),
+                   this, SLOT(msgRepeater(QString)));
+        disconnect(cThread, SIGNAL(resultData(Result)),
+                   this, SLOT(taskResultReceiver(Result)));
+        delete cThread;
+        cThread = NULL;
+        threadPool->remove(_number);
+    };
+    QString stateIcon;
+    if ( data.result ) {
+        stateIcon.append("leddarkblue");
+    } else {
+        stateIcon.append("ledlightred");
+    };
+    QList<QListWidgetItem*> _list = taskList->findItems(
+                _number.prepend("#"), Qt::MatchStartsWith);
+    if ( _list.count()>0 ) {
+        _list.at(0)->setIcon(QIcon::fromTheme(stateIcon));
+        // set result data to taskList item
+        taskList->scrollToItem(_list.at(0));
     };
 }

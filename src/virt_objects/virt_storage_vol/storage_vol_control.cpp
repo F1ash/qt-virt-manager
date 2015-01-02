@@ -251,14 +251,17 @@ void VirtStorageVolControl::execAction(const QStringList &l)
         if        ( l.first()=="getVirtStorageVolList" ) {
             //stVolControlThread->execAction(GET_ALL_ENTITY, args);
             args.prepend(l.first());
-            args.prepend(QString::number(START_ENTITY));
+            args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
+            // append current Pool name in same places
+            args.append(currPoolName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="deleteVirtStorageVol" ) {
             //stVolControlThread->execAction(DELETE_ENTITY, args);
             args.prepend(l.first());
-            args.prepend(QString::number(START_ENTITY));
+            args.prepend(QString::number(DELETE_ENTITY));
             args.prepend(currConnName);
+            args.append(currPoolName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="downloadVirtStorageVol" ) {
             QString path = QFileDialog::getSaveFileName(this, "Save to", "~");
@@ -267,8 +270,9 @@ void VirtStorageVolControl::execAction(const QStringList &l)
                 args.append(storageVolModel->DataList.at(idx.row())->getCurrSize());
                 //stVolControlThread->execAction(DOWNLOAD_ENTITY, args);
                 args.prepend(l.first());
-                args.prepend(QString::number(START_ENTITY));
+                args.prepend(QString::number(DOWNLOAD_ENTITY));
                 args.prepend(currConnName);
+                args.append(currPoolName);
                 emit addNewTask(currWorkConnect, args);
             } else return;
         } else if ( l.first()=="resizeVirtStorageVol" ) {
@@ -284,8 +288,9 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             };
             //stVolControlThread->execAction(RESIZE_ENTITY, args);
             args.prepend(l.first());
-            args.prepend(QString::number(START_ENTITY));
+            args.prepend(QString::number(RESIZE_ENTITY));
             args.prepend(currConnName);
+            args.append(currPoolName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="uploadVirtStorageVol" ) {
             QString path = QFileDialog::getOpenFileName(this, "Read from", "~");
@@ -293,30 +298,34 @@ void VirtStorageVolControl::execAction(const QStringList &l)
                 args.append(path);
                 //stVolControlThread->execAction(UPLOAD_ENTITY, args);
                 args.prepend(l.first());
-                args.prepend(QString::number(START_ENTITY));
+                args.prepend(QString::number(UPLOAD_ENTITY));
                 args.prepend(currConnName);
+                args.append(currPoolName);
                 emit addNewTask(currWorkConnect, args);
             } else return;
         } else if ( l.first()=="wipeVirtStorageVol" ) {
             args.append( (l.count()>1) ? l.at(1) : "0" );
             //stVolControlThread->execAction(WIPE_ENTITY, args);
             args.prepend(l.first());
-            args.prepend(QString::number(START_ENTITY));
+            args.prepend(QString::number(WIPE_ENTITY));
             args.prepend(currConnName);
+            args.append(currPoolName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="getVirtStorageVolXMLDesc" ) {
             //stVolControlThread->execAction(GET_XML_DESCRIPTION, args);
             args.prepend(l.first());
-            args.prepend(QString::number(START_ENTITY));
+            args.prepend(QString::number(GET_XML_DESCRIPTION));
             args.prepend(currConnName);
+            args.append(currPoolName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
             stopProcessing();
         } else if ( l.first()=="reloadVirtStoragePool" ) {
             //stVolControlThread->execAction(GET_ALL_ENTITY, args);
             args.prepend(l.first());
-            args.prepend(QString::number(START_ENTITY));
+            args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
+            args.append(currPoolName);
             emit addNewTask(currWorkConnect, args);
         };
     } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
@@ -324,8 +333,9 @@ void VirtStorageVolControl::execAction(const QStringList &l)
     } else if ( l.first()=="reloadVirtStoragePool" ) {
         //stVolControlThread->execAction(GET_ALL_ENTITY, args);
         args.prepend(l.first());
-        args.prepend(QString::number(START_ENTITY));
+        args.prepend(QString::number(GET_ALL_ENTITY));
         args.prepend(currConnName);
+        args.append(currPoolName);
         emit addNewTask(currWorkConnect, args);
     };
 }
@@ -367,6 +377,7 @@ void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
             //stVolControlThread->execAction(act, args);
             args.prepend(QString::number(act));
             args.prepend(currConnName);
+            args.append(currPoolName);
             emit addNewTask(currWorkConnect, args);
         };
     };

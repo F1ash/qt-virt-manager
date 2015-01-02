@@ -15,6 +15,9 @@ bool StorageVolControlThread::setCurrentStoragePoolName(virConnect *conn, QStrin
         virStoragePoolFree(currStoragePool);
         currStoragePool = NULL;
     };
+    currStoragePool = virStoragePoolLookupByName(
+                currWorkConnect, currPoolName.toUtf8().data());
+    if ( NULL==currStoragePool ) sendConnErrors();
     //qDebug()<<"stVol_thread (setPoolData)\n\tConnect\t\t"<<currWorkConnect
     //        <<"\n\tPool\t\t"<<currStoragePool
     //        <<"\n\tName\t\t"<<currPoolName;
@@ -264,7 +267,8 @@ Result StorageVolControlThread::resizeStorageVol()
         capacity = args.first().toULongLong();
     };
     bool resized = false;
-    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
+    virStorageVol *storageVol = virStorageVolLookupByName(
+                currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         int ret = virStorageVolResize(storageVol, capacity,
                                       VIR_STORAGE_VOL_RESIZE_ALLOCATE);
