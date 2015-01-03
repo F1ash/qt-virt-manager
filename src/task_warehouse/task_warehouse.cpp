@@ -1,5 +1,17 @@
 #include "task_warehouse.h"
 
+#define LIST_STYLE QString("\
+QListWidget::item {\
+    border-style: outset;\
+    border-width: 2px;\
+    border-radius: 10px;\
+    border-color: beige;\
+    font: bold 14px;\
+    min-width: 10em;\
+    padding: 6px;\
+}\
+")
+
 TaskWareHouse::TaskWareHouse(QWidget *parent) :
     QMainWindow(parent)
 {
@@ -18,6 +30,9 @@ TaskWareHouse::TaskWareHouse(QWidget *parent) :
     setVisible(settings.value("Visible", false).toBool());
     settings.endGroup();
     taskList = new QListWidget(this);
+    taskList->setStyleSheet(LIST_STYLE);
+    connect(taskList, SIGNAL(clicked(QModelIndex)),
+            taskList, SLOT(clearSelection()));
     setCentralWidget(taskList);
     threadPool = new THREAD_POOL;
 }
@@ -55,7 +70,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
     int ACT = _taskDesc.takeFirst().toInt();
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
-    if ( _taskDesc.count()>0 ) {
+    if ( _taskDesc.count()>0 && !_taskDesc[0].startsWith("reload") ) {
         QString _name = QString("#%1 %2 <%3>")
                 .arg(_number)
                 .arg(_taskDesc[0])
@@ -63,6 +78,18 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
         QListWidgetItem *_item = new QListWidgetItem();
         _item->setText(_name);
         _item->setIcon(QIcon::fromTheme("ledlightgreen"));
+        QTime _time = QTime::currentTime();
+        QMap<QString, QVariant> itemData;
+        itemData.insert("Start", QString("%1:%2:%3:%4")
+                        .arg(QString("").sprintf("%02d", _time.hour()))
+                        .arg(QString("").sprintf("%02d", _time.minute()))
+                        .arg(QString("").sprintf("%02d", _time.second()))
+                        .arg(QString("").sprintf("%03d", _time.msec())));
+        itemData.insert("End", "-");
+        itemData.insert("Result", "Processing");
+        itemData.insert("Message", "-");
+        _item->setData(Qt::UserRole, itemData);
+        setNewTooltip(_item);
         taskList->addItem(_item);
     } else return;
     if ( _taskDesc[0].contains("Domain") ) {
@@ -164,6 +191,35 @@ void TaskWareHouse::taskResultReceiver(Result data)
     if ( _list.count()>0 ) {
         _list.at(0)->setIcon(QIcon::fromTheme(stateIcon));
         // set result data to taskList item
+        QMap<QString, QVariant> _data = _list.at(0)->data(Qt::UserRole).toMap();
+        QTime _time = QTime::currentTime();
+        _data.insert("End", QString("%1:%2:%3:%4")
+                     .arg(QString("").sprintf("%02d", _time.hour()))
+                     .arg(QString("").sprintf("%02d", _time.minute()))
+                     .arg(QString("").sprintf("%02d", _time.second()))
+                     .arg(QString("").sprintf("%03d", _time.msec())));
+        _data.insert("Result", (data.result)? "Success":"Fail");
+        _data.insert("Message", data.msg.join("\n"));
+        _list.at(0)->setData(Qt::UserRole, _data);
         taskList->scrollToItem(_list.at(0));
+        setNewTooltip(_list.at(0));
     };
+}
+void TaskWareHouse::setNewTooltip(QListWidgetItem *_item)
+{
+    QString _toolTip;
+    QVariant data = _item->data(Qt::UserRole);
+    _toolTip.append(
+                QString("Time: %1 - %2")
+                .arg(data.toMap().value("Start").toString())
+                .arg(data.toMap().value("End").toString()));
+    _toolTip.append("\n");
+    _toolTip.append(
+                QString("Result: %1")
+                .arg(data.toMap().value("Result").toString()));
+    _toolTip.append("\n");
+    _toolTip.append(
+                QString("Message: %1")
+                .arg(data.toMap().value("Message").toString()));
+    _item->setToolTip(_toolTip);
 }

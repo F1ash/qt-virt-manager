@@ -46,6 +46,7 @@ private slots:
     void             closeEvent(QCloseEvent*);
     void             msgRepeater(QString);
     void             taskResultReceiver(Result);
+    void             setNewTooltip(QListWidgetItem*);
 };
 
 #endif // TASK_WAREHOUSE_H
