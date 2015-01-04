@@ -91,7 +91,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
         _item->setData(Qt::UserRole, itemData);
         setNewTooltip(_item);
         taskList->addItem(_item);
-    } else return;
+    } else if ( _taskDesc.count()==0 ) return;
     if ( _taskDesc[0].contains("Domain") ) {
         threadPool->insert(
                     _number,

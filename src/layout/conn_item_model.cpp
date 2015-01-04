@@ -5,6 +5,10 @@ ConnItemModel::ConnItemModel(QObject *parent) :
 {
     activeIcon = QIcon::fromTheme("run");
     no_activeIcon = QIcon::fromTheme("network-server");
+    uri_logo.insert("lxc", QIcon::fromTheme("lxc"));
+    uri_logo.insert("qemu", QIcon::fromTheme("qemu"));
+    uri_logo.insert("vnware", QIcon::fromTheme("vnware"));
+    uri_logo.insert("vbox", QIcon::fromTheme("vbox"));
     rootIdx = QModelIndex();
 }
 ConnItemModel::~ConnItemModel()
@@ -84,6 +88,10 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
+        case 1:
+            res = uri_logo.value( connItemDataList.at(index.row())->getURI()
+                    .split("://").first() );
+            break;
         default:
             break;
         }
@@ -94,7 +102,8 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case 0:
             s.append(QString("Name: %1").arg(connItemDataList.at(index.row())->getName()));
-            a = ( connItemDataList.at(index.row())->getData().value("availability").toBool() )? "Available":"Busy";
+            a = ( connItemDataList.at(index.row())->getData()
+                  .value("availability").toBool() )? "Available":"Busy";
             s.append(QString("\nState: %1").arg(a));
             res = s;
             break;

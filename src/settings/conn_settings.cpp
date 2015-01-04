@@ -101,6 +101,12 @@ void ConnSettings::initParamLayout()
     driver = new QLabel("Driver:", this);
     Drivers = new QComboBox(this);
     Drivers->addItems(HV_DRIVERS);
+    for (uint i=0; i<Drivers->count(); i++) {
+        QIcon _icon = QIcon::fromTheme(
+                    Drivers->itemText(i).split("/")
+                    .first().toLower());
+        Drivers->setItemIcon(i, _icon);
+    };
     connect(Drivers, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeConnParameters(QString)));
     transport = new QLabel("Transport:", this);
     Transports = new QComboBox(this);

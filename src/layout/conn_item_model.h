@@ -4,6 +4,7 @@
 #include <QAbstractTableModel>
 #include <QIcon>
 #include <QList>
+#include <QMap>
 #include "conn_item_index.h"
 #include <QDebug>
 
@@ -30,6 +31,8 @@ private:
     QModelIndex  rootIdx;
     QIcon        activeIcon;
     QIcon        no_activeIcon;
+    QMap<QString, QIcon>
+                 uri_logo;
 
 };
 
