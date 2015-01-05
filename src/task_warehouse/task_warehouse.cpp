@@ -42,7 +42,6 @@ void TaskWareHouse::changeVisibility()
 {
     setVisible(!isVisible());
     emit visibilityChanged(isVisible());
-    //addNewTask();
 }
 void TaskWareHouse::saveCurrentState()
 {
@@ -55,7 +54,7 @@ void TaskWareHouse::saveCurrentState()
 void TaskWareHouse::stopTaskComputing()
 {
 }
-void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
+void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virConnectPtr _distConn)
 {
     /* TaskDescription:
      * state icon
@@ -96,6 +95,10 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc)
         threadPool->insert(
                     _number,
                     new DomControlThread(this));
+        DomControlThread *cThread =
+                static_cast<DomControlThread*>(
+                    threadPool->value(_number));
+        cThread->setMigrateConnect( _distConn );
     } else if ( _taskDesc[0].contains("Network") ) {
         threadPool->insert(
                     _number,

@@ -168,7 +168,7 @@ void StorageVolToolBar::timerEvent(QTimerEvent *event)
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId && isVisible() ) {
         QStringList parameters;
-        parameters << "reloadVirtStoragePool";
+        parameters << "reloadVirtStorageVol";
         emit execMethod(parameters);
     };
 }

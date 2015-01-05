@@ -32,6 +32,7 @@ VirtDomainControl::VirtDomainControl(QWidget *parent) :
             this, SLOT(newVirtDomainFromXML(const QStringList&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
+    /*
     domControlThread = new DomControlThread(this);
     connect(domControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
     connect(domControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
@@ -39,6 +40,7 @@ VirtDomainControl::VirtDomainControl(QWidget *parent) :
             this, SLOT(resultReceiver(Result)));
     connect(domControlThread, SIGNAL(errorMsg(QString)),
             this, SLOT(msgRepeater(QString)));
+     */
 }
 VirtDomainControl::~VirtDomainControl()
 {
@@ -58,11 +60,14 @@ VirtDomainControl::~VirtDomainControl()
                this, SLOT(newVirtDomainFromXML(const QStringList&)));
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
                this, SLOT(execAction(const QStringList&)));
+    /*
     disconnect(domControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
     disconnect(domControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
     disconnect(domControlThread, SIGNAL(resultData(Result)),
                this, SLOT(resultReceiver(Result)));
-    disconnect(domControlThread, SIGNAL(errorMsg(QString)), this, SLOT(msgRepeater(QString)));
+    disconnect(domControlThread, SIGNAL(errorMsg(QString)),
+               this, SLOT(msgRepeater(QString)));
+    */
 
     if ( createVirtDomain!=NULL ) {
         delete createVirtDomain;
@@ -70,9 +75,11 @@ VirtDomainControl::~VirtDomainControl()
     };
 
     stopProcessing();
+    /*
     domControlThread->terminate();
     delete domControlThread;
     domControlThread = NULL;
+    */
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -96,14 +103,14 @@ VirtDomainControl::~VirtDomainControl()
 /* public slots */
 bool VirtDomainControl::getThreadState() const
 {
-    return domControlThread->isFinished() || !domControlThread->isRunning();
-    //return true;
+    //return domControlThread->isFinished() || !domControlThread->isRunning();
+    return true;
 }
 void VirtDomainControl::stopProcessing()
 {
-    if ( domControlThread!=NULL ) {
-        domControlThread->stop();
-    };
+    //if ( domControlThread!=NULL ) {
+    //    domControlThread->stop();
+    //};
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -137,7 +144,7 @@ bool VirtDomainControl::setCurrentWorkConnect(virConnect *conn)
         currWorkConnect = NULL;
         return false;
     } else {
-        domControlThread->setCurrentWorkConnect(currWorkConnect);
+        //domControlThread->setCurrentWorkConnect(currWorkConnect);
         toolBar->enableAutoReload();
         // for initiation content
         //domControlThread->execAction(GET_ALL_ENTITY, QStringList());
@@ -150,21 +157,21 @@ void VirtDomainControl::setListHeader(QString &connName)
                                .arg(connName), Qt::EditRole);
     currConnName = connName;
     setEnabled(true);
-    QStringList args;
-    args.append("..");
-    args.prepend("reloadVirtDomain");
-    args.prepend(QString::number(GET_ALL_ENTITY));
-    args.prepend(currConnName);
-    emit addNewTask(currWorkConnect, args);
+    reloadDomainState();
 }
 virConnect* VirtDomainControl::getConnect() const
 {
     return currWorkConnect;
 }
-void VirtDomainControl::execMigrateAction(virConnectPtr conn, QStringList &args)
+void VirtDomainControl::execMigrateAction(virConnectPtr conn, QStringList &_args)
 {
-    domControlThread->setMigrateConnect(conn);
-    domControlThread->execAction(MIGRATE_ENTITY, args);
+    QStringList args;
+    //domControlThread->setMigrateConnect(conn);
+    //domControlThread->execAction(MIGRATE_ENTITY, _args);
+    args.prepend("migrateVirtDomain");
+    args.prepend(QString::number(MIGRATE_ENTITY));
+    args.prepend(currConnName);
+    emit addNewTask(currWorkConnect, args, conn);
 }
 void VirtDomainControl::reloadDomainState()
 {

@@ -13,7 +13,7 @@
 #include "storage_vol_model.h"
 #include "storage_vol_toolbar.h"
 #include "storage_vol_control_menu.h"
-#include "storage_vol_control_thread.h"
+#include "virt_objects/control_thread.h"
 #include "resize_dialog.h"
 #include "create_widgets/storage/create_volume.h"
 
@@ -37,7 +37,7 @@ private:
     StorageVolToolBar         *toolBar;
 
     virConnect                *currWorkConnect = NULL;
-    StorageVolControlThread   *stVolControlThread = NULL;
+    //StorageVolControlThread   *stVolControlThread = NULL;
 
 public slots:
     bool getThreadState() const;

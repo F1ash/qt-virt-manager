@@ -40,7 +40,7 @@ public slots:
     void             changeVisibility();
     void             saveCurrentState();
     void             stopTaskComputing();
-    void             addNewTask(virConnectPtr, QStringList&);
+    void             addNewTask(virConnectPtr, QStringList&, virConnectPtr = NULL);
 
 private slots:
     void             closeEvent(QCloseEvent*);

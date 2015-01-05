@@ -13,7 +13,7 @@
 #include "storage_pool_model.h"
 #include "storage_pool_toolbar.h"
 #include "storage_pool_control_menu.h"
-#include "storage_pool_control_thread.h"
+#include "virt_objects/control_thread.h"
 #include "create_widgets/storage/create_pool.h"
 
 class VirtStoragePoolControl : public QMainWindow
@@ -36,7 +36,7 @@ private:
     StoragePoolToolBar        *toolBar;
 
     virConnect                *currWorkConnect = NULL;
-    StoragePoolControlThread  *stPoolControlThread = NULL;
+    ///StoragePoolControlThread  *stPoolControlThread = NULL;
 
 public slots:
     bool                       getThreadState() const;

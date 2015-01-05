@@ -393,6 +393,8 @@ void MainWindow::initDockWidgets()
             this, SLOT(buildMigrateArgs(QStringList&)));
     connect(domainDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+    connect(domainDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&, virConnectPtr)),
+            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
     connect(taskWrHouse, SIGNAL(domResult(Result)),
             domainDockContent, SLOT(resultReceiver(Result)));
 

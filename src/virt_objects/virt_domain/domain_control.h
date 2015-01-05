@@ -31,6 +31,7 @@ signals:
     void                     domainClosed(QString, QString);
     void                     migrateToConnect(QStringList&);
     void                     addNewTask(virConnectPtr, QStringList&);
+    void                     addNewTask(virConnectPtr, QStringList&, virConnectPtr);
 
 private:
     QString                  currConnName;
@@ -40,7 +41,7 @@ private:
     DomainToolBar           *toolBar;
 
     virConnect              *currWorkConnect  = NULL;
-    DomControlThread        *domControlThread = NULL;
+    //DomControlThread        *domControlThread = NULL;
     CreateVirtDomain        *createVirtDomain = NULL;
 
 public slots:

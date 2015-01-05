@@ -78,10 +78,10 @@ void StorageVolControlMenu::emitExecMethod(QAction *action)
         } else if ( action == getXMLDesc_Action ) {
             paramList << "getVirtStorageVolXMLDesc";
         } else if ( action == reload ) {
-            paramList << "reloadVirtStoragePool";
+            paramList << "reloadVirtStorageVol";
         } else return;
     } else if ( action == reload ) {
-        paramList << "reloadVirtStoragePool";
+        paramList << "reloadVirtStorageVol";
     } else return;
     //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);

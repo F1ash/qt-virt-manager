@@ -13,7 +13,7 @@
 #include "virtnet_model.h"
 #include "virtnet_toolbar.h"
 #include "virtnet_control_menu.h"
-#include "net_control_thread.h"
+#include "virt_objects/control_thread.h"
 #include "create_widgets/network/create_virt_network.h"
 
 class VirtNetControl : public QMainWindow
@@ -35,7 +35,7 @@ private:
     VirtNetToolBar      *toolBar;
 
     virConnect          *currWorkConnect = NULL;
-    NetControlThread    *netControlThread = NULL;
+    //NetControlThread    *netControlThread = NULL;
 
 public slots:
     bool                 getThreadState() const;
