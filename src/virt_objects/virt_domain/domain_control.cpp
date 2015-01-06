@@ -32,15 +32,6 @@ VirtDomainControl::VirtDomainControl(QWidget *parent) :
             this, SLOT(newVirtDomainFromXML(const QStringList&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
-    /*
-    domControlThread = new DomControlThread(this);
-    connect(domControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
-    connect(domControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    connect(domControlThread, SIGNAL(resultData(Result)),
-            this, SLOT(resultReceiver(Result)));
-    connect(domControlThread, SIGNAL(errorMsg(QString)),
-            this, SLOT(msgRepeater(QString)));
-     */
 }
 VirtDomainControl::~VirtDomainControl()
 {
@@ -60,14 +51,6 @@ VirtDomainControl::~VirtDomainControl()
                this, SLOT(newVirtDomainFromXML(const QStringList&)));
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
                this, SLOT(execAction(const QStringList&)));
-    /*
-    disconnect(domControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
-    disconnect(domControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    disconnect(domControlThread, SIGNAL(resultData(Result)),
-               this, SLOT(resultReceiver(Result)));
-    disconnect(domControlThread, SIGNAL(errorMsg(QString)),
-               this, SLOT(msgRepeater(QString)));
-    */
 
     if ( createVirtDomain!=NULL ) {
         delete createVirtDomain;
@@ -75,11 +58,6 @@ VirtDomainControl::~VirtDomainControl()
     };
 
     stopProcessing();
-    /*
-    domControlThread->terminate();
-    delete domControlThread;
-    domControlThread = NULL;
-    */
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -103,15 +81,10 @@ VirtDomainControl::~VirtDomainControl()
 /* public slots */
 bool VirtDomainControl::getThreadState() const
 {
-    //return domControlThread->isFinished() || !domControlThread->isRunning();
     return true;
 }
 void VirtDomainControl::stopProcessing()
 {
-    //if ( domControlThread!=NULL ) {
-    //    domControlThread->stop();
-    //};
-
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
         currWorkConnect = NULL;
@@ -144,10 +117,7 @@ bool VirtDomainControl::setCurrentWorkConnect(virConnect *conn)
         currWorkConnect = NULL;
         return false;
     } else {
-        //domControlThread->setCurrentWorkConnect(currWorkConnect);
         toolBar->enableAutoReload();
-        // for initiation content
-        //domControlThread->execAction(GET_ALL_ENTITY, QStringList());
         return true;
     };
 }
@@ -163,19 +133,14 @@ virConnect* VirtDomainControl::getConnect() const
 {
     return currWorkConnect;
 }
-void VirtDomainControl::execMigrateAction(virConnectPtr conn, QStringList &_args)
+void VirtDomainControl::execMigrateAction(virConnectPtr conn, QStringList &args)
 {
-    QStringList args;
-    //domControlThread->setMigrateConnect(conn);
-    //domControlThread->execAction(MIGRATE_ENTITY, _args);
-    args.prepend("migrateVirtDomain");
     args.prepend(QString::number(MIGRATE_ENTITY));
     args.prepend(currConnName);
     emit addNewTask(currWorkConnect, args, conn);
 }
 void VirtDomainControl::reloadDomainState()
 {
-    //domControlThread->execAction(GET_ALL_ENTITY, QStringList());
     QStringList args;
     args.append("..");
     args.prepend("reloadVirtDomain");
@@ -243,7 +208,6 @@ void VirtDomainControl::resultReceiver(Result data)
                 if ( show ) QDesktopServices::openUrl(QUrl(xml));
                 QStringList args;
                 args.append(xml);
-                //domControlThread->execAction(DEFINE_ENTITY, args);
                 args.prepend("defineVirtDomain");
                 args.prepend(QString::number(DEFINE_ENTITY));
                 args.prepend(currConnName);
@@ -259,7 +223,6 @@ void VirtDomainControl::resultReceiver(Result data)
     } else if ( data.action < GET_XML_DESCRIPTION ) {
         if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
         if ( data.result ) {
-            //domControlThread->execAction(GET_ALL_ENTITY, QStringList());
             reloadDomainState();
             switch (data.action) {
             case DESTROY_ENTITY:
@@ -323,44 +286,37 @@ void VirtDomainControl::execAction(const QStringList &l)
         QString domainName = domainModel->DataList.at(idx.row())->getName();
         args.append(domainName);
         if        ( l.first()=="startVirtDomain" ) {
-            //domControlThread->execAction(START_DOMAIN, args);
             args.prepend(l.first());
             args.prepend(QString::number(START_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="pauseVirtDomain" ) {
             args.append(domainModel->DataList.at(idx.row())->getState().split(":").last());
-            //domControlThread->execAction(PAUSE_DOMAIN, args);
             args.prepend(l.first());
             args.prepend(QString::number(PAUSE_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="destroyVirtDomain" ) {
-            //domControlThread->execAction(DESTROY_DOMAIN, args);
             args.prepend(l.first());
             args.prepend(QString::number(DESTROY_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="editVirtDomain" ) {
-            //domControlThread->execAction(EDIT_DOMAIN, args);
             args.prepend(l.first());
             args.prepend(QString::number(EDIT_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="resetVirtDomain" ) {
-            //domControlThread->execAction(RESET_DOMAIN, args);
             args.prepend(l.first());
             args.prepend(QString::number(RESET_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="rebootVirtDomain" ) {
-            //domControlThread->execAction(REBOOT_DOMAIN, args);
             args.prepend(l.first());
             args.prepend(QString::number(REBOOT_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="shutdownVirtDomain" ) {
-            //domControlThread->execAction(SHUTDOWN_DOMAIN, args);
             args.prepend(l.first());
             args.prepend(QString::number(SHUTDOWN_ENTITY));
             args.prepend(currConnName);
@@ -370,7 +326,6 @@ void VirtDomainControl::execAction(const QStringList &l)
             if ( !to.isEmpty() ) {
                 args.append(to);
                 args.append(domainModel->DataList.at(idx.row())->getState().split(":").last());
-                //domControlThread->execAction(SAVE_DOMAIN, args);
                 args.prepend(l.first());
                 args.prepend(QString::number(SAVE_ENTITY));
                 args.prepend(currConnName);
@@ -380,14 +335,12 @@ void VirtDomainControl::execAction(const QStringList &l)
             QString from = QFileDialog::getOpenFileName(this, "Restore from", "~");
             if ( !from.isEmpty() ) {
                 args.append(from);
-                //domControlThread->execAction(RESTORE_DOMAIN, args);
                 args.prepend(l.first());
                 args.prepend(QString::number(RESTORE_ENTITY));
                 args.prepend(currConnName);
                 emit addNewTask(currWorkConnect, args);
             };
         } else if ( l.first()=="undefineVirtDomain" ) {
-            //domControlThread->execAction(UNDEFINE_DOMAIN, args);
             args.prepend(l.first());
             args.prepend(QString::number(UNDEFINE_ENTITY));
             args.prepend(currConnName);
@@ -398,7 +351,6 @@ void VirtDomainControl::execAction(const QStringList &l)
                 (domainModel->DataList.at(idx.row())->getAutostart()=="yes")
                  ? "0" : "1";
             args.append(autostartState);
-            //domControlThread->execAction(CHANGE_DOM_AUTOSTART, args);
             args.prepend(l.first());
             args.prepend(QString::number(CHANGE_ENTITY_AUTOSTART));
             args.prepend(currConnName);
@@ -427,7 +379,6 @@ void VirtDomainControl::execAction(const QStringList &l)
                 };
                 if ( migrArgs.first().isEmpty() ) {
                     // migrate useing specified URI
-                    //domControlThread->execAction(MIGRATE_DOMAIN, args);
                     args.prepend(l.first());
                     args.prepend(QString::number(MIGRATE_ENTITY));
                     args.prepend(currConnName);
@@ -438,7 +389,6 @@ void VirtDomainControl::execAction(const QStringList &l)
                 };
             };
         } else if ( l.first()=="getVirtDomXMLDesc" ) {
-            //domControlThread->execAction(GET_DOM_XML_DESC, args);
             args.prepend(l.first());
             args.prepend(QString::number(GET_XML_DESCRIPTION));
             args.prepend(currConnName);
@@ -450,19 +400,9 @@ void VirtDomainControl::execAction(const QStringList &l)
             // send signal with Connect & Domain Names to add into Domain State Monitor
             emit addToStateMonitor(currWorkConnect, currConnName, domainName);
         } else if ( l.first()=="reloadVirtDomain" ) {
-            //domControlThread->execAction(GET_ALL_DOMAIN, args);
-            //args.prepend(l.first());
-            //args.prepend(QString::number(GET_ALL_ENTITY));
-            //args.prepend(currConnName);
-            //emit addNewTask(currWorkConnect, args);
             reloadDomainState();
         };
     } else if ( l.first()=="reloadVirtDomain" ) {
-        //domControlThread->execAction(GET_ALL_DOMAIN, args);
-        //args.prepend(l.first());
-        //args.prepend(QString::number(GET_ALL_ENTITY));
-        //args.prepend(currConnName);
-        //emit addNewTask(currWorkConnect, args);
         reloadDomainState();
     };
 }
@@ -506,7 +446,6 @@ void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
                 //qDebug()<<xml<<"path"<<result;
                 args.prepend(xml);
             };
-            //domControlThread->execAction(act, args);
             if ( act==CREATE_ENTITY ) {
                 args.prepend("createVirtDomain");
             } else {

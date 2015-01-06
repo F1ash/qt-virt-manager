@@ -37,23 +37,22 @@ private:
     StorageVolToolBar         *toolBar;
 
     virConnect                *currWorkConnect = NULL;
-    //StorageVolControlThread   *stVolControlThread = NULL;
 
 public slots:
-    bool getThreadState() const;
-    void stopProcessing();
-    bool setCurrentStoragePool(virConnect*, QString&, QString&);
-    QString getCurrentVolumeName() const;
-    void resultReceiver(Result);
+    bool                       getThreadState() const;
+    void                       stopProcessing();
+    bool                       setCurrentStoragePool(virConnect*, QString&, QString&);
+    QString                    getCurrentVolumeName() const;
+    void                       resultReceiver(Result);
 
 private slots:
-    void msgRepeater(QString);
-    void changeDockVisibility();
+    void                       msgRepeater(QString);
+    void                       changeDockVisibility();
 
-    void storageVolClicked(const QPoint&);
-    void storageVolDoubleClicked(const QModelIndex&);
-    void execAction(const QStringList&);
-    void newVirtStorageVolFromXML(const QStringList&);
+    void                       storageVolClicked(const QPoint&);
+    void                       storageVolDoubleClicked(const QModelIndex&);
+    void                       execAction(const QStringList&);
+    void                       newVirtStorageVolFromXML(const QStringList&);
 
 };
 

@@ -32,15 +32,6 @@ VirtStoragePoolControl::VirtStoragePoolControl(QWidget *parent) :
             this, SLOT(newVirtStoragePoolFromXML(const QStringList&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
-    /*
-    stPoolControlThread = new StoragePoolControlThread(this);
-    connect(stPoolControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
-    connect(stPoolControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    connect(stPoolControlThread, SIGNAL(resultData(Result)),
-            this, SLOT(resultReceiver(Result)));
-    connect(stPoolControlThread, SIGNAL(errorMsg(QString)),
-            this, SLOT(msgRepeater(QString)));
-     */
 }
 VirtStoragePoolControl::~VirtStoragePoolControl()
 {
@@ -60,21 +51,8 @@ VirtStoragePoolControl::~VirtStoragePoolControl()
                this, SLOT(newVirtStoragePoolFromXML(const QStringList&)));
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
                this, SLOT(execAction(const QStringList&)));
-    /*
-    disconnect(stPoolControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
-    disconnect(stPoolControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    disconnect(stPoolControlThread, SIGNAL(resultData(Result)),
-               this, SLOT(resultReceiver(Result)));
-    disconnect(stPoolControlThread, SIGNAL(errorMsg(QString)),
-               this, SLOT(msgRepeater(QString)));
-     */
 
     stopProcessing();
-    /*
-    stPoolControlThread->terminate();
-    delete stPoolControlThread;
-    stPoolControlThread = NULL;
-    */
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -98,15 +76,10 @@ VirtStoragePoolControl::~VirtStoragePoolControl()
 /* public slots */
 bool VirtStoragePoolControl::getThreadState() const
 {
-    //return stPoolControlThread->isFinished() || !stPoolControlThread->isRunning();
     return true;
 }
 void VirtStoragePoolControl::stopProcessing()
 {
-    //if ( stPoolControlThread!=NULL ) {
-    //    stPoolControlThread->stop();
-    //};
-
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
         currWorkConnect = NULL;
@@ -139,10 +112,7 @@ bool VirtStoragePoolControl::setCurrentWorkConnect(virConnect *conn)
         currWorkConnect = NULL;
         return false;
     } else {
-        //stPoolControlThread->setCurrentWorkConnect(currWorkConnect);
         toolBar->enableAutoReload();
-        // for initiation content
-        //stPoolControlThread->execAction(GET_ALL_ENTITY, QStringList());
         return true;
     };
 }
@@ -192,7 +162,6 @@ void VirtStoragePoolControl::resultReceiver(Result data)
     } else if ( data.action == CREATE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             msgRepeater(data.msg.join(" "));
-            //stPoolControlThread->execAction(GET_ALL_ENTITY, QStringList());
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -201,7 +170,6 @@ void VirtStoragePoolControl::resultReceiver(Result data)
     } else if ( data.action == DEFINE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             msgRepeater(data.msg.join(" "));
-            //stPoolControlThread->execAction(GET_ALL_ENTITY, QStringList());
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -210,7 +178,6 @@ void VirtStoragePoolControl::resultReceiver(Result data)
     } else if ( data.action == START_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             msgRepeater(data.msg.join(" "));
-            //stPoolControlThread->execAction(GET_ALL_ENTITY, QStringList());
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -219,7 +186,6 @@ void VirtStoragePoolControl::resultReceiver(Result data)
     } else if ( data.action == DESTROY_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             msgRepeater(data.msg.join(" "));
-            //stPoolControlThread->execAction(GET_ALL_ENTITY, QStringList());
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -228,7 +194,6 @@ void VirtStoragePoolControl::resultReceiver(Result data)
     } else if ( data.action == UNDEFINE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             msgRepeater(data.msg.join(" "));
-            //stPoolControlThread->execAction(GET_ALL_ENTITY, QStringList());
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -237,7 +202,6 @@ void VirtStoragePoolControl::resultReceiver(Result data)
     } else if ( data.action == CHANGE_ENTITY_AUTOSTART ) {
         if ( !data.msg.isEmpty() ) {
             msgRepeater(data.msg.join(" "));
-            //stPoolControlThread->execAction(GET_ALL_ENTITY, QStringList());
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -306,19 +270,16 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
         QString storagePoolName = storagePoolModel->DataList.at(idx.row())->getName();
         args.append(storagePoolName);
         if        ( l.first()=="startVirtStoragePool" ) {
-            //stPoolControlThread->execAction(START_ENTITY, args);
             args.prepend(l.first());
             args.prepend(QString::number(START_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="destroyVirtStoragePool" ) {
-            //stPoolControlThread->execAction(DESTROY_ENTITY, args);
             args.prepend(l.first());
             args.prepend(QString::number(DESTROY_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="undefineVirtStoragePool" ) {
-            //stPoolControlThread->execAction(UNDEFINE_ENTITY, args);
             args.prepend(l.first());
             args.prepend(QString::number(UNDEFINE_ENTITY));
             args.prepend(currConnName);
@@ -329,7 +290,6 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
                 (storagePoolModel->DataList.at(idx.row())->getAutostart()=="yes")
                  ? "0" : "1";
             args.append(autostartState);
-            //stPoolControlThread->execAction(CHANGE_ENTITY_AUTOSTART, args);
             args.prepend(l.first());
             args.prepend(QString::number(CHANGE_ENTITY_AUTOSTART));
             args.prepend(currConnName);
@@ -344,7 +304,6 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
                 emit addNewTask(currWorkConnect, args);
             };
         } else if ( l.first()=="getVirtStoragePoolXMLDesc" ) {
-            //stPoolControlThread->execAction(GET_XML_DESCRIPTION, args);
             args.prepend(l.first());
             args.prepend(QString::number(GET_XML_DESCRIPTION));
             args.prepend(currConnName);
@@ -352,14 +311,12 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
         } else if ( l.first()=="overviewVirtStoragePool" ) {
             emit currPool(currWorkConnect, currConnName, storagePoolName);
         } else if ( l.first()=="reloadVirtStoragePool" ) {
-            //stPoolControlThread->execAction(GET_ALL_ENTITY, args);
             args.prepend(l.first());
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         };
     } else if ( l.first()=="reloadVirtStoragePool" ) {
-        //stPoolControlThread->execAction(GET_ALL_ENTITY, args);
         args.prepend(l.first());
         args.prepend(QString::number(GET_ALL_ENTITY));
         args.prepend(currConnName);
@@ -393,7 +350,6 @@ void VirtStoragePoolControl::newVirtStoragePoolFromXML(const QStringList &_args)
                     args.prepend(path);
                     if ( show ) QDesktopServices::openUrl(QUrl(path));
                 };
-                //stPoolControlThread->execAction(act, args);
                 args.prepend(QString::number(act));
                 args.prepend(currConnName);
                 emit addNewTask(currWorkConnect, args);

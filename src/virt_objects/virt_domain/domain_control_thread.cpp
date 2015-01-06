@@ -139,7 +139,9 @@ Result DomControlThread::getAllDomainList()
                 }
             } else domainState.append("ERROR");
             currentAttr<< QString().fromUtf8( virDomainGetName(domain[i]) )
-                       << QString("%1:%2").arg( virDomainIsActive(domain[i]) ? "active" : "inactive" ).arg(domainState)
+                       << QString("%1:%2")
+                          .arg( virDomainIsActive(domain[i]) ? "active" : "inactive" )
+                          .arg(domainState)
                        << autostartStr
                        << QString( virDomainIsPersistent(domain[i]) ? "yes" : "no" );
             domainList.append(currentAttr.join(" "));
@@ -159,33 +161,6 @@ Result DomControlThread::getAllDomainList()
         };
         free(domain);
     };
-    /*
-    if ( currWorkConnect!=NULL && keep_alive ) {
-        virNodeDevicePtr *nodeDevice;
-        unsigned int flags = VIR_CONNECT_LIST_NODE_DEVICES_CAP_SYSTEM | VIR_CONNECT_LIST_NODE_DEVICES_CAP_PCI_DEV |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_USB_DEV | VIR_CONNECT_LIST_NODE_DEVICES_CAP_USB_INTERFACE |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_NET | VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_HOST |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_TARGET | VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_STORAGE | VIR_CONNECT_LIST_NODE_DEVICES_CAP_FC_HOST |
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_VPORTS | VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI_GENERIC;
-        int ret = virConnectListAllNodeDevices( currWorkConnect, &nodeDevice, flags);
-        if ( ret<0 ) {
-            sendConnErrors();
-            free(nodeDevice);
-        } else {
-
-        int i = 0;
-        while ( nodeDevice[i] != NULL ) {
-            QStringList currentAttr;
-            currentAttr<< QString( virNodeDeviceGetName(nodeDevice[i]) );
-            qDebug()<<currentAttr;
-            virNodeDeviceFree(nodeDevice[i]);
-            i++;
-        };
-        free(nodeDevice);
-        };
-    };
-    */
     result.result = true;
     result.msg = domainList;
     return result;

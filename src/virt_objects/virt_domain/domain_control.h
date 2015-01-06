@@ -12,7 +12,7 @@
 #include "domain_model.h"
 #include "domain_toolbar.h"
 #include "domain_control_menu.h"
-#include "domain_control_thread.h"
+#include "virt_objects/control_thread.h"
 #include "create_widgets/domain/create_virt_domain.h"
 #include "vm_viewer/vm_viewer.h"
 #include "migrate_dialog.h"
@@ -41,7 +41,6 @@ private:
     DomainToolBar           *toolBar;
 
     virConnect              *currWorkConnect  = NULL;
-    //DomControlThread        *domControlThread = NULL;
     CreateVirtDomain        *createVirtDomain = NULL;
 
 public slots:

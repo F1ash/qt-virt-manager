@@ -13,7 +13,7 @@ for virtual entities;
 v.0.0.4 :
 prepared qterminal for LXC;
 
-0.1.7 :
+v.0.1.7 :
 implemented the daemon mode application;
 changed open connect method to OpenAuth;
 implemented domain migration;
@@ -21,7 +21,7 @@ implemented domain close event;
 added migrate icons & some fixes;
 probe to implement LXC-terminal (fail);
 
-v 0.2.12 :
+v.0.2.12 :
 improved closing vm_viewers;
 implemented messaging from vm_viewers to Event&Error Log;
 improved wait_thread for closing all vm_viewers;
@@ -31,7 +31,12 @@ some prepears for LXC-terminal:
     added socket notifier (for read pty);
 some fixes & improvements;
 
-v 0.5.12:
+v.0.5.12 :
 implemented the Domain Create/Edit widget;
 implemented the Pool/Volume Storage Create/Edit;
 implemented the Simple Domain State Monitor;
+
+v.0.7.12 :
+implemented the Creation of VirtNetwork;
+implemented the Task WareHouse
+(+reimplemented Control Threads);

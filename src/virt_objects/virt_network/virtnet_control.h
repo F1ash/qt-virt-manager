@@ -35,7 +35,6 @@ private:
     VirtNetToolBar      *toolBar;
 
     virConnect          *currWorkConnect = NULL;
-    //NetControlThread    *netControlThread = NULL;
 
 public slots:
     bool                 getThreadState() const;

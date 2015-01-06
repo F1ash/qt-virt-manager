@@ -21,5 +21,4 @@ void BarNameLabel::paintEvent(QPaintEvent *event)
     painter.translate(_size, size().height());
     painter.rotate(270);
     painter.drawText(0, 0, text());
-    update();
 }

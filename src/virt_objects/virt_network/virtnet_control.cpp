@@ -32,15 +32,6 @@ VirtNetControl::VirtNetControl(QWidget *parent) :
             this, SLOT(newVirtNetworkFromXML(const QStringList&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
-    /*
-    netControlThread = new NetControlThread(this);
-    connect(netControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
-    connect(netControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    connect(netControlThread, SIGNAL(resultData(Result)),
-            this, SLOT(resultReceiver(Result)));
-    connect(netControlThread, SIGNAL(errorMsg(QString)),
-            this, SLOT(msgRepeater(QString)));
-    */
 }
 VirtNetControl::~VirtNetControl()
 {
@@ -60,19 +51,8 @@ VirtNetControl::~VirtNetControl()
                this, SLOT(newVirtNetworkFromXML(const QStringList&)));
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
                this, SLOT(execAction(const QStringList&)));
-    /*
-    disconnect(netControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
-    disconnect(netControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    disconnect(netControlThread, SIGNAL(resultData(Result)),
-               this, SLOT(resultReceiver(Result)));
-    disconnect(netControlThread, SIGNAL(errorMsg(QString)),
-               this, SLOT(msgRepeater(QString)));
-    */
 
     stopProcessing();
-    //netControlThread->terminate();
-    //delete netControlThread;
-    //netControlThread = NULL;
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -96,15 +76,10 @@ VirtNetControl::~VirtNetControl()
 /* public slots */
 bool VirtNetControl::getThreadState() const
 {
-    //return netControlThread->isFinished() || !netControlThread->isRunning();
     return true;
 }
 void VirtNetControl::stopProcessing()
 {
-    //if ( netControlThread!=NULL ) {
-    //    netControlThread->stop();
-    //};
-
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
         currWorkConnect = NULL;
@@ -136,10 +111,7 @@ bool VirtNetControl::setCurrentWorkConnect(virConnect *conn)
         currWorkConnect = NULL;
         return false;
     } else {
-        //netControlThread->setCurrentWorkConnect(currWorkConnect);
         toolBar->enableAutoReload();
-        // for initiation content
-        //netControlThread->execAction(GET_ALL_ENTITY, QStringList());
         return true;
     };
 }
@@ -195,7 +167,6 @@ void VirtNetControl::resultReceiver(Result data)
     } else if ( data.action < GET_XML_DESCRIPTION ) {
         if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
         if ( data.result ) {
-            //netControlThread->execAction(GET_ALL_ENTITY, QStringList());
             QStringList args;
             args.prepend("reloadVirtNetwork");
             args.prepend(QString::number(GET_ALL_ENTITY));
@@ -243,10 +214,12 @@ void VirtNetControl::networkClicked(const QPoint &p)
     };
     bool state = toolBar->getAutoReloadState();
     VirtNetControlMenu *netControlMenu = new VirtNetControlMenu(this, params, state);
-    connect(netControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    connect(netControlMenu, SIGNAL(execMethod(const QStringList&)),
+            this, SLOT(execAction(const QStringList&)));
     netControlMenu->move(QCursor::pos());
     netControlMenu->exec();
-    disconnect(netControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    disconnect(netControlMenu, SIGNAL(execMethod(const QStringList&)),
+               this, SLOT(execAction(const QStringList&)));
     netControlMenu->deleteLater();
 }
 void VirtNetControl::networkDoubleClicked(const QModelIndex &index)
@@ -263,19 +236,16 @@ void VirtNetControl::execAction(const QStringList &l)
         QString networkName = virtNetModel->DataList.at(idx.row())->getName();
         args.append(networkName);
         if        ( l.first()=="startVirtNetwork" ) {
-            //netControlThread->execAction(START_NETWORK, args);
             args.prepend(l.first());
             args.prepend(QString::number(START_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="destroyVirtNetwork" ) {
-            //netControlThread->execAction(DESTROY_NETWORK, args);
             args.prepend(l.first());
             args.prepend(QString::number(DESTROY_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="undefineVirtNetwork" ) {
-            //netControlThread->execAction(UNDEFINE_NETWORK, args);
             args.prepend(l.first());
             args.prepend(QString::number(UNDEFINE_ENTITY));
             args.prepend(currConnName);
@@ -286,26 +256,22 @@ void VirtNetControl::execAction(const QStringList &l)
                 (virtNetModel->DataList.at(idx.row())->getAutostart()=="yes")
                  ? "0" : "1";
             args.append(autostartState);
-            //netControlThread->execAction(CHANGE_NET_AUTOSTART, args);
             args.prepend(l.first());
             args.prepend(QString::number(CHANGE_ENTITY_AUTOSTART));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="getVirtNetXMLDesc" ) {
-            //netControlThread->execAction(GET_NET_XML_DESC, args);
             args.prepend(l.first());
             args.prepend(QString::number(GET_XML_DESCRIPTION));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="reloadVirtNetwork" ) {
-            //netControlThread->execAction(GET_ALL_NETWORK, args);
             args.prepend(l.first());
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         };
     } else if ( l.first()=="reloadVirtNetwork" ) {
-        //netControlThread->execAction(GET_ALL_NETWORK, args);
         args.prepend(l.first());
         args.prepend(QString::number(GET_ALL_ENTITY));
         args.prepend(currConnName);
@@ -343,7 +309,6 @@ void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
                 //qDebug()<<xml<<"path"<<result;
                 args.prepend(xml);
             };
-            //netControlThread->execAction(act, args);
             args.prepend(QString::number(act));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);

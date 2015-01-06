@@ -32,15 +32,6 @@ VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
             this, SLOT(newVirtStorageVolFromXML(const QStringList&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
-    /*
-    stVolControlThread = new StorageVolControlThread(this);
-    connect(stVolControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
-    connect(stVolControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    connect(stVolControlThread, SIGNAL(resultData(Result)),
-            this, SLOT(resultReceiver(Result)));
-    connect(stVolControlThread, SIGNAL(errorMsg(QString)),
-            this, SLOT(msgRepeater(QString)));
-     */
 }
 VirtStorageVolControl::~VirtStorageVolControl()
 {
@@ -52,27 +43,16 @@ VirtStorageVolControl::~VirtStorageVolControl()
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
-    //disconnect(storageVolList, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(storageVolDoubleClicked(const QModelIndex&)));
-    disconnect(storageVolList, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(storageVolClicked(const QPoint&)));
+    //disconnect(storageVolList, SIGNAL(doubleClicked(const QModelIndex&)),
+    //           this, SLOT(storageVolDoubleClicked(const QModelIndex&)));
+    disconnect(storageVolList, SIGNAL(customContextMenuRequested(const QPoint&)),
+               this, SLOT(storageVolClicked(const QPoint&)));
     disconnect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
                this, SLOT(newVirtStorageVolFromXML(const QStringList&)));
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
                this, SLOT(execAction(const QStringList&)));
-    /*
-    disconnect(stVolControlThread, SIGNAL(started()), this, SLOT(changeDockVisibility()));
-    disconnect(stVolControlThread, SIGNAL(finished()), this, SLOT(changeDockVisibility()));
-    disconnect(stVolControlThread, SIGNAL(resultData(Result)),
-               this, SLOT(resultReceiver(Result)));
-    disconnect(stVolControlThread, SIGNAL(errorMsg(QString)),
-               this, SLOT(msgRepeater(QString)));
-     */
 
     stopProcessing();
-    /*
-    stVolControlThread->terminate();
-    delete stVolControlThread;
-    stVolControlThread = NULL;
-    */
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -96,16 +76,12 @@ VirtStorageVolControl::~VirtStorageVolControl()
 /* public slots */
 bool VirtStorageVolControl::getThreadState() const
 {
-    //return stVolControlThread->isFinished() || !stVolControlThread->isRunning();
     return true;
 }
 void VirtStorageVolControl::stopProcessing()
 {
     setEnabled(false);
     toolBar->stopProcessing();
-    //if ( stVolControlThread!=NULL ) {
-    //    stVolControlThread->stop();
-    //};
 
     if ( currWorkConnect!=NULL ) {
         virConnectClose(currWorkConnect);
@@ -140,11 +116,13 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
         setEnabled(true);
         currConnName = connName;
         currPoolName = poolName;
-        storageVolModel->setHeaderData(0, Qt::Horizontal, QString("Name (Pool: \"%1\")").arg(poolName), Qt::EditRole);
-        //stVolControlThread->setCurrentStoragePoolName(currWorkConnect, currPoolName);
+        storageVolModel->setHeaderData(
+                    0,
+                    Qt::Horizontal,
+                    QString("Name (Pool: \"%1\")").arg(poolName),
+                    Qt::EditRole);
         toolBar->enableAutoReload();
         // for initiation content
-        //stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
         QStringList args;
         args.prepend("reloadVirtStorageVol");
         args.prepend(QString::number(GET_ALL_ENTITY));
@@ -189,7 +167,6 @@ void VirtStorageVolControl::resultReceiver(Result data)
     } else if ( data.action == CREATE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             msgRepeater(data.msg.join(" "));
-            //stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
             args.prepend("reloadVirtStorageVol");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -199,7 +176,6 @@ void VirtStorageVolControl::resultReceiver(Result data)
     } else if ( data.action == DELETE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             msgRepeater(data.msg.join(" "));
-            //stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
             args.prepend("reloadVirtStorageVol");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -213,7 +189,6 @@ void VirtStorageVolControl::resultReceiver(Result data)
     } else if ( data.action == RESIZE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             msgRepeater(data.msg.join(" "));
-            //stVolControlThread->execAction(GET_ALL_ENTITY, QStringList());
             args.prepend("reloadVirtStorageVol");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -264,10 +239,12 @@ void VirtStorageVolControl::storageVolClicked(const QPoint &p)
     };
     bool state = toolBar->getAutoReloadState();
     StorageVolControlMenu *storageVolControlMenu = new StorageVolControlMenu(this, params, state);
-    connect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    connect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)),
+            this, SLOT(execAction(const QStringList&)));
     storageVolControlMenu->move(QCursor::pos());
     storageVolControlMenu->exec();
-    disconnect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    disconnect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)),
+               this, SLOT(execAction(const QStringList&)));
     storageVolControlMenu->deleteLater();
 }
 void VirtStorageVolControl::storageVolDoubleClicked(const QModelIndex &index)
@@ -284,7 +261,6 @@ void VirtStorageVolControl::execAction(const QStringList &l)
         QString storageVolName = storageVolModel->DataList.at(idx.row())->getName();
         args.append(storageVolName);
         if        ( l.first()=="reloadVirtStorageVol" ) {
-            //stVolControlThread->execAction(GET_ALL_ENTITY, args);
             args.prepend(l.first());
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -292,7 +268,6 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             args.append(currPoolName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="deleteVirtStorageVol" ) {
-            //stVolControlThread->execAction(DELETE_ENTITY, args);
             args.prepend(l.first());
             args.prepend(QString::number(DELETE_ENTITY));
             args.prepend(currConnName);
@@ -303,7 +278,6 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             if ( !path.isEmpty() ) {
                 args.append(path);
                 args.append(storageVolModel->DataList.at(idx.row())->getCurrSize());
-                //stVolControlThread->execAction(DOWNLOAD_ENTITY, args);
                 args.prepend(l.first());
                 args.prepend(QString::number(DOWNLOAD_ENTITY));
                 args.prepend(currConnName);
@@ -321,7 +295,6 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             } else {
                 return;
             };
-            //stVolControlThread->execAction(RESIZE_ENTITY, args);
             args.prepend(l.first());
             args.prepend(QString::number(RESIZE_ENTITY));
             args.prepend(currConnName);
@@ -331,7 +304,6 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             QString path = QFileDialog::getOpenFileName(this, "Read from", "~");
             if ( !path.isEmpty() ) {
                 args.append(path);
-                //stVolControlThread->execAction(UPLOAD_ENTITY, args);
                 args.prepend(l.first());
                 args.prepend(QString::number(UPLOAD_ENTITY));
                 args.prepend(currConnName);
@@ -340,14 +312,12 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             } else return;
         } else if ( l.first()=="wipeVirtStorageVol" ) {
             args.append( (l.count()>1) ? l.at(1) : "0" );
-            //stVolControlThread->execAction(WIPE_ENTITY, args);
             args.prepend(l.first());
             args.prepend(QString::number(WIPE_ENTITY));
             args.prepend(currConnName);
             args.append(currPoolName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="getVirtStorageVolXMLDesc" ) {
-            //stVolControlThread->execAction(GET_XML_DESCRIPTION, args);
             args.prepend(l.first());
             args.prepend(QString::number(GET_XML_DESCRIPTION));
             args.prepend(currConnName);
@@ -356,7 +326,6 @@ void VirtStorageVolControl::execAction(const QStringList &l)
         } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
             stopProcessing();
         } else if ( l.first()=="reloadVirtStorageVol" ) {
-            //stVolControlThread->execAction(GET_ALL_ENTITY, args);
             args.prepend(l.first());
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -366,7 +335,6 @@ void VirtStorageVolControl::execAction(const QStringList &l)
     } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
         stopProcessing();
     } else if ( l.first()=="reloadVirtStorageVol" ) {
-        //stVolControlThread->execAction(GET_ALL_ENTITY, args);
         args.prepend(l.first());
         args.prepend(QString::number(GET_ALL_ENTITY));
         args.prepend(currConnName);
@@ -409,7 +377,6 @@ void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
                 args.prepend(path);
                 if ( show ) QDesktopServices::openUrl(QUrl(path));
             };
-            //stVolControlThread->execAction(act, args);
             args.prepend(QString::number(act));
             args.prepend(currConnName);
             args.append(currPoolName);

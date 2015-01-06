@@ -36,7 +36,6 @@ private:
     StoragePoolToolBar        *toolBar;
 
     virConnect                *currWorkConnect = NULL;
-    ///StoragePoolControlThread  *stPoolControlThread = NULL;
 
 public slots:
     bool                       getThreadState() const;
