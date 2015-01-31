@@ -207,7 +207,7 @@ void VirtNetToolBar::detectTriggerredAction(QAction *action)
     } else if ( action == setAutostart_Action ) {
         parameters << "setAutostartVirtNetwork";
     } else if ( action == getXMLDesc_Action ) {
-        parameters << "getVirtNetXMLDesc";
+        parameters << "getVirtNetworkXMLDesc";
     } else return;
     emit execMethod(parameters);
 }

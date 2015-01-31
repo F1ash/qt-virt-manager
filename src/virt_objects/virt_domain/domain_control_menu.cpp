@@ -105,7 +105,7 @@ void DomainControlMenu::emitExecMethod(QAction *action)
             paramList << "setAutostartVirtDomain";
             paramList << QString((parameters[2]=="yes")? "0" : "1");
         } else if ( action == getXMLDesc ) {
-            paramList << "getVirtDomXMLDesc";
+            paramList << "getVirtDomainXMLDesc";
         } else if ( action == display ) {
             paramList << "displayVirtDomain";
         } else if ( action == addToMonitor ) {

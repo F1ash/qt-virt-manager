@@ -67,7 +67,7 @@ void VirtNetControlMenu::emitExecMethod(QAction *action)
             paramList << "setAutostartVirtNetwork";
             paramList << QString((parameters[2]=="yes")? "0" : "1");
         } else if ( action == getXMLDesc ) {
-            paramList << "getVirtNetXMLDesc";
+            paramList << "getVirtNetworkXMLDesc";
         } else return;
         paramList.append(parameters.first());
     } else if ( action == reload ) {

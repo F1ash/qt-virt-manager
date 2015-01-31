@@ -260,7 +260,7 @@ void VirtNetControl::execAction(const QStringList &l)
             args.prepend(QString::number(CHANGE_ENTITY_AUTOSTART));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
-        } else if ( l.first()=="getVirtNetXMLDesc" ) {
+        } else if ( l.first()=="getVirtNetworkXMLDesc" ) {
             args.prepend(l.first());
             args.prepend(QString::number(GET_XML_DESCRIPTION));
             args.prepend(currConnName);
@@ -280,10 +280,16 @@ void VirtNetControl::execAction(const QStringList &l)
 }
 void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
 {
-    Actions act;
     if ( !_args.isEmpty() ) {
-        if ( _args.first().startsWith("create") ) act = CREATE_ENTITY;
-        else act = DEFINE_ENTITY;
+        Actions act;
+        QString actName;
+        if ( _args.first().startsWith("create") ) {
+            act = CREATE_ENTITY;
+            actName = "createVirtNetwork";
+        } else {
+            act = DEFINE_ENTITY;
+            actName = "defineVirtNetwork";
+        };
         QStringList args = _args;
         args.removeFirst();
         if ( !args.isEmpty() ) {
@@ -309,6 +315,7 @@ void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
                 //qDebug()<<xml<<"path"<<result;
                 args.prepend(xml);
             };
+            args.prepend(actName);
             args.prepend(QString::number(act));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);

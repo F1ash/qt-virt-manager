@@ -388,7 +388,7 @@ void VirtDomainControl::execAction(const QStringList &l)
                     emit migrateToConnect(args);
                 };
             };
-        } else if ( l.first()=="getVirtDomXMLDesc" ) {
+        } else if ( l.first()=="getVirtDomainXMLDesc" ) {
             args.prepend(l.first());
             args.prepend(QString::number(GET_XML_DESCRIPTION));
             args.prepend(currConnName);
