@@ -1,72 +1,17 @@
 #include "vm_viewer.h"
 
-VM_Viewer::VM_Viewer(QWidget *parent, virConnect *conn, QString arg1, QString arg2) :
+VM_Viewer::VM_Viewer(
+        QWidget *parent, virConnect *conn, QString arg1, QString arg2) :
     QMainWindow(parent), jobConnect(conn), connName(arg1), domain(arg2)
 {
     setMinimumSize(100, 100);
     setWindowTitle(QString("<%1> Virtual Machine").arg(domain));
-    restoreGeometry( settings.value("LXCTermGeometry").toByteArray() );
-    toolBar = new ViewerToolBar(this);
-    addToolBar(toolBar);
-    if ( jobConnect!=NULL ) {
-        type = QString().fromUtf8(virConnectGetType(jobConnect));
-    } else type.clear();
-    if ( type.isEmpty() ) {
-        QMessageBox::information(this, "VM Viewer", "Job empty.");
-    } else if ( type.toLower()=="lxc" ) {
-        // startnow = 1/yes
-        viewer = new LXC_Viewer(1, this, jobConnect, domain);
-        // from qtermwidget/main.cpp
-        menuBar = new QMenuBar(this);
-        actionsMenu = new QMenu("Actions", menuBar);
-        menuBar->addMenu(actionsMenu);
-        actionsMenu->addAction("Find..",
-                               viewer,
-                               SLOT(toggleShowSearchBar()),
-                               QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
-        this->setMenuBar(menuBar);
-    } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
-        //viewer = new VNC_Viewer(this);
-    } else QMessageBox::information(this, "VM Viewer", QString("Not implemented type: %1").arg(type));
-    if ( viewer!=NULL ) {
-        setCentralWidget(viewer);
-        connect(viewer,
-                SIGNAL(errorMsg(QString&)),
-                this,
-                SLOT(receiveErrMsg(QString&)));
-        connect(viewer,
-                SIGNAL(jobFinished()),
-                this,
-                SLOT(closeViewer()));
-    };
-    this->show();
+    restoreGeometry( settings.value("VMViewerGeometry").toByteArray() );
     VM_State = true;
 }
 VM_Viewer::~VM_Viewer()
 {
-    settings.setValue("LXCTermGeometry", saveGeometry());
-    if ( viewer!=NULL ) {
-        disconnect(viewer,
-                   SIGNAL(errorMsg(QString&)),
-                   this,
-                   SLOT(receiveErrMsg(QString&)));
-        disconnect(viewer,
-                   SIGNAL(jobFinished()),
-                   this,
-                   SLOT(closeViewer()));
-        delete viewer;
-        viewer = NULL;
-    };
-    if ( actionsMenu!=NULL ) {
-        delete actionsMenu;
-        actionsMenu = NULL;
-    };
-    if ( menuBar!=NULL ) {
-        delete menuBar;
-        menuBar = NULL;
-    };
-    delete toolBar;
-    toolBar = NULL;
+    settings.setValue("VMViewerGeometry", saveGeometry());
     if ( jobConnect!=NULL ) {
         virConnectClose(jobConnect);
     };
@@ -83,15 +28,13 @@ void VM_Viewer::stopProcessing()
     /*
      * reserved for stop viewer job
      */
-    QString msg = QString("'<b>%1</b>' terminal closed.").arg(domain);
+    QString msg = QString("'<b>%1</b>' viewer closed.").arg(domain);
     receiveErrMsg(msg);
 }
-
-/* private slots */
 void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
-        QString msg = QString("'<b>%1</b>' terminal hidden.").arg(domain);
+        QString msg = QString("'<b>%1</b>' viewer hidden.").arg(domain);
         receiveErrMsg(msg);
         ev->accept();
     }
@@ -99,9 +42,9 @@ void VM_Viewer::closeEvent(QCloseEvent *ev)
 void VM_Viewer::closeViewer()
 {
     qDebug()<<domain<<"Job Finished";
-    QString msg = QString("'<b>%1</b>' terminal closed.").arg(domain);
+    QString msg = QString("'<b>%1</b>' viewer closed.").arg(domain);
     receiveErrMsg(msg);
-    emit finished();
+    //emit finished();
 }
 void VM_Viewer::receiveErrMsg(QString &msg)
 {
@@ -109,4 +52,25 @@ void VM_Viewer::receiveErrMsg(QString &msg)
     QString title = QString("Connect '%1'").arg(connName);
     QString errMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
     emit errorMsg(errMsg);
+}
+
+void VM_Viewer::sendConnErrors()
+{
+    virtErrors = virConnGetLastError(jobConnect);
+    if ( virtErrors!=NULL && virtErrors->code>0 ) {
+        QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
+                .arg(QString().fromUtf8(virtErrors->message));
+        emit errorMsg( msg );
+        virResetError(virtErrors);
+    } else sendGlobalErrors();
+}
+void VM_Viewer::sendGlobalErrors()
+{
+    virtErrors = virGetLastError();
+    if ( virtErrors!=NULL && virtErrors->code>0 ) {
+        QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
+                .arg(QString().fromUtf8(virtErrors->message));
+        emit errorMsg( msg );
+    };
+    virResetLastError();
 }

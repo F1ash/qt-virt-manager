@@ -658,17 +658,32 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
 {
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( !VM_Displayed_Map.contains(key) ) {
-        VM_Viewer *value = new VM_Viewer(this, conn, connName, domName);
+        QString type;
+        VM_Viewer *value = NULL;
+        if ( conn!=NULL ) {
+            type = QString().fromUtf8(virConnectGetType(conn));
+        } else type.clear();
+        if ( type.isEmpty() ) {
+            QMessageBox::information(this, "VM Viewer", "Job empty.");
+        } else if ( type.toLower()=="lxc" ) {
+            value = new LXC_Viewer(this, conn, connName, domName);
+        } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
+            //viewer = new VNC_Viewer(this);
+        } else
+            QMessageBox::information(
+                        this,
+                        "VM Viewer",
+                        QString("Not implemented type: %1").arg(type));
+        if ( value==NULL ) return;
         VM_Displayed_Map.insert(key, value);
-        connect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()), this, SLOT(deleteVMDisplay()));
+        connect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()),
+                this, SLOT(deleteVMDisplay()));
         connect(VM_Displayed_Map.value(key, NULL), SIGNAL(errorMsg(QString&)),
                 logDockContent, SLOT(appendErrorMsg(QString&)));
+        value->show();
     } else {
         VM_Viewer *term = VM_Displayed_Map.value(key, NULL);
-        if ( term==NULL ) {
-            term = new VM_Viewer(this, conn, domName);
-        };
-        term->show();
+        if ( term!=NULL ) term->show();
     };
 }
 void MainWindow::deleteVMDisplay()
@@ -677,10 +692,10 @@ void MainWindow::deleteVMDisplay()
     if ( term!=NULL ) {
         QString key = VM_Displayed_Map.key(term);
         //qDebug()<<key<<"display close1";
-        disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()), this, SLOT(deleteVMDisplay()));
+        disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()),
+                   this, SLOT(deleteVMDisplay()));
         disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(errorMsg(QString&)),
-                   logDockContent,
-                   SLOT(appendErrorMsg(QString&)));
+                   logDockContent, SLOT(appendErrorMsg(QString&)));
         delete VM_Displayed_Map.value(key);
         VM_Displayed_Map.insert(key, NULL);
         VM_Displayed_Map.remove(key);
@@ -696,10 +711,10 @@ void MainWindow::deleteVMDisplay(QString connName, QString domName)
         //qDebug()<<key<<"display close2";
         if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
             VM_Displayed_Map.value(key)->stopProcessing();
-            disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()), this, SLOT(deleteVMDisplay()));
+            disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()),
+                       this, SLOT(deleteVMDisplay()));
             disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(errorMsg(QString&)),
-                       logDockContent,
-                       SLOT(appendErrorMsg(QString&)));
+                       logDockContent, SLOT(appendErrorMsg(QString&)));
             delete VM_Displayed_Map.value(key);
             VM_Displayed_Map.insert(key, NULL);
         };

@@ -2,7 +2,6 @@
 #define VIRTNET_CONTROL_H
 
 #include <QMainWindow>
-#include <QGridLayout>
 #include <QTreeView>
 #include <QSettings>
 #include <QTime>

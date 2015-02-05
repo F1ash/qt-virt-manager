@@ -1,36 +1,30 @@
 #ifndef LXC_VIEWER_H
 #define LXC_VIEWER_H
 
-#include <QWidget>
-#include <QLabel>
-#include <QVBoxLayout>
 #include <QTimerEvent>
 #include <QSocketNotifier>
 #include <QApplication>
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
-#include "qtermwidget/lib/qtermwidget.h"
+#include "vm_viewer/qterminal/mainwindow.h"
 #include <unistd.h>
 #include <QDebug>
 
-class LXC_Viewer : public QTermWidget
+class LXC_Viewer : public TermMainWindow
 {
     Q_OBJECT
 public:
-    explicit LXC_Viewer(int startnow = NULL, QWidget *parent = NULL, virConnect *conn = NULL, QString str = QString());
+    explicit LXC_Viewer(QWidget *parent = NULL,
+            virConnect *conn = NULL,
+            QString arg1 = QString(),
+            QString arg2 = QString(),
+            const QString& work_dir = NULL,
+            const QString& command = NULL);
     ~LXC_Viewer();
 
-signals:
-    void errorMsg(QString&);
-    void jobFinished();
-
 private:
-    QString         domain;
     virDomain      *domainPtr = NULL;
-    virConnect     *jobConnect = NULL;
-    virErrorPtr     virtErrors = NULL;
     virStream      *stream = NULL;
     int             ptySlaveFd = -1;
+    size_t          buffDiff = 0;
     uint            timerId = 0;
     uint            counter = 0;
     QSocketNotifier
@@ -41,6 +35,7 @@ public slots:
 
 private slots:
     void            timerEvent(QTimerEvent*);
+    void            setTerminalParameters();
     void            closeEvent(QCloseEvent*);
     virDomain*      getDomainPtr() const;
     int             registerStreamEvents();
@@ -51,10 +46,6 @@ private slots:
     void            sendDataToDisplay(virStreamPtr);
     void            sendDataToVMachine(int);
     void            closeStream();
-
-    void            sendConnErrors();
-    void            sendGlobalErrors();
-
 };
 
 #endif // LXC_VIEWER_H

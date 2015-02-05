@@ -8,7 +8,10 @@ endif (WIN32)
 
 include (${QT_USE_FILE})
 qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
-QT4_WRAP_UI(UI_SRCS src/qtermwidget/lib/SearchBar.ui)
+qt4_wrap_ui(UI_SRCS ${QTERM_UI_SRC})
+
+qt4_add_resources(QTERM_RCC ${QTERM_RCC_SRC})
+#qt4_add_translation(QTERM_QM ${QTERM_TS})
 
 set (QT4_BUILD 1)
 set (BUILD_PROJECT_LIBRARIES ${QT_LIBRARIES})
