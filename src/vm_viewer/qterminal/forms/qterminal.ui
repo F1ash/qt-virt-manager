@@ -16,6 +16,9 @@
   <property name="autoFillBackground">
    <bool>true</bool>
   </property>
+  <property name="locale">
+   <locale language="C" country="AnyCountry"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout">
     <property name="leftMargin">
@@ -37,6 +40,9 @@
         <width>320</width>
         <height>200</height>
        </size>
+      </property>
+      <property name="locale">
+       <locale language="C" country="AnyCountry"/>
       </property>
       <property name="tabPosition">
        <enum>QTabWidget::South</enum>
@@ -60,7 +66,7 @@
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -101,7 +107,9 @@
   </widget>
   <action name="actAbout">
    <property name="icon">
-    <iconset theme="help-about"/>
+    <iconset theme="help-about">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>About...</string>
@@ -119,7 +127,9 @@
   </action>
   <action name="actQuit">
    <property name="icon">
-    <iconset theme="application-exit"/>
+    <iconset theme="application-exit">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>
@@ -134,8 +144,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../icons.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

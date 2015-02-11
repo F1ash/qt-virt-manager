@@ -1,5 +1,3 @@
-//#include <qtermwidget.h>
-
 #include "properties.h"
 #include "config.h"
 
@@ -59,8 +57,12 @@ void Properties::loadSettings()
     foreach( QString key, keys )
     {
         QKeySequence sequence = QKeySequence( settings.value( key ).toString() );
-        if( Properties::Instance()->actions.contains( key ) )
-            Properties::Instance()->actions[ key ]->setShortcut( sequence );
+        if ( sequence.isEmpty() || sequence.count()<4 ) continue;
+        if( Properties::Instance()->actions.contains( key )
+                && NULL!=Properties::Instance()->actions[ key ] ) {
+            QAction *act = static_cast<QAction *>(Properties::Instance()->actions[ key ]);
+            if (NULL!=act) act->setShortcut( sequence );
+        };
     }
     settings.endGroup();
 
@@ -131,9 +133,13 @@ void Properties::saveSettings()
     while( it.hasNext() )
     {
         it.next();
-        QKeySequence shortcut = it.value()->shortcut();
-        settings.setValue( it.key(), shortcut.toString() );
-    }
+        // TODO: fix shortcuts
+        //qDebug()<< it.key()<<it.value();
+        QAction *act = const_cast<QAction*>(it.value());
+        if ( NULL==act ) continue;
+        //QKeySequence shortcut(act->shortcut());
+        //settings.setValue( it.key(), shortcut.toString() );
+    };
     settings.endGroup();
 
     settings.setValue("MainWindow/geometry", mainWindowGeometry);

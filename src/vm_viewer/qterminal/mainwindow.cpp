@@ -68,9 +68,9 @@ TermMainWindow::TermMainWindow(QWidget *parent,
     consoleTabulator->setWorkDirectory(work_dir);
     consoleTabulator->setTabPosition((QTabWidget::TabPosition)Properties::Instance()->tabsPos);
     //consoleTabulator->setShellProgram(command);
-    consoleTabulator->addNewTab(command);
+    consoleTabulator->addNewTab(QString("Terminal <%2> in <%1> Domain").arg(arg1).arg(arg2));
 
-    setWindowTitle("QTerminal");
+    setWindowTitle(QString("Terminal <%2> in <%1> Domain").arg(arg1).arg(arg2));
     setWindowIcon(QIcon::fromTheme("utilities-terminal"));
 
     setup_FileMenu_Actions();
@@ -260,9 +260,9 @@ void TermMainWindow::setup_FileMenu_Actions()
     QSettings settings;
     settings.beginGroup("Shortcuts");
 
+    /*
     QKeySequence seq;
 
-    /*
     Properties::Instance()->actions[ADD_TAB] = new QAction(QIcon::fromTheme("list-add"), tr("New Tab"), this);
     seq = QKeySequence::fromString( settings.value(ADD_TAB, ADD_TAB_SHORTCUT).toString() );
     Properties::Instance()->actions[ADD_TAB]->setShortcut(seq);
@@ -279,7 +279,6 @@ void TermMainWindow::setup_FileMenu_Actions()
     presetsMenu->addAction(QIcon(), tr("4 Terminals"),
                            consoleTabulator, SLOT(preset4Terminals()));
     menu_File->addMenu(presetsMenu);
-    */
 
     Properties::Instance()->actions[CLOSE_TAB] = new QAction(QIcon::fromTheme("list-remove"), tr("Close Tab"), this);
     seq = QKeySequence::fromString( settings.value(CLOSE_TAB, CLOSE_TAB_SHORTCUT).toString() );
@@ -288,6 +287,7 @@ void TermMainWindow::setup_FileMenu_Actions()
     menu_File->addAction(Properties::Instance()->actions[CLOSE_TAB]);
 
     menu_File->addSeparator();
+    */
 
     Properties::Instance()->actions[PREFERENCES] = actProperties;
     connect(actProperties, SIGNAL(triggered()), SLOT(actProperties_triggered()));

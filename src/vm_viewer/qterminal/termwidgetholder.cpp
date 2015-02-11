@@ -277,8 +277,10 @@ TermWidget *TermWidgetHolder::newTerm(const QString & wdir, const QString & shel
 
 void TermWidgetHolder::setCurrentTerminal(TermWidget* term)
 {
-    qDebug() << "set current term:" << term;
-    m_currentTerm = term;
+    if ( NULL==m_currentTerm ) {
+        qDebug() << "set current term:" << term;
+        m_currentTerm = term;
+    };
 }
 
 void TermWidgetHolder::handle_finished()

@@ -1,5 +1,4 @@
 #include "lxc_viewer.h"
-//#include <QTextCodec>
 
 #define BLOCK_SIZE  1024*100
 #define TIMEOUT     60*1000
@@ -47,6 +46,7 @@ LXC_Viewer::LXC_Viewer(
                 receiveErrMsg(msg);
             };
             if ( ret ) {
+                viewerToolBar->setEnabled(true);
                 // don't start (default) shell program,
                 // because take the data from VM Stream
                 timerId = startTimer(PERIOD);
@@ -121,13 +121,20 @@ PTY opened. Terminal is active.").arg(domain);
 }
 void LXC_Viewer::setTerminalParameters()
 {
+    // reserved for set terminal parameters
     TermWidget *t = getCurrentTerminal();
     if ( NULL!=t ) {
-        t->m_term->propertiesChanged();
-        t->propertiesChanged();
+        /*
+        t->m_term->setLocale(QLocale::system().name().left(2));
+        t->impl()->setKeyBindings("vt420pc");
+        t->m_term->setEnvironment(QStringList()
+                                  <<"TERM='xterm'"
+                                  <<"LANG='ru_RU.UTF-8'");
         qDebug()<<t->impl()->keyBindings()<<"term";
         qDebug()<<t->availableKeyBindings()<<"term";
-        qDebug()<<t->locale()<<"term";
+        qDebug()<<QLocale::system().name().left(2)<<"term";
+        t->m_term->propertiesChanged();
+         */
     };
 }
 void LXC_Viewer::closeEvent(QCloseEvent *ev)

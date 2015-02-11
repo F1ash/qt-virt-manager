@@ -8,10 +8,21 @@ VM_Viewer::VM_Viewer(
     setWindowTitle(QString("<%1> Virtual Machine").arg(domain));
     restoreGeometry( settings.value("VMViewerGeometry").toByteArray() );
     VM_State = true;
+    viewerToolBar = new ViewerToolBar(this);
+    viewerToolBar->setEnabled(false);
+    addToolBar(Qt::TopToolBarArea, viewerToolBar);
+    connect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
+            this, SLOT(resendExecMethod(const QStringList&)));
 }
 VM_Viewer::~VM_Viewer()
 {
     settings.setValue("VMViewerGeometry", saveGeometry());
+    if ( NULL!=viewerToolBar ) {
+        disconnect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
+                   this, SLOT(resendExecMethod(const QStringList&)));
+        delete viewerToolBar;
+        viewerToolBar = NULL;
+    };
     if ( jobConnect!=NULL ) {
         virConnectClose(jobConnect);
     };
@@ -73,4 +84,57 @@ void VM_Viewer::sendGlobalErrors()
         emit errorMsg( msg );
     };
     virResetLastError();
+}
+void VM_Viewer::resendExecMethod(const QStringList &method)
+{
+    QStringList args;
+    if ( true ) {
+        args.append(domain);
+        if        ( method.first()=="startVirtDomain" ) {
+            args.prepend(method.first());
+            args.prepend(QString::number(START_ENTITY));
+            args.prepend(connName);
+            emit addNewTask(jobConnect, args);
+        } else if ( method.first()=="pauseVirtDomain" ) {
+            args.append( QString::number(VM_State ? 1 : 0) );
+            args.prepend(method.first());
+            args.prepend(QString::number(PAUSE_ENTITY));
+            args.prepend(connName);
+            emit addNewTask(jobConnect, args);
+        } else if ( method.first()=="destroyVirtDomain" ) {
+            args.prepend(method.first());
+            args.prepend(QString::number(DESTROY_ENTITY));
+            args.prepend(connName);
+            emit addNewTask(jobConnect, args);
+        } else if ( method.first()=="resetVirtDomain" ) {
+            args.prepend(method.first());
+            args.prepend(QString::number(RESET_ENTITY));
+            args.prepend(connName);
+            emit addNewTask(jobConnect, args);
+        } else if ( method.first()=="shutdownVirtDomain" ) {
+            args.prepend(method.first());
+            args.prepend(QString::number(SHUTDOWN_ENTITY));
+            args.prepend(connName);
+            emit addNewTask(jobConnect, args);
+        } else if ( method.first()=="saveVirtDomain" ) {
+            QString to = QFileDialog::getSaveFileName(this, "Save to", "~");
+            if ( !to.isEmpty() ) {
+                args.append(to);
+                args.append( QString::number(VM_State ? 1 : 0) );
+                args.prepend(method.first());
+                args.prepend(QString::number(SAVE_ENTITY));
+                args.prepend(connName);
+                emit addNewTask(jobConnect, args);
+            };
+        } else if ( method.first()=="restoreVirtDomain" ) {
+            QString from = QFileDialog::getOpenFileName(this, "Restore from", "~");
+            if ( !from.isEmpty() ) {
+                args.append(from);
+                args.prepend(method.first());
+                args.prepend(QString::number(RESTORE_ENTITY));
+                args.prepend(connName);
+                emit addNewTask(jobConnect, args);
+            };
+        };
+    };
 }

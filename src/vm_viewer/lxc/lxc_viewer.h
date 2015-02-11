@@ -3,7 +3,6 @@
 
 #include <QTimerEvent>
 #include <QSocketNotifier>
-#include <QApplication>
 #include "vm_viewer/qterminal/mainwindow.h"
 #include <unistd.h>
 #include <QDebug>

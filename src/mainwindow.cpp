@@ -658,6 +658,7 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
 {
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( !VM_Displayed_Map.contains(key) ) {
+        qDebug()<<key<<"vm invoked"<<"new";
         QString type;
         VM_Viewer *value = NULL;
         if ( conn!=NULL ) {
@@ -680,10 +681,20 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
                 this, SLOT(deleteVMDisplay()));
         connect(VM_Displayed_Map.value(key, NULL), SIGNAL(errorMsg(QString&)),
                 logDockContent, SLOT(appendErrorMsg(QString&)));
-        value->show();
+        connect(VM_Displayed_Map.value(key, NULL), SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+                taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+        //connect(VM_Displayed_Map.value(key, NULL),
+        //        SIGNAL(addNewTask(virConnectPtr, QStringList&, virConnectPtr)),
+        //        taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
+        connect(taskWrHouse, SIGNAL(domResult(Result)),
+                VM_Displayed_Map.value(key, NULL), SLOT(resultReceiver(Result)));
+        VM_Displayed_Map.value(key, NULL)->show();
     } else {
-        VM_Viewer *term = VM_Displayed_Map.value(key, NULL);
-        if ( term!=NULL ) term->show();
+        qDebug()<<key<<"vm invoked"<<"exist";
+        if ( VM_Displayed_Map.value(key, NULL)!=NULL )
+            VM_Displayed_Map.value(key, NULL)->show();
+        else
+            VM_Displayed_Map.remove(key);
     };
 }
 void MainWindow::deleteVMDisplay()
@@ -691,13 +702,20 @@ void MainWindow::deleteVMDisplay()
     VM_Viewer *term = qobject_cast<VM_Viewer*>( sender() );
     if ( term!=NULL ) {
         QString key = VM_Displayed_Map.key(term);
-        //qDebug()<<key<<"display close1";
+        qDebug()<<key<<"display close1";
         disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()),
                    this, SLOT(deleteVMDisplay()));
         disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(errorMsg(QString&)),
                    logDockContent, SLOT(appendErrorMsg(QString&)));
+        disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+                   taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+        //disconnect(VM_Displayed_Map.value(key, NULL),
+        //           SIGNAL(addNewTask(virConnectPtr, QStringList&, virConnectPtr)),
+        //           taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
+        //disconnect(taskWrHouse, SIGNAL(domResult(Result)),
+        //           VM_Displayed_Map.value(key, NULL), SLOT(resultReceiver(Result)));
         delete VM_Displayed_Map.value(key);
-        VM_Displayed_Map.insert(key, NULL);
+        //VM_Displayed_Map.insert(key, NULL);
         VM_Displayed_Map.remove(key);
         // reload domains state, because VM_Viewer finished Domain Job
         // maybe it need for LXC only
@@ -708,15 +726,22 @@ void MainWindow::deleteVMDisplay(QString connName, QString domName)
 {
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( VM_Displayed_Map.contains(key) ) {
-        //qDebug()<<key<<"display close2";
+        qDebug()<<key<<"display close2";
         if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
             VM_Displayed_Map.value(key)->stopProcessing();
             disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished()),
                        this, SLOT(deleteVMDisplay()));
             disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(errorMsg(QString&)),
                        logDockContent, SLOT(appendErrorMsg(QString&)));
+            disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+                       taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+            //disconnect(VM_Displayed_Map.value(key, NULL),
+            //           SIGNAL(addNewTask(virConnectPtr, QStringList&, virConnectPtr)),
+            //           taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
+            //disconnect(taskWrHouse, SIGNAL(domResult(Result)),
+            //           VM_Displayed_Map.value(key, NULL), SLOT(resultReceiver(Result)));
             delete VM_Displayed_Map.value(key);
-            VM_Displayed_Map.insert(key, NULL);
+            //VM_Displayed_Map.insert(key, NULL);
         };
         VM_Displayed_Map.remove(key);
         // don't reload domains state, because this invoked by 'destroy Domain' action

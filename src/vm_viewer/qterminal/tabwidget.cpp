@@ -32,7 +32,8 @@
 #define TAB_INDEX_PROPERTY "tab_index"
 
 
-TabWidget::TabWidget(QWidget* parent) : QTabWidget(parent), tabNumerator(0)
+TabWidget::TabWidget(QWidget* parent, QString _name) :
+    QTabWidget(parent), tabName(_name)
 {
     setFocusPolicy(Qt::NoFocus);
 
@@ -44,13 +45,13 @@ TabWidget::TabWidget(QWidget* parent) : QTabWidget(parent), tabNumerator(0)
 
     tabBar()->setUsesScrollButtons(true);
 
-    setTabsClosable(true);
+    setTabsClosable(false);
     setMovable(true);
     setUsesScrollButtons(true);
 
     tabBar()->installEventFilter(this);
 
-    connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(removeTab(int)));
+    //connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(removeTab(int)));
 }
 
 TermWidgetHolder * TabWidget::terminalHolder()
@@ -63,11 +64,8 @@ void TabWidget::setWorkDirectory(const QString& dir)
     this->work_dir = dir;
 }
 
-int TabWidget::addNewTab(const QString & shell_program)
+int TabWidget::addNewTab(const QString & term_name)
 {
-    tabNumerator++;
-    QString label = QString(tr("Shell No. %1")).arg(tabNumerator);
-
     TermWidgetHolder *ch = terminalHolder();
     QString cwd(work_dir);
     if (Properties::Instance()->useCWD && ch)
@@ -77,13 +75,13 @@ int TabWidget::addNewTab(const QString & shell_program)
             cwd = work_dir;
     }
 
-    TermWidgetHolder *console = new TermWidgetHolder(cwd, shell_program, this);
+    TermWidgetHolder *console = new TermWidgetHolder(cwd, QString(), this);
     connect(console, SIGNAL(finished()), SLOT(removeFinished()));
     //connect(console, SIGNAL(lastTerminalClosed()), this, SLOT(removeCurrentTab()));
     connect(console, SIGNAL(lastTerminalClosed()), this, SLOT(removeFinished()));
     connect(console, SIGNAL(renameSession()), this, SLOT(renameSession()));
 
-    int index = addTab(console, label);
+    int index = addTab(console, term_name);
     recountIndexes();
     setCurrentIndex(index);
     console->setInitialFocus();
@@ -231,7 +229,7 @@ void TabWidget::removeTab(int index)
         qobject_cast<TermWidgetHolder*>(widget(current))->setInitialFocus();
     }
 // do not decrease it as renaming is disabled in renameTabsAfterRemove
-//    tabNumerator--;
+//    tabName--;
     setUpdatesEnabled(true);
 
     if (count() == 0)
@@ -344,7 +342,9 @@ void TabWidget::changeTabPosition(QAction *triggered)
 
     Properties *prop = Properties::Instance();
     /* order is dictated from mainwindow.cpp */
-    QTabWidget::TabPosition position = (QTabWidget::TabPosition)tabPosition->actions().indexOf(triggered);
+    QTabWidget::TabPosition position =
+            (QTabWidget::TabPosition)tabPosition->actions()
+            .indexOf(triggered);
     setTabPosition(position);
     prop->tabsPos = position;
     prop->saveSettings();

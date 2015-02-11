@@ -12,13 +12,13 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
     create_Action = new QAction(this);
     create_Action->setIcon(QIcon::fromTheme("storagePool-create"));
     create_Action->setToolTip("Create");
-    create_Menu = new OpenFileMenu(this, "create", "StoragePool");
+    create_Menu = new OpenFileMenu(this, "create", "storagePool");
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("storagePool-define"));
     define_Action->setToolTip("Define");
-    define_Menu = new OpenFileMenu(this, "define", "StoragePool");
+    define_Menu = new OpenFileMenu(this, "define", "storagePool");
     define_Action->setMenu(define_Menu);
     connect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
