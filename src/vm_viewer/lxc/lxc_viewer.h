@@ -3,6 +3,8 @@
 
 #include <QTimerEvent>
 #include <QSocketNotifier>
+#include <QProgressBar>
+#include <QStatusBar>
 #include "vm_viewer/qterminal/mainwindow.h"
 #include <unistd.h>
 #include <QDebug>
@@ -25,9 +27,11 @@ private:
     int             ptySlaveFd = -1;
     size_t          buffDiff = 0;
     uint            timerId = 0;
+    uint            killTimerId = 0;
     uint            counter = 0;
     QSocketNotifier
                    *readSlaveFd = NULL;
+    QProgressBar   *closeProcess = NULL;
 
 public slots:
     void            closeTerminal();

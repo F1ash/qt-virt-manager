@@ -91,7 +91,8 @@ void ConnAliveThread::openConnect()
 {
     if ( virInitialize()+1 ) {
         registered = (virEventRegisterDefaultImpl()==0)?true:false;
-        emit connMsg( QString("default event implementation registered: %1").arg(QVariant(registered).toString()) );
+        emit connMsg( QString("default event implementation registered: %1")
+                      .arg(QVariant(registered).toString()) );
         //conn = virConnectOpen(URI.toUtf8().constData());
         auth.cb = authCallback;
         auth.cbdata = this;
@@ -105,7 +106,9 @@ void ConnAliveThread::openConnect()
         emit changeConnState(FAILED);
     } else {
         keep_alive = true;
-        emit connMsg( QString("connect opened: %1").arg(QVariant(conn!=NULL).toString()) );
+        emit connMsg( QString("connect opened: %1")
+                      .arg(QVariant(conn!=NULL)
+                           .toString()) );
         emit changeConnState(RUNNING);
         registerConnEvents();
     };

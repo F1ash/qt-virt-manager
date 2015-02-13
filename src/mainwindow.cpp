@@ -686,8 +686,8 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
         //connect(VM_Displayed_Map.value(key, NULL),
         //        SIGNAL(addNewTask(virConnectPtr, QStringList&, virConnectPtr)),
         //        taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
-        connect(taskWrHouse, SIGNAL(domResult(Result)),
-                VM_Displayed_Map.value(key, NULL), SLOT(resultReceiver(Result)));
+        //connect(taskWrHouse, SIGNAL(domResult(Result)),
+        //        VM_Displayed_Map.value(key, NULL), SLOT(resultReceiver(Result)));
         VM_Displayed_Map.value(key, NULL)->show();
     } else {
         qDebug()<<key<<"vm invoked"<<"exist";
@@ -715,7 +715,6 @@ void MainWindow::deleteVMDisplay()
         //disconnect(taskWrHouse, SIGNAL(domResult(Result)),
         //           VM_Displayed_Map.value(key, NULL), SLOT(resultReceiver(Result)));
         delete VM_Displayed_Map.value(key);
-        //VM_Displayed_Map.insert(key, NULL);
         VM_Displayed_Map.remove(key);
         // reload domains state, because VM_Viewer finished Domain Job
         // maybe it need for LXC only
@@ -741,7 +740,6 @@ void MainWindow::deleteVMDisplay(QString connName, QString domName)
             //disconnect(taskWrHouse, SIGNAL(domResult(Result)),
             //           VM_Displayed_Map.value(key, NULL), SLOT(resultReceiver(Result)));
             delete VM_Displayed_Map.value(key);
-            //VM_Displayed_Map.insert(key, NULL);
         };
         VM_Displayed_Map.remove(key);
         // don't reload domains state, because this invoked by 'destroy Domain' action

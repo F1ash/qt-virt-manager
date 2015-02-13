@@ -31,7 +31,7 @@ LXC_Viewer::LXC_Viewer(
              * When passing @flags of 0 in order to support a wider range of server versions,
              * it is up to the client to ensure mutual exclusion.
              */
-            int ret;
+            int ret = -1;
             if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_SAFE)+1 ) {
                 msg = QString("In '<b>%1</b>': Console opened in SAFE-mode...").arg(domain);
                 receiveErrMsg(msg);
@@ -44,6 +44,12 @@ LXC_Viewer::LXC_Viewer(
             } else {
                 msg = QString("In '<b>%1</b>': Open console failed...").arg(domain);
                 receiveErrMsg(msg);
+                sendConnErrors();
+                getCurrentTerminal()->m_term->sendText(msg);
+                killTimerId = startTimer(PERIOD);
+                closeProcess = new QProgressBar(this);
+                statusBar()->addWidget(closeProcess);
+                closeProcess->setRange(0, TIMEOUT);
             };
             if ( ret ) {
                 viewerToolBar->setEnabled(true);
@@ -55,12 +61,19 @@ LXC_Viewer::LXC_Viewer(
     } else {
         msg = QString("In '<b>%1</b>': Connect or Domain is NULL...").arg(domain);
         receiveErrMsg(msg);
+        getCurrentTerminal()->m_term->sendText(msg);
+        killTimerId = startTimer(PERIOD);
+        closeProcess = new QProgressBar(this);
+        statusBar()->addWidget(closeProcess);
+        closeProcess->setRange(0, TIMEOUT);
     };
+    sendConnErrors();
     //qDebug()<<msg<<"term inits";
 }
 LXC_Viewer::~LXC_Viewer()
 {
     if ( timerId>0 ) killTimer(timerId);
+    if ( killTimerId>0 ) killTimer(killTimerId);
     if ( domainPtr!=NULL ) {
         if ( readSlaveFd!=NULL ) {
             disconnect(readSlaveFd,
@@ -71,6 +84,10 @@ LXC_Viewer::~LXC_Viewer()
             readSlaveFd = 0;
         };
         closeStream();
+    };
+    if ( NULL!=closeProcess ) {
+        delete closeProcess;
+        closeProcess = NULL;
     };
     qDebug()<<domain<< "Display destroyed";
 }
@@ -85,6 +102,7 @@ void LXC_Viewer::closeTerminal()
 /* private slots */
 void LXC_Viewer::timerEvent(QTimerEvent *ev)
 {
+    QString msg;
     if ( ev->timerId()==timerId ) {
         ptySlaveFd = this->getPtySlaveFd();
         counter++;
@@ -96,6 +114,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             if ( registerStreamEvents()<0 ) {
                 QString msg = QString("In '<b>%1</b>': Stream Registation fail.").arg(domain);
                 receiveErrMsg(msg);
+                getCurrentTerminal()->m_term->sendText(msg);
             } else {
                 setTerminalParameters();
                 readSlaveFd = new QSocketNotifier(
@@ -116,7 +135,17 @@ PTY opened. Terminal is active.").arg(domain);
             counter = 0;
             QString msg = QString("In '<b>%1</b>': Open PTY Error...").arg(domain);
             receiveErrMsg(msg);
+            getCurrentTerminal()->m_term->sendText(msg);
         }
+    } else if ( ev->timerId()==killTimerId ) {
+        counter++;
+        closeProcess->setValue(counter*PERIOD*6);
+        if ( TIMEOUT<counter*PERIOD*6 ) {
+            killTimer(killTimerId);
+            killTimerId = 0;
+            counter = 0;
+            closeTerminal();
+        };
     }
 }
 void LXC_Viewer::setTerminalParameters()

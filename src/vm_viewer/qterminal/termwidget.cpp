@@ -7,15 +7,12 @@
 #include "config.h"
 #include "properties.h"
 
-static int TermWidgetCount = 0;
-
 
 TermWidgetImpl::TermWidgetImpl(const QString & wdir, const QString & shell, QWidget * parent)
     : QTermWidget(0, parent)
 {
-    TermWidgetCount++;
-    QString name("TermWidget_%1");
-    setObjectName(name.arg(TermWidgetCount));
+    QString name("TermWidget");
+    setObjectName(name);
 
     setFlowControlEnabled(FLOW_CONTROL_ENABLED);
     setFlowControlWarningEnabled(FLOW_CONTROL_WARNING_ENABLED);

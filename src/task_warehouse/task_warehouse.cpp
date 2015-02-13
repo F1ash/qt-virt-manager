@@ -175,13 +175,15 @@ void TaskWareHouse::taskResultReceiver(Result data)
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));
     if ( NULL!=cThread ) {
+        //qDebug()<<_number<<"delete";
         disconnect(cThread, SIGNAL(errorMsg(QString)),
                    this, SLOT(msgRepeater(QString)));
         disconnect(cThread, SIGNAL(resultData(Result)),
                    this, SLOT(taskResultReceiver(Result)));
-        delete cThread;
-        cThread = NULL;
-        threadPool->remove(_number);
+        threadPool->value(_number)->quit();
+        //delete threadPool->value(_number);
+        int deleted = threadPool->remove(_number);
+        //qDebug()<<_number<<"deleted:"<<deleted;
     };
     QString stateIcon;
     if ( data.result ) {
