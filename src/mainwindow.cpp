@@ -34,36 +34,64 @@ MainWindow::MainWindow(QWidget *parent)
 }
 MainWindow::~MainWindow()
 {
-  disconnect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, \
-                    SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
-  disconnect(trayIcon->hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
-  disconnect(trayIcon->logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
-  disconnect(trayIcon->monitorAction, SIGNAL(triggered()), domainsStateMonitor, SLOT(changeVisibility()));
-  disconnect(trayIcon->taskUpAction, SIGNAL(triggered()), taskWrHouse, SLOT(changeVisibility()));
-  disconnect(trayIcon->closeAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
-  disconnect(connListWidget, SIGNAL(removeConnect(QString&)), this, SLOT(removeConnectItem(QString&)));
-  disconnect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
-  disconnect(connListWidget, SIGNAL(warning(QString&)), this, SLOT(writeToErrorLog(QString&)));
-  disconnect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  disconnect(connListWidget, SIGNAL(connectClosed(virConnect*)), this, SLOT(stopConnProcessing(virConnect*)));
-  disconnect(toolBar->_hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
-  disconnect(toolBar->_createAction, SIGNAL(triggered()), this, SLOT(createNewConnect()));
-  disconnect(toolBar->_editAction, SIGNAL(triggered()), this, SLOT(editCurrentConnect()));
-  disconnect(toolBar->_deleteAction, SIGNAL(triggered()), this, SLOT(deleteCurrentConnect()));
-  disconnect(toolBar->_openAction, SIGNAL(triggered()), this, SLOT(openCurrentConnect()));
-  disconnect(toolBar->_showAction, SIGNAL(triggered()), this, SLOT(showCurrentConnect()));
-  disconnect(toolBar->_closeAction, SIGNAL(triggered()), this, SLOT(closeCurrentConnect()));
-  disconnect(toolBar->_closeAllAction, SIGNAL(triggered()), this, SLOT(closeAllConnect()));
-  disconnect(toolBar->_logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
-  disconnect(toolBar->_closeOverview, SIGNAL(triggered()), this, SLOT(stopProcessing()));
-  disconnect(toolBar->_exitAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
-  disconnect(toolBar, SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
-  disconnect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
-  disconnect(toolBar->_netUpAction, SIGNAL(triggered(bool)), networkDock, SLOT(setVisible(bool)));
-  disconnect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storageVolDock, SLOT(setVisible(bool)));
-  disconnect(toolBar->_storageUpAction, SIGNAL(triggered(bool)), storagePoolDock, SLOT(setVisible(bool)));
-  disconnect(networkDockContent, SIGNAL(netMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
-  disconnect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+  disconnect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+  disconnect(trayIcon->hideAction, SIGNAL(triggered()),
+             this, SLOT(changeVisibility()));
+  disconnect(trayIcon->logUpAction, SIGNAL(triggered()),
+             this, SLOT(changeLogViewerVisibility()));
+  disconnect(trayIcon->monitorAction, SIGNAL(triggered()),
+             domainsStateMonitor, SLOT(changeVisibility()));
+  disconnect(trayIcon->taskUpAction, SIGNAL(triggered()),
+             taskWrHouse, SLOT(changeVisibility()));
+  disconnect(trayIcon->closeAction, SIGNAL(triggered()),
+             this, SLOT(closeEvent()));
+  disconnect(connListWidget, SIGNAL(removeConnect(QString&)),
+             this, SLOT(removeConnectItem(QString&)));
+  disconnect(connListWidget, SIGNAL(messageShowed()),
+             this, SLOT(mainWindowUp()));
+  disconnect(connListWidget, SIGNAL(warning(QString&)),
+             this, SLOT(writeToErrorLog(QString&)));
+  disconnect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)),
+             this, SLOT(receiveConnPtr(virConnect*, QString&)));
+  disconnect(connListWidget, SIGNAL(connectClosed(virConnect*)),
+             this, SLOT(stopConnProcessing(virConnect*)));
+  disconnect(toolBar->_hideAction, SIGNAL(triggered()),
+             this, SLOT(changeVisibility()));
+  disconnect(toolBar->_createAction, SIGNAL(triggered()),
+             this, SLOT(createNewConnect()));
+  disconnect(toolBar->_editAction, SIGNAL(triggered()),
+             this, SLOT(editCurrentConnect()));
+  disconnect(toolBar->_deleteAction, SIGNAL(triggered()),
+             this, SLOT(deleteCurrentConnect()));
+  disconnect(toolBar->_openAction, SIGNAL(triggered()),
+             this, SLOT(openCurrentConnect()));
+  disconnect(toolBar->_showAction, SIGNAL(triggered()),
+             this, SLOT(showCurrentConnect()));
+  disconnect(toolBar->_closeAction, SIGNAL(triggered()),
+             this, SLOT(closeCurrentConnect()));
+  disconnect(toolBar->_closeAllAction, SIGNAL(triggered()),
+             this, SLOT(closeAllConnect()));
+  disconnect(toolBar->_logUpAction, SIGNAL(triggered()),
+             this, SLOT(changeLogViewerVisibility()));
+  disconnect(toolBar->_closeOverview, SIGNAL(triggered()),
+             this, SLOT(stopProcessing()));
+  disconnect(toolBar->_exitAction, SIGNAL(triggered()),
+             this, SLOT(closeEvent()));
+  disconnect(toolBar, SIGNAL(warningShowed()),
+             this, SLOT(mainWindowUp()));
+  disconnect(toolBar->_domUpAction, SIGNAL(triggered(bool)),
+             domainDock, SLOT(setVisible(bool)));
+  disconnect(toolBar->_netUpAction, SIGNAL(triggered(bool)),
+             networkDock, SLOT(setVisible(bool)));
+  disconnect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
+             storageVolDock, SLOT(setVisible(bool)));
+  disconnect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
+             storagePoolDock, SLOT(setVisible(bool)));
+  disconnect(networkDockContent, SIGNAL(entityMsg(QString&)),
+             this, SLOT(writeToErrorLog(QString&)));
+  disconnect(domainDockContent, SIGNAL(entityMsg(QString&)),
+             this, SLOT(writeToErrorLog(QString&)));
   disconnect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
              this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
   disconnect(domainDockContent, SIGNAL(addToStateMonitor(virConnectPtr,QString&,QString&)),
@@ -72,8 +100,10 @@ MainWindow::~MainWindow()
              this, SLOT(deleteVMDisplay(QString,QString)));
   disconnect(domainDockContent, SIGNAL(migrateToConnect(QStringList&)),
              this, SLOT(buildMigrateArgs(QStringList&)));
-  disconnect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
-  disconnect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+  disconnect(storagePoolDockContent, SIGNAL(entityMsg(QString&)),
+             this, SLOT(writeToErrorLog(QString&)));
+  disconnect(storageVolDockContent, SIGNAL(entityMsg(QString&)),
+             this, SLOT(writeToErrorLog(QString&)));
   disconnect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
              this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
   disconnect(domainsStateMonitor, SIGNAL(visibilityChanged(bool)),
@@ -382,7 +412,7 @@ void MainWindow::initDockWidgets()
     settings.endGroup();
     addDockWidget(area, domainDock);
     connect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
-    connect(domainDockContent, SIGNAL(domMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+    connect(domainDockContent, SIGNAL(entityMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
     connect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
             this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
     connect(domainDockContent, SIGNAL(addToStateMonitor(virConnectPtr,QString&,QString&)),
@@ -427,7 +457,7 @@ void MainWindow::initDockWidgets()
     addDockWidget(area, networkDock);
     connect(toolBar->_netUpAction, SIGNAL(triggered(bool)),
             networkDock, SLOT(setVisible(bool)));
-    connect(networkDockContent, SIGNAL(netMsg(QString&)),
+    connect(networkDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
     connect(networkDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
@@ -462,7 +492,7 @@ void MainWindow::initDockWidgets()
     addDockWidget(area, storageVolDock);
     connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
             storageVolDock, SLOT(setVisible(bool)));
-    connect(storageVolDockContent, SIGNAL(storageVolMsg(QString&)),
+    connect(storageVolDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
     connect(storageVolDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
@@ -497,7 +527,7 @@ void MainWindow::initDockWidgets()
     addDockWidget(area, storagePoolDock);
     connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
             storagePoolDock, SLOT(setVisible(bool)));
-    connect(storagePoolDockContent, SIGNAL(storagePoolMsg(QString&)),
+    connect(storagePoolDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
     connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
             this, SLOT(receivePoolName(virConnect*,QString&,QString&)));

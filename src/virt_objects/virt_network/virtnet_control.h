@@ -1,39 +1,22 @@
 #ifndef VIRTNET_CONTROL_H
 #define VIRTNET_CONTROL_H
 
-#include <QMainWindow>
-#include <QTreeView>
-#include <QSettings>
-#include <QTime>
-#include <QUrl>
-#include <QDesktopServices>
-#include <QMessageBox>
-#include <QDebug>
+#include "virt_objects/virt_entity_control.h"
 #include "virtnet_model.h"
 #include "virtnet_toolbar.h"
 #include "virtnet_control_menu.h"
-#include "virt_objects/control_thread.h"
 #include "create_widgets/network/create_virt_network.h"
 
-class VirtNetControl : public QMainWindow
+class VirtNetControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
     explicit VirtNetControl(QWidget *parent = NULL);
     ~VirtNetControl();
 
-signals:
-    void                 netMsg(QString&);
-    void                 addNewTask(virConnectPtr, QStringList&);
-
 private:
-    QString              currConnName;
-    QSettings            settings;
     VirtNetModel        *virtNetModel = NULL;
-    QTreeView           *virtNetList = NULL;
     VirtNetToolBar      *toolBar;
-
-    virConnect          *currWorkConnect = NULL;
 
 public slots:
     bool                 getThreadState() const;
@@ -43,13 +26,11 @@ public slots:
     void                 resultReceiver(Result);
 
 private slots:
-    void                 msgRepeater(QString);
     void                 changeDockVisibility();
-
-    void                 networkClicked(const QPoint&);
-    void                 networkDoubleClicked(const QModelIndex&);
+    void                 entityClicked(const QPoint&);
+    void                 entityDoubleClicked(const QModelIndex&);
     void                 execAction(const QStringList&);
-    void                 newVirtNetworkFromXML(const QStringList&);
+    void                 newVirtEntityFromXML(const QStringList&);
 };
 
 #endif // VIRTNET_CONTROL_H

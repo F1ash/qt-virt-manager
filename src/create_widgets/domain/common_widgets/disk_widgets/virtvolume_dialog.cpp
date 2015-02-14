@@ -32,7 +32,7 @@ VirtVolumeDialog::VirtVolumeDialog(
     commonLayout->addWidget(listWidget);
     commonLayout->addWidget(buttons);
     setLayout(commonLayout);
-    connect(volumes, SIGNAL(storageVolMsg(QString&)),
+    connect(volumes, SIGNAL(entityMsg(QString&)),
             this, SLOT(showMsg(QString&)));
 }
 

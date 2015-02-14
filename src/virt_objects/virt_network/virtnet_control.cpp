@@ -1,63 +1,51 @@
 #include "virtnet_control.h"
 
 VirtNetControl::VirtNetControl(QWidget *parent) :
-    QMainWindow(parent)
+    VirtEntityControl(parent)
 {
     setObjectName("VirtNetControl");
     setWindowTitle("VirtNet Control");
-    setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     setWindowIcon(QIcon::fromTheme("network"));
     virtNetModel = new VirtNetModel();
-    virtNetList = new QTreeView(this);
-    virtNetList->setItemsExpandable(false);
-    virtNetList->setRootIsDecorated(false);
-    virtNetList->setModel(virtNetModel);
-    virtNetList->setFocus();
-    virtNetList->setContextMenuPolicy(Qt::CustomContextMenu);
-    //connect(virtNetList, SIGNAL(doubleClicked(const QModelIndex&)),
-    //        this, SLOT(networkDoubleClicked(const QModelIndex&)));
-    connect(virtNetList, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(networkClicked(const QPoint&)));
-    setCentralWidget(virtNetList);
+    entityList->setModel(virtNetModel);
+    //connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
+    //        this, SLOT(entityDoubleClicked(const QModelIndex&)));
+    connect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(entityClicked(const QPoint&)));
     settings.beginGroup("VirtNetControl");
-    virtNetList->setColumnWidth(0, settings.value("column0", 132).toInt());
-    virtNetList->setColumnWidth(1, settings.value("column1", 32).toInt());
-    virtNetList->setColumnWidth(2, settings.value("column2", 32).toInt());
-    virtNetList->setColumnWidth(3, settings.value("column3", 32).toInt());
+    entityList->setColumnWidth(0, settings.value("column0", 132).toInt());
+    entityList->setColumnWidth(1, settings.value("column1", 32).toInt());
+    entityList->setColumnWidth(2, settings.value("column2", 32).toInt());
+    entityList->setColumnWidth(3, settings.value("column3", 32).toInt());
     int area_int = settings.value("ToolBarArea", 4).toInt();
     settings.endGroup();
     toolBar = new VirtNetToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
     connect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-            this, SLOT(newVirtNetworkFromXML(const QStringList&)));
+            this, SLOT(newVirtEntityFromXML(const QStringList&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
 }
 VirtNetControl::~VirtNetControl()
 {
     settings.beginGroup("VirtNetControl");
-    settings.setValue("column0", virtNetList->columnWidth(0));
-    settings.setValue("column1", virtNetList->columnWidth(1));
-    settings.setValue("column2", virtNetList->columnWidth(2));
-    settings.setValue("column3", virtNetList->columnWidth(3));
+    settings.setValue("column0", entityList->columnWidth(0));
+    settings.setValue("column1", entityList->columnWidth(1));
+    settings.setValue("column2", entityList->columnWidth(2));
+    settings.setValue("column3", entityList->columnWidth(3));
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
-    //disconnect(virtNetList, SIGNAL(doubleClicked(const QModelIndex&)),
-    //           this, SLOT(networkDoubleClicked(const QModelIndex&)));
-    disconnect(virtNetList, SIGNAL(customContextMenuRequested(const QPoint&)),
-               this, SLOT(networkClicked(const QPoint&)));
+    //disconnect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
+    //           this, SLOT(entityDoubleClicked(const QModelIndex&)));
+    disconnect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
+               this, SLOT(entityClicked(const QPoint&)));
     disconnect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-               this, SLOT(newVirtNetworkFromXML(const QStringList&)));
+               this, SLOT(newVirtEntityFromXML(const QStringList&)));
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
                this, SLOT(execAction(const QStringList&)));
 
     stopProcessing();
-
-    if ( currWorkConnect!=NULL ) {
-        virConnectClose(currWorkConnect);
-        currWorkConnect = NULL;
-    };
 
     delete toolBar;
     toolBar = NULL;
@@ -67,9 +55,9 @@ VirtNetControl::~VirtNetControl()
         virtNetModel = NULL;
     };
 
-    if (virtNetList!=NULL) {
-        delete virtNetList;
-        virtNetList = NULL;
+    if (entityList!=NULL) {
+        delete entityList;
+        entityList = NULL;
     };
 }
 
@@ -105,7 +93,7 @@ bool VirtNetControl::setCurrentWorkConnect(virConnect *conn)
             QString msg = QString("%3 VirtError(%1) : %2")
                     .arg(virtErrors->code).arg(virtErrors->message)
                     .arg(time);
-            emit netMsg( msg );
+            emit entityMsg( msg );
             virResetError(virtErrors);
         };
         currWorkConnect = NULL;
@@ -185,32 +173,24 @@ void VirtNetControl::resultReceiver(Result data)
 }
 
 /* private slots */
-void VirtNetControl::msgRepeater(QString msg)
-{
-    QString time = QTime::currentTime().toString();
-    QString title = QString("Connect '%1'").arg(currConnName);
-    QString errorMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
-    emit netMsg(errorMsg);
-}
 void VirtNetControl::changeDockVisibility()
 {
     toolBar->setEnabled( !toolBar->isEnabled() );
-    virtNetList->setEnabled( !virtNetList->isEnabled() );
+    entityList->setEnabled( !entityList->isEnabled() );
 }
-
-void VirtNetControl::networkClicked(const QPoint &p)
+void VirtNetControl::entityClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
-    QModelIndex idx = virtNetList->indexAt(p);
+    QModelIndex idx = entityList->indexAt(p);
     QStringList params;
-    if ( idx.isValid() ) {
+    if ( idx.isValid() && virtNetModel->DataList.count()>idx.row() ) {
         //qDebug()<<virtNetModel->DataList.at(idx.row())->getName();
         params<<virtNetModel->DataList.at(idx.row())->getName();
         params<<virtNetModel->DataList.at(idx.row())->getState();
         params<<virtNetModel->DataList.at(idx.row())->getAutostart();
         params<<virtNetModel->DataList.at(idx.row())->getPersistent();
     } else {
-        virtNetList->clearSelection();
+        entityList->clearSelection();
     };
     bool state = toolBar->getAutoReloadState();
     VirtNetControlMenu *netControlMenu = new VirtNetControlMenu(this, params, state);
@@ -222,7 +202,7 @@ void VirtNetControl::networkClicked(const QPoint &p)
                this, SLOT(execAction(const QStringList&)));
     netControlMenu->deleteLater();
 }
-void VirtNetControl::networkDoubleClicked(const QModelIndex &index)
+void VirtNetControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
         qDebug()<<virtNetModel->DataList.at(index.row())->getName();
@@ -231,8 +211,8 @@ void VirtNetControl::networkDoubleClicked(const QModelIndex &index)
 void VirtNetControl::execAction(const QStringList &l)
 {
     QStringList args;
-    QModelIndex idx = virtNetList->currentIndex();
-    if ( idx.isValid() ) {
+    QModelIndex idx = entityList->currentIndex();
+    if ( idx.isValid() && virtNetModel->DataList.count()>idx.row() ) {
         QString networkName = virtNetModel->DataList.at(idx.row())->getName();
         args.append(networkName);
         if        ( l.first()=="startVirtNetwork" ) {
@@ -278,7 +258,7 @@ void VirtNetControl::execAction(const QStringList &l)
         emit addNewTask(currWorkConnect, args);
     };
 }
-void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
+void VirtNetControl::newVirtEntityFromXML(const QStringList &_args)
 {
     if ( !_args.isEmpty() ) {
         Actions act;
@@ -298,17 +278,19 @@ void VirtNetControl::newVirtNetworkFromXML(const QStringList &_args)
                 //QString source = args.first();
                 args.removeFirst();
                 QString xml;
+                bool show = false;
                 // show SRC Creator widget
                 CreateVirtNetwork *createVirtNet = new CreateVirtNetwork(this);
                 int result = createVirtNet->exec();
                 if ( createVirtNet!=NULL && result ) {
                     // get path for method12
                     xml = createVirtNet->getXMLDescFileName();
+                    show = createVirtNet->getShowing();
                     QStringList data;
                     data.append("New Network XML'ed");
                     data.append(QString("to <a href='%1'>%1</a>").arg(xml));
                     msgRepeater(data.join(" "));
-                    QDesktopServices::openUrl(QUrl(xml));
+                    if ( show ) QDesktopServices::openUrl(QUrl(xml));
                 };
                 delete createVirtNet;
                 createVirtNet = NULL;

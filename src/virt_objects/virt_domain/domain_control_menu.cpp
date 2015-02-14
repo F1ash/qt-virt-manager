@@ -84,38 +84,40 @@ void DomainControlMenu::emitExecMethod(QAction *action)
     QStringList paramList;
     if ( !parameters.isEmpty() ) {
         if ( action == start) {
-            paramList << "startVirtDomain";
+            paramList.append( "startVirtDomain");
         } else if ( action == pause ) {
-            paramList << "pauseVirtDomain";
+            paramList.append("pauseVirtDomain");
         } else if ( action == destroy ) {
-            paramList << "destroyVirtDomain";
+            paramList.append("destroyVirtDomain");
         } else if ( action == edit ) {
-            paramList << "editVirtDomain";
+            paramList.append("editVirtDomain");
         } else if ( action == reset ) {
-            paramList << "resetVirtDomain";
+            paramList.append("resetVirtDomain");
         } else if ( action == reboot ) {
-            paramList << "rebootVirtDomain";
+            paramList.append("rebootVirtDomain");
         } else if ( action == shutdown ) {
-            paramList << "shutdownVirtDomain";
+            paramList.append("shutdownVirtDomain");
         } else if ( action == save ) {
-            paramList << "saveVirtDomain";
+            paramList.append("saveVirtDomain");
         } else if ( action == undefine ) {
-            paramList << "undefineVirtDomain";
+            paramList.append("undefineVirtDomain");
         } else if ( action == autoStart ) {
-            paramList << "setAutostartVirtDomain";
-            paramList << QString((parameters[2]=="yes")? "0" : "1");
+            paramList.append("setAutostartVirtDomain");
+            paramList.append(QString((parameters[2]=="yes")? "0" : "1"));
         } else if ( action == getXMLDesc ) {
-            paramList << "getVirtDomainXMLDesc";
+            paramList.append("getVirtDomainXMLDesc");
         } else if ( action == display ) {
-            paramList << "displayVirtDomain";
+            paramList.append("displayVirtDomain");
         } else if ( action == addToMonitor ) {
-            paramList << "monitorVirtDomain";
+            paramList.append("monitorVirtDomain");
         } else if ( action == migrate ) {
-            paramList << "migrateVirtDomain";
+            paramList.append("migrateVirtDomain");
+        } else if ( action == reload ) {
+            paramList.append("reloadVirtDomain");
         } else return;
-        paramList.append(parameters.first());
+        if ( action != reload ) paramList.append(parameters.first());
     } else if ( action == reload ) {
-        paramList << "reloadVirtDomain";
+        paramList.append("reloadVirtDomain");
     } else return;
     //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);

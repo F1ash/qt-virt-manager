@@ -78,22 +78,24 @@ void StoragePoolControlMenu::emitExecMethod(QAction *action)
     QStringList paramList;
     if ( !parameters.isEmpty() ) {
         if ( action == start) {
-            paramList << "startVirtStoragePool";
+            paramList.append("startVirtStoragePool");
         } else if ( action == destroy ) {
-            paramList << "destroyVirtStoragePool";
+            paramList.append("destroyVirtStoragePool");
         } else if ( action == undefine ) {
-            paramList << "undefineVirtStoragePool";
+            paramList.append("undefineVirtStoragePool");
         } else if ( action == autoStart ) {
-            paramList << "setAutostartVirtStoragePool";
-            paramList << QString((parameters[2]=="yes")? "0" : "1");
+            paramList.append("setAutostartVirtStoragePool");
+            paramList.append(QString((parameters[2]=="yes")? "0" : "1"));
         } else if ( action == getXMLDesc ) {
-            paramList << "getVirtStoragePoolXMLDesc";
+            paramList.append("getVirtStoragePoolXMLDesc");
         } else if ( action == overview ) {
-            paramList << "overviewVirtStoragePool";
+            paramList.append("overviewVirtStoragePool");
+        } else if ( action == reload ) {
+            paramList.append("reloadVirtStoragePool");
         } else return;
-        paramList.append(parameters.first());
+        if ( action != reload ) paramList.append(parameters.first());
     } else if ( action == reload ) {
-        paramList << "reloadVirtStoragePool";
+        paramList.append("reloadVirtStoragePool");
     } else return;
     //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);

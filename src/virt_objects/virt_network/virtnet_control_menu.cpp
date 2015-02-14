@@ -58,20 +58,22 @@ void VirtNetControlMenu::emitExecMethod(QAction *action)
     QStringList paramList;
     if ( !parameters.isEmpty() ) {
         if ( action == start) {
-            paramList << "startVirtNetwork";
+            paramList.append("startVirtNetwork");
         } else if ( action == destroy ) {
-            paramList << "destroyVirtNetwork";
+            paramList.append("destroyVirtNetwork");
         } else if ( action == undefine ) {
-            paramList << "undefineVirtNetwork";
+            paramList.append("undefineVirtNetwork");
         } else if ( action == autoStart ) {
-            paramList << "setAutostartVirtNetwork";
-            paramList << QString((parameters[2]=="yes")? "0" : "1");
+            paramList.append("setAutostartVirtNetwork");
+            paramList.append(QString((parameters[2]=="yes")? "0" : "1"));
         } else if ( action == getXMLDesc ) {
-            paramList << "getVirtNetworkXMLDesc";
+            paramList.append("getVirtNetworkXMLDesc");
+        } else if ( action == reload ) {
+            paramList.append("reloadVirtNetwork");
         } else return;
-        paramList.append(parameters.first());
+        if ( action != reload ) paramList.append(parameters.first());
     } else if ( action == reload ) {
-        paramList << "reloadVirtNetwork";
+        paramList.append("reloadVirtNetwork");
     } else return;
     //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);

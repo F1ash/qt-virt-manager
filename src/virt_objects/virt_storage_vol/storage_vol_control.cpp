@@ -1,63 +1,51 @@
 #include "storage_vol_control.h"
 
 VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
-    QMainWindow(parent)
+    VirtEntityControl(parent)
 {
     setObjectName("VirtStorageVolControl");
     setWindowTitle("StorageVol Control");
-    setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     setWindowIcon(QIcon::fromTheme("storageVol"));
     storageVolModel = new StorageVolModel();
-    storageVolList = new QTreeView(this);
-    storageVolList->setItemsExpandable(false);
-    storageVolList->setRootIsDecorated(false);
-    storageVolList->setModel(storageVolModel);
-    storageVolList->setFocus();
-    storageVolList->setContextMenuPolicy(Qt::CustomContextMenu);
-    //connect(storageVolList, SIGNAL(doubleClicked(const QModelIndex&)),
-    //        this, SLOT(storageVolDoubleClicked(const QModelIndex&)));
-    connect(storageVolList, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(storageVolClicked(const QPoint&)));
-    setCentralWidget(storageVolList);
+    entityList->setModel(storageVolModel);
+    //connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
+    //        this, SLOT(entityDoubleClicked(const QModelIndex&)));
+    connect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(entityClicked(const QPoint&)));
     settings.beginGroup("VirtStorageVolControl");
-    storageVolList->setColumnWidth(0, settings.value("column0", 132).toInt());
-    storageVolList->setColumnWidth(1, settings.value("column1", 32).toInt());
-    storageVolList->setColumnWidth(2, settings.value("column2", 32).toInt());
-    storageVolList->setColumnWidth(3, settings.value("column3", 32).toInt());
+    entityList->setColumnWidth(0, settings.value("column0", 132).toInt());
+    entityList->setColumnWidth(1, settings.value("column1", 32).toInt());
+    entityList->setColumnWidth(2, settings.value("column2", 32).toInt());
+    entityList->setColumnWidth(3, settings.value("column3", 32).toInt());
     int area_int = settings.value("ToolBarArea", 4).toInt();
     settings.endGroup();
     toolBar = new StorageVolToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
     connect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-            this, SLOT(newVirtStorageVolFromXML(const QStringList&)));
+            this, SLOT(newVirtEntityFromXML(const QStringList&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
 }
 VirtStorageVolControl::~VirtStorageVolControl()
 {
     settings.beginGroup("VirtStorageVolControl");
-    settings.setValue("column0", storageVolList->columnWidth(0));
-    settings.setValue("column1", storageVolList->columnWidth(1));
-    settings.setValue("column2", storageVolList->columnWidth(2));
-    settings.setValue("column3", storageVolList->columnWidth(3));
+    settings.setValue("column0", entityList->columnWidth(0));
+    settings.setValue("column1", entityList->columnWidth(1));
+    settings.setValue("column2", entityList->columnWidth(2));
+    settings.setValue("column3", entityList->columnWidth(3));
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
-    //disconnect(storageVolList, SIGNAL(doubleClicked(const QModelIndex&)),
-    //           this, SLOT(storageVolDoubleClicked(const QModelIndex&)));
-    disconnect(storageVolList, SIGNAL(customContextMenuRequested(const QPoint&)),
-               this, SLOT(storageVolClicked(const QPoint&)));
+    //disconnect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
+    //           this, SLOT(entityDoubleClicked(const QModelIndex&)));
+    disconnect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
+               this, SLOT(entityClicked(const QPoint&)));
     disconnect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-               this, SLOT(newVirtStorageVolFromXML(const QStringList&)));
+               this, SLOT(newVirtEntityFromXML(const QStringList&)));
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
                this, SLOT(execAction(const QStringList&)));
 
     stopProcessing();
-
-    if ( currWorkConnect!=NULL ) {
-        virConnectClose(currWorkConnect);
-        currWorkConnect = NULL;
-    };
 
     delete toolBar;
     toolBar = NULL;
@@ -67,9 +55,9 @@ VirtStorageVolControl::~VirtStorageVolControl()
         storageVolModel = NULL;
     };
 
-    if (storageVolList!=NULL) {
-        delete storageVolList;
-        storageVolList = NULL;
+    if (entityList!=NULL) {
+        delete entityList;
+        entityList = NULL;
     };
 }
 
@@ -107,7 +95,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
                     .arg(virtErrors->code)
                     .arg(virtErrors->message)
                     .arg(time);
-            emit storageVolMsg( msg );
+            emit entityMsg( msg );
             virResetError(virtErrors);
         };
         currWorkConnect = NULL;
@@ -134,7 +122,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
 }
 QString VirtStorageVolControl::getCurrentVolumeName() const
 {
-    QModelIndex index = storageVolList->currentIndex();
+    QModelIndex index = entityList->currentIndex();
     if ( !index.isValid() ) return QString();
     return storageVolModel->DataList.at(index.row())->getName();
 }
@@ -209,25 +197,17 @@ void VirtStorageVolControl::resultReceiver(Result data)
 }
 
 /* private slots */
-void VirtStorageVolControl::msgRepeater(QString msg)
-{
-    QString time = QTime::currentTime().toString();
-    QString title = QString("Conn '%1'").arg(currConnName);
-    QString errorMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
-    emit storageVolMsg(errorMsg);
-}
 void VirtStorageVolControl::changeDockVisibility()
 {
     toolBar->setEnabled( !toolBar->isEnabled() );
-    storageVolList->setEnabled( !storageVolList->isEnabled() );
+    entityList->setEnabled( !entityList->isEnabled() );
 }
-
-void VirtStorageVolControl::storageVolClicked(const QPoint &p)
+void VirtStorageVolControl::entityClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
-    QModelIndex idx = storageVolList->indexAt(p);
+    QModelIndex idx = entityList->indexAt(p);
     QStringList params;
-    if ( idx.isValid() ) {
+    if ( idx.isValid() && storageVolModel->DataList.count()>idx.row() ) {
         //qDebug()<<storageVolModel->DataList.at(idx.row())->getName();
         params<<storageVolModel->DataList.at(idx.row())->getName();
         //params<<storageVolModel->DataList.at(idx.row())->getPath();
@@ -235,7 +215,7 @@ void VirtStorageVolControl::storageVolClicked(const QPoint &p)
         //params<<storageVolModel->DataList.at(idx.row())->getCurrSize();
         //params<<storageVolModel->DataList.at(idx.row())->getLogicSize();
     } else {
-        storageVolList->clearSelection();
+        entityList->clearSelection();
     };
     bool state = toolBar->getAutoReloadState();
     StorageVolControlMenu *storageVolControlMenu = new StorageVolControlMenu(this, params, state);
@@ -247,7 +227,7 @@ void VirtStorageVolControl::storageVolClicked(const QPoint &p)
                this, SLOT(execAction(const QStringList&)));
     storageVolControlMenu->deleteLater();
 }
-void VirtStorageVolControl::storageVolDoubleClicked(const QModelIndex &index)
+void VirtStorageVolControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
         qDebug()<<storageVolModel->DataList.at(index.row())->getName();
@@ -256,8 +236,8 @@ void VirtStorageVolControl::storageVolDoubleClicked(const QModelIndex &index)
 void VirtStorageVolControl::execAction(const QStringList &l)
 {
     QStringList args;
-    QModelIndex idx = storageVolList->currentIndex();
-    if ( idx.isValid() && storageVolModel->DataList.count() ) {
+    QModelIndex idx = entityList->currentIndex();
+    if ( idx.isValid() && storageVolModel->DataList.count()>idx.row() ) {
         QString storageVolName = storageVolModel->DataList.at(idx.row())->getName();
         args.append(storageVolName);
         if        ( l.first()=="reloadVirtStorageVol" ) {
@@ -342,12 +322,18 @@ void VirtStorageVolControl::execAction(const QStringList &l)
         emit addNewTask(currWorkConnect, args);
     };
 }
-void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
+void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
 {
-    Actions act;
     if ( !_args.isEmpty() ) {
-        if ( _args.first().startsWith("create") ) act = CREATE_ENTITY;
-        else act = _EMPTY_ACTION;
+        Actions act;
+        QString actName;
+        if ( _args.first().startsWith("create") ) {
+            act = CREATE_ENTITY;
+            actName = "createVirtStorageVol";
+        } else {
+            act = _EMPTY_ACTION;
+            actName = "reloadVirtStorageVol";
+        };
         QStringList args = _args;
         args.removeFirst();
         if ( !args.isEmpty() ) {
@@ -377,6 +363,7 @@ void VirtStorageVolControl::newVirtStorageVolFromXML(const QStringList &_args)
                 args.prepend(path);
                 if ( show ) QDesktopServices::openUrl(QUrl(path));
             };
+            args.prepend(actName);
             args.prepend(QString::number(act));
             args.prepend(currConnName);
             args.append(currPoolName);

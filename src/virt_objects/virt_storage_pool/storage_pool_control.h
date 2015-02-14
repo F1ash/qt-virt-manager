@@ -1,22 +1,13 @@
 #ifndef STORAGE_POOL_CONTROL_H
 #define STORAGE_POOL_CONTROL_H
 
-#include <QMainWindow>
-#include <QGridLayout>
-#include <QTreeView>
-#include <QSettings>
-#include <QTime>
-#include <QUrl>
-#include <QDesktopServices>
-#include <QMessageBox>
-#include <QDebug>
+#include "virt_objects/virt_entity_control.h"
 #include "storage_pool_model.h"
 #include "storage_pool_toolbar.h"
 #include "storage_pool_control_menu.h"
-#include "virt_objects/control_thread.h"
 #include "create_widgets/storage/create_pool.h"
 
-class VirtStoragePoolControl : public QMainWindow
+class VirtStoragePoolControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
@@ -24,18 +15,11 @@ public:
     ~VirtStoragePoolControl();
 
 signals:
-    void                       storagePoolMsg(QString&);
     void                       currPool(virConnect*, QString&, QString&);
-    void                       addNewTask(virConnectPtr, QStringList&);
 
 private:
-    QString                    currConnName;
-    QSettings                  settings;
     StoragePoolModel          *storagePoolModel = NULL;
-    QTreeView                 *storagePoolList = NULL;
     StoragePoolToolBar        *toolBar;
-
-    virConnect                *currWorkConnect = NULL;
 
 public slots:
     bool                       getThreadState() const;
@@ -45,13 +29,11 @@ public slots:
     void                       resultReceiver(Result);
 
 private slots:
-    void                       msgRepeater(QString);
     void                       changeDockVisibility();
-
-    void                       storagePoolClicked(const QPoint&);
-    void                       storagePoolDoubleClicked(const QModelIndex&);
+    void                       entityClicked(const QPoint&);
+    void                       entityDoubleClicked(const QModelIndex&);
     void                       execAction(const QStringList&);
-    void                       newVirtStoragePoolFromXML(const QStringList&);
+    void                       newVirtEntityFromXML(const QStringList&);
 };
 
 #endif // STORAGE_POOL_CONTROL_H

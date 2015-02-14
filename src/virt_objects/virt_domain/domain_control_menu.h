@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QIcon>
 #include <QStringList>
+#include <QDebug>
 
 class DomainControlMenu : public QMenu
 {

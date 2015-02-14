@@ -1,54 +1,47 @@
 #include "domain_control.h"
 
 VirtDomainControl::VirtDomainControl(QWidget *parent) :
-    QMainWindow(parent)
+    VirtEntityControl(parent)
 {
     setObjectName("VirtDomainControl");
     setWindowTitle("Domain Control");
-    setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     setWindowIcon(QIcon::fromTheme("domain"));
     domainModel = new DomainModel();
-    domainList = new QTreeView(this);
-    domainList->setItemsExpandable(false);
-    domainList->setRootIsDecorated(false);
-    domainList->setModel(domainModel);
-    domainList->setFocus();
-    domainList->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(domainList, SIGNAL(doubleClicked(const QModelIndex&)),
-            this, SLOT(domainDoubleClicked(const QModelIndex&)));
-    connect(domainList, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(domainClicked(const QPoint&)));
-    setCentralWidget(domainList);
+    connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
+            this, SLOT(entityDoubleClicked(const QModelIndex&)));
+    connect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(entityClicked(const QPoint&)));
+    entityList->setModel(domainModel);
     settings.beginGroup("VirtDomainControl");
-    domainList->setColumnWidth(0, settings.value("column0", 132).toInt());
-    domainList->setColumnWidth(1, settings.value("column1", 32).toInt());
-    domainList->setColumnWidth(2, settings.value("column2", 32).toInt());
-    domainList->setColumnWidth(3, settings.value("column3", 32).toInt());
+    entityList->setColumnWidth(0, settings.value("column0", 132).toInt());
+    entityList->setColumnWidth(1, settings.value("column1", 32).toInt());
+    entityList->setColumnWidth(2, settings.value("column2", 32).toInt());
+    entityList->setColumnWidth(3, settings.value("column3", 32).toInt());
     int area_int = settings.value("ToolBarArea", 4).toInt();
     settings.endGroup();
     toolBar = new DomainToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
     connect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-            this, SLOT(newVirtDomainFromXML(const QStringList&)));
+            this, SLOT(newVirtEntityFromXML(const QStringList&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
 }
 VirtDomainControl::~VirtDomainControl()
 {
     settings.beginGroup("VirtDomainControl");
-    settings.setValue("column0", domainList->columnWidth(0));
-    settings.setValue("column1", domainList->columnWidth(1));
-    settings.setValue("column2", domainList->columnWidth(2));
-    settings.setValue("column3", domainList->columnWidth(3));
+    settings.setValue("column0", entityList->columnWidth(0));
+    settings.setValue("column1", entityList->columnWidth(1));
+    settings.setValue("column2", entityList->columnWidth(2));
+    settings.setValue("column3", entityList->columnWidth(3));
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
-    disconnect(domainList, SIGNAL(doubleClicked(const QModelIndex&)),
-               this, SLOT(domainDoubleClicked(const QModelIndex&)));
-    disconnect(domainList, SIGNAL(customContextMenuRequested(const QPoint&)),
-               this, SLOT(domainClicked(const QPoint&)));
+    disconnect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
+               this, SLOT(entityDoubleClicked(const QModelIndex&)));
+    disconnect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
+               this, SLOT(entityClicked(const QPoint&)));
     disconnect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-               this, SLOT(newVirtDomainFromXML(const QStringList&)));
+               this, SLOT(newVirtEntityFromXML(const QStringList&)));
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
                this, SLOT(execAction(const QStringList&)));
 
@@ -59,11 +52,6 @@ VirtDomainControl::~VirtDomainControl()
 
     stopProcessing();
 
-    if ( currWorkConnect!=NULL ) {
-        virConnectClose(currWorkConnect);
-        currWorkConnect = NULL;
-    };
-
     delete toolBar;
     toolBar = NULL;
 
@@ -72,9 +60,9 @@ VirtDomainControl::~VirtDomainControl()
         domainModel = NULL;
     };
 
-    if (domainList!=NULL) {
-        delete domainList;
-        domainList = NULL;
+    if (entityList!=NULL) {
+        delete entityList;
+        entityList = NULL;
     };
 }
 
@@ -111,7 +99,7 @@ bool VirtDomainControl::setCurrentWorkConnect(virConnect *conn)
                     .arg(virtErrors->code)
                     .arg(virtErrors->message)
                     .arg(time);
-            emit domMsg( msg );
+            emit entityMsg( msg );
             virResetError(virtErrors);
         };
         currWorkConnect = NULL;
@@ -236,42 +224,36 @@ void VirtDomainControl::resultReceiver(Result data)
 }
 
 /* private slots */
-void VirtDomainControl::msgRepeater(QString msg)
-{
-    QString time = QTime::currentTime().toString();
-    QString title = QString("Connect '%1'").arg(currConnName);
-    QString errorMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
-    emit domMsg(errorMsg);
-}
 void VirtDomainControl::changeDockVisibility()
 {
     toolBar->setEnabled( !toolBar->isEnabled() );
-    domainList->setEnabled( !domainList->isEnabled() );
+    entityList->setEnabled( !entityList->isEnabled() );
 }
-
-void VirtDomainControl::domainClicked(const QPoint &p)
+void VirtDomainControl::entityClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
-    QModelIndex idx = domainList->indexAt(p);
+    QModelIndex idx = entityList->indexAt(p);
     QStringList params;
-    if ( idx.isValid() ) {
+    if ( idx.isValid() && domainModel->DataList.count()>idx.row() ) {
         //qDebug()<<domainModel->DataList.at(idx.row())->getName();
         params<<domainModel->DataList.at(idx.row())->getName();
         params<<domainModel->DataList.at(idx.row())->getState().split(":").first();
         params<<domainModel->DataList.at(idx.row())->getAutostart();
         params<<domainModel->DataList.at(idx.row())->getPersistent();
     } else {
-        domainList->clearSelection();
+        entityList->clearSelection();
     };
     bool state = toolBar->getAutoReloadState();
     DomainControlMenu *domControlMenu = new DomainControlMenu(this, params, state);
-    connect(domControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    connect(domControlMenu, SIGNAL(execMethod(const QStringList&)),
+            this, SLOT(execAction(const QStringList&)));
     domControlMenu->move(QCursor::pos());
     domControlMenu->exec();
-    disconnect(domControlMenu, SIGNAL(execMethod(const QStringList&)), this, SLOT(execAction(const QStringList&)));
+    disconnect(domControlMenu, SIGNAL(execMethod(const QStringList&)),
+               this, SLOT(execAction(const QStringList&)));
     domControlMenu->deleteLater();
 }
-void VirtDomainControl::domainDoubleClicked(const QModelIndex &index)
+void VirtDomainControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
         QString _domainName = domainModel->DataList.at(index.row())->getName();
@@ -281,8 +263,8 @@ void VirtDomainControl::domainDoubleClicked(const QModelIndex &index)
 void VirtDomainControl::execAction(const QStringList &l)
 {
     QStringList args;
-    QModelIndex idx = domainList->currentIndex();
-    if ( idx.isValid() ) {
+    QModelIndex idx = entityList->currentIndex();
+    if ( idx.isValid() && domainModel->DataList.count()>idx.row() ) {
         QString domainName = domainModel->DataList.at(idx.row())->getName();
         args.append(domainName);
         if        ( l.first()=="startVirtDomain" ) {
@@ -406,7 +388,7 @@ void VirtDomainControl::execAction(const QStringList &l)
         reloadDomainState();
     };
 }
-void VirtDomainControl::newVirtDomainFromXML(const QStringList &_args)
+void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
 {
     Actions act;
     if ( !_args.isEmpty() ) {

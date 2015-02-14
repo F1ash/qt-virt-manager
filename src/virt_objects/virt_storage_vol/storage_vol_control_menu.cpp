@@ -66,22 +66,23 @@ void StorageVolControlMenu::emitExecMethod(QAction *action)
     QStringList paramList;
     if ( !parameters.isEmpty() ) {
         if ( action == resize_Action) {
-            paramList << "resizeVirtStorageVol";
+            paramList.append("resizeVirtStorageVol");
         } else if ( action == delete_Action ) {
-            paramList << "deleteVirtStorageVol";
+            paramList.append("deleteVirtStorageVol");
         } else if ( action == download_Action ) {
-            paramList << "downloadVirtStorageVol";
+            paramList.append("downloadVirtStorageVol");
         } else if ( action == upload_Action ) {
-            paramList << "uploadVirtStorageVol";
+            paramList.append("uploadVirtStorageVol");
         } else if ( action == wipe_Action ) {
-            paramList << "wipeVirtStorageVol" << "0";
+            paramList.append("wipeVirtStorageVol");
+            paramList.append("0");
         } else if ( action == getXMLDesc_Action ) {
-            paramList << "getVirtStorageVolXMLDesc";
+            paramList.append("getVirtStorageVolXMLDesc");
         } else if ( action == reload ) {
-            paramList << "reloadVirtStorageVol";
+            paramList.append("reloadVirtStorageVol");
         } else return;
     } else if ( action == reload ) {
-        paramList << "reloadVirtStorageVol";
+        paramList.append("reloadVirtStorageVol");
     } else return;
     //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);
