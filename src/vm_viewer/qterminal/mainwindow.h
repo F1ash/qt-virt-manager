@@ -50,7 +50,7 @@ private:
     QActionGroup *tabPosition, *scrollBarPosition;
     QMenu *tabPosMenu, *scrollPosMenu;
 
-    QAction *toggleBorder, *toggleTabbar, *renameSession;
+    QAction *toggleBorder, *renameSession;
 
     QString m_initWorkDir;
     QString m_initShell;
@@ -73,7 +73,6 @@ private slots:
     void updateActionGroup(QAction *);
 
     void toggleBorderless();
-    void toggleTabBar();
     void toggleMenu();
 
     void showHide();

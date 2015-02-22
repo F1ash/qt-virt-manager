@@ -50,6 +50,7 @@ TabWidget::TabWidget(QWidget* parent, QString _name) :
     setUsesScrollButtons(true);
 
     tabBar()->installEventFilter(this);
+    tabBar()->setVisible(false);
 
     //connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(removeTab(int)));
 }
@@ -79,41 +80,12 @@ int TabWidget::addNewTab(const QString & term_name)
     connect(console, SIGNAL(finished()), SLOT(removeFinished()));
     //connect(console, SIGNAL(lastTerminalClosed()), this, SLOT(removeCurrentTab()));
     connect(console, SIGNAL(lastTerminalClosed()), this, SLOT(removeFinished()));
-    connect(console, SIGNAL(renameSession()), this, SLOT(renameSession()));
 
     int index = addTab(console, term_name);
-    recountIndexes();
     setCurrentIndex(index);
     console->setInitialFocus();
 
-    showHideTabBar();
-
     return index;
-}
-
-void TabWidget::switchNextSubterminal()
-{
-    terminalHolder()->switchNextSubterminal();
-}
-
-void TabWidget::switchPrevSubterminal()
-{
-    terminalHolder()->switchPrevSubterminal();
-}
-
-void TabWidget::splitHorizontally()
-{
-    terminalHolder()->splitHorizontal(terminalHolder()->currentTerminal());
-}
-
-void TabWidget::splitVertically()
-{
-    terminalHolder()->splitVertical(terminalHolder()->currentTerminal());
-}
-
-void TabWidget::splitCollapse()
-{
-    terminalHolder()->splitCollapse(terminalHolder()->currentTerminal());
 }
 
 void TabWidget::copySelection()
@@ -146,59 +118,9 @@ void TabWidget::zoomReset()
     terminalHolder()->currentTerminal()->impl()->zoomReset();
 }
 
-void TabWidget::recountIndexes()
-{
-    for(int i = 0; i < count(); i++)
-        widget(i)->setProperty(TAB_INDEX_PROPERTY, i);
-}
-
 void TabWidget::renameSession()
 {
-    bool ok = false;
-    QString text = QInputDialog::getText(this, tr("Tab name"),
-                                        tr("New tab name:"), QLineEdit::Normal,
-                                        QString(), &ok);
-    if(ok && !text.isEmpty())
-    {
-        setTabText(currentIndex(), text);
-    }
-}
-
-void TabWidget::renameTabsAfterRemove()
-{
-// it breaks custom names - it replaces original/custom title with shell no #
-#if 0
-    for(int i = 0; i < count(); i++) {
-        setTabText(i, QString(tr("Shell No. %1")).arg(i+1));
-    }
-#endif
-}
-
-void TabWidget::contextMenuEvent ( QContextMenuEvent * event )
-{
-    QMenu menu(this);
-
-    menu.addAction(QIcon::fromTheme("document-close"), tr("Close session"),
-                   this, SLOT(removeCurrentTab()));
-    menu.addAction(tr("Rename session"), this, SLOT(renameSession()), tr(RENAME_SESSION_SHORTCUT));
-
-    menu.exec(event->globalPos());
-}
-
-bool TabWidget::eventFilter(QObject *obj, QEvent *event)
-{
-    if (event->type() == QEvent::MouseButtonDblClick)
-    {
-        QMouseEvent *e = reinterpret_cast<QMouseEvent*>(event);
-        // if user doubleclicks on tab button - rename it. If user
-        // clicks on free space - open new tab
-        if (tabBar()->tabAt(e->pos()) == -1)
-            addNewTab();
-        else
-            renameSession();
-        return true;
-    }
-    return QTabWidget::eventFilter(obj, event);
+    // fake method;
 }
 
 void TabWidget::removeFinished()
@@ -222,7 +144,6 @@ void TabWidget::removeTab(int index)
     QTabWidget::removeTab(index);
     w->deleteLater();
 
-    recountIndexes();
     int current = currentIndex();
     if (current >= 0 )
     {
@@ -234,9 +155,6 @@ void TabWidget::removeTab(int index)
 
     if (count() == 0)
         emit closeTabNotification();
-
-    renameTabsAfterRemove();
-    showHideTabBar();
 }
 
 void TabWidget::removeCurrentTab()
@@ -252,71 +170,6 @@ void TabWidget::removeCurrentTab()
     } else {
         emit closeTabNotification();
     }
-}
-
-int TabWidget::switchToRight()
-{
-    int next_pos = currentIndex() + 1;
-    if (next_pos < count())
-        setCurrentIndex(next_pos);
-    else
-        setCurrentIndex(0);
-    return currentIndex();
-}
-
-int TabWidget::switchToLeft()
-{
-    int previous_pos = currentIndex() - 1;
-    if (previous_pos < 0)
-        setCurrentIndex(count() - 1);
-    else
-        setCurrentIndex(previous_pos);
-    return currentIndex();
-}
-
-
-void TabWidget::move(Direction dir)
-{
-    if(count() > 1)
-    {
-        int index = currentIndex();
-        QWidget* child  = widget(index);
-        QString label   = tabText(index);
-        QString toolTip = tabToolTip(index);
-        QIcon   icon    = tabIcon(index);
-
-        int newIndex = 0;
-        if(dir == Left)
-            if(index == 0)
-                newIndex = count() -1;
-            else
-                newIndex = index - 1;
-        else
-            if(index == count() - 1)
-                newIndex = 0;
-            else
-                newIndex = index + 1;
-
-        setUpdatesEnabled(false);
-        QTabWidget::removeTab(index);
-        newIndex = insertTab(newIndex, child, label);
-        setTabToolTip(newIndex, toolTip);
-        setTabIcon(newIndex, icon);
-        setUpdatesEnabled(true);
-        setCurrentIndex(newIndex);
-        child->setFocus();
-        recountIndexes();
-    }
-}
-
-void TabWidget::moveLeft()
-{
-    move(Left);
-}
-
-void TabWidget::moveRight()
-{
-    move(Right);
 }
 
 void TabWidget::changeScrollPosition(QAction *triggered)
@@ -358,60 +211,9 @@ void TabWidget::propertiesChanged()
         TermWidgetHolder *console = static_cast<TermWidgetHolder*>(widget(i));
         console->propertiesChanged();
     }
-    showHideTabBar();
 }
 
 void TabWidget::clearActiveTerminal()
 {
     reinterpret_cast<TermWidgetHolder*>(widget(currentIndex()))->clearActiveTerminal();
-}
-
-void TabWidget::saveSession()
-{
-    int ix = currentIndex();
-    reinterpret_cast<TermWidgetHolder*>(widget(ix))->saveSession(tabText(ix));
-}
-
-void TabWidget::loadSession()
-{
-    reinterpret_cast<TermWidgetHolder*>(widget(currentIndex()))->loadSession();
-}
-
-void TabWidget::preset2Horizontal()
-{
-    int ix = TabWidget::addNewTab();
-    TermWidgetHolder* term = reinterpret_cast<TermWidgetHolder*>(widget(ix));
-    term->splitHorizontal(term->currentTerminal());
-    // switch to the 1st terminal
-    term->switchNextSubterminal();
-}
-
-void TabWidget::preset2Vertical()
-{
-    int ix = TabWidget::addNewTab();
-    TermWidgetHolder* term = reinterpret_cast<TermWidgetHolder*>(widget(ix));
-    term->splitVertical(term->currentTerminal());
-    // switch to the 1st terminal
-    term->switchNextSubterminal();
-}
-
-void TabWidget::preset4Terminals()
-{
-    int ix = TabWidget::addNewTab();
-    TermWidgetHolder* term = reinterpret_cast<TermWidgetHolder*>(widget(ix));
-    term->splitVertical(term->currentTerminal());
-    term->splitHorizontal(term->currentTerminal());
-    term->switchNextSubterminal();
-    term->switchNextSubterminal();
-    term->splitHorizontal(term->currentTerminal());
-    // switch to the 1st terminal
-    term->switchNextSubterminal();
-}
-
-void TabWidget::showHideTabBar()
-{
-    if (Properties::Instance()->tabBarless)
-        tabBar()->setVisible(false);
-    else
-        tabBar()->setVisible(Properties::Instance()->alwaysShowTabs || count() > 1);
 }

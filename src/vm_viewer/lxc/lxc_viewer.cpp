@@ -14,6 +14,8 @@ LXC_Viewer::LXC_Viewer(
     TermMainWindow(parent, conn, arg1, arg2, work_dir, command)
 {
     qRegisterMetaType<QString>("QString&");
+    // unused toolbar
+    viewerToolBar->setVisible(false);
     if ( jobConnect!=NULL ) {
         domainPtr = getDomainPtr();
     };
@@ -52,7 +54,6 @@ LXC_Viewer::LXC_Viewer(
                 closeProcess->setRange(0, TIMEOUT);
             };
             if ( ret ) {
-                viewerToolBar->setEnabled(true);
                 // don't start (default) shell program,
                 // because take the data from VM Stream
                 timerId = startTimer(PERIOD);
@@ -74,17 +75,7 @@ LXC_Viewer::~LXC_Viewer()
 {
     if ( timerId>0 ) killTimer(timerId);
     if ( killTimerId>0 ) killTimer(killTimerId);
-    if ( domainPtr!=NULL ) {
-        if ( readSlaveFd!=NULL ) {
-            disconnect(readSlaveFd,
-                       SIGNAL(activated(int)),
-                       this,
-                       SLOT(sendDataToVMachine(int)));
-            delete readSlaveFd;
-            readSlaveFd = 0;
-        };
-        closeStream();
-    };
+    closeStream();
     if ( NULL!=closeProcess ) {
         delete closeProcess;
         closeProcess = NULL;
@@ -114,20 +105,12 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             if ( registerStreamEvents()<0 ) {
                 QString msg = QString("In '<b>%1</b>': Stream Registation fail.").arg(domain);
                 receiveErrMsg(msg);
-                getCurrentTerminal()->m_term->sendText(msg);
+                getCurrentTerminal()->impl()->sendText(msg);
             } else {
-                setTerminalParameters();
-                readSlaveFd = new QSocketNotifier(
-                            ptySlaveFd,
-                            QSocketNotifier::Read);
-                connect(readSlaveFd,
-                        SIGNAL(activated(int)),
-                        this,
-                        SLOT(sendDataToVMachine(int)));
-                readSlaveFd->setEnabled(true);
                 QString msg = QString("In '<b>%1</b>': Stream Registation success. \
 PTY opened. Terminal is active.").arg(domain);
                 receiveErrMsg(msg);
+                setTerminalParameters();
             };
         } else if ( TIMEOUT<counter*PERIOD ) {
             killTimer(timerId);
@@ -135,7 +118,7 @@ PTY opened. Terminal is active.").arg(domain);
             counter = 0;
             QString msg = QString("In '<b>%1</b>': Open PTY Error...").arg(domain);
             receiveErrMsg(msg);
-            getCurrentTerminal()->m_term->sendText(msg);
+            getCurrentTerminal()->impl()->sendText(msg);
         }
     } else if ( ev->timerId()==killTimerId ) {
         counter++;
@@ -153,17 +136,21 @@ void LXC_Viewer::setTerminalParameters()
     // reserved for set terminal parameters
     TermWidget *t = getCurrentTerminal();
     if ( NULL!=t ) {
+        connect(t->impl(), SIGNAL(sendData(const char*,int)),
+                this, SLOT(sendDataToVMachine(const char*,int)));
         /*
-        t->m_term->setLocale(QLocale::system().name().left(2));
-        t->impl()->setKeyBindings("vt420pc");
-        t->m_term->setEnvironment(QStringList()
-                                  <<"TERM='xterm'"
-                                  <<"LANG='ru_RU.UTF-8'");
-        qDebug()<<t->impl()->keyBindings()<<"term";
-        qDebug()<<t->availableKeyBindings()<<"term";
-        qDebug()<<QLocale::system().name().left(2)<<"term";
-        t->m_term->propertiesChanged();
+         * So usually terminals don't support
+         * the Window manipulation through CSI,
+         * then zoomOut it to standard 80x24.
          */
+        bool recognized = false;
+        do {
+            int l = t->impl()->screenLinesCount();
+            int c = t->impl()->screenColumnsCount();
+            if (l<24 || c<80) t->impl()->zoomOut();
+            else recognized = true;
+        } while ( !recognized );
+        t->impl()->startTerminalTeletype();
     };
 }
 void LXC_Viewer::closeEvent(QCloseEvent *ev)
@@ -238,24 +225,16 @@ void LXC_Viewer::sendDataToDisplay(virStreamPtr _stream)
         return;
     default:
         // send to TermEmulator stdout useing ptySlaveFd
-        // buffer must left the first bytes, which were sent previous
-        // to VM terminal
-        for ( int i=buffDiff; i<got; i++ ) {
+        for ( int i=0; i<got; i++ ) {
             write(ptySlaveFd, &buff[i], 1);
         };
-        buffDiff = 0;
         break;
     };
 }
-void LXC_Viewer::sendDataToVMachine(int fd)
+void LXC_Viewer::sendDataToVMachine(const char *buff, int got)
 {
-    readSlaveFd->setEnabled(false);
-    char buff[BLOCK_SIZE];
-    memset( buff, '\0', BLOCK_SIZE );
-    size_t got = read(ptySlaveFd, &buff, BLOCK_SIZE);
-    //qDebug()<<fd<<"fd"<<buff;
-    size_t saved = virStreamSend(stream, buff, got);
-    buffDiff = 0;
+    if ( got<=0 ) return;
+    int saved = virStreamSend(stream, buff, got);
     if ( saved==-2 ) {
         // This is basically EAGAIN
         return;
@@ -263,13 +242,11 @@ void LXC_Viewer::sendDataToVMachine(int fd)
         sendConnErrors();
     } else {
         //qDebug()<<saved<<"sent";
-        buffDiff = saved;
     };
     updateStreamEvents(stream,
                        VIR_STREAM_EVENT_READABLE |
                        VIR_STREAM_EVENT_ERROR |
                        VIR_STREAM_EVENT_HANGUP);
-    readSlaveFd->setEnabled(true);
 }
 void LXC_Viewer::closeStream()
 {

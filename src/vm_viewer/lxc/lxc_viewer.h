@@ -2,7 +2,6 @@
 #define LXC_VIEWER_H
 
 #include <QTimerEvent>
-#include <QSocketNotifier>
 #include <QProgressBar>
 #include <QStatusBar>
 #include "vm_viewer/qterminal/mainwindow.h"
@@ -25,12 +24,9 @@ private:
     virDomain      *domainPtr = NULL;
     virStream      *stream = NULL;
     int             ptySlaveFd = -1;
-    size_t          buffDiff = 0;
     uint            timerId = 0;
     uint            killTimerId = 0;
     uint            counter = 0;
-    QSocketNotifier
-                   *readSlaveFd = NULL;
     QProgressBar   *closeProcess = NULL;
 
 public slots:
@@ -47,7 +43,7 @@ private slots:
     static void     streamEventCallBack(virStreamPtr, int, void*);
     void            updateStreamEvents(virStreamPtr, int);
     void            sendDataToDisplay(virStreamPtr);
-    void            sendDataToVMachine(int);
+    void            sendDataToVMachine(const char*, int);
     void            closeStream();
 };
 

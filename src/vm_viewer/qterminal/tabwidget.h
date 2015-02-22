@@ -40,25 +40,13 @@ public:
 
     TermWidgetHolder * terminalHolder();
 
-    void showHideTabBar();
-
 public slots:
     int addNewTab(const QString& shell_program = QString());
     void removeTab(int);
     void removeCurrentTab();
-    int switchToRight();
-    int switchToLeft();
     void removeFinished();
-    void moveLeft();
-    void moveRight();
     void renameSession();
     void setWorkDirectory(const QString&);
-
-    void switchNextSubterminal();
-    void switchPrevSubterminal();
-    void splitHorizontally();
-    void splitVertically();
-    void splitCollapse();
 
     void copySelection();
     void pasteClipboard();
@@ -73,33 +61,12 @@ public slots:
 
     void clearActiveTerminal();
 
-    void saveSession();
-    void loadSession();
-
-    void preset2Horizontal();
-    void preset2Vertical();
-    void preset4Terminals();
-
 signals:
     void closeTabNotification();
-
-protected:
-    enum Direction{Left = 1, Right};
-    void contextMenuEvent(QContextMenuEvent * event);
-    void recountIndexes();
-    void move(Direction);
-    /*! Event filter for TabWidget's QTabBar. It's installed on tabBar()
-        in the constructor.
-        It's purpose is to handle doubleclicks on QTabBar for session
-        renaming or new tab opening
-     */
-    bool eventFilter(QObject *obj, QEvent *event);
 
 private:
     const QString tabName;
     QString work_dir;
-    /* re-order naming of the tabs then removeCurrentTab() */
-    void renameTabsAfterRemove();
 };
 
 #endif
