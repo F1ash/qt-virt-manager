@@ -66,16 +66,19 @@ QVariant ConnItemModel::headerData(int section, Qt::Orientation orientation, int
 QVariant ConnItemModel::data(const QModelIndex &index, int role) const
 {
     QVariant res;
+    QString _name  = connItemDataList.at(index.row())->getName();
+    QString _uri   = connItemDataList.at(index.row())->getURI();
+    QString _state = connItemDataList.at(index.row())->getState();
     if ( role==Qt::DisplayRole ) {
         switch (index.column()) {
         case 0:
-            res = connItemDataList.at(index.row())->getName();
+            res = _name;
             break;
         case 1:
-            res = connItemDataList.at(index.row())->getURI();
+            res = _uri;
             break;
         case 2:
-            res = connItemDataList.at(index.row())->getState();
+            res = _state;
             break;
         default:
             break;
@@ -84,34 +87,38 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::DecorationRole ) {
         switch (index.column()) {
         case 0:
-            if ( connItemDataList.at(index.row())->getState().toLower()=="running" ) {
+            if ( _state.toLower()=="running" ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
         case 1:
-            res = uri_logo.value( connItemDataList.at(index.row())->getURI()
-                    .split("://").first() );
+            foreach ( QString _key, uri_logo.keys() ) {
+                if ( _uri.startsWith(_key, Qt::CaseInsensitive) ) {
+                    res = uri_logo.value( _key );
+                    break;
+                };
+            };
             break;
         default:
             break;
-        }
+        };
     };
     if ( role==Qt::ToolTipRole ) {
         QString s;
         QString a;
         switch (index.column()) {
         case 0:
-            s.append(QString("Name: %1").arg(connItemDataList.at(index.row())->getName()));
+            s.append(QString("Name: %1").arg(_name));
             a = ( connItemDataList.at(index.row())->getData()
                   .value("availability").toBool() )? "Available":"Busy";
             s.append(QString("\nState: %1").arg(a));
             res = s;
             break;
         case 1:
-            res = QString("URI: %1").arg(connItemDataList.at(index.row())->getURI());
+            res = QString("URI: %1").arg(_uri);
             break;
         case 2:
-            res = QString("State: %1").arg(connItemDataList.at(index.row())->getState());
+            res = QString("State: %1").arg(_state);
             break;
         default:
             break;
