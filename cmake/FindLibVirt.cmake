@@ -5,27 +5,22 @@
 # LibVirt_LIBRARIES - The libraries needed to use LibVirt
 # LibVirt_DEFINITIONS - Compiler switches required for using LibVirt
 
-# LibFindMacros.cmake file must be placed in the module path
-include(LibFindMacros)
+find_package(PkgConfig)
+pkg_check_modules(PC_LibVirt QUIET libvirt)
+set(LibVirt_DEFINITIONS ${PC_LibVirt_CFLAGS_OTHER})
 
-# Dependencies
-#libfind_package(LibVirt <dependencies don't found>)
+find_path(LibVirt_INCLUDE_DIR NAMES libvirt/libvirt.h libvirt/virterror.h
+          HINTS ${PC_LibVirt_INCLUDEDIR} ${PC_LibVirt_INCLUDE_DIRS}
+          PATH_SUFFIXES libvirt)
 
-# Use pkg-config to get hints about paths
-libfind_pkg_check_modules(LibVirt_PKGCONF LibVirt)
+find_library(LibVirt_LIBRARY NAMES virt libvirt
+             HINTS ${PC_LibVirt_LIBDIR} ${PC_LibVirt_LIBRARY_DIRS})
 
-# Include dir
-find_path(LibVirt_INCLUDE_DIR
-  NAMES libvirt.h libvirt/libvirt.h
-  PATHS ${LibVirt_PKGCONF_INCLUDE_DIRS}
-)
+set(LibVirt_LIBRARIES ${LibVirt_LIBRARY})
+set(LibVirt_INCLUDE_DIRS ${LibVirt_INCLUDE_DIR})
 
-# Finally the library itself
-find_library(LibVirt_LIBRARY
-  NAMES virt
-  PATHS ${LibVirt_PKGCONF_LIBRARY_DIRS}
-)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(LibVirt DEFAULT_MSG
+                                  LibVirt_LIBRARY LibVirt_INCLUDE_DIR)
 
-set(LibVirt_PROCESS_INCLUDES ${LibVirt_INCLUDE_DIR}) # <dependencies don't found>_INCLUDE_DIRS)
-set(LibVirt_PROCESS_LIBS ${LibVirt_LIBRARY}) # <dependencies don't found>_LIBRARIES)
-libfind_process(LibVirt)
+mark_as_advanced(LibVirt_INCLUDE_DIR LibVirt_LIBRARY)

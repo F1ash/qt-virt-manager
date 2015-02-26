@@ -1,7 +1,7 @@
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_OSX_ARCHITECTURES x86_64)
-find_package (Qt5 COMPONENTS Core Gui Xml Svg REQUIRED)
+find_package (Qt5 COMPONENTS Widgets Xml Svg REQUIRED)
 include_directories(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Xml_INCLUDE_DIRS} ${Qt5Svg_INCLUDE_DIRS})
 qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
 qt5_wrap_ui(UI_SRCS ${QTERM_UI_SRC})
