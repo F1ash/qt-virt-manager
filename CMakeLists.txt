@@ -604,24 +604,23 @@ set(QTERM_TS
 
 ##
 if ( QT4_BUILD )
-    include("CMakeQt4.txt")
+    include("${CMAKE_MODULE_PATH}/CMakeQt4.txt")
     set(TERM_WIDGET_LIB qtermwidget4)
 else ( QT4_BUILD )
-    include("CMakeQt5.txt")
+    include("${CMAKE_MODULE_PATH}/CMakeQt5.txt")
     set(TERM_WIDGET_LIB qtermwidget5)
 endif( QT4_BUILD )
 ##
 
-find_package(${TERM_WIDGET_LIB} REQUIRED)
 find_package(LibVirt REQUIRED)
+find_package("${TERM_WIDGET_LIB}" REQUIRED)
 include_directories(${LibVirt_INCLUDE_DIRS} ${QTERMWIDGET_INCLUDE_DIRS})
 list(APPEND BUILD_PROJECT_LIBRARIES ${LibVirt_LIBRARIES} ${QTERMWIDGET_LIBRARIES})
 
 # * build & install application & files
 add_executable (${PROJECT_NAME}
     ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS} ${QTERM_RCC} ${QTERM_QM})
-target_link_libraries (${PROJECT_NAME}
-    ${BUILD_PROJECT_LIBRARIES} util)
+target_link_libraries (${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
 
 configure_file ( ${DESKTOP_FILE}.in ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE} )
 install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE}
