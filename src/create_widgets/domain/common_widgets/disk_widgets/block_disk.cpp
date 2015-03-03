@@ -17,7 +17,7 @@ Block_Disk::Block_Disk(
     connect(browse, SIGNAL(clicked()),
             this, SLOT(setDevPath()));
     // dataChanged connections
-    connect(path, SIGNAL(textEdited(QString)),
+    connect(path, SIGNAL(textChanged(QString)),
             this, SLOT(stateChanged()));
 }
 

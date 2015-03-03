@@ -460,6 +460,5 @@ void Devices::saveDeviceXMLDescription(int idx, QString &xmlDesc)
     QDomDocument doc;
     doc.setContent(xmlDesc);
     addDeviceToUsedDevList(doc);
-    initBootDevices();
     usedDeviceList->blockSignals(false);
 }

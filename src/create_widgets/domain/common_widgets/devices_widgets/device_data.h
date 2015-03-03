@@ -38,6 +38,7 @@ private:
     QScrollArea     *infoWidget;
     QVBoxLayout     *commonLayout;
 
+    bool             changed = false;
     bool             currentStateSaved = true;
     QString          DeviceXMLDesc;
     QString          currentDeviceXMLDesc;

@@ -17,7 +17,7 @@ File_Disk::File_Disk(
     connect(browse, SIGNAL(clicked()),
             this, SLOT(setFilePath()));
     // dataChanged connections
-    connect(path, SIGNAL(textEdited(QString)),
+    connect(path, SIGNAL(textChanged(QString)),
             this, SLOT(stateChanged()));
 }
 

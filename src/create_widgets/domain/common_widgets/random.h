@@ -2,7 +2,6 @@
 #define RANDOM_H
 
 #include <QStackedWidget>
-#include "create_widgets/domain/_qwidget.h"
 #include "char_device.h"
 
 class Random : public _QWidget

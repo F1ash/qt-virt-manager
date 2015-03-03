@@ -45,6 +45,6 @@ Disk::Disk(QWidget *parent,
 /* public slots */
 QDomDocument Disk::getDataDocument() const
 {
-    _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
+    _Disk *wdg = static_cast<_Disk*>(info->currentWidget());
     return wdg->getDataDocument();
 }

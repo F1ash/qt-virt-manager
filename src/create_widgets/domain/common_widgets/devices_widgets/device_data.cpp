@@ -137,12 +137,15 @@ void DeviceData::closeDataEdit()
                     QMessageBox::Cancel);
         if ( answer==QMessageBox::Ok ) {
             saveDeviceData();
-            if ( NULL!=device ) {
-                // save device data as null-point
-                emit saveDeviceXMLDesc(currentItemRow, currentDeviceXMLDesc);
-            };
         } else
             setStartState();
+    };
+    if ( NULL!=device && changed ) {
+        QString xmlDesc = currentDeviceXMLDesc;
+        int row = currentItemRow;
+        setStartState();
+        emit saveDeviceXMLDesc(row, xmlDesc);
+        //qDebug()<<"emited"<<devName->text();
     };
     if ( NULL!=device ) {
         infoLayout->removeWidget(device);
@@ -158,6 +161,7 @@ void DeviceData::currentStateChanged()
 {
     currentStateSaved = false;
     restoreMenu->revertData->setEnabled(true);
+    changed = true;
 }
 void DeviceData::saveDeviceData()
 {
@@ -192,4 +196,5 @@ void DeviceData::setStartState()
     currentItemRow = -1;
     currentStateSaved = true;
     restoreMenu->revertData->setEnabled(false);
+    changed = false;
 }

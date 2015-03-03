@@ -15,7 +15,7 @@ Dir_Disk::Dir_Disk(
     connect(browse, SIGNAL(clicked()),
             this, SLOT(setDirPath()));
     // dataChanged connections
-    connect(path, SIGNAL(textEdited(QString)),
+    connect(path, SIGNAL(textChanged(QString)),
             this, SLOT(stateChanged()));
 }
 
