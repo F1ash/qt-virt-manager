@@ -3,30 +3,26 @@
 
 #include <QThread>
 #include "layout/conn_list_widget.h"
-#include "vm_viewer/vm_viewer.h"
-
-typedef QMap<QString, VM_Viewer*> ViewerMap;
 
 class Wait : public QThread
 {
     Q_OBJECT
 public:
-    Wait(QObject *parent = NULL, ConnectList *wdgList = NULL,
-         ViewerMap map = ViewerMap());
+    Wait(QObject *parent = NULL,
+         ConnectList *wdgList = NULL);
     ~Wait();
 
 signals:
-    void refreshProcessingState();
+    void             refreshProcessingState();
 
 private:
     ConnectList     *wdg;
-    ViewerMap        vm_displayed_map;
     bool             processingState;
 
 public slots:
-    void setProcessingState(bool);
+    void             setProcessingState(bool);
 
 private slots:
-    void run();
+    void             run();
 };
 #endif   // WAIT_THREAD_H

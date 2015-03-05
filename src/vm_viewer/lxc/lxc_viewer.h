@@ -2,8 +2,6 @@
 #define LXC_VIEWER_H
 
 #include <QTimerEvent>
-#include <QProgressBar>
-#include <QStatusBar>
 #include "vm_viewer/qterminal/mainwindow.h"
 #include <unistd.h>
 #include <QDebug>
@@ -20,6 +18,9 @@ public:
             const QString& command = NULL);
     ~LXC_Viewer();
 
+signals:
+    void            termEOF();
+
 private:
     virDomain      *domainPtr = NULL;
     virStream      *stream = NULL;
@@ -27,10 +28,8 @@ private:
     uint            timerId = 0;
     uint            killTimerId = 0;
     uint            counter = 0;
-    QProgressBar   *closeProcess = NULL;
 
 public slots:
-    void            closeTerminal();
 
 private slots:
     void            timerEvent(QTimerEvent*);
@@ -45,6 +44,7 @@ private slots:
     void            sendDataToDisplay(virStreamPtr);
     void            sendDataToVMachine(const char*, int);
     void            closeStream();
+    void            startCloseProcess();
 };
 
 #endif // LXC_VIEWER_H

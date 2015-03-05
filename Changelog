@@ -40,3 +40,9 @@ v.0.7.12 :
 implemented the Creation of VirtNetwork;
 implemented the Task WareHouse
 (+reimplemented Control Threads);
+
+v.0.8.15 :
+implemented remote LXC-terminal;
+fixed a VM_Viewer at close;
+added libvirt cmake module;
+some fixes and enhancements;

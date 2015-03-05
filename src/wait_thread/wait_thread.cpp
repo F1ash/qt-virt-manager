@@ -1,8 +1,8 @@
 #include "wait_thread.h"
 #define  PERIOD 333
 
-Wait::Wait(QObject *parent, ConnectList *wdgList, ViewerMap map) :
-    QThread(parent), wdg(wdgList), vm_displayed_map(map)
+Wait::Wait(QObject *parent, ConnectList *wdgList) :
+    QThread(parent), wdg(wdgList)
 {
     processingState = false;
 }
@@ -12,17 +12,6 @@ Wait::~Wait()
 }
 void Wait::run()
 {
-    // close VM Displays
-    foreach ( QString key, vm_displayed_map.keys() ) {
-        VM_Viewer *vm = vm_displayed_map.value(key, NULL);
-        if ( vm!=NULL ) {
-            if ( vm->isActive() ) vm->stopProcessing();
-            delete vm_displayed_map.value(key);
-            vm_displayed_map.insert(key, NULL);
-            vm_displayed_map.remove(key);
-        };
-    };
-    vm_displayed_map.clear();
     // close connections
     while (wdg->connItemModel->connItemDataList.count()) {
         if ( processingState ) {

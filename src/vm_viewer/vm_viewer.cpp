@@ -6,22 +6,27 @@ VM_Viewer::VM_Viewer(
 {
     setMinimumSize(100, 100);
     setWindowTitle(QString("<%1> Virtual Machine").arg(domain));
-    restoreGeometry( settings.value("VMViewerGeometry").toByteArray() );
     VM_State = true;
     viewerToolBar = new ViewerToolBar(this);
     viewerToolBar->setEnabled(false);
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(resendExecMethod(const QStringList&)));
+    closeProcess = new QProgressBar(this);
+    statusBar()->addWidget(closeProcess);
+    statusBar()->hide();
 }
 VM_Viewer::~VM_Viewer()
 {
-    settings.setValue("VMViewerGeometry", saveGeometry());
     if ( NULL!=viewerToolBar ) {
         disconnect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
                    this, SLOT(resendExecMethod(const QStringList&)));
         delete viewerToolBar;
         viewerToolBar = NULL;
+    };
+    if ( NULL!=closeProcess ) {
+        delete closeProcess;
+        closeProcess = NULL;
     };
     if ( jobConnect!=NULL ) {
         virConnectClose(jobConnect);
@@ -34,30 +39,28 @@ bool VM_Viewer::isActive() const
 {
     return VM_State;
 }
-void VM_Viewer::stopProcessing()
-{
-    /*
-     * reserved for stop viewer job
-     */
-    QString msg = QString("'<b>%1</b>' viewer closed.").arg(domain);
-    receiveErrMsg(msg);
-}
+
 void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
         QString msg = QString("'<b>%1</b>' viewer hidden.").arg(domain);
-        receiveErrMsg(msg);
+        sendErrMsg(msg);
         ev->accept();
     }
 }
+void VM_Viewer::closeEvent()
+{
+    close();
+}
+
 void VM_Viewer::closeViewer()
 {
     qDebug()<<domain<<"Job Finished";
     QString msg = QString("'<b>%1</b>' viewer closed.").arg(domain);
-    receiveErrMsg(msg);
+    sendErrMsg(msg);
     //emit finished();
 }
-void VM_Viewer::receiveErrMsg(QString &msg)
+void VM_Viewer::sendErrMsg(QString &msg)
 {
     QString time = QTime::currentTime().toString();
     QString title = QString("Connect '%1'").arg(connName);

@@ -2,6 +2,8 @@
 #define VM_VIEWER_H
 
 #include <QMainWindow>
+#include <QProgressBar>
+#include <QStatusBar>
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QTime>
@@ -29,19 +31,20 @@ public:
     bool             VM_State;
     QSettings        settings;
     ViewerToolBar   *viewerToolBar = NULL;
+    QProgressBar    *closeProcess = NULL;
 
 signals:
-    void             finished();
+    void             finished(QString&);
     void             errorMsg(QString&);
     void             addNewTask(virConnectPtr, QStringList&);
     //void             addNewTask(virConnectPtr, QStringList&, virConnectPtr);
 
 public slots:
-    bool             isActive() const;
-    void             stopProcessing();
-    void             closeEvent(QCloseEvent *ev);
-    void             closeViewer();
-    void             receiveErrMsg(QString&);
+    virtual bool     isActive() const;
+    virtual void     closeEvent(QCloseEvent *ev);
+    virtual void     closeEvent();
+    virtual void     closeViewer();
+    void             sendErrMsg(QString&);
     void             sendConnErrors();
     void             sendGlobalErrors();
     void             resendExecMethod(const QStringList&);

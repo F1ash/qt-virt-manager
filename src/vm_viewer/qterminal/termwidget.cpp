@@ -68,7 +68,7 @@ void TermWidgetImpl::propertiesChanged()
         setHistorySize(-1);
     }
 
-    qDebug() << "TermWidgetImpl::propertiesChanged" << this << "emulation:" << Properties::Instance()->emulation;
+    //qDebug() << "TermWidgetImpl::propertiesChanged" << this << "emulation:" << Properties::Instance()->emulation;
     setKeyBindings(Properties::Instance()->emulation);
     setTerminalOpacity(Properties::Instance()->termOpacity/100.0);
 

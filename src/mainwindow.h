@@ -21,6 +21,8 @@
 #include "dock_head_widgets/dock_head_widget.h"
 #include <QDebug>
 
+typedef QMap<QString, VM_Viewer*> ViewerMap;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -89,7 +91,7 @@ private slots:
     void stopConnProcessing(virConnect*);
     void stopProcessing();
     void invokeVMDisplay(virConnect*, QString, QString);
-    void deleteVMDisplay();
+    void deleteVMDisplay(QString&);
     void deleteVMDisplay(QString, QString);
     void buildMigrateArgs(QStringList&);
 };

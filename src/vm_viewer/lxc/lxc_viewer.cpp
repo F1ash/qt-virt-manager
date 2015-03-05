@@ -24,7 +24,7 @@ LXC_Viewer::LXC_Viewer(
         stream = virStreamNew( jobConnect, VIR_STREAM_NONBLOCK );
         if ( stream==NULL ) {
             msg = QString("In '<b>%1</b>': Create virtual stream failed...").arg(domain);
-            receiveErrMsg(msg);
+            sendErrMsg(msg);
         } else {
             /*
              * Older servers did not support either flag,
@@ -36,37 +36,33 @@ LXC_Viewer::LXC_Viewer(
             int ret = -1;
             if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_SAFE)+1 ) {
                 msg = QString("In '<b>%1</b>': Console opened in SAFE-mode...").arg(domain);
-                receiveErrMsg(msg);
+                sendErrMsg(msg);
             } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_FORCE )+1 ) {
                 msg = QString("In '<b>%1</b>': Console opened in FORCE-mode...").arg(domain);
-                receiveErrMsg(msg);
+                sendErrMsg(msg);
             } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, 0 )+1 ) {
                 msg = QString("In '<b>%1</b>': Console opened in ZIRO-mode...").arg(domain);
-                receiveErrMsg(msg);
+                sendErrMsg(msg);
             } else {
                 msg = QString("In '<b>%1</b>': Open console failed...").arg(domain);
-                receiveErrMsg(msg);
+                sendErrMsg(msg);
                 sendConnErrors();
                 getCurrentTerminal()->m_term->sendText(msg);
-                killTimerId = startTimer(PERIOD);
-                closeProcess = new QProgressBar(this);
-                statusBar()->addWidget(closeProcess);
-                closeProcess->setRange(0, TIMEOUT);
+                startCloseProcess();
             };
             if ( ret ) {
                 // don't start (default) shell program,
                 // because take the data from VM Stream
                 timerId = startTimer(PERIOD);
+                connect(this, SIGNAL(termEOF()),
+                        this, SLOT(startCloseProcess()));
             };
         };
     } else {
         msg = QString("In '<b>%1</b>': Connect or Domain is NULL...").arg(domain);
-        receiveErrMsg(msg);
+        sendErrMsg(msg);
         getCurrentTerminal()->m_term->sendText(msg);
-        killTimerId = startTimer(PERIOD);
-        closeProcess = new QProgressBar(this);
-        statusBar()->addWidget(closeProcess);
-        closeProcess->setRange(0, TIMEOUT);
+        startCloseProcess();
     };
     sendConnErrors();
     //qDebug()<<msg<<"term inits";
@@ -76,19 +72,15 @@ LXC_Viewer::~LXC_Viewer()
     if ( timerId>0 ) killTimer(timerId);
     if ( killTimerId>0 ) killTimer(killTimerId);
     closeStream();
-    if ( NULL!=closeProcess ) {
-        delete closeProcess;
-        closeProcess = NULL;
-    };
-    qDebug()<<domain<< "Display destroyed";
+    QString msg, key;
+    msg = QString("In '<b>%1</b>': Display destroyed.")
+            .arg(domain);
+    sendErrMsg(msg);
+    key = QString("%1_%2").arg(connName).arg(domain);
+    emit finished(key);
 }
 
 /* public slots */
-void LXC_Viewer::closeTerminal()
-{
-    closeStream();
-    emit finished();
-}
 
 /* private slots */
 void LXC_Viewer::timerEvent(QTimerEvent *ev)
@@ -104,12 +96,12 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             counter = 0;
             if ( registerStreamEvents()<0 ) {
                 QString msg = QString("In '<b>%1</b>': Stream Registation fail.").arg(domain);
-                receiveErrMsg(msg);
+                sendErrMsg(msg);
                 getCurrentTerminal()->impl()->sendText(msg);
             } else {
                 QString msg = QString("In '<b>%1</b>': Stream Registation success. \
 PTY opened. Terminal is active.").arg(domain);
-                receiveErrMsg(msg);
+                sendErrMsg(msg);
                 setTerminalParameters();
             };
         } else if ( TIMEOUT<counter*PERIOD ) {
@@ -117,7 +109,7 @@ PTY opened. Terminal is active.").arg(domain);
             timerId = 0;
             counter = 0;
             QString msg = QString("In '<b>%1</b>': Open PTY Error...").arg(domain);
-            receiveErrMsg(msg);
+            sendErrMsg(msg);
             getCurrentTerminal()->impl()->sendText(msg);
         }
     } else if ( ev->timerId()==killTimerId ) {
@@ -127,19 +119,18 @@ PTY opened. Terminal is active.").arg(domain);
             killTimer(killTimerId);
             killTimerId = 0;
             counter = 0;
-            closeTerminal();
+            close();
         };
     }
 }
 void LXC_Viewer::setTerminalParameters()
 {
-    // reserved for set terminal parameters
     TermWidget *t = getCurrentTerminal();
     if ( NULL!=t ) {
         connect(t->impl(), SIGNAL(sendData(const char*,int)),
                 this, SLOT(sendDataToVMachine(const char*,int)));
         /*
-         * So usually terminals don't support
+         * As usually a xterm terminals don't support
          * the Window manipulation through CSI,
          * then zoomOut it to standard 80x24.
          */
@@ -155,7 +146,9 @@ void LXC_Viewer::setTerminalParameters()
 }
 void LXC_Viewer::closeEvent(QCloseEvent *ev)
 {
-    closeTerminal();
+    closeStream();
+    ev->ignore();
+    this->deleteLater();
 }
 virDomain* LXC_Viewer::getDomainPtr() const
 {
@@ -192,7 +185,7 @@ void LXC_Viewer::streamEventCallBack(virStreamPtr _stream, int events, void *opa
     if ( events & VIR_STREAM_EVENT_ERROR ||
          events & VIR_STREAM_EVENT_HANGUP ) {
         // Received stream ERROR/HANGUP, closing console
-        obj->closeTerminal();
+        obj->closeStream();
         return;
     };
     if ( events & VIR_STREAM_EVENT_READABLE ) {
@@ -218,7 +211,14 @@ void LXC_Viewer::sendDataToDisplay(virStreamPtr _stream)
         return;
     case 0:
         // Received EOF from stream, closing
-        closeTerminal();
+        closeStream();
+        write(ptySlaveFd, "\nEOF...", 7);
+        {
+            QString msg = QString("In '<b>%1</b>': EOF.")
+                    .arg(domain);
+            sendErrMsg(msg);
+        };
+        emit termEOF();
         return;
     case -1:
         // Error stream
@@ -233,7 +233,7 @@ void LXC_Viewer::sendDataToDisplay(virStreamPtr _stream)
 }
 void LXC_Viewer::sendDataToVMachine(const char *buff, int got)
 {
-    if ( got<=0 ) return;
+    if ( got<=0 || NULL==stream ) return;
     int saved = virStreamSend(stream, buff, got);
     if ( saved==-2 ) {
         // This is basically EAGAIN
@@ -262,6 +262,13 @@ void LXC_Viewer::closeStream()
         virStreamFinish(stream);
         virStreamFree(stream);
         stream = NULL;
+        //qDebug()<<"stream closed";
     };
-    qDebug()<<"stream closed";
+}
+void LXC_Viewer::startCloseProcess()
+{
+    killTimerId = startTimer(PERIOD);
+    closeProcess->setRange(0, TIMEOUT);
+    statusBar()->show();
+    //qDebug()<<killTimerId<<"killTimer";
 }

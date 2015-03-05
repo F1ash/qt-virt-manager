@@ -101,7 +101,7 @@ void TermWidgetHolder::saveSession(const QString & name)
 
 TermWidget* TermWidgetHolder::currentTerminal()
 {
-    qDebug() << m_currentTerm << "current terminal";
+    //qDebug() << m_currentTerm << "current terminal";
     return m_currentTerm;
 }
 
@@ -278,7 +278,7 @@ TermWidget *TermWidgetHolder::newTerm(const QString & wdir, const QString & shel
 void TermWidgetHolder::setCurrentTerminal(TermWidget* term)
 {
     if ( NULL==m_currentTerm ) {
-        qDebug() << "set current term:" << term;
+        //qDebug() << "set current term:" << term;
         m_currentTerm = term;
     };
 }

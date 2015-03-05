@@ -4,7 +4,7 @@
 %bcond_without qt5
 
 Name:           qt-virt-manager
-Version:        0.7.12
+Version:        0.8.15
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -13,15 +13,23 @@ Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 URL:            https://github.com/F1ash/%{name}
 
 Requires:       libvirt
+%if %with qt4
+Requires:       qtermwidget > 0.6.0
+%endif
+%if %with qt5
+Requires:       qtermwidget-qt5 > 0.6.0
+%endif
 # for scrubbing (optional)
 Requires:       scrub
 
 %if %with qt4
 BuildRequires:  qt4-devel
+BuildRequires:  qtermwidget-devel > 0.6.0
 %endif
 %if %with qt5
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  qtermwidget-qt5-devel > 0.6.0
 %endif
 BuildRequires:  libvirt-devel
 BuildRequires:  glibc-headers
@@ -110,6 +118,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %endif
 
 %changelog
+* Thu Mar  5 2015 Fl@sh <kaperang07@gmail.com> - 0.8.15-1
+- version updated;
+
 * Tue Jan  6 2015 Fl@sh <kaperang07@gmail.com> - 0.7.12-1
 - version updated;
 

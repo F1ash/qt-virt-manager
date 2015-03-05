@@ -18,7 +18,7 @@ Properties::Properties(const QString& filename) : filename(filename)
         QSettings settings;
         this->filename = settings.fileName();
     }
-    qDebug("Properties constructor called");
+    //qDebug("Properties constructor called");
 }
 
 Properties::~Properties()
