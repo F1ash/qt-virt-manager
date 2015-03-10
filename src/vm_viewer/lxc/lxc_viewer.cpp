@@ -1,8 +1,6 @@
 #include "lxc_viewer.h"
 
 #define BLOCK_SIZE  1024*100
-#define TIMEOUT     60*1000
-#define PERIOD      333
 
 LXC_Viewer::LXC_Viewer(
         QWidget *parent,
@@ -13,7 +11,6 @@ LXC_Viewer::LXC_Viewer(
         const QString& command) :
     TermMainWindow(parent, conn, arg1, arg2, work_dir, command)
 {
-    qRegisterMetaType<QString>("QString&");
     // unused toolbar
     viewerToolBar->setVisible(false);
     if ( jobConnect!=NULL ) {
@@ -69,8 +66,6 @@ LXC_Viewer::LXC_Viewer(
 }
 LXC_Viewer::~LXC_Viewer()
 {
-    if ( timerId>0 ) killTimer(timerId);
-    if ( killTimerId>0 ) killTimer(killTimerId);
     closeStream();
     QString msg, key;
     msg = QString("In '<b>%1</b>': Display destroyed.")
@@ -149,10 +144,6 @@ void LXC_Viewer::closeEvent(QCloseEvent *ev)
     closeStream();
     ev->ignore();
     this->deleteLater();
-}
-virDomain* LXC_Viewer::getDomainPtr() const
-{
-    return virDomainLookupByName(jobConnect, domain.toUtf8().data());
 }
 int LXC_Viewer::registerStreamEvents()
 {
@@ -264,11 +255,4 @@ void LXC_Viewer::closeStream()
         stream = NULL;
         //qDebug()<<"stream closed";
     };
-}
-void LXC_Viewer::startCloseProcess()
-{
-    killTimerId = startTimer(PERIOD);
-    closeProcess->setRange(0, TIMEOUT);
-    statusBar()->show();
-    //qDebug()<<killTimerId<<"killTimer";
 }

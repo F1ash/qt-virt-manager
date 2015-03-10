@@ -9,11 +9,12 @@
 #include <QTime>
 #include <QFileDialog>
 #include <QSettings>
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
 #include "vm_viewer/viewer_toolbar.h"
-#include "virt_objects/control_thread.h"
+#include "virt_objects/virt_entity_config.h"
 #include <QDebug>
+
+#define TIMEOUT     60*1000
+#define PERIOD      333
 
 class VM_Viewer : public QMainWindow
 {
@@ -32,22 +33,25 @@ public:
     QSettings        settings;
     ViewerToolBar   *viewerToolBar = NULL;
     QProgressBar    *closeProcess = NULL;
+    uint             timerId = 0;
+    uint             killTimerId = 0;
+    uint             counter = 0;
+    virDomain       *domainPtr = NULL;
 
 signals:
     void             finished(QString&);
     void             errorMsg(QString&);
     void             addNewTask(virConnectPtr, QStringList&);
-    //void             addNewTask(virConnectPtr, QStringList&, virConnectPtr);
 
 public slots:
     virtual bool     isActive() const;
+    virDomain*       getDomainPtr() const;
     virtual void     closeEvent(QCloseEvent *ev);
-    virtual void     closeEvent();
-    virtual void     closeViewer();
     void             sendErrMsg(QString&);
     void             sendConnErrors();
     void             sendGlobalErrors();
     void             resendExecMethod(const QStringList&);
+    void             startCloseProcess();
 };
 
 #endif // VM_VIEWER_H

@@ -81,6 +81,7 @@ set (HEADERS
   src/virt_objects/model.h
   src/virt_objects/control_thread.h
   src/virt_objects/virt_entity_control.h
+  src/virt_objects/virt_entity_config.h
   
   src/virt_objects/virt_connect/conn_element.h
   src/virt_objects/virt_connect/conn_alive_thread.h
@@ -300,6 +301,7 @@ set (HEADERS
   src/vm_viewer/viewer_toolbar.h
 
   src/vm_viewer/lxc/lxc_viewer.h
+  src/vm_viewer/spice/spice_viewer.h
 
   src/state_monitor/domain_state_monitor.h
   src/state_monitor/domain_monitor_thread.h
@@ -560,6 +562,7 @@ set (SOURCES
   src/vm_viewer/viewer_toolbar.cpp
 
   src/vm_viewer/lxc/lxc_viewer.cpp
+  src/vm_viewer/spice/spice_viewer.cpp
 
   src/state_monitor/domain_state_monitor.cpp
   src/state_monitor/domain_monitor_thread.cpp

@@ -4,6 +4,7 @@ VM_Viewer::VM_Viewer(
         QWidget *parent, virConnect *conn, QString arg1, QString arg2) :
     QMainWindow(parent), jobConnect(conn), connName(arg1), domain(arg2)
 {
+    qRegisterMetaType<QString>("QString&");
     setMinimumSize(100, 100);
     setWindowTitle(QString("<%1> Virtual Machine").arg(domain));
     VM_State = true;
@@ -18,6 +19,8 @@ VM_Viewer::VM_Viewer(
 }
 VM_Viewer::~VM_Viewer()
 {
+    if ( timerId>0 ) killTimer(timerId);
+    if ( killTimerId>0 ) killTimer(killTimerId);
     if ( NULL!=viewerToolBar ) {
         disconnect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
                    this, SLOT(resendExecMethod(const QStringList&)));
@@ -39,26 +42,18 @@ bool VM_Viewer::isActive() const
 {
     return VM_State;
 }
+virDomain* VM_Viewer::getDomainPtr() const
+{
+    return virDomainLookupByName(jobConnect, domain.toUtf8().data());
+}
 
 void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
-        QString msg = QString("'<b>%1</b>' viewer hidden.").arg(domain);
+        QString msg = QString("'<b>%1</b>' viewer closed.").arg(domain);
         sendErrMsg(msg);
         ev->accept();
     }
-}
-void VM_Viewer::closeEvent()
-{
-    close();
-}
-
-void VM_Viewer::closeViewer()
-{
-    qDebug()<<domain<<"Job Finished";
-    QString msg = QString("'<b>%1</b>' viewer closed.").arg(domain);
-    sendErrMsg(msg);
-    //emit finished();
 }
 void VM_Viewer::sendErrMsg(QString &msg)
 {
@@ -140,4 +135,11 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
             };
         };
     };
+}
+void VM_Viewer::startCloseProcess()
+{
+    killTimerId = startTimer(PERIOD);
+    closeProcess->setRange(0, TIMEOUT);
+    statusBar()->show();
+    //qDebug()<<killTimerId<<"killTimer";
 }

@@ -1,5 +1,9 @@
 #include "conn_element.h"
 
+#define TIMEOUT 10
+#define TO_RUN true
+#define TO_STOP false
+
 ElemConnect::ElemConnect(QObject *parent) :
     QObject(parent)
 {

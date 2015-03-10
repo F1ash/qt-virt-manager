@@ -22,12 +22,8 @@ signals:
     void            termEOF();
 
 private:
-    virDomain      *domainPtr = NULL;
     virStream      *stream = NULL;
     int             ptySlaveFd = -1;
-    uint            timerId = 0;
-    uint            killTimerId = 0;
-    uint            counter = 0;
 
 public slots:
 
@@ -35,7 +31,6 @@ private slots:
     void            timerEvent(QTimerEvent*);
     void            setTerminalParameters();
     void            closeEvent(QCloseEvent*);
-    virDomain*      getDomainPtr() const;
     int             registerStreamEvents();
     int             unregisterStreamEvents();
     static void     freeData(void*);
@@ -44,7 +39,6 @@ private slots:
     void            sendDataToDisplay(virStreamPtr);
     void            sendDataToVMachine(const char*, int);
     void            closeStream();
-    void            startCloseProcess();
 };
 
 #endif // LXC_VIEWER_H

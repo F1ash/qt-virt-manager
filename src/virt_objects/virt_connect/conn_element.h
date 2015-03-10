@@ -9,9 +9,6 @@
 #include "layout/conn_item_model.h"
 #include <QDebug>
 
-#define TIMEOUT 10
-#define TO_RUN true
-#define TO_STOP false
 #define AVAILABLE true
 #define NOT_AVAILABLE false
 

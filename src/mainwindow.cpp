@@ -237,7 +237,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       foreach ( QString key, VM_Displayed_Map.keys() ) {
           VM_Viewer *vm = VM_Displayed_Map.value(key, NULL);
           if ( vm!=NULL ) {
-              if ( vm->isActive() ) vm->closeEvent();
+              if ( vm->isActive() ) vm->close();
               delete VM_Displayed_Map.value(key);
               VM_Displayed_Map.remove(key);
               //qDebug()<<key<<"removed into Close";
@@ -709,7 +709,7 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
         } else if ( type.toLower()=="lxc" ) {
             value = new LXC_Viewer(this, conn, connName, domName);
         } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
-            //viewer = new VNC_Viewer(this);
+            value = new Spice_Viewer(this, conn, connName, domName);
         } else
             QMessageBox::information(
                         this,
@@ -762,7 +762,7 @@ void MainWindow::deleteVMDisplay(QString connName, QString domName)
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( VM_Displayed_Map.contains(key) ) {
         if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
-            VM_Displayed_Map.value(key)->closeEvent();
+            VM_Displayed_Map.value(key)->close();
             // don't anymore, because VM_Viewer emit finished signal and
             // VM_Viewer will cleaned from VM list
             // in <MainWindow::deleteVMDisplay(QString&)>

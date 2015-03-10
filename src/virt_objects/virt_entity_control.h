@@ -8,7 +8,7 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QDebug>
-#include "virt_objects/control_thread.h"
+#include "virt_objects/virt_entity_config.h"
 
 class VirtEntityControl : public QMainWindow
 {
