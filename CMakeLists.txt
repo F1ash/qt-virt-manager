@@ -302,13 +302,6 @@ set (HEADERS
 
   src/vm_viewer/lxc/lxc_viewer.h
   src/vm_viewer/spice/spice_viewer.h
-
-  src/state_monitor/domain_state_monitor.h
-  src/state_monitor/domain_monitor_thread.h
-  src/state_monitor/domain_state_viewer.h
-  src/state_monitor/svg_tamplates.h
-
-  src/task_warehouse/task_warehouse.h
   
   src/vm_viewer/qterminal/tabwidget.h
   src/vm_viewer/qterminal/termwidgetholder.h
@@ -319,6 +312,23 @@ set (HEADERS
   src/vm_viewer/qterminal/properties.h
   src/vm_viewer/qterminal/termwidget.h
   src/vm_viewer/qterminal/propertiesdialog.h
+
+  src/vm_viewer/qspice_widgets/qspicechannel.h
+  src/vm_viewer/qspice_widgets/qspicecursorchannel.h
+  src/vm_viewer/qspice_widgets/qspicedisplaychannel.h
+  src/vm_viewer/qspice_widgets/qspicehelper.h
+  src/vm_viewer/qspice_widgets/qspiceinputschannel.h
+  src/vm_viewer/qspice_widgets/qspicemainchannel.h
+  src/vm_viewer/qspice_widgets/qspiceobject.h
+  src/vm_viewer/qspice_widgets/qspicesession.h
+  src/vm_viewer/qspice_widgets/qspicewidget.h
+
+  src/state_monitor/domain_state_monitor.h
+  src/state_monitor/domain_monitor_thread.h
+  src/state_monitor/domain_state_viewer.h
+  src/state_monitor/svg_tamplates.h
+
+  src/task_warehouse/task_warehouse.h
 )
 set (SOURCES 
   src/main.cpp
@@ -563,12 +573,6 @@ set (SOURCES
 
   src/vm_viewer/lxc/lxc_viewer.cpp
   src/vm_viewer/spice/spice_viewer.cpp
-
-  src/state_monitor/domain_state_monitor.cpp
-  src/state_monitor/domain_monitor_thread.cpp
-  src/state_monitor/domain_state_viewer.cpp
-
-  src/task_warehouse/task_warehouse.cpp
   
   src/vm_viewer/qterminal/properties.cpp
   src/vm_viewer/qterminal/bookmarkswidget.cpp
@@ -579,6 +583,22 @@ set (SOURCES
   src/vm_viewer/qterminal/mainwindow.cpp
   src/vm_viewer/qterminal/termwidget.cpp
   src/vm_viewer/qterminal/fontdialog.cpp
+
+  src/vm_viewer/qspice_widgets/qspicechannel.cpp
+  src/vm_viewer/qspice_widgets/qspicecursorchannel.cpp
+  src/vm_viewer/qspice_widgets/qspicedisplaychannel.cpp
+  src/vm_viewer/qspice_widgets/qspicehelper.cpp
+  src/vm_viewer/qspice_widgets/qspiceinputschannel.cpp
+  src/vm_viewer/qspice_widgets/qspicemainchannel.cpp
+  src/vm_viewer/qspice_widgets/qspiceobject.cpp
+  src/vm_viewer/qspice_widgets/qspicesession.cpp
+  src/vm_viewer/qspice_widgets/qspicewidget.cpp
+
+  src/state_monitor/domain_state_monitor.cpp
+  src/state_monitor/domain_monitor_thread.cpp
+  src/state_monitor/domain_state_viewer.cpp
+
+  src/task_warehouse/task_warehouse.cpp
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE qt-virt-manager.desktop)
@@ -615,10 +635,27 @@ else ( QT4_BUILD )
 endif( QT4_BUILD )
 ##
 
+include(FindPkgConfig)
+pkg_check_modules (GLIB2 REQUIRED glib-2.0)
+pkg_check_modules (SPICE1 REQUIRED spice-protocol)
+pkg_check_modules (SPICE_CLIENT_GLIB2 REQUIRED spice-client-glib-2.0)
+
+include_directories(${GLIB2_INCLUDE_DIRS})
+include_directories(${SPICE1_INCLUDE_DIRS})
+include_directories(${SPICE_CLIENT_GLIB2_INCLUDE_DIRS})
+
+find_package(GObject REQUIRED)
 find_package(LibVirt REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
-include_directories(${LibVirt_INCLUDE_DIRS} ${QTERMWIDGET_INCLUDE_DIRS})
-list(APPEND BUILD_PROJECT_LIBRARIES ${LibVirt_LIBRARIES} ${QTERMWIDGET_LIBRARIES})
+include_directories(${GOBJECT_INCLUDE_DIRS} ${LibVirt_INCLUDE_DIRS} ${QTERMWIDGET_INCLUDE_DIRS})
+list(APPEND BUILD_PROJECT_LIBRARIES
+    ${LibVirt_LIBRARIES}
+    ${QTERMWIDGET_LIBRARIES}
+    ${GLIB2_LIBRARIES}
+    ${SPICE1_LIBRARIES}
+    ${SPICE_CLIENT_GLIB2_LIBRARIES}
+    ${GOBJECT_LIBRARIES}
+)
 
 # * build & install application & files
 add_executable (${PROJECT_NAME}

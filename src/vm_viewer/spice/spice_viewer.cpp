@@ -7,32 +7,48 @@ Spice_Viewer::Spice_Viewer(
         QString       arg2) :
     VM_Viewer(parent, conn, arg1, arg2)
 {
+    spiceWdg = new QSpiceWidget(this);
+    spiceWdg->setWidgetResizable(true);
+    setCentralWidget(spiceWdg);
     if ( jobConnect!=NULL ) {
         domainPtr = getDomainPtr();
     };
     QString msg;
     if ( domainPtr!=NULL ) {
+        // flag=0 for get running domain xml-description
         runXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
         QDomDocument doc;
         doc.setContent(runXmlDesc);
         QDomElement graph = doc.firstChildElement("domain")
            .firstChildElement("devices")
            .firstChildElement("graphics");
+        //qDebug()<<doc.toByteArray(4);
+        addr = (graph.hasAttribute("listen"))?
+                    graph.attribute("listen") :
+                    graph.firstChildElement("listen")
+                    .attribute("address");
+        port = (graph.hasAttribute("port"))?
+                    graph.attribute("port").toInt() : 5900;
+        qDebug()<<"address:"<<addr<<port;
         if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
             // use toolbar
             viewerToolBar->setEnabled(true);
+            actFullScreen = new QShortcut(QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
+            connect(actFullScreen, SIGNAL(activated()), SLOT(FullScreenTriggered()));
+            connect(spiceWdg, SIGNAL(DisplayResize(QSize)), SLOT(DisplayResize(QSize)));
+            spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
         } else {
             msg = QString("In '<b>%1</b>': Unsupported type '%2'.<br> Use external Viewer.")
                     .arg(domain).arg((!graph.isNull())? graph.attribute("type"):"???");
             sendErrMsg(msg);
-            setCentralWidget(new QLabel(msg, this));
+            spiceWdg->setWidget(new QLabel(msg, this));
             startCloseProcess();
         };
     } else {
         msg = QString("In '<b>%1</b>': Connect or Domain is NULL...")
                 .arg(domain);
         sendErrMsg(msg);
-        setCentralWidget(new QLabel(msg, this));
+        spiceWdg->setWidget(new QLabel(msg, this));
         startCloseProcess();
     };
     sendConnErrors();
@@ -59,5 +75,18 @@ void Spice_Viewer::timerEvent(QTimerEvent *ev)
             close();
         };
     }
+}
+
+void Spice_Viewer::DisplayResize(const QSize &size)
+{
+    resize(size);
+}
+
+void Spice_Viewer::FullScreenTriggered()
+{
+    if (isFullScreen())
+        setWindowState(Qt::WindowNoState);
+    else
+        setWindowState(Qt::WindowFullScreen);
 }
 

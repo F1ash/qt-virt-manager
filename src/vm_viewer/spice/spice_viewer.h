@@ -4,8 +4,10 @@
 #include <QMainWindow>
 #include <QDomDocument>
 #include <QLabel>
+#include <QShortcut>
 #include <QTimerEvent>
 #include "vm_viewer/vm_viewer.h"
+#include "vm_viewer/qspice_widgets/qspicewidget.h"
 
 class Spice_Viewer : public VM_Viewer
 {
@@ -21,12 +23,18 @@ public:
 signals:
 
 private:
-    QString      runXmlDesc;
+    QString          runXmlDesc;
+    QString          addr;
+    uint             port = 0;
+    QSpiceWidget    *spiceWdg;
+    QShortcut       *actFullScreen;
 
 public slots:
 
 private slots:
-    void         timerEvent(QTimerEvent*);
+    void             timerEvent(QTimerEvent*);
+    void             DisplayResize(const QSize&);
+    void             FullScreenTriggered();
 };
 
 #endif // SPICE_VIEWER_H
