@@ -9,11 +9,13 @@ find_package(PkgConfig)
 pkg_check_modules(PC_LibVirt QUIET libvirt)
 set(LibVirt_DEFINITIONS ${PC_LibVirt_CFLAGS_OTHER})
 
-find_path(LibVirt_INCLUDE_DIR NAMES libvirt/libvirt.h libvirt/virterror.h
+find_path(LibVirt_INCLUDE_DIR
+          NAMES libvirt/libvirt.h libvirt/virterror.h
           HINTS ${PC_LibVirt_INCLUDEDIR} ${PC_LibVirt_INCLUDE_DIRS}
           PATH_SUFFIXES libvirt)
 
-find_library(LibVirt_LIBRARY NAMES virt libvirt
+find_library(LibVirt_LIBRARY
+             NAMES virt libvirt
              HINTS ${PC_LibVirt_LIBDIR} ${PC_LibVirt_LIBRARY_DIRS})
 
 set(LibVirt_LIBRARIES ${LibVirt_LIBRARY})

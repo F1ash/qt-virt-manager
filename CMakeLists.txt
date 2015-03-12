@@ -635,26 +635,27 @@ else ( QT4_BUILD )
 endif( QT4_BUILD )
 ##
 
-include(FindPkgConfig)
-pkg_check_modules (GLIB2 REQUIRED glib-2.0)
-pkg_check_modules (SPICE1 REQUIRED spice-protocol)
-pkg_check_modules (SPICE_CLIENT_GLIB2 REQUIRED spice-client-glib-2.0)
-
-include_directories(${GLIB2_INCLUDE_DIRS})
-include_directories(${SPICE1_INCLUDE_DIRS})
-include_directories(${SPICE_CLIENT_GLIB2_INCLUDE_DIRS})
-
+find_package(GLib2   REQUIRED)
 find_package(GObject REQUIRED)
+find_package(Spice1  REQUIRED)
+find_package(SpiceClientGLib2     REQUIRED)
 find_package(LibVirt REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
-include_directories(${GOBJECT_INCLUDE_DIRS} ${LibVirt_INCLUDE_DIRS} ${QTERMWIDGET_INCLUDE_DIRS})
+include_directories(
+    ${GLib2_INCLUDE_DIRS}
+    ${GOBJECT_INCLUDE_DIRS}
+    ${Spice1_INCLUDE_DIRS}
+    ${SPICE_CLIENT_GLIB2_INCLUDE_DIRS}
+    ${LibVirt_INCLUDE_DIRS}
+    ${QTERMWIDGET_INCLUDE_DIRS}
+)
 list(APPEND BUILD_PROJECT_LIBRARIES
     ${LibVirt_LIBRARIES}
     ${QTERMWIDGET_LIBRARIES}
-    ${GLIB2_LIBRARIES}
-    ${SPICE1_LIBRARIES}
-    ${SPICE_CLIENT_GLIB2_LIBRARIES}
+    ${GLib2_LIBRARIES}
     ${GOBJECT_LIBRARIES}
+    ${Spice1_LIBRARIES}
+    ${SPICE_CLIENT_GLIB2_LIBRARIES}
 )
 
 # * build & install application & files
