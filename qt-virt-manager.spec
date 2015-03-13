@@ -1,7 +1,7 @@
 %global cmake_build_dir build-cmake
-%global debug_package %{nil}
-%bcond_without qt4
-%bcond_without qt5
+%global debug_package   %{nil}
+%bcond_without  qt4
+%bcond_without  qt5
 
 Name:           qt-virt-manager
 Version:        0.8.15
@@ -35,6 +35,9 @@ BuildRequires:  libvirt-devel
 BuildRequires:  glibc-headers
 BuildRequires:  desktop-file-utils
 BuildRequires:  cmake
+BuildRequires:  glib2-devel
+BuildRequires:  spice-protocol
+BuildRequires:  spice-glib-devel
 
 %description
 Qt Virtual Machine Manager provides a graphical tool for administering virtual

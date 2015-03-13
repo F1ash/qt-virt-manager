@@ -24,14 +24,14 @@ signals:
     void DisplayResize(const QSize &size);
 
 protected:
-    QSpiceSession   *spiceSession;
-    QSpiceMainChannel *main;
-    QSpiceDisplayChannel *display;
-    QSpiceInputsChannel *inputs;
-    QSpiceCursorChannel *cursor;
+    QSpiceSession           *spiceSession;
+    QSpiceMainChannel       *main;
+    QSpiceDisplayChannel    *display;
+    QSpiceInputsChannel     *inputs;
+    QSpiceCursorChannel     *cursor;
 
-    QLabel      *m_Image;
-    QTimer      resizeTimer;
+    QLabel                  *m_Image;
+    QTimer                   resizeTimer;
 
 
 protected slots:
@@ -48,7 +48,7 @@ protected slots:
          int                 height,
          int                 stride,
          int                 shmid,
-         void *             imgdata);
+         void *              imgdata);
 
     void displayInvalidate(
         int                 x,

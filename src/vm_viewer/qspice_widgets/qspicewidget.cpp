@@ -9,11 +9,11 @@
 QSpiceWidget::QSpiceWidget(QWidget *parent) :
     QScrollArea(parent)
 {
-    spiceSession = new QSpiceSession();
+    spiceSession = new QSpiceSession(this);
     display = NULL;
     inputs = NULL;
 
-    m_Image = new QLabel();
+    m_Image = new QLabel(this);
     m_Image->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
     setWidget(m_Image);
@@ -134,9 +134,12 @@ void QSpiceWidget::displayPrimaryCreate(
         QPixmap pix =  QPixmap::fromImage(*img);
         delete img;
         m_Image->setPixmap(pix);
-        m_Image->setFixedSize(width, height);
-        resize(m_Image->frameSize());
-        emit DisplayResize(m_Image->frameSize());
+        //m_Image->setFixedSize(width, height);
+        //resize(m_Image->frameSize());
+        //emit DisplayResize(m_Image->frameSize());
+        QSize _size(width, height);
+        resize(_size);
+        emit DisplayResize(_size);
     }
 }
 
