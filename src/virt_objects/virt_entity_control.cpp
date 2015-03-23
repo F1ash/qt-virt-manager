@@ -3,6 +3,7 @@
 VirtEntityControl::VirtEntityControl(QWidget *parent) : QMainWindow(parent)
 {
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
+    setMinimumSize(100, 100);
     entityList = new QTreeView(this);
     entityList->setItemsExpandable(false);
     entityList->setRootIsDecorated(false);

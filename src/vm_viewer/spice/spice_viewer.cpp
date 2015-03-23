@@ -12,6 +12,16 @@ Spice_Viewer::Spice_Viewer(
     setCentralWidget(spiceWdg);
     if ( jobConnect!=NULL ) {
         domainPtr = getDomainPtr();
+        QString uri(virConnectGetURI(jobConnect));
+        addr = uri.split("//").last();
+        uri = addr;
+        addr = uri.split("/").first();
+        uri = addr;
+        addr = uri.split(":").first();
+        uri = addr;
+        if ( uri.contains("@") ) {
+            addr = uri.split("@").last();
+        };
     };
     QString msg;
     if ( domainPtr!=NULL ) {
@@ -23,10 +33,11 @@ Spice_Viewer::Spice_Viewer(
            .firstChildElement("devices")
            .firstChildElement("graphics");
         //qDebug()<<doc.toByteArray(4);
-        addr = (graph.hasAttribute("listen"))?
-                    graph.attribute("listen") :
-                    graph.firstChildElement("listen")
-                    .attribute("address");
+        //addr = (graph.hasAttribute("listen"))?
+        //            graph.attribute("listen") :
+        //            graph.firstChildElement("listen")
+        //            .attribute("address");
+        if (addr.isEmpty()) addr = "127.0.0.1";
         port = (graph.hasAttribute("port"))?
                     graph.attribute("port").toInt() : 5900;
         qDebug()<<"address:"<<addr<<port;

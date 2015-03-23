@@ -96,5 +96,10 @@ void Userspace_SLIRP::setDataDescription(QString &xmlDesc)
         wdg->slot->setText( _addr.attribute("slot") );
         wdg->function->setValue( _addr.attribute("function")
                                  .split("x").last().toInt() );
+        if ( _addr.hasAttribute("multifunction") ) {
+            wdg->multifunction->setEnabled(true);
+            wdg->multifunction->setChecked(
+                        _addr.attribute("multifunction")=="on" );
+        };
     };
 }

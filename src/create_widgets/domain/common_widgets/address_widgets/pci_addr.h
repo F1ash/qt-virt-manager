@@ -3,6 +3,7 @@
 
 #include "_addr.h"
 #include <QSpinBox>
+#include <QCheckBox>
 
 class PciAddr : public _Addr
 {
@@ -13,6 +14,7 @@ public:
     QLineEdit       *bus;
     QLineEdit       *slot;
     QSpinBox        *function;
+    QCheckBox       *multifunction;
 
 private:
     QLabel          *domainLabel;
@@ -22,7 +24,10 @@ private:
     QGridLayout     *commonlayout;
 
 public slots:
-    AttrList getAttrList() const;
+    AttrList         getAttrList() const;
+
+private slots:
+    void             usageChanged(int);
 };
 
 #endif // PCI_ADDR_H

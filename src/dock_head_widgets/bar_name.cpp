@@ -3,7 +3,8 @@
 BarNameLabel::BarNameLabel(QWidget *parent) : QLabel(parent)
 {
     _size = this->fontInfo().pixelSize();
-    setMaximumSize(_size*2, _size*20);
+    setMaximumWidth(_size*2);
+    setMinimumHeight(_size*10);
 }
 
 /* public slots */
@@ -15,6 +16,7 @@ void BarNameLabel::setColor(int color)
 /* private slots */
 void BarNameLabel::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(_color);

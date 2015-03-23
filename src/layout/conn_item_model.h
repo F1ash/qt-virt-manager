@@ -29,6 +29,7 @@ signals:
 
 private:
     QModelIndex  rootIdx;
+    QIcon        onViewIcon;
     QIcon        activeIcon;
     QIcon        no_activeIcon;
     QMap<QString, QIcon>

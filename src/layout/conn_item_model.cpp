@@ -3,6 +3,7 @@
 ConnItemModel::ConnItemModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
+    onViewIcon = QIcon::fromTheme("overview");
     activeIcon = QIcon::fromTheme("run");
     no_activeIcon = QIcon::fromTheme("network-server");
     uri_logo.insert("lxc", QIcon::fromTheme("lxc"));
@@ -85,9 +86,12 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
         };
     };
     if ( role==Qt::DecorationRole ) {
+        DATA _data = connItemDataList.at(index.row())->getData();
         switch (index.column()) {
         case 0:
-            if ( _state.toLower()=="running" ) {
+            if ( _data.value("onView").toBool() ) {
+                res = onViewIcon;
+            } else if ( _state.toLower()=="opened" ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
@@ -158,6 +162,17 @@ bool ConnItemModel::setData( const QModelIndex &index, const QVariant &value, in
             break;
         case 2:
             connItemDataList.at(editedRow)->setState ( val );
+            break;
+        default:
+            break;
+        };
+    };
+    if ( role==Qt::DecorationRole ) {
+        DATA _data = connItemDataList.at(index.row())->getData();
+        switch (index.column()) {
+        case 0:
+            _data.insert("onView", value);
+            connItemDataList.at(editedRow)->setData( _data );
             break;
         default:
             break;

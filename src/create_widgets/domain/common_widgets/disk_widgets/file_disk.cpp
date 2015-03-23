@@ -155,6 +155,11 @@ void File_Disk::setDataDescription(QString &xmlDesc)
             wdg->function->setValue(
                         _addr.attribute("function")
                         .split("x").last().toInt() );
+            if ( _addr.hasAttribute("multifunction") ) {
+                wdg->multifunction->setEnabled(true);
+                wdg->multifunction->setChecked(
+                            _addr.attribute("multifunction")=="on" );
+            };
         } else if ( _attr=="drive" ) {
             DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
             wdg->controller->setText( _addr.attribute("controller") );

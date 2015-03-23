@@ -15,13 +15,17 @@ ConnectList::ConnectList(QWidget *parent = NULL)
   progressBarDlg = new ProgressBarDelegate();
   this->setItemDelegate(progressBarDlg);
   connects = new CONN_LIST();
-  connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(connectItemClicked(const QPoint &)));
-  connect(this, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(connectItemDoubleClicked(const QModelIndex&)));
+  connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
+          this, SLOT(connectItemClicked(const QPoint &)));
+  connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
+          this, SLOT(connectItemDoubleClicked(const QModelIndex&)));
 }
 ConnectList::~ConnectList()
 {
-  disconnect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(connectItemClicked(const QPoint &)));
-  disconnect(this, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(connectItemDoubleClicked(const QModelIndex&)));
+  disconnect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
+             this, SLOT(connectItemClicked(const QPoint &)));
+  disconnect(this, SIGNAL(doubleClicked(const QModelIndex&)),
+             this, SLOT(connectItemDoubleClicked(const QModelIndex&)));
   delete progressBarDlg;
   progressBarDlg = NULL;
   delete connItemModel;
@@ -125,16 +129,21 @@ void ConnectList::openConnect(QModelIndex &_item)
 }
 void ConnectList::showConnect(QModelIndex &_item)
 {
-    int conn_state;
-    bool conn_availability;
-    ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-    conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
-    conn_availability = idx->getData().value(QString("availability"), NOT_AVAILABLE).toBool();
-    if ( conn_state==RUNNING && conn_availability ) {
-        QString _name = idx->getName();
-        ElemConnect *conn;
-        conn = connects->value(_name);
-        conn->showConnectData();
+    for (uint i=0; i<connects->count(); i++) {
+        int conn_state;
+        bool conn_availability;
+        if ( i==_item.row() ) {
+            ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
+            conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
+            conn_availability = idx->getData().value(QString("availability"), NOT_AVAILABLE).toBool();
+            if ( conn_state==RUNNING && conn_availability ) {
+                QString _name = idx->getName();
+                ElemConnect *conn;
+                conn = connects->value(_name);
+                conn->showConnectData();
+            };
+        } else
+            connItemModel->setData(connItemModel->index(i, 0), false, Qt::DecorationRole);
     };
     clearSelection();
 }

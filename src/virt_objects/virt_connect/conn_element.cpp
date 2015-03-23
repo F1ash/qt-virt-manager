@@ -73,6 +73,8 @@ void ElemConnect::showConnectData()
     conn = connAliveThread->getConnect();
     //qDebug()<<"showConnectData:"<<name<<QVariant((conn!=NULL)?true:false).toString()<<conn;
     emit connPtr(conn, name);
+    int row = own_model->connItemDataList.indexOf(own_index);
+    own_model->setData(own_model->index(row, 0), true, Qt::DecorationRole);
 }
 virConnect* ElemConnect::getConnect() const
 {
@@ -136,6 +138,7 @@ void ElemConnect::setConnectState(CONN_STATE status)
   } else _diff = checkTimeout + 1;
   conn_Status.insert("isRunning", QVariant(status));
   conn_Status.insert("availability", QVariant(AVAILABLE));
+  conn_Status.insert("onView", QVariant(false));
   own_index->setData(conn_Status);
   int row = own_model->connItemDataList.indexOf(own_index);
   QString data;

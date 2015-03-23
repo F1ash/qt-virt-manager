@@ -14,6 +14,7 @@ DockHeadWidget::DockHeadWidget(
     commonLayout->setDirection(QBoxLayout::BottomToTop);
     commonLayout->addWidget(icon, 0, Qt::AlignBottom);
     commonLayout->addWidget(nameWdg);
+    commonLayout->addStretch(-1);
     commonLayout->addWidget(floatIt, 0, Qt::AlignTop);
     connect(floatIt, SIGNAL(clicked(bool)),
             this, SIGNAL(floatChanged(bool)));

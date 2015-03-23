@@ -274,7 +274,7 @@ void CreateVirtDomain::buildXMLDescription()
         };
     };
     root.appendChild(devices);
-    //qDebug()<<doc.toString();
+    //qDebug()<<doc.toByteArray(4).data();
 
     bool read = xml->open();
     if (read) xml->write(doc.toByteArray(4).data());

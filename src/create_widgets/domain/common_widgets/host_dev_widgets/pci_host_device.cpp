@@ -22,26 +22,29 @@ QDomDocument PCI_Host_Device::getDataDocument() const
     if ( devList->selectedItems().count()>0 ) {
         _Addr = devList->selectedItems().first()->data(Qt::UserRole).toString();
         QStringList _AddrList = _Addr.split(":");
-        domain.append( (_AddrList.size()>0)? _AddrList.at(0) : "0" );
-        bus.append( (_AddrList.size()>1)? _AddrList.at(1) : "0" );
-        slot.append( (_AddrList.size()>2)? _AddrList.at(2) : "0" );
-        function.append( (_AddrList.size()>3)? _AddrList.at(3) : "0" );
+        // if some from parameters is not set, then don't set whole element
         QDomElement _source, _address, _device, _devDesc;
         _device = doc.createElement("device");
         _devDesc = doc.createElement("hostdev");
-        _source = doc.createElement("source");
-        _address = doc.createElement("address");
+        if ( _AddrList.size()>3 ) {
+            domain.append( (_AddrList.size()>0)? _AddrList.at(0) : "0" );
+            bus.append( (_AddrList.size()>1)? _AddrList.at(1) : "0" );
+            slot.append( (_AddrList.size()>2)? _AddrList.at(2) : "0" );
+            function.append( (_AddrList.size()>3)? _AddrList.at(3) : "0" );
+            _source = doc.createElement("source");
+            _address = doc.createElement("address");
 
-        _hex = QString::number(domain.toInt(), 16);
-        _address.setAttribute("domain", QString("0x%1").arg(_hex));
-        _hex = QString::number(bus.toInt(), 16);
-        _address.setAttribute("bus", QString("0x%1").arg(_hex));
-        _hex = QString::number(slot.toInt(), 16);
-        _address.setAttribute("slot", QString("0x%1").arg(_hex));
-        _address.setAttribute("function", function);
+            _hex = QString::number(domain.toInt(), 16);
+            _address.setAttribute("domain", QString("0x%1").arg(_hex));
+            _hex = QString::number(bus.toInt(), 16);
+            _address.setAttribute("bus", QString("0x%1").arg(_hex));
+            _hex = QString::number(slot.toInt(), 16);
+            _address.setAttribute("slot", QString("0x%1").arg(_hex));
+            _address.setAttribute("function", function);
 
-        _source.appendChild(_address);
-        _devDesc.appendChild(_source);
+            _source.appendChild(_address);
+            _devDesc.appendChild(_source);
+        };
         _device.appendChild(_devDesc);
         _devDesc.setAttribute("type", "pci");
         _devDesc.setAttribute("mode", "subsystem");

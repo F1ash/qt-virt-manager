@@ -16,6 +16,9 @@ PciAddr::PciAddr(QWidget *parent) :
     function = new QSpinBox(this);
     function->setRange(0, 7);
     function->setPrefix("0x");
+    multifunction = new QCheckBox("Multifunction", this);
+    multifunction->setChecked(false);
+    multifunction->setEnabled(false);
     commonlayout = new QGridLayout();
     commonlayout->addWidget(domainLabel, 0, 0);
     commonlayout->addWidget(busLabel, 1, 0);
@@ -25,6 +28,7 @@ PciAddr::PciAddr(QWidget *parent) :
     commonlayout->addWidget(bus, 1, 1);
     commonlayout->addWidget(slot, 2, 1);
     commonlayout->addWidget(function, 3, 1);
+    commonlayout->addWidget(multifunction, 4, 1);
     setLayout(commonlayout);
     connect(domain, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
@@ -34,6 +38,10 @@ PciAddr::PciAddr(QWidget *parent) :
             this, SLOT(stateChanged()));
     connect(function, SIGNAL(valueChanged(int)),
             this, SLOT(stateChanged()));
+    connect(multifunction, SIGNAL(stateChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(function, SIGNAL(valueChanged(int)),
+            this, SLOT(usageChanged(int)));
 }
 AttrList PciAddr::getAttrList() const
 {
@@ -44,7 +52,16 @@ AttrList PciAddr::getAttrList() const
         attrs.insert("bus", bus->text());
     if ( !slot->text().isEmpty() )
         attrs.insert("slot", slot->text());
-    if ( !function->text().isEmpty() )
+    if ( !function->text().isEmpty() ) {
         attrs.insert("function", QString("0x%1").arg(function->value()));
+    };
+    if ( multifunction->isChecked() )
+        attrs.insert("multifunction", "on");
     return attrs;
+}
+
+void PciAddr::usageChanged(int i)
+{
+    multifunction->setEnabled(i==0);
+    if ( i!=0 ) multifunction->setChecked(false);
 }

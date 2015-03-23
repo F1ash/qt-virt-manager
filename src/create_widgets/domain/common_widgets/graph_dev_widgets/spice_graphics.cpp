@@ -446,9 +446,13 @@ QDomDocument Spice_Graphics::getDataDocument() const
         _listen.setAttribute("type", "address");
         if ( _address!="custom" ) {
             _listen.setAttribute("address", _address);
+            _devDesc.setAttribute("listen", _address);
         } else {
             _listen.setAttribute(
                         "address",
+                        address->currentText());
+            _devDesc.setAttribute(
+                        "listen",
                         address->currentText());
         };
         _devDesc.appendChild(_listen);
@@ -517,6 +521,8 @@ void Spice_Graphics::setDataDescription(QString &_xmlDesc)
     doc.setContent(_xmlDesc);
     _device = doc.firstChildElement("device")
             .firstChildElement("graphics");
+    autoPort->setChecked(
+                _device.attribute("autoport")=="yes");
     if ( !autoPort->isChecked() )
         port->setValue(
                     _device.attribute("port").toInt());
@@ -562,8 +568,6 @@ void Spice_Graphics::setDataDescription(QString &_xmlDesc)
     idx = defaultPolicy->findText(
                 _defaultPolicy, Qt::MatchContains);
     defaultPolicy->setCurrentIndex( (idx<0)? 0:idx );
-    autoPort->setChecked(
-                _device.attribute("autoport")=="yes");
     _channel = _device.firstChildElement("channel");
     while ( !_channel.isNull() ) {
         QComboBox *obj = NULL;
