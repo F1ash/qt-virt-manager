@@ -8,6 +8,8 @@ class StoragePoolModel : public Model
     Q_OBJECT
 public:
     explicit StoragePoolModel(QObject *parent = NULL);
+    QIcon    onViewIcon;
+    QVariant data(const QModelIndex &index, int role) const;
 };
 
 #endif // STORAGE_POOL_MODEL_H

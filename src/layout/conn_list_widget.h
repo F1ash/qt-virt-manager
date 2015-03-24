@@ -40,6 +40,7 @@ public slots:
     void showConnect(QModelIndex&);
     void closeConnect(QModelIndex&);
     virConnectPtr getConnect(QString&);
+    void stopProcessing();
 
 private :
     ConnSettings         *sDialog;

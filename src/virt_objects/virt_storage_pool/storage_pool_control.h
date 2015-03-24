@@ -27,6 +27,7 @@ public slots:
     bool                       setCurrentWorkConnect(virConnect*);
     void                       setListHeader(QString&);
     void                       resultReceiver(Result);
+    void                       stopOverView();
 
 private slots:
     void                       changeDockVisibility();

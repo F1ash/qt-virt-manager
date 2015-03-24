@@ -7,6 +7,7 @@ Index::Index(QObject *parent) :
     State = "";
     Autostart = "";
     Persistent = "";
+    onView = false;
 }
 void Index::setName(const QString &s)
 {
@@ -24,6 +25,10 @@ void Index::setPersistent(const QString &s)
 {
     Persistent = s;
 }
+void Index::setOnView(const bool state)
+{
+    onView = state;
+}
 QString Index::getName() const
 {
     return Name;
@@ -39,4 +44,8 @@ QString Index::getAutostart() const
 QString Index::getPersistent() const
 {
     return Persistent;
+}
+bool    Index::getOnView() const
+{
+    return onView;
 }

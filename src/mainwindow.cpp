@@ -105,13 +105,15 @@ MainWindow::~MainWindow()
   disconnect(storageVolDockContent, SIGNAL(entityMsg(QString&)),
              this, SLOT(writeToErrorLog(QString&)));
   disconnect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
-             this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
+             storageVolDockContent, SLOT(setCurrentStoragePool(virConnect*,QString&,QString&)));
   disconnect(domainsStateMonitor, SIGNAL(visibilityChanged(bool)),
              trayIcon, SLOT(stateMonitorVisibilityChanged(bool)));
   disconnect(taskWrHouse, SIGNAL(visibilityChanged(bool)),
              trayIcon, SLOT(stateTaskWareHouseVisibilityChanged(bool)));
   disconnect(taskWrHouse, SIGNAL(taskMsg(QString&)),
              this, SLOT(writeToErrorLog(QString&)));
+  disconnect(storageVolDockContent, SIGNAL(overViewStopped()),
+             storagePoolDockContent, SLOT(stopOverView()));
 
   delete domainsStateMonitor;
   domainsStateMonitor = NULL;
@@ -540,11 +542,13 @@ void MainWindow::initDockWidgets()
     connect(storagePoolDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
     connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
-            this, SLOT(receivePoolName(virConnect*,QString&,QString&)));
+            storageVolDockContent, SLOT(setCurrentStoragePool(virConnect*,QString&,QString&)));
     connect(storagePoolDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
     connect(taskWrHouse, SIGNAL(poolResult(Result)),
             storagePoolDockContent, SLOT(resultReceiver(Result)));
+    connect(storageVolDockContent, SIGNAL(overViewStopped()),
+            storagePoolDockContent, SLOT(stopOverView()));
 
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);
@@ -670,11 +674,6 @@ void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
     if ( storagePoolDockContent->setCurrentWorkConnect(conn) ) storagePoolDockContent->setListHeader(name);
     storageVolDockContent->stopProcessing();
 }
-void MainWindow::receivePoolName(virConnect *conn, QString &connName, QString &poolName)
-{
-    // send Pool name to Volume Comtrol for operating
-    storageVolDockContent->setCurrentStoragePool(conn, connName, poolName);
-}
 void MainWindow::stopConnProcessing(virConnect *conn)
 {
     // clear Overview Docks if closed connect is overviewed
@@ -684,6 +683,7 @@ void MainWindow::stopProcessing()
 {
     bool result = true;
     // stop processing of all virtual resources
+    connListWidget->stopProcessing();
     domainDockContent->stopProcessing();
     networkDockContent->stopProcessing();
     storagePoolDockContent->stopProcessing();

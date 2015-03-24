@@ -157,6 +157,13 @@ virConnectPtr ConnectList::getConnect(QString &name)
             connects->value(name)->getConnect()
             : NULL;
 }
+void ConnectList::stopProcessing()
+{
+    for (uint i=0; i<connects->count(); i++) {
+        connItemModel->setData(connItemModel->index(i, 0), false, Qt::DecorationRole);
+    };
+    clearSelection();
+}
 
 /* private slots */
 void ConnectList::connectItemClicked(const QPoint &pos)

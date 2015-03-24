@@ -15,6 +15,9 @@ public:
     explicit VirtStorageVolControl(QWidget *parent = NULL);
     ~VirtStorageVolControl();
 
+signals:
+    void                       overViewStopped();
+
 private:
     QString                    currPoolName;
     StorageVolModel           *storageVolModel = NULL;

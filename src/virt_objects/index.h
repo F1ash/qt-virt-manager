@@ -16,16 +16,19 @@ private:
     QString State;
     QString Autostart;
     QString Persistent;
+    bool    onView;
 
 public slots:
-    void setName(const QString&);
-    void setState(const QString&);
-    void setAutostart(const QString&);
-    void setPersistent(const QString&);
+    void    setName(const QString&);
+    void    setState(const QString&);
+    void    setAutostart(const QString&);
+    void    setPersistent(const QString&);
+    void    setOnView(const bool);
     QString getName() const;
     QString getState() const;
     QString getAutostart() const;
     QString getPersistent() const;
+    bool    getOnView() const;
 
 };
 

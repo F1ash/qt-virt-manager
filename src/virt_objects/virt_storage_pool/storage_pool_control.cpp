@@ -205,6 +205,12 @@ void VirtStoragePoolControl::resultReceiver(Result data)
         };
     };
 }
+void VirtStoragePoolControl::stopOverView()
+{
+    for ( uint i=0; i<storagePoolModel->DataList.count(); i++ ) {
+        storagePoolModel->DataList.at(i)->setOnView(false);
+    };
+}
 
 /* private slots */
 void VirtStoragePoolControl::changeDockVisibility()
@@ -289,6 +295,10 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="overviewVirtStoragePool" ) {
+            uint row = idx.row();
+            for ( uint i=0; i<storagePoolModel->DataList.count(); i++ ) {
+                storagePoolModel->DataList.at(i)->setOnView(i==row);
+            };
             emit currPool(currWorkConnect, currConnName, storagePoolName);
         } else if ( l.first()=="reloadVirtStoragePool" ) {
             args.prepend(l.first());
