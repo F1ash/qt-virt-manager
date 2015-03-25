@@ -12,8 +12,13 @@ Spice_Viewer::Spice_Viewer(
     setCentralWidget(spiceWdg);
     if ( jobConnect!=NULL ) {
         domainPtr = getDomainPtr();
+    };
+    QString msg;
+    if ( domainPtr!=NULL ) {
+        // get address or hostname from URI
+        // driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
         QString uri(virConnectGetURI(jobConnect));
-        addr = uri.split("//").last();
+        addr = uri.split("://").last();
         uri = addr;
         addr = uri.split("/").first();
         uri = addr;
@@ -21,10 +26,9 @@ Spice_Viewer::Spice_Viewer(
         uri = addr;
         if ( uri.contains("@") ) {
             addr = uri.split("@").last();
+            uri = addr;
         };
-    };
-    QString msg;
-    if ( domainPtr!=NULL ) {
+        addr.clear();
         // flag=0 for get running domain xml-description
         runXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
         QDomDocument doc;
@@ -33,11 +37,20 @@ Spice_Viewer::Spice_Viewer(
            .firstChildElement("devices")
            .firstChildElement("graphics");
         //qDebug()<<doc.toByteArray(4);
-        //addr = (graph.hasAttribute("listen"))?
-        //            graph.attribute("listen") :
-        //            graph.firstChildElement("listen")
-        //            .attribute("address");
-        if (addr.isEmpty()) addr = "127.0.0.1";
+        if (graph.hasAttribute("listen")) {
+            // for listen address
+            addr = graph.attribute("listen");
+        } else if ( !graph.firstChildElement("listen").isNull() ) {
+            // for listen address from virt.network
+            addr = graph.firstChildElement("listen")
+                    .attribute("address");
+        } else {
+            if ( uri.isEmpty() ) {
+                addr = "127.0.0.1";
+                uri  = "127.0.0.1";
+            };
+        };
+        if ( addr!=uri && !uri.isEmpty() ) addr = uri;
         port = (graph.hasAttribute("port"))?
                     graph.attribute("port").toInt() : 5900;
         qDebug()<<"address:"<<addr<<port;
