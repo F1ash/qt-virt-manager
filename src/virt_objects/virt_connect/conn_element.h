@@ -9,7 +9,7 @@
 #include "layout/conn_item_model.h"
 #include <QDebug>
 
-#define AVAILABLE true
+#define AVAILABLE     true
 #define NOT_AVAILABLE false
 
 class ElemConnect : public QObject
@@ -28,12 +28,14 @@ public slots:
     virConnect*       getConnect() const;
     void              setAuthCredentials(QString&, QString&);
     QString           getName() const;
+    void              setOnViewConnAliveThread(bool);
 
 signals:
-    void warningShowed();
-    void warning(QString&);
-    void connPtr(virConnect*, QString&);
-    void authRequested(QString&);
+    void              warningShowed();
+    void              warning(QString&);
+    void              connPtr(virConnect*, QString&);
+    void              authRequested(QString&);
+    void              domStateChanged(Result);
 
 private:
     ConnItemModel    *own_model;
@@ -52,14 +54,14 @@ private:
     ConnAliveThread  *connAliveThread = NULL;
 
 private slots:
-    void buildCommand();
-    void setConnectState(CONN_STATE);
-    void timerEvent(QTimerEvent*);
-    void receiveConnMessage(QString);
-    void addMsgToLog(QString, QString);
-    void sendWarning(QString&);
-    void mainWindowUp();
-    void getAuthCredentials(QString&);
+    void              buildCommand();
+    void              setConnectState(CONN_STATE);
+    void              timerEvent(QTimerEvent*);
+    void              receiveConnMessage(QString);
+    void              addMsgToLog(QString, QString);
+    void              sendWarning(QString&);
+    void              mainWindowUp();
+    void              getAuthCredentials(QString&);
 };
 
 #endif   // CONN_ELEMENT_H

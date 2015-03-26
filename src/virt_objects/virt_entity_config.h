@@ -3,6 +3,7 @@
 
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
+#include <QStringList>
 
 enum Actions {
     GET_ALL_ENTITY,

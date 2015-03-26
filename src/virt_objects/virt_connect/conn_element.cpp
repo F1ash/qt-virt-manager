@@ -11,16 +11,26 @@ ElemConnect::ElemConnect(QObject *parent) :
     waitTimerId = 0;
 
     connAliveThread = new ConnAliveThread(this);
-    connect(connAliveThread, SIGNAL(connMsg(QString)), this, SLOT(receiveConnMessage(QString)));
-    connect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)), this, SLOT(setConnectState(CONN_STATE)));
-    connect(connAliveThread, SIGNAL(authRequested(QString&)), this, SLOT(getAuthCredentials(QString&)));
+    connect(connAliveThread, SIGNAL(connMsg(QString)),
+            this, SLOT(receiveConnMessage(QString)));
+    connect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)),
+            this, SLOT(setConnectState(CONN_STATE)));
+    connect(connAliveThread, SIGNAL(authRequested(QString&)),
+            this, SLOT(getAuthCredentials(QString&)));
+    connect(connAliveThread, SIGNAL(domStateChanged(Result)),
+            this, SIGNAL(domStateChanged(Result)));
 }
 ElemConnect::~ElemConnect()
 {
     //disconnect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
-    disconnect(connAliveThread, SIGNAL(connMsg(QString)), this, SLOT(receiveConnMessage(QString)));
-    disconnect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)), this, SLOT(setConnectState(CONN_STATE)));
-    disconnect(connAliveThread, SIGNAL(authRequested(QString&)), this, SLOT(getAuthCredentials(QString&)));
+    disconnect(connAliveThread, SIGNAL(connMsg(QString)),
+               this, SLOT(receiveConnMessage(QString)));
+    disconnect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)),
+               this, SLOT(setConnectState(CONN_STATE)));
+    disconnect(connAliveThread, SIGNAL(authRequested(QString&)),
+               this, SLOT(getAuthCredentials(QString&)));
+    disconnect(connAliveThread, SIGNAL(domStateChanged(Result)),
+               this, SIGNAL(domStateChanged(Result)));
 
     if ( connAliveThread!=NULL ) {
         connAliveThread->setKeepAlive(false);
@@ -89,6 +99,10 @@ void ElemConnect::setAuthCredentials(QString &crd, QString &text)
 QString ElemConnect::getName() const
 {
     return name;
+}
+void ElemConnect::setOnViewConnAliveThread(bool state)
+{
+    connAliveThread->onView = state;
 }
 
 /* private slots */

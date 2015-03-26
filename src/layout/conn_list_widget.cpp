@@ -32,10 +32,16 @@ ConnectList::~ConnectList()
   connItemModel = NULL;
   QStringList keys = connects->keys();
   foreach (QString key, keys) {
-      disconnect(connects->value(key), SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
-      disconnect(connects->value(key), SIGNAL(warning(QString&)), this, SLOT(sendWarning(QString&)));
-      disconnect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(sendConnPtr(virConnect*, QString&)));
-      disconnect(connects->value(key), SIGNAL(authRequested(QString&)), this, SLOT(getAuthCredentials(QString&)));
+      disconnect(connects->value(key), SIGNAL(warningShowed()),
+                 this, SLOT(mainWindowUp()));
+      disconnect(connects->value(key), SIGNAL(warning(QString&)),
+                 this, SLOT(sendWarning(QString&)));
+      disconnect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)),
+                 this, SLOT(sendConnPtr(virConnect*, QString&)));
+      disconnect(connects->value(key), SIGNAL(authRequested(QString&)),
+                 this, SLOT(getAuthCredentials(QString&)));
+      disconnect(connects->value(key), SIGNAL(domStateChanged(Result)),
+                 this, SIGNAL(domResult(Result)));
   };
   connects->clear();
   delete connects;
@@ -54,9 +60,11 @@ int  ConnectList::connectItemEditAction()
     ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
     sDialog = new ConnSettings(this->parentWidget());
     sDialog->setConnectItem(idx);
-    connect(sDialog, SIGNAL(creatingConnectCancelled()), this, SLOT(deleteCancelledCreation()));
+    connect(sDialog, SIGNAL(creatingConnectCancelled()),
+            this, SLOT(deleteCancelledCreation()));
     exitCode = sDialog->exec();
-    disconnect(sDialog, SIGNAL(creatingConnectCancelled()), this, SLOT(deleteCancelledCreation()));
+    disconnect(sDialog, SIGNAL(creatingConnectCancelled()),
+               this, SLOT(deleteCancelledCreation()));
 
     sDialog->deleteLater();
     return exitCode;
@@ -132,14 +140,17 @@ void ConnectList::showConnect(QModelIndex &_item)
     for (uint i=0; i<connects->count(); i++) {
         int conn_state;
         bool conn_availability;
+        ConnItemIndex *idx = connItemModel->connItemDataList.at(i);
+        if ( idx==NULL ) return;
+        QString _name = idx->getName();
+        ElemConnect *conn;
+        conn = connects->value(_name);
+        conn->setOnViewConnAliveThread(i==_item.row());
+        //qDebug()<<_name<<(i==_item.row());
         if ( i==_item.row() ) {
-            ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
             conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
             conn_availability = idx->getData().value(QString("availability"), NOT_AVAILABLE).toBool();
             if ( conn_state==RUNNING && conn_availability ) {
-                QString _name = idx->getName();
-                ElemConnect *conn;
-                conn = connects->value(_name);
                 conn->showConnectData();
             };
         } else
@@ -160,6 +171,12 @@ virConnectPtr ConnectList::getConnect(QString &name)
 void ConnectList::stopProcessing()
 {
     for (uint i=0; i<connects->count(); i++) {
+        ConnItemIndex *idx = connItemModel->connItemDataList.at(i);
+        if ( idx==NULL ) return;
+        QString _name = idx->getName();
+        ElemConnect *conn;
+        conn = connects->value(_name);
+        conn->setOnViewConnAliveThread(false);
         connItemModel->setData(connItemModel->index(i, 0), false, Qt::DecorationRole);
     };
     clearSelection();
@@ -184,7 +201,8 @@ void ConnectList::connectItemClicked(const QPoint &pos)
   if ( conn_Status.value("isRunning", STOPPED)==RUNNING ) {
       connectMenu->act->setText("Close Connect");
       connectMenu->act->setIcon(QIcon::fromTheme("stop"));
-      connect(connectMenu->act, SIGNAL(triggered()), this, SLOT(connectItemKillAction()));
+      connect(connectMenu->act, SIGNAL(triggered()),
+              this, SLOT(connectItemKillAction()));
       //connectMenu->clean->setEnabled(true);
       connectMenu->display->setEnabled(true);
       to_run = TO_STOP;
@@ -197,16 +215,24 @@ void ConnectList::connectItemClicked(const QPoint &pos)
       to_run = TO_RUN;
   };
   idx->setData(conn_Status);
-  connect(connectMenu->edit, SIGNAL(triggered()), this, SLOT(connectItemEditAction()));
-  connect(connectMenu->display, SIGNAL(triggered()), this, SLOT(connectItemShowAction()));
-  connect(connectMenu->clean, SIGNAL(triggered()), this, SLOT(deleteCurrentConnect()));
+  connect(connectMenu->edit, SIGNAL(triggered()),
+          this, SLOT(connectItemEditAction()));
+  connect(connectMenu->display, SIGNAL(triggered()),
+          this, SLOT(connectItemShowAction()));
+  connect(connectMenu->clean, SIGNAL(triggered()),
+          this, SLOT(deleteCurrentConnect()));
   connectMenu->move(mapToGlobal(pos));
   connectMenu->exec();
-  if (to_run) disconnect(connectMenu->act, SIGNAL(triggered()), this, SLOT(connectItemRunAction()));
-  else disconnect(connectMenu->act, SIGNAL(triggered()), this, SLOT(connectItemKillAction()));
-  disconnect(connectMenu->edit, SIGNAL(triggered()), this, SLOT(connectItemEditAction()));
-  disconnect(connectMenu->display, SIGNAL(triggered()), this, SLOT(connectItemShowAction()));
-  disconnect(connectMenu->clean, SIGNAL(triggered()), this, SLOT(deleteCurrentConnect()));
+  if (to_run) disconnect(connectMenu->act, SIGNAL(triggered()),
+                         this, SLOT(connectItemRunAction()));
+  else disconnect(connectMenu->act, SIGNAL(triggered()),
+                  this, SLOT(connectItemKillAction()));
+  disconnect(connectMenu->edit, SIGNAL(triggered()),
+             this, SLOT(connectItemEditAction()));
+  disconnect(connectMenu->display, SIGNAL(triggered()),
+             this, SLOT(connectItemShowAction()));
+  disconnect(connectMenu->clean, SIGNAL(triggered()),
+             this, SLOT(deleteCurrentConnect()));
   connectMenu->deleteLater();
 }
 void ConnectList::connectItemDoubleClicked(const QModelIndex &_item)
@@ -261,10 +287,16 @@ void ConnectList::createConnect(QModelIndex &_item)
   conn->setItemReference(connItemModel, idx);
   connects->insert(key, conn);
   clearSelection();
-  connect(connects->value(key), SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
-  connect(connects->value(key), SIGNAL(warning(QString&)), this, SLOT(sendWarning(QString&)));
-  connect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(sendConnPtr(virConnect*, QString&)));
-  connect(connects->value(key), SIGNAL(authRequested(QString&)), this, SLOT(getAuthCredentials(QString&)));
+  connect(connects->value(key), SIGNAL(warningShowed()),
+          this, SLOT(mainWindowUp()));
+  connect(connects->value(key), SIGNAL(warning(QString&)),
+          this, SLOT(sendWarning(QString&)));
+  connect(connects->value(key), SIGNAL(connPtr(virConnect*, QString&)),
+          this, SLOT(sendConnPtr(virConnect*, QString&)));
+  connect(connects->value(key), SIGNAL(authRequested(QString&)),
+          this, SLOT(getAuthCredentials(QString&)));
+  connect(connects->value(key), SIGNAL(domStateChanged(Result)),
+          this, SIGNAL(domResult(Result)));
   //qDebug()<<key<<" create Connect item";
 }
 void ConnectList::checkConnect(QModelIndex &_item, bool to_run = TO_RUN)

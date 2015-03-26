@@ -8,6 +8,7 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
     QThread(parent)
 {
     qRegisterMetaType<CONN_STATE>("CONN_STATE");
+    onView = false;
     connect(this, SIGNAL(connectClosed(int)), this, SLOT(closeConnect(int)));
 }
 ConnAliveThread::~ConnAliveThread()
@@ -156,10 +157,18 @@ void ConnAliveThread::registerConnEvents()
     // don't register freeData, because it remove this thread
                                               NULL);
     if (ret<0) sendConnErrors();
+    ret = virConnectDomainEventRegister(conn,
+                                        domEventCallback,
+                                        this,
+    // don't register freeData, because it remove this thread
+                                        NULL);
+    if (ret<0) sendConnErrors();
 }
 void ConnAliveThread::unregisterConnEvents()
 {
     int ret = virConnectUnregisterCloseCallback(conn, connEventCallBack);
+    if (ret<0) sendConnErrors();
+    ret = virConnectDomainEventDeregister(conn, domEventCallback);
     if (ret<0) sendConnErrors();
 }
 void ConnAliveThread::freeData(void *opaque)
@@ -171,6 +180,7 @@ void ConnAliveThread::freeData(void *opaque)
 }
 void ConnAliveThread::connEventCallBack(virConnectPtr _conn, int reason, void *opaque)
 {
+    Q_UNUSED(_conn);
     static_cast<ConnAliveThread*>(opaque)->closeConnect(reason);
 }
 int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int ncred, void *cbdata)
@@ -225,6 +235,222 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
         }
     };
     return 0;
+}
+int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, int event, int detail, void *opaque)
+{
+    ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
+    QString msg;
+    msg = QString("EVENT: <b>'%1'</b> Domain %2 %3\n")
+           .arg(virDomainGetName(dom))
+           .arg(obj->eventToString(event))
+           .arg(obj->eventDetailToString(event, detail));
+    emit obj->connMsg(msg);
+    if ( obj->onView ) {
+        Result result;
+        QStringList domainList;
+        if ( _conn!=NULL && obj->keep_alive ) {
+            virDomainPtr *domains;
+            unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
+                                 VIR_CONNECT_LIST_DOMAINS_INACTIVE;
+            int ret = virConnectListAllDomains(_conn, &domains, flags);
+            if ( ret<0 ) {
+                obj->sendConnErrors();
+                free(domains);
+                return 0;
+            };
+            int i = 0;
+            while ( domains[i] != NULL ) {
+                QStringList currentAttr;
+                QString autostartStr;
+                int is_autostart = 0;
+                if (virDomainGetAutostart(domains[i], &is_autostart) < 0) {
+                    autostartStr.append("no autostart");
+                } else autostartStr.append( is_autostart ? "yes" : "no" );
+                int state;
+                int reason;
+                // flags : extra flags; not used yet, so callers should always pass 0
+                flags = 0;
+                QString domainState;
+                if ( virDomainGetState(domains[i], &state, &reason, flags)+1 ) {
+                    switch (state) {
+                    case VIR_DOMAIN_NOSTATE:
+                        domainState.append("NOSTATE");
+                        break;
+                    case VIR_DOMAIN_RUNNING:
+                        domainState.append("RUNNING");
+                        break;
+                    case VIR_DOMAIN_BLOCKED:
+                        domainState.append("BLOCKED");
+                        break;
+                    case VIR_DOMAIN_PAUSED:
+                        domainState.append("PAUSED");
+                        break;
+                    case VIR_DOMAIN_SHUTDOWN:
+                        domainState.append("SHUTDOWN");
+                        break;
+                    case VIR_DOMAIN_SHUTOFF:
+                        domainState.append("SHUTOFF");
+                        break;
+                    case VIR_DOMAIN_CRASHED:
+                        domainState.append("CRASHED");
+                        break;
+                    case VIR_DOMAIN_PMSUSPENDED:
+                        domainState.append("PMSUSPENDED");
+                        break;
+                    default:
+                        break;
+                    }
+                } else domainState.append("ERROR");
+                currentAttr<< QString().fromUtf8( virDomainGetName(domains[i]) )
+                           << QString("%1:%2")
+                              .arg( virDomainIsActive(domains[i]) ? "active" : "inactive" )
+                              .arg(domainState)
+                           << autostartStr
+                           << QString( virDomainIsPersistent(domains[i]) ? "yes" : "no" );
+                domainList.append(currentAttr.join(" "));
+                virDomainFree(domains[i]);
+                i++;
+            };
+            free(domains);
+        };
+        //result.name   = ;
+        result.type   = "domain";
+        //result.number = number;
+        result.action = GET_ALL_ENTITY;
+        result.result = true;
+        result.msg = domainList;
+        emit obj->domStateChanged(result);
+    };
+    return 0;
+}
+const char* ConnAliveThread::eventToString(int event) {
+    const char *ret = "";
+    switch ((virDomainEventType) event) {
+        case VIR_DOMAIN_EVENT_DEFINED:
+            ret ="Defined";
+            break;
+        case VIR_DOMAIN_EVENT_UNDEFINED:
+            ret ="Undefined";
+            break;
+        case VIR_DOMAIN_EVENT_STARTED:
+            ret ="Started";
+            break;
+        case VIR_DOMAIN_EVENT_SUSPENDED:
+            ret ="Suspended";
+            break;
+        case VIR_DOMAIN_EVENT_RESUMED:
+            ret ="Resumed";
+            break;
+        case VIR_DOMAIN_EVENT_STOPPED:
+            ret ="Stopped";
+            break;
+        case VIR_DOMAIN_EVENT_SHUTDOWN:
+            ret = "Shutdown";
+            break;
+    };
+    return ret;
+}
+const char* ConnAliveThread::eventDetailToString(int event, int detail) {
+    const char *ret = "";
+    switch ((virDomainEventType) event) {
+        case VIR_DOMAIN_EVENT_DEFINED:
+            if (detail == VIR_DOMAIN_EVENT_DEFINED_ADDED)
+                ret = "Added";
+            else if (detail == VIR_DOMAIN_EVENT_DEFINED_UPDATED)
+                ret = "Updated";
+            break;
+        case VIR_DOMAIN_EVENT_UNDEFINED:
+            if (detail == VIR_DOMAIN_EVENT_UNDEFINED_REMOVED)
+                ret = "Removed";
+            break;
+        case VIR_DOMAIN_EVENT_STARTED:
+            switch ((virDomainEventStartedDetailType) detail) {
+            case VIR_DOMAIN_EVENT_STARTED_BOOTED:
+                ret = "Booted";
+                break;
+            case VIR_DOMAIN_EVENT_STARTED_MIGRATED:
+                ret = "Migrated";
+                break;
+            case VIR_DOMAIN_EVENT_STARTED_RESTORED:
+                ret = "Restored";
+                break;
+            case VIR_DOMAIN_EVENT_STARTED_FROM_SNAPSHOT:
+                ret = "Snapshot";
+                break;
+            case VIR_DOMAIN_EVENT_STARTED_WAKEUP:
+                ret = "Event wakeup";
+                break;
+            }
+            break;
+        case VIR_DOMAIN_EVENT_SUSPENDED:
+            switch ((virDomainEventSuspendedDetailType) detail) {
+            case VIR_DOMAIN_EVENT_SUSPENDED_PAUSED:
+                ret = "Paused";
+                break;
+            case VIR_DOMAIN_EVENT_SUSPENDED_MIGRATED:
+                ret = "Migrated";
+                break;
+            case VIR_DOMAIN_EVENT_SUSPENDED_IOERROR:
+                ret = "I/O Error";
+                break;
+            case VIR_DOMAIN_EVENT_SUSPENDED_WATCHDOG:
+                ret = "Watchdog";
+                break;
+            case VIR_DOMAIN_EVENT_SUSPENDED_RESTORED:
+                ret = "Restored";
+                break;
+            case VIR_DOMAIN_EVENT_SUSPENDED_FROM_SNAPSHOT:
+                ret = "Snapshot";
+                break;
+            }
+            break;
+        case VIR_DOMAIN_EVENT_RESUMED:
+            switch ((virDomainEventResumedDetailType) detail) {
+            case VIR_DOMAIN_EVENT_RESUMED_UNPAUSED:
+                ret = "Unpaused";
+                break;
+            case VIR_DOMAIN_EVENT_RESUMED_MIGRATED:
+                ret = "Migrated";
+                break;
+            case VIR_DOMAIN_EVENT_RESUMED_FROM_SNAPSHOT:
+                ret = "Snapshot";
+                break;
+            }
+            break;
+        case VIR_DOMAIN_EVENT_STOPPED:
+            switch ((virDomainEventStoppedDetailType) detail) {
+            case VIR_DOMAIN_EVENT_STOPPED_SHUTDOWN:
+                ret = "Shutdown";
+                break;
+            case VIR_DOMAIN_EVENT_STOPPED_DESTROYED:
+                ret = "Destroyed";
+                break;
+            case VIR_DOMAIN_EVENT_STOPPED_CRASHED:
+                ret = "Crashed";
+                break;
+            case VIR_DOMAIN_EVENT_STOPPED_MIGRATED:
+                ret = "Migrated";
+                break;
+            case VIR_DOMAIN_EVENT_STOPPED_SAVED:
+                ret = "Saved";
+                break;
+            case VIR_DOMAIN_EVENT_STOPPED_FAILED:
+                ret = "Failed";
+                break;
+            case VIR_DOMAIN_EVENT_STOPPED_FROM_SNAPSHOT:
+                ret = "Snapshot";
+                break;
+            }
+            break;
+        case VIR_DOMAIN_EVENT_SHUTDOWN:
+            switch ((virDomainEventShutdownDetailType) detail) {
+            case VIR_DOMAIN_EVENT_SHUTDOWN_FINISHED:
+                ret = "Finished";
+                break;
+            }
+            break;
+    };
+    return ret;
 }
 void ConnAliveThread::closeConnect(int reason)
 {

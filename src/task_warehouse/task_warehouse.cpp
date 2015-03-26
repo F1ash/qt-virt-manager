@@ -157,8 +157,8 @@ void TaskWareHouse::msgRepeater(QString msg)
     QString time = QTime::currentTime().toString();
     //QString title = QString("Connect '%1'").arg(currConnName);
     //QString errorMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
-    QString errorMsg = QString("<b>%1 :</b><br>%2").arg(time).arg(msg);
-    emit taskMsg(errorMsg);
+    QString currMsg = QString("<b>%1 :</b><br>%2").arg(time).arg(msg);
+    emit taskMsg(currMsg);
 }
 void TaskWareHouse::taskResultReceiver(Result data)
 {

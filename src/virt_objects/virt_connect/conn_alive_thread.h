@@ -2,8 +2,7 @@
 #define CONN_ALIVE_THREAD_H
 
 #include <QThread>
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
+#include "virt_objects/virt_entity_config.h"
 #include <QDebug>
 
 #define WAIT_AUTH 300    // dev 10 (sec.)
@@ -42,12 +41,14 @@ class ConnAliveThread : public QThread
 public:
     explicit ConnAliveThread(QObject *parent = NULL);
     ~ConnAliveThread();
+    bool            onView;
 
 signals:
-    void connMsg(const QString&);
-    void changeConnState(CONN_STATE);
-    void connectClosed(int);
-    void authRequested(QString&);
+    void            connMsg(const QString&);
+    void            changeConnState(CONN_STATE);
+    void            connectClosed(int);
+    void            authRequested(QString&);
+    void            domStateChanged(Result);
 
 private:
     bool            keep_alive;
@@ -67,19 +68,23 @@ public slots:
     void            setAuthCredentials(QString&, QString&);
 
 private slots:
-    void run();
-    void openConnect();
-    void closeConnect();
-    void sendConnErrors();
-    void sendGlobalErrors();
-    void registerConnEvents();
-    void unregisterConnEvents();
+    void            run();
+    void            openConnect();
+    void            closeConnect();
+    void            sendConnErrors();
+    void            sendGlobalErrors();
+    void            registerConnEvents();
+    void            unregisterConnEvents();
     static void     freeData(void*);
     static void     connEventCallBack(virConnectPtr, int, void*);
     static  int     authCallback(virConnectCredentialPtr, unsigned int, void*);
-    void closeConnect(int);
-    void getAuthCredentials(QString&);
-
+    static  int     domEventCallback(virConnectPtr, virDomainPtr,
+                                     int, int, void*);
+    const char*     eventToString(int event);
+    static const char*
+                    eventDetailToString(int event, int detail);
+    void            closeConnect(int);
+    void            getAuthCredentials(QString&);
 };
 
 #endif // CONN_ALIVE_THREAD_H

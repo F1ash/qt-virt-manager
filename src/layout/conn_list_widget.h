@@ -31,6 +31,7 @@ signals:
     void warning(QString&);
     void connPtr(virConnect*, QString&);
     void connectClosed(virConnect*);
+    void domResult(Result);
 
 public slots:
     int  connectItemEditAction();

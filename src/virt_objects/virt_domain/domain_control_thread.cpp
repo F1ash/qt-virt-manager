@@ -85,22 +85,22 @@ Result DomControlThread::getAllDomainList()
     Result result;
     QStringList domainList;
     if ( currWorkConnect!=NULL && keep_alive ) {
-        virDomainPtr *domain;
+        virDomainPtr *domains;
         unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
                              VIR_CONNECT_LIST_DOMAINS_INACTIVE;
-        int ret = virConnectListAllDomains(currWorkConnect, &domain, flags);
+        int ret = virConnectListAllDomains(currWorkConnect, &domains, flags);
         if ( ret<0 ) {
             sendConnErrors();
-            free(domain);
+            free(domains);
             return result;
         };
 
         int i = 0;
-        while ( domain[i] != NULL ) {
+        while ( domains[i] != NULL ) {
             QStringList currentAttr;
             QString autostartStr;
             int is_autostart = 0;
-            if (virDomainGetAutostart(domain[i], &is_autostart) < 0) {
+            if (virDomainGetAutostart(domains[i], &is_autostart) < 0) {
                 autostartStr.append("no autostart");
             } else autostartStr.append( is_autostart ? "yes" : "no" );
             int state;
@@ -108,7 +108,7 @@ Result DomControlThread::getAllDomainList()
             // flags : extra flags; not used yet, so callers should always pass 0
             flags = 0;
             QString domainState;
-            if ( virDomainGetState(domain[i], &state, &reason, flags)+1 ) {
+            if ( virDomainGetState(domains[i], &state, &reason, flags)+1 ) {
                 switch (state) {
                 case VIR_DOMAIN_NOSTATE:
                     domainState.append("NOSTATE");
@@ -138,17 +138,17 @@ Result DomControlThread::getAllDomainList()
                     break;
                 }
             } else domainState.append("ERROR");
-            currentAttr<< QString().fromUtf8( virDomainGetName(domain[i]) )
+            currentAttr<< QString().fromUtf8( virDomainGetName(domains[i]) )
                        << QString("%1:%2")
-                          .arg( virDomainIsActive(domain[i]) ? "active" : "inactive" )
+                          .arg( virDomainIsActive(domains[i]) ? "active" : "inactive" )
                           .arg(domainState)
                        << autostartStr
-                       << QString( virDomainIsPersistent(domain[i]) ? "yes" : "no" );
+                       << QString( virDomainIsPersistent(domains[i]) ? "yes" : "no" );
             domainList.append(currentAttr.join(" "));
             //qDebug()<<currentAttr;
             /*
             virDomainInfo info;
-            if ( virDomainGetInfo(domain[i], &info)+1 ) {
+            if ( virDomainGetInfo(domains[i], &info)+1 ) {
                 qDebug()<<info.state
                         <<info.maxMem
                         <<info.memory
@@ -156,10 +156,10 @@ Result DomControlThread::getAllDomainList()
                         <<info.cpuTime;
             };
             */
-            virDomainFree(domain[i]);
+            virDomainFree(domains[i]);
             i++;
         };
-        free(domain);
+        free(domains);
     };
     result.result = true;
     result.msg = domainList;

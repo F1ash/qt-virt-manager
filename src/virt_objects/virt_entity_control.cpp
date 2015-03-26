@@ -82,6 +82,6 @@ void VirtEntityControl::msgRepeater(QString msg)
 {
     QString time = QTime::currentTime().toString();
     QString title = QString("Connect '%1'").arg(currConnName);
-    QString errorMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
-    emit entityMsg(errorMsg);
+    QString currMsg = QString("<b>%1 %2:</b><br>ACTION: %3").arg(time).arg(title).arg(msg);
+    emit entityMsg(currMsg);
 }

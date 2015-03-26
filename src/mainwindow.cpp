@@ -75,6 +75,8 @@ MainWindow::~MainWindow()
   disconnect(toolBar->_logUpAction, SIGNAL(triggered()),
              this, SLOT(changeLogViewerVisibility()));
   disconnect(toolBar->_closeOverview, SIGNAL(triggered()),
+             connListWidget, SLOT(stopProcessing()));
+  disconnect(toolBar->_closeOverview, SIGNAL(triggered()),
              this, SLOT(stopProcessing()));
   disconnect(toolBar->_exitAction, SIGNAL(triggered()),
              this, SLOT(closeEvent()));
@@ -340,28 +342,47 @@ void MainWindow::initConnListWidget()
       connListWidget->addConnectItem(s);
   };
   setCentralWidget(connListWidget);
-  connect(connListWidget, SIGNAL(removeConnect(QString&)), this, SLOT(removeConnectItem(QString&)));
-  connect(connListWidget, SIGNAL(messageShowed()), this, SLOT(mainWindowUp()));
-  connect(connListWidget, SIGNAL(warning(QString&)), this, SLOT(writeToErrorLog(QString&)));
-  connect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)), this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  connect(connListWidget, SIGNAL(connectClosed(virConnect*)), this, SLOT(stopConnProcessing(virConnect*)));
+  connect(connListWidget, SIGNAL(removeConnect(QString&)),
+          this, SLOT(removeConnectItem(QString&)));
+  connect(connListWidget, SIGNAL(messageShowed()),
+          this, SLOT(mainWindowUp()));
+  connect(connListWidget, SIGNAL(warning(QString&)),
+          this, SLOT(writeToErrorLog(QString&)));
+  connect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)),
+          this, SLOT(receiveConnPtr(virConnect*, QString&)));
+  connect(connListWidget, SIGNAL(connectClosed(virConnect*)),
+          this, SLOT(stopConnProcessing(virConnect*)));
 }
 void MainWindow::initToolBar()
 {
   toolBar = new ToolBar(this);
   toolBar->setObjectName("toolBar");
-  connect(toolBar->_hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
-  connect(toolBar->_createAction, SIGNAL(triggered()), this, SLOT(createNewConnect()));
-  connect(toolBar->_editAction, SIGNAL(triggered()), this, SLOT(editCurrentConnect()));
-  connect(toolBar->_deleteAction, SIGNAL(triggered()), this, SLOT(deleteCurrentConnect()));
-  connect(toolBar->_openAction, SIGNAL(triggered()), this, SLOT(openCurrentConnect()));
-  connect(toolBar->_showAction, SIGNAL(triggered()), this, SLOT(showCurrentConnect()));
-  connect(toolBar->_closeAction, SIGNAL(triggered()), this, SLOT(closeCurrentConnect()));
-  connect(toolBar->_closeAllAction, SIGNAL(triggered()), this, SLOT(closeAllConnect()));
-  connect(toolBar->_logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
-  connect(toolBar->_closeOverview, SIGNAL(triggered()), this, SLOT(stopProcessing()));
-  connect(toolBar->_exitAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
-  connect(toolBar, SIGNAL(warningShowed()), this, SLOT(mainWindowUp()));
+  connect(toolBar->_hideAction, SIGNAL(triggered()),
+          this, SLOT(changeVisibility()));
+  connect(toolBar->_createAction, SIGNAL(triggered()),
+          this, SLOT(createNewConnect()));
+  connect(toolBar->_editAction, SIGNAL(triggered()),
+          this, SLOT(editCurrentConnect()));
+  connect(toolBar->_deleteAction, SIGNAL(triggered()),
+          this, SLOT(deleteCurrentConnect()));
+  connect(toolBar->_openAction, SIGNAL(triggered()),
+          this, SLOT(openCurrentConnect()));
+  connect(toolBar->_showAction, SIGNAL(triggered()),
+          this, SLOT(showCurrentConnect()));
+  connect(toolBar->_closeAction, SIGNAL(triggered()),
+          this, SLOT(closeCurrentConnect()));
+  connect(toolBar->_closeAllAction, SIGNAL(triggered()),
+          this, SLOT(closeAllConnect()));
+  connect(toolBar->_logUpAction, SIGNAL(triggered()),
+          this, SLOT(changeLogViewerVisibility()));
+  connect(toolBar->_closeOverview, SIGNAL(triggered()),
+          connListWidget, SLOT(stopProcessing()));
+  connect(toolBar->_closeOverview, SIGNAL(triggered()),
+          this, SLOT(stopProcessing()));
+  connect(toolBar->_exitAction, SIGNAL(triggered()),
+          this, SLOT(closeEvent()));
+  connect(toolBar, SIGNAL(warningShowed()),
+          this, SLOT(mainWindowUp()));
   int area_int = settings.value("ToolBarArea", 4).toInt();
   this->addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
 }
@@ -438,6 +459,8 @@ void MainWindow::initDockWidgets()
     connect(domainDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&, virConnectPtr)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
     connect(taskWrHouse, SIGNAL(domResult(Result)),
+            domainDockContent, SLOT(resultReceiver(Result)));
+    connect(connListWidget, SIGNAL(domResult(Result)),
             domainDockContent, SLOT(resultReceiver(Result)));
 
     networkDock = new DockWidget(this);
@@ -683,7 +706,6 @@ void MainWindow::stopProcessing()
 {
     bool result = true;
     // stop processing of all virtual resources
-    connListWidget->stopProcessing();
     domainDockContent->stopProcessing();
     networkDockContent->stopProcessing();
     storagePoolDockContent->stopProcessing();
