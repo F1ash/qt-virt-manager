@@ -55,6 +55,15 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     _autoReload->setToolTip("AutoReload Domain Overview");
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
     _autoReload->setCheckable(true);
+    snapshot_Menu = new QMenu(this);
+    createSnapshot = snapshot_Menu->addAction("create Snapshot of Current Domain");
+    createSnapshot->setIcon(QIcon::fromTheme("camera-photo"));
+    moreSnapshot_Actions = snapshot_Menu->addAction("more Snapshot actions for Domain");
+    moreSnapshot_Actions->setIcon(QIcon::fromTheme("camera-photo"));
+    snapshot_Action = new QAction(this);
+    snapshot_Action->setIcon(QIcon::fromTheme("camera-photo"));
+    snapshot_Action->setToolTip("Snapshot now!");
+    snapshot_Action->setMenu(snapshot_Menu);
 
     addAction(start_Action);
     addAction(pause_Action);
@@ -65,6 +74,8 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     addAction(undefine_Action);
     //addSeparator();
     addAction(setAutostart_Action);
+    addSeparator();
+    addAction(snapshot_Action);
     addSeparator();
     addAction(getXMLDesc_Action);
     addSeparator();
@@ -146,6 +157,14 @@ DomainToolBar::~DomainToolBar()
     undefine_Action = NULL;
     delete setAutostart_Action;
     setAutostart_Action = NULL;
+    delete createSnapshot;
+    createSnapshot = NULL;
+    delete moreSnapshot_Actions;
+    moreSnapshot_Actions = NULL;
+    delete snapshot_Menu;
+    snapshot_Menu = NULL;
+    delete snapshot_Action;
+    snapshot_Action = NULL;
     delete getXMLDesc_Action;
     getXMLDesc_Action = NULL;
     delete migrate_Action;
@@ -266,6 +285,12 @@ void DomainToolBar::detectTriggerredAction(QAction *action)
         parameters << "getVirtDomainXMLDesc";
     } else if ( action == migrate_Action ) {
         parameters << "migrateVirtDomain";
+    } else if ( action == snapshot_Action ) {
+        parameters << "createVirtDomainSnapshot";
+    } else if ( action == createSnapshot ) {
+        parameters << "createVirtDomainSnapshot";
+    } else if ( action == moreSnapshot_Actions ) {
+        parameters << "moreSnapshotActions";
     } else return;
     emit execMethod(parameters);
 }

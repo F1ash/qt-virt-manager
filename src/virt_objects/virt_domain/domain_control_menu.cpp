@@ -35,6 +35,9 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         autoStart = new QAction("change AutoStart", this);
         autoStart->setIcon(QIcon::fromTheme("domain-autostart"));
         autoStart->setEnabled(parameters.last()=="yes");
+        createSnapshot = new QAction("Snapshot now!", this);
+        createSnapshot->setIcon(QIcon::fromTheme("camera-photo"));
+        createSnapshot->setEnabled(parameters[1]=="active");
         getXMLDesc = new QAction("get XML Description", this);
         getXMLDesc->setIcon(QIcon::fromTheme("domain-xml"));
         getXMLDesc->setEnabled(true);
@@ -61,6 +64,8 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         addSeparator();
         addAction(undefine);
         addAction(autoStart);
+        addSeparator();
+        addAction(createSnapshot);
         addSeparator();
         addAction(getXMLDesc);
         addSeparator();
@@ -114,6 +119,8 @@ void DomainControlMenu::emitExecMethod(QAction *action)
             paramList.append("migrateVirtDomain");
         } else if ( action == reload ) {
             paramList.append("reloadVirtDomain");
+        } else if ( action == createSnapshot ) {
+            paramList.append("createVirtDomainSnapshot");
         } else return;
         if ( action != reload ) paramList.append(parameters.first());
     } else if ( action == reload ) {

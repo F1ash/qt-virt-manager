@@ -383,6 +383,10 @@ void VirtDomainControl::execAction(const QStringList &l)
             emit addToStateMonitor(currWorkConnect, currConnName, domainName);
         } else if ( l.first()=="reloadVirtDomain" ) {
             reloadDomainState();
+        } else if ( l.first()=="createVirtDomainSnapshot" ) {
+            qDebug()<<"createVirtDomainSnapshot";
+        } else if ( l.first()=="moreSnapshotActions" ) {
+            qDebug()<<"moreSnapshotActions";
         };
     } else if ( l.first()=="reloadVirtDomain" ) {
         reloadDomainState();

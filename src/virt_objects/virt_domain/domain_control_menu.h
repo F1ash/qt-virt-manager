@@ -36,6 +36,8 @@ private:
     QAction        *display;
     QAction        *addToMonitor;
     QAction        *reload;
+    QAction        *createSnapshot;
+    QAction        *moreSnapshot_Actions;
     QStringList     parameters;
 
 private slots:
