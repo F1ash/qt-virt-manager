@@ -37,7 +37,6 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         autoStart->setEnabled(parameters.last()=="yes");
         createSnapshot = new QAction("Snapshot now!", this);
         createSnapshot->setIcon(QIcon::fromTheme("camera-photo"));
-        createSnapshot->setEnabled(parameters[1]=="active");
         getXMLDesc = new QAction("get XML Description", this);
         getXMLDesc->setIcon(QIcon::fromTheme("domain-xml"));
         getXMLDesc->setEnabled(true);

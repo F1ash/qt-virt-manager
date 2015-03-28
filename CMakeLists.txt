@@ -297,6 +297,12 @@ set (HEADERS
   src/create_widgets/network/network_widgets/forward_mode_widgets/passthrough_mode_widget.h
   src/create_widgets/network/network_widgets/forward_mode_widgets/hostdev_mode_widget.h
 
+  src/create_widgets/snapshot/create_snapshot_dialog.h
+  src/create_widgets/snapshot/_snapshot_stuff.h
+  src/create_widgets/snapshot/types/mem_state_snapshot.h
+  src/create_widgets/snapshot/types/disk_snapshot.h
+  src/create_widgets/snapshot/types/system_checkpoint.h
+
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
 
@@ -567,6 +573,12 @@ set (SOURCES
   src/create_widgets/network/network_widgets/forward_mode_widgets/vepa_mode_widget.cpp
   src/create_widgets/network/network_widgets/forward_mode_widgets/passthrough_mode_widget.cpp
   src/create_widgets/network/network_widgets/forward_mode_widgets/hostdev_mode_widget.cpp
+
+  src/create_widgets/snapshot/create_snapshot_dialog.cpp
+  src/create_widgets/snapshot/_snapshot_stuff.cpp
+  src/create_widgets/snapshot/types/mem_state_snapshot.cpp
+  src/create_widgets/snapshot/types/disk_snapshot.cpp
+  src/create_widgets/snapshot/types/system_checkpoint.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp

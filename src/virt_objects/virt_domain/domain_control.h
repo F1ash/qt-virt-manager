@@ -8,6 +8,7 @@
 #include "create_widgets/domain/create_virt_domain.h"
 #include "vm_viewer/vm_viewer.h"
 #include "migrate_dialog.h"
+#include "create_widgets/snapshot/create_snapshot_dialog.h"
 
 class VirtDomainControl : public VirtEntityControl
 {
