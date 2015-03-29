@@ -15,7 +15,6 @@ public:
     explicit _SnapshotStuff(
             QWidget *parent = NULL,
             bool     _state = false);
-    int                      type;
     const bool               state;
     QLabel                  *memLabel, *diskWarn,
                             *filePathLabel;

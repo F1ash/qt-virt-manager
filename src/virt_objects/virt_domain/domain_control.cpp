@@ -391,7 +391,7 @@ void VirtDomainControl::execAction(const QStringList &l)
                     new CreateSnapshotDialog(this, domainName, state);
             int exitCode = _dialog->exec();
             if ( exitCode ) {
-                args.append(_dialog->getSnapshotType());
+                args.append(_dialog->getSnapshotFlags());
                 args.append(_dialog->getSnapshotXMLDesc());
                 args.prepend(l.first());
                 args.prepend(QString::number(DOMAIN_SNAPSHOT));

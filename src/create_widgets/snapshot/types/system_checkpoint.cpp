@@ -3,7 +3,6 @@
 SystemCheckpoint::SystemCheckpoint(QWidget *parent, bool _state, bool _external) :
     _SnapshotStuff(parent, _state), external(_external)
 {
-    type = 2;
     QString _memAttr("<b>Memory</b> is ");
     if ( !state ) {
         _memAttr.append("no (Domain inactive)");

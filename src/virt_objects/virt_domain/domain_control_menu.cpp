@@ -77,6 +77,7 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
     reload = new QAction("Reload Domain OverView", this);
     reload->setIcon(QIcon::fromTheme("view-refresh"));
     reload->setEnabled(!autoReloadState);
+    setSeparatorsCollapsible(true);
 
     addAction(reload);
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));

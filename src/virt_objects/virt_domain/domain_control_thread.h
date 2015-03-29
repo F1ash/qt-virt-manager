@@ -35,6 +35,7 @@ private slots:
     Result           changeAutoStartDomain();
     Result           getDomainXMLDesc();
     Result           migrateDomain();
+    Result           snapshoteDomain();
 };
 
 #endif // DOM_CONTROL_THREAD_H

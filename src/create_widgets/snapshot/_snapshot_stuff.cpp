@@ -4,7 +4,6 @@ _SnapshotStuff::_SnapshotStuff(
         QWidget *parent, bool _state) :
     QWidget(parent), state(_state)
 {
-    type = -1;
     memLabel = new QLabel(this);
     filePathLabel = new QLabel("Absolute path of the file holding the VM memory state", this);
     filePath = new QLineEdit(this);

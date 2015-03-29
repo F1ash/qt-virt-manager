@@ -22,7 +22,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     name = new QLineEdit(this);
     name->setMinimumWidth(100);
     addTimeSuff = new QCheckBox(this);
-    addTimeSuff->setToolTip("Add Time to Snapsot Name");
+    addTimeSuff->setToolTip("Add Time to Snapshot Name");
     timeLabel = new QLabel(this);
     QString _date(QTime::currentTime().toString());
     _date.append("-");
@@ -39,6 +39,18 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     description->setPlaceholderText("Short Description");
     snapshotType = new QComboBox(this);
     snapshotType->addItems(SNAPSHOT_TYPES);
+    flagsMenu = new CreateSnapshotFlags(this);
+    flags = new QPushButton(QIcon::fromTheme("flag"), "", this);
+    flags->setMenu(flagsMenu);
+    flags->setMaximumWidth(flags->sizeHint().width());
+    flags->setToolTip("Create Snapshot Flags");
+    // because first item is non-actual there
+    flags->setEnabled(false);
+    typeLayout = new QHBoxLayout(this);
+    typeLayout->addWidget(snapshotType);
+    typeLayout->addWidget(flags);
+    typeWdg = new QWidget(this);
+    typeWdg->setLayout(typeLayout);
     baseWdg = new QStackedWidget(this);
     baseWdg->addWidget(new MemStateSnapshot(this, _state));
     baseWdg->addWidget(new DiskSnapshot(this, _state, false));
@@ -60,7 +72,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(titleWdg);
     commonLayout->addWidget(description);
-    commonLayout->addWidget(snapshotType);
+    commonLayout->addWidget(typeWdg);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(buttonsWdg);
     commonLayout->addStretch(-1);
@@ -77,7 +89,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
 }
 
 /* public slots */
-char* CreateSnapshotDialog::getSnapshotXMLDesc() const
+QString CreateSnapshotDialog::getSnapshotXMLDesc() const
 {
     QDomDocument doc;
     QDomElement domainsnapshot, _name, _desc, _node;
@@ -105,13 +117,12 @@ char* CreateSnapshotDialog::getSnapshotXMLDesc() const
     if ( !_node.isNull() ) domainsnapshot.appendChild(_node);
     _node = wdg->getElements().firstChildElement("disks");
     if ( !_node.isNull() ) domainsnapshot.appendChild(_node);
-    qDebug()<<doc.toByteArray(4).data();
-    return doc.toByteArray(4).data();
+    //qDebug()<<doc.toByteArray(4).data();
+    return doc.toString();
 }
-QString CreateSnapshotDialog::getSnapshotType() const
+QString CreateSnapshotDialog::getSnapshotFlags() const
 {
-    _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(baseWdg->currentWidget());
-    return QString::number( wdg->type );
+    return QString::number( flagsMenu->getCompositeFlag() );
 }
 
 /* private slots */
@@ -128,6 +139,8 @@ void CreateSnapshotDialog::reject()
 void CreateSnapshotDialog::snapshotTypeChange(int i)
 {
     ok->setDisabled( i==0 );
+    flags->setDisabled( i==0 );
+    flagsMenu->changeAvailableFlags(i);
 }
 void CreateSnapshotDialog::timerEvent(QTimerEvent *ev)
 {

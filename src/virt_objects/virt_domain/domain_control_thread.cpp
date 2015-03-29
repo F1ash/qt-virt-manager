@@ -72,6 +72,9 @@ void DomControlThread::run()
     case MIGRATE_ENTITY :
         result = migrateDomain();
         break;
+    case DOMAIN_SNAPSHOT :
+        result = snapshoteDomain();
+        break;
     default:
         break;
     };
@@ -226,7 +229,8 @@ Result DomControlThread::startDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = started;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 Started.").arg(name).arg((started)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 Started.")
+                      .arg(name).arg((started)?"":"don't"));
     return result;
 }
 Result DomControlThread::pauseDomain()
@@ -250,7 +254,8 @@ Result DomControlThread::pauseDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'<b>%1</b>' Domain state %2 changed.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain state %2 changed.")
+                      .arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::destroyDomain()
@@ -267,7 +272,8 @@ Result DomControlThread::destroyDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = deleted;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 Destroyed.").arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 Destroyed.")
+                      .arg(name).arg((deleted)?"":"don't"));
     return result;
 }
 Result DomControlThread::resetDomain()
@@ -287,7 +293,8 @@ Result DomControlThread::resetDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 reset.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 reset.")
+                      .arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::rebootDomain()
@@ -311,7 +318,8 @@ Result DomControlThread::rebootDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 reboot.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 reboot.")
+                      .arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::shutdownDomain()
@@ -335,7 +343,8 @@ Result DomControlThread::shutdownDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 shutdown.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 shutdown.")
+                      .arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::saveDomain()
@@ -363,7 +372,8 @@ Result DomControlThread::saveDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = invoked;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 saved.").arg(name).arg((invoked)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 saved.")
+                      .arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::restoreDomain()
@@ -390,8 +400,7 @@ Result DomControlThread::restoreDomain()
     result.result = invoked;
     result.msg.append(
                 QString("'<b>%1</b>' Domain %2 restored.")
-                .arg(name)
-                .arg((invoked)?"":"don't"));
+                .arg(name).arg((invoked)?"":"don't"));
     return result;
 }
 Result DomControlThread::undefineDomain()
@@ -408,7 +417,8 @@ Result DomControlThread::undefineDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = deleted;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 Undefined.").arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 Undefined.")
+                      .arg(name).arg((deleted)?"":"don't"));
     return result;
 }
 Result DomControlThread::changeAutoStartDomain()
@@ -439,7 +449,8 @@ Result DomControlThread::changeAutoStartDomain()
     } else sendConnErrors();
     result.name = name;
     result.result = set;
-    result.msg.append(QString("'<b>%1</b>' Domain autostart %2 Set.").arg(name).arg((set)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain autostart %2 Set.")
+                      .arg(name).arg((set)?"":"don't"));
     return result;
 }
 Result DomControlThread::getDomainXMLDesc()
@@ -466,7 +477,8 @@ Result DomControlThread::getDomainXMLDesc()
     free(Returns);
     result.name = name;
     result.result = read;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 XML'ed").arg(name).arg((read)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 XML'ed")
+                      .arg(name).arg((read)?"":"don't"));
     return result;
 }
 Result DomControlThread::migrateDomain()
@@ -557,7 +569,41 @@ Result DomControlThread::migrateDomain()
     } else sendConnErrors();
     result.name = args[0];
     result.result = migrated;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 Migrated.").arg(args[0]).arg((migrated)?"":"don't"));
+    result.msg.append(QString("'<b>%1</b>' Domain %2 Migrated.")
+                      .arg(args[0]).arg((migrated)?"":"don't"));
     if ( destConnect ) destConnect = NULL;
+    return result;
+}
+Result DomControlThread::snapshoteDomain()
+{
+    Result result;
+    bool done = false;
+    if ( args.count()>2 ) {
+        QString domName = args.at(0);
+        result.name = args.at(0);
+        unsigned int flags = args.at(1).toUInt();
+        QByteArray _xmlDesc;
+        _xmlDesc.append(args.at(2));
+        const char *xmlDesc = _xmlDesc.data();
+        //qDebug()<<xmlDesc<<flags;
+        virDomainPtr domain = virDomainLookupByName(currWorkConnect, domName.toUtf8().data());
+        if ( NULL==domain ) {
+            sendConnErrors();
+        } else {
+            virDomainSnapshotPtr snapshot =
+                    virDomainSnapshotCreateXML(domain, xmlDesc, flags);
+            if ( NULL==snapshot ) {
+                sendConnErrors();
+            } else {
+                done = true;
+                virDomainFree(domain);
+                virDomainSnapshotFree(snapshot);
+            };
+        };
+    } else
+        result.name = "error";
+    result.result = done;
+    result.msg.append(QString("'<b>%1</b>' Domain %2 done.")
+                      .arg(result.name).arg((done)?"":"don't"));
     return result;
 }

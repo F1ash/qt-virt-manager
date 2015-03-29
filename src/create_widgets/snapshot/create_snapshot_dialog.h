@@ -16,6 +16,7 @@
 #include "types/mem_state_snapshot.h"
 #include "types/disk_snapshot.h"
 #include "types/system_checkpoint.h"
+#include "create_snapshot_flags.h"
 #include <QDebug>
 
 class CreateSnapshotDialog : public QDialog
@@ -43,10 +44,15 @@ private:
     QPushButton     *cancel;
     QWidget         *buttonsWdg;
     int              timerID;
+    QWidget         *typeWdg;
+    QHBoxLayout     *typeLayout;
+    QPushButton     *flags;
+    CreateSnapshotFlags
+                    *flagsMenu = NULL;
 
 public slots:
-    char*            getSnapshotXMLDesc() const;
-    QString          getSnapshotType() const;
+    QString          getSnapshotXMLDesc() const;
+    QString          getSnapshotFlags() const;
 
 private slots:
     void             accept();
