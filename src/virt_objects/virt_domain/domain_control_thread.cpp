@@ -577,7 +577,7 @@ Result DomControlThread::migrateDomain()
 Result DomControlThread::snapshoteDomain()
 {
     Result result;
-    bool done = false;
+    bool snapped = false;
     if ( args.count()>2 ) {
         QString domName = args.at(0);
         result.name = args.at(0);
@@ -595,15 +595,15 @@ Result DomControlThread::snapshoteDomain()
             if ( NULL==snapshot ) {
                 sendConnErrors();
             } else {
-                done = true;
+                snapped = true;
                 virDomainFree(domain);
                 virDomainSnapshotFree(snapshot);
             };
         };
     } else
         result.name = "error";
-    result.result = done;
-    result.msg.append(QString("'<b>%1</b>' Domain %2 done.")
-                      .arg(result.name).arg((done)?"":"don't"));
+    result.result = snapped;
+    result.msg.append(QString("'<b>%1</b>' Domain %2 snapped.")
+                      .arg(result.name).arg((snapped)?"":"don't"));
     return result;
 }

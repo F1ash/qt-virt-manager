@@ -400,7 +400,18 @@ void VirtDomainControl::execAction(const QStringList &l)
             };
             _dialog->deleteLater();
         } else if ( l.first()=="moreSnapshotActions" ) {
-            qDebug()<<"moreSnapshotActions";
+            //qDebug()<<"moreSnapshotActions";
+            SnapshotActionDialog *_dialog =
+                    new SnapshotActionDialog(this, currWorkConnect, domainName);
+            int exitCode = _dialog->exec();
+            if ( exitCode ) {
+                // add parameters
+                args.prepend(l.first());
+                //args.prepend(QString::number(DOMAIN_SNAPSHOT));
+                args.prepend(currConnName);
+                //emit addNewTask(currWorkConnect, args);
+            };
+            _dialog->deleteLater();
         };
     } else if ( l.first()=="reloadVirtDomain" ) {
         reloadDomainState();

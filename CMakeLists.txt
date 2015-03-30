@@ -303,6 +303,7 @@ set (HEADERS
   src/create_widgets/snapshot/types/mem_state_snapshot.h
   src/create_widgets/snapshot/types/disk_snapshot.h
   src/create_widgets/snapshot/types/system_checkpoint.h
+  src/create_widgets/snapshot/snapshot_action_dialog.h
 
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
@@ -581,6 +582,7 @@ set (SOURCES
   src/create_widgets/snapshot/types/mem_state_snapshot.cpp
   src/create_widgets/snapshot/types/disk_snapshot.cpp
   src/create_widgets/snapshot/types/system_checkpoint.cpp
+  src/create_widgets/snapshot/snapshot_action_dialog.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp
