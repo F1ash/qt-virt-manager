@@ -13,7 +13,9 @@ SnapshotActionDialog::SnapshotActionDialog(
     toolBar = new QToolBar(this);
     toolBar->addAction(new QAction("Revert", this));
     toolBar->addAction(new QAction("Delete", this));
+    model = new SnapshotTreeModel(this);
     snapshotTree = new QTreeView(this);
+    snapshotTree->setModel(model);
     info = new QLabel("<a href='https://libvirt.org/html/libvirt-libvirt-domain-snapshot.html'>About</a>", this);
     info->setOpenExternalLinks(true);
     ok = new QPushButton("Ok", this);
@@ -32,9 +34,26 @@ SnapshotActionDialog::SnapshotActionDialog(
     setLayout(commonLayout);
     connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
+    setDomainSnapshots();
 }
 
 /* private slots */
+void SnapshotActionDialog::setDomainSnapshots()
+{
+    virDomainPtr domain = virDomainLookupByName(
+                currJobConnect, domName.toUtf8().data());
+    int namesLen = virDomainSnapshotNum(
+                domain, VIR_DOMAIN_SNAPSHOT_LIST_ROOTS);
+    char *names;
+    if ( namesLen>=0 ) {
+        int ret = virDomainSnapshotListNames(
+                    domain, &names, namesLen, VIR_DOMAIN_SNAPSHOT_LIST_ROOTS);
+        if ( ret>=0 ) {
+
+        };
+    };
+    virDomainFree(domain);
+}
 void SnapshotActionDialog::accept()
 {
     done(1);

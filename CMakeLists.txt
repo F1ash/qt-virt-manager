@@ -304,6 +304,8 @@ set (HEADERS
   src/create_widgets/snapshot/types/disk_snapshot.h
   src/create_widgets/snapshot/types/system_checkpoint.h
   src/create_widgets/snapshot/snapshot_action_dialog.h
+  src/create_widgets/snapshot/model/snapshot_tree_model.h
+  src/create_widgets/snapshot/model/snapshot_tree_index.h
 
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
@@ -583,6 +585,8 @@ set (SOURCES
   src/create_widgets/snapshot/types/disk_snapshot.cpp
   src/create_widgets/snapshot/types/system_checkpoint.cpp
   src/create_widgets/snapshot/snapshot_action_dialog.cpp
+  src/create_widgets/snapshot/model/snapshot_tree_model.cpp
+  src/create_widgets/snapshot/model/snapshot_tree_index.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp

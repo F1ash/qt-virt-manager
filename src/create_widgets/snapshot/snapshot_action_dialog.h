@@ -10,6 +10,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include "virt_objects/virt_entity_config.h"
+#include "model/snapshot_tree_model.h"
 #include <QDebug>
 
 class SnapshotActionDialog : public QDialog
@@ -26,6 +27,7 @@ signals:
 private:
     virConnectPtr       currJobConnect;
     const QString       domName;
+    SnapshotTreeModel  *model;
     QTreeView          *snapshotTree;
     QToolBar           *toolBar;
     QHBoxLayout        *buttonsLayout;
@@ -38,6 +40,7 @@ private:
 public slots:
 
 private slots:
+    void                setDomainSnapshots();
     void                accept();
     void                reject();
 };
