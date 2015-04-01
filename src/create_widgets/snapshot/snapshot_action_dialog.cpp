@@ -15,7 +15,10 @@ SnapshotActionDialog::SnapshotActionDialog(
     toolBar->addAction(new QAction("Delete", this));
     model = new SnapshotTreeModel(this);
     snapshotTree = new QTreeView(this);
+    snapshotTree->setRootIndex(QModelIndex());
+    snapshotTree->setRootIsDecorated(true);
     snapshotTree->setModel(model);
+    snapshotTree->setExpandsOnDoubleClick(true);
     info = new QLabel("<a href='https://libvirt.org/html/libvirt-libvirt-domain-snapshot.html'>About</a>", this);
     info->setOpenExternalLinks(true);
     ok = new QPushButton("Ok", this);
@@ -36,23 +39,56 @@ SnapshotActionDialog::SnapshotActionDialog(
     connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
     setDomainSnapshots();
 }
+SnapshotActionDialog::~SnapshotActionDialog()
+{
+    if ( NULL!=domain ) virDomainFree(domain);
+}
 
 /* private slots */
+void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, char *name)
+{
+    // flags: extra flags; not used yet, so callers should always pass 0
+    virDomainSnapshotPtr snapShot =
+            virDomainSnapshotLookupByName(domain, name, 0);
+    if ( NULL!=snapShot ) {
+        model->insertRow(row, parent);
+        model->setData(model->index(row, 0, parent), name, Qt::EditRole);
+        qDebug()<<row<<name<<"added";
+        int namesLen = virDomainSnapshotNumChildren(
+                    snapShot, 0);
+        if ( namesLen>0 ) {
+            char *names;
+            int ret = virDomainSnapshotListChildrenNames(
+                        snapShot, &names, namesLen, 0);
+            if ( ret>0 ) {
+                for (uint i = 0; i<ret; i++) {
+                    int _row = model->rowCount();
+                    qDebug()<<_row<<(&names)[i]<<model->index(row, 0, parent).data()<<ret;
+                    addSnapshotChild(_row, model->index(row, 0, parent), (&names)[i]);
+                };
+            };
+        };
+        virDomainSnapshotFree(snapShot);
+    };
+}
 void SnapshotActionDialog::setDomainSnapshots()
 {
-    virDomainPtr domain = virDomainLookupByName(
+    domain = virDomainLookupByName(
                 currJobConnect, domName.toUtf8().data());
     int namesLen = virDomainSnapshotNum(
                 domain, VIR_DOMAIN_SNAPSHOT_LIST_ROOTS);
-    char *names;
-    if ( namesLen>=0 ) {
+    if ( namesLen>0 ) {
+        char *names;
         int ret = virDomainSnapshotListNames(
                     domain, &names, namesLen, VIR_DOMAIN_SNAPSHOT_LIST_ROOTS);
-        if ( ret>=0 ) {
-
+        if ( ret>0 ) {
+            for (uint i = 0; i<ret; i++) {
+                int row = model->rowCount();
+                addSnapshotChild(row, snapshotTree->rootIndex(), (&names)[i]);
+            };
         };
+        qDebug()<<"tree is set";
     };
-    virDomainFree(domain);
 }
 void SnapshotActionDialog::accept()
 {

@@ -3,7 +3,7 @@
 SnapshotTreeModel::SnapshotTreeModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
-    icon = QIcon::fromTheme("snapshot");
+    icon = QIcon::fromTheme("camera-photo");
     column0 = "Name";
 }
 Qt::ItemFlags SnapshotTreeModel::flags(const QModelIndex &index) const
@@ -25,6 +25,7 @@ Qt::ItemFlags SnapshotTreeModel::flags(const QModelIndex &index) const
 }
 int SnapshotTreeModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return DataList.count();
 }
 int SnapshotTreeModel::columnCount(const QModelIndex &parent) const
@@ -107,19 +108,18 @@ bool SnapshotTreeModel::setData( const QModelIndex &index, const QVariant &value
     emit dataChanged(index.sibling(0,0), index.sibling(rowCount(), columnCount()));
     return true;
 }
-bool SnapshotTreeModel::insertRow(int row)
+bool SnapshotTreeModel::insertRow(int row, const QModelIndex &parent)
 {
-    if (row == -1) row = 0;
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    SnapshotTreeIndex *newItem = new SnapshotTreeIndex;
-    DataList.insert(row, newItem);
+    if ( row<0 ) return false;
+    beginInsertRows(parent, row, row);
+    DataList.insert(row, new SnapshotTreeIndex);
     endInsertRows();
     emit dataChanged(index(0,0), index(0,0).sibling(rowCount(), columnCount()));
     return true;
 }
-bool SnapshotTreeModel::removeRow(int row)
+bool SnapshotTreeModel::removeRow(int row, const QModelIndex &parent)
 {
-    beginRemoveRows(QModelIndex(), rowCount(), rowCount());
+    beginRemoveRows(parent, row, row);
     DataList.removeAt(row);
     endRemoveRows();
     emit dataChanged(index(0,0), index(0,0).sibling(rowCount(), columnCount()));

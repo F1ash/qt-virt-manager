@@ -21,11 +21,13 @@ public:
             QWidget          *parent = NULL,
             virConnectPtr     currConnect = NULL,
             QString           _domName = QString());
+    ~SnapshotActionDialog();
 
 signals:
 
 private:
     virConnectPtr       currJobConnect;
+    virDomainPtr        domain = NULL;
     const QString       domName;
     SnapshotTreeModel  *model;
     QTreeView          *snapshotTree;
@@ -40,6 +42,7 @@ private:
 public slots:
 
 private slots:
+    void                addSnapshotChild(int, const QModelIndex&, char*);
     void                setDomainSnapshots();
     void                accept();
     void                reject();

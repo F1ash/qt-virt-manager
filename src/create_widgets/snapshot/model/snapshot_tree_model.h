@@ -22,8 +22,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
-    bool insertRow(int);
-    bool removeRow(int);
+    bool insertRow(int, const QModelIndex&);
+    bool removeRow(int, const QModelIndex&);
 
 signals:
 
