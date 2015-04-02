@@ -1,127 +1,131 @@
 #include "snapshot_tree_model.h"
 
 SnapshotTreeModel::SnapshotTreeModel(QObject *parent) :
-    QAbstractTableModel(parent)
+    QAbstractItemModel(parent)
 {
     icon = QIcon::fromTheme("camera-photo");
-    column0 = "Name";
+    rootItem = new TreeItem("Name");
+}
+SnapshotTreeModel::~SnapshotTreeModel()
+{
+    delete rootItem;
+    rootItem = NULL;
+}
+
+QModelIndex SnapshotTreeModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (!hasIndex(row, column, parent))
+        return QModelIndex();
+
+    TreeItem *parentItem;
+
+    if (!parent.isValid())
+        parentItem = rootItem;
+    else
+        parentItem = static_cast<TreeItem*>(parent.internalPointer());
+
+    TreeItem *childItem = parentItem->child(row);
+    if (childItem)
+        return createIndex(row, column, childItem);
+    else
+        return QModelIndex();
+}
+QModelIndex SnapshotTreeModel::parent(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return QModelIndex();
+
+    TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
+    TreeItem *parentItem = childItem->parent();
+
+    if (parentItem == rootItem)
+        return QModelIndex();
+
+    return createIndex(parentItem->row(), 0, parentItem);
 }
 Qt::ItemFlags SnapshotTreeModel::flags(const QModelIndex &index) const
 {
-    Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
-    if ( !index.isValid() ) {
-        //qDebug()<<"index not valid";
-        return defaultFlags;
-    };
-
-    SnapshotTreeIndex *item = static_cast<SnapshotTreeIndex *>(index.internalPointer());
-    if ( !item ) {
-        //qDebug()<<"item not valid";
-        return defaultFlags;
-    };
-    Qt::ItemFlags flags;
-    flags = (defaultFlags | Qt::ItemIsEditable);
-    return flags;
+    return QAbstractItemModel::flags(index);
 }
 int SnapshotTreeModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
-    return DataList.count();
+    TreeItem *parentItem;
+    if (parent.column() > 0)
+        return 0;
+
+    if (!parent.isValid())
+        parentItem = rootItem;
+    else
+        parentItem = static_cast<TreeItem*>(parent.internalPointer());
+
+    return parentItem->childCount();
 }
 int SnapshotTreeModel::columnCount(const QModelIndex &parent) const
 {
     return 1;
 }
-bool SnapshotTreeModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
-{
-    if ( orientation == Qt::Horizontal ) {
-        if ( role == Qt::EditRole ) {
-            switch (section) {
-            case 0:
-                column0 = value.toString();
-                break;
-            default:
-                break;
-            }
-        };
-        headerDataChanged(Qt::Horizontal, 0, 3);
-    };
-}
 QVariant SnapshotTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if ( orientation == Qt::Horizontal ) {
-    if ( role == Qt::DisplayRole ) {
-      switch (section) {
-      case 0:
-        return column0;
-        break;
-      default:
-        break;
-      }
-    }
-  };
-  return QAbstractTableModel::headerData( section, orientation, role );
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+        return rootItem->data(section);
+    return QVariant();
 }
 QVariant SnapshotTreeModel::data(const QModelIndex &index, int role) const
 {
     QVariant res;
+    if (!index.isValid()) return res;
+
+    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+
     if ( role==Qt::DisplayRole && index.column()==0 ) {
-        return DataList.at(index.row())->getName();
+        return item->data(index.column());
     };
-    if ( role==Qt::DecorationRole ) {
-        switch (index.column()) {
-        case 0:
-            res = icon;
-            break;
-        default:
-            break;
-        }
+    if ( role==Qt::DecorationRole  && index.column()==0 ) {
+        return icon;
     };
-    if ( role==Qt::ToolTipRole && index.column() ) {
-        switch (index.column()) {
-        case 0:
-            res = QString("Name: %1").arg(DataList.at(index.row())->getName());
-            break;
-        default:
-            break;
-        }
-    };
-    //qDebug()<<res<<"data";
     return res;
 }
 bool SnapshotTreeModel::setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole )
 {
-    if ( !index.isValid() ) {
-        //qDebug()<<"index not valid";
+    TreeItem *item;
+    if (!index.isValid())
         return false;
-    };
+    else
+        item = static_cast<TreeItem*>(index.internalPointer());
 
     if ( role == Qt::EditRole ) {
-        switch( index.column() ) {
-        case 0:
-            DataList.at(index.row())->setName ( value.toString() );
-            break;
-        default:
-            break;
-        };
+        QString data = value.toString();
+        item->setData( data );
+        //qDebug()<<data<<"set to"<<index.row();
     };
-    emit dataChanged(index.sibling(0,0), index.sibling(rowCount(), columnCount()));
+    emit dataChanged(index.sibling(index.row()-1, 1), index.sibling(index.row()+1, 1));
     return true;
 }
 bool SnapshotTreeModel::insertRow(int row, const QModelIndex &parent)
 {
     if ( row<0 ) return false;
+    TreeItem *parentItem;
+    if (!parent.isValid())
+        parentItem = rootItem;
+    else
+        parentItem = static_cast<TreeItem*>(parent.internalPointer());
     beginInsertRows(parent, row, row);
-    DataList.insert(row, new SnapshotTreeIndex);
+    parentItem->appendChild(new TreeItem(QString(), parentItem));
     endInsertRows();
-    emit dataChanged(index(0,0), index(0,0).sibling(rowCount(), columnCount()));
+    emit layoutChanged();
     return true;
 }
 bool SnapshotTreeModel::removeRow(int row, const QModelIndex &parent)
 {
+    if ( row<0 ) return false;
+    TreeItem *parentItem;
+    if (!parent.isValid())
+        parentItem = rootItem;
+    else
+        parentItem = static_cast<TreeItem*>(parent.internalPointer());
     beginRemoveRows(parent, row, row);
-    DataList.removeAt(row);
+    parentItem->removeChild( parentItem->child(row) );
     endRemoveRows();
-    emit dataChanged(index(0,0), index(0,0).sibling(rowCount(), columnCount()));
+    emit layoutChanged();
     return true;
 }

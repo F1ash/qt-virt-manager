@@ -1,22 +1,29 @@
 #ifndef SNAPSHOT_TREE_INDEX_H
 #define SNAPSHOT_TREE_INDEX_H
 
-#include <QObject>
+#include <QString>
+#include <QVariant>
 
-class SnapshotTreeIndex : public QObject
+class TreeItem
 {
-    Q_OBJECT
 public:
-    explicit SnapshotTreeIndex(QObject *parent = 0);
+    TreeItem(const QString &data, TreeItem *parent = NULL);
 
-signals:
+    void                 appendChild(TreeItem *child);
+    void                 removeChild(TreeItem *child);
+
+    TreeItem            *child(int row);
+    int                  childCount() const;
+    int                  columnCount() const;
+    QVariant             data(int column) const;
+    void                 setData(QString&);
+    int                  row() const;
+    TreeItem            *parent();
 
 private:
-    QString Name;
-
-public slots:
-    void    setName(const QString&);
-    QString getName() const;
+    QList<TreeItem*>     childItems;
+    QString              itemData;
+    TreeItem            *parentItem;
 };
 
 #endif // SNAPSHOT_TREE_INDEX_H

@@ -1,15 +1,57 @@
 #include "snapshot_tree_index.h"
 
-SnapshotTreeIndex::SnapshotTreeIndex(QObject *parent) :
-    QObject(parent)
+
+TreeItem::TreeItem(const QString &data, TreeItem *parent)
 {
-    Name = "";
+    parentItem = parent;
+    itemData = data;
 }
-void SnapshotTreeIndex::setName(const QString &s)
+
+void TreeItem::appendChild(TreeItem *item)
 {
-    Name = s;
+    childItems.append(item);
 }
-QString SnapshotTreeIndex::getName() const
+
+void TreeItem::removeChild(TreeItem *item)
 {
-    return Name;
+    childItems.removeOne(item);
+}
+
+TreeItem *TreeItem::child(int row)
+{
+    return childItems.value(row, NULL);
+}
+
+int TreeItem::childCount() const
+{
+    return childItems.count();
+}
+
+int TreeItem::columnCount() const
+{
+    return 1;
+}
+
+QVariant TreeItem::data(int column) const
+{
+    Q_UNUSED(column);
+    return itemData;
+}
+
+void TreeItem::setData(QString &data)
+{
+    itemData = data;
+}
+
+TreeItem *TreeItem::parent()
+{
+    return parentItem;
+}
+
+int TreeItem::row() const
+{
+    if (parentItem)
+        return parentItem->childItems.indexOf(const_cast<TreeItem*>(this));
+
+    return 0;
 }

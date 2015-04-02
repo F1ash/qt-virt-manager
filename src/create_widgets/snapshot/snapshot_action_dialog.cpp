@@ -13,9 +13,8 @@ SnapshotActionDialog::SnapshotActionDialog(
     toolBar = new QToolBar(this);
     toolBar->addAction(new QAction("Revert", this));
     toolBar->addAction(new QAction("Delete", this));
-    model = new SnapshotTreeModel(this);
+    model = new SnapshotTreeModel;
     snapshotTree = new QTreeView(this);
-    snapshotTree->setRootIndex(QModelIndex());
     snapshotTree->setRootIsDecorated(true);
     snapshotTree->setModel(model);
     snapshotTree->setExpandsOnDoubleClick(true);
@@ -62,9 +61,8 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
                         snapShot, &names, namesLen, 0);
             if ( ret>0 ) {
                 for (uint i = 0; i<ret; i++) {
-                    int _row = model->rowCount();
-                    qDebug()<<_row<<(&names)[i]<<model->index(row, 0, parent).data()<<ret;
-                    addSnapshotChild(_row, model->index(row, 0, parent), (&names)[i]);
+                    qDebug()<<i<<(&names)[i]<<ret;
+                    addSnapshotChild(row+i+1, model->index(row, 0, parent), (&names)[i]);
                 };
             };
         };
@@ -83,8 +81,7 @@ void SnapshotActionDialog::setDomainSnapshots()
                     domain, &names, namesLen, VIR_DOMAIN_SNAPSHOT_LIST_ROOTS);
         if ( ret>0 ) {
             for (uint i = 0; i<ret; i++) {
-                int row = model->rowCount();
-                addSnapshotChild(row, snapshotTree->rootIndex(), (&names)[i]);
+                addSnapshotChild(i, snapshotTree->rootIndex(), (&names)[i]);
             };
         };
         qDebug()<<"tree is set";
