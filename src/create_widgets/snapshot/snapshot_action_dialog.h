@@ -42,10 +42,12 @@ private:
 public slots:
 
 private slots:
+    void                clearSnapshotTree();
     void                addSnapshotChild(int, const QModelIndex&, char*);
     void                setDomainSnapshots();
     void                accept();
     void                reject();
+    void                detectTriggeredAction(QAction*);
 };
 
 #endif // SNAPSHOT_ACTION_DIALOG_H

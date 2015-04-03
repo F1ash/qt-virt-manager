@@ -4,7 +4,8 @@ SnapshotTreeModel::SnapshotTreeModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     icon = QIcon::fromTheme("camera-photo");
-    rootItem = new TreeItem("Name");
+    work = QIcon::fromTheme("system-run");
+    rootItem = new TreeItem("Snapshots");
 }
 SnapshotTreeModel::~SnapshotTreeModel()
 {
@@ -80,23 +81,24 @@ QVariant SnapshotTreeModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::DisplayRole && index.column()==0 ) {
         return item->data(index.column());
     };
-    if ( role==Qt::DecorationRole  && index.column()==0 ) {
-        return icon;
+    if ( role==Qt::DecorationRole && index.column()==0 ) {
+        return ( item->getState() )? work : icon;
     };
     return res;
 }
 bool SnapshotTreeModel::setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole )
 {
-    TreeItem *item;
     if (!index.isValid())
         return false;
-    else
-        item = static_cast<TreeItem*>(index.internalPointer());
+    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
 
-    if ( role == Qt::EditRole ) {
+    if ( role == Qt::DisplayRole ) {
         QString data = value.toString();
         item->setData( data );
-        //qDebug()<<data<<"set to"<<index.row();
+    };
+    if ( role == Qt::DecorationRole ) {
+        bool data = value.toBool();
+        item->setState( data );
     };
     emit dataChanged(index.sibling(index.row()-1, 1), index.sibling(index.row()+1, 1));
     return true;
@@ -128,4 +130,8 @@ bool SnapshotTreeModel::removeRow(int row, const QModelIndex &parent)
     endRemoveRows();
     emit layoutChanged();
     return true;
+}
+int SnapshotTreeModel::rootItemChildCount() const
+{
+    return rootItem->childCount();
 }

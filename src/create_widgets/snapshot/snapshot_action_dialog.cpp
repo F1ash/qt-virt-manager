@@ -1,5 +1,9 @@
 #include "snapshot_action_dialog.h"
 
+/*
+ * https://libvirt.org/html/libvirt-libvirt-domain-snapshot.html
+ */
+
 SnapshotActionDialog::SnapshotActionDialog(
         QWidget         *parent,
         virConnectPtr    currConnect,
@@ -18,7 +22,9 @@ SnapshotActionDialog::SnapshotActionDialog(
     snapshotTree->setRootIsDecorated(true);
     snapshotTree->setModel(model);
     snapshotTree->setExpandsOnDoubleClick(true);
-    info = new QLabel("<a href='https://libvirt.org/html/libvirt-libvirt-domain-snapshot.html'>About</a>", this);
+    info = new QLabel(
+    "<a href='https://libvirt.org/html/libvirt-libvirt-domain-snapshot.html'>About</a>",
+                this);
     info->setOpenExternalLinks(true);
     ok = new QPushButton("Ok", this);
     cancel = new QPushButton("Cancel", this);
@@ -37,6 +43,8 @@ SnapshotActionDialog::SnapshotActionDialog(
     connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
     setDomainSnapshots();
+    connect(toolBar, SIGNAL(actionTriggered(QAction*)),
+            this, SLOT(detectTriggeredAction(QAction*)));
 }
 SnapshotActionDialog::~SnapshotActionDialog()
 {
@@ -44,25 +52,32 @@ SnapshotActionDialog::~SnapshotActionDialog()
 }
 
 /* private slots */
+void SnapshotActionDialog::clearSnapshotTree()
+{
+    while ( model->rootItemChildCount()>0 ) {
+        model->removeRow(0, snapshotTree->rootIndex());
+    };
+}
 void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, char *name)
 {
     // flags: extra flags; not used yet, so callers should always pass 0
     virDomainSnapshotPtr snapShot =
             virDomainSnapshotLookupByName(domain, name, 0);
+    // flags: extra flags; not used yet, so callers should always pass 0
+    int current = virDomainSnapshotIsCurrent(snapShot, 0);
     if ( NULL!=snapShot ) {
         model->insertRow(row, parent);
-        model->setData(model->index(row, 0, parent), name, Qt::EditRole);
-        qDebug()<<row<<name<<"added";
-        int namesLen = virDomainSnapshotNumChildren(
-                    snapShot, 0);
+        model->setData(model->index(row, 0, parent), name, Qt::DisplayRole);
+        model->setData(model->index(row, 0, parent), (current>0), Qt::DecorationRole);
+        // By default, this command covers only direct children; use flag=0
+        int namesLen = virDomainSnapshotNumChildren(snapShot, 0);
         if ( namesLen>0 ) {
             char *names;
             int ret = virDomainSnapshotListChildrenNames(
                         snapShot, &names, namesLen, 0);
             if ( ret>0 ) {
                 for (uint i = 0; i<ret; i++) {
-                    qDebug()<<i<<(&names)[i]<<ret;
-                    addSnapshotChild(row+i+1, model->index(row, 0, parent), (&names)[i]);
+                    addSnapshotChild(i, model->index(row, 0, parent), (&names)[i]);
                 };
             };
         };
@@ -84,7 +99,6 @@ void SnapshotActionDialog::setDomainSnapshots()
                 addSnapshotChild(i, snapshotTree->rootIndex(), (&names)[i]);
             };
         };
-        qDebug()<<"tree is set";
     };
 }
 void SnapshotActionDialog::accept()
@@ -94,4 +108,13 @@ void SnapshotActionDialog::accept()
 void SnapshotActionDialog::reject()
 {
     done(0);
+}
+void SnapshotActionDialog::detectTriggeredAction(QAction *act)
+{
+    QString tag = act->text();
+    if ( tag=="Revert" ) {
+
+    } else if ( tag=="Delete" ) {
+        clearSnapshotTree();
+    }
 }

@@ -5,6 +5,7 @@ TreeItem::TreeItem(const QString &data, TreeItem *parent)
 {
     parentItem = parent;
     itemData = data;
+    state = false;
 }
 
 void TreeItem::appendChild(TreeItem *item)
@@ -41,6 +42,16 @@ QVariant TreeItem::data(int column) const
 void TreeItem::setData(QString &data)
 {
     itemData = data;
+}
+
+bool TreeItem::getState() const
+{
+    return state;
+}
+
+void TreeItem::setState(bool _state)
+{
+    state = _state;
 }
 
 TreeItem *TreeItem::parent()

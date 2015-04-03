@@ -17,12 +17,15 @@ public:
     int                  columnCount() const;
     QVariant             data(int column) const;
     void                 setData(QString&);
+    bool                 getState() const;
+    void                 setState(bool);
     int                  row() const;
     TreeItem            *parent();
 
 private:
     QList<TreeItem*>     childItems;
     QString              itemData;
+    bool                 state;
     TreeItem            *parentItem;
 };
 

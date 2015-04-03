@@ -13,7 +13,7 @@ class SnapshotTreeModel : public QAbstractItemModel
 public:
     explicit SnapshotTreeModel(QObject *parent = NULL);
     ~SnapshotTreeModel();
-    QIcon                        icon;
+    QIcon                        icon, work;
 
     QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex & index) const;
@@ -32,6 +32,7 @@ private:
     TreeItem *rootItem;
 
 public slots:
+    int       rootItemChildCount() const;
 };
 
 #endif // SNAPSHOT_TREE_MODEL_H
