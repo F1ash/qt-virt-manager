@@ -156,7 +156,7 @@ void VirtDomainControl::resultReceiver(Result data)
         };
         int i = 0;
         foreach (QString _data, data.msg) {
-            QStringList chain = _data.split(" ");
+            QStringList chain = _data.split(DFR);
             if (chain.isEmpty()) continue;
             int count = chain.size();
             for (int j=0; j<count; j++) {
@@ -394,7 +394,7 @@ void VirtDomainControl::execAction(const QStringList &l)
                 args.append(_dialog->getSnapshotFlags());
                 args.append(_dialog->getSnapshotXMLDesc());
                 args.prepend(l.first());
-                args.prepend(QString::number(DOMAIN_SNAPSHOT));
+                args.prepend(QString::number(CREATE_DOMAIN_SNAPSHOT));
                 args.prepend(currConnName);
                 emit addNewTask(currWorkConnect, args);
             };
@@ -406,10 +406,11 @@ void VirtDomainControl::execAction(const QStringList &l)
             int exitCode = _dialog->exec();
             if ( exitCode ) {
                 // add parameters
-                args.prepend(l.first());
-                //args.prepend(QString::number(DOMAIN_SNAPSHOT));
+                args.prepend(_dialog->getParameters().first());
+                args.append(_dialog->getParameters().last());
+                args.prepend(QString::number(exitCode));
                 args.prepend(currConnName);
-                //emit addNewTask(currWorkConnect, args);
+                emit addNewTask(currWorkConnect, args);
             };
             _dialog->deleteLater();
         };

@@ -27,7 +27,9 @@ enum Actions {
     WIPE_ENTITY,
     CHANGE_ENTITY_AUTOSTART,
     GET_XML_DESCRIPTION,
-    DOMAIN_SNAPSHOT,
+    CREATE_DOMAIN_SNAPSHOT,
+    REVERT_TO_DOMAIN_SNAPSHOT,
+    DELETE_DOMAIN_SNAPSHOT,
     _EMPTY_ACTION
 };
 
@@ -39,6 +41,8 @@ struct Result {
     bool            result = false;
     QStringList     msg    = QStringList();
 };
+
+#define DFR QString("<||>")
 
 #endif // VIRT_ENTITY_CONFIG
 

@@ -7,8 +7,8 @@
 #include "settings/conn_settings.h"
 
 // http://libvirt.org/drivers.html#hypervisor
-#define HV_DRIVERS QStringList()<<"TEST"<<"LXC"<<"XEN"<<"QEMU/KVM"<<"QEMU/KVM user session"
-//<<"OpenVZ"<<"UML"
+#define HV_DRIVERS QStringList()<<"TEST"<<"LXC"<<"XEN"<<"QEMU/KVM"<<"QEMU/KVM user session"\
+<<"VBox"//<<"OpenVZ"<<"UML"
 
 // http://libvirt.org/remote.html#Remote_transports
 #define TRANSPORTS QStringList()<<""<<"TLS"<<"SSH"<<"UNIX"<<"TCP"<<"LibSSH2"

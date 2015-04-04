@@ -79,7 +79,7 @@ Result NetControlThread::getAllNetworkList()
                        << QString( virNetworkIsActive(network[i]) ? "active" : "inactive" )
                        << autostartStr
                        << QString( virNetworkIsPersistent(network[i]) ? "yes" : "no" );
-            virtNetList.append(currentAttr.join(" "));
+            virtNetList.append(currentAttr.join(DFR));
             //qDebug()<<currentAttr;
             virNetworkFree(network[i]);
             i++;

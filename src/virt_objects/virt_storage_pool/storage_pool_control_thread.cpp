@@ -85,7 +85,7 @@ Result StoragePoolControlThread::getAllStoragePoolList()
                        << QString( virStoragePoolIsActive(storagePool[i]) ? "active" : "inactive" )
                        << autostartStr
                        << QString( virStoragePoolIsPersistent(storagePool[i]) ? "yes" : "no" );
-            storagePoolList.append(currentAttr.join(" "));
+            storagePoolList.append(currentAttr.join(DFR));
             //qDebug()<<currentAttr;
             virStoragePoolFree(storagePool[i]);
             i++;

@@ -139,7 +139,7 @@ void VirtStoragePoolControl::resultReceiver(Result data)
         };
         int i = 0;
         foreach (QString _data, data.msg) {
-            QStringList chain = _data.split(" ");
+            QStringList chain = _data.split(DFR);
             if (chain.isEmpty()) continue;
             int count = chain.size();
             for (int j=0; j<count; j++) {

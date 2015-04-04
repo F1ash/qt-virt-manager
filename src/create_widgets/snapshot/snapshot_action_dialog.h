@@ -29,7 +29,11 @@ private:
     virConnectPtr       currJobConnect;
     virDomainPtr        domain = NULL;
     const QString       domName;
+    QStringList         params;
     SnapshotTreeModel  *model;
+    QAction            *revertAction;
+    QAction            *deleteAction;
+    QAction            *refreshAction;
     QTreeView          *snapshotTree;
     QToolBar           *toolBar;
     QHBoxLayout        *buttonsLayout;
@@ -37,9 +41,11 @@ private:
     QLabel             *info;
     QPushButton        *ok;
     QPushButton        *cancel;
+    QPushButton        *closeWdg;
     QWidget            *buttonsWdg;
 
 public slots:
+    QStringList         getParameters() const;
 
 private slots:
     void                clearSnapshotTree();
@@ -47,6 +53,8 @@ private slots:
     void                setDomainSnapshots();
     void                accept();
     void                reject();
+    void                cancelled();
+    void                changeDialogState(bool);
     void                detectTriggeredAction(QAction*);
 };
 

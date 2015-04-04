@@ -72,7 +72,7 @@ void DomControlThread::run()
     case MIGRATE_ENTITY :
         result = migrateDomain();
         break;
-    case DOMAIN_SNAPSHOT :
+    case CREATE_DOMAIN_SNAPSHOT :
         result = snapshoteDomain();
         break;
     default:
@@ -147,7 +147,7 @@ Result DomControlThread::getAllDomainList()
                           .arg(domainState)
                        << autostartStr
                        << QString( virDomainIsPersistent(domains[i]) ? "yes" : "no" );
-            domainList.append(currentAttr.join(" "));
+            domainList.append(currentAttr.join(DFR));
             //qDebug()<<currentAttr;
             /*
             virDomainInfo info;
