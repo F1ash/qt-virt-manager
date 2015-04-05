@@ -73,7 +73,13 @@ void DomControlThread::run()
         result = migrateDomain();
         break;
     case CREATE_DOMAIN_SNAPSHOT :
-        result = snapshoteDomain();
+        result = createSnapshoteDomain();
+        break;
+    case REVERT_TO_DOMAIN_SNAPSHOT :
+        result = revertSnapshoteDomain();
+        break;
+    case DELETE_DOMAIN_SNAPSHOT :
+        result = deleteSnapshoteDomain();
         break;
     default:
         break;
@@ -574,7 +580,7 @@ Result DomControlThread::migrateDomain()
     if ( destConnect ) destConnect = NULL;
     return result;
 }
-Result DomControlThread::snapshoteDomain()
+Result DomControlThread::createSnapshoteDomain()
 {
     Result result;
     bool snapped = false;
@@ -605,5 +611,21 @@ Result DomControlThread::snapshoteDomain()
     result.result = snapped;
     result.msg.append(QString("'<b>%1</b>' Domain %2 snapped.")
                       .arg(result.name).arg((snapped)?"":"don't"));
+    return result;
+}
+Result DomControlThread::revertSnapshoteDomain()
+{
+    Result result;
+    result.msg.append(QString("'<b>%1</b>' Domain %2 reverted.")
+                      .arg(result.name).arg((false)?"":"don't"));
+    result.result = false;
+    return result;
+}
+Result DomControlThread::deleteSnapshoteDomain()
+{
+    Result result;
+    result.msg.append(QString("'<b>%1</b>' Domain %2 deleted.")
+                      .arg(result.name).arg((false)?"":"don't"));
+    result.result = false;
     return result;
 }
