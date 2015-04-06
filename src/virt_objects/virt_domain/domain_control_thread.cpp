@@ -602,9 +602,9 @@ Result DomControlThread::createSnapshoteDomain()
                 sendConnErrors();
             } else {
                 snapped = true;
-                virDomainFree(domain);
                 virDomainSnapshotFree(snapshot);
             };
+            virDomainFree(domain);
         };
     } else
         result.name = "error";
@@ -616,16 +616,74 @@ Result DomControlThread::createSnapshoteDomain()
 Result DomControlThread::revertSnapshoteDomain()
 {
     Result result;
+    bool reverted = false;
+    if ( args.count()>2 ) {
+        QString domName = args.at(0);
+        result.name = args.at(0);
+        QString snapshotName(args.at(1));
+        unsigned int flags = args.at(2).toUInt();
+        //qDebug()<<snapshotName<<flags;
+        virDomainPtr domain = virDomainLookupByName(currWorkConnect, domName.toUtf8().data());
+        if ( NULL==domain ) {
+            sendConnErrors();
+        } else {
+            // flags: extra flags; not used yet, so callers should always pass 0
+            virDomainSnapshotPtr snapshot =
+                    virDomainSnapshotLookupByName(domain, snapshotName.toUtf8().data(), 0);
+            if ( NULL==snapshot ) {
+                sendConnErrors();
+            } else {
+                int ret = virDomainRevertToSnapshot(snapshot, flags);
+                if ( ret<0 ) {
+                    sendConnErrors();
+                } else {
+                    reverted = true;
+                };
+                virDomainSnapshotFree(snapshot);
+            };
+            virDomainFree(domain);
+        };
+    } else
+        result.name = "error";
     result.msg.append(QString("'<b>%1</b>' Domain %2 reverted.")
-                      .arg(result.name).arg((false)?"":"don't"));
-    result.result = false;
+                      .arg(result.name).arg((reverted)?"":"don't"));
+    result.result = reverted;
     return result;
 }
 Result DomControlThread::deleteSnapshoteDomain()
 {
     Result result;
+    bool deleted = false;
+    if ( args.count()>2 ) {
+        QString domName = args.at(0);
+        result.name = args.at(0);
+        QString snapshotName(args.at(1));
+        unsigned int flags = args.at(2).toUInt();
+        //qDebug()<<snapshotName<<flags;
+        virDomainPtr domain = virDomainLookupByName(currWorkConnect, domName.toUtf8().data());
+        if ( NULL==domain ) {
+            sendConnErrors();
+        } else {
+            // flags: extra flags; not used yet, so callers should always pass 0
+            virDomainSnapshotPtr snapshot =
+                    virDomainSnapshotLookupByName(domain, snapshotName.toUtf8().data(), 0);
+            if ( NULL==snapshot ) {
+                sendConnErrors();
+            } else {
+                int ret = virDomainSnapshotDelete(snapshot, flags);
+                if ( ret<0 ) {
+                    sendConnErrors();
+                } else {
+                    deleted = true;
+                };
+                virDomainSnapshotFree(snapshot);
+            };
+            virDomainFree(domain);
+        };
+    } else
+        result.name = "error";
     result.msg.append(QString("'<b>%1</b>' Domain %2 deleted.")
-                      .arg(result.name).arg((false)?"":"don't"));
-    result.result = false;
+                      .arg(result.name).arg((deleted)?"":"don't"));
+    result.result = deleted;
     return result;
 }

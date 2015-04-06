@@ -1,13 +1,13 @@
-#ifndef CREATE_SNAPSHOT_FLAGS_H
-#define CREATE_SNAPSHOT_FLAGS_H
+#ifndef REVERT_SNAPSHOT_FLAGS_H
+#define REVERT_SNAPSHOT_FLAGS_H
 
 #include "_snapshot_flags.h"
 
-class CreateSnapshotFlags : public _SnapshotFlags
+class RevertSnapshotFlags : public _SnapshotFlags
 {
     Q_OBJECT
 public:
-    explicit CreateSnapshotFlags(
+    RevertSnapshotFlags(
             QWidget     *parent = NULL);
 
 public slots:
@@ -17,4 +17,4 @@ private slots:
     void             changeFlagCompatibility();
 };
 
-#endif // CREATE_SNAPSHOT_FLAGS_H
+#endif // REVERT_SNAPSHOT_FLAGS_H

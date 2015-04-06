@@ -406,8 +406,10 @@ void VirtDomainControl::execAction(const QStringList &l)
             int exitCode = _dialog->exec();
             if ( exitCode ) {
                 // add parameters
-                args.prepend(_dialog->getParameters().first());
-                args.append(_dialog->getParameters().last());
+                QStringList params = _dialog->getParameters();
+                args.prepend(params.first());
+                params.removeFirst();
+                args.append(params);
                 args.prepend(QString::number(exitCode));
                 args.prepend(currConnName);
                 emit addNewTask(currWorkConnect, args);

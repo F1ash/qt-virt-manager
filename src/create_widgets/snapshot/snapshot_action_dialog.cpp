@@ -15,8 +15,12 @@ SnapshotActionDialog::SnapshotActionDialog(
     params.clear();
     QString winTitle = QString("<%1> Snapshot Actions").arg(domName);
     setWindowTitle(winTitle);
+    revertFlagsMenu = new RevertSnapshotFlags(this);
     revertAction = new QAction(QIcon::fromTheme("document-revert"), "Revert To", this);
+    revertAction->setMenu(revertFlagsMenu);
+    deleteFlagsMenu = new DeleteSnapshotFlags(this);
     deleteAction = new QAction(QIcon::fromTheme("list-remove"), "Delete", this);
+    deleteAction->setMenu(deleteFlagsMenu);
     refreshAction = new QAction(QIcon::fromTheme("view-refresh"), "Refresh", this);
     toolBar = new QToolBar(this);
     toolBar->addAction(revertAction);
@@ -118,7 +122,16 @@ void SnapshotActionDialog::setDomainSnapshots()
 }
 void SnapshotActionDialog::accept()
 {
-    done(result());
+    TreeItem *item = static_cast<TreeItem*>(
+            snapshotTree->currentIndex().internalPointer());
+    if ( NULL==item ) {
+        cancelled();
+    } else {
+        params.append(item->data(0).toString());
+        params.append(QString::number(flags));
+        //qDebug()<<params;
+        done(result());
+    };
 }
 void SnapshotActionDialog::reject()
 {
@@ -126,6 +139,7 @@ void SnapshotActionDialog::reject()
 }
 void SnapshotActionDialog::cancelled()
 {
+    flags = 0;
     params.clear();
     setResult(0);
     changeDialogState(false);
@@ -143,24 +157,17 @@ void SnapshotActionDialog::detectTriggeredAction(QAction *act)
     if ( act==revertAction ) {
         changeDialogState(true);
         params.append("revertVirtDomainSnapshot");
+        flags = revertFlagsMenu->getCompositeFlag();
         setResult(REVERT_TO_DOMAIN_SNAPSHOT);
     } else if ( act==deleteAction ) {
         changeDialogState(true);
         params.append("deleteVirtDomainSnapshot");
+        flags = deleteFlagsMenu->getCompositeFlag();
         setResult(DELETE_DOMAIN_SNAPSHOT);
-    } else {
+    } else if ( act==refreshAction ) {
         snapshotTree->setEnabled(false);
         clearSnapshotTree();
         setDomainSnapshots();
         snapshotTree->setEnabled(true);
-        return;
-    };
-    TreeItem *item = static_cast<TreeItem*>(
-            snapshotTree->currentIndex().internalPointer());
-    if ( NULL==item ) {
-        cancelled();
-    } else {
-        params.append(item->data(0).toString());
-        //qDebug()<<params;
     };
 }

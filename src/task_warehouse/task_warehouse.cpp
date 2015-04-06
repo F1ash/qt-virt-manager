@@ -85,6 +85,13 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
                         .arg(QString("").sprintf("%02d", _time.second()))
                         .arg(QString("").sprintf("%03d", _time.msec())));
         itemData.insert("End", "-");
+        QStringList _args;
+        if ( _taskDesc.count()>2 ) {
+            for (uint i=2; i<_taskDesc.count(); i++) {
+                _args.append(_taskDesc.at(i));
+            };
+        };
+        itemData.insert("Arguments", _args.join(", "));
         itemData.insert("Result", "Processing");
         itemData.insert("Message", "-");
         _item->setData(Qt::UserRole, itemData);
@@ -218,6 +225,10 @@ void TaskWareHouse::setNewTooltip(QListWidgetItem *_item)
                 QString("Time: %1 - %2")
                 .arg(data.toMap().value("Start").toString())
                 .arg(data.toMap().value("End").toString()));
+    _toolTip.append("\n");
+    _toolTip.append(
+                QString("Arguments: %1")
+                .arg(data.toMap().value("Arguments").toString()));
     _toolTip.append("\n");
     _toolTip.append(
                 QString("Result: %1")

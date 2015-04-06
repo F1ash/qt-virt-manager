@@ -1,5 +1,4 @@
 #include "create_snapshot_flags.h"
-#include <math.h>
 
 /*
  * https://libvirt.org/html/libvirt-libvirt-domain-snapshot.html#virDomainSnapshotCreateXML
@@ -17,9 +16,8 @@
     <<"VIR_DOMAIN_SNAPSHOT_CREATE_LIVE"
 
 CreateSnapshotFlags::CreateSnapshotFlags(QWidget *parent) :
-    QMenu(parent)
+    _SnapshotFlags(parent)
 {
-    actGroup = new QActionGroup(this);
     foreach (QString flag, CREATE_SNAPSHOT_FLAGS) {
         actGroup->addAction(new QAction(flag, this));
     };
@@ -33,10 +31,7 @@ CreateSnapshotFlags::CreateSnapshotFlags(QWidget *parent) :
         //qDebug()<<act->text()<<act->data().toInt();
         i++;
     };
-    actGroup->setExclusive(false);
     addActions(actGroup->actions());
-    connect(actGroup, SIGNAL(triggered(QAction*)),
-            this, SLOT(show()));
 }
 
 /* public slots */
@@ -73,16 +68,6 @@ void CreateSnapshotFlags::changeAvailableFlags(int control)
     default:
         break;
     }
-}
-int CreateSnapshotFlags::getCompositeFlag() const
-{
-    int ret = 0;
-    foreach (QAction *act, actGroup->actions()) {
-        if ( act->isChecked() ) {
-            ret += act->data().toInt();
-        };
-    };
-    return ret;
 }
 
 /* private slots */

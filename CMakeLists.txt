@@ -299,6 +299,9 @@ set (HEADERS
 
   src/create_widgets/snapshot/create_snapshot_dialog.h
   src/create_widgets/snapshot/create_snapshot_flags.h
+  src/create_widgets/snapshot/delete_snapshot_flags.h
+  src/create_widgets/snapshot/revert_snapshot_flags.h
+  src/create_widgets/snapshot/_snapshot_flags.h
   src/create_widgets/snapshot/_snapshot_stuff.h
   src/create_widgets/snapshot/types/mem_state_snapshot.h
   src/create_widgets/snapshot/types/disk_snapshot.h
@@ -580,6 +583,9 @@ set (SOURCES
 
   src/create_widgets/snapshot/create_snapshot_dialog.cpp
   src/create_widgets/snapshot/create_snapshot_flags.cpp
+  src/create_widgets/snapshot/delete_snapshot_flags.cpp
+  src/create_widgets/snapshot/revert_snapshot_flags.cpp
+  src/create_widgets/snapshot/_snapshot_flags.cpp
   src/create_widgets/snapshot/_snapshot_stuff.cpp
   src/create_widgets/snapshot/types/mem_state_snapshot.cpp
   src/create_widgets/snapshot/types/disk_snapshot.cpp
