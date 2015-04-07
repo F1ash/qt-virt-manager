@@ -46,3 +46,8 @@ implemented remote LXC-terminal;
 fixed a VM_Viewer at close;
 added libvirt cmake module;
 some fixes and enhancements;
+
+v.0.10.18 :
+implemented SpiceViewer;
+implemented Domain Snapshot Actions;
+some improvements;

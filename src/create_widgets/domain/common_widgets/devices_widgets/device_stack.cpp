@@ -35,7 +35,21 @@
     <<"sound"<<"rng"<<"nvram"
 
 #define XEN_DEVICE_LIST QStringList()\
-    <<"DON'T_IMPLEMENTED"
+    <<"emulator"\
+    <<"disk"<<"filesystem"<<"controller"<<"hostdev"\
+    <<"smartcard"<<"interface"\
+    <<"input"<<"hub"<<"graphics"<<"video"\
+    <<"console"<<"serial"<<"parallel"<<"channel"\
+    <<"sound"<<"memballoon"\
+    <<"rng"<<"nvram"
+
+#define VBOX_DEVICE_LIST QStringList()\
+    <<"emulator"\
+    <<"disk"<<"filesystem"<<"controller"<<"hostdev"\
+    <<"smartcard"<<"interface"\
+    <<"input"<<"hub"<<"graphics"<<"video"\
+    <<"console"<<"serial"<<"parallel"<<"channel"\
+    <<"sound"<<"rng"<<"nvram"
 
 DeviceStack::DeviceStack(
         QWidget *parent,
@@ -58,6 +72,10 @@ DeviceStack::DeviceStack(
         devSet = QEMU_DEVICE_LIST;
     } else if ( connType=="lxc" ) {
         devSet = LXC_DEVICE_LIST;
+    } else if ( connType=="xen" ) {
+        devSet = XEN_DEVICE_LIST;
+    } else if ( connType=="vbox" ) {
+        devSet = VBOX_DEVICE_LIST;
     };
     deviceList = new QListWidget(this);
     deviceList->setSortingEnabled(false);
