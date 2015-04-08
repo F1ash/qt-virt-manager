@@ -51,6 +51,22 @@
     <<"console"<<"serial"<<"parallel"<<"channel"\
     <<"sound"<<"rng"<<"nvram"
 
+#define VMWARE_DEVICE_LIST QStringList()\
+    <<"emulator"\
+    <<"disk"<<"filesystem"<<"controller"<<"hostdev"\
+    <<"smartcard"<<"interface"\
+    <<"input"<<"hub"<<"graphics"<<"video"\
+    <<"console"<<"serial"<<"parallel"<<"channel"\
+    <<"sound"<<"rng"<<"nvram"
+
+#define OPENVZ_DEVICE_LIST QStringList()\
+    <<"emulator"\
+    <<"disk"<<"filesystem"<<"controller"<<"hostdev"\
+    <<"smartcard"<<"interface"\
+    <<"input"<<"hub"<<"graphics"<<"video"\
+    <<"console"<<"serial"<<"parallel"<<"channel"\
+    <<"sound"<<"rng"<<"nvram"
+
 DeviceStack::DeviceStack(
         QWidget *parent,
         virConnectPtr conn) :
@@ -76,6 +92,10 @@ DeviceStack::DeviceStack(
         devSet = XEN_DEVICE_LIST;
     } else if ( connType=="vbox" ) {
         devSet = VBOX_DEVICE_LIST;
+    } else if ( connType=="vbox" ) {
+        devSet = VMWARE_DEVICE_LIST;
+    } else if ( connType=="vbox" ) {
+        devSet = OPENVZ_DEVICE_LIST;
     };
     deviceList = new QListWidget(this);
     deviceList->setSortingEnabled(false);

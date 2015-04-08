@@ -63,19 +63,21 @@ private:
     int                  timerId;
 
 public slots:
-    void setConnectItem(ConnItemIndex*);
+    void                 setConnectItem(ConnItemIndex*);
 
 private slots:
-    void initParamLayout();
-    void initButtons();
-    void initParameters();
-    void saveConnect();
-    void cancelConnect();
-    void saveParameters();
-    void closeEvent(QCloseEvent*);
-    void set_Title_Name(QString);
-    void timerEvent(QTimerEvent*);
-    void changeConnParameters(QString);
+    void                 initParamLayout();
+    void                 initButtons();
+    void                 initParameters();
+    void                 saveConnect();
+    void                 cancelConnect();
+    void                 saveParameters();
+    void                 closeEvent(QCloseEvent*);
+    void                 set_Title_Name(QString);
+    void                 timerEvent(QTimerEvent*);
+    void                 changeConnParameters(QString);
+    QString              getIconName(QString&) const;
+    QString              getDriverName(QString&) const;
 };
 
 #endif   // CONN_SETTINGS_H

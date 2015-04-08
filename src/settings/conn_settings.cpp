@@ -8,12 +8,12 @@
 
 // http://libvirt.org/drivers.html#hypervisor
 #define HV_DRIVERS QStringList()<<"TEST"<<"LXC"<<"XEN"<<"QEMU/KVM"<<"QEMU/KVM user session"\
-<<"VBox"//<<"OpenVZ"<<"UML"
+<<"VBox"<<"VMware Player"<<"VMware Workstation"<<"VMware Fusion"\
+<<"VMware ESX"<<"VMware GSX"<<"VMware VPX"<<"OpenVZ"//<<"UML"
 
 // http://libvirt.org/remote.html#Remote_transports
 #define TRANSPORTS QStringList()<<""<<"TLS"<<"SSH"<<"UNIX"<<"TCP"<<"LibSSH2"
 //<<"EXT"
-
 
 ConnSettings::ConnSettings(QWidget *parent) :
     QDialog(parent)
@@ -24,7 +24,8 @@ ConnSettings::ConnSettings(QWidget *parent) :
     setContentsMargins(1,1,1,1);
     initParamLayout();
     warning = new QLabel(this);
-    warning->setText("<b>WARNING</b> See for: <a href='http://libvirt.org/remote.html'><b>Libvirt Remote support</b></a>");
+    warning->setText(
+    "<b>WARNING</b> See for: <a href='http://libvirt.org/remote.html'><b>Libvirt Remote support</b></a>");
     warning->setOpenExternalLinks(true);
     initButtons();
     URI = new QTextEdit(this);
@@ -97,17 +98,19 @@ void ConnSettings::initParamLayout()
     connName = new QLabel("Connect:", this);
     ConnName = new QLineEdit(this);
     ConnName->setPlaceholderText("Enter Connect Name");
-    connect(ConnName, SIGNAL(textChanged(QString)), this, SLOT(set_Title_Name(QString)));
+    connect(ConnName, SIGNAL(textChanged(QString)),
+            this, SLOT(set_Title_Name(QString)));
     driver = new QLabel("Driver:", this);
     Drivers = new QComboBox(this);
     Drivers->addItems(HV_DRIVERS);
-    for (uint i=0; i<Drivers->count(); i++) {
-        QIcon _icon = QIcon::fromTheme(
-                    Drivers->itemText(i).split("/")
-                    .first().toLower());
+    for (int i=0; i<Drivers->count(); i++) {
+        QString _text =  Drivers->itemText(i);
+        QIcon _icon = QIcon::fromTheme( getIconName( _text ) );
         Drivers->setItemIcon(i, _icon);
+        Drivers->setItemData(i, getDriverName( _text ));
     };
-    connect(Drivers, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeConnParameters(QString)));
+    connect(Drivers, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(changeConnParameters(QString)));
     transport = new QLabel("Transport:", this);
     Transports = new QComboBox(this);
     Transports->addItems(TRANSPORTS);
@@ -256,7 +259,12 @@ void ConnSettings::timerEvent(QTimerEvent *event)
     if ( _timerId && timerId==_timerId ) {
         // URI building
         QStringList _uri;
-        _uri.append(Drivers->currentText().toLower().split("/").first());
+#if QT_VERSION>=0x050200
+        _uri.append(Drivers->currentData(Qt::UserRole).toString());
+#else
+        QString _data = Drivers->itemData(Drivers->currentIndex()).toString();
+        _uri.append(_data);
+#endif
         if ( !Transports->currentText().isEmpty() ) {
             _uri.append("+");
             _uri.append(Transports->currentText().toLower());
@@ -278,9 +286,59 @@ void ConnSettings::timerEvent(QTimerEvent *event)
 }
 void ConnSettings::changeConnParameters(QString s)
 {
-    if ( s.toLower().split("/").first()=="qemu" ) {
+    QString _name = getIconName(s);
+    Transports->setEnabled(true);
+    Path->setPlaceholderText("[path]");
+    Path->setEnabled(true);
+    if ( _name=="qemu" ) {
         Path->setText( (s.endsWith("session"))?"session":"system" );
-    } else if ( s.toLower().split("/").first()=="test" ) {
+        Path->setEnabled(false);
+    } else if ( _name=="vbox" ) {
+        Path->setText( "session" );
+        Path->setEnabled(false);
+    } else if ( _name=="vmware" ) {
+        if ( getDriverName(s).startsWith("vmware") ) {
+            // VMware Player/Workstation
+            Path->setText( "session" );
+            Path->setEnabled(false);
+        } else {
+            // VMware ESX
+            Transports->setCurrentIndex(0);
+            Transports->setEnabled(false);
+            Path->setPlaceholderText(
+                        "[[folder/...]datacenter/[folder/...][cluster/]server]");
+            Path->clear();
+        };
+    } else if ( _name=="openvz" ) {
+        Path->setText( "system" );
+        Path->setEnabled(false);
+    } else if ( _name=="test" ) {
         Path->setText( "default" );
     } else Path->clear();
+}
+QString ConnSettings::getIconName(QString &_text) const
+{
+    return _text.split("/").first().split(" ").first().toLower();
+}
+QString ConnSettings::getDriverName(QString &_text) const
+{
+    QString ret;
+    QString _drv_row = _text.toLower().split("/").first();
+    if ( _drv_row.startsWith("vmware") ) {
+        if ( _drv_row.endsWith("player") ) {
+            ret.append("vmwareplayer");
+        } else if ( _drv_row.endsWith("workstation") ) {
+            ret.append("vmwarews");
+        } else if ( _drv_row.endsWith("fusion") ) {
+            ret.append("vmwarefusion");
+        } else if ( _drv_row.endsWith("esx") ) {
+            ret.append("esx");
+        } else if ( _drv_row.endsWith("gsx") ) {
+            ret.append("gsx");
+        } else if ( _drv_row.endsWith("vpx") ) {
+            ret.append("vpx");
+        };
+    } else
+        ret = _drv_row;
+    return ret;
 }
