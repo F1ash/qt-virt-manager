@@ -31,8 +31,11 @@ VM_Viewer::~VM_Viewer()
         delete closeProcess;
         closeProcess = NULL;
     };
+    // for end virConnect usage close one of it
     if ( jobConnect!=NULL ) {
         virConnectClose(jobConnect);
+        // for reject the multiple close of virConnectRef[erence]
+        jobConnect = NULL;
     };
     VM_State = false;
 }
@@ -44,7 +47,10 @@ bool VM_Viewer::isActive() const
 }
 virDomain* VM_Viewer::getDomainPtr() const
 {
-    return virDomainLookupByName(jobConnect, domain.toUtf8().data());
+    virDomainPtr ret = NULL;
+    if ( NULL!=jobConnect )
+        ret = virDomainLookupByName(jobConnect, domain.toUtf8().data());
+    return ret;
 }
 
 void VM_Viewer::closeEvent(QCloseEvent *ev)

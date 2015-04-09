@@ -6,6 +6,13 @@ ControlThread::ControlThread(QObject *parent) :
     qRegisterMetaType<Result>("Result");
     qRegisterMetaType<Actions>("Actions");
 }
+ControlThread::~ControlThread()
+{
+    if ( currWorkConnect!=NULL ) {
+        virConnectClose(currWorkConnect);
+        currWorkConnect = NULL;
+    };
+}
 
 /* public slots */
 bool ControlThread::setCurrentWorkConnect(virConnectPtr conn, uint i, QString _name)

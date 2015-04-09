@@ -56,6 +56,8 @@ void DomainStateMonitor::setNewMonitoredDomain(
                 Qt::MatchExactly | Qt::MatchCaseSensitive);
     if ( idx<0 ) {
         monitoredDomainList->addItem(_id);
+        // for new virConnect usage create the new virConnectRef[erence]
+        virConnectRef(conn);
         int i = monitoredDomains->addWidget(
                     new DomainStateViewer(
                         this, conn, domainName));

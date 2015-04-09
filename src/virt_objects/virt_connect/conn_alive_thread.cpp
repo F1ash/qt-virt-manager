@@ -9,11 +9,9 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
 {
     qRegisterMetaType<CONN_STATE>("CONN_STATE");
     onView = false;
-    connect(this, SIGNAL(connectClosed(int)), this, SLOT(closeConnect(int)));
 }
 ConnAliveThread::~ConnAliveThread()
 {
-    disconnect(this, SIGNAL(connectClosed(int)), this, SLOT(closeConnect(int)));
     conn = NULL;
     virtErrors = NULL;
 }
@@ -74,6 +72,7 @@ void ConnAliveThread::run()
          * A connection will be classed as alive if it is either local,
          * or running over a channel (TCP or UNIX socket) which is not closed.
          */
+        emit connMsg( "Check the connection is alive." );
         while ( keep_alive ) {
             msleep(500);
             ret = virConnectIsAlive(conn);
@@ -255,7 +254,6 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
             int ret = virConnectListAllDomains(_conn, &domains, flags);
             if ( ret<0 ) {
                 obj->sendConnErrors();
-                free(domains);
                 return 0;
             };
             int i = 0;
@@ -307,7 +305,7 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
                               .arg(domainState)
                            << autostartStr
                            << QString( virDomainIsPersistent(domains[i]) ? "yes" : "no" );
-                domainList.append(currentAttr.join(" "));
+                domainList.append(currentAttr.join(DFR));
                 virDomainFree(domains[i]);
                 i++;
             };
@@ -478,14 +476,7 @@ void ConnAliveThread::closeConnect(int reason)
         state = FAILED;
         break;
     };
-    int ret = virConnectClose(conn);
-    if ( ret<0 ) {
-        sendConnErrors();
-    } else {
-        emit connMsg( QString("close exit code: %1").arg(ret) );
-    };
-    conn = NULL;
-    emit changeConnState(state);
+    closeConnect();
 }
 void ConnAliveThread::getAuthCredentials(QString &crd)
 {

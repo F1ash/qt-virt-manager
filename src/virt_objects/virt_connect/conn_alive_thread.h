@@ -46,7 +46,6 @@ public:
 signals:
     void            connMsg(const QString&);
     void            changeConnState(CONN_STATE);
-    void            connectClosed(int);
     void            authRequested(QString&);
     void            domStateChanged(Result);
 

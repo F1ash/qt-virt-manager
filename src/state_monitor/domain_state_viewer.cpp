@@ -59,7 +59,10 @@ void DomainStateViewer::closeDomainStateViewer()
     };
     setEnabled(false);
     domainMonitorThread->deleteLater();
-    virConnectClose(currWorkConn);
+    if ( currWorkConn!=NULL ) {
+        virConnectClose(currWorkConn);
+        currWorkConn = NULL;
+    };
     close();
     emit viewerClosed();
 }

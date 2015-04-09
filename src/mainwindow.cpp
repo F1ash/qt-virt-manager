@@ -729,8 +729,12 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
         if ( type.isEmpty() ) {
             QMessageBox::information(this, "VM Viewer", "Job empty.");
         } else if ( type.toLower()=="lxc" ) {
+            // for new virConnect usage create the new virConnectRef[erence]
+            virConnectRef(conn);
             value = new LXC_Viewer(this, conn, connName, domName);
         } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
+            // for new virConnect usage create the new virConnectRef[erence]
+            virConnectRef(conn);
             value = new Spice_Viewer(this, conn, connName, domName);
         } else
             QMessageBox::information(

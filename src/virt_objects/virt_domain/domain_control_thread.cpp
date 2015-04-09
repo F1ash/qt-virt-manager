@@ -100,7 +100,6 @@ Result DomControlThread::getAllDomainList()
         int ret = virConnectListAllDomains(currWorkConnect, &domains, flags);
         if ( ret<0 ) {
             sendConnErrors();
-            free(domains);
             return result;
         };
 

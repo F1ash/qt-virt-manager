@@ -13,6 +13,7 @@ class ControlThread : public QThread
     Q_OBJECT
 public:
     explicit ControlThread(QObject *parent = NULL);
+    virtual ~ControlThread();
     QStringList      args;
     bool             keep_alive = false;
     uint             number;

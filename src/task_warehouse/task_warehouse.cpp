@@ -128,6 +128,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));
     virConnectPtr currWorkConnect = _conn;
+    // for new virConnect usage create the new virConnectRef[erence]
     int ret = virConnectRef(currWorkConnect);
     if ( ret<0 ) {
         virErrorPtr virtErrors = virGetLastError();

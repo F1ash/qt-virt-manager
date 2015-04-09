@@ -145,7 +145,7 @@ void LXC_Viewer::closeEvent(QCloseEvent *ev)
     ev->ignore();
     this->deleteLater();
 }
-int LXC_Viewer::registerStreamEvents()
+int  LXC_Viewer::registerStreamEvents()
 {
     int ret = virStreamEventAddCallback(stream,
                                         VIR_STREAM_EVENT_READABLE |
@@ -157,7 +157,7 @@ int LXC_Viewer::registerStreamEvents()
     if (ret<0) sendConnErrors();
     return ret;
 }
-int LXC_Viewer::unregisterStreamEvents()
+int  LXC_Viewer::unregisterStreamEvents()
 {
     int ret = virStreamEventRemoveCallback(stream);
     if (ret<0) sendConnErrors();
