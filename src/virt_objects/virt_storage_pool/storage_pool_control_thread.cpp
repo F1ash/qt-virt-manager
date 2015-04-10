@@ -12,7 +12,14 @@ void StoragePoolControlThread::execAction(Actions act, QStringList _args)
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;
-        start();
+        if ( NULL!=currWorkConnect ) start();
+        else {
+            Result result;
+            result.type   = "pool";
+            result.number = number;
+            result.action = _EMPTY_ACTION;
+            emit resultData(result);
+        };
     };
 }
 

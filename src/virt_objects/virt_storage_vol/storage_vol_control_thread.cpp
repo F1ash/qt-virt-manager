@@ -38,7 +38,14 @@ void StorageVolControlThread::execAction(Actions act, QStringList _args)
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;
-        start();
+        if ( NULL!=currWorkConnect ) start();
+        else {
+            Result result;
+            result.type   = "volume";
+            result.number = number;
+            result.action = _EMPTY_ACTION;
+            emit resultData(result);
+        };
         //qDebug()<<"stVolThread started\n\targs\t\t"<<_args<<"\n\taction\t\t"<<act;
         //qDebug()<<"stVol_thread (execAct)\n\tConnect\t\t"<<currWorkConnect
         //        <<"\n\tPool\t\t"<<currStoragePool

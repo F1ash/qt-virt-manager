@@ -127,22 +127,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
     } else return;
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));
-    virConnectPtr currWorkConnect = _conn;
-    // for new virConnect usage create the new virConnectRef[erence]
-    int ret = virConnectRef(currWorkConnect);
-    if ( ret<0 ) {
-        virErrorPtr virtErrors = virGetLastError();
-        if ( virtErrors!=NULL && virtErrors->code>0 ) {
-            QString time = QTime::currentTime().toString();
-            QString msg = QString("%3 VirtError(%1) : %2")
-                    .arg(virtErrors->code)
-                    .arg(virtErrors->message)
-                    .arg(time);
-            virResetError(virtErrors);
-            msgRepeater( msg );
-        };
-        currWorkConnect = NULL;
-    } else if ( NULL!=cThread ) {
+    if ( NULL!=cThread ) {
         _taskDesc.removeFirst();
         //qDebug()<<ACT<<_taskDesc;
         connect(cThread, SIGNAL(errorMsg(QString)),
@@ -150,7 +135,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
         connect(cThread, SIGNAL(resultData(Result)),
                 this, SLOT(taskResultReceiver(Result)));
         cThread->setCurrentWorkConnect(
-                    currWorkConnect, counter, currConnName);
+                    _conn, counter, currConnName);
         cThread->execAction(static_cast<Actions>(ACT), _taskDesc);
     };
 }

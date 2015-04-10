@@ -16,6 +16,8 @@ VM_Viewer::VM_Viewer(
     closeProcess = new QProgressBar(this);
     statusBar()->addWidget(closeProcess);
     statusBar()->hide();
+    // for new virConnect usage create the new virConnectRef[erence]
+    if ( virConnectRef(jobConnect)<0 ) jobConnect = NULL;
 }
 VM_Viewer::~VM_Viewer()
 {
@@ -31,10 +33,10 @@ VM_Viewer::~VM_Viewer()
         delete closeProcess;
         closeProcess = NULL;
     };
-    // for end virConnect usage close one of it
+    // release the reference because no longer required
     if ( jobConnect!=NULL ) {
         virConnectClose(jobConnect);
-        // for reject the multiple close of virConnectRef[erence]
+        // for reject the multiple releasing the reference
         jobConnect = NULL;
     };
     VM_State = false;

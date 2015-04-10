@@ -29,6 +29,8 @@ DomainStateViewer::DomainStateViewer(QWidget *parent,
     setLayout(commonLayout);
     connect(closeViewer, SIGNAL(clicked()),
             this, SLOT(closeDomainStateViewer()));
+    // for new virConnect usage create the new virConnectRef[erence]
+    if ( virConnectRef(currWorkConn)<0 ) currWorkConn = NULL;
     // TODO: implement the display of different domain states:
     // CPU Usage, Disk I/O (?), Network I/O (?), MemoryStats.
     domainMonitorThread = new DomainMonitorThread(
@@ -48,6 +50,9 @@ DomainStateViewer::DomainStateViewer(QWidget *parent,
     memPercent = memDoc.firstChildElement("svg")
             .firstChildElement("text");
     timerId = startTimer(PERIOD*1000);
+    if ( NULL==currWorkConn ) {
+        monitorName->setText("State:<br><b>Connect Error</b></br>");
+    };
 }
 
 /* public slots */
@@ -59,8 +64,10 @@ void DomainStateViewer::closeDomainStateViewer()
     };
     setEnabled(false);
     domainMonitorThread->deleteLater();
+    // release the reference because no longer required
     if ( currWorkConn!=NULL ) {
         virConnectClose(currWorkConn);
+        // for reject the multiple releasing the reference
         currWorkConn = NULL;
     };
     close();

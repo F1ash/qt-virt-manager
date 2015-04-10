@@ -9,7 +9,9 @@ ControlThread::ControlThread(QObject *parent) :
 ControlThread::~ControlThread()
 {
     if ( currWorkConnect!=NULL ) {
+        // release the reference because no longer required
         virConnectClose(currWorkConnect);
+        // for reject the multiple releasing the reference
         currWorkConnect = NULL;
     };
 }
@@ -21,6 +23,11 @@ bool ControlThread::setCurrentWorkConnect(virConnectPtr conn, uint i, QString _n
     number = i;
     currConnName = _name;
     currWorkConnect = conn;
+    // for new virConnect usage create the new virConnectRef[erence]
+    if ( virConnectRef(currWorkConnect)<0 ) {
+        currWorkConnect = NULL;
+        sendConnErrors();
+    };
     //qDebug()<<"net_thread"<<currWorkConnect;
 }
 void ControlThread::execAction(Actions i, QStringList _str)
