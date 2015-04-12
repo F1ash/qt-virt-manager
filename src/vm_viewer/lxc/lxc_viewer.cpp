@@ -48,8 +48,6 @@ LXC_Viewer::LXC_Viewer(
                 startCloseProcess();
             };
             if ( ret ) {
-                // don't start (default) shell program,
-                // because take the data from VM Stream
                 timerId = startTimer(PERIOD);
                 connect(this, SIGNAL(termEOF()),
                         this, SLOT(startCloseProcess()));
@@ -66,6 +64,7 @@ LXC_Viewer::LXC_Viewer(
 }
 LXC_Viewer::~LXC_Viewer()
 {
+    //qDebug()<<"LXC_Viewer destroy:";
     closeStream();
     QString msg, key;
     msg = QString("In '<b>%1</b>': Display destroyed.")
@@ -73,6 +72,7 @@ LXC_Viewer::~LXC_Viewer()
     sendErrMsg(msg);
     key = QString("%1_%2").arg(connName).arg(domain);
     emit finished(key);
+    //qDebug()<<"LXC_Viewer destroyed";
 }
 
 /* public slots */
@@ -210,6 +210,7 @@ void LXC_Viewer::sendDataToDisplay(virStreamPtr _stream)
             sendErrMsg(msg);
         };
         emit termEOF();
+        //qDebug()<<"EOF emited";
         return;
     case -1:
         // Error stream
@@ -241,18 +242,20 @@ void LXC_Viewer::sendDataToVMachine(const char *buff, int got)
 }
 void LXC_Viewer::closeStream()
 {
+    //qDebug()<<"stream close:";
     if ( stream!=NULL ) {
         if ( virStreamEventUpdateCallback(
                  stream,
                  VIR_STREAM_EVENT_READABLE |
                  VIR_STREAM_EVENT_WRITABLE |
                  VIR_STREAM_EVENT_ERROR |
-                 VIR_STREAM_EVENT_HANGUP) +1 ) {
-            unregisterStreamEvents();
-        } else sendConnErrors();
+                 VIR_STREAM_EVENT_HANGUP)<0 )
+            sendConnErrors();
+        unregisterStreamEvents();
         virStreamFinish(stream);
         virStreamFree(stream);
         stream = NULL;
         //qDebug()<<"stream closed";
     };
+    //qDebug()<<"stream closed already";
 }

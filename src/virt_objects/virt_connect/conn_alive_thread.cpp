@@ -476,7 +476,12 @@ void ConnAliveThread::closeConnect(int reason)
         state = FAILED;
         break;
     };
-    closeConnect();
+    // don't unregisterConnEvents, because disconnected already
+    sendConnErrors();
+    if ( virConnectClose(conn)<0 ) sendConnErrors();
+    conn = NULL;
+    emit changeConnState(state);
+    keep_alive = false;
 }
 void ConnAliveThread::getAuthCredentials(QString &crd)
 {

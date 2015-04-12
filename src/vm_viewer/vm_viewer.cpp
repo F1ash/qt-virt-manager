@@ -14,13 +14,15 @@ VM_Viewer::VM_Viewer(
     connect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(resendExecMethod(const QStringList&)));
     closeProcess = new QProgressBar(this);
-    statusBar()->addWidget(closeProcess);
+    closeProcess->setRange(0, TIMEOUT);
+    statusBar()->addPermanentWidget(closeProcess);
     statusBar()->hide();
     // for new virConnect usage create the new virConnectRef[erence]
     if ( virConnectRef(jobConnect)<0 ) jobConnect = NULL;
 }
 VM_Viewer::~VM_Viewer()
 {
+    //qDebug()<<"VM_Viewer destroy:";
     if ( timerId>0 ) killTimer(timerId);
     if ( killTimerId>0 ) killTimer(killTimerId);
     if ( NULL!=viewerToolBar ) {
@@ -40,6 +42,7 @@ VM_Viewer::~VM_Viewer()
         jobConnect = NULL;
     };
     VM_State = false;
+    //qDebug()<<"VM_Viewer destroyed";
 }
 
 /* public slots */
@@ -147,7 +150,6 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
 void VM_Viewer::startCloseProcess()
 {
     killTimerId = startTimer(PERIOD);
-    closeProcess->setRange(0, TIMEOUT);
     statusBar()->show();
     //qDebug()<<killTimerId<<"killTimer";
 }
