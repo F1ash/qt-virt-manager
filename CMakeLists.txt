@@ -314,6 +314,7 @@ set (HEADERS
   src/vm_viewer/viewer_toolbar.h
 
   src/vm_viewer/lxc/lxc_viewer.h
+  src/vm_viewer/lxc/lxc_viewer_thread.h
   src/vm_viewer/spice/spice_viewer.h
   
   src/vm_viewer/qterminal/tabwidget.h
@@ -598,6 +599,7 @@ set (SOURCES
   src/vm_viewer/viewer_toolbar.cpp
 
   src/vm_viewer/lxc/lxc_viewer.cpp
+  src/vm_viewer/lxc/lxc_viewer_thread.cpp
   src/vm_viewer/spice/spice_viewer.cpp
   
   src/vm_viewer/qterminal/properties.cpp

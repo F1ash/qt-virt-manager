@@ -27,8 +27,10 @@ bool ControlThread::setCurrentWorkConnect(virConnectPtr conn, uint i, QString _n
     if ( virConnectRef(currWorkConnect)<0 ) {
         currWorkConnect = NULL;
         sendConnErrors();
+        keep_alive = false;
     };
     //qDebug()<<"net_thread"<<currWorkConnect;
+    return keep_alive;
 }
 void ControlThread::execAction(Actions i, QStringList _str)
 {
