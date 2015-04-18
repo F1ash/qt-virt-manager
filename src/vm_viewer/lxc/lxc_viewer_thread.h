@@ -8,9 +8,7 @@ class LXC_ViewerThread : public ControlThread
 {
     Q_OBJECT
 public:
-    LXC_ViewerThread(
-            QObject *parent = NULL,
-            virConnect  *_conn = NULL);
+    LXC_ViewerThread(QObject *parent = NULL);
     ~LXC_ViewerThread();
 
 signals:
@@ -18,12 +16,14 @@ signals:
 
 private:
     int             ptySlaveFd = -1;
+    QString         domain;
     virStream      *stream = NULL;
-    virConnect     *jobConnect = NULL;
+    virDomainPtr    domainPtr = NULL;
 
 public slots:
+    void            setData(QString&, virDomainPtr, int);
     void            run();
-    int             registerStreamEvents(QString&, virDomainPtr, int);
+    int             registerStreamEvents();
     void            sendDataToVMachine(const char*, int);
 
 private slots:

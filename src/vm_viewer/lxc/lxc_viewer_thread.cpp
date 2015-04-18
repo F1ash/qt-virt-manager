@@ -2,65 +2,76 @@
 
 #define BLOCK_SIZE  1024*100
 
-LXC_ViewerThread::LXC_ViewerThread(QObject *parent, virConnect *_conn) :
-    ControlThread(parent), jobConnect(_conn)
+LXC_ViewerThread::LXC_ViewerThread(QObject *parent) :
+    ControlThread(parent)
 {
-    bool ret = setCurrentWorkConnect(jobConnect);
-    stream = (ret)? virStreamNew( jobConnect, VIR_STREAM_NONBLOCK ):NULL;
-    if ( NULL==stream ) {
-        sendConnErrors();
-    };
-}
 
+}
 LXC_ViewerThread::~LXC_ViewerThread()
 {
     closeStream();
 }
 
 /* public slots */
+void LXC_ViewerThread::setData(QString &_dom, virDomainPtr _domPtr, int fd)
+{
+    ptySlaveFd = fd;
+    domain = _dom;
+    domainPtr = _domPtr;
+}
 void LXC_ViewerThread::run()
 {
+    stream = (NULL!=currWorkConnect)? virStreamNew( currWorkConnect, VIR_STREAM_NONBLOCK ):NULL;
+    if ( NULL==stream ) {
+        sendConnErrors();
+        keep_alive = false;
+    } else {
+        /*
+         * Older servers did not support either flag,
+         * and also did not forbid simultaneous clients on a console,
+         * with potentially confusing results.
+         * When passing @flags of 0 in order to support a wider range of server versions,
+         * it is up to the client to ensure mutual exclusion.
+         */
+        int ret = -1;
+        QString msg;
+        if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_SAFE)+1 ) {
+            msg = QString("In '<b>%1</b>': Console opened in SAFE-mode...").arg(domain);
+            emit errorMsg(msg);
+        } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_FORCE )+1 ) {
+            msg = QString("In '<b>%1</b>': Console opened in FORCE-mode...").arg(domain);
+            emit errorMsg(msg);
+        } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, 0 )+1 ) {
+            msg = QString("In '<b>%1</b>': Console opened in ZIRO-mode...").arg(domain);
+            emit errorMsg(msg);
+        } else {
+            msg = QString("In '<b>%1</b>': Open console failed...").arg(domain);
+            emit errorMsg(msg);
+            sendConnErrors();
+        };
+        //qDebug()<<msg<<"msg";
+        if ( ret<0 ) {
+            keep_alive = false;
+        } else if ( registerStreamEvents()<0 ) {
+            keep_alive = false;
+        };
+    };
+    //qDebug()<<keep_alive<<stream;
     while (keep_alive) {
         msleep(100);
     };
 }
 
 /* private slots */
-int  LXC_ViewerThread::registerStreamEvents(QString &domain, virDomainPtr domainPtr, int fd)
+int  LXC_ViewerThread::registerStreamEvents()
 {
-    ptySlaveFd = fd;
-    /*
-     * Older servers did not support either flag,
-     * and also did not forbid simultaneous clients on a console,
-     * with potentially confusing results.
-     * When passing @flags of 0 in order to support a wider range of server versions,
-     * it is up to the client to ensure mutual exclusion.
-     */
-    int ret = -1;
-    QString msg;
-    if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_SAFE)+1 ) {
-        msg = QString("In '<b>%1</b>': Console opened in SAFE-mode...").arg(domain);
-        emit errorMsg(msg);
-    } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_FORCE )+1 ) {
-        msg = QString("In '<b>%1</b>': Console opened in FORCE-mode...").arg(domain);
-        emit errorMsg(msg);
-    } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, 0 )+1 ) {
-        msg = QString("In '<b>%1</b>': Console opened in ZIRO-mode...").arg(domain);
-        emit errorMsg(msg);
-    } else {
-        msg = QString("In '<b>%1</b>': Open console failed...").arg(domain);
-        emit errorMsg(msg);
-        sendConnErrors();
-        closeStream();
-        return ret;
-    };
-    ret = virStreamEventAddCallback(stream,
-                                    VIR_STREAM_EVENT_READABLE |
-                                    VIR_STREAM_EVENT_HANGUP |
-                                    VIR_STREAM_EVENT_ERROR,
-                                    streamEventCallBack, this,
+    int ret = virStreamEventAddCallback(stream,
+                                        VIR_STREAM_EVENT_READABLE |
+                                        VIR_STREAM_EVENT_HANGUP |
+                                        VIR_STREAM_EVENT_ERROR,
+                                        streamEventCallBack, this,
     //  don't register freeCallback, because it remove itself
-                                    NULL);
+                                        NULL);
     if (ret<0) sendConnErrors();
     return ret;
 }

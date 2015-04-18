@@ -16,7 +16,7 @@ LXC_Viewer::LXC_Viewer(
     };
     QString msg;
     if ( domainPtr!=NULL ) {
-        viewerThread = new LXC_ViewerThread(this, jobConnect);
+        viewerThread = new LXC_ViewerThread(this);
         timerId = startTimer(PERIOD);
     } else {
         msg = QString("In '<b>%1</b>': Connect or Domain is NULL...").arg(domain);
@@ -58,14 +58,8 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             killTimer(timerId);
             timerId = 0;
             counter = 0;
-            if ( viewerThread->registerStreamEvents(domain, domainPtr, ptySlaveFd)<0 ) {
-                QString msg = QString("In '<b>%1</b>': Stream Registation fail.").arg(domain);
-                sendErrMsg(msg);
-                getCurrentTerminal()->impl()->sendText(msg);
-            } else {
-                QString msg = QString("In '<b>%1</b>': Stream Registation success. \
-PTY opened. Terminal is active.").arg(domain);
-                sendErrMsg(msg);
+            viewerThread->setData(domain, domainPtr, ptySlaveFd);
+            if ( viewerThread->setCurrentWorkConnect(jobConnect) ) {
                 setTerminalParameters();
             };
         } else if ( TIMEOUT<counter*PERIOD ) {
@@ -96,6 +90,11 @@ void LXC_Viewer::setTerminalParameters()
         connect(viewerThread, SIGNAL(termEOF()),
                 this, SLOT(startCloseProcess()));
         viewerThread->start();
+        if ( viewerThread->keep_alive ) {
+            QString msg = QString("In '<b>%1</b>': Stream Registation success. \
+PTY opened. Terminal is active.").arg(domain);
+            sendErrMsg(msg);
+        };
         /*
          * As usually a xterm terminals don't support
          * the Window manipulation through CSI,
@@ -113,7 +112,7 @@ void LXC_Viewer::setTerminalParameters()
 }
 void LXC_Viewer::closeEvent(QCloseEvent *ev)
 {
-    viewerThread->keep_alive = false;
+    viewerThread->stop();
     ev->ignore();
     this->deleteLater();
 }
