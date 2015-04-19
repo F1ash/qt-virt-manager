@@ -166,7 +166,8 @@ Result StorageVolControlThread::createStorageVol()
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        emit errorMsg( QString("File \"%1\"\nnot opened.").arg(path) );
+        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        emit errorMsg( msg );
         result.result = false;
         return result;
     };
@@ -247,7 +248,11 @@ Result StorageVolControlThread::downloadStorageVol()
                 saved = f->write(buf, got);
                 //qDebug()<<"got<>saved"<<got<<saved<<step;
                 if ( saved+1 ) length += saved;
-                else emit errorMsg( QString("WriteError after (%2): %1 bytes").arg(length).arg(step) );
+                else {
+                    QString msg = QString("WriteError after (%2): %1 bytes")
+                            .arg(length).arg(step);
+                    emit errorMsg( msg );
+                };
             };
             virStreamFinish(stream);
         };
@@ -284,7 +289,8 @@ Result StorageVolControlThread::resizeStorageVol()
     // See for: <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>
         if ( ret<0 ) {
             sendConnErrors();
-            emit errorMsg("ResizeError: Maybe <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>");
+            QString msg("ResizeError: Maybe <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>");
+            emit errorMsg(msg);
         } else resized = true;
         virStorageVolFree(storageVol);
     } else sendConnErrors();
@@ -326,8 +332,9 @@ Result StorageVolControlThread::uploadStorageVol()
                 got = f->read(buf, BLOCK_SIZE);
                 if (got == 0) break;
                 if ( got<0 ) {
-                    emit errorMsg( QString("ReadError after (%2): %1 bytes")
-                                   .arg(length).arg(step) );
+                    QString msg = QString("ReadError after (%2): %1 bytes")
+                            .arg(length).arg(step);
+                    emit errorMsg( msg );
                 } else {
                     saved = virStreamSend(stream, buf, got);
                     if (saved < 0) {

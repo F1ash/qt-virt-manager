@@ -115,7 +115,8 @@ Result StoragePoolControlThread::createStoragePool()
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        emit errorMsg( QString("File \"%1\"\nnot opened.").arg(path) );
+        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        emit errorMsg( msg );
         result.result = false;
         return result;
     };
@@ -144,7 +145,8 @@ Result StoragePoolControlThread::defineStoragePool()
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        emit errorMsg( QString("File \"%1\"\nnot opened.").arg(path) );
+        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        emit errorMsg( msg );
         result.result = false;
         return result;
     };

@@ -23,7 +23,7 @@ public:
     virErrorPtr      virtErrors;
 
 signals:
-    void             errorMsg(QString);
+    void             errorMsg(QString&);
     void             resultData(Result);
 
 public slots:
@@ -31,13 +31,13 @@ public slots:
                         virConnectPtr,
                         uint i=0,
                         QString _name="");
-    void             stop();
 
     void             sendConnErrors();
     void             sendGlobalErrors();
 
     virtual void     execAction(Actions, QStringList);
     virtual void     run();
+    virtual void     stop();
 };
 
 #endif // CONTROL_THREAD_H

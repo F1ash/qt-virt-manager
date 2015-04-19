@@ -70,7 +70,8 @@ void VM_Viewer::sendErrMsg(QString &msg)
 {
     QString time = QTime::currentTime().toString();
     QString title = QString("Connect '%1'").arg(connName);
-    QString errMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
+    QString errMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
     emit errorMsg(errMsg);
 }
 
@@ -149,6 +150,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
 }
 void VM_Viewer::startCloseProcess()
 {
+    qDebug()<<"startCloseProcess";
     killTimerId = startTimer(PERIOD);
     statusBar()->show();
     //qDebug()<<killTimerId<<"killTimer";

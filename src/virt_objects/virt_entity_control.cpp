@@ -82,6 +82,7 @@ void VirtEntityControl::msgRepeater(QString msg)
 {
     QString time = QTime::currentTime().toString();
     QString title = QString("Connect '%1'").arg(currConnName);
-    QString currMsg = QString("<b>%1 %2:</b><br>ACTION: %3").arg(time).arg(title).arg(msg);
+    QString currMsg = QString("<b>%1 %2:</b><br><font color='green'><b>ACTION</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
     emit entityMsg(currMsg);
 }

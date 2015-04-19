@@ -29,12 +29,16 @@ LXC_Viewer::LXC_Viewer(
 }
 LXC_Viewer::~LXC_Viewer()
 {
-    //qDebug()<<"LXC_Viewer destroy:";
+    qDebug()<<"LXC_Viewer destroy:";
     if ( NULL!=viewerThread ) {
         disconnect(viewerThread, SIGNAL(termEOF()),
                    this, SLOT(startCloseProcess()));
+        disconnect(viewerThread, SIGNAL(errorMsg(QString&)),
+                   this, SLOT(sendErrMsg(QString&)));
+        qDebug()<<"viewer thread disconnected";
         delete viewerThread;
         viewerThread = NULL;
+        qDebug()<<"viewer thread deleted";
     };
     QString msg, key;
     msg = QString("In '<b>%1</b>': Display destroyed.")
@@ -42,7 +46,7 @@ LXC_Viewer::~LXC_Viewer()
     sendErrMsg(msg);
     key = QString("%1_%2").arg(connName).arg(domain);
     emit finished(key);
-    //qDebug()<<"LXC_Viewer destroyed";
+    qDebug()<<"LXC_Viewer destroyed";
 }
 
 /* public slots */
@@ -89,6 +93,8 @@ void LXC_Viewer::setTerminalParameters()
                 viewerThread, SLOT(sendDataToVMachine(const char*,int)));
         connect(viewerThread, SIGNAL(termEOF()),
                 this, SLOT(startCloseProcess()));
+        connect(viewerThread, SIGNAL(errorMsg(QString&)),
+                this, SLOT(sendErrMsg(QString&)));
         viewerThread->start();
         if ( viewerThread->keep_alive ) {
             QString msg = QString("In '<b>%1</b>': Stream Registation success. \
@@ -112,7 +118,10 @@ PTY opened. Terminal is active.").arg(domain);
 }
 void LXC_Viewer::closeEvent(QCloseEvent *ev)
 {
-    viewerThread->stop();
     ev->ignore();
-    this->deleteLater();
+    qDebug()<<"closeEvent";
+    if ( NULL!=viewerThread ) {
+        viewerThread->stop();
+        this->deleteLater();
+    };
 }

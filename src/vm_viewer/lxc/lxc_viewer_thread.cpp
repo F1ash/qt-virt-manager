@@ -9,7 +9,14 @@ LXC_ViewerThread::LXC_ViewerThread(QObject *parent) :
 }
 LXC_ViewerThread::~LXC_ViewerThread()
 {
-    closeStream();
+    bool closed = wait(60000);
+    qDebug()<<"delete thread:"<<closed;
+    if (!closed) {
+        setTerminationEnabled(true);
+        terminate();
+        closed = wait(60000);
+        qDebug()<<"delete thread:"<<closed;
+    };
 }
 
 /* public slots */
@@ -26,13 +33,6 @@ void LXC_ViewerThread::run()
         sendConnErrors();
         keep_alive = false;
     } else {
-        /*
-         * Older servers did not support either flag,
-         * and also did not forbid simultaneous clients on a console,
-         * with potentially confusing results.
-         * When passing @flags of 0 in order to support a wider range of server versions,
-         * it is up to the client to ensure mutual exclusion.
-         */
         int ret = -1;
         QString msg;
         if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_SAFE)+1 ) {
@@ -49,17 +49,19 @@ void LXC_ViewerThread::run()
             emit errorMsg(msg);
             sendConnErrors();
         };
-        //qDebug()<<msg<<"msg";
         if ( ret<0 ) {
             keep_alive = false;
         } else if ( registerStreamEvents()<0 ) {
             keep_alive = false;
         };
     };
-    //qDebug()<<keep_alive<<stream;
     while (keep_alive) {
         msleep(100);
     };
+}
+void LXC_ViewerThread::stop()
+{
+    if ( isRunning() ) closeStream();
 }
 
 /* private slots */
@@ -83,7 +85,7 @@ int  LXC_ViewerThread::unregisterStreamEvents()
 }
 void LXC_ViewerThread::freeData(void *opaque)
 {
-    if ( opaque!=NULL ) {
+    if ( NULL!=opaque ) {
         void *data = opaque;
         free(data);
     }
@@ -111,6 +113,7 @@ void LXC_ViewerThread::updateStreamEvents(virStreamPtr _stream, int type)
 }
 void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
 {
+    if ( NULL==_stream ) return;
     QString msg;
     char buff[BLOCK_SIZE];
     memset( buff, '\0', BLOCK_SIZE );
@@ -123,10 +126,10 @@ void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
         // Received EOF from stream, closing
         closeStream();
         write(ptySlaveFd, "\nEOF...", 7);
-        msg = QString("In '<b>%1</b>': EOF.");
+        msg = QString("In '<b>%1</b>': EOF.").arg(domain);
         emit errorMsg(msg);
         emit termEOF();
-        //qDebug()<<"EOF emited";
+        qDebug()<<"EOF emited";
         return;
     case -1:
         // Error stream
@@ -158,8 +161,8 @@ void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
 }
 void LXC_ViewerThread::closeStream()
 {
-    //qDebug()<<"stream close:";
-    if ( stream!=NULL ) {
+    qDebug()<<"stream close:";
+    if ( NULL!=stream ) {
         if ( virStreamEventUpdateCallback(
                  stream,
                  VIR_STREAM_EVENT_READABLE |
@@ -171,8 +174,8 @@ void LXC_ViewerThread::closeStream()
         if ( virStreamFinish(stream)+1 )
             virStreamFree(stream);
         stream = NULL;
-        //qDebug()<<"stream closed";
+        qDebug()<<"stream closed";
     };
-    //qDebug()<<"stream closed already";
+    qDebug()<<"stream closed already";
     keep_alive = false;
 }

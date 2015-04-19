@@ -130,8 +130,8 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
     if ( NULL!=cThread ) {
         _taskDesc.removeFirst();
         //qDebug()<<ACT<<_taskDesc;
-        connect(cThread, SIGNAL(errorMsg(QString)),
-                this, SLOT(msgRepeater(QString)));
+        connect(cThread, SIGNAL(errorMsg(QString&)),
+                this, SLOT(msgRepeater(QString&)));
         connect(cThread, SIGNAL(resultData(Result)),
                 this, SLOT(taskResultReceiver(Result)));
         cThread->setCurrentWorkConnect(
@@ -145,7 +145,7 @@ void TaskWareHouse::closeEvent(QCloseEvent *ev)
 {
     ev->ignore();
 }
-void TaskWareHouse::msgRepeater(QString msg)
+void TaskWareHouse::msgRepeater(QString &msg)
 {
     QString time = QTime::currentTime().toString();
     //QString title = QString("Connect '%1'").arg(currConnName);
@@ -169,8 +169,8 @@ void TaskWareHouse::taskResultReceiver(Result data)
                 threadPool->value(_number));
     if ( NULL!=cThread ) {
         //qDebug()<<_number<<"delete";
-        disconnect(cThread, SIGNAL(errorMsg(QString)),
-                   this, SLOT(msgRepeater(QString)));
+        disconnect(cThread, SIGNAL(errorMsg(QString&)),
+                   this, SLOT(msgRepeater(QString&)));
         disconnect(cThread, SIGNAL(resultData(Result)),
                    this, SLOT(taskResultReceiver(Result)));
         threadPool->value(_number)->quit();

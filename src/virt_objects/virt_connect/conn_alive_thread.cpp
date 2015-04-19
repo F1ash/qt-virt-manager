@@ -239,7 +239,7 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
 {
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
     QString msg;
-    msg = QString("EVENT: <b>'%1'</b> Domain %2 %3\n")
+    msg = QString("<font color='blue'><b>EVENT</b></font>: <b>'%1'</b> Domain %2 %3\n")
            .arg(virDomainGetName(dom))
            .arg(obj->eventToString(event))
            .arg(obj->eventDetailToString(event, detail));
