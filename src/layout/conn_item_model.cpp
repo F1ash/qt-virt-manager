@@ -180,6 +180,7 @@ bool ConnItemModel::setData( const QModelIndex &index, const QVariant &value, in
             break;
         };
     };
+    /*
     QModelIndex topLeft;
     QModelIndex lowRight;
     if ( editedRow==0 ) {
@@ -193,6 +194,8 @@ bool ConnItemModel::setData( const QModelIndex &index, const QVariant &value, in
         lowRight = this->index(rowCount(), columnCount()-1);
     };
     emit dataChanged(topLeft, lowRight);
+    */
+    emit dataChanged(index.sibling(0,0), index.sibling(rowCount(), columnCount()));
     return true;
 }
 bool ConnItemModel::insertRow(int row)

@@ -29,16 +29,16 @@ LXC_Viewer::LXC_Viewer(
 }
 LXC_Viewer::~LXC_Viewer()
 {
-    qDebug()<<"LXC_Viewer destroy:";
+    //qDebug()<<"LXC_Viewer destroy:";
     if ( NULL!=viewerThread ) {
         disconnect(viewerThread, SIGNAL(termEOF()),
                    this, SLOT(startCloseProcess()));
         disconnect(viewerThread, SIGNAL(errorMsg(QString&)),
                    this, SLOT(sendErrMsg(QString&)));
-        qDebug()<<"viewer thread disconnected";
+        //qDebug()<<"viewer thread disconnected";
         delete viewerThread;
         viewerThread = NULL;
-        qDebug()<<"viewer thread deleted";
+        //qDebug()<<"viewer thread deleted";
     };
     QString msg, key;
     msg = QString("In '<b>%1</b>': Display destroyed.")
@@ -46,7 +46,7 @@ LXC_Viewer::~LXC_Viewer()
     sendErrMsg(msg);
     key = QString("%1_%2").arg(connName).arg(domain);
     emit finished(key);
-    qDebug()<<"LXC_Viewer destroyed";
+    //qDebug()<<"LXC_Viewer destroyed";
 }
 
 /* public slots */
@@ -119,9 +119,9 @@ PTY opened. Terminal is active.").arg(domain);
 void LXC_Viewer::closeEvent(QCloseEvent *ev)
 {
     ev->ignore();
-    qDebug()<<"closeEvent";
     if ( NULL!=viewerThread ) {
+        viewerThread->blockSignals(true);
         viewerThread->stop();
-        this->deleteLater();
+        deleteLater();
     };
 }

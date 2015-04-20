@@ -22,8 +22,8 @@ void Wait::run()
                 DATA map = idx->getData();
                 if ( map.value("availability").toBool() && map.value("isRunning").toInt()!=RUNNING ) {
                     to_Delete.append(idx->getName());
-                //} else if ( map.value("availability").toBool() && map.value("isRunning").toInt()==RUNNING ) {
-                //    wdg->connects->value(idx->getName())->closeConnect();
+                } else if ( map.value("availability").toBool() && map.value("isRunning").toInt()==RUNNING ) {
+                    wdg->connects->value(idx->getName())->closeConnect();
                 } else
                     wdg->connects->value(idx->getName())->closeConnect();
             };

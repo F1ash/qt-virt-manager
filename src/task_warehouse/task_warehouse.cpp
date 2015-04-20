@@ -53,6 +53,7 @@ void TaskWareHouse::saveCurrentState()
 }
 void TaskWareHouse::stopTaskComputing()
 {
+    blockSignals(true);
 }
 void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virConnectPtr _distConn)
 {

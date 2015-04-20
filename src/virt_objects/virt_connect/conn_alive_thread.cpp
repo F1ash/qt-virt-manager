@@ -24,6 +24,7 @@ void ConnAliveThread::setKeepAlive(bool b)
     if ( isRunning() && !keep_alive ) {
         closeConnect();
         terminate();
+        wait(60000);
     };
 }
 bool ConnAliveThread::getKeepAlive() const

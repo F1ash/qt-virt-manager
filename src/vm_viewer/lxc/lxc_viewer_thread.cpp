@@ -10,12 +10,12 @@ LXC_ViewerThread::LXC_ViewerThread(QObject *parent) :
 LXC_ViewerThread::~LXC_ViewerThread()
 {
     bool closed = wait(60000);
-    qDebug()<<"delete thread:"<<closed;
+    //qDebug()<<"delete thread:"<<closed;
     if (!closed) {
         setTerminationEnabled(true);
         terminate();
         closed = wait(60000);
-        qDebug()<<"delete thread:"<<closed;
+        //qDebug()<<"delete thread:"<<closed;
     };
 }
 
@@ -126,6 +126,7 @@ void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
         // Received EOF from stream, closing
         closeStream();
         write(ptySlaveFd, "\nEOF...", 7);
+        close(ptySlaveFd);
         msg = QString("In '<b>%1</b>': EOF.").arg(domain);
         emit errorMsg(msg);
         emit termEOF();
@@ -133,11 +134,18 @@ void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
         return;
     case -1:
         // Error stream
+        virStreamAbort(_stream);
+        closeStream();
         return;
     default:
         // send to TermEmulator stdout useing ptySlaveFd
         for ( int i=0; i<got; i++ ) {
-            write(ptySlaveFd, &buff[i], 1);
+            int sent = write(ptySlaveFd, &buff[i], 1);
+            if ( sent<0 ) {
+                virStreamAbort(_stream);
+                closeStream();
+                break;
+            };
         };
         break;
     };
@@ -163,16 +171,11 @@ void LXC_ViewerThread::closeStream()
 {
     qDebug()<<"stream close:";
     if ( NULL!=stream ) {
-        if ( virStreamEventUpdateCallback(
-                 stream,
-                 VIR_STREAM_EVENT_READABLE |
-                 VIR_STREAM_EVENT_WRITABLE |
-                 VIR_STREAM_EVENT_ERROR |
-                 VIR_STREAM_EVENT_HANGUP)<0 )
-            sendConnErrors();
         unregisterStreamEvents();
-        if ( virStreamFinish(stream)+1 )
-            virStreamFree(stream);
+        if ( virStreamFinish(stream)<0 ) {
+            sendConnErrors();
+        };
+        virStreamFree(stream);
         stream = NULL;
         qDebug()<<"stream closed";
     };

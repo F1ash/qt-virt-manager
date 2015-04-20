@@ -175,7 +175,6 @@ bool Model::insertRow(int row)
     Index *newItem = new Index;
     DataList.insert(row, newItem);
     endInsertRows();
-    emit dataChanged(index(0,0), index(0,0).sibling(rowCount(), columnCount()));
     return true;
 }
 bool Model::removeRow(int row)
@@ -183,6 +182,5 @@ bool Model::removeRow(int row)
     beginRemoveRows(QModelIndex(), rowCount(), rowCount());
     DataList.removeAt(row);
     endRemoveRows();
-    emit dataChanged(index(0,0), index(0,0).sibling(rowCount(), columnCount()));
     return true;
 }
