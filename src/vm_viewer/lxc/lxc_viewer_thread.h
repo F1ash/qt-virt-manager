@@ -24,10 +24,10 @@ public slots:
     void            setData(QString&, virDomainPtr, int);
     void            run();
     void            stop();
-    int             registerStreamEvents();
     void            sendDataToVMachine(const char*, int);
 
 private slots:
+    int             registerStreamEvents();
     int             unregisterStreamEvents();
     static void     freeData(void*);
     static void     streamEventCallBack(virStreamPtr, int, void*);

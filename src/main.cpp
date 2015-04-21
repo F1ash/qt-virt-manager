@@ -5,6 +5,9 @@
 
 int main(int argc, char *argv[])
 {
+    if ( virInitialize()+1 ) {
+        virEventRegisterDefaultImpl();
+    };
     /*
      * WARNING:
      * for work askpass need to run

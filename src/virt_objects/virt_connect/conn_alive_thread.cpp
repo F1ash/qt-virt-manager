@@ -50,9 +50,9 @@ void ConnAliveThread::run()
     openConnect();
     int probe = 0;
     int ret;
-    if ( keep_alive && registered ) {
+    if ( keep_alive ) {
         /* Use if virEventRegisterDefaultImpl() is registered */
-        ret = virConnectSetKeepAlive(conn, 10, 3);
+        ret = virConnectSetKeepAlive(conn, 3, 10);
         if ( ret<0 ) {
             sendConnErrors();
             closeConnect();
@@ -64,7 +64,7 @@ void ConnAliveThread::run()
         while ( keep_alive ) {
             if ( virEventRunDefaultImpl() < 0 ) {
                 sendConnErrors();
-                if ( ++probe>2 ) break;
+                //if ( ++probe>2 ) break;
             };
         };
     } else {
@@ -90,15 +90,10 @@ void ConnAliveThread::run()
 }
 void ConnAliveThread::openConnect()
 {
-    if ( virInitialize()+1 ) {
-        registered = (virEventRegisterDefaultImpl()==0)?true:false;
-        emit connMsg( QString("default event implementation registered: %1")
-                      .arg(QVariant(registered).toString()) );
-        //conn = virConnectOpen(URI.toUtf8().constData());
-        auth.cb = authCallback;
-        auth.cbdata = this;
-        conn = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
-    };
+    //conn = virConnectOpen(URI.toUtf8().constData());
+    auth.cb = authCallback;
+    auth.cbdata = this;
+    conn = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
     //qDebug()<<"openConn"<<conn;
     if (conn==NULL) {
         sendConnErrors();

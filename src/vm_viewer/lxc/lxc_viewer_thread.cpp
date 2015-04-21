@@ -121,7 +121,7 @@ void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
     switch ( got ) {
     case -2:
         // This is basically EAGAIN
-        return;
+        break;
     case 0:
         // Received EOF from stream, closing
         closeStream();
@@ -130,13 +130,13 @@ void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
         msg = QString("In '<b>%1</b>': EOF.").arg(domain);
         emit errorMsg(msg);
         emit termEOF();
-        qDebug()<<"EOF emited";
-        return;
+        //qDebug()<<"EOF emited";
+        break;
     case -1:
         // Error stream
         virStreamAbort(_stream);
         closeStream();
-        return;
+        break;
     default:
         // send to TermEmulator stdout useing ptySlaveFd
         for ( int i=0; i<got; i++ ) {
@@ -169,16 +169,18 @@ void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
 }
 void LXC_ViewerThread::closeStream()
 {
-    qDebug()<<"stream close:";
+    //qDebug()<<"stream close:";
     if ( NULL!=stream ) {
         unregisterStreamEvents();
         if ( virStreamFinish(stream)<0 ) {
             sendConnErrors();
         };
-        virStreamFree(stream);
+        if ( virStreamFree(stream)<0 ) {
+            sendConnErrors();
+        };
         stream = NULL;
-        qDebug()<<"stream closed";
+        //qDebug()<<"stream closed";
     };
-    qDebug()<<"stream closed already";
+    //qDebug()<<"stream closed already";
     keep_alive = false;
 }

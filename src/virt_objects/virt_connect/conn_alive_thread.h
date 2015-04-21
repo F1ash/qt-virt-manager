@@ -57,7 +57,6 @@ private:
 
     virConnectPtr   conn = NULL;
     virErrorPtr     virtErrors;
-    bool            registered;
 
 public slots:
     void            setData(QString&);
