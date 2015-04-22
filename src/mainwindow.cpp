@@ -410,9 +410,9 @@ void MainWindow::initDockWidgets()
     settings.beginGroup("LogDock");
     logDock->setFloating(settings.value("Floating", false).toBool());
     logDock->restoreGeometry(settings.value("Geometry").toByteArray());
-    visible = !settings.value("Visible", false).toBool();
+    visible = settings.value("Visible", true).toBool();
     logDock->setVisible(visible);
-    changeLogViewerVisibility();
+    toolBar->_logUpAction->setChecked(visible);
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, logDock);
@@ -438,12 +438,13 @@ void MainWindow::initDockWidgets()
     settings.beginGroup("DomainDock");
     domainDock->setFloating(settings.value("Floating", false).toBool());
     domainDock->restoreGeometry(settings.value("Geometry").toByteArray());
-    visible = settings.value("Visible", false).toBool();
+    visible = settings.value("Visible", true).toBool();
     domainDock->setVisible(visible);
     toolBar->_domUpAction->setChecked(visible);
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, domainDock);
+    tabifyDockWidget(logDock, domainDock);
     connect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
     connect(domainDockContent, SIGNAL(entityMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
     connect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
@@ -490,6 +491,7 @@ void MainWindow::initDockWidgets()
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, networkDock);
+    tabifyDockWidget(domainDock, networkDock);
     connect(toolBar->_netUpAction, SIGNAL(triggered(bool)),
             networkDock, SLOT(setVisible(bool)));
     connect(networkDockContent, SIGNAL(entityMsg(QString&)),
@@ -525,6 +527,7 @@ void MainWindow::initDockWidgets()
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, storageVolDock);
+    tabifyDockWidget(networkDock, storageVolDock);
     connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
             storageVolDock, SLOT(setVisible(bool)));
     connect(storageVolDockContent, SIGNAL(entityMsg(QString&)),
@@ -560,6 +563,7 @@ void MainWindow::initDockWidgets()
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
     addDockWidget(area, storagePoolDock);
+    tabifyDockWidget(networkDock, storagePoolDock);
     connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
             storagePoolDock, SLOT(setVisible(bool)));
     connect(storagePoolDockContent, SIGNAL(entityMsg(QString&)),

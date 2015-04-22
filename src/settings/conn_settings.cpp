@@ -318,7 +318,9 @@ void ConnSettings::changeConnParameters(QString s)
 }
 QString ConnSettings::getIconName(QString &_text) const
 {
-    return _text.split("/").first().split(" ").first().toLower();
+    QString ret(_text.split("/").first().split(" ").first().toLower());
+    if ( ret=="test" ) ret = "user-trash";
+    return ret;
 }
 QString ConnSettings::getDriverName(QString &_text) const
 {

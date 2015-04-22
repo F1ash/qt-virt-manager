@@ -6,6 +6,7 @@ ConnItemModel::ConnItemModel(QObject *parent) :
     onViewIcon = QIcon::fromTheme("overview");
     activeIcon = QIcon::fromTheme("run");
     no_activeIcon = QIcon::fromTheme("network-server");
+    uri_logo.insert("test", QIcon::fromTheme("user-trash"));
     uri_logo.insert("lxc", QIcon::fromTheme("lxc"));
     uri_logo.insert("qemu", QIcon::fromTheme("qemu"));
     uri_logo.insert("xen", QIcon::fromTheme("xen"));

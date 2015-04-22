@@ -2,6 +2,7 @@
 
 VirtEntityControl::VirtEntityControl(QWidget *parent) : QMainWindow(parent)
 {
+    qRegisterMetaType<QString>("QString&");
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     setMinimumSize(100, 100);
     entityList = new QTreeView(this);
