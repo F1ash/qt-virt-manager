@@ -2,6 +2,7 @@
 #define CONN_ALIVE_THREAD_H
 
 #include <QThread>
+#include <QTime>
 #include "virt_objects/virt_entity_config.h"
 #include <QDebug>
 

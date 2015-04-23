@@ -4,8 +4,8 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.10.18
-Release:        2%{?dist}
+Version:        0.10.21
+Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
 License:        GPLv2+
@@ -121,37 +121,6 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %endif
 
 %changelog
-* Sat Apr 11 2015 Fl@sh <kaperang07@gmail.com> - 0.10.18-2
-- fixed qtermwidget version in R,BR in according with Fedora repo;
-- release updated;
-
-* Tue Apr  7 2015 Fl@sh <kaperang07@gmail.com> - 0.10.18-1
+* Thu Apr 23 2015 Fl@sh <kaperang07@gmail.com> - 0.10.21-1
 - version updated;
-
-* Thu Mar  5 2015 Fl@sh <kaperang07@gmail.com> - 0.8.15-1
-- version updated;
-
-* Tue Jan  6 2015 Fl@sh <kaperang07@gmail.com> - 0.7.12-1
-- version updated;
-
-* Sun Nov 30 2014 Fl@sh <kaperang07@gmail.com> - 0.5.12-1
-- description enhanced;
-- version updated;
-
-* Thu Jul 10 2014 Fl@sh <kaperang07@gmail.com> - 0.1.7-1
-- version updated;
-
-* Wed May 21 2014 Fl@sh <kaperang07@gmail.com> - 0.0.4-1
-- added glibc-headers to BR;
-
-* Fri Apr 25 2014 Fl@sh <kaperang07@gmail.com> - 0.0.3-1
-- added scrub to R optionally;
-
-* Wed Apr  2 2014 Fl@sh <kaperang07@gmail.com> - 0.0.2-2
-- remove open-xdg R;
-
-* Fri Mar  7 2014 Fl@sh <kaperang07@gmail.com> - 0.0.2-1
-- version updated;
-
-* Mon Feb 17 2014 Fl@sh <kaperang07@gmail.com> - 0.0.1-1
-- begin build;
+- clear %%changelog;

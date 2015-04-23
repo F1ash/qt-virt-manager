@@ -69,7 +69,7 @@ void VM_Viewer::closeEvent(QCloseEvent *ev)
 void VM_Viewer::sendErrMsg(QString &msg)
 {
     QString time = QTime::currentTime().toString();
-    QString title = QString("Connect '%1'").arg(connName);
+    QString title = QString("Connection '%1'").arg(connName);
     QString errMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     emit errorMsg(errMsg);

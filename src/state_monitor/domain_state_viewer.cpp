@@ -51,7 +51,7 @@ DomainStateViewer::DomainStateViewer(QWidget *parent,
             .firstChildElement("text");
     timerId = startTimer(PERIOD*1000);
     if ( NULL==currWorkConn ) {
-        monitorName->setText("State:<br><b>Connect Error</b></br>");
+        monitorName->setText("State:<br><b>Connection Error</b></br>");
     };
 }
 

@@ -12,13 +12,13 @@
 <<"VMware ESX"<<"VMware GSX"<<"VMware VPX"<<"OpenVZ"//<<"UML"
 
 // http://libvirt.org/remote.html#Remote_transports
-#define TRANSPORTS QStringList()<<""<<"TLS"<<"SSH"<<"UNIX"<<"TCP"<<"LibSSH2"
+#define TRANSPORTS QStringList()<<" -- "<<"TLS"<<"SSH"<<"UNIX"<<"TCP"<<"LibSSH2"
 //<<"EXT"
 
 ConnSettings::ConnSettings(QWidget *parent) :
     QDialog(parent)
 {
-    setWindowTitle("Connect: <noname>");
+    setWindowTitle("Connection: <noname>");
     restoreGeometry(settings.value("SetDlgGeometry").toByteArray());
     setModal(false);
     setContentsMargins(1,1,1,1);
@@ -95,9 +95,9 @@ ConnSettings::~ConnSettings()
 }
 void ConnSettings::initParamLayout()
 {
-    connName = new QLabel("Connect:", this);
+    connName = new QLabel("Connection:", this);
     ConnName = new QLineEdit(this);
-    ConnName->setPlaceholderText("Enter Connect Name");
+    ConnName->setPlaceholderText("Enter Connection Name");
     connect(ConnName, SIGNAL(textChanged(QString)),
             this, SLOT(set_Title_Name(QString)));
     driver = new QLabel("Driver:", this);
@@ -114,6 +114,11 @@ void ConnSettings::initParamLayout()
     transport = new QLabel("Transport:", this);
     Transports = new QComboBox(this);
     Transports->addItems(TRANSPORTS);
+    for (int i=0; i<Transports->count(); i++) {
+        QString _text =  Transports->itemText(i);
+        if ( _text.contains("--") ) _text.clear();
+        Transports->setItemData(i, _text.toLower() );
+    };
     host = new QLabel("Host:", this);
     Host = new QLineEdit(this);
     Host->setPlaceholderText("[username@][hostname][:port]");
@@ -171,14 +176,17 @@ void ConnSettings::saveConnect()
     QStringList groups = settings.childGroups();
     settings.endGroup();
     setResult(QDialog::Accepted);
-    if ( name.isEmpty() ) QMessageBox::information(this, QString("Info"), QString("Connect Name is empty."));
+    if ( name.isEmpty() ) QMessageBox::information(
+                this, QString("Info"), QString("Connection Name is empty."));
     else if ( groups.contains(name) && !newbe && name==previousName ) {
         saveParameters();
         close();
     } else if ( groups.contains(name) && newbe ) {
-        QMessageBox::information(this, QString("Info"), QString("Same Connect Name is exist."));
+        QMessageBox::information(
+                    this, QString("Info"), QString("Same Connection Name is exist."));
     } else if ( groups.contains(name) && !newbe && name!=previousName ) {
-        QMessageBox::information(this, QString("Info"), QString("Same Connect Name is exist."));
+        QMessageBox::information(
+                    this, QString("Info"), QString("Same Connection Name is exist."));
     } else if ( !groups.contains(name) && newbe ) {
         saveParameters();
         close();
@@ -195,9 +203,10 @@ void ConnSettings::cancelConnect()
 {
     if (newbe) {
         settings.beginGroup("Connects");
-        settings.remove(name);
+        if ( !name.isEmpty() )
+            settings.remove(name);
         settings.endGroup();
-        emit creatingConnectCancelled();
+        emit creationConnCancelled();
     };
     setResult(QDialog::Rejected);
     close();
@@ -212,11 +221,12 @@ void ConnSettings::initParameters()
     ConnName->setText(name);
     atStart->setChecked(settings.value("AtStart", QVariant(false)).toBool());
     groups = HV_DRIVERS;
-    int idx = groups.indexOf(settings.value("Driver", "TEST").toString());
+    // https://github.com/F1ash/qt-virt-manager/issues/2
+    int idx = groups.indexOf(settings.value("Driver", "QEMU/KVM").toString());
     if (idx<0) idx=0;
     Drivers->setCurrentIndex(idx);
-    groups = TRANSPORTS;
-    idx = groups.indexOf(settings.value("Transport", "").toString());
+    // https://github.com/F1ash/qt-virt-manager/issues/2#comment
+    idx = Transports->findData(settings.value("Transport", " -- ").toString());
     if (idx<0) idx=0;
     Transports->setCurrentIndex(idx);
     Host->setText(settings.value("Host", "").toString());
@@ -232,7 +242,11 @@ void ConnSettings::saveParameters()
     settings.beginGroup(name);
     settings.setValue("AtStart", QVariant(atStart->isChecked()));
     settings.setValue("Driver", Drivers->currentText());
-    settings.setValue("Transport", Transports->currentText());
+#if QT_VERSION>=0x050200
+    settings.setValue("Transport", Transports->currentData(Qt::UserRole).toString());
+#else
+    settings.setValue("Transport", Transports->itemData(Transports->currentIndex()).toString());
+#endif
     settings.setValue("Host", Host->text());
     settings.setValue("Path", Path->text());
     settings.setValue("Extra", Extra->text());
@@ -251,7 +265,7 @@ void ConnSettings::closeEvent(QCloseEvent *ev)
 }
 void ConnSettings::set_Title_Name(QString s)
 {
-    setWindowTitle(QString("Connect: %1").arg(s));
+    setWindowTitle(QString("Connection: %1").arg(s));
 }
 void ConnSettings::timerEvent(QTimerEvent *event)
 {
@@ -265,7 +279,13 @@ void ConnSettings::timerEvent(QTimerEvent *event)
         QString _data = Drivers->itemData(Drivers->currentIndex()).toString();
         _uri.append(_data);
 #endif
-        if ( !Transports->currentText().isEmpty() ) {
+        QString _transport;
+#if QT_VERSION>=0x050200
+        _transport = Transports->currentData(Qt::UserRole).toString();
+#else
+        _transport = Transports->itemData(Transports->currentIndex()).toString();
+#endif
+        if ( !_transport.isEmpty() ) {
             _uri.append("+");
             _uri.append(Transports->currentText().toLower());
         };
@@ -312,7 +332,7 @@ void ConnSettings::changeConnParameters(QString s)
     } else if ( _name=="openvz" ) {
         Path->setText( "system" );
         Path->setEnabled(false);
-    } else if ( _name=="test" ) {
+    } else if ( getDriverName(s)=="test" ) {
         Path->setText( "default" );
     } else Path->clear();
 }

@@ -69,7 +69,7 @@ Spice_Viewer::Spice_Viewer(
             startCloseProcess();
         };
     } else {
-        msg = QString("In '<b>%1</b>': Connect or Domain is NULL...")
+        msg = QString("In '<b>%1</b>': Connection or Domain is NULL...")
                 .arg(domain);
         sendErrMsg(msg);
         spiceWdg->setWidget(new QLabel(msg, this));

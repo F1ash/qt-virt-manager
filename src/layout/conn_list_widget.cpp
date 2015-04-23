@@ -60,10 +60,10 @@ int  ConnectList::connectItemEditAction()
     ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
     sDialog = new ConnSettings(this->parentWidget());
     sDialog->setConnectItem(idx);
-    connect(sDialog, SIGNAL(creatingConnectCancelled()),
+    connect(sDialog, SIGNAL(creationConnCancelled()),
             this, SLOT(deleteCancelledCreation()));
     exitCode = sDialog->exec();
-    disconnect(sDialog, SIGNAL(creatingConnectCancelled()),
+    disconnect(sDialog, SIGNAL(creationConnCancelled()),
                this, SLOT(deleteCancelledCreation()));
 
     sDialog->deleteLater();
@@ -112,13 +112,13 @@ void ConnectList::deleteCurrentConnect()
       bool conn_availability;
       conn_availability = idx->getData().value(QString("availability"), AVAILABLE).toBool();
       if ( !conn_availability ) {
-          showMessage(QString("Connect '%1'").arg(connect), "Connect is Busy.");
+          showMessage(QString("Connection '%1'").arg(connect), "Connection is Busy.");
           clearSelection();
           return;
       };
       conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
       if ( conn && conn_state==RUNNING ) {
-          showMessage(QString("Connect '%1'").arg(connect), "Connect is Running.");
+          showMessage(QString("Connection '%1'").arg(connect), "Connection is Running.");
       } else {
           //if ( conn && !conn_state ) conn->closeConnect();
           connects->remove(connect);
@@ -191,7 +191,7 @@ void ConnectList::connectItemClicked(const QPoint &pos)
       //showMessage("Info", "Item not exist.");
       return;
   };
-  //qDebug()<<_item->text()<<" Connect detected";
+  //qDebug()<<_item->text()<<" Connection detected";
   DATA conn_Status;
   ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
   conn_Status = idx->getData();
@@ -199,7 +199,7 @@ void ConnectList::connectItemClicked(const QPoint &pos)
   bool to_run = TO_RUN;
   ConnectMenu *connectMenu = new ConnectMenu(this);
   if ( conn_Status.value("isRunning", STOPPED)==RUNNING ) {
-      connectMenu->act->setText("Close Connect");
+      connectMenu->act->setText("Close Connection");
       connectMenu->act->setIcon(QIcon::fromTheme("stop"));
       connect(connectMenu->act, SIGNAL(triggered()),
               this, SLOT(connectItemKillAction()));
@@ -207,7 +207,7 @@ void ConnectList::connectItemClicked(const QPoint &pos)
       connectMenu->display->setEnabled(true);
       to_run = TO_STOP;
   } else {
-      connectMenu->act->setText("Open Connect");
+      connectMenu->act->setText("Open Connection");
       connectMenu->act->setIcon(QIcon::fromTheme("run"));
       connect(connectMenu->act, SIGNAL(triggered()), this, SLOT(connectItemRunAction()));
       //connectMenu->clean->setEnabled(false);
@@ -250,11 +250,11 @@ void ConnectList::connectItemDoubleClicked(const QModelIndex &_item)
       connects->remove(key);
       conn->setItemReference(connItemModel, idx);
   };
-  //qDebug()<<key<<" Connect doubleClicked"<<conn;
+  //qDebug()<<key<<" Connection doubleClicked"<<conn;
   int conn_state;
   conn_state = conn_Status.value(QString("isRunning"), STOPPED).toInt();
   if ( !conn_Status.value(QString("availability"), NOT_AVAILABLE).toBool() ) {
-      showMessage("Info", "Connect is busy.");
+      showMessage("Info", "Connection is busy.");
   } else if ( conn_state!=RUNNING ) conn->openConnect();
   else if ( conn_state==RUNNING ) {
       emit connectClosed(conn->getConnect());
@@ -297,7 +297,7 @@ void ConnectList::createConnect(QModelIndex &_item)
           this, SLOT(getAuthCredentials(QString&)));
   connect(connects->value(key), SIGNAL(domStateChanged(Result)),
           this, SIGNAL(domResult(Result)));
-  //qDebug()<<key<<" create Connect item";
+  //qDebug()<<key<<" create Connection item";
 }
 void ConnectList::checkConnect(QModelIndex &_item, bool to_run = TO_RUN)
 {

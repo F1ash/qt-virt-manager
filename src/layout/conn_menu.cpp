@@ -3,11 +3,11 @@
 ConnectMenu::ConnectMenu(QWidget *parent)
     : QMenu(parent)
 {
-  edit     = addAction(QIcon::fromTheme("configure"), "Edit Connect");
-  display  = addAction(QIcon::fromTheme("overview"), "Overview Connect");
-  clean    = addAction(QIcon::fromTheme("clean"), "Delete Connect");
-  act      = addAction(QIcon::fromTheme("run"), "Open Connect");
-  setTitle("Connect Control");
+  edit     = addAction(QIcon::fromTheme("configure"), "Edit Connection");
+  display  = addAction(QIcon::fromTheme("overview"), "Overview Connection");
+  clean    = addAction(QIcon::fromTheme("clean"), "Delete Connection");
+  act      = addAction(QIcon::fromTheme("run"), "Open Connection");
+  setTitle("Connection Control");
   setSeparatorsCollapsible(true);
 }
 ConnectMenu::~ConnectMenu()

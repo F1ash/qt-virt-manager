@@ -51,3 +51,12 @@ v.0.10.18 :
 implemented SpiceViewer;
 implemented Domain Snapshot Actions;
 some improvements;
+
+v.0.10.21 :
+fixes for:
+ -- https://github.com/F1ash/qt-virt-manager/issues/2
+ -- https://github.com/F1ash/qt-virt-manager/issues/3;
+fixed deletion of connection settings,
+    when creation of new connection was cancelled;
+improved Connection AliveThread for connections,
+    on which auto 'keep_alive' messages don't implemented;

@@ -376,10 +376,10 @@ void VirtDomainControl::execAction(const QStringList &l)
             args.prepend(currConnName);
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="displayVirtDomain" ) {
-            // send signal with Connect & Domain Names to call VM_Viewer into MainWindow widget
+            // send signal with Connection & Domain Names to call VM_Viewer into MainWindow widget
             emit displayRequest(currWorkConnect, currConnName, domainName);
         } else if ( l.first()=="monitorVirtDomain" ) {
-            // send signal with Connect & Domain Names to add into Domain State Monitor
+            // send signal with Connection & Domain Names to add into Domain State Monitor
             emit addToStateMonitor(currWorkConnect, currConnName, domainName);
         } else if ( l.first()=="reloadVirtDomain" ) {
             reloadDomainState();

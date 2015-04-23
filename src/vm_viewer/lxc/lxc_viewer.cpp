@@ -19,7 +19,7 @@ LXC_Viewer::LXC_Viewer(
         viewerThread = new LXC_ViewerThread(this);
         timerId = startTimer(PERIOD);
     } else {
-        msg = QString("In '<b>%1</b>': Connect or Domain is NULL...").arg(domain);
+        msg = QString("In '<b>%1</b>': Connection or Domain is NULL...").arg(domain);
         sendErrMsg(msg);
         getCurrentTerminal()->m_term->sendText(msg);
         startCloseProcess();

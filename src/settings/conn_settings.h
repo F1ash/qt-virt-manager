@@ -26,7 +26,7 @@ public:
     QSettings    settings;
 
 signals:
-    void creatingConnectCancelled();
+    void creationConnCancelled();
 
 private:
     ConnItemIndex       *own_index;

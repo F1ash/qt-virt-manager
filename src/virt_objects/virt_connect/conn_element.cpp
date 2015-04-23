@@ -69,7 +69,7 @@ void ElemConnect::openConnect()
         _diff = 0;
         waitTimerId = startTimer(1000);
     } else {
-        addMsgToLog(QString("Connect '%1'").arg(name),
+        addMsgToLog(QString("Connection '%1'").arg(name),
             QString("Wait Timer is running: %1").arg(waitTimerId));
     };
 }
@@ -200,7 +200,7 @@ void ElemConnect::timerEvent(QTimerEvent *event)
 }
 void ElemConnect::receiveConnMessage(QString msg)
 {
-    addMsgToLog( QString("Connect '%1'").arg(name), msg );
+    addMsgToLog( QString("Connection '%1'").arg(name), msg );
 }
 void ElemConnect::addMsgToLog(QString title, QString msg)
 {

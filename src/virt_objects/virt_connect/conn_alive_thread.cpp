@@ -1,4 +1,5 @@
 #include "conn_alive_thread.h"
+#define MINUTE 60000
 
 /*
  * TODO: Implement some event callbacks if necessary.
@@ -48,41 +49,47 @@ void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
 void ConnAliveThread::run()
 {
     openConnect();
+    if (!keep_alive) return;
     int probe = 0;
-    int ret;
-    if ( keep_alive ) {
-        /* Use if virEventRegisterDefaultImpl() is registered */
-        ret = virConnectSetKeepAlive(conn, 3, 10);
-        if ( ret<0 ) {
-            sendConnErrors();
-            closeConnect();
-        } else if ( ret ) {
-            emit connMsg( "Remote party doesn't support keepalive messages." );
-        } else {
-            emit connMsg( "Set keepalive messages." );
-        };
-        while ( keep_alive ) {
-            if ( virEventRunDefaultImpl() < 0 ) {
-                sendConnErrors();
-                //if ( ++probe>2 ) break;
-            };
-        };
-    } else {
+    int ret = virConnectSetKeepAlive(conn, 3, 10);
+    if ( ret<0 ) {
+        emit connMsg( "Remote party doesn't support keepalive messages." );
         /* virConnectIsAlive() --
          * Determine if the connection to the hypervisor is still alive
          * A connection will be classed as alive if it is either local,
          * or running over a channel (TCP or UNIX socket) which is not closed.
+         *
+         * WARNING: current policy for close Connection is 3 error per minute;
+         * It maybe improved later.
          */
-        emit connMsg( "Check the connection is alive." );
+        emit connMsg( "The check of the alive connection in the loop." );
+        QTime timeMark;
+        timeMark.start();
         while ( keep_alive ) {
-            msleep(500);
             ret = virConnectIsAlive(conn);
             if ( ret<0 ) {
                 sendConnErrors();
-                if ( ++probe>2 ) break;
+                if ( ++probe>2 ) {
+                    if ( timeMark.elapsed()>MINUTE ) {
+                        emit connMsg("The connection is not stable and it was automatically closed.");
+                        break;
+                    } else {
+                        probe = 0;
+                        timeMark.restart();
+                    };
+                };
             } else if ( ret==0 ) {
-                emit connMsg( "Connection is dead." );
+                emit connMsg("Connection is died or this connection type is unsupported.");
                 break;
+            };
+            msleep(500);
+        };
+    } else {
+        emit connMsg( "Set keepalive messages." );
+        while ( keep_alive ) {
+            if ( virEventRunDefaultImpl() < 0 ) {
+                sendConnErrors();
+                //if ( ++probe>2 ) break;
             };
         };
     };
@@ -452,23 +459,23 @@ void ConnAliveThread::closeConnect(int reason)
     keep_alive = false;
     switch (reason) {
     case VIR_CONNECT_CLOSE_REASON_ERROR:
-        emit connMsg("Connect closed: Misc I/O error");
+        emit connMsg("Connection closed: Misc I/O error");
         state = FAILED;
         break;
     case VIR_CONNECT_CLOSE_REASON_EOF:
-        emit connMsg("Connect closed: End-of-file from server");
+        emit connMsg("Connection closed: End-of-file from server");
         state = FAILED;
         break;
     case VIR_CONNECT_CLOSE_REASON_KEEPALIVE:
-        emit connMsg("Connect closed: Keepalive timer triggered");
+        emit connMsg("Connection closed: Keepalive timer triggered");
         state = STOPPED;
         break;
     case VIR_CONNECT_CLOSE_REASON_CLIENT:
-        emit connMsg("Connect closed: Client requested it");
+        emit connMsg("Connection closed: Client requested it");
         state = STOPPED;
         break;
     default:
-        emit connMsg("Connect closed: Unknown reason");
+        emit connMsg("Connection closed: Unknown reason");
         state = FAILED;
         break;
     };

@@ -83,19 +83,19 @@ void ToolBar::addItemControlMenu()
 {
     itemControlMenu = new QMenu(this);
 
-    _createAction = new QAction(QString("Create new Connect"), this);
+    _createAction = new QAction(QString("New Connection"), this);
     _createAction->setIcon ( QIcon::fromTheme("install") );
-    _editAction = new QAction(QString("Edit selected Connect"), this);
+    _editAction = new QAction(QString("Edit selected Connection"), this);
     _editAction->setIcon ( QIcon::fromTheme("configure") );
-    _deleteAction = new QAction(QString("Delete selected Connect"), this);
+    _deleteAction = new QAction(QString("Delete selected Connection"), this);
     _deleteAction->setIcon ( QIcon::fromTheme("clean") );
-    _openAction = new QAction(QString("Open selected Connect"), this);
+    _openAction = new QAction(QString("Open selected Connection"), this);
     _openAction->setIcon ( QIcon::fromTheme("run") );
-    _showAction = new QAction(QString("Overview selected Connect"), this);
+    _showAction = new QAction(QString("Overview selected Connection"), this);
     _showAction->setIcon ( QIcon::fromTheme("overview") );
-    _closeAction = new QAction(QString("Close selected Connect"), this);
+    _closeAction = new QAction(QString("Close selected Connection"), this);
     _closeAction->setIcon ( QIcon::fromTheme("stop") );
-    _closeAllAction = new QAction(QString("Close all Connect"), this);
+    _closeAllAction = new QAction(QString("Close all Connection"), this);
     _closeAllAction->setIcon ( QIcon::fromTheme("stop-all") );
 
     itemControlMenu->addAction(_createAction);
@@ -109,7 +109,7 @@ void ToolBar::addItemControlMenu()
 
     itemControlAction = new QAction(this);
     itemControlAction->setIcon(QIcon::fromTheme("job"));
-    itemControlAction->setToolTip("Connect Control");
+    itemControlAction->setToolTip("Connection Control");
     itemControlAction->setMenu(itemControlMenu);
     addAction( itemControlAction );
     //connect(itemControlAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));

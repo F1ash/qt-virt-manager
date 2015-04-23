@@ -78,10 +78,10 @@ MigrateDialog::MigrateDialog(QWidget *parent,
     Name->setText(domainName);
     Name->setPlaceholderText("Enter new VM name");
     commonLayout->addWidget(Name);
-    host = new QLabel(QString("Original Host / Connect Type : %1 / %2")
+    host = new QLabel(QString("Original Host / Connection Type : %1 / %2")
                       .arg(hostName).arg(connType.toUpper()), this);
     commonLayout->addWidget(host);
-    newHost = new QLabel("Destination Host / Connect :", this);
+    newHost = new QLabel("Destination Host / Connection :", this);
     commonLayout->addWidget(newHost);
     connectList = new QComboBox(this);
     connList.prepend("Set Host/URI manually");
