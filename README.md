@@ -1,15 +1,14 @@
 qt-virt-manager
 =================
 
-Qt GUI for Control Virtual Machines &&
-    other Virtual Entities
+A GUI application for managing virtual machines.
 
 Known issues:
 
-    Red Hat Bugzilla -- Bug #1021802
-    ( virsh vol-resize does not shrink volume )
+0. virsh vol-resize does not shrink volume (see [Red Hat Bugzilla ticket #1021802](https://bugzilla.redhat.com/1021802) for details).
 
-    For use askpass in KDE you need to make symlink:
-    # ln -s /usr/bin/ksshaskpass /usr/libexec/openssh/ssh-askpass
+1. You need to create the following symlink in order to use askpass in KDE:
 
-    Adding devices implemented partially.
+    `$ sudo ln -s /usr/bin/ksshaskpass /usr/libexec/openssh/ssh-askpass`
+
+2. Adding devices implemented partially.
