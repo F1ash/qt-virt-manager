@@ -10,6 +10,10 @@
 #include <QMenu>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QDesktopServices>
+#include <QTemporaryFile>
+#include <QUrl>
+#include <QDir>
 #include "virt_objects/virt_entity_config.h"
 #include "model/snapshot_tree_model.h"
 #include "revert_snapshot_flags.h"
@@ -39,6 +43,7 @@ private:
     QAction             *deleteAction;
     DeleteSnapshotFlags *deleteFlagsMenu;
     QAction             *refreshAction;
+    QAction             *getXMLDescAction;
     QTreeView           *snapshotTree;
     QToolBar            *toolBar;
     QHBoxLayout         *buttonsLayout;
@@ -61,6 +66,7 @@ private slots:
     void                 cancelled();
     void                 changeDialogState(bool);
     void                 detectTriggeredAction(QAction*);
+    void                 showSnapsotXMLDesc();
 };
 
 #endif // SNAPSHOT_ACTION_DIALOG_H

@@ -488,7 +488,7 @@ Result DomControlThread::getDomainXMLDesc()
     if (read) f.write(Returns);
     result.msg.append(f.fileName());
     f.close();
-    free(Returns);
+    if ( Returns!=NULL ) free(Returns);
     result.name = name;
     result.result = read;
     result.msg.append(QString("'<b>%1</b>' Domain %2 XML'ed")

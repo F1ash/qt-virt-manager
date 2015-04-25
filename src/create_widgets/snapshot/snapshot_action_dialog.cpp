@@ -22,10 +22,12 @@ SnapshotActionDialog::SnapshotActionDialog(
     deleteAction = new QAction(QIcon::fromTheme("list-remove"), "Delete", this);
     deleteAction->setMenu(deleteFlagsMenu);
     refreshAction = new QAction(QIcon::fromTheme("view-refresh"), "Refresh", this);
+    getXMLDescAction = new QAction(QIcon::fromTheme("application-xml"), "get XML Description", this);
     toolBar = new QToolBar(this);
     toolBar->addAction(revertAction);
     toolBar->addAction(deleteAction);
     toolBar->addAction(refreshAction);
+    toolBar->addAction(getXMLDescAction);
     model = new SnapshotTreeModel;
     snapshotTree = new QTreeView(this);
     snapshotTree->setRootIsDecorated(true);
@@ -169,5 +171,35 @@ void SnapshotActionDialog::detectTriggeredAction(QAction *act)
         clearSnapshotTree();
         setDomainSnapshots();
         snapshotTree->setEnabled(true);
+    } else if ( act==getXMLDescAction ) {
+        showSnapsotXMLDesc();
+    };
+}
+void SnapshotActionDialog::showSnapsotXMLDesc()
+{
+    if ( snapshotTree->currentIndex().isValid() ) {
+        TreeItem *item = static_cast<TreeItem*>(
+                snapshotTree->currentIndex().internalPointer());
+        if ( NULL!=item ) {
+            // flags: extra flags; not used yet, so callers should always pass 0
+            virDomainSnapshotPtr snapShot =
+                    virDomainSnapshotLookupByName(
+                        domain, item->data(0).toByteArray().data(), 0);
+            char *xmlDesc = virDomainSnapshotGetXMLDesc(snapShot, 0);
+            if ( NULL!=xmlDesc ) {
+                QTemporaryFile f;
+                f.setAutoRemove(false);
+                f.setFileTemplate(
+                            QString("%1%2XML_Desc-XXXXXX.xml")
+                            .arg(QDir::tempPath())
+                            .arg(QDir::separator()));
+                bool read = f.open();
+                if (read) f.write(xmlDesc);
+                QString xml = f.fileName();
+                f.close();
+                free(xmlDesc);
+                QDesktopServices::openUrl(QUrl(xml));
+            };
+        };
     };
 }

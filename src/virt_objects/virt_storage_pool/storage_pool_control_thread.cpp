@@ -311,7 +311,7 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     if (read) f.write(Returns);
     result.msg.append(f.fileName());
     f.close();
-    free(Returns);
+    if ( Returns!=NULL ) free(Returns);
     result.msg.append(QString("'<b>%1</b>' StoragePool %2 XML'ed")
                   .arg(name).arg((read)?"":"don't"));
     result.name = name;

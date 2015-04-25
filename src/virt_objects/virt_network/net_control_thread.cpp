@@ -251,7 +251,7 @@ Result NetControlThread::getVirtNetXMLDesc()
     if (read) f.write(Returns);
     result.msg.append(f.fileName());
     f.close();
-    free(Returns);
+    if ( Returns!=NULL ) free(Returns);
     result.result = read;
     result.msg.append(QString("'<b>%1</b>' Network %2 XML'ed")
                       .arg(name).arg((read)?"":"don't"));
