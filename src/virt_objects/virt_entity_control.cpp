@@ -79,7 +79,7 @@ void VirtEntityControl::newVirtEntityFromXML(const QStringList &_args)
 }
 
 /* public slots */
-void VirtEntityControl::msgRepeater(QString msg)
+void VirtEntityControl::msgRepeater(QString &msg)
 {
     QString time = QTime::currentTime().toString();
     QString title = QString("Connection '%1'").arg(currConnName);

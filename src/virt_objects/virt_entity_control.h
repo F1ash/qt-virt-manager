@@ -38,7 +38,7 @@ signals:
     void                     addNewTask(virConnectPtr, QStringList&, virConnectPtr);
 
 public slots:
-    void                     msgRepeater(QString);
+    void                     msgRepeater(QString&);
 };
 
 #endif // VIRT_ENTITY_CONTROL_H

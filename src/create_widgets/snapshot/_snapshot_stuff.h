@@ -4,8 +4,10 @@
 #include <QWidget>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QDomDocument>
 #include <QLineEdit>
+#include <QCheckBox>
+#include "_disks.h"
+#include "set_disks_data_thread.h"
 #include <QDebug>
 
 class _SnapshotStuff : public QWidget
@@ -16,15 +18,16 @@ public:
             QWidget *parent = NULL,
             bool     _state = false);
     const bool               state;
-    QLabel                  *memLabel, *diskWarn,
-                            *filePathLabel;
+    QLabel                  *memLabel, *filePathLabel;
     QLineEdit               *filePath;
+    QCheckBox               *diskWarn;
+    _Disks                  *disks;
     QVBoxLayout             *commonLayout;
     virtual QDomDocument     getElements() const;
+    void                     setParameters(virConnectPtr, QString&);
 
-private:
-
-public slots:
+signals:
+    void                     errMsg(QString&);
 };
 
 #endif // _SNAPSHOT_STUFF_H

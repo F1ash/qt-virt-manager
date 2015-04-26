@@ -223,7 +223,8 @@ void CreateVirtDomain::timerEvent(QTimerEvent *ev){
             killTimer(timerId);
             timerId = 0;
             counter = 0;
-            emit errorMsg( "Read Data failed." );
+            QString msg("Read Data failed.");
+            emit errorMsg( msg );
             // to done()
             set_Result();
         };

@@ -154,7 +154,8 @@ void VirtStorageVolControl::resultReceiver(Result data)
         };
     } else if ( data.action == CREATE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             args.prepend("reloadVirtStorageVol");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -163,7 +164,8 @@ void VirtStorageVolControl::resultReceiver(Result data)
         };
     } else if ( data.action == DELETE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             args.prepend("reloadVirtStorageVol");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -171,12 +173,19 @@ void VirtStorageVolControl::resultReceiver(Result data)
             emit addNewTask(currWorkConnect, args);
         };
     } else if ( data.action == DOWNLOAD_ENTITY ) {
-        if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
+        if ( !data.msg.isEmpty() ) {
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
+        };
     } else if ( data.action == UPLOAD_ENTITY ) {
-        if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
+        if ( !data.msg.isEmpty() ) {
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
+        };
     } else if ( data.action == RESIZE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             args.prepend("reloadVirtStorageVol");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -184,13 +193,17 @@ void VirtStorageVolControl::resultReceiver(Result data)
             emit addNewTask(currWorkConnect, args);
         };
     } else if ( data.action == WIPE_ENTITY ) {
-        if ( !data.msg.isEmpty() ) msgRepeater(data.msg.join(" "));
+        if ( !data.msg.isEmpty() ) {
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
+        };
     } else if ( data.action == GET_XML_DESCRIPTION ) {
         if ( !data.msg.isEmpty() ) {
             QString xml = data.msg.first();
             data.msg.removeFirst();
             data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             QDesktopServices::openUrl(QUrl(xml));
         };
     };

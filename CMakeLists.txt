@@ -303,6 +303,9 @@ set (HEADERS
   src/create_widgets/snapshot/revert_snapshot_flags.h
   src/create_widgets/snapshot/_snapshot_flags.h
   src/create_widgets/snapshot/_snapshot_stuff.h
+  src/create_widgets/snapshot/_disks.h
+  src/create_widgets/snapshot/_disk_item.h
+  src/create_widgets/snapshot/set_disks_data_thread.h
   src/create_widgets/snapshot/types/mem_state_snapshot.h
   src/create_widgets/snapshot/types/disk_snapshot.h
   src/create_widgets/snapshot/types/system_checkpoint.h
@@ -588,6 +591,9 @@ set (SOURCES
   src/create_widgets/snapshot/revert_snapshot_flags.cpp
   src/create_widgets/snapshot/_snapshot_flags.cpp
   src/create_widgets/snapshot/_snapshot_stuff.cpp
+  src/create_widgets/snapshot/_disks.cpp
+  src/create_widgets/snapshot/_disk_item.cpp
+  src/create_widgets/snapshot/set_disks_data_thread.cpp
   src/create_widgets/snapshot/types/mem_state_snapshot.cpp
   src/create_widgets/snapshot/types/disk_snapshot.cpp
   src/create_widgets/snapshot/types/system_checkpoint.cpp

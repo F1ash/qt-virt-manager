@@ -24,9 +24,13 @@ class CreateSnapshotDialog : public QDialog
     Q_OBJECT
 public:
     explicit CreateSnapshotDialog(
-            QWidget *parent = NULL,
-            QString  domainName = QString(),
-            bool     _state = false);
+            QWidget        *parent = NULL,
+            QString         domainName = QString(),
+            bool            _state = false,
+            virConnectPtr   _conn = NULL);
+
+signals:
+    void             errMsg(QString&);
 
 private:
     QHBoxLayout     *titleLayout;

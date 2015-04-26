@@ -149,7 +149,8 @@ void VirtStoragePoolControl::resultReceiver(Result data)
         };
     } else if ( data.action == CREATE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -157,7 +158,8 @@ void VirtStoragePoolControl::resultReceiver(Result data)
         };
     } else if ( data.action == DEFINE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -165,7 +167,8 @@ void VirtStoragePoolControl::resultReceiver(Result data)
         };
     } else if ( data.action == START_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -173,7 +176,8 @@ void VirtStoragePoolControl::resultReceiver(Result data)
         };
     } else if ( data.action == DESTROY_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -181,7 +185,8 @@ void VirtStoragePoolControl::resultReceiver(Result data)
         };
     } else if ( data.action == UNDEFINE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -189,7 +194,8 @@ void VirtStoragePoolControl::resultReceiver(Result data)
         };
     } else if ( data.action == CHANGE_ENTITY_AUTOSTART ) {
         if ( !data.msg.isEmpty() ) {
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             args.prepend("reloadVirtStoragePool");
             args.prepend(QString::number(GET_ALL_ENTITY));
             args.prepend(currConnName);
@@ -200,7 +206,8 @@ void VirtStoragePoolControl::resultReceiver(Result data)
             QString xml = data.msg.first();
             data.msg.removeFirst();
             data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
-            msgRepeater(data.msg.join(" "));
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
             QDesktopServices::openUrl(QUrl(xml));
         };
     };
