@@ -3,11 +3,21 @@
 _DiskItem::_DiskItem(QWidget *parent) : QWidget(parent)
 {
     usage = new QCheckBox(this);
-    baseLayout = new QHBoxLayout(this);
+    name = new QLineEdit(this);
+    name->setReadOnly(true);
+    source = new QLineEdit(this);
+    source->setPlaceholderText("Source path");
+    driver = new QComboBox(this);
+    snapshotType = new QComboBox(this);
+    baseLayout = new QVBoxLayout(this);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
     baseWdg->setDisabled(true);
-    commonLayout = new QVBoxLayout(this);
+    baseLayout->addWidget(name);
+    baseLayout->addWidget(source);
+    baseLayout->addWidget(driver);
+    baseLayout->addWidget(snapshotType);
+    commonLayout = new QHBoxLayout(this);
     commonLayout->addWidget(usage);
     commonLayout->addWidget(baseWdg);
     setLayout(commonLayout);
@@ -20,3 +30,8 @@ _DiskItem::~_DiskItem()
 
 }
 
+/* public slots */
+void _DiskItem::setDiskName(QString &_name)
+{
+    name->setText(_name);
+}

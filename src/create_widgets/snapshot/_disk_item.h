@@ -1,7 +1,8 @@
-#ifndef _DISKITEM_H
-#define _DISKITEM_H
+#ifndef _DISK_ITEM_H
+#define _DISK_ITEM_H
 
 #include <QWidget>
+#include <QLabel>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
@@ -23,11 +24,12 @@ private:
     QLineEdit           *source;
     QComboBox           *driver;
     QComboBox           *snapshotType;
-    QHBoxLayout         *baseLayout;
+    QVBoxLayout         *baseLayout;
     QWidget             *baseWdg;
-    QVBoxLayout         *commonLayout;
+    QHBoxLayout         *commonLayout;
 
 public slots:
+    void                 setDiskName(QString&);
 };
 
-#endif // _DISKITEM_H
+#endif // _DISK_ITEM_H
