@@ -24,12 +24,24 @@ private:
     QLineEdit           *source;
     QComboBox           *driver;
     QComboBox           *snapshotType;
+    QHBoxLayout         *paramLayout;
+    QWidget             *params;
     QVBoxLayout         *baseLayout;
     QWidget             *baseWdg;
     QHBoxLayout         *commonLayout;
 
 public slots:
     void                 setDiskName(QString&);
+    void                 setDriverType(QString&);
+    QString              getName() const;
+    QString              getSource() const;
+    QString              getDriverType() const;
+    QString              getSnapshotType() const;
+    bool                 isUsed() const;
+
+private slots:
+    void                 snapshotTypeChanged(QString);
+    void                 driverTypeChanged(QString);
 };
 
 #endif // _DISK_ITEM_H

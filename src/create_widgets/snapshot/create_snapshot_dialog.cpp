@@ -78,7 +78,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     commonLayout->addWidget(typeWdg);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(buttonsWdg);
-    commonLayout->addStretch(-1);
+    //commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(snapshotType, SIGNAL(currentIndexChanged(int)),
             baseWdg, SLOT(setCurrentIndex(int)));
@@ -127,7 +127,7 @@ QString CreateSnapshotDialog::getSnapshotXMLDesc() const
     if ( !_node.isNull() ) domainsnapshot.appendChild(_node);
     _node = wdg->getElements().firstChildElement("disks");
     if ( !_node.isNull() ) domainsnapshot.appendChild(_node);
-    //qDebug()<<doc.toByteArray(4).data();
+    qDebug()<<doc.toByteArray(4).data();
     return doc.toString();
 }
 QString CreateSnapshotDialog::getSnapshotFlags() const
@@ -138,8 +138,20 @@ QString CreateSnapshotDialog::getSnapshotFlags() const
 /* private slots */
 void CreateSnapshotDialog::accept()
 {
-    killTimer(timerID);
-    done(1);
+    _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(baseWdg->currentWidget());
+    QDomElement _node = wdg->getElements()
+            .firstChildElement("disks")
+            .firstChildElement("disk");
+    if ( _node.isNull() ) {
+        // count of disk subset not can be equal ziro
+        QMessageBox::warning(
+                    this,
+                    QString(),
+                    QString("Count of disk subset not can be equal ziro"));
+    } else {
+        killTimer(timerID);
+        done(1);
+    };
 }
 void CreateSnapshotDialog::reject()
 {

@@ -13,6 +13,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QMessageBox>
 #include "types/mem_state_snapshot.h"
 #include "types/disk_snapshot.h"
 #include "types/system_checkpoint.h"

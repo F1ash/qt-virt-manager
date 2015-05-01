@@ -217,7 +217,8 @@ void MainWindow::closeEvent(QCloseEvent *ev)
   settings.setValue("column2", connListWidget->columnWidth(2));
   settings.endGroup();
   settings.sync();
-  if ( !this->isVisible() ) changeVisibility();
+  // In KDE Plasma 5 at close app the tray icon hide too
+  //if ( !this->isVisible() ) changeVisibility();
   domainsStateMonitor->stopMonitoring();
   taskWrHouse->stopTaskComputing();
   if ( runningConnectsExist() && wait_thread==NULL ) {

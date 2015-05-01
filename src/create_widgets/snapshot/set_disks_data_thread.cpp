@@ -23,13 +23,14 @@ void SetDisksDataThread::run()
             QDomDocument doc;
             doc.setContent(QString(xmlDesc));
             free(xmlDesc);
-            QDomElement _disk = doc
+            QDomElement _devices = doc
                     .firstChildElement("domain")
-                    .firstChildElement("devices")
+                    .firstChildElement("devices");
+            QDomElement _disk = _devices
                     .firstChildElement("disk");
             while ( !_disk.isNull() ) {
                 emit diskData(_disk);
-                _disk = _disk.nextSiblingElement("disk");
+                _disk = _devices.nextSiblingElement("disk");
             };
         };
     } else

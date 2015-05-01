@@ -6,23 +6,27 @@ _SnapshotStuff::_SnapshotStuff(QWidget *parent, bool _state) :
     memLabel = new QLabel(this);
     filePathLabel = new QLabel("Absolute path of the file holding the VM memory state", this);
     filePath = new QLineEdit(this);
-    diskWarn = new QCheckBox("Disks Specification", this);
+    diskWarn = new QCheckBox("Snapshot all disks", this);
     disks = new _Disks(this);
-    disks->setEnabled(false);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(memLabel);
     commonLayout->addWidget(filePathLabel);
     commonLayout->addWidget(filePath);
     commonLayout->addWidget(diskWarn);
     commonLayout->addWidget(disks);
-    commonLayout->addStretch(-1);
+    //commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(diskWarn, SIGNAL(toggled(bool)),
-            disks, SLOT(setEnabled(bool)));
+            disks, SLOT(setDisabled(bool)));
+    diskWarn->setChecked(true);
 }
 QDomDocument _SnapshotStuff::getElements() const
 {
-    return QDomDocument();
+    QDomDocument doc;
+    if ( !diskWarn->isChecked() ) {
+        doc = disks->getElements();
+    };
+    return doc;
 }
 void _SnapshotStuff::setParameters(virConnectPtr _conn, QString &_domName)
 {
@@ -40,4 +44,5 @@ void _SnapshotStuff::setParameters(virConnectPtr _conn, QString &_domName)
                this, SIGNAL(errMsg(QString&)));
     delete setThread;
     setThread = NULL;
+    disks->addStretch();
 }

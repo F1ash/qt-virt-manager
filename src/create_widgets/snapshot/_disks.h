@@ -20,6 +20,8 @@ private:
 
 public slots:
     void             setDisksData(QDomElement&);
+    QDomDocument     getElements() const;
+    void             addStretch();
 };
 
 #endif // _DISKS_H
