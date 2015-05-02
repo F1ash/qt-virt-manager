@@ -33,9 +33,16 @@ void DockHeadWidget::setTabBarName(const QString &_name)
 }
 void DockHeadWidget::floatStateChanged(bool _floated)
 {
-    QString _icon;
-    _icon.append((!_floated)? "dock_up":"dock_down");
+    QString _icon, _toolTip;
+    if (_floated) {
+        _icon.append("dock_down");
+        _toolTip.append("Push to dock");
+    } else {
+        _icon.append("dock_up");
+        _toolTip.append("Undock");
+    };
     floatIt->setIcon(QIcon::fromTheme(_icon));
+    floatIt->setToolTip(_toolTip);
     floatIt->setChecked(_floated);
     nameWdg->setColor((_floated)? 0x008000:0x000080);
 }

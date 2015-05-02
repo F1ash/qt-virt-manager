@@ -205,7 +205,8 @@ void ElemConnect::receiveConnMessage(QString msg)
 void ElemConnect::addMsgToLog(QString title, QString msg)
 {
     QString time = QTime::currentTime().toString();
-    QString errorMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
+    QString errorMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
     sendWarning(errorMsg);
     mainWindowUp();
 }
