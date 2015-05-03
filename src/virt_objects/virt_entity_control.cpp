@@ -14,10 +14,6 @@ VirtEntityControl::VirtEntityControl(QWidget *parent) : QMainWindow(parent)
 }
 VirtEntityControl::~VirtEntityControl()
 {
-    if ( currWorkConnect!=NULL ) {
-        virConnectClose(currWorkConnect);
-        currWorkConnect = NULL;
-    };
 }
 
 bool VirtEntityControl::getThreadState() const
@@ -29,24 +25,8 @@ bool VirtEntityControl::setCurrentWorkConnect(virConnect *conn)
 {
     stopProcessing();
     currWorkConnect = conn;
-    int ret = virConnectRef(currWorkConnect);
-    if ( ret<0 ) {
-        virErrorPtr virtErrors = virGetLastError();
-        if ( virtErrors!=NULL && virtErrors->code>0 ) {
-            QString time = QTime::currentTime().toString();
-            QString msg = QString("%3 VirtError(%1) : %2")
-                    .arg(virtErrors->code)
-                    .arg(virtErrors->message)
-                    .arg(time);
-            emit entityMsg( msg );
-            virResetError(virtErrors);
-        };
-        currWorkConnect = NULL;
-        return false;
-    } else {
-        //toolBar->enableAutoReload();
-        return true;
-    };
+    //toolBar->enableAutoReload();
+    return true;
 }
 void VirtEntityControl::setListHeader(QString &_name)
 {

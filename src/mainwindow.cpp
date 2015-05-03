@@ -173,54 +173,55 @@ MainWindow::~MainWindow()
   trayIcon = NULL;
   //qDebug()<<"application stopped";
 }
+void MainWindow::saveSettings()
+{
+    taskWrHouse->saveCurrentState();
+    domainsStateMonitor->saveCurrentState();
+    settings.setValue("Geometry", saveGeometry());
+    settings.setValue("State", saveState());
+    settings.setValue("ToolBarArea", toolBarArea(toolBar));
+    settings.setValue("Visible", this->isVisible());
+    settings.beginGroup("LogDock");
+    settings.setValue("DockArea", dockWidgetArea(logDock));
+    settings.setValue("Visible", logDock->isVisible());
+    settings.setValue("Floating", logDock->isFloating());
+    settings.setValue("Geometry", logDock->saveGeometry());
+    settings.endGroup();
+    settings.beginGroup("DomainDock");
+    settings.setValue("DockArea", dockWidgetArea(domainDock));
+    settings.setValue("Visible", domainDock->isVisible());
+    settings.setValue("Floating", domainDock->isFloating());
+    settings.setValue("Geometry", domainDock->saveGeometry());
+    settings.endGroup();
+    settings.beginGroup("NetworkDock");
+    settings.setValue("DockArea", dockWidgetArea(networkDock));
+    settings.setValue("Visible", networkDock->isVisible());
+    settings.setValue("Floating", networkDock->isFloating());
+    settings.setValue("Geometry", networkDock->saveGeometry());
+    settings.endGroup();
+    settings.beginGroup("StorageVolDock");
+    settings.setValue("DockArea", dockWidgetArea(storageVolDock));
+    settings.setValue("Visible", storageVolDock->isVisible());
+    settings.setValue("Floating", storageVolDock->isFloating());
+    settings.setValue("Geometry", storageVolDock->saveGeometry());
+    settings.endGroup();
+    settings.beginGroup("StoragePoolDock");
+    settings.setValue("DockArea", dockWidgetArea(storagePoolDock));
+    settings.setValue("Visible", storagePoolDock->isVisible());
+    settings.setValue("Floating", storagePoolDock->isFloating());
+    settings.setValue("Geometry", storagePoolDock->saveGeometry());
+    settings.endGroup();
+    settings.beginGroup("ConnectListColumns");
+    settings.setValue("column0", connListWidget->columnWidth(0));
+    settings.setValue("column1", connListWidget->columnWidth(1));
+    settings.setValue("column2", connListWidget->columnWidth(2));
+    settings.endGroup();
+    settings.sync();
+}
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
-  taskWrHouse->saveCurrentState();
-  domainsStateMonitor->saveCurrentState();
-  settings.setValue("Geometry", saveGeometry());
-  settings.setValue("State", saveState());
-  settings.setValue("ToolBarArea", toolBarArea(toolBar));
-  settings.setValue("Visible", this->isVisible());
-  settings.beginGroup("LogDock");
-  settings.setValue("DockArea", dockWidgetArea(logDock));
-  settings.setValue("Visible", logDock->isVisible());
-  settings.setValue("Floating", logDock->isFloating());
-  settings.setValue("Geometry", logDock->saveGeometry());
-  settings.endGroup();
-  settings.beginGroup("DomainDock");
-  settings.setValue("DockArea", dockWidgetArea(domainDock));
-  settings.setValue("Visible", domainDock->isVisible());
-  settings.setValue("Floating", domainDock->isFloating());
-  settings.setValue("Geometry", domainDock->saveGeometry());
-  settings.endGroup();
-  settings.beginGroup("NetworkDock");
-  settings.setValue("DockArea", dockWidgetArea(networkDock));
-  settings.setValue("Visible", networkDock->isVisible());
-  settings.setValue("Floating", networkDock->isFloating());
-  settings.setValue("Geometry", networkDock->saveGeometry());
-  settings.endGroup();
-  settings.beginGroup("StorageVolDock");
-  settings.setValue("DockArea", dockWidgetArea(storageVolDock));
-  settings.setValue("Visible", storageVolDock->isVisible());
-  settings.setValue("Floating", storageVolDock->isFloating());
-  settings.setValue("Geometry", storageVolDock->saveGeometry());
-  settings.endGroup();
-  settings.beginGroup("StoragePoolDock");
-  settings.setValue("DockArea", dockWidgetArea(storagePoolDock));
-  settings.setValue("Visible", storagePoolDock->isVisible());
-  settings.setValue("Floating", storagePoolDock->isFloating());
-  settings.setValue("Geometry", storagePoolDock->saveGeometry());
-  settings.endGroup();
-  settings.beginGroup("ConnectListColumns");
-  settings.setValue("column0", connListWidget->columnWidth(0));
-  settings.setValue("column1", connListWidget->columnWidth(1));
-  settings.setValue("column2", connListWidget->columnWidth(2));
-  settings.endGroup();
-  settings.sync();
   // In KDE Plasma 5 at close app the tray icon hide too
   //if ( !this->isVisible() ) changeVisibility();
-  domainsStateMonitor->stopMonitoring();
-  taskWrHouse->stopTaskComputing();
   if ( runningConnectsExist() && wait_thread==NULL ) {
       /*
       QString q;
@@ -238,6 +239,8 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       networkDock->setEnabled(false);
       storageVolDock->setEnabled(false);
       storagePoolDock->setEnabled(false);
+      domainsStateMonitor->stopMonitoring();
+      taskWrHouse->stopTaskComputing();
       // close VM Displays
       foreach ( QString key, VM_Displayed_Map.keys() ) {
           VM_Viewer *vm = VM_Displayed_Map.value(key, NULL);
@@ -255,10 +258,11 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       connect(wait_thread, SIGNAL(refreshProcessingState()), this, SLOT(stopProcessing()));
       wait_thread->start();
       ev->ignore();
-  } else if ( !runningConnectsExist() && (wait_thread==NULL || wait_thread->isFinished()) ) {
+  } else if ( !runningConnectsExist() && (wait_thread==NULL || !wait_thread->isRunning()) ) {
+      saveSettings();
       ev->accept();
   } else {
-      //  ( runningConnectsExist() && wait_thread!=NULL )
+      //  ( wait_thread!=NULL || wait_thread->isRunning() )
       ev->ignore();
   };
 }

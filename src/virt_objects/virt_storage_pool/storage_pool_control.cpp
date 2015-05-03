@@ -68,11 +68,6 @@ bool VirtStoragePoolControl::getThreadState() const
 }
 void VirtStoragePoolControl::stopProcessing()
 {
-    if ( currWorkConnect!=NULL ) {
-        virConnectClose(currWorkConnect);
-        currWorkConnect = NULL;
-    };
-
     // clear StoragePool list
     while ( storagePoolModel->DataList.count() ) {
         storagePoolModel->removeRow(0);
@@ -85,24 +80,8 @@ bool VirtStoragePoolControl::setCurrentWorkConnect(virConnect *conn)
 {
     stopProcessing();
     currWorkConnect = conn;
-    int ret = virConnectRef(currWorkConnect);
-    if ( ret<0 ) {
-        virErrorPtr virtErrors = virGetLastError();
-        if ( virtErrors!=NULL && virtErrors->code>0 ) {
-            QString time = QTime::currentTime().toString();
-            QString msg = QString("%3 VirtError(%1) : %2")
-                    .arg(virtErrors->code)
-                    .arg(virtErrors->message)
-                    .arg(time);
-            emit entityMsg( msg );
-            virResetError(virtErrors);
-        };
-        currWorkConnect = NULL;
-        return false;
-    } else {
-        toolBar->enableAutoReload();
-        return true;
-    };
+    toolBar->enableAutoReload();
+    return true;
 }
 void VirtStoragePoolControl::setListHeader(QString &connName)
 {

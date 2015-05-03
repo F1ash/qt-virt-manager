@@ -71,11 +71,6 @@ void VirtStorageVolControl::stopProcessing()
     setEnabled(false);
     toolBar->stopProcessing();
 
-    if ( currWorkConnect!=NULL ) {
-        virConnectClose(currWorkConnect);
-        currWorkConnect = NULL;
-    };
-
     // clear StorageVol list
     while ( storageVolModel->DataList.count() ) {
         storageVolModel->removeRow(0);
@@ -86,39 +81,23 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
 {
     stopProcessing();
     currWorkConnect = conn;
-    int ret = virConnectRef(currWorkConnect);
-    if ( ret<0 ) {
-        virErrorPtr virtErrors = virGetLastError();
-        if ( virtErrors!=NULL && virtErrors->code>0 ) {
-            QString time = QTime::currentTime().toString();
-            QString msg = QString("%3 VirtError(%1) : %2")
-                    .arg(virtErrors->code)
-                    .arg(virtErrors->message)
-                    .arg(time);
-            emit entityMsg( msg );
-            virResetError(virtErrors);
-        };
-        currWorkConnect = NULL;
-        return false;
-    } else {
-        setEnabled(true);
-        currConnName = connName;
-        currPoolName = poolName;
-        storageVolModel->setHeaderData(
-                    0,
-                    Qt::Horizontal,
-                    QString("Name (Pool: \"%1\")").arg(poolName),
-                    Qt::EditRole);
-        toolBar->enableAutoReload();
-        // for initiation content
-        QStringList args;
-        args.prepend("reloadVirtStorageVol");
-        args.prepend(QString::number(GET_ALL_ENTITY));
-        args.prepend(currConnName);
-        args.append(currPoolName);
-        emit addNewTask(currWorkConnect, args);
-        return true;
-    };
+    setEnabled(true);
+    currConnName = connName;
+    currPoolName = poolName;
+    storageVolModel->setHeaderData(
+                0,
+                Qt::Horizontal,
+                QString("Name (Pool: \"%1\")").arg(poolName),
+                Qt::EditRole);
+    toolBar->enableAutoReload();
+    // for initiation content
+    QStringList args;
+    args.prepend("reloadVirtStorageVol");
+    args.prepend(QString::number(GET_ALL_ENTITY));
+    args.prepend(currConnName);
+    args.append(currPoolName);
+    emit addNewTask(currWorkConnect, args);
+    return true;
 }
 QString VirtStorageVolControl::getCurrentVolumeName() const
 {
@@ -129,7 +108,7 @@ QString VirtStorageVolControl::getCurrentVolumeName() const
 void VirtStorageVolControl::resultReceiver(Result data)
 {
     QStringList args;
-    //qDebug()<<act<<data<<"result";
+    //qDebug()<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY ) {
         int chain  = storageVolModel->columnCount();
         int chains = data.msg.count()/chain;

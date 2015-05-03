@@ -11,6 +11,7 @@ ControlThread::~ControlThread()
     if ( currWorkConnect!=NULL ) {
         // release the reference because no longer required
         virConnectClose(currWorkConnect);
+        qDebug()<<"virConnectRef -1"<<"ControlThread"<<currConnName;
         // for reject the multiple releasing the reference
         currWorkConnect = NULL;
     };
@@ -28,7 +29,7 @@ bool ControlThread::setCurrentWorkConnect(virConnectPtr conn, uint i, QString _n
         currWorkConnect = NULL;
         sendConnErrors();
         keep_alive = false;
-    };
+    } else qDebug()<<"virConnectRef +1"<<"ControlThread"<<currConnName;
     //qDebug()<<"net_thread"<<currWorkConnect;
     return keep_alive;
 }

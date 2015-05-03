@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QMessageBox>
 #include "virt_objects/virt_storage_vol/storage_vol_control.h"
+#include "virt_objects/virt_storage_vol/storage_vol_control_thread.h"
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
 #include <QDebug>
@@ -34,15 +35,17 @@ private:
     QWidget         *listWidget;
     QVBoxLayout     *commonLayout;
     virConnectPtr    currWorkConnect = NULL;
+    StorageVolControlThread
+                    *storageThread;
 
 public slots:
-    QStringList getResult() const;
+    QStringList      getResult() const;
 
 private slots:
-    void setPoolList();
-    void set_Result();
-    void showVolumes(QListWidgetItem*);
-    void showMsg(QString&);
+    void             setPoolList();
+    void             set_Result();
+    void             showVolumes(QListWidgetItem*);
+    void             showMsg(QString&);
 };
 
 #endif // VIRTVOLUME_DIALOG_H

@@ -31,6 +31,7 @@ DomainStateViewer::DomainStateViewer(QWidget *parent,
             this, SLOT(closeDomainStateViewer()));
     // for new virConnect usage create the new virConnectRef[erence]
     if ( virConnectRef(currWorkConn)<0 ) currWorkConn = NULL;
+    else qDebug()<<"virConnectRef +1"<<"DomainStateViewer"<<domainName;
     // TODO: implement the display of different domain states:
     // CPU Usage, Disk I/O (?), Network I/O (?), MemoryStats.
     domainMonitorThread = new DomainMonitorThread(
@@ -67,6 +68,7 @@ void DomainStateViewer::closeDomainStateViewer()
     // release the reference because no longer required
     if ( currWorkConn!=NULL ) {
         virConnectClose(currWorkConn);
+        qDebug()<<"virConnectRef -1"<<"DomainStateViewer"<<domainName;
         // for reject the multiple releasing the reference
         currWorkConn = NULL;
     };

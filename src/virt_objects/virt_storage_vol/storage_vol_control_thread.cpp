@@ -3,13 +3,25 @@
 StorageVolControlThread::StorageVolControlThread(QObject *parent) :
     ControlThread(parent)
 {
+    currWorkConnect = NULL;
 }
 
 /* public slots */
 bool StorageVolControlThread::setCurrentStoragePoolName(virConnect *conn, QString &poolName)
 {
     keep_alive = true;
+    // close previous virConnectRef[erence]
+    if ( NULL!=currWorkConnect ) {
+        virConnectClose(currWorkConnect);
+        qDebug()<<"virConnectRef -1"<<"StorageVolControlThread"<<currPoolName;
+    };
     currWorkConnect = conn;
+    // for new virConnect usage create the new virConnectRef[erence]
+    if ( virConnectRef(currWorkConnect)<0 ) {
+        currWorkConnect = NULL;
+        sendConnErrors();
+        keep_alive = false;
+    } else qDebug()<<"virConnectRef +1"<<"StorageVolControlThread"<<poolName;
     currPoolName = poolName;
     if (currStoragePool!=NULL) {
         virStoragePoolFree(currStoragePool);

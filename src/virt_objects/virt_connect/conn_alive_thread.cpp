@@ -108,6 +108,7 @@ void ConnAliveThread::openConnect()
         emit connMsg( "Connection to the Hypervisor is failed." );
         emit changeConnState(FAILED);
     } else {
+        qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI;
         keep_alive = true;
         emit connMsg( QString("connect opened: %1")
                       .arg(QVariant(conn!=NULL)
@@ -122,6 +123,7 @@ void ConnAliveThread::closeConnect()
     if ( conn!=NULL ) {
         unregisterConnEvents();
         int ret = virConnectClose(conn);
+        qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI;
         if ( ret<0 ) {
             sendConnErrors();
         } else {
@@ -481,7 +483,8 @@ void ConnAliveThread::closeConnect(int reason)
     };
     // don't unregisterConnEvents, because disconnected already
     sendConnErrors();
-    if ( virConnectClose(conn)<0 ) sendConnErrors();
+    if ( conn!=NULL && virConnectClose(conn)<0 ) sendConnErrors();
+    qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI;
     conn = NULL;
     emit changeConnState(state);
     keep_alive = false;

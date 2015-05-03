@@ -30,7 +30,7 @@ void SetDisksDataThread::run()
                     .firstChildElement("disk");
             while ( !_disk.isNull() ) {
                 emit diskData(_disk);
-                _disk = _devices.nextSiblingElement("disk");
+                _disk = _disk.nextSiblingElement("disk");
             };
         };
     } else

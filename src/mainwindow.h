@@ -62,6 +62,7 @@ private :
     DockHeadWidget              *volumeHeadWdg;
 
 private slots:
+    void saveSettings();
     void closeEvent(QCloseEvent*);
     void closeEvent();
     void changeVisibility();

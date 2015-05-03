@@ -19,6 +19,7 @@ VM_Viewer::VM_Viewer(
     statusBar()->hide();
     // for new virConnect usage create the new virConnectRef[erence]
     if ( virConnectRef(jobConnect)<0 ) jobConnect = NULL;
+    else qDebug()<<"virConnectRef +1"<<"VM_Viewer"<<connName;
 }
 VM_Viewer::~VM_Viewer()
 {
@@ -38,6 +39,7 @@ VM_Viewer::~VM_Viewer()
     // release the reference because no longer required
     if ( jobConnect!=NULL ) {
         virConnectClose(jobConnect);
+        qDebug()<<"virConnectRef -1"<<"VM_Viewer"<<connName;
         // for reject the multiple releasing the reference
         jobConnect = NULL;
     };

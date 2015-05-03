@@ -9,8 +9,11 @@ VirtVolumeDialog::VirtVolumeDialog(
     poolList = new QListWidget(this);
     setPoolList();
     volumes = new VirtStorageVolControl(this);
+    storageThread = new StorageVolControlThread(this);
+    connect(storageThread, SIGNAL(resultData(Result)),
+            volumes, SLOT(resultReceiver(Result)));
 
-     connect(poolList, SIGNAL(itemClicked(QListWidgetItem*)),
+    connect(poolList, SIGNAL(itemClicked(QListWidgetItem*)),
             this, SLOT(showVolumes(QListWidgetItem*)));
     listLayout = new QHBoxLayout(this);
     listLayout->addWidget(poolList, 2);
@@ -77,11 +80,9 @@ void VirtVolumeDialog::set_Result()
 void VirtVolumeDialog::showVolumes(QListWidgetItem *_item)
 {
     QString _poolName = _item->text();
-    QString _connName;
-    volumes->setCurrentStoragePool(
-                currWorkConnect,
-                _connName,
-                _poolName);
+    storageThread->setCurrentStoragePoolName(
+                currWorkConnect, _poolName);
+    storageThread->execAction(GET_ALL_ENTITY, QStringList());
 }
 void VirtVolumeDialog::showMsg(QString &msg)
 {
