@@ -1,4 +1,8 @@
+#ifndef QT4_BUILD
 #include "qtermwidget4/qtermwidget.h"
+#else
+#include "qtermwidget5/qtermwidget.h"
+#endif
 
 #include <QDebug>
 #include <QStyleFactory>
