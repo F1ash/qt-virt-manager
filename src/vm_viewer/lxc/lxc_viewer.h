@@ -2,7 +2,7 @@
 #define LXC_VIEWER_H
 
 #include <QTimerEvent>
-#include "vm_viewer/qterminal/mainwindow.h"
+#include "vm_viewer/qterminal/term_mainwindow.h"
 #include "lxc_viewer_thread.h"
 #include <QDebug>
 

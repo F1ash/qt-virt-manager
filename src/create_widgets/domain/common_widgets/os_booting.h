@@ -4,7 +4,7 @@
 #include <QScrollArea>
 #include <QStackedWidget>
 #include "create_widgets/domain/_tab.h"
-#include "create_widgets/domain/lxc_widgets/os_booting.h"
+#include "create_widgets/domain/lxc_widgets/lxc_os_booting.h"
 #include "os_boot_widgets/_arch.h"
 #include "os_boot_widgets/bios_boot.h"
 #include "os_boot_widgets/host_boot.h"

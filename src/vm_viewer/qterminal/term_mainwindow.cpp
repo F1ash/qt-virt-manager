@@ -22,7 +22,7 @@
 #include <QDesktopWidget>
 #include <QMessageBox>
 
-#include "mainwindow.h"
+#include "term_mainwindow.h"
 #include "tabwidget.h"
 #include "properties.h"
 #include "propertiesdialog.h"

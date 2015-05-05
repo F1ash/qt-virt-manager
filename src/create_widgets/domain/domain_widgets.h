@@ -44,7 +44,7 @@
 #include "edit_widgets/disk_edit.h"
 
 /* LXC WIDGETS HEADERS */
-#include "lxc_widgets/os_booting.h"
+#include "lxc_widgets/lxc_os_booting.h"
 
 /* QEMU WIDGETS HEADERS */
 
