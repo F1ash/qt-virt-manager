@@ -1,9 +1,2 @@
-.gitignore
-CMakeLists.txt.use*
-CMakeCache.txt
-CMakeFiles
-Makefile
-cmake_install.cmake
-install_manifest.txt
-*build*
-make-source-archive
+/build-qt4/
+/build-qt5/

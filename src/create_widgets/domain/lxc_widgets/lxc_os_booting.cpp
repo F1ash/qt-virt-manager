@@ -1,4 +1,4 @@
-#include "os_booting.h"
+#include "lxc_os_booting.h"
 
 LXC_OSBooting::LXC_OSBooting(QWidget *parent, QString _caps) :
     _QWidget(parent), capabilities(_caps)

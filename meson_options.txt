@@ -1,0 +1,1 @@
+option('build_qt_version', type : 'string', value : '5', desctipion : 'Qt version')

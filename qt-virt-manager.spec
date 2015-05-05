@@ -1,4 +1,3 @@
-%global cmake_build_dir build-cmake
 %global debug_package   %{nil}
 %bcond_without  qt4
 %bcond_without  qt5
@@ -34,7 +33,7 @@ BuildRequires:  qtermwidget-qt5-devel >= 0.6.0-2
 BuildRequires:  libvirt-devel
 BuildRequires:  glibc-headers
 BuildRequires:  desktop-file-utils
-BuildRequires:  cmake
+BuildRequires:  meson
 BuildRequires:  glib2-devel
 BuildRequires:  spice-protocol
 BuildRequires:  spice-glib-devel
@@ -71,29 +70,29 @@ Uses libvirt as the backend management API.
 
 %build
 %if %with qt4
-mkdir %{cmake_build_dir}-qt4
-pushd %{cmake_build_dir}-qt4
-      %cmake ..
-      %{make_build}
+mkdir build-qt4
+pushd build-qt4
+      %meson .. -Dbuild_qt_version=4
+      ninja-build -v
 popd
 %endif
 %if %with qt5
-mkdir %{cmake_build_dir}-qt5
-pushd %{cmake_build_dir}-qt5
-      %cmake -DBUILD_QT_VERSION=5 ..
-      %{make_build}
+mkdir build-qt5
+pushd build-qt5
+      %meson .. -Dbuild_qt_version=5
+      ninja-build -v
 popd
 %endif
 
 %install
 %if %with qt4
-pushd %{cmake_build_dir}-qt4
-      %{make_install}
+pushd build-qt4
+      DESTDIR=%{buildroot} ninja-build -v install
 popd
 %endif
 %if %with qt5
-pushd %{cmake_build_dir}-qt5
-      %{make_install}
+pushd build-qt5
+      DESTDIR=%{buildroot} ninja-build -v install
 popd
 %endif
 
