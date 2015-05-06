@@ -48,7 +48,7 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
             this, SLOT(revertData()));
     connect(restorePanel, SIGNAL(saveData()),
             this, SLOT(saveData()));
-    for (uint i=0; i<bootSet->count(); i++) {
+    for (int i=0; i<bootSet->count(); i++) {
         connect(bootSet->widget(i), SIGNAL(domainType(QString&)),
                 this, SIGNAL(domainType(QString&)));
         connect(bootSet->widget(i), SIGNAL(osType(QString&)),

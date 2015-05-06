@@ -137,7 +137,7 @@ void ConnectList::openConnect(QModelIndex &_item)
 }
 void ConnectList::showConnect(QModelIndex &_item)
 {
-    for (uint i=0; i<connects->count(); i++) {
+    for (int i=0; i<connects->count(); i++) {
         int conn_state;
         bool conn_availability;
         ConnItemIndex *idx = connItemModel->connItemDataList.at(i);
@@ -170,7 +170,7 @@ virConnectPtr ConnectList::getConnect(QString &name)
 }
 void ConnectList::stopProcessing()
 {
-    for (uint i=0; i<connects->count(); i++) {
+    for (int i=0; i<connects->count(); i++) {
         ConnItemIndex *idx = connItemModel->connItemDataList.at(i);
         if ( idx==NULL ) return;
         QString _name = idx->getName();

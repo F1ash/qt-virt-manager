@@ -22,7 +22,7 @@
 #include <QDesktopWidget>
 #include <QMessageBox>
 
-#include "mainwindow.h"
+#include "term_mainwindow.h"
 #include "tabwidget.h"
 #include "properties.h"
 #include "propertiesdialog.h"
@@ -30,7 +30,7 @@
 
 
 // TODO/FXIME: probably remove. QSS makes it unusable on mac...
-#define QSS_DROP    "MainWindow {border: 1px solid rgba(0, 0, 0, 50%);}\n"
+#define QSS_DROP    "TermMainWindow {border: 1px solid rgba(0, 0, 0, 50%);}\n"
 
 TermMainWindow::TermMainWindow(QWidget *parent,
         virConnect *conn,

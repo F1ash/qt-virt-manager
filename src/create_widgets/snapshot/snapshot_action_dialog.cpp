@@ -97,7 +97,7 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
             int ret = virDomainSnapshotListChildrenNames(
                         snapShot, &names, namesLen, 0);
             if ( ret>0 ) {
-                for (uint i = 0; i<ret; i++) {
+                for (int i = 0; i<ret; i++) {
                     addSnapshotChild(i, model->index(row, 0, parent), (&names)[i]);
                 };
             };
@@ -116,7 +116,7 @@ void SnapshotActionDialog::setDomainSnapshots()
         int ret = virDomainSnapshotListNames(
                     domain, &names, namesLen, VIR_DOMAIN_SNAPSHOT_LIST_ROOTS);
         if ( ret>0 ) {
-            for (uint i = 0; i<ret; i++) {
+            for (int i = 0; i<ret; i++) {
                 addSnapshotChild(i, snapshotTree->rootIndex(), (&names)[i]);
             };
         };

@@ -50,7 +50,7 @@ SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(QWidget *parent) :
             this, SLOT(stateChanged()));
     connect(addr, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
-    for (uint i=0; i<scsiDevices->count(); i++) {
+    for (int i=0; i<scsiDevices->count(); i++) {
         connect(scsiDevices->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));
     };

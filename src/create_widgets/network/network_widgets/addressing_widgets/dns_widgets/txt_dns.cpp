@@ -17,7 +17,7 @@ TXT_DNS::TXT_DNS(QWidget *parent, QString tag) :
 QDomDocument TXT_DNS::getDataDocument() const
 {
     QDomDocument doc;
-    for (uint i=0; i<list->count(); i++) {
+    for (int i=0; i<list->count(); i++) {
         QDomElement _txt = doc.createElement("txt");
         QString _data = list->item(i)->text();
         _txt.setAttribute(
@@ -35,7 +35,7 @@ void TXT_DNS::addItem()
     _text.append(hostValue->text());
     if ( !_text.isEmpty() ) {
         bool exist = false;
-        for (uint i=0; i<list->count(); i++) {
+        for (int i=0; i<list->count(); i++) {
             if ( _text==list->item(i)->text() ) {
                 exist = true;
                 break;

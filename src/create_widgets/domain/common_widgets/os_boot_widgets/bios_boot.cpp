@@ -173,7 +173,7 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
     uint count = _devices.length();
     uint j = 0;
     //search bootable devices
-    for (uint i=0; i<count; i++) {
+    for (int i=0; i<count; i++) {
         //qDebug()<<_devices.item(j).nodeName()<<i;
         if (!_devices.item(j).isNull()) {
             QDomElement _el;
@@ -199,7 +199,7 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
     count = bootDevices->devices->count();
     QList<int> _unexist;
     // search exist bootable devices
-    for (uint i=0; i<count; i++) {
+    for (int i=0; i<count; i++) {
         QDomDocument _doc1;
         _doc1.setContent(
                     bootDevices->devices->item(i)->data(Qt::UserRole)
@@ -236,13 +236,13 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
         };
     };
     // clear unexist bootable devices
-    for (uint i=_unexist.count(); i>0; i--) {
+    for (int i=_unexist.count(); i>0; i--) {
         QListWidgetItem *_item = bootDevices->devices->takeItem(_unexist.at(i-1));
         delete _item;
         _item = NULL;
     };
     // append new bootable devices
-    for (uint i=0; i<_bootable.count(); i++) {
+    for (int i=0; i<_bootable.count(); i++) {
         QDomElement _el = _bootable.at(i);
         bootDevices->addNewDevice(_el);
         //qDebug()<<_el.attribute("type");

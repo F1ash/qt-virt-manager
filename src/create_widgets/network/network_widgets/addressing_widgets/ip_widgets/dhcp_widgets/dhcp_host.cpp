@@ -19,7 +19,7 @@ QDomDocument DHCP_Host::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _host;
-    for (uint i=0; i<list->count(); i++) {
+    for (int i=0; i<list->count(); i++) {
         QStringList _item = list->item(i)->text().split("|");
         _host = doc.createElement("host");
         _host.setAttribute("name", _item.first());
@@ -42,7 +42,7 @@ void DHCP_Host::addItem()
     _text.append("|");
     _text.append(mac->text());
     bool exist = false;
-    for (uint i=0; i<list->count(); i++) {
+    for (int i=0; i<list->count(); i++) {
         if ( list->item(i)->text()==_text ) {
             exist = true;
             break;

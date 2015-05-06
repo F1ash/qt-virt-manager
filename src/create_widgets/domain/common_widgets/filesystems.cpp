@@ -32,7 +32,7 @@ FileSystems::FileSystems(
     typeWdg->setLayout(typeLayout);
 
     info = new QStackedWidget(this);
-    for (uint i=0; i<type->count(); i++) {
+    for (int i=0; i<type->count(); i++) {
         setWidgets(type->itemText(i));
     };
 

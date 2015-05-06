@@ -16,7 +16,7 @@ ChannelDevice::ChannelDevice(QWidget *parent) :
     // see for: CharDevice_Edit
     connect(devType, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));
-    for (uint i=0; i<charDevWdg->count(); i++) {
+    for (int i=0; i<charDevWdg->count(); i++) {
         connect(charDevWdg->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));
     };

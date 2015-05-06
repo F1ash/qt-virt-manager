@@ -88,7 +88,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
         itemData.insert("End", "-");
         QStringList _args;
         if ( _taskDesc.count()>2 ) {
-            for (uint i=2; i<_taskDesc.count(); i++) {
+            for (int i=2; i<_taskDesc.count(); i++) {
                 _args.append(_taskDesc.at(i));
             };
         };
@@ -149,9 +149,9 @@ void TaskWareHouse::closeEvent(QCloseEvent *ev)
 void TaskWareHouse::msgRepeater(QString &msg)
 {
     QString time = QTime::currentTime().toString();
-    //QString title = QString("Connection '%1'").arg(currConnName);
-    //QString errorMsg = QString("<b>%1 %2:</b><br>%3").arg(time).arg(title).arg(msg);
-    QString currMsg = QString("<b>%1 :</b><br>%2").arg(time).arg(msg);
+    QString title("in TASKs");
+    QString currMsg = QString("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
     emit taskMsg(currMsg);
 }
 void TaskWareHouse::taskResultReceiver(Result data)

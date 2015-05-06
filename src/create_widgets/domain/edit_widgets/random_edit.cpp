@@ -17,7 +17,7 @@ Random_Edit::Random_Edit(QWidget *parent) :
             this, SLOT(stateChanged()));
     connect(bkEGD->devType, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));
-    for (uint i=0; i<bkEGD->charDevWdg->count(); i++) {
+    for (int i=0; i<bkEGD->charDevWdg->count(); i++) {
         connect(bkEGD->charDevWdg->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));
     };
@@ -67,7 +67,7 @@ void Random_Edit::setDataDescription(QString &xmlDesc)
         QDomNodeList _list = _backend.childNodes();
         uint j = 0;
         uint count = _list.length();
-        for (uint i=0; i<count; i++) {
+        for (int i=0; i<count; i++) {
             if (!_list.item(j).isNull()) {
                 _serial.appendChild( _list.item(j) );
             } else

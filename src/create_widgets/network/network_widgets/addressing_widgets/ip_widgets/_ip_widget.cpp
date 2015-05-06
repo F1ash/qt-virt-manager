@@ -20,7 +20,7 @@ _IP_Widget::_IP_Widget(
     setLayout(commonLayout);
     connect(ipv6, SIGNAL(toggled(bool)),
             this, SLOT(ipv6StateChanged(bool)));
-    for (uint i=0; i<sets->count(); i++) {
+    for (int i=0; i<sets->count(); i++) {
         _IPvX *wdg = static_cast<_IPvX*>(sets->widget(i));
         if ( NULL==wdg ) continue;
         connect(staticRoute, SIGNAL(toggled(bool)),
@@ -76,7 +76,7 @@ QDomDocument _IP_Widget::getDataDocument() const
 }
 void _IP_Widget::updateDHCPUsage()
 {
-    for (uint i=0; i<sets->count(); i++) {
+    for (int i=0; i<sets->count(); i++) {
         _IPvX *wdg = static_cast<_IPvX*>(sets->widget(i));
         if ( NULL==wdg ) continue;
         wdg->updateDHCPUsage();

@@ -7,15 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     setMinimumSize(100, 100);
     setContentsMargins(0, 0, 0, 5);
     setWindowTitle("Qt VirtManager");
-    QStringList searchThemePath;
-    // TODO: make a cross platform here
-    QString qt_ver = QString( QT_VERSION_STR ).split(".").first();
-    searchThemePath.append(QIcon::themeSearchPaths());
-    searchThemePath.insert(
-                0, QString("/usr/share/qt%1-virt-manager/").arg(qt_ver));
-    QIcon::setThemeSearchPaths(searchThemePath);
-    //
-    QIcon::setThemeName("icons");
+    QIcon::setThemeName("virt-icons");
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     setMouseTracking(true);
     setDockOptions(QMainWindow::AnimatedDocks|

@@ -37,7 +37,7 @@ QDomDocument _Disks::getElements() const
     QDomDocument doc;
     QDomElement _disks = doc.createElement("disks");
     doc.appendChild(_disks);
-    for (uint i=0; i<disksLayout->count(); i++) {
+    for (int i=0; i<disksLayout->count(); i++) {
         _DiskItem *wdg = static_cast<_DiskItem*>(
                     disksLayout->itemAt(i)->widget());
         if ( wdg!=NULL && wdg->isUsed() ) {

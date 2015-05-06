@@ -265,7 +265,7 @@ set (HEADERS
   src/create_widgets/domain/edit_widgets/net_interfaces_edit.h
   src/create_widgets/domain/edit_widgets/filesystems_edit.h
   src/create_widgets/domain/edit_widgets/disk_edit.h
-  src/create_widgets/domain/lxc_widgets/os_booting.h
+  src/create_widgets/domain/lxc_widgets/lxc_os_booting.h
   
   src/create_widgets/network/create_virt_network.h
   src/create_widgets/network/network_widgets/_checked_widget.h
@@ -325,7 +325,7 @@ set (HEADERS
   src/vm_viewer/qterminal/config.h
   src/vm_viewer/qterminal/fontdialog.h
   src/vm_viewer/qterminal/bookmarkswidget.h
-  src/vm_viewer/qterminal/mainwindow.h
+  src/vm_viewer/qterminal/term_mainwindow.h
   src/vm_viewer/qterminal/properties.h
   src/vm_viewer/qterminal/termwidget.h
   src/vm_viewer/qterminal/propertiesdialog.h
@@ -553,7 +553,7 @@ set (SOURCES
   src/create_widgets/domain/edit_widgets/net_interfaces_edit.cpp
   src/create_widgets/domain/edit_widgets/filesystems_edit.cpp
   src/create_widgets/domain/edit_widgets/disk_edit.cpp
-  src/create_widgets/domain/lxc_widgets/os_booting.cpp
+  src/create_widgets/domain/lxc_widgets/lxc_os_booting.cpp
   
   src/create_widgets/network/create_virt_network.cpp
   src/create_widgets/network/network_widgets/_checked_widget.cpp
@@ -614,7 +614,7 @@ set (SOURCES
   src/vm_viewer/qterminal/termwidgetholder.cpp
   #src/vm_viewer/qterminal/main.cpp
   src/vm_viewer/qterminal/propertiesdialog.cpp
-  src/vm_viewer/qterminal/mainwindow.cpp
+  src/vm_viewer/qterminal/term_mainwindow.cpp
   src/vm_viewer/qterminal/termwidget.cpp
   src/vm_viewer/qterminal/fontdialog.cpp
 
@@ -648,6 +648,7 @@ set(QTERM_UI_SRC
 )
 set(QTERM_RCC_SRC
     src/vm_viewer/qterminal/icons.qrc
+    src/qt-virt-manager.qrc
 )
 set(QTERM_TS
     src/vm_viewer/qterminal/translations/qterminal_cs.ts
@@ -703,6 +704,8 @@ install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE}
     RENAME ${PROJECT_NAME}.desktop )
 install ( TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
-install ( DIRECTORY src/misc src/icons
+install ( DIRECTORY src/misc
     DESTINATION ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME} )
+#install ( DIRECTORY src/icons
+#    DESTINATION ${SHARE_INSTALL_PREFIX}/icons/${PROJECT_NAME} )
 # * end

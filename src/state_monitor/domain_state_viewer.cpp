@@ -67,8 +67,8 @@ void DomainStateViewer::closeDomainStateViewer()
     domainMonitorThread->deleteLater();
     // release the reference because no longer required
     if ( currWorkConn!=NULL ) {
-        virConnectClose(currWorkConn);
-        qDebug()<<"virConnectRef -1"<<"DomainStateViewer"<<domainName;
+        int ret = virConnectClose(currWorkConn);
+        qDebug()<<"virConnectRef -1"<<"DomainStateViewer"<<domainName<<(ret+1>0);
         // for reject the multiple releasing the reference
         currWorkConn = NULL;
     };

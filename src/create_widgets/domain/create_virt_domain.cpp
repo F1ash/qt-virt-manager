@@ -268,7 +268,7 @@ void CreateVirtDomain::buildXMLDescription()
          */
         uint j = 0;
         uint count = list.length();
-        for (uint i=0; i<count; i++) {
+        for (int i=0; i<count; i++) {
             //qDebug()<<list.item(j).nodeName()<<i;
             if (!list.item(j).isNull()) _element.appendChild(list.item(j));
             else ++j;
@@ -317,7 +317,7 @@ void CreateVirtDomain::create_specified_widgets()
 void CreateVirtDomain::set_specified_Tabs()
 {
     if ( NULL==tabWidget ) tabWidget = new QTabWidget(this);
-    for (uint idx=0; idx<wdgList.count(); idx++ ) {
+    for (int idx=0; idx<wdgList.count(); idx++ ) {
         QString key;
         switch (idx) {
         case 0:

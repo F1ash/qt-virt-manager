@@ -38,8 +38,8 @@ VM_Viewer::~VM_Viewer()
     };
     // release the reference because no longer required
     if ( jobConnect!=NULL ) {
-        virConnectClose(jobConnect);
-        qDebug()<<"virConnectRef -1"<<"VM_Viewer"<<connName;
+        int ret = virConnectClose(jobConnect);
+        qDebug()<<"virConnectRef -1"<<"VM_Viewer"<<connName<<(ret+1>0);
         // for reject the multiple releasing the reference
         jobConnect = NULL;
     };

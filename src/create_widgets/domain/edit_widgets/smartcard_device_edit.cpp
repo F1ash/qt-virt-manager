@@ -33,7 +33,7 @@ void SmartCardDevice_Edit::setDataDescription(QString &xmlDesc)
     QDomNodeList list = _device.childNodes();
     uint j = 0;
     uint count = list.length();
-    for (uint i=0; i<count;i++) {
+    for (int i=0; i<count;i++) {
         //qDebug()<<list.item(j).nodeName()<<i;
         if (!list.item(j).isNull() && list.item(j).toElement().tagName()!="address")
             _channel.appendChild(list.item(j));

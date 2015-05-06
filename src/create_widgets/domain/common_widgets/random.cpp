@@ -106,7 +106,7 @@ QDomDocument Random::getDataDocument() const
                 .childNodes();
         uint j = 0;
         uint count = list.length();
-        for (uint i=0; i<count;i++) {
+        for (int i=0; i<count;i++) {
             if (!list.item(j).isNull()) {
                 _backend.appendChild(list.item(j));
             } else ++j;

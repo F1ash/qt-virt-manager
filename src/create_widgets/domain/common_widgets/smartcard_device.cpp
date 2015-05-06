@@ -65,7 +65,7 @@ QDomDocument SmartCardDevice::getDataDocument() const
                 .childNodes();
         uint j = 0;
         uint count = list.length();
-        for (uint i=0; i<count;i++) {
+        for (int i=0; i<count;i++) {
             //qDebug()<<list.item(j).nodeName()<<i;
             if (!list.item(j).isNull() && list.item(j).toElement().tagName()!="target")
                 _devDesc.appendChild(list.item(j));

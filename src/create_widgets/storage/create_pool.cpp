@@ -42,7 +42,7 @@ CreatePool::CreatePool(QWidget *parent) :
     QStringList _text, _data;
     _text = POOL_TYPE_DESC;
     _data = POOL_TYPES;
-    for (uint i = 0; i<_text.count(); i++) {
+    for (int i = 0; i<_text.count(); i++) {
         type->addItem(_text.at(i), _data.at(i));
     };
     uuidLabel = new QLabel("UUID:", this);
@@ -89,7 +89,7 @@ QString CreatePool::getStorageXMLDescFileName() const
      */
     uint j = 0;
     uint count = list.length();
-    for (uint i=0; i<count;i++) {
+    for (int i=0; i<count;i++) {
         //qDebug()<<list.item(j).nodeName()<<i;
         if (!list.item(j).isNull()) _pool.appendChild(list.item(j));
         else ++j;

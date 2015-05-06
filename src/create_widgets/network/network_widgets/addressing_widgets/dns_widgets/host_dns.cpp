@@ -24,7 +24,7 @@ QDomDocument Host_DNS::getDataDocument() const
     QDomElement _host;
     _host = doc.createElement("host");
     _host.setAttribute("ip", hostIP->text());
-    for (uint i=0; i<list->count(); i++) {
+    for (int i=0; i<list->count(); i++) {
         QDomElement _el;
         QDomText data;
         data = doc.createTextNode(
@@ -41,7 +41,7 @@ void Host_DNS::addItem()
     QString _text = hostName->text();
     if ( !_text.isEmpty() ) {
         bool exist = false;
-        for (uint i=0; i<list->count(); i++) {
+        for (int i=0; i<list->count(); i++) {
             if ( _text==list->item(i)->text() ) {
                 exist = true;
                 break;

@@ -193,7 +193,7 @@ void VirtStoragePoolControl::resultReceiver(Result data)
 }
 void VirtStoragePoolControl::stopOverView()
 {
-    for ( uint i=0; i<storagePoolModel->DataList.count(); i++ ) {
+    for ( int i=0; i<storagePoolModel->DataList.count(); i++ ) {
         storagePoolModel->DataList.at(i)->setOnView(false);
     };
 }
@@ -282,7 +282,7 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
             emit addNewTask(currWorkConnect, args);
         } else if ( l.first()=="overviewVirtStoragePool" ) {
             uint row = idx.row();
-            for ( uint i=0; i<storagePoolModel->DataList.count(); i++ ) {
+            for ( int i=0; i<storagePoolModel->DataList.count(); i++ ) {
                 storagePoolModel->DataList.at(i)->setOnView(i==row);
             };
             emit currPool(currWorkConnect, currConnName, storagePoolName);

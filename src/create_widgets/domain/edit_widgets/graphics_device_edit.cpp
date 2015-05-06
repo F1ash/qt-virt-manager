@@ -6,7 +6,7 @@ GraphicsDevice_Edit::GraphicsDevice_Edit(
     GraphicsDevice(parent, conn)
 {
     // dataChanged signals
-    for (uint i=0; i<info->count(); i++) {
+    for (int i=0; i<info->count(); i++) {
         connect(info->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));
     };

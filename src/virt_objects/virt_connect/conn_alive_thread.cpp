@@ -123,7 +123,7 @@ void ConnAliveThread::closeConnect()
     if ( conn!=NULL ) {
         unregisterConnEvents();
         int ret = virConnectClose(conn);
-        qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI;
+        qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
         if ( ret<0 ) {
             sendConnErrors();
         } else {
@@ -483,8 +483,9 @@ void ConnAliveThread::closeConnect(int reason)
     };
     // don't unregisterConnEvents, because disconnected already
     sendConnErrors();
-    if ( conn!=NULL && virConnectClose(conn)<0 ) sendConnErrors();
-    qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI;
+    int ret;
+    if ( conn!=NULL && (ret=virConnectClose(conn))<0 ) sendConnErrors();
+    qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
     conn = NULL;
     emit changeConnState(state);
     keep_alive = false;

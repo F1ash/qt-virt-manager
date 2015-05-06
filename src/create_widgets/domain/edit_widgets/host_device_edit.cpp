@@ -19,7 +19,7 @@ HostDevice_Edit::HostDevice_Edit(
     commonLayout->insertWidget(2, infoEdit);
     connect(type, SIGNAL(currentIndexChanged(int)),
             infoEdit, SLOT(setCurrentIndex(int)));
-    for (uint i=0; i<infoEdit->count(); i++) {
+    for (int i=0; i<infoEdit->count(); i++) {
         connect(infoEdit->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));
     };

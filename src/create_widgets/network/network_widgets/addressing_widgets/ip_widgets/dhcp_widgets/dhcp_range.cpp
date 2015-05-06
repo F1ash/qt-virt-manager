@@ -16,7 +16,7 @@ QDomDocument DHCP_Range::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _range;
-    for (uint i=0; i<list->count(); i++) {
+    for (int i=0; i<list->count(); i++) {
         QStringList _item = list->item(i)->text().split("|");
         _range = doc.createElement("range");
         _range.setAttribute("start", _item.first());
@@ -34,7 +34,7 @@ void DHCP_Range::addItem()
     _text.append("|");
     _text.append(end->text());
     bool exist = false;
-    for (uint i=0; i<list->count(); i++) {
+    for (int i=0; i<list->count(); i++) {
         if ( list->item(i)->text()==_text ) {
             exist = true;
             break;

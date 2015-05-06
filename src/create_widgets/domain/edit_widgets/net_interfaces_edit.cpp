@@ -7,7 +7,7 @@ NetInterfaces_Edit::NetInterfaces_Edit(
 {
     connect(type, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));
-    for (uint i=0; i<info->count(); i++) {
+    for (int i=0; i<info->count(); i++) {
         connect(info->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));
     };

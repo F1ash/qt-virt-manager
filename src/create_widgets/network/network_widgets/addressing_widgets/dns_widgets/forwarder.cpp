@@ -12,7 +12,7 @@ Forwarder::Forwarder(QWidget *parent, QString tag) :
 QDomDocument Forwarder::getDataDocument() const
 {
     QDomDocument doc;
-    for (uint i=0; i<list->count(); i++) {
+    for (int i=0; i<list->count(); i++) {
         QDomElement _el;
         _el = doc.createElement("forwarder");
         _el.setAttribute(
@@ -27,7 +27,7 @@ void Forwarder::addItem()
     QString _text = frwds->text();
     if ( !_text.isEmpty() ) {
         bool exist = false;
-        for (uint i=0; i<list->count(); i++) {
+        for (int i=0; i<list->count(); i++) {
             if ( _text==list->item(i)->text() ) {
                 exist = true;
                 break;

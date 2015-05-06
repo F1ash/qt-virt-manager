@@ -6,7 +6,7 @@ Disk_Edit::Disk_Edit(QWidget *parent,
 {
     connect(source, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));
-    for (uint i=0; i<info->count(); i++) {
+    for (int i=0; i<info->count(); i++) {
         connect(info->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));
     };

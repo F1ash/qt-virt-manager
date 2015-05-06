@@ -159,7 +159,7 @@ QDomDocument Devices::getDataDocument() const
         QDomNodeList list = _doc.firstChildElement("device").childNodes();
         int j = 0;
         uint count = list.length();
-        for (uint i=0; i<count;i++) {
+        for (int i=0; i<count;i++) {
             //qDebug()<<list.item(j).nodeName()<<i;
             if (!list.item(j).isNull()) {
                 devices.appendChild(list.item(j));
@@ -435,7 +435,7 @@ void Devices::detectAttachedDevicesFromXMLDesc()
                 .childNodes();
         uint j = 0;
         uint count = list.length();
-        for (uint i=0; i<count;i++) {
+        for (int i=0; i<count;i++) {
             if (!list.item(j).isNull()) {
                 QDomDocument _device;
                 QDomElement _devDesc = _device.createElement("device");

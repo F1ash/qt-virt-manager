@@ -1,7 +1,7 @@
 [Icon Theme]
-Name=Sandbox
-Comment=Sandbox Icon Set
-Inherits=hicolor
+Name=virt-icons
+Comment=Qt VirtManager Icon Set
+Inherits=hicolor,default
 Directories=22x22/actions,22x22/apps,22x22/categories,22x22/emblems,22x22/status,24x24/actions,24x24/apps,24x24/categories,24x24/emblems,24x24/status,32x32/actions,32x32/apps,32x32/categories,32x32/emblems,32x32/status,48x48/actions,48x48/apps,48x48/categories,48x48/emblems,48x48/status,64x64/actions,64x64/apps,64x64/categories,64x64/emblems,64x64/status,256x256/actions,256x256/apps,256x256/categories,256x256/emblems,256x256/status
 
 [22x22/actions]

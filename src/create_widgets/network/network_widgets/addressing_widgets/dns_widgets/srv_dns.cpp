@@ -48,7 +48,7 @@ SRV_DNS::SRV_DNS(QWidget *parent, QString tag) :
 QDomDocument SRV_DNS::getDataDocument() const
 {
     QDomDocument doc;
-    for (uint i=0; i<list->count(); i++) {
+    for (int i=0; i<list->count(); i++) {
         QDomElement _srv = doc.createElement("srv");
         QString _data = list->item(i)->text();
         if ( _data.split(":").count()<7 ) continue;
@@ -87,7 +87,7 @@ void SRV_DNS::addItem()
     _text.append(weight->text());
     if ( !_text.isEmpty() ) {
         bool exist = false;
-        for (uint i=0; i<list->count(); i++) {
+        for (int i=0; i<list->count(); i++) {
             if ( _text==list->item(i)->text() ) {
                 exist = true;
                 break;

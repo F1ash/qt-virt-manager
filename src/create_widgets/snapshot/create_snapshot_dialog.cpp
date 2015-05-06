@@ -88,7 +88,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
     connect(addTimeSuff, SIGNAL(toggled(bool)),
             timeLabel, SLOT(setEnabled(bool)));
-    for (uint i=0; i<baseWdg->count(); i++) {
+    for (int i=0; i<baseWdg->count(); i++) {
         _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(
                     baseWdg->widget(i));
         if ( NULL!=wdg ) wdg->setParameters(_conn, domainName);

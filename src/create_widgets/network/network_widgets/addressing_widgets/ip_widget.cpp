@@ -19,7 +19,7 @@ QDomDocument IP_Widget::getDataDocument() const
 {
     QDomDocument doc;
     doc.setContent(QString());
-    for (uint i=0; i<ipSet->count(); i++) {
+    for (int i=0; i<ipSet->count(); i++) {
         _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
         if ( NULL==wdg ) continue;
         doc.appendChild(wdg->getDataDocument());
@@ -33,7 +33,7 @@ void IP_Widget::updateDHCPUsage()
     //qDebug()<<"IPv4:"<<IPv4HasDHCP;
     //qDebug()<<"IPv6:"<<IPv6HasDHCP;
 
-    for (uint i=0; i<ipSet->count(); i++) {
+    for (int i=0; i<ipSet->count(); i++) {
         _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
         if ( NULL==wdg ) continue;
         wdg->updateDHCPUsage();
