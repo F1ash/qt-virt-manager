@@ -108,7 +108,6 @@ void ConnAliveThread::openConnect()
         emit connMsg( "Connection to the Hypervisor is failed." );
         emit changeConnState(FAILED);
     } else {
-        qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI;
         keep_alive = true;
         emit connMsg( QString("connect opened: %1")
                       .arg(QVariant(conn!=NULL)
@@ -116,6 +115,7 @@ void ConnAliveThread::openConnect()
         emit changeConnState(RUNNING);
         registerConnEvents();
     };
+    qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI<<(conn!=NULL);
 }
 void ConnAliveThread::closeConnect()
 {
@@ -185,13 +185,15 @@ void ConnAliveThread::freeData(void *opaque)
 void ConnAliveThread::connEventCallBack(virConnectPtr _conn, int reason, void *opaque)
 {
     Q_UNUSED(_conn);
-    static_cast<ConnAliveThread*>(opaque)->closeConnect(reason);
+    ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
+    if ( NULL!=obj ) obj->closeConnect(reason);
 }
 int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int ncred, void *cbdata)
 {
     qDebug()<<ncred<<"keep auth";
     size_t i;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(cbdata);
+    if ( NULL==obj ) return -1;
 
     /* libvirt might request multiple credentials in a single call.
      * This example supports VIR_CRED_AUTHNAME and VIR_CRED_PASSPHRASE
@@ -209,42 +211,43 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
     QString crd;
     for (i = 0; i < ncred; ++i) {
         switch (cred[i].type) {
-        case VIR_CRED_AUTHNAME:
-            crd = "Username";
-            obj->getAuthCredentials(crd);
-            cred[i].result = strdup(obj->authData.username);
-            if (cred[i].result == NULL) {
+            case VIR_CRED_AUTHNAME:
+                crd = "Username";
+                obj->getAuthCredentials(crd);
+                cred[i].result = strdup(obj->authData.username);
+                if (cred[i].result == NULL) {
+                    return -1;
+                };
+                cred[i].resultlen = strlen(cred[i].result);
+                // clear/shred authData credential for more security
+                if ( obj->authData.username!=NULL )
+                    memset(&obj->authData.username[0], 0, sizeof(obj->authData.username));
+                break;
+            case VIR_CRED_PASSPHRASE:
+                crd = "Password";
+                obj->getAuthCredentials(crd);
+                cred[i].result = strdup(obj->authData.password);
+                if (cred[i].result == NULL) {
+                    return -1;
+                };
+                cred[i].resultlen = strlen(cred[i].result);
+                // clear/shred authData credential for more security
+                if ( obj->authData.password!=NULL )
+                    memset(&obj->authData.password[0], 0, sizeof(obj->authData.password));
+                break;
+            default:
+                qDebug()<<cred[i].type<<"unused credential type";
                 return -1;
-            };
-            cred[i].resultlen = strlen(cred[i].result);
-            // clear/shred authData credential for more security
-            if ( obj->authData.username!=NULL )
-                memset(&obj->authData.username[0], 0, sizeof(obj->authData.username));
-            break;
-        case VIR_CRED_PASSPHRASE:
-            crd = "Password";
-            obj->getAuthCredentials(crd);
-            cred[i].result = strdup(obj->authData.password);
-            if (cred[i].result == NULL) {
-                return -1;
-            };
-            cred[i].resultlen = strlen(cred[i].result);
-            // clear/shred authData credential for more security
-            if ( obj->authData.password!=NULL )
-                memset(&obj->authData.password[0], 0, sizeof(obj->authData.password));
-            break;
-        default:
-            qDebug()<<cred[i].type<<"unused credential type";
-            return -1;
-        }
+        };
     };
     return 0;
 }
 int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, int event, int detail, void *opaque)
 {
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
+    if ( NULL==obj ) return 0;
     QString msg;
-    msg = QString("<font color='blue'><b>EVENT</b></font>: <b>'%1'</b> Domain %2 %3\n")
+    msg = QString("<b>'%1'</b> Domain %2 %3\n")
            .arg(virDomainGetName(dom))
            .arg(obj->eventToString(event))
            .arg(obj->eventDetailToString(event, detail));
@@ -301,6 +304,7 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
                         domainState.append("PMSUSPENDED");
                         break;
                     default:
+                        domainState.append("UNKNOWN");
                         break;
                     }
                 } else domainState.append("ERROR");
@@ -350,6 +354,9 @@ const char* ConnAliveThread::eventToString(int event) {
         case VIR_DOMAIN_EVENT_SHUTDOWN:
             ret = "Shutdown";
             break;
+        default:
+            ret = "Unknown";
+            break;
     };
     return ret;
 }
@@ -368,89 +375,107 @@ const char* ConnAliveThread::eventDetailToString(int event, int detail) {
             break;
         case VIR_DOMAIN_EVENT_STARTED:
             switch ((virDomainEventStartedDetailType) detail) {
-            case VIR_DOMAIN_EVENT_STARTED_BOOTED:
-                ret = "Booted";
-                break;
-            case VIR_DOMAIN_EVENT_STARTED_MIGRATED:
-                ret = "Migrated";
-                break;
-            case VIR_DOMAIN_EVENT_STARTED_RESTORED:
-                ret = "Restored";
-                break;
-            case VIR_DOMAIN_EVENT_STARTED_FROM_SNAPSHOT:
-                ret = "Snapshot";
-                break;
-            case VIR_DOMAIN_EVENT_STARTED_WAKEUP:
-                ret = "Event wakeup";
-                break;
-            }
+                case VIR_DOMAIN_EVENT_STARTED_BOOTED:
+                    ret = "Booted";
+                    break;
+                case VIR_DOMAIN_EVENT_STARTED_MIGRATED:
+                    ret = "Migrated";
+                    break;
+                case VIR_DOMAIN_EVENT_STARTED_RESTORED:
+                    ret = "Restored";
+                    break;
+                case VIR_DOMAIN_EVENT_STARTED_FROM_SNAPSHOT:
+                    ret = "Snapshot";
+                    break;
+                case VIR_DOMAIN_EVENT_STARTED_WAKEUP:
+                    ret = "Event wakeup";
+                    break;
+                default:
+                    ret = "Unknown";
+                    break;
+            };
             break;
         case VIR_DOMAIN_EVENT_SUSPENDED:
             switch ((virDomainEventSuspendedDetailType) detail) {
-            case VIR_DOMAIN_EVENT_SUSPENDED_PAUSED:
-                ret = "Paused";
-                break;
-            case VIR_DOMAIN_EVENT_SUSPENDED_MIGRATED:
-                ret = "Migrated";
-                break;
-            case VIR_DOMAIN_EVENT_SUSPENDED_IOERROR:
-                ret = "I/O Error";
-                break;
-            case VIR_DOMAIN_EVENT_SUSPENDED_WATCHDOG:
-                ret = "Watchdog";
-                break;
-            case VIR_DOMAIN_EVENT_SUSPENDED_RESTORED:
-                ret = "Restored";
-                break;
-            case VIR_DOMAIN_EVENT_SUSPENDED_FROM_SNAPSHOT:
-                ret = "Snapshot";
-                break;
-            }
+                case VIR_DOMAIN_EVENT_SUSPENDED_PAUSED:
+                    ret = "Paused";
+                    break;
+                case VIR_DOMAIN_EVENT_SUSPENDED_MIGRATED:
+                    ret = "Migrated";
+                    break;
+                case VIR_DOMAIN_EVENT_SUSPENDED_IOERROR:
+                    ret = "I/O Error";
+                    break;
+                case VIR_DOMAIN_EVENT_SUSPENDED_WATCHDOG:
+                    ret = "Watchdog";
+                    break;
+                case VIR_DOMAIN_EVENT_SUSPENDED_RESTORED:
+                    ret = "Restored";
+                    break;
+                case VIR_DOMAIN_EVENT_SUSPENDED_FROM_SNAPSHOT:
+                    ret = "Snapshot";
+                    break;
+                default:
+                    ret = "Unknown";
+                    break;
+            };
             break;
         case VIR_DOMAIN_EVENT_RESUMED:
             switch ((virDomainEventResumedDetailType) detail) {
-            case VIR_DOMAIN_EVENT_RESUMED_UNPAUSED:
-                ret = "Unpaused";
-                break;
-            case VIR_DOMAIN_EVENT_RESUMED_MIGRATED:
-                ret = "Migrated";
-                break;
-            case VIR_DOMAIN_EVENT_RESUMED_FROM_SNAPSHOT:
-                ret = "Snapshot";
-                break;
-            }
+                case VIR_DOMAIN_EVENT_RESUMED_UNPAUSED:
+                    ret = "Unpaused";
+                    break;
+                case VIR_DOMAIN_EVENT_RESUMED_MIGRATED:
+                    ret = "Migrated";
+                    break;
+                case VIR_DOMAIN_EVENT_RESUMED_FROM_SNAPSHOT:
+                    ret = "Snapshot";
+                    break;
+                default:
+                    ret = "Unknown";
+                    break;
+            };
             break;
         case VIR_DOMAIN_EVENT_STOPPED:
             switch ((virDomainEventStoppedDetailType) detail) {
-            case VIR_DOMAIN_EVENT_STOPPED_SHUTDOWN:
-                ret = "Shutdown";
-                break;
-            case VIR_DOMAIN_EVENT_STOPPED_DESTROYED:
-                ret = "Destroyed";
-                break;
-            case VIR_DOMAIN_EVENT_STOPPED_CRASHED:
-                ret = "Crashed";
-                break;
-            case VIR_DOMAIN_EVENT_STOPPED_MIGRATED:
-                ret = "Migrated";
-                break;
-            case VIR_DOMAIN_EVENT_STOPPED_SAVED:
-                ret = "Saved";
-                break;
-            case VIR_DOMAIN_EVENT_STOPPED_FAILED:
-                ret = "Failed";
-                break;
-            case VIR_DOMAIN_EVENT_STOPPED_FROM_SNAPSHOT:
-                ret = "Snapshot";
-                break;
-            }
+                case VIR_DOMAIN_EVENT_STOPPED_SHUTDOWN:
+                    ret = "Shutdown";
+                    break;
+                case VIR_DOMAIN_EVENT_STOPPED_DESTROYED:
+                    ret = "Destroyed";
+                    break;
+                case VIR_DOMAIN_EVENT_STOPPED_CRASHED:
+                    ret = "Crashed";
+                    break;
+                case VIR_DOMAIN_EVENT_STOPPED_MIGRATED:
+                    ret = "Migrated";
+                    break;
+                case VIR_DOMAIN_EVENT_STOPPED_SAVED:
+                    ret = "Saved";
+                    break;
+                case VIR_DOMAIN_EVENT_STOPPED_FAILED:
+                    ret = "Failed";
+                    break;
+                case VIR_DOMAIN_EVENT_STOPPED_FROM_SNAPSHOT:
+                    ret = "Snapshot";
+                    break;
+                default:
+                    ret = "Unknown";
+                    break;
+            };
             break;
         case VIR_DOMAIN_EVENT_SHUTDOWN:
             switch ((virDomainEventShutdownDetailType) detail) {
-            case VIR_DOMAIN_EVENT_SHUTDOWN_FINISHED:
-                ret = "Finished";
-                break;
-            }
+                case VIR_DOMAIN_EVENT_SHUTDOWN_FINISHED:
+                    ret = "Finished";
+                    break;
+                default:
+                    ret = "Unknown";
+                    break;
+                };
+            break;
+        default:
+            ret = "Unknown";
             break;
     };
     return ret;
@@ -460,26 +485,26 @@ void ConnAliveThread::closeConnect(int reason)
     CONN_STATE state;
     keep_alive = false;
     switch (reason) {
-    case VIR_CONNECT_CLOSE_REASON_ERROR:
-        emit connMsg("Connection closed: Misc I/O error");
-        state = FAILED;
-        break;
-    case VIR_CONNECT_CLOSE_REASON_EOF:
-        emit connMsg("Connection closed: End-of-file from server");
-        state = FAILED;
-        break;
-    case VIR_CONNECT_CLOSE_REASON_KEEPALIVE:
-        emit connMsg("Connection closed: Keepalive timer triggered");
-        state = STOPPED;
-        break;
-    case VIR_CONNECT_CLOSE_REASON_CLIENT:
-        emit connMsg("Connection closed: Client requested it");
-        state = STOPPED;
-        break;
-    default:
-        emit connMsg("Connection closed: Unknown reason");
-        state = FAILED;
-        break;
+        case VIR_CONNECT_CLOSE_REASON_ERROR:
+            emit connMsg("Connection closed: Misc I/O error");
+            state = FAILED;
+            break;
+        case VIR_CONNECT_CLOSE_REASON_EOF:
+            emit connMsg("Connection closed: End-of-file from server");
+            state = FAILED;
+            break;
+        case VIR_CONNECT_CLOSE_REASON_KEEPALIVE:
+            emit connMsg("Connection closed: Keepalive timer triggered");
+            state = STOPPED;
+            break;
+        case VIR_CONNECT_CLOSE_REASON_CLIENT:
+            emit connMsg("Connection closed: Client requested it");
+            state = STOPPED;
+            break;
+        default:
+            emit connMsg("Connection closed: Unknown reason");
+            state = FAILED;
+            break;
     };
     // don't unregisterConnEvents, because disconnected already
     sendConnErrors();

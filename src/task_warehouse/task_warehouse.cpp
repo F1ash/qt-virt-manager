@@ -177,6 +177,8 @@ void TaskWareHouse::taskResultReceiver(Result data)
         threadPool->value(_number)->quit();
         //delete threadPool->value(_number);
         int deleted = threadPool->remove(_number);
+        delete cThread;
+        cThread = NULL;
         //qDebug()<<_number<<"deleted:"<<deleted;
     };
     QString stateIcon;

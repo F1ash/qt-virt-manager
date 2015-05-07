@@ -93,6 +93,7 @@ void LXC_ViewerThread::freeData(void *opaque)
 void LXC_ViewerThread::streamEventCallBack(virStreamPtr _stream, int events, void *opaque)
 {
     LXC_ViewerThread *obj = static_cast<LXC_ViewerThread*>(opaque);
+    if ( NULL==obj ) return;
     if ( events & VIR_STREAM_EVENT_ERROR ||
          events & VIR_STREAM_EVENT_HANGUP ) {
         // Received stream ERROR/HANGUP, closing console
@@ -124,18 +125,22 @@ void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
         break;
     case 0:
         // Received EOF from stream, closing
-        closeStream();
-        write(ptySlaveFd, "\nEOF...", 7);
-        close(ptySlaveFd);
-        msg = QString("In '<b>%1</b>': EOF.").arg(domain);
-        emit errorMsg(msg);
-        emit termEOF();
-        //qDebug()<<"EOF emited";
+        if ( NULL!=stream ) {
+            closeStream();
+            write(ptySlaveFd, "\nEOF...", 7);
+            close(ptySlaveFd);
+            msg = QString("In '<b>%1</b>': EOF.").arg(domain);
+            emit errorMsg(msg);
+            emit termEOF();
+            //qDebug()<<"EOF emited";
+        };
         break;
     case -1:
         // Error stream
-        virStreamAbort(_stream);
-        closeStream();
+        if ( NULL!=stream ) {
+            virStreamAbort(stream);
+            closeStream();
+        };
         break;
     default:
         // send to TermEmulator stdout useing ptySlaveFd
@@ -171,11 +176,11 @@ void LXC_ViewerThread::closeStream()
 {
     //qDebug()<<"stream close:";
     if ( NULL!=stream ) {
-        unregisterStreamEvents();
-        if ( virStreamFinish(stream)<0 ) {
+        int ret = unregisterStreamEvents();
+        if ( ret+1 && virStreamFinish(stream)<0 ) {
             sendConnErrors();
         };
-        if ( virStreamFree(stream)<0 ) {
+        if ( ret+1 && virStreamFree(stream)<0 ) {
             sendConnErrors();
         };
         stream = NULL;

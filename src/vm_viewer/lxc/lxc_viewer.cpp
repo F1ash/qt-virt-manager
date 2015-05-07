@@ -19,7 +19,8 @@ LXC_Viewer::LXC_Viewer(
         viewerThread = new LXC_ViewerThread(this);
         timerId = startTimer(PERIOD);
     } else {
-        msg = QString("In '<b>%1</b>': Connection or Domain is NULL...").arg(domain);
+        msg = QString("In '<b>%1</b>': Connection or Domain is NULL...")
+                .arg(domain);
         sendErrMsg(msg);
         getCurrentTerminal()->m_term->sendText(msg);
         startCloseProcess();
@@ -44,8 +45,8 @@ LXC_Viewer::~LXC_Viewer()
     msg = QString("In '<b>%1</b>': Display destroyed.")
             .arg(domain);
     sendErrMsg(msg);
-    key = QString("%1_%2").arg(connName).arg(domain);
-    emit finished(key);
+    //key = QString("%1_%2").arg(connName).arg(domain);
+    //emit finished(key);
     //qDebug()<<"LXC_Viewer destroyed";
 }
 
@@ -119,9 +120,15 @@ PTY opened. Terminal is active.").arg(domain);
 void LXC_Viewer::closeEvent(QCloseEvent *ev)
 {
     ev->ignore();
+    if ( killTimerId>0 ) {
+        killTimer(killTimerId);
+        killTimerId = 0;
+    };
     if ( NULL!=viewerThread ) {
         viewerThread->blockSignals(true);
         viewerThread->stop();
-        deleteLater();
+        //deleteLater();
+        QString key = QString("%1_%2").arg(connName).arg(domain);
+        emit finished(key);
     };
 }

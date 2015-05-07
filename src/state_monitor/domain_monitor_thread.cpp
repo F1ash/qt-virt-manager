@@ -4,12 +4,26 @@ DomainMonitorThread::DomainMonitorThread(
         QObject *parent, virConnectPtr conn, QString _domainName) :
     QThread(parent), currWorkConn(conn), domainName(_domainName)
 {
+    // for new virConnect usage create the new virConnectRef[erence]
+    int ret = virConnectRef(currWorkConn);
+    if ( ret<0 ) currWorkConn = NULL;
+    qDebug()<<"virConnectRef +1"<<"DomainMonitorThread"<<domainName<<(ret+1>0);
     domain = virDomainLookupByName(
                 currWorkConn, domainName.toUtf8().data());
     virNodeInfo NodeInfo;
     if ( virNodeGetInfo(currWorkConn, &NodeInfo)+1 ) {
         nr_cores = NodeInfo.cores;
         //qDebug()<<nr_cores<<"cores";
+    };
+}
+DomainMonitorThread::~DomainMonitorThread()
+{
+    // release the reference because no longer required
+    if ( currWorkConn!=NULL ) {
+        int ret = virConnectClose(currWorkConn);
+        qDebug()<<"virConnectRef -1"<<"DomainStateViewer"<<domainName<<(ret+1>0);
+        // for reject the multiple releasing the reference
+        currWorkConn = NULL;
     };
 }
 

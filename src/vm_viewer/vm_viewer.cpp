@@ -17,15 +17,18 @@ VM_Viewer::VM_Viewer(
     closeProcess->setRange(0, TIMEOUT);
     statusBar()->addPermanentWidget(closeProcess);
     statusBar()->hide();
-    // for new virConnect usage create the new virConnectRef[erence]
-    if ( virConnectRef(jobConnect)<0 ) jobConnect = NULL;
-    else qDebug()<<"virConnectRef +1"<<"VM_Viewer"<<connName;
 }
 VM_Viewer::~VM_Viewer()
 {
     //qDebug()<<"VM_Viewer destroy:";
-    if ( timerId>0 ) killTimer(timerId);
-    if ( killTimerId>0 ) killTimer(killTimerId);
+    if ( timerId>0 ) {
+        killTimer(timerId);
+        timerId = 0;
+    };
+    if ( killTimerId>0 ) {
+        killTimer(killTimerId);
+        killTimerId = 0;
+    };
     if ( NULL!=viewerToolBar ) {
         disconnect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
                    this, SLOT(resendExecMethod(const QStringList&)));
@@ -35,13 +38,6 @@ VM_Viewer::~VM_Viewer()
     if ( NULL!=closeProcess ) {
         delete closeProcess;
         closeProcess = NULL;
-    };
-    // release the reference because no longer required
-    if ( jobConnect!=NULL ) {
-        int ret = virConnectClose(jobConnect);
-        qDebug()<<"virConnectRef -1"<<"VM_Viewer"<<connName<<(ret+1>0);
-        // for reject the multiple releasing the reference
-        jobConnect = NULL;
     };
     VM_State = false;
     //qDebug()<<"VM_Viewer destroyed";

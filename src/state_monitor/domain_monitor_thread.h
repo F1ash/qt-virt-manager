@@ -15,6 +15,7 @@ public:
             QObject *parent = NULL,
             virConnectPtr conn = NULL,
             QString _domainName = QString());
+    ~DomainMonitorThread();
 
 signals:
     void                 dataChanged(int, int, int, int);

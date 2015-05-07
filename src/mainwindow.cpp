@@ -240,6 +240,8 @@ void MainWindow::closeEvent(QCloseEvent *ev)
               if ( vm->isActive() ) vm->close();
               delete VM_Displayed_Map.value(key);
               VM_Displayed_Map.remove(key);
+              delete vm;
+              vm = NULL;
               //qDebug()<<key<<"removed into Close";
           };
       };
@@ -775,9 +777,11 @@ void MainWindow::deleteVMDisplay(QString &key)
         //           taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
         //disconnect(taskWrHouse, SIGNAL(domResult(Result)),
         //           VM_Displayed_Map.value(key, NULL), SLOT(resultReceiver(Result)));
+        //VM_Viewer *vm = static_cast<VM_Viewer*>(VM_Displayed_Map.value(key, NULL));
+        delete VM_Displayed_Map.value(key);
         VM_Displayed_Map.remove(key);
         // reload domains state, because VM_Viewer is finished
-        domainDockContent->reloadDomainState();
+        //domainDockContent->reloadDomainState();
     }
 }
 void MainWindow::deleteVMDisplay(QString connName, QString domName)
