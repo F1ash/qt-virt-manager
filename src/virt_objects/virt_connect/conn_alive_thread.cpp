@@ -506,14 +506,11 @@ void ConnAliveThread::closeConnect(int reason)
             state = FAILED;
             break;
     };
-    // don't unregisterConnEvents, because disconnected already
+    // don't unregisterConnEvents and close connection,
+    // because disconnected already
     sendConnErrors();
-    int ret;
-    if ( conn!=NULL && (ret=virConnectClose(conn))<0 ) sendConnErrors();
-    qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
     conn = NULL;
     emit changeConnState(state);
-    keep_alive = false;
 }
 void ConnAliveThread::getAuthCredentials(QString &crd)
 {
