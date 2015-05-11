@@ -214,14 +214,13 @@ void VNC_Graphics::readNetworkList()
     if ( ret<0 ) {
         sendConnErrors();
     } else {
-        int i = 0;
-        while ( networks[i] != NULL ) {
+        // therefore correctly to use for() command, because networks[0] can not exist.
+        for (int i = 0; i < ret; i++) {
             nets.append( virNetworkGetName(networks[i]) );
             virNetworkFree(networks[i]);
-            i++;
         };
+        free(networks);
     };
-    free(networks);
 }
 
 void VNC_Graphics::sendConnErrors()

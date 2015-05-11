@@ -68,20 +68,19 @@ Result StoragePoolControlThread::getAllStoragePoolList()
     Result result;
     QStringList storagePoolList;
     if ( currWorkConnect!=NULL && keep_alive ) {
-        virStoragePoolPtr *storagePool;
+        virStoragePoolPtr *storagePool = NULL;
         unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                              VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
         int ret = virConnectListAllStoragePools( currWorkConnect, &storagePool, flags);
         if ( ret<0 ) {
             sendConnErrors();
-            free(storagePool);
             result.result = false;
             result.msg = storagePoolList;
             return result;
         };
 
-        int i = 0;
-        while ( storagePool[i] != NULL ) {
+        // therefore correctly to use for() command, because storagePool[0] can not exist.
+        for (int i = 0; i < ret; i++) {
             QStringList currentAttr;
             QString autostartStr;
             int is_autostart = 0;
@@ -95,15 +94,12 @@ Result StoragePoolControlThread::getAllStoragePoolList()
             storagePoolList.append(currentAttr.join(DFR));
             //qDebug()<<currentAttr;
             virStoragePoolFree(storagePool[i]);
-            i++;
         };
         free(storagePool);
+        result.result = true;
     } else {
         result.result = false;
-        result.msg = storagePoolList;
-        return result;
     };
-    result.result = true;
     result.msg = storagePoolList;
     return result;
 }

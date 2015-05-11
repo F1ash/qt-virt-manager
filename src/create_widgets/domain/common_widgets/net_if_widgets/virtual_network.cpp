@@ -221,18 +221,17 @@ void Virtual_Network::setAvailableVirtNetworks()
         // if failed, then set to default virtual network
         network->addItem("VirtNetwork detect failed", "default");
     } else {
-        int i = 0;
-        while ( networks[i] != NULL ) {
+        // therefore correctly to use for() command, because networks[0] can not exist.
+        for (int i = 0; i < ret; i++) {
             QString _network = QString( virNetworkGetName(networks[i]) );
             network->addItem(
                         QString("Virtual network '%1'")
                         .arg(_network),
                         _network);
             virNetworkFree(networks[i]);
-            i++;
         };
+        free(networks);
     };
-    free(networks);
     network->insertSeparator(network->count());
     network->addItem("Set exist Virtual Network manually", "");
 }

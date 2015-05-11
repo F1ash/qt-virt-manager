@@ -52,8 +52,8 @@ void ConnAliveThread::run()
     if (!keep_alive) return;
     int probe = 0;
     int ret = virConnectSetKeepAlive(conn, 3, 10);
-    if ( ret<0 ) {
-        emit connMsg( "Remote party doesn't support keepalive messages." );
+    if ( ret!=0 ) {
+        emit connMsg( "Remote party doesn't support keepalive messages or error is occurred." );
         /* virConnectIsAlive() --
          * Determine if the connection to the hypervisor is still alive
          * A connection will be classed as alive if it is either local,
@@ -256,16 +256,17 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
         Result result;
         QStringList domainList;
         if ( _conn!=NULL && obj->keep_alive ) {
-            virDomainPtr *domains;
+            virDomainPtr *domains = NULL;
             unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
                                  VIR_CONNECT_LIST_DOMAINS_INACTIVE;
+            // the number of domains found or -1 and sets domains to NULL in case of error.
             int ret = virConnectListAllDomains(_conn, &domains, flags);
             if ( ret<0 ) {
                 obj->sendConnErrors();
                 return 0;
             };
-            int i = 0;
-            while ( domains[i] != NULL ) {
+            // therefore correctly to use for() command, because domains[0] can not exist.
+            for (int i = 0; i < ret; i++) {
                 QStringList currentAttr;
                 QString autostartStr;
                 int is_autostart = 0;
@@ -316,7 +317,6 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
                            << QString( virDomainIsPersistent(domains[i]) ? "yes" : "no" );
                 domainList.append(currentAttr.join(DFR));
                 virDomainFree(domains[i]);
-                i++;
             };
             free(domains);
         };

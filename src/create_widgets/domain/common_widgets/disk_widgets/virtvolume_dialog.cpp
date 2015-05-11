@@ -61,14 +61,13 @@ void VirtVolumeDialog::setPoolList()
     if ( ret<0 ) {
         poolList->addItem("Not found");
     } else {
-        int i = 0;
-        while ( pools[i] != NULL ) {
+        // therefore correctly to use for() command, because pools[0] can not exist.
+        for (int i = 0; i < ret; i++) {
             poolList->addItem( virStoragePoolGetName(pools[i]) );
             virStoragePoolFree(pools[i]);
-            i++;
         };
+        free(pools);
     };
-    free(pools);
 }
 void VirtVolumeDialog::set_Result()
 {

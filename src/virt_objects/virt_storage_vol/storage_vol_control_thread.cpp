@@ -114,7 +114,7 @@ Result StorageVolControlThread::getAllStorageVolList()
         };
     };
     if ( currStoragePool!=NULL && keep_alive ) {
-        virStorageVolPtr *storageVol;
+        virStorageVolPtr *storageVol = NULL;
         // flags: extra flags; not used yet, so callers should always pass 0
         unsigned int flags = 0;
         int ret = virStoragePoolListAllVolumes( currStoragePool, &storageVol, flags );
@@ -125,8 +125,8 @@ Result StorageVolControlThread::getAllStorageVolList()
             return result;
         };
 
-        int i = 0;
-        while ( storageVol[i] != NULL ) {
+        // therefore correctly to use for() command, because storageVol[0] can not exist.
+        for (int i = 0; i < ret; i++) {
             QString type, capacity, allocation;
             virStorageVolInfo info;
             if ( virStorageVolGetInfo(storageVol[i], &info)+1 ) {
@@ -164,7 +164,6 @@ Result StorageVolControlThread::getAllStorageVolList()
             storageVolList.append(currentAttr);
             //qDebug()<<currentAttr<<"Volume";
             virStorageVolFree(storageVol[i]);
-            i++;
         };
         free(storageVol);
     };

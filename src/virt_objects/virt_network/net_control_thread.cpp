@@ -64,34 +64,32 @@ Result NetControlThread::getAllNetworkList()
     Result result;
     QStringList virtNetList;
     if ( currWorkConnect!=NULL && keep_alive ) {
-        virNetworkPtr *network;
+        virNetworkPtr *networks = NULL;
         unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                              VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-        int ret = virConnectListAllNetworks( currWorkConnect, &network, flags);
+        int ret = virConnectListAllNetworks( currWorkConnect, &networks, flags);
         if ( ret<0 ) {
             sendConnErrors();
-            free(network);
             return result;
         };
 
-        int i = 0;
-        while ( network[i] != NULL ) {
+        // therefore correctly to use for() command, because networks[0] can not exist.
+        for (int i = 0; i < ret; i++) {
             QStringList currentAttr;
             QString autostartStr;
             int is_autostart = 0;
-            if (virNetworkGetAutostart(network[i], &is_autostart) < 0) {
+            if (virNetworkGetAutostart(networks[i], &is_autostart) < 0) {
                 autostartStr.append("no autostart");
             } else autostartStr.append( is_autostart ? "yes" : "no" );
-            currentAttr<< QString().fromUtf8( virNetworkGetName(network[i]) )
-                       << QString( virNetworkIsActive(network[i]) ? "active" : "inactive" )
+            currentAttr<< QString().fromUtf8( virNetworkGetName(networks[i]) )
+                       << QString( virNetworkIsActive(networks[i]) ? "active" : "inactive" )
                        << autostartStr
-                       << QString( virNetworkIsPersistent(network[i]) ? "yes" : "no" );
+                       << QString( virNetworkIsPersistent(networks[i]) ? "yes" : "no" );
             virtNetList.append(currentAttr.join(DFR));
             //qDebug()<<currentAttr;
-            virNetworkFree(network[i]);
-            i++;
+            virNetworkFree(networks[i]);
         };
-        free(network);
+        free(networks);
     };
     result.result = true;
     result.msg = virtNetList;
