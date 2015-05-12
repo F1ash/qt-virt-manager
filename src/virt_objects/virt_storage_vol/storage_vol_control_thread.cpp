@@ -13,7 +13,7 @@ bool StorageVolControlThread::setCurrentStoragePoolName(virConnect *conn, QStrin
     // close previous virConnectRef[erence]
     if ( NULL!=currWorkConnect ) {
         int ret = virConnectClose(currWorkConnect);
-        qDebug()<<"virConnectRef -1"<<"StorageVolControlThread"<<currPoolName<<(ret+1>0);
+        //qDebug()<<"virConnectRef -1"<<"StorageVolControlThread"<<currPoolName<<(ret+1>0);
     };
     currWorkConnect = conn;
     // for new virConnect usage create the new virConnectRef[erence]
@@ -23,7 +23,7 @@ bool StorageVolControlThread::setCurrentStoragePoolName(virConnect *conn, QStrin
         sendConnErrors();
         keep_alive = false;
     };
-    qDebug()<<"virConnectRef +1"<<"StorageVolControlThread"<<poolName<<(ret+1>0);
+    //qDebug()<<"virConnectRef +1"<<"StorageVolControlThread"<<poolName<<(ret+1>0);
     currPoolName = poolName;
     if (currStoragePool!=NULL) {
         virStoragePoolFree(currStoragePool);

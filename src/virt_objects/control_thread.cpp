@@ -11,10 +11,11 @@ ControlThread::~ControlThread()
     if ( currWorkConnect!=NULL ) {
         // release the reference because no longer required
         int ret = virConnectClose(currWorkConnect);
-        qDebug()<<"virConnectRef -1"<<"ControlThread"<<currConnName<<(ret+1>0)<<number;
+        //qDebug()<<"virConnectRef -1"<<"ControlThread"<<currConnName<<(ret+1>0)<<number;
         // for reject the multiple releasing the reference
         currWorkConnect = NULL;
     };
+    wait(30000);
 }
 
 /* public slots */
@@ -31,7 +32,7 @@ bool ControlThread::setCurrentWorkConnect(virConnectPtr conn, uint i, QString _n
         sendConnErrors();
         keep_alive = false;
     };
-    qDebug()<<"virConnectRef +1"<<"ControlThread"<<currConnName<<(ret+1>0)<<number;
+    //qDebug()<<"virConnectRef +1"<<"ControlThread"<<currConnName<<(ret+1>0)<<number;
     //qDebug()<<"net_thread"<<currWorkConnect;
     return keep_alive;
 }

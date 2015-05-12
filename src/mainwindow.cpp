@@ -235,13 +235,11 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       taskWrHouse->stopTaskComputing();
       // close VM Displays
       foreach ( QString key, VM_Displayed_Map.keys() ) {
-          VM_Viewer *vm = VM_Displayed_Map.value(key, NULL);
-          if ( vm!=NULL ) {
-              if ( vm->isActive() ) vm->close();
+          if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
+              if ( VM_Displayed_Map.value(key, NULL)->isActive() )
+                  VM_Displayed_Map.value(key, NULL)->close();
               delete VM_Displayed_Map.value(key);
               VM_Displayed_Map.remove(key);
-              delete vm;
-              vm = NULL;
               //qDebug()<<key<<"removed into Close";
           };
       };

@@ -15,6 +15,7 @@ ConnAliveThread::~ConnAliveThread()
 {
     conn = NULL;
     virtErrors = NULL;
+    wait(30000);
 }
 
 /* public slots */
@@ -115,7 +116,7 @@ void ConnAliveThread::openConnect()
         emit changeConnState(RUNNING);
         registerConnEvents();
     };
-    qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI<<(conn!=NULL);
+    //qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI<<(conn!=NULL);
 }
 void ConnAliveThread::closeConnect()
 {
@@ -123,7 +124,7 @@ void ConnAliveThread::closeConnect()
     if ( conn!=NULL ) {
         unregisterConnEvents();
         int ret = virConnectClose(conn);
-        qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
+        //qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
         if ( ret<0 ) {
             sendConnErrors();
         } else {

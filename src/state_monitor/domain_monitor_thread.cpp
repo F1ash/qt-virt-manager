@@ -7,7 +7,7 @@ DomainMonitorThread::DomainMonitorThread(
     // for new virConnect usage create the new virConnectRef[erence]
     int ret = virConnectRef(currWorkConn);
     if ( ret<0 ) currWorkConn = NULL;
-    qDebug()<<"virConnectRef +1"<<"DomainMonitorThread"<<domainName<<(ret+1>0);
+    //qDebug()<<"virConnectRef +1"<<"DomainMonitorThread"<<domainName<<(ret+1>0);
     domain = virDomainLookupByName(
                 currWorkConn, domainName.toUtf8().data());
     virNodeInfo NodeInfo;
@@ -21,10 +21,11 @@ DomainMonitorThread::~DomainMonitorThread()
     // release the reference because no longer required
     if ( currWorkConn!=NULL ) {
         int ret = virConnectClose(currWorkConn);
-        qDebug()<<"virConnectRef -1"<<"DomainStateViewer"<<domainName<<(ret+1>0);
+        //qDebug()<<"virConnectRef -1"<<"DomainStateViewer"<<domainName<<(ret+1>0);
         // for reject the multiple releasing the reference
         currWorkConn = NULL;
     };
+    wait(30000);
 }
 
 /* public slots */
