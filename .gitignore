@@ -1,5 +1,5 @@
 .gitignore
-CMakeLists.txt.use*
+CMakeLists.txt.*
 CMakeCache.txt
 CMakeFiles
 Makefile

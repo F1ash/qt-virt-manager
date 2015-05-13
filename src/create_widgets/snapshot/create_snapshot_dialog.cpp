@@ -20,6 +20,9 @@ CreateSnapshotDialog::CreateSnapshotDialog(
 {
     QString winTitle = QString("Create Snapshot <%1>").arg(domainName);
     setWindowTitle(winTitle);
+    settings.beginGroup("CreateSnapshotDialog");
+    restoreGeometry( settings.value("Geometry").toByteArray() );
+    settings.endGroup();
     titleLayout = new QHBoxLayout(this);
     nameLabel = new QLabel("Name:", this);
     name = new QLineEdit(this);
@@ -150,12 +153,18 @@ void CreateSnapshotDialog::accept()
                     QString("Count of disk subset not can be equal ziro"));
     } else {
         killTimer(timerID);
+        settings.beginGroup("CreateSnapshotDialog");
+        settings.setValue("Geometry", saveGeometry());
+        settings.endGroup();
         done(1);
     };
 }
 void CreateSnapshotDialog::reject()
 {
     killTimer(timerID);
+    settings.beginGroup("CreateSnapshotDialog");
+    settings.setValue("Geometry", saveGeometry());
+    settings.endGroup();
     done(0);
 }
 void CreateSnapshotDialog::snapshotTypeChange(int i)

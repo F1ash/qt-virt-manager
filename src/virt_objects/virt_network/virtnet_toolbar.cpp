@@ -49,7 +49,7 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     autoReload = addWidget(_autoReload);
     addAction(autoReload);
 
-    settings.beginGroup("VirtNetworkControl");
+    settings.beginGroup("VirtNetControl");
     interval = settings.value("UpdateTime", 3).toInt();
     _autoReload->setChecked(settings.value("AutoReload", false).toBool());
     settings.endGroup();
@@ -69,7 +69,7 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
 }
 VirtNetToolBar::~VirtNetToolBar()
 {
-    settings.beginGroup("VirtNetworkControl");
+    settings.beginGroup("VirtNetControl");
     settings.setValue("UpdateTime", interval);
     settings.setValue("AutoReload", _autoReload->isChecked());
     settings.endGroup();

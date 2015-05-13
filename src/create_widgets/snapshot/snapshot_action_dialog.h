@@ -14,6 +14,9 @@
 #include <QTemporaryFile>
 #include <QUrl>
 #include <QDir>
+#include <QDomDocument>
+#include <QDateTime>
+#include <QSettings>
 #include "virt_objects/virt_entity_config.h"
 #include "model/snapshot_tree_model.h"
 #include "revert_snapshot_flags.h"
@@ -53,6 +56,7 @@ private:
     QPushButton         *cancel;
     QPushButton         *closeWdg;
     QWidget             *buttonsWdg;
+    QSettings            settings;
 
 public slots:
     QStringList          getParameters() const;

@@ -17,6 +17,7 @@ public:
     int                  columnCount() const;
     QVariant             data(int column) const;
     void                 setData(QString&);
+    void                 setDate(QString&);
     bool                 getState() const;
     void                 setState(bool);
     int                  row() const;
@@ -24,7 +25,7 @@ public:
 
 private:
     QList<TreeItem*>     childItems;
-    QString              itemData;
+    QString              itemData, itemDate;
     bool                 state;
     TreeItem            *parentItem;
 };

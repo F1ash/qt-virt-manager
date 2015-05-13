@@ -5,6 +5,7 @@ TreeItem::TreeItem(const QString &data, TreeItem *parent)
 {
     parentItem = parent;
     itemData = data;
+    itemDate = QString("Date");
     state = false;
 }
 
@@ -35,13 +36,18 @@ int TreeItem::columnCount() const
 
 QVariant TreeItem::data(int column) const
 {
-    Q_UNUSED(column);
-    return itemData;
+    if ( column ) return itemDate;
+    else return itemData;
 }
 
 void TreeItem::setData(QString &data)
 {
     itemData = data;
+}
+
+void TreeItem::setDate(QString &date)
+{
+    itemDate = date;
 }
 
 bool TreeItem::getState() const

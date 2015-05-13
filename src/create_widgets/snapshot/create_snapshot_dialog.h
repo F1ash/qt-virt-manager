@@ -14,6 +14,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QSettings>
 #include "types/mem_state_snapshot.h"
 #include "types/disk_snapshot.h"
 #include "types/system_checkpoint.h"
@@ -54,6 +55,7 @@ private:
     QPushButton     *flags;
     CreateSnapshotFlags
                     *flagsMenu = NULL;
+    QSettings        settings;
 
 public slots:
     QString          getSnapshotXMLDesc() const;

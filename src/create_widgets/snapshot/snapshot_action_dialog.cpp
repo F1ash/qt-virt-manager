@@ -15,6 +15,11 @@ SnapshotActionDialog::SnapshotActionDialog(
     params.clear();
     QString winTitle = QString("<%1> Snapshot Actions").arg(domName);
     setWindowTitle(winTitle);
+    settings.beginGroup("SnapshotActionDialog");
+    restoreGeometry( settings.value("Geometry").toByteArray() );
+    int c0 = settings.value("column0", 132).toInt();
+    int c1 = settings.value("column1", 64).toInt();
+    settings.endGroup();
     revertFlagsMenu = new RevertSnapshotFlags(this);
     revertAction = new QAction(QIcon::fromTheme("document-revert"), "Revert To", this);
     revertAction->setMenu(revertFlagsMenu);
@@ -33,6 +38,8 @@ SnapshotActionDialog::SnapshotActionDialog(
     snapshotTree->setRootIsDecorated(true);
     snapshotTree->setModel(model);
     snapshotTree->setExpandsOnDoubleClick(true);
+    snapshotTree->setColumnWidth(0, c0);
+    snapshotTree->setColumnWidth(1, c1);
     info = new QLabel(
     "<a href='https://libvirt.org/html/libvirt-libvirt-domain-snapshot.html'>About</a>",
                 this);
@@ -84,12 +91,30 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
     // flags: extra flags; not used yet, so callers should always pass 0
     virDomainSnapshotPtr snapShot =
             virDomainSnapshotLookupByName(domain, name, 0);
+    char *xmlDesc = virDomainSnapshotGetXMLDesc(snapShot, 0);
+    QString _date(" -- ");
+    if ( NULL!=xmlDesc ) {
+        QDomDocument doc;
+        doc.setContent(QString(xmlDesc));
+        free(xmlDesc);
+        QDomElement _el = doc
+                .firstChildElement("domainsnapshot")
+                .firstChildElement("creationTime");
+        if ( !_el.isNull() ) {
+            _date.clear();
+            _date.append(
+                  QDateTime::fromMSecsSinceEpoch(
+                      _el.text().toULongLong()*1000)
+                        .toString("yyyy-MM-dd_HH:mm:ss"));
+        };
+    };
     // flags: extra flags; not used yet, so callers should always pass 0
     int current = virDomainSnapshotIsCurrent(snapShot, 0);
     if ( NULL!=snapShot ) {
         model->insertRow(row, parent);
         model->setData(model->index(row, 0, parent), name, Qt::DisplayRole);
         model->setData(model->index(row, 0, parent), (current>0), Qt::DecorationRole);
+        model->setData(model->index(row, 1, parent), _date, Qt::DisplayRole);
         // By default, this command covers only direct children; use flag=0
         int namesLen = virDomainSnapshotNumChildren(snapShot, 0);
         if ( namesLen>0 ) {
@@ -129,6 +154,12 @@ void SnapshotActionDialog::accept()
     if ( NULL==item ) {
         cancelled();
     } else {
+        settings.beginGroup("SnapshotActionDialog");
+        settings.setValue("Geometry", saveGeometry());
+        settings.setValue("column0", snapshotTree->columnWidth(0));
+        settings.setValue("column1", snapshotTree->columnWidth(1));
+        settings.endGroup();
+        settings.sync();
         params.append(item->data(0).toString());
         params.append(QString::number(flags));
         //qDebug()<<params;
@@ -137,6 +168,12 @@ void SnapshotActionDialog::accept()
 }
 void SnapshotActionDialog::reject()
 {
+    settings.beginGroup("SnapshotActionDialog");
+    settings.setValue("Geometry", saveGeometry());
+    settings.setValue("column0", snapshotTree->columnWidth(0));
+    settings.setValue("column1", snapshotTree->columnWidth(1));
+    settings.endGroup();
+    settings.sync();
     done(0);
 }
 void SnapshotActionDialog::cancelled()

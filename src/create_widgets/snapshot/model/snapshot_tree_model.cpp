@@ -63,7 +63,7 @@ int SnapshotTreeModel::rowCount(const QModelIndex &parent) const
 }
 int SnapshotTreeModel::columnCount(const QModelIndex &parent) const
 {
-    return 1;
+    return 2;
 }
 QVariant SnapshotTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
@@ -78,7 +78,7 @@ QVariant SnapshotTreeModel::data(const QModelIndex &index, int role) const
 
     TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
 
-    if ( role==Qt::DisplayRole && index.column()==0 ) {
+    if ( role==Qt::DisplayRole ) {
         return item->data(index.column());
     };
     if ( role==Qt::DecorationRole && index.column()==0 ) {
@@ -92,15 +92,21 @@ bool SnapshotTreeModel::setData( const QModelIndex &index, const QVariant &value
         return false;
     TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
 
-    if ( role == Qt::DisplayRole ) {
+    if ( role == Qt::DisplayRole && index.column()==0 ) {
         QString data = value.toString();
         item->setData( data );
     };
-    if ( role == Qt::DecorationRole ) {
+    if ( role == Qt::DisplayRole && index.column()==1 ) {
+        QString data = value.toString();
+        item->setDate( data );
+    };
+    if ( role == Qt::DecorationRole && index.column()==0 ) {
         bool data = value.toBool();
         item->setState( data );
     };
-    emit dataChanged(index.sibling(index.row()-1, 1), index.sibling(index.row()+1, 1));
+    emit dataChanged(
+                index.sibling(index.row()-1, columnCount()),
+                index.sibling(index.row()+1, columnCount()));
     return true;
 }
 bool SnapshotTreeModel::insertRow(int row, const QModelIndex &parent)

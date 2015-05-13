@@ -60,3 +60,9 @@ fixed deletion of connection settings,
     when creation of new connection was cancelled;
 improved Connection AliveThread for connections,
     on which auto 'keep_alive' messages don't implemented;
+
+v.0.10.25 :
+improved Domain Snapshot Actions;
+fixed the loop at close LXC_Viewer;
+changed the app building with the icons qrc-file;
+some fixes and improvements;

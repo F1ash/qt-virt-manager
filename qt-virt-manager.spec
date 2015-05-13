@@ -4,7 +4,7 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.10.21
+Version:        0.10.25
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -121,6 +121,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %endif
 
 %changelog
+* Wed May 13 2015 Fl@sh <kaperang07@gmail.com> - 0.10.25-1
+- version updated;
+
 * Thu Apr 23 2015 Fl@sh <kaperang07@gmail.com> - 0.10.21-1
 - version updated;
 - clear %%changelog;
