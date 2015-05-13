@@ -706,6 +706,6 @@ install ( TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
 install ( DIRECTORY src/misc
     DESTINATION ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME} )
-#install ( DIRECTORY src/icons
-#    DESTINATION ${SHARE_INSTALL_PREFIX}/icons/${PROJECT_NAME} )
+install ( DIRECTORY src/icons/256x256/apps/virtual-engineering.png
+    DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
 # * end

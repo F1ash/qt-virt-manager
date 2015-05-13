@@ -111,6 +111,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %{_bindir}/qt4-virt-manager
 %{_datadir}/applications/qt4-virt-manager.desktop
 %{_datadir}/qt4-virt-manager
+%{_datadir}/icons/hicolor/256x256/apps/virtual-engineering.png
 %endif
 %if %with qt5
 %files -n qt5-virt-manager
@@ -118,10 +119,12 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %{_bindir}/qt5-virt-manager
 %{_datadir}/applications/qt5-virt-manager.desktop
 %{_datadir}/qt5-virt-manager
+%{_datadir}/icons/hicolor/256x256/apps/virtual-engineering.png
 %endif
 
 %changelog
 * Wed May 13 2015 Fl@sh <kaperang07@gmail.com> - 0.10.25-1
+- changed %%files for desktop icon;
 - version updated;
 
 * Thu Apr 23 2015 Fl@sh <kaperang07@gmail.com> - 0.10.21-1
