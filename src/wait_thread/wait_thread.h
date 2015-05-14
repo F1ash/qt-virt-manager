@@ -12,15 +12,8 @@ public:
          ConnectList *wdgList = NULL);
     ~Wait();
 
-signals:
-    void             refreshProcessingState();
-
 private:
     ConnectList     *wdg;
-    bool             processingState;
-
-public slots:
-    void             setProcessingState(bool);
 
 private slots:
     void             run();

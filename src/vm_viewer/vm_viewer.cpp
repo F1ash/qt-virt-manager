@@ -59,6 +59,7 @@ virDomain* VM_Viewer::getDomainPtr() const
 void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
+        VM_State = false;
         QString msg = QString("'<b>%1</b>' viewer closed.").arg(domain);
         sendErrMsg(msg);
         ev->accept();

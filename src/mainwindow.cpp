@@ -116,8 +116,8 @@ MainWindow::~MainWindow()
   taskWrHouse = NULL;
 
   if ( wait_thread!=NULL ) {
-      disconnect(wait_thread, SIGNAL(finished()), this, SLOT(closeEvent()));
-      disconnect(wait_thread, SIGNAL(refreshProcessingState()), this, SLOT(stopProcessing()));
+      disconnect(wait_thread, SIGNAL(finished()),
+                 this, SLOT(closeEvent()));
       delete wait_thread;
       wait_thread = NULL;
   };
@@ -246,11 +246,12 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       VM_Displayed_Map.clear();
       //qDebug()<<"Viewers cleared";
       wait_thread = new Wait(this, connListWidget);
-      connect(wait_thread, SIGNAL(finished()), this, SLOT(closeEvent()));
-      connect(wait_thread, SIGNAL(refreshProcessingState()), this, SLOT(stopProcessing()));
+      connect(wait_thread, SIGNAL(finished()),
+              this, SLOT(closeEvent()));
       wait_thread->start();
       ev->ignore();
-  } else if ( !runningConnectsExist() && (wait_thread==NULL || !wait_thread->isRunning()) ) {
+  } else if ( !runningConnectsExist() &&
+              (wait_thread==NULL || !wait_thread->isRunning()) ) {
       saveSettings();
       ev->accept();
   } else {
@@ -705,17 +706,15 @@ void MainWindow::stopConnProcessing(virConnect *conn)
 }
 void MainWindow::stopProcessing()
 {
-    bool result = true;
     // stop processing of all virtual resources
     domainDockContent->stopProcessing();
     networkDockContent->stopProcessing();
     storagePoolDockContent->stopProcessing();
     storageVolDockContent->stopProcessing();
-    result = result && domainDockContent->getThreadState();
-    result = result && networkDockContent->getThreadState() ;
-    result = result && storagePoolDockContent->getThreadState();
-    result = result && storageVolDockContent->getThreadState();
-    if ( wait_thread!=NULL ) wait_thread->setProcessingState(result);
+    domainDockContent->getThreadState();
+    networkDockContent->getThreadState() ;
+    storagePoolDockContent->getThreadState();
+    storageVolDockContent->getThreadState();
 }
 void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString domName)
 {
