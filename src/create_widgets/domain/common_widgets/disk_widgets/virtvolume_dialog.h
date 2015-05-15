@@ -34,7 +34,7 @@ private:
     QHBoxLayout     *listLayout;
     QWidget         *listWidget;
     QVBoxLayout     *commonLayout;
-    virConnectPtr    currWorkConnect = NULL;
+    virConnectPtr    currWorkConnection = NULL;
     StorageVolControlThread
                     *storageThread;
 

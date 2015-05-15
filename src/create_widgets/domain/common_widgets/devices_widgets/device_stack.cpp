@@ -70,7 +70,7 @@
 DeviceStack::DeviceStack(
         QWidget *parent,
         virConnectPtr conn) :
-    QDialog(parent), currWorkConnect(conn)
+    QDialog(parent), currWorkConnection(conn)
 {
     setModal(true);
     restoreGeometry(settings.value("DeviceStackGeometry").toByteArray());
@@ -80,7 +80,7 @@ DeviceStack::DeviceStack(
     scrolled->setLayout(infoLayout);
     infoWidget->setWidget(scrolled);
     infoWidget->setWidgetResizable(true);
-    QString connType = QString(virConnectGetType(currWorkConnect)).toLower();
+    QString connType = QString(virConnectGetType(currWorkConnection)).toLower();
     QStringList devSet, devList, devType;
     devList = DEV_LIST;
     devType = DEV_TYPE;
@@ -206,11 +206,11 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     if ( deviceType == "disk" ) {
         device = new Disk(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else if ( deviceType == "interface" ) {
         device = new NetInterfaces(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else if ( deviceType == "serial" ) {
         device = new CharDevice(this, NULL, NULL, deviceType);
     } else if ( deviceType == "parallel" ) {
@@ -220,7 +220,7 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     } else if ( deviceType == "console" ) {
         device = new ConsoleDevice(
                           this,
-                          currWorkConnect);
+                          currWorkConnection);
     } else if ( deviceType == "smartcard" ) {
         device = new SmartCardDevice(this);
     } else if ( deviceType == "input" ) {
@@ -234,30 +234,30 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     } else if ( deviceType == "hostdev" ) {
         device = new HostDevice(
                           this,
-                          currWorkConnect);
+                          currWorkConnection);
     } else if ( deviceType == "graphics" ) {
         device = new GraphicsDevice(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else if ( deviceType == "redirdev" ) {
         device = new RedirDevDevice(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else if ( deviceType == "filesystem" ) {
         device = new FileSystems(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else if ( deviceType == "emulator" ) {
         device = new _QWidget(this);
         //device = new Emulator(
         //            this,
-        //            currWorkConnect);
+        //            currWorkConnection);
     } else if ( deviceType == "rng" ) {
         device = new Random(this);
     } else if ( deviceType == "memballoon" ) {
         device = new MemBalloon(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else {
         device = new _QWidget(this);
     };

@@ -37,7 +37,7 @@ public slots:
 
 private :
     QSettings                    settings;
-    ConnectList                 *connListWidget;
+    ConnectionList              *connListWidget;
     TrayIcon                    *trayIcon;
     ToolBar                     *toolBar;
     Wait                        *wait_thread = NULL;
@@ -74,16 +74,16 @@ private slots:
     void initConnListWidget();
     void initToolBar();
     void initDockWidgets();
-    void editCurrentConnect();
-    void createNewConnect();
-    void deleteCurrentConnect();
-    void removeConnectItem(QString&);
-    void openCurrentConnect();
-    void showCurrentConnect();
-    void closeCurrentConnect();
-    void closeConnect(int);
-    void closeAllConnect();
-    bool runningConnectsExist();
+    void editCurrentConnection();
+    void createNewConnection();
+    void deleteCurrentConnection();
+    void removeConnItem(QString&);
+    void openCurrentConnection();
+    void showCurrentConnection();
+    void closeCurrentConnection();
+    void closeConnection(int);
+    void closeAllConnections();
+    bool runningConnExist();
     void autoHide();
     void writeToErrorLog(QString&);
     void changeLogViewerVisibility();

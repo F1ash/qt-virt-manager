@@ -33,7 +33,7 @@ void LXC_ViewerThread::setData(QString &_dom, virDomainPtr _domPtr, int fd)
 }
 void LXC_ViewerThread::run()
 {
-    stream = (NULL!=currWorkConnect)? virStreamNew( currWorkConnect, VIR_STREAM_NONBLOCK ):NULL;
+    stream = (NULL!=currWorkConnection)? virStreamNew( currWorkConnection, VIR_STREAM_NONBLOCK ):NULL;
     if ( NULL==stream ) {
         sendConnErrors();
         keep_alive = false;

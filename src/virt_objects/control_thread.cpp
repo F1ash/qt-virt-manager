@@ -8,12 +8,12 @@ ControlThread::ControlThread(QObject *parent) :
 }
 ControlThread::~ControlThread()
 {
-    if ( currWorkConnect!=NULL ) {
+    if ( currWorkConnection!=NULL ) {
         // release the reference because no longer required
-        int ret = virConnectClose(currWorkConnect);
+        int ret = virConnectClose(currWorkConnection);
         //qDebug()<<"virConnectRef -1"<<"ControlThread"<<currConnName<<(ret+1>0)<<number;
         // for reject the multiple releasing the reference
-        currWorkConnect = NULL;
+        currWorkConnection = NULL;
     };
     wait(30000);
 }
@@ -24,16 +24,16 @@ bool ControlThread::setCurrentWorkConnect(virConnectPtr conn, uint i, QString _n
     keep_alive = true;
     number = i;
     currConnName = _name;
-    currWorkConnect = conn;
+    currWorkConnection = conn;
     // for new virConnect usage create the new virConnectRef[erence]
-    int ret = virConnectRef(currWorkConnect);
+    int ret = virConnectRef(currWorkConnection);
     if ( ret<0 ) {
-        currWorkConnect = NULL;
+        currWorkConnection = NULL;
         sendConnErrors();
         keep_alive = false;
     };
     //qDebug()<<"virConnectRef +1"<<"ControlThread"<<currConnName<<(ret+1>0)<<number;
-    //qDebug()<<"net_thread"<<currWorkConnect;
+    //qDebug()<<"net_thread"<<currWorkConnection;
     return keep_alive;
 }
 void ControlThread::execAction(Actions i, QStringList _str)
@@ -48,7 +48,7 @@ void ControlThread::run()
 
 void ControlThread::sendConnErrors()
 {
-    virtErrors = virConnGetLastError(currWorkConnect);
+    virtErrors = virConnGetLastError(currWorkConnection);
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));

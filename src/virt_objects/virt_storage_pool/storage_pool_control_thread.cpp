@@ -12,7 +12,7 @@ void StoragePoolControlThread::execAction(Actions act, QStringList _args)
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;
-        if ( NULL!=currWorkConnect ) start();
+        if ( NULL!=currWorkConnection ) start();
         else {
             Result result;
             result.type   = "pool";
@@ -67,11 +67,11 @@ Result StoragePoolControlThread::getAllStoragePoolList()
 {
     Result result;
     QStringList storagePoolList;
-    if ( currWorkConnect!=NULL && keep_alive ) {
+    if ( currWorkConnection!=NULL && keep_alive ) {
         virStoragePoolPtr *storagePool = NULL;
         unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                              VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
-        int ret = virConnectListAllStoragePools( currWorkConnect, &storagePool, flags);
+        int ret = virConnectListAllStoragePools( currWorkConnection, &storagePool, flags);
         if ( ret<0 ) {
             sendConnErrors();
             result.result = false;
@@ -120,7 +120,7 @@ Result StoragePoolControlThread::createStoragePool()
     f.close();
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
-    virStoragePoolPtr storagePool = virStoragePoolCreateXML(currWorkConnect, xmlData.data(), flags);
+    virStoragePoolPtr storagePool = virStoragePoolCreateXML(currWorkConnection, xmlData.data(), flags);
     if ( storagePool==NULL ) {
         sendConnErrors();
         result.result = false;
@@ -150,7 +150,7 @@ Result StoragePoolControlThread::defineStoragePool()
     f.close();
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
-    virStoragePoolPtr storagePool = virStoragePoolDefineXML(currWorkConnect, xmlData.data(), flags);
+    virStoragePoolPtr storagePool = virStoragePoolDefineXML(currWorkConnection, xmlData.data(), flags);
     if ( storagePool==NULL ) {
         sendConnErrors();
         result.result = false;
@@ -173,7 +173,7 @@ Result StoragePoolControlThread::startStoragePool()
     bool started = false;
     // flags: extra flags; not used yet, so callers should always pass 0
     flags = 0;
-    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnection, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         started = (virStoragePoolCreate(storagePool, flags)+1) ? true : false;
         if (!started) sendConnErrors();
@@ -190,7 +190,7 @@ Result StoragePoolControlThread::destroyStoragePool()
     Result result;
     QString name = args.first();
     bool deleted = false;
-    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnection, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         deleted = (virStoragePoolDestroy(storagePool)+1) ? true : false;
         if (!deleted) sendConnErrors();
@@ -207,7 +207,7 @@ Result StoragePoolControlThread::undefineStoragePool()
     Result result;
     QString name = args.first();
     bool deleted = false;
-    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnection, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         deleted = (virStoragePoolUndefine(storagePool)+1) ? true : false;
         if (!deleted) sendConnErrors();
@@ -239,7 +239,7 @@ Result StoragePoolControlThread::changeAutoStartStoragePool()
         };
     };
     bool set = false;
-    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnection, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         set = (virStoragePoolSetAutostart(storagePool, autostart)+1) ? true : false;
         if (!set) sendConnErrors();
@@ -274,7 +274,7 @@ Result StoragePoolControlThread::deleteStoragePool()
         };
     };
     bool deleted = false;
-    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnection, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         deleted = (virStoragePoolDelete(storagePool, flags)+1) ? true : false;
         if (!deleted) sendConnErrors();
@@ -292,7 +292,7 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     QString name = args.first();
     bool read = false;
     char *Returns = NULL;
-    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnect, name.toUtf8().data());
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(currWorkConnection, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         Returns = (virStoragePoolGetXMLDesc(storagePool, VIR_STORAGE_XML_INACTIVE));
         if ( Returns==NULL ) sendConnErrors();

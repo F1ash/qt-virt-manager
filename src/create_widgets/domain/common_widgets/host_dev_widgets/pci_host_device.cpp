@@ -61,10 +61,10 @@ void PCI_Host_Device::setAvailabledPCIDevices()
     int i = 0;
     QStringList      devices;
     virNodeDevice  **nodeDevices = NULL;
-    if ( currWorkConnect!=NULL ) {
+    if ( currWorkConnection!=NULL ) {
         unsigned int flags =
                 VIR_CONNECT_LIST_NODE_DEVICES_CAP_PCI_DEV;
-        int ret = virConnectListAllNodeDevices(currWorkConnect, &nodeDevices, flags);
+        int ret = virConnectListAllNodeDevices(currWorkConnection, &nodeDevices, flags);
         if ( ret<0 ) {
             sendConnErrors();
         } else {
@@ -79,7 +79,7 @@ void PCI_Host_Device::setAvailabledPCIDevices()
         };
         free(nodeDevices);
     };
-    //int devs = virNodeNumOfDevices(currWorkConnect, NULL, 0);
+    //int devs = virNodeNumOfDevices(currWorkConnection, NULL, 0);
     //qDebug()<<"Devices("<<devs<<i<<"):\n"<<devices.join("\n");
     // set unique device description to devList
     // WARNING: PCI devices can only be described by their address.
@@ -122,7 +122,7 @@ void PCI_Host_Device::setAvailabledPCIDevices()
 
 void PCI_Host_Device::sendConnErrors()
 {
-    virtErrors = virConnGetLastError(currWorkConnect);
+    virtErrors = virConnGetLastError(currWorkConnection);
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                        .arg(QString().fromUtf8(virtErrors->message)) );

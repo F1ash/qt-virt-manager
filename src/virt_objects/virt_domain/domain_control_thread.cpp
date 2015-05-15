@@ -11,7 +11,7 @@ void DomControlThread::execAction(Actions act, QStringList _args)
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;
-        if ( NULL!=currWorkConnect ) start();
+        if ( NULL!=currWorkConnection ) start();
         else {
             Result result;
             result.type   = "domain";
@@ -100,12 +100,12 @@ Result DomControlThread::getAllDomainList()
 {
     Result result;
     QStringList domainList;
-    if ( currWorkConnect!=NULL && keep_alive ) {
+    if ( currWorkConnection!=NULL && keep_alive ) {
         virDomainPtr *domains = NULL;
         unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
                              VIR_CONNECT_LIST_DOMAINS_INACTIVE;
         // the number of domains found or -1 and sets domains to NULL in case of error.
-        int ret = virConnectListAllDomains(currWorkConnect, &domains, flags);
+        int ret = virConnectListAllDomains(currWorkConnection, &domains, flags);
         if ( ret<0 ) {
             sendConnErrors();
             result.result = false;
@@ -196,7 +196,7 @@ Result DomControlThread::createDomain()
     };
     xmlData = f.readAll();
     f.close();
-    virDomainPtr domain = virDomainCreateXML(currWorkConnect, xmlData.data(), VIR_DOMAIN_START_AUTODESTROY);
+    virDomainPtr domain = virDomainCreateXML(currWorkConnection, xmlData.data(), VIR_DOMAIN_START_AUTODESTROY);
     if ( domain==NULL ) {
         sendConnErrors();
         return result;
@@ -222,7 +222,7 @@ Result DomControlThread::defineDomain()
     };
     xmlData = f.readAll();
     f.close();
-    virDomainPtr domain = virDomainDefineXML(currWorkConnect, xmlData.data());
+    virDomainPtr domain = virDomainDefineXML(currWorkConnection, xmlData.data());
     sendConnErrors();
     if ( domain==NULL ) return result;
     result.name = QString().fromUtf8( virDomainGetName(domain) );
@@ -237,7 +237,7 @@ Result DomControlThread::startDomain()
     Result result;
     QString name = args.first();
     bool started = false;
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, name.toUtf8().data());
     if ( domain!=NULL ) {
         started = (virDomainCreate(domain)+1) ? true : false;
         if (!started) sendConnErrors();
@@ -256,7 +256,7 @@ Result DomControlThread::pauseDomain()
     QString state = args.last();
     bool invoked = false;
 
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, name.toUtf8().data());
 
     if ( domain!=NULL ) {
         if ( state=="RUNNING" ) {
@@ -280,7 +280,7 @@ Result DomControlThread::destroyDomain()
     QString name = args.first();
 
     bool deleted = false;
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, name.toUtf8().data());
     if ( domain!=NULL ) {
         deleted = (virDomainDestroy(domain)+1) ? true : false;
         if (!deleted) sendConnErrors();
@@ -300,7 +300,7 @@ Result DomControlThread::resetDomain()
     // extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
 
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, name.toUtf8().data());
 
     if ( domain!=NULL ) {
         invoked = (virDomainReset(domain, flags)+1) ? true : false;
@@ -325,7 +325,7 @@ Result DomControlThread::rebootDomain()
             VIR_DOMAIN_REBOOT_INITCTL |
             VIR_DOMAIN_REBOOT_SIGNAL;
 
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, name.toUtf8().data());
 
     if ( domain!=NULL ) {
         invoked = (virDomainReboot(domain, flags)+1) ? true : false;
@@ -350,7 +350,7 @@ Result DomControlThread::shutdownDomain()
             VIR_DOMAIN_SHUTDOWN_INITCTL |
             VIR_DOMAIN_SHUTDOWN_SIGNAL;
 
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, name.toUtf8().data());
 
     if ( domain!=NULL ) {
         invoked = (virDomainShutdownFlags(domain, flags)+1) ? true : false;
@@ -379,7 +379,7 @@ Result DomControlThread::saveDomain()
         flags = flags | VIR_DOMAIN_SAVE_PAUSED;
     };
 
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, name.toUtf8().data());
 
     if ( domain!=NULL ) {
         invoked = (virDomainSaveFlags(domain, to, dxml, flags)+1) ? true : false;
@@ -408,8 +408,8 @@ Result DomControlThread::restoreDomain()
         flags = flags | VIR_DOMAIN_SAVE_PAUSED;
     };
 
-    if ( currWorkConnect!=NULL ) {
-        invoked = (virDomainRestoreFlags(currWorkConnect, from, dxml, flags)+1) ? true : false;
+    if ( currWorkConnection!=NULL ) {
+        invoked = (virDomainRestoreFlags(currWorkConnection, from, dxml, flags)+1) ? true : false;
         if (!invoked) sendConnErrors();
     };
     result.name = name;
@@ -425,7 +425,7 @@ Result DomControlThread::undefineDomain()
     QString name = args.first();
 
     bool deleted = false;
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, name.toUtf8().data());
     if ( domain!=NULL ) {
         deleted = (virDomainUndefine(domain)+1) ? true : false;
         if (!deleted) sendConnErrors();
@@ -457,7 +457,7 @@ Result DomControlThread::changeAutoStartDomain()
     };
 
     bool set = false;
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, name.toUtf8().data());
     if ( domain!=NULL ) {
         set = (virDomainSetAutostart(domain, autostart)+1) ? true : false;
         if (!set) sendConnErrors();
@@ -476,7 +476,7 @@ Result DomControlThread::getDomainXMLDesc()
 
     bool read = false;
     char *Returns = NULL;
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, name.toUtf8().data());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, name.toUtf8().data());
     if ( domain!=NULL ) {
         Returns = (virDomainGetXMLDesc(domain, VIR_DOMAIN_XML_INACTIVE));
         if ( Returns==NULL ) sendConnErrors();
@@ -503,7 +503,7 @@ Result DomControlThread::migrateDomain()
     bool migrated = false;
     unsigned int flags = 0;
     qDebug()<<args<<"migrate";
-    //qDebug()<<virConnectGetCapabilities(currWorkConnect);
+    //qDebug()<<virConnectGetCapabilities(currWorkConnection);
     if ( args.count()<17 ) {
         result.name = args[0];
         result.result = migrated;
@@ -511,7 +511,7 @@ Result DomControlThread::migrateDomain()
                           .arg(args[0]).arg("arguments incorrect."));
         return result;
     };
-    virDomainPtr domain = virDomainLookupByName(currWorkConnect, args[0].toUtf8().constData());
+    virDomainPtr domain = virDomainLookupByName(currWorkConnection, args[0].toUtf8().constData());
     //const char *uri = ( args[2].isEmpty() ) ? NULL : args[2].toUtf8().constData();
     bool ok;
     int maxDownTime = args[3].toInt(&ok);
@@ -602,7 +602,7 @@ Result DomControlThread::createSnapshoteDomain()
         _xmlDesc.append(args.at(2));
         const char *xmlDesc = _xmlDesc.data();
         //qDebug()<<xmlDesc<<flags;
-        virDomainPtr domain = virDomainLookupByName(currWorkConnect, domName.toUtf8().data());
+        virDomainPtr domain = virDomainLookupByName(currWorkConnection, domName.toUtf8().data());
         if ( NULL==domain ) {
             sendConnErrors();
         } else {
@@ -633,7 +633,7 @@ Result DomControlThread::revertSnapshoteDomain()
         QString snapshotName(args.at(1));
         unsigned int flags = args.at(2).toUInt();
         //qDebug()<<snapshotName<<flags;
-        virDomainPtr domain = virDomainLookupByName(currWorkConnect, domName.toUtf8().data());
+        virDomainPtr domain = virDomainLookupByName(currWorkConnection, domName.toUtf8().data());
         if ( NULL==domain ) {
             sendConnErrors();
         } else {
@@ -670,7 +670,7 @@ Result DomControlThread::deleteSnapshoteDomain()
         QString snapshotName(args.at(1));
         unsigned int flags = args.at(2).toUInt();
         //qDebug()<<snapshotName<<flags;
-        virDomainPtr domain = virDomainLookupByName(currWorkConnect, domName.toUtf8().data());
+        virDomainPtr domain = virDomainLookupByName(currWorkConnection, domName.toUtf8().data());
         if ( NULL==domain ) {
             sendConnErrors();
         } else {

@@ -63,13 +63,13 @@ public slots:
     void            setData(QString&);
     void            setKeepAlive(bool);
     bool            getKeepAlive() const;
-    virConnect*     getConnect() const;
+    virConnect*     getConnection() const;
     void            setAuthCredentials(QString&, QString&);
 
 private slots:
     void            run();
-    void            openConnect();
-    void            closeConnect();
+    void            openConnection();
+    void            closeConnection();
     void            sendConnErrors();
     void            sendGlobalErrors();
     void            registerConnEvents();
@@ -82,7 +82,7 @@ private slots:
     const char*     eventToString(int event);
     static const char*
                     eventDetailToString(int event, int detail);
-    void            closeConnect(int);
+    void            closeConnection(int);
     void            getAuthCredentials(QString&);
 };
 

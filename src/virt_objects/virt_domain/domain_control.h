@@ -34,7 +34,7 @@ public slots:
     void                     stopProcessing();
     bool                     setCurrentWorkConnect(virConnect*);
     void                     setListHeader(QString&);
-    virConnect*              getConnect() const;
+    virConnect*              getConnection() const;
     void                     execMigrateAction(virConnectPtr, QStringList&);
     void                     reloadDomainState();
     void                     resultReceiver(Result);

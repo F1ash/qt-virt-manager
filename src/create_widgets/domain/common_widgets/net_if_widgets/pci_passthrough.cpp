@@ -11,7 +11,7 @@ PCI_Passthrough::PCI_Passthrough(
     attention = new QLabel("WARNING: only for SR-IOV\n(Single Root I/O Virtualization)", this);
     driverLabel = new QLabel("Driver:", this);
     driver = new QComboBox(this);
-    connType = QString(virConnectGetType(currWorkConnect)).toLower();
+    connType = QString(virConnectGetType(currWorkConnection)).toLower();
     if ( connType=="lxc" ) {
         driver->addItem("VFIO");
     } else if ( connType=="qemu" ) {

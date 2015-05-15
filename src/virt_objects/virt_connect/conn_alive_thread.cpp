@@ -24,7 +24,7 @@ void ConnAliveThread::setKeepAlive(bool b)
 {
     keep_alive = b;
     if ( isRunning() && !keep_alive ) {
-        closeConnect();
+        closeConnection();
         terminate();
         wait(60000);
     };
@@ -33,7 +33,7 @@ bool ConnAliveThread::getKeepAlive() const
 {
     return keep_alive;
 }
-virConnect* ConnAliveThread::getConnect() const
+virConnect* ConnAliveThread::getConnection() const
 {
     return conn;
 }
@@ -49,7 +49,7 @@ void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
 /* private slots */
 void ConnAliveThread::run()
 {
-    openConnect();
+    openConnection();
     if (!keep_alive) return;
     int probe = 0;
     int ret = virConnectSetKeepAlive(conn, 3, 10);
@@ -94,9 +94,9 @@ void ConnAliveThread::run()
             };
         };
     };
-    if ( keep_alive ) closeConnect();
+    if ( keep_alive ) closeConnection();
 }
-void ConnAliveThread::openConnect()
+void ConnAliveThread::openConnection()
 {
     //conn = virConnectOpen(URI.toUtf8().constData());
     auth.cb = authCallback;
@@ -118,7 +118,7 @@ void ConnAliveThread::openConnect()
     };
     //qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI<<(conn!=NULL);
 }
-void ConnAliveThread::closeConnect()
+void ConnAliveThread::closeConnection()
 {
     keep_alive = false;
     if ( conn!=NULL ) {
@@ -187,7 +187,7 @@ void ConnAliveThread::connEventCallBack(virConnectPtr _conn, int reason, void *o
 {
     Q_UNUSED(_conn);
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
-    if ( NULL!=obj ) obj->closeConnect(reason);
+    if ( NULL!=obj ) obj->closeConnection(reason);
 }
 int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int ncred, void *cbdata)
 {
@@ -481,7 +481,7 @@ const char* ConnAliveThread::eventDetailToString(int event, int detail) {
     };
     return ret;
 }
-void ConnAliveThread::closeConnect(int reason)
+void ConnAliveThread::closeConnection(int reason)
 {
     CONN_STATE state;
     keep_alive = false;

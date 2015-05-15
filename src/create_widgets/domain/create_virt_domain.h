@@ -30,7 +30,7 @@ signals:
 
 private:
     QSettings        settings;
-    virConnect      *currWorkConnect = NULL;
+    virConnect      *currWorkConnection = NULL;
     QString          xmlFileName, xmlDesc;
     virErrorPtr      virtErrors;
     QString          capabilities;

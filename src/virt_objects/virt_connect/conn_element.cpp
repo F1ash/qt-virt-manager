@@ -4,7 +4,7 @@
 #define TO_RUN true
 #define TO_STOP false
 
-ElemConnect::ElemConnect(QObject *parent) :
+ConnElement::ConnElement(QObject *parent) :
     QObject(parent)
 {
     //connect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
@@ -14,19 +14,19 @@ ElemConnect::ElemConnect(QObject *parent) :
     connect(connAliveThread, SIGNAL(connMsg(QString)),
             this, SLOT(receiveConnMessage(QString)));
     connect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)),
-            this, SLOT(setConnectState(CONN_STATE)));
+            this, SLOT(setConnectionState(CONN_STATE)));
     connect(connAliveThread, SIGNAL(authRequested(QString&)),
             this, SLOT(getAuthCredentials(QString&)));
     connect(connAliveThread, SIGNAL(domStateChanged(Result)),
             this, SIGNAL(domStateChanged(Result)));
 }
-ElemConnect::~ElemConnect()
+ConnElement::~ConnElement()
 {
     //disconnect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
     disconnect(connAliveThread, SIGNAL(connMsg(QString)),
                this, SLOT(receiveConnMessage(QString)));
     disconnect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)),
-               this, SLOT(setConnectState(CONN_STATE)));
+               this, SLOT(setConnectionState(CONN_STATE)));
     disconnect(connAliveThread, SIGNAL(authRequested(QString&)),
                this, SLOT(getAuthCredentials(QString&)));
     disconnect(connAliveThread, SIGNAL(domStateChanged(Result)),
@@ -41,7 +41,7 @@ ElemConnect::~ElemConnect()
 }
 
 /* public slots */
-void ElemConnect::setItemReference(ConnItemModel *model, ConnItemIndex *idx)
+void ConnElement::setItemReference(ConnItemModel *model, ConnItemIndex *idx)
 {
     own_model = model;
     own_index = idx;
@@ -55,9 +55,9 @@ void ElemConnect::setItemReference(ConnItemModel *model, ConnItemIndex *idx)
     bool atStart = settings.value("AtStart", QVariant(false)).toBool();
     settings.endGroup();
     settings.endGroup();
-    if ( atStart ) openConnect();
+    if ( atStart ) openConnection();
 }
-void ElemConnect::openConnect()
+void ConnElement::openConnection()
 {
     conn_Status.insert("availability", QVariant(NOT_AVAILABLE));
     conn_Status.insert("isRunning", QVariant(RUNNING));
@@ -73,40 +73,40 @@ void ElemConnect::openConnect()
             QString("Wait Timer is running: %1").arg(waitTimerId));
     };
 }
-void ElemConnect::closeConnect()
+void ConnElement::closeConnection()
 {
     connAliveThread->setKeepAlive(false);
 }
-void ElemConnect::showConnectData()
+void ConnElement::showConnectionData()
 {
     virConnect *conn = NULL;
-    conn = connAliveThread->getConnect();
-    //qDebug()<<"showConnectData:"<<name<<QVariant((conn!=NULL)?true:false).toString()<<conn;
+    conn = connAliveThread->getConnection();
+    //qDebug()<<"showConnectionData:"<<name<<QVariant((conn!=NULL)?true:false).toString()<<conn;
     emit connPtr(conn, name);
     int row = own_model->connItemDataList.indexOf(own_index);
     own_model->setData(own_model->index(row, 0), true, Qt::DecorationRole);
 }
-virConnect* ElemConnect::getConnect() const
+virConnect* ConnElement::getConnection() const
 {
-    return connAliveThread->getConnect();
+    return connAliveThread->getConnection();
 }
-void ElemConnect::setAuthCredentials(QString &crd, QString &text)
+void ConnElement::setAuthCredentials(QString &crd, QString &text)
 {
     if ( connAliveThread!=NULL ) {
         connAliveThread->setAuthCredentials(crd, text);
     }
 }
-QString ElemConnect::getName() const
+QString ConnElement::getName() const
 {
     return name;
 }
-void ElemConnect::setOnViewConnAliveThread(bool state)
+void ConnElement::setOnViewConnAliveThread(bool state)
 {
     connAliveThread->onView = state;
 }
 
 /* private slots */
-void ElemConnect::buildCommand()
+void ConnElement::buildCommand()
 {
     settings.beginGroup("Connects");
     settings.beginGroup(name);
@@ -140,7 +140,7 @@ void ElemConnect::buildCommand()
     };
     URI = _uri.join("");
 }
-void ElemConnect::setConnectState(CONN_STATE status)
+void ConnElement::setConnectionState(CONN_STATE status)
 {
   if ( status!=RUNNING ) {
       if (waitTimerId) {
@@ -185,7 +185,7 @@ void ElemConnect::setConnectState(CONN_STATE status)
       own_model->setData(own_model->index(row, i), data, Qt::EditRole);
   };
 }
-void ElemConnect::timerEvent(QTimerEvent *event)
+void ConnElement::timerEvent(QTimerEvent *event)
 {
     int percent = 0;
     int _timerId = event->timerId();
@@ -198,11 +198,11 @@ void ElemConnect::timerEvent(QTimerEvent *event)
         };
     };
 }
-void ElemConnect::receiveConnMessage(QString msg)
+void ConnElement::receiveConnMessage(QString msg)
 {
     addMsgToLog( QString("Connection '%1'").arg(name), msg );
 }
-void ElemConnect::addMsgToLog(QString title, QString msg)
+void ConnElement::addMsgToLog(QString title, QString msg)
 {
     QString time = QTime::currentTime().toString();
     QString errorMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
@@ -210,15 +210,15 @@ void ElemConnect::addMsgToLog(QString title, QString msg)
     sendWarning(errorMsg);
     mainWindowUp();
 }
-void ElemConnect::sendWarning(QString &msg)
+void ConnElement::sendWarning(QString &msg)
 {
     emit warning(msg);
 }
-void ElemConnect::mainWindowUp()
+void ConnElement::mainWindowUp()
 {
     emit warningShowed();
 }
-void ElemConnect::getAuthCredentials(QString &crd)
+void ConnElement::getAuthCredentials(QString &crd)
 {
     emit authRequested(crd);
 }

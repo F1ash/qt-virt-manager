@@ -38,32 +38,32 @@ MainWindow::~MainWindow()
              taskWrHouse, SLOT(changeVisibility()));
   disconnect(trayIcon->closeAction, SIGNAL(triggered()),
              this, SLOT(closeEvent()));
-  disconnect(connListWidget, SIGNAL(removeConnect(QString&)),
-             this, SLOT(removeConnectItem(QString&)));
+  disconnect(connListWidget, SIGNAL(removeConnection(QString&)),
+             this, SLOT(removeConnItem(QString&)));
   disconnect(connListWidget, SIGNAL(messageShowed()),
              this, SLOT(mainWindowUp()));
   disconnect(connListWidget, SIGNAL(warning(QString&)),
              this, SLOT(writeToErrorLog(QString&)));
   disconnect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)),
              this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  disconnect(connListWidget, SIGNAL(connectClosed(virConnect*)),
+  disconnect(connListWidget, SIGNAL(connectionClosed(virConnect*)),
              this, SLOT(stopConnProcessing(virConnect*)));
   disconnect(toolBar->_hideAction, SIGNAL(triggered()),
              this, SLOT(changeVisibility()));
   disconnect(toolBar->_createAction, SIGNAL(triggered()),
-             this, SLOT(createNewConnect()));
+             this, SLOT(createNewConnection()));
   disconnect(toolBar->_editAction, SIGNAL(triggered()),
-             this, SLOT(editCurrentConnect()));
+             this, SLOT(editCurrentConnection()));
   disconnect(toolBar->_deleteAction, SIGNAL(triggered()),
-             this, SLOT(deleteCurrentConnect()));
+             this, SLOT(deleteCurrentConnection()));
   disconnect(toolBar->_openAction, SIGNAL(triggered()),
-             this, SLOT(openCurrentConnect()));
+             this, SLOT(openCurrentConnection()));
   disconnect(toolBar->_showAction, SIGNAL(triggered()),
-             this, SLOT(showCurrentConnect()));
+             this, SLOT(showCurrentConnection()));
   disconnect(toolBar->_closeAction, SIGNAL(triggered()),
-             this, SLOT(closeCurrentConnect()));
+             this, SLOT(closeCurrentConnection()));
   disconnect(toolBar->_closeAllAction, SIGNAL(triggered()),
-             this, SLOT(closeAllConnect()));
+             this, SLOT(closeAllConnections()));
   disconnect(toolBar->_logUpAction, SIGNAL(triggered()),
              this, SLOT(changeLogViewerVisibility()));
   disconnect(toolBar->_closeOverview, SIGNAL(triggered()),
@@ -214,7 +214,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
 {
   // In KDE Plasma 5 at close app the tray icon hide too
   //if ( !this->isVisible() ) changeVisibility();
-  if ( runningConnectsExist() && wait_thread==NULL ) {
+  if ( runningConnExist() && wait_thread==NULL ) {
       /*
       QString q;
       q.append("Running Connects are exist.\nKill them and exit?");
@@ -250,7 +250,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
               this, SLOT(closeEvent()));
       wait_thread->start();
       ev->ignore();
-  } else if ( !runningConnectsExist() &&
+  } else if ( !runningConnExist() &&
               (wait_thread==NULL || !wait_thread->isRunning()) ) {
       saveSettings();
       ev->accept();
@@ -325,7 +325,7 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 }
 void MainWindow::initConnListWidget()
 {
-  connListWidget = new ConnectList(this);
+  connListWidget = new ConnectionList(this);
   settings.beginGroup("ConnectListColumns");
   connListWidget->setColumnWidth(0, settings.value("column0", 132).toInt());
   connListWidget->setColumnWidth(1, settings.value("column1", 32).toInt());
@@ -337,18 +337,18 @@ void MainWindow::initConnListWidget()
   QList<QString>::const_iterator i;
   for (i=groups.constBegin(); i!=groups.constEnd(); ++i) {
       QString s = (*i);
-      connListWidget->addConnectItem(s);
+      connListWidget->addConnItem(s);
   };
   setCentralWidget(connListWidget);
-  connect(connListWidget, SIGNAL(removeConnect(QString&)),
-          this, SLOT(removeConnectItem(QString&)));
+  connect(connListWidget, SIGNAL(removeConnection(QString&)),
+          this, SLOT(removeConnItem(QString&)));
   connect(connListWidget, SIGNAL(messageShowed()),
           this, SLOT(mainWindowUp()));
   connect(connListWidget, SIGNAL(warning(QString&)),
           this, SLOT(writeToErrorLog(QString&)));
   connect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)),
           this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  connect(connListWidget, SIGNAL(connectClosed(virConnect*)),
+  connect(connListWidget, SIGNAL(connectionClosed(virConnect*)),
           this, SLOT(stopConnProcessing(virConnect*)));
 }
 void MainWindow::initToolBar()
@@ -358,19 +358,19 @@ void MainWindow::initToolBar()
   connect(toolBar->_hideAction, SIGNAL(triggered()),
           this, SLOT(changeVisibility()));
   connect(toolBar->_createAction, SIGNAL(triggered()),
-          this, SLOT(createNewConnect()));
+          this, SLOT(createNewConnection()));
   connect(toolBar->_editAction, SIGNAL(triggered()),
-          this, SLOT(editCurrentConnect()));
+          this, SLOT(editCurrentConnection()));
   connect(toolBar->_deleteAction, SIGNAL(triggered()),
-          this, SLOT(deleteCurrentConnect()));
+          this, SLOT(deleteCurrentConnection()));
   connect(toolBar->_openAction, SIGNAL(triggered()),
-          this, SLOT(openCurrentConnect()));
+          this, SLOT(openCurrentConnection()));
   connect(toolBar->_showAction, SIGNAL(triggered()),
-          this, SLOT(showCurrentConnect()));
+          this, SLOT(showCurrentConnection()));
   connect(toolBar->_closeAction, SIGNAL(triggered()),
-          this, SLOT(closeCurrentConnect()));
+          this, SLOT(closeCurrentConnection()));
   connect(toolBar->_closeAllAction, SIGNAL(triggered()),
-          this, SLOT(closeAllConnect()));
+          this, SLOT(closeAllConnections()));
   connect(toolBar->_logUpAction, SIGNAL(triggered()),
           this, SLOT(changeLogViewerVisibility()));
   connect(toolBar->_closeOverview, SIGNAL(triggered()),
@@ -580,59 +580,59 @@ void MainWindow::initDockWidgets()
     storageVolDockContent->setEnabled(false);
     storagePoolDockContent->setEnabled(false);
 }
-void MainWindow::editCurrentConnect()
+void MainWindow::editCurrentConnection()
 {
-  connListWidget->connectItemEditAction();
+  connListWidget->connItemEditAction();
 }
-void MainWindow::createNewConnect()
+void MainWindow::createNewConnection()
 {
   QString s = QString("<noname>");
-  connListWidget->addConnectItem(s);
+  connListWidget->addConnItem(s);
 }
-void MainWindow::deleteCurrentConnect()
+void MainWindow::deleteCurrentConnection()
 {
-  connListWidget->deleteCurrentConnect();
+  connListWidget->deleteCurrentConnection();
 }
-void MainWindow::removeConnectItem(QString &connect)
+void MainWindow::removeConnItem(QString &connect)
 {
   settings.beginGroup("Connects");
   settings.remove(connect);
   settings.endGroup();
   //qDebug()<<connect<<"connect deleted";
 }
-void MainWindow::openCurrentConnect()
+void MainWindow::openCurrentConnection()
 {
     QModelIndex _item = connListWidget->currentIndex();
     if (_item.isValid()) {
-        connListWidget->openConnect(_item);
+        connListWidget->openConnection(_item);
     };
 }
-void MainWindow::showCurrentConnect()
+void MainWindow::showCurrentConnection()
 {
     QModelIndex _item = connListWidget->currentIndex();
     if (_item.isValid()) {
-        connListWidget->showConnect(_item);
+        connListWidget->showConnection(_item);
     };
 }
-void MainWindow::closeCurrentConnect()
+void MainWindow::closeCurrentConnection()
 {
     QModelIndex _item = connListWidget->currentIndex();
     if (_item.isValid()) {
-        connListWidget->closeConnect(_item);
+        connListWidget->closeConnection(_item);
     };
 }
-void MainWindow::closeAllConnect()
+void MainWindow::closeAllConnections()
 {
   int count = connListWidget->connItemModel->rowCount();
-  for (int i = 0; i< count; i++) closeConnect(i);
+  for (int i = 0; i< count; i++) closeConnection(i);
 }
-void MainWindow::closeConnect(int i)
+void MainWindow::closeConnection(int i)
 {
   //qDebug()<<i<<" item to stop";
   QModelIndex _item = connListWidget->connItemModel->index(i, 0);
-  connListWidget->closeConnect(_item);
+  connListWidget->closeConnection(_item);
 }
-bool MainWindow::runningConnectsExist()
+bool MainWindow::runningConnExist()
 {
     bool result = false;
     int count = connListWidget->connItemModel->rowCount();
@@ -702,7 +702,7 @@ void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
 void MainWindow::stopConnProcessing(virConnect *conn)
 {
     // clear Overview Docks if closed connect is overviewed
-    if ( NULL!=conn && conn==domainDockContent->getConnect() ) stopProcessing();
+    if ( NULL!=conn && conn==domainDockContent->getConnection() ) stopProcessing();
 }
 void MainWindow::stopProcessing()
 {
@@ -795,7 +795,7 @@ void MainWindow::deleteVMDisplay(QString connName, QString domName)
 }
 void MainWindow::buildMigrateArgs(QStringList &args)
 {
-    virConnectPtr namedConnect = connListWidget->getConnect(args[1]);
+    virConnectPtr namedConnect = connListWidget->getConnection(args[1]);
     if ( NULL!=namedConnect ) {
         domainDockContent->execMigrateAction(namedConnect, args);
     }

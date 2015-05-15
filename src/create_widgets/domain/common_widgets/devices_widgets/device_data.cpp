@@ -4,7 +4,7 @@ DeviceData::DeviceData(
         QWidget *parent,
         virConnectPtr conn
         ) :
-    QWidget(parent), currWorkConnect(conn)
+    QWidget(parent), currWorkConnection(conn)
 {
     devName = new QLabel(this);
     save = new QPushButton(QIcon::fromTheme("document-save"), "Save", this);
@@ -66,11 +66,11 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
     if ( deviceType == "disk" ) {
         device = new Disk_Edit(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else if ( deviceType == "interface" ) {
         device = new NetInterfaces_Edit(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else if ( deviceType == "serial" ) {
         device = new CharDevice_Edit(this, NULL, NULL, deviceType);
     } else if ( deviceType == "parallel" ) {
@@ -80,7 +80,7 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
     } else if ( deviceType == "console" ) {
         device = new ConsoleDevice_Edit(
                           this,
-                          currWorkConnect);
+                          currWorkConnection);
     } else if ( deviceType == "smartcard" ) {
         device = new SmartCardDevice_Edit(this);
     } else if ( deviceType == "input" ) {
@@ -94,19 +94,19 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
     } else if ( deviceType == "hostdev" ) {
         device = new HostDevice_Edit(
                           this,
-                          currWorkConnect);
+                          currWorkConnection);
     } else if ( deviceType == "graphics" ) {
         device = new GraphicsDevice_Edit(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else if ( deviceType == "redirdev" ) {
         device = new RedirDevDevice_Edit(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else if ( deviceType == "filesystem" ) {
         device = new FileSystems_Edit(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else if ( deviceType == "emulator" ) {
         device = new Emulator_Edit(this);
     } else if ( deviceType == "rng" ) {
@@ -114,7 +114,7 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
     } else if ( deviceType == "memballoon" ) {
         device = new MemBalloon_Edit(
                     this,
-                    currWorkConnect);
+                    currWorkConnection);
     } else {
         device = new _QWidget(this);
     };

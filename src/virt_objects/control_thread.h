@@ -19,7 +19,7 @@ public:
     uint             number;
     Actions          action;
     QString          currConnName;
-    virConnect      *currWorkConnect = NULL;
+    virConnect      *currWorkConnection = NULL;
     virErrorPtr      virtErrors;
 
 signals:

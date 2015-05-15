@@ -747,7 +747,7 @@ void Spice_Graphics::readNetworkList()
     virNetworkPtr *networks = NULL;
     unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                          VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks(currWorkConnect, &networks, flags);
+    int ret = virConnectListAllNetworks(currWorkConnection, &networks, flags);
     if ( ret<0 ) {
         sendConnErrors();
     } else {
@@ -762,7 +762,7 @@ void Spice_Graphics::readNetworkList()
 
 void Spice_Graphics::sendConnErrors()
 {
-    virtErrors = virConnGetLastError(currWorkConnect);
+    virtErrors = virConnGetLastError(currWorkConnection);
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                        .arg(QString().fromUtf8(virtErrors->message)) );

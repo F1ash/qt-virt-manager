@@ -1,7 +1,7 @@
 #include "wait_thread.h"
 #define  PERIOD 333
 
-Wait::Wait(QObject *parent, ConnectList *wdgList) :
+Wait::Wait(QObject *parent, ConnectionList *wdgList) :
     QThread(parent), wdg(wdgList)
 {
 
@@ -23,7 +23,7 @@ void Wait::run()
             if ( map.value("availability").toBool() && map.value("isRunning").toInt()!=RUNNING ) {
                 to_Delete.append(idx->getName());
             } else if ( map.value("isRunning").toInt()==RUNNING ) {
-                wdg->connects->value(idx->getName())->closeConnect();
+                wdg->connections->value(idx->getName())->closeConnection();
             };
         };
         ConnItemIndex *idx;

@@ -19,7 +19,7 @@ public:
     QString                  currConnName;
     QSettings                settings;
     QTreeView               *entityList = NULL;
-    virConnect              *currWorkConnect = NULL;
+    virConnect              *currWorkConnection = NULL;
 
     virtual bool             getThreadState() const;
     virtual void             stopProcessing();

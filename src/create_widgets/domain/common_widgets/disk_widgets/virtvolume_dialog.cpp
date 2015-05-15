@@ -3,7 +3,7 @@
 VirtVolumeDialog::VirtVolumeDialog(
         QWidget *parent,
         virConnectPtr conn) :
-    QDialog(parent), currWorkConnect(conn)
+    QDialog(parent), currWorkConnection(conn)
 {
     setModal(true);
     poolList = new QListWidget(this);
@@ -57,7 +57,7 @@ void VirtVolumeDialog::setPoolList()
     virStoragePoolPtr *pools = NULL;
     unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                          VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
-    int ret = virConnectListAllStoragePools(currWorkConnect, &pools, flags);
+    int ret = virConnectListAllStoragePools(currWorkConnection, &pools, flags);
     if ( ret<0 ) {
         poolList->addItem("Not found");
     } else {
@@ -80,7 +80,7 @@ void VirtVolumeDialog::showVolumes(QListWidgetItem *_item)
 {
     QString _poolName = _item->text();
     storageThread->setCurrentStoragePoolName(
-                currWorkConnect, _poolName);
+                currWorkConnection, _poolName);
     storageThread->execAction(GET_ALL_ENTITY, QStringList());
 }
 void VirtVolumeDialog::showMsg(QString &msg)

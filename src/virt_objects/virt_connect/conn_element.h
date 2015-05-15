@@ -12,20 +12,20 @@
 #define AVAILABLE     true
 #define NOT_AVAILABLE false
 
-class ElemConnect : public QObject
+class ConnElement : public QObject
 {
     Q_OBJECT
 
 public:
-    ElemConnect(QObject *parent);
-    ~ElemConnect();
+    ConnElement(QObject *parent);
+    ~ConnElement();
 
 public slots:
     void              setItemReference(ConnItemModel*, ConnItemIndex*);
-    void              openConnect();
-    void              closeConnect();
-    void              showConnectData();
-    virConnect*       getConnect() const;
+    void              openConnection();
+    void              closeConnection();
+    void              showConnectionData();
+    virConnect*       getConnection() const;
     void              setAuthCredentials(QString&, QString&);
     QString           getName() const;
     void              setOnViewConnAliveThread(bool);
@@ -55,7 +55,7 @@ private:
 
 private slots:
     void              buildCommand();
-    void              setConnectState(CONN_STATE);
+    void              setConnectionState(CONN_STATE);
     void              timerEvent(QTimerEvent*);
     void              receiveConnMessage(QString);
     void              addMsgToLog(QString, QString);

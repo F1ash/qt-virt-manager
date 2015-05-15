@@ -27,11 +27,11 @@ Disk::Disk(QWidget *parent,
     sourceWdg->setLayout(sourceLayout);
 
     info = new QStackedWidget(this);
-    info->addWidget(new Volume_Disk(this, currWorkConnect));
-    info->addWidget(new Block_Disk(this, currWorkConnect));
-    info->addWidget(new Dir_Disk(this, currWorkConnect));
-    info->addWidget(new File_Disk(this, currWorkConnect));
-    info->addWidget(new Network_Disk(this, currWorkConnect));
+    info->addWidget(new Volume_Disk(this, currWorkConnection));
+    info->addWidget(new Block_Disk(this, currWorkConnection));
+    info->addWidget(new Dir_Disk(this, currWorkConnection));
+    info->addWidget(new File_Disk(this, currWorkConnection));
+    info->addWidget(new Network_Disk(this, currWorkConnection));
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(sourceWdg);

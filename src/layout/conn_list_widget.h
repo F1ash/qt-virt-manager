@@ -12,35 +12,35 @@
 
 #define TO_RUN true
 #define TO_STOP false
-typedef QMap<QString, ElemConnect*> CONN_LIST;
+typedef QMap<QString, ConnElement*> CONN_LIST;
 
-class ConnectList : public QTreeView
+class ConnectionList : public QTreeView
 {
     Q_OBJECT
 public:
-    ConnectList(QWidget *parent);
-    ~ConnectList();
+    ConnectionList(QWidget *parent);
+    ~ConnectionList();
 
-    CONN_LIST           *connects;
+    CONN_LIST           *connections;
     ConnItemModel       *connItemModel;
 
 signals:
     void clickedItem(QString);
-    void removeConnect(QString&);
+    void removeConnection(QString&);
     void messageShowed();
     void warning(QString&);
     void connPtr(virConnect*, QString&);
-    void connectClosed(virConnect*);
+    void connectionClosed(virConnect*);
     void domResult(Result);
 
 public slots:
-    int  connectItemEditAction();
-    void addConnectItem(QString&);
-    void deleteCurrentConnect();
-    void openConnect(QModelIndex&);
-    void showConnect(QModelIndex&);
-    void closeConnect(QModelIndex&);
-    virConnectPtr getConnect(QString&);
+    int  connItemEditAction();
+    void addConnItem(QString&);
+    void deleteCurrentConnection();
+    void openConnection(QModelIndex&);
+    void showConnection(QModelIndex&);
+    void closeConnection(QModelIndex&);
+    virConnectPtr getConnection(QString&);
     void stopProcessing();
 
 private :
@@ -48,13 +48,13 @@ private :
     ProgressBarDelegate  *progressBarDlg;
 
 private slots:
-    void connectItemClicked(const QPoint&);
-    void connectItemDoubleClicked(const QModelIndex&);
-    void connectItemKillAction();
-    void connectItemRunAction();
-    void connectItemShowAction();
-    void createConnect(QModelIndex&);
-    void checkConnect(QModelIndex&, bool);
+    void connItemClicked(const QPoint&);
+    void connItemDoubleClicked(const QModelIndex&);
+    void connItemKillAction();
+    void connItemRunAction();
+    void connItemShowAction();
+    void createConnection(QModelIndex&);
+    void checkConnection(QModelIndex&, bool);
     void deleteCancelledCreation();
     void showMessage(QString, QString);
     void sendWarning(QString&);

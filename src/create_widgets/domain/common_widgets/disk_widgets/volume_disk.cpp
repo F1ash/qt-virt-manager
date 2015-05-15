@@ -200,7 +200,7 @@ void Volume_Disk::getVolumeNames()
 {
     QStringList _ret;
     if ( volumeDialog==NULL ) {
-        volumeDialog = new VirtVolumeDialog(this, currWorkConnect);
+        volumeDialog = new VirtVolumeDialog(this, currWorkConnection);
     };
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();

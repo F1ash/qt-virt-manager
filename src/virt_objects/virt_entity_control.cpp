@@ -24,7 +24,7 @@ void VirtEntityControl::stopProcessing() {}
 bool VirtEntityControl::setCurrentWorkConnect(virConnect *conn)
 {
     stopProcessing();
-    currWorkConnect = conn;
+    currWorkConnection = conn;
     //toolBar->enableAutoReload();
     return true;
 }

@@ -17,7 +17,7 @@ FileSystems::FileSystems(
 {
     typeLabel = new QLabel("Type:", this);
     type = new QComboBox(this);
-    connType = QString(virConnectGetType(currWorkConnect)).toLower();
+    connType = QString(virConnectGetType(currWorkConnection)).toLower();
     if ( connType=="lxc" ) {
         type->addItems(LXC_FS_TYPES);
     } else if ( connType=="qemu" ) {

@@ -96,7 +96,7 @@ Devices::Devices(QWidget *parent,
     listWidget = new QWidget(this);
     listWidget->setLayout(listLayout);
 
-    infoWidget = new DeviceData(this, currWorkConnect);
+    infoWidget = new DeviceData(this, currWorkConnection);
     commonLayout = new QHBoxLayout(this);
     commonLayout->addWidget(listWidget, 3);
     commonLayout->addWidget(infoWidget, 8);
@@ -205,7 +205,7 @@ QDomDocument Devices::chooseNewDevice()
     QDomDocument doc;
     //qDebug()<<"choose New Device";
     if ( deviceStack==NULL ) {
-        deviceStack = new DeviceStack(this, currWorkConnect);
+        deviceStack = new DeviceStack(this, currWorkConnection);
     };
     if ( deviceStack->exec()==QDialog::Accepted ) {
         doc = deviceStack->getResult();

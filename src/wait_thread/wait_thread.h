@@ -9,11 +9,11 @@ class Wait : public QThread
     Q_OBJECT
 public:
     Wait(QObject *parent = NULL,
-         ConnectList *wdgList = NULL);
+         ConnectionList *wdgList = NULL);
     ~Wait();
 
 private:
-    ConnectList     *wdg;
+    ConnectionList     *wdg;
 
 private slots:
     void             run();

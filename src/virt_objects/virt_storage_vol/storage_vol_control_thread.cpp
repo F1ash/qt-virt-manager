@@ -3,7 +3,7 @@
 StorageVolControlThread::StorageVolControlThread(QObject *parent) :
     ControlThread(parent)
 {
-    currWorkConnect = NULL;
+    currWorkConnection = NULL;
 }
 
 /* public slots */
@@ -11,15 +11,15 @@ bool StorageVolControlThread::setCurrentStoragePoolName(virConnect *conn, QStrin
 {
     keep_alive = true;
     // close previous virConnectRef[erence]
-    if ( NULL!=currWorkConnect ) {
-        int ret = virConnectClose(currWorkConnect);
+    if ( NULL!=currWorkConnection ) {
+        int ret = virConnectClose(currWorkConnection);
         //qDebug()<<"virConnectRef -1"<<"StorageVolControlThread"<<currPoolName<<(ret+1>0);
     };
-    currWorkConnect = conn;
+    currWorkConnection = conn;
     // for new virConnect usage create the new virConnectRef[erence]
-    int ret = virConnectRef(currWorkConnect);
+    int ret = virConnectRef(currWorkConnection);
     if ( ret<0 ) {
-        currWorkConnect = NULL;
+        currWorkConnection = NULL;
         sendConnErrors();
         keep_alive = false;
     };
@@ -30,9 +30,9 @@ bool StorageVolControlThread::setCurrentStoragePoolName(virConnect *conn, QStrin
         currStoragePool = NULL;
     };
     currStoragePool = virStoragePoolLookupByName(
-                currWorkConnect, currPoolName.toUtf8().data());
+                currWorkConnection, currPoolName.toUtf8().data());
     if ( NULL==currStoragePool ) sendConnErrors();
-    //qDebug()<<"stVol_thread (setPoolData)\n\tConnect\t\t"<<currWorkConnect
+    //qDebug()<<"stVol_thread (setPoolData)\n\tConnect\t\t"<<currWorkConnection
     //        <<"\n\tPool\t\t"<<currStoragePool
     //        <<"\n\tName\t\t"<<currPoolName;
 }
@@ -43,7 +43,7 @@ void StorageVolControlThread::stop()
         virStoragePoolFree(currStoragePool);
         currStoragePool = NULL;
     };
-    //qDebug()<<"stVol_thread (stop)\n\tConnect\t\t"<<currWorkConnect
+    //qDebug()<<"stVol_thread (stop)\n\tConnect\t\t"<<currWorkConnection
     //        <<"\n\tPool\t\t"<<currStoragePool
     //        <<"\n\tName\t\t"<<currPoolName;
 }
@@ -52,7 +52,7 @@ void StorageVolControlThread::execAction(Actions act, QStringList _args)
     if ( keep_alive && !isRunning() ) {
         action = act;
         args = _args;
-        if ( NULL!=currWorkConnect ) start();
+        if ( NULL!=currWorkConnection ) start();
         else {
             Result result;
             result.type   = "volume";
@@ -61,7 +61,7 @@ void StorageVolControlThread::execAction(Actions act, QStringList _args)
             emit resultData(result);
         };
         //qDebug()<<"stVolThread started\n\targs\t\t"<<_args<<"\n\taction\t\t"<<act;
-        //qDebug()<<"stVol_thread (execAct)\n\tConnect\t\t"<<currWorkConnect
+        //qDebug()<<"stVol_thread (execAct)\n\tConnect\t\t"<<currWorkConnection
         //        <<"\n\tPool\t\t"<<currStoragePool
         //        <<"\n\tName\t\t"<<currPoolName;
     };
@@ -109,8 +109,8 @@ Result StorageVolControlThread::getAllStorageVolList()
     Result result;
     QStringList storageVolList;
     if ( currStoragePool==NULL ) {
-        if ( currWorkConnect!=NULL && keep_alive ) {
-            currStoragePool = virStoragePoolLookupByName(currWorkConnect, currPoolName.toUtf8().data());
+        if ( currWorkConnection!=NULL && keep_alive ) {
+            currStoragePool = virStoragePoolLookupByName(currWorkConnection, currPoolName.toUtf8().data());
         };
     };
     if ( currStoragePool!=NULL && keep_alive ) {
@@ -234,7 +234,7 @@ Result StorageVolControlThread::downloadStorageVol()
     f->open(QIODevice::WriteOnly);
 
     bool downloaded = false;
-    virStreamPtr stream = virStreamNew(currWorkConnect, 0);
+    virStreamPtr stream = virStreamNew(currWorkConnection, 0);
     unsigned long long offset = 0;
     unsigned long long length = args.first().toULongLong();
     // flags: extra flags; not used yet, so callers should always pass 0
@@ -325,7 +325,7 @@ Result StorageVolControlThread::uploadStorageVol()
     f->open(QIODevice::ReadOnly);
 
     bool uploaded = false;
-    virStreamPtr stream = virStreamNew(currWorkConnect, 0);
+    virStreamPtr stream = virStreamNew(currWorkConnection, 0);
     unsigned long long offset = 0;
     unsigned long long length = f->size();
     // flags: extra flags; not used yet, so callers should always pass 0

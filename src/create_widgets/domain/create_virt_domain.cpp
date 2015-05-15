@@ -90,7 +90,7 @@ CreateVirtDomain::CreateVirtDomain(
         QWidget *parent,
         virConnectPtr conn,
         QString _xmlFileName) :
-    QDialog(parent), currWorkConnect(conn), xmlFileName(_xmlFileName)
+    QDialog(parent), currWorkConnection(conn), xmlFileName(_xmlFileName)
 {
     setModal(true);
     setWindowTitle("Domain Settings");
@@ -150,7 +150,7 @@ bool CreateVirtDomain::getShowing() const
 void CreateVirtDomain::readCapabilities()
 {
     capabilities = QString("%1")
-            .arg(virConnectGetCapabilities(currWorkConnect));
+            .arg(virConnectGetCapabilities(currWorkConnection));
     //qDebug()<<capabilities;
     QDomDocument doc;
     doc.setContent(capabilities);
@@ -300,7 +300,7 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.insert("Memory", new Memory(this, capabilities, xmlDesc));
         wdgList.insert("CPU", new CPU(this, capabilities, xmlDesc));
         wdgList.insert("Computer",
-                       new Devices(this, currWorkConnect, xmlDesc));
+                       new Devices(this, currWorkConnection, xmlDesc));
         wdgList.insert("SecurityLabel", new SecurityLabel(this, xmlDesc));
         connect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
                 wdgList.value("General"), SLOT(changeArch(QString&)));
