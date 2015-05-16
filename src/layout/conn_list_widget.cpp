@@ -19,13 +19,20 @@ ConnectionList::ConnectionList(QWidget *parent = NULL)
           this, SLOT(connItemClicked(const QPoint &)));
   connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
           this, SLOT(connItemDoubleClicked(const QModelIndex&)));
+  searchThread = new SearchThread(this);
+  connect(searchThread, SIGNAL(localConnFound(QString&)),
+          this, SLOT(compareConnURI(QString&)));
 }
 ConnectionList::~ConnectionList()
 {
+  disconnect(searchThread, SIGNAL(localConnFound(QString&)),
+             this, SLOT(compareConnURI(QString&)));
   disconnect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
              this, SLOT(connItemClicked(const QPoint &)));
   disconnect(this, SIGNAL(doubleClicked(const QModelIndex&)),
              this, SLOT(connItemDoubleClicked(const QModelIndex&)));
+  delete searchThread;
+  searchThread = NULL;
   delete progressBarDlg;
   progressBarDlg = NULL;
   delete connItemModel;
@@ -68,6 +75,10 @@ int  ConnectionList::connItemEditAction()
 
     sDialog->deleteLater();
     return exitCode;
+}
+void ConnectionList::searchLocalhostConnections()
+{
+    searchThread->start();
 }
 void ConnectionList::addConnItem(QString &s)
 {
@@ -310,6 +321,10 @@ void ConnectionList::checkConnection(QModelIndex &_item, bool to_run = TO_RUN)
   conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
   if ( (to_run && conn_state!=RUNNING) || (!to_run && conn_state==RUNNING) )
     connItemDoubleClicked(_item);
+}
+void ConnectionList::compareConnURI(QString &uri)
+{
+
 }
 void ConnectionList::deleteCancelledCreation()
 {

@@ -339,6 +339,7 @@ void MainWindow::initConnListWidget()
       QString s = (*i);
       connListWidget->addConnItem(s);
   };
+  connListWidget->searchLocalhostConnections();
   setCentralWidget(connListWidget);
   connect(connListWidget, SIGNAL(removeConnection(QString&)),
           this, SLOT(removeConnItem(QString&)));

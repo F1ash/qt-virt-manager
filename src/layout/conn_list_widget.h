@@ -7,6 +7,7 @@
 #include "conn_menu.h"
 #include "conn_item_model.h"
 #include "progressbar_delegate.h"
+#include "search_thread.h"
 #include "virt_objects/virt_connect/conn_element.h"
 #include <QDebug>
 
@@ -35,6 +36,7 @@ signals:
 
 public slots:
     int  connItemEditAction();
+    void searchLocalhostConnections();
     void addConnItem(QString&);
     void deleteCurrentConnection();
     void openConnection(QModelIndex&);
@@ -46,6 +48,7 @@ public slots:
 private :
     ConnSettings         *sDialog;
     ProgressBarDelegate  *progressBarDlg;
+    SearchThread         *searchThread;
 
 private slots:
     void connItemClicked(const QPoint&);
@@ -55,6 +58,7 @@ private slots:
     void connItemShowAction();
     void createConnection(QModelIndex&);
     void checkConnection(QModelIndex&, bool);
+    void compareConnURI(QString&);
     void deleteCancelledCreation();
     void showMessage(QString, QString);
     void sendWarning(QString&);
