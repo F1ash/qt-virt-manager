@@ -58,7 +58,6 @@ private slots:
     void connItemShowAction();
     void createConnection(QModelIndex&);
     void checkConnection(QModelIndex&, bool);
-    void compareConnURI(QString&);
     void deleteCancelledCreation();
     void showMessage(QString, QString);
     void sendWarning(QString&);

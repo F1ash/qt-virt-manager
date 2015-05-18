@@ -2,6 +2,8 @@
 #define SEARCH_THREAD_H
 
 #include <QThread>
+#include <QStringList>
+#include <QDebug>
 
 class SearchThread : public QThread
 {
@@ -13,8 +15,12 @@ public:
 signals:
     void        localConnFound(QString&);
 
+private:
+    QStringList URIs;
+
 public slots:
     void        run();
+    void        compareURI(QString&);
 };
 
 #endif // SEARCH_THREAD_H

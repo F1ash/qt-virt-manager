@@ -3,7 +3,7 @@
 SearchThread::SearchThread(QObject *parent) :
     QThread(parent)
 {
-
+    URIs<<"lxc:///"<<"qemu:///system"<<"qemu:///session"<<"xen:///"<<"vbox:///session"<<"openvz:///system";
 }
 SearchThread::~SearchThread()
 {
@@ -12,5 +12,10 @@ SearchThread::~SearchThread()
 
 void SearchThread::run()
 {
-
+    qDebug()<<URIs;
+}
+void SearchThread::compareURI(QString &uri)
+{
+    qDebug()<<uri;
+    URIs.removeAll(uri);
 }

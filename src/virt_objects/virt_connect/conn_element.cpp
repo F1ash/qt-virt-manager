@@ -100,6 +100,10 @@ QString ConnElement::getName() const
 {
     return name;
 }
+QString ConnElement::getURI() const
+{
+    return URI;
+}
 void ConnElement::setOnViewConnAliveThread(bool state)
 {
     connAliveThread->onView = state;

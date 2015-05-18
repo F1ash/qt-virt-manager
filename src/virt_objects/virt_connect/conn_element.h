@@ -28,6 +28,7 @@ public slots:
     virConnect*       getConnection() const;
     void              setAuthCredentials(QString&, QString&);
     QString           getName() const;
+    QString           getURI() const;
     void              setOnViewConnAliveThread(bool);
 
 signals:
