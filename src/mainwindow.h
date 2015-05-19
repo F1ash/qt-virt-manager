@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QTimerEvent>
 #include <QSettings>
 #include <QCloseEvent>
 #include "log_dock/log_dock.h"
@@ -61,10 +62,16 @@ private :
     DockHeadWidget              *poolHeadWdg;
     DockHeadWidget              *volumeHeadWdg;
 
+    QProgressBar                *closeProgress;
+    int                          killTimerId = 0;
+    int                          counter = 0;
+
 private slots:
     void saveSettings();
     void closeEvent(QCloseEvent*);
     void closeEvent();
+    void startCloseProcess();
+    void timerEvent(QTimerEvent*);
     void changeVisibility();
     void mainWindowUp();
     void initTaskWareHouse();

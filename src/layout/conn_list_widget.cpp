@@ -20,6 +20,8 @@ ConnectionList::ConnectionList(QWidget *parent = NULL)
   connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
           this, SLOT(connItemDoubleClicked(const QModelIndex&)));
   searchThread = new SearchThread(this);
+  connect(searchThread, SIGNAL(localConnFound(QString&)),
+          this, SLOT(createLocalConnection(QString&)));
 }
 ConnectionList::~ConnectionList()
 {
@@ -27,6 +29,8 @@ ConnectionList::~ConnectionList()
              this, SLOT(connItemClicked(const QPoint &)));
   disconnect(this, SIGNAL(doubleClicked(const QModelIndex&)),
              this, SLOT(connItemDoubleClicked(const QModelIndex&)));
+  disconnect(searchThread, SIGNAL(localConnFound(QString&)),
+             this, SLOT(createLocalConnection(QString&)));
   delete searchThread;
   searchThread = NULL;
   delete progressBarDlg;
@@ -253,8 +257,11 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
   DATA conn_Status;
   conn_Status = idx->getData();
   QString key = conn_Status.value(QString("initName")).toString();
-  ConnElement *conn;
-  conn = connections->value(key);
+  ConnElement *conn = static_cast<ConnElement*>(connections->value(key));
+  if ( NULL==conn ) {
+      clearSelection();
+      return;
+  };
   if ( key != _name ) {
       conn_Status.insert(QString("initName"), QVariant(_name));
       connections->insert(_name, conn);
@@ -269,8 +276,6 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
   } else if ( conn_state!=RUNNING ) conn->openConnection();
   else if ( conn_state==RUNNING ) {
       emit connectionClosed(conn->getConnection());
-      // TODO: check here for close related instances :
-      // domains, networks, storages, etc.
       conn->closeConnection();
   };
   clearSelection();
@@ -309,8 +314,49 @@ void ConnectionList::createConnection(QModelIndex &_item)
   connect(connections->value(key), SIGNAL(domStateChanged(Result)),
           this, SIGNAL(domResult(Result)));
   //qDebug()<<key<<" create Connection item";
-  QString uri(conn->getURI());
-  searchThread->compareURI(uri);
+  if ( !searchThread->isFinished() && !searchThread->isRunning() ) {
+      QString uri(conn->getURI());
+      searchThread->compareURI(uri);
+  };
+}
+void ConnectionList::createLocalConnection(QString &uri)
+{
+    //qDebug()<<uri<<"create connection";
+    localConn ++;
+    QString s = QString("{Local%2_%1}")
+            .arg(uri.split(":///").first().toUpper())
+            .arg(localConn);
+    connItemModel->insertRow(0);
+    QModelIndex item;
+    for (int j=0; j<connItemModel->columnCount(); j++) {
+        QString data;
+        if (j==2) {
+            data = "-";
+        } else if (j==1) {
+            data = uri;
+        } else data = s;
+        item = connItemModel->index(0,j);
+        connItemModel->setData(item, data, Qt::EditRole);
+    };
+    ConnItemIndex *idx = connItemModel->connItemDataList.at(item.row());
+    QString key = idx->getName();
+    ConnElement *conn = new ConnElement(this);
+    conn->setName(s);
+    conn->setURI(uri);
+    conn->setItemReferenceForLocal(connItemModel, idx);
+    connections->insert(key, conn);
+    clearSelection();
+    connect(connections->value(key), SIGNAL(warningShowed()),
+            this, SLOT(mainWindowUp()));
+    connect(connections->value(key), SIGNAL(warning(QString&)),
+            this, SLOT(sendWarning(QString&)));
+    connect(connections->value(key), SIGNAL(connPtr(virConnect*, QString&)),
+            this, SLOT(sendConnPtr(virConnect*, QString&)));
+    connect(connections->value(key), SIGNAL(authRequested(QString&)),
+            this, SLOT(getAuthCredentials(QString&)));
+    connect(connections->value(key), SIGNAL(domStateChanged(Result)),
+            this, SIGNAL(domResult(Result)));
+    //qDebug()<<key<<" create Local Connection item";
 }
 void ConnectionList::checkConnection(QModelIndex &_item, bool to_run = TO_RUN)
 {

@@ -16,6 +16,6 @@ private:
     ConnectionList     *wdg;
 
 private slots:
-    void             run();
+    void                run();
 };
 #endif   // WAIT_THREAD_H

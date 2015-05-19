@@ -33,8 +33,6 @@ ConnElement::~ConnElement()
                this, SIGNAL(domStateChanged(Result)));
 
     if ( connAliveThread!=NULL ) {
-        connAliveThread->setKeepAlive(false);
-        connAliveThread->quit();
         delete connAliveThread;
         connAliveThread = NULL;
     };
@@ -55,14 +53,25 @@ void ConnElement::setItemReference(ConnItemModel *model, ConnItemIndex *idx)
     bool atStart = settings.value("AtStart", QVariant(false)).toBool();
     settings.endGroup();
     settings.endGroup();
+    buildURI();
     if ( atStart ) openConnection();
+}
+void ConnElement::setItemReferenceForLocal(ConnItemModel *model, ConnItemIndex *idx)
+{
+    own_model = model;
+    own_index = idx;
+    name = idx->getName();
+    conn_Status.insert("availability", QVariant(AVAILABLE));
+    conn_Status.insert("isRunning", QVariant(STOPPED));
+    conn_Status.insert("initName", QVariant(name));
+    idx->setData(conn_Status);
+    openConnection();
 }
 void ConnElement::openConnection()
 {
     conn_Status.insert("availability", QVariant(NOT_AVAILABLE));
     conn_Status.insert("isRunning", QVariant(RUNNING));
     own_index->setData(conn_Status);
-    buildCommand();
     connAliveThread->setData(URI);
     connAliveThread->start();
     if (!waitTimerId) {
@@ -76,6 +85,10 @@ void ConnElement::openConnection()
 void ConnElement::closeConnection()
 {
     connAliveThread->setKeepAlive(false);
+}
+void ConnElement::forceCloseConnection()
+{
+    setConnectionState(FAILED);
 }
 void ConnElement::showConnectionData()
 {
@@ -104,13 +117,21 @@ QString ConnElement::getURI() const
 {
     return URI;
 }
+void ConnElement::setName(QString &_name)
+{
+    name = _name;
+}
+void ConnElement::setURI(QString &_uri)
+{
+    URI = _uri;
+}
 void ConnElement::setOnViewConnAliveThread(bool state)
 {
     connAliveThread->onView = state;
 }
 
 /* private slots */
-void ConnElement::buildCommand()
+void ConnElement::buildURI()
 {
     settings.beginGroup("Connects");
     settings.beginGroup(name);
@@ -151,8 +172,10 @@ void ConnElement::setConnectionState(CONN_STATE status)
           killTimer(waitTimerId);
           waitTimerId = 0;
       };
-      URI.clear();
-      URI.append("-");
+      // don't clear URI because openConnection()
+      // not contains buildURI().
+      //URI.clear();
+      //URI.append("-");
   } else _diff = checkTimeout + 1;
   conn_Status.insert("isRunning", QVariant(status));
   conn_Status.insert("availability", QVariant(AVAILABLE));
@@ -166,7 +189,7 @@ void ConnElement::setConnectionState(CONN_STATE status)
           data = name;
           break;
       case 1:
-          data = URI;
+          data = ( status!=RUNNING )? "-" : URI;
           break;
       case 2:
           switch (status) {

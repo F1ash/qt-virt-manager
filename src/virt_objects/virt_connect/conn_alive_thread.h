@@ -55,6 +55,8 @@ private:
     bool            authWaitKey;
     AuthData        authData;
     QString         URI = QString();
+    bool            closeCallbackRegistered,
+                    domainEventRegistered;
 
     virConnectPtr   conn = NULL;
     virErrorPtr     virtErrors;

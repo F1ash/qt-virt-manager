@@ -252,6 +252,7 @@ void ConnSettings::saveParameters()
     settings.setValue("Extra", Extra->text());
     settings.endGroup();
     settings.endGroup();
+    settings.sync();
     own_index->setName(name);
     if ( own_index->getData().value("isRunning").toBool() )
         QMessageBox::information(this, "Info", "New settings apply\nat next job start.");
@@ -265,6 +266,8 @@ void ConnSettings::closeEvent(QCloseEvent *ev)
 }
 void ConnSettings::set_Title_Name(QString s)
 {
+    s.replace(" ", "_");
+    ConnName->setText(s);
     setWindowTitle(QString("Connection: %1").arg(s));
 }
 void ConnSettings::timerEvent(QTimerEvent *event)

@@ -10,6 +10,8 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
 {
     qRegisterMetaType<CONN_STATE>("CONN_STATE");
     onView = false;
+    closeCallbackRegistered = false;
+    domainEventRegistered = false;
 }
 ConnAliveThread::~ConnAliveThread()
 {
@@ -22,7 +24,9 @@ ConnAliveThread::~ConnAliveThread()
 void ConnAliveThread::setData(QString &uri) { URI = uri; }
 void ConnAliveThread::setKeepAlive(bool b)
 {
-    keep_alive = b;
+    //qDebug()<<"ConnAliveThread::setKeepAlive(bool b)"<<URI;
+    if ( keep_alive && !b ) keep_alive = b;
+    else return;
     if ( isRunning() && !keep_alive ) {
         closeConnection();
         terminate();
@@ -66,7 +70,7 @@ void ConnAliveThread::run()
         emit connMsg( "The check of the alive connection in the loop." );
         QTime timeMark;
         timeMark.start();
-        while ( keep_alive ) {
+        while ( keep_alive && NULL!=conn ) {
             ret = virConnectIsAlive(conn);
             if ( ret<0 ) {
                 sendConnErrors();
@@ -87,7 +91,7 @@ void ConnAliveThread::run()
         };
     } else {
         emit connMsg( "Set keepalive messages." );
-        while ( keep_alive ) {
+        while ( keep_alive && NULL!=conn ) {
             if ( virEventRunDefaultImpl() < 0 ) {
                 sendConnErrors();
                 //if ( ++probe>2 ) break;
@@ -102,13 +106,13 @@ void ConnAliveThread::openConnection()
     auth.cb = authCallback;
     auth.cbdata = this;
     conn = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
-    //qDebug()<<"openConn"<<conn;
     if (conn==NULL) {
         sendConnErrors();
         keep_alive = false;
         emit connMsg( "Connection to the Hypervisor is failed." );
         emit changeConnState(FAILED);
     } else {
+        //qDebug()<<" openConnection"<<conn<<URI;
         keep_alive = true;
         emit connMsg( QString("connect opened: %1")
                       .arg(QVariant(conn!=NULL)
@@ -120,18 +124,20 @@ void ConnAliveThread::openConnection()
 }
 void ConnAliveThread::closeConnection()
 {
+    //qDebug()<<"closeConnection"<<conn<<URI;
     keep_alive = false;
     if ( conn!=NULL ) {
         unregisterConnEvents();
         int ret = virConnectClose(conn);
         //qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
         if ( ret<0 ) {
+            emit changeConnState(FAILED);
             sendConnErrors();
         } else {
             emit connMsg( QString("close exit code: %1").arg(ret) );
+            emit changeConnState(STOPPED);
         };
         conn = NULL;
-        emit changeConnState(STOPPED);
     } else {
         emit connMsg( QString("connect is NULL") );
         emit changeConnState(FAILED);
@@ -161,20 +167,28 @@ void ConnAliveThread::registerConnEvents()
                                               this,
     // don't register freeData, because it remove this thread
                                               NULL);
+    closeCallbackRegistered = !(ret<0);
     if (ret<0) sendConnErrors();
     ret = virConnectDomainEventRegister(conn,
                                         domEventCallback,
                                         this,
     // don't register freeData, because it remove this thread
                                         NULL);
+    domainEventRegistered = !(ret<0);
     if (ret<0) sendConnErrors();
 }
 void ConnAliveThread::unregisterConnEvents()
 {
-    int ret = virConnectUnregisterCloseCallback(conn, connEventCallBack);
-    if (ret<0) sendConnErrors();
-    ret = virConnectDomainEventDeregister(conn, domEventCallback);
-    if (ret<0) sendConnErrors();
+    if ( closeCallbackRegistered ) {
+        int ret = virConnectUnregisterCloseCallback(conn, connEventCallBack);
+        if (ret<0) sendConnErrors();
+    };
+    if ( domainEventRegistered ) {
+        int ret = virConnectDomainEventDeregister(conn, domEventCallback);
+        if (ret<0) sendConnErrors();
+    };
+    closeCallbackRegistered = false;
+    domainEventRegistered = false;
 }
 void ConnAliveThread::freeData(void *opaque)
 {
@@ -483,8 +497,12 @@ const char* ConnAliveThread::eventDetailToString(int event, int detail) {
 }
 void ConnAliveThread::closeConnection(int reason)
 {
-    CONN_STATE state;
+    //qDebug()<<"closeConnection(int reason)"<<conn<<URI;
+    // don't unregisterConnEvents and close connection,
+    // because disconnected already
+    conn = NULL;
     keep_alive = false;
+    CONN_STATE state;
     switch (reason) {
         case VIR_CONNECT_CLOSE_REASON_ERROR:
             emit connMsg("Connection closed: Misc I/O error");
@@ -507,10 +525,6 @@ void ConnAliveThread::closeConnection(int reason)
             state = FAILED;
             break;
     };
-    // don't unregisterConnEvents and close connection,
-    // because disconnected already
-    sendConnErrors();
-    conn = NULL;
     emit changeConnState(state);
 }
 void ConnAliveThread::getAuthCredentials(QString &crd)

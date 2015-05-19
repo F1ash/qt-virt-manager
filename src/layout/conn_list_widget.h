@@ -49,6 +49,7 @@ private :
     ConnSettings         *sDialog;
     ProgressBarDelegate  *progressBarDlg;
     SearchThread         *searchThread;
+    int                   localConn = 0;
 
 private slots:
     void connItemClicked(const QPoint&);
@@ -57,6 +58,7 @@ private slots:
     void connItemRunAction();
     void connItemShowAction();
     void createConnection(QModelIndex&);
+    void createLocalConnection(QString&);
     void checkConnection(QModelIndex&, bool);
     void deleteCancelledCreation();
     void showMessage(QString, QString);

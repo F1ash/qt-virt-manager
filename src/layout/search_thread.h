@@ -3,6 +3,8 @@
 
 #include <QThread>
 #include <QStringList>
+#include <libvirt/libvirt.h>
+#include <libvirt/virterror.h>
 #include <QDebug>
 
 class SearchThread : public QThread

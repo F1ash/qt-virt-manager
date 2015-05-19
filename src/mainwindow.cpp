@@ -23,9 +23,18 @@ MainWindow::MainWindow(QWidget *parent)
     restoreState(settings.value("State").toByteArray());
     this->setVisible(!settings.value("Visible", false).toBool());
     changeVisibility();
+    closeProgress = new QProgressBar(this);
+    closeProgress->setRange(0, TIMEOUT);
+    statusBar()->addPermanentWidget(closeProgress);
+    statusBar()->hide();
 }
 MainWindow::~MainWindow()
 {
+  if ( killTimerId>0 ) {
+      killTimer(killTimerId);
+      killTimerId = 0;
+      counter = 0;
+  };
   disconnect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
              this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
   disconnect(trayIcon->hideAction, SIGNAL(triggered()),
@@ -161,6 +170,9 @@ MainWindow::~MainWindow()
   toolBar = NULL;
   //qDebug()<<"ToolBar cleared";
 
+  delete closeProgress;
+  closeProgress = NULL;
+
   delete trayIcon;
   trayIcon = NULL;
   //qDebug()<<"application stopped";
@@ -250,6 +262,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
               this, SLOT(closeEvent()));
       wait_thread->start();
       ev->ignore();
+      startCloseProcess();
   } else if ( !runningConnExist() &&
               (wait_thread==NULL || !wait_thread->isRunning()) ) {
       saveSettings();
@@ -262,6 +275,25 @@ void MainWindow::closeEvent(QCloseEvent *ev)
 void MainWindow::closeEvent()
 {
     this->close();
+}
+void MainWindow::startCloseProcess()
+{
+    //qDebug()<<"startCloseProcess";
+    killTimerId = startTimer(PERIOD);
+    statusBar()->show();
+    //qDebug()<<killTimerId<<"killTimer";
+}
+void MainWindow::timerEvent(QTimerEvent *ev)
+{
+    if ( ev->timerId()==killTimerId ) {
+        counter++;
+        closeProgress->setValue(counter*PERIOD);
+        if ( TIMEOUT<counter*PERIOD ) {
+            killTimer(killTimerId);
+            killTimerId = 0;
+            counter = 0;
+        };
+    };
 }
 void MainWindow::initTaskWareHouse()
 {
@@ -712,10 +744,10 @@ void MainWindow::stopProcessing()
     networkDockContent->stopProcessing();
     storagePoolDockContent->stopProcessing();
     storageVolDockContent->stopProcessing();
-    domainDockContent->getThreadState();
-    networkDockContent->getThreadState() ;
-    storagePoolDockContent->getThreadState();
-    storageVolDockContent->getThreadState();
+    //domainDockContent->getThreadState();
+    //networkDockContent->getThreadState() ;
+    //storagePoolDockContent->getThreadState();
+    //storageVolDockContent->getThreadState();
 }
 void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString domName)
 {

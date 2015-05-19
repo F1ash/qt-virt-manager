@@ -22,13 +22,17 @@ public:
 
 public slots:
     void              setItemReference(ConnItemModel*, ConnItemIndex*);
+    void              setItemReferenceForLocal(ConnItemModel*, ConnItemIndex*);
     void              openConnection();
     void              closeConnection();
+    void              forceCloseConnection();
     void              showConnectionData();
     virConnect*       getConnection() const;
     void              setAuthCredentials(QString&, QString&);
     QString           getName() const;
     QString           getURI() const;
+    void              setName(QString&);
+    void              setURI(QString&);
     void              setOnViewConnAliveThread(bool);
 
 signals:
@@ -55,7 +59,7 @@ private:
     ConnAliveThread  *connAliveThread = NULL;
 
 private slots:
-    void              buildCommand();
+    void              buildURI();
     void              setConnectionState(CONN_STATE);
     void              timerEvent(QTimerEvent*);
     void              receiveConnMessage(QString);
