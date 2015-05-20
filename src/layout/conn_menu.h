@@ -13,6 +13,7 @@ public:
     QAction  *display;
     QAction  *clean;
     QAction  *act;
+    QAction  *refresh;
 
 signals:
 

@@ -236,6 +236,8 @@ void ConnectionList::connItemClicked(const QPoint &pos)
           this, SLOT(connItemShowAction()));
   connect(connectMenu->clean, SIGNAL(triggered()),
           this, SLOT(deleteCurrentConnection()));
+  connect(connectMenu->refresh, SIGNAL(triggered()),
+          this, SLOT(refresfLocalhostConnection()));
   connectMenu->move(mapToGlobal(pos));
   connectMenu->exec();
   if (to_run) disconnect(connectMenu->act, SIGNAL(triggered()),
@@ -248,6 +250,8 @@ void ConnectionList::connItemClicked(const QPoint &pos)
              this, SLOT(connItemShowAction()));
   disconnect(connectMenu->clean, SIGNAL(triggered()),
              this, SLOT(deleteCurrentConnection()));
+  disconnect(connectMenu->refresh, SIGNAL(triggered()),
+             this, SLOT(refresfLocalhostConnection()));
   connectMenu->deleteLater();
 }
 void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
@@ -357,6 +361,33 @@ void ConnectionList::createLocalConnection(QString &uri)
     connect(connections->value(key), SIGNAL(domStateChanged(Result)),
             this, SIGNAL(domResult(Result)));
     //qDebug()<<key<<" create Local Connection item";
+}
+void ConnectionList::refresfLocalhostConnection()
+{
+    foreach (QString key, connections->keys()) {
+        ConnElement *el = static_cast<ConnElement*>(
+                    connections->value(key));
+        if ( NULL!=el ) {
+            QRegExp rx("^\\{Local([0-9]+)_([A-Z]+)\\}$");
+            QString _name = el->getName();
+            if ( _name.contains(rx) ) {
+                qDebug()<<_name;
+                el->forceCloseConnection();
+                int count = connItemModel->rowCount();
+                ConnItemIndex *idx = NULL;
+                for (int i=0; i<count; i++) {
+                    idx = connItemModel->connItemDataList.at(i);
+                    if ( idx->getName()==_name ) {
+                        connItemModel->removeRow(i);
+                        delete el;
+                        el = NULL;
+                        connections->remove(_name);
+                        break;
+                    };
+                };
+            };
+        };
+    };
 }
 void ConnectionList::checkConnection(QModelIndex &_item, bool to_run = TO_RUN)
 {

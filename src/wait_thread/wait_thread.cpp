@@ -48,6 +48,7 @@ void Wait::run()
         };
         msleep(PERIOD);
         waitTimeout += PERIOD;
+        qDebug()<<waitTimeout;
         if ( waitTimeout>MINUTE ) {
             foreach (QString key, wdg->connections->keys()) {
                 ConnElement *el = static_cast<ConnElement*>(

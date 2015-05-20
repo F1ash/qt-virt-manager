@@ -4,6 +4,7 @@
 #include <QTreeView>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QRegExp>
 #include "conn_menu.h"
 #include "conn_item_model.h"
 #include "progressbar_delegate.h"
@@ -37,6 +38,7 @@ signals:
 public slots:
     int  connItemEditAction();
     void searchLocalhostConnections();
+    void refresfLocalhostConnection();
     void addConnItem(QString&);
     void deleteCurrentConnection();
     void openConnection(QModelIndex&);

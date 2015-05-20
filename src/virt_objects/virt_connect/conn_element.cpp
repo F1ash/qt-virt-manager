@@ -88,6 +88,7 @@ void ConnElement::closeConnection()
 }
 void ConnElement::forceCloseConnection()
 {
+    closeConnection();
     setConnectionState(FAILED);
 }
 void ConnElement::showConnectionData()
