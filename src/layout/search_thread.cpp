@@ -4,12 +4,7 @@ SearchThread::SearchThread(QObject *parent) :
     QThread(parent)
 {
     qRegisterMetaType<QString>("QString&");
-    URIs<<"lxc:///"\
-        <<"qemu:///system"\
-        <<"qemu:///session"\
-        <<"xen:///"\
-        <<"vbox:///session"\
-        <<"openvz:///system";
+    setURIList();
 }
 SearchThread::~SearchThread()
 {
@@ -38,6 +33,16 @@ void SearchThread::run()
             };
         };
     };
+}
+void SearchThread::setURIList()
+{
+    URIs.clear();
+    URIs<<"lxc:///"\
+        <<"qemu:///system"\
+        <<"qemu:///session"\
+        <<"xen:///"\
+        <<"vbox:///session"\
+        <<"openvz:///system";
 }
 void SearchThread::compareURI(QString &uri)
 {

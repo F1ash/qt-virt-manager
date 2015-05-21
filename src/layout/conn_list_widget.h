@@ -38,7 +38,7 @@ signals:
 public slots:
     int  connItemEditAction();
     void searchLocalhostConnections();
-    void refresfLocalhostConnection();
+    void refreshLocalhostConnection();
     void addConnItem(QString&);
     void deleteCurrentConnection();
     void openConnection(QModelIndex&);

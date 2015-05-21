@@ -22,6 +22,7 @@ private:
 
 public slots:
     void        run();
+    void        setURIList();
     void        compareURI(QString&);
 };
 

@@ -147,7 +147,25 @@ void ConnElement::buildURI()
 
     // URI building
     QStringList _uri;
-    _uri.append(Driver.toLower().toLower().split("/").first());
+    QString _driver, _drv_row;
+    _drv_row = Driver.toLower().split("/").first();
+    if ( _drv_row.startsWith("vmware") ) {
+        if ( _drv_row.endsWith("player") ) {
+            _driver.append("vmwareplayer");
+        } else if ( _drv_row.endsWith("workstation") ) {
+            _driver.append("vmwarews");
+        } else if ( _drv_row.endsWith("fusion") ) {
+            _driver.append("vmwarefusion");
+        } else if ( _drv_row.endsWith("esx") ) {
+            _driver.append("esx");
+        } else if ( _drv_row.endsWith("gsx") ) {
+            _driver.append("gsx");
+        } else if ( _drv_row.endsWith("vpx") ) {
+            _driver.append("vpx");
+        };
+    } else
+        _driver = _drv_row;
+    _uri.append(_driver);
     if ( !Transport.isEmpty() ) {
         _uri.append("+");
         _uri.append(Transport.toLower());
@@ -165,6 +183,7 @@ void ConnElement::buildURI()
         _uri.append(Extra);
     };
     URI = _uri.join("");
+    qDebug()<<URI;
 }
 void ConnElement::setConnectionState(CONN_STATE status)
 {

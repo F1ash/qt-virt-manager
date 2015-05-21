@@ -43,12 +43,18 @@ void Wait::run()
             };
             if ( NULL!=idx ) {
                 int row = wdg->connItemModel->connItemDataList.indexOf(idx);
-                if (exist) wdg->connItemModel->removeRow(row);
+                if (exist) {
+                    wdg->connItemModel->removeRow(row);
+                    ConnElement *el = static_cast<ConnElement*>(
+                                wdg->connections->value(_name));
+                    delete el;
+                    el = NULL;
+                    wdg->connections->remove(_name);
+                };
             };
         };
         msleep(PERIOD);
         waitTimeout += PERIOD;
-        qDebug()<<waitTimeout;
         if ( waitTimeout>MINUTE ) {
             foreach (QString key, wdg->connections->keys()) {
                 ConnElement *el = static_cast<ConnElement*>(

@@ -672,8 +672,7 @@ bool MainWindow::runningConnExist()
     for (int i=0; i<count; i++) {
         ConnItemIndex *item = connListWidget->connItemModel->connItemDataList.at(i);
         //qDebug()<<connListWidget->item(i)->text()<< connListWidget->item(i)->data(Qt::UserRole).toMap().value("isRunning").toInt();
-        if ( item->getData().value("isRunning").toInt()==RUNNING ||
-            !item->getData().value("availability").toBool() ) {
+        if ( item->getData().value("isRunning").toInt()==RUNNING ) {
             result = true;
             break;
         };

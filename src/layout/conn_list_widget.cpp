@@ -237,7 +237,7 @@ void ConnectionList::connItemClicked(const QPoint &pos)
   connect(connectMenu->clean, SIGNAL(triggered()),
           this, SLOT(deleteCurrentConnection()));
   connect(connectMenu->refresh, SIGNAL(triggered()),
-          this, SLOT(refresfLocalhostConnection()));
+          this, SLOT(refreshLocalhostConnection()));
   connectMenu->move(mapToGlobal(pos));
   connectMenu->exec();
   if (to_run) disconnect(connectMenu->act, SIGNAL(triggered()),
@@ -251,7 +251,7 @@ void ConnectionList::connItemClicked(const QPoint &pos)
   disconnect(connectMenu->clean, SIGNAL(triggered()),
              this, SLOT(deleteCurrentConnection()));
   disconnect(connectMenu->refresh, SIGNAL(triggered()),
-             this, SLOT(refresfLocalhostConnection()));
+             this, SLOT(refreshLocalhostConnection()));
   connectMenu->deleteLater();
 }
 void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
@@ -362,8 +362,10 @@ void ConnectionList::createLocalConnection(QString &uri)
             this, SIGNAL(domResult(Result)));
     //qDebug()<<key<<" create Local Connection item";
 }
-void ConnectionList::refresfLocalhostConnection()
+void ConnectionList::refreshLocalhostConnection()
 {
+    searchThread->setURIList();
+    localConn = 0;
     foreach (QString key, connections->keys()) {
         ConnElement *el = static_cast<ConnElement*>(
                     connections->value(key));
@@ -371,22 +373,29 @@ void ConnectionList::refresfLocalhostConnection()
             QRegExp rx("^\\{Local([0-9]+)_([A-Z]+)\\}$");
             QString _name = el->getName();
             if ( _name.contains(rx) ) {
-                qDebug()<<_name;
+                //qDebug()<<_name;
                 el->forceCloseConnection();
                 int count = connItemModel->rowCount();
                 ConnItemIndex *idx = NULL;
                 for (int i=0; i<count; i++) {
                     idx = connItemModel->connItemDataList.at(i);
                     if ( idx->getName()==_name ) {
-                        connItemModel->removeRow(i);
+                        int row = connItemModel->connItemDataList.indexOf(idx);
+                        connItemModel->removeRow(row);
                         delete el;
                         el = NULL;
                         connections->remove(_name);
                         break;
                     };
                 };
+            } else {
+                QString uri(el->getURI());
+                searchThread->compareURI(uri);
             };
         };
+    }
+    if ( !searchThread->isRunning() ) {
+        searchLocalhostConnections();
     };
 }
 void ConnectionList::checkConnection(QModelIndex &_item, bool to_run = TO_RUN)
