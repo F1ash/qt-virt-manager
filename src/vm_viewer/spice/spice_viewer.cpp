@@ -64,14 +64,14 @@ Spice_Viewer::Spice_Viewer(
         } else {
             msg = QString("In '<b>%1</b>': Unsupported type '%2'.<br> Use external Viewer.")
                     .arg(domain).arg((!graph.isNull())? graph.attribute("type"):"???");
-            sendErrMsg(msg);
+            sendErrMsg(msg, 0);
             spiceWdg->setWidget(new QLabel(msg, this));
             startCloseProcess();
         };
     } else {
         msg = QString("In '<b>%1</b>': Connection or Domain is NULL...")
                 .arg(domain);
-        sendErrMsg(msg);
+        sendErrMsg(msg, 0);
         spiceWdg->setWidget(new QLabel(msg, this));
         startCloseProcess();
     };

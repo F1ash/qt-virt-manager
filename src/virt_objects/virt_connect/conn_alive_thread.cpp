@@ -22,20 +22,31 @@ ConnAliveThread::~ConnAliveThread()
 
 /* public slots */
 void ConnAliveThread::setData(QString &uri) { URI = uri; }
-void ConnAliveThread::setKeepAlive(bool b)
+void ConnAliveThread::closeConnection()
 {
-    //qDebug()<<"ConnAliveThread::setKeepAlive(bool b)"<<URI;
-    if ( keep_alive && !b ) keep_alive = b;
-    else return;
-    if ( isRunning() && !keep_alive ) {
-        closeConnection();
-        terminate();
-        wait(60000);
+    //qDebug()<<"closeConnection"<<conn<<URI;
+    if ( keep_alive ) {
+        keep_alive = false;
+        return;
     };
-}
-bool ConnAliveThread::getKeepAlive() const
-{
-    return keep_alive;
+    CONN_STATE state;
+    if ( conn!=NULL ) {
+        unregisterConnEvents();
+        int ret = virConnectClose(conn);
+        //qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
+        if ( ret<0 ) {
+            state = FAILED;
+            sendConnErrors();
+        } else {
+            emit connMsg( QString("close exit code: %1").arg(ret) );
+            state = STOPPED;
+        };
+        conn = NULL;
+    } else {
+        emit connMsg( QString("connect is NULL") );
+        state = FAILED;
+    };
+    emit changeConnState(state);
 }
 virConnect* ConnAliveThread::getConnection() const
 {
@@ -98,7 +109,7 @@ void ConnAliveThread::run()
             };
         };
     };
-    if ( keep_alive ) closeConnection();
+    closeConnection();
 }
 void ConnAliveThread::openConnection()
 {
@@ -121,27 +132,6 @@ void ConnAliveThread::openConnection()
         registerConnEvents();
     };
     //qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI<<(conn!=NULL);
-}
-void ConnAliveThread::closeConnection()
-{
-    //qDebug()<<"closeConnection"<<conn<<URI;
-    keep_alive = false;
-    if ( conn!=NULL ) {
-        unregisterConnEvents();
-        int ret = virConnectClose(conn);
-        //qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
-        if ( ret<0 ) {
-            emit changeConnState(FAILED);
-            sendConnErrors();
-        } else {
-            emit connMsg( QString("close exit code: %1").arg(ret) );
-            emit changeConnState(STOPPED);
-        };
-        conn = NULL;
-    } else {
-        emit connMsg( QString("connect is NULL") );
-        emit changeConnState(FAILED);
-    };
 }
 void ConnAliveThread::sendConnErrors()
 {
@@ -199,13 +189,15 @@ void ConnAliveThread::freeData(void *opaque)
 }
 void ConnAliveThread::connEventCallBack(virConnectPtr _conn, int reason, void *opaque)
 {
-    Q_UNUSED(_conn);
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
-    if ( NULL!=obj ) obj->closeConnection(reason);
+    if ( NULL!=obj && obj->conn==_conn) {
+        obj->unregisterConnEvents();
+        obj->closeConnection(reason);
+    };
 }
 int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int ncred, void *cbdata)
 {
-    qDebug()<<ncred<<"keep auth";
+    //qDebug()<<ncred<<"keep auth";
     size_t i;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(cbdata);
     if ( NULL==obj ) return -1;
@@ -260,7 +252,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
 int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, int event, int detail, void *opaque)
 {
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
-    if ( NULL==obj ) return 0;
+    if ( NULL==obj || obj->conn!=_conn ) return 0;
     QString msg;
     msg = QString("<b>'%1'</b> Domain %2 %3\n")
            .arg(virDomainGetName(dom))

@@ -61,12 +61,13 @@ void VM_Viewer::closeEvent(QCloseEvent *ev)
     if ( ev->type()==QEvent::Close ) {
         VM_State = false;
         QString msg = QString("'<b>%1</b>' viewer closed.").arg(domain);
-        sendErrMsg(msg);
+        sendErrMsg(msg, 0);
         ev->accept();
     }
 }
-void VM_Viewer::sendErrMsg(QString &msg)
+void VM_Viewer::sendErrMsg(QString &msg, uint _number)
 {
+    Q_UNUSED(_number);
     QString time = QTime::currentTime().toString();
     QString title = QString("Connection '%1'").arg(connName);
     QString errMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")

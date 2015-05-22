@@ -54,7 +54,7 @@ private:
     bool            keep_alive;
     bool            authWaitKey;
     AuthData        authData;
-    QString         URI = QString();
+    QString         URI;
     bool            closeCallbackRegistered,
                     domainEventRegistered;
 
@@ -63,15 +63,13 @@ private:
 
 public slots:
     void            setData(QString&);
-    void            setKeepAlive(bool);
-    bool            getKeepAlive() const;
+    void            closeConnection();
     virConnect*     getConnection() const;
     void            setAuthCredentials(QString&, QString&);
 
 private slots:
     void            run();
     void            openConnection();
-    void            closeConnection();
     void            sendConnErrors();
     void            sendGlobalErrors();
     void            registerConnEvents();

@@ -47,7 +47,7 @@ public slots:
     virtual bool     isActive() const;
     virDomain*       getDomainPtr() const;
     virtual void     closeEvent(QCloseEvent *ev);
-    void             sendErrMsg(QString&);
+    void             sendErrMsg(QString&, uint);
     void             sendConnErrors();
     void             sendGlobalErrors();
     void             resendExecMethod(const QStringList&);

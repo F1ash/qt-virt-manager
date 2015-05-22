@@ -277,9 +277,10 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
   conn_state = conn_Status.value(QString("isRunning"), STOPPED).toInt();
   if ( !conn_Status.value(QString("availability"), NOT_AVAILABLE).toBool() ) {
       showMessage("Info", "Connection is busy.");
-  } else if ( conn_state!=RUNNING ) conn->openConnection();
-  else if ( conn_state==RUNNING ) {
-      emit connectionClosed(conn->getConnection());
+  } else if ( conn_state!=RUNNING ) {
+      conn->openConnection();
+  } else if ( conn_state==RUNNING ) {
+      emit connectionToClose(conn->getConnection());
       conn->closeConnection();
   };
   clearSelection();

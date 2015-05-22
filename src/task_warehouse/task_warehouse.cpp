@@ -131,8 +131,8 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
     if ( NULL!=cThread ) {
         _taskDesc.removeFirst();
         //qDebug()<<ACT<<_taskDesc;
-        connect(cThread, SIGNAL(errorMsg(QString&)),
-                this, SLOT(msgRepeater(QString&)));
+        connect(cThread, SIGNAL(errorMsg(QString&,uint)),
+                this, SLOT(msgRepeater(QString&, uint)));
         connect(cThread, SIGNAL(resultData(Result)),
                 this, SLOT(taskResultReceiver(Result)));
         cThread->setCurrentWorkConnect(
@@ -146,10 +146,11 @@ void TaskWareHouse::closeEvent(QCloseEvent *ev)
 {
     ev->ignore();
 }
-void TaskWareHouse::msgRepeater(QString &msg)
+void TaskWareHouse::msgRepeater(QString &msg, uint _number)
 {
     QString time = QTime::currentTime().toString();
-    QString title("in TASKs");
+    QString number = QString("").sprintf("%08d", _number);
+    QString title = QString("in TASK #%1").arg(number);
     QString currMsg = QString("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     emit taskMsg(currMsg);
@@ -170,8 +171,8 @@ void TaskWareHouse::taskResultReceiver(Result data)
                 threadPool->value(_number));
     if ( NULL!=cThread ) {
         //qDebug()<<_number<<"delete";
-        disconnect(cThread, SIGNAL(errorMsg(QString&)),
-                   this, SLOT(msgRepeater(QString&)));
+        disconnect(cThread, SIGNAL(errorMsg(QString&, uint)),
+                   this, SLOT(msgRepeater(QString&, uint)));
         disconnect(cThread, SIGNAL(resultData(Result)),
                    this, SLOT(taskResultReceiver(Result)));
         threadPool->value(_number)->quit();

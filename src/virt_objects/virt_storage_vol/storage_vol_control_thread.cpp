@@ -180,7 +180,7 @@ Result StorageVolControlThread::createStorageVol()
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
-        emit errorMsg( msg );
+        emit errorMsg( msg, number );
         result.result = false;
         return result;
     };
@@ -264,7 +264,7 @@ Result StorageVolControlThread::downloadStorageVol()
                 else {
                     QString msg = QString("WriteError after (%2): %1 bytes")
                             .arg(length).arg(step);
-                    emit errorMsg( msg );
+                    emit errorMsg( msg, number );
                 };
             };
             virStreamFinish(stream);
@@ -303,7 +303,7 @@ Result StorageVolControlThread::resizeStorageVol()
         if ( ret<0 ) {
             sendConnErrors();
             QString msg("ResizeError: Maybe <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>");
-            emit errorMsg(msg);
+            emit errorMsg(msg, number);
         } else resized = true;
         virStorageVolFree(storageVol);
     } else sendConnErrors();
@@ -347,7 +347,7 @@ Result StorageVolControlThread::uploadStorageVol()
                 if ( got<0 ) {
                     QString msg = QString("ReadError after (%2): %1 bytes")
                             .arg(length).arg(step);
-                    emit errorMsg( msg );
+                    emit errorMsg( msg, number );
                 } else {
                     saved = virStreamSend(stream, buf, got);
                     if (saved < 0) {

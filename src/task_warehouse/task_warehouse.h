@@ -44,7 +44,7 @@ public slots:
 
 private slots:
     void             closeEvent(QCloseEvent*);
-    void             msgRepeater(QString&);
+    void             msgRepeater(QString&, uint);
     void             taskResultReceiver(Result);
     void             setNewTooltip(QListWidgetItem*);
 };

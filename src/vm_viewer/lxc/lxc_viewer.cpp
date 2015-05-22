@@ -21,7 +21,7 @@ LXC_Viewer::LXC_Viewer(
     } else {
         msg = QString("In '<b>%1</b>': Connection or Domain is NULL...")
                 .arg(domain);
-        sendErrMsg(msg);
+        sendErrMsg(msg, 0);
         getCurrentTerminal()->m_term->sendText(msg);
         startCloseProcess();
     };
@@ -34,8 +34,8 @@ LXC_Viewer::~LXC_Viewer()
     if ( NULL!=viewerThread ) {
         disconnect(viewerThread, SIGNAL(termEOF()),
                    this, SLOT(startCloseProcess()));
-        disconnect(viewerThread, SIGNAL(errorMsg(QString&)),
-                   this, SLOT(sendErrMsg(QString&)));
+        disconnect(viewerThread, SIGNAL(errorMsg(QString&, uint)),
+                   this, SLOT(sendErrMsg(QString&, uint)));
         //qDebug()<<"viewer thread disconnected";
         delete viewerThread;
         viewerThread = NULL;
@@ -44,7 +44,7 @@ LXC_Viewer::~LXC_Viewer()
     QString msg, key;
     msg = QString("In '<b>%1</b>': Display destroyed.")
             .arg(domain);
-    sendErrMsg(msg);
+    sendErrMsg(msg, 0);
     //key = QString("%1_%2").arg(connName).arg(domain);
     //emit finished(key);
     //qDebug()<<"LXC_Viewer destroyed";
@@ -72,7 +72,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             timerId = 0;
             counter = 0;
             QString msg = QString("In '<b>%1</b>': Open PTY Error...").arg(domain);
-            sendErrMsg(msg);
+            sendErrMsg(msg, 0);
             getCurrentTerminal()->impl()->sendText(msg);
         }
     } else if ( ev->timerId()==killTimerId ) {
@@ -94,13 +94,13 @@ void LXC_Viewer::setTerminalParameters()
                 viewerThread, SLOT(sendDataToVMachine(const char*,int)));
         connect(viewerThread, SIGNAL(termEOF()),
                 this, SLOT(startCloseProcess()));
-        connect(viewerThread, SIGNAL(errorMsg(QString&)),
-                this, SLOT(sendErrMsg(QString&)));
+        connect(viewerThread, SIGNAL(errorMsg(QString&, uint)),
+                this, SLOT(sendErrMsg(QString&, uint)));
         viewerThread->start();
         if ( viewerThread->keep_alive ) {
             QString msg = QString("In '<b>%1</b>': Stream Registation success. \
 PTY opened. Terminal is active.").arg(domain);
-            sendErrMsg(msg);
+            sendErrMsg(msg, 0);
         };
         /*
          * As usually a xterm terminals don't support

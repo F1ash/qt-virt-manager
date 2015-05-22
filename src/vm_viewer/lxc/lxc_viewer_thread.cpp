@@ -42,16 +42,16 @@ void LXC_ViewerThread::run()
         QString msg;
         if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_SAFE)+1 ) {
             msg = QString("In '<b>%1</b>': Console opened in SAFE-mode...").arg(domain);
-            emit errorMsg(msg);
+            emit errorMsg(msg, number);
         } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_FORCE )+1 ) {
             msg = QString("In '<b>%1</b>': Console opened in FORCE-mode...").arg(domain);
-            emit errorMsg(msg);
+            emit errorMsg(msg, number);
         } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, 0 )+1 ) {
             msg = QString("In '<b>%1</b>': Console opened in ZIRO-mode...").arg(domain);
-            emit errorMsg(msg);
+            emit errorMsg(msg, number);
         } else {
             msg = QString("In '<b>%1</b>': Open console failed...").arg(domain);
-            emit errorMsg(msg);
+            emit errorMsg(msg, number);
             sendConnErrors();
         };
         if ( ret<0 ) {
@@ -148,7 +148,7 @@ void LXC_ViewerThread::sendDataToDisplay()
             write(ptySlaveFd, "\nEOF...", 7);
             close(ptySlaveFd);
             msg = QString("In '<b>%1</b>': EOF.").arg(domain);
-            emit errorMsg(msg);
+            emit errorMsg(msg, number);
             emit termEOF();
             //qDebug()<<"EOF emited";
         };

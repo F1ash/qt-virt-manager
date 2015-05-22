@@ -191,7 +191,7 @@ Result DomControlThread::createDomain()
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
-        emit errorMsg( msg );
+        emit errorMsg( msg, number );
         return result;
     };
     xmlData = f.readAll();
@@ -217,7 +217,7 @@ Result DomControlThread::defineDomain()
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
-        emit errorMsg( msg );
+        emit errorMsg( msg, number );
         return result;
     };
     xmlData = f.readAll();

@@ -52,7 +52,7 @@ void ControlThread::sendConnErrors()
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
-        emit errorMsg( msg );
+        emit errorMsg( msg, number );
         virResetError(virtErrors);
     } else sendGlobalErrors();
 }
@@ -62,7 +62,7 @@ void ControlThread::sendGlobalErrors()
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
-        emit errorMsg( msg );
+        emit errorMsg( msg, number );
     };
     virResetLastError();
 }

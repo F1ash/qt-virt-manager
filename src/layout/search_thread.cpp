@@ -42,6 +42,12 @@ void SearchThread::setURIList()
         <<"qemu:///session"\
         <<"xen:///"\
         <<"vbox:///session"\
+        <<"vmwareplayer:///session"\
+        <<"vmwarews:///session"\
+        <<"vmwarefusion:///session"\
+        <<"esx:///"\
+        <<"gsx:///"\
+        <<"vpx:///"\
         <<"openvz:///system";
 }
 void SearchThread::compareURI(QString &uri)

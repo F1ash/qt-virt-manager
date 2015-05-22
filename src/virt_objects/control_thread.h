@@ -23,7 +23,7 @@ public:
     virErrorPtr      virtErrors;
 
 signals:
-    void             errorMsg(QString&);
+    void             errorMsg(QString&, uint);
     void             resultData(Result);
 
 public slots:

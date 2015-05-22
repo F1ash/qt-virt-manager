@@ -84,7 +84,7 @@ void ConnElement::openConnection()
 }
 void ConnElement::closeConnection()
 {
-    connAliveThread->setKeepAlive(false);
+    connAliveThread->closeConnection();
 }
 void ConnElement::forceCloseConnection()
 {
@@ -183,7 +183,6 @@ void ConnElement::buildURI()
         _uri.append(Extra);
     };
     URI = _uri.join("");
-    qDebug()<<URI;
 }
 void ConnElement::setConnectionState(CONN_STATE status)
 {
