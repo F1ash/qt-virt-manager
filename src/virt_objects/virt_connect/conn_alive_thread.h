@@ -49,6 +49,7 @@ signals:
     void            changeConnState(CONN_STATE);
     void            authRequested(QString&);
     void            domStateChanged(Result);
+    void            connClosed(virConnect*);
 
 private:
     bool            keep_alive;

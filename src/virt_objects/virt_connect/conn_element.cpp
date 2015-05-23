@@ -19,6 +19,8 @@ ConnElement::ConnElement(QObject *parent) :
             this, SLOT(getAuthCredentials(QString&)));
     connect(connAliveThread, SIGNAL(domStateChanged(Result)),
             this, SIGNAL(domStateChanged(Result)));
+    connect(connAliveThread, SIGNAL(connClosed(virConnect*)),
+            this, SIGNAL(connClosed(virConnect*)));
 }
 ConnElement::~ConnElement()
 {
@@ -31,6 +33,8 @@ ConnElement::~ConnElement()
                this, SLOT(getAuthCredentials(QString&)));
     disconnect(connAliveThread, SIGNAL(domStateChanged(Result)),
                this, SIGNAL(domStateChanged(Result)));
+    disconnect(connAliveThread, SIGNAL(connClosed(virConnect*)),
+               this, SIGNAL(connClosed(virConnect*)));
 
     if ( connAliveThread!=NULL ) {
         delete connAliveThread;
@@ -88,8 +92,10 @@ void ConnElement::closeConnection()
 }
 void ConnElement::forceCloseConnection()
 {
+    //qDebug()<<"forceCloseConnection0";
     closeConnection();
     setConnectionState(FAILED);
+    //qDebug()<<"forceCloseConnection1";
 }
 void ConnElement::showConnectionData()
 {
@@ -186,6 +192,7 @@ void ConnElement::buildURI()
 }
 void ConnElement::setConnectionState(CONN_STATE status)
 {
+  //qDebug()<<"setConnectionState0"<<status;
   if ( status!=RUNNING ) {
       if (waitTimerId) {
           killTimer(waitTimerId);
@@ -230,6 +237,7 @@ void ConnElement::setConnectionState(CONN_STATE status)
       };
       own_model->setData(own_model->index(row, i), data, Qt::EditRole);
   };
+  //qDebug()<<"setConnectionState1"<<status;
 }
 void ConnElement::timerEvent(QTimerEvent *event)
 {

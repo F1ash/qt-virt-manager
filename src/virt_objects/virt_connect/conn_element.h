@@ -41,6 +41,7 @@ signals:
     void              connPtr(virConnect*, QString&);
     void              authRequested(QString&);
     void              domStateChanged(Result);
+    void              connClosed(virConnect*);
 
 private:
     ConnItemModel    *own_model;

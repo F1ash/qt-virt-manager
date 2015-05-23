@@ -55,7 +55,7 @@ MainWindow::~MainWindow()
              this, SLOT(writeToErrorLog(QString&)));
   disconnect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)),
              this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  disconnect(connListWidget, SIGNAL(connectionToClose(virConnect*)),
+  disconnect(connListWidget, SIGNAL(connClosed(virConnect*)),
              this, SLOT(stopConnProcessing(virConnect*)));
   disconnect(toolBar->_hideAction, SIGNAL(triggered()),
              this, SLOT(changeVisibility()));
@@ -381,7 +381,7 @@ void MainWindow::initConnListWidget()
           this, SLOT(writeToErrorLog(QString&)));
   connect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)),
           this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  connect(connListWidget, SIGNAL(connectionToClose(virConnect*)),
+  connect(connListWidget, SIGNAL(connClosed(virConnect*)),
           this, SLOT(stopConnProcessing(virConnect*)));
 }
 void MainWindow::initToolBar()

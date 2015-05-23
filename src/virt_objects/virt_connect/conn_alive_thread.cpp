@@ -24,11 +24,12 @@ ConnAliveThread::~ConnAliveThread()
 void ConnAliveThread::setData(QString &uri) { URI = uri; }
 void ConnAliveThread::closeConnection()
 {
-    //qDebug()<<"closeConnection"<<conn<<URI;
+    //qDebug()<<"closeConnection0"<<conn<<URI;
     if ( keep_alive ) {
         keep_alive = false;
         return;
     };
+    //qDebug()<<"closeConnection1"<<conn<<URI;
     CONN_STATE state;
     if ( conn!=NULL ) {
         unregisterConnEvents();
@@ -40,6 +41,7 @@ void ConnAliveThread::closeConnection()
         } else {
             emit connMsg( QString("close exit code: %1").arg(ret) );
             state = STOPPED;
+            if ( onView ) emit connClosed(conn);
         };
         conn = NULL;
     } else {
@@ -109,6 +111,7 @@ void ConnAliveThread::run()
             };
         };
     };
+    keep_alive = false;
     closeConnection();
 }
 void ConnAliveThread::openConnection()
@@ -169,6 +172,7 @@ void ConnAliveThread::registerConnEvents()
 }
 void ConnAliveThread::unregisterConnEvents()
 {
+    //qDebug()<<"unregisterConnEvents0"<<conn<<URI;
     if ( closeCallbackRegistered ) {
         int ret = virConnectUnregisterCloseCallback(conn, connEventCallBack);
         if (ret<0) sendConnErrors();
@@ -179,6 +183,7 @@ void ConnAliveThread::unregisterConnEvents()
     };
     closeCallbackRegistered = false;
     domainEventRegistered = false;
+    //qDebug()<<"unregisterConnEvents1"<<conn<<URI;
 }
 void ConnAliveThread::freeData(void *opaque)
 {
@@ -189,9 +194,9 @@ void ConnAliveThread::freeData(void *opaque)
 }
 void ConnAliveThread::connEventCallBack(virConnectPtr _conn, int reason, void *opaque)
 {
+    //qDebug()<<"connEventCallBack"<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
     if ( NULL!=obj && obj->conn==_conn) {
-        obj->unregisterConnEvents();
         obj->closeConnection(reason);
     };
 }
@@ -251,6 +256,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
 }
 int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, int event, int detail, void *opaque)
 {
+    //qDebug()<<"domEventCallback"<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
     if ( NULL==obj || obj->conn!=_conn ) return 0;
     QString msg;
@@ -489,35 +495,25 @@ const char* ConnAliveThread::eventDetailToString(int event, int detail) {
 }
 void ConnAliveThread::closeConnection(int reason)
 {
-    //qDebug()<<"closeConnection(int reason)"<<conn<<URI;
-    // don't unregisterConnEvents and close connection,
-    // because disconnected already
-    conn = NULL;
+    //qDebug()<<"closeConnection(reason)"<<conn<<URI;
     keep_alive = false;
-    CONN_STATE state;
     switch (reason) {
         case VIR_CONNECT_CLOSE_REASON_ERROR:
             emit connMsg("Connection closed: Misc I/O error");
-            state = FAILED;
             break;
         case VIR_CONNECT_CLOSE_REASON_EOF:
             emit connMsg("Connection closed: End-of-file from server");
-            state = FAILED;
             break;
         case VIR_CONNECT_CLOSE_REASON_KEEPALIVE:
             emit connMsg("Connection closed: Keepalive timer triggered");
-            state = STOPPED;
             break;
         case VIR_CONNECT_CLOSE_REASON_CLIENT:
             emit connMsg("Connection closed: Client requested it");
-            state = STOPPED;
             break;
         default:
             emit connMsg("Connection closed: Unknown reason");
-            state = FAILED;
             break;
     };
-    emit changeConnState(state);
 }
 void ConnAliveThread::getAuthCredentials(QString &crd)
 {

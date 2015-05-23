@@ -49,6 +49,8 @@ ConnectionList::~ConnectionList()
                  this, SLOT(getAuthCredentials(QString&)));
       disconnect(connections->value(key), SIGNAL(domStateChanged(Result)),
                  this, SIGNAL(domResult(Result)));
+      disconnect(connections->value(key), SIGNAL(connClosed(virConnect*)),
+                 this, SIGNAL(connClosed(virConnect*)));
   };
   connections->clear();
   delete connections;
@@ -132,17 +134,21 @@ void ConnectionList::deleteCurrentConnection()
           showMessage(QString("Connection '%1'").arg(connection), "Connection is Running.");
       } else {
           //if ( conn && !conn_state ) conn->closeConnection();
+          disconnect(connections->value(connection), SIGNAL(warningShowed()),
+                     this, SLOT(mainWindowUp()));
+          disconnect(connections->value(connection), SIGNAL(warning(QString&)),
+                     this, SLOT(sendWarning(QString&)));
+          disconnect(connections->value(connection), SIGNAL(connPtr(virConnect*, QString&)),
+                     this, SLOT(sendConnPtr(virConnect*, QString&)));
+          disconnect(connections->value(connection), SIGNAL(authRequested(QString&)),
+                     this, SLOT(getAuthCredentials(QString&)));
+          disconnect(connections->value(connection), SIGNAL(domStateChanged(Result)),
+                     this, SIGNAL(domResult(Result)));
+          disconnect(connections->value(connection), SIGNAL(connClosed(virConnect*)),
+                     this, SIGNAL(connClosed(virConnect*)));
+          emit removeConnection(connection);
           connections->remove(connection);
           connItemModel->removeRow(_item.row());
-          //disconnect(connections->value(connection), SIGNAL(warningShowed()),
-          // this, SLOT(mainWindowUp()));
-          //disconnect(connections->value(connection), SIGNAL(warning(QString&)),
-          // this, SLOT(sendWarning(QString&)));
-          //disconnect(connections->value(key), SIGNAL(connPtr(virConnect*, QString&)),
-          // this, SLOT(sendConnPtr(virConnect*, QString&)));
-          //disconnect(connections->value(key), SIGNAL(authRequested(QString&)),
-          // this, SLOT(getAuthCredentials(QString&)));
-          emit removeConnection(connection);
       };
   } else showMessage("Info", "Item not exist.");
 }
@@ -280,7 +286,6 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
   } else if ( conn_state!=RUNNING ) {
       conn->openConnection();
   } else if ( conn_state==RUNNING ) {
-      emit connectionToClose(conn->getConnection());
       conn->closeConnection();
   };
   clearSelection();
@@ -318,6 +323,8 @@ void ConnectionList::createConnection(QModelIndex &_item)
           this, SLOT(getAuthCredentials(QString&)));
   connect(connections->value(key), SIGNAL(domStateChanged(Result)),
           this, SIGNAL(domResult(Result)));
+  connect(connections->value(key), SIGNAL(connClosed(virConnect*)),
+          this, SIGNAL(connClosed(virConnect*)));
   //qDebug()<<key<<" create Connection item";
   if ( !searchThread->isFinished() && !searchThread->isRunning() ) {
       QString uri(conn->getURI());
@@ -361,6 +368,8 @@ void ConnectionList::createLocalConnection(QString &uri)
             this, SLOT(getAuthCredentials(QString&)));
     connect(connections->value(key), SIGNAL(domStateChanged(Result)),
             this, SIGNAL(domResult(Result)));
+    connect(connections->value(key), SIGNAL(connClosed(virConnect*)),
+            this, SIGNAL(connClosed(virConnect*)));
     //qDebug()<<key<<" create Local Connection item";
 }
 void ConnectionList::refreshLocalhostConnection()

@@ -32,7 +32,7 @@ signals:
     void messageShowed();
     void warning(QString&);
     void connPtr(virConnect*, QString&);
-    void connectionToClose(virConnect*);
+    void connClosed(virConnect*);
     void domResult(Result);
 
 public slots:
