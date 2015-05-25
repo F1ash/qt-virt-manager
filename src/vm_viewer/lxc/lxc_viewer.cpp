@@ -36,6 +36,8 @@ LXC_Viewer::~LXC_Viewer()
                    this, SLOT(startCloseProcess()));
         disconnect(viewerThread, SIGNAL(errorMsg(QString&, uint)),
                    this, SLOT(sendErrMsg(QString&, uint)));
+        disconnect(viewerThread, SIGNAL(finished()),
+                   this, SLOT(startCloseProcess()));
         //qDebug()<<"viewer thread disconnected";
         delete viewerThread;
         viewerThread = NULL;
@@ -96,6 +98,8 @@ void LXC_Viewer::setTerminalParameters()
                 this, SLOT(startCloseProcess()));
         connect(viewerThread, SIGNAL(errorMsg(QString&, uint)),
                 this, SLOT(sendErrMsg(QString&, uint)));
+        connect(viewerThread, SIGNAL(finished()),
+                this, SLOT(startCloseProcess()));
         viewerThread->start();
         if ( viewerThread->keep_alive ) {
             QString msg = QString("In '<b>%1</b>': Stream Registation success. \

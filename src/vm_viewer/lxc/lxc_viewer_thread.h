@@ -13,12 +13,13 @@ public:
 
 signals:
     void            termEOF();
+    void            streamIObroken();
 
 private:
-    int             ptySlaveFd = -1;
+    int             ptySlaveFd;
     QString         domain;
-    virStream      *stream = NULL;
-    virDomainPtr    domainPtr = NULL;
+    virStream      *stream;
+    virDomainPtr    domainPtr;
 
 public slots:
     void            setData(QString&, virDomainPtr, int);
@@ -34,6 +35,7 @@ private slots:
     void            updateStreamEvents(virStreamPtr, int);
     void            sendDataToDisplay();
     void            closeStream();
+    void            forceCloseDomain();
 };
 
 #endif // LXC_VIEWER_THREAD_H
