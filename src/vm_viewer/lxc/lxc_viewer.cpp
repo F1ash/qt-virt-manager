@@ -9,6 +9,7 @@ LXC_Viewer::LXC_Viewer(
         const QString& command) :
     TermMainWindow(parent, conn, arg1, arg2, work_dir, command)
 {
+    TYPE = "LXC";
     // unused toolbar
     viewerToolBar->setVisible(false);
     if ( jobConnect!=NULL ) {

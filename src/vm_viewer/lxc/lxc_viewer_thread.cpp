@@ -222,7 +222,7 @@ void LXC_ViewerThread::closeStream()
 }
 void LXC_ViewerThread::forceCloseDomain()
 {
-    if ( domainPtr!=NULL ) {
+    if ( domainPtr!=NULL && virDomainIsActive(domainPtr)) {
         if ( virDomainDestroy(domainPtr)<0 ) {
             sendConnErrors();
         };

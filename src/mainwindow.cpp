@@ -248,9 +248,26 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       // close VM Displays
       foreach ( QString key, VM_Displayed_Map.keys() ) {
           if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
-              if ( VM_Displayed_Map.value(key, NULL)->isActive() )
-                  VM_Displayed_Map.value(key, NULL)->close();
-              delete VM_Displayed_Map.value(key);
+              VM_Viewer *value = NULL;
+              QString _type = VM_Displayed_Map.value(key, NULL)->TYPE.toUpper();
+              if ( _type=="LXC" ) {
+                  value = static_cast<LXC_Viewer*>(
+                              VM_Displayed_Map.value(key, NULL));
+              } else if ( _type=="SPICE" ) {
+                  value = static_cast<Spice_Viewer*>(
+                              VM_Displayed_Map.value(key, NULL));
+              };
+              if ( NULL!=value ) {
+                  if ( value->isActive() ) value->close();
+                  disconnect(value, SIGNAL(finished(QString&)),
+                             this, SLOT(deleteVMDisplay(QString&)));
+                  disconnect(value, SIGNAL(errorMsg(QString&)),
+                             logDockContent, SLOT(appendErrorMsg(QString&)));
+                  disconnect(value, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+                             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+                  delete value;
+                  value = NULL;
+              };
               VM_Displayed_Map.remove(key);
               //qDebug()<<key<<"removed into Close";
           };
@@ -750,14 +767,14 @@ void MainWindow::stopProcessing()
 }
 void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString domName)
 {
+    QString type;
+    VM_Viewer *value = NULL;
+    if ( conn!=NULL ) {
+        type = QString::fromUtf8(virConnectGetType(conn));
+    } else type.clear();
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( !VM_Displayed_Map.contains(key) ) {
         //qDebug()<<key<<"vm invoked"<<"new";
-        QString type;
-        VM_Viewer *value = NULL;
-        if ( conn!=NULL ) {
-            type = QString::fromUtf8(virConnectGetType(conn));
-        } else type.clear();
         if ( type.isEmpty() ) {
             QMessageBox::information(this, "VM Viewer", "Job empty.");
         } else if ( type.toLower()=="lxc" ) {
@@ -771,43 +788,51 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
                         QString("Not implemented type: %1").arg(type));
         if ( value==NULL ) return;
         VM_Displayed_Map.insert(key, value);
-        connect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished(QString&)),
+        connect(value, SIGNAL(finished(QString&)),
                 this, SLOT(deleteVMDisplay(QString&)));
-        connect(VM_Displayed_Map.value(key, NULL), SIGNAL(errorMsg(QString&)),
+        connect(value, SIGNAL(errorMsg(QString&)),
                 logDockContent, SLOT(appendErrorMsg(QString&)));
-        connect(VM_Displayed_Map.value(key, NULL), SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+        connect(value, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
                 taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
-        //connect(VM_Displayed_Map.value(key, NULL),
-        //        SIGNAL(addNewTask(virConnectPtr, QStringList&, virConnectPtr)),
-        //        taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
-        //connect(taskWrHouse, SIGNAL(domResult(Result)),
-        //        VM_Displayed_Map.value(key, NULL), SLOT(resultReceiver(Result)));
-        VM_Displayed_Map.value(key, NULL)->show();
+        value->show();
     } else {
         //qDebug()<<key<<"vm invoked"<<"exist";
-        if ( VM_Displayed_Map.value(key, NULL)!=NULL )
-            VM_Displayed_Map.value(key, NULL)->show();
-        else
-            VM_Displayed_Map.remove(key);
+        if ( type.isEmpty() ) {
+            QMessageBox::information(this, "VM Viewer", "Job empty.");
+        } else if ( type.toLower()=="lxc" ) {
+            value = static_cast<LXC_Viewer*>(
+                        VM_Displayed_Map.value(key, NULL));
+        } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
+            value = static_cast<Spice_Viewer*>(
+                        VM_Displayed_Map.value(key, NULL));
+        };
+        if ( value!=NULL ) value->show();
+        else VM_Displayed_Map.remove(key);
     };
 }
 void MainWindow::deleteVMDisplay(QString &key)
 {
     if ( VM_Displayed_Map.contains(key) ) {
         // disconnect before close for don't loop it
-        disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(finished(QString&)),
-                   this, SLOT(deleteVMDisplay(QString&)));
-        disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(errorMsg(QString&)),
-                   logDockContent, SLOT(appendErrorMsg(QString&)));
-        disconnect(VM_Displayed_Map.value(key, NULL), SIGNAL(addNewTask(virConnectPtr, QStringList&)),
-                   taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
-        //disconnect(VM_Displayed_Map.value(key, NULL),
-        //           SIGNAL(addNewTask(virConnectPtr, QStringList&, virConnectPtr)),
-        //           taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
-        //disconnect(taskWrHouse, SIGNAL(domResult(Result)),
-        //           VM_Displayed_Map.value(key, NULL), SLOT(resultReceiver(Result)));
-        //VM_Viewer *vm = static_cast<VM_Viewer*>(VM_Displayed_Map.value(key, NULL));
-        delete VM_Displayed_Map.value(key);
+        VM_Viewer *value = NULL;
+        QString _type = VM_Displayed_Map.value(key, NULL)->TYPE.toUpper();
+        if ( _type=="LXC" ) {
+            value = static_cast<LXC_Viewer*>(
+                        VM_Displayed_Map.value(key, NULL));
+        } else if ( _type=="SPICE" ) {
+            value = static_cast<Spice_Viewer*>(
+                        VM_Displayed_Map.value(key, NULL));
+        };
+        if ( NULL!=value ) {
+            disconnect(value, SIGNAL(finished(QString&)),
+                       this, SLOT(deleteVMDisplay(QString&)));
+            disconnect(value, SIGNAL(errorMsg(QString&)),
+                       logDockContent, SLOT(appendErrorMsg(QString&)));
+            disconnect(value, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+                       taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+            delete value;
+            value = NULL;
+        };
         VM_Displayed_Map.remove(key);
         // reload domains state, because VM_Viewer is finished
         //domainDockContent->reloadDomainState();
@@ -817,8 +842,17 @@ void MainWindow::deleteVMDisplay(QString connName, QString domName)
 {
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( VM_Displayed_Map.contains(key) ) {
-        if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
-            VM_Displayed_Map.value(key)->close();
+        VM_Viewer *value = NULL;
+        QString _type = VM_Displayed_Map.value(key, NULL)->TYPE.toUpper();
+        if ( _type=="LXC" ) {
+            value = static_cast<LXC_Viewer*>(
+                        VM_Displayed_Map.value(key, NULL));
+        } else if ( _type=="SPICE" ) {
+            value = static_cast<Spice_Viewer*>(
+                        VM_Displayed_Map.value(key, NULL));
+        };
+        if ( NULL!=value ) {
+            if ( value->isActive() ) value->close();
             // don't anymore, because VM_Viewer emit finished signal and
             // VM_Viewer will cleaned from VM list
             // in <MainWindow::deleteVMDisplay(QString&)>

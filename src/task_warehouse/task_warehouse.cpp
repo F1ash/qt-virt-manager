@@ -71,15 +71,22 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
     if ( _taskDesc.count()>0 && !_taskDesc[0].startsWith("reload") ) {
-        QString _name = QString("#%1 %2 <%3>")
+        QString _name, _task, _domName;
+        _task = _taskDesc[0];
+        _domName = (_taskDesc.count()>1)? _taskDesc[1]:".";
+        _name = QString("#%1 %2 <%3> in <%4> connection")
                 .arg(_number)
-                .arg(_taskDesc[0])
-                .arg( (_taskDesc.count()>1)? _taskDesc[1]:".");
+                .arg(_task)
+                .arg(_domName)
+                .arg(currConnName);
         QListWidgetItem *_item = new QListWidgetItem();
         _item->setText(_name);
         _item->setIcon(QIcon::fromTheme("ledlightgreen"));
         QTime _time = QTime::currentTime();
         QMap<QString, QVariant> itemData;
+        itemData.insert("Connection", currConnName);
+        itemData.insert("Domain", _domName);
+        itemData.insert("Action", _task);
         itemData.insert("Start", QString("%1:%2:%3:%4")
                         .arg(QString("").sprintf("%02d", _time.hour()))
                         .arg(QString("").sprintf("%02d", _time.minute()))
@@ -209,23 +216,38 @@ void TaskWareHouse::taskResultReceiver(Result data)
 }
 void TaskWareHouse::setNewTooltip(QListWidgetItem *_item)
 {
-    QString _toolTip;
+    QString _toolTip, _table, _conn, _dom, _arg, _task, _time, _res, _msg;
     QVariant data = _item->data(Qt::UserRole);
-    _toolTip.append(
-                QString("Time: %1 - %2")
-                .arg(data.toMap().value("Start").toString())
-                .arg(data.toMap().value("End").toString()));
-    _toolTip.append("\n");
-    _toolTip.append(
-                QString("Arguments: %1")
-                .arg(data.toMap().value("Arguments").toString()));
-    _toolTip.append("\n");
-    _toolTip.append(
-                QString("Result: %1")
-                .arg(data.toMap().value("Result").toString()));
-    _toolTip.append("\n");
-    _toolTip.append(
-                QString("Message: %1")
-                .arg(data.toMap().value("Message").toString()));
+    _conn.append(QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
+                 .arg("<b>Connection</b>")
+                 .arg(data.toMap().value("Connection").toString()));
+    _dom.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
+                 .arg("<b>Domain</b>")
+                 .arg(data.toMap().value("Domain").toString()));
+    _task.append(QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
+                 .arg("<b>Action</b>")
+                 .arg(data.toMap().value("Action").toString()));
+    _arg.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
+                 .arg("<b>Arguments</b>")
+                 .arg(data.toMap().value("Arguments").toString()));
+    _time.append(QString("<TR><TD>%1</TD><TD>%2 - %3</TD></TR>")
+                 .arg("<b>Time</b>")
+                 .arg(data.toMap().value("Start").toString())
+                 .arg(data.toMap().value("End").toString()));
+    _res.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
+                 .arg("<b>Result</b>")
+                 .arg(data.toMap().value("Result").toString()));
+    _msg.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
+                 .arg("<b>Message</b>")
+                 .arg(data.toMap().value("Message").toString()));
+    _table.append(QString("%1%2%3%4%5%6%7")
+                  .arg(_conn)
+                  .arg(_dom)
+                  .arg(_task)
+                  .arg(_arg)
+                  .arg(_time)
+                  .arg(_res)
+                  .arg(_msg));
+    _toolTip = QString("<TABLE BORDER=3>%1</TABLE>").arg(_table);
     _item->setToolTip(_toolTip);
 }

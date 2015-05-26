@@ -26,7 +26,7 @@ public:
             QString arg1 = QString(),
             QString arg2 = QString());
     ~VM_Viewer();
-    QString          connName, domain;
+    QString          connName, domain, TYPE;
     virConnect      *jobConnect = NULL;
     virErrorPtr      virtErrors = NULL;
     bool             VM_State;

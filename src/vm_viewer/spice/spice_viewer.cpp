@@ -7,6 +7,7 @@ Spice_Viewer::Spice_Viewer(
         QString       arg2) :
     VM_Viewer(parent, conn, arg1, arg2)
 {
+    TYPE = "SPICE";
     spiceWdg = new QSpiceWidget(this);
     spiceWdg->setWidgetResizable(true);
     setCentralWidget(spiceWdg);
