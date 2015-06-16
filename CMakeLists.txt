@@ -649,8 +649,8 @@ set(QTERM_UI_SRC
     src/vm_viewer/qterminal/forms/fontdialog.ui
 )
 set(QTERM_RCC_SRC
-    src/vm_viewer/qterminal/icons.qrc
-    src/qt-virt-manager.qrc
+    #src/vm_viewer/qterminal/icons.qrc
+    src/qt_virt_manager.qrc
 )
 set(QTERM_TS
     src/vm_viewer/qterminal/translations/qterminal_cs.ts

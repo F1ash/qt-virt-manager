@@ -3,16 +3,19 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
+    setSizePolicy(
+                QSizePolicy(
+                    QSizePolicy::MinimumExpanding,
+                    QSizePolicy::MinimumExpanding));
     setMinimumSize(100, 100);
     setContentsMargins(0, 0, 0, 5);
     setWindowTitle("Qt VirtManager");
-    QIcon::setThemeName("virt-icons");
+    QIcon::setThemeName("QtVirtManager");
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     setMouseTracking(true);
-    setDockOptions(QMainWindow::AnimatedDocks|
-                   QMainWindow::ForceTabbedDocks
-    );
+    setDockOptions(
+                QMainWindow::AnimatedDocks |
+                QMainWindow::ForceTabbedDocks);
     restoreGeometry(settings.value("Geometry").toByteArray());
     initTaskWareHouse();
     initDomainStateMonitor();
@@ -28,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     statusBar()->addPermanentWidget(closeProgress);
     statusBar()->hide();
 }
+
 MainWindow::~MainWindow()
 {
   if ( killTimerId>0 ) {
@@ -177,6 +181,7 @@ MainWindow::~MainWindow()
   trayIcon = NULL;
   //qDebug()<<"application stopped";
 }
+
 void MainWindow::saveSettings()
 {
     taskWrHouse->saveCurrentState();
@@ -224,8 +229,7 @@ void MainWindow::saveSettings()
 }
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
-  // In KDE Plasma 5 at close app the tray icon hide too
-  //if ( !this->isVisible() ) changeVisibility();
+  if ( !this->isVisible() ) changeVisibility();
   if ( runningConnExist() && wait_thread==NULL ) {
       /*
       QString q;
@@ -283,6 +287,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
   } else if ( !runningConnExist() &&
               (wait_thread==NULL || !wait_thread->isRunning()) ) {
       saveSettings();
+      trayIcon->hide();
       ev->accept();
   } else {
       //  ( wait_thread!=NULL || wait_thread->isRunning() )
@@ -325,13 +330,18 @@ void MainWindow::initDomainStateMonitor()
 void MainWindow::initTrayIcon()
 {
     trayIcon = new TrayIcon(this);
-    connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, \
-                      SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
-    connect(trayIcon->hideAction, SIGNAL(triggered()), this, SLOT(changeVisibility()));
-    connect(trayIcon->logUpAction, SIGNAL(triggered()), this, SLOT(changeLogViewerVisibility()));
-    connect(trayIcon->monitorAction, SIGNAL(triggered()), domainsStateMonitor, SLOT(changeVisibility()));
-    connect(trayIcon->taskUpAction, SIGNAL(triggered()), taskWrHouse, SLOT(changeVisibility()));
-    connect(trayIcon->closeAction, SIGNAL(triggered()), this, SLOT(closeEvent()));
+    connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+    connect(trayIcon->hideAction, SIGNAL(triggered()),
+            this, SLOT(changeVisibility()));
+    connect(trayIcon->logUpAction, SIGNAL(triggered()),
+            this, SLOT(changeLogViewerVisibility()));
+    connect(trayIcon->monitorAction, SIGNAL(triggered()),
+            domainsStateMonitor, SLOT(changeVisibility()));
+    connect(trayIcon->taskUpAction, SIGNAL(triggered()),
+            taskWrHouse, SLOT(changeVisibility()));
+    connect(trayIcon->closeAction, SIGNAL(triggered()),
+            this, SLOT(closeEvent()));
     connect(domainsStateMonitor, SIGNAL(visibilityChanged(bool)),
             trayIcon, SLOT(stateMonitorVisibilityChanged(bool)));
     connect(taskWrHouse, SIGNAL(visibilityChanged(bool)),
@@ -362,10 +372,14 @@ void MainWindow::changeVisibility()
         this->show();
         trayIcon->hideAction->setText (QString("Down"));
         trayIcon->hideAction->setIcon (QIcon::fromTheme("down"));
-        if ( domainDock->isFloating() && toolBar->_domUpAction->isChecked() ) domainDock->show();
-        if ( networkDock->isFloating() && toolBar->_netUpAction->isChecked() ) networkDock->show();
-        if ( storageVolDock->isFloating() && toolBar->_storageUpAction->isChecked() ) storageVolDock->show();
-        if ( storagePoolDock->isFloating() && toolBar->_storageUpAction->isChecked() ) storagePoolDock->show();
+        if ( domainDock->isFloating() && toolBar->_domUpAction->isChecked() )
+            domainDock->show();
+        if ( networkDock->isFloating() && toolBar->_netUpAction->isChecked() )
+            networkDock->show();
+        if ( storageVolDock->isFloating() && toolBar->_storageUpAction->isChecked() )
+            storageVolDock->show();
+        if ( storagePoolDock->isFloating() && toolBar->_storageUpAction->isChecked() )
+            storagePoolDock->show();
     };
 }
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
@@ -743,15 +757,19 @@ Qt::DockWidgetArea MainWindow::getDockArea(int i) const
 void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
 {
     // send connect ptr to all related virtual resources for operating
-    if ( domainDockContent->setCurrentWorkConnect(conn) ) domainDockContent->setListHeader(name);
-    if ( networkDockContent->setCurrentWorkConnect(conn) ) networkDockContent->setListHeader(name);
-    if ( storagePoolDockContent->setCurrentWorkConnect(conn) ) storagePoolDockContent->setListHeader(name);
+    if ( domainDockContent->setCurrentWorkConnect(conn) )
+        domainDockContent->setListHeader(name);
+    if ( networkDockContent->setCurrentWorkConnect(conn) )
+        networkDockContent->setListHeader(name);
+    if ( storagePoolDockContent->setCurrentWorkConnect(conn) )
+        storagePoolDockContent->setListHeader(name);
     storageVolDockContent->stopProcessing();
 }
 void MainWindow::stopConnProcessing(virConnect *conn)
 {
     // clear Overview Docks if closed connect is overviewed
-    if ( NULL!=conn && conn==domainDockContent->getConnection() ) stopProcessing();
+    if ( NULL!=conn && conn==domainDockContent->getConnection() )
+        stopProcessing();
 }
 void MainWindow::stopProcessing()
 {

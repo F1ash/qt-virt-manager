@@ -29,7 +29,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    MainWindow(QWidget *parent = NULL);
+    explicit MainWindow(QWidget *parent = NULL);
     ~MainWindow();
 
 signals:

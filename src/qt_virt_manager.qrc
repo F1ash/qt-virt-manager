@@ -1,6 +1,5 @@
-<?xml version="1.0" ?>
 <RCC>
-    <qresource prefix="/icons/virt-icons">
+    <qresource prefix="/icons/QtVirtManager">
         <file alias="index.theme">icons/index.theme</file>
         <file alias="22x22/categories/preferences-other.png">icons/22x22/categories/preferences-other.png</file>
         <file alias="22x22/categories/preferences-system-network.png">icons/22x22/categories/preferences-system-network.png</file>
