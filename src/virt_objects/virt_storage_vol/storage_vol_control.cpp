@@ -107,6 +107,7 @@ QString VirtStorageVolControl::getCurrentVolumeName() const
 }
 void VirtStorageVolControl::resultReceiver(Result data)
 {
+    if ( data.name!=objectName() ) return;
     QStringList args;
     //qDebug()<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY ) {

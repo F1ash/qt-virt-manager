@@ -78,9 +78,10 @@ void VirtVolumeDialog::set_Result()
 }
 void VirtVolumeDialog::showVolumes(QListWidgetItem *_item)
 {
+    QString str;
     QString _poolName = _item->text();
     storageThread->setCurrentStoragePoolName(
-                currWorkConnection, _poolName);
+                currWorkConnection, _poolName, str);
     storageThread->execAction(GET_ALL_ENTITY, QStringList());
 }
 void VirtVolumeDialog::showMsg(QString &msg)

@@ -32,156 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
     statusBar()->hide();
 }
 
-MainWindow::~MainWindow()
-{
-  if ( killTimerId>0 ) {
-      killTimer(killTimerId);
-      killTimerId = 0;
-      counter = 0;
-  };
-  disconnect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
-  disconnect(trayIcon->hideAction, SIGNAL(triggered()),
-             this, SLOT(changeVisibility()));
-  disconnect(trayIcon->logUpAction, SIGNAL(triggered()),
-             this, SLOT(changeLogViewerVisibility()));
-  disconnect(trayIcon->monitorAction, SIGNAL(triggered()),
-             domainsStateMonitor, SLOT(changeVisibility()));
-  disconnect(trayIcon->taskUpAction, SIGNAL(triggered()),
-             taskWrHouse, SLOT(changeVisibility()));
-  disconnect(trayIcon->closeAction, SIGNAL(triggered()),
-             this, SLOT(closeEvent()));
-  disconnect(connListWidget, SIGNAL(removeConnection(QString&)),
-             this, SLOT(removeConnItem(QString&)));
-  disconnect(connListWidget, SIGNAL(messageShowed()),
-             this, SLOT(mainWindowUp()));
-  disconnect(connListWidget, SIGNAL(warning(QString&)),
-             this, SLOT(writeToErrorLog(QString&)));
-  disconnect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)),
-             this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  disconnect(connListWidget, SIGNAL(connClosed(virConnect*)),
-             this, SLOT(stopConnProcessing(virConnect*)));
-  disconnect(toolBar->_hideAction, SIGNAL(triggered()),
-             this, SLOT(changeVisibility()));
-  disconnect(toolBar->_createAction, SIGNAL(triggered()),
-             this, SLOT(createNewConnection()));
-  disconnect(toolBar->_editAction, SIGNAL(triggered()),
-             this, SLOT(editCurrentConnection()));
-  disconnect(toolBar->_deleteAction, SIGNAL(triggered()),
-             this, SLOT(deleteCurrentConnection()));
-  disconnect(toolBar->_openAction, SIGNAL(triggered()),
-             this, SLOT(openCurrentConnection()));
-  disconnect(toolBar->_showAction, SIGNAL(triggered()),
-             this, SLOT(showCurrentConnection()));
-  disconnect(toolBar->_closeAction, SIGNAL(triggered()),
-             this, SLOT(closeCurrentConnection()));
-  disconnect(toolBar->_closeAllAction, SIGNAL(triggered()),
-             this, SLOT(closeAllConnections()));
-  disconnect(toolBar->_logUpAction, SIGNAL(triggered()),
-             this, SLOT(changeLogViewerVisibility()));
-  disconnect(toolBar->_closeOverview, SIGNAL(triggered()),
-             connListWidget, SLOT(stopProcessing()));
-  disconnect(toolBar->_closeOverview, SIGNAL(triggered()),
-             this, SLOT(stopProcessing()));
-  disconnect(toolBar->_exitAction, SIGNAL(triggered()),
-             this, SLOT(closeEvent()));
-  disconnect(toolBar, SIGNAL(warningShowed()),
-             this, SLOT(mainWindowUp()));
-  disconnect(toolBar->_domUpAction, SIGNAL(triggered(bool)),
-             domainDock, SLOT(setVisible(bool)));
-  disconnect(toolBar->_netUpAction, SIGNAL(triggered(bool)),
-             networkDock, SLOT(setVisible(bool)));
-  disconnect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
-             storageVolDock, SLOT(setVisible(bool)));
-  disconnect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
-             storagePoolDock, SLOT(setVisible(bool)));
-  disconnect(networkDockContent, SIGNAL(entityMsg(QString&)),
-             this, SLOT(writeToErrorLog(QString&)));
-  disconnect(domainDockContent, SIGNAL(entityMsg(QString&)),
-             this, SLOT(writeToErrorLog(QString&)));
-  disconnect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
-             this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
-  disconnect(domainDockContent, SIGNAL(addToStateMonitor(virConnectPtr,QString&,QString&)),
-             domainsStateMonitor, SLOT(setNewMonitoredDomain(virConnectPtr,QString&,QString&)));
-  disconnect(domainDockContent, SIGNAL(domainClosed(QString,QString)),
-             this, SLOT(deleteVMDisplay(QString,QString)));
-  disconnect(domainDockContent, SIGNAL(migrateToConnect(QStringList&)),
-             this, SLOT(buildMigrateArgs(QStringList&)));
-  disconnect(storagePoolDockContent, SIGNAL(entityMsg(QString&)),
-             this, SLOT(writeToErrorLog(QString&)));
-  disconnect(storageVolDockContent, SIGNAL(entityMsg(QString&)),
-             this, SLOT(writeToErrorLog(QString&)));
-  disconnect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
-             storageVolDockContent, SLOT(setCurrentStoragePool(virConnect*,QString&,QString&)));
-  disconnect(domainsStateMonitor, SIGNAL(visibilityChanged(bool)),
-             trayIcon, SLOT(stateMonitorVisibilityChanged(bool)));
-  disconnect(taskWrHouse, SIGNAL(visibilityChanged(bool)),
-             trayIcon, SLOT(stateTaskWareHouseVisibilityChanged(bool)));
-  disconnect(taskWrHouse, SIGNAL(taskMsg(QString&)),
-             this, SLOT(writeToErrorLog(QString&)));
-  disconnect(storageVolDockContent, SIGNAL(overViewStopped()),
-             storagePoolDockContent, SLOT(stopOverView()));
-
-  delete domainsStateMonitor;
-  domainsStateMonitor = NULL;
-
-  delete taskWrHouse;
-  taskWrHouse = NULL;
-
-  if ( wait_thread!=NULL ) {
-      disconnect(wait_thread, SIGNAL(finished()),
-                 this, SLOT(closeEvent()));
-      delete wait_thread;
-      wait_thread = NULL;
-  };
-  //qDebug()<<"processing stopped";
-
-  delete logDockContent;
-  logDockContent = NULL;
-  delete logDock;
-  logDock = NULL;
-  //qDebug()<<"LogDock cleared";
-
-  delete domainDockContent;
-  domainDockContent = NULL;
-  delete domainDock;
-  domainDock = NULL;
-  //qDebug()<<"DomDock cleared";
-
-  delete networkDockContent;
-  networkDockContent = NULL;
-  delete networkDock;
-  networkDock = NULL;
-  //qDebug()<<"NetDock cleared";
-
-  delete storageVolDockContent;
-  storageVolDockContent = NULL;
-  delete storageVolDock;
-  storageVolDock = NULL;
-  //qDebug()<<"SVolDock cleared";
-
-  delete storagePoolDockContent;
-  storagePoolDockContent = NULL;
-  delete storagePoolDock;
-  storagePoolDock = NULL;
-  //qDebug()<<"SPoolDock cleared";
-
-  delete connListWidget;
-  connListWidget = NULL;
-  //qDebug()<<"ConnListWdg cleared";
-
-  delete toolBar;
-  toolBar = NULL;
-  //qDebug()<<"ToolBar cleared";
-
-  delete closeProgress;
-  closeProgress = NULL;
-
-  delete trayIcon;
-  trayIcon = NULL;
-  //qDebug()<<"application stopped";
-}
-
 void MainWindow::saveSettings()
 {
     taskWrHouse->saveCurrentState();
@@ -207,12 +57,6 @@ void MainWindow::saveSettings()
     settings.setValue("Visible", networkDock->isVisible());
     settings.setValue("Floating", networkDock->isFloating());
     settings.setValue("Geometry", networkDock->saveGeometry());
-    settings.endGroup();
-    settings.beginGroup("StorageVolDock");
-    settings.setValue("DockArea", dockWidgetArea(storageVolDock));
-    settings.setValue("Visible", storageVolDock->isVisible());
-    settings.setValue("Floating", storageVolDock->isFloating());
-    settings.setValue("Geometry", storageVolDock->saveGeometry());
     settings.endGroup();
     settings.beginGroup("StoragePoolDock");
     settings.setValue("DockArea", dockWidgetArea(storagePoolDock));
@@ -245,7 +89,6 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       logDock->setEnabled(false);
       domainDock->setEnabled(false);
       networkDock->setEnabled(false);
-      storageVolDock->setEnabled(false);
       storagePoolDock->setEnabled(false);
       domainsStateMonitor->stopMonitoring();
       taskWrHouse->stopTaskComputing();
@@ -366,7 +209,6 @@ void MainWindow::changeVisibility()
         trayIcon->hideAction->setIcon (QIcon::fromTheme("up"));
         if ( domainDock->isFloating() ) domainDock->hide();
         if ( networkDock->isFloating() ) networkDock->hide();
-        if ( storageVolDock->isFloating() ) storageVolDock->hide();
         if ( storagePoolDock->isFloating() ) storagePoolDock->hide();
     } else {
         this->show();
@@ -376,8 +218,6 @@ void MainWindow::changeVisibility()
             domainDock->show();
         if ( networkDock->isFloating() && toolBar->_netUpAction->isChecked() )
             networkDock->show();
-        if ( storageVolDock->isFloating() && toolBar->_storageUpAction->isChecked() )
-            storageVolDock->show();
         if ( storagePoolDock->isFloating() && toolBar->_storageUpAction->isChecked() )
             storagePoolDock->show();
     };
@@ -414,6 +254,8 @@ void MainWindow::initConnListWidget()
           this, SLOT(receiveConnPtr(virConnect*, QString&)));
   connect(connListWidget, SIGNAL(connClosed(virConnect*)),
           this, SLOT(stopConnProcessing(virConnect*)));
+  connect(connListWidget, SIGNAL(connToClose(int)),
+          this, SLOT(closeConnStorageQverview(int)));
 }
 void MainWindow::initToolBar()
 {
@@ -507,8 +349,10 @@ void MainWindow::initDockWidgets()
     settings.endGroup();
     addDockWidget(area, domainDock);
     tabifyDockWidget(logDock, domainDock);
-    connect(toolBar->_domUpAction, SIGNAL(triggered(bool)), domainDock, SLOT(setVisible(bool)));
-    connect(domainDockContent, SIGNAL(entityMsg(QString&)), this, SLOT(writeToErrorLog(QString&)));
+    connect(toolBar->_domUpAction, SIGNAL(triggered(bool)),
+            domainDock, SLOT(setVisible(bool)));
+    connect(domainDockContent, SIGNAL(entityMsg(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
     connect(domainDockContent, SIGNAL(displayRequest(virConnect*,QString,QString)),
             this, SLOT(invokeVMDisplay(virConnect*,QString,QString)));
     connect(domainDockContent, SIGNAL(addToStateMonitor(virConnectPtr,QString&,QString&)),
@@ -563,42 +407,6 @@ void MainWindow::initDockWidgets()
     connect(taskWrHouse, SIGNAL(netResult(Result)),
             networkDockContent, SLOT(resultReceiver(Result)));
 
-    storageVolDock = new DockWidget(this);
-    storageVolDock->setObjectName("storageVolDock");
-    storageVolDock->setWindowTitle("StorageVol");
-    storageVolDock->setFeatures(
-        QDockWidget::DockWidgetMovable   |
-        QDockWidget::DockWidgetFloatable |
-        QDockWidget::DockWidgetVerticalTitleBar
-    );
-    volumeHeadWdg = new DockHeadWidget(this, "Storage Volumes");
-    volumeHeadWdg->setTabBarName("storage");
-    storageVolDock->setTitleBarWidget(volumeHeadWdg);
-    connect(volumeHeadWdg, SIGNAL(floatChanged(bool)),
-            storageVolDock, SLOT(_setFloating(bool)));
-    connect(storageVolDock, SIGNAL(topLevelChanged(bool)),
-            volumeHeadWdg, SLOT(floatStateChanged(bool)));
-    storageVolDockContent = new VirtStorageVolControl(this);
-    storageVolDock->setWidget( storageVolDockContent );
-    settings.beginGroup("StorageVolDock");
-    storageVolDock->setFloating(settings.value("Floating", false).toBool());
-    storageVolDock->restoreGeometry(settings.value("Geometry").toByteArray());
-    visible = settings.value("Visible", false).toBool();
-    storageVolDock->setVisible(visible);
-    toolBar->_storageUpAction->setChecked(visible);
-    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
-    settings.endGroup();
-    addDockWidget(area, storageVolDock);
-    tabifyDockWidget(networkDock, storageVolDock);
-    connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
-            storageVolDock, SLOT(setVisible(bool)));
-    connect(storageVolDockContent, SIGNAL(entityMsg(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
-    connect(storageVolDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
-            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
-    connect(taskWrHouse, SIGNAL(volResult(Result)),
-            storageVolDockContent, SLOT(resultReceiver(Result)));
-
     storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
     storagePoolDock->setWindowTitle("StoragePool");
@@ -630,18 +438,15 @@ void MainWindow::initDockWidgets()
             storagePoolDock, SLOT(setVisible(bool)));
     connect(storagePoolDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
-    connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
-            storageVolDockContent, SLOT(setCurrentStoragePool(virConnect*,QString&,QString&)));
     connect(storagePoolDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
     connect(taskWrHouse, SIGNAL(poolResult(Result)),
             storagePoolDockContent, SLOT(resultReceiver(Result)));
-    connect(storageVolDockContent, SIGNAL(overViewStopped()),
-            storagePoolDockContent, SLOT(stopOverView()));
+    connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
+            this, SLOT(addStorageVol(virConnect*,QString&,QString&)));
 
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);
-    storageVolDockContent->setEnabled(false);
     storagePoolDockContent->setEnabled(false);
 }
 void MainWindow::editCurrentConnection()
@@ -682,7 +487,7 @@ void MainWindow::closeCurrentConnection()
 {
     QModelIndex _item = connListWidget->currentIndex();
     if (_item.isValid()) {
-        connListWidget->closeConnection(_item);
+        closeConnection(_item.row());
     };
 }
 void MainWindow::closeAllConnections()
@@ -694,7 +499,24 @@ void MainWindow::closeConnection(int i)
 {
   //qDebug()<<i<<" item to stop";
   QModelIndex _item = connListWidget->connItemModel->index(i, 0);
-  connListWidget->closeConnection(_item);
+  if (_item.isValid()) {
+      connListWidget->closeConnection(_item);
+  };
+}
+void MainWindow::closeConnStorageQverview(int i)
+{
+    ConnItemIndex *idx = static_cast<ConnItemIndex*>(
+                connListWidget->connItemModel->
+                connItemDataList.at(i));
+    if ( idx!=NULL ) {
+        QString conn_to_close = idx->getName();
+        foreach (QString key, storageMap.keys()) {
+            if ( key.startsWith(conn_to_close) ) {
+                storageMap.value(key)->close();
+                storageMap.remove(key);
+            };
+        };
+    };
 }
 bool MainWindow::runningConnExist()
 {
@@ -763,13 +585,13 @@ void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
         networkDockContent->setListHeader(name);
     if ( storagePoolDockContent->setCurrentWorkConnect(conn) )
         storagePoolDockContent->setListHeader(name);
-    storageVolDockContent->stopProcessing();
 }
 void MainWindow::stopConnProcessing(virConnect *conn)
 {
     // clear Overview Docks if closed connect is overviewed
-    if ( NULL!=conn && conn==domainDockContent->getConnection() )
+    if ( NULL!=conn && conn==domainDockContent->getConnection() ) {
         stopProcessing();
+    };
 }
 void MainWindow::stopProcessing()
 {
@@ -777,11 +599,9 @@ void MainWindow::stopProcessing()
     domainDockContent->stopProcessing();
     networkDockContent->stopProcessing();
     storagePoolDockContent->stopProcessing();
-    storageVolDockContent->stopProcessing();
     //domainDockContent->getThreadState();
     //networkDockContent->getThreadState() ;
     //storagePoolDockContent->getThreadState();
-    //storageVolDockContent->getThreadState();
 }
 void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString domName)
 {
@@ -883,4 +703,23 @@ void MainWindow::buildMigrateArgs(QStringList &args)
     if ( NULL!=namedConnect ) {
         domainDockContent->execMigrateAction(namedConnect, args);
     }
+}
+
+void MainWindow::addStorageVol(virConnect *conn, QString &connName, QString &poolName)
+{
+    QString key = QString("%1_%2").arg(connName).arg(poolName);
+    if ( !storageMap.contains(key) ) {
+        storageMap.insert(key, new VirtStorageVolControl(this));
+        storageMap.value(key)->setObjectName(key);
+        storageMap.value(key)->setWindowTitle(QString("%1 Pool").arg(key));
+        connect(storageMap.value(key), SIGNAL(entityMsg(QString&)),
+                this, SLOT(writeToErrorLog(QString&)));
+        connect(storageMap.value(key), SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+                taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+        connect(taskWrHouse, SIGNAL(volResult(Result)),
+                storageMap.value(key), SLOT(resultReceiver(Result)));
+        storageMap.value(key)->setCurrentStoragePool(conn, connName, poolName);
+    };
+    storageMap.value(key)->show();
+    storageMap.value(key)->setFocus();
 }

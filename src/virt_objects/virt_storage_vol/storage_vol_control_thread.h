@@ -18,7 +18,7 @@ private:
     virStoragePool       *currStoragePool = NULL;
 
 public slots:
-    bool                  setCurrentStoragePoolName(virConnect*, QString&);
+    bool                  setCurrentStoragePoolName(virConnect*, QString&, QString&);
     void                  stop();
     void                  execAction(Actions, QStringList);
 

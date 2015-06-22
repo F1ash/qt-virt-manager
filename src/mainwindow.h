@@ -24,13 +24,13 @@
 #include <QDebug>
 
 typedef QMap<QString, VM_Viewer*> ViewerMap;
+typedef QMap<QString, VirtStorageVolControl*> StorageMap;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = NULL);
-    ~MainWindow();
 
 signals:
 
@@ -48,8 +48,6 @@ private :
     VirtDomainControl           *domainDockContent;
     DockWidget                  *networkDock;
     VirtNetControl              *networkDockContent;
-    DockWidget                  *storageVolDock;
-    VirtStorageVolControl       *storageVolDockContent;
     DockWidget                  *storagePoolDock;
     VirtStoragePoolControl      *storagePoolDockContent;
     ViewerMap                    VM_Displayed_Map;
@@ -60,11 +58,11 @@ private :
     DockHeadWidget              *domHeadWdg;
     DockHeadWidget              *netHeadWdg;
     DockHeadWidget              *poolHeadWdg;
-    DockHeadWidget              *volumeHeadWdg;
 
     QProgressBar                *closeProgress;
     int                          killTimerId = 0;
     int                          counter = 0;
+    StorageMap                   storageMap;
 
 private slots:
     void saveSettings();
@@ -90,6 +88,7 @@ private slots:
     void closeCurrentConnection();
     void closeConnection(int);
     void closeAllConnections();
+    void closeConnStorageQverview(int);
     bool runningConnExist();
     void autoHide();
     void writeToErrorLog(QString&);
@@ -102,6 +101,7 @@ private slots:
     void deleteVMDisplay(QString&);
     void deleteVMDisplay(QString, QString);
     void buildMigrateArgs(QStringList&);
+    void addStorageVol(virConnect*,QString&,QString&);
 };
 
 #endif // MAINWINDOW_H

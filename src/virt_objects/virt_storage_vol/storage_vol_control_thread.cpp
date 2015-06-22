@@ -7,9 +7,10 @@ StorageVolControlThread::StorageVolControlThread(QObject *parent) :
 }
 
 /* public slots */
-bool StorageVolControlThread::setCurrentStoragePoolName(virConnect *conn, QString &poolName)
+bool StorageVolControlThread::setCurrentStoragePoolName(virConnect *conn, QString &poolName, QString &connName)
 {
     keep_alive = true;
+    currConnName = connName;
     // close previous virConnectRef[erence]
     if ( NULL!=currWorkConnection ) {
         int ret = virConnectClose(currWorkConnection);
@@ -107,6 +108,7 @@ void StorageVolControlThread::run()
 Result StorageVolControlThread::getAllStorageVolList()
 {
     Result result;
+    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
     QStringList storageVolList;
     if ( currStoragePool==NULL ) {
         if ( currWorkConnection!=NULL && keep_alive ) {
@@ -174,6 +176,7 @@ Result StorageVolControlThread::getAllStorageVolList()
 Result StorageVolControlThread::createStorageVol()
 {
     Result result;
+    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
     QString path = args.first();
     QByteArray xmlData;
     QFile f;
@@ -193,10 +196,10 @@ Result StorageVolControlThread::createStorageVol()
         result.result = false;
         return result;
     };
-    result.name = QString().fromUtf8( virStorageVolGetName(storageVol) );
+    QString name = QString().fromUtf8( virStorageVolGetName(storageVol) );
     result.msg
             .append(QString("'<b>%1</b>' StorageVol from\n\"%2\"\nis created.")
-                    .arg(result.name).arg(path));
+                    .arg(name).arg(path));
     virStorageVolFree(storageVol);
     result.result = true;
     return result;
@@ -204,6 +207,7 @@ Result StorageVolControlThread::createStorageVol()
 Result StorageVolControlThread::deleteStorageVol()
 {
     Result result;
+    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
     QString name = args.first();
 
     // flags: extra flags; not used yet, so callers should always pass 0
@@ -217,13 +221,13 @@ Result StorageVolControlThread::deleteStorageVol()
     } else sendConnErrors();
     result.msg.append(QString("'<b>%1</b>' StorageVol %2 Deleted.")
                       .arg(name).arg((deleted)?"":"don't"));
-    result.name = name;
     result.result = deleted;
     return result;
 }
 Result StorageVolControlThread::downloadStorageVol()
 {
     Result result;
+    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
     QString name, path;
     name = args.first();
     args.removeFirst();
@@ -277,13 +281,13 @@ Result StorageVolControlThread::downloadStorageVol()
     result.msg.append(QString("'<b>%1</b>' StorageVol %2 Downloaded into %3 (%4).")
                   .arg(name).arg((downloaded)?"":"don't")
                   .arg(path).arg(length));
-    result.name = name;
     result.result = downloaded;
     return result;
 }
 Result StorageVolControlThread::resizeStorageVol()
 {
     Result result;
+    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
     QString name = args.first();
     args.removeFirst();
 
@@ -309,13 +313,13 @@ Result StorageVolControlThread::resizeStorageVol()
     } else sendConnErrors();
     result.msg.append(QString("'<b>%1</b>' StorageVol %2 Resized to %3 (bytes).")
                   .arg(name).arg((resized)?"":"don't").arg(capacity));
-    result.name = name;
     result.result = resized;
     return result;
 }
 Result StorageVolControlThread::uploadStorageVol()
 {
     Result result;
+    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
     QString name, path;
     name = args.first();
     args.removeFirst();
@@ -370,13 +374,13 @@ Result StorageVolControlThread::uploadStorageVol()
     result.msg.append(QString("'<b>%1</b>' StorageVol %2 Uploaded from %3 (%4).")
                   .arg(name).arg((uploaded)?"":"don't")
                   .arg(path).arg(length));
-    result.name = name;
     result.result = uploaded;
     return result;
 }
 Result StorageVolControlThread::wipeStorageVol()
 {
     Result result;
+    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
     QString name, algorithm;
     name = args.first();
     args.removeFirst();
@@ -428,13 +432,13 @@ Result StorageVolControlThread::wipeStorageVol()
     };
     result.msg.append(QString("'<b>%1</b>' StorageVol %2 Wiped with %3 algorithm.")
                   .arg(name).arg((wiped)?"":"don't").arg(algorithm));
-    result.name = name;
     result.result = wiped;
     return result;
 }
 Result StorageVolControlThread::getStorageVolXMLDesc()
 {
     Result result;
+    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
     QString name = args.first();
 
     bool read = false;
@@ -459,7 +463,6 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
     if ( Returns!=NULL ) free(Returns);
     result.msg.append(QString("'<b>%1</b>' StorageVol %2 XML'ed")
                   .arg(name).arg((read)?"":"don't"));
-    result.name = name;
     result.result = read;
     return result;
 }

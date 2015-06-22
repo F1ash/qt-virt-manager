@@ -131,7 +131,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
                     threadPool->value(_number));
         QString poolname = _taskDesc.last();
         cThread->setCurrentStoragePoolName(
-                    _conn, poolname);
+                    _conn, poolname, currConnName);
     } else return;
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));

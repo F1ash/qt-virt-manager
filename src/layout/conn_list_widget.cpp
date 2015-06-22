@@ -286,6 +286,7 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
   } else if ( conn_state!=RUNNING ) {
       conn->openConnection();
   } else if ( conn_state==RUNNING ) {
+      emit connToClose(_item.row());
       conn->closeConnection();
   };
   clearSelection();

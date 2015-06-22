@@ -32,6 +32,7 @@ signals:
     void messageShowed();
     void warning(QString&);
     void connPtr(virConnect*, QString&);
+    void connToClose(int);
     void connClosed(virConnect*);
     void domResult(Result);
 
