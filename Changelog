@@ -66,3 +66,11 @@ improved Domain Snapshot Actions;
 fixed the loop at close LXC_Viewer;
 changed the app building with the icons qrc-file;
 some fixes and improvements;
+
+v.0.12.28 :
+added the local connections search;
+implemented pool overview in modal windows;
+some improvements:
+    fixed closing with systemtray;
+    improved Taskware Tooltip;
+    fixed icon theme in qrc-file;

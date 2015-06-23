@@ -296,9 +296,6 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             args.prepend(currConnName);
             args.append(currPoolName);
             emit addNewTask(currWorkConnection, args);
-        } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
-            stopProcessing();
-            emit overViewStopped();
         } else if ( l.first()=="reloadVirtStorageVol" ) {
             args.prepend(l.first());
             args.prepend(QString::number(GET_ALL_ENTITY));
@@ -306,9 +303,6 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             args.append(currPoolName);
             emit addNewTask(currWorkConnection, args);
         };
-    } else if ( l.first()=="stopOverViewVirtStoragePool" ) {
-        stopProcessing();
-        emit overViewStopped();
     } else if ( l.first()=="reloadVirtStorageVol" ) {
         args.prepend(l.first());
         args.prepend(QString::number(GET_ALL_ENTITY));

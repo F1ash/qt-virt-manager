@@ -125,7 +125,7 @@ void ToolBar::addDocksControlMenu()
     _domUpAction->setCheckable(true);
     _netUpAction = new QAction("Network Dock", this);
     _netUpAction->setCheckable(true);
-    _storageUpAction = new QAction("Storages Docks", this);
+    _storageUpAction = new QAction("Storages Dock", this);
     _storageUpAction->setCheckable(true);
 
     showDocksControlMenu->addAction(_logUpAction);

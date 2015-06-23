@@ -281,10 +281,10 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
             args.prepend(currConnName);
             emit addNewTask(currWorkConnection, args);
         } else if ( l.first()=="overviewVirtStoragePool" ) {
-            uint row = idx.row();
-            for ( int i=0; i<storagePoolModel->DataList.count(); i++ ) {
-                storagePoolModel->DataList.at(i)->setOnView(i==row);
-            };
+            //uint row = idx.row();
+            //for ( int i=0; i<storagePoolModel->DataList.count(); i++ ) {
+            //    storagePoolModel->DataList.at(i)->setOnView(i==row);
+            //};
             emit currPool(currWorkConnection, currConnName, storagePoolName);
         } else if ( l.first()=="reloadVirtStoragePool" ) {
             args.prepend(l.first());

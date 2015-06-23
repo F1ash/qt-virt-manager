@@ -1,6 +1,7 @@
 #include "storage_vol_control_menu.h"
 
-StorageVolControlMenu::StorageVolControlMenu(QWidget *parent, QStringList params, bool state) :
+StorageVolControlMenu::StorageVolControlMenu(
+        QWidget *parent, QStringList params, bool state) :
     QMenu(parent), parameters(params), autoReloadState(state)
 {
     if ( !parameters.isEmpty() ) {

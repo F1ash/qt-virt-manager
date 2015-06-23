@@ -42,9 +42,6 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     getXMLDesc_Action = new QAction(this);
     getXMLDesc_Action->setIcon(QIcon::fromTheme("storageVol-xml"));
     getXMLDesc_Action->setToolTip("Get XML Description");
-    stopOverview_Action = new QAction(this);
-    stopOverview_Action->setIcon(QIcon::fromTheme("overview-stop"));
-    stopOverview_Action->setToolTip("Close Pool Overview");
     _autoReload = new QPushButton(this);
     _autoReload->setToolTip("AutoReload Volume Overview");
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
@@ -58,8 +55,6 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     addAction(wipe_Action);
     addSeparator();
     addAction(getXMLDesc_Action);
-    addSeparator();
-    addAction(stopOverview_Action);
     addSeparator();
     autoReload = addWidget(_autoReload);
     addAction(autoReload);
@@ -115,8 +110,6 @@ StorageVolToolBar::~StorageVolToolBar()
     wipe_Action = NULL;
     delete getXMLDesc_Action;
     getXMLDesc_Action = NULL;
-    delete stopOverview_Action;
-    stopOverview_Action = NULL;
     delete _autoReload;
     _autoReload = NULL;
     delete autoReload;
@@ -201,8 +194,6 @@ void StorageVolToolBar::detectTriggerredAction(QAction *action)
         parameters << "wipeVirtStorageVol" << "0";
     } else if ( action == getXMLDesc_Action ) {
         parameters << "getVirtStorageVolXMLDesc";
-    } else if ( action == stopOverview_Action ) {
-        parameters << "stopOverViewVirtStoragePool";
     } else return;
     emit execMethod(parameters);
 }
