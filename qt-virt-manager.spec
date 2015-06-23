@@ -123,7 +123,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %endif
 
 %changelog
-* Wed May 13 2015 Fl@sh <kaperang07@gmail.com> - 0.12.28-1
+* Tue Jun 23 2015 Fl@sh <kaperang07@gmail.com> - 0.12.28-1
 - version updated;
 
 * Wed May 13 2015 Fl@sh <kaperang07@gmail.com> - 0.10.25-1
