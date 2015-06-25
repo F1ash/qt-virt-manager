@@ -20,27 +20,13 @@ public:
     ConnElement(QObject *parent);
     ~ConnElement();
 
-public slots:
-    void              setItemReference(ConnItemModel*, ConnItemIndex*);
-    void              setItemReferenceForLocal(ConnItemModel*, ConnItemIndex*);
-    void              openConnection();
-    void              closeConnection();
-    void              forceCloseConnection();
-    void              showConnectionData();
-    virConnect*       getConnection() const;
-    void              setAuthCredentials(QString&, QString&);
-    QString           getName() const;
-    QString           getURI() const;
-    void              setName(QString&);
-    void              setURI(QString&);
-    void              setOnViewConnAliveThread(bool);
-
 signals:
     void              warningShowed();
     void              warning(QString&);
     void              connPtr(virConnect*, QString&);
     void              authRequested(QString&);
     void              domStateChanged(Result);
+    void              netStateChanged(Result);
     void              connClosed(virConnect*);
 
 private:
@@ -58,6 +44,21 @@ private:
     int               _diff;
 
     ConnAliveThread  *connAliveThread = NULL;
+
+public slots:
+    void              setItemReference(ConnItemModel*, ConnItemIndex*);
+    void              setItemReferenceForLocal(ConnItemModel*, ConnItemIndex*);
+    void              openConnection();
+    void              closeConnection();
+    void              forceCloseConnection();
+    void              showConnectionData();
+    virConnect*       getConnection() const;
+    void              setAuthCredentials(QString&, QString&);
+    QString           getName() const;
+    QString           getURI() const;
+    void              setName(QString&);
+    void              setURI(QString&);
+    void              setOnViewConnAliveThread(bool);
 
 private slots:
     void              buildURI();

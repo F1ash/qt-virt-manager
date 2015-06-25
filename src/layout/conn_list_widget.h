@@ -35,6 +35,7 @@ signals:
     void connToClose(int);
     void connClosed(virConnect*);
     void domResult(Result);
+    void netResult(Result);
 
 public slots:
     int  connItemEditAction();

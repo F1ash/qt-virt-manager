@@ -11,7 +11,8 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
     qRegisterMetaType<CONN_STATE>("CONN_STATE");
     onView = false;
     closeCallbackRegistered = false;
-    domainEventRegistered = false;
+    domainsLifeCycleCallback = -1;
+    networkLifeCycleCallback = -1;
 }
 ConnAliveThread::~ConnAliveThread()
 {
@@ -155,34 +156,55 @@ void ConnAliveThread::sendGlobalErrors()
 }
 void ConnAliveThread::registerConnEvents()
 {
-    int ret = virConnectRegisterCloseCallback(conn,
-                                              connEventCallBack,
-                                              this,
+    int ret = virConnectRegisterCloseCallback(
+                conn,
+                connEventCallBack,
+                this,
     // don't register freeData, because it remove this thread
-                                              NULL);
+                NULL);
     closeCallbackRegistered = !(ret<0);
     if (ret<0) sendConnErrors();
-    ret = virConnectDomainEventRegister(conn,
-                                        domEventCallback,
-                                        this,
+    domainsLifeCycleCallback = virConnectDomainEventRegisterAny(
+                conn,
+                NULL,
+                VIR_DOMAIN_EVENT_ID_LIFECYCLE,
+    // set domainsLifeCycleCallback signature
+                VIR_DOMAIN_EVENT_CALLBACK(domEventCallback),
+                this,
     // don't register freeData, because it remove this thread
-                                        NULL);
-    domainEventRegistered = !(ret<0);
+                NULL);
+    networkLifeCycleCallback = virConnectNetworkEventRegisterAny(
+                conn,
+                NULL,
+                VIR_NETWORK_EVENT_ID_LIFECYCLE,
+    // set domainsLifeCycleCallback signature
+                VIR_NETWORK_EVENT_CALLBACK(netEventCallback),
+                this,
+    // don't register freeData, because it remove this thread
+                NULL);
     if (ret<0) sendConnErrors();
 }
 void ConnAliveThread::unregisterConnEvents()
 {
     //qDebug()<<"unregisterConnEvents0"<<conn<<URI;
     if ( closeCallbackRegistered ) {
-        int ret = virConnectUnregisterCloseCallback(conn, connEventCallBack);
+        int ret = virConnectUnregisterCloseCallback(
+                    conn, connEventCallBack);
         if (ret<0) sendConnErrors();
     };
-    if ( domainEventRegistered ) {
-        int ret = virConnectDomainEventDeregister(conn, domEventCallback);
+    if ( domainsLifeCycleCallback ) {
+        int ret = virConnectDomainEventDeregisterAny(
+                    conn, domainsLifeCycleCallback);
         if (ret<0) sendConnErrors();
+        else domainsLifeCycleCallback = -1;
+    };
+    if ( networkLifeCycleCallback ) {
+        int ret = virConnectNetworkEventDeregisterAny(
+                    conn, networkLifeCycleCallback);
+        if (ret<0) sendConnErrors();
+        else networkLifeCycleCallback = -1;
     };
     closeCallbackRegistered = false;
-    domainEventRegistered = false;
     //qDebug()<<"unregisterConnEvents1"<<conn<<URI;
 }
 void ConnAliveThread::freeData(void *opaque)
@@ -262,8 +284,8 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
     QString msg;
     msg = QString("<b>'%1'</b> Domain %2 %3\n")
            .arg(virDomainGetName(dom))
-           .arg(obj->eventToString(event))
-           .arg(obj->eventDetailToString(event, detail));
+           .arg(obj->domEventToString(event))
+           .arg(obj->domEventDetailToString(event, detail));
     emit obj->connMsg(msg);
     if ( obj->onView ) {
         Result result;
@@ -343,29 +365,88 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
     };
     return 0;
 }
-const char* ConnAliveThread::eventToString(int event) {
+int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, int event, int detail, void *opaque)
+{
+    //qDebug()<<"netEventCallback"<<_conn;
+    ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
+    if ( NULL==obj || obj->conn!=_conn ) return 0;
+    QString msg;
+    msg = QString("<b>'%1'</b> Network %2 %3\n")
+           .arg(virNetworkGetName(net))
+           .arg(obj->netEventToString(event))
+           .arg(obj->netEventDetailToString(event, detail));
+    emit obj->connMsg(msg);
+    if ( obj->onView ) {
+        Result result;
+        QStringList virtNetList;
+        if ( _conn!=NULL && obj->keep_alive ) {
+            virNetworkPtr *networks = NULL;
+            unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
+                                 VIR_CONNECT_LIST_NETWORKS_INACTIVE;
+            // the number of networks found or -1 and sets networks to NULL in case of error.
+            int ret = virConnectListAllNetworks(_conn, &networks, flags);
+            if ( ret<0 ) {
+                obj->sendConnErrors();
+                return 0;
+            };
+            // therefore correctly to use for() command, because networks[0] can not exist.
+            for (int i = 0; i < ret; i++) {
+                QStringList currentAttr;
+                QString autostartStr;
+                int is_autostart = 0;
+                if (virNetworkGetAutostart(networks[i], &is_autostart) < 0) {
+                    autostartStr.append("no autostart");
+                } else autostartStr.append( is_autostart ? "yes" : "no" );
+                currentAttr<< QString().fromUtf8( virNetworkGetName(networks[i]) )
+                           << QString( virNetworkIsActive(networks[i]) ? "active" : "inactive" )
+                           << autostartStr
+                           << QString( virNetworkIsPersistent(networks[i]) ? "yes" : "no" );
+                virtNetList.append(currentAttr.join(DFR));
+                //qDebug()<<currentAttr;
+                virNetworkFree(networks[i]);
+            };
+            free(networks);
+        };
+        //result.name   = ;
+        result.type   = "network";
+        //result.number = number;
+        result.action = GET_ALL_ENTITY;
+        result.result = true;
+        result.msg = virtNetList;
+        emit obj->netStateChanged(result);
+    };
+    return 0;
+}
+const char* ConnAliveThread::domEventToString(int event)
+{
     const char *ret = "";
     switch ((virDomainEventType) event) {
         case VIR_DOMAIN_EVENT_DEFINED:
-            ret ="Defined";
+            ret = "Defined";
             break;
         case VIR_DOMAIN_EVENT_UNDEFINED:
-            ret ="Undefined";
+            ret = "Undefined";
             break;
         case VIR_DOMAIN_EVENT_STARTED:
-            ret ="Started";
+            ret = "Started";
             break;
         case VIR_DOMAIN_EVENT_SUSPENDED:
-            ret ="Suspended";
+            ret = "Suspended";
             break;
         case VIR_DOMAIN_EVENT_RESUMED:
-            ret ="Resumed";
+            ret = "Resumed";
             break;
         case VIR_DOMAIN_EVENT_STOPPED:
-            ret ="Stopped";
+            ret = "Stopped";
             break;
         case VIR_DOMAIN_EVENT_SHUTDOWN:
             ret = "Shutdown";
+            break;
+        case VIR_DOMAIN_EVENT_PMSUSPENDED:
+            ret = "PMSuspended";
+            break;
+        case VIR_DOMAIN_EVENT_CRASHED:
+            ret = "Crashed";
             break;
         default:
             ret = "Unknown";
@@ -373,7 +454,8 @@ const char* ConnAliveThread::eventToString(int event) {
     };
     return ret;
 }
-const char* ConnAliveThread::eventDetailToString(int event, int detail) {
+const char* ConnAliveThread::domEventDetailToString(int event, int detail)
+{
     const char *ret = "";
     switch ((virDomainEventType) event) {
         case VIR_DOMAIN_EVENT_DEFINED:
@@ -427,6 +509,9 @@ const char* ConnAliveThread::eventDetailToString(int event, int detail) {
                     break;
                 case VIR_DOMAIN_EVENT_SUSPENDED_FROM_SNAPSHOT:
                     ret = "Snapshot";
+                    break;
+                case VIR_DOMAIN_EVENT_SUSPENDED_API_ERROR:
+                    ret = "API error";
                     break;
                 default:
                     ret = "Unknown";
@@ -487,8 +572,69 @@ const char* ConnAliveThread::eventDetailToString(int event, int detail) {
                     break;
                 };
             break;
+        case VIR_DOMAIN_EVENT_PMSUSPENDED:
+            switch ((virDomainEventPMSuspendedDetailType) detail) {
+            case VIR_DOMAIN_EVENT_PMSUSPENDED_MEMORY:
+                ret = "Memory";
+                break;
+            case VIR_DOMAIN_EVENT_PMSUSPENDED_DISK:
+                ret = "Disk";
+                break;
+            };
+            break;
+        case VIR_DOMAIN_EVENT_CRASHED:
+           switch ((virDomainEventCrashedDetailType) detail) {
+           case VIR_DOMAIN_EVENT_CRASHED_PANICKED:
+               ret = "Panicked";
+               break;
+           };
+           break;
         default:
             ret = "Unknown";
+            break;
+    };
+    return ret;
+}
+const char* ConnAliveThread::netEventToString(int event)
+{
+    const char *ret = "";
+    switch ((virNetworkEventLifecycleType) event) {
+        case VIR_NETWORK_EVENT_DEFINED:
+            ret = "Defined";
+            break;
+        case VIR_NETWORK_EVENT_UNDEFINED:
+            ret = "Undefined";
+            break;
+        case VIR_NETWORK_EVENT_STARTED:
+            ret = "Started";
+            break;
+        case VIR_NETWORK_EVENT_STOPPED:
+            ret = "Stopped";
+            break;
+        default:
+            ret = "Unknown";
+            break;
+    };
+    return ret;
+}
+const char* ConnAliveThread::netEventDetailToString(int event, int detail)
+{
+    const char *ret = "";
+    switch ((virNetworkEventLifecycleType) event) {
+        case VIR_NETWORK_EVENT_DEFINED:
+            ret = "N0_DETAILS";
+            break;
+        case VIR_NETWORK_EVENT_UNDEFINED:
+            ret = "N0_DETAILS";
+            break;
+        case VIR_NETWORK_EVENT_STARTED:
+            ret = "N0_DETAILS";
+            break;
+        case VIR_NETWORK_EVENT_STOPPED:
+            ret = "N0_DETAILS";
+            break;
+        default:
+            ret = "N0_DETAILS";
             break;
     };
     return ret;

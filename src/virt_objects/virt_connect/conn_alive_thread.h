@@ -49,15 +49,17 @@ signals:
     void            changeConnState(CONN_STATE);
     void            authRequested(QString&);
     void            domStateChanged(Result);
+    void            netStateChanged(Result);
     void            connClosed(virConnect*);
 
 private:
+    int             domainsLifeCycleCallback;
+    int             networkLifeCycleCallback;
     bool            keep_alive;
     bool            authWaitKey;
     AuthData        authData;
     QString         URI;
-    bool            closeCallbackRegistered,
-                    domainEventRegistered;
+    bool            closeCallbackRegistered;
 
     virConnectPtr   conn = NULL;
     virErrorPtr     virtErrors;
@@ -80,9 +82,14 @@ private slots:
     static  int     authCallback(virConnectCredentialPtr, unsigned int, void*);
     static  int     domEventCallback(virConnectPtr, virDomainPtr,
                                      int, int, void*);
-    const char*     eventToString(int event);
+    static  int     netEventCallback(virConnectPtr, virNetworkPtr,
+                                     int, int, void*);
+    const char*     domEventToString(int event);
     static const char*
-                    eventDetailToString(int event, int detail);
+                    domEventDetailToString(int event, int detail);
+    const char*     netEventToString(int event);
+    static const char*
+                    netEventDetailToString(int event, int detail);
     void            closeConnection(int);
     void            getAuthCredentials(QString&);
 };

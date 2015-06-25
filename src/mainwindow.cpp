@@ -75,15 +75,6 @@ void MainWindow::closeEvent(QCloseEvent *ev)
 {
   if ( !this->isVisible() ) changeVisibility();
   if ( runningConnExist() && wait_thread==NULL ) {
-      /*
-      QString q;
-      q.append("Running Connects are exist.\nKill them and exit?");
-      int answer = QMessageBox::question(this, "Action", q, QMessageBox::Yes, QMessageBox::Cancel);
-      if ( answer == QMessageBox::Cancel ) {
-          ev->ignore();
-          return;
-      };
-      */
       connListWidget->setEnabled(false);
       toolBar->setEnabled(false);
       logDock->setEnabled(false);
@@ -93,7 +84,8 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       domainsStateMonitor->stopMonitoring();
       taskWrHouse->stopTaskComputing();
       // close VM Displays
-      foreach ( QString key, VM_Displayed_Map.keys() ) {
+      QStringList keys(VM_Displayed_Map.keys());
+      foreach ( QString key, keys ) {
           if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
               VM_Viewer *value = NULL;
               QString _type = VM_Displayed_Map.value(key, NULL)->TYPE.toUpper();
@@ -105,15 +97,8 @@ void MainWindow::closeEvent(QCloseEvent *ev)
                               VM_Displayed_Map.value(key, NULL));
               };
               if ( NULL!=value ) {
+                  // close&delete into deleteVMDisplay
                   if ( value->isActive() ) value->close();
-                  disconnect(value, SIGNAL(finished(QString&)),
-                             this, SLOT(deleteVMDisplay(QString&)));
-                  disconnect(value, SIGNAL(errorMsg(QString&)),
-                             logDockContent, SLOT(appendErrorMsg(QString&)));
-                  disconnect(value, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
-                             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
-                  delete value;
-                  value = NULL;
               };
               VM_Displayed_Map.remove(key);
               //qDebug()<<key<<"removed into Close";
@@ -123,7 +108,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       //qDebug()<<"Viewers cleared";
       wait_thread = new Wait(this, connListWidget);
       connect(wait_thread, SIGNAL(finished()),
-              this, SLOT(closeEvent()));
+              this, SLOT(close()));
       wait_thread->start();
       ev->ignore();
       startCloseProcess();
@@ -136,10 +121,6 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       //  ( wait_thread!=NULL || wait_thread->isRunning() )
       ev->ignore();
   };
-}
-void MainWindow::closeEvent()
-{
-    this->close();
 }
 void MainWindow::startCloseProcess()
 {
@@ -184,7 +165,7 @@ void MainWindow::initTrayIcon()
     connect(trayIcon->taskUpAction, SIGNAL(triggered()),
             taskWrHouse, SLOT(changeVisibility()));
     connect(trayIcon->closeAction, SIGNAL(triggered()),
-            this, SLOT(closeEvent()));
+            this, SLOT(close()));
     connect(domainsStateMonitor, SIGNAL(visibilityChanged(bool)),
             trayIcon, SLOT(stateMonitorVisibilityChanged(bool)));
     connect(taskWrHouse, SIGNAL(visibilityChanged(bool)),
@@ -224,7 +205,7 @@ void MainWindow::changeVisibility()
 }
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 {
-  if (r==QSystemTrayIcon::Trigger) changeVisibility();
+    if (r==QSystemTrayIcon::Trigger) changeVisibility();
 }
 void MainWindow::initConnListWidget()
 {
@@ -284,7 +265,7 @@ void MainWindow::initToolBar()
   connect(toolBar->_closeOverview, SIGNAL(triggered()),
           this, SLOT(stopProcessing()));
   connect(toolBar->_exitAction, SIGNAL(triggered()),
-          this, SLOT(closeEvent()));
+          this, SLOT(close()));
   connect(toolBar, SIGNAL(warningShowed()),
           this, SLOT(mainWindowUp()));
   int area_int = settings.value("ToolBarArea", 4).toInt();
@@ -406,6 +387,8 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
     connect(taskWrHouse, SIGNAL(netResult(Result)),
             networkDockContent, SLOT(resultReceiver(Result)));
+    connect(connListWidget, SIGNAL(netResult(Result)),
+            networkDockContent, SLOT(resultReceiver(Result)));
 
     storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
@@ -451,23 +434,23 @@ void MainWindow::initDockWidgets()
 }
 void MainWindow::editCurrentConnection()
 {
-  connListWidget->connItemEditAction();
+    connListWidget->connItemEditAction();
 }
 void MainWindow::createNewConnection()
 {
-  QString s = QString("<noname>");
-  connListWidget->addConnItem(s);
+    QString s = QString("<noname>");
+    connListWidget->addConnItem(s);
 }
 void MainWindow::deleteCurrentConnection()
 {
-  connListWidget->deleteCurrentConnection();
+    connListWidget->deleteCurrentConnection();
 }
 void MainWindow::removeConnItem(QString &connect)
 {
-  settings.beginGroup("Connects");
-  settings.remove(connect);
-  settings.endGroup();
-  //qDebug()<<connect<<"connect deleted";
+    settings.beginGroup("Connects");
+    settings.remove(connect);
+    settings.endGroup();
+    //qDebug()<<connect<<"connect deleted";
 }
 void MainWindow::openCurrentConnection()
 {
@@ -492,16 +475,16 @@ void MainWindow::closeCurrentConnection()
 }
 void MainWindow::closeAllConnections()
 {
-  int count = connListWidget->connItemModel->rowCount();
-  for (int i = 0; i< count; i++) closeConnection(i);
+    int count = connListWidget->connItemModel->rowCount();
+    for (int i = 0; i< count; i++) closeConnection(i);
 }
 void MainWindow::closeConnection(int i)
 {
-  //qDebug()<<i<<" item to stop";
-  QModelIndex _item = connListWidget->connItemModel->index(i, 0);
-  if (_item.isValid()) {
-      connListWidget->closeConnection(_item);
-  };
+    //qDebug()<<i<<" item to stop";
+    QModelIndex _item = connListWidget->connItemModel->index(i, 0);
+    if (_item.isValid()) {
+        connListWidget->closeConnection(_item);
+    };
 }
 void MainWindow::closeConnStorageQverview(int i)
 {

@@ -49,6 +49,8 @@ ConnectionList::~ConnectionList()
                  this, SLOT(getAuthCredentials(QString&)));
       disconnect(connections->value(key), SIGNAL(domStateChanged(Result)),
                  this, SIGNAL(domResult(Result)));
+      disconnect(connections->value(key), SIGNAL(netStateChanged(Result)),
+                 this, SIGNAL(netResult(Result)));
       disconnect(connections->value(key), SIGNAL(connClosed(virConnect*)),
                  this, SIGNAL(connClosed(virConnect*)));
   };
@@ -144,6 +146,8 @@ void ConnectionList::deleteCurrentConnection()
                      this, SLOT(getAuthCredentials(QString&)));
           disconnect(connections->value(connection), SIGNAL(domStateChanged(Result)),
                      this, SIGNAL(domResult(Result)));
+          disconnect(connections->value(connection), SIGNAL(netStateChanged(Result)),
+                     this, SIGNAL(netResult(Result)));
           disconnect(connections->value(connection), SIGNAL(connClosed(virConnect*)),
                      this, SIGNAL(connClosed(virConnect*)));
           emit removeConnection(connection);
@@ -324,6 +328,8 @@ void ConnectionList::createConnection(QModelIndex &_item)
           this, SLOT(getAuthCredentials(QString&)));
   connect(connections->value(key), SIGNAL(domStateChanged(Result)),
           this, SIGNAL(domResult(Result)));
+  connect(connections->value(key), SIGNAL(netStateChanged(Result)),
+          this, SIGNAL(netResult(Result)));
   connect(connections->value(key), SIGNAL(connClosed(virConnect*)),
           this, SIGNAL(connClosed(virConnect*)));
   //qDebug()<<key<<" create Connection item";
@@ -369,6 +375,8 @@ void ConnectionList::createLocalConnection(QString &uri)
             this, SLOT(getAuthCredentials(QString&)));
     connect(connections->value(key), SIGNAL(domStateChanged(Result)),
             this, SIGNAL(domResult(Result)));
+    connect(connections->value(key), SIGNAL(netStateChanged(Result)),
+            this, SIGNAL(netResult(Result)));
     connect(connections->value(key), SIGNAL(connClosed(virConnect*)),
             this, SIGNAL(connClosed(virConnect*)));
     //qDebug()<<key<<" create Local Connection item";

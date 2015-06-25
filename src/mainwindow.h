@@ -67,7 +67,6 @@ private :
 private slots:
     void saveSettings();
     void closeEvent(QCloseEvent*);
-    void closeEvent();
     void startCloseProcess();
     void timerEvent(QTimerEvent*);
     void changeVisibility();

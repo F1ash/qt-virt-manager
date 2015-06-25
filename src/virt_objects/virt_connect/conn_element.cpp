@@ -19,24 +19,28 @@ ConnElement::ConnElement(QObject *parent) :
             this, SLOT(getAuthCredentials(QString&)));
     connect(connAliveThread, SIGNAL(domStateChanged(Result)),
             this, SIGNAL(domStateChanged(Result)));
+    connect(connAliveThread, SIGNAL(netStateChanged(Result)),
+            this, SIGNAL(netStateChanged(Result)));
     connect(connAliveThread, SIGNAL(connClosed(virConnect*)),
             this, SIGNAL(connClosed(virConnect*)));
 }
 ConnElement::~ConnElement()
 {
     //disconnect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
-    disconnect(connAliveThread, SIGNAL(connMsg(QString)),
-               this, SLOT(receiveConnMessage(QString)));
-    disconnect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)),
-               this, SLOT(setConnectionState(CONN_STATE)));
-    disconnect(connAliveThread, SIGNAL(authRequested(QString&)),
-               this, SLOT(getAuthCredentials(QString&)));
-    disconnect(connAliveThread, SIGNAL(domStateChanged(Result)),
-               this, SIGNAL(domStateChanged(Result)));
-    disconnect(connAliveThread, SIGNAL(connClosed(virConnect*)),
-               this, SIGNAL(connClosed(virConnect*)));
 
     if ( connAliveThread!=NULL ) {
+        disconnect(connAliveThread, SIGNAL(connMsg(QString)),
+                   this, SLOT(receiveConnMessage(QString)));
+        disconnect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)),
+                   this, SLOT(setConnectionState(CONN_STATE)));
+        disconnect(connAliveThread, SIGNAL(authRequested(QString&)),
+                   this, SLOT(getAuthCredentials(QString&)));
+        disconnect(connAliveThread, SIGNAL(domStateChanged(Result)),
+                   this, SIGNAL(domStateChanged(Result)));
+        disconnect(connAliveThread, SIGNAL(netStateChanged(Result)),
+                   this, SIGNAL(netStateChanged(Result)));
+        disconnect(connAliveThread, SIGNAL(connClosed(virConnect*)),
+                   this, SIGNAL(connClosed(virConnect*)));
         delete connAliveThread;
         connAliveThread = NULL;
     };
