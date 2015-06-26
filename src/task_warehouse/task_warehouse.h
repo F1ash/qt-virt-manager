@@ -13,6 +13,7 @@
 #include "virt_objects/virt_network/net_control_thread.h"
 #include "virt_objects/virt_storage_pool/storage_pool_control_thread.h"
 #include "virt_objects/virt_storage_vol/storage_vol_control_thread.h"
+#include "virt_objects/virt_secret/secret_control_thread.h"
 
 typedef QMap<QString, ControlThread*> THREAD_POOL;
 
@@ -29,6 +30,7 @@ signals:
     void             netResult(Result);
     void             poolResult(Result);
     void             volResult(Result);
+    void             secResult(Result);
 
 private:
     uint             counter = 0;

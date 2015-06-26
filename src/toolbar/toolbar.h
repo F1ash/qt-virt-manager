@@ -28,6 +28,7 @@ public:
   QAction    *_domUpAction;
   QAction    *_netUpAction;
   QAction    *_storageUpAction;
+  QAction    *_secretsUpAction;
 
 signals:
   void        warningShowed();

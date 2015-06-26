@@ -5,7 +5,10 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
 {
     setModal(true);
     setWindowTitle("Network Settings");
+    settings.beginGroup("VirtNetControl");
     restoreGeometry(settings.value("NetCreateGeometry").toByteArray());
+    bool showDesc = settings.value("NetCreateShowDesc").toBool();
+    settings.endGroup();
 
     netNameLabel = new QLabel("Name:", this);
     networkName = new QLineEdit(this);
@@ -34,7 +37,7 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
     forwardWdg = new Forward_Widget(this);
 
     showDescription = new QCheckBox("Show XML Description\nat close", this);
-    showDescription->setChecked(settings.value("NetCreateShowDesc").toBool());
+    showDescription->setChecked(showDesc);
     about = new QLabel("<a href='http://libvirt.org/formatnetwork.html'>About</a>", this);
     about->setOpenExternalLinks(true);
     about->setToolTip("http://libvirt.org/formatnetwork.html");
@@ -87,8 +90,10 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
 }
 CreateVirtNetwork::~CreateVirtNetwork()
 {
+    settings.beginGroup("VirtNetControl");
     settings.setValue("NetCreateGeometry", saveGeometry());
     settings.setValue("NetCreateShowDesc", showDescription->isChecked());
+    settings.endGroup();
     disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
     disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     delete networkName;

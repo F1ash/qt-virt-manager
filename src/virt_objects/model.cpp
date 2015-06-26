@@ -57,6 +57,7 @@ bool Model::setHeaderData(int section, Qt::Orientation orientation, const QVaria
                 break;
             case 3:
                 column3 = value.toString();
+                break;
             default:
                 break;
             }
@@ -71,13 +72,10 @@ QVariant Model::headerData(int section, Qt::Orientation orientation, int role) c
       switch (section) {
       case 0:
         return column0;
-        break;
       case 1:
         return column1;
-        break;
       case 2:
         return column2;
-        break;
       case 3:
         return column3;
       default:

@@ -73,19 +73,14 @@ QVariant StorageVolModel::headerData(int section, Qt::Orientation orientation, i
       switch (section) {
       case 0:
         return column0;
-        break;
       case 1:
         return column1;
-        break;
       case 2:
         return column2;
-        break;
       case 3:
         return column3;
-          break;
       case 4:
         return column4;
-          break;
       default:
         break;
       }

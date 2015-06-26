@@ -64,6 +64,12 @@ void MainWindow::saveSettings()
     settings.setValue("Floating", storagePoolDock->isFloating());
     settings.setValue("Geometry", storagePoolDock->saveGeometry());
     settings.endGroup();
+    settings.beginGroup("SecretDock");
+    settings.setValue("DockArea", dockWidgetArea(secretDock));
+    settings.setValue("Visible", secretDock->isVisible());
+    settings.setValue("Floating", secretDock->isFloating());
+    settings.setValue("Geometry", secretDock->saveGeometry());
+    settings.endGroup();
     settings.beginGroup("ConnectListColumns");
     settings.setValue("column0", connListWidget->columnWidth(0));
     settings.setValue("column1", connListWidget->columnWidth(1));
@@ -191,6 +197,7 @@ void MainWindow::changeVisibility()
         if ( domainDock->isFloating() ) domainDock->hide();
         if ( networkDock->isFloating() ) networkDock->hide();
         if ( storagePoolDock->isFloating() ) storagePoolDock->hide();
+        if ( secretDock->isFloating() ) secretDock->hide();
     } else {
         this->show();
         trayIcon->hideAction->setText (QString("Down"));
@@ -201,6 +208,8 @@ void MainWindow::changeVisibility()
             networkDock->show();
         if ( storagePoolDock->isFloating() && toolBar->_storageUpAction->isChecked() )
             storagePoolDock->show();
+        if ( secretDock->isFloating() && toolBar->_secretsUpAction->isChecked() )
+            secretDock->show();
     };
 }
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
@@ -428,9 +437,46 @@ void MainWindow::initDockWidgets()
     connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
             this, SLOT(addStorageVol(virConnect*,QString&,QString&)));
 
+    secretDock = new DockWidget(this);
+    secretDock->setObjectName("secretDock");
+    secretDock->setWindowTitle("Secret");
+    secretDock->setFeatures(
+        QDockWidget::DockWidgetMovable   |
+        QDockWidget::DockWidgetFloatable |
+        QDockWidget::DockWidgetVerticalTitleBar
+    );
+    scrtHeadWdg = new DockHeadWidget(this, "Secret");
+    scrtHeadWdg->setTabBarName("security-high");
+    secretDock->setTitleBarWidget(scrtHeadWdg);
+    connect(scrtHeadWdg, SIGNAL(floatChanged(bool)),
+            secretDock, SLOT(_setFloating(bool)));
+    connect(secretDock, SIGNAL(topLevelChanged(bool)),
+            scrtHeadWdg, SLOT(floatStateChanged(bool)));
+    secretDockContent = new VirtSecretControl(this);
+    secretDock->setWidget( secretDockContent );
+    settings.beginGroup("SecretDock");
+    secretDock->setFloating(settings.value("Floating", false).toBool());
+    secretDock->restoreGeometry(settings.value("Geometry").toByteArray());
+    visible = settings.value("Visible", false).toBool();
+    secretDock->setVisible(visible);
+    toolBar->_secretsUpAction->setChecked(visible);
+    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
+    settings.endGroup();
+    addDockWidget(area, secretDock);
+    tabifyDockWidget(storagePoolDock, secretDock);
+    connect(toolBar->_secretsUpAction, SIGNAL(triggered(bool)),
+            secretDock, SLOT(setVisible(bool)));
+    connect(secretDockContent, SIGNAL(entityMsg(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
+    connect(secretDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
+            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+    connect(taskWrHouse, SIGNAL(secResult(Result)),
+            secretDockContent, SLOT(resultReceiver(Result)));
+
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);
     storagePoolDockContent->setEnabled(false);
+    secretDockContent->setEnabled(false);
 }
 void MainWindow::editCurrentConnection()
 {
@@ -568,6 +614,8 @@ void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
         networkDockContent->setListHeader(name);
     if ( storagePoolDockContent->setCurrentWorkConnect(conn) )
         storagePoolDockContent->setListHeader(name);
+    if ( secretDockContent->setCurrentWorkConnect(conn) )
+        secretDockContent->setListHeader(name);
 }
 void MainWindow::stopConnProcessing(virConnect *conn)
 {
@@ -582,6 +630,7 @@ void MainWindow::stopProcessing()
     domainDockContent->stopProcessing();
     networkDockContent->stopProcessing();
     storagePoolDockContent->stopProcessing();
+    secretDockContent->stopProcessing();
     //domainDockContent->getThreadState();
     //networkDockContent->getThreadState() ;
     //storagePoolDockContent->getThreadState();

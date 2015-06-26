@@ -115,6 +115,13 @@ set (HEADERS
   src/virt_objects/virt_storage_vol/storage_vol_control_menu.h
   src/virt_objects/virt_storage_vol/wipe_menu.h
   src/virt_objects/virt_storage_vol/resize_dialog.h
+
+  src/virt_objects/virt_secret/secret_control.h
+  src/virt_objects/virt_secret/secret_control_thread.h
+  src/virt_objects/virt_secret/secret_control_menu.h
+  src/virt_objects/virt_secret/secret_toolbar.h
+  src/virt_objects/virt_secret/secret_model.h
+  src/virt_objects/virt_secret/secret_index.h
   
   src/create_widgets/domain/domain_widgets.h
   src/create_widgets/domain/_qwidget.h
@@ -314,6 +321,8 @@ set (HEADERS
   src/create_widgets/snapshot/model/snapshot_tree_model.h
   src/create_widgets/snapshot/model/snapshot_tree_index.h
 
+  src/create_widgets/secret/create_virt_secret.h
+
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
 
@@ -405,6 +414,13 @@ set (SOURCES
   src/virt_objects/virt_storage_vol/storage_vol_control_menu.cpp
   src/virt_objects/virt_storage_vol/wipe_menu.cpp
   src/virt_objects/virt_storage_vol/resize_dialog.cpp
+
+  src/virt_objects/virt_secret/secret_control.cpp
+  src/virt_objects/virt_secret/secret_control_thread.cpp
+  src/virt_objects/virt_secret/secret_control_menu.cpp
+  src/virt_objects/virt_secret/secret_toolbar.cpp
+  src/virt_objects/virt_secret/secret_model.cpp
+  src/virt_objects/virt_secret/secret_index.cpp
   
   src/create_widgets/domain/create_virt_domain.cpp
   src/create_widgets/domain/_qwidget.cpp
@@ -602,6 +618,8 @@ set (SOURCES
   src/create_widgets/snapshot/snapshot_action_dialog.cpp
   src/create_widgets/snapshot/model/snapshot_tree_model.cpp
   src/create_widgets/snapshot/model/snapshot_tree_index.cpp
+
+  src/create_widgets/secret/create_virt_secret.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp

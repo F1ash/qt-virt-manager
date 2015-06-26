@@ -5,6 +5,7 @@ ControlThread::ControlThread(QObject *parent) :
 {
     qRegisterMetaType<Result>("Result");
     qRegisterMetaType<Actions>("Actions");
+    number = 0;
 }
 ControlThread::~ControlThread()
 {

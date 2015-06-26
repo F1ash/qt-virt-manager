@@ -132,6 +132,10 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
         QString poolname = _taskDesc.last();
         cThread->setCurrentStoragePoolName(
                     _conn, poolname, currConnName);
+    } else if ( _taskDesc[0].contains("Secret") ) {
+        threadPool->insert(
+                    _number,
+                    new SecretControlThread(this));
     } else return;
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));
@@ -172,6 +176,8 @@ void TaskWareHouse::taskResultReceiver(Result data)
         emit poolResult(data);
     } else if ( data.type=="volume" ) {
         emit volResult(data);
+    } else if ( data.type=="secret" ) {
+        emit secResult(data);
     } else return;
     QString _number = QString("").sprintf("%08d", data.number);
     ControlThread *cThread = static_cast<ControlThread*>(

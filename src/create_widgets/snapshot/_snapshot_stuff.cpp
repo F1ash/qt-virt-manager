@@ -34,13 +34,13 @@ void _SnapshotStuff::setParameters(virConnectPtr _conn, QString &_domName)
     setThread->setCurrentWorkConnect(_conn, 0, _domName);
     connect(setThread, SIGNAL(diskData(QDomElement&)),
             disks, SLOT(setDisksData(QDomElement&)));
-    connect(setThread, SIGNAL(errorMsg(QString&)),
+    connect(setThread, SIGNAL(errorMsg(QString&,uint)),
             this, SIGNAL(errMsg(QString&)));
     setThread->start();
     setThread->wait();
     disconnect(setThread, SIGNAL(diskData(QDomElement&)),
                disks, SLOT(setDisksData(QDomElement&)));
-    disconnect(setThread, SIGNAL(errorMsg(QString&)),
+    disconnect(setThread, SIGNAL(errorMsg(QString&,uint)),
                this, SIGNAL(errMsg(QString&)));
     delete setThread;
     setThread = NULL;

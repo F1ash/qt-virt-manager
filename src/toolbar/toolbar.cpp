@@ -52,6 +52,8 @@ ToolBar::~ToolBar()
   _netUpAction = NULL;
   delete _storageUpAction;
   _storageUpAction = NULL;
+  delete _secretsUpAction;
+  _secretsUpAction = NULL;
   delete showDocksControlMenu;
   showDocksControlMenu = NULL;
   delete _docsUpAction;
@@ -127,12 +129,15 @@ void ToolBar::addDocksControlMenu()
     _netUpAction->setCheckable(true);
     _storageUpAction = new QAction("Storages Dock", this);
     _storageUpAction->setCheckable(true);
+    _secretsUpAction = new QAction("Secrets Dock", this);
+    _secretsUpAction->setCheckable(true);
 
     showDocksControlMenu->addAction(_logUpAction);
     showDocksControlMenu->addSeparator();
     showDocksControlMenu->addAction(_domUpAction);
     showDocksControlMenu->addAction(_netUpAction);
     showDocksControlMenu->addAction(_storageUpAction);
+    showDocksControlMenu->addAction(_secretsUpAction);
 
     _docsUpAction = new QAction(QString("Dock Control"), this);
     _docsUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
