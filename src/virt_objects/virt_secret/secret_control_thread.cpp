@@ -64,8 +64,11 @@ Result SecretControlThread::getAllSecretList()
         // therefore correctly to use for() command, because secrets[0] can not exist.
         for (int i = 0; i < ret; i++) {
             QStringList currentAttr;
-            char uuid;
-            virSecretGetUUIDString(secrets[i], &uuid);
+            char uuid[100];
+            if ( 0>virSecretGetUUIDString(secrets[i], uuid) )
+                uuid[0] = '?';
+            const char* usageID = virSecretGetUsageID(secrets[i]);
+            /*
             QString type;
             switch (virSecretGetUsageType(secrets[i])) {
             case VIR_SECRET_USAGE_TYPE_NONE:
@@ -84,10 +87,8 @@ Result SecretControlThread::getAllSecretList()
                 type.append("NONE");
                 break;
             };
-            currentAttr<< QString(uuid)
-                       << type
-                       << "-"
-                       << "no";
+            */
+            currentAttr<< uuid<< usageID;
             virtSecretList.append(currentAttr.join(DFR));
             //qDebug()<<currentAttr;
             virSecretFree(secrets[i]);
@@ -120,8 +121,8 @@ Result SecretControlThread::defineSecret()
         sendConnErrors();
         return result;
     };
-    char uuid;
-    virSecretGetUUIDString(secret, &uuid);
+    char uuid[100];
+    virSecretGetUUIDString(secret, uuid);
     result.name = QString(uuid);
     result.result = true;
     result.msg.append(QString("'<b>%1</b>' Secret from\n\"%2\"\nis defined.")
@@ -172,7 +173,7 @@ Result SecretControlThread::getVirtSecretXMLDesc()
                 .arg(QDir::separator()));
     read = f.open();
     if (read) f.write(Returns);
-    result.msg.append(f.fileName());
+    result.fileName.append(f.fileName());
     f.close();
     if ( Returns!=NULL ) free(Returns);
     result.result = read;

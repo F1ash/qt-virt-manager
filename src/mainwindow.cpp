@@ -245,7 +245,7 @@ void MainWindow::initConnListWidget()
   connect(connListWidget, SIGNAL(connClosed(virConnect*)),
           this, SLOT(stopConnProcessing(virConnect*)));
   connect(connListWidget, SIGNAL(connToClose(int)),
-          this, SLOT(closeConnStorageQverview(int)));
+          this, SLOT(closeConnStorageOverview(int)));
 }
 void MainWindow::initToolBar()
 {
@@ -532,7 +532,7 @@ void MainWindow::closeConnection(int i)
         connListWidget->closeConnection(_item);
     };
 }
-void MainWindow::closeConnStorageQverview(int i)
+void MainWindow::closeConnStorageOverview(int i)
 {
     ConnItemIndex *idx = static_cast<ConnItemIndex*>(
                 connListWidget->connItemModel->

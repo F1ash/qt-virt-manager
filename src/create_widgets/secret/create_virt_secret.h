@@ -7,17 +7,23 @@
 #include <QPushButton>
 #include <QDir>
 #include <QTemporaryFile>
+#include <QComboBox>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QCheckBox>
+#include <QLineEdit>
 #include <QDomDocument>
+#include "virt_objects/virt_entity_config.h"
 #include <QDebug>
 
 class CreateVirtSecret : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CreateVirtSecret(QWidget *parent = NULL);
+    explicit CreateVirtSecret(
+            QWidget         *parent = NULL,
+            virConnectPtr    conn = NULL,
+            QString          _uuid = QString());
     ~CreateVirtSecret();
 
 signals:
@@ -25,13 +31,21 @@ signals:
 
 private:
     QSettings        settings;
+    QString          UUID;
+    virConnectPtr    currConnection;
+
     QScrollArea     *scroll;
     QWidget         *scrolled;
     QVBoxLayout     *scrollLayout;
     QWidget         *baseWdg;
     QGridLayout     *baseLayout;
 
-    QCheckBox       *showDescription;
+    QLineEdit       *uuid, *secDesc;
+    QComboBox       *secType;
+    QCheckBox       *ephemeralAttr, *privateAttr;
+    QHBoxLayout     *propLayout;
+    QWidget         *propWdg;
+    QCheckBox       *showXMLDescription;
     QLabel          *about;
     QPushButton     *ok;
     QPushButton     *cancel;
@@ -49,7 +63,7 @@ public slots:
 private slots:
     void             buildXMLDescription();
     void             set_Result();
-    void             secretTypeChanged(bool);
+    void             secretTypeChanged(QString);
 };
 
 #endif // CREATE_VIRT_SECRET_H

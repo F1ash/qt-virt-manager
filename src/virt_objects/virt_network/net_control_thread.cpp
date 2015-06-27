@@ -247,7 +247,7 @@ Result NetControlThread::getVirtNetXMLDesc()
     f.setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml").arg(QDir::tempPath()).arg(QDir::separator()));
     read = f.open();
     if (read) f.write(Returns);
-    result.msg.append(f.fileName());
+    result.fileName.append(f.fileName());
     f.close();
     if ( Returns!=NULL ) free(Returns);
     result.result = read;

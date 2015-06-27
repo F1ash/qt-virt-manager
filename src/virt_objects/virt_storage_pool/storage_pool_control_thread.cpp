@@ -305,7 +305,7 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
                       .arg(QDir::tempPath()).arg(QDir::separator()));
     read = f.open();
     if (read) f.write(Returns);
-    result.msg.append(f.fileName());
+    result.fileName.append(f.fileName());
     f.close();
     if ( Returns!=NULL ) free(Returns);
     result.msg.append(QString("'<b>%1</b>' StoragePool %2 XML'ed")

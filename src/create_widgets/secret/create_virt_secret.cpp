@@ -4,11 +4,12 @@
  * http://libvirt.org/formatsecret.html
  */
 
-CreateVirtSecret::CreateVirtSecret(QWidget *parent) :
-    QDialog(parent)
+CreateVirtSecret::CreateVirtSecret(
+        QWidget *parent, virConnectPtr conn, QString _uuid) :
+    QDialog(parent), currConnection(conn), UUID(_uuid)
 {
     setModal(true);
-    setWindowTitle("Network Settings");
+    setWindowTitle("Secret Settings");
     settings.beginGroup("VirtSecretControl");
     restoreGeometry(settings.value("SecretCreateGeometry").toByteArray());
     bool showDesc = settings.value("SecCreateShowDesc").toBool();
@@ -17,8 +18,8 @@ CreateVirtSecret::CreateVirtSecret(QWidget *parent) :
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
 
-    showDescription = new QCheckBox("Show XML Description\nat close", this);
-    showDescription->setChecked(showDesc);
+    showXMLDescription = new QCheckBox("Show XML Description\nat close", this);
+    showXMLDescription->setChecked(showDesc);
     about = new QLabel("<a href='http://libvirt.org/formatsecret.html'>About</a>", this);
     about->setOpenExternalLinks(true);
     about->setToolTip("http://libvirt.org/formatnetwork.html");
@@ -30,11 +31,45 @@ CreateVirtSecret::CreateVirtSecret(QWidget *parent) :
     connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(about);
-    buttonLayout->addWidget(showDescription);
+    buttonLayout->addWidget(showXMLDescription);
     buttonLayout->addWidget(ok);
     buttonLayout->addWidget(cancel);
     buttons = new QWidget(this);
     buttons->setLayout(buttonLayout);
+
+    uuid = new QLineEdit(this);
+    if ( !UUID.isEmpty() ) {
+        uuid->setText(UUID);
+        uuid->setReadOnly(true);
+    };
+    uuid->setPlaceholderText("UUID generated if omitted");
+    secDesc = new QLineEdit(this);
+    secDesc->setPlaceholderText(
+"A human-readable description of the purpose of the secret");
+    secType = new QComboBox(this);
+    secType->addItems(QStringList()<<"VOLUME"<<"CEPH"<<"iSCSI");
+    if ( !UUID.isEmpty() ) {
+        // find type
+        secType->setEnabled(false);
+    };
+    ephemeralAttr = new QCheckBox("Ephemeral", this);
+    ephemeralAttr->setToolTip(
+"This secret must only be kept in memory,\n\
+never stored persistently");
+    privateAttr = new QCheckBox("Private", this);
+    privateAttr->setToolTip(
+"The value of the secret must not be revealed to any caller of libvirt,\n\
+nor to any other node");
+    propLayout = new QHBoxLayout(this);
+    propLayout->addWidget(secType);
+    propLayout->addWidget(ephemeralAttr);
+    propLayout->addWidget(privateAttr);
+    propWdg = new QWidget(this);
+    propWdg->setLayout(propLayout);
+
+    baseLayout->addWidget(uuid);
+    baseLayout->addWidget(secDesc);
+    baseLayout->addWidget(propWdg);
 
     scrollLayout = new QVBoxLayout(this);
     scrollLayout->setContentsMargins(3, 0, 3, 0);
@@ -50,6 +85,9 @@ CreateVirtSecret::CreateVirtSecret(QWidget *parent) :
     secDescLayout->addWidget(buttons);
     setLayout(secDescLayout);
 
+    connect(secType, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(secretTypeChanged(QString)));
+
     xml = new QTemporaryFile(this);
     xml->setAutoRemove(false);
     xml->setFileTemplate(
@@ -61,35 +99,8 @@ CreateVirtSecret::~CreateVirtSecret()
 {
     settings.beginGroup("VirtSecretControl");
     settings.setValue("SecretCreateGeometry", saveGeometry());
-    settings.setValue("SecCreateShowDesc", showDescription->isChecked());
+    settings.setValue("SecCreateShowDesc", showXMLDescription->isChecked());
     settings.endGroup();
-    disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
-    disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
-
-    delete scrollLayout;
-    scrollLayout = NULL;
-    delete scrolled;
-    scrolled = NULL;
-    delete scroll;
-    scroll = NULL;
-
-    delete about;
-    about = NULL;
-    delete showDescription;
-    showDescription = NULL;
-    delete ok;
-    ok = NULL;
-    delete cancel;
-    cancel = NULL;
-    delete buttonLayout;
-    buttonLayout = NULL;
-    delete buttons;
-    buttons = NULL;
-    delete secDescLayout;
-    secDescLayout = NULL;
-
-    delete xml;
-    xml = NULL;
 }
 
 /* public slots */
@@ -99,7 +110,7 @@ QString CreateVirtSecret::getXMLDescFileName() const
 }
 bool CreateVirtSecret::getShowing() const
 {
-    return showDescription->isChecked();
+    return showXMLDescription->isChecked();
 }
 
 /* private slots */
@@ -128,6 +139,7 @@ void CreateVirtSecret::set_Result()
     };
     done(result());
 }
-void CreateVirtSecret::secretTypeChanged(bool state)
+void CreateVirtSecret::secretTypeChanged(QString _type)
 {
+
 }

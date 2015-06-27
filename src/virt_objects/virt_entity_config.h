@@ -34,12 +34,22 @@ enum Actions {
 };
 
 struct Result {
-    QString         name   = QString();
-    uint            number = 0;
-    QString         type   = QString();
-    int             action = -1;
-    bool            result = false;
-    QStringList     msg    = QStringList();
+    QString         name        = QString();
+    uint            number      = 0;
+    QString         type        = QString();
+    int             action      = -1;
+    bool            result      = false;
+    QStringList     msg         = QStringList();
+    QString         fileName    = QString();
+};
+
+struct TASK {
+    virConnectPtr   sourceConn  = NULL;
+    QString         connName    = QString();
+    QString         object      = QString();
+    QString         action      = QString();
+    QString         arg         = QString();
+    virConnectPtr   destConn    = NULL;
 };
 
 #define DFR QString("<||>")

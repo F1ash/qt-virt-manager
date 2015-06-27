@@ -120,14 +120,12 @@ void VirtSecretControl::resultReceiver(Result data)
             i++;
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {
-        if ( !data.msg.isEmpty() ) {
-            QString xml = data.msg.first();
-            data.msg.removeFirst();
-            data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
-            QString msg = data.msg.join(" ");
-            msgRepeater(msg);
+        QString xml = data.fileName;
+        data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        QString msg = data.msg.join(" ");
+        msgRepeater(msg);
+        if ( data.result )
             QDesktopServices::openUrl(QUrl(xml));
-        };
     } else if ( data.action < GET_XML_DESCRIPTION ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
@@ -164,8 +162,8 @@ void VirtSecretControl::entityClicked(const QPoint &p)
     QStringList params;
     if ( idx.isValid() && virtSecretModel->DataList.count()>idx.row() ) {
         //qDebug()<<virtSecretModel->DataList.at(idx.row())->getName();
-        params<<virtSecretModel->DataList.at(idx.row())->getName();
-        params<<virtSecretModel->DataList.at(idx.row())->getState();
+        params<<virtSecretModel->DataList.at(idx.row())->getUUID();
+        params<<virtSecretModel->DataList.at(idx.row())->getUsageID();
     } else {
         entityList->clearSelection();
     };
@@ -183,7 +181,7 @@ void VirtSecretControl::entityClicked(const QPoint &p)
 void VirtSecretControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<virtSecretModel->DataList.at(index.row())->getName();
+        qDebug()<<virtSecretModel->DataList.at(index.row())->getUUID();
     }
 }
 void VirtSecretControl::execAction(const QStringList &l)
@@ -191,7 +189,7 @@ void VirtSecretControl::execAction(const QStringList &l)
     QStringList args;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtSecretModel->DataList.count()>idx.row() ) {
-        QString uuid = virtSecretModel->DataList.at(idx.row())->getName();
+        QString uuid = virtSecretModel->DataList.at(idx.row())->getUUID();
         args.append(uuid);
         if        ( l.first()=="undefineVirtSecret" ) {
             args.prepend(l.first());
@@ -220,7 +218,7 @@ void VirtSecretControl::execAction(const QStringList &l)
         // show Secret Creator widget
         CreateVirtSecret *createVirtSec = new CreateVirtSecret(this);
         int result = createVirtSec->exec();
-        if ( createVirtSec!=NULL && result ) {
+        if ( createVirtSec!=NULL && result==QDialog::Accepted ) {
             xml = createVirtSec->getXMLDescFileName();
             show = createVirtSec->getShowing();
             QStringList data;
@@ -229,14 +227,14 @@ void VirtSecretControl::execAction(const QStringList &l)
             QString msg = data.join(" ");
             msgRepeater(msg);
             if ( show ) QDesktopServices::openUrl(QUrl(xml));
+            args.prepend(xml);
+            args.prepend(l.first());
+            args.prepend(QString::number(DEFINE_ENTITY));
+            args.prepend(currConnName);
+            emit addNewTask(currWorkConnection, args);
         };
         delete createVirtSec;
         createVirtSec = NULL;
         //qDebug()<<xml<<"path"<<result;
-        args.prepend(xml);
-        args.prepend(l.first());
-        args.prepend(QString::number(DEFINE_ENTITY));
-        args.prepend(currConnName);
-        emit addNewTask(currWorkConnection, args);
     };
 }

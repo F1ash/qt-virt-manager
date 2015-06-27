@@ -12,16 +12,19 @@ public:
 signals:
 
 private:
-    QString Name;
-    QString State;
+    QString UsageID;
+    QString UUID;
+    QString Type;
     bool    onView;
 
 public slots:
-    void    setName(const QString&);
-    void    setState(const QString&);
+    void    setUsageID(const QString&);
+    void    setUUID(const QString&);
+    void    setType(const QString&);
     void    setOnView(const bool);
-    QString getName() const;
-    QString getState() const;
+    QString getUsageID() const;
+    QString getUUID() const;
+    QString getType() const;
     bool    getOnView() const;
 
 };

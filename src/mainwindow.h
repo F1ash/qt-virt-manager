@@ -91,7 +91,7 @@ private slots:
     void closeCurrentConnection();
     void closeConnection(int);
     void closeAllConnections();
-    void closeConnStorageQverview(int);
+    void closeConnStorageOverview(int);
     bool runningConnExist();
     void autoHide();
     void writeToErrorLog(QString&);

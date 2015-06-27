@@ -55,16 +55,8 @@ void TaskWareHouse::stopTaskComputing()
 {
     blockSignals(true);
 }
-void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virConnectPtr _distConn)
+void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virConnectPtr _destConn)
 {
-    /* TaskDescription:
-     * state icon
-     * task number
-     * source
-     * action type
-     * connection name
-     * parameters
-     */
     //qDebug()<<_taskDesc<<"addNewTask";
     QString currConnName = _taskDesc.takeFirst();
     int ACT = _taskDesc.takeFirst().toInt();
@@ -85,7 +77,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
         QTime _time = QTime::currentTime();
         QMap<QString, QVariant> itemData;
         itemData.insert("Connection", currConnName);
-        itemData.insert("Domain", _domName);
+        itemData.insert("Object", _domName);
         itemData.insert("Action", _task);
         itemData.insert("Start", QString("%1:%2:%3:%4")
                         .arg(QString("").sprintf("%02d", _time.hour()))
@@ -113,7 +105,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
         DomControlThread *cThread =
                 static_cast<DomControlThread*>(
                     threadPool->value(_number));
-        cThread->setMigrateConnect( _distConn );
+        cThread->setMigrateConnect( _destConn );
     } else if ( _taskDesc[0].contains("Network") ) {
         threadPool->insert(
                     _number,
@@ -228,8 +220,8 @@ void TaskWareHouse::setNewTooltip(QListWidgetItem *_item)
                  .arg("<b>Connection</b>")
                  .arg(data.toMap().value("Connection").toString()));
     _dom.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
-                 .arg("<b>Domain</b>")
-                 .arg(data.toMap().value("Domain").toString()));
+                 .arg("<b>Object</b>")
+                 .arg(data.toMap().value("Object").toString()));
     _task.append(QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
                  .arg("<b>Action</b>")
                  .arg(data.toMap().value("Action").toString()));

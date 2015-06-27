@@ -125,14 +125,12 @@ void VirtNetControl::resultReceiver(Result data)
             i++;
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {
-        if ( !data.msg.isEmpty() ) {
-            QString xml = data.msg.first();
-            data.msg.removeFirst();
-            data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
-            QString msg = data.msg.join(" ");
-            msgRepeater(msg);
+        QString xml = data.fileName;
+        data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        QString msg = data.msg.join(" ");
+        msgRepeater(msg);
+        if ( data.result )
             QDesktopServices::openUrl(QUrl(xml));
-        };
     } else if ( data.action < GET_XML_DESCRIPTION ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");

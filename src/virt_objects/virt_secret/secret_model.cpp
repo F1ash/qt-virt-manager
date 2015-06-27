@@ -5,7 +5,7 @@ VirtSecretModel::VirtSecretModel(QObject *parent) :
 {
     defined = QIcon::fromTheme("security-define");
     column0 = "UUID";
-    column1 = "Type";
+    column1 = "UsageID";
 }
 VirtSecretModel::~VirtSecretModel()
 {
@@ -74,7 +74,7 @@ QVariant VirtSecretModel::data(const QModelIndex &index, int role) const
 {
     QVariant res;
     if ( role==Qt::DisplayRole && index.column()==0 ) {
-        return DataList.at(index.row())->getName();
+        return DataList.at(index.row())->getUUID();
     };
     if ( role==Qt::DecorationRole ) {
         switch (index.column()) {
@@ -88,10 +88,10 @@ QVariant VirtSecretModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::ToolTipRole && index.column() ) {
         switch (index.column()) {
         case 0:
-            res = QString("UUID: %1").arg(DataList.at(index.row())->getName());
+            res = QString("UUID: %1").arg(DataList.at(index.row())->getUUID());
             break;
         case 1:
-            res = QString("Type: %1").arg(DataList.at(index.row())->getState());
+            res = QString("UsageID: %1").arg(DataList.at(index.row())->getUsageID());
             break;
         default:
             break;
@@ -110,10 +110,10 @@ bool VirtSecretModel::setData( const QModelIndex &index, const QVariant &value, 
     if ( role == Qt::EditRole ) {
         switch( index.column() ) {
         case 0:
-            DataList.at(index.row())->setName ( value.toString() );
+            DataList.at(index.row())->setUUID( value.toString() );
             break;
         case 1:
-            DataList.at(index.row())->setState ( value.toString() );
+            DataList.at(index.row())->setUsageID( value.toString() );
             break;
         default:
             break;
