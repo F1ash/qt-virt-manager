@@ -36,6 +36,7 @@ public slots:
     void             sendGlobalErrors();
 
     virtual void     execAction(Actions, QStringList);
+    virtual void     execAction(uint, TASK);
     virtual void     run();
     virtual void     stop();
 };

@@ -234,6 +234,8 @@ void VirtStoragePoolControl::entityDoubleClicked(const QModelIndex &index)
 }
 void VirtStoragePoolControl::execAction(const QStringList &l)
 {
+    TASK task;
+    task.type = "pool";
     QStringList args;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && storagePoolModel->DataList.count()>idx.row() ) {
@@ -264,6 +266,15 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
             args.prepend(QString::number(CHANGE_ENTITY_AUTOSTART));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnection, args);
+            //TASK task;
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.action     = QString::number(CHANGE_ENTITY_AUTOSTART);
+            task.method     = l.first();
+            task.object     = storagePoolName;
+            task.args.append(autostartState);
+            //task.args       = QStringList();
+            emit addNewTask(task);
         } else if ( l.first()=="deleteVirtStoragePool" ) {
             if ( l.count()>1 ) {
                 args.append(l.at(1));

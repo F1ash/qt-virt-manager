@@ -186,6 +186,8 @@ void VirtSecretControl::entityDoubleClicked(const QModelIndex &index)
 }
 void VirtSecretControl::execAction(const QStringList &l)
 {
+    TASK task;
+    task.type = "secret";
     QStringList args;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtSecretModel->DataList.count()>idx.row() ) {
@@ -232,6 +234,14 @@ void VirtSecretControl::execAction(const QStringList &l)
             args.prepend(QString::number(DEFINE_ENTITY));
             args.prepend(currConnName);
             emit addNewTask(currWorkConnection, args);
+            //TASK task;
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.action     = QString::number(DEFINE_ENTITY);
+            task.method     = l.first();
+            task.object     = xml;
+            //task.args       = QStringList();
+            emit addNewTask(task);
         };
         delete createVirtSec;
         createVirtSec = NULL;

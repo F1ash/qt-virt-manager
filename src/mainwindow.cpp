@@ -355,6 +355,8 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
     connect(domainDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&, virConnectPtr)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
+    connect(domainDockContent, SIGNAL(addNewTask(TASK)),
+            taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(domResult(Result)),
             domainDockContent, SLOT(resultReceiver(Result)));
     connect(connListWidget, SIGNAL(domResult(Result)),
@@ -394,6 +396,8 @@ void MainWindow::initDockWidgets()
             this, SLOT(writeToErrorLog(QString&)));
     connect(networkDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+    connect(networkDockContent, SIGNAL(addNewTask(TASK)),
+            taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(netResult(Result)),
             networkDockContent, SLOT(resultReceiver(Result)));
     connect(connListWidget, SIGNAL(netResult(Result)),
@@ -432,6 +436,8 @@ void MainWindow::initDockWidgets()
             this, SLOT(writeToErrorLog(QString&)));
     connect(storagePoolDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+    connect(storagePoolDockContent, SIGNAL(addNewTask(TASK)),
+            taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(poolResult(Result)),
             storagePoolDockContent, SLOT(resultReceiver(Result)));
     connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
@@ -470,6 +476,8 @@ void MainWindow::initDockWidgets()
             this, SLOT(writeToErrorLog(QString&)));
     connect(secretDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
             taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+    connect(secretDockContent, SIGNAL(addNewTask(TASK)),
+            taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(secResult(Result)),
             secretDockContent, SLOT(resultReceiver(Result)));
 
@@ -748,6 +756,8 @@ void MainWindow::addStorageVol(virConnect *conn, QString &connName, QString &poo
                 this, SLOT(writeToErrorLog(QString&)));
         connect(storageMap.value(key), SIGNAL(addNewTask(virConnectPtr, QStringList&)),
                 taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+        connect(storageMap.value(key), SIGNAL(addNewTask(TASK)),
+                taskWrHouse, SLOT(addNewTask(TASK)));
         connect(taskWrHouse, SIGNAL(volResult(Result)),
                 storageMap.value(key), SLOT(resultReceiver(Result)));
         storageMap.value(key)->setCurrentStoragePool(conn, connName, poolName);

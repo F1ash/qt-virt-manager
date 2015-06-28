@@ -42,6 +42,7 @@ public slots:
     void             changeVisibility();
     void             saveCurrentState();
     void             stopTaskComputing();
+    void             addNewTask(TASK);
     void             addNewTask(virConnectPtr, QStringList&, virConnectPtr = NULL);
 
 private slots:

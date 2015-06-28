@@ -55,21 +55,97 @@ void TaskWareHouse::stopTaskComputing()
 {
     blockSignals(true);
 }
+void TaskWareHouse::addNewTask(TASK task)
+{
+    qDebug()<<task.sourceConn<<task.srcConName<<task.action\
+          <<task.method<<task.object<<task.args\
+          <<task.destConn<<task.type<<"addNewTask_TASK";
+    ++counter;
+    QString _number = QString("").sprintf("%08d", counter);
+    if (  !task.method.startsWith("reload") ) {
+        QString _name = QString("#%1 %2 <%3> in <%4> connection")
+                .arg(_number)
+                .arg(task.method)
+                .arg(task.object)
+                .arg(task.srcConName);
+        QListWidgetItem *_item = new QListWidgetItem();
+        _item->setText(_name);
+        _item->setIcon(QIcon::fromTheme("ledlightgreen"));
+        QTime _time = QTime::currentTime();
+        QMap<QString, QVariant> itemData;
+        itemData.insert("Connection", task.srcConName);
+        itemData.insert("Object", task.object);
+        itemData.insert("Action", task.method);
+        itemData.insert("Start", QString("%1:%2:%3:%4")
+                        .arg(QString("").sprintf("%02d", _time.hour()))
+                        .arg(QString("").sprintf("%02d", _time.minute()))
+                        .arg(QString("").sprintf("%02d", _time.second()))
+                        .arg(QString("").sprintf("%03d", _time.msec())));
+        itemData.insert("End", "-");
+        itemData.insert("Arguments", task.args.join(", "));
+        itemData.insert("Result", "Processing");
+        itemData.insert("Message", "-");
+        _item->setData(Qt::UserRole, itemData);
+        setNewTooltip(_item);
+        taskList->addItem(_item);
+    };
+    if        ( task.type == "domain" ) {
+        threadPool->insert(
+                    _number,
+                    new DomControlThread(this));
+        DomControlThread *cThread =
+                static_cast<DomControlThread*>(
+                    threadPool->value(_number));
+        cThread->setMigrateConnect( task.destConn );
+    } else if ( task.type == "network" ) {
+        threadPool->insert(
+                    _number,
+                    new NetControlThread(this));
+    } else if ( task.type == "pool" ) {
+        threadPool->insert(
+                    _number,
+                    new StoragePoolControlThread(this));
+    } else if ( task.type == "volume" ) {
+        threadPool->insert(
+                    _number,
+                    new StorageVolControlThread(this));
+        StorageVolControlThread *cThread =
+                static_cast<StorageVolControlThread*>(
+                    threadPool->value(_number));
+        QString poolname;
+        if (!task.args.isEmpty()) poolname = task.args.first();
+        cThread->setCurrentStoragePoolName(
+                    task.sourceConn, poolname, task.srcConName);
+    } else if ( task.type == "secret" ) {
+        threadPool->insert(
+                    _number,
+                    new SecretControlThread(this));
+    } else return;
+    ControlThread *cThread = static_cast<ControlThread*>(
+                threadPool->value(_number));
+    if ( NULL!=cThread ) {
+        connect(cThread, SIGNAL(errorMsg(QString&,uint)),
+                this, SLOT(msgRepeater(QString&, uint)));
+        connect(cThread, SIGNAL(resultData(Result)),
+                this, SLOT(taskResultReceiver(Result)));
+        cThread->execAction(counter, task);
+    };
+}
 void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virConnectPtr _destConn)
 {
-    //qDebug()<<_taskDesc<<"addNewTask";
+    qDebug()<<_taskDesc<<"addNewTask";
     QString currConnName = _taskDesc.takeFirst();
     int ACT = _taskDesc.takeFirst().toInt();
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
     if ( _taskDesc.count()>0 && !_taskDesc[0].startsWith("reload") ) {
-        QString _name, _task, _domName;
+        QString _name, _task, _object;
         _task = _taskDesc[0];
-        _domName = (_taskDesc.count()>1)? _taskDesc[1]:".";
+        _object = (_taskDesc.count()>1)? _taskDesc[1]:".";
         _name = QString("#%1 %2 <%3> in <%4> connection")
                 .arg(_number)
                 .arg(_task)
-                .arg(_domName)
+                .arg(_object)
                 .arg(currConnName);
         QListWidgetItem *_item = new QListWidgetItem();
         _item->setText(_name);
@@ -77,7 +153,7 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
         QTime _time = QTime::currentTime();
         QMap<QString, QVariant> itemData;
         itemData.insert("Connection", currConnName);
-        itemData.insert("Object", _domName);
+        itemData.insert("Object", _object);
         itemData.insert("Action", _task);
         itemData.insert("Start", QString("%1:%2:%3:%4")
                         .arg(QString("").sprintf("%02d", _time.hour()))

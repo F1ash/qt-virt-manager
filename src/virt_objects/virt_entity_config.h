@@ -45,11 +45,13 @@ struct Result {
 
 struct TASK {
     virConnectPtr   sourceConn  = NULL;
-    QString         connName    = QString();
+    QString         srcConName  = QString();
     QString         object      = QString();
     QString         action      = QString();
-    QString         arg         = QString();
+    QString         method      = QString();
+    QStringList     args        = QStringList();
     virConnectPtr   destConn    = NULL;
+    QString         type        = QString();
 };
 
 #define DFR QString("<||>")

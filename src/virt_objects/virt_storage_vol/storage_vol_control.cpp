@@ -226,6 +226,8 @@ void VirtStorageVolControl::entityDoubleClicked(const QModelIndex &index)
 }
 void VirtStorageVolControl::execAction(const QStringList &l)
 {
+    TASK task;
+    task.type = "volume";
     QStringList args;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && storageVolModel->DataList.count()>idx.row() ) {
@@ -294,6 +296,14 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             args.prepend(currConnName);
             args.append(currPoolName);
             emit addNewTask(currWorkConnection, args);
+            //TASK task;
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.action     = QString::number(GET_XML_DESCRIPTION);
+            task.method     = l.first();
+            task.object     = storageVolName;
+            task.args.append(currPoolName);
+            emit addNewTask(task);
         } else if ( l.first()=="reloadVirtStorageVol" ) {
             args.prepend(l.first());
             args.prepend(QString::number(GET_ALL_ENTITY));

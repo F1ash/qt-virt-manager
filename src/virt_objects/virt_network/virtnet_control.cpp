@@ -192,6 +192,8 @@ void VirtNetControl::entityDoubleClicked(const QModelIndex &index)
 }
 void VirtNetControl::execAction(const QStringList &l)
 {
+    TASK task;
+    task.type = "network";
     QStringList args;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtNetModel->DataList.count()>idx.row() ) {

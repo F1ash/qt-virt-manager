@@ -239,6 +239,8 @@ void VirtDomainControl::entityDoubleClicked(const QModelIndex &index)
 }
 void VirtDomainControl::execAction(const QStringList &l)
 {
+    TASK task;
+    task.type = "domain";
     QStringList args;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && domainModel->DataList.count()>idx.row() ) {

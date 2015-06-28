@@ -29,11 +29,11 @@ public slots:
 
 private slots:
     int             registerStreamEvents();
-    int             unregisterStreamEvents();
+    int             unregisterStreamEvents(virStreamPtr);
     static void     freeData(void*);
     static void     streamEventCallBack(virStreamPtr, int, void*);
     void            updateStreamEvents(virStreamPtr, int);
-    void            sendDataToDisplay();
+    void            sendDataToDisplay(virStreamPtr);
     void            closeStream();
     void            forceCloseDomain();
 };

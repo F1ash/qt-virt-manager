@@ -41,6 +41,10 @@ void ControlThread::execAction(Actions i, QStringList _str)
 {
     return;
 }
+void ControlThread::execAction(uint _number, TASK task)
+{
+    return;
+}
 void ControlThread::stop() { keep_alive = false; }
 void ControlThread::run()
 {
