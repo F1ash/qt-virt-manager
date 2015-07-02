@@ -474,8 +474,6 @@ void MainWindow::initDockWidgets()
             secretDock, SLOT(setVisible(bool)));
     connect(secretDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
-    connect(secretDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
-            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
     connect(secretDockContent, SIGNAL(addNewTask(TASK)),
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(secResult(Result)),

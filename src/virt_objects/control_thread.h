@@ -17,6 +17,7 @@ public:
     QStringList      args;
     bool             keep_alive = false;
     uint             number;
+    TASK             task;
     Actions          action;
     QString          currConnName;
     virConnect      *currWorkConnection = NULL;

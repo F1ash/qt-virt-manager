@@ -85,11 +85,13 @@ void VirtSecretControl::setListHeader(QString &connName)
     currConnName = connName;
     setEnabled(true);
     // for initiation content
-    QStringList args;
-    args.prepend("reloadVirtSecret");
-    args.prepend(QString::number(GET_ALL_ENTITY));
-    args.prepend(currConnName);
-    emit addNewTask(currWorkConnection, args);
+    TASK task;
+    task.type = "secret";
+    task.sourceConn = currWorkConnection;
+    task.srcConName = currConnName;
+    task.action     = QString::number(GET_ALL_ENTITY);
+    task.method     = "reloadVirtSecret";
+    emit addNewTask(task);
 }
 void VirtSecretControl::resultReceiver(Result data)
 {
@@ -132,11 +134,15 @@ void VirtSecretControl::resultReceiver(Result data)
             msgRepeater(msg);
         };
         if ( data.result ) {
-            QStringList args;
-            args.prepend("reloadVirtSecret");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            TASK task;
+            task.type = "secret";
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.action     = QString::number(GET_ALL_ENTITY);
+            task.method     = "reloadVirtSecret";
+            //task.object     = xml;
+            //task.args       = QStringList();
+            emit addNewTask(task);
             // for different action's specified manipulation
             switch (data.action) {
             case _EMPTY_ACTION:
@@ -188,32 +194,42 @@ void VirtSecretControl::execAction(const QStringList &l)
 {
     TASK task;
     task.type = "secret";
-    QStringList args;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtSecretModel->DataList.count()>idx.row() ) {
         QString uuid = virtSecretModel->DataList.at(idx.row())->getUUID();
-        args.append(uuid);
         if        ( l.first()=="undefineVirtSecret" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(UNDEFINE_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.action     = QString::number(UNDEFINE_ENTITY);
+            task.method     = l.first();
+            task.object     = uuid;
+            //task.args       = QStringList();
+            emit addNewTask(task);
         } else if ( l.first()=="getVirtSecretXMLDesc" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(GET_XML_DESCRIPTION));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.action     = QString::number(GET_XML_DESCRIPTION);
+            task.method     = l.first();
+            task.object     = uuid;
+            //task.args       = QStringList();
+            emit addNewTask(task);
         } else if ( l.first()=="reloadVirtSecret" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.action     = QString::number(GET_ALL_ENTITY);
+            task.method     = l.first();
+            //task.object     = xml;
+            //task.args       = QStringList();
+            emit addNewTask(task);
         };
     } else if ( l.first()=="reloadVirtSecret" ) {
-        args.prepend(l.first());
-        args.prepend(QString::number(GET_ALL_ENTITY));
-        args.prepend(currConnName);
-        emit addNewTask(currWorkConnection, args);
+        task.sourceConn = currWorkConnection;
+        task.srcConName = currConnName;
+        task.action     = QString::number(GET_ALL_ENTITY);
+        task.method     = l.first();
+        //task.object     = xml;
+        //task.args       = QStringList();
+        emit addNewTask(task);
     } else if ( l.first()=="defineVirtSecret" ) {
         QString xml;
         bool show = false;
@@ -229,12 +245,6 @@ void VirtSecretControl::execAction(const QStringList &l)
             QString msg = data.join(" ");
             msgRepeater(msg);
             if ( show ) QDesktopServices::openUrl(QUrl(xml));
-            args.prepend(xml);
-            args.prepend(l.first());
-            args.prepend(QString::number(DEFINE_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
-            //TASK task;
             task.sourceConn = currWorkConnection;
             task.srcConName = currConnName;
             task.action     = QString::number(DEFINE_ENTITY);
