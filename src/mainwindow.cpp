@@ -394,8 +394,6 @@ void MainWindow::initDockWidgets()
             networkDock, SLOT(setVisible(bool)));
     connect(networkDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
-    connect(networkDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
-            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
     connect(networkDockContent, SIGNAL(addNewTask(TASK)),
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(netResult(Result)),
@@ -711,7 +709,7 @@ void MainWindow::deleteVMDisplay(QString &key)
         };
         VM_Displayed_Map.remove(key);
         // reload domains state, because VM_Viewer is finished
-        //domainDockContent->reloadDomainState();
+        //domainDockContent->reloadState();
     }
 }
 void MainWindow::deleteVMDisplay(QString connName, QString domName)
@@ -752,8 +750,6 @@ void MainWindow::addStorageVol(virConnect *conn, QString &connName, QString &poo
         storageMap.value(key)->setWindowTitle(QString("%1 Pool").arg(key));
         connect(storageMap.value(key), SIGNAL(entityMsg(QString&)),
                 this, SLOT(writeToErrorLog(QString&)));
-        connect(storageMap.value(key), SIGNAL(addNewTask(virConnectPtr, QStringList&)),
-                taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
         connect(storageMap.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
         connect(taskWrHouse, SIGNAL(volResult(Result)),

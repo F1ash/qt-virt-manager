@@ -37,6 +37,8 @@ VirtVolumeDialog::VirtVolumeDialog(
     setLayout(commonLayout);
     connect(volumes, SIGNAL(entityMsg(QString&)),
             this, SLOT(showMsg(QString&)));
+    connect(volumes, SIGNAL(addNewTask(TASK)),
+            this, SLOT(execAction(TASK)));
 }
 
 /* public slots */
@@ -78,17 +80,26 @@ void VirtVolumeDialog::set_Result()
 }
 void VirtVolumeDialog::showVolumes(QListWidgetItem *_item)
 {
-    QString str;
     QString _poolName = _item->text();
-    storageThread->setCurrentStoragePoolName(
-                currWorkConnection, _poolName, str);
-    storageThread->execAction(GET_ALL_ENTITY, QStringList());
+    QString currConnName("VirtVolumeDialog");
+    // need for identification
+    // see for: MainWindow::addStorageVol
+    // & VirtStorageVolControl::resultReceiver
+    volumes->setObjectName(
+                QString("%1_%2").arg(currConnName).arg(_poolName));
+    // initiate content
+    volumes->setCurrentStoragePool(
+                currWorkConnection, currConnName, _poolName);
 }
 void VirtVolumeDialog::showMsg(QString &msg)
 {
     QMessageBox::information(
                 this,
-                "Error",
+                "VirtVolumeDialog",
                 msg,
                 QMessageBox::Ok);
+}
+void VirtVolumeDialog::execAction(TASK _task)
+{
+    storageThread->execAction(0, _task);
 }

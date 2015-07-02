@@ -109,13 +109,6 @@ void TaskWareHouse::addNewTask(TASK task)
         threadPool->insert(
                     _number,
                     new StorageVolControlThread(this));
-        StorageVolControlThread *cThread =
-                static_cast<StorageVolControlThread*>(
-                    threadPool->value(_number));
-        QString poolname;
-        if (!task.args.isEmpty()) poolname = task.args.first();
-        cThread->setCurrentStoragePoolName(
-                    task.sourceConn, poolname, task.srcConName);
     } else if ( task.type == "secret" ) {
         threadPool->insert(
                     _number,
@@ -194,12 +187,6 @@ void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virC
         threadPool->insert(
                     _number,
                     new StorageVolControlThread(this));
-        StorageVolControlThread *cThread =
-                static_cast<StorageVolControlThread*>(
-                    threadPool->value(_number));
-        QString poolname = _taskDesc.last();
-        cThread->setCurrentStoragePoolName(
-                    _conn, poolname, currConnName);
     } else if ( _taskDesc[0].contains("Secret") ) {
         threadPool->insert(
                     _number,

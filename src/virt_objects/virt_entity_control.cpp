@@ -32,6 +32,10 @@ void VirtEntityControl::setListHeader(QString &_name)
 {
 
 }
+void VirtEntityControl::reloadState()
+{
+    return;
+}
 void VirtEntityControl::resultReceiver(Result data)
 {
 

@@ -26,6 +26,7 @@ public slots:
     void                 resultReceiver(Result);
 
 private slots:
+    void                 reloadState();
     void                 changeDockVisibility();
     void                 entityClicked(const QPoint&);
     void                 entityDoubleClicked(const QModelIndex&);

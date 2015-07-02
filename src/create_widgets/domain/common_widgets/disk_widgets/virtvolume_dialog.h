@@ -46,6 +46,7 @@ private slots:
     void             set_Result();
     void             showVolumes(QListWidgetItem*);
     void             showMsg(QString&);
+    void             execAction(TASK);
 };
 
 #endif // VIRTVOLUME_DIALOG_H

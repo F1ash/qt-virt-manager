@@ -90,11 +90,7 @@ void VirtNetControl::setListHeader(QString &connName)
     currConnName = connName;
     setEnabled(true);
     // for initiation content
-    QStringList args;
-    args.prepend("reloadVirtNetwork");
-    args.prepend(QString::number(GET_ALL_ENTITY));
-    args.prepend(currConnName);
-    emit addNewTask(currWorkConnection, args);
+    reloadState();
 }
 void VirtNetControl::resultReceiver(Result data)
 {
@@ -137,11 +133,7 @@ void VirtNetControl::resultReceiver(Result data)
             msgRepeater(msg);
         };
         if ( data.result ) {
-            QStringList args;
-            args.prepend("reloadVirtNetwork");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
             // for different action's specified manipulation
             switch (data.action) {
             case _EMPTY_ACTION:
@@ -155,6 +147,16 @@ void VirtNetControl::resultReceiver(Result data)
 }
 
 /* private slots */
+void VirtNetControl::reloadState()
+{
+    TASK task;
+    task.type = "network";
+    task.sourceConn = currWorkConnection;
+    task.srcConName = currConnName;
+    task.action     = QString::number(GET_ALL_ENTITY);
+    task.method     = "reloadVirtNetwork";
+    emit addNewTask(task);
+}
 void VirtNetControl::changeDockVisibility()
 {
     toolBar->setEnabled( !toolBar->isEnabled() );
@@ -192,75 +194,68 @@ void VirtNetControl::entityDoubleClicked(const QModelIndex &index)
 }
 void VirtNetControl::execAction(const QStringList &l)
 {
-    TASK task;
-    task.type = "network";
-    QStringList args;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtNetModel->DataList.count()>idx.row() ) {
         QString networkName = virtNetModel->DataList.at(idx.row())->getName();
-        args.append(networkName);
+        TASK task;
+        task.type = "network";
+        task.sourceConn = currWorkConnection;
+        task.srcConName = currConnName;
+        task.object     = networkName;
         if        ( l.first()=="startVirtNetwork" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(START_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.method = l.first();
+            task.action = QString::number(START_ENTITY);
+            emit addNewTask(task);
         } else if ( l.first()=="destroyVirtNetwork" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(DESTROY_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.method = l.first();
+            task.action = QString::number(DESTROY_ENTITY);
+            emit addNewTask(task);
+        } else if ( l.first()=="defineVirtNetwork" ) {
+            task.method = l.first();
+            task.action = QString::number(DEFINE_ENTITY);
+            emit addNewTask(task);
         } else if ( l.first()=="undefineVirtNetwork" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(UNDEFINE_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.method = l.first();
+            task.action = QString::number(UNDEFINE_ENTITY);
+            emit addNewTask(task);
         } else if ( l.first()=="setAutostartVirtNetwork" ) {
             /* set the opposite value */
             QString autostartState =
                 (virtNetModel->DataList.at(idx.row())->getAutostart()=="yes")
                  ? "0" : "1";
-            args.append(autostartState);
-            args.prepend(l.first());
-            args.prepend(QString::number(CHANGE_ENTITY_AUTOSTART));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.method = l.first();
+            task.action = QString::number(CHANGE_ENTITY_AUTOSTART);
+            task.args.append(autostartState);
+            emit addNewTask(task);
         } else if ( l.first()=="getVirtNetworkXMLDesc" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(GET_XML_DESCRIPTION));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.method = l.first();
+            task.action = QString::number(GET_XML_DESCRIPTION);
+            emit addNewTask(task);
         } else if ( l.first()=="reloadVirtNetwork" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( l.first()=="reloadVirtNetwork" ) {
-        args.prepend(l.first());
-        args.prepend(QString::number(GET_ALL_ENTITY));
-        args.prepend(currConnName);
-        emit addNewTask(currWorkConnection, args);
+        reloadState();
     };
 }
 void VirtNetControl::newVirtEntityFromXML(const QStringList &_args)
 {
-    if ( !_args.isEmpty() ) {
+    QStringList args = _args;
+    if ( !args.isEmpty() ) {
+        TASK task;
+        task.type = "network";
         Actions act;
         QString actName;
-        if ( _args.first().startsWith("create") ) {
+        if ( args.first().startsWith("create") ) {
             act = CREATE_ENTITY;
             actName = "createVirtNetwork";
         } else {
             act = DEFINE_ENTITY;
             actName = "defineVirtNetwork";
         };
-        QStringList args = _args;
         args.removeFirst();
         if ( !args.isEmpty() ) {
             if ( args.first()=="manually" ) {
-                args.removeFirst();
-                //QString source = args.first();
-                args.removeFirst();
                 QString xml;
                 bool show = false;
                 // show SRC Creator widget
@@ -280,12 +275,16 @@ void VirtNetControl::newVirtEntityFromXML(const QStringList &_args)
                 delete createVirtNet;
                 createVirtNet = NULL;
                 //qDebug()<<xml<<"path"<<result;
-                args.prepend(xml);
+                task.object     = xml;
+            } else {
+                QString xml = args.first();
+                task.object     = xml;
             };
-            args.prepend(actName);
-            args.prepend(QString::number(act));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.method     = actName;
+            task.action     = QString::number(act);
+            emit addNewTask(task);
         };
     };
 }

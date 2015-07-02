@@ -91,12 +91,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(virConnect *conn, QString &con
                 Qt::EditRole);
     toolBar->enableAutoReload();
     // for initiation content
-    QStringList args;
-    args.prepend("reloadVirtStorageVol");
-    args.prepend(QString::number(GET_ALL_ENTITY));
-    args.prepend(currConnName);
-    args.append(currPoolName);
-    emit addNewTask(currWorkConnection, args);
+    reloadState();
     return true;
 }
 QString VirtStorageVolControl::getCurrentVolumeName() const
@@ -108,7 +103,6 @@ QString VirtStorageVolControl::getCurrentVolumeName() const
 void VirtStorageVolControl::resultReceiver(Result data)
 {
     if ( data.name!=objectName() ) return;
-    QStringList args;
     //qDebug()<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY ) {
         int chain  = storageVolModel->columnCount();
@@ -136,21 +130,13 @@ void VirtStorageVolControl::resultReceiver(Result data)
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
             msgRepeater(msg);
-            args.prepend("reloadVirtStorageVol");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            args.append(currPoolName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( data.action == DELETE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
             msgRepeater(msg);
-            args.prepend("reloadVirtStorageVol");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            args.append(currPoolName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( data.action == DOWNLOAD_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
@@ -166,11 +152,7 @@ void VirtStorageVolControl::resultReceiver(Result data)
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
             msgRepeater(msg);
-            args.prepend("reloadVirtStorageVol");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            args.append(currPoolName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( data.action == WIPE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
@@ -188,6 +170,17 @@ void VirtStorageVolControl::resultReceiver(Result data)
 }
 
 /* private slots */
+void VirtStorageVolControl::reloadState()
+{
+    TASK task;
+    task.type = "volume";
+    task.sourceConn = currWorkConnection;
+    task.srcConName = currConnName;
+    task.action     = QString::number(GET_ALL_ENTITY);
+    task.method     = "reloadVirtStorageVol";
+    task.args.append(currPoolName);
+    emit addNewTask(task);
+}
 void VirtStorageVolControl::changeDockVisibility()
 {
     toolBar->setEnabled( !toolBar->isEnabled() );
@@ -226,36 +219,29 @@ void VirtStorageVolControl::entityDoubleClicked(const QModelIndex &index)
 }
 void VirtStorageVolControl::execAction(const QStringList &l)
 {
-    TASK task;
-    task.type = "volume";
-    QStringList args;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && storageVolModel->DataList.count()>idx.row() ) {
         QString storageVolName = storageVolModel->DataList.at(idx.row())->getName();
-        args.append(storageVolName);
+        TASK task;
+        task.type = "volume";
+        task.sourceConn = currWorkConnection;
+        task.srcConName = currConnName;
+        task.object     = storageVolName;
+        task.args.append(currPoolName);
         if        ( l.first()=="reloadVirtStorageVol" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            // append current Pool name in same places
-            args.append(currPoolName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         } else if ( l.first()=="deleteVirtStorageVol" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(DELETE_ENTITY));
-            args.prepend(currConnName);
-            args.append(currPoolName);
-            emit addNewTask(currWorkConnection, args);
+            task.action     = QString::number(DELETE_ENTITY);
+            task.method     = l.first();
+            emit addNewTask(task);
         } else if ( l.first()=="downloadVirtStorageVol" ) {
             QString path = QFileDialog::getSaveFileName(this, "Save to", "~");
             if ( !path.isEmpty() ) {
-                args.append(path);
-                args.append(storageVolModel->DataList.at(idx.row())->getCurrSize());
-                args.prepend(l.first());
-                args.prepend(QString::number(DOWNLOAD_ENTITY));
-                args.prepend(currConnName);
-                args.append(currPoolName);
-                emit addNewTask(currWorkConnection, args);
+                task.action     = QString::number(DOWNLOAD_ENTITY);
+                task.method     = l.first();
+                task.args.append(path);
+                task.args.append(storageVolModel->DataList.at(idx.row())->getCurrSize());
+                emit addNewTask(task);
             } else return;
         } else if ( l.first()=="resizeVirtStorageVol" ) {
             ResizeDialog *resizeDialog = new ResizeDialog(this,
@@ -264,80 +250,53 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             unsigned long long size = resizeDialog->getNewSize();
             resizeDialog->deleteLater();
             if ( res ) {
-                args.append( QString("%1").arg(size) );
+                task.args.append(QString::number(size));
             } else {
                 return;
             };
-            args.prepend(l.first());
-            args.prepend(QString::number(RESIZE_ENTITY));
-            args.prepend(currConnName);
-            args.append(currPoolName);
-            emit addNewTask(currWorkConnection, args);
+            task.action     = QString::number(RESIZE_ENTITY);
+            task.method     = l.first();
+            emit addNewTask(task);
         } else if ( l.first()=="uploadVirtStorageVol" ) {
             QString path = QFileDialog::getOpenFileName(this, "Read from", "~");
             if ( !path.isEmpty() ) {
-                args.append(path);
-                args.prepend(l.first());
-                args.prepend(QString::number(UPLOAD_ENTITY));
-                args.prepend(currConnName);
-                args.append(currPoolName);
-                emit addNewTask(currWorkConnection, args);
+                task.action     = QString::number(UPLOAD_ENTITY);
+                task.method     = l.first();
+                task.args.append(path);
+                emit addNewTask(task);
             } else return;
         } else if ( l.first()=="wipeVirtStorageVol" ) {
-            args.append( (l.count()>1) ? l.at(1) : "0" );
-            args.prepend(l.first());
-            args.prepend(QString::number(WIPE_ENTITY));
-            args.prepend(currConnName);
-            args.append(currPoolName);
-            emit addNewTask(currWorkConnection, args);
+            task.action     = QString::number(WIPE_ENTITY);
+            task.method     = l.first();
+            task.args.append( (l.count()>1) ? l.at(1) : "0" );
+            emit addNewTask(task);
         } else if ( l.first()=="getVirtStorageVolXMLDesc" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(GET_XML_DESCRIPTION));
-            args.prepend(currConnName);
-            args.append(currPoolName);
-            emit addNewTask(currWorkConnection, args);
-            //TASK task;
-            task.sourceConn = currWorkConnection;
-            task.srcConName = currConnName;
             task.action     = QString::number(GET_XML_DESCRIPTION);
             task.method     = l.first();
-            task.object     = storageVolName;
-            task.args.append(currPoolName);
             emit addNewTask(task);
-        } else if ( l.first()=="reloadVirtStorageVol" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            args.append(currPoolName);
-            emit addNewTask(currWorkConnection, args);
         };
     } else if ( l.first()=="reloadVirtStorageVol" ) {
-        args.prepend(l.first());
-        args.prepend(QString::number(GET_ALL_ENTITY));
-        args.prepend(currConnName);
-        args.append(currPoolName);
-        emit addNewTask(currWorkConnection, args);
+        reloadState();
     };
 }
 void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
 {
-    if ( !_args.isEmpty() ) {
+    QStringList args = _args;
+    if ( !args.isEmpty() ) {
         Actions act;
         QString actName;
-        if ( _args.first().startsWith("create") ) {
+        if ( args.first().startsWith("create") ) {
             act = CREATE_ENTITY;
             actName = "createVirtStorageVol";
         } else {
             act = _EMPTY_ACTION;
             actName = "reloadVirtStorageVol";
         };
-        QStringList args = _args;
+        TASK task;
+        task.type = "volume";
         args.removeFirst();
-        if ( !args.isEmpty() ) {
+        if ( !_args.isEmpty() ) {
             if ( args.first()=="manually" ) {
-                args.removeFirst();
-                QString source = args.first();
-                args.removeFirst();
                 QString path, _poolType;
                 bool show = false;
                 // show SRC Creator widget
@@ -357,14 +316,18 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                 };
                 delete createVolumeDialog;
                 createVolumeDialog = NULL;
-                args.prepend(path);
+                task.object = path;
                 if ( show ) QDesktopServices::openUrl(QUrl(path));
+            } else {
+                QString path = args.first();
+                task.object = path;
             };
-            args.prepend(actName);
-            args.prepend(QString::number(act));
-            args.prepend(currConnName);
-            args.append(currPoolName);
-            emit addNewTask(currWorkConnection, args);
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.action     = QString::number(act);
+            task.method     = actName;
+            task.args.append(currPoolName);
+            emit addNewTask(task);
         };
     };
 }

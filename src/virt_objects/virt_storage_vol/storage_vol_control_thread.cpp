@@ -7,36 +7,6 @@ StorageVolControlThread::StorageVolControlThread(QObject *parent) :
 }
 
 /* public slots */
-bool StorageVolControlThread::setCurrentStoragePoolName(virConnect *conn, QString &poolName, QString &connName)
-{
-    keep_alive = true;
-    currConnName = connName;
-    // close previous virConnectRef[erence]
-    if ( NULL!=currWorkConnection ) {
-        int ret = virConnectClose(currWorkConnection);
-        //qDebug()<<"virConnectRef -1"<<"StorageVolControlThread"<<currPoolName<<(ret+1>0);
-    };
-    currWorkConnection = conn;
-    // for new virConnect usage create the new virConnectRef[erence]
-    int ret = virConnectRef(currWorkConnection);
-    if ( ret<0 ) {
-        currWorkConnection = NULL;
-        sendConnErrors();
-        keep_alive = false;
-    };
-    //qDebug()<<"virConnectRef +1"<<"StorageVolControlThread"<<poolName<<(ret+1>0);
-    currPoolName = poolName;
-    if (currStoragePool!=NULL) {
-        virStoragePoolFree(currStoragePool);
-        currStoragePool = NULL;
-    };
-    currStoragePool = virStoragePoolLookupByName(
-                currWorkConnection, currPoolName.toUtf8().data());
-    if ( NULL==currStoragePool ) sendConnErrors();
-    //qDebug()<<"stVol_thread (setPoolData)\n\tConnect\t\t"<<currWorkConnection
-    //        <<"\n\tPool\t\t"<<currStoragePool
-    //        <<"\n\tName\t\t"<<currPoolName;
-}
 void StorageVolControlThread::stop()
 {
     keep_alive = false;
@@ -48,12 +18,21 @@ void StorageVolControlThread::stop()
     //        <<"\n\tPool\t\t"<<currStoragePool
     //        <<"\n\tName\t\t"<<currPoolName;
 }
-void StorageVolControlThread::execAction(Actions act, QStringList _args)
+void StorageVolControlThread::execAction(uint _num, TASK _task)
 {
+    number = _num;
+    task = _task;
+    keep_alive = true;
+    // for new virConnect usage create the new virConnectRef[erence]
+    int ret = virConnectRef(task.sourceConn);
+    if ( ret<0 ) {
+        task.sourceConn = NULL;
+        sendConnErrors();
+        keep_alive = false;
+    };
+    currPoolName = task.args.first();
     if ( keep_alive && !isRunning() ) {
-        action = act;
-        args = _args;
-        if ( NULL!=currWorkConnection ) start();
+        if ( NULL!=task.sourceConn ) start();
         else {
             Result result;
             result.type   = "volume";
@@ -61,10 +40,6 @@ void StorageVolControlThread::execAction(Actions act, QStringList _args)
             result.action = _EMPTY_ACTION;
             emit resultData(result);
         };
-        //qDebug()<<"stVolThread started\n\targs\t\t"<<_args<<"\n\taction\t\t"<<act;
-        //qDebug()<<"stVol_thread (execAct)\n\tConnect\t\t"<<currWorkConnection
-        //        <<"\n\tPool\t\t"<<currStoragePool
-        //        <<"\n\tName\t\t"<<currPoolName;
     };
 }
 
@@ -72,7 +47,8 @@ void StorageVolControlThread::execAction(Actions act, QStringList _args)
 void StorageVolControlThread::run()
 {
     Result result;
-    switch (action) {
+    Actions act = static_cast<Actions>(task.action.toInt());
+    switch (act) {
     case GET_ALL_ENTITY :
         result = getAllStorageVolList();
         break;
@@ -100,26 +76,29 @@ void StorageVolControlThread::run()
     default:
         break;
     };
+    virConnectClose(task.sourceConn);
     result.type   = "volume";
     result.number = number;
-    result.action = action;
+    result.action = act;
     emit resultData(result);
 }
 Result StorageVolControlThread::getAllStorageVolList()
 {
     Result result;
-    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
+    result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QStringList storageVolList;
-    if ( currStoragePool==NULL ) {
-        if ( currWorkConnection!=NULL && keep_alive ) {
-            currStoragePool = virStoragePoolLookupByName(currWorkConnection, currPoolName.toUtf8().data());
-        };
+    if (currStoragePool!=NULL) {
+        virStoragePoolFree(currStoragePool);
+        currStoragePool = NULL;
     };
+    currStoragePool = virStoragePoolLookupByName(
+                task.sourceConn, currPoolName.toUtf8().data());
     if ( currStoragePool!=NULL && keep_alive ) {
         virStorageVolPtr *storageVol = NULL;
         // flags: extra flags; not used yet, so callers should always pass 0
         unsigned int flags = 0;
-        int ret = virStoragePoolListAllVolumes( currStoragePool, &storageVol, flags );
+        int ret = virStoragePoolListAllVolumes(
+                    currStoragePool, &storageVol, flags);
         if ( ret<0 ) {
             sendConnErrors();
             result.result = false;
@@ -168,7 +147,8 @@ Result StorageVolControlThread::getAllStorageVolList()
             virStorageVolFree(storageVol[i]);
         };
         free(storageVol);
-    };
+    } else
+        sendConnErrors();
     result.result = true;
     result.msg = storageVolList;
     return result;
@@ -176,8 +156,8 @@ Result StorageVolControlThread::getAllStorageVolList()
 Result StorageVolControlThread::createStorageVol()
 {
     Result result;
-    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
-    QString path = args.first();
+    result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
+    QString path = task.object;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -189,6 +169,12 @@ Result StorageVolControlThread::createStorageVol()
     };
     xmlData = f.readAll();
     f.close();
+    if (currStoragePool!=NULL) {
+        virStoragePoolFree(currStoragePool);
+        currStoragePool = NULL;
+    };
+    currStoragePool = virStoragePoolLookupByName(
+                task.sourceConn, currPoolName.toUtf8().data());
     virStorageVolPtr storageVol = virStorageVolCreateXML(
                 currStoragePool, xmlData.data(), VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA);
     if ( storageVol==NULL ) {
@@ -197,9 +183,9 @@ Result StorageVolControlThread::createStorageVol()
         return result;
     };
     QString name = QString().fromUtf8( virStorageVolGetName(storageVol) );
-    result.msg
-            .append(QString("'<b>%1</b>' StorageVol from\n\"%2\"\nis created.")
-                    .arg(name).arg(path));
+    result.msg.append(
+                QString("'<b>%1</b>' StorageVol from\n\"%2\"\nis created.")
+                .arg(name).arg(path));
     virStorageVolFree(storageVol);
     result.result = true;
     return result;
@@ -207,13 +193,20 @@ Result StorageVolControlThread::createStorageVol()
 Result StorageVolControlThread::deleteStorageVol()
 {
     Result result;
-    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
-    QString name = args.first();
+    result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
+    QString name = task.object;
+    if (currStoragePool!=NULL) {
+        virStoragePoolFree(currStoragePool);
+        currStoragePool = NULL;
+    };
+    currStoragePool = virStoragePoolLookupByName(
+                task.sourceConn, currPoolName.toUtf8().data());
 
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     bool deleted = false;
-    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
+    virStorageVol *storageVol = virStorageVolLookupByName(
+                currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         deleted = (virStorageVolDelete(storageVol, flags)+1) ? true : false;
         if (!deleted) sendConnErrors();
@@ -227,25 +220,32 @@ Result StorageVolControlThread::deleteStorageVol()
 Result StorageVolControlThread::downloadStorageVol()
 {
     Result result;
-    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
+    result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name, path;
-    name = args.first();
-    args.removeFirst();
-    path = args.first();
-    args.removeFirst();
+    name = task.object;
+    path = task.args.first();
+    task.args.removeFirst();
     //qDebug()<<args.first()<<"download";
+    if (currStoragePool!=NULL) {
+        virStoragePoolFree(currStoragePool);
+        currStoragePool = NULL;
+    };
+    currStoragePool = virStoragePoolLookupByName(
+                task.sourceConn, currPoolName.toUtf8().data());
     QFile *f = new QFile(path);
     f->open(QIODevice::WriteOnly);
 
     bool downloaded = false;
-    virStreamPtr stream = virStreamNew(currWorkConnection, 0);
+    virStreamPtr stream = virStreamNew(task.sourceConn, 0);
     unsigned long long offset = 0;
-    unsigned long long length = args.first().toULongLong();
+    unsigned long long length = task.args.first().toULongLong();
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
-    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
+    virStorageVol *storageVol = virStorageVolLookupByName(
+                currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
-        int ret = virStorageVolDownload(storageVol, stream, offset, length, flags);
+        int ret = virStorageVolDownload(
+                    storageVol, stream, offset, length, flags);
         if ( ret<0 ) sendConnErrors();
         else {
             downloaded = true;
@@ -278,65 +278,80 @@ Result StorageVolControlThread::downloadStorageVol()
     if ( stream!=NULL ) virStreamFree(stream);
     f->close();
     delete f; f = NULL;
-    result.msg.append(QString("'<b>%1</b>' StorageVol %2 Downloaded into %3 (%4).")
-                  .arg(name).arg((downloaded)?"":"don't")
-                  .arg(path).arg(length));
+    result.msg.append(
+                QString("'<b>%1</b>' StorageVol %2 Downloaded into %3 (%4).")
+                .arg(name).arg((downloaded)?"":"don't")
+                .arg(path).arg(length));
     result.result = downloaded;
     return result;
 }
 Result StorageVolControlThread::resizeStorageVol()
 {
     Result result;
-    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
-    QString name = args.first();
-    args.removeFirst();
+    result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
+    QString name = task.object;
+    if (currStoragePool!=NULL) {
+        virStoragePoolFree(currStoragePool);
+        currStoragePool = NULL;
+    };
+    currStoragePool = virStoragePoolLookupByName(
+                task.sourceConn, currPoolName.toUtf8().data());
 
     unsigned long long capacity = 0;
-    if ( args.count() && !args.first().isEmpty() ) {
-        capacity = args.first().toULongLong();
+    if ( task.args.count() && !task.args.first().isEmpty() ) {
+        capacity = task.args.first().toULongLong();
     };
     bool resized = false;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
-        int ret = virStorageVolResize(storageVol, capacity,
-                                      VIR_STORAGE_VOL_RESIZE_ALLOCATE);
-    //                                 | VIR_STORAGE_VOL_RESIZE_SHRINK);
-    // TODO: add SHRINK-flag when fixed
-    // See for: <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>
+        int ret = virStorageVolResize(
+                    storageVol, capacity, VIR_STORAGE_VOL_RESIZE_ALLOCATE);
+//                                 | VIR_STORAGE_VOL_RESIZE_SHRINK);
+// TODO: add SHRINK-flag when fixed
+// See for: <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>
         if ( ret<0 ) {
             sendConnErrors();
-            QString msg("ResizeError: Maybe <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>");
+            QString msg(
+"ResizeError: Maybe <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>");
             emit errorMsg(msg, number);
         } else resized = true;
         virStorageVolFree(storageVol);
     } else sendConnErrors();
-    result.msg.append(QString("'<b>%1</b>' StorageVol %2 Resized to %3 (bytes).")
-                  .arg(name).arg((resized)?"":"don't").arg(capacity));
+    result.msg.append(
+                QString("'<b>%1</b>' StorageVol %2 Resized to %3 (bytes).")
+                .arg(name).arg((resized)?"":"don't").arg(capacity));
     result.result = resized;
     return result;
 }
 Result StorageVolControlThread::uploadStorageVol()
 {
     Result result;
-    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
+    result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name, path;
-    name = args.first();
-    args.removeFirst();
-    path = args.first();
+    name = task.object;
+    path = task.args.first();
     //qDebug()<<path<<"upload";
+    if (currStoragePool!=NULL) {
+        virStoragePoolFree(currStoragePool);
+        currStoragePool = NULL;
+    };
+    currStoragePool = virStoragePoolLookupByName(
+                task.sourceConn, currPoolName.toUtf8().data());
     QFile *f = new QFile(path);
     f->open(QIODevice::ReadOnly);
 
     bool uploaded = false;
-    virStreamPtr stream = virStreamNew(currWorkConnection, 0);
+    virStreamPtr stream = virStreamNew(task.sourceConn, 0);
     unsigned long long offset = 0;
     unsigned long long length = f->size();
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
-    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
+    virStorageVol *storageVol = virStorageVolLookupByName(
+                currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
-        int ret = virStorageVolUpload(storageVol, stream, offset, length, flags);
+        int ret = virStorageVolUpload(
+                    storageVol, stream, offset, length, flags);
         if ( ret<0 ) {
             sendConnErrors();
         } else {
@@ -371,26 +386,33 @@ Result StorageVolControlThread::uploadStorageVol()
     if ( stream!=NULL ) virStreamFree(stream);
     f->close();
     delete f; f = 0;
-    result.msg.append(QString("'<b>%1</b>' StorageVol %2 Uploaded from %3 (%4).")
-                  .arg(name).arg((uploaded)?"":"don't")
-                  .arg(path).arg(length));
+    result.msg.append(
+                QString("'<b>%1</b>' StorageVol %2 Uploaded from %3 (%4).")
+                .arg(name).arg((uploaded)?"":"don't")
+                .arg(path).arg(length));
     result.result = uploaded;
     return result;
 }
 Result StorageVolControlThread::wipeStorageVol()
 {
     Result result;
-    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
+    result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name, algorithm;
-    name = args.first();
-    args.removeFirst();
+    name = task.object;
+    if (currStoragePool!=NULL) {
+        virStoragePoolFree(currStoragePool);
+        currStoragePool = NULL;
+    };
+    currStoragePool = virStoragePoolLookupByName(
+                task.sourceConn, currPoolName.toUtf8().data());
 
     //flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     unsigned int alg = 0;
     bool wiped = false;
-    if ( !args.isEmpty() ) alg = args.first().toUInt();
-    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
+    if ( !task.args.isEmpty() ) alg = task.args.first().toUInt();
+    virStorageVol *storageVol = virStorageVolLookupByName(
+                currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         int ret = virStorageVolWipePattern(storageVol, alg, flags);
         if ( ret<0 ) {
@@ -430,22 +452,30 @@ Result StorageVolControlThread::wipeStorageVol()
         algorithm.append("NONE");
         break;
     };
-    result.msg.append(QString("'<b>%1</b>' StorageVol %2 Wiped with %3 algorithm.")
-                  .arg(name).arg((wiped)?"":"don't").arg(algorithm));
+    result.msg.append(
+                QString("'<b>%1</b>' StorageVol %2 Wiped with %3 algorithm.")
+                .arg(name).arg((wiped)?"":"don't").arg(algorithm));
     result.result = wiped;
     return result;
 }
 Result StorageVolControlThread::getStorageVolXMLDesc()
 {
     Result result;
-    result.name = QString("%1_%2").arg(currConnName).arg(currPoolName);
-    QString name = args.first();
+    result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
+    QString name = task.object;
+    if (currStoragePool!=NULL) {
+        virStoragePoolFree(currStoragePool);
+        currStoragePool = NULL;
+    };
+    currStoragePool = virStoragePoolLookupByName(
+                task.sourceConn, currPoolName.toUtf8().data());
 
     bool read = false;
     char *Returns = NULL;
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
-    virStorageVol *storageVol = virStorageVolLookupByName(currStoragePool, name.toUtf8().data());
+    virStorageVol *storageVol = virStorageVolLookupByName(
+                currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         Returns = virStorageVolGetXMLDesc(storageVol, flags);
         if ( Returns==NULL ) sendConnErrors();

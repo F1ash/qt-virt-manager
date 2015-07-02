@@ -25,6 +25,7 @@ public:
     virtual void             stopProcessing();
     virtual bool             setCurrentWorkConnect(virConnect*);
     virtual void             setListHeader(QString&);
+    virtual void             reloadState();
     virtual void             resultReceiver(Result);
     virtual void             changeDockVisibility();
     virtual void             entityClicked(const QPoint&);

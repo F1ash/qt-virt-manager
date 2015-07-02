@@ -36,10 +36,10 @@ public slots:
     void                     setListHeader(QString&);
     virConnect*              getConnection() const;
     void                     execMigrateAction(virConnectPtr, QStringList&);
-    void                     reloadDomainState();
     void                     resultReceiver(Result);
 
 private slots:
+    void                     reloadState();
     void                     changeDockVisibility();
     void                     entityClicked(const QPoint&);
     void                     entityDoubleClicked(const QModelIndex&);
