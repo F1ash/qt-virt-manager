@@ -432,8 +432,6 @@ void MainWindow::initDockWidgets()
             storagePoolDock, SLOT(setVisible(bool)));
     connect(storagePoolDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
-    connect(storagePoolDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
-            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
     connect(storagePoolDockContent, SIGNAL(addNewTask(TASK)),
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(poolResult(Result)),

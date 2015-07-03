@@ -34,8 +34,7 @@ void SecretControlThread::execAction(uint _num, TASK _task)
 void SecretControlThread::run()
 {
     Result result;
-    Actions act = static_cast<Actions>(task.action.toInt());
-    switch (act) {
+    switch (task.action) {
     case GET_ALL_ENTITY :
         result = getAllSecretList();
         break;
@@ -54,7 +53,7 @@ void SecretControlThread::run()
     virConnectClose(task.sourceConn);
     result.type   = "secret";
     result.number = number;
-    result.action = act;
+    result.action = task.action;
     emit resultData(result);
 }
 Result SecretControlThread::getAllSecretList()
@@ -112,7 +111,7 @@ Result SecretControlThread::getAllSecretList()
 Result SecretControlThread::defineSecret()
 {
     Result result;
-    QString path = task.object;
+    QString path = task.ARGS.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);

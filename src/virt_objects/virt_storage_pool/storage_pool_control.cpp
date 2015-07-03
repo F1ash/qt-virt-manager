@@ -91,15 +91,10 @@ void VirtStoragePoolControl::setListHeader(QString &connName)
     currConnName = connName;
     setEnabled(true);
     // for initiation content
-    QStringList args;
-    args.prepend("reloadVirtStoragePool");
-    args.prepend(QString::number(GET_ALL_ENTITY));
-    args.prepend(currConnName);
-    emit addNewTask(currWorkConnection, args);
+    reloadState();
 }
 void VirtStoragePoolControl::resultReceiver(Result data)
 {
-    QStringList args;
     //qDebug()<<data.action<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY ) {
         if ( data.msg.count() > storagePoolModel->DataList.count() ) {
@@ -130,55 +125,37 @@ void VirtStoragePoolControl::resultReceiver(Result data)
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
             msgRepeater(msg);
-            args.prepend("reloadVirtStoragePool");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( data.action == DEFINE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
             msgRepeater(msg);
-            args.prepend("reloadVirtStoragePool");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( data.action == START_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
             msgRepeater(msg);
-            args.prepend("reloadVirtStoragePool");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( data.action == DESTROY_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
             msgRepeater(msg);
-            args.prepend("reloadVirtStoragePool");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( data.action == UNDEFINE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
             msgRepeater(msg);
-            args.prepend("reloadVirtStoragePool");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( data.action == CHANGE_ENTITY_AUTOSTART ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
             msgRepeater(msg);
-            args.prepend("reloadVirtStoragePool");
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {
         QString xml = data.fileName;
@@ -197,6 +174,16 @@ void VirtStoragePoolControl::stopOverView()
 }
 
 /* private slots */
+void VirtStoragePoolControl::reloadState()
+{
+    TASK task;
+    task.type = "pool";
+    task.sourceConn = currWorkConnection;
+    task.srcConName = currConnName;
+    task.action     = GET_ALL_ENTITY;
+    task.method     = "reloadVirtStoragePool";
+    emit addNewTask(task);
+}
 void VirtStoragePoolControl::changeDockVisibility()
 {
     toolBar->setEnabled( !toolBar->isEnabled() );
@@ -234,61 +221,44 @@ void VirtStoragePoolControl::entityDoubleClicked(const QModelIndex &index)
 }
 void VirtStoragePoolControl::execAction(const QStringList &l)
 {
-    TASK task;
-    task.type = "pool";
-    QStringList args;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && storagePoolModel->DataList.count()>idx.row() ) {
         QString storagePoolName = storagePoolModel->DataList.at(idx.row())->getName();
-        args.append(storagePoolName);
+        TASK task;
+        task.type = "pool";
+        task.sourceConn = currWorkConnection;
+        task.srcConName = currConnName;
+        task.object     = storagePoolName;
         if        ( l.first()=="startVirtStoragePool" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(START_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.action     = START_ENTITY;
+            task.method     = l.first();
+            emit addNewTask(task);
         } else if ( l.first()=="destroyVirtStoragePool" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(DESTROY_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.action     = DESTROY_ENTITY;
+            task.method     = l.first();
+            emit addNewTask(task);
         } else if ( l.first()=="undefineVirtStoragePool" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(UNDEFINE_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.action     = UNDEFINE_ENTITY;
+            task.method     = l.first();
+            emit addNewTask(task);
         } else if ( l.first()=="setAutostartVirtStoragePool" ) {
             /* set the opposite value */
-            QString autostartState =
+            uint autostartState =
                 (storagePoolModel->DataList.at(idx.row())->getAutostart()=="yes")
-                 ? "0" : "1";
-            args.append(autostartState);
-            args.prepend(l.first());
-            args.prepend(QString::number(CHANGE_ENTITY_AUTOSTART));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
-            //TASK task;
-            task.sourceConn = currWorkConnection;
-            task.srcConName = currConnName;
-            task.action     = QString::number(CHANGE_ENTITY_AUTOSTART);
+                 ? 0 : 1;
+            task.action     = CHANGE_ENTITY_AUTOSTART;
             task.method     = l.first();
-            task.object     = storagePoolName;
-            task.args.append(autostartState);
-            //task.args       = QStringList();
+            task.ARGS.sign  = autostartState;
             emit addNewTask(task);
         } else if ( l.first()=="deleteVirtStoragePool" ) {
-            if ( l.count()>1 ) {
-                args.append(l.at(1));
-                //stPoolControlThread->execAction(DELETE_ENTITY, args);
-                args.prepend(l.first());
-                args.prepend(QString::number(DELETE_ENTITY));
-                args.prepend(currConnName);
-                emit addNewTask(currWorkConnection, args);
-            };
+            task.action     = DELETE_ENTITY;
+            task.method     = l.first();
+            task.ARGS.sign  = ( l.count()>1 )? l.at(1).toUInt(): 0;
+            emit addNewTask(task);
         } else if ( l.first()=="getVirtStoragePoolXMLDesc" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(GET_XML_DESCRIPTION));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            task.action     = GET_XML_DESCRIPTION;
+            task.method     = l.first();
+            emit addNewTask(task);
         } else if ( l.first()=="overviewVirtStoragePool" ) {
             //uint row = idx.row();
             //for ( int i=0; i<storagePoolModel->DataList.count(); i++ ) {
@@ -296,21 +266,17 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
             //};
             emit currPool(currWorkConnection, currConnName, storagePoolName);
         } else if ( l.first()=="reloadVirtStoragePool" ) {
-            args.prepend(l.first());
-            args.prepend(QString::number(GET_ALL_ENTITY));
-            args.prepend(currConnName);
-            emit addNewTask(currWorkConnection, args);
+            reloadState();
         };
     } else if ( l.first()=="reloadVirtStoragePool" ) {
-        args.prepend(l.first());
-        args.prepend(QString::number(GET_ALL_ENTITY));
-        args.prepend(currConnName);
-        emit addNewTask(currWorkConnection, args);
+        reloadState();
     };
 }
 void VirtStoragePoolControl::newVirtEntityFromXML(const QStringList &_args)
 {
     if ( !_args.isEmpty() ) {
+        TASK task;
+        task.type = "pool";
         Actions act;
         QString actName;
         if ( _args.first().startsWith("create") ) {
@@ -318,15 +284,12 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const QStringList &_args)
             actName = "createVirtStoragePool";
         } else {
             act = DEFINE_ENTITY;
-            actName = "reloadVirtStoragePool";
+            actName = "defineVirtStoragePool";
         };
         QStringList args = _args;
         args.removeFirst();
         if ( !args.isEmpty() ) {
                 if ( args.first()=="manually" ) {
-                    args.removeFirst();
-                    //QString source = args.first();
-                    args.removeFirst();
                     QString path;
                     bool show = false;
                     // show SRC Creator widget
@@ -338,13 +301,17 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const QStringList &_args)
                     };
                     delete createPoolDialog;
                     createPoolDialog = NULL;
-                    args.prepend(path);
+                    task.ARGS.path = path;
                     if ( show ) QDesktopServices::openUrl(QUrl(path));
+                } else {
+                    QString path = args.first();
+                    task.ARGS.path = path;
                 };
-                args.prepend(actName);
-                args.prepend(QString::number(act));
-                args.prepend(currConnName);
-                emit addNewTask(currWorkConnection, args);
+                task.sourceConn = currWorkConnection;
+                task.srcConName = currConnName;
+                task.method     = actName;
+                task.action     = act;
+                emit addNewTask(task);
         };
     };
 }

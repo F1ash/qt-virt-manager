@@ -30,7 +30,7 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
         sendConnErrors();
         keep_alive = false;
     };
-    currPoolName = task.args.first();
+    currPoolName = task.ARGS.parent;
     if ( keep_alive && !isRunning() ) {
         if ( NULL!=task.sourceConn ) start();
         else {
@@ -47,8 +47,7 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
 void StorageVolControlThread::run()
 {
     Result result;
-    Actions act = static_cast<Actions>(task.action.toInt());
-    switch (act) {
+    switch (task.action) {
     case GET_ALL_ENTITY :
         result = getAllStorageVolList();
         break;
@@ -79,7 +78,7 @@ void StorageVolControlThread::run()
     virConnectClose(task.sourceConn);
     result.type   = "volume";
     result.number = number;
-    result.action = act;
+    result.action = task.action;
     emit resultData(result);
 }
 Result StorageVolControlThread::getAllStorageVolList()
@@ -157,7 +156,7 @@ Result StorageVolControlThread::createStorageVol()
 {
     Result result;
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
-    QString path = task.object;
+    QString path = task.ARGS.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -223,8 +222,7 @@ Result StorageVolControlThread::downloadStorageVol()
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name, path;
     name = task.object;
-    path = task.args.first();
-    task.args.removeFirst();
+    path = task.ARGS.path;
     //qDebug()<<args.first()<<"download";
     if (currStoragePool!=NULL) {
         virStoragePoolFree(currStoragePool);
@@ -238,7 +236,7 @@ Result StorageVolControlThread::downloadStorageVol()
     bool downloaded = false;
     virStreamPtr stream = virStreamNew(task.sourceConn, 0);
     unsigned long long offset = 0;
-    unsigned long long length = task.args.first().toULongLong();
+    unsigned long long length = task.ARGS.size;
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     virStorageVol *storageVol = virStorageVolLookupByName(
@@ -297,10 +295,7 @@ Result StorageVolControlThread::resizeStorageVol()
     currStoragePool = virStoragePoolLookupByName(
                 task.sourceConn, currPoolName.toUtf8().data());
 
-    unsigned long long capacity = 0;
-    if ( task.args.count() && !task.args.first().isEmpty() ) {
-        capacity = task.args.first().toULongLong();
-    };
+    unsigned long long capacity = task.ARGS.size;
     bool resized = false;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
@@ -330,7 +325,7 @@ Result StorageVolControlThread::uploadStorageVol()
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name, path;
     name = task.object;
-    path = task.args.first();
+    path = task.ARGS.path;
     //qDebug()<<path<<"upload";
     if (currStoragePool!=NULL) {
         virStoragePoolFree(currStoragePool);
@@ -408,9 +403,8 @@ Result StorageVolControlThread::wipeStorageVol()
 
     //flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
-    unsigned int alg = 0;
+    unsigned int alg = task.ARGS.sign;
     bool wiped = false;
-    if ( !task.args.isEmpty() ) alg = task.args.first().toUInt();
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {

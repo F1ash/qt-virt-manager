@@ -15,7 +15,7 @@ private:
     virConnectPtr    destConnect = NULL;
 
 public slots:
-    void             execAction(Actions, QStringList);
+    void             execAction(uint, TASK);
     void             setMigrateConnect(virConnectPtr);
 
 private slots:

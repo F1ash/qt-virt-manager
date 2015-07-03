@@ -15,7 +15,7 @@ private:
 
 public slots:
     void                  stop();
-    void                  execAction(Actions, QStringList);
+    void                  execAction(uint, TASK);
 
 private slots:
     void                  run();

@@ -148,7 +148,7 @@ void VirtSecretControl::reloadState()
     task.type = "secret";
     task.sourceConn = currWorkConnection;
     task.srcConName = currConnName;
-    task.action     = QString::number(GET_ALL_ENTITY);
+    task.action     = GET_ALL_ENTITY;
     task.method     = "reloadVirtSecret";
     emit addNewTask(task);
 }
@@ -197,11 +197,11 @@ void VirtSecretControl::execAction(const QStringList &l)
         QString uuid = virtSecretModel->DataList.at(idx.row())->getUUID();
         task.object     = uuid;
         if        ( l.first()=="undefineVirtSecret" ) {
-            task.action     = QString::number(UNDEFINE_ENTITY);
+            task.action     = UNDEFINE_ENTITY;
             task.method     = l.first();
             emit addNewTask(task);
         } else if ( l.first()=="getVirtSecretXMLDesc" ) {
-            task.action     = QString::number(GET_XML_DESCRIPTION);
+            task.action     = GET_XML_DESCRIPTION;
             task.method     = l.first();
             emit addNewTask(task);
         } else if ( l.first()=="reloadVirtSecret" ) {
@@ -224,9 +224,9 @@ void VirtSecretControl::execAction(const QStringList &l)
             QString msg = data.join(" ");
             msgRepeater(msg);
             if ( show ) QDesktopServices::openUrl(QUrl(xml));
-            task.action     = QString::number(DEFINE_ENTITY);
+            task.action     = DEFINE_ENTITY;
             task.method     = l.first();
-            task.object     = xml;
+            task.ARGS.path  = xml;
             emit addNewTask(task);
         };
         delete createVirtSec;

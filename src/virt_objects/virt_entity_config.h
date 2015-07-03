@@ -44,14 +44,26 @@ struct Result {
 };
 
 struct TASK {
-    virConnectPtr   sourceConn  = NULL;
-    QString         srcConName  = QString();
-    QString         object      = QString();
-    QString         action      = QString();
-    QString         method      = QString();
-    QStringList     args        = QStringList();
-    virConnectPtr   destConn    = NULL;
-    QString         type        = QString();
+    // base parameters
+    virConnectPtr       sourceConn  = NULL;
+    QString             srcConName  = QString();
+    QString             object      = QString();
+    Actions             action      = _EMPTY_ACTION;
+    QString             method      = QString();
+    QString             type        = QString();
+    // details
+    struct          DETAILS {
+        virConnectPtr   destConn    = NULL;
+        qulonglong      size        = 0;
+        uint            sign        = 0;
+        QString         path        = QString();
+        QString         parent      = QString();
+        QString         list()        {
+            return QString("%1, %2, %3, %4")
+                .arg(size).arg(sign).arg(path).arg(parent);
+        };
+    };
+    DETAILS             ARGS;
 };
 
 #define DFR QString("<||>")

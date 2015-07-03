@@ -58,8 +58,8 @@ void TaskWareHouse::stopTaskComputing()
 void TaskWareHouse::addNewTask(TASK task)
 {
     qDebug()<<task.sourceConn<<task.srcConName<<task.action\
-          <<task.method<<task.object<<task.args\
-          <<task.destConn<<task.type<<"addNewTask_TASK";
+          <<task.method<<task.object<<task.ARGS.list()\
+          <<task.ARGS.destConn<<task.type<<"addNewTask_TASK";
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
     if (  !task.method.startsWith("reload") ) {
@@ -82,7 +82,7 @@ void TaskWareHouse::addNewTask(TASK task)
                         .arg(QString("").sprintf("%02d", _time.second()))
                         .arg(QString("").sprintf("%03d", _time.msec())));
         itemData.insert("End", "-");
-        itemData.insert("Arguments", task.args.join(", "));
+        itemData.insert("Arguments", task.ARGS.list());
         itemData.insert("Result", "Processing");
         itemData.insert("Message", "-");
         _item->setData(Qt::UserRole, itemData);
@@ -96,7 +96,7 @@ void TaskWareHouse::addNewTask(TASK task)
         DomControlThread *cThread =
                 static_cast<DomControlThread*>(
                     threadPool->value(_number));
-        cThread->setMigrateConnect( task.destConn );
+        cThread->setMigrateConnect( task.ARGS.destConn );
     } else if ( task.type == "network" ) {
         threadPool->insert(
                     _number,

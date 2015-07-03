@@ -34,8 +34,7 @@ void NetControlThread::execAction(uint _num, TASK _task)
 void NetControlThread::run()
 {
     Result result;
-    Actions act = static_cast<Actions>(task.action.toInt());
-    switch (act) {
+    switch (task.action) {
     case GET_ALL_ENTITY :
         result = getAllNetworkList();
         break;
@@ -66,7 +65,7 @@ void NetControlThread::run()
     virConnectClose(task.sourceConn);
     result.type   = "network";
     result.number = number;
-    result.action = act;
+    result.action = task.action;
     emit resultData(result);
 }
 Result NetControlThread::getAllNetworkList()
@@ -108,7 +107,7 @@ Result NetControlThread::getAllNetworkList()
 Result NetControlThread::createNetwork()
 {
     Result result;
-    QString path = task.object;
+    QString path = task.ARGS.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -135,7 +134,7 @@ Result NetControlThread::createNetwork()
 Result NetControlThread::defineNetwork()
 {
     Result result;
-    QString path = task.object;
+    QString path = task.ARGS.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -218,19 +217,7 @@ Result NetControlThread::changeAutoStartNetwork()
     Result result;
     QString name = task.object;
     result.name = name;
-    int autostart = 0;
-    if ( task.args.count()<1 || task.args.first().isEmpty() ) {
-        result.msg.append("Incorrect parameters.");
-        return result;
-    } else {
-        bool converted;
-        int res = task.args.first().toInt(&converted);
-        if (converted) autostart = (res) ? 1 : 0;
-        else {
-            result.msg.append("Incorrect parameters.");
-            return result;
-        };
-    };
+    int autostart = task.ARGS.sign;
     bool set = false;
     virNetworkPtr network = virNetworkLookupByName(
                 task.sourceConn, name.toUtf8().data());

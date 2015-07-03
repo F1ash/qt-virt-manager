@@ -176,9 +176,9 @@ void VirtStorageVolControl::reloadState()
     task.type = "volume";
     task.sourceConn = currWorkConnection;
     task.srcConName = currConnName;
-    task.action     = QString::number(GET_ALL_ENTITY);
+    task.action     = GET_ALL_ENTITY;
     task.method     = "reloadVirtStorageVol";
-    task.args.append(currPoolName);
+    task.ARGS.parent= currPoolName;
     emit addNewTask(task);
 }
 void VirtStorageVolControl::changeDockVisibility()
@@ -227,20 +227,21 @@ void VirtStorageVolControl::execAction(const QStringList &l)
         task.sourceConn = currWorkConnection;
         task.srcConName = currConnName;
         task.object     = storageVolName;
-        task.args.append(currPoolName);
+        task.ARGS.parent= currPoolName;
         if        ( l.first()=="reloadVirtStorageVol" ) {
             reloadState();
         } else if ( l.first()=="deleteVirtStorageVol" ) {
-            task.action     = QString::number(DELETE_ENTITY);
+            task.action     = DELETE_ENTITY;
             task.method     = l.first();
             emit addNewTask(task);
         } else if ( l.first()=="downloadVirtStorageVol" ) {
             QString path = QFileDialog::getSaveFileName(this, "Save to", "~");
             if ( !path.isEmpty() ) {
-                task.action     = QString::number(DOWNLOAD_ENTITY);
+                task.action     = DOWNLOAD_ENTITY;
                 task.method     = l.first();
-                task.args.append(path);
-                task.args.append(storageVolModel->DataList.at(idx.row())->getCurrSize());
+                task.ARGS.path  = path;
+                task.ARGS.size  = storageVolModel->DataList
+                        .at(idx.row())->getCurrSize().toULongLong();
                 emit addNewTask(task);
             } else return;
         } else if ( l.first()=="resizeVirtStorageVol" ) {
@@ -250,28 +251,28 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             unsigned long long size = resizeDialog->getNewSize();
             resizeDialog->deleteLater();
             if ( res ) {
-                task.args.append(QString::number(size));
+                task.ARGS.size = size;
             } else {
                 return;
             };
-            task.action     = QString::number(RESIZE_ENTITY);
+            task.action     = RESIZE_ENTITY;
             task.method     = l.first();
             emit addNewTask(task);
         } else if ( l.first()=="uploadVirtStorageVol" ) {
             QString path = QFileDialog::getOpenFileName(this, "Read from", "~");
             if ( !path.isEmpty() ) {
-                task.action     = QString::number(UPLOAD_ENTITY);
+                task.action     = UPLOAD_ENTITY;
                 task.method     = l.first();
-                task.args.append(path);
+                task.ARGS.path  = path;
                 emit addNewTask(task);
             } else return;
         } else if ( l.first()=="wipeVirtStorageVol" ) {
-            task.action     = QString::number(WIPE_ENTITY);
+            task.action     = WIPE_ENTITY;
             task.method     = l.first();
-            task.args.append( (l.count()>1) ? l.at(1) : "0" );
+            task.ARGS.sign  = (l.count()>1) ? l.at(1).toUInt() : 0;
             emit addNewTask(task);
         } else if ( l.first()=="getVirtStorageVolXMLDesc" ) {
-            task.action     = QString::number(GET_XML_DESCRIPTION);
+            task.action     = GET_XML_DESCRIPTION;
             task.method     = l.first();
             emit addNewTask(task);
         };
@@ -316,17 +317,17 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                 };
                 delete createVolumeDialog;
                 createVolumeDialog = NULL;
-                task.object = path;
+                task.ARGS.path = path;
                 if ( show ) QDesktopServices::openUrl(QUrl(path));
             } else {
-                QString path = args.first();
-                task.object = path;
+                QString path   = args.first();
+                task.ARGS.path = path;
             };
             task.sourceConn = currWorkConnection;
             task.srcConName = currConnName;
-            task.action     = QString::number(act);
+            task.action     = act;
             task.method     = actName;
-            task.args.append(currPoolName);
+            task.ARGS.parent= currPoolName;
             emit addNewTask(task);
         };
     };
