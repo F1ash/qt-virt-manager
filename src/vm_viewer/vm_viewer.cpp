@@ -100,50 +100,48 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
     QStringList args;
     if ( true ) {
         args.append(domain);
+        TASK task;
+        task.type = "domain";
+        task.sourceConn = jobConnect;
+        task.srcConName = connName;
+        task.object     = domain;
         if        ( method.first()=="startVirtDomain" ) {
-            args.prepend(method.first());
-            args.prepend(QString::number(START_ENTITY));
-            args.prepend(connName);
-            emit addNewTask(jobConnect, args);
+            task.method     = method.first();
+            task.action     = START_ENTITY;
+            emit addNewTask(task);
         } else if ( method.first()=="pauseVirtDomain" ) {
-            args.append( QString::number(VM_State ? 1 : 0) );
-            args.prepend(method.first());
-            args.prepend(QString::number(PAUSE_ENTITY));
-            args.prepend(connName);
-            emit addNewTask(jobConnect, args);
+            task.method     = method.first();
+            task.action     = PAUSE_ENTITY;
+            task.args.state = VM_State ? 1 : 0;
+            emit addNewTask(task);
         } else if ( method.first()=="destroyVirtDomain" ) {
-            args.prepend(method.first());
-            args.prepend(QString::number(DESTROY_ENTITY));
-            args.prepend(connName);
-            emit addNewTask(jobConnect, args);
+            task.method     = method.first();
+            task.action     = DESTROY_ENTITY;
+            emit addNewTask(task);
         } else if ( method.first()=="resetVirtDomain" ) {
-            args.prepend(method.first());
-            args.prepend(QString::number(RESET_ENTITY));
-            args.prepend(connName);
-            emit addNewTask(jobConnect, args);
+            task.method     = method.first();
+            task.action     = RESET_ENTITY;
+            emit addNewTask(task);
         } else if ( method.first()=="shutdownVirtDomain" ) {
-            args.prepend(method.first());
-            args.prepend(QString::number(SHUTDOWN_ENTITY));
-            args.prepend(connName);
-            emit addNewTask(jobConnect, args);
+            task.method     = method.first();
+            task.action     = SHUTDOWN_ENTITY;
+            emit addNewTask(task);
         } else if ( method.first()=="saveVirtDomain" ) {
             QString to = QFileDialog::getSaveFileName(this, "Save to", "~");
             if ( !to.isEmpty() ) {
-                args.append(to);
-                args.append( QString::number(VM_State ? 1 : 0) );
-                args.prepend(method.first());
-                args.prepend(QString::number(SAVE_ENTITY));
-                args.prepend(connName);
-                emit addNewTask(jobConnect, args);
+                task.method     = method.first();
+                task.action     = SAVE_ENTITY;
+                task.args.path  = to;
+                task.args.state = VM_State ? 1 : 0;
+                emit addNewTask(task);
             };
         } else if ( method.first()=="restoreVirtDomain" ) {
             QString from = QFileDialog::getOpenFileName(this, "Restore from", "~");
             if ( !from.isEmpty() ) {
-                args.append(from);
-                args.prepend(method.first());
-                args.prepend(QString::number(RESTORE_ENTITY));
-                args.prepend(connName);
-                emit addNewTask(jobConnect, args);
+                task.method     = method.first();
+                task.action     = RESTORE_ENTITY;
+                task.args.path  = from;
+                emit addNewTask(task);
             };
         };
     };

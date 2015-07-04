@@ -59,7 +59,7 @@ private:
 
 public slots:
     QString          getSnapshotXMLDesc() const;
-    QString          getSnapshotFlags() const;
+    uint             getSnapshotFlags() const;
 
 private slots:
     void             accept();

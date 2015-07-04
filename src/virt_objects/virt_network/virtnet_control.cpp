@@ -225,7 +225,7 @@ void VirtNetControl::execAction(const QStringList &l)
                  ? 0 : 1;
             task.method = l.first();
             task.action = CHANGE_ENTITY_AUTOSTART;
-            task.ARGS.sign = autostartState;
+            task.args.sign = autostartState;
             emit addNewTask(task);
         } else if ( l.first()=="getVirtNetworkXMLDesc" ) {
             task.method = l.first();
@@ -275,10 +275,10 @@ void VirtNetControl::newVirtEntityFromXML(const QStringList &_args)
                 delete createVirtNet;
                 createVirtNet = NULL;
                 //qDebug()<<xml<<"path"<<result;
-                task.ARGS.path = xml;
+                task.args.path = xml;
             } else {
                 QString xml = args.first();
-                task.ARGS.path = xml;
+                task.args.path = xml;
             };
             task.sourceConn = currWorkConnection;
             task.srcConName = currConnName;

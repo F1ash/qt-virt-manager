@@ -14,11 +14,9 @@ class ControlThread : public QThread
 public:
     explicit ControlThread(QObject *parent = NULL);
     virtual ~ControlThread();
-    QStringList      args;
     bool             keep_alive = false;
     uint             number;
     TASK             task;
-    Actions          action;
     QString          currConnName;
     virConnect      *currWorkConnection = NULL;
     virErrorPtr      virtErrors;
@@ -36,7 +34,6 @@ public slots:
     void             sendConnErrors();
     void             sendGlobalErrors();
 
-    virtual void     execAction(Actions, QStringList);
     virtual void     execAction(uint, TASK);
     virtual void     run();
     virtual void     stop();

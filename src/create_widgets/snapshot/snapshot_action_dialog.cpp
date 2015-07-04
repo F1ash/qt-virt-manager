@@ -78,6 +78,10 @@ QStringList SnapshotActionDialog::getParameters() const
 {
     return params;
 }
+uint SnapshotActionDialog::getSnapshotFlags() const
+{
+    return flags;
+}
 
 /* private slots */
 void SnapshotActionDialog::clearSnapshotTree()
@@ -161,7 +165,6 @@ void SnapshotActionDialog::accept()
         settings.endGroup();
         settings.sync();
         params.append(item->data(0).toString());
-        params.append(QString::number(flags));
         //qDebug()<<params;
         done(result());
     };

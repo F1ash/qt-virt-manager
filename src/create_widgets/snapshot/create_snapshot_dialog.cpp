@@ -130,12 +130,12 @@ QString CreateSnapshotDialog::getSnapshotXMLDesc() const
     if ( !_node.isNull() ) domainsnapshot.appendChild(_node);
     _node = wdg->getElements().firstChildElement("disks");
     if ( !_node.isNull() ) domainsnapshot.appendChild(_node);
-    qDebug()<<doc.toByteArray(4).data();
+    //qDebug()<<doc.toByteArray(4).data();
     return doc.toString();
 }
-QString CreateSnapshotDialog::getSnapshotFlags() const
+uint CreateSnapshotDialog::getSnapshotFlags() const
 {
-    return QString::number( flagsMenu->getCompositeFlag() );
+    return flagsMenu->getCompositeFlag();
 }
 
 /* private slots */

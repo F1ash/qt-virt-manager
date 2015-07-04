@@ -22,7 +22,7 @@ signals:
     void                     displayRequest(virConnect*, QString, QString);
     void                     addToStateMonitor(virConnectPtr, QString&, QString&);
     void                     domainClosed(QString, QString);
-    void                     migrateToConnect(QStringList&);
+    void                     migrateToConnect(TASK);
 
 private:
     DomainModel             *domainModel = NULL;
@@ -35,7 +35,7 @@ public slots:
     bool                     setCurrentWorkConnect(virConnect*);
     void                     setListHeader(QString&);
     virConnect*              getConnection() const;
-    void                     execMigrateAction(virConnectPtr, QStringList&);
+    void                     execMigrateAction(virConnectPtr, TASK);
     void                     resultReceiver(Result);
 
 private slots:

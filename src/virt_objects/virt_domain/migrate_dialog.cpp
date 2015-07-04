@@ -1,4 +1,5 @@
 #include "migrate_dialog.h"
+#include <libvirt/libvirt.h>
 
 #define APPEND_URI_HELP_0 QString("The destination libvirtd server \
 will automatically determine the native hypervisor URI for migration, \
@@ -315,7 +316,7 @@ MigrateDialog::~MigrateDialog()
 }
 
 /* public slots */
-QStringList MigrateDialog::getMigrateArgs() const
+MIGR_ARGS MigrateDialog::getMigrateArgs() const
 {
     return migrateArgs;
 }
@@ -328,90 +329,55 @@ void MigrateDialog::closeEvent(QCloseEvent *ev)
 }
 void MigrateDialog::cancelClicked()
 {
-    exitCode = NULL;
+    exitCode = 0;
     close();
 }
 void MigrateDialog::migrateClicked()
 {
+    if ( useAdvanced->isChecked() ) {
+        if ( liveMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_LIVE;
+        if ( p2pCheck->isChecked() )
+            m_flags |= VIR_MIGRATE_PEER2PEER;
+        if ( tunnelMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_TUNNELLED;
+        if ( persistDestMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_PERSIST_DEST;
+        if ( undefineSourceMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_UNDEFINE_SOURCE;
+        if ( pausedMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_PAUSED;
+        if ( fullNonSharedDiskMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_NON_SHARED_DISK;
+        if ( incNonSharedDiskMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_NON_SHARED_INC;
+        if ( unsafeMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_UNSAFE;
+        if ( offlineMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_OFFLINE;
+        if ( compressedMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_COMPRESSED;
+        if ( abortOnMigration->isChecked() )
+            m_flags |= VIR_MIGRATE_ABORT_ON_ERROR;
+    };
+    migrateArgs.flags = m_flags;
     exitCode = 1;
     // build migrate parameters
     if ( connectList->currentIndex() ) {
-        migrateArgs.append(connectList->currentText().split('\t').first());
-    } else migrateArgs.append(QString());
+        migrateArgs.connName =connectList->currentText().split('\t').first();
+    };
     if ( uri->isEnabled() ) {
-        migrateArgs.append(uri->text());
-    } else migrateArgs.append(QString());
+        migrateArgs.uri = uri->text();
+    };
     if ( useAdvanced->isChecked() ) {
         if ( maxDownCheck->isChecked() ) {
-             migrateArgs.append(QString::number(maxDownTime->value()));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
+             migrateArgs.maxDownTime = maxDownTime->value();
+        };
         if ( bandWdthCheck->isChecked() ) {
-             migrateArgs.append(QString::number(bandwidth->value()));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( liveMigration->isChecked() ) {
-             migrateArgs.append(QString("live"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( p2pCheck->isChecked() ) {
-             migrateArgs.append(QString("p2p"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( tunnelMigration->isChecked() ) {
-             migrateArgs.append(QString("tun"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( persistDestMigration->isChecked() ) {
-             migrateArgs.append(QString("persist"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( undefineSourceMigration->isChecked() ) {
-             migrateArgs.append(QString("undefine"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( pausedMigration->isChecked() ) {
-             migrateArgs.append(QString("pause"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( fullNonSharedDiskMigration->isChecked() ) {
-             migrateArgs.append(QString("full"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( incNonSharedDiskMigration->isChecked() ) {
-             migrateArgs.append(QString("inc"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( unsafeMigration->isChecked() ) {
-             migrateArgs.append(QString("unsafe"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( offlineMigration->isChecked() ) {
-             migrateArgs.append(QString("offline"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( compressedMigration->isChecked() ) {
-             migrateArgs.append(QString("compressed"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    if ( useAdvanced->isChecked() ) {
-        if ( abortOnMigration->isChecked() ) {
-             migrateArgs.append(QString("abortOn"));
-        } else migrateArgs.append(QString());
-    } else migrateArgs.append(QString());
-    migrateArgs.append(Name->text());
+             migrateArgs.bandwidth = bandwidth->value();
+        };
+    };
+    migrateArgs.new_name = Name->text();
     //qDebug()<<migrateArgs;
     close();
 }

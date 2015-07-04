@@ -35,8 +35,6 @@ public:
 
 signals:
     void                     entityMsg(QString&);
-    void                     addNewTask(virConnectPtr, QStringList&);
-    void                     addNewTask(virConnectPtr, QStringList&, virConnectPtr);
     void                     addNewTask(TASK);
 
 public slots:

@@ -41,7 +41,7 @@ public:
 signals:
     void             finished(QString&);
     void             errorMsg(QString&);
-    void             addNewTask(virConnectPtr, QStringList&);
+    void             addNewTask(TASK);
 
 public slots:
     virtual bool     isActive() const;

@@ -107,7 +107,7 @@ Result NetControlThread::getAllNetworkList()
 Result NetControlThread::createNetwork()
 {
     Result result;
-    QString path = task.ARGS.path;
+    QString path = task.args.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -134,7 +134,7 @@ Result NetControlThread::createNetwork()
 Result NetControlThread::defineNetwork()
 {
     Result result;
-    QString path = task.ARGS.path;
+    QString path = task.args.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -217,7 +217,7 @@ Result NetControlThread::changeAutoStartNetwork()
     Result result;
     QString name = task.object;
     result.name = name;
-    int autostart = task.ARGS.sign;
+    int autostart = task.args.sign;
     bool set = false;
     virNetworkPtr network = virNetworkLookupByName(
                 task.sourceConn, name.toUtf8().data());

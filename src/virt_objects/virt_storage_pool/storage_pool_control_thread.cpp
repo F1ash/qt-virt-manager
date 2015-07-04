@@ -116,7 +116,7 @@ Result StoragePoolControlThread::getAllStoragePoolList()
 Result StoragePoolControlThread::createStoragePool()
 {
     Result result;
-    QString path = task.ARGS.path;
+    QString path = task.args.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -147,7 +147,7 @@ Result StoragePoolControlThread::createStoragePool()
 Result StoragePoolControlThread::defineStoragePool()
 {
     Result result;
-    QString path = task.ARGS.path;
+    QString path = task.args.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -238,7 +238,7 @@ Result StoragePoolControlThread::changeAutoStartStoragePool()
 {
     Result result;
     QString name = task.object;
-    int autostart = task.ARGS.sign;
+    int autostart = task.args.sign;
     bool set = false;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 task.sourceConn, name.toUtf8().data());
@@ -257,7 +257,7 @@ Result StoragePoolControlThread::deleteStoragePool()
 {
     Result result;
     QString name = task.object;
-    uint flags = (task.ARGS.sign)? VIR_STORAGE_POOL_DELETE_ZEROED
+    uint flags = (task.args.sign)? VIR_STORAGE_POOL_DELETE_ZEROED
                                  : VIR_STORAGE_POOL_DELETE_NORMAL;
     bool deleted = false;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(

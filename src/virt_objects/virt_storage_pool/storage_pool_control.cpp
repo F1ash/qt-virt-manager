@@ -248,12 +248,12 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
                  ? 0 : 1;
             task.action     = CHANGE_ENTITY_AUTOSTART;
             task.method     = l.first();
-            task.ARGS.sign  = autostartState;
+            task.args.sign  = autostartState;
             emit addNewTask(task);
         } else if ( l.first()=="deleteVirtStoragePool" ) {
             task.action     = DELETE_ENTITY;
             task.method     = l.first();
-            task.ARGS.sign  = ( l.count()>1 )? l.at(1).toUInt(): 0;
+            task.args.sign  = ( l.count()>1 )? l.at(1).toUInt(): 0;
             emit addNewTask(task);
         } else if ( l.first()=="getVirtStoragePoolXMLDesc" ) {
             task.action     = GET_XML_DESCRIPTION;
@@ -301,11 +301,11 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const QStringList &_args)
                     };
                     delete createPoolDialog;
                     createPoolDialog = NULL;
-                    task.ARGS.path = path;
+                    task.args.path = path;
                     if ( show ) QDesktopServices::openUrl(QUrl(path));
                 } else {
                     QString path = args.first();
-                    task.ARGS.path = path;
+                    task.args.path = path;
                 };
                 task.sourceConn = currWorkConnection;
                 task.srcConName = currConnName;

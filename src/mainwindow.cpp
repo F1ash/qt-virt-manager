@@ -349,12 +349,8 @@ void MainWindow::initDockWidgets()
             domainsStateMonitor, SLOT(setNewMonitoredDomain(virConnectPtr,QString&,QString&)));
     connect(domainDockContent, SIGNAL(domainClosed(QString,QString)),
             this, SLOT(deleteVMDisplay(QString,QString)));
-    connect(domainDockContent, SIGNAL(migrateToConnect(QStringList&)),
-            this, SLOT(buildMigrateArgs(QStringList&)));
-    connect(domainDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
-            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
-    connect(domainDockContent, SIGNAL(addNewTask(virConnectPtr, QStringList&, virConnectPtr)),
-            taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&, virConnectPtr)));
+    connect(domainDockContent, SIGNAL(migrateToConnect(TASK)),
+            this, SLOT(buildMigrateArgs(TASK)));
     connect(domainDockContent, SIGNAL(addNewTask(TASK)),
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(domResult(Result)),
@@ -664,8 +660,8 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
                 this, SLOT(deleteVMDisplay(QString&)));
         connect(value, SIGNAL(errorMsg(QString&)),
                 logDockContent, SLOT(appendErrorMsg(QString&)));
-        connect(value, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
-                taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+        connect(value, SIGNAL(addNewTask(TASK)),
+                taskWrHouse, SLOT(addNewTask(TASK)));
         value->show();
     } else {
         //qDebug()<<key<<"vm invoked"<<"exist";
@@ -700,8 +696,8 @@ void MainWindow::deleteVMDisplay(QString &key)
                        this, SLOT(deleteVMDisplay(QString&)));
             disconnect(value, SIGNAL(errorMsg(QString&)),
                        logDockContent, SLOT(appendErrorMsg(QString&)));
-            disconnect(value, SIGNAL(addNewTask(virConnectPtr, QStringList&)),
-                       taskWrHouse, SLOT(addNewTask(virConnectPtr, QStringList&)));
+            disconnect(value, SIGNAL(addNewTask(TASK)),
+                       taskWrHouse, SLOT(addNewTask(TASK)));
             delete value;
             value = NULL;
         };
@@ -731,11 +727,11 @@ void MainWindow::deleteVMDisplay(QString connName, QString domName)
         };
     };
 }
-void MainWindow::buildMigrateArgs(QStringList &args)
+void MainWindow::buildMigrateArgs(TASK _task)
 {
-    virConnectPtr namedConnect = connListWidget->getConnection(args[1]);
+    virConnectPtr namedConnect = connListWidget->getConnection(_task.args.path);
     if ( NULL!=namedConnect ) {
-        domainDockContent->execMigrateAction(namedConnect, args);
+        domainDockContent->execMigrateAction(namedConnect, _task);
     }
 }
 

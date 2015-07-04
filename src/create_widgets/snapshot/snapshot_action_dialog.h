@@ -60,6 +60,7 @@ private:
 
 public slots:
     QStringList          getParameters() const;
+    uint                 getSnapshotFlags() const;
 
 private slots:
     void                 clearSnapshotTree();

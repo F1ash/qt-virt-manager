@@ -37,10 +37,6 @@ bool ControlThread::setCurrentWorkConnect(virConnectPtr conn, uint i, QString _n
     //qDebug()<<"net_thread"<<currWorkConnection;
     return keep_alive;
 }
-void ControlThread::execAction(Actions i, QStringList _str)
-{
-    return;
-}
 void ControlThread::execAction(uint _number, TASK task)
 {
     return;

@@ -29,10 +29,6 @@ void DomControlThread::execAction(uint _num, TASK _task)
         };
     };
 }
-void DomControlThread::setMigrateConnect(virConnectPtr conn)
-{
-    destConnect = conn;
-}
 
 /* private slots */
 void DomControlThread::run()
@@ -194,7 +190,7 @@ Result DomControlThread::getAllDomainList()
 Result DomControlThread::createDomain()
 {
     Result result;
-    QString path = task.ARGS.path;
+    QString path = task.args.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -222,7 +218,7 @@ Result DomControlThread::createDomain()
 Result DomControlThread::defineDomain()
 {
     Result result;
-    QString path = task.ARGS.path;
+    QString path = task.args.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -268,7 +264,7 @@ Result DomControlThread::pauseDomain()
 {
     Result result;
     QString name = task.object;
-    QString state = task.ARGS.sign;
+    QString state = task.args.state;
     bool invoked = false;
 
     virDomainPtr domain = virDomainLookupByName(
@@ -392,9 +388,9 @@ Result DomControlThread::saveDomain()
 {
     Result result;
     QString name = task.object;
-    const char *to = args.first().toUtf8().data();
+    const char *to = task.args.path.toUtf8().data();
     const char *dxml = NULL;
-    QString state = args.last();
+    QString state = task.args.state;
     bool invoked = false;
     unsigned int flags = VIR_DOMAIN_SAVE_BYPASS_CACHE;
     if ( state=="RUNNING" ) {
@@ -424,9 +420,9 @@ Result DomControlThread::restoreDomain()
 {
     Result result;
     QString name = task.object;
-    const char *from = args.first().toUtf8().data();
+    const char *from = task.args.path.toUtf8().data();
     const char *dxml = NULL;
-    QString to_state = args.last();
+    QString to_state = task.args.state;
     bool invoked = false;
     unsigned int flags = VIR_DOMAIN_SAVE_BYPASS_CACHE;
     if ( to_state=="RUNNING" ) {
@@ -472,7 +468,7 @@ Result DomControlThread::changeAutoStartDomain()
     Result result;
     QString name = task.object;
     result.name = name;
-    int autostart = task.ARGS.sign;
+    int autostart = task.args.sign;
 
     bool set = false;
     virDomainPtr domain = virDomainLookupByName(
@@ -528,74 +524,25 @@ Result DomControlThread::migrateDomain()
 {
     Result result;
     bool migrated = false;
-    unsigned int flags = 0;
-    qDebug()<<args<<"migrate";
-    //qDebug()<<virConnectGetCapabilities(task.sourceConn);
-    if ( args.count()<17 ) {
-        result.name = args[0];
-        result.result = migrated;
-        result.msg.append(QString("'<b>%1</b>' Domain don't Migrated: %2")
-                          .arg(args[0]).arg("arguments incorrect."));
-        return result;
-    };
+    result.name = task.object;
+    unsigned int flags = task.args.sign;
     virDomainPtr domain = virDomainLookupByName(
-                task.sourceConn, args[0].toUtf8().constData());
+                task.sourceConn, result.name.toUtf8().constData());
     //const char *uri = ( args[2].isEmpty() ) ? NULL : args[2].toUtf8().constData();
-    bool ok;
-    int maxDownTime = args[3].toInt(&ok);
-    if (!ok) maxDownTime = 0;
-    int bdw = args[4].toInt(&ok);
-    if (!ok) bdw = 0;
-    bool live = !args[5].isEmpty();
-    bool p2p = !args[6].isEmpty();
-    bool tun = !args[7].isEmpty();
-    bool persist = !args[8].isEmpty();
-    bool undefine = !args[9].isEmpty();
-    bool pause = !args[10].isEmpty();
-    bool full = !args[11].isEmpty();
-    bool inc = !args[12].isEmpty();
-    bool unsafe = !args[13].isEmpty();
-    bool offline = !args[14].isEmpty();
-    bool compressed = !args[15].isEmpty();
-    bool abortOn = !args[16].isEmpty();
-    //const char *dName = ( args[17].isEmpty() )? NULL : args[17].toUtf8().constData();
-    //qDebug()<<args[0].toUtf8().constData()<<tun<< unsafe<<maxDownTime<<uri<<bdw<<args[17].toUtf8().constData();
+    int maxDownTime = task.args.offset;
+    int bdw = task.args.size;
     if ( domain!=NULL ) {
         // virDomainMigrateSetMaxDowntime
         // flags: extra flags; not used yet, so callers should always pass 0
         virDomainMigrateSetMaxDowntime(domain, maxDownTime, 0);
-        if ( live )
-            flags |= VIR_MIGRATE_LIVE;
-        if ( p2p )
-            flags |= VIR_MIGRATE_PEER2PEER;
-        if ( tun )
-            flags |= VIR_MIGRATE_TUNNELLED;
-        if ( persist )
-            flags |= VIR_MIGRATE_PERSIST_DEST;
-        if ( undefine )
-            flags |= VIR_MIGRATE_UNDEFINE_SOURCE;
-        if ( pause )
-            flags |= VIR_MIGRATE_PAUSED;
-        if ( full )
-            flags |= VIR_MIGRATE_NON_SHARED_DISK;
-        if ( inc )
-            flags |= VIR_MIGRATE_NON_SHARED_INC;
-        if ( unsafe )
-            flags |= VIR_MIGRATE_UNSAFE;
-        if ( offline )
-            flags |= VIR_MIGRATE_OFFLINE;
-        if ( compressed )
-            flags |= VIR_MIGRATE_COMPRESSED;
-        if ( abortOn )
-            flags |= VIR_MIGRATE_ABORT_ON_ERROR;
-        if ( NULL!=destConnect ) {
+        if ( NULL!=task.args.destConn ) {
             qDebug()<<"migrate to exist connect";
             virDomainPtr newDomain =
             virDomainMigrate(domain,
-                             destConnect,
+                             task.args.destConn,
                              flags,
-                             args[17].toUtf8().constData(),
-                             args[2].toUtf8().constData(),
+                             task.args.object.toUtf8().data(),
+                             task.args.path.toUtf8().data(),
                              bdw);
             migrated = NULL!=newDomain;
             if (migrated) virDomainFree( newDomain );
@@ -603,52 +550,48 @@ Result DomControlThread::migrateDomain()
             qDebug()<< "migrate to URI";
             migrated = (virDomainMigrateToURI(
                             domain,
-                            args[2].toUtf8().constData(),
+                            task.args.path.toUtf8().data(),
                             flags,
-                            args[17].toUtf8().constData(),
+                            task.args.object.toUtf8().data(),
                             bdw)
                         +1)?true:false;
         };
         virDomainFree(domain);
         if ( !migrated ) sendConnErrors();
     } else sendConnErrors();
-    result.name = args[0];
     result.result = migrated;
     result.msg.append(
                 QString("'<b>%1</b>' Domain %2 Migrated.")
-                .arg(args[0]).arg((migrated)?"":"don't"));
-    if ( destConnect ) destConnect = NULL;
+                .arg(result.name).arg((migrated)?"":"don't"));
+    //if ( task.args.destConn ) task.args.destConn = NULL;
     return result;
 }
 Result DomControlThread::createSnapshoteDomain()
 {
     Result result;
     bool snapped = false;
-    if ( args.count()>2 ) {
-        QString domName = args.at(0);
-        result.name = args.at(0);
-        unsigned int flags = args.at(1).toUInt();
-        QByteArray _xmlDesc;
-        _xmlDesc.append(args.at(2));
-        const char *xmlDesc = _xmlDesc.data();
-        //qDebug()<<xmlDesc<<flags;
-        virDomainPtr domain = virDomainLookupByName(
-                    task.sourceConn, domName.toUtf8().data());
-        if ( NULL==domain ) {
+    QString domName = task.object;
+    result.name = domName;
+    unsigned int flags = task.args.sign;
+    QByteArray _xmlDesc;
+    _xmlDesc.append(task.args.object);
+    const char *xmlDesc = _xmlDesc.data();
+    //qDebug()<<xmlDesc<<flags;
+    virDomainPtr domain = virDomainLookupByName(
+                task.sourceConn, domName.toUtf8().data());
+    if ( NULL==domain ) {
+        sendConnErrors();
+    } else {
+        virDomainSnapshotPtr snapshot =
+                virDomainSnapshotCreateXML(domain, xmlDesc, flags);
+        if ( NULL==snapshot ) {
             sendConnErrors();
         } else {
-            virDomainSnapshotPtr snapshot =
-                    virDomainSnapshotCreateXML(domain, xmlDesc, flags);
-            if ( NULL==snapshot ) {
-                sendConnErrors();
-            } else {
-                snapped = true;
-                virDomainSnapshotFree(snapshot);
-            };
-            virDomainFree(domain);
+            snapped = true;
+            virDomainSnapshotFree(snapshot);
         };
-    } else
-        result.name = "error";
+        virDomainFree(domain);
+    };
     result.result = snapped;
     result.msg.append(
                 QString("'<b>%1</b>' Domain %2 snapped.")
@@ -659,38 +602,35 @@ Result DomControlThread::revertSnapshoteDomain()
 {
     Result result;
     bool reverted = false;
-    if ( args.count()>2 ) {
-        QString domName = args.at(0);
-        result.name = args.at(0);
-        QString snapshotName(args.at(1));
-        unsigned int flags = args.at(2).toUInt();
-        //qDebug()<<snapshotName<<flags;
-        virDomainPtr domain = virDomainLookupByName(
-                    task.sourceConn, domName.toUtf8().data());
-        if ( NULL==domain ) {
+    QString domName = task.object;
+    result.name = task.args.object;
+    QString snapshotName(task.args.object);
+    unsigned int flags = task.args.sign;
+    //qDebug()<<snapshotName<<flags;
+    virDomainPtr domain = virDomainLookupByName(
+                task.sourceConn, domName.toUtf8().data());
+    if ( NULL==domain ) {
+        sendConnErrors();
+    } else {
+        // flags: extra flags; not used yet, so callers should always pass 0
+        virDomainSnapshotPtr snapshot = virDomainSnapshotLookupByName(
+                    domain, snapshotName.toUtf8().data(), 0);
+        if ( NULL==snapshot ) {
             sendConnErrors();
-        } else {
-            // flags: extra flags; not used yet, so callers should always pass 0
-            virDomainSnapshotPtr snapshot = virDomainSnapshotLookupByName(
-                        domain, snapshotName.toUtf8().data(), 0);
-            if ( NULL==snapshot ) {
+       } else {
+           int ret = virDomainRevertToSnapshot(snapshot, flags);
+           if ( ret<0 ) {
                 sendConnErrors();
             } else {
-                int ret = virDomainRevertToSnapshot(snapshot, flags);
-                if ( ret<0 ) {
-                    sendConnErrors();
-                } else {
-                    reverted = true;
-                };
-                virDomainSnapshotFree(snapshot);
+                reverted = true;
             };
-            virDomainFree(domain);
+            virDomainSnapshotFree(snapshot);
         };
-    } else
-        result.name = "error";
+        virDomainFree(domain);
+    };
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 reverted.")
-                .arg(result.name).arg((reverted)?"":"don't"));
+                QString("'<b>%1</b>' snapshot in <b>%2</b> Domain %3 reverted.")
+                .arg(result.name).arg(domName).arg((reverted)?"":"don't"));
     result.result = reverted;
     return result;
 }
@@ -698,39 +638,36 @@ Result DomControlThread::deleteSnapshoteDomain()
 {
     Result result;
     bool deleted = false;
-    if ( args.count()>2 ) {
-        QString domName = args.at(0);
-        result.name = args.at(0);
-        QString snapshotName(args.at(1));
-        unsigned int flags = args.at(2).toUInt();
-        //qDebug()<<snapshotName<<flags;
-        virDomainPtr domain = virDomainLookupByName(
-                    task.sourceConn, domName.toUtf8().data());
-        if ( NULL==domain ) {
+    QString domName = task.object;
+    result.name = task.args.object;
+    QString snapshotName(task.args.object);
+    unsigned int flags = task.args.sign;
+    //qDebug()<<snapshotName<<flags;
+    virDomainPtr domain = virDomainLookupByName(
+                task.sourceConn, domName.toUtf8().data());
+    if ( NULL==domain ) {
+        sendConnErrors();
+    } else {
+        // flags: extra flags; not used yet, so callers should always pass 0
+        virDomainSnapshotPtr snapshot =
+                virDomainSnapshotLookupByName(
+                    domain, snapshotName.toUtf8().data(), 0);
+        if ( NULL==snapshot ) {
             sendConnErrors();
         } else {
-            // flags: extra flags; not used yet, so callers should always pass 0
-            virDomainSnapshotPtr snapshot =
-                    virDomainSnapshotLookupByName(
-                        domain, snapshotName.toUtf8().data(), 0);
-            if ( NULL==snapshot ) {
+            int ret = virDomainSnapshotDelete(snapshot, flags);
+            if ( ret<0 ) {
                 sendConnErrors();
             } else {
-                int ret = virDomainSnapshotDelete(snapshot, flags);
-                if ( ret<0 ) {
-                    sendConnErrors();
-                } else {
-                    deleted = true;
-                };
-                virDomainSnapshotFree(snapshot);
+                deleted = true;
             };
-            virDomainFree(domain);
+            virDomainSnapshotFree(snapshot);
         };
-    } else
-        result.name = "error";
+        virDomainFree(domain);
+    };
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 deleted.")
-                .arg(result.name).arg((deleted)?"":"don't"));
+                QString("'<b>%1</b>' snapshot in <b>%2</b> Domain %3 deleted.")
+                .arg(result.name).arg(domName).arg((deleted)?"":"don't"));
     result.result = deleted;
     return result;
 }

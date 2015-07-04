@@ -58,8 +58,8 @@ void TaskWareHouse::stopTaskComputing()
 void TaskWareHouse::addNewTask(TASK task)
 {
     qDebug()<<task.sourceConn<<task.srcConName<<task.action\
-          <<task.method<<task.object<<task.ARGS.list()\
-          <<task.ARGS.destConn<<task.type<<"addNewTask_TASK";
+          <<task.method<<task.object<<task.args.list()\
+          <<task.args.destConn<<task.type<<"addNewTask_TASK";
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
     if (  !task.method.startsWith("reload") ) {
@@ -82,7 +82,7 @@ void TaskWareHouse::addNewTask(TASK task)
                         .arg(QString("").sprintf("%02d", _time.second()))
                         .arg(QString("").sprintf("%03d", _time.msec())));
         itemData.insert("End", "-");
-        itemData.insert("Arguments", task.ARGS.list());
+        itemData.insert("Arguments", task.args.list());
         itemData.insert("Result", "Processing");
         itemData.insert("Message", "-");
         _item->setData(Qt::UserRole, itemData);
@@ -93,10 +93,6 @@ void TaskWareHouse::addNewTask(TASK task)
         threadPool->insert(
                     _number,
                     new DomControlThread(this));
-        DomControlThread *cThread =
-                static_cast<DomControlThread*>(
-                    threadPool->value(_number));
-        cThread->setMigrateConnect( task.ARGS.destConn );
     } else if ( task.type == "network" ) {
         threadPool->insert(
                     _number,
@@ -122,88 +118,6 @@ void TaskWareHouse::addNewTask(TASK task)
         connect(cThread, SIGNAL(resultData(Result)),
                 this, SLOT(taskResultReceiver(Result)));
         cThread->execAction(counter, task);
-    };
-}
-void TaskWareHouse::addNewTask(virConnectPtr _conn, QStringList &_taskDesc, virConnectPtr _destConn)
-{
-    qDebug()<<_taskDesc<<"addNewTask";
-    QString currConnName = _taskDesc.takeFirst();
-    int ACT = _taskDesc.takeFirst().toInt();
-    ++counter;
-    QString _number = QString("").sprintf("%08d", counter);
-    if ( _taskDesc.count()>0 && !_taskDesc[0].startsWith("reload") ) {
-        QString _name, _task, _object;
-        _task = _taskDesc[0];
-        _object = (_taskDesc.count()>1)? _taskDesc[1]:".";
-        _name = QString("#%1 %2 <%3> in <%4> connection")
-                .arg(_number)
-                .arg(_task)
-                .arg(_object)
-                .arg(currConnName);
-        QListWidgetItem *_item = new QListWidgetItem();
-        _item->setText(_name);
-        _item->setIcon(QIcon::fromTheme("ledlightgreen"));
-        QTime _time = QTime::currentTime();
-        QMap<QString, QVariant> itemData;
-        itemData.insert("Connection", currConnName);
-        itemData.insert("Object", _object);
-        itemData.insert("Action", _task);
-        itemData.insert("Start", QString("%1:%2:%3:%4")
-                        .arg(QString("").sprintf("%02d", _time.hour()))
-                        .arg(QString("").sprintf("%02d", _time.minute()))
-                        .arg(QString("").sprintf("%02d", _time.second()))
-                        .arg(QString("").sprintf("%03d", _time.msec())));
-        itemData.insert("End", "-");
-        QStringList _args;
-        if ( _taskDesc.count()>2 ) {
-            for (int i=2; i<_taskDesc.count(); i++) {
-                _args.append(_taskDesc.at(i));
-            };
-        };
-        itemData.insert("Arguments", _args.join(", "));
-        itemData.insert("Result", "Processing");
-        itemData.insert("Message", "-");
-        _item->setData(Qt::UserRole, itemData);
-        setNewTooltip(_item);
-        taskList->addItem(_item);
-    } else if ( _taskDesc.count()==0 ) return;
-    if ( _taskDesc[0].contains("Domain") ) {
-        threadPool->insert(
-                    _number,
-                    new DomControlThread(this));
-        DomControlThread *cThread =
-                static_cast<DomControlThread*>(
-                    threadPool->value(_number));
-        cThread->setMigrateConnect( _destConn );
-    } else if ( _taskDesc[0].contains("Network") ) {
-        threadPool->insert(
-                    _number,
-                    new NetControlThread(this));
-    } else if ( _taskDesc[0].contains("StoragePool") ) {
-        threadPool->insert(
-                    _number,
-                    new StoragePoolControlThread(this));
-    } else if ( _taskDesc[0].contains("StorageVol") ) {
-        threadPool->insert(
-                    _number,
-                    new StorageVolControlThread(this));
-    } else if ( _taskDesc[0].contains("Secret") ) {
-        threadPool->insert(
-                    _number,
-                    new SecretControlThread(this));
-    } else return;
-    ControlThread *cThread = static_cast<ControlThread*>(
-                threadPool->value(_number));
-    if ( NULL!=cThread ) {
-        _taskDesc.removeFirst();
-        //qDebug()<<ACT<<_taskDesc;
-        connect(cThread, SIGNAL(errorMsg(QString&,uint)),
-                this, SLOT(msgRepeater(QString&, uint)));
-        connect(cThread, SIGNAL(resultData(Result)),
-                this, SLOT(taskResultReceiver(Result)));
-        cThread->setCurrentWorkConnect(
-                    _conn, counter, currConnName);
-        cThread->execAction(static_cast<Actions>(ACT), _taskDesc);
     };
 }
 

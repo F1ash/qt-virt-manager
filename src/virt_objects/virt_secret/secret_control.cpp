@@ -226,7 +226,7 @@ void VirtSecretControl::execAction(const QStringList &l)
             if ( show ) QDesktopServices::openUrl(QUrl(xml));
             task.action     = DEFINE_ENTITY;
             task.method     = l.first();
-            task.ARGS.path  = xml;
+            task.args.path  = xml;
             emit addNewTask(task);
         };
         delete createVirtSec;

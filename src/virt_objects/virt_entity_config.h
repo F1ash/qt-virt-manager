@@ -54,16 +54,19 @@ struct TASK {
     // details
     struct          DETAILS {
         virConnectPtr   destConn    = NULL;
+        qulonglong      offset      = 0;
         qulonglong      size        = 0;
         uint            sign        = 0;
         QString         path        = QString();
-        QString         parent      = QString();
+        QString         state       = QString();
+        QString         object      = QString();
         QString         list()        {
-            return QString("%1, %2, %3, %4")
-                .arg(size).arg(sign).arg(path).arg(parent);
-        };
+            return QString("%1, %2, %3, %4, %5")
+                .arg(offset).arg(size).arg(sign)
+                    .arg(path).arg(object);
+        }
     };
-    DETAILS             ARGS;
+    DETAILS             args;
 };
 
 #define DFR QString("<||>")

@@ -103,7 +103,7 @@ private slots:
     void invokeVMDisplay(virConnect*, QString, QString);
     void deleteVMDisplay(QString&);
     void deleteVMDisplay(QString, QString);
-    void buildMigrateArgs(QStringList&);
+    void buildMigrateArgs(TASK);
     void addStorageVol(virConnect*,QString&,QString&);
 };
 

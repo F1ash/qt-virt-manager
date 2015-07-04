@@ -19,6 +19,15 @@
 #include <QGridLayout>
 #include <QDebug>
 
+struct MIGR_ARGS {
+    int flags           = 0;
+    int bandwidth       = 0;
+    int maxDownTime     = 0;
+    QString uri         = QString();
+    QString new_name    = QString();
+    QString connName    = QString();
+};
+
 class MigrateDialog : public QDialog
 {
     Q_OBJECT
@@ -35,8 +44,9 @@ signals:
 private:
     QSettings        settings;
     int              exitCode = 0;
+    int              m_flags = 0;
     bool             p2p = false;
-    QStringList      migrateArgs;
+    MIGR_ARGS        migrateArgs;
     QStringList      connList;
     QComboBox       *connectList;
     QWidget         *advanced;
@@ -88,7 +98,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QStringList getMigrateArgs() const;
+    MIGR_ARGS        getMigrateArgs() const;
 
 private slots:
     void closeEvent(QCloseEvent *ev);

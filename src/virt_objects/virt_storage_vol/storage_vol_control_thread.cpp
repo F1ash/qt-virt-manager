@@ -30,7 +30,7 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
         sendConnErrors();
         keep_alive = false;
     };
-    currPoolName = task.ARGS.parent;
+    currPoolName = task.args.object;
     if ( keep_alive && !isRunning() ) {
         if ( NULL!=task.sourceConn ) start();
         else {
@@ -156,7 +156,7 @@ Result StorageVolControlThread::createStorageVol()
 {
     Result result;
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
-    QString path = task.ARGS.path;
+    QString path = task.args.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);
@@ -222,7 +222,7 @@ Result StorageVolControlThread::downloadStorageVol()
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name, path;
     name = task.object;
-    path = task.ARGS.path;
+    path = task.args.path;
     //qDebug()<<args.first()<<"download";
     if (currStoragePool!=NULL) {
         virStoragePoolFree(currStoragePool);
@@ -236,7 +236,7 @@ Result StorageVolControlThread::downloadStorageVol()
     bool downloaded = false;
     virStreamPtr stream = virStreamNew(task.sourceConn, 0);
     unsigned long long offset = 0;
-    unsigned long long length = task.ARGS.size;
+    unsigned long long length = task.args.size;
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     virStorageVol *storageVol = virStorageVolLookupByName(
@@ -295,7 +295,7 @@ Result StorageVolControlThread::resizeStorageVol()
     currStoragePool = virStoragePoolLookupByName(
                 task.sourceConn, currPoolName.toUtf8().data());
 
-    unsigned long long capacity = task.ARGS.size;
+    unsigned long long capacity = task.args.size;
     bool resized = false;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
@@ -325,7 +325,7 @@ Result StorageVolControlThread::uploadStorageVol()
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name, path;
     name = task.object;
-    path = task.ARGS.path;
+    path = task.args.path;
     //qDebug()<<path<<"upload";
     if (currStoragePool!=NULL) {
         virStoragePoolFree(currStoragePool);
@@ -403,7 +403,7 @@ Result StorageVolControlThread::wipeStorageVol()
 
     //flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
-    unsigned int alg = task.ARGS.sign;
+    unsigned int alg = task.args.sign;
     bool wiped = false;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());

@@ -12,11 +12,9 @@ public:
 signals:
 
 private:
-    virConnectPtr    destConnect = NULL;
 
 public slots:
     void             execAction(uint, TASK);
-    void             setMigrateConnect(virConnectPtr);
 
 private slots:
     void             run();

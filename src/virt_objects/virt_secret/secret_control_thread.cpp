@@ -111,7 +111,7 @@ Result SecretControlThread::getAllSecretList()
 Result SecretControlThread::defineSecret()
 {
     Result result;
-    QString path = task.ARGS.path;
+    QString path = task.args.path;
     QByteArray xmlData;
     QFile f;
     f.setFileName(path);

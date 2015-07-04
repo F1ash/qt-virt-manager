@@ -178,7 +178,7 @@ void VirtStorageVolControl::reloadState()
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY;
     task.method     = "reloadVirtStorageVol";
-    task.ARGS.parent= currPoolName;
+    task.args.object= currPoolName;
     emit addNewTask(task);
 }
 void VirtStorageVolControl::changeDockVisibility()
@@ -227,7 +227,7 @@ void VirtStorageVolControl::execAction(const QStringList &l)
         task.sourceConn = currWorkConnection;
         task.srcConName = currConnName;
         task.object     = storageVolName;
-        task.ARGS.parent= currPoolName;
+        task.args.object= currPoolName;
         if        ( l.first()=="reloadVirtStorageVol" ) {
             reloadState();
         } else if ( l.first()=="deleteVirtStorageVol" ) {
@@ -239,8 +239,8 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             if ( !path.isEmpty() ) {
                 task.action     = DOWNLOAD_ENTITY;
                 task.method     = l.first();
-                task.ARGS.path  = path;
-                task.ARGS.size  = storageVolModel->DataList
+                task.args.path  = path;
+                task.args.size  = storageVolModel->DataList
                         .at(idx.row())->getCurrSize().toULongLong();
                 emit addNewTask(task);
             } else return;
@@ -251,7 +251,7 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             unsigned long long size = resizeDialog->getNewSize();
             resizeDialog->deleteLater();
             if ( res ) {
-                task.ARGS.size = size;
+                task.args.size = size;
             } else {
                 return;
             };
@@ -263,13 +263,13 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             if ( !path.isEmpty() ) {
                 task.action     = UPLOAD_ENTITY;
                 task.method     = l.first();
-                task.ARGS.path  = path;
+                task.args.path  = path;
                 emit addNewTask(task);
             } else return;
         } else if ( l.first()=="wipeVirtStorageVol" ) {
             task.action     = WIPE_ENTITY;
             task.method     = l.first();
-            task.ARGS.sign  = (l.count()>1) ? l.at(1).toUInt() : 0;
+            task.args.sign  = (l.count()>1) ? l.at(1).toUInt() : 0;
             emit addNewTask(task);
         } else if ( l.first()=="getVirtStorageVolXMLDesc" ) {
             task.action     = GET_XML_DESCRIPTION;
@@ -317,17 +317,17 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                 };
                 delete createVolumeDialog;
                 createVolumeDialog = NULL;
-                task.ARGS.path = path;
+                task.args.path = path;
                 if ( show ) QDesktopServices::openUrl(QUrl(path));
             } else {
                 QString path   = args.first();
-                task.ARGS.path = path;
+                task.args.path = path;
             };
             task.sourceConn = currWorkConnection;
             task.srcConName = currConnName;
             task.action     = act;
             task.method     = actName;
-            task.ARGS.parent= currPoolName;
+            task.args.object= currPoolName;
             emit addNewTask(task);
         };
     };
