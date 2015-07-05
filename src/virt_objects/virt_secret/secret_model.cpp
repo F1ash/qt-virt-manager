@@ -34,7 +34,7 @@ int VirtSecretModel::rowCount(const QModelIndex &parent) const
 }
 int VirtSecretModel::columnCount(const QModelIndex &parent) const
 {
-    return 2;
+    return 4;
 }
 bool VirtSecretModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
@@ -73,8 +73,18 @@ QVariant VirtSecretModel::headerData(int section, Qt::Orientation orientation, i
 QVariant VirtSecretModel::data(const QModelIndex &index, int role) const
 {
     QVariant res;
-    if ( role==Qt::DisplayRole && index.column()==0 ) {
-        return DataList.at(index.row())->getUUID();
+    if ( !index.isValid() ) return res;
+    if ( role==Qt::DisplayRole ) {
+        switch (index.column()) {
+        case 0:
+            res = DataList.at(index.row())->getUUID();
+            break;
+        case 1:
+            res = DataList.at(index.row())->getUsageID();
+            break;
+        default:
+            break;
+        }
     };
     if ( role==Qt::DecorationRole ) {
         switch (index.column()) {
@@ -85,13 +95,13 @@ QVariant VirtSecretModel::data(const QModelIndex &index, int role) const
             break;
         }
     };
-    if ( role==Qt::ToolTipRole && index.column() ) {
+    if ( role==Qt::ToolTipRole ) {
         switch (index.column()) {
         case 0:
-            res = QString("UUID: %1").arg(DataList.at(index.row())->getUUID());
+            res = QString("Description: %1").arg(DataList.at(index.row())->getDescription());
             break;
         case 1:
-            res = QString("UsageID: %1").arg(DataList.at(index.row())->getUsageID());
+            res = QString("Type: %1").arg(DataList.at(index.row())->getType());
             break;
         default:
             break;
@@ -114,6 +124,12 @@ bool VirtSecretModel::setData( const QModelIndex &index, const QVariant &value, 
             break;
         case 1:
             DataList.at(index.row())->setUsageID( value.toString() );
+            break;
+        case 2:
+            DataList.at(index.row())->setType( value.toString() );
+            break;
+        case 3:
+            DataList.at(index.row())->setDescription( value.toString() );
             break;
         default:
             break;

@@ -322,6 +322,10 @@ set (HEADERS
   src/create_widgets/snapshot/model/snapshot_tree_index.h
 
   src/create_widgets/secret/create_virt_secret.h
+  src/create_widgets/secret/secret_widgets/volume_sec_type.h
+  src/create_widgets/secret/secret_widgets/ceph_sec_type.h
+  src/create_widgets/secret/secret_widgets/iscsi_sec_type.h
+  src/create_widgets/secret/secret_widgets/_sec_type.h
 
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
@@ -620,6 +624,10 @@ set (SOURCES
   src/create_widgets/snapshot/model/snapshot_tree_index.cpp
 
   src/create_widgets/secret/create_virt_secret.cpp
+  src/create_widgets/secret/secret_widgets/volume_sec_type.cpp
+  src/create_widgets/secret/secret_widgets/ceph_sec_type.cpp
+  src/create_widgets/secret/secret_widgets/iscsi_sec_type.cpp
+  src/create_widgets/secret/secret_widgets/_sec_type.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp

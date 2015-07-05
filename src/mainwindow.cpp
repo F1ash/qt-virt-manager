@@ -112,6 +112,20 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       };
       VM_Displayed_Map.clear();
       //qDebug()<<"Viewers cleared";
+      // close StorageVolControls
+      keys = storageMap.keys();
+      foreach ( QString key, keys ) {
+          if ( storageMap.value(key, NULL)!=NULL ) {
+              VirtStorageVolControl *value = NULL;
+              value = static_cast<VirtStorageVolControl*>(
+                              storageMap.value(key, NULL));
+              if ( NULL!=value ) value->close();
+              storageMap.remove(key);
+              //qDebug()<<key<<"removed into Close";
+          };
+      };
+      storageMap.clear();
+      //qDebug()<<"StorageVolControls cleared";
       wait_thread = new Wait(this, connListWidget);
       connect(wait_thread, SIGNAL(finished()),
               this, SLOT(close()));

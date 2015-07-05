@@ -6,6 +6,7 @@ Secret_Index::Secret_Index(QObject *parent) :
     UsageID = "";
     UUID = "";
     Type = "";
+    Description = "";
     onView = false;
 }
 void Secret_Index::setUsageID(const QString &s)
@@ -19,6 +20,10 @@ void Secret_Index::setUUID(const QString &s)
 void Secret_Index::setType(const QString &s)
 {
     Type = s;
+}
+void Secret_Index::setDescription(const QString &s)
+{
+    Description = s;
 }
 void Secret_Index::setOnView(const bool state)
 {
@@ -35,6 +40,10 @@ QString Secret_Index::getUUID() const
 QString Secret_Index::getType() const
 {
     return Type;
+}
+QString Secret_Index::getDescription() const
+{
+    return Description;
 }
 bool    Secret_Index::getOnView() const
 {

@@ -15,16 +15,19 @@ private:
     QString UsageID;
     QString UUID;
     QString Type;
+    QString Description;
     bool    onView;
 
 public slots:
     void    setUsageID(const QString&);
     void    setUUID(const QString&);
     void    setType(const QString&);
+    void    setDescription(const QString&);
     void    setOnView(const bool);
     QString getUsageID() const;
     QString getUUID() const;
     QString getType() const;
+    QString getDescription() const;
     bool    getOnView() const;
 
 };

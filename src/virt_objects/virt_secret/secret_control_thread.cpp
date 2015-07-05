@@ -1,4 +1,5 @@
 #include "secret_control_thread.h"
+#include <QDomDocument>
 
 SecretControlThread::SecretControlThread(QObject *parent) :
     ControlThread(parent)
@@ -77,7 +78,7 @@ Result SecretControlThread::getAllSecretList()
             if ( 0>virSecretGetUUIDString(secrets[i], uuid) )
                 uuid[0] = '?';
             const char* usageID = virSecretGetUsageID(secrets[i]);
-            /*
+
             QString type;
             switch (virSecretGetUsageType(secrets[i])) {
             case VIR_SECRET_USAGE_TYPE_NONE:
@@ -96,8 +97,13 @@ Result SecretControlThread::getAllSecretList()
                 type.append("NONE");
                 break;
             };
-            */
-            currentAttr<< uuid<< usageID;
+            char *xmlDesc = NULL;
+            xmlDesc = virSecretGetXMLDesc(secrets[i], 0);
+            QDomDocument doc;
+            doc.setContent(QString(xmlDesc));
+            QString desc = doc.firstChildElement("secret")
+                    .firstChildElement("description").text();
+            currentAttr<< uuid<< usageID<<type<<desc;
             virtSecretList.append(currentAttr.join(DFR));
             //qDebug()<<currentAttr;
             virSecretFree(secrets[i]);

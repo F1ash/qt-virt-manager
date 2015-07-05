@@ -213,7 +213,7 @@ void VirtSecretControl::execAction(const QStringList &l)
         QString xml;
         bool show = false;
         // show Secret Creator widget
-        CreateVirtSecret *createVirtSec = new CreateVirtSecret(this);
+        CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, currWorkConnection);
         int result = createVirtSec->exec();
         if ( createVirtSec!=NULL && result==QDialog::Accepted ) {
             xml = createVirtSec->getXMLDescFileName();

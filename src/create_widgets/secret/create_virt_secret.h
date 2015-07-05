@@ -13,7 +13,11 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QDomDocument>
+#include <QStackedWidget>
 #include "virt_objects/virt_entity_config.h"
+#include "secret_widgets/ceph_sec_type.h"
+#include "secret_widgets/iscsi_sec_type.h"
+#include "secret_widgets/volume_sec_type.h"
 #include <QDebug>
 
 class CreateVirtSecret : public QDialog
@@ -45,6 +49,7 @@ private:
     QCheckBox       *ephemeralAttr, *privateAttr;
     QHBoxLayout     *propLayout;
     QWidget         *propWdg;
+    QStackedWidget  *stuffWdg;
     QCheckBox       *showXMLDescription;
     QLabel          *about;
     QPushButton     *ok;
@@ -63,7 +68,6 @@ public slots:
 private slots:
     void             buildXMLDescription();
     void             set_Result();
-    void             secretTypeChanged(QString);
 };
 
 #endif // CREATE_VIRT_SECRET_H
