@@ -8,9 +8,16 @@
 #include <QMessageBox>
 #include "virt_objects/virt_storage_vol/storage_vol_control.h"
 #include "virt_objects/virt_storage_vol/storage_vol_control_thread.h"
+#include "virt_objects/virt_storage_pool/storage_pool_control_thread.h"
 #include "libvirt/libvirt.h"
 #include "libvirt/virterror.h"
 #include <QDebug>
+
+struct VVD_Result {
+    QString pool    = QString();
+    QString name    = QString();
+    QString path    = QString();
+};
 
 class VirtVolumeDialog : public QDialog
 {
@@ -36,10 +43,12 @@ private:
     QVBoxLayout     *commonLayout;
     virConnectPtr    currWorkConnection = NULL;
     StorageVolControlThread
-                    *storageThread;
+                    *storageVolThread;
+    StoragePoolControlThread
+                    *storagePoolThread;
 
 public slots:
-    QStringList      getResult() const;
+    VVD_Result       getResult() const;
 
 private slots:
     void             setPoolList();
@@ -47,6 +56,7 @@ private slots:
     void             showVolumes(QListWidgetItem*);
     void             showMsg(QString&);
     void             execAction(TASK);
+    void             poolThreadResult(Result);
 };
 
 #endif // VIRTVOLUME_DIALOG_H

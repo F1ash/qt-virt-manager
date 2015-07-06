@@ -100,12 +100,21 @@ Result SecretControlThread::getAllSecretList()
             char *xmlDesc = NULL;
             xmlDesc = virSecretGetXMLDesc(secrets[i], 0);
             QDomDocument doc;
-            doc.setContent(QString(xmlDesc));
+            doc.setContent(QString::fromUtf8(xmlDesc));
             QString desc = doc.firstChildElement("secret")
                     .firstChildElement("description").text();
-            currentAttr<< uuid<< usageID<<type<<desc;
+            //size_t value_size;
+            //unsigned char *value = virSecretGetValue(secrets[i], &value_size, 0);
+            currentAttr<< uuid\
+                       <<QString::fromUtf8(usageID)\
+                       <<type\
+                       <<desc;
             virtSecretList.append(currentAttr.join(DFR));
-            //qDebug()<<currentAttr;
+            //qDebug() << currentAttr << value_size;
+            //for (int k=0; k< value_size; k++) {
+            //    if (value[k]=='\0') break;
+            //    qDebug()<<( value[k] );
+            //};
             virSecretFree(secrets[i]);
         };
         free(secrets);
@@ -136,12 +145,22 @@ Result SecretControlThread::defineSecret()
         sendConnErrors();
         return result;
     };
+    unsigned char *value = (unsigned char*)(
+                task.secret->getSecretValue().data());
+    size_t value_size = task.secret->getSecretValue().length();
+    //qDebug()<<task.secret->getSecretValue().data()\
+    //       <<(const char*)(value)<<value_size;
+    //extra flags; not used yet, so callers should always pass 0
+    flags = 0;
+    int ret = virSecretSetValue(secret, value, value_size, flags);
     char uuid[100];
     virSecretGetUUIDString(secret, uuid);
-    result.name = QString(uuid);
+    result.name = QString::fromUtf8(uuid);
     result.result = true;
-    result.msg.append(QString("'<b>%1</b>' Secret from\n\"%2\"\nis defined.")
-                      .arg(result.name).arg(path));
+    result.msg.append(
+                QString("'<b>%1</b>' Secret from\n\"%2\"\nis defined.")
+                .arg(result.name).arg(path));
+    if ( ret<0 ) result.msg.append("Secret Value not set.");
     virSecretFree(secret);
     return result;
 }

@@ -7,11 +7,13 @@ VirtVolumeDialog::VirtVolumeDialog(
 {
     setModal(true);
     poolList = new QListWidget(this);
-    setPoolList();
     volumes = new VirtStorageVolControl(this);
-    storageThread = new StorageVolControlThread(this);
-    connect(storageThread, SIGNAL(resultData(Result)),
+    storageVolThread = new StorageVolControlThread(this);
+    connect(storageVolThread, SIGNAL(resultData(Result)),
             volumes, SLOT(resultReceiver(Result)));
+    storagePoolThread = new StoragePoolControlThread(this);
+    connect(storagePoolThread, SIGNAL(resultData(Result)),
+            this, SLOT(poolThreadResult(Result)));
 
     connect(poolList, SIGNAL(itemClicked(QListWidgetItem*)),
             this, SLOT(showVolumes(QListWidgetItem*)));
@@ -21,8 +23,10 @@ VirtVolumeDialog::VirtVolumeDialog(
     listWidget = new QWidget(this);
     listWidget->setLayout(listLayout);
 
-    chooseVolume = new QPushButton(QIcon::fromTheme("dialog-ok"), "Choose Volume", this);
-    cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
+    chooseVolume = new QPushButton(
+                QIcon::fromTheme("dialog-ok"), "Choose Volume", this);
+    cancel = new QPushButton(
+                QIcon::fromTheme("dialog-cancel"), "Cancel", this);
     connect(chooseVolume, SIGNAL(clicked()), this, SLOT(set_Result()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout(this);
@@ -39,16 +43,18 @@ VirtVolumeDialog::VirtVolumeDialog(
             this, SLOT(showMsg(QString&)));
     connect(volumes, SIGNAL(addNewTask(TASK)),
             this, SLOT(execAction(TASK)));
+    setPoolList();
 }
 
 /* public slots */
-QStringList VirtVolumeDialog::getResult() const
+VVD_Result VirtVolumeDialog::getResult() const
 {
-    QStringList _ret;
+    VVD_Result _ret;
     QList<QListWidgetItem*> _list = poolList->selectedItems();
     if ( !_list.isEmpty() ) {
-        _ret.append( _list.at(0)->text() );
-        _ret.append(volumes->getCurrentVolumeName());
+        _ret.pool = _list.at(0)->text();
+        _ret.name = volumes->getCurrentVolumeName();
+        _ret.path = volumes->getCurrentVolumePath();
     };
     return _ret;
 }
@@ -56,20 +62,12 @@ QStringList VirtVolumeDialog::getResult() const
 /* private slots */
 void VirtVolumeDialog::setPoolList()
 {
-    virStoragePoolPtr *pools = NULL;
-    unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
-                         VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
-    int ret = virConnectListAllStoragePools(currWorkConnection, &pools, flags);
-    if ( ret<0 ) {
-        poolList->addItem("Not found");
-    } else {
-        // therefore correctly to use for() command, because pools[0] can not exist.
-        for (int i = 0; i < ret; i++) {
-            poolList->addItem( virStoragePoolGetName(pools[i]) );
-            virStoragePoolFree(pools[i]);
-        };
-        free(pools);
-    };
+    setEnabled(false);
+    TASK _task;
+    _task.type          = "pool";
+    _task.sourceConn    = currWorkConnection;
+    _task.action        = GET_ALL_ENTITY;
+    storagePoolThread->execAction(0, _task);
 }
 void VirtVolumeDialog::set_Result()
 {
@@ -101,5 +99,16 @@ void VirtVolumeDialog::showMsg(QString &msg)
 }
 void VirtVolumeDialog::execAction(TASK _task)
 {
-    storageThread->execAction(0, _task);
+    storageVolThread->execAction(0, _task);
+}
+void VirtVolumeDialog::poolThreadResult(Result data)
+{
+    if ( data.msg.isEmpty() ) {
+        poolList->addItem("Not found");
+    } else {
+        foreach (QString chain, data.msg ) {
+            poolList->addItem( chain.split(DFR).first() );
+        };
+    };
+    setEnabled(true);
 }

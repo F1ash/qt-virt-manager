@@ -136,8 +136,8 @@ Result StorageVolControlThread::getAllStorageVolList()
                 capacity.append("-");
             };
             QStringList currentAttr;
-            currentAttr<< QString().fromUtf8( virStorageVolGetName(storageVol[i]) )
-                       << QString().fromUtf8( virStorageVolGetPath(storageVol[i]) )
+            currentAttr<< QString::fromUtf8( virStorageVolGetName(storageVol[i]) )
+                       << QString::fromUtf8( virStorageVolGetPath(storageVol[i]) )
                        << QString( type )
                        << QString( allocation )
                        << QString( capacity );;

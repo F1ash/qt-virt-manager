@@ -4,9 +4,8 @@
  * http://libvirt.org/formatsecret.html
  */
 
-CreateVirtSecret::CreateVirtSecret(
-        QWidget *parent, virConnectPtr conn, QString _uuid) :
-    QDialog(parent), currConnection(conn), UUID(_uuid)
+CreateVirtSecret::CreateVirtSecret(QWidget *parent, virConnectPtr conn) :
+    QDialog(parent), currConnection(conn)
 {
     setModal(true);
     setWindowTitle("Secret Settings");
@@ -38,10 +37,6 @@ CreateVirtSecret::CreateVirtSecret(
     buttons->setLayout(buttonLayout);
 
     uuid = new QLineEdit(this);
-    if ( !UUID.isEmpty() ) {
-        uuid->setText(UUID);
-        uuid->setReadOnly(true);
-    };
     uuid->setPlaceholderText("UUID generated if omitted");
     secDesc = new QLineEdit(this);
     secDesc->setPlaceholderText(
@@ -49,10 +44,6 @@ CreateVirtSecret::CreateVirtSecret(
     secType = new QComboBox(this);
     secType->addItems(QStringList()<<"VOLUME"<<"CEPH"<<"iSCSI");
     secType->setToolTip("Type");
-    if ( !UUID.isEmpty() ) {
-        // find type
-        secType->setEnabled(false);
-    };
     ephemeralAttr = new QCheckBox("Ephemeral", this);
     ephemeralAttr->setToolTip(
 "This secret must only be kept in memory,\n\
@@ -67,6 +58,8 @@ nor to any other node");
     propLayout->addWidget(privateAttr);
     propWdg = new QWidget(this);
     propWdg->setLayout(propLayout);
+    secValue = new QLineEdit(this);
+    secValue->setPlaceholderText("Enter secret value/phrase");
     stuffWdg = new QStackedWidget(this);
     stuffWdg->addWidget(new VolumeSecType(this, currConnection));
     stuffWdg->addWidget(new CephSecType(this, currConnection));
@@ -74,6 +67,7 @@ nor to any other node");
 
     baseLayout->addWidget(uuid);
     baseLayout->addWidget(secDesc);
+    baseLayout->addWidget(secValue);
     baseLayout->addWidget(propWdg);
 
     scrollLayout = new QVBoxLayout(this);
@@ -103,6 +97,7 @@ nor to any other node");
 }
 CreateVirtSecret::~CreateVirtSecret()
 {
+    secValue->clear();
     settings.beginGroup("VirtSecretControl");
     settings.setValue("SecretCreateGeometry", saveGeometry());
     settings.setValue("SecCreateShowDesc", showXMLDescription->isChecked());
@@ -113,6 +108,10 @@ CreateVirtSecret::~CreateVirtSecret()
 QString CreateVirtSecret::getXMLDescFileName() const
 {
     return xml->fileName();
+}
+QByteArray CreateVirtSecret::getSecretValue() const
+{
+    return secValue->text().toUtf8().toBase64();
 }
 bool CreateVirtSecret::getShowing() const
 {

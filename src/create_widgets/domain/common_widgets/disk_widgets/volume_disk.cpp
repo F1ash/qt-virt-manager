@@ -198,15 +198,13 @@ void Volume_Disk::changeModeVisibility(QString _devType)
 }
 void Volume_Disk::getVolumeNames()
 {
-    QStringList _ret;
+    VVD_Result _ret;
     if ( volumeDialog==NULL ) {
         volumeDialog = new VirtVolumeDialog(this, currWorkConnection);
     };
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();
-        if ( !_ret.isEmpty() ) {
-            pool->setText(_ret.first());
-            volume->setText(_ret.last());
-        };
+        pool->setText(_ret.pool);
+        volume->setText(_ret.name);
     };
 }

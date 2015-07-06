@@ -26,8 +26,7 @@ class CreateVirtSecret : public QDialog
 public:
     explicit CreateVirtSecret(
             QWidget         *parent = NULL,
-            virConnectPtr    conn = NULL,
-            QString          _uuid = QString());
+            virConnectPtr    conn = NULL);
     ~CreateVirtSecret();
 
 signals:
@@ -44,7 +43,7 @@ private:
     QWidget         *baseWdg;
     QGridLayout     *baseLayout;
 
-    QLineEdit       *uuid, *secDesc;
+    QLineEdit       *uuid, *secDesc, *secValue;
     QComboBox       *secType;
     QCheckBox       *ephemeralAttr, *privateAttr;
     QHBoxLayout     *propLayout;
@@ -63,6 +62,7 @@ private:
 
 public slots:
     QString          getXMLDescFileName() const;
+    QByteArray       getSecretValue() const;
     bool             getShowing() const;
 
 private slots:

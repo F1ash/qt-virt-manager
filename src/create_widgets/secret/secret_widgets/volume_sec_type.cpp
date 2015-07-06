@@ -9,6 +9,7 @@ VolumeSecType::VolumeSecType(QWidget *parent, virConnectPtr _conn) :
 {
     usage = new QLineEdit(this);
     find  = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
+    find->setToolTip("Search volume storage");
     usageLayout = new QHBoxLayout();
     usageLayout->addWidget(usage);
     usageLayout->addWidget(find);
@@ -34,7 +35,7 @@ QDomDocument VolumeSecType::getSecStuff() const
     _volume = doc.createElement("volume");
     _volume.appendChild(_text);
     _usage.appendChild(_volume);
-    qDebug()<<doc.toByteArray(4).data();
+    //qDebug()<<doc.toByteArray(4).data();
     return doc;
 }
 void VolumeSecType::showVolumeChoose()
@@ -42,6 +43,6 @@ void VolumeSecType::showVolumeChoose()
     VirtVolumeDialog *dialog = new VirtVolumeDialog(
                 this, currWorkConnection);
     dialog->exec();
-    qDebug()<<dialog->getResult();
+    usage->setText(dialog->getResult().path);
     dialog->deleteLater();
 }

@@ -61,12 +61,27 @@ struct TASK {
         QString         state       = QString();
         QString         object      = QString();
         QString         list()        {
-            return QString("%1, %2, %3, %4, %5")
+            return QString("%1, %2, %3, %4, %5, %6")
                 .arg(offset).arg(size).arg(sign)
-                    .arg(path).arg(object);
+                .arg(path).arg(state).arg(object);
         }
     };
     DETAILS             args;
+    class           SECRET {
+    ~SECRET() {
+        secretValue.clear();
+    }
+    private:
+        QByteArray secretValue;
+    public:
+        void setSecretValue(QByteArray value) {
+            secretValue = value;
+        }
+        QByteArray getSecretValue() const {
+            return secretValue;
+        }
+    };
+    SECRET *secret = new SECRET();
 };
 
 #define DFR QString("<||>")

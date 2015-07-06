@@ -100,6 +100,12 @@ QString VirtStorageVolControl::getCurrentVolumeName() const
     if ( !index.isValid() ) return QString();
     return storageVolModel->DataList.at(index.row())->getName();
 }
+QString VirtStorageVolControl::getCurrentVolumePath() const
+{
+    QModelIndex index = entityList->currentIndex();
+    if ( !index.isValid() ) return QString();
+    return storageVolModel->DataList.at(index.row())->getPath();
+}
 void VirtStorageVolControl::resultReceiver(Result data)
 {
     if ( data.name!=objectName() ) return;

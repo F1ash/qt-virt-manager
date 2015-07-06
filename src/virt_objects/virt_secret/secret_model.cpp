@@ -34,7 +34,7 @@ int VirtSecretModel::rowCount(const QModelIndex &parent) const
 }
 int VirtSecretModel::columnCount(const QModelIndex &parent) const
 {
-    return 4;
+    return 2;
 }
 bool VirtSecretModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
@@ -124,12 +124,6 @@ bool VirtSecretModel::setData( const QModelIndex &index, const QVariant &value, 
             break;
         case 1:
             DataList.at(index.row())->setUsageID( value.toString() );
-            break;
-        case 2:
-            DataList.at(index.row())->setType( value.toString() );
-            break;
-        case 3:
-            DataList.at(index.row())->setDescription( value.toString() );
             break;
         default:
             break;

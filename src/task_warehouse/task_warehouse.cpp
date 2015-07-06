@@ -57,9 +57,9 @@ void TaskWareHouse::stopTaskComputing()
 }
 void TaskWareHouse::addNewTask(TASK task)
 {
-    qDebug()<<task.sourceConn<<task.srcConName<<task.action\
-          <<task.method<<task.object<<task.args.list()\
-          <<task.args.destConn<<task.type<<"addNewTask_TASK";
+    //qDebug()<<task.sourceConn<<task.srcConName<<task.action\
+    //      <<task.method<<task.object<<task.args.list()\
+    //      <<task.args.destConn<<task.type<<"addNewTask_TASK";
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
     if (  !task.method.startsWith("reload") ) {

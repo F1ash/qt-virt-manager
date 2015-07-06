@@ -7,7 +7,6 @@ VirtSecretControlMenu::VirtSecretControlMenu(
     if ( !parameters.isEmpty() ) {
         undefine = new QAction("Undefine", this);
         undefine->setIcon(QIcon::fromTheme("security-undefine"));
-        undefine->setEnabled(parameters.last()=="yes");
         getXMLDesc = new QAction("get XML Description", this);
         getXMLDesc->setIcon(QIcon::fromTheme("security-xml"));
         getXMLDesc->setEnabled(true);

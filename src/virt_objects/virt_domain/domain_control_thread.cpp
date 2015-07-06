@@ -161,7 +161,7 @@ Result DomControlThread::getAllDomainList()
                     break;
                 }
             } else domainState.append("ERROR");
-            currentAttr<< QString().fromUtf8( virDomainGetName(domains[i]) )
+            currentAttr<< QString::fromUtf8( virDomainGetName(domains[i]) )
                        << QString("%1:%2")
                           .arg( virDomainIsActive(domains[i]) ? "active" : "inactive" )
                           .arg(domainState)

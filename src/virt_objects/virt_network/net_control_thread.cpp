@@ -90,7 +90,7 @@ Result NetControlThread::getAllNetworkList()
             if (virNetworkGetAutostart(networks[i], &is_autostart) < 0) {
                 autostartStr.append("no autostart");
             } else autostartStr.append( is_autostart ? "yes" : "no" );
-            currentAttr<< QString().fromUtf8( virNetworkGetName(networks[i]) )
+            currentAttr<< QString::fromUtf8( virNetworkGetName(networks[i]) )
                        << QString( virNetworkIsActive(networks[i]) ? "active" : "inactive" )
                        << autostartStr
                        << QString( virNetworkIsPersistent(networks[i]) ? "yes" : "no" );

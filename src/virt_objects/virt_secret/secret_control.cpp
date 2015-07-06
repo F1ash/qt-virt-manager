@@ -109,10 +109,16 @@ void VirtSecretControl::resultReceiver(Result data)
         foreach (QString _data, data.msg) {
             QStringList chain = _data.split(DFR);
             if (chain.isEmpty()) continue;
+            /*
             int count = chain.size();
             for (int j=0; j<count; j++) {
                 virtSecretModel->setData(virtSecretModel->index(i,j), chain.at(j), Qt::EditRole);
             };
+            */
+            virtSecretModel->DataList.at(i)->setUUID(chain.at(0));
+            virtSecretModel->DataList.at(i)->setUsageID(chain.at(1));
+            virtSecretModel->DataList.at(i)->setType(chain.at(2));
+            virtSecretModel->DataList.at(i)->setDescription(chain.at(3));
             i++;
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {
@@ -195,8 +201,33 @@ void VirtSecretControl::execAction(const QStringList &l)
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtSecretModel->DataList.count()>idx.row() ) {
         QString uuid = virtSecretModel->DataList.at(idx.row())->getUUID();
-        task.object     = uuid;
-        if        ( l.first()=="undefineVirtSecret" ) {
+        task.object = uuid;
+        if        ( l.first()=="defineVirtSecret" ) {
+            QString xml;
+            bool show = false;
+            // show Secret Creator widget
+            CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, currWorkConnection);
+            int result = createVirtSec->exec();
+            if ( createVirtSec!=NULL && result==QDialog::Accepted ) {
+                xml = createVirtSec->getXMLDescFileName();
+                show = createVirtSec->getShowing();
+                QStringList data;
+                data.append("New Secret XML'ed");
+                data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+                QString msg = data.join(" ");
+                msgRepeater(msg);
+                if ( show ) QDesktopServices::openUrl(QUrl(xml));
+                task.action     = DEFINE_ENTITY;
+                task.method     = l.first();
+                task.args.path  = xml;
+                task.secret->setSecretValue(
+                            createVirtSec->getSecretValue());
+                emit addNewTask(task);
+            };
+            delete createVirtSec;
+            createVirtSec = NULL;
+            //qDebug()<<xml<<"path"<<result;
+        } else if ( l.first()=="undefineVirtSecret" ) {
             task.action     = UNDEFINE_ENTITY;
             task.method     = l.first();
             emit addNewTask(task);

@@ -97,7 +97,7 @@ Result StoragePoolControlThread::getAllStoragePoolList()
             if (virStoragePoolGetAutostart(storagePool[i], &is_autostart) < 0) {
                 autostartStr.append("no autostart");
             } else autostartStr.append( is_autostart ? "yes" : "no" );
-            currentAttr<< QString().fromUtf8( virStoragePoolGetName(storagePool[i]) )
+            currentAttr<< QString::fromUtf8( virStoragePoolGetName(storagePool[i]) )
                        << QString( virStoragePoolIsActive(storagePool[i]) ? "active" : "inactive" )
                        << autostartStr
                        << QString( virStoragePoolIsPersistent(storagePool[i]) ? "yes" : "no" );
