@@ -157,7 +157,7 @@ void CreateVirtSecret::buildXMLDescription()
 
     bool read = xml->open();
     if (read) xml->write(doc.toByteArray(4).data());
-    qDebug()<<doc.toString();
+    //qDebug()<<doc.toString();
     xml->close();
 }
 void CreateVirtSecret::set_Result()

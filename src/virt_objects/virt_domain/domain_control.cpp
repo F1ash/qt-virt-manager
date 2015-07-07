@@ -142,7 +142,7 @@ void VirtDomainControl::resultReceiver(Result data)
             QDesktopServices::openUrl(QUrl(xml));
     } else if ( data.action == EDIT_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
-            QString xml = data.msg.first();
+            QString xml = data.fileName;
             // show SRC Creator widget in Edit-mode
             createVirtDomain = new CreateVirtDomain(
                         this,
@@ -437,6 +437,7 @@ void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
                 delete createVirtDomain;
                 createVirtDomain = NULL;
                 //qDebug()<<xml<<"path"<<result;
+                if ( !result ) return;
                 task.args.path = xml;
             } else {
                 xml = args.first();

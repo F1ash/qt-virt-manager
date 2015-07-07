@@ -92,7 +92,7 @@ CreateVirtDomain::CreateVirtDomain(
         QString _xmlFileName) :
     QDialog(parent), currWorkConnection(conn), xmlFileName(_xmlFileName)
 {
-    setModal(true);
+    setModal(false);
     setWindowTitle("Domain Settings");
     restoreGeometry(settings.value("DomCreateGeometry").toByteArray());
     xml = new QTemporaryFile(this);
@@ -115,7 +115,7 @@ CreateVirtDomain::~CreateVirtDomain()
         disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
         disconnect(restore, SIGNAL(clicked()), this, SLOT(restoreParameters()));
         disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
-        delete_specified_widgets();
+        if ( !type.isEmpty() ) delete_specified_widgets();
         settings.setValue("DomCreateShowDesc", showDescription->isChecked());
         delete about;
         about = NULL;
@@ -312,7 +312,14 @@ void CreateVirtDomain::create_specified_widgets()
                 wdgList.value("CPU"), SLOT(setMaxVCPU(QString&)));
         connect(wdgList.value("OS_Booting"), SIGNAL(archChanged(QString&)),
                 wdgList.value("CPU"), SLOT(changeArch(QString&)));
-    } else wdgList.clear();
+    } else {
+        wdgList.clear();
+        QMessageBox::information(
+                    this,
+                    "Info",
+                    "Type of VM not defined.\nPlease, install nessesary drivers.",
+                    QMessageBox::Ok);
+    };
 }
 void CreateVirtDomain::set_specified_Tabs()
 {
