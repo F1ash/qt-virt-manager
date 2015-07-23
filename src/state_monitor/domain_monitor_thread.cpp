@@ -41,7 +41,7 @@ void DomainMonitorThread::run()
 {
     if ( NULL!=domain && nr_cores!=0 ) {
         virDomainInfo info;
-        uint curr_cpuTime, cpu_time_diff, curr_time_mark,
+        unsigned long curr_cpuTime, cpu_time_diff, curr_time_mark,
                 _time_diff, CPU_percent, MEM_percent, MEM;
         curr_time_mark = time(0);
         _time_diff = curr_time_mark - prev_time_mark;
