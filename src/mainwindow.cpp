@@ -70,6 +70,12 @@ void MainWindow::saveSettings()
     settings.setValue("Floating", secretDock->isFloating());
     settings.setValue("Geometry", secretDock->saveGeometry());
     settings.endGroup();
+    settings.beginGroup("IfaceDock");
+    settings.setValue("DockArea", dockWidgetArea(secretDock));
+    settings.setValue("Visible", secretDock->isVisible());
+    settings.setValue("Floating", secretDock->isFloating());
+    settings.setValue("Geometry", secretDock->saveGeometry());
+    settings.endGroup();
     settings.beginGroup("ConnectListColumns");
     settings.setValue("column0", connListWidget->columnWidth(0));
     settings.setValue("column1", connListWidget->columnWidth(1));
@@ -87,6 +93,8 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       domainDock->setEnabled(false);
       networkDock->setEnabled(false);
       storagePoolDock->setEnabled(false);
+      secretDock->setEnabled(false);
+      ifaceDock->setEnabled(false);
       domainsStateMonitor->stopMonitoring();
       taskWrHouse->stopTaskComputing();
       // close VM Displays
@@ -212,6 +220,7 @@ void MainWindow::changeVisibility()
         if ( networkDock->isFloating() ) networkDock->hide();
         if ( storagePoolDock->isFloating() ) storagePoolDock->hide();
         if ( secretDock->isFloating() ) secretDock->hide();
+        if ( ifaceDock->isFloating() ) secretDock->hide();
     } else {
         this->show();
         trayIcon->hideAction->setText (QString("Down"));
@@ -224,6 +233,8 @@ void MainWindow::changeVisibility()
             storagePoolDock->show();
         if ( secretDock->isFloating() && toolBar->_secretsUpAction->isChecked() )
             secretDock->show();
+        if ( ifaceDock->isFloating() && toolBar->_ifaceUpAction->isChecked() )
+            ifaceDock->show();
     };
 }
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
@@ -485,10 +496,47 @@ void MainWindow::initDockWidgets()
     connect(taskWrHouse, SIGNAL(secResult(Result)),
             secretDockContent, SLOT(resultReceiver(Result)));
 
+    ifaceDock = new DockWidget(this);
+    ifaceDock->setObjectName("ifaceDock");
+    ifaceDock->setWindowTitle("Interface");
+    ifaceDock->setFeatures(
+        QDockWidget::DockWidgetMovable   |
+        QDockWidget::DockWidgetFloatable |
+        QDockWidget::DockWidgetVerticalTitleBar
+    );
+    ifaceHeadWdg = new DockHeadWidget(this, "Interface");
+    ifaceHeadWdg->setTabBarName("network-wired");
+    ifaceDock->setTitleBarWidget(ifaceHeadWdg);
+    connect(ifaceHeadWdg, SIGNAL(floatChanged(bool)),
+            ifaceDock, SLOT(_setFloating(bool)));
+    connect(ifaceDock, SIGNAL(topLevelChanged(bool)),
+            ifaceHeadWdg, SLOT(floatStateChanged(bool)));
+    ifaceDockContent = new VirtInterfaceControl(this);
+    ifaceDock->setWidget( ifaceDockContent );
+    settings.beginGroup("IfaceDock");
+    ifaceDock->setFloating(settings.value("Floating", false).toBool());
+    ifaceDock->restoreGeometry(settings.value("Geometry").toByteArray());
+    visible = settings.value("Visible", false).toBool();
+    ifaceDock->setVisible(visible);
+    toolBar->_ifaceUpAction->setChecked(visible);
+    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
+    settings.endGroup();
+    addDockWidget(area, ifaceDock);
+    tabifyDockWidget(secretDock, ifaceDock);
+    connect(toolBar->_ifaceUpAction, SIGNAL(triggered(bool)),
+            ifaceDock, SLOT(setVisible(bool)));
+    connect(ifaceDockContent, SIGNAL(entityMsg(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
+    connect(ifaceDockContent, SIGNAL(addNewTask(TASK)),
+            taskWrHouse, SLOT(addNewTask(TASK)));
+    connect(taskWrHouse, SIGNAL(secResult(Result)),
+            ifaceDockContent, SLOT(resultReceiver(Result)));
+
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);
     storagePoolDockContent->setEnabled(false);
     secretDockContent->setEnabled(false);
+    ifaceDockContent->setEnabled(false);
 }
 void MainWindow::editCurrentConnection()
 {
@@ -628,6 +676,8 @@ void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
         storagePoolDockContent->setListHeader(name);
     if ( secretDockContent->setCurrentWorkConnect(conn) )
         secretDockContent->setListHeader(name);
+    if ( ifaceDockContent->setCurrentWorkConnect(conn) )
+        ifaceDockContent->setListHeader(name);
 }
 void MainWindow::stopConnProcessing(virConnect *conn)
 {
@@ -643,6 +693,7 @@ void MainWindow::stopProcessing()
     networkDockContent->stopProcessing();
     storagePoolDockContent->stopProcessing();
     secretDockContent->stopProcessing();
+    ifaceDockContent->stopProcessing();
     //domainDockContent->getThreadState();
     //networkDockContent->getThreadState() ;
     //storagePoolDockContent->getThreadState();
