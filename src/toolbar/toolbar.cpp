@@ -8,57 +8,6 @@ ToolBar::ToolBar (QWidget *parent = NULL) : QToolBar(parent)
 
   initActions();
 }
-ToolBar::~ToolBar()
-{
-  //disconnect(itemControlAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-  //disconnect(_hideAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-  //disconnect(_docsUpAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-  //disconnect(_exitAction, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-
-    disconnect(itemControlAction, SIGNAL(triggered()), this, SLOT(showMenu()));
-    disconnect(_docsUpAction, SIGNAL(triggered()), this, SLOT(showMenu()));
-
-  delete _hideAction;
-  _hideAction = NULL;
-  delete _closeOverview;
-  _closeOverview = NULL;
-  delete _exitAction;
-  _exitAction = NULL;
-
-  delete _createAction;
-  _createAction = NULL;
-  delete _deleteAction;
-  _deleteAction = NULL;
-  delete _editAction;
-  _editAction = NULL;
-  delete _openAction;
-  _openAction = NULL;
-  delete _showAction;
-  _showAction = NULL;
-  delete _closeAction;
-  _closeAction = NULL;
-  delete _closeAllAction;
-  _closeAllAction = NULL;
-  delete itemControlMenu;
-  itemControlMenu = NULL;
-  delete itemControlAction;
-  itemControlAction = NULL;
-
-  delete _logUpAction;
-  _logUpAction = NULL;
-  delete _domUpAction;
-  _domUpAction = NULL;
-  delete _netUpAction;
-  _netUpAction = NULL;
-  delete _storageUpAction;
-  _storageUpAction = NULL;
-  delete _secretsUpAction;
-  _secretsUpAction = NULL;
-  delete showDocksControlMenu;
-  showDocksControlMenu = NULL;
-  delete _docsUpAction;
-  _docsUpAction = NULL;
-}
 void ToolBar::initActions()
 {
     _hideAction = new QAction(QString("Hide to tray"), this);
@@ -131,6 +80,8 @@ void ToolBar::addDocksControlMenu()
     _storageUpAction->setCheckable(true);
     _secretsUpAction = new QAction("Secrets Dock", this);
     _secretsUpAction->setCheckable(true);
+    _ifaceUpAction = new QAction("Interface Dock", this);
+    _ifaceUpAction->setCheckable(true);
 
     showDocksControlMenu->addAction(_logUpAction);
     showDocksControlMenu->addSeparator();
@@ -138,6 +89,7 @@ void ToolBar::addDocksControlMenu()
     showDocksControlMenu->addAction(_netUpAction);
     showDocksControlMenu->addAction(_storageUpAction);
     showDocksControlMenu->addAction(_secretsUpAction);
+    showDocksControlMenu->addAction(_ifaceUpAction);
 
     _docsUpAction = new QAction(QString("Dock Control"), this);
     _docsUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );

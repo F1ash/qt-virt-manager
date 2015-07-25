@@ -37,7 +37,7 @@ struct Result {
     QString         name        = QString();
     uint            number      = 0;
     QString         type        = QString();
-    int             action      = -1;
+    Actions         action      = _EMPTY_ACTION;
     bool            result      = false;
     QStringList     msg         = QStringList();
     QString         fileName    = QString();
@@ -51,6 +51,7 @@ struct TASK {
     Actions             action      = _EMPTY_ACTION;
     QString             method      = QString();
     QString             type        = QString();
+
     // details
     struct          DETAILS {
         virConnectPtr   destConn    = NULL;
@@ -67,6 +68,8 @@ struct TASK {
         }
     };
     DETAILS             args;
+
+    // secret (clear before deletion)
     class           SECRET {
     ~SECRET() {
         secretValue.clear();

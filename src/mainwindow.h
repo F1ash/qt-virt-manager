@@ -12,6 +12,7 @@
 #include "virt_objects/virt_storage_vol/storage_vol_control.h"
 #include "virt_objects/virt_storage_pool/storage_pool_control.h"
 #include "virt_objects/virt_secret/secret_control.h"
+#include "virt_objects/virt_interface/virt_interface_control.h"
 #include "tray/traywidget.h"
 #include "layout/conn_list_widget.h"
 #include "toolbar/toolbar.h"
@@ -53,6 +54,8 @@ private :
     VirtStoragePoolControl      *storagePoolDockContent;
     DockWidget                  *secretDock;
     VirtSecretControl           *secretDockContent;
+    DockWidget                  *ifaceDock;
+    VirtInterfaceControl        *ifaceDockContent;
     ViewerMap                    VM_Displayed_Map;
     DomainStateMonitor          *domainsStateMonitor;
     TaskWareHouse               *taskWrHouse;
@@ -62,6 +65,7 @@ private :
     DockHeadWidget              *netHeadWdg;
     DockHeadWidget              *poolHeadWdg;
     DockHeadWidget              *scrtHeadWdg;
+    DockHeadWidget              *ifaceHeadWdg;
 
     QProgressBar                *closeProgress;
     int                          killTimerId = 0;

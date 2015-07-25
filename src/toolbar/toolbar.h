@@ -9,8 +9,7 @@ class ToolBar : public QToolBar
 {
   Q_OBJECT
 public:
-  ToolBar(QWidget *parent);
-  ~ToolBar();
+  explicit ToolBar(QWidget *parent);
 
   QAction    *_hideAction;
   QAction    *_createAction;
@@ -29,6 +28,7 @@ public:
   QAction    *_netUpAction;
   QAction    *_storageUpAction;
   QAction    *_secretsUpAction;
+  QAction    *_ifaceUpAction;
 
 signals:
   void        warningShowed();

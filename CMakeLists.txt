@@ -122,6 +122,8 @@ set (HEADERS
   src/virt_objects/virt_secret/secret_toolbar.h
   src/virt_objects/virt_secret/secret_model.h
   src/virt_objects/virt_secret/secret_index.h
+
+  src/virt_objects/virt_interface/virt_interface_control.h
   
   src/create_widgets/domain/domain_widgets.h
   src/create_widgets/domain/_qwidget.h
@@ -425,6 +427,8 @@ set (SOURCES
   src/virt_objects/virt_secret/secret_toolbar.cpp
   src/virt_objects/virt_secret/secret_model.cpp
   src/virt_objects/virt_secret/secret_index.cpp
+
+  src/virt_objects/virt_interface/virt_interface_control.cpp
   
   src/create_widgets/domain/create_virt_domain.cpp
   src/create_widgets/domain/_qwidget.cpp
