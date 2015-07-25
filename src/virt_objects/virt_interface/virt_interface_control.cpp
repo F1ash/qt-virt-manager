@@ -96,7 +96,7 @@ void VirtInterfaceControl::setListHeader(QString &connName)
 }
 void VirtInterfaceControl::resultReceiver(Result data)
 {
-    qDebug()<<data.action<<data.msg<<"result";
+    //qDebug()<<data.action<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY ) {
         if ( data.msg.count() > virtIfaceModel->DataList.count() ) {
             int _diff = data.msg.count() - virtIfaceModel->DataList.count();
