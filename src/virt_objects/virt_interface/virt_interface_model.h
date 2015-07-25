@@ -1,23 +1,23 @@
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef IFACE_MODEL_H
+#define IFACE_MODEL_H
 
 #include <QAbstractTableModel>
 #include <QIcon>
 #include <QList>
+#include "virt_interface_index.h"
 #include <QDebug>
-#include "index.h"
 
-class Model : public QAbstractTableModel
+class VirtIfaceModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit Model(QObject *parent = NULL);
-    ~Model();
-    QList<Index *>  DataList;
+    explicit VirtIfaceModel(QObject *parent = NULL);
+    ~VirtIfaceModel();
+    QList<Interface_Index *>  DataList;
     QIcon    activeIcon;
     QIcon    no_activeIcon;
     QIcon    defined;
-    QIcon    created;
+    QIcon    changing;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -36,4 +36,4 @@ private:
     QString  column3;
 };
 
-#endif // MODEL_H
+#endif // IFACE_MODEL_H

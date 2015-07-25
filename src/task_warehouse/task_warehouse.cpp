@@ -60,6 +60,7 @@ void TaskWareHouse::addNewTask(TASK task)
     //qDebug()<<task.sourceConn<<task.srcConName<<task.action\
     //      <<task.method<<task.object<<task.args.list()\
     //      <<task.args.destConn<<task.type<<"addNewTask_TASK";
+    //
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
     if (  !task.method.startsWith("reload") ) {
@@ -109,6 +110,10 @@ void TaskWareHouse::addNewTask(TASK task)
         threadPool->insert(
                     _number,
                     new SecretControlThread(this));
+    } else if ( task.type == "iface" ) {
+        threadPool->insert(
+                    _number,
+                    new InterfaceControlThread(this));
     } else return;
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));
@@ -147,6 +152,8 @@ void TaskWareHouse::taskResultReceiver(Result data)
         emit volResult(data);
     } else if ( data.type=="secret" ) {
         emit secResult(data);
+    } else if ( data.type=="iface" ) {
+        emit ifaceResult(data);
     } else return;
     QString _number = QString("").sprintf("%08d", data.number);
     ControlThread *cThread = static_cast<ControlThread*>(
