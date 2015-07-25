@@ -35,7 +35,8 @@ void QSpiceHelper::inputs_modifiers(SpiceInputsChannel *spiceinputschannel, gpoi
 
 void QSpiceInputsChannel::initCallbacks()
 {
-    g_signal_connect(gobject, "inputs-modifiers", (GCallback) QSpiceHelper::inputs_modifiers, this);
+    g_signal_connect(gobject, "inputs-modifiers",
+                     (GCallback) QSpiceHelper::inputs_modifiers, this);
 }
 
 void QSpiceInputsChannel::inputsPosition(

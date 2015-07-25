@@ -67,6 +67,12 @@ protected slots:
             int                hot_y,
             void *             rgba);
 
+    void cursorMove(int dx, int dy);
+
+    void cursorHide();
+
+    void cursorReset();
+
 
     bool eventFilter(QObject *object, QEvent *event);
     void resizeEvent ( QResizeEvent * event );

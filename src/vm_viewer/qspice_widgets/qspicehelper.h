@@ -73,6 +73,14 @@ public:
                            gint                hot_y,
                            gpointer            rgba,
                            gpointer            user_data);
+    static void cursor_move(SpiceCursorChannel *cursor,
+                            gint                dx,
+                            gint                dy,
+                            gpointer            user_data);
+    static void cursor_hide(SpiceCursorChannel *cursor,
+                            gpointer            user_data);
+    static void cursor_reset(SpiceCursorChannel *cursor,
+                             gpointer            user_data);
 
 };
 

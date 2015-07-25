@@ -18,12 +18,11 @@
 #include "qspicehelper.h"
 
 #include "qspicechannel.h"
-#include <QDebug>
 
 
 QSpiceChannel::QSpiceChannel(void *channel) : QSpiceObject(channel)
 {
-    initCallbacks();       
+    initCallbacks();
 }
 
 void QSpiceChannel::initCallbacks()

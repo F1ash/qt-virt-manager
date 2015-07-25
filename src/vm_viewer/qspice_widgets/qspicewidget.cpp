@@ -20,9 +20,11 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     setFrameStyle(QFrame::NoFrame);
 
     resizeTimer.setSingleShot( true );
-    connect(&resizeTimer, SIGNAL(timeout()), SLOT(resizeDone()));
+    connect(&resizeTimer, SIGNAL(timeout()),
+            SLOT(resizeDone()));
 
-    connect(spiceSession, SIGNAL(channelNew(QSpiceChannel*)), SLOT(ChannelNew(QSpiceChannel*)));
+    connect(spiceSession, SIGNAL(channelNew(QSpiceChannel*)),
+            SLOT(ChannelNew(QSpiceChannel*)));
     m_Image->setMouseTracking(true);
     m_Image->setFocusPolicy(Qt::StrongFocus);
     m_Image->installEventFilter( this );
@@ -31,6 +33,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
 QSpiceWidget::~QSpiceWidget()
 {
     delete spiceSession;
+    spiceSession = NULL;
 }
 
 bool QSpiceWidget::Connect(QString uri)
@@ -43,43 +46,54 @@ bool QSpiceWidget::Connect(QString uri)
 void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
 {
     QSpiceMainChannel * _main = dynamic_cast<QSpiceMainChannel *>(channel);
-    if (_main)
-    {
+    if (_main) {
         main = _main;
-        connect(main, SIGNAL(channelDestroyed()), SLOT(channelDestroyed()));
+        connect(main, SIGNAL(channelDestroyed()),
+                SLOT(channelDestroyed()));
         main->Connect();
         return;
     }
 
     QSpiceDisplayChannel *_display = dynamic_cast<QSpiceDisplayChannel *>(channel);
-    if (_display)
-    {
+    if (_display) {
         display = _display;
-        connect(display, SIGNAL(displayPrimaryCreate(int,int,int,int,int,void*)), SLOT(displayPrimaryCreate(int,int,int,int,int,void*)));
-        connect(display, SIGNAL(displayInvalidate(int,int,int,int)), SLOT(displayInvalidate(int,int,int,int)));
-        connect(display, SIGNAL(displayPrimaryDestroy()), SLOT(displayPrimaryDestroy()));
-        connect(display, SIGNAL(displayMark(int)), SLOT(displayMark(int)));
-        connect(display, SIGNAL(channelDestroyed()), SLOT(displayPrimaryDestroy()));
+        connect(display, SIGNAL(displayPrimaryCreate(int,int,int,int,int,void*)),
+                SLOT(displayPrimaryCreate(int,int,int,int,int,void*)));
+        connect(display, SIGNAL(displayInvalidate(int,int,int,int)),
+                SLOT(displayInvalidate(int,int,int,int)));
+        connect(display, SIGNAL(displayPrimaryDestroy()),
+                SLOT(displayPrimaryDestroy()));
+        connect(display, SIGNAL(displayMark(int)),
+                SLOT(displayMark(int)));
+        connect(display, SIGNAL(channelDestroyed()),
+                SLOT(displayPrimaryDestroy()));
 
         display->Connect();
         return;
     }
 
     QSpiceInputsChannel * _inputs = dynamic_cast<QSpiceInputsChannel *>(channel);
-    if (_inputs)
-    {
+    if (_inputs) {
         inputs = _inputs;
-        connect(inputs, SIGNAL(channelDestroyed()), SLOT(channelDestroyed()));
+        connect(inputs, SIGNAL(channelDestroyed()),
+                SLOT(channelDestroyed()));
         inputs->Connect();
         return;
     }
 
     QSpiceCursorChannel * _cursor = dynamic_cast<QSpiceCursorChannel *>(channel);
-    if (_cursor)
-    {
+    if (_cursor) {
         cursor = _cursor;
-        connect(cursor, SIGNAL(channelDestroyed()), SLOT(channelDestroyed()));
-        connect(cursor, SIGNAL(cursorSet(int,int,int,int,void*)), SLOT(cursorSet(int,int,int,int,void*)));
+        connect(cursor, SIGNAL(channelDestroyed()),
+                SLOT(channelDestroyed()));
+        connect(cursor, SIGNAL(cursorSet(int,int,int,int,void*)),
+                SLOT(cursorSet(int,int,int,int,void*)));
+        connect(cursor, SIGNAL(cursorMove(int,int)),
+                SLOT(cursorMove(int,int)));
+        connect(cursor, SIGNAL(cursorHide()),
+                SLOT(cursorHide()));
+        connect(cursor, SIGNAL(cursorReset()),
+                SLOT(cursorReset()));
         cursor->Connect();
         return;
     }
@@ -117,11 +131,21 @@ void QSpiceWidget::displayPrimaryCreate(
     switch(format)
     {
     case SPICE_SURFACE_FMT_32_xRGB:
-        img = new QImage(static_cast<uchar *>(imgdata), width, height, stride, QImage::Format_RGB32);
+        img = new QImage(
+                    static_cast<uchar *>(imgdata),
+                    width,
+                    height,
+                    stride,
+                    QImage::Format_RGB32);
         break;
 
     case SPICE_SURFACE_FMT_16_555:
-        img = new QImage(static_cast<uchar *>(imgdata), width, height, stride, QImage::Format_RGB555);
+        img = new QImage(
+                    static_cast<uchar *>(imgdata),
+                    width,
+                    height,
+                    stride,
+                    QImage::Format_RGB555);
         break;
 
     default:
@@ -162,7 +186,7 @@ void QSpiceWidget::displayPrimaryDestroy()
 
 void QSpiceWidget::displayMark(int mark)
 {
-    qDebug() << "Display Mark " << mark;
+    qDebug() << "Display Mark " << mark << display->getId();
     m_Image->setUpdatesEnabled(mark != 0);
 }
 
@@ -173,13 +197,30 @@ void QSpiceWidget::cursorSet(
         int                hot_y,
         void *             rgba)
 {
+    qDebug()<<width<<height<<hot_x<<hot_y<<"cursorSet";
     QImage img((uchar *) rgba, width, height, QImage::Format_ARGB32);
     QPixmap pix = QPixmap::fromImage(img);
     QCursor c(pix, hot_x, hot_y);
 
     m_Image->setCursor(c);
+}
 
+void QSpiceWidget::cursorMove(int dx, int dy)
+{
+    qDebug()<<dx<<dy<<"cursorMove";
+    QCursor c(*(m_Image->pixmap()), dx, dy);
 
+    m_Image->setCursor(c);
+}
+
+void QSpiceWidget::cursorHide()
+{
+    qDebug()<<"cursorHide";
+}
+
+void QSpiceWidget::cursorReset()
+{
+    qDebug()<<"cursorReset";
 }
 
 
@@ -231,19 +272,26 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     if (event->type() == QEvent::MouseMove )
     {
         QMouseEvent *ev = (QMouseEvent *) event;
-        inputs->inputsPosition(ev->x(), ev->y(), display->getId(), QtButtonsMaskToSpice(ev));
+        inputs->inputsPosition(
+                    ev->x(), ev->y(),
+                    display->getId(),
+                    QtButtonsMaskToSpice(ev));
         return true;
     }
     else if (event->type() == QEvent::MouseButtonPress)
     {
         QMouseEvent *ev = (QMouseEvent *) event;
-        inputs->inputsButtonPress(QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
+        inputs->inputsButtonPress(
+                    QtButtonToSpice(ev),
+                    QtButtonsMaskToSpice(ev));
         return true;
     }
     else if (event->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent *ev = (QMouseEvent *) event;
-        inputs->inputsButtonRelease(QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
+        inputs->inputsButtonRelease(
+                    QtButtonToSpice(ev),
+                    QtButtonsMaskToSpice(ev));
         return true;
     }
     else if (event->type() == QEvent::KeyPress)
@@ -260,8 +308,11 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     }
     else if (event->type() == QEvent::MouseButtonDblClick)
     {
-        inputs->inputsButtonPress(SPICE_MOUSE_BUTTON_LEFT, SPICE_MOUSE_BUTTON_MASK_LEFT);
-        inputs->inputsButtonRelease(SPICE_MOUSE_BUTTON_LEFT, 0);
+        inputs->inputsButtonPress(
+                    SPICE_MOUSE_BUTTON_LEFT,
+                    SPICE_MOUSE_BUTTON_MASK_LEFT);
+        inputs->inputsButtonRelease(
+                    SPICE_MOUSE_BUTTON_LEFT, 0);
         return true;
     }
     else if (event->type() == QEvent::Wheel)
@@ -269,13 +320,21 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         QWheelEvent *ev = (QWheelEvent *) event;
         if (ev->delta() > 0)
         {
-            inputs->inputsButtonPress(SPICE_MOUSE_BUTTON_UP, QtButtonsMaskToSpice(QApplication::mouseButtons()));
-            inputs->inputsButtonRelease(SPICE_MOUSE_BUTTON_UP, QtButtonsMaskToSpice(QApplication::mouseButtons()));
+            inputs->inputsButtonPress(
+                        SPICE_MOUSE_BUTTON_UP,
+                        QtButtonsMaskToSpice(QApplication::mouseButtons()));
+            inputs->inputsButtonRelease(
+                        SPICE_MOUSE_BUTTON_UP,
+                        QtButtonsMaskToSpice(QApplication::mouseButtons()));
         }
         else
         {
-            inputs->inputsButtonPress(SPICE_MOUSE_BUTTON_DOWN, QtButtonsMaskToSpice(QApplication::mouseButtons()));
-            inputs->inputsButtonRelease(SPICE_MOUSE_BUTTON_DOWN, QtButtonsMaskToSpice(QApplication::mouseButtons()));
+            inputs->inputsButtonPress(
+                        SPICE_MOUSE_BUTTON_DOWN,
+                        QtButtonsMaskToSpice(QApplication::mouseButtons()));
+            inputs->inputsButtonRelease(
+                        SPICE_MOUSE_BUTTON_DOWN,
+                        QtButtonsMaskToSpice(QApplication::mouseButtons()));
 
         }
         ev->accept();

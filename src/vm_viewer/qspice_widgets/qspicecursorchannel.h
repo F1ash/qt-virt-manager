@@ -33,6 +33,9 @@ signals:
             int                hot_x,
             int                hot_y,
             void *             rgba);
+    void cursorMove(int x, int y);
+    void cursorHide();
+    void cursorReset();
 
 protected:
     inline QSpiceCursorChannel(void *channel) : QSpiceChannel(channel) {initCallbacks();}
