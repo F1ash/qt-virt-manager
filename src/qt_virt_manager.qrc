@@ -468,5 +468,30 @@
         <file alias="22x22/actions/security-define.png">icons/22x22/actions/security-define.png</file>
         <file alias="22x22/actions/security-undefine.png">icons/22x22/actions/security-undefine.png</file>
         <file alias="22x22/actions/security-xml.png">icons/22x22/actions/security-xml.png</file>
+        <file alias="64x64/actions/iface-start.png">icons/64x64/actions/iface-start.png</file>
+        <file alias="64x64/actions/iface-stop.png">icons/64x64/actions/iface-stop.png</file>
+        <file alias="64x64/actions/iface-define.png">icons/64x64/actions/iface-define.png</file>
+        <file alias="64x64/actions/iface-undefine.png">icons/64x64/actions/iface-undefine.png</file>
+        <file alias="64x64/actions/iface-xml.png">icons/64x64/actions/iface-xml.png</file>
+        <file alias="48x48/actions/iface-start.png">icons/48x48/actions/iface-start.png</file>
+        <file alias="48x48/actions/iface-stop.png">icons/48x48/actions/iface-stop.png</file>
+        <file alias="48x48/actions/iface-define.png">icons/48x48/actions/iface-define.png</file>
+        <file alias="48x48/actions/iface-undefine.png">icons/48x48/actions/iface-undefine.png</file>
+        <file alias="48x48/actions/iface-xml.png">icons/48x48/actions/iface-xml.png</file>
+        <file alias="32x32/actions/iface-start.png">icons/32x32/actions/iface-start.png</file>
+        <file alias="32x32/actions/iface-stop.png">icons/32x32/actions/iface-stop.png</file>
+        <file alias="32x32/actions/iface-define.png">icons/32x32/actions/iface-define.png</file>
+        <file alias="32x32/actions/iface-undefine.png">icons/32x32/actions/iface-undefine.png</file>
+        <file alias="32x32/actions/iface-xml.png">icons/32x32/actions/iface-xml.png</file>
+        <file alias="24x24/actions/iface-start.png">icons/24x24/actions/iface-start.png</file>
+        <file alias="24x24/actions/iface-stop.png">icons/24x24/actions/iface-stop.png</file>
+        <file alias="24x24/actions/iface-define.png">icons/24x24/actions/iface-define.png</file>
+        <file alias="24x24/actions/iface-undefine.png">icons/24x24/actions/iface-undefine.png</file>
+        <file alias="24x24/actions/iface-xml.png">icons/24x24/actions/iface-xml.png</file>
+        <file alias="22x22/actions/iface-start.png">icons/22x22/actions/iface-start.png</file>
+        <file alias="22x22/actions/iface-stop.png">icons/22x22/actions/iface-stop.png</file>
+        <file alias="22x22/actions/iface-define.png">icons/22x22/actions/iface-define.png</file>
+        <file alias="22x22/actions/iface-undefine.png">icons/22x22/actions/iface-undefine.png</file>
+        <file alias="22x22/actions/iface-xml.png">icons/22x22/actions/iface-xml.png</file>
     </qresource>
 </RCC>

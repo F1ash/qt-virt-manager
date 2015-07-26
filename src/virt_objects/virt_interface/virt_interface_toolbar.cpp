@@ -4,16 +4,16 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
     QToolBar(parent)
 {
     start_Action = new QAction(this);
-    start_Action->setIcon(QIcon::fromTheme("security-define"));
+    start_Action->setIcon(QIcon::fromTheme("iface-start"));
     start_Action->setToolTip("Start");
     destroy_Action = new QAction(this);
-    destroy_Action->setIcon(QIcon::fromTheme("security-define"));
+    destroy_Action->setIcon(QIcon::fromTheme("iface-stop"));
     destroy_Action->setToolTip("Destroy");
     define_Action = new QAction(this);
-    define_Action->setIcon(QIcon::fromTheme("security-define"));
+    define_Action->setIcon(QIcon::fromTheme("iface-define"));
     define_Action->setToolTip("Define");
     undefine_Action = new QAction(this);
-    undefine_Action->setIcon(QIcon::fromTheme("security-undefine"));
+    undefine_Action->setIcon(QIcon::fromTheme("iface-undefine"));
     undefine_Action->setToolTip("Undefine");
     changeBegin_Action = new QAction(this);
     changeBegin_Action->setIcon(QIcon::fromTheme("document-open"));
@@ -25,7 +25,7 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
     changeRollback_Action->setIcon(QIcon::fromTheme("document-revert"));
     changeRollback_Action->setToolTip("Change Rollback");
     getXMLDesc_Action = new QAction(this);
-    getXMLDesc_Action->setIcon(QIcon::fromTheme("security-xml"));
+    getXMLDesc_Action->setIcon(QIcon::fromTheme("iface-xml"));
     getXMLDesc_Action->setToolTip("Get XML Description");
     _autoReload = new QPushButton(this);
     _autoReload->setToolTip("AutoReload Interface Overview");

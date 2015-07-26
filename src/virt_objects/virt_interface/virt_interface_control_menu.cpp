@@ -5,13 +5,13 @@ IfaceControlMenu::IfaceControlMenu(QWidget *parent, QStringList params, bool sta
 {
     if ( !parameters.isEmpty() ) {
         start = new QAction("Start", this);
-        start->setIcon(QIcon::fromTheme("network-start"));
+        start->setIcon(QIcon::fromTheme("iface-start"));
         start->setVisible(parameters[2]=="inactive" );
         destroy = new QAction("Destroy", this);
-        destroy->setIcon(QIcon::fromTheme("network-stop"));
+        destroy->setIcon(QIcon::fromTheme("iface-stop"));
         destroy->setVisible(parameters[2]=="active");
         undefine = new QAction("Undefine", this);
-        undefine->setIcon(QIcon::fromTheme("network-undefine"));
+        undefine->setIcon(QIcon::fromTheme("iface-undefine"));
         changeBegin = new QAction("Change Begin", this);
         changeBegin->setIcon(QIcon::fromTheme("document-open"));
         changeBegin->setVisible(parameters[3]!="yes");
@@ -22,7 +22,7 @@ IfaceControlMenu::IfaceControlMenu(QWidget *parent, QStringList params, bool sta
         changeRollback->setIcon(QIcon::fromTheme("document-revert"));
         changeRollback->setVisible(parameters[3]=="yes");
         getXMLDesc = new QAction("get XML Description", this);
-        getXMLDesc->setIcon(QIcon::fromTheme("network-xml"));
+        getXMLDesc->setIcon(QIcon::fromTheme("iface-xml"));
         getXMLDesc->setEnabled(true);
 
         addAction(start);
