@@ -334,6 +334,8 @@ set (HEADERS
   src/create_widgets/secret/secret_widgets/iscsi_sec_type.h
   src/create_widgets/secret/secret_widgets/_sec_type.h
 
+  src/create_widgets/interface/create_interface.h
+
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
 
@@ -642,6 +644,8 @@ set (SOURCES
   src/create_widgets/secret/secret_widgets/ceph_sec_type.cpp
   src/create_widgets/secret/secret_widgets/iscsi_sec_type.cpp
   src/create_widgets/secret/secret_widgets/_sec_type.cpp
+
+  src/create_widgets/interface/create_interface.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp

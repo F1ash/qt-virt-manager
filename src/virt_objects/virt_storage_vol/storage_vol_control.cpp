@@ -317,12 +317,14 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                             );
                 _poolType = doc.firstChildElement("pool").attribute("type");
                 CreateVolume *createVolumeDialog = new CreateVolume(this, _poolType);
-                if ( createVolumeDialog->exec()==QDialog::Accepted ) {
+                int result = createVolumeDialog->exec();
+                if ( result==QDialog::Accepted ) {
                     path = createVolumeDialog->getStorageXMLDescFileName();
                     show = createVolumeDialog->showXMLDescription();
                 };
                 delete createVolumeDialog;
                 createVolumeDialog = NULL;
+                if ( result==QDialog::Rejected ) return;
                 task.args.path = path;
                 if ( show ) QDesktopServices::openUrl(QUrl(path));
             } else {

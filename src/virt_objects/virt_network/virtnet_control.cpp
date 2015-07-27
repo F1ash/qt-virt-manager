@@ -278,6 +278,7 @@ void VirtNetControl::newVirtEntityFromXML(const QStringList &_args)
                 delete createVirtNet;
                 createVirtNet = NULL;
                 //qDebug()<<xml<<"path"<<result;
+                if ( !result ) return;
                 task.args.path = xml;
             } else {
                 QString xml = args.first();

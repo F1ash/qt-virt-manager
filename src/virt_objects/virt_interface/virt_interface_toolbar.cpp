@@ -12,6 +12,9 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("iface-define"));
     define_Action->setToolTip("Define");
+    define_Menu = new OpenFileMenu(this, "define", "interface");
+    define_Action->setMenu(define_Menu);
+    connect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("iface-undefine"));
     undefine_Action->setToolTip("Undefine");
@@ -56,6 +59,9 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
 
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
+
+    connect(define_Menu, SIGNAL(fileForMethod(QStringList&)),
+            this, SLOT(repeatParameters(QStringList&)));
 }
 InterfaceToolBar::~InterfaceToolBar()
 {
@@ -115,12 +121,23 @@ void InterfaceToolBar::timerEvent(QTimerEvent *event)
         emit execMethod(parameters);
     };
 }
+void InterfaceToolBar::repeatParameters(QStringList &p)
+{
+    emit fileForMethod(p);
+}
+void InterfaceToolBar::showMenu()
+{
+    QAction *act = static_cast<QAction*>(sender());
+    if ( act->menu()->isVisible() ) act->menu()->hide();
+    else {
+        act->menu()->show();
+        act->menu()->move(QCursor::pos());
+    };
+}
 void InterfaceToolBar::detectTriggerredAction(QAction *action)
 {
     QStringList parameters;
-    if        ( action == define_Action ) {
-        parameters << "defineVirtInterface";
-    } else if ( action == undefine_Action ) {
+    if        ( action == undefine_Action ) {
         parameters << "undefineVirtInterface";
     } else if ( action == start_Action ) {
         parameters << "startVirtInterface";

@@ -135,7 +135,6 @@ void VirtInterfaceControl::resultReceiver(Result data)
             msgRepeater(msg);
         };
         if ( data.result ) {
-            reloadState();
             int row = -1;
             for ( int i=0; i<virtIfaceModel->DataList.count(); i++ ) {
                 if ( virtIfaceModel->DataList.at(i)->getName()==data.name ) {
@@ -146,21 +145,22 @@ void VirtInterfaceControl::resultReceiver(Result data)
             // for different action's specified manipulation
             switch (data.action) {
             case IFACE_CHANGE_BEGIN:
-                if (row+1)
+                if (row+1>0)
                     virtIfaceModel->DataList.at(row)->setChanging("yes");
                 break;
             case IFACE_CHANGE_COMMIT:
-                if (row+1)
+                if (row+1>0)
                     virtIfaceModel->DataList.at(row)->setChanging("");
                 break;
             case IFACE_CHANGE_ROLLBACK:
-                if (row+1)
+                if (row+1>0)
                     virtIfaceModel->DataList.at(row)->setChanging("");
                 break;
             default:
                 break;
             }
         };
+        reloadState();
     };
 }
 
@@ -228,6 +228,8 @@ void VirtInterfaceControl::execAction(const QStringList &l)
             task.method = l.first();
             task.action = DESTROY_ENTITY;
             emit addNewTask(task);
+        } else if ( l.first()=="defineVirtInterface" ) {
+            newVirtEntityFromXML(l);
         } else if ( l.first()=="undefineVirtInterface" ) {
             task.method = l.first();
             task.action = UNDEFINE_ENTITY;
@@ -253,6 +255,8 @@ void VirtInterfaceControl::execAction(const QStringList &l)
         };
     } else if ( l.first()=="reloadVirtInterface" ) {
         reloadState();
+    } else if ( l.first()=="defineVirtInterface" ) {
+        newVirtEntityFromXML(l);
     };
 }
 void VirtInterfaceControl::newVirtEntityFromXML(const QStringList &_args)
@@ -271,6 +275,21 @@ void VirtInterfaceControl::newVirtEntityFromXML(const QStringList &_args)
                 QString xml;
                 bool show = false;
                 // show SRC Creator widget
+                CreateInterface *createIface = new CreateInterface(this);
+                int result = createIface->exec();
+                if ( createIface!=NULL && result==QDialog::Accepted ) {
+                    xml = createIface->getXMLDescFileName();
+                    show = createIface->getShowing();
+                    QStringList data;
+                    data.append("New Interface XML'ed");
+                    data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+                    QString msg = data.join(" ");
+                    msgRepeater(msg);
+                    if ( show ) QDesktopServices::openUrl(QUrl(xml));
+                };
+                delete createIface;
+                createIface = NULL;
+                if ( result==QDialog::Rejected ) return;
                 //qDebug()<<xml<<"path"<<result;
                 task.args.path = xml;
             } else {

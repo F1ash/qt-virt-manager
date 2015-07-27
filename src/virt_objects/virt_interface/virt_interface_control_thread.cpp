@@ -98,6 +98,7 @@ Result InterfaceControlThread::getAllIfaceList()
                        <<QString::fromUtf8(MAC)\
                        <<state\
                        <<"";
+            //qDebug()<<currentAttr;
             virtIfaceList.append(currentAttr.join(DFR));
             virInterfaceFree(ifaces[i]);
         };
@@ -201,14 +202,10 @@ Result InterfaceControlThread::ifaceChangeBegin()
     Result result;
     QString name = task.object;
     bool processed = false;
-    virInterfacePtr iface = virInterfaceLookupByName(
-                task.sourceConn, name.toUtf8().data());
-    if ( iface!=NULL ) {
-        // extra flags; not used yet, so callers should always pass 0
-        processed = (virInterfaceUndefine(iface)+1) ? true : false;
-        if (!processed) sendConnErrors();
-        virInterfaceFree(iface);
-    } else sendConnErrors();
+    // extra flags; not used yet, so callers should always pass 0
+    processed = (virInterfaceChangeBegin(task.sourceConn, 0)+1) ? true : false;
+    if (!processed) sendConnErrors();
+
     result.name = name;
     result.result = processed;
     result.msg.append(
@@ -221,14 +218,10 @@ Result InterfaceControlThread::ifaceChangeCommit()
     Result result;
     QString name = task.object;
     bool processed = false;
-    virInterfacePtr iface = virInterfaceLookupByName(
-                task.sourceConn, name.toUtf8().data());
-    if ( iface!=NULL ) {
-        // extra flags; not used yet, so callers should always pass 0
-        processed = (virInterfaceUndefine(iface)+1) ? true : false;
-        if (!processed) sendConnErrors();
-        virInterfaceFree(iface);
-    } else sendConnErrors();
+    // extra flags; not used yet, so callers should always pass 0
+    processed = (virInterfaceChangeCommit(task.sourceConn, 0)+1) ? true : false;
+    if (!processed) sendConnErrors();
+
     result.name = name;
     result.result = processed;
     result.msg.append(
@@ -241,14 +234,10 @@ Result InterfaceControlThread::ifaceChangeRollback()
     Result result;
     QString name = task.object;
     bool processed = false;
-    virInterfacePtr iface = virInterfaceLookupByName(
-                task.sourceConn, name.toUtf8().data());
-    if ( iface!=NULL ) {
-        // extra flags; not used yet, so callers should always pass 0
-        processed = (virInterfaceUndefine(iface)+1) ? true : false;
-        if (!processed) sendConnErrors();
-        virInterfaceFree(iface);
-    } else sendConnErrors();
+    // extra flags; not used yet, so callers should always pass 0
+    processed = (virInterfaceChangeRollback(task.sourceConn, 0)+1) ? true : false;
+    if (!processed) sendConnErrors();
+
     result.name = name;
     result.result = processed;
     result.msg.append(

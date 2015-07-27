@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QTimerEvent>
 #include <QSettings>
+#include "virt_objects/open_file_menu.h"
 #include <QDebug>
 
 class InterfaceToolBar : public QToolBar
@@ -24,6 +25,7 @@ private:
     QAction         *start_Action;
     QAction         *destroy_Action;
     QAction         *define_Action;
+    OpenFileMenu    *define_Menu;
     QAction         *undefine_Action;
     QAction         *changeBegin_Action;
     QAction         *changeCommit_Action;
@@ -38,6 +40,8 @@ private:
 
 private slots:
     void             timerEvent(QTimerEvent*);
+    void             repeatParameters(QStringList&);
+    void             showMenu();
     void             detectTriggerredAction(QAction*);
     void             changeAutoReloadState(bool);
 

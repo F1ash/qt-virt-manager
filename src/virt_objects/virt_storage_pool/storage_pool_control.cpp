@@ -289,29 +289,31 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const QStringList &_args)
         QStringList args = _args;
         args.removeFirst();
         if ( !args.isEmpty() ) {
-                if ( args.first()=="manually" ) {
-                    QString path;
-                    bool show = false;
-                    // show SRC Creator widget
-                    // get path for method
-                    CreatePool *createPoolDialog = new CreatePool(this);
-                    if ( createPoolDialog->exec()==QDialog::Accepted ) {
-                        path = createPoolDialog->getStorageXMLDescFileName();
-                        show = createPoolDialog->showXMLDescription();
-                    };
-                    delete createPoolDialog;
-                    createPoolDialog = NULL;
-                    task.args.path = path;
-                    if ( show ) QDesktopServices::openUrl(QUrl(path));
-                } else {
-                    QString path = args.first();
-                    task.args.path = path;
+            if ( args.first()=="manually" ) {
+                QString path;
+                bool show = false;
+                // show SRC Creator widget
+                // get path for method
+                CreatePool *createPoolDialog = new CreatePool(this);
+                int result = createPoolDialog->exec();
+                if ( result==QDialog::Accepted ) {
+                    path = createPoolDialog->getStorageXMLDescFileName();
+                    show = createPoolDialog->showXMLDescription();
                 };
-                task.sourceConn = currWorkConnection;
-                task.srcConName = currConnName;
-                task.method     = actName;
-                task.action     = act;
-                emit addNewTask(task);
+                delete createPoolDialog;
+                createPoolDialog = NULL;
+                if ( result==QDialog::Rejected ) return;
+                task.args.path = path;
+                if ( show ) QDesktopServices::openUrl(QUrl(path));
+            } else {
+                QString path = args.first();
+                task.args.path = path;
+            };
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.method     = actName;
+            task.action     = act;
+            emit addNewTask(task);
         };
     };
 }
