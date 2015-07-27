@@ -85,8 +85,11 @@ bool VirtNetControl::setCurrentWorkConnect(virConnect *conn)
 }
 void VirtNetControl::setListHeader(QString &connName)
 {
-    virtNetModel->setHeaderData(0, Qt::Horizontal, QString("Name (Conn: \"%1\")")
-                                .arg(connName), Qt::EditRole);
+    virtNetModel->setHeaderData(
+                0,
+                Qt::Horizontal,
+                QString("Name (Conn: \"%1\")")
+                .arg(connName), Qt::EditRole);
     currConnName = connName;
     setEnabled(true);
     // for initiation content

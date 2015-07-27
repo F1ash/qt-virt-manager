@@ -529,7 +529,7 @@ void MainWindow::initDockWidgets()
             this, SLOT(writeToErrorLog(QString&)));
     connect(ifaceDockContent, SIGNAL(addNewTask(TASK)),
             taskWrHouse, SLOT(addNewTask(TASK)));
-    connect(taskWrHouse, SIGNAL(secResult(Result)),
+    connect(taskWrHouse, SIGNAL(ifaceResult(Result)),
             ifaceDockContent, SLOT(resultReceiver(Result)));
 
     domainDockContent->setEnabled(false);

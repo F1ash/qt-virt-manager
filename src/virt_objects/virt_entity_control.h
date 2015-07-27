@@ -21,12 +21,7 @@ public:
     QTreeView               *entityList = NULL;
     virConnect              *currWorkConnection = NULL;
 
-    virtual bool             getThreadState() const;
-    virtual void             stopProcessing();
-    virtual bool             setCurrentWorkConnect(virConnect*);
-    virtual void             setListHeader(QString&);
     virtual void             reloadState();
-    virtual void             resultReceiver(Result);
     virtual void             changeDockVisibility();
     virtual void             entityClicked(const QPoint&);
     virtual void             entityDoubleClicked(const QModelIndex&);
@@ -39,6 +34,11 @@ signals:
 
 public slots:
     void                     msgRepeater(QString&);
+    virtual bool             getThreadState() const;
+    virtual void             stopProcessing();
+    virtual bool             setCurrentWorkConnect(virConnect*);
+    virtual void             setListHeader(QString&);
+    virtual void             resultReceiver(Result);
 };
 
 #endif // VIRT_ENTITY_CONTROL_H
