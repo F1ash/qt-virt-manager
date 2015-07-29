@@ -97,7 +97,7 @@ void VirtInterfaceControl::setListHeader(QString &connName)
 void VirtInterfaceControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.msg<<"result";
-    if ( data.action == GET_ALL_ENTITY ) {
+    if ( data.action == GET_ALL_ENTITY_STATE ) {
         if ( data.msg.count() > virtIfaceModel->DataList.count() ) {
             int _diff = data.msg.count() - virtIfaceModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -171,7 +171,7 @@ void VirtInterfaceControl::reloadState()
     task.type = "iface";
     task.sourceConn = currWorkConnection;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY;
+    task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtInterface";
     emit addNewTask(task);
 }

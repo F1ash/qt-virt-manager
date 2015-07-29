@@ -1,7 +1,7 @@
 #include "encryption.h"
 
-Encryption::Encryption(QWidget *parent) :
-    QWidget(parent)
+Encryption::Encryption(QWidget *parent, virConnectPtr _conn) :
+    QWidget(parent), currConnection(_conn)
 {
     useEncryption = new QCheckBox("Use Encryption", this);
     formatLabel = new QLabel("Format:", this);

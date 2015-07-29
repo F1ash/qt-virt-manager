@@ -8,6 +8,7 @@ Dir_Pool_Stuff::Dir_Pool_Stuff(QWidget *parent) :
     _Pool_Stuff(parent)
 {
     source->setVisible(false);
+    target->path->setPlaceholderText("/var/lib/virt/images");
 }
 
 /* public slots */

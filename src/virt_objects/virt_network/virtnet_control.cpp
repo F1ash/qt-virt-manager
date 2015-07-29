@@ -98,7 +98,7 @@ void VirtNetControl::setListHeader(QString &connName)
 void VirtNetControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.name<<"result";
-    if ( data.action == GET_ALL_ENTITY ) {
+    if ( data.action == GET_ALL_ENTITY_STATE ) {
         if ( data.msg.count() > virtNetModel->DataList.count() ) {
             int _diff = data.msg.count() - virtNetModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -156,7 +156,7 @@ void VirtNetControl::reloadState()
     task.type = "network";
     task.sourceConn = currWorkConnection;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY;
+    task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtNetwork";
     emit addNewTask(task);
 }

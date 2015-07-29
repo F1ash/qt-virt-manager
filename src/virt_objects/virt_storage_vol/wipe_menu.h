@@ -2,7 +2,7 @@
 #define WIPE_MENU_H
 
 #include <QMenu>
-#include "libvirt/libvirt.h"
+#include <libvirt/libvirt.h>
 
 class WipeMenu : public QMenu
 {

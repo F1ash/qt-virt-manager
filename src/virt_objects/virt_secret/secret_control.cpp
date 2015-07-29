@@ -87,10 +87,28 @@ void VirtSecretControl::setListHeader(QString &connName)
     // for initiation content
     reloadState();
 }
+QString VirtSecretControl::getCurrentSecUsage() const
+{
+    QModelIndex index = entityList->currentIndex();
+    if ( !index.isValid() ) return QString();
+    return virtSecretModel->DataList.at(index.row())->getUsageID();
+}
+QString VirtSecretControl::getCurrentSecUUID() const
+{
+    QModelIndex index = entityList->currentIndex();
+    if ( !index.isValid() ) return QString();
+    return virtSecretModel->DataList.at(index.row())->getUUID();
+}
+QString VirtSecretControl::getCurrentSecType() const
+{
+    QModelIndex index = entityList->currentIndex();
+    if ( !index.isValid() ) return QString();
+    return virtSecretModel->DataList.at(index.row())->getType();
+}
 void VirtSecretControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.name<<"result";
-    if ( data.action == GET_ALL_ENTITY ) {
+    if ( data.action == GET_ALL_ENTITY_STATE ) {
         if ( data.msg.count() > virtSecretModel->DataList.count() ) {
             int _diff = data.msg.count() - virtSecretModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -154,7 +172,7 @@ void VirtSecretControl::reloadState()
     task.type = "secret";
     task.sourceConn = currWorkConnection;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY;
+    task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtSecret";
     emit addNewTask(task);
 }
@@ -258,6 +276,8 @@ void VirtSecretControl::execAction(const QStringList &l)
             task.action     = DEFINE_ENTITY;
             task.method     = l.first();
             task.args.path  = xml;
+            task.secret->setSecretValue(
+                        createVirtSec->getSecretValue());
             emit addNewTask(task);
         };
         delete createVirtSec;

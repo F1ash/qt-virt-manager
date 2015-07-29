@@ -241,6 +241,7 @@ set (HEADERS
   src/create_widgets/storage/_create_storage_widgets/_storage_source.h
   src/create_widgets/storage/_create_storage_widgets/_adapter.h
   src/create_widgets/storage/_create_storage_widgets/_auth.h
+  src/create_widgets/storage/_create_storage_widgets/find_secret_dialog.h
   src/create_widgets/storage/_create_storage_widgets/_block_devices.h
   src/create_widgets/storage/_create_storage_widgets/_storage_target.h
   src/create_widgets/storage/_create_storage_widgets/_pool_stuff.h
@@ -552,6 +553,7 @@ set (SOURCES
   src/create_widgets/storage/_create_storage_widgets/_storage_source.cpp
   src/create_widgets/storage/_create_storage_widgets/_adapter.cpp
   src/create_widgets/storage/_create_storage_widgets/_auth.cpp
+  src/create_widgets/storage/_create_storage_widgets/find_secret_dialog.cpp
   src/create_widgets/storage/_create_storage_widgets/_block_devices.cpp
   src/create_widgets/storage/_create_storage_widgets/_storage_target.cpp
   src/create_widgets/storage/_create_storage_widgets/_pool_stuff.cpp

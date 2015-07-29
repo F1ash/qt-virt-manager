@@ -48,7 +48,7 @@ void StorageVolControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY :
+    case GET_ALL_ENTITY_STATE :
         result = getAllStorageVolList();
         break;
     case CREATE_ENTITY:

@@ -35,7 +35,7 @@ void InterfaceControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY :
+    case GET_ALL_ENTITY_STATE :
         result = getAllIfaceList();
         break;
     case START_ENTITY :

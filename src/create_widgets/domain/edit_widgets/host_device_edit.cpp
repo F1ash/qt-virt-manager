@@ -11,7 +11,7 @@ HostDevice_Edit::HostDevice_Edit(
     if ( connType=="qemu" ) {
         infoEdit->addWidget(new USB_Host_Device_Edit(this));
         infoEdit->addWidget(new PCI_Host_Device_Edit(this));
-        infoEdit->addWidget(new SCSI_Host_Device_Edit(this));
+        infoEdit->addWidget(new SCSI_Host_Device_Edit(this, currWorkConnection));
     } else if ( connType=="lxc" ) {
         infoEdit->addWidget(new USB_Host_Device_Edit(this));
         infoEdit->addWidget(new BCh_Host_Device_Edit(this));

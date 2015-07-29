@@ -43,6 +43,8 @@ public slots:
     void             setOneHostMode(bool);
     void             setHostItem(QString&);
     void             clearHostList();
+    void             setHostPlaceholderText(const QString&);
+    void             setPortPlaceholderText(const QString&);
 
 private slots:
     void             addHost();

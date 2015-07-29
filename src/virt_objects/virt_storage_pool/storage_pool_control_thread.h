@@ -20,6 +20,7 @@ public slots:
 private slots:
     void                  run();
     Result                getAllStoragePoolList();
+    Result                getAllStoragePoolDataList();
     Result                createStoragePool();
     Result                defineStoragePool();
     Result                startStoragePool();

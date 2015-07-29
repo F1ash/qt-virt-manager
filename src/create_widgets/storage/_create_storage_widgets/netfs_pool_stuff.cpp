@@ -16,6 +16,7 @@ NetFs_Pool_Stuff::NetFs_Pool_Stuff(QWidget *parent) :
     source->hostLabel->setVisible(true);
     source->host->setVisible(true);
     source->host->checkHosts(true);
+    source->host->setHostPlaceholderText("nfs.example.com");
     source->host->setFullHostMode(false);
     source->dirLabel->setVisible(true);
     source->formatLabel->setVisible(true);

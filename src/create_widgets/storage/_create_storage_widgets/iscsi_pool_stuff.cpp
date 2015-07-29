@@ -4,20 +4,22 @@
  * http://libvirt.org/storage.html#StorageBackendISCSI
  */
 
-iSCSI_Pool_Stuff::iSCSI_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+iSCSI_Pool_Stuff::iSCSI_Pool_Stuff(QWidget *parent, virConnectPtr _conn) :
+    _Pool_Stuff(parent, _conn)
 {
     source->deviceLabel->setVisible(true);
     source->device->setVisible(true);
     source->device->setOneDeviceMode(true);
-    source->device->name->setPlaceholderText("demo-target");
+    source->device->name->setPlaceholderText("iqn.2013-06.com.example:iscsi-pool");
     source->hostLabel->setVisible(true);
     source->host->setVisible(true);
     source->host->checkHosts(true);
     source->host->setFullHostMode(false);
     source->host->setOneHostMode(true);
+    source->host->setHostPlaceholderText("iscsi.example.com");
     source->authLabel->setVisible(true);
     source->auth->setVisible(true);
+    source->auth->setSecretType("ISCSI");
     target->path->setPlaceholderText("/dev/disk/{by-path, by-id}");
 }
 

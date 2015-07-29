@@ -96,7 +96,7 @@ void VirtStoragePoolControl::setListHeader(QString &connName)
 void VirtStoragePoolControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.msg<<"result";
-    if ( data.action == GET_ALL_ENTITY ) {
+    if ( data.action == GET_ALL_ENTITY_STATE ) {
         if ( data.msg.count() > storagePoolModel->DataList.count() ) {
             int _diff = data.msg.count() - storagePoolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -180,7 +180,7 @@ void VirtStoragePoolControl::reloadState()
     task.type = "pool";
     task.sourceConn = currWorkConnection;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY;
+    task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtStoragePool";
     emit addNewTask(task);
 }
@@ -294,7 +294,7 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const QStringList &_args)
                 bool show = false;
                 // show SRC Creator widget
                 // get path for method
-                CreatePool *createPoolDialog = new CreatePool(this);
+                CreatePool *createPoolDialog = new CreatePool(this, currWorkConnection);
                 int result = createPoolDialog->exec();
                 if ( result==QDialog::Accepted ) {
                     path = createPoolDialog->getStorageXMLDescFileName();

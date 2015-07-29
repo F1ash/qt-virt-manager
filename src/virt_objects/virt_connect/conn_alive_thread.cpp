@@ -358,7 +358,7 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
         //result.name   = ;
         result.type   = "domain";
         //result.number = number;
-        result.action = GET_ALL_ENTITY;
+        result.action = GET_ALL_ENTITY_STATE;
         result.result = true;
         result.msg = domainList;
         emit obj->domStateChanged(result);
@@ -410,7 +410,7 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
         //result.name   = ;
         result.type   = "network";
         //result.number = number;
-        result.action = GET_ALL_ENTITY;
+        result.action = GET_ALL_ENTITY_STATE;
         result.result = true;
         result.msg = virtNetList;
         emit obj->netStateChanged(result);

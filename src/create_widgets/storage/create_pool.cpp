@@ -17,7 +17,7 @@
     <<"mpath"<<"rbd"<<"sheepdog"\
     <<"gluster"<<"zfs"
 
-CreatePool::CreatePool(QWidget *parent) :
+CreatePool::CreatePool(QWidget *parent, virConnectPtr _conn) :
     _CreateStorage(parent)
 {
     setUrl("http://libvirt.org/formatstorage.html");
@@ -31,10 +31,10 @@ CreatePool::CreatePool(QWidget *parent) :
     info->addWidget(new NetFs_Pool_Stuff(this));
     info->addWidget(new Logical_Pool_Stuff(this));
     info->addWidget(new Disk_Pool_Stuff(this));
-    info->addWidget(new iSCSI_Pool_Stuff(this));
+    info->addWidget(new iSCSI_Pool_Stuff(this, _conn));
     info->addWidget(new SCSI_Pool_Stuff(this));
     info->addWidget(new MPath_Pool_Stuff(this));
-    info->addWidget(new RBD_Pool_Stuff(this));
+    info->addWidget(new RBD_Pool_Stuff(this, _conn));
     info->addWidget(new SheepDog_Pool_Stuff(this));
     info->addWidget(new Gluster_Pool_Stuff(this));
     info->addWidget(new ZFS_Pool_Stuff(this));

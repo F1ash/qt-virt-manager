@@ -10,7 +10,9 @@ class SCSI_Host_Device_Edit : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit SCSI_Host_Device_Edit(QWidget *parent = 0);
+    explicit SCSI_Host_Device_Edit(
+            QWidget         *parent = NULL,
+            virConnectPtr    _conn  = NULL);
 
 private:
     QLabel              *info, *infoText;

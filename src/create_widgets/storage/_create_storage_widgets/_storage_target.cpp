@@ -13,7 +13,7 @@
 #define CUSTOMIZABLE_POOL_TYPES QStringList()\
     <<"dir"<<"fs"<<"netfs"<<"gluster"<<"disk"
 
-_Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
+_Storage_Target::_Storage_Target(QWidget *parent, virConnectPtr _conn, QString _type) :
     QWidget(parent), currPoolType(_type)
 {
     pathLabel = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
@@ -68,7 +68,7 @@ _Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
     permissions->setLayout(permLayout);
     permissions->setVisible(false);
 
-    encrypt = new Encryption(this);
+    encrypt = new Encryption(this, _conn);
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(new QLabel("<b>Target</b>"));

@@ -2,7 +2,7 @@
 #define DELETE_POOL_MENU_H
 
 #include <QMenu>
-#include "libvirt/libvirt.h"
+#include <libvirt/libvirt.h>
 
 class Delete_Pool_Menu : public QMenu
 {

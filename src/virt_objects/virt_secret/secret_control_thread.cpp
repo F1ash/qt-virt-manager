@@ -36,7 +36,7 @@ void SecretControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY :
+    case GET_ALL_ENTITY_STATE :
         result = getAllSecretList();
         break;
     case DEFINE_ENTITY :
@@ -148,8 +148,7 @@ Result SecretControlThread::defineSecret()
     unsigned char *value = (unsigned char*)(
                 task.secret->getSecretValue().data());
     size_t value_size = task.secret->getSecretValue().length();
-    //qDebug()<<task.secret->getSecretValue().data()\
-    //       <<(const char*)(value)<<value_size;
+    //qDebug()<<task.secret->getSecretValue().data()<<(const char*)(value)<<value_size;
     //extra flags; not used yet, so callers should always pass 0
     flags = 0;
     int ret = virSecretSetValue(secret, value, value_size, flags);
