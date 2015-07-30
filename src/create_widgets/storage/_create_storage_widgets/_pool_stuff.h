@@ -10,15 +10,17 @@ class _Pool_Stuff : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _Pool_Stuff(QWidget *parent = NULL);
-    _Storage_Source *source;
-    _Storage_Target *target;
+    explicit _Pool_Stuff(
+            QWidget         *parent = NULL,
+            virConnectPtr    _conn = NULL);
+    _Storage_Source         *source;
+    _Storage_Target         *target;
 
 private:
-    QVBoxLayout     *commonLayout;
+    QVBoxLayout             *commonLayout;
 
 public slots:
-    virtual QDomDocument getStorageXMLDesc() const;
+    virtual QDomDocument     getStorageXMLDesc() const;
 };
 
 #endif // _POOL_STUFF_H

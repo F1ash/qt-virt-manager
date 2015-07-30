@@ -4,16 +4,19 @@
  * http://libvirt.org/storage.html#StorageBackendRBD
  */
 
-RBD_Pool_Stuff::RBD_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+RBD_Pool_Stuff::RBD_Pool_Stuff(QWidget *parent, virConnectPtr _conn) :
+    _Pool_Stuff(parent, _conn)
 {
     source->namedLabel->setVisible(true);
     source->named->setVisible(true);
     source->hostLabel->setVisible(true);
     source->host->setVisible(true);
     source->host->checkHosts(true);
+    source->host->setHostPlaceholderText("my.ceph.monitor");
+    source->host->setPortPlaceholderText("6789");
     source->authLabel->setVisible(true);
     source->auth->setVisible(true);
+    source->auth->setSecretType("CEPH");
     target->setVisible(false);
 }
 

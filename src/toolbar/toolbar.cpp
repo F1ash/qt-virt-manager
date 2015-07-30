@@ -76,9 +76,9 @@ void ToolBar::addDocksControlMenu()
     _domUpAction->setCheckable(true);
     _netUpAction = new QAction("Network Dock", this);
     _netUpAction->setCheckable(true);
-    _storageUpAction = new QAction("Storages Dock", this);
+    _storageUpAction = new QAction("Storage Dock", this);
     _storageUpAction->setCheckable(true);
-    _secretsUpAction = new QAction("Secrets Dock", this);
+    _secretsUpAction = new QAction("Secret Dock", this);
     _secretsUpAction->setCheckable(true);
     _ifaceUpAction = new QAction("Interface Dock", this);
     _ifaceUpAction->setCheckable(true);

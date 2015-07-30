@@ -1,12 +1,13 @@
 #ifndef VIRT_ENTITY_CONFIG
 #define VIRT_ENTITY_CONFIG
 
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
+#include <libvirt/libvirt.h>
+#include <libvirt/virterror.h>
 #include <QStringList>
 
 enum Actions {
-    GET_ALL_ENTITY,
+    GET_ALL_ENTITY_STATE,
+    GET_ALL_ENTITY_DATA,
     CREATE_ENTITY,
     DEFINE_ENTITY,
     EDIT_ENTITY,

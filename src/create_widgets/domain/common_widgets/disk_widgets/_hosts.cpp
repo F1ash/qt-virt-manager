@@ -73,6 +73,14 @@ void _Hosts::clearHostList()
 {
     hosts->clear();
 }
+void _Hosts::setHostPlaceholderText(const QString &s)
+{
+    name->setPlaceholderText(s);
+}
+void _Hosts::setPortPlaceholderText(const QString &s)
+{
+    port->setPlaceholderText(s);
+}
 
 /* private slots */
 void _Hosts::addHost()

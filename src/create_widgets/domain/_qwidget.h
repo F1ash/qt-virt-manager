@@ -12,8 +12,8 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QtXml/QDomDocument>
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
+#include <libvirt/libvirt.h>
+#include <libvirt/virterror.h>
 #include "_changed.h"
 
 class _QWidget : public _Changed

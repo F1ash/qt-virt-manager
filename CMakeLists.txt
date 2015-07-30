@@ -220,6 +220,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/disk_widgets/_device.h
   src/create_widgets/domain/common_widgets/disk_widgets/_read_only.h
   src/create_widgets/domain/common_widgets/disk_widgets/_startup_policy.h
+  src/create_widgets/domain/common_widgets/disk_widgets/_use_encryption.h
   src/create_widgets/domain/common_widgets/disk_widgets/_hosts.h
   src/create_widgets/domain/common_widgets/disk_widgets/virtvolume_dialog.h
   src/create_widgets/domain/common_widgets/disk_widgets/block_disk.h
@@ -241,6 +242,7 @@ set (HEADERS
   src/create_widgets/storage/_create_storage_widgets/_storage_source.h
   src/create_widgets/storage/_create_storage_widgets/_adapter.h
   src/create_widgets/storage/_create_storage_widgets/_auth.h
+  src/create_widgets/storage/_create_storage_widgets/find_secret_dialog.h
   src/create_widgets/storage/_create_storage_widgets/_block_devices.h
   src/create_widgets/storage/_create_storage_widgets/_storage_target.h
   src/create_widgets/storage/_create_storage_widgets/_pool_stuff.h
@@ -333,6 +335,8 @@ set (HEADERS
   src/create_widgets/secret/secret_widgets/ceph_sec_type.h
   src/create_widgets/secret/secret_widgets/iscsi_sec_type.h
   src/create_widgets/secret/secret_widgets/_sec_type.h
+
+  src/create_widgets/interface/create_interface.h
 
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
@@ -529,6 +533,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/disk_widgets/_device.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_read_only.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_startup_policy.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/_use_encryption.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_hosts.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/virtvolume_dialog.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/block_disk.cpp
@@ -550,6 +555,7 @@ set (SOURCES
   src/create_widgets/storage/_create_storage_widgets/_storage_source.cpp
   src/create_widgets/storage/_create_storage_widgets/_adapter.cpp
   src/create_widgets/storage/_create_storage_widgets/_auth.cpp
+  src/create_widgets/storage/_create_storage_widgets/find_secret_dialog.cpp
   src/create_widgets/storage/_create_storage_widgets/_block_devices.cpp
   src/create_widgets/storage/_create_storage_widgets/_storage_target.cpp
   src/create_widgets/storage/_create_storage_widgets/_pool_stuff.cpp
@@ -642,6 +648,8 @@ set (SOURCES
   src/create_widgets/secret/secret_widgets/ceph_sec_type.cpp
   src/create_widgets/secret/secret_widgets/iscsi_sec_type.cpp
   src/create_widgets/secret/secret_widgets/_sec_type.cpp
+
+  src/create_widgets/interface/create_interface.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp

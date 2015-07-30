@@ -4,6 +4,7 @@
 #include <QPushButton>
 #include "_disk.h"
 #include "virtvolume_dialog.h"
+#include "create_widgets/storage/_create_storage_widgets/_auth.h"
 
 class Volume_Disk : public _Disk
 {
@@ -21,6 +22,7 @@ private:
     QComboBox       *mode;
     VirtVolumeDialog
                     *volumeDialog = NULL;
+    _Storage_Auth   *auth;
 
 public slots:
     QDomDocument     getDataDocument() const;

@@ -14,6 +14,7 @@ Gluster_Pool_Stuff::Gluster_Pool_Stuff(QWidget *parent) :
     source->host->checkHosts(true);
     source->host->setOneHostMode(true);
     source->host->setFullHostMode(false);
+    source->host->setHostPlaceholderText("localhost");
     source->dirLabel->setVisible(true);
     source->dir->setVisible(true);
     target->setVisible(false);
@@ -44,7 +45,6 @@ QDomDocument Gluster_Pool_Stuff::getStorageXMLDesc() const
         if ( _split.count()>1 ) port.append(_split.last());
         _host = doc.createElement("host");
         _host.setAttribute("name", host);
-        _host.setAttribute("port", port);
         _source.appendChild(_host);
     };
     _dir = doc.createElement("dir");

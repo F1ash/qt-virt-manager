@@ -11,8 +11,8 @@ class CreateVolume : public _CreateStorage
     Q_OBJECT
 public:
     explicit CreateVolume(
-            QWidget *parent = NULL,
-            QString _type = QString());
+            QWidget         *parent = NULL,
+            QString          _type  = QString());
 
 signals:
 
@@ -30,7 +30,7 @@ private:
     QWidget         *infoStuff;
 
 public slots:
-    QString getStorageXMLDescFileName() const;
+    QString          getStorageXMLDescFileName() const;
 };
 
 #endif // CREATE_VOLUME_H

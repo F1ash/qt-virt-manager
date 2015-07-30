@@ -1,6 +1,6 @@
 #include "_storage_source.h"
 
-_Storage_Source::_Storage_Source(QWidget *parent) :
+_Storage_Source::_Storage_Source(QWidget *parent, virConnectPtr _conn) :
     QWidget(parent)
 {
     namedLabel = new QLabel("Name:", this);
@@ -38,7 +38,7 @@ _Storage_Source::_Storage_Source(QWidget *parent) :
     adapter->setVisible(false);
     authLabel = new QLabel("Auth:", this);
     authLabel->setVisible(false);
-    auth = new _Storage_Auth(this);
+    auth = new _Storage_Auth(this, _conn);
     auth->setVisible(false);
     commonLayout = new QGridLayout();
     commonLayout->addWidget(new QLabel("<b>Source</b>"), 0, 0);

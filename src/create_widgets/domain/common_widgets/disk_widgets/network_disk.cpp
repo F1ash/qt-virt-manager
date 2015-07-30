@@ -16,7 +16,8 @@ Network_Disk::Network_Disk(
     sourceNameLabel = new QLabel("Source name:", this);
     sourceName = new QLineEdit(this);
     sourceName->setPlaceholderText("Source name or URL path");
-    auth = new _Storage_Auth(this);
+    auth = new _Storage_Auth(this, currWorkConnection);
+    auth->setVisible(false);
 
     baseLayout->addWidget(protocolLabel, 0, 0);
     baseLayout->addWidget(protocol, 0, 1);
@@ -30,8 +31,6 @@ Network_Disk::Network_Disk(
             this, SLOT(protocolTypeChanged(int)));
     connect(protocol, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(protocolTypeChanged(QString)));
-    connect(auth, SIGNAL(dataChanged()),
-            this, SLOT(authUsageTypeChanged()));
     // dataChanged connections
     connect(protocol, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));
@@ -240,21 +239,16 @@ void Network_Disk::protocolTypeChanged(int i)
 }
 void Network_Disk::protocolTypeChanged(QString _type)
 {
-    auth->auth->setChecked( _type=="iscsi" || _type=="rbd" );
-    if ( _type=="rbd" && auth->usageType->currentText().toLower()=="usage" )
-        auth->usage->setPlaceholderText("mypassid");
-    else if ( _type=="iscsi" && auth->usageType->currentText().toLower()=="usage" )
-        auth->usage->setPlaceholderText("libvirtiscsi");
-    else
-        auth->usage->setPlaceholderText("c4dbe20b-b1a3-4ac1-b6e6-2ac97852ebb6");
-}
-void Network_Disk::authUsageTypeChanged()
-{
-    QString _type = protocol->currentText().toLower();
-    if ( _type=="rbd" && auth->usageType->currentText().toLower()=="usage" )
-        auth->usage->setPlaceholderText("mypassid");
-    else if ( _type=="iscsi" && auth->usageType->currentText().toLower()=="usage" )
-        auth->usage->setPlaceholderText("libvirtiscsi");
-    else
-        auth->usage->setPlaceholderText("c4dbe20b-b1a3-4ac1-b6e6-2ac97852ebb6");
+    if ( _type.toLower()=="rbd" ) {
+        auth->setSecretType("CEPH");
+        auth->setVisible(true);
+    } else if ( _type.toLower()=="iscsi" ) {
+        auth->setSecretType("ISCSI");
+        auth->setVisible(true);
+    } else {
+        auth->setSecretType(NOT_VOLUME);
+        auth->setVisible(false);
+    };
+    auth->usage->clear();
+    auth->auth->setChecked(false);
 }

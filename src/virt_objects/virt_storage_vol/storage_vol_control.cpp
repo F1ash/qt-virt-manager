@@ -110,7 +110,7 @@ void VirtStorageVolControl::resultReceiver(Result data)
 {
     if ( data.name!=objectName() ) return;
     //qDebug()<<data.msg<<"result";
-    if ( data.action == GET_ALL_ENTITY ) {
+    if ( data.action == GET_ALL_ENTITY_STATE ) {
         int chain  = storageVolModel->columnCount();
         int chains = data.msg.count()/chain;
         if ( chains > storageVolModel->DataList.count() ) {
@@ -182,7 +182,7 @@ void VirtStorageVolControl::reloadState()
     task.type = "volume";
     task.sourceConn = currWorkConnection;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY;
+    task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtStorageVol";
     task.args.object= currPoolName;
     emit addNewTask(task);
@@ -316,13 +316,16 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                                 virStoragePoolGetXMLDesc(_pool, VIR_STORAGE_XML_INACTIVE))
                             );
                 _poolType = doc.firstChildElement("pool").attribute("type");
-                CreateVolume *createVolumeDialog = new CreateVolume(this, _poolType);
-                if ( createVolumeDialog->exec()==QDialog::Accepted ) {
+                CreateVolume *createVolumeDialog =
+                        new CreateVolume(this, _poolType);
+                int result = createVolumeDialog->exec();
+                if ( result==QDialog::Accepted ) {
                     path = createVolumeDialog->getStorageXMLDescFileName();
                     show = createVolumeDialog->showXMLDescription();
                 };
                 delete createVolumeDialog;
                 createVolumeDialog = NULL;
+                if ( result==QDialog::Rejected ) return;
                 task.args.path = path;
                 if ( show ) QDesktopServices::openUrl(QUrl(path));
             } else {

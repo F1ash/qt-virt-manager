@@ -53,6 +53,12 @@ VVD_Result VirtVolumeDialog::getResult() const
     QList<QListWidgetItem*> _list = poolList->selectedItems();
     if ( !_list.isEmpty() ) {
         _ret.pool = _list.at(0)->text();
+        QStringList _data = _list.at(0)->data(Qt::UserRole).toStringList();
+        if ( _data.count()>2 ) {
+            _ret.type   = _data.at(0);
+            _ret.source = _data.at(1);
+            _ret.target = _data.at(2);
+        };
         _ret.name = volumes->getCurrentVolumeName();
         _ret.path = volumes->getCurrentVolumePath();
     };
@@ -66,7 +72,7 @@ void VirtVolumeDialog::setPoolList()
     TASK _task;
     _task.type          = "pool";
     _task.sourceConn    = currWorkConnection;
-    _task.action        = GET_ALL_ENTITY;
+    _task.action        = GET_ALL_ENTITY_DATA;
     storagePoolThread->execAction(0, _task);
 }
 void VirtVolumeDialog::set_Result()
@@ -107,7 +113,12 @@ void VirtVolumeDialog::poolThreadResult(Result data)
         poolList->addItem("Not found");
     } else {
         foreach (QString chain, data.msg ) {
-            poolList->addItem( chain.split(DFR).first() );
+            QStringList _data = chain.split(DFR);
+            QListWidgetItem *item = new QListWidgetItem();
+            item->setText( _data.first() );
+            _data.removeFirst();
+            item->setData( Qt::UserRole, _data );
+            poolList->addItem(item);
         };
     };
     setEnabled(true);

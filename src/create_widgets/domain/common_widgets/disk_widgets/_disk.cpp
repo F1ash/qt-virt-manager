@@ -15,6 +15,8 @@ _Disk::_Disk(
     target = new _Target(this);
     secLabels = new SecLabels(this);
     secLabels->setVisible(false);
+    encrypt = new _UseEncryption(this, currWorkConnection);
+    encrypt->setVisible(true);
     readOnly = new _ReadOnly(this);
     addr = new DeviceAddress(this);
     addr->info->widget(2)->setEnabled(false);
@@ -30,6 +32,7 @@ _Disk::_Disk(
     commonLayout->addWidget(devType);
     commonLayout->addWidget(target);
     commonLayout->addWidget(secLabels);
+    commonLayout->addWidget(encrypt);
     commonLayout->addWidget(readOnly);
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
@@ -42,6 +45,8 @@ _Disk::_Disk(
     connect(devType, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(startupPolicy, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(encrypt, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(secLabels, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));

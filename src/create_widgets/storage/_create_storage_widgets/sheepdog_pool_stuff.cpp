@@ -13,6 +13,8 @@ SheepDog_Pool_Stuff::SheepDog_Pool_Stuff(QWidget *parent) :
     source->host->setVisible(true);
     source->host->checkHosts(true);
     source->host->setOneHostMode(true);
+    source->host->setHostPlaceholderText("localhost");
+    source->host->setPortPlaceholderText("7000");
     target->setVisible(false);
 }
 

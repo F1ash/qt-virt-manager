@@ -9,8 +9,8 @@ class Network_Disk : public _Disk
     Q_OBJECT
 public:
     explicit Network_Disk(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget         *parent = NULL,
+            virConnectPtr    conn = NULL);
 
 private:
     QLabel          *protocolLabel, *sourceNameLabel,
@@ -26,7 +26,6 @@ public slots:
 private slots:
     void             protocolTypeChanged(int);
     void             protocolTypeChanged(QString);
-    void             authUsageTypeChanged();
 };
 
 #endif // NETWORK_DISK_H

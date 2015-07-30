@@ -9,14 +9,15 @@
 #include "virt_objects/virt_storage_vol/storage_vol_control.h"
 #include "virt_objects/virt_storage_vol/storage_vol_control_thread.h"
 #include "virt_objects/virt_storage_pool/storage_pool_control_thread.h"
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
 #include <QDebug>
 
 struct VVD_Result {
     QString pool    = QString();
+    QString type    = QString();
     QString name    = QString();
     QString path    = QString();
+    QString source  = QString();
+    QString target  = QString();
 };
 
 class VirtVolumeDialog : public QDialog
@@ -24,8 +25,8 @@ class VirtVolumeDialog : public QDialog
     Q_OBJECT
 public:
     explicit VirtVolumeDialog(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget         *parent = NULL,
+            virConnectPtr    conn   = NULL);
 
 signals:
 
@@ -41,7 +42,7 @@ private:
     QHBoxLayout     *listLayout;
     QWidget         *listWidget;
     QVBoxLayout     *commonLayout;
-    virConnectPtr    currWorkConnection = NULL;
+    virConnectPtr    currWorkConnection;
     StorageVolControlThread
                     *storageVolThread;
     StoragePoolControlThread

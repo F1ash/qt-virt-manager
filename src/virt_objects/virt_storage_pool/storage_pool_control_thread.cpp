@@ -1,4 +1,5 @@
 #include "storage_pool_control_thread.h"
+#include <QDomDocument>
 
 StoragePoolControlThread::StoragePoolControlThread(QObject *parent) :
     ControlThread(parent)
@@ -36,8 +37,11 @@ void StoragePoolControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY :
+    case GET_ALL_ENTITY_STATE :
         result = getAllStoragePoolList();
+        break;
+    case GET_ALL_ENTITY_DATA :
+        result = getAllStoragePoolDataList();
         break;
     case CREATE_ENTITY :
         result = createStoragePool();
@@ -111,6 +115,59 @@ Result StoragePoolControlThread::getAllStoragePoolList()
         result.result = false;
     };
     result.msg = storagePoolList;
+    return result;
+}
+Result StoragePoolControlThread::getAllStoragePoolDataList()
+{
+    Result result;
+    QStringList storagePoolDataList;
+    if ( task.sourceConn!=NULL && keep_alive ) {
+        virStoragePoolPtr *storagePool = NULL;
+        unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
+                             VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
+        int ret = virConnectListAllStoragePools(
+                    task.sourceConn, &storagePool, flags);
+        if ( ret<0 ) {
+            sendConnErrors();
+            result.result = false;
+            result.msg = storagePoolDataList;
+            return result;
+        };
+
+        // therefore correctly to use for() command, because storagePool[0] can not exist.
+        for (int i = 0; i < ret; i++) {
+            QStringList currentAttr;
+            QString type, source, target;
+            char *Returns = (virStoragePoolGetXMLDesc(storagePool[i], VIR_STORAGE_XML_INACTIVE));
+            if ( Returns!=NULL ) {
+                QDomDocument doc;
+                QString s;
+                QTextStream str;
+                str.setString(&s);
+                doc.setContent(QString(Returns));
+                QDomElement _pool, _el;
+                _pool= doc.firstChildElement("pool");
+                type = _pool.attribute("type");
+                _el = _pool.firstChildElement("source");
+                _el.save(str, 4);
+                source = str.readAll();
+                _el = _pool.firstChildElement("target");
+                _el.save(str, 4);
+                target = str.readAll();
+                free(Returns);
+            };
+            currentAttr<< QString::fromUtf8( virStoragePoolGetName(storagePool[i]) )
+                       << type << source << target;
+            storagePoolDataList.append(currentAttr.join(DFR));
+            //qDebug()<<currentAttr;
+            virStoragePoolFree(storagePool[i]);
+        };
+        free(storagePool);
+        result.result = true;
+    } else {
+        result.result = false;
+    };
+    result.msg = storagePoolDataList;
     return result;
 }
 Result StoragePoolControlThread::createStoragePool()

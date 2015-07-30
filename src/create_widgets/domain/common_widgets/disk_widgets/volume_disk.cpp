@@ -9,12 +9,14 @@ Volume_Disk::Volume_Disk(
     pool = new QLabel(this);
     volumeLabel = new QPushButton("Volume:", this);
     volume = new QLineEdit(this);
-    volume->setReadOnly(true);
+    //volume->setReadOnly(true);
     modeLabel = new QLabel("LUN source mode:", this);
     modeLabel->setEnabled(false);
     mode = new QComboBox(this);
     mode->addItems(QStringList()<<"Host"<<"Direct");
     mode->setEnabled(false);
+    auth = new _Storage_Auth(this, currWorkConnection);
+    auth->setVisible(false);
 
     secLabels->setVisible(true);
 
@@ -24,6 +26,7 @@ Volume_Disk::Volume_Disk(
     baseLayout->addWidget(volume, 1, 1);
     baseLayout->addWidget(modeLabel, 2, 0);
     baseLayout->addWidget(mode, 2, 1);
+    baseLayout->addWidget(auth, 3, 1);
 
     connect(devType->devType, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(changeModeVisibility(QString)));
@@ -38,13 +41,29 @@ Volume_Disk::Volume_Disk(
 QDomDocument Volume_Disk::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _source, _target, _device, _devDesc;
+    QDomElement _source, _auth, _secret, _target, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("disk");
 
     _source = doc.createElement("source");
     _source.setAttribute("pool", pool->text());
     _source.setAttribute("volume", volume->text());
+    // used for iscsi pool only
+    if ( auth->auth->isChecked() ) {
+        _auth = doc.createElement("auth");
+        _auth.setAttribute(
+                    "username", auth->userName->text());
+        _secret = doc.createElement("secret");
+        if ( auth->getSecretType().toLower()=="iscsi" ) {
+            _secret.setAttribute("type", "iscsi");
+            _secret.setAttribute(
+                        auth->usageType->currentText().toLower(),
+                        auth->usage->text());
+            _auth.appendChild(_secret);
+            _devDesc.appendChild(_auth);
+        };
+    };
+    //
     if ( startupPolicy->isUsed() )
         _source.setAttribute(
                     "startupPolicy", startupPolicy->getStartupPolicy());
@@ -74,6 +93,16 @@ QDomDocument Volume_Disk::getDataDocument() const
         };
     };
 
+    if ( encrypt->isUsed() ) {
+        QDomElement _encrypt = doc.createElement("encryption");
+        _encrypt.setAttribute("format", "qcow");
+        _secret = doc.createElement("secret");
+        _secret.setAttribute("type", "passphrase");
+        _secret.setAttribute("uuid", encrypt->getSecretUUID());
+        _encrypt.appendChild(_secret);
+        _devDesc.appendChild(_encrypt);
+    };
+
     if ( readOnly->state() ) {
         QDomElement _readOnly = doc.createElement("readonly");
         _devDesc.appendChild(_readOnly);
@@ -101,13 +130,14 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
     //qDebug()<<xmlDesc;
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QDomElement _device, _source, _target,
-            _readOnly, _secLabel, _addr, _driver;
+    QDomElement _device, _source, _auth, _secret, _target,
+            _readOnly, _encrypt, _secLabel, _addr, _driver;
     _device = doc.firstChildElement("device")
             .firstChildElement("disk");
     _source = _device.firstChildElement("source");
     _target = _device.firstChildElement("target");
     _secLabel = _device.firstChildElement("seclabel");
+    _encrypt = _device.firstChildElement("encryption");
     _readOnly = _device.firstChildElement("readonly");
     _addr = _device.firstChildElement("address");
     _driver = _device.firstChildElement("driver");
@@ -123,6 +153,27 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
         idx = mode->findText(
                     _source.attribute("mode"), Qt::MatchContains);
         mode->setCurrentIndex( (idx<0)? 0:idx );
+    };
+    _auth = _source.firstChildElement("auth");
+    auth->auth->setChecked( !_auth.isNull() );
+    if ( !_auth.isNull() ) {
+        auth->userName->setText(
+                    _auth.attribute("username"));
+        _secret = _auth.firstChildElement("secret");
+        if ( !_secret.isNull() ) {
+            QString _u;
+            if ( _secret.hasAttribute("usage") ) {
+                idx = auth->usageType->findText(
+                            "usage", Qt::MatchContains);
+                _u = _secret.attribute("usage");
+            } else if ( _secret.hasAttribute("uuid") ) {
+                idx = auth->usageType->findText(
+                            "uuid", Qt::MatchContains);
+                _u = _secret.attribute("uuid");
+            };
+            auth->usageType->setCurrentIndex( (idx<0)? 0:idx );
+            auth->usage->setText(_u);
+        };
     };
     if ( _source.hasAttribute("startupPolicy") ) {
         startupPolicy->setUsage(true);
@@ -158,6 +209,11 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
         _device.setTagName("domain");
         QString _xmlDesc = _doc.toString();
         secLabels->readXMLDesciption(_xmlDesc);
+    };
+    encrypt->setUsage( !_encrypt.isNull() );
+    if ( !_encrypt.isNull() ) {
+        _secret = _auth.firstChildElement("secret");
+        encrypt->setSecretUUID(_secret.attribute("uuid"));
     };
     readOnly->readOnly->setChecked( !_readOnly.isNull() );
     addr->use->setChecked( !_addr.isNull() );
@@ -205,6 +261,12 @@ void Volume_Disk::getVolumeNames()
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();
         pool->setText(_ret.pool);
-        volume->setText(_ret.name);
+        volume->setText(_ret.path);
+        if ( _ret.type=="iscsi" ) {
+            auth->setVisible(true);
+        } else {
+            auth->auth->setChecked(false);
+            auth->setVisible(false);
+        };
     };
 }

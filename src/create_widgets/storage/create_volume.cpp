@@ -42,7 +42,7 @@ CreateVolume::CreateVolume(QWidget *parent, QString _type) :
     //source = new _Storage_Source(this);
     target = new _Storage_Target(this, currPoolType);
     target->formatWdg->setVisible(true);
-    target->encrypt->setVisible(false);
+    target->encrypt->setVisible(true);
 
     infoStuffLayout = new QVBoxLayout();
     //infoStuffLayout->addWidget(source);
@@ -70,7 +70,7 @@ QString CreateVolume::getStorageXMLDescFileName() const
     QDomElement _volume, _name, _target,
             _source, _allocation, _capacity,
             _format, _permissions, _owner,
-            _group, _mode, _label;
+            _group, _mode, _label, _encrypt;
     _volume = doc.createElement("volume");
     _name = doc.createElement("name");
     _text = doc.createTextNode(QString("%1.img").arg(stName->text()));
@@ -78,25 +78,30 @@ QString CreateVolume::getStorageXMLDescFileName() const
     _volume.appendChild(_name);
     _allocation = doc.createElement("allocation");
     _text = doc.createTextNode(allocation->text());
-    _allocation.setAttribute("unit", allocLabel->itemData(
-                                 allocLabel->currentIndex(),
-                                 Qt::UserRole).toString());
+    _allocation.setAttribute(
+                "unit",
+                allocLabel->itemData(
+                    allocLabel->currentIndex(),
+                    Qt::UserRole).toString());
     _allocation.appendChild(_text);
     _volume.appendChild(_allocation);
     _capacity = doc.createElement("capacity");
     _text = doc.createTextNode(capacity->text());
-    _capacity.setAttribute("unit", capLabel->itemData(
-                               capLabel->currentIndex(),
-                               Qt::UserRole).toString());
+    _capacity.setAttribute(
+                "unit",
+                capLabel->itemData(
+                    capLabel->currentIndex(),
+                    Qt::UserRole).toString());
     _capacity.appendChild(_text);
     _volume.appendChild(_capacity);
+    _target = doc.createElement("target");
     if ( target->usePerm->isChecked() ||
          target->format->currentText()!="default" ) {
-        _target = doc.createElement("target");
         if ( target->format->currentText()!="default" ) {
             _format = doc.createElement("format");
-            _format.setAttribute("type", target->format->currentText()
-                                 .toLower());
+            _format.setAttribute(
+                        "type",
+                        target->format->currentText().toLower());
             _target.appendChild(_format);
         };
         if ( target->usePerm->isChecked() ) {
@@ -119,8 +124,15 @@ QString CreateVolume::getStorageXMLDescFileName() const
             _permissions.appendChild(_label);
             _target.appendChild(_permissions);
         };
-        _volume.appendChild(_target);
     };
+    if ( target->encrypt->isUsed() ) {
+        _encrypt = doc.createElement("encryption");
+        _target.appendChild(_encrypt);
+        _encrypt.setAttribute(
+                    "format",
+                    target->encrypt->getFormat());
+    };
+    if ( !_target.isNull() ) _volume.appendChild(_target);
     doc.appendChild(_volume);
     //qDebug()<<doc.toString();
 

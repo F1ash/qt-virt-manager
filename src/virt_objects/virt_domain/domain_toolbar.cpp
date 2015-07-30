@@ -98,9 +98,12 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     //connect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
     connect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
 
-    connect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    connect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    connect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
+    connect(create_Menu, SIGNAL(fileForMethod(QStringList&)),
+            this, SLOT(repeatParameters(QStringList&)));
+    connect(define_Menu, SIGNAL(fileForMethod(QStringList&)),
+            this, SLOT(repeatParameters(QStringList&)));
+    connect(this, SIGNAL(actionTriggered(QAction*)),
+            this, SLOT(detectTriggerredAction(QAction*)));
 }
 DomainToolBar::~DomainToolBar()
 {
@@ -108,71 +111,6 @@ DomainToolBar::~DomainToolBar()
     settings.setValue("UpdateTime", interval);
     settings.setValue("AutoReload", _autoReload->isChecked());
     settings.endGroup();
-    //disconnect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(define_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    disconnect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
-    disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    disconnect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    disconnect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
-
-    disconnect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
-    disconnect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
-
-    delete start_Action;
-    start_Action = NULL;
-    delete restore_Action;
-    restore_Action = NULL;
-    delete start_Menu;
-    start_Menu = NULL;
-    delete pause_Action;
-    pause_Action = NULL;
-    delete reset_Action;
-    reset_Action = NULL;
-    delete reboot_Action;
-    reboot_Action = NULL;
-    delete shutdown_Action;
-    shutdown_Action = NULL;
-    delete save_Action;
-    save_Action = NULL;
-    delete sep;
-    sep = NULL;
-    delete destroy_Menu;
-    destroy_Menu = NULL;
-    delete destroy_Action;
-    destroy_Action = NULL;
-    delete create_Menu;
-    create_Menu = NULL;
-    delete define_Menu;
-    define_Menu = NULL;
-    delete create_Action;
-    create_Action = NULL;
-    delete define_Action;
-    define_Action = NULL;
-    delete undefine_Action;
-    undefine_Action = NULL;
-    delete setAutostart_Action;
-    setAutostart_Action = NULL;
-    delete createSnapshot;
-    createSnapshot = NULL;
-    delete moreSnapshot_Actions;
-    moreSnapshot_Actions = NULL;
-    delete snapshot_Menu;
-    snapshot_Menu = NULL;
-    delete snapshot_Action;
-    snapshot_Action = NULL;
-    delete getXMLDesc_Action;
-    getXMLDesc_Action = NULL;
-    delete migrate_Action;
-    migrate_Action = NULL;
-    delete _autoReload;
-    _autoReload = NULL;
-    delete autoReload;
-    autoReload = NULL;
 }
 
 /* public slots */

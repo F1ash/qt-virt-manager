@@ -9,7 +9,9 @@ class ISCSI_Device : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ISCSI_Device(QWidget *parent = 0);
+    explicit ISCSI_Device(
+            QWidget         *parent = NULL,
+            virConnectPtr    _conn  = NULL);
     QLineEdit           *host;
     QSpinBox            *port;
     _Storage_Auth       *auth;

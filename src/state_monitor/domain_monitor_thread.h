@@ -4,8 +4,8 @@
 #include <QThread>
 #include "time.h"
 #include <QDebug>
-#include "libvirt/libvirt.h"
-#include "libvirt/virterror.h"
+#include <libvirt/libvirt.h>
+#include <libvirt/virterror.h>
 
 class DomainMonitorThread : public QThread
 {

@@ -468,7 +468,7 @@ void MainWindow::initDockWidgets()
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
-    scrtHeadWdg = new DockHeadWidget(this, "Secret");
+    scrtHeadWdg = new DockHeadWidget(this, "Secrets");
     scrtHeadWdg->setTabBarName("security-high");
     secretDock->setTitleBarWidget(scrtHeadWdg);
     connect(scrtHeadWdg, SIGNAL(floatChanged(bool)),
@@ -504,7 +504,7 @@ void MainWindow::initDockWidgets()
         QDockWidget::DockWidgetFloatable |
         QDockWidget::DockWidgetVerticalTitleBar
     );
-    ifaceHeadWdg = new DockHeadWidget(this, "Interface");
+    ifaceHeadWdg = new DockHeadWidget(this, "Interfaces");
     ifaceHeadWdg->setTabBarName("network-wired");
     ifaceDock->setTitleBarWidget(ifaceHeadWdg);
     connect(ifaceHeadWdg, SIGNAL(floatChanged(bool)),

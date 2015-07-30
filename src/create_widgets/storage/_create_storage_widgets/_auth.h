@@ -7,12 +7,19 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QGridLayout>
+#include <QPushButton>
+#include "find_secret_dialog.h"
+
+#define NOT_VOLUME QString("NOT_VOLUME")
 
 class _Storage_Auth : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _Storage_Auth(QWidget *parent = NULL);
+    explicit _Storage_Auth(
+            QWidget         *parent = NULL,
+            virConnectPtr    _conn  = NULL,
+            QString          _type  = NOT_VOLUME);
     QCheckBox       *auth;
     QLineEdit       *userName, *usage;
     QComboBox       *usageType;
@@ -21,15 +28,22 @@ signals:
     void             dataChanged();
 
 private:
+    QString          secType;
     QLabel          *userLabel;
+    QPushButton     *findSecret;
     QGridLayout     *authLayout;
     QWidget         *authWdg;
     QVBoxLayout     *commonLayout;
 
+    virConnectPtr    currConnection;
+
 public slots:
+    void             setSecretType(const QString&);
+    QString          getSecretType() const;
 
 private slots:
     void             usageTypeChanged(int);
+    void             setSecret();
 
 };
 
