@@ -4,7 +4,7 @@ _Pool_Stuff::_Pool_Stuff(QWidget *parent, virConnectPtr _conn) :
     QWidget(parent)
 {
     source = new _Storage_Source(this, _conn);
-    target = new _Storage_Target(this, _conn);
+    target = new _Storage_Target(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(source);
     commonLayout->addWidget(target);

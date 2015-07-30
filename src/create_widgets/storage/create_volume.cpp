@@ -4,7 +4,7 @@
  * http://libvirt.org/formatstorage.html
  */
 
-CreateVolume::CreateVolume(QWidget *parent, virConnectPtr _conn, QString _type) :
+CreateVolume::CreateVolume(QWidget *parent, QString _type) :
     _CreateStorage(parent), currPoolType(_type)
 {
     setUrl("http://libvirt.org/formatstorage.html");
@@ -40,7 +40,7 @@ CreateVolume::CreateVolume(QWidget *parent, virConnectPtr _conn, QString _type) 
     sizeWdg->setLayout(sizeLayout);
 
     //source = new _Storage_Source(this);
-    target = new _Storage_Target(this, _conn, currPoolType);
+    target = new _Storage_Target(this, currPoolType);
     target->formatWdg->setVisible(true);
     target->encrypt->setVisible(true);
 
@@ -126,7 +126,7 @@ QString CreateVolume::getStorageXMLDescFileName() const
         };
     };
     if ( target->encrypt->isUsed() ) {
-        _encrypt = doc.createElement("encrypt");
+        _encrypt = doc.createElement("encryption");
         _target.appendChild(_encrypt);
         _encrypt.setAttribute(
                     "format",

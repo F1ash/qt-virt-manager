@@ -7,6 +7,7 @@
 #include "_device.h"
 #include "_read_only.h"
 #include "_startup_policy.h"
+#include "_use_encryption.h"
 #include "create_widgets/domain/common_widgets/sec_label_widgets/sec_labels.h"
 #include "create_widgets/domain/common_widgets/device_address.h"
 
@@ -23,6 +24,7 @@ public:
     _Target         *target;
     SecLabels       *secLabels;
     _ReadOnly       *readOnly;
+    _UseEncryption  *encrypt;
     DeviceAddress   *addr;
     QGridLayout     *baseLayout;
     QWidget         *baseWdg;

@@ -93,6 +93,16 @@ QDomDocument Volume_Disk::getDataDocument() const
         };
     };
 
+    if ( encrypt->isUsed() ) {
+        QDomElement _encrypt = doc.createElement("encryption");
+        _encrypt.setAttribute("format", "qcow");
+        _secret = doc.createElement("secret");
+        _secret.setAttribute("type", "passphrase");
+        _secret.setAttribute("uuid", encrypt->getSecretUUID());
+        _encrypt.appendChild(_secret);
+        _devDesc.appendChild(_encrypt);
+    };
+
     if ( readOnly->state() ) {
         QDomElement _readOnly = doc.createElement("readonly");
         _devDesc.appendChild(_readOnly);
@@ -121,12 +131,13 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
     QDomDocument doc;
     doc.setContent(xmlDesc);
     QDomElement _device, _source, _auth, _secret, _target,
-            _readOnly, _secLabel, _addr, _driver;
+            _readOnly, _encrypt, _secLabel, _addr, _driver;
     _device = doc.firstChildElement("device")
             .firstChildElement("disk");
     _source = _device.firstChildElement("source");
     _target = _device.firstChildElement("target");
     _secLabel = _device.firstChildElement("seclabel");
+    _encrypt = _device.firstChildElement("encryption");
     _readOnly = _device.firstChildElement("readonly");
     _addr = _device.firstChildElement("address");
     _driver = _device.firstChildElement("driver");
@@ -198,6 +209,11 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
         _device.setTagName("domain");
         QString _xmlDesc = _doc.toString();
         secLabels->readXMLDesciption(_xmlDesc);
+    };
+    encrypt->setUsage( !_encrypt.isNull() );
+    if ( !_encrypt.isNull() ) {
+        _secret = _auth.firstChildElement("secret");
+        encrypt->setSecretUUID(_secret.attribute("uuid"));
     };
     readOnly->readOnly->setChecked( !_readOnly.isNull() );
     addr->use->setChecked( !_addr.isNull() );

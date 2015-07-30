@@ -6,16 +6,12 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QGridLayout>
-#include <libvirt/libvirt.h>
-#include <libvirt/virterror.h>
 
 class Encryption : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Encryption(
-            QWidget         *parent = NULL,
-            virConnectPtr    _conn = NULL);
+    explicit Encryption(QWidget *parent = NULL);
 
 private:
     QCheckBox           *useEncryption;
@@ -24,8 +20,6 @@ private:
     QGridLayout         *baseLayout;
     QWidget             *baseWdg;
     QVBoxLayout         *commonLayout;
-
-    virConnectPtr        currConnection;
 
 public slots:
     bool                 isUsed() const;

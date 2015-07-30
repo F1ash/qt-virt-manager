@@ -317,7 +317,7 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                             );
                 _poolType = doc.firstChildElement("pool").attribute("type");
                 CreateVolume *createVolumeDialog =
-                        new CreateVolume(this, currWorkConnection, _poolType);
+                        new CreateVolume(this, _poolType);
                 int result = createVolumeDialog->exec();
                 if ( result==QDialog::Accepted ) {
                     path = createVolumeDialog->getStorageXMLDescFileName();

@@ -220,6 +220,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/disk_widgets/_device.h
   src/create_widgets/domain/common_widgets/disk_widgets/_read_only.h
   src/create_widgets/domain/common_widgets/disk_widgets/_startup_policy.h
+  src/create_widgets/domain/common_widgets/disk_widgets/_use_encryption.h
   src/create_widgets/domain/common_widgets/disk_widgets/_hosts.h
   src/create_widgets/domain/common_widgets/disk_widgets/virtvolume_dialog.h
   src/create_widgets/domain/common_widgets/disk_widgets/block_disk.h
@@ -532,6 +533,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/disk_widgets/_device.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_read_only.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_startup_policy.cpp
+  src/create_widgets/domain/common_widgets/disk_widgets/_use_encryption.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/_hosts.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/virtvolume_dialog.cpp
   src/create_widgets/domain/common_widgets/disk_widgets/block_disk.cpp
