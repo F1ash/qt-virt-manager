@@ -46,7 +46,7 @@ Network_Disk::Network_Disk(
 QDomDocument Network_Disk::getDataDocument() const
 {
     QDomDocument doc;
-    QDomElement _source, _auth, _secret,
+    QDomElement _source, _auth, _secret, _encrypt,
             _target, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("disk");
@@ -99,6 +99,16 @@ QDomDocument Network_Disk::getDataDocument() const
     };
     _devDesc.appendChild(_target);
 
+    if ( encrypt->isUsed() ) {
+        _encrypt = doc.createElement("encryption");
+        _encrypt.setAttribute("format", "qcow");
+        _secret = doc.createElement("secret");
+        _secret.setAttribute("type", "passphrase");
+        _secret.setAttribute("uuid", encrypt->getSecretUUID());
+        _encrypt.appendChild(_secret);
+        _devDesc.appendChild(_encrypt);
+    };
+
     if ( readOnly->state() ) {
         QDomElement _readOnly = doc.createElement("readonly");
         _devDesc.appendChild(_readOnly);
@@ -126,12 +136,13 @@ void Network_Disk::setDataDescription(QString &xmlDesc)
     //qDebug()<<xmlDesc;
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QDomElement _device, _source, _host, _auth,
+    QDomElement _device, _source, _host, _auth, _encrypt,
             _secret, _target, _readOnly, _addr, _driver;
     _device = doc.firstChildElement("device")
             .firstChildElement("disk");
     _source = _device.firstChildElement("source");
     _target = _device.firstChildElement("target");
+    _encrypt = _device.firstChildElement("encryption");
     _readOnly = _device.firstChildElement("readonly");
     _addr = _device.firstChildElement("address");
     _driver = _device.firstChildElement("driver");
@@ -200,6 +211,11 @@ void Network_Disk::setDataDescription(QString &xmlDesc)
         target->removable->setCurrentIndex( (idx<0)? 0:idx );
     } else
         target->removableLabel->setChecked(false);
+    encrypt->setUsage( !_encrypt.isNull() );
+    if ( !_encrypt.isNull() ) {
+        _secret = _encrypt.firstChildElement("secret");
+        encrypt->setSecretUUID(_secret.attribute("uuid"));
+    };
     readOnly->readOnly->setChecked( !_readOnly.isNull() );
     addr->use->setChecked( !_addr.isNull() );
     if ( !_addr.isNull() ) {

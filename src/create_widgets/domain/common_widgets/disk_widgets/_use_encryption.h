@@ -19,27 +19,32 @@ public:
             virConnectPtr    _conn  = NULL);
 
 signals:
-    void             dataChanged();
+    void                 dataChanged();
 
 private:
-    QCheckBox       *usage;
-    QLineEdit       *secUsage;
-    QPushButton     *findSecret;
-    QHBoxLayout     *baseLayout;
-    QWidget         *baseWdg;
-    QLabel          *info;
-    QVBoxLayout     *commonLayout;
+    QString              currVolumePath;
+    QCheckBox           *usage;
+    QLineEdit           *secUsage;
+    QPushButton         *findSecret;
+    QHBoxLayout         *baseLayout;
+    QWidget             *baseWdg;
+    QLabel              *info;
+    QVBoxLayout         *commonLayout;
 
-    virConnectPtr    currWorkConnection;
+    virConnectPtr        currWorkConnection;
+    SecretControlThread *thread;
 
 public slots:
-    bool             isUsed() const;
-    void             setUsage(bool);
-    QString          getSecretUUID() const;
-    void             setSecretUUID(const QString&);
+    bool                 isUsed() const;
+    void                 setUsage(bool);
+    void                 emitSecretList();
+    void                 setCurrVolumePath(const QString&);
+    QString              getSecretUUID() const;
+    void                 setSecretUUID(const QString&);
 
 private slots:
-    void             setVolumeSecret();
+    void                 resultReceiver(Result);
+    void                 setVolumeSecret();
 };
 
 #endif // _USE_ENCRYPTION_H

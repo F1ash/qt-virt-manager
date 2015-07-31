@@ -16,7 +16,7 @@ _Disk::_Disk(
     secLabels = new SecLabels(this);
     secLabels->setVisible(false);
     encrypt = new _UseEncryption(this, currWorkConnection);
-    encrypt->setVisible(true);
+    encrypt->setVisible(false);
     readOnly = new _ReadOnly(this);
     addr = new DeviceAddress(this);
     addr->info->widget(2)->setEnabled(false);

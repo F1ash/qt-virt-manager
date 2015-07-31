@@ -19,6 +19,7 @@ Volume_Disk::Volume_Disk(
     auth->setVisible(false);
 
     secLabels->setVisible(true);
+    encrypt->setVisible(true);
 
     baseLayout->addWidget(poolLabel, 0, 0);
     baseLayout->addWidget(pool, 0, 1);
@@ -32,6 +33,8 @@ Volume_Disk::Volume_Disk(
             this, SLOT(changeModeVisibility(QString)));
     connect(volumeLabel, SIGNAL(clicked()),
             this, SLOT(getVolumeNames()));
+    connect(volume, SIGNAL(textChanged(QString)),
+            encrypt, SLOT(setCurrVolumePath(const QString&)));
     // dataChanged connections
     connect(volume, SIGNAL(textChanged(QString)),
             this, SLOT(stateChanged()));
@@ -212,7 +215,7 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
     };
     encrypt->setUsage( !_encrypt.isNull() );
     if ( !_encrypt.isNull() ) {
-        _secret = _auth.firstChildElement("secret");
+        _secret = _encrypt.firstChildElement("secret");
         encrypt->setSecretUUID(_secret.attribute("uuid"));
     };
     readOnly->readOnly->setChecked( !_readOnly.isNull() );

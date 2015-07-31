@@ -25,7 +25,8 @@ Block_Disk::Block_Disk(
 QDomDocument Block_Disk::getDataDocument() const
 {
     QDomDocument doc = QDomDocument();
-    QDomElement _source, _target, _device, _devDesc;
+    QDomElement _source, _target, _device, _devDesc,
+            _encrypt, _secret;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("disk");
 
@@ -57,6 +58,16 @@ QDomDocument Block_Disk::getDataDocument() const
         };
     };
 
+    if ( encrypt->isUsed() ) {
+        _encrypt = doc.createElement("encryption");
+        _encrypt.setAttribute("format", "qcow");
+        _secret = doc.createElement("secret");
+        _secret.setAttribute("type", "passphrase");
+        _secret.setAttribute("uuid", encrypt->getSecretUUID());
+        _encrypt.appendChild(_secret);
+        _devDesc.appendChild(_encrypt);
+    };
+
     if ( readOnly->state() ) {
         QDomElement _readOnly = doc.createElement("readonly");
         _devDesc.appendChild(_readOnly);
@@ -84,8 +95,8 @@ void Block_Disk::setDataDescription(QString &xmlDesc)
     //qDebug()<<xmlDesc;
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QDomElement _device, _source, _target,
-            _readOnly, _secLabel, _addr, _driver;
+    QDomElement _device, _source, _target, _encrypt,
+            _secret, _readOnly, _secLabel, _addr, _driver;
     _device = doc.firstChildElement("device")
             .firstChildElement("disk");
     _source = _device.firstChildElement("source");
@@ -134,6 +145,11 @@ void Block_Disk::setDataDescription(QString &xmlDesc)
         _device.setTagName("domain");
         QString _xmlDesc = _doc.toString();
         secLabels->readXMLDesciption(_xmlDesc);
+    };
+    encrypt->setUsage( !_encrypt.isNull() );
+    if ( !_encrypt.isNull() ) {
+        _secret = _encrypt.firstChildElement("secret");
+        encrypt->setSecretUUID(_secret.attribute("uuid"));
     };
     readOnly->readOnly->setChecked( !_readOnly.isNull() );
     addr->use->setChecked( !_addr.isNull() );
