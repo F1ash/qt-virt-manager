@@ -112,7 +112,7 @@ Result DomControlThread::getAllDomainList()
         int ret = virConnectListAllDomains(
                     task.sourceConn, &domains, flags);
         if ( ret<0 ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
             result.result = false;
             result.msg = domainList;
             return result;
@@ -197,6 +197,7 @@ Result DomControlThread::createDomain()
     if ( !f.open(QIODevice::ReadOnly) ) {
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
         emit errorMsg( msg, number );
+        result.err = msg;
         return result;
     };
     xmlData = f.readAll();
@@ -204,7 +205,7 @@ Result DomControlThread::createDomain()
     virDomainPtr domain = virDomainCreateXML(
                 task.sourceConn, xmlData.data(), VIR_DOMAIN_START_AUTODESTROY);
     if ( domain==NULL ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
         return result;
     };
     result.name = QString().fromUtf8( virDomainGetName(domain) );
@@ -225,14 +226,17 @@ Result DomControlThread::defineDomain()
     if ( !f.open(QIODevice::ReadOnly) ) {
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
         emit errorMsg( msg, number );
+        result.err = msg;
         return result;
     };
     xmlData = f.readAll();
     f.close();
     virDomainPtr domain = virDomainDefineXML(
                 task.sourceConn, xmlData.data());
-    sendConnErrors();
-    if ( domain==NULL ) return result;
+    if ( domain==NULL ) {
+        result.err = sendConnErrors();
+        return result;
+    };
     result.name = QString().fromUtf8( virDomainGetName(domain) );
     result.result = true;
     result.msg.append(
@@ -250,9 +254,11 @@ Result DomControlThread::startDomain()
                 task.sourceConn, name.toUtf8().data());
     if ( domain!=NULL ) {
         started = (virDomainCreate(domain)+1) ? true : false;
-        if (!started) sendConnErrors();
+        if (!started)
+            result.err = sendConnErrors();
         virDomainFree(domain);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = started;
     result.msg.append(
@@ -273,13 +279,16 @@ Result DomControlThread::pauseDomain()
     if ( domain!=NULL ) {
         if ( state=="RUNNING" ) {
             invoked = (virDomainSuspend(domain)+1) ? true : false;
-            if (!invoked) sendConnErrors();
+            if (!invoked)
+                result.err = sendConnErrors();
         } else if ( state=="PAUSED" ) {
             invoked = (virDomainResume(domain)+1) ? true : false;
-            if (!invoked) sendConnErrors();
+            if (!invoked)
+                result.err = sendConnErrors();
         } else 0;
         virDomainFree(domain);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = invoked;
     result.msg.append(
@@ -296,9 +305,11 @@ Result DomControlThread::destroyDomain()
                 task.sourceConn, name.toUtf8().data());
     if ( domain!=NULL ) {
         deleted = (virDomainDestroy(domain)+1) ? true : false;
-        if (!deleted) sendConnErrors();
+        if (!deleted)
+            result.err = sendConnErrors();
         virDomainFree(domain);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = deleted;
     result.msg.append(
@@ -319,9 +330,11 @@ Result DomControlThread::resetDomain()
 
     if ( domain!=NULL ) {
         invoked = (virDomainReset(domain, flags)+1) ? true : false;
-        if (!invoked) sendConnErrors();
+        if (!invoked)
+            result.err = sendConnErrors();
         virDomainFree(domain);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = invoked;
     result.msg.append(
@@ -346,9 +359,11 @@ Result DomControlThread::rebootDomain()
 
     if ( domain!=NULL ) {
         invoked = (virDomainReboot(domain, flags)+1) ? true : false;
-        if (!invoked) sendConnErrors();
+        if (!invoked)
+            result.err = sendConnErrors();
         virDomainFree(domain);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = invoked;
     result.msg.append(
@@ -374,9 +389,11 @@ Result DomControlThread::shutdownDomain()
     if ( domain!=NULL ) {
         invoked = (virDomainShutdownFlags(
                        domain, flags)+1) ? true : false;
-        if (!invoked) sendConnErrors();
+        if (!invoked)
+            result.err = sendConnErrors();
         virDomainFree(domain);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = invoked;
     result.msg.append(
@@ -406,9 +423,11 @@ Result DomControlThread::saveDomain()
         invoked = (virDomainSaveFlags(
                        domain, to, dxml, flags)+1)
                 ? true : false;
-        if (!invoked) sendConnErrors();
+        if (!invoked)
+            result.err = sendConnErrors();
         virDomainFree(domain);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = invoked;
     result.msg.append(
@@ -435,7 +454,8 @@ Result DomControlThread::restoreDomain()
         invoked = (virDomainRestoreFlags(
                        task.sourceConn, from, dxml, flags)+1)
                 ? true : false;
-        if (!invoked) sendConnErrors();
+        if (!invoked)
+            result.err = sendConnErrors();
     };
     result.name = name;
     result.result = invoked;
@@ -453,9 +473,11 @@ Result DomControlThread::undefineDomain()
                 task.sourceConn, name.toUtf8().data());
     if ( domain!=NULL ) {
         deleted = (virDomainUndefine(domain)+1) ? true : false;
-        if (!deleted) sendConnErrors();
+        if (!deleted)
+            result.err = sendConnErrors();
         virDomainFree(domain);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = deleted;
     result.msg.append(
@@ -476,9 +498,11 @@ Result DomControlThread::changeAutoStartDomain()
     if ( domain!=NULL ) {
         set = (virDomainSetAutostart(
                    domain, autostart)+1) ? true : false;
-        if (!set) sendConnErrors();
+        if (!set)
+            result.err = sendConnErrors();
         virDomainFree(domain);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = set;
     result.msg.append(
@@ -498,10 +522,12 @@ Result DomControlThread::getDomainXMLDesc()
     if ( domain!=NULL ) {
         Returns = (virDomainGetXMLDesc(
                        domain, VIR_DOMAIN_XML_INACTIVE));
-        if ( Returns==NULL ) sendConnErrors();
+        if ( Returns==NULL )
+            result.err = sendConnErrors();
         else read = true;
         virDomainFree(domain);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     QTemporaryFile f;
     f.setAutoRemove(false);
     f.setFileTemplate(
@@ -557,8 +583,10 @@ Result DomControlThread::migrateDomain()
                         +1)?true:false;
         };
         virDomainFree(domain);
-        if ( !migrated ) sendConnErrors();
-    } else sendConnErrors();
+        if ( !migrated )
+            result.err = sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.result = migrated;
     result.msg.append(
                 QString("'<b>%1</b>' Domain %2 Migrated.")
@@ -580,12 +608,12 @@ Result DomControlThread::createSnapshoteDomain()
     virDomainPtr domain = virDomainLookupByName(
                 task.sourceConn, domName.toUtf8().data());
     if ( NULL==domain ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
     } else {
         virDomainSnapshotPtr snapshot =
                 virDomainSnapshotCreateXML(domain, xmlDesc, flags);
         if ( NULL==snapshot ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
         } else {
             snapped = true;
             virDomainSnapshotFree(snapshot);
@@ -610,17 +638,17 @@ Result DomControlThread::revertSnapshoteDomain()
     virDomainPtr domain = virDomainLookupByName(
                 task.sourceConn, domName.toUtf8().data());
     if ( NULL==domain ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
     } else {
         // flags: extra flags; not used yet, so callers should always pass 0
         virDomainSnapshotPtr snapshot = virDomainSnapshotLookupByName(
                     domain, snapshotName.toUtf8().data(), 0);
         if ( NULL==snapshot ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
        } else {
            int ret = virDomainRevertToSnapshot(snapshot, flags);
            if ( ret<0 ) {
-                sendConnErrors();
+               result.err = sendConnErrors();
             } else {
                 reverted = true;
             };
@@ -646,18 +674,18 @@ Result DomControlThread::deleteSnapshoteDomain()
     virDomainPtr domain = virDomainLookupByName(
                 task.sourceConn, domName.toUtf8().data());
     if ( NULL==domain ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
     } else {
         // flags: extra flags; not used yet, so callers should always pass 0
         virDomainSnapshotPtr snapshot =
                 virDomainSnapshotLookupByName(
                     domain, snapshotName.toUtf8().data(), 0);
         if ( NULL==snapshot ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
         } else {
             int ret = virDomainSnapshotDelete(snapshot, flags);
             if ( ret<0 ) {
-                sendConnErrors();
+                result.err = sendConnErrors();
             } else {
                 deleted = true;
             };

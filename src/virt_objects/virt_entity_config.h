@@ -44,6 +44,7 @@ struct Result {
     Actions         action      = _EMPTY_ACTION;
     bool            result      = false;
     QStringList     msg         = QStringList();
+    QString         err         = QString();
     QString         fileName    = QString();
 };
 

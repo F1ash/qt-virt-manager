@@ -90,7 +90,9 @@ void LogDock::saveLogToFile()
     QString _fileName = QFileDialog::getSaveFileName(
                 this,
                 "Save Log To",
-                "~");
+                QString("~/QtVirtManager_%1_%2.log")
+                .arg(QDate::currentDate().toString("dd.MM.yyyy"))
+                .arg(QTime::currentTime().toString()));
     if ( !_fileName.isEmpty() ) {
         QFile file;
         file.setFileName(_fileName);

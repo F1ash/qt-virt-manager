@@ -67,7 +67,7 @@ Result SecretControlThread::getAllSecretList()
         unsigned int flags = 0;
         int ret = virConnectListAllSecrets(task.sourceConn, &secrets, flags);
         if ( ret<0 ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
             return result;
         };
 
@@ -133,6 +133,7 @@ Result SecretControlThread::defineSecret()
     if ( !f.open(QIODevice::ReadOnly) ) {
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
         emit errorMsg( msg, number );
+        result.err = msg;
         return result;
     };
     xmlData = f.readAll();
@@ -142,7 +143,7 @@ Result SecretControlThread::defineSecret()
     virSecretPtr secret = virSecretDefineXML(
                 task.sourceConn, xmlData.data(), flags);
     if ( secret==NULL ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
         return result;
     };
     unsigned char *value = (unsigned char*)(
@@ -172,9 +173,11 @@ Result SecretControlThread::undefineSecret()
                 task.sourceConn, uuid.toUtf8().data());
     if ( secret!=NULL ) {
         deleted = (virSecretUndefine(secret)+1) ? true : false;
-        if (!deleted) sendConnErrors();
+        if (!deleted)
+            result.err = sendConnErrors();
         virSecretFree(secret);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = uuid;
     result.result = deleted;
     result.msg.append(QString("'<b>%1</b>' Secret %2 Undefined.")
@@ -194,10 +197,12 @@ Result SecretControlThread::getVirtSecretXMLDesc()
         //extra flags; not used yet, so callers should always pass 0
         int flags = 0;
         Returns = (virSecretGetXMLDesc(secret, flags));
-        if ( Returns==NULL ) sendConnErrors();
+        if ( Returns==NULL )
+            result.err = sendConnErrors();
         else read = true;
         virSecretFree(secret);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     QTemporaryFile f;
     f.setAutoRemove(false);
     f.setFileTemplate(

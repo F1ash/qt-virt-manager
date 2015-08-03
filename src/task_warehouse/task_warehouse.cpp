@@ -57,8 +57,8 @@ void TaskWareHouse::stopTaskComputing()
 }
 void TaskWareHouse::addNewTask(TASK task)
 {
-    //qDebug()<<task.sourceConn<<task.srcConName<<task.action\
-    //      <<task.method<<task.object<<task.args.list()\
+    //qDebug()<<task.sourceConn<<task.srcConName<<task.action
+    //      <<task.method<<task.object<<task.args.list()
     //      <<task.args.destConn<<task.type<<"addNewTask_TASK";
     //
     ++counter;
@@ -191,6 +191,7 @@ void TaskWareHouse::taskResultReceiver(Result data)
                      .arg(QString("").sprintf("%03d", _time.msec())));
         _data.insert("Result", (data.result)? "Success":"Fail");
         _data.insert("Message", data.msg.join("\n"));
+        _data.insert("Error", data.err);
         _list.at(0)->setData(Qt::UserRole, _data);
         taskList->scrollToItem(_list.at(0));
         setNewTooltip(_list.at(0));
@@ -198,7 +199,7 @@ void TaskWareHouse::taskResultReceiver(Result data)
 }
 void TaskWareHouse::setNewTooltip(QListWidgetItem *_item)
 {
-    QString _toolTip, _table, _conn, _dom, _arg, _task, _time, _res, _msg;
+    QString _toolTip, _table, _conn, _dom, _arg, _task, _time, _res, _msg, _err;
     QVariant data = _item->data(Qt::UserRole);
     _conn.append(QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
                  .arg("<b>Connection</b>")
@@ -222,14 +223,18 @@ void TaskWareHouse::setNewTooltip(QListWidgetItem *_item)
     _msg.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
                  .arg("<b>Message</b>")
                  .arg(data.toMap().value("Message").toString()));
-    _table.append(QString("%1%2%3%4%5%6%7")
+    _err.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
+                 .arg("<b>Error</b>")
+                 .arg(data.toMap().value("Error").toString()));
+    _table.append(QString("%1%2%3%4%5%6%7%8")
                   .arg(_conn)
                   .arg(_dom)
                   .arg(_task)
                   .arg(_arg)
                   .arg(_time)
                   .arg(_res)
-                  .arg(_msg));
+                  .arg(_msg)
+                  .arg(_err));
     _toolTip = QString("<TABLE BORDER=3>%1</TABLE>").arg(_table);
     _item->setToolTip(_toolTip);
 }

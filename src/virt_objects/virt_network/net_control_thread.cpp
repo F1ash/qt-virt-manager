@@ -78,7 +78,7 @@ Result NetControlThread::getAllNetworkList()
                              VIR_CONNECT_LIST_NETWORKS_INACTIVE;
         int ret = virConnectListAllNetworks( task.sourceConn, &networks, flags);
         if ( ret<0 ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
             return result;
         };
 
@@ -114,6 +114,7 @@ Result NetControlThread::createNetwork()
     if ( !f.open(QIODevice::ReadOnly) ) {
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
         emit errorMsg( msg, number );
+        result.err = msg;
         return result;
     };
     xmlData = f.readAll();
@@ -121,7 +122,7 @@ Result NetControlThread::createNetwork()
     virNetworkPtr network = virNetworkCreateXML(
                 task.sourceConn, xmlData.data());
     if ( network==NULL ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
         return result;
     };
     result.name = QString().fromUtf8( virNetworkGetName(network) );
@@ -141,6 +142,7 @@ Result NetControlThread::defineNetwork()
     if ( !f.open(QIODevice::ReadOnly) ) {
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
         emit errorMsg( msg, number );
+        result.err = msg;
         return result;
     };
     xmlData = f.readAll();
@@ -148,7 +150,7 @@ Result NetControlThread::defineNetwork()
     virNetworkPtr network = virNetworkDefineXML(
                 task.sourceConn, xmlData.data());
     if ( network==NULL ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
         return result;
     };
     result.name = QString().fromUtf8( virNetworkGetName(network) );
@@ -167,9 +169,11 @@ Result NetControlThread::startNetwork()
                 task.sourceConn, name.toUtf8().data());
     if ( network!=NULL ) {
         started = (virNetworkCreate(network)+1) ? true : false;
-        if (!started) sendConnErrors();
+        if (!started)
+            result.err = sendConnErrors();
         virNetworkFree(network);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = started;
     result.msg.append(QString("'<b>%1</b>' Network %2 Started.")
@@ -185,9 +189,11 @@ Result NetControlThread::destroyNetwork()
                 task.sourceConn, name.toUtf8().data());
     if ( network!=NULL ) {
         deleted = (virNetworkDestroy(network)+1) ? true : false;
-        if (!deleted) sendConnErrors();
+        if (!deleted)
+            result.err = sendConnErrors();
         virNetworkFree(network);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = deleted;
     result.msg.append(QString("'<b>%1</b>' Network %2 Destroyed.")
@@ -203,9 +209,11 @@ Result NetControlThread::undefineNetwork()
                 task.sourceConn, name.toUtf8().data());
     if ( network!=NULL ) {
         deleted = (virNetworkUndefine(network)+1) ? true : false;
-        if (!deleted) sendConnErrors();
+        if (!deleted)
+            result.err = sendConnErrors();
         virNetworkFree(network);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = deleted;
     result.msg.append(QString("'<b>%1</b>' Network %2 Undefined.")
@@ -223,9 +231,11 @@ Result NetControlThread::changeAutoStartNetwork()
                 task.sourceConn, name.toUtf8().data());
     if ( network!=NULL ) {
         set = (virNetworkSetAutostart(network, autostart)+1) ? true : false;
-        if (!set) sendConnErrors();
+        if (!set)
+            result.err = sendConnErrors();
         virNetworkFree(network);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.result = set;
     result.msg.append(QString("'<b>%1</b>' Network autostart %2 Set.")
                       .arg(name).arg((set)?"":"don't"));
@@ -243,10 +253,12 @@ Result NetControlThread::getVirtNetXMLDesc()
     if ( network!=NULL ) {
         Returns = (virNetworkGetXMLDesc(
                        network, VIR_NETWORK_XML_INACTIVE));
-        if ( Returns==NULL ) sendConnErrors();
+        if ( Returns==NULL )
+            result.err = sendConnErrors();
         else read = true;
         virNetworkFree(network);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     QTemporaryFile f;
     f.setAutoRemove(false);
     f.setFileTemplate(

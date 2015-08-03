@@ -87,7 +87,7 @@ Result StoragePoolControlThread::getAllStoragePoolList()
         int ret = virConnectListAllStoragePools(
                     task.sourceConn, &storagePool, flags);
         if ( ret<0 ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
             result.result = false;
             result.msg = storagePoolList;
             return result;
@@ -128,7 +128,7 @@ Result StoragePoolControlThread::getAllStoragePoolDataList()
         int ret = virConnectListAllStoragePools(
                     task.sourceConn, &storagePool, flags);
         if ( ret<0 ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
             result.result = false;
             result.msg = storagePoolDataList;
             return result;
@@ -181,6 +181,7 @@ Result StoragePoolControlThread::createStoragePool()
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
         emit errorMsg( msg, number );
         result.result = false;
+        result.err = msg;
         return result;
     };
     xmlData = f.readAll();
@@ -190,7 +191,7 @@ Result StoragePoolControlThread::createStoragePool()
     virStoragePoolPtr storagePool = virStoragePoolCreateXML(
                 task.sourceConn, xmlData.data(), flags);
     if ( storagePool==NULL ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
         result.result = false;
         return result;
     };
@@ -212,6 +213,7 @@ Result StoragePoolControlThread::defineStoragePool()
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
         emit errorMsg( msg, number );
         result.result = false;
+        result.err = msg;
         return result;
     };
     xmlData = f.readAll();
@@ -221,7 +223,7 @@ Result StoragePoolControlThread::defineStoragePool()
     virStoragePoolPtr storagePool = virStoragePoolDefineXML(
                 task.sourceConn, xmlData.data(), flags);
     if ( storagePool==NULL ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
         result.result = false;
         return result;
     };
@@ -246,9 +248,11 @@ Result StoragePoolControlThread::startStoragePool()
                 task.sourceConn, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         started = (virStoragePoolCreate(storagePool, flags)+1) ? true : false;
-        if (!started) sendConnErrors();
+        if (!started)
+            result.err = sendConnErrors();
         virStoragePoolFree(storagePool);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.msg.append(QString("'<b>%1</b>' StoragePool %2 Started.")
                   .arg(name).arg((started)?"":"don't"));
     result.name = name;
@@ -264,9 +268,11 @@ Result StoragePoolControlThread::destroyStoragePool()
                 task.sourceConn, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         deleted = (virStoragePoolDestroy(storagePool)+1) ? true : false;
-        if (!deleted) sendConnErrors();
+        if (!deleted)
+            result.err = sendConnErrors();
         virStoragePoolFree(storagePool);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.msg.append(QString("'<b>%1</b>' StoragePool %2 Destroyed.")
                   .arg(name).arg((deleted)?"":"don't"));
     result.name = name;
@@ -282,9 +288,11 @@ Result StoragePoolControlThread::undefineStoragePool()
                 task.sourceConn, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         deleted = (virStoragePoolUndefine(storagePool)+1) ? true : false;
-        if (!deleted) sendConnErrors();
+        if (!deleted)
+            result.err = sendConnErrors();
         virStoragePoolFree(storagePool);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.msg.append(QString("'<b>%1</b>' StoragePool %2 Undefined.")
                   .arg(name).arg((deleted)?"":"don't"));
     result.name = name;
@@ -301,9 +309,11 @@ Result StoragePoolControlThread::changeAutoStartStoragePool()
                 task.sourceConn, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         set = (virStoragePoolSetAutostart(storagePool, autostart)+1) ? true : false;
-        if (!set) sendConnErrors();
+        if (!set)
+            result.err = sendConnErrors();
         virStoragePoolFree(storagePool);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.msg.append(QString("'<b>%1</b>' StoragePool autostart %2 Set.")
                   .arg(name).arg((set)?"":"don't"));
     result.name = name;
@@ -321,9 +331,11 @@ Result StoragePoolControlThread::deleteStoragePool()
                 task.sourceConn, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         deleted = (virStoragePoolDelete(storagePool, flags)+1) ? true : false;
-        if (!deleted) sendConnErrors();
+        if (!deleted)
+            result.err = sendConnErrors();
         virStoragePoolFree(storagePool);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.msg.append(QString("'<b>%1</b>' StoragePool %2 Deleted.")
                   .arg(name).arg((deleted)?"":"don't"));
     result.name = name;
@@ -339,10 +351,12 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(task.sourceConn, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         Returns = (virStoragePoolGetXMLDesc(storagePool, VIR_STORAGE_XML_INACTIVE));
-        if ( Returns==NULL ) sendConnErrors();
+        if ( Returns==NULL )
+            result.err = sendConnErrors();
         else read = true;
         virStoragePoolFree(storagePool);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     QTemporaryFile f;
     f.setAutoRemove(false);
     f.setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml")

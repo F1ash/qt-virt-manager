@@ -83,7 +83,7 @@ Result InterfaceControlThread::getAllIfaceList()
                 VIR_CONNECT_LIST_INTERFACES_ACTIVE;
         int ret = virConnectListAllInterfaces(task.sourceConn, &ifaces, flags);
         if ( ret<0 ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
             return result;
         };
 
@@ -118,9 +118,11 @@ Result InterfaceControlThread::startIface()
     if ( iface!=NULL ) {
         // extra flags; not used yet, so callers should always pass 0
         started = (virInterfaceCreate(iface, 0)+1) ? true : false;
-        if (!started) sendConnErrors();
+        if (!started)
+            result.err = sendConnErrors();
         virInterfaceFree(iface);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = started;
     result.msg.append(
@@ -138,9 +140,11 @@ Result InterfaceControlThread::destroyIface()
     if ( iface!=NULL ) {
         // extra flags; not used yet, so callers should always pass 0
         destroyed = (virInterfaceDestroy(iface, 0)+1) ? true : false;
-        if (!destroyed) sendConnErrors();
+        if (!destroyed)
+            result.err = sendConnErrors();
         virInterfaceFree(iface);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = destroyed;
     result.msg.append(
@@ -158,6 +162,7 @@ Result InterfaceControlThread::defineIface()
     if ( !f.open(QIODevice::ReadOnly) ) {
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
         emit errorMsg( msg, number );
+        result.err = msg;
         return result;
     };
     xmlData = f.readAll();
@@ -167,7 +172,7 @@ Result InterfaceControlThread::defineIface()
     virInterfacePtr iface = virInterfaceDefineXML(
                 task.sourceConn, xmlData.data(), flags);
     if ( iface==NULL ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
         return result;
     };
     result.name = QString::fromUtf8(virInterfaceGetName(iface));
@@ -187,9 +192,11 @@ Result InterfaceControlThread::undefineIface()
                 task.sourceConn, name.toUtf8().data());
     if ( iface!=NULL ) {
         deleted = (virInterfaceUndefine(iface)+1) ? true : false;
-        if (!deleted) sendConnErrors();
+        if (!deleted)
+            result.err = sendConnErrors();
         virInterfaceFree(iface);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.name = name;
     result.result = deleted;
     result.msg.append(
@@ -204,7 +211,8 @@ Result InterfaceControlThread::ifaceChangeBegin()
     bool processed = false;
     // extra flags; not used yet, so callers should always pass 0
     processed = (virInterfaceChangeBegin(task.sourceConn, 0)+1) ? true : false;
-    if (!processed) sendConnErrors();
+    if (!processed)
+        result.err = sendConnErrors();
 
     result.name = name;
     result.result = processed;
@@ -220,7 +228,8 @@ Result InterfaceControlThread::ifaceChangeCommit()
     bool processed = false;
     // extra flags; not used yet, so callers should always pass 0
     processed = (virInterfaceChangeCommit(task.sourceConn, 0)+1) ? true : false;
-    if (!processed) sendConnErrors();
+    if (!processed)
+        result.err = sendConnErrors();
 
     result.name = name;
     result.result = processed;
@@ -236,7 +245,8 @@ Result InterfaceControlThread::ifaceChangeRollback()
     bool processed = false;
     // extra flags; not used yet, so callers should always pass 0
     processed = (virInterfaceChangeRollback(task.sourceConn, 0)+1) ? true : false;
-    if (!processed) sendConnErrors();
+    if (!processed)
+        result.err = sendConnErrors();
 
     result.name = name;
     result.result = processed;
@@ -258,10 +268,12 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
         //extra flags; not used yet, so callers should always pass 0
         int flags = 0;
         Returns = (virInterfaceGetXMLDesc(iface, flags));
-        if ( Returns==NULL ) sendConnErrors();
+        if ( Returns==NULL )
+            result.err = sendConnErrors();
         else read = true;
         virInterfaceFree(iface);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     QTemporaryFile f;
     f.setAutoRemove(false);
     f.setFileTemplate(

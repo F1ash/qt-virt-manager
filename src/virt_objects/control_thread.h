@@ -31,8 +31,8 @@ public slots:
                         uint i=0,
                         QString _name="");
 
-    void             sendConnErrors();
-    void             sendGlobalErrors();
+    QString          sendConnErrors();
+    QString          sendGlobalErrors();
 
     virtual void     execAction(uint, TASK);
     virtual void     run();

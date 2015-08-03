@@ -99,7 +99,7 @@ Result StorageVolControlThread::getAllStorageVolList()
         int ret = virStoragePoolListAllVolumes(
                     currStoragePool, &storageVol, flags);
         if ( ret<0 ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
             result.result = false;
             result.msg = storageVolList;
             return result;
@@ -147,7 +147,7 @@ Result StorageVolControlThread::getAllStorageVolList()
         };
         free(storageVol);
     } else
-        sendConnErrors();
+        result.err = sendConnErrors();
     result.result = true;
     result.msg = storageVolList;
     return result;
@@ -164,6 +164,7 @@ Result StorageVolControlThread::createStorageVol()
         QString msg = QString("File \"%1\"\nnot opened.").arg(path);
         emit errorMsg( msg, number );
         result.result = false;
+        result.err = msg;
         return result;
     };
     xmlData = f.readAll();
@@ -177,7 +178,7 @@ Result StorageVolControlThread::createStorageVol()
     virStorageVolPtr storageVol = virStorageVolCreateXML(
                 currStoragePool, xmlData.data(), VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA);
     if ( storageVol==NULL ) {
-        sendConnErrors();
+        result.err = sendConnErrors();
         result.result = false;
         return result;
     };
@@ -208,9 +209,11 @@ Result StorageVolControlThread::deleteStorageVol()
                 currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         deleted = (virStorageVolDelete(storageVol, flags)+1) ? true : false;
-        if (!deleted) sendConnErrors();
+        if (!deleted)
+            result.err = sendConnErrors();
         virStorageVolFree(storageVol);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.msg.append(QString("'<b>%1</b>' StorageVol %2 Deleted.")
                       .arg(name).arg((deleted)?"":"don't"));
     result.result = deleted;
@@ -244,7 +247,8 @@ Result StorageVolControlThread::downloadStorageVol()
     if ( storageVol!=NULL ) {
         int ret = virStorageVolDownload(
                     storageVol, stream, offset, length, flags);
-        if ( ret<0 ) sendConnErrors();
+        if ( ret<0 )
+            result.err = sendConnErrors();
         else {
             downloaded = true;
             length = 0;
@@ -254,7 +258,7 @@ Result StorageVolControlThread::downloadStorageVol()
             while ( 1 && keep_alive ) {
                 got = virStreamRecv(stream, buf, BLOCK_SIZE);
                 if (got < 0) {
-                    sendConnErrors();
+                    result.err = sendConnErrors();
                     downloaded = false;
                     break;
                 };
@@ -267,6 +271,7 @@ Result StorageVolControlThread::downloadStorageVol()
                     QString msg = QString("WriteError after (%2): %1 bytes")
                             .arg(length).arg(step);
                     emit errorMsg( msg, number );
+                    result.err = msg;
                 };
             };
             virStreamFinish(stream);
@@ -306,13 +311,14 @@ Result StorageVolControlThread::resizeStorageVol()
 // TODO: add SHRINK-flag when fixed
 // See for: <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>
         if ( ret<0 ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
             QString msg(
 "ResizeError: Maybe <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>");
             emit errorMsg(msg, number);
         } else resized = true;
         virStorageVolFree(storageVol);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     result.msg.append(
                 QString("'<b>%1</b>' StorageVol %2 Resized to %3 (bytes).")
                 .arg(name).arg((resized)?"":"don't").arg(capacity));
@@ -348,7 +354,7 @@ Result StorageVolControlThread::uploadStorageVol()
         int ret = virStorageVolUpload(
                     storageVol, stream, offset, length, flags);
         if ( ret<0 ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
         } else {
             uploaded = true;
             length = 0;
@@ -362,10 +368,11 @@ Result StorageVolControlThread::uploadStorageVol()
                     QString msg = QString("ReadError after (%2): %1 bytes")
                             .arg(length).arg(step);
                     emit errorMsg( msg, number );
+                    result.err = msg;
                 } else {
                     saved = virStreamSend(stream, buf, got);
                     if (saved < 0) {
-                        sendConnErrors();
+                        result.err = sendConnErrors();
                         uploaded = false;
                         break;
                     };
@@ -377,7 +384,8 @@ Result StorageVolControlThread::uploadStorageVol()
             virStreamFinish(stream);
         };
         virStorageVolFree(storageVol);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     if ( stream!=NULL ) virStreamFree(stream);
     f->close();
     delete f; f = 0;
@@ -410,10 +418,11 @@ Result StorageVolControlThread::wipeStorageVol()
     if ( storageVol!=NULL ) {
         int ret = virStorageVolWipePattern(storageVol, alg, flags);
         if ( ret<0 ) {
-            sendConnErrors();
+            result.err = sendConnErrors();
         } else wiped = true;
         virStorageVolFree(storageVol);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     switch (alg) {
     case VIR_STORAGE_VOL_WIPE_ALG_ZERO:
         algorithm.append("ZERO");
@@ -472,10 +481,12 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
                 currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         Returns = virStorageVolGetXMLDesc(storageVol, flags);
-        if ( Returns==NULL ) sendConnErrors();
+        if ( Returns==NULL )
+            result.err = sendConnErrors();
         else read = true;
         virStorageVolFree(storageVol);
-    } else sendConnErrors();
+    } else
+        result.err = sendConnErrors();
     QTemporaryFile f;
     f.setAutoRemove(false);
     f.setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml")

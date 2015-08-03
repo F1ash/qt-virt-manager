@@ -47,23 +47,28 @@ void ControlThread::run()
     return;
 }
 
-void ControlThread::sendConnErrors()
+QString ControlThread::sendConnErrors()
 {
+    QString msg;
     virtErrors = virConnGetLastError(currWorkConnection);
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
-        QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
+        msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
         emit errorMsg( msg, number );
         virResetError(virtErrors);
-    } else sendGlobalErrors();
+    } else
+        msg = sendGlobalErrors();
+    return msg;
 }
-void ControlThread::sendGlobalErrors()
+QString ControlThread::sendGlobalErrors()
 {
+    QString msg;
     virtErrors = virGetLastError();
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
-        QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
+        msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
         emit errorMsg( msg, number );
     };
     virResetLastError();
+    return msg;
 }
