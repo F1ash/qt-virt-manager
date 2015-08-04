@@ -111,7 +111,7 @@ QString CreateVirtSecret::getXMLDescFileName() const
 }
 QByteArray CreateVirtSecret::getSecretValue() const
 {
-    return secValue->text().toUtf8().toBase64();
+    return secValue->text().toUtf8(); //.toBase64();
 }
 bool CreateVirtSecret::getShowing() const
 {
