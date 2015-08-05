@@ -8,7 +8,6 @@
 #include <QTemporaryFile>
 #include <QTabWidget>
 #include <QPushButton>
-#include <QTimerEvent>
 #include "domain_widgets.h"
 #include "common_widgets/devices.h"
 #include <QDebug>
@@ -22,11 +21,13 @@ public:
     explicit CreateVirtDomain(
             QWidget *parent = NULL,
             virConnectPtr conn = NULL,
-            QString _xmlFileName = QString());
+            QString _xmlFileName = QString(),
+            Actions _act         = _EMPTY_ACTION);
     ~CreateVirtDomain();
 
 signals:
     void             errorMsg(QString&);
+    void             readyRead(bool);
 
 private:
     QSettings        settings;
@@ -48,17 +49,17 @@ private:
     QTemporaryFile  *xml = NULL;
     WidgetList       wdgList;
     bool             ready = false;
-    uint             timerId = 0;
-    uint             counter = 0;
+    Actions          action;
 
 public slots:
+    int              getResult() const;
+    Actions          getAction() const;
     QString          getXMLDescFileName() const;
     bool             getShowing() const;
 
 private slots:
     void             readCapabilities();
     void             readyDataLists();
-    void             timerEvent(QTimerEvent*);
     void             buildXMLDescription();
     void             set_Result();
     void             create_specified_widgets();

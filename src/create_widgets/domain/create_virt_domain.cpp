@@ -1,6 +1,4 @@
 #include "create_virt_domain.h"
-#define TIMEOUT     60*1000
-#define PERIOD      333
 
 /*
  * http://libvirt.org/formatdomain.html
@@ -87,10 +85,12 @@
 */
 
 CreateVirtDomain::CreateVirtDomain(
-        QWidget *parent,
-        virConnectPtr conn,
-        QString _xmlFileName) :
-    QDialog(parent), currWorkConnection(conn), xmlFileName(_xmlFileName)
+        QWidget         *parent,
+        virConnectPtr    conn,
+        QString          _xmlFileName,
+        Actions          _act) :
+    QDialog(parent), currWorkConnection(conn),
+    xmlFileName(_xmlFileName), action(_act)
 {
     setModal(false);
     setWindowTitle("Domain Settings");
@@ -102,12 +102,12 @@ CreateVirtDomain::CreateVirtDomain(
                 .arg(QDir::tempPath())
                 .arg(QDir::separator()));
     setEnabled(false);
-    timerId = startTimer(PERIOD);
-    readyDataLists();
+    connect(this, SIGNAL(readyRead(bool)),
+            this, SLOT(readyDataLists()));
+    readCapabilities();
 }
 CreateVirtDomain::~CreateVirtDomain()
 {
-    if ( timerId>0 ) killTimer(timerId);
     settings.setValue("DomCreateGeometry", saveGeometry());
     delete xml;
     xml = NULL;
@@ -137,6 +137,14 @@ CreateVirtDomain::~CreateVirtDomain()
 }
 
 /* public slots */
+int CreateVirtDomain::getResult() const
+{
+    return result();
+}
+Actions CreateVirtDomain::getAction() const
+{
+    return action;
+}
 QString CreateVirtDomain::getXMLDescFileName() const
 {
     return xml->fileName();
@@ -149,6 +157,7 @@ bool CreateVirtDomain::getShowing() const
 /* private slots */
 void CreateVirtDomain::readCapabilities()
 {
+    // TODO: reimplement getting the capabilities into DomainControlThread
     capabilities = QString("%1")
             .arg(virConnectGetCapabilities(currWorkConnection));
     //qDebug()<<capabilities;
@@ -161,11 +170,9 @@ void CreateVirtDomain::readCapabilities()
             firstChildElement("domain");
     if ( !_domain.isNull() ) {
         type = _domain.attribute("type");
-    };
-}
-void CreateVirtDomain::readyDataLists()
-{
-    readCapabilities();
+        ready = true;
+    } else
+        ready = false;
     if ( xmlFileName.isEmpty() ) {
         // create/define new VM
     } else {
@@ -181,53 +188,45 @@ void CreateVirtDomain::readyDataLists()
         _xml = NULL;
         //qDebug()<<xmlDesc<<"desc";
     };
-    ready = true;
+    emit readyRead(ready);
 }
-void CreateVirtDomain::timerEvent(QTimerEvent *ev){
-    if ( timerId>0 && timerId==ev->timerId() ) {
-        counter++;
-        if ( ready ) {
-            killTimer(timerId);
-            timerId = 0;
-
-            commonLayout = new QVBoxLayout(this);
-            create_specified_widgets();
-            set_specified_Tabs();
-            about = new QLabel("<a href='http://libvirt.org/formatdomain.html'>About</a>", this);
-            about->setToolTip("http://libvirt.org/formatdomain.html");
-            about->setOpenExternalLinks(true);
-            showDescription = new QCheckBox("Show XML Description\nat close", this);
-            showDescription->setChecked(settings.value("DomCreateShowDesc").toBool());
-            ok = new QPushButton(QIcon::fromTheme("dialog-ok"), "Ok", this);
-            ok->setAutoDefault(true);
-            connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
-            restore = new QPushButton(QIcon::fromTheme("go-first"), "Restore", this);
-            restore->setToolTip("Restore all");
-            connect(restore, SIGNAL(clicked()), this, SLOT(restoreParameters()));
-            cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
-            cancel->setAutoDefault(true);
-            connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
-            buttonLayout = new QHBoxLayout();
-            buttonLayout->addWidget(about);
-            buttonLayout->addWidget(showDescription);
-            buttonLayout->addWidget(ok);
-            buttonLayout->addWidget(restore);
-            buttonLayout->addWidget(cancel);
-            buttons = new QWidget(this);
-            buttons->setLayout(buttonLayout);
-            commonLayout->addWidget(tabWidget);
-            commonLayout->addWidget(buttons);
-            setLayout(commonLayout);
-            setEnabled(true);
-        } else if ( TIMEOUT<counter*PERIOD ) {
-            killTimer(timerId);
-            timerId = 0;
-            counter = 0;
-            QString msg("Read Data failed.");
-            emit errorMsg( msg );
-            // to done()
-            set_Result();
-        };
+void CreateVirtDomain::readyDataLists()
+{
+    if ( ready ) {
+        commonLayout = new QVBoxLayout(this);
+        create_specified_widgets();
+        set_specified_Tabs();
+        about = new QLabel("<a href='http://libvirt.org/formatdomain.html'>About</a>", this);
+        about->setToolTip("http://libvirt.org/formatdomain.html");
+        about->setOpenExternalLinks(true);
+        showDescription = new QCheckBox("Show XML Description\nat close", this);
+        showDescription->setChecked(settings.value("DomCreateShowDesc").toBool());
+        ok = new QPushButton(QIcon::fromTheme("dialog-ok"), "Ok", this);
+        ok->setAutoDefault(true);
+        connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
+        restore = new QPushButton(QIcon::fromTheme("go-first"), "Restore", this);
+        restore->setToolTip("Restore all");
+        connect(restore, SIGNAL(clicked()), this, SLOT(restoreParameters()));
+        cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
+        cancel->setAutoDefault(true);
+        connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
+        buttonLayout = new QHBoxLayout();
+        buttonLayout->addWidget(about);
+        buttonLayout->addWidget(showDescription);
+        buttonLayout->addWidget(ok);
+        buttonLayout->addWidget(restore);
+        buttonLayout->addWidget(cancel);
+        buttons = new QWidget(this);
+        buttons->setLayout(buttonLayout);
+        commonLayout->addWidget(tabWidget);
+        commonLayout->addWidget(buttons);
+        setLayout(commonLayout);
+        setEnabled(true);
+    } else {
+        QString msg("Read Data failed.");
+        emit errorMsg( msg );
+        // to done()
+        set_Result();
     };
 }
 void CreateVirtDomain::buildXMLDescription()

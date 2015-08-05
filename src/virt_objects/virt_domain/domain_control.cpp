@@ -45,11 +45,6 @@ VirtDomainControl::~VirtDomainControl()
     disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
                this, SLOT(execAction(const QStringList&)));
 
-    if ( createVirtDomain!=NULL ) {
-        delete createVirtDomain;
-        createVirtDomain = NULL;
-    };
-
     stopProcessing();
 
     delete toolBar;
@@ -144,36 +139,13 @@ void VirtDomainControl::resultReceiver(Result data)
         if ( !data.msg.isEmpty() ) {
             QString xml = data.fileName;
             // show SRC Creator widget in Edit-mode
-            createVirtDomain = new CreateVirtDomain(
-                        this,
-                        currWorkConnection,
-                        xml);
+            CreateVirtDomain *createVirtDomain =
+                    new CreateVirtDomain(this, currWorkConnection, xml, DEFINE_ENTITY);
             connect(createVirtDomain, SIGNAL(errorMsg(QString&)),
                     this, SLOT(msgRepeater(QString&)));
-            int result = createVirtDomain->exec();
-            if ( createVirtDomain!=NULL && result ) {
-                // get path for method
-                xml = createVirtDomain->getXMLDescFileName();
-                bool show = createVirtDomain->getShowing();
-                QStringList data;
-                data.append("Edited Domain XML'ed");
-                data.append(QString("to <a href='%1'>%1</a>").arg(xml));
-                QString msg = data.join(" ");
-                msgRepeater(msg);
-                if ( show ) QDesktopServices::openUrl(QUrl(xml));
-                TASK task;
-                task.type = "domain";
-                task.sourceConn = currWorkConnection;
-                task.srcConName = currConnName;
-                task.action     = DEFINE_ENTITY;
-                task.method     = "defineVirtDomain";
-                task.args.path  = xml;
-                emit addNewTask(task);
-            };
-            disconnect(createVirtDomain, SIGNAL(errorMsg(QString&)),
-                       this, SLOT(msgRepeater(QString&)));
-            delete createVirtDomain;
-            createVirtDomain = NULL;
+            connect(createVirtDomain, SIGNAL(finished(int)),
+                    this, SLOT(doneDomainCreation()));
+            createVirtDomain->show();
         };
     } else if ( data.action < GET_XML_DESCRIPTION ) {
         if ( !data.msg.isEmpty() ) {
@@ -417,37 +389,53 @@ void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
             QString xml;
             if ( args.first()=="manually" ) {
                 // show SRC Creator widget
-                createVirtDomain = new CreateVirtDomain(this, currWorkConnection);
+                CreateVirtDomain *createVirtDomain =
+                        new CreateVirtDomain(this, currWorkConnection, QString(), act);
                 connect(createVirtDomain, SIGNAL(errorMsg(QString&)),
                         this, SLOT(msgRepeater(QString&)));
-                int result = createVirtDomain->exec();
-                if ( createVirtDomain!=NULL && result ) {
-                    // get path for method
-                    xml = createVirtDomain->getXMLDescFileName();
-                    bool show = createVirtDomain->getShowing();
-                    QStringList data;
-                    data.append("New Domain XML'ed");
-                    data.append(QString("to <a href='%1'>%1</a>").arg(xml));
-                    QString msg = data.join(" ");
-                    msgRepeater(msg);
-                    if ( show ) QDesktopServices::openUrl(QUrl(xml));
-                };
-                disconnect(createVirtDomain, SIGNAL(errorMsg(QString&)),
-                           this, SLOT(msgRepeater(QString&)));
-                delete createVirtDomain;
-                createVirtDomain = NULL;
-                //qDebug()<<xml<<"path"<<result;
-                if ( !result ) return;
-                task.args.path = xml;
+                connect(createVirtDomain, SIGNAL(finished(int)),
+                        this, SLOT(doneDomainCreation()));
+                createVirtDomain->show();
             } else {
                 xml = args.first();
-                task.args.path = xml;
+                task.args.path  = xml;
+                task.sourceConn = currWorkConnection;
+                task.srcConName = currConnName;
+                task.method     = actName;
+                task.action     = act;
+                emit addNewTask(task);
             };
-            task.sourceConn = currWorkConnection;
-            task.srcConName = currConnName;
-            task.method     = actName;
-            task.action     = act;
-            emit addNewTask(task);
         };
+    };
+}
+void VirtDomainControl::doneDomainCreation()
+{
+    CreateVirtDomain *createVirtDomain = static_cast<CreateVirtDomain*>(sender());
+    if ( createVirtDomain!=NULL && createVirtDomain->getResult()==QDialog::Accepted ) {
+        // get path for method
+        Actions act = createVirtDomain->getAction();
+        QString xml = createVirtDomain->getXMLDescFileName();
+        bool show = createVirtDomain->getShowing();
+        QStringList data;
+        data.append("New Domain XML'ed");
+        data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        QString msg = data.join(" ");
+        msgRepeater(msg);
+        if ( show ) QDesktopServices::openUrl(QUrl(xml));
+        disconnect(createVirtDomain, SIGNAL(errorMsg(QString&)),
+                   this, SLOT(msgRepeater(QString&)));
+        disconnect(createVirtDomain, SIGNAL(finished(int)),
+                   this, SLOT(doneDomainCreation()));
+        delete createVirtDomain;
+        createVirtDomain = NULL;
+        TASK task;
+        task.type = "domain";
+        task.sourceConn = currWorkConnection;
+        task.srcConName = currConnName;
+        task.action     = act;
+        task.method     =
+                (act==DEFINE_ENTITY)? "defineVirtDomain" : "createVirtDomain";
+        task.args.path  = xml;
+        emit addNewTask(task);
     };
 }

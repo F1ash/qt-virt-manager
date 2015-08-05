@@ -27,7 +27,6 @@ signals:
 private:
     DomainModel             *domainModel = NULL;
     DomainToolBar           *toolBar;
-    CreateVirtDomain        *createVirtDomain = NULL;
 
 public slots:
     bool                     getThreadState() const;
@@ -45,6 +44,7 @@ private slots:
     void                     entityDoubleClicked(const QModelIndex&);
     void                     execAction(const QStringList&);
     void                     newVirtEntityFromXML(const QStringList&);
+    void                     doneDomainCreation();
 };
 
 #endif // DOMAIN_CONTROL_H
