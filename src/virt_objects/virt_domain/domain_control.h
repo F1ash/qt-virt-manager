@@ -44,7 +44,7 @@ private slots:
     void                     entityDoubleClicked(const QModelIndex&);
     void                     execAction(const QStringList&);
     void                     newVirtEntityFromXML(const QStringList&);
-    void                     doneDomainCreation();
+    void                     doneEntityCreationDialog();
 };
 
 #endif // DOMAIN_CONTROL_H

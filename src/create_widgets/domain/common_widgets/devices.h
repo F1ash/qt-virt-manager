@@ -6,6 +6,7 @@
 #include "devices_widgets/device_stack.h"
 #include <QListWidget>
 #include <QPushButton>
+#include <QStackedWidget>
 
 #define DEVICE_ORDER QStringList()\
     <<"Emulator"<<"Disk"<<"Filesystem"<<"Controller"\
@@ -23,7 +24,6 @@ public:
             QWidget *parent = NULL,
             virConnectPtr conn = NULL,
             QString _xmlDesc = QString());
-    ~Devices();
 
 signals:
     void             devicesChanged(QDomDocument&);
@@ -34,14 +34,17 @@ private:
     QPushButton     *delSelDevice;
 
     QHBoxLayout     *buttonlayout;
-    QVBoxLayout     *listLayout;
-    QHBoxLayout     *commonLayout;
-
     QWidget         *buttons;
+    QVBoxLayout     *listLayout;
     QWidget         *listWidget;
     DeviceData      *infoWidget;
+    QHBoxLayout     *baseLayout;
+    QWidget         *baseWdg;
 
-    DeviceStack     *deviceStack = NULL;
+    QStackedWidget  *stackWdg;
+    QHBoxLayout     *commonLayout;
+
+    DeviceStack     *deviceStack;
 
     const QString    xmlDesc;
     const QStringList
@@ -53,7 +56,7 @@ public slots:
     void             initBootDevices();
 
 private slots:
-    QDomDocument     chooseNewDevice();
+    void             showDeviceStack();
     void             addDevice();
     void             addDeviceToUsedDevList(QDomDocument&);
     void             delDevice();

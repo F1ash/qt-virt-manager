@@ -30,7 +30,7 @@ private:
     QWidget         *infoStuff;
 
 public slots:
-    QString          getStorageXMLDescFileName() const;
+    QString          getXMLDescFileName() const;
 };
 
 #endif // CREATE_VOLUME_H

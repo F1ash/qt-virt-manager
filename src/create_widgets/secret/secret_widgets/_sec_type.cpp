@@ -3,7 +3,9 @@
 _SecType::_SecType(QWidget *parent, virConnectPtr _conn) :
     QWidget(parent), currWorkConnection(_conn)
 {
+    info = new QLabel(this);
     baseLayout = new QVBoxLayout(this);
+    baseLayout->addWidget(info);
     setLayout(baseLayout);
 }
 

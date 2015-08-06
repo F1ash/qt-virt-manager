@@ -52,7 +52,7 @@ private:
     QWidget             *scrolled;
 
 public slots:
-    virtual QString      getStorageXMLDescFileName() const;
+    virtual QString      getXMLDescFileName() const;
             bool         showXMLDescription() const;
             void         setUrl(QString);
 

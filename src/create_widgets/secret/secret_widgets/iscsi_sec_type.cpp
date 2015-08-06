@@ -14,6 +14,7 @@ iSCSISecType::iSCSISecType(QWidget *parent, virConnectPtr _conn) :
     usageWdg = new QWidget(this);
     usageWdg->setLayout(usageLayout);
     baseLayout->addWidget(usageWdg);
+    info->setText("Using for authentification");
 }
 QDomDocument iSCSISecType::getSecStuff() const
 {

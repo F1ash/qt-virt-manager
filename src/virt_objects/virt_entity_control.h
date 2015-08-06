@@ -27,6 +27,7 @@ public:
     virtual void             entityDoubleClicked(const QModelIndex&);
     virtual void             execAction(const QStringList&);
     virtual void             newVirtEntityFromXML(const QStringList&);
+    virtual void             doneEntityCreationDialog();
 
 signals:
     void                     entityMsg(QString&);

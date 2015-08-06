@@ -16,6 +16,7 @@ VolumeSecType::VolumeSecType(QWidget *parent, virConnectPtr _conn) :
     usageWdg = new QWidget(this);
     usageWdg->setLayout(usageLayout);
     baseLayout->addWidget(usageWdg);
+    info->setText("Using for encryption");
     connect(find,SIGNAL(clicked(bool)),
             this, SLOT(showVolumeChoose()));
 }

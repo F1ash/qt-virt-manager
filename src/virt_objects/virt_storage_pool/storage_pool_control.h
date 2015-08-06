@@ -36,6 +36,7 @@ private slots:
     void                       entityDoubleClicked(const QModelIndex&);
     void                       execAction(const QStringList&);
     void                       newVirtEntityFromXML(const QStringList&);
+    void                       doneEntityCreationDialog();
 };
 
 #endif // STORAGE_POOL_CONTROL_H

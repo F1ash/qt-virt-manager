@@ -204,7 +204,8 @@ void VirtStoragePoolControl::entityClicked(const QPoint &p)
         entityList->clearSelection();
     };
     bool state = toolBar->getAutoReloadState();
-    StoragePoolControlMenu *storagePoolControlMenu = new StoragePoolControlMenu(this, params, state);
+    StoragePoolControlMenu *storagePoolControlMenu =
+            new StoragePoolControlMenu(this, params, state);
     connect(storagePoolControlMenu, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
     storagePoolControlMenu->move(QCursor::pos());
@@ -216,7 +217,7 @@ void VirtStoragePoolControl::entityClicked(const QPoint &p)
 void VirtStoragePoolControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<storagePoolModel->DataList.at(index.row())->getName();
+        //qDebug()<<storagePoolModel->DataList.at(index.row())->getName();
     }
 }
 void VirtStoragePoolControl::execAction(const QStringList &l)
@@ -295,25 +296,47 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const QStringList &_args)
                 // show SRC Creator widget
                 // get path for method
                 CreatePool *createPoolDialog = new CreatePool(this, currWorkConnection);
-                int result = createPoolDialog->exec();
-                if ( result==QDialog::Accepted ) {
-                    path = createPoolDialog->getStorageXMLDescFileName();
-                    show = createPoolDialog->showXMLDescription();
-                };
-                delete createPoolDialog;
-                createPoolDialog = NULL;
-                if ( result==QDialog::Rejected ) return;
-                task.args.path = path;
-                if ( show ) QDesktopServices::openUrl(QUrl(path));
+                connect(createPoolDialog, SIGNAL(finished(int)),
+                        this, SLOT(doneEntityCreationDialog()));
+                createPoolDialog->show();
             } else {
-                QString path = args.first();
-                task.args.path = path;
+                QString path    = args.first();
+                task.args.path  = path;
+                task.sourceConn = currWorkConnection;
+                task.srcConName = currConnName;
+                task.method     = actName;
+                task.action     = act;
+                emit addNewTask(task);
             };
-            task.sourceConn = currWorkConnection;
-            task.srcConName = currConnName;
-            task.method     = actName;
-            task.action     = act;
-            emit addNewTask(task);
         };
+    };
+}
+void VirtStoragePoolControl::doneEntityCreationDialog()
+{
+    CreatePool *createPoolDialog = static_cast<CreatePool*>(sender());
+    if ( createPoolDialog!=NULL && createPoolDialog->getResult()==QDialog::Accepted ) {
+        // get path for method
+        Actions act = createPoolDialog->getAction();
+        QString xml = createPoolDialog->getXMLDescFileName();
+        bool show = createPoolDialog->showXMLDescription();
+        QStringList data;
+        data.append("New StoragePool XML'ed");
+        data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        QString msg = data.join(" ");
+        msgRepeater(msg);
+        if ( show ) QDesktopServices::openUrl(QUrl(xml));
+        disconnect(createPoolDialog, SIGNAL(finished(int)),
+                   this, SLOT(doneEntityCreationDialog()));
+        delete createPoolDialog;
+        createPoolDialog = NULL;
+        TASK task;
+        task.type = "pool";
+        task.sourceConn = currWorkConnection;
+        task.srcConName = currConnName;
+        task.action     = act;
+        task.method     =
+                (act==DEFINE_ENTITY)? "defineVirtStoragePool" : "createVirtStoragePool";
+        task.args.path  = xml;
+        emit addNewTask(task);
     };
 }

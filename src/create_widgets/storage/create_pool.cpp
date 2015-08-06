@@ -17,9 +17,11 @@
     <<"mpath"<<"rbd"<<"sheepdog"\
     <<"gluster"<<"zfs"
 
-CreatePool::CreatePool(QWidget *parent, virConnectPtr _conn) :
-    _CreateStorage(parent)
+CreatePool::CreatePool(QWidget *parent, virConnectPtr _conn, Actions _act) :
+    _CreateStorage(parent), action(_act)
 {
+    setModal(false);
+    setWindowTitle("StoragePool Settings");
     setUrl("http://libvirt.org/formatstorage.html");
     settingName.append("CreateStoragePool");
     settings.beginGroup(settingName);
@@ -59,7 +61,15 @@ CreatePool::CreatePool(QWidget *parent, virConnectPtr _conn) :
 }
 
 /* public slots */
-QString CreatePool::getStorageXMLDescFileName() const
+int CreatePool::getResult() const
+{
+    return result();
+}
+Actions CreatePool::getAction() const
+{
+    return action;
+}
+QString CreatePool::getXMLDescFileName() const
 {
     QDomDocument doc, _stuff;
     QDomElement _pool, _name, _uuid;

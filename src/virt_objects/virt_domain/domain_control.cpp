@@ -144,7 +144,7 @@ void VirtDomainControl::resultReceiver(Result data)
             connect(createVirtDomain, SIGNAL(errorMsg(QString&)),
                     this, SLOT(msgRepeater(QString&)));
             connect(createVirtDomain, SIGNAL(finished(int)),
-                    this, SLOT(doneDomainCreation()));
+                    this, SLOT(doneEntityCreationDialog()));
             createVirtDomain->show();
         };
     } else if ( data.action < GET_XML_DESCRIPTION ) {
@@ -394,7 +394,7 @@ void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
                 connect(createVirtDomain, SIGNAL(errorMsg(QString&)),
                         this, SLOT(msgRepeater(QString&)));
                 connect(createVirtDomain, SIGNAL(finished(int)),
-                        this, SLOT(doneDomainCreation()));
+                        this, SLOT(doneEntityCreationDialog()));
                 createVirtDomain->show();
             } else {
                 xml = args.first();
@@ -408,7 +408,7 @@ void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
         };
     };
 }
-void VirtDomainControl::doneDomainCreation()
+void VirtDomainControl::doneEntityCreationDialog()
 {
     CreateVirtDomain *createVirtDomain = static_cast<CreateVirtDomain*>(sender());
     if ( createVirtDomain!=NULL && createVirtDomain->getResult()==QDialog::Accepted ) {
@@ -425,7 +425,7 @@ void VirtDomainControl::doneDomainCreation()
         disconnect(createVirtDomain, SIGNAL(errorMsg(QString&)),
                    this, SLOT(msgRepeater(QString&)));
         disconnect(createVirtDomain, SIGNAL(finished(int)),
-                   this, SLOT(doneDomainCreation()));
+                   this, SLOT(doneEntityCreationDialog()));
         delete createVirtDomain;
         createVirtDomain = NULL;
         TASK task;

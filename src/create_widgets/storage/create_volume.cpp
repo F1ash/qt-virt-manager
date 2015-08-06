@@ -63,7 +63,7 @@ CreateVolume::CreateVolume(QWidget *parent, QString _type) :
 }
 
 /* public slots */
-QString CreateVolume::getStorageXMLDescFileName() const
+QString CreateVolume::getXMLDescFileName() const
 {
     QDomDocument doc;
     QDomText _text;

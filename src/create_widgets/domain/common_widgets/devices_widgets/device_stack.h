@@ -16,7 +16,6 @@ public:
     explicit DeviceStack(
             QWidget *parent = NULL,
             virConnectPtr conn = NULL);
-    ~DeviceStack();
 
 signals:
 
@@ -46,6 +45,7 @@ private:
 
 public slots:
     QDomDocument     getResult() const;
+    void             clearDevice();
 
 private slots:
     void             showDevice(QListWidgetItem*);

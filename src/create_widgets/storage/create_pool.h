@@ -21,7 +21,8 @@ class CreatePool : public _CreateStorage
 public:
     explicit CreatePool(
             QWidget         *parent = NULL,
-            virConnectPtr    _conn  = NULL);
+            virConnectPtr    _conn  = NULL,
+            Actions          _act   = _EMPTY_ACTION);
 
 signals:
 
@@ -31,8 +32,12 @@ private:
     QHBoxLayout     *uuidLayout;
     QWidget         *uuidWdg;
 
+    Actions          action;
+
 public slots:
-    QString          getStorageXMLDescFileName() const;
+    int              getResult() const;
+    Actions          getAction() const;
+    QString          getXMLDescFileName() const;
 };
 
 #endif // CREATE_POOL_H

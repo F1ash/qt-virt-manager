@@ -59,7 +59,7 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
 }
 
 /* public slots */
-QString _CreateStorage::getStorageXMLDescFileName() const
+QString _CreateStorage::getXMLDescFileName() const
 {
     return QString();
 }

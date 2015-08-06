@@ -72,8 +72,6 @@ DeviceStack::DeviceStack(
         virConnectPtr conn) :
     QDialog(parent), currWorkConnection(conn)
 {
-    setModal(true);
-    restoreGeometry(settings.value("DeviceStackGeometry").toByteArray());
     infoLayout = new QVBoxLayout(this);
     infoWidget = new QScrollArea(this);
     scrolled = new QWidget(this);
@@ -143,44 +141,6 @@ DeviceStack::DeviceStack(
     commonLayout->addWidget(buttons);
     setLayout(commonLayout);
 }
-DeviceStack::~DeviceStack()
-{
-    //disconnect(deviceList, SIGNAL(itemClicked(QListWidgetItem*)),
-    //           this, SLOT(showDevice(QListWidgetItem*)));
-    disconnect(deviceList, SIGNAL(itemSelectionChanged()),
-               this, SLOT(showDevice()));
-    disconnect(addDevice, SIGNAL(clicked()), this, SLOT(set_Result()));
-    disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
-    delete deviceList;
-    deviceList = NULL;
-
-    delete infoLayout;
-    infoLayout = NULL;
-    if ( scrolled!=NULL ) {
-        delete scrolled;
-        scrolled = NULL;
-    };
-    delete infoWidget;
-    infoWidget = NULL;
-
-    delete listLayout;
-    listLayout = NULL;
-    delete listWidget;
-    listWidget = NULL;
-
-    delete addDevice;
-    addDevice = NULL;
-    delete cancel;
-    cancel = NULL;
-
-    delete buttonlayout;
-    buttonlayout = NULL;
-    delete buttons;
-    buttons = NULL;
-
-    delete commonLayout;
-    commonLayout = NULL;
-}
 
 /* public slots */
 QDomDocument DeviceStack::getResult() const
@@ -192,15 +152,19 @@ QDomDocument DeviceStack::getResult() const
     };
     return doc;
 }
-
-/* private slots */
-void DeviceStack::showDevice(QListWidgetItem *item)
+void DeviceStack::clearDevice()
 {
     if ( device!=NULL ) {
         infoLayout->removeWidget(device);
         delete device;
         device = NULL;
     };
+}
+
+/* private slots */
+void DeviceStack::showDevice(QListWidgetItem *item)
+{
+    clearDevice();
     QString deviceType = item->data(Qt::UserRole).toString();
     //qDebug()<<item->text()<<deviceType;
     if ( deviceType == "disk" ) {
@@ -273,5 +237,4 @@ void DeviceStack::set_Result()
                    QDialog::Accepted : QDialog::Rejected );
     done(result());
     //qDebug()<<"done";
-    settings.setValue("DeviceStackGeometry", saveGeometry());
 }

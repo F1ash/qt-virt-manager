@@ -2,6 +2,7 @@
 #define _SECT_YPE_H
 
 #include <QWidget>
+#include <QLabel>
 #include <QVBoxLayout>
 #include <QDomDocument>
 #include "virt_objects/virt_entity_config.h"
@@ -14,10 +15,9 @@ public:
     explicit _SecType(
             QWidget        *parent = NULL,
             virConnectPtr   _conn  = NULL);
+    QLabel                 *info;
     QVBoxLayout            *baseLayout;
     virConnectPtr           currWorkConnection;
-
-signals:
 
 public slots:
     virtual QDomDocument    getSecStuff() const;

@@ -79,7 +79,7 @@ Devices::Devices(QWidget *parent,
             this, SLOT(showContextMenu(const QPoint&)));
     addNewDevice = new QPushButton(QIcon::fromTheme("list-add"), "", this);
     addNewDevice->setToolTip("Add Device");
-    connect(addNewDevice, SIGNAL(clicked()), this, SLOT(addDevice()));
+    connect(addNewDevice, SIGNAL(clicked()), this, SLOT(showDeviceStack()));
     delSelDevice = new QPushButton(QIcon::fromTheme("list-remove"), "", this);
     delSelDevice->setToolTip("Del Device");
     connect(delSelDevice, SIGNAL(clicked()), this, SLOT(delDevice()));
@@ -97,9 +97,21 @@ Devices::Devices(QWidget *parent,
     listWidget->setLayout(listLayout);
 
     infoWidget = new DeviceData(this, currWorkConnection);
+    baseLayout = new QHBoxLayout(this);
+    baseLayout->addWidget(listWidget, 3);
+    baseLayout->addWidget(infoWidget, 8);
+    baseWdg = new QWidget(this);
+    baseWdg->setLayout(baseLayout);
+
+    deviceStack = new DeviceStack(this, currWorkConnection);
+    stackWdg = new QStackedWidget(this);
+    stackWdg->addWidget(baseWdg);
+    stackWdg->addWidget(deviceStack);
+
     commonLayout = new QHBoxLayout(this);
-    commonLayout->addWidget(listWidget, 3);
-    commonLayout->addWidget(infoWidget, 8);
+    commonLayout->addWidget(stackWdg);
+    setLayout(commonLayout);
+
     detectAttachedDevicesFromXMLDesc();
     //connect(usedDeviceList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
     //        this, SLOT(showDevice(QListWidgetItem*,QListWidgetItem*)));
@@ -107,40 +119,8 @@ Devices::Devices(QWidget *parent,
             this, SLOT(showDevice()));
     connect(infoWidget, SIGNAL(saveDeviceXMLDesc(int, QString&)),
             this, SLOT(saveDeviceXMLDescription(int, QString&)));
-}
-Devices::~Devices()
-{
-    if ( deviceStack!=NULL ) {
-        delete deviceStack;
-        deviceStack = NULL;
-    };
-    disconnect(usedDeviceList,
-               SIGNAL(customContextMenuRequested(const QPoint&)),
-               this,
-               SLOT(showContextMenu(const QPoint&)));
-    disconnect(addNewDevice, SIGNAL(clicked()), this, SLOT(addDevice()));
-    disconnect(delSelDevice, SIGNAL(clicked()), this, SLOT(delDevice()));
-    delete usedDeviceList;
-    usedDeviceList = NULL;
-    delete addNewDevice;
-    addNewDevice = NULL;
-    delete delSelDevice;
-    delSelDevice = NULL;
-
-    delete buttonlayout;
-    buttonlayout = NULL;
-    delete buttons;
-    buttons = NULL;
-
-    delete listLayout;
-    listLayout = NULL;
-    delete listWidget;
-    listWidget = NULL;
-
-    delete infoWidget;
-    infoWidget = NULL;
-    delete commonLayout;
-    commonLayout = NULL;
+    connect(deviceStack, SIGNAL(finished(int)),
+            this, SLOT(addDevice()));
 }
 
 /* public slots */
@@ -200,27 +180,19 @@ void Devices::initBootDevices()
 }
 
 /* private slots */
-QDomDocument Devices::chooseNewDevice()
+void Devices::showDeviceStack()
 {
-    QDomDocument doc;
-    //qDebug()<<"choose New Device";
-    if ( deviceStack==NULL ) {
-        deviceStack = new DeviceStack(this, currWorkConnection);
-    };
-    if ( deviceStack->exec()==QDialog::Accepted ) {
-        doc = deviceStack->getResult();
-    };
-    if ( NULL!=deviceStack ) {
-        delete deviceStack;
-        deviceStack = NULL;
-    };
-    return doc;
+    stackWdg->setCurrentWidget(deviceStack);
 }
 void Devices::addDevice()
 {
-    QDomDocument doc = chooseNewDevice();
-    //qDebug()<<doc.toString();
-    addDeviceToUsedDevList(doc);
+    if ( deviceStack->result()==QDialog::Accepted ) {
+        QDomDocument doc = deviceStack->getResult();
+        //qDebug()<<doc.toString();
+        addDeviceToUsedDevList(doc);
+    };
+    deviceStack->clearDevice();
+    stackWdg->setCurrentWidget(baseWdg);
 }
 void Devices::addDeviceToUsedDevList(QDomDocument &doc)
 {
@@ -418,7 +390,7 @@ void Devices::showContextMenu(const QPoint &pos)
 void Devices::execDevExistanceMenuResult(Device_Action ret)
 {
     if ( ret==ADD ) {
-        addDevice();
+        stackWdg->setCurrentWidget(deviceStack);
     } else if ( ret==DEL ) {
         delDevice();
     };

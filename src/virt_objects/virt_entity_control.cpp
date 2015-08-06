@@ -61,6 +61,10 @@ void VirtEntityControl::newVirtEntityFromXML(const QStringList &_args)
 {
 
 }
+void VirtEntityControl::doneEntityCreationDialog()
+{
+
+}
 
 /* public slots */
 void VirtEntityControl::msgRepeater(QString &msg)
