@@ -260,7 +260,8 @@ void VirtNetControl::newVirtEntityFromXML(const QStringList &_args)
         if ( !args.isEmpty() ) {
             if ( args.first()=="manually" ) {
                 // show SRC Creator widget
-                CreateVirtNetwork *createVirtNet = new CreateVirtNetwork(this);
+                CreateVirtNetwork *createVirtNet =
+                        new CreateVirtNetwork(this, act);
                 connect(createVirtNet, SIGNAL(errorMsg(QString&)),
                         this, SLOT(msgRepeater(QString&)));
                 connect(createVirtNet, SIGNAL(finished(int)),
