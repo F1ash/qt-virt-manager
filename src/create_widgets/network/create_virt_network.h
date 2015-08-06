@@ -11,13 +11,16 @@
 #include "network_widgets/domain_widget.h"
 #include "network_widgets/forward_widget.h"
 #include "network_widgets/addressing_widget.h"
+#include "virt_objects/virt_entity_config.h"
 #include <QDebug>
 
 class CreateVirtNetwork : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CreateVirtNetwork(QWidget *parent = NULL);
+    explicit CreateVirtNetwork(
+            QWidget *parent = NULL,
+            Actions  _act   = _EMPTY_ACTION);
     ~CreateVirtNetwork();
 
 signals:
@@ -48,8 +51,11 @@ private:
     QVBoxLayout     *netDescLayout;
 
     QTemporaryFile  *xml;
+    Actions          action;
 
 public slots:
+    int              getResult() const;
+    Actions          getAction() const;
     QString          getXMLDescFileName() const;
     bool             getShowing() const;
 

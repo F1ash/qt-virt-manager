@@ -1,9 +1,9 @@
 #include "create_virt_network.h"
 
-CreateVirtNetwork::CreateVirtNetwork(QWidget *parent) :
-    QDialog(parent)
+CreateVirtNetwork::CreateVirtNetwork(QWidget *parent, Actions _act) :
+    QDialog(parent), action(_act)
 {
-    setModal(true);
+    setModal(false);
     setWindowTitle("Network Settings");
     settings.beginGroup("VirtNetControl");
     restoreGeometry(settings.value("NetCreateGeometry").toByteArray());
@@ -141,6 +141,14 @@ CreateVirtNetwork::~CreateVirtNetwork()
 }
 
 /* public slots */
+int CreateVirtNetwork::getResult() const
+{
+    return result();
+}
+Actions CreateVirtNetwork::getAction() const
+{
+    return action;
+}
 QString CreateVirtNetwork::getXMLDescFileName() const
 {
     return xml->fileName();

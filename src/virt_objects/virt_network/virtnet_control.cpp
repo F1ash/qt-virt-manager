@@ -259,36 +259,53 @@ void VirtNetControl::newVirtEntityFromXML(const QStringList &_args)
         args.removeFirst();
         if ( !args.isEmpty() ) {
             if ( args.first()=="manually" ) {
-                QString xml;
-                bool show = false;
                 // show SRC Creator widget
                 CreateVirtNetwork *createVirtNet = new CreateVirtNetwork(this);
-                int result = createVirtNet->exec();
-                if ( createVirtNet!=NULL && result ) {
-                    // get path for method12
-                    xml = createVirtNet->getXMLDescFileName();
-                    show = createVirtNet->getShowing();
-                    QStringList data;
-                    data.append("New Network XML'ed");
-                    data.append(QString("to <a href='%1'>%1</a>").arg(xml));
-                    QString msg = data.join(" ");
-                    msgRepeater(msg);
-                    if ( show ) QDesktopServices::openUrl(QUrl(xml));
-                };
-                delete createVirtNet;
-                createVirtNet = NULL;
-                //qDebug()<<xml<<"path"<<result;
-                if ( !result ) return;
-                task.args.path = xml;
+                connect(createVirtNet, SIGNAL(errorMsg(QString&)),
+                        this, SLOT(msgRepeater(QString&)));
+                connect(createVirtNet, SIGNAL(finished(int)),
+                        this, SLOT(doneEntityCreationDialog()));
+                createVirtNet->show();
             } else {
-                QString xml = args.first();
-                task.args.path = xml;
+                QString xml     = args.first();
+                task.args.path  = xml;
+                task.sourceConn = currWorkConnection;
+                task.srcConName = currConnName;
+                task.method     = actName;
+                task.action     = act;
+                emit addNewTask(task);
             };
-            task.sourceConn = currWorkConnection;
-            task.srcConName = currConnName;
-            task.method     = actName;
-            task.action     = act;
-            emit addNewTask(task);
         };
+    };
+}
+void VirtNetControl::doneEntityCreationDialog()
+{
+    CreateVirtNetwork *createVirtNet = static_cast<CreateVirtNetwork*>(sender());
+    if ( createVirtNet!=NULL && createVirtNet->getResult()==QDialog::Accepted ) {
+        // get path for method
+        Actions act = createVirtNet->getAction();
+        QString xml = createVirtNet->getXMLDescFileName();
+        bool show = createVirtNet->getShowing();
+        QStringList data;
+        data.append("New Network XML'ed");
+        data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        QString msg = data.join(" ");
+        msgRepeater(msg);
+        if ( show ) QDesktopServices::openUrl(QUrl(xml));
+        disconnect(createVirtNet, SIGNAL(errorMsg(QString&)),
+                   this, SLOT(msgRepeater(QString&)));
+        disconnect(createVirtNet, SIGNAL(finished(int)),
+                   this, SLOT(doneEntityCreationDialog()));
+        delete createVirtNet;
+        createVirtNet = NULL;
+        TASK task;
+        task.type = "network";
+        task.sourceConn = currWorkConnection;
+        task.srcConName = currConnName;
+        task.action     = act;
+        task.method     =
+                (act==DEFINE_ENTITY)? "defineVirtNetwork" : "createVirtNetwork";
+        task.args.path  = xml;
+        emit addNewTask(task);
     };
 }

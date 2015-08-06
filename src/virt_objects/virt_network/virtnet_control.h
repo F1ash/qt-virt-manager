@@ -32,6 +32,7 @@ private slots:
     void                 entityDoubleClicked(const QModelIndex&);
     void                 execAction(const QStringList&);
     void                 newVirtEntityFromXML(const QStringList&);
+    void                 doneEntityCreationDialog();
 };
 
 #endif // VIRTNET_CONTROL_H
