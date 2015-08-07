@@ -24,7 +24,7 @@ public:
     ~CreateVirtNetwork();
 
 signals:
-    void             errorMsg(QString);
+    void             errorMsg(QString&);
 
 private:
     QSettings        settings;

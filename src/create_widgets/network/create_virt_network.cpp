@@ -94,50 +94,6 @@ CreateVirtNetwork::~CreateVirtNetwork()
     settings.setValue("NetCreateGeometry", saveGeometry());
     settings.setValue("NetCreateShowDesc", showDescription->isChecked());
     settings.endGroup();
-    disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
-    disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
-    delete networkName;
-    networkName = NULL;
-    delete uuid;
-    uuid = NULL;
-
-    delete bridgeWdg;
-    bridgeWdg = NULL;
-
-    delete domainWdg;
-    domainWdg = NULL;
-
-    delete addressingWdg;
-    addressingWdg = NULL;
-
-    delete forwardWdg;
-    forwardWdg = NULL;
-
-    delete scrollLayout;
-    scrollLayout = NULL;
-    delete scrolled;
-    scrolled = NULL;
-    delete scroll;
-    scroll = NULL;
-
-    delete about;
-    about = NULL;
-    delete showDescription;
-    showDescription = NULL;
-    delete ok;
-    ok = NULL;
-    delete cancel;
-    cancel = NULL;
-    delete buttonLayout;
-    buttonLayout = NULL;
-    delete buttons;
-    buttons = NULL;
-
-    delete netDescLayout;
-    netDescLayout = NULL;
-
-    delete xml;
-    xml = NULL;
 }
 
 /* public slots */

@@ -29,7 +29,6 @@ public slots:
     void             setDataDescription(QString&);
 
 private slots:
-    void             changeModeVisibility(QString);
     void             getVolumeNames();
 };
 

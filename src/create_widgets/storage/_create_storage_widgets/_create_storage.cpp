@@ -3,7 +3,7 @@
 _CreateStorage::_CreateStorage(QWidget *parent) :
     QDialog(parent)
 {
-    setModal(true);
+    setModal(false);
     typeLabel = new QLabel("Pool Type:", this);
     type = new QComboBox(this);
     stNameLabel = new QLabel("Name:", this);
@@ -78,9 +78,10 @@ void _CreateStorage::setUrl(QString _url)
 /* private slots */
 void _CreateStorage::set_Result()
 {
-    done( (sender()==chooseStorage)?
-              QDialog::Accepted :
-              QDialog::Rejected);
+    setResult( (sender()==chooseStorage)?
+                QDialog::Accepted :
+                QDialog::Rejected );
+    done(result());
     //qDebug()<<"done";
     if ( !settingName.isEmpty() ) {
         settings.beginGroup(settingName);

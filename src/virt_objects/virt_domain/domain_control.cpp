@@ -411,31 +411,33 @@ void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
 void VirtDomainControl::doneEntityCreationDialog()
 {
     CreateVirtDomain *createVirtDomain = static_cast<CreateVirtDomain*>(sender());
-    if ( createVirtDomain!=NULL && createVirtDomain->getResult()==QDialog::Accepted ) {
-        // get path for method
-        Actions act = createVirtDomain->getAction();
-        QString xml = createVirtDomain->getXMLDescFileName();
-        bool show = createVirtDomain->getShowing();
-        QStringList data;
-        data.append("New Domain XML'ed");
-        data.append(QString("to <a href='%1'>%1</a>").arg(xml));
-        QString msg = data.join(" ");
-        msgRepeater(msg);
-        if ( show ) QDesktopServices::openUrl(QUrl(xml));
-        disconnect(createVirtDomain, SIGNAL(errorMsg(QString&)),
-                   this, SLOT(msgRepeater(QString&)));
-        disconnect(createVirtDomain, SIGNAL(finished(int)),
-                   this, SLOT(doneEntityCreationDialog()));
-        delete createVirtDomain;
-        createVirtDomain = NULL;
-        TASK task;
-        task.type = "domain";
-        task.sourceConn = currWorkConnection;
-        task.srcConName = currConnName;
-        task.action     = act;
-        task.method     =
-                (act==DEFINE_ENTITY)? "defineVirtDomain" : "createVirtDomain";
-        task.args.path  = xml;
-        emit addNewTask(task);
+    if ( createVirtDomain!=NULL ) {
+        if ( createVirtDomain->getResult()==QDialog::Accepted ) {
+            // get path for method
+            Actions act = createVirtDomain->getAction();
+            QString xml = createVirtDomain->getXMLDescFileName();
+            bool show = createVirtDomain->getShowing();
+            QStringList data;
+            data.append("New Domain XML'ed");
+            data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+            QString msg = data.join(" ");
+            msgRepeater(msg);
+            if ( show ) QDesktopServices::openUrl(QUrl(xml));
+            disconnect(createVirtDomain, SIGNAL(errorMsg(QString&)),
+                       this, SLOT(msgRepeater(QString&)));
+            disconnect(createVirtDomain, SIGNAL(finished(int)),
+                       this, SLOT(doneEntityCreationDialog()));
+            TASK task;
+            task.type = "domain";
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.action     = act;
+            task.method     =
+                    (act==DEFINE_ENTITY)?
+                    "defineVirtDomain" : "createVirtDomain";
+            task.args.path  = xml;
+            emit addNewTask(task);
+        };
+        createVirtDomain->deleteLater();
     };
 }

@@ -10,7 +10,7 @@ Volume_Disk::Volume_Disk(
     volumeLabel = new QPushButton("Volume:", this);
     volume = new QLineEdit(this);
     //volume->setReadOnly(true);
-    modeLabel = new QLabel("LUN source mode:", this);
+    modeLabel = new QLabel("Source Mode:", this);
     modeLabel->setEnabled(false);
     mode = new QComboBox(this);
     mode->addItems(QStringList()<<"Host"<<"Direct");
@@ -29,8 +29,6 @@ Volume_Disk::Volume_Disk(
     baseLayout->addWidget(mode, 2, 1);
     baseLayout->addWidget(auth, 3, 1);
 
-    connect(devType->devType, SIGNAL(currentIndexChanged(QString)),
-            this, SLOT(changeModeVisibility(QString)));
     connect(volumeLabel, SIGNAL(clicked()),
             this, SLOT(getVolumeNames()));
     connect(volume, SIGNAL(textChanged(QString)),
@@ -250,11 +248,6 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
 }
 
 /* private slots */
-void Volume_Disk::changeModeVisibility(QString _devType)
-{
-    modeLabel->setEnabled( _devType.toLower()=="lun" );
-    mode->setEnabled( _devType.toLower()=="lun" );
-}
 void Volume_Disk::getVolumeNames()
 {
     VVD_Result _ret;
@@ -264,12 +257,16 @@ void Volume_Disk::getVolumeNames()
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();
         pool->setText(_ret.pool);
-        volume->setText(_ret.path);
+        volume->setText(_ret.name);
         if ( _ret.type=="iscsi" ) {
             auth->setVisible(true);
+            mode->setEnabled(true);
+            modeLabel->setEnabled(true);
         } else {
             auth->auth->setChecked(false);
             auth->setVisible(false);
+            mode->setEnabled(false);
+            modeLabel->setEnabled(false);
         };
     };
 }

@@ -282,31 +282,33 @@ void VirtNetControl::newVirtEntityFromXML(const QStringList &_args)
 void VirtNetControl::doneEntityCreationDialog()
 {
     CreateVirtNetwork *createVirtNet = static_cast<CreateVirtNetwork*>(sender());
-    if ( createVirtNet!=NULL && createVirtNet->getResult()==QDialog::Accepted ) {
-        // get path for method
-        Actions act = createVirtNet->getAction();
-        QString xml = createVirtNet->getXMLDescFileName();
-        bool show = createVirtNet->getShowing();
-        QStringList data;
-        data.append("New Network XML'ed");
-        data.append(QString("to <a href='%1'>%1</a>").arg(xml));
-        QString msg = data.join(" ");
-        msgRepeater(msg);
-        if ( show ) QDesktopServices::openUrl(QUrl(xml));
-        disconnect(createVirtNet, SIGNAL(errorMsg(QString&)),
-                   this, SLOT(msgRepeater(QString&)));
-        disconnect(createVirtNet, SIGNAL(finished(int)),
-                   this, SLOT(doneEntityCreationDialog()));
-        delete createVirtNet;
-        createVirtNet = NULL;
-        TASK task;
-        task.type = "network";
-        task.sourceConn = currWorkConnection;
-        task.srcConName = currConnName;
-        task.action     = act;
-        task.method     =
-                (act==DEFINE_ENTITY)? "defineVirtNetwork" : "createVirtNetwork";
-        task.args.path  = xml;
-        emit addNewTask(task);
+    if ( createVirtNet!=NULL ) {
+        if ( createVirtNet->getResult()==QDialog::Accepted ) {
+            // get path for method
+            Actions act = createVirtNet->getAction();
+            QString xml = createVirtNet->getXMLDescFileName();
+            bool show = createVirtNet->getShowing();
+            QStringList data;
+            data.append("New Network XML'ed");
+            data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+            QString msg = data.join(" ");
+            msgRepeater(msg);
+            if ( show ) QDesktopServices::openUrl(QUrl(xml));
+            disconnect(createVirtNet, SIGNAL(errorMsg(QString&)),
+                       this, SLOT(msgRepeater(QString&)));
+            disconnect(createVirtNet, SIGNAL(finished(int)),
+                       this, SLOT(doneEntityCreationDialog()));
+            TASK task;
+            task.type = "network";
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.action     = act;
+            task.method     =
+                    (act==DEFINE_ENTITY)?
+                    "defineVirtNetwork" : "createVirtNetwork";
+            task.args.path  = xml;
+            emit addNewTask(task);
+        };
+        createVirtNet->deleteLater();
     };
 }
