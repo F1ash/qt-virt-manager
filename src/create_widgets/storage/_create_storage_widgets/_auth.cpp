@@ -28,6 +28,8 @@ _Storage_Auth::_Storage_Auth(QWidget *parent, virConnectPtr _conn, QString _type
     setLayout(commonLayout);
     connect(auth, SIGNAL(toggled(bool)),
             authWdg, SLOT(setVisible(bool)));
+    connect(auth, SIGNAL(stateChanged(int)),
+            this, SLOT(changeAuthVisibility(int)));
     connect(usageType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(usageTypeChanged(int)));
     connect(auth, SIGNAL(toggled(bool)),
@@ -84,4 +86,8 @@ void _Storage_Auth::setSecret()
     } else if ( _type=="uuid" && !res.uuid.isEmpty() ) {
         usage->setText(res.uuid);
     }
+}
+void _Storage_Auth::changeAuthVisibility(int i)
+{
+    authWdg->setVisible( i==Qt::Checked );
 }

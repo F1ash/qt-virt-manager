@@ -44,6 +44,7 @@ public slots:
 private slots:
     void             usageTypeChanged(int);
     void             setSecret();
+    void             changeAuthVisibility(int);
 
 };
 

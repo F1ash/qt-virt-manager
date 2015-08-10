@@ -154,6 +154,7 @@ QDomDocument DeviceStack::getResult() const
 }
 void DeviceStack::clearDevice()
 {
+    deviceList->clearSelection();
     if ( device!=NULL ) {
         infoLayout->removeWidget(device);
         delete device;

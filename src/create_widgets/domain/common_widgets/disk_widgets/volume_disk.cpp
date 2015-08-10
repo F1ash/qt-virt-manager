@@ -155,9 +155,12 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
                     _source.attribute("mode"), Qt::MatchContains);
         mode->setCurrentIndex( (idx<0)? 0:idx );
     };
-    _auth = _source.firstChildElement("auth");
-    auth->auth->setChecked( !_auth.isNull() );
+    // used for iscsi pool only
+    _auth = _device.firstChildElement("auth");
     if ( !_auth.isNull() ) {
+        auth->setVisible(true);
+        auth->auth->setChecked( true );
+        auth->setSecretType("iSCSI");
         auth->userName->setText(
                     _auth.attribute("username"));
         _secret = _auth.firstChildElement("secret");
@@ -171,11 +174,15 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
                 idx = auth->usageType->findText(
                             "uuid", Qt::MatchContains);
                 _u = _secret.attribute("uuid");
+            } else if ( _secret.hasAttribute("type") ) {
+                _u = _secret.attribute("type");
+                auth->setSecretType(_u.toLower());
             };
             auth->usageType->setCurrentIndex( (idx<0)? 0:idx );
             auth->usage->setText(_u);
         };
     };
+    //
     if ( _source.hasAttribute("startupPolicy") ) {
         startupPolicy->setUsage(true);
         _attr = _source.attribute("startupPolicy");
@@ -260,11 +267,13 @@ void Volume_Disk::getVolumeNames()
         volume->setText(_ret.name);
         if ( _ret.type=="iscsi" ) {
             auth->setVisible(true);
+            auth->setSecretType("ISCSI");
             mode->setEnabled(true);
             modeLabel->setEnabled(true);
         } else {
             auth->auth->setChecked(false);
             auth->setVisible(false);
+            auth->setSecretType(NOT_VOLUME);
             mode->setEnabled(false);
             modeLabel->setEnabled(false);
         };
