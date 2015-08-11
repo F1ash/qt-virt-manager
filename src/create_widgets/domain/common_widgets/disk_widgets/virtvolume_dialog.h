@@ -26,11 +26,13 @@ class VirtVolumeDialog : public QDialog
 public:
     explicit VirtVolumeDialog(
             QWidget         *parent = NULL,
-            virConnectPtr    conn   = NULL);
+            virConnectPtr    conn   = NULL,
+            QString          _type  = QString());
 
 signals:
 
 private:
+    const QString    type;
     QPushButton     *chooseVolume;
     QPushButton     *cancel;
     QHBoxLayout     *buttonLayout;
@@ -58,6 +60,7 @@ private slots:
     void             showMsg(QString&);
     void             execAction(TASK);
     void             poolThreadResult(Result);
+    void             addPoolItem(QStringList&);
 };
 
 #endif // VIRTVOLUME_DIALOG_H

@@ -45,7 +45,7 @@ bool _Hosts::isUsed() const
 {
     return useHosts->isChecked();
 }
-void _Hosts::checkHosts(bool state)
+void _Hosts::setUsage(bool state)
 {
     useHosts->setChecked(state);
 }

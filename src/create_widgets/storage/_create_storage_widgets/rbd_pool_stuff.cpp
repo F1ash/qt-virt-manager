@@ -11,7 +11,7 @@ RBD_Pool_Stuff::RBD_Pool_Stuff(QWidget *parent, virConnectPtr _conn) :
     source->named->setVisible(true);
     source->hostLabel->setVisible(true);
     source->host->setVisible(true);
-    source->host->checkHosts(true);
+    source->host->setUsage(true);
     source->host->setHostPlaceholderText("my.ceph.monitor");
     source->host->setPortPlaceholderText("6789");
     source->authLabel->setVisible(true);

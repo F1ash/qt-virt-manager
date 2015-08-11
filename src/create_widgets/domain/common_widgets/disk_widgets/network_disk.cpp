@@ -13,7 +13,7 @@ Network_Disk::Network_Disk(
     protocol->addItems(PROTOCOLS);
     protocol->insertSeparator(protocol->count());
     protocol->insertItem(protocol->count(), "Set manually");
-    sourceNameLabel = new QLabel("Source name:", this);
+    sourceLabel = new QPushButton("Source:", this);
     sourceName = new QLineEdit(this);
     sourceName->setPlaceholderText("Source name or URL path");
     auth = new _Storage_Auth(this, currWorkConnection);
@@ -21,7 +21,7 @@ Network_Disk::Network_Disk(
 
     baseLayout->addWidget(protocolLabel, 0, 0);
     baseLayout->addWidget(protocol, 0, 1);
-    baseLayout->addWidget(sourceNameLabel, 1, 0);
+    baseLayout->addWidget(sourceLabel, 1, 0);
     baseLayout->addWidget(sourceName, 1, 1);
     baseLayout->addWidget(auth, 2, 0, 4, 2);
 
@@ -31,6 +31,8 @@ Network_Disk::Network_Disk(
             this, SLOT(protocolTypeChanged(int)));
     connect(protocol, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(protocolTypeChanged(QString)));
+    connect(sourceLabel, SIGNAL(clicked()),
+            this, SLOT(getVolumeNames()));
     // dataChanged connections
     connect(protocol, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));
@@ -184,7 +186,7 @@ void Network_Disk::setDataDescription(QString &xmlDesc)
     _attr = _target.attribute("dev");
     target->devName->setText(_attr);
     _host = _source.firstChildElement("host");
-    hosts->checkHosts( !_host.isNull() );
+    hosts->setUsage( !_host.isNull() );
     hosts->clearHostList();
     _attr.clear();
     while ( !_host.isNull() ) {
@@ -267,4 +269,112 @@ void Network_Disk::protocolTypeChanged(QString _type)
     };
     auth->usage->clear();
     auth->auth->setChecked(false);
+    sourceName->clear();
+}
+void Network_Disk::getVolumeNames()
+{
+    VVD_Result _ret;
+    if ( volumeDialog==NULL ) {
+        QString _type = protocol->currentText().toLower();
+        volumeDialog = new VirtVolumeDialog(
+                    this, currWorkConnection, _type);
+    };
+    if ( volumeDialog->exec()==QDialog::Accepted ) {
+        _ret = volumeDialog->getResult();
+        if ( _ret.type=="iscsi" ) {
+            auth->setVisible(true);
+            auth->setSecretType("ISCSI");
+        }else if ( _ret.type=="rnd" ) {
+            auth->setVisible(true);
+            auth->setSecretType("CEPH");
+        } else {
+            auth->auth->setChecked(false);
+            auth->setVisible(false);
+            auth->setSecretType(NOT_VOLUME);
+        };
+        setTypedData(_ret);
+    };
+    delete volumeDialog;
+    volumeDialog = NULL;
+}
+void Network_Disk::setTypedData(VVD_Result &_data)
+{
+    QString _name;
+    QDomDocument doc;
+    doc.setContent(_data.source);
+    QDomElement _source, _host, _auth, _secret, _device;
+    _source = doc.firstChildElement("source");
+    if ( !_source.isNull() ) {
+        _host = _source.firstChildElement("host");
+        if ( !_host.isNull() ) {
+            hosts->setUsage(true);
+            QString _name, _port, _addr;
+            _name = _host.attribute("name");
+            _port = _host.attribute("port");
+            _addr = QString("%1:%2").arg(_name).arg(_port);
+            hosts->setHostItem(_addr);
+        };
+        _device = _source.firstChildElement("device");
+        if        ( _data.type=="iscsi" ) {
+            _auth = _source.firstChildElement("auth");
+            if ( !_device.isNull() ) {
+                _name.append(
+                            _device.attribute("path"));
+                _name.append("/");
+                QString _lun = _data.path.split("-").last();
+                _name.append(_lun);
+            };
+            if ( !_auth.isNull() ) {
+                auth->auth->setChecked(true);
+                auth->userName->setText(
+                            _auth.attribute("username"));
+                _secret = _auth.firstChildElement("secret");
+                if ( !_secret.isNull() ) {
+                    QString _u;
+                    int idx;
+                    if ( _secret.hasAttribute("usage") ) {
+                        idx = auth->usageType->findText(
+                                    "usage", Qt::MatchContains);
+                        _u = _secret.attribute("usage");
+                    } else if ( _secret.hasAttribute("uuid") ) {
+                        idx = auth->usageType->findText(
+                                    "uuid", Qt::MatchContains);
+                        _u = _secret.attribute("uuid");
+                    };
+                    auth->usageType->setCurrentIndex( (idx<0)? 0:idx );
+                    auth->usage->setText(_u);
+                    auth->setSecretType("ISCSI");
+                };
+            };
+        } else if ( _data.type=="rnd" ) {
+            if ( !_auth.isNull() ) {
+                auth->auth->setChecked(true);
+                auth->userName->setText(
+                            _auth.attribute("username"));
+                _secret = _auth.firstChildElement("secret");
+                if ( !_secret.isNull() ) {
+                    QString _u;
+                    int idx;
+                    if ( _secret.hasAttribute("usage") ) {
+                        idx = auth->usageType->findText(
+                                    "usage", Qt::MatchContains);
+                        _u = _secret.attribute("usage");
+                    } else if ( _secret.hasAttribute("uuid") ) {
+                        idx = auth->usageType->findText(
+                                    "uuid", Qt::MatchContains);
+                        _u = _secret.attribute("uuid");
+                    };
+                    auth->usageType->setCurrentIndex( (idx<0)? 0:idx );
+                    auth->usage->setText(_u);
+                    auth->setSecretType("CEPH");
+                };
+            };
+        } else if ( _data.type=="nbd" ) {
+        } else if ( _data.type=="sheepdog" ) {
+        } else if ( _data.type=="gluster" ) {
+        } else {
+            _name.append(_data.name);
+        };
+        sourceName->setText(_name);
+    };
 }

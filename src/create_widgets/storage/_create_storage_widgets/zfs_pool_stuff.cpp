@@ -11,7 +11,7 @@ ZFS_Pool_Stuff::ZFS_Pool_Stuff(QWidget *parent) :
     source->named->setVisible(true);
     source->deviceLabel->setVisible(true);
     source->device->setVisible(true);
-    source->host->checkHosts(true);
+    source->host->setUsage(true);
     target->setVisible(false);
 }
 

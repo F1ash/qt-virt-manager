@@ -11,7 +11,7 @@ Gluster_Pool_Stuff::Gluster_Pool_Stuff(QWidget *parent) :
     source->named->setVisible(true);
     source->hostLabel->setVisible(true);
     source->host->setVisible(true);
-    source->host->checkHosts(true);
+    source->host->setUsage(true);
     source->host->setOneHostMode(true);
     source->host->setFullHostMode(false);
     source->host->setHostPlaceholderText("localhost");

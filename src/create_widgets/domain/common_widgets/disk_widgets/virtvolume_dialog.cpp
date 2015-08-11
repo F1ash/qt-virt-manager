@@ -1,9 +1,8 @@
 #include "virtvolume_dialog.h"
 
 VirtVolumeDialog::VirtVolumeDialog(
-        QWidget *parent,
-        virConnectPtr conn) :
-    QDialog(parent), currWorkConnection(conn)
+        QWidget *parent, virConnectPtr conn, QString _type) :
+    QDialog(parent), currWorkConnection(conn), type(_type)
 {
     setModal(true);
     poolList = new QListWidget(this);
@@ -112,14 +111,24 @@ void VirtVolumeDialog::poolThreadResult(Result data)
     if ( data.msg.isEmpty() ) {
         poolList->addItem("Not found");
     } else {
-        foreach (QString chain, data.msg ) {
+        foreach ( QString chain, data.msg ) {
             QStringList _data = chain.split(DFR);
-            QListWidgetItem *item = new QListWidgetItem();
-            item->setText( _data.first() );
-            _data.removeFirst();
-            item->setData( Qt::UserRole, _data );
-            poolList->addItem(item);
+            QString _type = _data.at(1);
+            //qDebug()<<_data;
+            if        ( type.isEmpty() ) {
+                addPoolItem(_data);
+            } else if ( type==_type ) {
+                addPoolItem(_data);
+            }
         };
     };
     setEnabled(true);
+}
+void VirtVolumeDialog::addPoolItem(QStringList &_data)
+{
+    QListWidgetItem *item = new QListWidgetItem();
+    item->setText( _data.first() );
+    _data.removeFirst();
+    item->setData( Qt::UserRole, _data );
+    poolList->addItem(item);
 }

@@ -37,7 +37,7 @@ private:
 
 public slots:
     bool             isUsed() const;
-    void             checkHosts(bool);
+    void             setUsage(bool);
     void             setFullHostMode(bool);
     QStringList      getHostsList() const;
     void             setOneHostMode(bool);
