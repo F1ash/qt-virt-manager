@@ -63,6 +63,8 @@ void VM_Viewer::closeEvent(QCloseEvent *ev)
         QString msg = QString("'<b>%1</b>' viewer closed.").arg(domain);
         sendErrMsg(msg, 0);
         ev->accept();
+        QString key = QString("%1_%2").arg(connName).arg(domain);
+        emit finished(key);
     }
 }
 void VM_Viewer::sendErrMsg(QString &msg, uint _number)

@@ -54,7 +54,7 @@ Spice_Viewer::Spice_Viewer(
         if ( addr!=uri && !uri.isEmpty() ) addr = uri;
         port = (graph.hasAttribute("port"))?
                     graph.attribute("port").toInt() : 5900;
-        qDebug()<<"address:"<<addr<<port;
+        //qDebug()<<"address:"<<addr<<port;
         if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
             // use toolbar
             viewerToolBar->setEnabled(true);

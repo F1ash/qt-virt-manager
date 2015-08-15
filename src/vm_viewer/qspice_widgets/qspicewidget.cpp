@@ -22,7 +22,8 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     resizeTimer.setSingleShot( true );
     connect(&resizeTimer, SIGNAL(timeout()), SLOT(resizeDone()));
 
-    connect(spiceSession, SIGNAL(channelNew(QSpiceChannel*)), SLOT(ChannelNew(QSpiceChannel*)));
+    connect(spiceSession, SIGNAL(channelNew(QSpiceChannel*)),
+            SLOT(ChannelNew(QSpiceChannel*)));
     m_Image->setMouseTracking(true);
     m_Image->setFocusPolicy(Qt::StrongFocus);
     m_Image->installEventFilter( this );
@@ -55,11 +56,16 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     if (_display)
     {
         display = _display;
-        connect(display, SIGNAL(displayPrimaryCreate(int,int,int,int,int,void*)), SLOT(displayPrimaryCreate(int,int,int,int,int,void*)));
-        connect(display, SIGNAL(displayInvalidate(int,int,int,int)), SLOT(displayInvalidate(int,int,int,int)));
-        connect(display, SIGNAL(displayPrimaryDestroy()), SLOT(displayPrimaryDestroy()));
-        connect(display, SIGNAL(displayMark(int)), SLOT(displayMark(int)));
-        connect(display, SIGNAL(channelDestroyed()), SLOT(displayPrimaryDestroy()));
+        connect(display, SIGNAL(displayPrimaryCreate(int,int,int,int,int,void*)),
+                SLOT(displayPrimaryCreate(int,int,int,int,int,void*)));
+        connect(display, SIGNAL(displayInvalidate(int,int,int,int)),
+                SLOT(displayInvalidate(int,int,int,int)));
+        connect(display, SIGNAL(displayPrimaryDestroy()),
+                SLOT(displayPrimaryDestroy()));
+        connect(display, SIGNAL(displayMark(int)),
+                SLOT(displayMark(int)));
+        connect(display, SIGNAL(channelDestroyed()),
+                SLOT(displayPrimaryDestroy()));
 
         display->Connect();
         return;
@@ -79,7 +85,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     {
         cursor = _cursor;
         connect(cursor, SIGNAL(channelDestroyed()), SLOT(channelDestroyed()));
-        connect(cursor, SIGNAL(cursorSet(int,int,int,int,void*)), SLOT(cursorSet(int,int,int,int,void*)));
+        connect(cursor, SIGNAL(cursorSet(int,int,int,int,void*)),
+                SLOT(cursorSet(int,int,int,int,void*)));
         cursor->Connect();
         return;
     }
@@ -111,17 +118,27 @@ void QSpiceWidget::displayPrimaryCreate(
     Q_UNUSED(shmid);
     m_Image->setUpdatesEnabled(false);
 
-    qDebug() << "Display Create(" << width << ", " << height << ")";
+    //qDebug() << "Display Create(" << width << ", " << height << ")";
 
     QImage *img = NULL;
     switch(format)
     {
     case SPICE_SURFACE_FMT_32_xRGB:
-        img = new QImage(static_cast<uchar *>(imgdata), width, height, stride, QImage::Format_RGB32);
+        img = new QImage(
+                    static_cast<uchar *>(imgdata),
+                    width,
+                    height,
+                    stride,
+                    QImage::Format_RGB32);
         break;
 
     case SPICE_SURFACE_FMT_16_555:
-        img = new QImage(static_cast<uchar *>(imgdata), width, height, stride, QImage::Format_RGB555);
+        img = new QImage(
+                    static_cast<uchar *>(imgdata),
+                    width,
+                    height,
+                    stride,
+                    QImage::Format_RGB555);
         break;
 
     default:
@@ -155,14 +172,14 @@ void QSpiceWidget::displayInvalidate(
 
 void QSpiceWidget::displayPrimaryDestroy()
 {
-    qDebug() << "Display Destroyed";
+    //qDebug() << "Display Destroyed";
     m_Image->setPixmap(QPixmap());
     m_Image->setUpdatesEnabled(false);
 }
 
 void QSpiceWidget::displayMark(int mark)
 {
-    qDebug() << "Display Mark " << mark;
+    //qDebug() << "Display Mark " << mark;
     m_Image->setUpdatesEnabled(mark != 0);
 }
 

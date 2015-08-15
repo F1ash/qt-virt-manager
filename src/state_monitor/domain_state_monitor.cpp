@@ -61,7 +61,7 @@ void DomainStateMonitor::setNewMonitoredDomain(
                         this, conn, domainName));
         connect(monitoredDomains->widget(i), SIGNAL(viewerClosed()),
                 this, SLOT(removeClosedViewer()));
-        qDebug()<<domainName<<"add to StateMonitor";
+        //qDebug()<<domainName<<"add to StateMonitor";
     };
 }
 void DomainStateMonitor::changeVisibility()
@@ -81,7 +81,8 @@ void DomainStateMonitor::saveCurrentState()
 void DomainStateMonitor::stopMonitoring()
 {
     while (monitoredDomainList->count()>0) {
-        DomainStateViewer *wdg = static_cast<DomainStateViewer*>(monitoredDomains->widget(0));
+        DomainStateViewer *wdg =
+                static_cast<DomainStateViewer*>(monitoredDomains->widget(0));
         wdg->closeDomainStateViewer();
     };
 }
@@ -99,7 +100,7 @@ void DomainStateMonitor::removeClosedViewer()
                this, SLOT(removeClosedViewer()));
     monitoredDomains->removeWidget(wdg);
     monitoredDomainList->removeItem(i);
-    qDebug()<<wdg->domainName<<"remove from StateMonitor";
+    //qDebug()<<wdg->domainName<<"remove from StateMonitor";
     delete wdg;
     wdg = NULL;
 }
