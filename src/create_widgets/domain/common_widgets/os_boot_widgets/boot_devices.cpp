@@ -30,6 +30,16 @@ void Boot_Devices::addNewDevice(QDomElement &_el)
     QString _devType = _el.attribute("type");
     _devName.append(" ");
     _devName.append(_devType);
+    if ( _el.hasAttribute("device") ) {
+        _devName.append(" ");
+        _devName.append(_el.attribute("device"));
+    };
+    if ( !_el.firstChildElement("target").isNull() ) {
+        _devName.append(" ");
+        _devName.append(
+                    _el.firstChildElement("target")
+                    .attribute("dev"));
+    };
     int _order = devices->count()+1;
     bool _used = !_el.firstChildElement("boot").isNull();
     if (_used)

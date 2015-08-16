@@ -421,38 +421,50 @@ void CreateVirtDomain::setBootOrder(QDomElement *_devices)
                 wdgList.value("OS_Booting"));
     if ( NULL!=Wdg ) {
         BootOrderList list = Wdg->getBootOrder();
+        QDomDocument _bootDevDoc;
+        _bootDevDoc.setContent(QString());
         foreach (BootOrder _data, list) {
-            //qDebug()<<_data.deviceDesc<<_data.usage<<_data.order;
-            QDomDocument _doc, _doc1;
+            QDomDocument _doc;
             _doc.setContent(_data.deviceDesc);
-            QDomElement _dev = _devices->firstChildElement();
-            while ( !_dev.isNull() ) {
-                if ( !_doc.firstChildElement(_dev.tagName()).isNull() ) {
-                    //qDebug()<<_dev.tagName();
-                    QDomElement _el, _el1;
-                    _el = _doc.firstChildElement(_dev.tagName());
-                    if ( !_el.firstChildElement("boot").isNull() ) {
-                        _el.removeChild(_el.firstChildElement("boot"));
-                    };
-                    if ( !_dev.firstChildElement("boot").isNull() ) {
-                        _dev.removeChild(_dev.firstChildElement("boot"));
-                    };
-                    _el1 = _dev;
-                    _doc1.setContent(QString());
-                    _doc1.appendChild(_el1);
-                    //qDebug()<<_doc.toString()<<_doc1.toString();
-                    if ( _doc.toString()==_doc1.toString() ) {
-                        if ( _data.usage ) {
-                            QDomElement _boot = _doc.createElement("boot");
-                            _boot.setAttribute("order", _data.order);
-                            _dev.appendChild(_boot);
-                        };
-                    };
-                    _devices->appendChild(_dev);
-                    break;
+            QDomElement _dev = _doc.firstChildElement();
+            QDomElement _taggedDev = _devices->firstChildElement(_dev.tagName());
+            while ( !_taggedDev.isNull() ) {
+                QDomElement _boot = _taggedDev.firstChildElement("boot");
+                if ( !_boot.isNull() ) {
+                    _taggedDev.removeChild(_boot);
                 };
-                _dev = _dev.nextSiblingElement();
+                QDomNode _el = _devices->removeChild(_taggedDev);
+                _bootDevDoc.appendChild(_el);
+                _taggedDev = _devices->firstChildElement(_dev.tagName());
             };
+        };
+        //qDebug()<<_bootDevDoc.toString()<<"booted";
+        QDomNodeList _list = _bootDevDoc.childNodes();
+        int count = _list.count();
+        for(int i=0; i<count; i++) {
+            QDomNode _dev = _list.at(0);
+            QDomDocument _doc1;
+            _doc1.setContent(QString());
+            _doc1.appendChild(_dev);
+            foreach (BootOrder _data, list) {
+                //qDebug()<<_data.deviceDesc<<_data.usage<<_data.order;
+                QDomDocument _doc;
+                _doc.setContent(_data.deviceDesc);
+                QDomElement _new_dev = _doc.firstChildElement();
+                if ( !_new_dev.firstChildElement("boot").isNull() ) {
+                    _new_dev.removeChild(_new_dev.firstChildElement("boot"));
+                };
+                //qDebug()<<_doc.toString()<<_doc1.toString();
+                if ( _doc.toString()==_doc1.toString() ) {
+                    if ( _data.usage ) {
+                        QDomElement _boot = _doc.createElement("boot");
+                        _boot.setAttribute("order", _data.order);
+                        _dev.appendChild(_boot);
+                        //qDebug()<<_doc.toString()<<_data.order;
+                    };
+                };
+            };
+            _devices->appendChild(_doc1.firstChildElement());
         };
     };
 }
