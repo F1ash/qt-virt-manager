@@ -1,5 +1,5 @@
-#ifndef BARNAMELABEL_H
-#define BARNAMELABEL_H
+#ifndef BAR_NAME_LABEL_H
+#define BAR_NAME_LABEL_H
 
 #include <QLabel>
 #include <QPaintEvent>
@@ -22,4 +22,4 @@ private slots:
     void paintEvent(QPaintEvent*);
 };
 
-#endif // BARNAMELABEL_H
+#endif // BAR_NAME_LABEL_H

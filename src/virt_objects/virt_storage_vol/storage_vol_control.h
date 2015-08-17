@@ -7,6 +7,7 @@
 #include "storage_vol_control_menu.h"
 #include "resize_dialog.h"
 #include "create_widgets/storage/create_volume.h"
+#include <QCloseEvent>
 
 class VirtStorageVolControl : public VirtEntityControl
 {
@@ -14,6 +15,9 @@ class VirtStorageVolControl : public VirtEntityControl
 public:
     explicit VirtStorageVolControl(QWidget *parent = NULL);
     ~VirtStorageVolControl();
+
+signals:
+    void                       finished(QString&);
 
 private:
     QString                    currPoolName;
@@ -27,6 +31,7 @@ public slots:
     QString                    getCurrentVolumeName() const;
     QString                    getCurrentVolumePath() const;
     void                       resultReceiver(Result);
+    void                       closeEvent(QCloseEvent*);
 
 private slots:
     void                       reloadState();

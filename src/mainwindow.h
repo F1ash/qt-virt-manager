@@ -108,7 +108,8 @@ private slots:
     void deleteVMDisplay(QString&);
     void deleteVMDisplay(QString, QString);
     void buildMigrateArgs(TASK);
-    void addStorageVol(virConnect*,QString&,QString&);
+    void overviewStoragePool(virConnect*,QString&,QString&);
+    void deleteStPoolOverview(QString&);
 };
 
 #endif // MAINWINDOW_H

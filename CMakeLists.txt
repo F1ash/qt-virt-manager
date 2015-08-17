@@ -61,6 +61,7 @@ set (PROJECT_VERSION 1.0.0)
 set (HEADERS 
   src/mainwindow.h
   src/log_dock/log_dock.h
+  src/log_dock/log_dock_menu.h
   src/tray/traywidget.h
   src/toolbar/toolbar.h
   src/settings/conn_settings.h
@@ -368,7 +369,7 @@ set (HEADERS
   src/state_monitor/domain_state_monitor.h
   src/state_monitor/domain_monitor_thread.h
   src/state_monitor/domain_state_viewer.h
-  src/state_monitor/svg_tamplates.h
+  src/state_monitor/svg_templates.h
 
   src/task_warehouse/task_warehouse.h
 )
@@ -376,6 +377,7 @@ set (SOURCES
   src/main.cpp
   src/mainwindow.cpp
   src/log_dock/log_dock.cpp
+  src/log_dock/log_dock_menu.cpp
   src/tray/traywidget.cpp
   src/toolbar/toolbar.cpp
   src/settings/conn_settings.cpp

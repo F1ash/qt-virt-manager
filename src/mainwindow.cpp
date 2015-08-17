@@ -331,6 +331,8 @@ void MainWindow::initDockWidgets()
     logDock->restoreGeometry(settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", true).toBool();
     logDock->setVisible(visible);
+    connect(logDockContent, SIGNAL(overflow(bool)),
+            logDock, SLOT(changeWarningState(bool)));
     toolBar->_logUpAction->setChecked(visible);
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
@@ -458,7 +460,7 @@ void MainWindow::initDockWidgets()
     connect(taskWrHouse, SIGNAL(poolResult(Result)),
             storagePoolDockContent, SLOT(resultReceiver(Result)));
     connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
-            this, SLOT(addStorageVol(virConnect*,QString&,QString&)));
+            this, SLOT(overviewStoragePool(virConnect*,QString&,QString&)));
 
     secretDock = new DockWidget(this);
     secretDock->setObjectName("secretDock");
@@ -627,7 +629,7 @@ void MainWindow::autoHide()
 }
 void MainWindow::writeToErrorLog(QString &msg)
 {
-    logDockContent->appendErrorMsg(msg);
+    logDockContent->appendMsgToLog(msg);
 }
 void MainWindow::changeLogViewerVisibility()
 {
@@ -724,7 +726,7 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
         connect(value, SIGNAL(finished(QString&)),
                 this, SLOT(deleteVMDisplay(QString&)));
         connect(value, SIGNAL(errorMsg(QString&)),
-                logDockContent, SLOT(appendErrorMsg(QString&)));
+                logDockContent, SLOT(appendMsgToLog(QString&)));
         connect(value, SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
         value->show();
@@ -760,15 +762,13 @@ void MainWindow::deleteVMDisplay(QString &key)
             disconnect(value, SIGNAL(finished(QString&)),
                        this, SLOT(deleteVMDisplay(QString&)));
             disconnect(value, SIGNAL(errorMsg(QString&)),
-                       logDockContent, SLOT(appendErrorMsg(QString&)));
+                       logDockContent, SLOT(appendMsgToLog(QString&)));
             disconnect(value, SIGNAL(addNewTask(TASK)),
                        taskWrHouse, SLOT(addNewTask(TASK)));
             delete value;
             value = NULL;
         };
         VM_Displayed_Map.remove(key);
-        // reload domains state, because VM_Viewer is finished
-        //domainDockContent->reloadState();
     }
 }
 void MainWindow::deleteVMDisplay(QString connName, QString domName)
@@ -800,7 +800,7 @@ void MainWindow::buildMigrateArgs(TASK _task)
     }
 }
 
-void MainWindow::addStorageVol(virConnect *conn, QString &connName, QString &poolName)
+void MainWindow::overviewStoragePool(virConnect *conn, QString &connName, QString &poolName)
 {
     QString key = QString("%1_%2").arg(connName).arg(poolName);
     if ( !storageMap.contains(key) ) {
@@ -809,6 +809,8 @@ void MainWindow::addStorageVol(virConnect *conn, QString &connName, QString &poo
         storageMap.value(key)->setWindowTitle(QString("%1 Pool").arg(key));
         connect(storageMap.value(key), SIGNAL(entityMsg(QString&)),
                 this, SLOT(writeToErrorLog(QString&)));
+        connect(storageMap.value(key), SIGNAL(finished(QString&)),
+                this, SLOT(deleteStPoolOverview(QString&)));
         connect(storageMap.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
         connect(taskWrHouse, SIGNAL(volResult(Result)),
@@ -817,4 +819,25 @@ void MainWindow::addStorageVol(virConnect *conn, QString &connName, QString &poo
     };
     storageMap.value(key)->show();
     storageMap.value(key)->setFocus();
+}
+void MainWindow::deleteStPoolOverview(QString &key)
+{
+    if ( storageMap.contains(key) ) {
+        VirtStorageVolControl *value = NULL;
+        value = static_cast<VirtStorageVolControl*>(
+                        storageMap.value(key, NULL));
+        if ( NULL!=value ) {
+            disconnect(storageMap.value(key), SIGNAL(entityMsg(QString&)),
+                       this, SLOT(writeToErrorLog(QString&)));
+            disconnect(storageMap.value(key), SIGNAL(finished(QString&)),
+                       this, SLOT(deleteStPoolOverview(QString&)));
+            disconnect(storageMap.value(key), SIGNAL(addNewTask(TASK)),
+                       taskWrHouse, SLOT(addNewTask(TASK)));
+            disconnect(taskWrHouse, SIGNAL(volResult(Result)),
+                       storageMap.value(key), SLOT(resultReceiver(Result)));
+            delete value;
+            value = NULL;
+        };
+        storageMap.remove(key);
+    };
 }

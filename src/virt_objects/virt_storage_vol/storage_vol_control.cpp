@@ -18,6 +18,7 @@ VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
     entityList->setColumnWidth(2, settings.value("column2", 32).toInt());
     entityList->setColumnWidth(3, settings.value("column3", 32).toInt());
     int area_int = settings.value("ToolBarArea", 4).toInt();
+    restoreGeometry(settings.value("Geometry").toByteArray());
     settings.endGroup();
     toolBar = new StorageVolToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
@@ -34,31 +35,11 @@ VirtStorageVolControl::~VirtStorageVolControl()
     settings.setValue("column2", entityList->columnWidth(2));
     settings.setValue("column3", entityList->columnWidth(3));
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
+    settings.setValue("Geometry", saveGeometry());
     settings.endGroup();
     settings.sync();
-    //disconnect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
-    //           this, SLOT(entityDoubleClicked(const QModelIndex&)));
-    disconnect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
-               this, SLOT(entityClicked(const QPoint&)));
-    disconnect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-               this, SLOT(newVirtEntityFromXML(const QStringList&)));
-    disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
 
     stopProcessing();
-
-    delete toolBar;
-    toolBar = NULL;
-
-    if (storageVolModel!=NULL) {
-        delete storageVolModel;
-        storageVolModel = NULL;
-    };
-
-    if (entityList!=NULL) {
-        delete entityList;
-        entityList = NULL;
-    };
 }
 
 /* public slots */
@@ -172,6 +153,15 @@ void VirtStorageVolControl::resultReceiver(Result data)
         msgRepeater(msg);
         if ( data.result )
             QDesktopServices::openUrl(QUrl(xml));
+    };
+}
+void VirtStorageVolControl::closeEvent(QCloseEvent *ev)
+{
+    if ( ev->type()==QEvent::Close ) {
+        QString key = objectName();
+        QString msg = QString("'<b>%1</b>' overview closed.").arg(key);
+        emit msgRepeater(msg);
+        emit finished(key);
     };
 }
 

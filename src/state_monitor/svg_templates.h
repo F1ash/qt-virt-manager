@@ -1,5 +1,5 @@
-#ifndef SVG_TAMPLATES_H
-#define SVG_TAMPLATES_H
+#ifndef SVG_TEMPLATES_H
+#define SVG_TEMPLATES_H
 
 #define HOST_CPU_USAGE_SVG_TEMPLATE QString("\
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>\
@@ -31,4 +31,4 @@
     <text x='3' y='23' font-family='Monospace' font-size='14' fill='black'></text>\
 </svg>")
 
-#endif // SVG_TAMPLATES_H
+#endif // SVG_TEMPLATES_H

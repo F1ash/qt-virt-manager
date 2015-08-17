@@ -86,7 +86,7 @@ void VirtVolumeDialog::showVolumes(QListWidgetItem *_item)
     QString _poolName = _item->text();
     QString currConnName("VirtVolumeDialog");
     // need for identification
-    // see for: MainWindow::addStorageVol
+    // see for: MainWindow::overviewStoragePool
     // & VirtStorageVolControl::resultReceiver
     volumes->setObjectName(
                 QString("%1_%2").arg(currConnName).arg(_poolName));

@@ -36,29 +36,8 @@ VirtDomainControl::~VirtDomainControl()
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
-    disconnect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
-               this, SLOT(entityDoubleClicked(const QModelIndex&)));
-    disconnect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
-               this, SLOT(entityClicked(const QPoint&)));
-    disconnect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-               this, SLOT(newVirtEntityFromXML(const QStringList&)));
-    disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
 
     stopProcessing();
-
-    delete toolBar;
-    toolBar = NULL;
-
-    if (domainModel!=NULL) {
-        delete domainModel;
-        domainModel = NULL;
-    };
-
-    if (entityList!=NULL) {
-        delete entityList;
-        entityList = NULL;
-    };
 }
 
 /* public slots */
@@ -68,12 +47,12 @@ bool VirtDomainControl::getThreadState() const
 }
 void VirtDomainControl::stopProcessing()
 {
+    setEnabled(false);
     // clear Domain list
     while ( domainModel->DataList.count() ) {
         domainModel->removeRow(0);
     };
     domainModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
-    setEnabled(false);
 }
 bool VirtDomainControl::setCurrentWorkConnect(virConnect *conn)
 {

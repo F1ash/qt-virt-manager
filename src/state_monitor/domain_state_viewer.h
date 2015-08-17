@@ -10,7 +10,7 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include "domain_monitor_thread.h"
-#include "svg_tamplates.h"
+#include "svg_templates.h"
 
 class DomainStateViewer : public QWidget
 {

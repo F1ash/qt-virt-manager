@@ -30,27 +30,8 @@ VirtSecretControl::~VirtSecretControl()
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
-    //disconnect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
-    //           this, SLOT(entityDoubleClicked(const QModelIndex&)));
-    disconnect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
-               this, SLOT(entityClicked(const QPoint&)));
-    disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
 
     stopProcessing();
-
-    delete toolBar;
-    toolBar = NULL;
-
-    if (virtSecretModel!=NULL) {
-        delete virtSecretModel;
-        virtSecretModel = NULL;
-    };
-
-    if (entityList!=NULL) {
-        delete entityList;
-        entityList = NULL;
-    };
 }
 
 /* public slots */
@@ -60,13 +41,13 @@ bool VirtSecretControl::getThreadState() const
 }
 void VirtSecretControl::stopProcessing()
 {
+    setEnabled(false);
     // clear Secret list
     while ( virtSecretModel->DataList.count() ) {
         virtSecretModel->removeRow(0);
     };
     virtSecretModel->setHeaderData(
                 0, Qt::Horizontal, QString("UUID"), Qt::EditRole);
-    setEnabled(false);
 
 }
 bool VirtSecretControl::setCurrentWorkConnect(virConnect *conn)

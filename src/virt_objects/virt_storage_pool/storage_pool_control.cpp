@@ -36,29 +36,8 @@ VirtStoragePoolControl::~VirtStoragePoolControl()
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
-    //disconnect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
-    //           this, SLOT(entityDoubleClicked(const QModelIndex&)));
-    disconnect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
-               this, SLOT(entityClicked(const QPoint&)));
-    disconnect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-               this, SLOT(newVirtEntityFromXML(const QStringList&)));
-    disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
 
     stopProcessing();
-
-    delete toolBar;
-    toolBar = NULL;
-
-    if (storagePoolModel!=NULL) {
-        delete storagePoolModel;
-        storagePoolModel = NULL;
-    };
-
-    if (entityList!=NULL) {
-        delete entityList;
-        entityList = NULL;
-    };
 }
 
 /* public slots */
@@ -68,12 +47,12 @@ bool VirtStoragePoolControl::getThreadState() const
 }
 void VirtStoragePoolControl::stopProcessing()
 {
+    setEnabled(false);
     // clear StoragePool list
     while ( storagePoolModel->DataList.count() ) {
         storagePoolModel->removeRow(0);
     };
     storagePoolModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
-    setEnabled(false);
 
 }
 bool VirtStoragePoolControl::setCurrentWorkConnect(virConnect *conn)

@@ -36,29 +36,8 @@ VirtNetControl::~VirtNetControl()
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.endGroup();
     settings.sync();
-    //disconnect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
-    //           this, SLOT(entityDoubleClicked(const QModelIndex&)));
-    disconnect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
-               this, SLOT(entityClicked(const QPoint&)));
-    disconnect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-               this, SLOT(newVirtEntityFromXML(const QStringList&)));
-    disconnect(toolBar, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
 
     stopProcessing();
-
-    delete toolBar;
-    toolBar = NULL;
-
-    if (virtNetModel!=NULL) {
-        delete virtNetModel;
-        virtNetModel = NULL;
-    };
-
-    if (entityList!=NULL) {
-        delete entityList;
-        entityList = NULL;
-    };
 }
 
 /* public slots */
@@ -68,12 +47,12 @@ bool VirtNetControl::getThreadState() const
 }
 void VirtNetControl::stopProcessing()
 {
+    setEnabled(false);
     // clear Network list
     while ( virtNetModel->DataList.count() ) {
         virtNetModel->removeRow(0);
     };
     virtNetModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
-    setEnabled(false);
 
 }
 bool VirtNetControl::setCurrentWorkConnect(virConnect *conn)
