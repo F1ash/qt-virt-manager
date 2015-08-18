@@ -9,7 +9,7 @@ Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
 License:        GPLv2+
-Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz 
+Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 URL:            https://github.com/F1ash/%{name}
 
 Requires:       libvirt
@@ -19,6 +19,13 @@ Requires:       qtermwidget >= 0.6.0-2
 %if %with qt5
 Requires:       qtermwidget-qt5 >= 0.6.0-2
 %endif
+# for use qemu-kvm (more useful)
+Requires:       qemu-kvm
+Requires:       libvirt-daemon-driver-qemu
+# for use SPICE viewer
+# spice-server exist in libvirt-daemon-driver-qemu Requires in Fedora
+#Requires:      spice-server
+Requires:       spice-vdagent
 # for scrubbing (optional)
 Requires:       scrub
 
