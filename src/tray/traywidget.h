@@ -1,5 +1,5 @@
-#ifndef TRAYWIDGET_H
-#define TRAYWIDGET_H
+#ifndef TRAY_WIDGET_H
+#define TRAY_WIDGET_H
 
 #include <QSystemTrayIcon>
 #include <QMenu>
@@ -8,7 +8,7 @@ class TrayIcon : public QSystemTrayIcon
 {
   Q_OBJECT
 public :
-  TrayIcon(QWidget *parent);
+  explicit TrayIcon(QWidget *parent);
 
   QAction   *hideAction;
   QAction   *logUpAction;
@@ -25,4 +25,4 @@ public slots:
   void       stateTaskWareHouseVisibilityChanged(bool);
 };
 
-#endif
+#endif // TRAY_WIDGET_H

@@ -15,10 +15,11 @@
 #include <QFile>
 #include <QPushButton>
 #include <QSettings>
-#include "log_dock_menu.h"
+#include <QCheckBox>
+#include <QSpinBox>
 #include <QDebug>
 
-#define LOG_SIZE 1048576
+#define ONE_MB 1048576
 
 class LogDock : public QWidget
 {
@@ -28,15 +29,15 @@ public:
     ~LogDock();
 
 private:
-    bool              useNameTemplate, saveAtExit, lastProbe;
-    int               timerId;
+    bool              lastProbe;
+    int               timerId, currLogSize;
     QSettings         settings;
     QSize             _size;
     QVBoxLayout      *docLayout;
     QLabel           *currentTime;
+    QSpinBox         *logSize;
+    QCheckBox        *autoSaveLog;
     QPushButton      *saveLog;
-    QPushButton      *menuBtn;
-    LogDockMenu      *menu;
     QHBoxLayout      *titleLayout;
     QWidget          *title;
     QTextBrowser     *Log;
@@ -53,7 +54,7 @@ private slots:
     void              _saveLogToFile();
     void              saveLogToFile();
     QString           getTemplateFilename() const;
-    void              changeSettings(QAction*);
+    void              changeLogSize(int);
 
 };
 

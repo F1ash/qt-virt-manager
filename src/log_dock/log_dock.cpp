@@ -4,8 +4,8 @@ LogDock::LogDock(QWidget *parent) :
     QWidget(parent)
 {
     settings.beginGroup("LogDock");
-    useNameTemplate = settings.value("UseNameTemplate", false).toBool();
-    saveAtExit = settings.value("SaveAtExit", false).toBool();
+    bool autoSave = settings.value("AutoSave", false).toBool();
+    currLogSize = settings.value("LogSize", 1).toInt();
     settings.endGroup();
     // lastProbe variable for reject loop when log overflow is occurred
     // see for LogDock::saveLogToFile()
@@ -16,21 +16,22 @@ LogDock::LogDock(QWidget *parent) :
                     QSizePolicy::MinimumExpanding));
     int _size = this->fontInfo().pixelSize();
     currentTime = new QLabel(this);
+    logSize = new QSpinBox(this);
+    logSize->setToolTip("Size of Log (MB)");
+    logSize->setRange(1, 100);
+    logSize->setSuffix("MB");
+    logSize->setValue(currLogSize);
+    autoSaveLog = new QCheckBox(this);
+    autoSaveLog->setToolTip("AutoSave");
     saveLog = new QPushButton(QIcon::fromTheme("document-save"), "", this);
     saveLog->setToolTip("Save Log to File");
     saveLog->setMaximumSize(QSize(_size, _size));
-    menu = new LogDockMenu(this);
-    menu->useNameTemplate->setChecked(useNameTemplate);
-    menu->saveAtExit->setChecked(saveAtExit);
-    menuBtn = new QPushButton(QIcon::fromTheme("system-settings"), "", this);
-    menuBtn->setToolTip("Log Settings");
-    menuBtn->setMaximumSize(QSize(_size, _size));
-    menuBtn->setMenu(menu);
     titleLayout = new QHBoxLayout();
     titleLayout->addWidget(currentTime, 0, Qt::AlignRight);
     titleLayout->addStretch(-1);
+    titleLayout->addWidget(logSize, 0, Qt::AlignRight);
+    titleLayout->addWidget(autoSaveLog, 0, Qt::AlignRight);
     titleLayout->addWidget(saveLog, 0, Qt::AlignRight);
-    titleLayout->addWidget(menuBtn, 0, Qt::AlignRight);
     title = new QWidget(this);
     title->setLayout(titleLayout);
     titleLayout->setMargin(0);
@@ -38,7 +39,7 @@ LogDock::LogDock(QWidget *parent) :
 
     Log = new QTextBrowser(this);
     Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
-                    .arg(LOG_SIZE)
+                    .arg(currLogSize * ONE_MB)
                     .arg(Log->toPlainText().count()));
     Log->setReadOnly(true);
     Log->setOpenLinks(false);
@@ -54,10 +55,13 @@ LogDock::LogDock(QWidget *parent) :
     docLayout->setMargin(0);
     setContentsMargins(0, 0, 0, 0);
     timerId = startTimer(1000);
+    connect(logSize, SIGNAL(valueChanged(int)),
+            this, SLOT(changeLogSize(int)));
+    connect(autoSaveLog, SIGNAL(toggled(bool)),
+            saveLog, SLOT(setDisabled(bool)));
     connect(saveLog, SIGNAL(clicked()),
             this, SLOT(_saveLogToFile()));
-    connect(menu, SIGNAL(triggered(QAction*)),
-            this, SLOT(changeSettings(QAction*)));
+    autoSaveLog->setChecked(autoSave);
 }
 LogDock::~LogDock()
 {
@@ -66,12 +70,11 @@ LogDock::~LogDock()
         timerId = 0;
     };
     settings.beginGroup("LogDock");
-    settings.setValue("UseNameTemplate", useNameTemplate);
-    settings.setValue("SaveAtExit", saveAtExit);
+    settings.setValue("LogSize", currLogSize);
+    settings.setValue("AutoSave", autoSaveLog->isChecked());
     settings.endGroup();
     settings.sync();
-    useNameTemplate = true;
-    if ( saveAtExit ) saveLogToFile();
+    if ( autoSaveLog->isChecked() ) saveLogToFile();
 }
 
 /* public slots */
@@ -80,10 +83,10 @@ void LogDock::appendMsgToLog(QString &msg)
     Log->append(msg);
     Log->setToolTip(
                 QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
-                .arg(LOG_SIZE)
+                .arg(currLogSize * ONE_MB)
                 .arg(Log->toPlainText().count()));
-    if ( Log->toPlainText().count()>LOG_SIZE ) {
-        if ( useNameTemplate ) {
+    if ( Log->toPlainText().count()>currLogSize * ONE_MB ) {
+        if ( autoSaveLog->isChecked() ) {
             saveLogToFile();
         } else {
             emit overflow(true);
@@ -115,7 +118,7 @@ void LogDock::saveLogToFile()
     saveLog->setEnabled(false);
     saveLog->setDown(true);
     QString _fileName;
-    if ( useNameTemplate ) {
+    if ( autoSaveLog->isChecked() ) {
         _fileName = getTemplateFilename();
     } else {
         _fileName = QFileDialog::getSaveFileName(
@@ -155,11 +158,10 @@ QString LogDock::getTemplateFilename() const
             .arg(QDate::currentDate().toString("dd.MM.yyyy"))
             .arg(QTime::currentTime().toString());
 }
-void LogDock::changeSettings(QAction *act)
+void LogDock::changeLogSize(int i)
 {
-    if        ( act==menu->useNameTemplate ) {
-        useNameTemplate = menu->useNameTemplate->isChecked();
-    } else if ( act==menu->saveAtExit ) {
-        saveAtExit = menu->saveAtExit->isChecked();
-    };
+    currLogSize = i;
+    Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
+                    .arg(currLogSize * ONE_MB)
+                    .arg(Log->toPlainText().count()));
 }

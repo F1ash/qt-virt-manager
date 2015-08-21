@@ -17,7 +17,7 @@ private:
     bool            state, _mark;
     int             timerId;
     QPalette        standard;
-    QBrush    lightBrush, darkBrush, midBrush;
+    QBrush          lightBrush, darkBrush, midBrush;
 
 public slots:
     void            _setFloating(bool);
