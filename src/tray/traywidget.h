@@ -3,26 +3,34 @@
 
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include <QTimerEvent>
 
 class TrayIcon : public QSystemTrayIcon
 {
-  Q_OBJECT
+    Q_OBJECT
 public :
   explicit TrayIcon(QWidget *parent);
 
-  QAction   *hideAction;
-  QAction   *logUpAction;
-  QAction   *monitorAction;
-  QAction   *taskUpAction;
-  QAction   *closeAction;
+    QAction   *hideAction;
+    QAction   *logUpAction;
+    QAction   *monitorAction;
+    QAction   *taskUpAction;
+    QAction   *closeAction;
 
 private :
-  QMenu     *trayIconMenu;
+    int        timerId;
+    bool       _mark;
+    QMenu     *trayIconMenu;
+    QIcon      appIcon, warningIcon;
 
 public slots:
-  void       setLogUpActionText(QString&);
-  void       stateMonitorVisibilityChanged(bool);
-  void       stateTaskWareHouseVisibilityChanged(bool);
+    void       setLogUpActionText(QString&);
+    void       stateMonitorVisibilityChanged(bool);
+    void       stateTaskWareHouseVisibilityChanged(bool);
+    void       changeWarningState(bool);
+
+private slots:
+    void       timerEvent(QTimerEvent*);
 };
 
 #endif // TRAY_WIDGET_H

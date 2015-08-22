@@ -333,6 +333,8 @@ void MainWindow::initDockWidgets()
     logDock->setVisible(visible);
     connect(logDockContent, SIGNAL(overflow(bool)),
             logDock, SLOT(changeWarningState(bool)));
+    connect(logDockContent, SIGNAL(overflow(bool)),
+            trayIcon, SLOT(changeWarningState(bool)));
     toolBar->_logUpAction->setChecked(visible);
     area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
     settings.endGroup();
