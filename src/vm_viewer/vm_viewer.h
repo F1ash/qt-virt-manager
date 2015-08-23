@@ -11,6 +11,8 @@
 #include <QSettings>
 #include "vm_viewer/viewer_toolbar.h"
 #include "virt_objects/virt_entity_config.h"
+#include "create_widgets/snapshot/create_snapshot_dialog.h"
+#include "create_widgets/snapshot/snapshot_action_dialog.h"
 #include <QDebug>
 
 #define TIMEOUT     60*1000

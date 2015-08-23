@@ -145,6 +145,39 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
                 task.args.path  = from;
                 emit addNewTask(task);
             };
+        } else if ( method.first()=="createVirtDomainSnapshot" ) {
+            //qDebug()<<"createVirtDomainSnapshot";
+            CreateSnapshotDialog *_dialog =
+                    new CreateSnapshotDialog(
+                        this, domain, true, jobConnect);
+            connect(_dialog, SIGNAL(errMsg(QString&)),
+                    this, SLOT(msgRepeater(QString&)));
+            int exitCode = _dialog->exec();
+            if ( exitCode ) {
+                task.action      = CREATE_DOMAIN_SNAPSHOT;
+                task.method      = "createVirtDomainSnapshot";
+                task.args.object = _dialog->getSnapshotXMLDesc();
+                task.args.sign   = _dialog->getSnapshotFlags();
+                emit addNewTask(task);
+            };
+            disconnect(_dialog, SIGNAL(errMsg(QString&)),
+                       this, SLOT(msgRepeater(QString&)));
+            _dialog->deleteLater();
+        } else if ( method.first()=="moreSnapshotActions" ) {
+            //qDebug()<<"moreSnapshotActions";
+            SnapshotActionDialog *_dialog =
+                    new SnapshotActionDialog(this, jobConnect, domain);
+            int exitCode = _dialog->exec();
+            if ( exitCode ) {
+                QStringList params = _dialog->getParameters();
+                task.action      = static_cast<Actions>(exitCode);
+                task.method      = params.first();
+                params.removeFirst();
+                task.args.object = params.first();
+                task.args.sign   = _dialog->getSnapshotFlags();
+                emit addNewTask(task);
+            };
+            _dialog->deleteLater();
         };
     };
 }

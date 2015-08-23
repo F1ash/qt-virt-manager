@@ -21,6 +21,10 @@ public:
     QAction         *reboot_Action;
     QAction         *reset_Action;
     QAction         *shutdown_Action;
+    QMenu           *snapshot_Menu;
+    QAction         *createSnapshot;
+    QAction         *moreSnapshot_Actions;
+    QAction         *snapshot_Action;
 
 signals:
     void             execMethod(const QStringList&);

@@ -89,15 +89,8 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     _autoReload->setChecked(settings.value("AutoReload", false).toBool());
     settings.endGroup();
 
-    //connect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(define_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    connect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
-
+    connect(_autoReload, SIGNAL(toggled(bool)),
+            this, SLOT(changeAutoReloadState(bool)));
     connect(create_Menu, SIGNAL(fileForMethod(QStringList&)),
             this, SLOT(repeatParameters(QStringList&)));
     connect(define_Menu, SIGNAL(fileForMethod(QStringList&)),

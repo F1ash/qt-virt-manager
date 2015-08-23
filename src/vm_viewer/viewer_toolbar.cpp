@@ -27,12 +27,24 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     destroy_Action->setIcon(QIcon::fromTheme("domain-stop"));
     destroy_Action->setToolTip("Stop");
     destroy_Action->setMenu(destroy_Menu);
+    snapshot_Menu = new QMenu(this);
+    createSnapshot = snapshot_Menu->addAction("create Snapshot of Current Domain");
+    createSnapshot->setIcon(QIcon::fromTheme("camera-photo"));
+    moreSnapshot_Actions = snapshot_Menu->addAction("more Snapshot actions for Domain");
+    moreSnapshot_Actions->setIcon(QIcon::fromTheme("camera-photo"));
+    snapshot_Action = new QAction(this);
+    snapshot_Action->setIcon(QIcon::fromTheme("camera-photo"));
+    snapshot_Action->setToolTip("Snapshot now!");
+    snapshot_Action->setMenu(snapshot_Menu);
 
     addAction(start_Action);
     addAction(pause_Action);
     addAction(destroy_Action);
+    addSeparator();
+    addAction(snapshot_Action);
 
-    connect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
+    connect(this, SIGNAL(actionTriggered(QAction*)),
+            this, SLOT(detectTriggerredAction(QAction*)));
 }
 
 /* public slots */
@@ -66,6 +78,12 @@ void ViewerToolBar::detectTriggerredAction(QAction *action)
         parameters << "saveVirtDomain";
     } else if ( action == restore_Action ) {
         parameters << "restoreVirtDomain";
+    } else if ( action == snapshot_Action ) {
+        parameters << "createVirtDomainSnapshot";
+    } else if ( action == createSnapshot ) {
+        parameters << "createVirtDomainSnapshot";
+    } else if ( action == moreSnapshot_Actions ) {
+        parameters << "moreSnapshotActions";
     } else return;
     emit execMethod(parameters);
 }
