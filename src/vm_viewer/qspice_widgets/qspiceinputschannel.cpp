@@ -110,6 +110,9 @@ static ScanCodeHash scanCodeHash;
 
 void InitScanCodeMap()
 {
+    // SPICE protocol use PC AT scan codes for keyboard
+    // See for: http://philipstorr.id.au/pcbook/book3/scancode.htm
+    // WARNING: (Prnt, Scrn) <-> (Keypad *)
     scanCodeHash.clear();
     scanCodeHash.insert(Qt::Key_Space,          0x39);
     scanCodeHash.insert(Qt::Key_A,              0x1E);

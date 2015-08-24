@@ -151,7 +151,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
                     new CreateSnapshotDialog(
                         this, domain, true, jobConnect);
             connect(_dialog, SIGNAL(errMsg(QString&)),
-                    this, SLOT(msgRepeater(QString&)));
+                    this, SLOT(sendErrMsg(QString&)));
             int exitCode = _dialog->exec();
             if ( exitCode ) {
                 task.action      = CREATE_DOMAIN_SNAPSHOT;
@@ -161,7 +161,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
                 emit addNewTask(task);
             };
             disconnect(_dialog, SIGNAL(errMsg(QString&)),
-                       this, SLOT(msgRepeater(QString&)));
+                       this, SLOT(sendErrMsg(QString&)));
             _dialog->deleteLater();
         } else if ( method.first()=="moreSnapshotActions" ) {
             //qDebug()<<"moreSnapshotActions";
@@ -178,6 +178,8 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
                 emit addNewTask(task);
             };
             _dialog->deleteLater();
+        } else if ( method.first()=="reconnectToVirtDomain" ) {
+            reconnectToDomain();
         };
     };
 }
@@ -187,4 +189,8 @@ void VM_Viewer::startCloseProcess()
     killTimerId = startTimer(PERIOD);
     statusBar()->show();
     //qDebug()<<killTimerId<<"killTimer";
+}
+void VM_Viewer::reconnectToDomain()
+{
+
 }

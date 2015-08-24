@@ -2,7 +2,7 @@
 #define DOMAIN_MONITOR_THREAD_H
 
 #include <QThread>
-#include "time.h"
+#include <QTime>
 #include <QDebug>
 #include <libvirt/libvirt.h>
 #include <libvirt/virterror.h>
@@ -24,9 +24,9 @@ private:
     virConnectPtr        currWorkConn;
     virDomainPtr         domain;
     const QString        domainName;
-    uint                 prev_cpuTime = 0;
-    uint                 prev_time_mark = 0;
-    uint                 nr_cores = 0;
+    quint64              prev_cpuTime;
+    QTime                tMark;
+    bool                 firstStep;
 
 public slots:
     void                 stop();

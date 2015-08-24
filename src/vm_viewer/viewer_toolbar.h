@@ -25,12 +25,10 @@ public:
     QAction         *createSnapshot;
     QAction         *moreSnapshot_Actions;
     QAction         *snapshot_Action;
+    QAction         *reconnect_Action;
 
 signals:
     void             execMethod(const QStringList&);
-
-private:
-    QAction         *sep;
 
 private slots:
     void             showMenu();

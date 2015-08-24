@@ -86,6 +86,19 @@ Spice_Viewer::~Spice_Viewer()
 }
 
 /* public slots */
+void Spice_Viewer::reconnectToDomain()
+{
+    QSpiceWidget *wdg = static_cast<QSpiceWidget*>(centralWidget());
+    if ( NULL!=wdg ) {
+        wdg->Disconnect();
+        delete wdg;
+        wdg = NULL;
+        spiceWdg = new QSpiceWidget(this);
+        spiceWdg->setWidgetResizable(true);
+        setCentralWidget(spiceWdg);
+        spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
+    };
+}
 
 /* private slots */
 void Spice_Viewer::timerEvent(QTimerEvent *ev)

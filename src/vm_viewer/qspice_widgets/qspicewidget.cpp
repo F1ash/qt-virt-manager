@@ -39,7 +39,10 @@ bool QSpiceWidget::Connect(QString uri)
     spiceSession->setUri(uri);
     return spiceSession->Connect();
 }
-
+void QSpiceWidget::Disconnect()
+{
+    spiceSession->Disconnect();
+}
 
 void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
 {

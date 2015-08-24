@@ -19,6 +19,7 @@ public:
     ~QSpiceWidget();
 
     bool Connect(QString uri);
+    void Disconnect();
 
 signals:
     void DisplayResize(const QSize &size);

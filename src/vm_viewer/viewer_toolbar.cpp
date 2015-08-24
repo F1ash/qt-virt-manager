@@ -18,7 +18,7 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     reboot_Action->setIcon(QIcon::fromTheme("reboot"));
     reset_Action = destroy_Menu->addAction("Reset");
     reset_Action->setIcon(QIcon::fromTheme("reset"));
-    sep = destroy_Menu->addSeparator();
+    destroy_Menu->addSeparator();
     shutdown_Action = destroy_Menu->addAction("Shutdown");
     shutdown_Action->setIcon(QIcon::fromTheme("shutdown"));
     save_Action = destroy_Menu->addAction("Save");
@@ -36,12 +36,17 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     snapshot_Action->setIcon(QIcon::fromTheme("camera-photo"));
     snapshot_Action->setToolTip("Snapshot now!");
     snapshot_Action->setMenu(snapshot_Menu);
+    reconnect_Action = new QAction(this);
+    reconnect_Action->setIcon(QIcon::fromTheme("view-refresh"));
+    reconnect_Action->setToolTip("Reconnect");
 
     addAction(start_Action);
     addAction(pause_Action);
     addAction(destroy_Action);
     addSeparator();
     addAction(snapshot_Action);
+    addSeparator();
+    addAction(reconnect_Action);
 
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
@@ -84,6 +89,8 @@ void ViewerToolBar::detectTriggerredAction(QAction *action)
         parameters << "createVirtDomainSnapshot";
     } else if ( action == moreSnapshot_Actions ) {
         parameters << "moreSnapshotActions";
+    } else if ( action == reconnect_Action ) {
+        parameters << "reconnectToVirtDomain";
     } else return;
     emit execMethod(parameters);
 }

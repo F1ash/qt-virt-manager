@@ -54,6 +54,7 @@ public slots:
     void             sendGlobalErrors();
     void             resendExecMethod(const QStringList&);
     void             startCloseProcess();
+    virtual void     reconnectToDomain();
 };
 
 #endif // VM_VIEWER_H

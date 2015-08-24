@@ -30,6 +30,7 @@ private:
     QShortcut       *actFullScreen;
 
 public slots:
+    void             reconnectToDomain();
 
 private slots:
     void             timerEvent(QTimerEvent*);
