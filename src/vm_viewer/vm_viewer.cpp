@@ -180,6 +180,8 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
             _dialog->deleteLater();
         } else if ( method.first()=="reconnectToVirtDomain" ) {
             reconnectToDomain();
+        } else if ( method.first()=="sendKeySeqToVirtDomain" ) {
+            sendKeySeqToDomain((Qt::Key)method.last().toInt());
         };
     };
 }
@@ -193,4 +195,8 @@ void VM_Viewer::startCloseProcess()
 void VM_Viewer::reconnectToDomain()
 {
 
+}
+void VM_Viewer::sendKeySeqToDomain(Qt::Key key)
+{
+    Q_UNUSED(key);
 }

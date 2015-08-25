@@ -26,6 +26,18 @@ public:
     QAction         *moreSnapshot_Actions;
     QAction         *snapshot_Action;
     QAction         *reconnect_Action;
+    QAction         *keySeq_Action;
+    QMenu           *keySequenceMenu;
+    QAction         *sendKeySeq_BackSpc;
+    QAction         *sendKeySeq_Del;
+    QAction         *sendKeySeq_1;
+    QAction         *sendKeySeq_2;
+    QAction         *sendKeySeq_3;
+    QAction         *sendKeySeq_4;
+    QAction         *sendKeySeq_5;
+    QAction         *sendKeySeq_6;
+    QAction         *sendKeySeq_7;
+    QAction         *sendKeySeq_8;
 
 signals:
     void             execMethod(const QStringList&);

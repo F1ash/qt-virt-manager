@@ -20,6 +20,7 @@ public:
 
     bool Connect(QString uri);
     void Disconnect();
+    void SendKeySequience(Qt::Key);
 
 signals:
     void DisplayResize(const QSize &size);

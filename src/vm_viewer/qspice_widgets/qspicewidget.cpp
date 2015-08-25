@@ -43,6 +43,15 @@ void QSpiceWidget::Disconnect()
 {
     spiceSession->Disconnect();
 }
+void QSpiceWidget::SendKeySequience(Qt::Key key)
+{
+    if ( NULL!=inputs ) {
+        // inputs->inputsKeyPressAndRelease()
+        // does not give the desired effect
+        inputs->inputsQKeyPress(key);
+        inputs->inputsQKeyRelease(key);
+    };
+}
 
 void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
 {

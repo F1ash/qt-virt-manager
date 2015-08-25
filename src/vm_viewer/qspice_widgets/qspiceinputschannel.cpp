@@ -97,12 +97,29 @@ public:
         append(code2);
     }
 
+    QScanCodeArray(uint code1, uint code2, uint code3)
+    {
+        append(code1);
+        append(code2);
+        append(code3);
+    }
+
+    QScanCodeArray(uint code1, uint code2, uint code3, uint code4)
+    {
+        append(code1);
+        append(code2);
+        append(code3);
+        append(code4);
+    }
+
 };
 
 
 // Scan Code Hash
 #define ADD_SCAN1(q, s1)    scanCodeHash.insert(q, s1);
 #define ADD_SCAN2(q, s1, s2)    scanCodeHash.insert(q, QScanCodeArray(s1, s2));
+#define ADD_SCAN3(q, s1, s2, s3)    scanCodeHash.insert(q, QScanCodeArray(s1, s2, s3));
+#define ADD_SCAN4(q, s1, s2, s3, s4)    scanCodeHash.insert(q, QScanCodeArray(s1, s2, s3, s4));
 
 typedef QHash<int, QScanCodeArray> ScanCodeHash;
 
@@ -188,7 +205,7 @@ void InitScanCodeMap()
     scanCodeHash.insert(Qt::Key_Escape,         0x01);
     scanCodeHash.insert(Qt::Key_Tab,            0x0F);
     scanCodeHash.insert(Qt::Key_Backtab,        0x0F);
-    // not applicable in PC AT
+    // not applicable in PC AT keyboard
     // ADD_SCAN2(Qt::Key_Super_L,               0xE0, 0x5B);
     // ADD_SCAN2(Qt::Key_Super_R,               0xE0, 0x5C);
     // ADD_SCAN2(Qt::Key_Meta, 0x00,            0x00);
@@ -202,7 +219,7 @@ void InitScanCodeMap()
     scanCodeHash.insert(Qt::Key_Control,        0x1D);
     scanCodeHash.insert(Qt::Key_Alt,            0x38);
     ADD_SCAN2          (Qt::Key_AltGr,          0xE0, 0x38);
-    // not applicable in PC AT
+    // not applicable in PC AT keyboard
     // scanCodeHash.insert(Qt::Key_Menu,        0x00);
 
     // Cursor Keys/Num pad
@@ -239,6 +256,19 @@ void InitScanCodeMap()
     scanCodeHash.insert(Qt::Key_F11,            0xD9);
     scanCodeHash.insert(Qt::Key_F12,            0xDA);
 
+    // additional non-keyboard called keys :
+    // not applicable in PC AT keyboard,
+    // therefore used for send key sequence
+    ADD_SCAN3          (Qt::Key_Launch1,        0x1D, 0x38, 0x3B);          // CtrlAltF1
+    ADD_SCAN3          (Qt::Key_Launch2,        0x1D, 0x38, 0x3C);          // CtrlAltF2
+    ADD_SCAN3          (Qt::Key_Launch3,        0x1D, 0x38, 0x3D);          // CtrlAltF3
+    ADD_SCAN3          (Qt::Key_Launch4,        0x1D, 0x38, 0x3E);          // CtrlAltF4
+    ADD_SCAN3          (Qt::Key_Launch5,        0x1D, 0x38, 0x3F);          // CtrlAltF5
+    ADD_SCAN3          (Qt::Key_Launch6,        0x1D, 0x38, 0x40);          // CtrlAltF6
+    ADD_SCAN3          (Qt::Key_Launch7,        0x1D, 0x38, 0x41);          // CtrlAltF7
+    ADD_SCAN3          (Qt::Key_Launch8,        0x1D, 0x38, 0x42);          // CtrlAltF8
+    ADD_SCAN3          (Qt::Key_LaunchB,        0x1D, 0x38, 0x0E);          // CtrlAltBackSpc
+    ADD_SCAN4          (Qt::Key_LaunchD,        0x1D, 0x38, 0xE0, 0x53);    // CtrlAltDel
 }
 
 // Qt Virtual Keys (platform independant)
