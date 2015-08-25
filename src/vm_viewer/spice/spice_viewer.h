@@ -31,6 +31,7 @@ private:
 
 public slots:
     void             reconnectToDomain();
+    void             sendKeySeqToDomain(Qt::Key);
 
 private slots:
     void             timerEvent(QTimerEvent*);

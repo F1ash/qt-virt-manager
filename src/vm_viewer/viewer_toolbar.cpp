@@ -39,6 +39,22 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     reconnect_Action = new QAction(this);
     reconnect_Action->setIcon(QIcon::fromTheme("view-refresh"));
     reconnect_Action->setToolTip("Reconnect");
+    keySeq_Action = new QAction(this);
+    keySeq_Action->setIcon(QIcon::fromTheme("input-keyboard"));
+    keySeq_Action->setToolTip("Send key sequence");
+    keySequenceMenu = new QMenu(this);
+    keySeq_Action->setMenu(keySequenceMenu);
+    sendKeySeq_BackSpc = keySequenceMenu->addAction("Ctrl+Alt+BackSpace");
+    sendKeySeq_Del = keySequenceMenu->addAction("Ctrl+Alt+Del");
+    keySequenceMenu->addSeparator();
+    sendKeySeq_1 = keySequenceMenu->addAction("Ctrl+Alt+F1");
+    sendKeySeq_2 = keySequenceMenu->addAction("Ctrl+Alt+F2");
+    sendKeySeq_3 = keySequenceMenu->addAction("Ctrl+Alt+F3");
+    sendKeySeq_4 = keySequenceMenu->addAction("Ctrl+Alt+F4");
+    sendKeySeq_5 = keySequenceMenu->addAction("Ctrl+Alt+F5");
+    sendKeySeq_6 = keySequenceMenu->addAction("Ctrl+Alt+F6");
+    sendKeySeq_7 = keySequenceMenu->addAction("Ctrl+Alt+F7");
+    sendKeySeq_8 = keySequenceMenu->addAction("Ctrl+Alt+F8");
 
     addAction(start_Action);
     addAction(pause_Action);
@@ -47,6 +63,7 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     addAction(snapshot_Action);
     addSeparator();
     addAction(reconnect_Action);
+    addAction(keySeq_Action);
 
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
@@ -91,6 +108,26 @@ void ViewerToolBar::detectTriggerredAction(QAction *action)
         parameters << "moreSnapshotActions";
     } else if ( action == reconnect_Action ) {
         parameters << "reconnectToVirtDomain";
+    } else if ( action == sendKeySeq_1 ) {
+        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch1);
+    } else if ( action == sendKeySeq_2 ) {
+        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch2);
+    } else if ( action == sendKeySeq_3 ) {
+        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch3);
+    } else if ( action == sendKeySeq_4 ) {
+        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch4);
+    } else if ( action == sendKeySeq_5 ) {
+        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch5);
+    } else if ( action == sendKeySeq_6 ) {
+        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch6);
+    } else if ( action == sendKeySeq_7 ) {
+        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch7);
+    } else if ( action == sendKeySeq_8 ) {
+        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch8);
+    } else if ( action == sendKeySeq_BackSpc ) {
+        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_LaunchB);
+    } else if ( action == sendKeySeq_Del ) {
+        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_LaunchD);
     } else return;
     emit execMethod(parameters);
 }

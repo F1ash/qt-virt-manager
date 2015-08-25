@@ -99,6 +99,10 @@ void Spice_Viewer::reconnectToDomain()
         spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
     };
 }
+void Spice_Viewer::sendKeySeqToDomain(Qt::Key key)
+{
+    spiceWdg->SendKeySequience(key);
+}
 
 /* private slots */
 void Spice_Viewer::timerEvent(QTimerEvent *ev)
