@@ -195,18 +195,3 @@ void VM_Viewer::sendKeySeqToDomain(Qt::Key key)
 {
     Q_UNUSED(key);
 }
-void VM_Viewer::showErrorInfo(QString &_msg)
-{
-    QIcon _icon = QIcon::fromTheme("face-sad");
-    icon = new QLabel(this);
-    icon->setPixmap(_icon.pixmap(256));
-    msg = new QLabel(this);
-    msg->setText(_msg);
-    infoLayout = new QVBoxLayout();
-    infoLayout->addWidget(icon, 0, Qt::AlignHCenter);
-    infoLayout->addWidget(msg);
-    infoLayout->addStretch(-1);
-    info = new QWidget(this);
-    info->setLayout(infoLayout);
-    setCentralWidget(info);
-}
