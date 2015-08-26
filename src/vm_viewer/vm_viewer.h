@@ -9,6 +9,9 @@
 #include <QTime>
 #include <QFileDialog>
 #include <QSettings>
+#include <QIcon>
+#include <QVBoxLayout>
+#include <QLabel>
 #include "vm_viewer/viewer_toolbar.h"
 #include "virt_objects/virt_entity_config.h"
 #include "create_widgets/snapshot/create_snapshot_dialog.h"
@@ -40,6 +43,10 @@ public:
     uint             counter = 0;
     virDomain       *domainPtr = NULL;
 
+    QVBoxLayout     *infoLayout = NULL;
+    QLabel          *icon, *msg;
+    QWidget         *info = NULL;
+
 signals:
     void             finished(QString&);
     void             errorMsg(QString&);
@@ -49,6 +56,7 @@ public slots:
     virtual bool     isActive() const;
     virDomain*       getDomainPtr() const;
     virtual void     closeEvent(QCloseEvent *ev);
+    void             sendErrMsg(QString&);
     void             sendErrMsg(QString&, uint);
     void             sendConnErrors();
     void             sendGlobalErrors();
@@ -56,6 +64,7 @@ public slots:
     void             startCloseProcess();
     virtual void     reconnectToDomain();
     virtual void     sendKeySeqToDomain(Qt::Key);
+    void             showErrorInfo(QString&);
 };
 
 #endif // VM_VIEWER_H

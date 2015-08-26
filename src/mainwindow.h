@@ -26,7 +26,8 @@
 #include <QDebug>
 
 typedef QMap<QString, VM_Viewer*> ViewerMap;
-typedef QMap<QString, VirtStorageVolControl*> StorageMap;
+typedef QMap<QString, VirtStorageVolControl*> OverviwedStorageMap;
+typedef QMap<QString, CreateVirtDomain*> DomainEditorMap;
 
 class MainWindow : public QMainWindow
 {
@@ -56,7 +57,6 @@ private :
     VirtSecretControl           *secretDockContent;
     DockWidget                  *ifaceDock;
     VirtInterfaceControl        *ifaceDockContent;
-    ViewerMap                    VM_Displayed_Map;
     DomainStateMonitor          *domainsStateMonitor;
     TaskWareHouse               *taskWrHouse;
 
@@ -70,7 +70,10 @@ private :
     QProgressBar                *closeProgress;
     int                          killTimerId = 0;
     int                          counter = 0;
-    StorageMap                   storageMap;
+
+    ViewerMap                    VM_Displayed_Map;
+    OverviwedStorageMap          Overviewed_StPool_Map;
+    DomainEditorMap              DomainEditor_Map;
 
 private slots:
     void saveSettings();
@@ -95,14 +98,15 @@ private slots:
     void closeCurrentConnection();
     void closeConnection(int);
     void closeAllConnections();
-    void closeConnStorageOverview(int);
+    void closeConnGenerations(int);
+    void closeConnGenerations(QString&);
     bool runningConnExist();
     void autoHide();
     void writeToErrorLog(QString&);
     void changeLogViewerVisibility();
     Qt::DockWidgetArea getDockArea(int) const;
     void receiveConnPtr(virConnect*, QString&);
-    void stopConnProcessing(virConnect*);
+    void stopConnProcessing(bool, QString &);
     void stopProcessing();
     void invokeVMDisplay(virConnect*, QString, QString);
     void deleteVMDisplay(QString&);
@@ -110,6 +114,8 @@ private slots:
     void buildMigrateArgs(TASK);
     void overviewStoragePool(virConnect*,QString&,QString&);
     void deleteStPoolOverview(QString&);
+    void invokeDomainEditor(TASK);
+    void deleteDomainEditor(QString&);
 };
 
 #endif // MAINWINDOW_H

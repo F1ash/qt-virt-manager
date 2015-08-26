@@ -33,7 +33,7 @@ signals:
     void warning(QString&);
     void connPtr(virConnect*, QString&);
     void connToClose(int);
-    void connClosed(virConnect*);
+    void connClosed(bool, QString&);
     void domResult(Result);
     void netResult(Result);
 

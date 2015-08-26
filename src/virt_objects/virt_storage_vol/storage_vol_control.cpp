@@ -159,7 +159,8 @@ void VirtStorageVolControl::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
         QString key = objectName();
-        QString msg = QString("'<b>%1</b>' overview closed.").arg(key);
+        QString msg = QString("'<b>%1</b>' pool overview closed.")
+                .arg(currPoolName);
         emit msgRepeater(msg);
         emit finished(key);
     };

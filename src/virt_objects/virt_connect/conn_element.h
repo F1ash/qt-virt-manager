@@ -27,7 +27,7 @@ signals:
     void              authRequested(QString&);
     void              domStateChanged(Result);
     void              netStateChanged(Result);
-    void              connClosed(virConnect*);
+    void              connClosed(bool, QString&);
 
 private:
     ConnItemModel    *own_model;
@@ -69,6 +69,7 @@ private slots:
     void              sendWarning(QString&);
     void              mainWindowUp();
     void              getAuthCredentials(QString&);
+    void              forwardConnClosedSignal(bool);
 };
 
 #endif   // CONN_ELEMENT_H

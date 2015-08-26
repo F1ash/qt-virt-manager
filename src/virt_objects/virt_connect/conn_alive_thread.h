@@ -50,7 +50,7 @@ signals:
     void            authRequested(QString&);
     void            domStateChanged(Result);
     void            netStateChanged(Result);
-    void            connClosed(virConnect*);
+    void            connClosed(bool);
 
 private:
     int             domainsLifeCycleCallback;

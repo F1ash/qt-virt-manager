@@ -6,10 +6,11 @@ VM_Viewer::VM_Viewer(
 {
     qRegisterMetaType<QString>("QString&");
     setMinimumSize(100, 100);
-    setWindowTitle(QString("<%1> Virtual Machine").arg(domain));
+    setWindowTitle(QString("<%1> Virtual Machine in [ %2 ] connection")
+                   .arg(domain).arg(connName));
     VM_State = true;
     viewerToolBar = new ViewerToolBar(this);
-    viewerToolBar->setEnabled(false);
+    viewerToolBar->setVisible(false);
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(resendExecMethod(const QStringList&)));
@@ -28,16 +29,6 @@ VM_Viewer::~VM_Viewer()
     if ( killTimerId>0 ) {
         killTimer(killTimerId);
         killTimerId = 0;
-    };
-    if ( NULL!=viewerToolBar ) {
-        disconnect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
-                   this, SLOT(resendExecMethod(const QStringList&)));
-        delete viewerToolBar;
-        viewerToolBar = NULL;
-    };
-    if ( NULL!=closeProcess ) {
-        delete closeProcess;
-        closeProcess = NULL;
     };
     VM_State = false;
     //qDebug()<<"VM_Viewer destroyed";
@@ -60,12 +51,17 @@ void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
         VM_State = false;
-        QString msg = QString("'<b>%1</b>' viewer closed.").arg(domain);
-        sendErrMsg(msg, 0);
+        QString key = objectName();
+        QString msg = QString("'<b>%1</b>' VM viewer closed.")
+                .arg(domain);
+        sendErrMsg(msg);
         ev->accept();
-        QString key = QString("%1_%2").arg(connName).arg(domain);
         emit finished(key);
     }
+}
+void VM_Viewer::sendErrMsg(QString &msg)
+{
+    sendErrMsg(msg, 0);
 }
 void VM_Viewer::sendErrMsg(QString &msg, uint _number)
 {
@@ -100,90 +96,89 @@ void VM_Viewer::sendGlobalErrors()
 void VM_Viewer::resendExecMethod(const QStringList &method)
 {
     QStringList args;
-    if ( true ) {
-        args.append(domain);
-        TASK task;
-        task.type = "domain";
-        task.sourceConn = jobConnect;
-        task.srcConName = connName;
-        task.object     = domain;
-        if        ( method.first()=="startVirtDomain" ) {
+    args.append(domain);
+    TASK task;
+    task.type = "domain";
+    task.sourceConn = jobConnect;
+    task.srcConName = connName;
+    task.object     = domain;
+    if        ( method.first()=="startVirtDomain" ) {
+        task.method     = method.first();
+        task.action     = START_ENTITY;
+        emit addNewTask(task);
+    } else if ( method.first()=="pauseVirtDomain" ) {
+        task.method     = method.first();
+        task.action     = PAUSE_ENTITY;
+        task.args.state = VM_State ? 1 : 0;
+        emit addNewTask(task);
+    } else if ( method.first()=="destroyVirtDomain" ) {
+        task.method     = method.first();
+        task.action     = DESTROY_ENTITY;
+        emit addNewTask(task);
+    } else if ( method.first()=="resetVirtDomain" ) {
+        task.method     = method.first();
+        task.action     = RESET_ENTITY;
+        emit addNewTask(task);
+    } else if ( method.first()=="shutdownVirtDomain" ) {
+        task.method     = method.first();
+        task.action     = SHUTDOWN_ENTITY;
+        emit addNewTask(task);
+    } else if ( method.first()=="saveVirtDomain" ) {
+        QString to = QFileDialog::getSaveFileName(this, "Save to", "~");
+        if ( !to.isEmpty() ) {
             task.method     = method.first();
-            task.action     = START_ENTITY;
-            emit addNewTask(task);
-        } else if ( method.first()=="pauseVirtDomain" ) {
-            task.method     = method.first();
-            task.action     = PAUSE_ENTITY;
+            task.action     = SAVE_ENTITY;
+            task.args.path  = to;
             task.args.state = VM_State ? 1 : 0;
             emit addNewTask(task);
-        } else if ( method.first()=="destroyVirtDomain" ) {
-            task.method     = method.first();
-            task.action     = DESTROY_ENTITY;
-            emit addNewTask(task);
-        } else if ( method.first()=="resetVirtDomain" ) {
-            task.method     = method.first();
-            task.action     = RESET_ENTITY;
-            emit addNewTask(task);
-        } else if ( method.first()=="shutdownVirtDomain" ) {
-            task.method     = method.first();
-            task.action     = SHUTDOWN_ENTITY;
-            emit addNewTask(task);
-        } else if ( method.first()=="saveVirtDomain" ) {
-            QString to = QFileDialog::getSaveFileName(this, "Save to", "~");
-            if ( !to.isEmpty() ) {
-                task.method     = method.first();
-                task.action     = SAVE_ENTITY;
-                task.args.path  = to;
-                task.args.state = VM_State ? 1 : 0;
-                emit addNewTask(task);
-            };
-        } else if ( method.first()=="restoreVirtDomain" ) {
-            QString from = QFileDialog::getOpenFileName(this, "Restore from", "~");
-            if ( !from.isEmpty() ) {
-                task.method     = method.first();
-                task.action     = RESTORE_ENTITY;
-                task.args.path  = from;
-                emit addNewTask(task);
-            };
-        } else if ( method.first()=="createVirtDomainSnapshot" ) {
-            //qDebug()<<"createVirtDomainSnapshot";
-            CreateSnapshotDialog *_dialog =
-                    new CreateSnapshotDialog(
-                        this, domain, true, jobConnect);
-            connect(_dialog, SIGNAL(errMsg(QString&)),
-                    this, SLOT(sendErrMsg(QString&)));
-            int exitCode = _dialog->exec();
-            if ( exitCode ) {
-                task.action      = CREATE_DOMAIN_SNAPSHOT;
-                task.method      = "createVirtDomainSnapshot";
-                task.args.object = _dialog->getSnapshotXMLDesc();
-                task.args.sign   = _dialog->getSnapshotFlags();
-                emit addNewTask(task);
-            };
-            disconnect(_dialog, SIGNAL(errMsg(QString&)),
-                       this, SLOT(sendErrMsg(QString&)));
-            _dialog->deleteLater();
-        } else if ( method.first()=="moreSnapshotActions" ) {
-            //qDebug()<<"moreSnapshotActions";
-            SnapshotActionDialog *_dialog =
-                    new SnapshotActionDialog(this, jobConnect, domain);
-            int exitCode = _dialog->exec();
-            if ( exitCode ) {
-                QStringList params = _dialog->getParameters();
-                task.action      = static_cast<Actions>(exitCode);
-                task.method      = params.first();
-                params.removeFirst();
-                task.args.object = params.first();
-                task.args.sign   = _dialog->getSnapshotFlags();
-                emit addNewTask(task);
-            };
-            _dialog->deleteLater();
-        } else if ( method.first()=="reconnectToVirtDomain" ) {
-            reconnectToDomain();
-        } else if ( method.first()=="sendKeySeqToVirtDomain" ) {
-            sendKeySeqToDomain((Qt::Key)method.last().toInt());
         };
+    } else if ( method.first()=="restoreVirtDomain" ) {
+        QString from = QFileDialog::getOpenFileName(this, "Restore from", "~");
+        if ( !from.isEmpty() ) {
+            task.method     = method.first();
+            task.action     = RESTORE_ENTITY;
+            task.args.path  = from;
+            emit addNewTask(task);
+        };
+    } else if ( method.first()=="createVirtDomainSnapshot" ) {
+        //qDebug()<<"createVirtDomainSnapshot";
+        CreateSnapshotDialog *_dialog =
+                new CreateSnapshotDialog(
+                    this, domain, true, jobConnect);
+        connect(_dialog, SIGNAL(errMsg(QString&)),
+                this, SLOT(sendErrMsg(QString&)));
+        int exitCode = _dialog->exec();
+        if ( exitCode ) {
+            task.action      = CREATE_DOMAIN_SNAPSHOT;
+            task.method      = "createVirtDomainSnapshot";
+            task.args.object = _dialog->getSnapshotXMLDesc();
+            task.args.sign   = _dialog->getSnapshotFlags();
+            emit addNewTask(task);
+        };
+        disconnect(_dialog, SIGNAL(errMsg(QString&)),
+                   this, SLOT(sendErrMsg(QString&)));
+        _dialog->deleteLater();
+    } else if ( method.first()=="moreSnapshotActions" ) {
+        //qDebug()<<"moreSnapshotActions";
+        SnapshotActionDialog *_dialog =
+               new SnapshotActionDialog(this, jobConnect, domain);
+        int exitCode = _dialog->exec();
+        if ( exitCode ) {
+            QStringList params = _dialog->getParameters();
+            task.action      = static_cast<Actions>(exitCode);
+            task.method      = params.first();
+            params.removeFirst();
+            task.args.object = params.first();
+            task.args.sign   = _dialog->getSnapshotFlags();
+            emit addNewTask(task);
+        };
+        _dialog->deleteLater();
+    } else if ( method.first()=="reconnectToVirtDomain" ) {
+        reconnectToDomain();
+    } else if ( method.first()=="sendKeySeqToVirtDomain" ) {
+        sendKeySeqToDomain((Qt::Key)method.last().toInt());
     };
+
 }
 void VM_Viewer::startCloseProcess()
 {
@@ -199,4 +194,19 @@ void VM_Viewer::reconnectToDomain()
 void VM_Viewer::sendKeySeqToDomain(Qt::Key key)
 {
     Q_UNUSED(key);
+}
+void VM_Viewer::showErrorInfo(QString &_msg)
+{
+    QIcon _icon = QIcon::fromTheme("face-sad");
+    icon = new QLabel(this);
+    icon->setPixmap(_icon.pixmap(256));
+    msg = new QLabel(this);
+    msg->setText(_msg);
+    infoLayout = new QVBoxLayout();
+    infoLayout->addWidget(icon, 0, Qt::AlignHCenter);
+    infoLayout->addWidget(msg);
+    infoLayout->addStretch(-1);
+    info = new QWidget(this);
+    info->setLayout(infoLayout);
+    setCentralWidget(info);
 }

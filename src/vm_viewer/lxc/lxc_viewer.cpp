@@ -11,7 +11,7 @@ LXC_Viewer::LXC_Viewer(
 {
     TYPE = "LXC";
     // unused toolbar
-    viewerToolBar->setVisible(false);
+    // viewerToolBar->setVisible(false);
     if ( jobConnect!=NULL ) {
         domainPtr = getDomainPtr();
     };
@@ -20,10 +20,10 @@ LXC_Viewer::LXC_Viewer(
         viewerThread = new LXC_ViewerThread(this);
         timerId = startTimer(PERIOD);
     } else {
-        msg = QString("In '<b>%1</b>': Connection or Domain is NULL...")
+        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL...")
                 .arg(domain);
-        sendErrMsg(msg, 0);
-        getCurrentTerminal()->m_term->sendText(msg);
+        sendErrMsg(msg);
+        showErrorInfo(msg);
         startCloseProcess();
     };
     sendConnErrors();
@@ -32,22 +32,10 @@ LXC_Viewer::LXC_Viewer(
 LXC_Viewer::~LXC_Viewer()
 {
     qDebug()<<"LXC_Viewer destroy:";
-    if ( NULL!=viewerThread ) {
-        disconnect(viewerThread, SIGNAL(termEOF()),
-                   this, SLOT(startCloseProcess()));
-        disconnect(viewerThread, SIGNAL(errorMsg(QString&, uint)),
-                   this, SLOT(sendErrMsg(QString&, uint)));
-        disconnect(viewerThread, SIGNAL(finished()),
-                   this, SLOT(startCloseProcess()));
-        qDebug()<<"viewer thread disconnected";
-        delete viewerThread;
-        viewerThread = NULL;
-        qDebug()<<"viewer thread deleted";
-    };
     QString msg, key;
     msg = QString("In '<b>%1</b>': Display destroyed.")
             .arg(domain);
-    sendErrMsg(msg, 0);
+    sendErrMsg(msg);
     //key = QString("%1_%2").arg(connName).arg(domain);
     //emit finished(key);
     qDebug()<<"LXC_Viewer destroyed";
@@ -75,7 +63,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             timerId = 0;
             counter = 0;
             QString msg = QString("In '<b>%1</b>': Open PTY Error...").arg(domain);
-            sendErrMsg(msg, 0);
+            sendErrMsg(msg);
             getCurrentTerminal()->impl()->sendText(msg);
         }
     } else if ( ev->timerId()==killTimerId ) {
@@ -105,7 +93,7 @@ void LXC_Viewer::setTerminalParameters()
         if ( viewerThread->keep_alive ) {
             QString msg = QString("In '<b>%1</b>': Stream Registation success. \
 PTY opened. Terminal is active.").arg(domain);
-            sendErrMsg(msg, 0);
+            sendErrMsg(msg);
         };
         /*
          * As usually a xterm terminals don't support

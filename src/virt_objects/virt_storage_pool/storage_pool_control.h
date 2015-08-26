@@ -15,7 +15,7 @@ public:
     ~VirtStoragePoolControl();
 
 signals:
-    void                       currPool(virConnect*, QString&, QString&);
+    void                       overviewStPool(virConnect*, QString&, QString&);
 
 private:
     StoragePoolModel          *storagePoolModel = NULL;

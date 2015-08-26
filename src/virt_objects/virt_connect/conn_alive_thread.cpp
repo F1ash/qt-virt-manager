@@ -42,7 +42,7 @@ void ConnAliveThread::closeConnection()
         } else {
             emit connMsg( QString("close exit code: %1").arg(ret) );
             state = STOPPED;
-            if ( onView ) emit connClosed(conn);
+            emit connClosed(onView);
         };
         conn = NULL;
     } else {

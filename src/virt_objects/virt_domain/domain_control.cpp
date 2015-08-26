@@ -116,15 +116,21 @@ void VirtDomainControl::resultReceiver(Result data)
             QDesktopServices::openUrl(QUrl(xml));
     } else if ( data.action == EDIT_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
-            QString xml = data.fileName;
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
+        };
+        if ( data.result ) {
             // show SRC Creator widget in Edit-mode
-            CreateVirtDomain *createVirtDomain =
-                    new CreateVirtDomain(this, currWorkConnection, xml, DEFINE_ENTITY);
-            connect(createVirtDomain, SIGNAL(errorMsg(QString&)),
-                    this, SLOT(msgRepeater(QString&)));
-            connect(createVirtDomain, SIGNAL(finished(int)),
-                    this, SLOT(doneEntityCreationDialog()));
-            createVirtDomain->show();
+            TASK task;
+            task.type = "domain";
+            task.sourceConn = currWorkConnection;
+            task.srcConName = currConnName;
+            task.object     = QString("DomainEditor_%1")
+                    .arg(QTime::currentTime().toString());
+            task.args.path  = data.fileName;
+            task.method     = "editVirtDomain";
+            task.action     = DEFINE_ENTITY;
+            emit domainToEditor(task);
         };
     } else if ( data.action < GET_XML_DESCRIPTION ) {
         if ( !data.msg.isEmpty() ) {
@@ -365,19 +371,17 @@ void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
         };
         args.removeFirst();
         if ( !args.isEmpty() ) {
-            QString xml;
             if ( args.first()=="manually" ) {
                 // show SRC Creator widget
-                CreateVirtDomain *createVirtDomain =
-                        new CreateVirtDomain(this, currWorkConnection, QString(), act);
-                connect(createVirtDomain, SIGNAL(errorMsg(QString&)),
-                        this, SLOT(msgRepeater(QString&)));
-                connect(createVirtDomain, SIGNAL(finished(int)),
-                        this, SLOT(doneEntityCreationDialog()));
-                createVirtDomain->show();
+                task.sourceConn = currWorkConnection;
+                task.srcConName = currConnName;
+                task.object     = QString("DomainEditor_%1")
+                        .arg(QTime::currentTime().toString());
+                task.method     = actName;
+                task.action     = act;
+                emit domainToEditor(task);
             } else {
-                xml = args.first();
-                task.args.path  = xml;
+                task.args.path  = args.first();
                 task.sourceConn = currWorkConnection;
                 task.srcConName = currConnName;
                 task.method     = actName;
@@ -385,38 +389,5 @@ void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
                 emit addNewTask(task);
             };
         };
-    };
-}
-void VirtDomainControl::doneEntityCreationDialog()
-{
-    CreateVirtDomain *createVirtDomain = static_cast<CreateVirtDomain*>(sender());
-    if ( createVirtDomain!=NULL ) {
-        if ( createVirtDomain->getResult()==QDialog::Accepted ) {
-            // get path for method
-            Actions act = createVirtDomain->getAction();
-            QString xml = createVirtDomain->getXMLDescFileName();
-            bool show = createVirtDomain->getShowing();
-            QStringList data;
-            data.append("New Domain XML'ed");
-            data.append(QString("to <a href='%1'>%1</a>").arg(xml));
-            QString msg = data.join(" ");
-            msgRepeater(msg);
-            if ( show ) QDesktopServices::openUrl(QUrl(xml));
-            disconnect(createVirtDomain, SIGNAL(errorMsg(QString&)),
-                       this, SLOT(msgRepeater(QString&)));
-            disconnect(createVirtDomain, SIGNAL(finished(int)),
-                       this, SLOT(doneEntityCreationDialog()));
-            TASK task;
-            task.type = "domain";
-            task.sourceConn = currWorkConnection;
-            task.srcConName = currConnName;
-            task.action     = act;
-            task.method     =
-                    (act==DEFINE_ENTITY)?
-                    "defineVirtDomain" : "createVirtDomain";
-            task.args.path  = xml;
-            emit addNewTask(task);
-        };
-        createVirtDomain->deleteLater();
     };
 }

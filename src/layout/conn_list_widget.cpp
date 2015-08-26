@@ -51,8 +51,8 @@ ConnectionList::~ConnectionList()
                  this, SIGNAL(domResult(Result)));
       disconnect(connections->value(key), SIGNAL(netStateChanged(Result)),
                  this, SIGNAL(netResult(Result)));
-      disconnect(connections->value(key), SIGNAL(connClosed(virConnect*)),
-                 this, SIGNAL(connClosed(virConnect*)));
+      disconnect(connections->value(key), SIGNAL(connClosed(bool, QString&)),
+                 this, SIGNAL(connClosed(bool, QString&)));
   };
   connections->clear();
   delete connections;
@@ -148,8 +148,8 @@ void ConnectionList::deleteCurrentConnection()
                      this, SIGNAL(domResult(Result)));
           disconnect(connections->value(connection), SIGNAL(netStateChanged(Result)),
                      this, SIGNAL(netResult(Result)));
-          disconnect(connections->value(connection), SIGNAL(connClosed(virConnect*)),
-                     this, SIGNAL(connClosed(virConnect*)));
+          disconnect(connections->value(connection), SIGNAL(connClosed(bool, QString&)),
+                     this, SIGNAL(connClosed(bool, QString&)));
           emit removeConnection(connection);
           connections->remove(connection);
           connItemModel->removeRow(_item.row());
@@ -330,8 +330,8 @@ void ConnectionList::createConnection(QModelIndex &_item)
           this, SIGNAL(domResult(Result)));
   connect(connections->value(key), SIGNAL(netStateChanged(Result)),
           this, SIGNAL(netResult(Result)));
-  connect(connections->value(key), SIGNAL(connClosed(virConnect*)),
-          this, SIGNAL(connClosed(virConnect*)));
+  connect(connections->value(key), SIGNAL(connClosed(bool, QString&)),
+          this, SIGNAL(connClosed(bool, QString&)));
   //qDebug()<<key<<" create Connection item";
   if ( !searchThread->isFinished() && !searchThread->isRunning() ) {
       QString uri(conn->getURI());
@@ -377,8 +377,8 @@ void ConnectionList::createLocalConnection(QString &uri)
             this, SIGNAL(domResult(Result)));
     connect(connections->value(key), SIGNAL(netStateChanged(Result)),
             this, SIGNAL(netResult(Result)));
-    connect(connections->value(key), SIGNAL(connClosed(virConnect*)),
-            this, SIGNAL(connClosed(virConnect*)));
+    connect(connections->value(key), SIGNAL(connClosed(bool, QString&)),
+            this, SIGNAL(connClosed(bool, QString&)));
     //qDebug()<<key<<" create Local Connection item";
 }
 void ConnectionList::refreshLocalhostConnection()

@@ -8,14 +8,12 @@ Spice_Viewer::Spice_Viewer(
     VM_Viewer(parent, conn, arg1, arg2)
 {
     TYPE = "SPICE";
-    spiceWdg = new QSpiceWidget(this);
-    spiceWdg->setWidgetResizable(true);
-    setCentralWidget(spiceWdg);
     if ( jobConnect!=NULL ) {
         domainPtr = getDomainPtr();
     };
     QString msg;
     if ( domainPtr!=NULL ) {
+        // TODO: implement getting URI & Connect to thread
         // get address or hostname from URI
         // driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
         QString uri(virConnectGetURI(jobConnect));
@@ -56,24 +54,27 @@ Spice_Viewer::Spice_Viewer(
                     graph.attribute("port").toInt() : 5900;
         //qDebug()<<"address:"<<addr<<port;
         if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
+            spiceWdg = new QSpiceWidget(this);
+            spiceWdg->setWidgetResizable(true);
+            setCentralWidget(spiceWdg);
             // use toolbar
-            viewerToolBar->setEnabled(true);
+            viewerToolBar->setVisible(true);
             actFullScreen = new QShortcut(QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
             connect(actFullScreen, SIGNAL(activated()), SLOT(FullScreenTriggered()));
             connect(spiceWdg, SIGNAL(DisplayResize(QSize)), SLOT(DisplayResize(QSize)));
             spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
         } else {
-            msg = QString("In '<b>%1</b>': Unsupported type '%2'.<br> Use external Viewer.")
+            msg = QString("In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")
                     .arg(domain).arg((!graph.isNull())? graph.attribute("type"):"???");
-            sendErrMsg(msg, 0);
-            spiceWdg->setWidget(new QLabel(msg, this));
+            sendErrMsg(msg);
+            showErrorInfo(msg);
             startCloseProcess();
         };
     } else {
-        msg = QString("In '<b>%1</b>': Connection or Domain is NULL...")
+        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL...")
                 .arg(domain);
-        sendErrMsg(msg, 0);
-        spiceWdg->setWidget(new QLabel(msg, this));
+        sendErrMsg(msg);
+        showErrorInfo(msg);
         startCloseProcess();
     };
     sendConnErrors();

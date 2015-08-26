@@ -63,7 +63,8 @@ void TaskWareHouse::addNewTask(TASK task)
     //
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
-    if (  !task.method.startsWith("reload") ) {
+    if ( !task.method.startsWith("reload") &&
+         !task.method.startsWith("edit") ) {
         QString _name = QString("#%1 %2 <%3> in <%4> connection")
                 .arg(_number)
                 .arg(task.method)

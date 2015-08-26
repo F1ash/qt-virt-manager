@@ -244,7 +244,7 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
             //for ( int i=0; i<storagePoolModel->DataList.count(); i++ ) {
             //    storagePoolModel->DataList.at(i)->setOnView(i==row);
             //};
-            emit currPool(currWorkConnection, currConnName, storagePoolName);
+            emit overviewStPool(currWorkConnection, currConnName, storagePoolName);
         } else if ( l.first()=="reloadVirtStoragePool" ) {
             reloadState();
         };

@@ -121,19 +121,33 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       VM_Displayed_Map.clear();
       //qDebug()<<"Viewers cleared";
       // close StorageVolControls
-      keys = storageMap.keys();
+      keys = Overviewed_StPool_Map.keys();
       foreach ( QString key, keys ) {
-          if ( storageMap.value(key, NULL)!=NULL ) {
+          if ( Overviewed_StPool_Map.value(key, NULL)!=NULL ) {
               VirtStorageVolControl *value = NULL;
               value = static_cast<VirtStorageVolControl*>(
-                              storageMap.value(key, NULL));
+                              Overviewed_StPool_Map.value(key, NULL));
               if ( NULL!=value ) value->close();
-              storageMap.remove(key);
+              Overviewed_StPool_Map.remove(key);
               //qDebug()<<key<<"removed into Close";
           };
       };
-      storageMap.clear();
+      Overviewed_StPool_Map.clear();
       //qDebug()<<"StorageVolControls cleared";
+      // close DomainEditors
+      keys = DomainEditor_Map.keys();
+      foreach ( QString key, keys ) {
+          if ( DomainEditor_Map.value(key, NULL)!=NULL ) {
+              CreateVirtDomain *value = NULL;
+              value = static_cast<CreateVirtDomain*>(
+                              DomainEditor_Map.value(key, NULL));
+              if ( NULL!=value ) value->close();
+              DomainEditor_Map.remove(key);
+              //qDebug()<<key<<"removed into Close";
+          };
+      };
+      DomainEditor_Map.clear();
+      //qDebug()<<"DomainEditors cleared";
       wait_thread = new Wait(this, connListWidget);
       connect(wait_thread, SIGNAL(finished()),
               this, SLOT(close()));
@@ -267,10 +281,10 @@ void MainWindow::initConnListWidget()
           this, SLOT(writeToErrorLog(QString&)));
   connect(connListWidget, SIGNAL(connPtr(virConnect*, QString&)),
           this, SLOT(receiveConnPtr(virConnect*, QString&)));
-  connect(connListWidget, SIGNAL(connClosed(virConnect*)),
-          this, SLOT(stopConnProcessing(virConnect*)));
+  connect(connListWidget, SIGNAL(connClosed(bool, QString&)),
+          this, SLOT(stopConnProcessing(bool, QString&)));
   connect(connListWidget, SIGNAL(connToClose(int)),
-          this, SLOT(closeConnStorageOverview(int)));
+          this, SLOT(closeConnGenerations(int)));
 }
 void MainWindow::initToolBar()
 {
@@ -386,6 +400,8 @@ void MainWindow::initDockWidgets()
             domainDockContent, SLOT(resultReceiver(Result)));
     connect(connListWidget, SIGNAL(domResult(Result)),
             domainDockContent, SLOT(resultReceiver(Result)));
+    connect(domainDockContent, SIGNAL(domainToEditor(TASK)),
+            this, SLOT(invokeDomainEditor(TASK)));
 
     networkDock = new DockWidget(this);
     networkDock->setObjectName("networkDock");
@@ -461,7 +477,7 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(poolResult(Result)),
             storagePoolDockContent, SLOT(resultReceiver(Result)));
-    connect(storagePoolDockContent, SIGNAL(currPool(virConnect*,QString&,QString&)),
+    connect(storagePoolDockContent, SIGNAL(overviewStPool(virConnect*,QString&,QString&)),
             this, SLOT(overviewStoragePool(virConnect*,QString&,QString&)));
 
     secretDock = new DockWidget(this);
@@ -596,18 +612,36 @@ void MainWindow::closeConnection(int i)
         connListWidget->closeConnection(_item);
     };
 }
-void MainWindow::closeConnStorageOverview(int i)
+void MainWindow::closeConnGenerations(int i)
 {
     ConnItemIndex *idx = static_cast<ConnItemIndex*>(
                 connListWidget->connItemModel->
                 connItemDataList.at(i));
     if ( idx!=NULL ) {
         QString conn_to_close = idx->getName();
-        foreach (QString key, storageMap.keys()) {
-            if ( key.startsWith(conn_to_close) ) {
-                storageMap.value(key)->close();
-                storageMap.remove(key);
-            };
+        closeConnGenerations(conn_to_close);
+    };
+}
+void MainWindow::closeConnGenerations(QString &_connName)
+{
+    // WARNING: the policy for close a Viewers, Editors :
+    // close the connection -- close all of its generation
+    foreach (QString key, VM_Displayed_Map.keys()) {
+        if ( key.startsWith(_connName) ) {
+            VM_Displayed_Map.value(key)->close();
+            VM_Displayed_Map.remove(key);
+        };
+    };
+    foreach (QString key, Overviewed_StPool_Map.keys()) {
+        if ( key.startsWith(_connName) ) {
+            Overviewed_StPool_Map.value(key)->close();
+            Overviewed_StPool_Map.remove(key);
+        };
+    };
+    foreach (QString key, DomainEditor_Map.keys()) {
+        if ( key.startsWith(_connName) ) {
+            DomainEditor_Map.value(key)->close();
+            DomainEditor_Map.remove(key);
         };
     };
 }
@@ -683,12 +717,14 @@ void MainWindow::receiveConnPtr(virConnect *conn, QString &name)
     if ( ifaceDockContent->setCurrentWorkConnect(conn) )
         ifaceDockContent->setListHeader(name);
 }
-void MainWindow::stopConnProcessing(virConnect *conn)
+void MainWindow::stopConnProcessing(bool onView, QString &_connName)
 {
-    // clear Overview Docks if closed connect is overviewed
-    if ( NULL!=conn && conn==domainDockContent->getConnection() ) {
+    // clear Overview Docks if closed connect is on View
+    if ( onView ) {
         stopProcessing();
     };
+    // close all of its generation
+    closeConnGenerations(_connName);
 }
 void MainWindow::stopProcessing()
 {
@@ -709,6 +745,8 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
     if ( conn!=NULL ) {
         type = QString::fromUtf8(virConnectGetType(conn));
     } else type.clear();
+    // WARNING: key must starts with connection name
+    // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( !VM_Displayed_Map.contains(key) ) {
         //qDebug()<<key<<"vm invoked"<<"new";
@@ -724,6 +762,7 @@ void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString dom
                         "VM Viewer",
                         QString("Not implemented type: %1").arg(type));
         if ( value==NULL ) return;
+        value->setObjectName(key);
         VM_Displayed_Map.insert(key, value);
         connect(value, SIGNAL(finished(QString&)),
                 this, SLOT(deleteVMDisplay(QString&)));
@@ -804,42 +843,83 @@ void MainWindow::buildMigrateArgs(TASK _task)
 
 void MainWindow::overviewStoragePool(virConnect *conn, QString &connName, QString &poolName)
 {
+    // WARNING: key must starts with connection name
+    // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(poolName);
-    if ( !storageMap.contains(key) ) {
-        storageMap.insert(key, new VirtStorageVolControl(this));
-        storageMap.value(key)->setObjectName(key);
-        storageMap.value(key)->setWindowTitle(QString("%1 Pool").arg(key));
-        connect(storageMap.value(key), SIGNAL(entityMsg(QString&)),
+    if ( !Overviewed_StPool_Map.contains(key) ) {
+        Overviewed_StPool_Map.insert(key, new VirtStorageVolControl(this));
+        Overviewed_StPool_Map.value(key)->setObjectName(key);
+        Overviewed_StPool_Map.value(key)->setWindowTitle(QString("%1 Pool").arg(key));
+        connect(Overviewed_StPool_Map.value(key), SIGNAL(entityMsg(QString&)),
                 this, SLOT(writeToErrorLog(QString&)));
-        connect(storageMap.value(key), SIGNAL(finished(QString&)),
+        connect(Overviewed_StPool_Map.value(key), SIGNAL(finished(QString&)),
                 this, SLOT(deleteStPoolOverview(QString&)));
-        connect(storageMap.value(key), SIGNAL(addNewTask(TASK)),
+        connect(Overviewed_StPool_Map.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
         connect(taskWrHouse, SIGNAL(volResult(Result)),
-                storageMap.value(key), SLOT(resultReceiver(Result)));
-        storageMap.value(key)->setCurrentStoragePool(conn, connName, poolName);
+                Overviewed_StPool_Map.value(key), SLOT(resultReceiver(Result)));
+        Overviewed_StPool_Map.value(key)->setCurrentStoragePool(conn, connName, poolName);
     };
-    storageMap.value(key)->show();
-    storageMap.value(key)->setFocus();
+    Overviewed_StPool_Map.value(key)->show();
+    Overviewed_StPool_Map.value(key)->setFocus();
 }
 void MainWindow::deleteStPoolOverview(QString &key)
 {
-    if ( storageMap.contains(key) ) {
+    if ( Overviewed_StPool_Map.contains(key) ) {
         VirtStorageVolControl *value = NULL;
         value = static_cast<VirtStorageVolControl*>(
-                        storageMap.value(key, NULL));
+                        Overviewed_StPool_Map.value(key, NULL));
         if ( NULL!=value ) {
-            disconnect(storageMap.value(key), SIGNAL(entityMsg(QString&)),
+            disconnect(Overviewed_StPool_Map.value(key), SIGNAL(entityMsg(QString&)),
                        this, SLOT(writeToErrorLog(QString&)));
-            disconnect(storageMap.value(key), SIGNAL(finished(QString&)),
+            disconnect(Overviewed_StPool_Map.value(key), SIGNAL(finished(QString&)),
                        this, SLOT(deleteStPoolOverview(QString&)));
-            disconnect(storageMap.value(key), SIGNAL(addNewTask(TASK)),
+            disconnect(Overviewed_StPool_Map.value(key), SIGNAL(addNewTask(TASK)),
                        taskWrHouse, SLOT(addNewTask(TASK)));
             disconnect(taskWrHouse, SIGNAL(volResult(Result)),
-                       storageMap.value(key), SLOT(resultReceiver(Result)));
+                       Overviewed_StPool_Map.value(key), SLOT(resultReceiver(Result)));
             delete value;
             value = NULL;
         };
-        storageMap.remove(key);
+        Overviewed_StPool_Map.remove(key);
+    };
+}
+void MainWindow::invokeDomainEditor(TASK task)
+{
+    // WARNING: key must starts with connection name
+    // see for: MainWindow::closeConnGenerations(QString &_connName)
+    QString key = QString("%1_%2").arg(task.srcConName).arg(task.object);
+    if ( !DomainEditor_Map.contains(key) ) {
+        DomainEditor_Map.insert(key, new CreateVirtDomain(this, task));
+        DomainEditor_Map.value(key)->setObjectName(key);
+        DomainEditor_Map.value(key)->setWindowTitle(
+                    QString("VM Settings / %1").arg(task.object));
+        connect(DomainEditor_Map.value(key), SIGNAL(errorMsg(QString&)),
+                this, SLOT(writeToErrorLog(QString&)));
+        connect(DomainEditor_Map.value(key), SIGNAL(finished(QString&)),
+                this, SLOT(deleteDomainEditor(QString&)));
+        connect(DomainEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
+                taskWrHouse, SLOT(addNewTask(TASK)));
+    };
+    DomainEditor_Map.value(key)->show();
+    DomainEditor_Map.value(key)->setFocus();
+}
+void MainWindow::deleteDomainEditor(QString &key)
+{
+    if ( DomainEditor_Map.contains(key) ) {
+        CreateVirtDomain *value = NULL;
+        value = static_cast<CreateVirtDomain*>(
+                        DomainEditor_Map.value(key, NULL));
+        if ( NULL!=value ) {
+            disconnect(DomainEditor_Map.value(key), SIGNAL(errorMsg(QString&)),
+                       this, SLOT(writeToErrorLog(QString&)));
+            disconnect(DomainEditor_Map.value(key), SIGNAL(finished(QString&)),
+                       this, SLOT(deleteDomainEditor(QString&)));
+            disconnect(DomainEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
+                       taskWrHouse, SLOT(addNewTask(TASK)));
+            delete value;
+            value = NULL;
+        };
+        DomainEditor_Map.remove(key);
     };
 }

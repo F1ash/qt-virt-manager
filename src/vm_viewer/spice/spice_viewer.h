@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QDomDocument>
-#include <QLabel>
 #include <QShortcut>
 #include <QTimerEvent>
 #include "vm_viewer/vm_viewer.h"
@@ -26,8 +25,8 @@ private:
     QString          runXmlDesc;
     QString          addr;
     uint             port = 0;
-    QSpiceWidget    *spiceWdg;
-    QShortcut       *actFullScreen;
+    QSpiceWidget    *spiceWdg = NULL;
+    QShortcut       *actFullScreen = NULL;
 
 public slots:
     void             reconnectToDomain();

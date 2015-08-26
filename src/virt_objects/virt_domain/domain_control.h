@@ -23,6 +23,7 @@ signals:
     void                     addToStateMonitor(virConnectPtr, QString&, QString&);
     void                     domainClosed(QString, QString);
     void                     migrateToConnect(TASK);
+    void                     domainToEditor(TASK);
 
 private:
     DomainModel             *domainModel = NULL;
@@ -44,7 +45,6 @@ private slots:
     void                     entityDoubleClicked(const QModelIndex&);
     void                     execAction(const QStringList&);
     void                     newVirtEntityFromXML(const QStringList&);
-    void                     doneEntityCreationDialog();
 };
 
 #endif // DOMAIN_CONTROL_H

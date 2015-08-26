@@ -21,8 +21,8 @@ ConnElement::ConnElement(QObject *parent) :
             this, SIGNAL(domStateChanged(Result)));
     connect(connAliveThread, SIGNAL(netStateChanged(Result)),
             this, SIGNAL(netStateChanged(Result)));
-    connect(connAliveThread, SIGNAL(connClosed(virConnect*)),
-            this, SIGNAL(connClosed(virConnect*)));
+    connect(connAliveThread, SIGNAL(connClosed(bool)),
+            this, SLOT(forwardConnClosedSignal(bool)));
 }
 ConnElement::~ConnElement()
 {
@@ -39,8 +39,8 @@ ConnElement::~ConnElement()
                    this, SIGNAL(domStateChanged(Result)));
         disconnect(connAliveThread, SIGNAL(netStateChanged(Result)),
                    this, SIGNAL(netStateChanged(Result)));
-        disconnect(connAliveThread, SIGNAL(connClosed(virConnect*)),
-                   this, SIGNAL(connClosed(virConnect*)));
+        disconnect(connAliveThread, SIGNAL(connClosed(bool)),
+                   this, SLOT(forwardConnClosedSignal(bool)));
         delete connAliveThread;
         connAliveThread = NULL;
     };
@@ -279,4 +279,8 @@ void ConnElement::mainWindowUp()
 void ConnElement::getAuthCredentials(QString &crd)
 {
     emit authRequested(crd);
+}
+void ConnElement::forwardConnClosedSignal(bool onView)
+{
+    emit connClosed(onView, name);
 }

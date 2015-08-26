@@ -1,5 +1,18 @@
 #include "create_virt_domain.h"
 
+HelperThread::HelperThread(
+        QObject *parent, virConnect *_conn) :
+    QThread(parent), currWorkConnection(_conn)
+{
+
+}
+void HelperThread::run()
+{
+    QString capabilities = QString("%1")
+            .arg(virConnectGetCapabilities(currWorkConnection));
+    emit result(capabilities);
+}
+
 /*
  * http://libvirt.org/formatdomain.html
  *
@@ -84,16 +97,12 @@
 
 */
 
-CreateVirtDomain::CreateVirtDomain(
-        QWidget         *parent,
-        virConnectPtr    conn,
-        QString          _xmlFileName,
-        Actions          _act) :
-    QDialog(parent), currWorkConnection(conn),
-    xmlFileName(_xmlFileName), action(_act)
+CreateVirtDomain::CreateVirtDomain(QWidget *parent, TASK _task) :
+    QMainWindow(parent), task(_task)
 {
-    setModal(false);
-    setWindowTitle("Domain Settings");
+    xmlFileName = task.args.path;
+    currWorkConnection = task.sourceConn;
+    setWindowTitle("VM Settings");
     restoreGeometry(settings.value("DomCreateGeometry").toByteArray());
     xml = new QTemporaryFile(this);
     xml->setAutoRemove(false);
@@ -104,62 +113,39 @@ CreateVirtDomain::CreateVirtDomain(
     setEnabled(false);
     connect(this, SIGNAL(readyRead(bool)),
             this, SLOT(readyDataLists()));
-    readCapabilities();
+    helperThread = new HelperThread(this, currWorkConnection);
+    connect(helperThread, SIGNAL(result(QString&)),
+            this, SLOT(setCapabilities(QString&)));
+    helperThread->start();
 }
 CreateVirtDomain::~CreateVirtDomain()
 {
     settings.setValue("DomCreateGeometry", saveGeometry());
-    delete xml;
-    xml = NULL;
     if ( ready ) {
-        disconnect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
-        disconnect(restore, SIGNAL(clicked()), this, SLOT(restoreParameters()));
-        disconnect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
-        if ( !type.isEmpty() ) delete_specified_widgets();
         settings.setValue("DomCreateShowDesc", showDescription->isChecked());
-        delete about;
-        about = NULL;
-        delete showDescription;
-        showDescription = NULL;
-        delete ok;
-        ok = NULL;
-        delete restore;
-        restore = NULL;
-        delete cancel;
-        cancel = NULL;
-        delete buttonLayout;
-        buttonLayout = NULL;
-        delete buttons;
-        buttons = NULL;
-        delete commonLayout;
-        commonLayout = NULL;
     };
 }
 
 /* public slots */
-int CreateVirtDomain::getResult() const
+void CreateVirtDomain::closeEvent(QCloseEvent *ev)
 {
-    return result();
-}
-Actions CreateVirtDomain::getAction() const
-{
-    return action;
-}
-QString CreateVirtDomain::getXMLDescFileName() const
-{
-    return xml->fileName();
-}
-bool CreateVirtDomain::getShowing() const
-{
-    return showDescription->isChecked();
+    if ( ev->type()==QEvent::Close ) {
+        QString key = objectName();
+        QString msg = QString("'<b>%1</b>' domain editor closed.")
+                .arg(task.object);
+        sendMsg(msg);
+        emit finished(key);
+    };
 }
 
 /* private slots */
+void CreateVirtDomain::setCapabilities(QString &_cap)
+{
+    capabilities = _cap;
+    readCapabilities();
+}
 void CreateVirtDomain::readCapabilities()
 {
-    // TODO: reimplement getting the capabilities into DomainControlThread
-    capabilities = QString("%1")
-            .arg(virConnectGetCapabilities(currWorkConnection));
     //qDebug()<<capabilities;
     QDomDocument doc;
     doc.setContent(capabilities);
@@ -193,7 +179,7 @@ void CreateVirtDomain::readCapabilities()
 void CreateVirtDomain::readyDataLists()
 {
     if ( ready ) {
-        commonLayout = new QVBoxLayout(this);
+        commonLayout = new QVBoxLayout();
         create_specified_widgets();
         set_specified_Tabs();
         about = new QLabel("<a href='http://libvirt.org/formatdomain.html'>About</a>", this);
@@ -220,11 +206,14 @@ void CreateVirtDomain::readyDataLists()
         buttons->setLayout(buttonLayout);
         commonLayout->addWidget(tabWidget);
         commonLayout->addWidget(buttons);
-        setLayout(commonLayout);
+        baseWdg = new QWidget(this);
+        baseWdg->setLayout(commonLayout);
         setEnabled(true);
+        setCentralWidget(baseWdg);
     } else {
-        QString msg("Read Data failed.");
-        emit errorMsg( msg );
+        QString msg = QString("Read Data in %1 failed.")
+                .arg(objectName());
+        sendMsg( msg );
         // to done()
         set_Result();
     };
@@ -283,12 +272,18 @@ void CreateVirtDomain::buildXMLDescription()
 void CreateVirtDomain::set_Result()
 {
     if ( sender()==ok ) {
-        setResult(QDialog::Accepted);
         buildXMLDescription();
-    } else {
-        setResult(QDialog::Rejected);
+        QString _xml = xml->fileName();
+        QStringList data;
+        data.append("New Domain XML'ed");
+        data.append(QString("to <a href='%1'>%1</a>").arg(_xml));
+        QString msg = data.join(" ");
+        sendMsg(msg);
+        if ( showDescription->isChecked() ) QDesktopServices::openUrl(QUrl(_xml));
+        task.args.path = _xml;
+        emit addNewTask(task);
     };
-    done(result());
+    close();
 }
 void CreateVirtDomain::create_specified_widgets()
 {
@@ -370,31 +365,6 @@ void CreateVirtDomain::set_specified_Tabs()
     };
     tabWidget->setCurrentIndex(0);
 }
-void CreateVirtDomain::delete_specified_widgets()
-{
-    tabWidget->clear();
-    disconnect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
-               wdgList.value("General"), SLOT(changeArch(QString&)));
-    disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
-               wdgList.value("Computer"), SLOT(setEmulator(QString&)));
-    disconnect(wdgList.value("Computer"), SIGNAL(devicesChanged(QDomDocument&)),
-               wdgList.value("OS_Booting"), SLOT(searchBootableDevices(QDomDocument&)));
-    disconnect(wdgList.value("OS_Booting"), SIGNAL(maxVCPU(QString&)),
-               wdgList.value("CPU"), SLOT(setMaxVCPU(QString&)));
-    disconnect(wdgList.value("OS_Booting"), SIGNAL(archChanged(QString&)),
-               wdgList.value("CPU"), SLOT(changeArch(QString&)));
-    foreach (QString key, wdgList.keys()) {
-        _QWidget *Wdg = static_cast<_QWidget*>(
-                    wdgList.value(key));
-        if ( NULL!=Wdg ) {
-            delete Wdg;
-        };
-    };
-    wdgList.clear();
-    commonLayout->removeWidget(tabWidget);
-    delete tabWidget;
-    tabWidget = NULL;
-}
 void CreateVirtDomain::restoreParameters()
 {
     setEnabled(false);
@@ -467,4 +437,12 @@ void CreateVirtDomain::setBootOrder(QDomElement *_devices)
             _devices->appendChild(_doc1.firstChildElement());
         };
     };
+}
+void CreateVirtDomain::sendMsg(QString &msg)
+{
+    QString time = QTime::currentTime().toString();
+    QString title = QString("Connection '%1'").arg(task.srcConName);
+    QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
+    emit errorMsg(currMsg);
 }
