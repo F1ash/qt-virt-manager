@@ -64,6 +64,7 @@ public slots:
     void             startCloseProcess();
     virtual void     reconnectToDomain();
     virtual void     sendKeySeqToDomain(Qt::Key);
+    void             showErrorInfo(QString&);
 };
 
 #endif // VM_VIEWER_H
