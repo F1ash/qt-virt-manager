@@ -84,6 +84,9 @@ QVariant SnapshotTreeModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::DecorationRole && index.column()==0 ) {
         return ( item->getState() )? work : icon;
     };
+    if ( role==Qt::ToolTipRole && index.column()==0 ) {
+        return item->getDesc();
+    };
     return res;
 }
 bool SnapshotTreeModel::setData( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole )
@@ -99,6 +102,10 @@ bool SnapshotTreeModel::setData( const QModelIndex &index, const QVariant &value
     if ( role == Qt::DisplayRole && index.column()==1 ) {
         QString data = value.toString();
         item->setDate( data );
+    };
+    if ( role == Qt::ToolTipRole && index.column()==0 ) {
+        QString data = value.toString();
+        item->setDesc( data );
     };
     if ( role == Qt::DecorationRole && index.column()==0 ) {
         bool data = value.toBool();

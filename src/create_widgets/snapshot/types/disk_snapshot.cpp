@@ -1,7 +1,7 @@
 #include "disk_snapshot.h"
 
 DiskSnapshot::DiskSnapshot(QWidget *parent, bool _state, bool _external) :
-    _SnapshotStuff(parent, _state), external(_external)
+    _SnapshotStuff(parent, _state, _external)
 {
     memLabel->setText("<b>Memory</b> is no");
     memLabel->setVisible(true);
@@ -13,11 +13,11 @@ DiskSnapshot::DiskSnapshot(QWidget *parent, bool _state, bool _external) :
 QDomDocument DiskSnapshot::getElements() const
 {
     QDomDocument doc;
-    QDomElement _memory, _disks;
+    QDomElement _memory;
     _memory = doc.createElement("memory");
     _memory.setAttribute("snapshot", "no");
     doc.appendChild(_memory);
-    _disks = doc.createElement("disks");
-    doc.appendChild(_disks);
+    doc.appendChild(disks->getElements(diskWarn->isChecked()));
+    //qDebug()<<doc.toByteArray(4).data()<<"SystemCheckpoint";
     return doc;
 }

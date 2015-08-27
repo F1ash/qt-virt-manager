@@ -13,8 +13,7 @@ class _DiskItem : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _DiskItem(QWidget *parent = 0);
-    ~_DiskItem();
+    explicit _DiskItem(QWidget *parent = NULL);
 
 signals:
 
@@ -33,6 +32,7 @@ private:
 public slots:
     void                 setDiskName(QString&);
     void                 setDriverType(QString&);
+    void                 setSnapshotType(QString&);
     QString              getName() const;
     QString              getSource() const;
     QString              getDriverType() const;

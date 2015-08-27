@@ -6,6 +6,7 @@ TreeItem::TreeItem(const QString &data, TreeItem *parent)
     parentItem = parent;
     itemData = data;
     itemDate = QString("Date");
+    itemDesc = QString();
     state = false;
 }
 
@@ -40,6 +41,11 @@ QVariant TreeItem::data(int column) const
     else return itemData;
 }
 
+QString TreeItem::getDesc() const
+{
+    return itemDesc;
+}
+
 void TreeItem::setData(QString &data)
 {
     itemData = data;
@@ -58,6 +64,11 @@ bool TreeItem::getState() const
 void TreeItem::setState(bool _state)
 {
     state = _state;
+}
+
+void TreeItem::setDesc(QString &_desc)
+{
+    itemDesc = _desc;
 }
 
 TreeItem *TreeItem::parent()

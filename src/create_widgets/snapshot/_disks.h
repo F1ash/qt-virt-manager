@@ -19,8 +19,8 @@ private:
     QVBoxLayout     *disksLayout;
 
 public slots:
-    void             setDisksData(QDomElement&);
-    QDomDocument     getElements() const;
+    void             setDisksData(QDomElement&, bool);
+    QDomDocument     getElements(bool) const;
     void             addStretch();
 };
 

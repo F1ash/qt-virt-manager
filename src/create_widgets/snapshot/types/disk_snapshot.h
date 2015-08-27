@@ -12,9 +12,6 @@ public:
             bool     _state = false,
             bool     _external = false);
 
-private:
-    const bool       external;
-
 public slots:
     QDomDocument     getElements() const;
 };

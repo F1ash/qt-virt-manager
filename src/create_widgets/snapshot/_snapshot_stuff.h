@@ -16,8 +16,10 @@ class _SnapshotStuff : public QWidget
 public:
     explicit _SnapshotStuff(
             QWidget *parent = NULL,
-            bool     _state = false);
+            bool     _state = false,
+            bool     _external = false);
     const bool               state;
+    const bool               external;
     QLabel                  *memLabel, *filePathLabel;
     QLineEdit               *filePath;
     QCheckBox               *diskWarn;
@@ -28,6 +30,9 @@ public:
 
 signals:
     void                     errMsg(QString&);
+
+private slots:
+    void                     setDiskItem(QDomElement&);
 };
 
 #endif // _SNAPSHOT_STUFF_H

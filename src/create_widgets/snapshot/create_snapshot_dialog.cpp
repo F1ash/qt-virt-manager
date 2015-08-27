@@ -65,6 +65,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     baseWdg->addWidget(new SystemCheckpoint(this, _state, true));
     info = new QLabel("<a href='https://libvirt.org/formatsnapshot.html'>About</a>", this);
     info->setOpenExternalLinks(true);
+    info->setToolTip("https://libvirt.org/formatsnapshot.html");
     ok = new QPushButton("Ok", this);
     // because first item is non-actual there
     ok->setEnabled(false);
@@ -104,8 +105,8 @@ CreateSnapshotDialog::CreateSnapshotDialog(
 /* public slots */
 QString CreateSnapshotDialog::getSnapshotXMLDesc() const
 {
-    QDomDocument doc;
-    QDomElement domainsnapshot, _name, _desc, _node;
+    QDomDocument doc, _doc;
+    QDomElement domainsnapshot, _name, _desc;
     domainsnapshot = doc.createElement("domainsnapshot");
     doc.appendChild(domainsnapshot);
     if ( !name->text().isEmpty() ) {
@@ -126,10 +127,15 @@ QString CreateSnapshotDialog::getSnapshotXMLDesc() const
         _desc.appendChild(_text);
     };
     _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(baseWdg->currentWidget());
-    _node = wdg->getElements().firstChildElement("memory");
-    if ( !_node.isNull() ) domainsnapshot.appendChild(_node);
-    _node = wdg->getElements().firstChildElement("disks");
-    if ( !_node.isNull() ) domainsnapshot.appendChild(_node);
+    if ( NULL!=wdg ) {
+        _doc = wdg->getElements();
+        QDomNodeList _nodeList = _doc.childNodes();
+        int count = _nodeList.count();
+        for(int i=0; i<count; i++) {
+            QDomNode _node = _nodeList.item(0);
+            domainsnapshot.appendChild(_node);
+        };
+    };
     //qDebug()<<doc.toByteArray(4).data();
     return doc.toString();
 }
@@ -145,12 +151,12 @@ void CreateSnapshotDialog::accept()
     QDomElement _node = wdg->getElements()
             .firstChildElement("disks")
             .firstChildElement("disk");
-    if ( _node.isNull() ) {
-        // count of disk subset not can be equal ziro
+    if ( _node.childNodes().count() ) {
+        // count of disk subset not can be equal zero
         QMessageBox::warning(
                     this,
                     QString(),
-                    QString("Count of disk subset not can be equal ziro"));
+                    QString("Count of disk subset not can be equal zero"));
     } else {
         killTimer(timerID);
         settings.beginGroup("CreateSnapshotDialog");

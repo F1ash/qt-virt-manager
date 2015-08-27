@@ -11,9 +11,9 @@ _Disks::_Disks(QWidget *parent) :
 }
 
 /* public slots */
-void _Disks::setDisksData(QDomElement &_disk)
+void _Disks::setDisksData(QDomElement &_disk, bool external)
 {
-    QString _name, _driver;
+    QString _name, _driver, _type;
     if ( !_disk.firstChildElement("target").isNull() ) {
         _name = _disk.firstChildElement("target").attribute("dev");
     } else if ( !_disk.firstChildElement("source").isNull() ) {
@@ -24,6 +24,8 @@ void _Disks::setDisksData(QDomElement &_disk)
         _DiskItem *wdg = static_cast<_DiskItem*>(
                     disksLayout->itemAt(disksLayout->count()-1)->widget());
         wdg->setDiskName(_name);
+        _type = QString(external? "external" : "internal");
+        wdg->setSnapshotType(_type);
         if ( !_disk.firstChildElement("driver").isNull() ) {
             _driver = _disk.firstChildElement("driver").attribute("type");
         };
@@ -32,7 +34,7 @@ void _Disks::setDisksData(QDomElement &_disk)
         };
     };
 }
-QDomDocument _Disks::getElements() const
+QDomDocument _Disks::getElements(bool all) const
 {
     QDomDocument doc;
     QDomElement _disks = doc.createElement("disks");
@@ -40,19 +42,33 @@ QDomDocument _Disks::getElements() const
     for (int i=0; i<disksLayout->count(); i++) {
         _DiskItem *wdg = static_cast<_DiskItem*>(
                     disksLayout->itemAt(i)->widget());
-        if ( wdg!=NULL && wdg->isUsed() ) {
-            QDomElement _disk = doc.createElement("disk");
+        if ( wdg==NULL ) continue;
+        QDomElement _disk = doc.createElement("disk");
+        if ( wdg->isUsed() || all ) {
             _disk.setAttribute("name", wdg->getName());
             _disk.setAttribute("snapshot", wdg->getSnapshotType());
-            QDomElement _source = doc.createElement("source");
-            _source.setAttribute("file", wdg->getSource());
-            _disk.appendChild(_source);
-            QDomElement _driver = doc.createElement("driver");
-            _driver.setAttribute("type", wdg->getDriverType());
-            _disk.appendChild(_driver);
-            _disks.appendChild(_disk);
+            if ( wdg->getSnapshotType()=="external" ) {
+                QString source, driver;
+                source = wdg->getSource();
+                if (!source.isEmpty()) {
+                    QDomElement _source = doc.createElement("source");
+                    _source.setAttribute("file", source);
+                    _disk.appendChild(_source);
+                };
+                driver = wdg->getDriverType();
+                if (!driver.isEmpty()) {
+                    QDomElement _driver = doc.createElement("driver");
+                    _driver.setAttribute("type", driver);
+                    _disk.appendChild(_driver);
+                };
+            };
+        } else {
+            _disk.setAttribute("name", wdg->getName());
+            _disk.setAttribute("snapshot", "no");
         };
+        _disks.appendChild(_disk);
     };
+    //qDebug()<<doc.toByteArray(4).data()<<"disks";
     return doc;
 }
 void _Disks::addStretch()

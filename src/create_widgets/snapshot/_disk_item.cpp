@@ -7,7 +7,10 @@ _DiskItem::_DiskItem(QWidget *parent) : QWidget(parent)
     name->setReadOnly(true);
     source = new QLineEdit(this);
     source->setPlaceholderText("Source file path");
+    source->setToolTip("The absolute path to the disk snapshot image/file");
     driver = new QComboBox(this);
+    driver->setToolTip("The driver type of the new file\n\
+created by the external snapshot\n(optional)");
     snapshotType = new QComboBox(this);
     paramLayout = new QHBoxLayout(this);
     paramLayout->addWidget(driver);
@@ -34,12 +37,7 @@ _DiskItem::_DiskItem(QWidget *parent) : QWidget(parent)
             this, SLOT(driverTypeChanged(QString)));
     driver->addItems(QStringList()<<"custom"<<"qcow2"<<"qcow"<<"raw"<<"qed"
                      <<"bochs"<<"vmdk"<<"dmg"<<"iso");
-    snapshotType->addItems(QStringList()<<"no"<<"internal"<<"external");
-}
-
-_DiskItem::~_DiskItem()
-{
-
+    snapshotType->addItems(QStringList()<<"internal"<<"external");
 }
 
 /* public slots */
@@ -53,6 +51,12 @@ void _DiskItem::setDriverType(QString &_type)
     if ( idx<0 ) idx = 0;
     driver->setCurrentIndex(idx);
     if ( idx==0 && !_type.isEmpty() ) driver->setEditText(_type);
+}
+void _DiskItem::setSnapshotType(QString &_type)
+{
+    int idx = snapshotType->findText(_type);
+    if ( idx<0 ) idx = 0;
+    snapshotType->setCurrentIndex(idx);
 }
 QString _DiskItem::getName() const
 {
@@ -79,6 +83,7 @@ bool _DiskItem::isUsed() const
 void _DiskItem::snapshotTypeChanged(QString _text)
 {
     driver->setEnabled( _text=="external" );
+    source->setEnabled( _text=="external" );
 }
 void _DiskItem::driverTypeChanged(QString _text)
 {

@@ -96,7 +96,8 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
     virDomainSnapshotPtr snapShot =
             virDomainSnapshotLookupByName(domain, name, 0);
     char *xmlDesc = virDomainSnapshotGetXMLDesc(snapShot, 0);
-    QString _date(" -- ");
+    QString _desc;
+    QString _data(" -- ");
     if ( NULL!=xmlDesc ) {
         QDomDocument doc;
         doc.setContent(QString(xmlDesc));
@@ -105,11 +106,18 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
                 .firstChildElement("domainsnapshot")
                 .firstChildElement("creationTime");
         if ( !_el.isNull() ) {
-            _date.clear();
-            _date.append(
+            _data.clear();
+            _data.append(
                   QDateTime::fromMSecsSinceEpoch(
                       _el.text().toULongLong()*1000)
                         .toString("yyyy-MM-dd_HH:mm:ss"));
+        };
+        _el = doc
+                .firstChildElement("domainsnapshot")
+                .firstChildElement("description");
+        if ( !_el.isNull() ) {
+            _desc.clear();
+            _desc.append(_el.text());
         };
     };
     // flags: extra flags; not used yet, so callers should always pass 0
@@ -118,7 +126,8 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
         model->insertRow(row, parent);
         model->setData(model->index(row, 0, parent), name, Qt::DisplayRole);
         model->setData(model->index(row, 0, parent), (current>0), Qt::DecorationRole);
-        model->setData(model->index(row, 1, parent), _date, Qt::DisplayRole);
+        model->setData(model->index(row, 0, parent), _desc, Qt::ToolTipRole);
+        model->setData(model->index(row, 1, parent), _data, Qt::DisplayRole);
         // By default, this command covers only direct children; use flag=0
         int namesLen = virDomainSnapshotNumChildren(snapShot, 0);
         if ( namesLen>0 ) {

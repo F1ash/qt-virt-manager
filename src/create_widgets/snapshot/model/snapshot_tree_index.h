@@ -16,16 +16,18 @@ public:
     int                  childCount() const;
     int                  columnCount() const;
     QVariant             data(int column) const;
+    QString              getDesc() const;
     void                 setData(QString&);
     void                 setDate(QString&);
     bool                 getState() const;
     void                 setState(bool);
+    void                 setDesc(QString&);
     int                  row() const;
     TreeItem            *parent();
 
 private:
     QList<TreeItem*>     childItems;
-    QString              itemData, itemDate;
+    QString              itemData, itemDate, itemDesc;
     bool                 state;
     TreeItem            *parentItem;
 };

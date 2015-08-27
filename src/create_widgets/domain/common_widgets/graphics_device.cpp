@@ -26,6 +26,8 @@ GraphicsDevice::GraphicsDevice(
     setLayout(commonLayout);
     connect(type, SIGNAL(currentIndexChanged(int)),
             info, SLOT(setCurrentIndex(int)));
+    // set to more useful case (SPICE) and implemented in application
+    type->setCurrentIndex(2);
 }
 
 /* public slots */
