@@ -1,10 +1,6 @@
 #include "conn_alive_thread.h"
 #define MINUTE 60000
 
-/*
- * TODO: Implement some event callbacks if necessary.
- */
-
 ConnAliveThread::ConnAliveThread(QObject *parent) :
     QThread(parent)
 {

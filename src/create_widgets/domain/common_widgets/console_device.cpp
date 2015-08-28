@@ -1,6 +1,6 @@
 #include "console_device.h"
 
-/* WARNING:
+/*
  * http://libvirt.org/formatdomain.html#elementCharConsole
  *
  *  Console

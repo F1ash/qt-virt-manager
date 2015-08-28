@@ -1,5 +1,16 @@
 #include "vm_viewer.h"
 
+HlpThread::HlpThread(
+        QObject *parent, virConnect *_conn) :
+    QThread(parent), currWorkConnection(_conn)
+{
+
+}
+void HlpThread::run()
+{
+
+}
+
 VM_Viewer::VM_Viewer(
         QWidget *parent, virConnect *conn, QString arg1, QString arg2) :
     QMainWindow(parent), jobConnect(conn), connName(arg1), domain(arg2)
@@ -18,6 +29,9 @@ VM_Viewer::VM_Viewer(
     closeProcess->setRange(0, TIMEOUT);
     statusBar()->addPermanentWidget(closeProcess);
     statusBar()->hide();
+    hlpThread = new HlpThread(this, jobConnect);
+    connect(hlpThread, SIGNAL(result(QString&)),
+            this, SLOT(init(QString&)));
 }
 VM_Viewer::~VM_Viewer()
 {
@@ -35,6 +49,10 @@ VM_Viewer::~VM_Viewer()
 }
 
 /* public slots */
+void VM_Viewer::init(QString&)
+{
+
+}
 bool VM_Viewer::isActive() const
 {
     return VM_State;

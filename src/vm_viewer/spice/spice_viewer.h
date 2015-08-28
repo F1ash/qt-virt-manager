@@ -17,9 +17,6 @@ public:
             virConnect *conn = NULL,
             QString arg1 = QString(),
             QString arg2 = QString());
-    ~Spice_Viewer();
-
-signals:
 
 private:
     QString          runXmlDesc;

@@ -44,6 +44,7 @@ SnapshotActionDialog::SnapshotActionDialog(
     "<a href='https://libvirt.org/html/libvirt-libvirt-domain-snapshot.html'>About</a>",
                 this);
     info->setOpenExternalLinks(true);
+    info->setToolTip("https://libvirt.org/html/libvirt-libvirt-domain-snapshot.html");
     ok = new QPushButton("Ok", this);
     cancel = new QPushButton("Cancel", this);
     closeWdg = new QPushButton("Close", this);

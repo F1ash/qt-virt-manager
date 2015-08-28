@@ -48,7 +48,7 @@ void LXC_ViewerThread::run()
             msg = QString("In '<b>%1</b>': Console opened in FORCE-mode...").arg(domain);
             emit errorMsg(msg, number);
         } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, 0 )+1 ) {
-            msg = QString("In '<b>%1</b>': Console opened in ZIRO-mode...").arg(domain);
+            msg = QString("In '<b>%1</b>': Console opened in ZERO-mode...").arg(domain);
             emit errorMsg(msg, number);
         } else {
             msg = QString("In '<b>%1</b>': Open console failed...").arg(domain);

@@ -81,11 +81,6 @@ Spice_Viewer::Spice_Viewer(
     //qDebug()<<msg<<"viewer inits";
 }
 
-Spice_Viewer::~Spice_Viewer()
-{
-
-}
-
 /* public slots */
 void Spice_Viewer::reconnectToDomain()
 {
