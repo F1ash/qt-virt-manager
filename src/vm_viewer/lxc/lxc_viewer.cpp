@@ -1,5 +1,17 @@
 #include "lxc_viewer.h"
 
+lxcHlpThread::lxcHlpThread(QObject *parent, virConnect *_conn, QString _domain) :
+    QThread(parent), currWorkConnection(_conn), domain(_domain)
+{
+
+}
+void lxcHlpThread::run()
+{
+    if ( NULL!=currWorkConnection )
+        domainPtr =virDomainLookupByName(
+                    currWorkConnection, domain.toUtf8().data());
+}
+
 LXC_Viewer::LXC_Viewer(
         QWidget *parent,
         virConnect *conn,
@@ -12,22 +24,10 @@ LXC_Viewer::LXC_Viewer(
     TYPE = "LXC";
     // unused toolbar
     // viewerToolBar->setVisible(false);
-    if ( jobConnect!=NULL ) {
-        domainPtr = getDomainPtr();
-    };
-    QString msg;
-    if ( domainPtr!=NULL ) {
-        viewerThread = new LXC_ViewerThread(this);
-        timerId = startTimer(PERIOD);
-    } else {
-        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL...")
-                .arg(domain);
-        sendErrMsg(msg);
-        showErrorInfo(msg);
-        startCloseProcess();
-    };
-    sendConnErrors();
-    //qDebug()<<msg<<"term inits";
+    hlpThread = new lxcHlpThread(this, jobConnect, domain);
+    connect(hlpThread, SIGNAL(finished()),
+            this, SLOT(init()));
+    hlpThread->start();
 }
 LXC_Viewer::~LXC_Viewer()
 {
@@ -42,6 +42,22 @@ LXC_Viewer::~LXC_Viewer()
 }
 
 /* public slots */
+void LXC_Viewer::init()
+{
+    QString msg;
+    if ( hlpThread->domainPtr!=NULL ) {
+        viewerThread = new LXC_ViewerThread(this);
+        timerId = startTimer(PERIOD);
+    } else {
+        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL...")
+                .arg(domain);
+        sendErrMsg(msg);
+        showErrorInfo(msg);
+        startCloseProcess();
+    };
+    sendConnErrors();
+    //qDebug()<<msg<<"term inits";
+}
 
 /* private slots */
 void LXC_Viewer::timerEvent(QTimerEvent *ev)
@@ -54,7 +70,8 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             killTimer(timerId);
             timerId = 0;
             counter = 0;
-            viewerThread->setData(domain, domainPtr, ptySlaveFd);
+            viewerThread->setData(
+                        domain, hlpThread->domainPtr, ptySlaveFd);
             if ( viewerThread->setCurrentWorkConnect(jobConnect) ) {
                 setTerminalParameters();
             };

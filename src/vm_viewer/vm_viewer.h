@@ -21,20 +21,6 @@
 #define TIMEOUT     60*1000
 #define PERIOD      333
 
-class HlpThread : public QThread
-{
-    Q_OBJECT
-public:
-    explicit HlpThread(
-            QObject     *parent = NULL,
-            virConnect  *_conn  = NULL);
-    void             run();
-signals:
-    void             result(QString&);
-private:
-    virConnect      *currWorkConnection = NULL;
-};
-
 class VM_Viewer : public QMainWindow
 {
     Q_OBJECT
@@ -55,13 +41,10 @@ public:
     uint             timerId = 0;
     uint             killTimerId = 0;
     uint             counter = 0;
-    virDomain       *domainPtr = NULL;
 
     QVBoxLayout     *infoLayout = NULL;
     QLabel          *icon, *msg;
     QWidget         *info = NULL;
-
-    HlpThread       *hlpThread;
 
 signals:
     void             finished(QString&);
@@ -69,9 +52,8 @@ signals:
     void             addNewTask(TASK);
 
 public slots:
-    virtual void     init(QString&);
+    virtual void     init();
     virtual bool     isActive() const;
-    virDomain*       getDomainPtr() const;
     virtual void     closeEvent(QCloseEvent *ev);
     void             sendErrMsg(QString&);
     void             sendErrMsg(QString&, uint);

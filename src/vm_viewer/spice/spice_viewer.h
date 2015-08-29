@@ -8,6 +8,22 @@
 #include "vm_viewer/vm_viewer.h"
 #include "vm_viewer/qspice_widgets/qspicewidget.h"
 
+class spcHlpThread : public QThread
+{
+    Q_OBJECT
+public:
+    explicit spcHlpThread(
+            QObject     *parent = NULL,
+            virConnect  *_conn  = NULL,
+            QString      _domain= QString());
+    const QString    domain;
+    virDomainPtr     domainPtr = NULL;
+    QString          uri, runXmlDesc;
+    void             run();
+private:
+    virConnect      *currWorkConnection = NULL;
+};
+
 class Spice_Viewer : public VM_Viewer
 {
     Q_OBJECT
@@ -19,13 +35,14 @@ public:
             QString arg2 = QString());
 
 private:
-    QString          runXmlDesc;
+    spcHlpThread    *hlpThread;
     QString          addr;
     uint             port = 0;
     QSpiceWidget    *spiceWdg = NULL;
     QShortcut       *actFullScreen = NULL;
 
 public slots:
+    void             init();
     void             reconnectToDomain();
     void             sendKeySeqToDomain(Qt::Key);
 

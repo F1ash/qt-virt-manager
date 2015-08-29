@@ -1,5 +1,21 @@
 #include "spice_viewer.h"
 
+spcHlpThread::spcHlpThread(
+        QObject *parent, virConnect *_conn, QString _domain) :
+    QThread(parent), currWorkConnection(_conn), domain(_domain)
+{
+
+}
+void spcHlpThread::run()
+{
+    if ( NULL!=currWorkConnection )
+        domainPtr =virDomainLookupByName(
+                    currWorkConnection, domain.toUtf8().data());
+    uri.append(virConnectGetURI(currWorkConnection));
+    // flag=0 for get running domain xml-description
+    runXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
+}
+
 Spice_Viewer::Spice_Viewer(
         QWidget      *parent,
         virConnect   *conn,
@@ -8,30 +24,32 @@ Spice_Viewer::Spice_Viewer(
     VM_Viewer(parent, conn, arg1, arg2)
 {
     TYPE = "SPICE";
-    if ( jobConnect!=NULL ) {
-        domainPtr = getDomainPtr();
-    };
+    hlpThread = new spcHlpThread(this, jobConnect, domain);
+    connect(hlpThread, SIGNAL(finished()),
+            this, SLOT(init()));
+    hlpThread->start();
+}
+
+/* public slots */
+void Spice_Viewer::init()
+{
+    // get address or hostname from URI
+    // driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
     QString msg;
-    if ( domainPtr!=NULL ) {
-        // TODO: implement getting URI & Connect to thread
-        // get address or hostname from URI
-        // driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
-        QString uri(virConnectGetURI(jobConnect));
-        addr = uri.split("://").last();
-        uri = addr;
-        addr = uri.split("/").first();
-        uri = addr;
-        addr = uri.split(":").first();
-        uri = addr;
-        if ( uri.contains("@") ) {
-            addr = uri.split("@").last();
-            uri = addr;
+    if ( hlpThread->domainPtr!=NULL ) {
+        addr = hlpThread->uri.split("://").last();
+        hlpThread->uri = addr;
+        addr = hlpThread->uri.split("/").first();
+        hlpThread->uri = addr;
+        addr = hlpThread->uri.split(":").first();
+        hlpThread->uri = addr;
+        if ( hlpThread->uri.contains("@") ) {
+            addr = hlpThread->uri.split("@").last();
+            hlpThread->uri = addr;
         };
         addr.clear();
-        // flag=0 for get running domain xml-description
-        runXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
         QDomDocument doc;
-        doc.setContent(runXmlDesc);
+        doc.setContent(hlpThread->runXmlDesc);
         QDomElement graph = doc.firstChildElement("domain")
            .firstChildElement("devices")
            .firstChildElement("graphics");
@@ -44,12 +62,13 @@ Spice_Viewer::Spice_Viewer(
             addr = graph.firstChildElement("listen")
                     .attribute("address");
         } else {
-            if ( uri.isEmpty() ) {
+            if ( hlpThread->uri.isEmpty() ) {
                 addr = "127.0.0.1";
-                uri  = "127.0.0.1";
+                hlpThread->uri  = "127.0.0.1";
             };
         };
-        if ( addr!=uri && !uri.isEmpty() ) addr = uri;
+        if ( addr!=hlpThread->uri && !hlpThread->uri.isEmpty() )
+            addr = hlpThread->uri;
         port = (graph.hasAttribute("port"))?
                     graph.attribute("port").toInt() : 5900;
         //qDebug()<<"address:"<<addr<<port;
@@ -80,8 +99,6 @@ Spice_Viewer::Spice_Viewer(
     sendConnErrors();
     //qDebug()<<msg<<"viewer inits";
 }
-
-/* public slots */
 void Spice_Viewer::reconnectToDomain()
 {
     QSpiceWidget *wdg = static_cast<QSpiceWidget*>(centralWidget());

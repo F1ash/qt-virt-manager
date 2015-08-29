@@ -6,6 +6,23 @@
 #include "lxc_viewer_thread.h"
 #include <QDebug>
 
+class lxcHlpThread : public QThread
+{
+    Q_OBJECT
+public:
+    explicit lxcHlpThread(
+            QObject     *parent = NULL,
+            virConnect  *_conn  = NULL,
+            QString      _domain= QString());
+    const QString    domain;
+    virDomainPtr     domainPtr = NULL;
+    void             run();
+signals:
+    void             result(QString&);
+private:
+    virConnect      *currWorkConnection = NULL;
+};
+
 class LXC_Viewer : public TermMainWindow
 {
     Q_OBJECT
@@ -22,9 +39,11 @@ public:
 signals:
 
 private:
+    lxcHlpThread        *hlpThread;
     LXC_ViewerThread    *viewerThread = NULL;
 
 public slots:
+    void                 init();
 
 private slots:
     void                 timerEvent(QTimerEvent*);
