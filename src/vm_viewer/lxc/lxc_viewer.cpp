@@ -32,12 +32,16 @@ LXC_Viewer::LXC_Viewer(
 LXC_Viewer::~LXC_Viewer()
 {
     qDebug()<<"LXC_Viewer destroy:";
-    QString msg, key;
+    QString msg;
+    if ( NULL!=viewerThread ) {
+        viewerThread->blockSignals(true);
+        viewerThread->stop();
+        delete viewerThread;
+        viewerThread = NULL;
+    };
     msg = QString("In '<b>%1</b>': Display destroyed.")
             .arg(domain);
     sendErrMsg(msg);
-    //key = QString("%1_%2").arg(connName).arg(domain);
-    //emit finished(key);
     qDebug()<<"LXC_Viewer destroyed";
 }
 
@@ -87,8 +91,6 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
         counter++;
         closeProcess->setValue(counter*PERIOD*6);
         if ( TIMEOUT<counter*PERIOD*6 ) {
-            killTimer(killTimerId);
-            killTimerId = 0;
             counter = 0;
             close();
         };
@@ -100,8 +102,6 @@ void LXC_Viewer::setTerminalParameters()
     if ( NULL!=t ) {
         connect(t->impl(), SIGNAL(sendData(const char*,int)),
                 viewerThread, SLOT(sendDataToVMachine(const char*,int)));
-        connect(viewerThread, SIGNAL(termEOF()),
-                this, SLOT(startCloseProcess()));
         connect(viewerThread, SIGNAL(errorMsg(QString&, uint)),
                 this, SLOT(sendErrMsg(QString&, uint)));
         connect(viewerThread, SIGNAL(finished()),
@@ -130,15 +130,6 @@ PTY opened. Terminal is active.").arg(domain);
 void LXC_Viewer::closeEvent(QCloseEvent *ev)
 {
     ev->ignore();
-    if ( killTimerId>0 ) {
-        killTimer(killTimerId);
-        killTimerId = 0;
-    };
-    if ( NULL!=viewerThread ) {
-        viewerThread->blockSignals(true);
-        viewerThread->stop();
-        //deleteLater();
-        QString key = QString("%1_%2").arg(connName).arg(domain);
-        emit finished(key);
-    };
+    QString key = QString("%1_%2").arg(connName).arg(domain);
+    emit finished(key);
 }

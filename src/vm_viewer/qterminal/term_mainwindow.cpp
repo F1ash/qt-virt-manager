@@ -68,7 +68,7 @@ TermMainWindow::TermMainWindow(QWidget *parent,
     consoleTabulator->setWorkDirectory(work_dir);
     consoleTabulator->setTabPosition((QTabWidget::TabPosition)Properties::Instance()->tabsPos);
     //consoleTabulator->setShellProgram(command);
-    consoleTabulator->addNewTab(QString("<%2> Domain Terminal in <%1> Connection").arg(arg1).arg(arg2));
+    consoleTabulator->addNewTab(QString("<%2> Domain Terminal in [ %1 ] Connection").arg(arg1).arg(arg2));
 
     setWindowTitle(QString("<%2> Domain Terminal in <%1> Connection").arg(arg1).arg(arg2));
     setWindowIcon(QIcon::fromTheme("utilities-terminal"));

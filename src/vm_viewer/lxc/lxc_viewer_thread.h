@@ -12,10 +12,9 @@ public:
     ~LXC_ViewerThread();
 
 signals:
-    void            termEOF();
-    void            streamIObroken();
 
 private:
+    bool            streamRegistered;
     int             ptySlaveFd;
     QString         domain;
     virStream      *stream;
@@ -29,13 +28,12 @@ public slots:
 
 private slots:
     int             registerStreamEvents();
-    int             unregisterStreamEvents(virStreamPtr);
+    void            unregisterStreamEvents();
     static void     freeData(void*);
     static void     streamEventCallBack(virStreamPtr, int, void*);
     void            updateStreamEvents(virStreamPtr, int);
     void            sendDataToDisplay(virStreamPtr);
     void            closeStream();
-    void            forceCloseDomain();
 };
 
 #endif // LXC_VIEWER_THREAD_H

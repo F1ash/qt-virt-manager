@@ -15,7 +15,7 @@ class VirtEntityControl : public QMainWindow
     Q_OBJECT
 public:
     explicit VirtEntityControl(QWidget *parent = 0);
-    ~VirtEntityControl();
+    virtual ~VirtEntityControl();
     QString                  currConnName;
     QSettings                settings;
     QTreeView               *entityList = NULL;

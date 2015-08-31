@@ -180,8 +180,10 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
 void VM_Viewer::startCloseProcess()
 {
     //qDebug()<<"startCloseProcess";
-    killTimerId = startTimer(PERIOD);
-    statusBar()->show();
+    if ( killTimerId==0 ) {
+        killTimerId = startTimer(PERIOD);
+        statusBar()->show();
+    };
     //qDebug()<<killTimerId<<"killTimer";
 }
 void VM_Viewer::reconnectToDomain()

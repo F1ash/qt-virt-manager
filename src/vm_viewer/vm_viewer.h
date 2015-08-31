@@ -30,7 +30,7 @@ public:
             virConnect *conn = NULL,
             QString arg1 = QString(),
             QString arg2 = QString());
-    ~VM_Viewer();
+    virtual ~VM_Viewer();
     QString          connName, domain, TYPE;
     virConnect      *jobConnect = NULL;
     virErrorPtr      virtErrors = NULL;
