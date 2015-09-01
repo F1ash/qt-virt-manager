@@ -14,7 +14,7 @@ public:
 signals:
 
 private:
-    bool            streamRegistered;
+    bool            streamRegistered, connRef;
     int             ptySlaveFd;
     QString         domain;
     virStream      *stream;

@@ -9,6 +9,7 @@ LXC_ViewerThread::LXC_ViewerThread(QObject *parent) :
     stream = NULL;
     domainPtr = NULL;
     streamRegistered = false;
+    connRef = false;
 }
 LXC_ViewerThread::~LXC_ViewerThread()
 {
@@ -18,6 +19,7 @@ LXC_ViewerThread::~LXC_ViewerThread()
         qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd;
     };
     closeStream();
+    if ( connRef ) virConnectClose(currWorkConnection);
     wait(30000);
 }
 
@@ -30,7 +32,8 @@ void LXC_ViewerThread::setData(QString &_dom, virDomainPtr _domPtr, int fd)
 }
 void LXC_ViewerThread::run()
 {
-    stream = (NULL!=currWorkConnection)?
+    connRef = virConnectRef(currWorkConnection)+1>0;
+    stream = (connRef)?
                 virStreamNew( currWorkConnection, VIR_STREAM_NONBLOCK ):NULL;
     if ( NULL==stream ) {
         sendConnErrors();
@@ -38,14 +41,8 @@ void LXC_ViewerThread::run()
     } else {
         int ret = -1;
         QString msg;
-        if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_SAFE)+1 ) {
-            msg = QString("In '<b>%1</b>': Console opened in SAFE-mode...").arg(domain);
-            emit errorMsg(msg, number);
-        } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, 0 )+1 ) {
+        if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, 0 )+1 ) {
             msg = QString("In '<b>%1</b>': Console opened in ZERO-mode...").arg(domain);
-            emit errorMsg(msg, number);
-        } else if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, VIR_DOMAIN_CONSOLE_FORCE )+1 ) {
-            msg = QString("In '<b>%1</b>': Console opened in FORCE-mode...").arg(domain);
             emit errorMsg(msg, number);
         } else {
             msg = QString("In '<b>%1</b>': Open console failed...").arg(domain);
@@ -92,13 +89,13 @@ void LXC_ViewerThread::unregisterStreamEvents()
     streamRegistered = virStreamEventRemoveCallback(stream)!=0;
     if ( !streamRegistered ) sendConnErrors();
     if ( NULL!=stream ) {
-        //if ( virStreamAbort(stream)<0 ) {
-        //    sendConnErrors();
-        //};
-        if ( virStreamFree(stream)<0 ) {
+        if ( virStreamAbort(stream)<0 ) {
             sendConnErrors();
         };
-        //stream = NULL;
+        if ( virStreamFree(stream)<0 ) {
+            sendConnErrors();
+        } else
+            stream = NULL;
     };
 }
 void LXC_ViewerThread::freeData(void *opaque)
