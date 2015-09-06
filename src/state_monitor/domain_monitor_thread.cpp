@@ -10,14 +10,26 @@ DomainMonitorThread::DomainMonitorThread(
     //qDebug()<<"virConnectRef +1"<<"DomainMonitorThread"<<domainName<<(ret+1>0);
     domain = virDomainLookupByName(
                 currWorkConn, domainName.toUtf8().data());
+    domainsBalloonChangeCallback = virConnectDomainEventRegisterAny(
+                currWorkConn,
+                domain,
+                VIR_DOMAIN_EVENT_ID_BALLOON_CHANGE,
+    // set domainsBalloonChangeCallback signature
+                VIR_DOMAIN_EVENT_CALLBACK(domEventCallback),
+                this,
+    // don't register freeData, because it remove this thread
+                NULL);
     prev_cpuTime = 0;
     firstStep = true;
     tMark.start();
+    qDebug()<<domainsBalloonChangeCallback<<"BalloonChange";
 }
 DomainMonitorThread::~DomainMonitorThread()
 {
     // release the reference because no longer required
     if ( currWorkConn!=NULL ) {
+        virConnectDomainEventDeregisterAny(
+                    currWorkConn, domainsBalloonChangeCallback);
         int ret = virConnectClose(currWorkConn);
         //qDebug()<<"virConnectRef -1"<<"DomainStateViewer"<<domainName<<(ret+1>0);
         // for reject the multiple releasing the reference
@@ -59,4 +71,17 @@ void DomainMonitorThread::run()
     } else {
         firstStep = true;
     };
+}
+
+int  DomainMonitorThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, qulonglong actual, void *opaque)
+{
+    qDebug()<<"domEventCallback"<<_conn;
+    DomainMonitorThread *obj = static_cast<DomainMonitorThread*>(opaque);
+    if ( NULL==obj || obj->currWorkConn!=_conn ) return 0;
+    QString msg;
+    msg = QString("<b>'%1'</b> Domain %2")
+           .arg(virDomainGetName(dom))
+           .arg(QString::number(actual));
+    qDebug()<<msg<<"BalloonChange";
+    return 0;
 }

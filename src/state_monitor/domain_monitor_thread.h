@@ -16,6 +16,9 @@ public:
             virConnectPtr conn = NULL,
             QString _domainName = QString());
     ~DomainMonitorThread();
+    static  int          domEventCallback(
+                                virConnectPtr, virDomainPtr,
+                                qulonglong, void*);
 
 signals:
     void                 dataChanged(int, int, int, int);
@@ -27,6 +30,8 @@ private:
     quint64              prev_cpuTime;
     QTime                tMark;
     bool                 firstStep;
+    int                  domainsBalloonChangeCallback;
+    qulonglong           baloonSize;
 
 public slots:
     void                 stop();
