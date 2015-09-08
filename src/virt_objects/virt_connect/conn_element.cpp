@@ -24,27 +24,6 @@ ConnElement::ConnElement(QObject *parent) :
     connect(connAliveThread, SIGNAL(connClosed(bool)),
             this, SLOT(forwardConnClosedSignal(bool)));
 }
-ConnElement::~ConnElement()
-{
-    //disconnect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
-
-    if ( connAliveThread!=NULL ) {
-        disconnect(connAliveThread, SIGNAL(connMsg(QString)),
-                   this, SLOT(receiveConnMessage(QString)));
-        disconnect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)),
-                   this, SLOT(setConnectionState(CONN_STATE)));
-        disconnect(connAliveThread, SIGNAL(authRequested(QString&)),
-                   this, SLOT(getAuthCredentials(QString&)));
-        disconnect(connAliveThread, SIGNAL(domStateChanged(Result)),
-                   this, SIGNAL(domStateChanged(Result)));
-        disconnect(connAliveThread, SIGNAL(netStateChanged(Result)),
-                   this, SIGNAL(netStateChanged(Result)));
-        disconnect(connAliveThread, SIGNAL(connClosed(bool)),
-                   this, SLOT(forwardConnClosedSignal(bool)));
-        delete connAliveThread;
-        connAliveThread = NULL;
-    };
-}
 
 /* public slots */
 void ConnElement::setItemReference(ConnItemModel *model, ConnItemIndex *idx)
@@ -81,7 +60,7 @@ void ConnElement::openConnection()
     conn_Status.insert("isRunning", QVariant(RUNNING));
     own_index->setData(conn_Status);
     connAliveThread->setData(URI);
-    connAliveThread->start();
+    if ( !connAliveThread->isRunning() ) connAliveThread->start();
     if (!waitTimerId) {
         _diff = 0;
         waitTimerId = startTimer(1000);
@@ -92,14 +71,7 @@ void ConnElement::openConnection()
 }
 void ConnElement::closeConnection()
 {
-    connAliveThread->closeConnection();
-}
-void ConnElement::forceCloseConnection()
-{
-    //qDebug()<<"forceCloseConnection0";
-    closeConnection();
-    setConnectionState(FAILED);
-    //qDebug()<<"forceCloseConnection1";
+    if ( connAliveThread->isRunning() ) connAliveThread->closeConnection();
 }
 void ConnElement::showConnectionData()
 {

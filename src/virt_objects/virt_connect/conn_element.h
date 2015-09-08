@@ -15,10 +15,8 @@
 class ConnElement : public QObject
 {
     Q_OBJECT
-
 public:
-    ConnElement(QObject *parent);
-    ~ConnElement();
+    explicit ConnElement(QObject *parent = NULL);
 
 signals:
     void              warningShowed();
@@ -43,14 +41,13 @@ private:
     int               checkTimeout;
     int               _diff;
 
-    ConnAliveThread  *connAliveThread = NULL;
+    ConnAliveThread  *connAliveThread;
 
 public slots:
     void              setItemReference(ConnItemModel*, ConnItemIndex*);
     void              setItemReferenceForLocal(ConnItemModel*, ConnItemIndex*);
     void              openConnection();
     void              closeConnection();
-    void              forceCloseConnection();
     void              showConnectionData();
     virConnect*       getConnection() const;
     void              setAuthCredentials(QString&, QString&);

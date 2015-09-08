@@ -14,11 +14,11 @@ class VirtEntityControl : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit VirtEntityControl(QWidget *parent = 0);
+    explicit VirtEntityControl(QWidget *parent = NULL);
     virtual ~VirtEntityControl();
     QString                  currConnName;
     QSettings                settings;
-    QTreeView               *entityList = NULL;
+    QTreeView               *entityList;
     virConnect              *currWorkConnection = NULL;
 
     virtual void             reloadState();
@@ -35,7 +35,6 @@ signals:
 
 public slots:
     void                     msgRepeater(QString&);
-    virtual bool             getThreadState() const;
     virtual void             stopProcessing();
     virtual bool             setCurrentWorkConnect(virConnect*);
     virtual void             setListHeader(QString&);

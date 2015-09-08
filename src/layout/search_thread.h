@@ -12,7 +12,6 @@ class SearchThread : public QThread
     Q_OBJECT
 public:
     explicit SearchThread(QObject *parent = NULL);
-    ~SearchThread();
 
 signals:
     void        localConnFound(QString&);

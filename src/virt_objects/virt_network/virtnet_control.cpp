@@ -41,10 +41,6 @@ VirtNetControl::~VirtNetControl()
 }
 
 /* public slots */
-bool VirtNetControl::getThreadState() const
-{
-    return true;
-}
 void VirtNetControl::stopProcessing()
 {
     setEnabled(false);

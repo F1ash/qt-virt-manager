@@ -7,14 +7,8 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
     qRegisterMetaType<CONN_STATE>("CONN_STATE");
     onView = false;
     closeCallbackRegistered = false;
-    domainsLifeCycleCallback = -1;
-    networkLifeCycleCallback = -1;
-}
-ConnAliveThread::~ConnAliveThread()
-{
-    conn = NULL;
-    virtErrors = NULL;
-    wait(30000);
+    domainsLifeCycleCallback = 0;
+    networkLifeCycleCallback = 0;
 }
 
 /* public slots */
@@ -187,20 +181,20 @@ void ConnAliveThread::unregisterConnEvents()
         int ret = virConnectUnregisterCloseCallback(
                     conn, connEventCallBack);
         if (ret<0) sendConnErrors();
+        else closeCallbackRegistered = false;
     };
     if ( domainsLifeCycleCallback ) {
         int ret = virConnectDomainEventDeregisterAny(
                     conn, domainsLifeCycleCallback);
         if (ret<0) sendConnErrors();
-        else domainsLifeCycleCallback = -1;
+        domainsLifeCycleCallback = 0;
     };
     if ( networkLifeCycleCallback ) {
         int ret = virConnectNetworkEventDeregisterAny(
                     conn, networkLifeCycleCallback);
         if (ret<0) sendConnErrors();
-        else networkLifeCycleCallback = -1;
+        networkLifeCycleCallback = 0;
     };
-    closeCallbackRegistered = false;
     //qDebug()<<"unregisterConnEvents1"<<conn<<URI;
 }
 void ConnAliveThread::freeData(void *opaque)

@@ -258,6 +258,7 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 void MainWindow::initConnListWidget()
 {
   connListWidget = new ConnectionList(this);
+  setCentralWidget(connListWidget);
   settings.beginGroup("ConnectListColumns");
   connListWidget->setColumnWidth(0, settings.value("column0", 132).toInt());
   connListWidget->setColumnWidth(1, settings.value("column1", 32).toInt());
@@ -272,7 +273,6 @@ void MainWindow::initConnListWidget()
       connListWidget->addConnItem(s);
   };
   connListWidget->searchLocalhostConnections();
-  setCentralWidget(connListWidget);
   connect(connListWidget, SIGNAL(removeConnection(QString&)),
           this, SLOT(removeConnItem(QString&)));
   connect(connListWidget, SIGNAL(messageShowed()),
@@ -734,9 +734,6 @@ void MainWindow::stopProcessing()
     storagePoolDockContent->stopProcessing();
     secretDockContent->stopProcessing();
     ifaceDockContent->stopProcessing();
-    //domainDockContent->getThreadState();
-    //networkDockContent->getThreadState() ;
-    //storagePoolDockContent->getThreadState();
 }
 void MainWindow::invokeVMDisplay(virConnect *conn, QString connName, QString domName)
 {

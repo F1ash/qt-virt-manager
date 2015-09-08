@@ -6,10 +6,6 @@ SearchThread::SearchThread(QObject *parent) :
     qRegisterMetaType<QString>("QString&");
     setURIList();
 }
-SearchThread::~SearchThread()
-{
-    wait(30000);
-}
 
 void SearchThread::run()
 {

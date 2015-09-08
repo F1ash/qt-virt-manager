@@ -63,8 +63,6 @@ private:
     void setup_ActionsMenu_Actions();
     void setup_ViewMenu_Actions();
 
-    void closeEvent(QCloseEvent*);
-
 private slots:
     void on_consoleTabulator_currentChanged(int);
     void propertiesChanged();

@@ -35,10 +35,6 @@ VirtSecretControl::~VirtSecretControl()
 }
 
 /* public slots */
-bool VirtSecretControl::getThreadState() const
-{
-    return true;
-}
 void VirtSecretControl::stopProcessing()
 {
     setEnabled(false);

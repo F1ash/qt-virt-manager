@@ -41,10 +41,6 @@ VirtStoragePoolControl::~VirtStoragePoolControl()
 }
 
 /* public slots */
-bool VirtStoragePoolControl::getThreadState() const
-{
-    return true;
-}
 void VirtStoragePoolControl::stopProcessing()
 {
     setEnabled(false);

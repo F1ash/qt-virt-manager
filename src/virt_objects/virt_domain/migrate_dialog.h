@@ -37,7 +37,6 @@ public:
                            const QString arg2 = "-",
                            const QString arg3 = "-",
                            const QStringList list = QStringList());
-    ~MigrateDialog();
 
 signals:
 

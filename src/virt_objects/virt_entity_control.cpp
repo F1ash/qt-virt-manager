@@ -1,6 +1,7 @@
 #include "virt_entity_control.h"
 
-VirtEntityControl::VirtEntityControl(QWidget *parent) : QMainWindow(parent)
+VirtEntityControl::VirtEntityControl(QWidget *parent) :
+    QMainWindow(parent)
 {
     qRegisterMetaType<QString>("QString&");
     setSizePolicy(
@@ -19,10 +20,6 @@ VirtEntityControl::~VirtEntityControl()
 {
 }
 
-bool VirtEntityControl::getThreadState() const
-{
-    return true;
-}
 void VirtEntityControl::stopProcessing() {}
 bool VirtEntityControl::setCurrentWorkConnect(virConnect *conn)
 {
@@ -33,7 +30,7 @@ bool VirtEntityControl::setCurrentWorkConnect(virConnect *conn)
 }
 void VirtEntityControl::setListHeader(QString &_name)
 {
-
+    Q_UNUSED(_name);
 }
 void VirtEntityControl::reloadState()
 {
@@ -41,7 +38,7 @@ void VirtEntityControl::reloadState()
 }
 void VirtEntityControl::resultReceiver(Result data)
 {
-
+    Q_UNUSED(data);
 }
 void VirtEntityControl::changeDockVisibility()
 {
@@ -50,19 +47,19 @@ void VirtEntityControl::changeDockVisibility()
 }
 void VirtEntityControl::entityClicked(const QPoint &pos)
 {
-
+    Q_UNUSED(pos);
 }
 void VirtEntityControl::entityDoubleClicked(const QModelIndex &index)
 {
-
+    Q_UNUSED(index);
 }
 void VirtEntityControl::execAction(const QStringList &l)
 {
-
+    Q_UNUSED(l);
 }
 void VirtEntityControl::newVirtEntityFromXML(const QStringList &_args)
 {
-
+    Q_UNUSED(_args);
 }
 void VirtEntityControl::doneEntityCreationDialog()
 {

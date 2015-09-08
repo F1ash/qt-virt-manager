@@ -41,10 +41,6 @@ VirtInterfaceControl::~VirtInterfaceControl()
 }
 
 /* public slots */
-bool VirtInterfaceControl::getThreadState() const
-{
-    return true;
-}
 void VirtInterfaceControl::stopProcessing()
 {
     setEnabled(false);

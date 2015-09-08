@@ -4,25 +4,20 @@
 #include <QTreeView>
 #include <QMessageBox>
 #include <QInputDialog>
-#include <QRegExp>
 #include "conn_menu.h"
-#include "conn_item_model.h"
 #include "progressbar_delegate.h"
 #include "search_thread.h"
-#include "virt_objects/virt_connect/conn_element.h"
+#include "wait_local_conn.h"
 #include <QDebug>
 
 #define TO_RUN true
 #define TO_STOP false
-typedef QMap<QString, ConnElement*> CONN_LIST;
 
 class ConnectionList : public QTreeView
 {
     Q_OBJECT
 public:
-    ConnectionList(QWidget *parent);
-    ~ConnectionList();
-
+    explicit ConnectionList(QWidget *parent = NULL);
     CONN_LIST           *connections;
     ConnItemModel       *connItemModel;
 
@@ -53,6 +48,7 @@ private :
     ConnSettings         *sDialog;
     ProgressBarDelegate  *progressBarDlg;
     SearchThread         *searchThread;
+    WaitLocalConn        *waitLocalConn;
     int                   localConn = 0;
 
 private slots:

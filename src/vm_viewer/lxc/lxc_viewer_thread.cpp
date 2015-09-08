@@ -141,8 +141,8 @@ void LXC_ViewerThread::updateStreamEvents(virStreamPtr _stream, int type)
 void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
 {
     qDebug()<<"sendDataToDisplay"<<"to"<<ptySlaveFd;
-    if ( NULL==_stream || !keep_alive ) {
-        qDebug()<<"sendDataToDisplay"<<"callback stream is NULL or thread is died";
+    if ( NULL==_stream || !keep_alive || !streamRegistered ) {
+        qDebug()<<"sendDataToDisplay"<<"callback stream is NULL or deregistered or thread is died";
         keep_alive = false;
         closeStream();
         return;

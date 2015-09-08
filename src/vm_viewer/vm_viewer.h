@@ -43,7 +43,7 @@ public:
     uint             counter = 0;
 
     QVBoxLayout     *infoLayout = NULL;
-    QLabel          *icon, *msg;
+    QLabel          *icon = NULL, *msg = NULL;
     QWidget         *info = NULL;
 
 signals:

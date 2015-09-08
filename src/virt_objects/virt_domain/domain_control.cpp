@@ -41,10 +41,6 @@ VirtDomainControl::~VirtDomainControl()
 }
 
 /* public slots */
-bool VirtDomainControl::getThreadState() const
-{
-    return true;
-}
 void VirtDomainControl::stopProcessing()
 {
     setEnabled(false);

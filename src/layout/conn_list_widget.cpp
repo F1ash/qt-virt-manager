@@ -1,6 +1,6 @@
 #include "layout/conn_list_widget.h"
 
-ConnectionList::ConnectionList(QWidget *parent = NULL)
+ConnectionList::ConnectionList(QWidget *parent)
     : QTreeView(parent)
 {
   this->setContextMenuPolicy ( Qt::CustomContextMenu );
@@ -20,43 +20,13 @@ ConnectionList::ConnectionList(QWidget *parent = NULL)
   connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
           this, SLOT(connItemDoubleClicked(const QModelIndex&)));
   searchThread = new SearchThread(this);
+  waitLocalConn = new WaitLocalConn(this, connections, connItemModel);
   connect(searchThread, SIGNAL(localConnFound(QString&)),
           this, SLOT(createLocalConnection(QString&)));
-}
-ConnectionList::~ConnectionList()
-{
-  disconnect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
-             this, SLOT(connItemClicked(const QPoint &)));
-  disconnect(this, SIGNAL(doubleClicked(const QModelIndex&)),
-             this, SLOT(connItemDoubleClicked(const QModelIndex&)));
-  disconnect(searchThread, SIGNAL(localConnFound(QString&)),
-             this, SLOT(createLocalConnection(QString&)));
-  delete searchThread;
-  searchThread = NULL;
-  delete progressBarDlg;
-  progressBarDlg = NULL;
-  delete connItemModel;
-  connItemModel = NULL;
-  QStringList keys = connections->keys();
-  foreach (QString key, keys) {
-      disconnect(connections->value(key), SIGNAL(warningShowed()),
-                 this, SLOT(mainWindowUp()));
-      disconnect(connections->value(key), SIGNAL(warning(QString&)),
-                 this, SLOT(sendWarning(QString&)));
-      disconnect(connections->value(key), SIGNAL(connPtr(virConnect*, QString&)),
-                 this, SLOT(sendConnPtr(virConnect*, QString&)));
-      disconnect(connections->value(key), SIGNAL(authRequested(QString&)),
-                 this, SLOT(getAuthCredentials(QString&)));
-      disconnect(connections->value(key), SIGNAL(domStateChanged(Result)),
-                 this, SIGNAL(domResult(Result)));
-      disconnect(connections->value(key), SIGNAL(netStateChanged(Result)),
-                 this, SIGNAL(netResult(Result)));
-      disconnect(connections->value(key), SIGNAL(connClosed(bool, QString&)),
-                 this, SIGNAL(connClosed(bool, QString&)));
-  };
-  connections->clear();
-  delete connections;
-  connections = NULL;
+  connect(waitLocalConn, SIGNAL(uriToCompare(QString&)),
+          searchThread, SLOT(compareURI(QString&)));
+  connect(waitLocalConn, SIGNAL(finished()),
+          this, SLOT(searchLocalhostConnections()));
 }
 
 /* public slots */
@@ -82,7 +52,7 @@ int  ConnectionList::connItemEditAction()
 }
 void ConnectionList::searchLocalhostConnections()
 {
-    searchThread->start();
+    if ( !searchThread->isRunning() ) searchThread->start();
 }
 void ConnectionList::addConnItem(QString &s)
 {
@@ -158,7 +128,7 @@ void ConnectionList::deleteCurrentConnection()
 }
 void ConnectionList::openConnection(QModelIndex &_item)
 {
-  checkConnection(_item, TO_RUN);
+    checkConnection(_item, TO_RUN);
 }
 void ConnectionList::showConnection(QModelIndex &_item)
 {
@@ -185,7 +155,7 @@ void ConnectionList::showConnection(QModelIndex &_item)
 }
 void ConnectionList::closeConnection(QModelIndex &_item)
 {
-  checkConnection(_item, TO_STOP);
+    checkConnection(_item, TO_STOP);
 }
 virConnectPtr ConnectionList::getConnection(QString &name)
 {
@@ -297,8 +267,8 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
 }
 void ConnectionList::connItemKillAction()
 {
-  QModelIndex _item = currentIndex();
-  checkConnection(_item, TO_STOP);
+    QModelIndex _item = currentIndex();
+    checkConnection(_item, TO_STOP);
 }
 void ConnectionList::connItemRunAction()
 {
@@ -312,31 +282,31 @@ void ConnectionList::connItemShowAction()
 }
 void ConnectionList::createConnection(QModelIndex &_item)
 {
-  ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-  QString key = idx->getName();
-  ConnElement *conn = new ConnElement(this);
-  conn->setItemReference(connItemModel, idx);
-  connections->insert(key, conn);
-  clearSelection();
-  connect(connections->value(key), SIGNAL(warningShowed()),
-          this, SLOT(mainWindowUp()));
-  connect(connections->value(key), SIGNAL(warning(QString&)),
-          this, SLOT(sendWarning(QString&)));
-  connect(connections->value(key), SIGNAL(connPtr(virConnect*, QString&)),
-          this, SLOT(sendConnPtr(virConnect*, QString&)));
-  connect(connections->value(key), SIGNAL(authRequested(QString&)),
-          this, SLOT(getAuthCredentials(QString&)));
-  connect(connections->value(key), SIGNAL(domStateChanged(Result)),
-          this, SIGNAL(domResult(Result)));
-  connect(connections->value(key), SIGNAL(netStateChanged(Result)),
-          this, SIGNAL(netResult(Result)));
-  connect(connections->value(key), SIGNAL(connClosed(bool, QString&)),
-          this, SIGNAL(connClosed(bool, QString&)));
-  //qDebug()<<key<<" create Connection item";
-  if ( !searchThread->isFinished() && !searchThread->isRunning() ) {
-      QString uri(conn->getURI());
-      searchThread->compareURI(uri);
-  };
+    ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
+    QString key = idx->getName();
+    ConnElement *conn = new ConnElement(this);
+    conn->setItemReference(connItemModel, idx);
+    connections->insert(key, conn);
+    clearSelection();
+    connect(connections->value(key), SIGNAL(warningShowed()),
+            this, SLOT(mainWindowUp()));
+    connect(connections->value(key), SIGNAL(warning(QString&)),
+            this, SLOT(sendWarning(QString&)));
+    connect(connections->value(key), SIGNAL(connPtr(virConnect*, QString&)),
+            this, SLOT(sendConnPtr(virConnect*, QString&)));
+    connect(connections->value(key), SIGNAL(authRequested(QString&)),
+            this, SLOT(getAuthCredentials(QString&)));
+    connect(connections->value(key), SIGNAL(domStateChanged(Result)),
+            this, SIGNAL(domResult(Result)));
+    connect(connections->value(key), SIGNAL(netStateChanged(Result)),
+            this, SIGNAL(netResult(Result)));
+    connect(connections->value(key), SIGNAL(connClosed(bool, QString&)),
+            this, SIGNAL(connClosed(bool, QString&)));
+    //qDebug()<<key<<" create Connection item";
+    if ( !searchThread->isFinished() && !searchThread->isRunning() ) {
+        QString uri(conn->getURI());
+        searchThread->compareURI(uri);
+    };
 }
 void ConnectionList::createLocalConnection(QString &uri)
 {
@@ -385,54 +355,24 @@ void ConnectionList::refreshLocalhostConnection()
 {
     searchThread->setURIList();
     localConn = 0;
-    foreach (QString key, connections->keys()) {
-        ConnElement *el = static_cast<ConnElement*>(
-                    connections->value(key));
-        if ( NULL!=el ) {
-            QRegExp rx("^\\{Local([0-9]+)_([A-Z]+)\\}$");
-            QString _name = el->getName();
-            if ( _name.contains(rx) ) {
-                //qDebug()<<_name;
-                el->forceCloseConnection();
-                int count = connItemModel->rowCount();
-                ConnItemIndex *idx = NULL;
-                for (int i=0; i<count; i++) {
-                    idx = connItemModel->connItemDataList.at(i);
-                    if ( idx->getName()==_name ) {
-                        int row = connItemModel->connItemDataList.indexOf(idx);
-                        connItemModel->removeRow(row);
-                        delete el;
-                        el = NULL;
-                        connections->remove(_name);
-                        break;
-                    };
-                };
-            } else {
-                QString uri(el->getURI());
-                searchThread->compareURI(uri);
-            };
-        };
-    }
-    if ( !searchThread->isRunning() ) {
-        searchLocalhostConnections();
-    };
+    if ( !waitLocalConn->isRunning() ) waitLocalConn->start();
 }
 void ConnectionList::checkConnection(QModelIndex &_item, bool to_run = TO_RUN)
 {
-  int conn_state;
-  ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-  conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
-  if ( (to_run && conn_state!=RUNNING) || (!to_run && conn_state==RUNNING) )
-    connItemDoubleClicked(_item);
+    int conn_state;
+    ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
+    conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
+    if ( (to_run && conn_state!=RUNNING) || (!to_run && conn_state==RUNNING) )
+        connItemDoubleClicked(_item);
 }
 void ConnectionList::deleteCancelledCreation()
 {
-  deleteCurrentConnection();
+    deleteCurrentConnection();
 }
 void ConnectionList::showMessage(QString title, QString msg)
 {
-  QMessageBox::information(this, title, msg);
-  mainWindowUp();
+    QMessageBox::information(this, title, msg);
+    mainWindowUp();
 }
 void ConnectionList::sendWarning(QString &msg)
 {
@@ -449,6 +389,7 @@ void ConnectionList::sendConnPtr(virConnect *conn, QString &name)
 void ConnectionList::getAuthCredentials(QString &crd)
 {
     ConnElement *obj = static_cast<ConnElement*>(sender());
+    if ( NULL==obj ) return;
     QString text;
     QLineEdit::EchoMode mode = (crd.toLower()=="password") ?
                 QLineEdit::PasswordEchoOnEdit :

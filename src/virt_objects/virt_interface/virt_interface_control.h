@@ -15,11 +15,10 @@ public:
     ~VirtInterfaceControl();
 
 private:
-    VirtIfaceModel      *virtIfaceModel = NULL;
+    VirtIfaceModel      *virtIfaceModel;
     InterfaceToolBar    *toolBar;
 
 public slots:
-    bool                 getThreadState() const;
     void                 stopProcessing();
     bool                 setCurrentWorkConnect(virConnect*);
     void                 setListHeader(QString&);

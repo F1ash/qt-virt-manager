@@ -72,6 +72,7 @@ set (HEADERS
   src/layout/conn_item_model.h
   src/layout/progressbar_delegate.h
   src/layout/search_thread.h
+  src/layout/wait_local_conn.h
 
   src/dock_head_widgets/dock_head_widget.h
   src/dock_head_widgets/bar_name.h
@@ -387,6 +388,7 @@ set (SOURCES
   src/layout/conn_item_model.cpp
   src/layout/progressbar_delegate.cpp
   src/layout/search_thread.cpp
+  src/layout/wait_local_conn.cpp
 
   src/dock_head_widgets/dock_head_widget.cpp
   src/dock_head_widgets/bar_name.cpp

@@ -270,55 +270,6 @@ void TermMainWindow::toggleMenu()
     Properties::Instance()->menuVisible = m_menuBar->isVisible();
 }
 
-void TermMainWindow::closeEvent(QCloseEvent *ev)
-{
-    if (!Properties::Instance()->askOnExit
-            || !consoleTabulator->count())
-    {
-        // #80 - do not save state and geometry in drop mode
-        if (true)
-        {
-            Properties::Instance()->mainWindowGeometry = saveGeometry();
-            Properties::Instance()->mainWindowState = saveState();
-        }
-        Properties::Instance()->saveSettings();
-        ev->accept();
-        return;
-    }
-
-    // ask user for cancel only when there is at least one terminal active in this window
-    QDialog * dia = new QDialog(this);
-    dia->setObjectName("exitDialog");
-    dia->setWindowTitle(tr("Exit QTerminal"));
-
-    QCheckBox * dontAskCheck = new QCheckBox(tr("Do not ask again"), dia);
-    QDialogButtonBox * buttonBox = new QDialogButtonBox(
-                QDialogButtonBox::Yes | QDialogButtonBox::No,
-                Qt::Horizontal,
-                dia);
-
-    connect(buttonBox, SIGNAL(accepted()), dia, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), dia, SLOT(reject()));
-
-    QVBoxLayout * lay = new QVBoxLayout();
-    lay->addWidget(new QLabel(tr("Are you sure you want to exit?")));
-    lay->addWidget(dontAskCheck);
-    lay->addWidget(buttonBox);
-    dia->setLayout(lay);
-
-    if (dia->exec() == QDialog::Accepted) {
-        Properties::Instance()->mainWindowGeometry = saveGeometry();
-        Properties::Instance()->mainWindowState = saveState();
-        Properties::Instance()->askOnExit = !dontAskCheck->isChecked();
-        Properties::Instance()->saveSettings();
-        ev->accept();
-    } else {
-        ev->ignore();
-    }
-
-    dia->deleteLater();
-}
-
 void TermMainWindow::actAbout_triggered()
 {
     QMessageBox::about(this, QString("QTerminal "), tr("A lightweight multiplatform terminal emulator"));

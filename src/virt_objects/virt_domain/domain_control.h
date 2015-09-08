@@ -26,11 +26,10 @@ signals:
     void                     domainToEditor(TASK);
 
 private:
-    DomainModel             *domainModel = NULL;
+    DomainModel             *domainModel;
     DomainToolBar           *toolBar;
 
 public slots:
-    bool                     getThreadState() const;
     void                     stopProcessing();
     bool                     setCurrentWorkConnect(virConnect*);
     void                     setListHeader(QString&);

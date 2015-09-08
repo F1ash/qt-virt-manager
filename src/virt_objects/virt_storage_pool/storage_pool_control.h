@@ -18,11 +18,10 @@ signals:
     void                       overviewStPool(virConnect*, QString&, QString&);
 
 private:
-    StoragePoolModel          *storagePoolModel = NULL;
+    StoragePoolModel          *storagePoolModel;
     StoragePoolToolBar        *toolBar;
 
 public slots:
-    bool                       getThreadState() const;
     void                       stopProcessing();
     bool                       setCurrentWorkConnect(virConnect*);
     void                       setListHeader(QString&);

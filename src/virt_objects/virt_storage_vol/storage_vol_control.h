@@ -21,11 +21,10 @@ signals:
 
 private:
     QString                    currPoolName;
-    StorageVolModel           *storageVolModel = NULL;
+    StorageVolModel           *storageVolModel;
     StorageVolToolBar         *toolBar;
 
 public slots:
-    bool                       getThreadState() const;
     void                       stopProcessing();
     bool                       setCurrentStoragePool(virConnect*, QString&, QString&);
     QString                    getCurrentVolumeName() const;

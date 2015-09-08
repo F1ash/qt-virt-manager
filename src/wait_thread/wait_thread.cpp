@@ -1,67 +1,49 @@
 #include "wait_thread.h"
 #define  PERIOD 333
-#define MINUTE 60000
 
 Wait::Wait(QObject *parent, ConnectionList *wdgList) :
     QThread(parent), wdg(wdgList)
 {
 
 }
-Wait::~Wait()
-{
 
-}
 void Wait::run()
 {
     // close connections
-    int waitTimeout = 0;
     while (wdg->connItemModel->connItemDataList.count()) {
         int count = wdg->connItemModel->connItemDataList.count();
         QStringList to_Delete;
         for (int i=0; i<count; i++) {
             ConnItemIndex *idx = wdg->connItemModel->connItemDataList.at(i);
             if ( NULL==idx ) continue;
-            DATA map = idx->getData();
-            if ( map.value("availability").toBool() && map.value("isRunning").toInt()!=RUNNING ) {
+            QString state = idx->getState();
+            if ( state!="OPENED" ) {
                 to_Delete.append(idx->getName());
-            } else if ( map.value("isRunning").toInt()==RUNNING ) {
-                ConnElement *el = static_cast<ConnElement*>(
-                            wdg->connections->value(idx->getName()));
-                if ( NULL!=el ) el->closeConnection();
+            } else {
+                wdg->connections->value(idx->getName())->closeConnection();
             };
         };
-        foreach (QString _name, to_Delete) {
-            int count = wdg->connItemModel->rowCount();
-            bool exist = false;
-            ConnItemIndex *idx = NULL;
-            for (int i=0; i<count; i++) {
-                idx = wdg->connItemModel->connItemDataList.at(i);
-                if ( idx->getName()==_name ) {
-                    exist = true;
-                    break;
-                }
-            };
-            if ( NULL!=idx ) {
-                int row = wdg->connItemModel->connItemDataList.indexOf(idx);
-                if (exist) {
-                    wdg->connItemModel->removeRow(row);
-                    ConnElement *el = static_cast<ConnElement*>(
-                                wdg->connections->value(_name));
-                    delete el;
-                    el = NULL;
-                    wdg->connections->remove(_name);
+        foreach (QString key, to_Delete) {
+            ConnElement *el = static_cast<ConnElement*>(
+                        wdg->connections->value(key));
+            if ( NULL!=el ) {
+                QString _name = el->getName();
+                int count = wdg->connItemModel->rowCount();
+                ConnItemIndex *idx = NULL;
+                for (int i=0; i<count; i++) {
+                    idx = wdg->connItemModel->connItemDataList.at(i);
+                    if ( idx->getName()==_name ) {
+                        int row = wdg->connItemModel->connItemDataList.indexOf(idx);
+                        wdg->connItemModel->removeRow(row);
+                        wdg->connItemModel->connItemDataList.removeOne(idx);
+                        break;
+                    };
                 };
+                delete el;
+                el = NULL;
+                wdg->connections->remove(key);
             };
         };
         msleep(PERIOD);
-        waitTimeout += PERIOD;
-        if ( waitTimeout>MINUTE ) {
-            foreach (QString key, wdg->connections->keys()) {
-                ConnElement *el = static_cast<ConnElement*>(
-                            wdg->connections->value(key));
-                if ( NULL!=el ) el->forceCloseConnection();
-            };
-        };
     };
-    msleep(PERIOD);
 }

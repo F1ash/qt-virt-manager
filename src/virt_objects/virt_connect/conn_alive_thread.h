@@ -41,7 +41,6 @@ class ConnAliveThread : public QThread
     Q_OBJECT
 public:
     explicit ConnAliveThread(QObject *parent = NULL);
-    ~ConnAliveThread();
     bool            onView;
 
 signals:

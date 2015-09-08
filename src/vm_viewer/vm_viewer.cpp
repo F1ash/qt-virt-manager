@@ -47,13 +47,13 @@ bool VM_Viewer::isActive() const
 void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
-        VM_State = false;
+        ev->ignore();
         QString key = objectName();
         QString msg = QString("'<b>%1</b>' VM viewer closed.")
                 .arg(domain);
         sendErrMsg(msg);
-        ev->accept();
-        emit finished(key);
+        if (VM_State) emit finished(key);
+        VM_State = false;
     }
 }
 void VM_Viewer::sendErrMsg(QString &msg)

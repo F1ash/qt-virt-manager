@@ -32,6 +32,15 @@ LXC_Viewer::LXC_Viewer(
 LXC_Viewer::~LXC_Viewer()
 {
     qDebug()<<"LXC_Viewer destroy:";
+    if ( timerId>0 ) {
+        killTimer(timerId);
+        timerId = 0;
+    };
+    if ( killTimerId>0 ) {
+        killTimer(killTimerId);
+        killTimerId = 0;
+    };
+    VM_State = false;
     QString msg;
     if ( NULL!=viewerThread ) {
         viewerThread->blockSignals(true);
@@ -129,7 +138,9 @@ PTY opened. Terminal is active.").arg(domain);
 }
 void LXC_Viewer::closeEvent(QCloseEvent *ev)
 {
-    ev->ignore();
-    QString key = QString("%1_%2").arg(connName).arg(domain);
-    emit finished(key);
+    if ( ev->type()==QEvent::Close ) {
+        ev->ignore();
+        QString key = QString("%1_%2").arg(connName).arg(domain);
+        if (VM_State) emit finished(key);
+    };
 }
