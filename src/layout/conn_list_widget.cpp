@@ -110,8 +110,8 @@ void ConnectionList::deleteCurrentConnection()
                      this, SLOT(mainWindowUp()));
           disconnect(connections->value(connection), SIGNAL(warning(QString&)),
                      this, SLOT(sendWarning(QString&)));
-          disconnect(connections->value(connection), SIGNAL(connPtr(virConnect*, QString&)),
-                     this, SLOT(sendConnPtr(virConnect*, QString&)));
+          disconnect(connections->value(connection), SIGNAL(connPtr(virConnectPtr*, QString&)),
+                     this, SLOT(sendConnPtr(virConnectPtr*, QString&)));
           disconnect(connections->value(connection), SIGNAL(authRequested(QString&)),
                      this, SLOT(getAuthCredentials(QString&)));
           disconnect(connections->value(connection), SIGNAL(domStateChanged(Result)),
@@ -157,10 +157,10 @@ void ConnectionList::closeConnection(QModelIndex &_item)
 {
     checkConnection(_item, TO_STOP);
 }
-virConnectPtr ConnectionList::getConnection(QString &name)
+virConnectPtr* ConnectionList::getConnectionPtr(QString &name)
 {
     return (connections->contains(name)) ?
-            connections->value(name)->getConnection()
+            connections->value(name)->getConnectionPtr()
             : NULL;
 }
 void ConnectionList::stopProcessing()
@@ -193,7 +193,7 @@ void ConnectionList::connItemClicked(const QPoint &pos)
   if ( !conn_Status.value("availability", NOT_AVAILABLE).toBool() ) return;
   bool to_run = TO_RUN;
   ConnectMenu *connectMenu = new ConnectMenu(this);
-  if ( conn_Status.value("isRunning", STOPPED)==RUNNING ) {
+  if ( conn_Status.value("isRunning", STOPPED).toInt()==RUNNING ) {
       connectMenu->act->setText("Close Connection");
       connectMenu->act->setIcon(QIcon::fromTheme("stop"));
       connect(connectMenu->act, SIGNAL(triggered()),
@@ -292,8 +292,8 @@ void ConnectionList::createConnection(QModelIndex &_item)
             this, SLOT(mainWindowUp()));
     connect(connections->value(key), SIGNAL(warning(QString&)),
             this, SLOT(sendWarning(QString&)));
-    connect(connections->value(key), SIGNAL(connPtr(virConnect*, QString&)),
-            this, SLOT(sendConnPtr(virConnect*, QString&)));
+    connect(connections->value(key), SIGNAL(connPtr(virConnectPtr*, QString&)),
+            this, SLOT(sendConnPtr(virConnectPtr*, QString&)));
     connect(connections->value(key), SIGNAL(authRequested(QString&)),
             this, SLOT(getAuthCredentials(QString&)));
     connect(connections->value(key), SIGNAL(domStateChanged(Result)),
@@ -339,8 +339,8 @@ void ConnectionList::createLocalConnection(QString &uri)
             this, SLOT(mainWindowUp()));
     connect(connections->value(key), SIGNAL(warning(QString&)),
             this, SLOT(sendWarning(QString&)));
-    connect(connections->value(key), SIGNAL(connPtr(virConnect*, QString&)),
-            this, SLOT(sendConnPtr(virConnect*, QString&)));
+    connect(connections->value(key), SIGNAL(connPtr(virConnectPtr*, QString&)),
+            this, SLOT(sendConnPtr(virConnectPtr*, QString&)));
     connect(connections->value(key), SIGNAL(authRequested(QString&)),
             this, SLOT(getAuthCredentials(QString&)));
     connect(connections->value(key), SIGNAL(domStateChanged(Result)),
@@ -382,9 +382,9 @@ void ConnectionList::mainWindowUp()
 {
     emit messageShowed();
 }
-void ConnectionList::sendConnPtr(virConnect *conn, QString &name)
+void ConnectionList::sendConnPtr(virConnectPtr *_connPtr, QString &name)
 {
-    emit connPtr(conn, name);
+    emit connPtr(_connPtr, name);
 }
 void ConnectionList::getAuthCredentials(QString &crd)
 {

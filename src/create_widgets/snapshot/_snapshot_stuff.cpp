@@ -24,10 +24,10 @@ QDomDocument _SnapshotStuff::getElements() const
 {
     return QDomDocument();
 }
-void _SnapshotStuff::setParameters(virConnectPtr _conn, QString &_domName)
+void _SnapshotStuff::setParameters(virConnectPtr* connPtr, QString &_domName)
 {
     SetDisksDataThread *setThread = new SetDisksDataThread(this);
-    setThread->setCurrentWorkConnect(_conn, 0, _domName);
+    setThread->setCurrentWorkConnect(connPtr, 0, _domName);
     connect(setThread, SIGNAL(diskData(QDomElement&)),
             this, SLOT(setDiskItem(QDomElement&)));
     connect(setThread, SIGNAL(errorMsg(QString&,uint)),

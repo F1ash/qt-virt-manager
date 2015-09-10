@@ -15,8 +15,8 @@ class _UseEncryption : public QWidget
     Q_OBJECT
 public:
     explicit _UseEncryption(
-            QWidget         *parent = NULL,
-            virConnectPtr    _conn  = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
 
 signals:
     void                 dataChanged();
@@ -31,7 +31,7 @@ private:
     QLabel              *info;
     QVBoxLayout         *commonLayout;
 
-    virConnectPtr        currWorkConnection;
+    virConnectPtr*       currConnPtr;
     SecretControlThread *thread;
 
 public slots:

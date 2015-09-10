@@ -11,8 +11,8 @@ class PCI_Passthrough : public _QWidget
     Q_OBJECT
 public:
     explicit PCI_Passthrough(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
 
 private:
     QString              connType;

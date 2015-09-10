@@ -1,9 +1,8 @@
 #include "tcp_tunnel.h"
 
 TCP_Tunnel::TCP_Tunnel(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     typeLabel =new QLabel("Type:", this);
     addrLabel = new QLabel("Address:", this);

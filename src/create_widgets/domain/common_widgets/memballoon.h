@@ -9,8 +9,8 @@ class MemBalloon : public _QWidget
     Q_OBJECT
 public:
     explicit MemBalloon(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
     QComboBox       *model;
     QCheckBox       *periodLabel;
     QSpinBox        *period;

@@ -15,8 +15,8 @@ class DeviceData : public QWidget
     Q_OBJECT
 public:
     explicit DeviceData(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  conn    = NULL);
 
 signals:
     void             errorMsg(QString);
@@ -43,7 +43,7 @@ private:
     QString          DeviceXMLDesc;
     QString          currentDeviceXMLDesc;
     int              currentItemRow = -1;
-    virConnectPtr    currWorkConnection = NULL;
+    virConnectPtr*   currConnPtr;
     virNodeDevice  **nodeDevices = NULL;
     virErrorPtr      virtErrors;
 

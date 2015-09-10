@@ -23,6 +23,11 @@ ConnElement::ConnElement(QObject *parent) :
             this, SIGNAL(netStateChanged(Result)));
     connect(connAliveThread, SIGNAL(connClosed(bool)),
             this, SLOT(forwardConnClosedSignal(bool)));
+    // change element state in the thread's state changed case only
+    connect(connAliveThread, SIGNAL(started()),
+            this, SLOT(connAliveThreadStarted()));
+    connect(connAliveThread, SIGNAL(finished()),
+            this, SLOT(connAliveThreadFinished()));
 }
 
 /* public slots */
@@ -57,7 +62,6 @@ void ConnElement::setItemReferenceForLocal(ConnItemModel *model, ConnItemIndex *
 void ConnElement::openConnection()
 {
     conn_Status.insert("availability", QVariant(NOT_AVAILABLE));
-    conn_Status.insert("isRunning", QVariant(RUNNING));
     own_index->setData(conn_Status);
     connAliveThread->setData(URI);
     if ( !connAliveThread->isRunning() ) connAliveThread->start();
@@ -75,16 +79,16 @@ void ConnElement::closeConnection()
 }
 void ConnElement::showConnectionData()
 {
-    virConnect *conn = NULL;
-    conn = connAliveThread->getConnection();
+    virConnectPtr *conn = NULL;
+    conn = connAliveThread->getConnectionPtr();
     //qDebug()<<"showConnectionData:"<<name<<QVariant((conn!=NULL)?true:false).toString()<<conn;
     emit connPtr(conn, name);
     int row = own_model->connItemDataList.indexOf(own_index);
     own_model->setData(own_model->index(row, 0), true, Qt::DecorationRole);
 }
-virConnect* ConnElement::getConnection() const
+virConnectPtr* ConnElement::getConnectionPtr() const
 {
-    return connAliveThread->getConnection();
+    return connAliveThread->getConnectionPtr();
 }
 void ConnElement::setAuthCredentials(QString &crd, QString &text)
 {
@@ -179,7 +183,6 @@ void ConnElement::setConnectionState(CONN_STATE status)
       //URI.clear();
       //URI.append("-");
   } else _diff = checkTimeout + 1;
-  conn_Status.insert("isRunning", QVariant(status));
   conn_Status.insert("availability", QVariant(AVAILABLE));
   conn_Status.insert("onView", QVariant(false));
   own_index->setData(conn_Status);
@@ -255,4 +258,14 @@ void ConnElement::getAuthCredentials(QString &crd)
 void ConnElement::forwardConnClosedSignal(bool onView)
 {
     emit connClosed(onView, name);
+}
+void ConnElement::connAliveThreadStarted()
+{
+    conn_Status.insert("isRunning", QVariant(RUNNING));
+    own_index->setData(conn_Status);
+}
+void ConnElement::connAliveThreadFinished()
+{
+    conn_Status.insert("isRunning", QVariant(STOPPED));
+    own_index->setData(conn_Status);
 }

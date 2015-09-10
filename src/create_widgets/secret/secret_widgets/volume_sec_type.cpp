@@ -4,8 +4,8 @@
  * http://libvirt.org/formatsecret.html#VolumeUsageType
  */
 
-VolumeSecType::VolumeSecType(QWidget *parent, virConnectPtr _conn) :
-    _SecType(parent, _conn)
+VolumeSecType::VolumeSecType(QWidget *parent, virConnectPtr *connPtr) :
+    _SecType(parent, connPtr)
 {
     usage = new QLineEdit(this);
     find  = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
@@ -42,7 +42,7 @@ QDomDocument VolumeSecType::getSecStuff() const
 void VolumeSecType::showVolumeChoose()
 {
     VirtVolumeDialog *dialog = new VirtVolumeDialog(
-                this, currWorkConnection);
+                this, currConnPtr);
     dialog->exec();
     usage->setText(dialog->getResult().path);
     dialog->deleteLater();

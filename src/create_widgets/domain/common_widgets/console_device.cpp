@@ -31,13 +31,10 @@ Since 1.0.2
  */
 
 ConsoleDevice::ConsoleDevice(
-        QWidget *parent,
-        virConnectPtr conn,
-        virDomainPtr domain
-        ) :
-    CharDevice(parent, conn, domain, QString("console"))
+        QWidget *parent, virConnectPtr *connPtr, virDomainPtr domain) :
+    CharDevice(parent, connPtr, domain, QString("console"))
 {
-    QString connType = QString::fromUtf8(virConnectGetType(currWorkConnection));
+    QString connType = QString::fromUtf8(virConnectGetType(*currConnPtr));
     devType->clear();
     devType->addItem("PseudoTTY (pty)", "pty");
     targetType = new QComboBox(this);

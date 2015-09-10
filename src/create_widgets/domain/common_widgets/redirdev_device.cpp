@@ -5,9 +5,8 @@
  */
 
 RedirDevDevice::RedirDevDevice(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     type = new QComboBox(this);
     type->addItem("TCP channel", "tcp");

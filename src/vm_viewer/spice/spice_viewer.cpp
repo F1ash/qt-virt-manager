@@ -1,30 +1,30 @@
 #include "spice_viewer.h"
 
 spcHlpThread::spcHlpThread(
-        QObject *parent, virConnect *_conn, QString _domain) :
-    QThread(parent), currWorkConnection(_conn), domain(_domain)
+        QObject *parent, virConnectPtr *connPtr, QString _domain) :
+    QThread(parent), currConnPtr(connPtr), domain(_domain)
 {
 
 }
 void spcHlpThread::run()
 {
-    if ( NULL!=currWorkConnection )
-        domainPtr =virDomainLookupByName(
-                    currWorkConnection, domain.toUtf8().data());
-    uri.append(virConnectGetURI(currWorkConnection));
+    if ( NULL==currConnPtr ) return;
+    if ( virConnectRef(*currConnPtr)<0 ) return;
+    domainPtr =virDomainLookupByName(
+                    *currConnPtr, domain.toUtf8().data());
+    uri.append(virConnectGetURI(*currConnPtr));
     // flag=0 for get running domain xml-description
     runXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
+    virConnectClose(*currConnPtr);
 }
 
 Spice_Viewer::Spice_Viewer(
-        QWidget      *parent,
-        virConnect   *conn,
-        QString       arg1,
-        QString       arg2) :
-    VM_Viewer(parent, conn, arg1, arg2)
+        QWidget *parent, virConnectPtr *connPtr,
+        QString arg1, QString arg2) :
+    VM_Viewer(parent, connPtr, arg1, arg2)
 {
     TYPE = "SPICE";
-    hlpThread = new spcHlpThread(this, jobConnect, domain);
+    hlpThread = new spcHlpThread(this, currConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
     hlpThread->start();

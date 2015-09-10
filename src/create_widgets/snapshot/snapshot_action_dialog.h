@@ -27,15 +27,15 @@ class SnapshotActionDialog : public QDialog
     Q_OBJECT
 public:
     explicit SnapshotActionDialog(
-            QWidget          *parent = NULL,
-            virConnectPtr     currConnect = NULL,
-            QString           _domName = QString());
+            QWidget        *parent      = NULL,
+            virConnectPtr*  currConnPtr = NULL,
+            QString         _domName    = QString());
     ~SnapshotActionDialog();
 
 signals:
 
 private:
-    virConnectPtr        currJobConnect;
+    virConnectPtr*       currConnPtr;
     virDomainPtr         domain = NULL;
     const QString        domName;
     QStringList          params;

@@ -16,13 +16,12 @@
 #define XEN_NET_TYPES QStringList()<<"None"
 
 NetInterfaces::NetInterfaces(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     typeLabel = new QLabel("Type:", this);
     type = new QComboBox(this);
-    connType = QString(virConnectGetType(currWorkConnection)).toLower();
+    connType = QString(virConnectGetType(*currConnPtr)).toLower();
     if ( connType=="lxc" ) {
         type->addItems(LXC_NET_TYPES);
     } else if ( connType=="qemu" ) {
@@ -65,16 +64,16 @@ void NetInterfaces::setWidgets(QString _type)
     } else if ( _type.startsWith("tcp") ) {
         info->addWidget(new TCP_Tunnel(this));
     } else if ( _type.startsWith("pci") ) {
-        info->addWidget(new PCI_Passthrough(this, currWorkConnection));
+        info->addWidget(new PCI_Passthrough(this, currConnPtr));
     } else if ( _type.startsWith("direct") ) {
-        info->addWidget(new DirectAttachment(this, currWorkConnection));
+        info->addWidget(new DirectAttachment(this, currConnPtr));
     } else if ( _type.startsWith("generic") ) {
-        info->addWidget(new Generic_Ethernet(this, currWorkConnection));
+        info->addWidget(new Generic_Ethernet(this, currConnPtr));
     } else if ( _type.startsWith("userspace") ) {
-        info->addWidget(new Userspace_SLIRP(this, currWorkConnection));
+        info->addWidget(new Userspace_SLIRP(this, currConnPtr));
     } else if ( _type.startsWith("bridge") ) {
-        info->addWidget(new Bridge_to_LAN(this, currWorkConnection));
+        info->addWidget(new Bridge_to_LAN(this, currConnPtr));
     } else if ( _type.startsWith("virtual") ) {
-        info->addWidget(new Virtual_Network(this, currWorkConnection));
+        info->addWidget(new Virtual_Network(this, currConnPtr));
     };
 }

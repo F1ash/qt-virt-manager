@@ -1,9 +1,8 @@
 #include "pci_passthrough.h"
 
 PCI_Passthrough::PCI_Passthrough(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     attentionIcon = new QLabel(this);
     attentionIcon->setPixmap(QIcon::fromTheme("dialog-warning")
@@ -11,7 +10,7 @@ PCI_Passthrough::PCI_Passthrough(
     attention = new QLabel("WARNING: only for SR-IOV\n(Single Root I/O Virtualization)", this);
     driverLabel = new QLabel("Driver:", this);
     driver = new QComboBox(this);
-    connType = QString(virConnectGetType(currWorkConnection)).toLower();
+    connType = QString(virConnectGetType(*currConnPtr)).toLower();
     if ( connType=="lxc" ) {
         driver->addItem("VFIO");
     } else if ( connType=="qemu" ) {

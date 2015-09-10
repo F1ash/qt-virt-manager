@@ -11,23 +11,25 @@ void SecretControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
-    keep_alive = true;
-    // for new virConnect usage create the new virConnectRef[erence]
-    int ret = virConnectRef(task.sourceConn);
-    if ( ret<0 ) {
-        task.sourceConn = NULL;
-        sendConnErrors();
-        keep_alive = false;
+    if ( NULL!=task.srcConnPtr ) {
+        // for new virConnect usage create the new virConnectRef[erence]
+        int ret = virConnectRef(*task.srcConnPtr);
+        if ( ret<0 ) {
+            task.srcConnPtr = NULL;
+            sendConnErrors();
+            keep_alive = false;
+        } else
+            keep_alive = true;
     };
     if ( keep_alive && !isRunning() ) {
-        if ( NULL!=task.sourceConn ) start();
-        else {
-            Result result;
-            result.type   = "secret";
-            result.number = number;
-            result.action = _EMPTY_ACTION;
-            emit resultData(result);
-        };
+        currConnPtr = task.srcConnPtr;
+        start();
+    } else {
+        Result result;
+        result.type   = "secret";
+        result.number = number;
+        result.action = _EMPTY_ACTION;
+        emit resultData(result);
     };
 }
 
@@ -51,7 +53,8 @@ void SecretControlThread::run()
     default:
         break;
     };
-    virConnectClose(task.sourceConn);
+    // task.srcConnPtr reference will closed in destructor as currConnPtr
+    //virConnectClose(*task.srcConnPtr);
     result.type   = "secret";
     result.number = number;
     result.action = task.action;
@@ -61,11 +64,11 @@ Result SecretControlThread::getAllSecretList()
 {
     Result result;
     QStringList virtSecretList;
-    if ( task.sourceConn!=NULL && keep_alive ) {
+    if ( task.srcConnPtr!=NULL && keep_alive ) {
         virSecretPtr *secrets = NULL;
         //extra flags; not used yet, so callers should always pass 0
         unsigned int flags = 0;
-        int ret = virConnectListAllSecrets(task.sourceConn, &secrets, flags);
+        int ret = virConnectListAllSecrets(*task.srcConnPtr, &secrets, flags);
         if ( ret<0 ) {
             result.err = sendConnErrors();
             return result;
@@ -141,7 +144,7 @@ Result SecretControlThread::defineSecret()
     //extra flags; not used yet, so callers should always pass 0
     int flags = 0;
     virSecretPtr secret = virSecretDefineXML(
-                task.sourceConn, xmlData.data(), flags);
+                *task.srcConnPtr, xmlData.data(), flags);
     if ( secret==NULL ) {
         result.err = sendConnErrors();
         return result;
@@ -170,7 +173,7 @@ Result SecretControlThread::undefineSecret()
     QString uuid = task.object;
     bool deleted = false;
     virSecretPtr secret = virSecretLookupByUUIDString(
-                task.sourceConn, uuid.toUtf8().data());
+                *task.srcConnPtr, uuid.toUtf8().data());
     if ( secret!=NULL ) {
         deleted = (virSecretUndefine(secret)+1) ? true : false;
         if (!deleted)
@@ -192,7 +195,7 @@ Result SecretControlThread::getVirtSecretXMLDesc()
     bool read = false;
     char *Returns = NULL;
     virSecretPtr secret = virSecretLookupByUUIDString(
-                task.sourceConn, uuid.toUtf8().data());
+                *task.srcConnPtr, uuid.toUtf8().data());
     if ( secret!=NULL ) {
         //extra flags; not used yet, so callers should always pass 0
         int flags = 0;

@@ -105,14 +105,14 @@ private slots:
     void writeToErrorLog(QString&);
     void changeLogViewerVisibility();
     Qt::DockWidgetArea getDockArea(int) const;
-    void receiveConnPtr(virConnect*, QString&);
+    void receiveConnPtr(virConnectPtr*, QString&);
     void stopConnProcessing(bool, QString &);
     void stopProcessing();
-    void invokeVMDisplay(virConnect*, QString, QString);
+    void invokeVMDisplay(virConnectPtr*, QString, QString);
     void deleteVMDisplay(QString&);
     void deleteVMDisplay(QString, QString);
     void buildMigrateArgs(TASK);
-    void overviewStoragePool(virConnect*,QString&,QString&);
+    void overviewStoragePool(virConnectPtr*, QString&, QString&);
     void deleteStPoolOverview(QString&);
     void invokeDomainEditor(TASK);
     void deleteDomainEditor(QString&);

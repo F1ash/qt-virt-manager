@@ -1,8 +1,8 @@
 #include "virtvolume_dialog.h"
 
 VirtVolumeDialog::VirtVolumeDialog(
-        QWidget *parent, virConnectPtr conn, QString _type) :
-    QDialog(parent), currWorkConnection(conn), type(_type)
+        QWidget *parent, virConnectPtr *connPtr, QString _type) :
+    QDialog(parent), currConnPtr(connPtr), type(_type)
 {
     setModal(true);
     poolList = new QListWidget(this);
@@ -70,7 +70,7 @@ void VirtVolumeDialog::setPoolList()
     setEnabled(false);
     TASK _task;
     _task.type          = "pool";
-    _task.sourceConn    = currWorkConnection;
+    _task.srcConnPtr    = currConnPtr;
     _task.action        = GET_ALL_ENTITY_DATA;
     storagePoolThread->execAction(0, _task);
 }
@@ -92,7 +92,7 @@ void VirtVolumeDialog::showVolumes(QListWidgetItem *_item)
                 QString("%1_%2").arg(currConnName).arg(_poolName));
     // initiate content
     volumes->setCurrentStoragePool(
-                currWorkConnection, currConnName, _poolName);
+                currConnPtr, currConnName, _poolName);
 }
 void VirtVolumeDialog::showMsg(QString &msg)
 {

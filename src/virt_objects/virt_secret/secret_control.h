@@ -20,7 +20,7 @@ private:
 
 public slots:
     void                 stopProcessing();
-    bool                 setCurrentWorkConnect(virConnect*);
+    bool                 setCurrentWorkConnect(virConnectPtr*);
     void                 setListHeader(QString&);
     QString              getCurrentSecUsage() const;
     QString              getCurrentSecUUID() const;

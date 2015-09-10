@@ -24,7 +24,7 @@ public:
 signals:
     void             result(QString&);
 private:
-    virConnect      *currWorkConnection = NULL;
+    virConnect      *currConnPtr = NULL;
 };
 
 typedef QMap<QString, _QWidget*> WidgetList;
@@ -46,7 +46,7 @@ signals:
 
 private:
     QSettings        settings;
-    virConnect      *currWorkConnection = NULL;
+    virConnectPtr*   currConnPtr = NULL;
     QString          xmlFileName, xmlDesc;
     virErrorPtr      virtErrors;
     QString          capabilities;

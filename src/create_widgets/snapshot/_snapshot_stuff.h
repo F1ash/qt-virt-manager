@@ -26,7 +26,7 @@ public:
     _Disks                  *disks;
     QVBoxLayout             *commonLayout;
     virtual QDomDocument     getElements() const;
-    void                     setParameters(virConnectPtr, QString&);
+    void                     setParameters(virConnectPtr*, QString&);
 
 signals:
     void                     errMsg(QString&);

@@ -32,13 +32,10 @@
 // TODO/FXIME: probably remove. QSS makes it unusable on mac...
 #define QSS_DROP    "TermMainWindow {border: 1px solid rgba(0, 0, 0, 50%);}\n"
 
-TermMainWindow::TermMainWindow(QWidget *parent,
-        virConnect *conn,
-        QString arg1,
-        QString arg2,
-        const QString& work_dir,
-        const QString& command) :
-      VM_Viewer(parent, conn, arg1, arg2),
+TermMainWindow::TermMainWindow(
+        QWidget *parent, virConnectPtr *connPtr, QString arg1,
+        QString arg2, const QString& work_dir, const QString& command) :
+      VM_Viewer(parent, connPtr, arg1, arg2),
       m_initShell(command),
       m_initWorkDir(work_dir)
 {

@@ -50,7 +50,7 @@ struct Result {
 
 struct TASK {
     // base parameters
-    virConnectPtr       sourceConn  = NULL;
+    virConnectPtr*      srcConnPtr  = NULL;
     QString             srcConName  = QString();
     QString             object      = QString();
     Actions             action      = _EMPTY_ACTION;
@@ -59,7 +59,7 @@ struct TASK {
 
     // details
     struct          DETAILS {
-        virConnectPtr   destConn    = NULL;
+        virConnectPtr*  destConnPtr = NULL;
         qulonglong      offset      = 0;
         qulonglong      size        = 0;
         uint            sign        = 0;

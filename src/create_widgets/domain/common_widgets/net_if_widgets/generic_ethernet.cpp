@@ -1,9 +1,8 @@
 #include "generic_ethernet.h"
 
 Generic_Ethernet::Generic_Ethernet(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     targetLabel = new QLabel("Target Device name:", this);
     scriptLabel = new QLabel("Script path:", this);

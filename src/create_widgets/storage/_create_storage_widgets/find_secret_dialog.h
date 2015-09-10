@@ -19,8 +19,8 @@ class FindSecretDialog : public QDialog
     Q_OBJECT
 public:
     explicit FindSecretDialog(
-            QWidget         *parent = NULL,
-            virConnectPtr    _conn  = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
 
 private:
     VirtSecretControl   *secrets;
@@ -33,7 +33,7 @@ private:
     QVBoxLayout         *commonLayout;
     SecretControlThread *virtSecretThread;
 
-    virConnectPtr        currWorkConnection;
+    virConnectPtr*       currConnPtr;
 
 public slots:
     FSD_Result           getResult() const;

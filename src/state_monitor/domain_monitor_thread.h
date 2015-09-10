@@ -12,29 +12,23 @@ class DomainMonitorThread : public QThread
     Q_OBJECT
 public:
     explicit DomainMonitorThread(
-            QObject *parent = NULL,
-            virConnectPtr conn = NULL,
-            QString _domainName = QString());
+            QObject        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL,
+            QString         _domainName = QString());
     ~DomainMonitorThread();
-    static  int          domEventCallback(
-                                virConnectPtr, virDomainPtr,
-                                qulonglong, void*);
 
 signals:
     void                 dataChanged(int, int, int, int);
 
 private:
-    virConnectPtr        currWorkConn;
+    virConnectPtr*       currConnPtr;
     virDomainPtr         domain;
     const QString        domainName;
     quint64              prev_cpuTime;
     QTime                tMark;
     bool                 firstStep;
-    int                  domainsBalloonChangeCallback;
-    qulonglong           baloonSize;
 
 public slots:
-    void                 stop();
 
 private slots:
     void                 run();

@@ -1,9 +1,8 @@
 #include "net_interfaces_edit.h"
 
 NetInterfaces_Edit::NetInterfaces_Edit(
-        QWidget *parent,
-        virConnectPtr conn) :
-    NetInterfaces(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    NetInterfaces(parent, connPtr)
 {
     connect(type, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));

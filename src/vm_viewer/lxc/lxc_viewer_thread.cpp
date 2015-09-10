@@ -10,6 +10,7 @@ LXC_ViewerThread::LXC_ViewerThread(QObject *parent) :
     domainPtr = NULL;
     streamRegistered = false;
     connRef = false;
+    EndOfFile = false;
 }
 LXC_ViewerThread::~LXC_ViewerThread()
 {
@@ -19,7 +20,7 @@ LXC_ViewerThread::~LXC_ViewerThread()
         qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd;
     };
     closeStream();
-    if ( connRef ) virConnectClose(currWorkConnection);
+    if ( connRef ) virConnectClose(*currConnPtr);
     wait(30000);
 }
 
@@ -32,9 +33,9 @@ void LXC_ViewerThread::setData(QString &_dom, virDomainPtr _domPtr, int fd)
 }
 void LXC_ViewerThread::run()
 {
-    connRef = virConnectRef(currWorkConnection)+1>0;
+    connRef = virConnectRef(*currConnPtr)+1>0;
     stream = (connRef)?
-                virStreamNew( currWorkConnection, VIR_STREAM_NONBLOCK ):NULL;
+                virStreamNew( *currConnPtr, VIR_STREAM_NONBLOCK ):NULL;
     if ( NULL==stream ) {
         sendConnErrors();
         keep_alive = false;
@@ -143,8 +144,7 @@ void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
     qDebug()<<"sendDataToDisplay"<<"to"<<ptySlaveFd;
     if ( NULL==_stream || !keep_alive || !streamRegistered ) {
         qDebug()<<"sendDataToDisplay"<<"callback stream is NULL or deregistered or thread is died";
-        keep_alive = false;
-        closeStream();
+        msleep(333);
         return;
     };
     QString msg;
@@ -159,8 +159,8 @@ void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
     case 0:
         // Received EOF from stream, closing
         qDebug()<<"sendDataToDisplay"<<"Received EOF";
-        if ( keep_alive ) {
-            keep_alive = false;
+        if ( !EndOfFile ) {
+            EndOfFile = true;
             closeStream();
             if (ptySlaveFd) {
                 write(ptySlaveFd, "\nEOF...", 7);
@@ -170,6 +170,7 @@ void LXC_ViewerThread::sendDataToDisplay(virStreamPtr _stream)
             };
             msg = QString("In '<b>%1</b>': EOF.").arg(domain);
             emit errorMsg(msg, number);
+            qDebug()<<"emit errMsg";
         };
         break;
     case -1:

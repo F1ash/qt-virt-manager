@@ -9,8 +9,8 @@ class USB_Host_Device : public _QWidget
     Q_OBJECT
 public:
     explicit USB_Host_Device(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
 
 private:
     QListWidget     *devList;

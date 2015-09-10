@@ -1,9 +1,8 @@
 #include "multicast_tunnel.h"
 
 MultiCast_Tunnel::MultiCast_Tunnel(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     addrLabel = new QLabel("Address:", this);
     portLabel = new QLabel("Port:", this);

@@ -1,17 +1,16 @@
 #include "host_device_edit.h"
 
 HostDevice_Edit::HostDevice_Edit(
-        QWidget *parent,
-        virConnectPtr conn) :
-    HostDevice(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    HostDevice(parent, connPtr)
 {
     info->setVisible(false);
     infoEdit = new QStackedWidget(this);
-    QString connType = QString(virConnectGetType(currWorkConnection)).toLower();
+    QString connType = QString(virConnectGetType(*currConnPtr)).toLower();
     if ( connType=="qemu" ) {
         infoEdit->addWidget(new USB_Host_Device_Edit(this));
         infoEdit->addWidget(new PCI_Host_Device_Edit(this));
-        infoEdit->addWidget(new SCSI_Host_Device_Edit(this, currWorkConnection));
+        infoEdit->addWidget(new SCSI_Host_Device_Edit(this, currConnPtr));
     } else if ( connType=="lxc" ) {
         infoEdit->addWidget(new USB_Host_Device_Edit(this));
         infoEdit->addWidget(new BCh_Host_Device_Edit(this));

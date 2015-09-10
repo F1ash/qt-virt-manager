@@ -1,9 +1,9 @@
 #include "_pool_stuff.h"
 
-_Pool_Stuff::_Pool_Stuff(QWidget *parent, virConnectPtr _conn) :
+_Pool_Stuff::_Pool_Stuff(QWidget *parent, virConnectPtr* connPtr) :
     QWidget(parent)
 {
-    source = new _Storage_Source(this, _conn);
+    source = new _Storage_Source(this, connPtr);
     target = new _Storage_Target(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(source);

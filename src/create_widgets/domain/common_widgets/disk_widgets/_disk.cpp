@@ -1,9 +1,8 @@
 #include "_disk.h"
 
 _Disk::_Disk(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr* connPtr) :
+    _QWidget(parent, connPtr)
 {
     baseLayout = new QGridLayout();
     baseWdg = new QWidget(this);
@@ -15,7 +14,7 @@ _Disk::_Disk(
     target = new _Target(this);
     secLabels = new SecLabels(this);
     secLabels->setVisible(false);
-    encrypt = new _UseEncryption(this, currWorkConnection);
+    encrypt = new _UseEncryption(this, currConnPtr);
     encrypt->setVisible(false);
     readOnly = new _ReadOnly(this);
     addr = new DeviceAddress(this);

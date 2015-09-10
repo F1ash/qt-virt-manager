@@ -40,59 +40,6 @@ ConnSettings::ConnSettings(QWidget *parent) :
     initParameters();
     timerId = startTimer(1000);
 }
-ConnSettings::~ConnSettings()
-{
-    disconnect(ok, SIGNAL(clicked()), this, SLOT(saveConnect()));
-    disconnect(cancel, SIGNAL(clicked()), this, SLOT(cancelConnect()));
-    disconnect(ConnName, SIGNAL(textChanged(QString)), this, SLOT(set_Title_Name(QString)));
-    disconnect(Drivers, SIGNAL(currentIndexChanged(QString)), this, SLOT(changeConnParameters(QString)));
-
-    delete atStart;
-    atStart = NULL;
-    delete ok;
-    ok = NULL;
-    delete cancel;
-    cancel = NULL;
-    delete warning;
-    warning = NULL;
-    delete URI;
-    URI = NULL;
-    delete buttonsLayout;
-    buttonsLayout = NULL;
-    delete buttons;
-    buttons = NULL;
-
-    delete connName;
-    connName = NULL;
-    delete ConnName;
-    ConnName = NULL;
-    delete driver;
-    driver = NULL;
-    delete Drivers;
-    Drivers = NULL;
-    delete transport;
-    transport = NULL;
-    delete Transports;
-    Transports = NULL;
-    delete host;
-    host = NULL;
-    delete Host;
-    Host = NULL;
-    delete path;
-    path = NULL;
-    delete Path;
-    Path = NULL;
-    delete extra;
-    extra = NULL;
-    delete Extra;
-    Extra = NULL;
-    delete paramLayout;
-    paramLayout = NULL;
-    delete parameters;
-    parameters = NULL;
-    delete commonLayout;
-    commonLayout = NULL;
-}
 void ConnSettings::initParamLayout()
 {
     connName = new QLabel("Connection:", this);

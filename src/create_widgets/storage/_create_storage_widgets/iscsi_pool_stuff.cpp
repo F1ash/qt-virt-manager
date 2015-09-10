@@ -4,8 +4,8 @@
  * http://libvirt.org/storage.html#StorageBackendISCSI
  */
 
-iSCSI_Pool_Stuff::iSCSI_Pool_Stuff(QWidget *parent, virConnectPtr _conn) :
-    _Pool_Stuff(parent, _conn)
+iSCSI_Pool_Stuff::iSCSI_Pool_Stuff(QWidget *parent, virConnectPtr *connPtr) :
+    _Pool_Stuff(parent, connPtr)
 {
     source->deviceLabel->setVisible(true);
     source->device->setVisible(true);

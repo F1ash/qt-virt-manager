@@ -4,9 +4,8 @@
     <<"nbd"<<"iscsi"<<"rbd"<<"sheepdog"<<"gluster"
 
 Network_Disk::Network_Disk(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _Disk(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _Disk(parent, connPtr)
 {
     protocolLabel = new QLabel("Protocol:", this);
     protocol = new QComboBox(this);
@@ -16,7 +15,7 @@ Network_Disk::Network_Disk(
     sourceLabel = new QPushButton("Source:", this);
     sourceName = new QLineEdit(this);
     sourceName->setPlaceholderText("Source name or URL path");
-    auth = new _Storage_Auth(this, currWorkConnection);
+    auth = new _Storage_Auth(this, currConnPtr);
     auth->setVisible(false);
 
     baseLayout->addWidget(protocolLabel, 0, 0);
@@ -277,7 +276,7 @@ void Network_Disk::getVolumeNames()
     if ( volumeDialog==NULL ) {
         QString _type = protocol->currentText().toLower();
         volumeDialog = new VirtVolumeDialog(
-                    this, currWorkConnection, _type);
+                    this, currConnPtr, _type);
     };
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();

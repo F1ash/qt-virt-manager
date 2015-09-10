@@ -14,8 +14,8 @@ class DeviceStack : public QDialog
     Q_OBJECT
 public:
     explicit DeviceStack(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  conn    = NULL);
 
 signals:
 
@@ -37,7 +37,7 @@ private:
     QWidget         *listWidget;
     QWidget         *buttons;
 
-    virConnectPtr    currWorkConnection = NULL;
+    virConnectPtr*   currConnPtr;
     virNodeDevice  **nodeDevices = NULL;
     virErrorPtr      virtErrors;
 

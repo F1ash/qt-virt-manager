@@ -29,8 +29,8 @@ void WaitLocalConn::run()
                     for (int i=0; i<count; i++) {
                         idx = connItemModel->connItemDataList.at(i);
                         if ( idx->getName()==_name ) {
-                            QString state = idx->getState();
-                            if ( state!="OPENED" ) {
+                            DATA _data = idx->getData();
+                            if ( _data.value("isRunning").toInt()!=RUNNING ) {
                                 to_Delete.append(key);
                             } else {
                                 el->closeConnection();

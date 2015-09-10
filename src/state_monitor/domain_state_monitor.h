@@ -26,7 +26,7 @@ private:
     QWidget         *monitorWdg;
 
 public slots:
-    void             setNewMonitoredDomain(virConnectPtr, QString&, QString&);
+    void             setNewMonitoredDomain(virConnectPtr*, QString&, QString&);
     void             changeVisibility();
     void             saveCurrentState();
     void             stopMonitoring();

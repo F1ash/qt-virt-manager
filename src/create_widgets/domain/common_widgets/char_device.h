@@ -14,10 +14,10 @@ class CharDevice : public _QWidget
     Q_OBJECT
 public:
     explicit CharDevice(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL,
-            virDomainPtr domain = NULL,
-            QString _tag = QString());
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL,
+            virDomainPtr    domain  = NULL,
+            QString         _tag    = QString());
 
     QComboBox       *devType;
     QStackedWidget  *charDevWdg;

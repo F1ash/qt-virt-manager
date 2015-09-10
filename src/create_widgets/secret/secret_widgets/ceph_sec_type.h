@@ -9,8 +9,8 @@ class CephSecType : public _SecType
     Q_OBJECT
 public:
     explicit CephSecType(
-            QWidget         *parent = NULL,
-            virConnectPtr    _conn  = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
     QLineEdit      *usage;
     QHBoxLayout    *usageLayout;
     QWidget        *usageWdg;

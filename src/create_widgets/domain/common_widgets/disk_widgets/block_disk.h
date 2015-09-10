@@ -10,8 +10,8 @@ class Block_Disk : public _Disk
     Q_OBJECT
 public:
     explicit Block_Disk(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
 
 private:
     QPushButton     *browse;

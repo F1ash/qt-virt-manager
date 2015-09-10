@@ -4,8 +4,9 @@
  * http://libvirt.org/formatsecret.html#iSCSIUsageType
  */
 
-iSCSISecType::iSCSISecType(QWidget *parent, virConnectPtr _conn) :
-    _SecType(parent, _conn)
+iSCSISecType::iSCSISecType(
+        QWidget *parent, virConnectPtr *connPtr) :
+    _SecType(parent, connPtr)
 {
     usage = new QLineEdit(this);
     usage->setPlaceholderText("Enter usage name");

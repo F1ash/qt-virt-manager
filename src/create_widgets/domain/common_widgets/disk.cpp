@@ -4,9 +4,8 @@
  * http://libvirt.org/formatdomain.html#elementsDisks
  */
 
-Disk::Disk(QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+Disk::Disk(QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     sourceLabel = new QLabel("Source:", this);
     source = new QComboBox(this);
@@ -27,11 +26,11 @@ Disk::Disk(QWidget *parent,
     sourceWdg->setLayout(sourceLayout);
 
     info = new QStackedWidget(this);
-    info->addWidget(new Volume_Disk(this, currWorkConnection));
-    info->addWidget(new Block_Disk(this, currWorkConnection));
-    info->addWidget(new Dir_Disk(this, currWorkConnection));
-    info->addWidget(new File_Disk(this, currWorkConnection));
-    info->addWidget(new Network_Disk(this, currWorkConnection));
+    info->addWidget(new Volume_Disk(this, currConnPtr));
+    info->addWidget(new Block_Disk(this, currConnPtr));
+    info->addWidget(new Dir_Disk(this, currConnPtr));
+    info->addWidget(new File_Disk(this, currConnPtr));
+    info->addWidget(new Network_Disk(this, currConnPtr));
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(sourceWdg);

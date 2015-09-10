@@ -8,8 +8,8 @@ class MemBalloon_Edit : public MemBalloon
     Q_OBJECT
 public:
     explicit MemBalloon_Edit(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
 
 signals:
 

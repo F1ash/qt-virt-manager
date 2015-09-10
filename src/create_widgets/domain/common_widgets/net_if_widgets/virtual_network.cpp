@@ -1,9 +1,8 @@
 #include "virtual_network.h"
 
 Virtual_Network::Virtual_Network(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     networkLabel = new QLabel("Network:", this);
     network = new QComboBox(this);
@@ -216,7 +215,7 @@ void Virtual_Network::setAvailableVirtNetworks()
     virNetworkPtr *networks = NULL;
     unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                          VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks(currWorkConnection, &networks, flags);
+    int ret = virConnectListAllNetworks(*currConnPtr, &networks, flags);
     if ( ret<0 ) {
         // if failed, then set to default virtual network
         network->addItem("VirtNetwork detect failed", "default");

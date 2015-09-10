@@ -10,9 +10,8 @@ for unprivileged users who need their VMs\n\
 to have outgoing access. ")
 
 Userspace_SLIRP::Userspace_SLIRP(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     mac = new MAC_Address(this);
     infoIcon = new QLabel(this);

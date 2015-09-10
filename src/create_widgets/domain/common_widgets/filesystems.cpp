@@ -11,13 +11,12 @@
 #define XEN_FS_TYPES QStringList()<<"None"
 
 FileSystems::FileSystems(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     typeLabel = new QLabel("Type:", this);
     type = new QComboBox(this);
-    connType = QString(virConnectGetType(currWorkConnection)).toLower();
+    connType = QString(virConnectGetType(*currConnPtr)).toLower();
     if ( connType=="lxc" ) {
         type->addItems(LXC_FS_TYPES);
     } else if ( connType=="qemu" ) {

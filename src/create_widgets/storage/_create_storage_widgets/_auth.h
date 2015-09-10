@@ -17,9 +17,9 @@ class _Storage_Auth : public QWidget
     Q_OBJECT
 public:
     explicit _Storage_Auth(
-            QWidget         *parent = NULL,
-            virConnectPtr    _conn  = NULL,
-            QString          _type  = NOT_VOLUME);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL,
+            QString         _type   = NOT_VOLUME);
     QCheckBox       *auth;
     QLineEdit       *userName, *usage;
     QComboBox       *usageType;
@@ -35,7 +35,7 @@ private:
     QWidget         *authWdg;
     QVBoxLayout     *commonLayout;
 
-    virConnectPtr    currConnection;
+    virConnectPtr*   currConnPtr;
 
 public slots:
     void             setSecretType(const QString&);

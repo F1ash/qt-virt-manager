@@ -1,8 +1,8 @@
 #include "vm_viewer.h"
 
 VM_Viewer::VM_Viewer(
-        QWidget *parent, virConnect *conn, QString arg1, QString arg2) :
-    QMainWindow(parent), jobConnect(conn), connName(arg1), domain(arg2)
+        QWidget *parent, virConnectPtr *connPtr, QString arg1, QString arg2) :
+    QMainWindow(parent), currConnPtr(connPtr), connName(arg1), domain(arg2)
 {
     qRegisterMetaType<QString>("QString&");
     setMinimumSize(100, 100);
@@ -72,7 +72,7 @@ void VM_Viewer::sendErrMsg(QString &msg, uint _number)
 
 void VM_Viewer::sendConnErrors()
 {
-    virtErrors = virConnGetLastError(jobConnect);
+    virtErrors = virConnGetLastError(*currConnPtr);
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
@@ -96,7 +96,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
     args.append(domain);
     TASK task;
     task.type = "domain";
-    task.sourceConn = jobConnect;
+    task.srcConnPtr = currConnPtr;
     task.srcConName = connName;
     task.object     = domain;
     if        ( method.first()=="startVirtDomain" ) {
@@ -141,7 +141,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
         //qDebug()<<"createVirtDomainSnapshot";
         CreateSnapshotDialog *_dialog =
                 new CreateSnapshotDialog(
-                    this, domain, true, jobConnect);
+                    this, domain, true, currConnPtr);
         connect(_dialog, SIGNAL(errMsg(QString&)),
                 this, SLOT(sendErrMsg(QString&)));
         int exitCode = _dialog->exec();
@@ -158,7 +158,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
     } else if ( method.first()=="moreSnapshotActions" ) {
         //qDebug()<<"moreSnapshotActions";
         SnapshotActionDialog *_dialog =
-               new SnapshotActionDialog(this, jobConnect, domain);
+               new SnapshotActionDialog(this, currConnPtr, domain);
         int exitCode = _dialog->exec();
         if ( exitCode ) {
             QStringList params = _dialog->getParameters();
@@ -179,12 +179,12 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
 }
 void VM_Viewer::startCloseProcess()
 {
-    //qDebug()<<"startCloseProcess";
+    qDebug()<<"startCloseProcess";
     if ( killTimerId==0 ) {
         killTimerId = startTimer(PERIOD);
         statusBar()->show();
     };
-    //qDebug()<<killTimerId<<"killTimer";
+    qDebug()<<killTimerId<<"killTimer";
 }
 void VM_Viewer::reconnectToDomain()
 {

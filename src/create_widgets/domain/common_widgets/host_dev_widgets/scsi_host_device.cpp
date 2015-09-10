@@ -1,9 +1,8 @@
 #include "scsi_host_device.h"
 
 SCSI_Host_Device::SCSI_Host_Device(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     devList = new QListWidget(this);
     devList->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -60,10 +59,10 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
     int i = 0;
     QStringList      devices;
     virNodeDevice  **nodeDevices = NULL;
-    if ( currWorkConnection!=NULL ) {
+    if ( currConnPtr!=NULL ) {
         unsigned int flags =
                 VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI ;
-        int ret = virConnectListAllNodeDevices(currWorkConnection, &nodeDevices, flags);
+        int ret = virConnectListAllNodeDevices(*currConnPtr, &nodeDevices, flags);
         if ( ret<0 ) {
             sendConnErrors();
         } else {
@@ -78,7 +77,7 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
         };
         free(nodeDevices);
     };
-    //int devs = virNodeNumOfDevices(currWorkConnection, NULL, 0);
+    //int devs = virNodeNumOfDevices(currConnPtr, NULL, 0);
     //qDebug()<<"Devices("<<devs<<i<<"):\n"<<devices.join("\n");
     // set unique device description to devList
     foreach (QString _dev, devices) {
@@ -138,7 +137,7 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
 
 void SCSI_Host_Device::sendConnErrors()
 {
-    virtErrors = virConnGetLastError(currWorkConnection);
+    virtErrors = virConnGetLastError(*currConnPtr);
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                        .arg(QString().fromUtf8(virtErrors->message)) );

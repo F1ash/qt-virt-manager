@@ -10,23 +10,25 @@ void NetControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
-    keep_alive = true;
-    // for new virConnect usage create the new virConnectRef[erence]
-    int ret = virConnectRef(task.sourceConn);
-    if ( ret<0 ) {
-        task.sourceConn = NULL;
-        sendConnErrors();
-        keep_alive = false;
+    if ( NULL!=task.srcConnPtr ) {
+        // for new virConnect usage create the new virConnectRef[erence]
+        int ret = virConnectRef(*task.srcConnPtr);
+        if ( ret<0 ) {
+            task.srcConnPtr = NULL;
+            sendConnErrors();
+            keep_alive = false;
+        } else
+            keep_alive = true;
     };
     if ( keep_alive && !isRunning() ) {
-        if ( NULL!=task.sourceConn ) start();
-        else {
-            Result result;
-            result.type   = "network";
-            result.number = number;
-            result.action = _EMPTY_ACTION;
-            emit resultData(result);
-        };
+        currConnPtr = task.srcConnPtr;
+        start();
+    } else {
+        Result result;
+        result.type   = "network";
+        result.number = number;
+        result.action = _EMPTY_ACTION;
+        emit resultData(result);
     };
 }
 
@@ -62,7 +64,8 @@ void NetControlThread::run()
     default:
         break;
     };
-    virConnectClose(task.sourceConn);
+    // task.srcConnPtr reference will closed in destructor as currConnPtr
+    //virConnectClose(*task.srcConnPtr);
     result.type   = "network";
     result.number = number;
     result.action = task.action;
@@ -72,11 +75,11 @@ Result NetControlThread::getAllNetworkList()
 {
     Result result;
     QStringList virtNetList;
-    if ( task.sourceConn!=NULL && keep_alive ) {
+    if ( task.srcConnPtr!=NULL && keep_alive ) {
         virNetworkPtr *networks = NULL;
         unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                              VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-        int ret = virConnectListAllNetworks( task.sourceConn, &networks, flags);
+        int ret = virConnectListAllNetworks(*task.srcConnPtr, &networks, flags);
         if ( ret<0 ) {
             result.err = sendConnErrors();
             return result;
@@ -120,7 +123,7 @@ Result NetControlThread::createNetwork()
     xmlData = f.readAll();
     f.close();
     virNetworkPtr network = virNetworkCreateXML(
-                task.sourceConn, xmlData.data());
+                *task.srcConnPtr, xmlData.data());
     if ( network==NULL ) {
         result.err = sendConnErrors();
         return result;
@@ -148,7 +151,7 @@ Result NetControlThread::defineNetwork()
     xmlData = f.readAll();
     f.close();
     virNetworkPtr network = virNetworkDefineXML(
-                task.sourceConn, xmlData.data());
+                *task.srcConnPtr, xmlData.data());
     if ( network==NULL ) {
         result.err = sendConnErrors();
         return result;
@@ -166,7 +169,7 @@ Result NetControlThread::startNetwork()
     QString name = task.object;
     bool started = false;
     virNetworkPtr network = virNetworkLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( network!=NULL ) {
         started = (virNetworkCreate(network)+1) ? true : false;
         if (!started)
@@ -186,7 +189,7 @@ Result NetControlThread::destroyNetwork()
     QString name = task.object;
     bool deleted = false;
     virNetworkPtr network = virNetworkLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( network!=NULL ) {
         deleted = (virNetworkDestroy(network)+1) ? true : false;
         if (!deleted)
@@ -206,7 +209,7 @@ Result NetControlThread::undefineNetwork()
     QString name = task.object;
     bool deleted = false;
     virNetworkPtr network = virNetworkLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( network!=NULL ) {
         deleted = (virNetworkUndefine(network)+1) ? true : false;
         if (!deleted)
@@ -228,7 +231,7 @@ Result NetControlThread::changeAutoStartNetwork()
     int autostart = task.args.sign;
     bool set = false;
     virNetworkPtr network = virNetworkLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( network!=NULL ) {
         set = (virNetworkSetAutostart(network, autostart)+1) ? true : false;
         if (!set)
@@ -249,7 +252,7 @@ Result NetControlThread::getVirtNetXMLDesc()
     bool read = false;
     char *Returns = NULL;
     virNetworkPtr network = virNetworkLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( network!=NULL ) {
         Returns = (virNetworkGetXMLDesc(
                        network, VIR_NETWORK_XML_INACTIVE));

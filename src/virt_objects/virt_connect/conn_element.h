@@ -21,7 +21,7 @@ public:
 signals:
     void              warningShowed();
     void              warning(QString&);
-    void              connPtr(virConnect*, QString&);
+    void              connPtr(virConnectPtr*, QString&);
     void              authRequested(QString&);
     void              domStateChanged(Result);
     void              netStateChanged(Result);
@@ -49,7 +49,7 @@ public slots:
     void              openConnection();
     void              closeConnection();
     void              showConnectionData();
-    virConnect*       getConnection() const;
+    virConnectPtr*    getConnectionPtr() const;
     void              setAuthCredentials(QString&, QString&);
     QString           getName() const;
     QString           getURI() const;
@@ -67,6 +67,8 @@ private slots:
     void              mainWindowUp();
     void              getAuthCredentials(QString&);
     void              forwardConnClosedSignal(bool);
+    void              connAliveThreadStarted();
+    void              connAliveThreadFinished();
 };
 
 #endif   // CONN_ELEMENT_H

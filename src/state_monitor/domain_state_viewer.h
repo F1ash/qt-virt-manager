@@ -17,16 +17,16 @@ class DomainStateViewer : public QWidget
     Q_OBJECT
 public:
     explicit DomainStateViewer(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL,
-            QString _domainName = QString());
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL,
+            QString         _domainName = QString());
     const QString        domainName;
 
 signals:
     void                 viewerClosed();
 
 private:
-    virConnectPtr        currWorkConn;
+    virConnectPtr*       currConnPtr;
     DomainMonitorThread
                         *domainMonitorThread;
     int                  timerId = 0;

@@ -3,7 +3,7 @@
 StorageVolControlThread::StorageVolControlThread(QObject *parent) :
     ControlThread(parent)
 {
-    currWorkConnection = NULL;
+    currConnPtr = NULL;
 }
 
 /* public slots */
@@ -14,7 +14,7 @@ void StorageVolControlThread::stop()
         virStoragePoolFree(currStoragePool);
         currStoragePool = NULL;
     };
-    //qDebug()<<"stVol_thread (stop)\n\tConnect\t\t"<<currWorkConnection
+    //qDebug()<<"stVol_thread (stop)\n\tConnect\t\t"<<currConnPtr
     //        <<"\n\tPool\t\t"<<currStoragePool
     //        <<"\n\tName\t\t"<<currPoolName;
 }
@@ -22,24 +22,26 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
-    keep_alive = true;
-    // for new virConnect usage create the new virConnectRef[erence]
-    int ret = virConnectRef(task.sourceConn);
-    if ( ret<0 ) {
-        task.sourceConn = NULL;
-        sendConnErrors();
-        keep_alive = false;
-    };
     currPoolName = task.args.object;
+    if ( NULL!=task.srcConnPtr ) {
+        // for new virConnect usage create the new virConnectRef[erence]
+        int ret = virConnectRef(*task.srcConnPtr);
+        if ( ret<0 ) {
+            task.srcConnPtr = NULL;
+            sendConnErrors();
+            keep_alive = false;
+        } else
+            keep_alive = true;
+    };
     if ( keep_alive && !isRunning() ) {
-        if ( NULL!=task.sourceConn ) start();
-        else {
-            Result result;
-            result.type   = "volume";
-            result.number = number;
-            result.action = _EMPTY_ACTION;
-            emit resultData(result);
-        };
+        currConnPtr = task.srcConnPtr;
+        start();
+    } else {
+        Result result;
+        result.type   = "volume";
+        result.number = number;
+        result.action = _EMPTY_ACTION;
+        emit resultData(result);
     };
 }
 
@@ -75,7 +77,8 @@ void StorageVolControlThread::run()
     default:
         break;
     };
-    virConnectClose(task.sourceConn);
+    // task.srcConnPtr reference will closed in destructor as currConnPtr
+    //virConnectClose(*task.srcConnPtr);
     result.type   = "volume";
     result.number = number;
     result.action = task.action;
@@ -91,7 +94,7 @@ Result StorageVolControlThread::getAllStorageVolList()
         currStoragePool = NULL;
     };
     currStoragePool = virStoragePoolLookupByName(
-                task.sourceConn, currPoolName.toUtf8().data());
+                *task.srcConnPtr, currPoolName.toUtf8().data());
     if ( currStoragePool!=NULL && keep_alive ) {
         virStorageVolPtr *storageVol = NULL;
         // flags: extra flags; not used yet, so callers should always pass 0
@@ -174,7 +177,7 @@ Result StorageVolControlThread::createStorageVol()
         currStoragePool = NULL;
     };
     currStoragePool = virStoragePoolLookupByName(
-                task.sourceConn, currPoolName.toUtf8().data());
+                *task.srcConnPtr, currPoolName.toUtf8().data());
     virStorageVolPtr storageVol = virStorageVolCreateXML(
                 currStoragePool, xmlData.data(), VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA);
     if ( storageVol==NULL ) {
@@ -200,7 +203,7 @@ Result StorageVolControlThread::deleteStorageVol()
         currStoragePool = NULL;
     };
     currStoragePool = virStoragePoolLookupByName(
-                task.sourceConn, currPoolName.toUtf8().data());
+                *task.srcConnPtr, currPoolName.toUtf8().data());
 
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
@@ -232,12 +235,12 @@ Result StorageVolControlThread::downloadStorageVol()
         currStoragePool = NULL;
     };
     currStoragePool = virStoragePoolLookupByName(
-                task.sourceConn, currPoolName.toUtf8().data());
+                *task.srcConnPtr, currPoolName.toUtf8().data());
     QFile *f = new QFile(path);
     f->open(QIODevice::WriteOnly);
 
     bool downloaded = false;
-    virStreamPtr stream = virStreamNew(task.sourceConn, 0);
+    virStreamPtr stream = virStreamNew(*task.srcConnPtr, 0);
     unsigned long long offset = 0;
     unsigned long long length = task.args.size;
     // flags: extra flags; not used yet, so callers should always pass 0
@@ -298,7 +301,7 @@ Result StorageVolControlThread::resizeStorageVol()
         currStoragePool = NULL;
     };
     currStoragePool = virStoragePoolLookupByName(
-                task.sourceConn, currPoolName.toUtf8().data());
+                *task.srcConnPtr, currPoolName.toUtf8().data());
 
     unsigned long long capacity = task.args.size;
     bool resized = false;
@@ -338,12 +341,12 @@ Result StorageVolControlThread::uploadStorageVol()
         currStoragePool = NULL;
     };
     currStoragePool = virStoragePoolLookupByName(
-                task.sourceConn, currPoolName.toUtf8().data());
+                *task.srcConnPtr, currPoolName.toUtf8().data());
     QFile *f = new QFile(path);
     f->open(QIODevice::ReadOnly);
 
     bool uploaded = false;
-    virStreamPtr stream = virStreamNew(task.sourceConn, 0);
+    virStreamPtr stream = virStreamNew(*task.srcConnPtr, 0);
     unsigned long long offset = 0;
     unsigned long long length = f->size();
     // flags: extra flags; not used yet, so callers should always pass 0
@@ -407,7 +410,7 @@ Result StorageVolControlThread::wipeStorageVol()
         currStoragePool = NULL;
     };
     currStoragePool = virStoragePoolLookupByName(
-                task.sourceConn, currPoolName.toUtf8().data());
+                *task.srcConnPtr, currPoolName.toUtf8().data());
 
     //flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
@@ -471,7 +474,7 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
         currStoragePool = NULL;
     };
     currStoragePool = virStoragePoolLookupByName(
-                task.sourceConn, currPoolName.toUtf8().data());
+                *task.srcConnPtr, currPoolName.toUtf8().data());
 
     bool read = false;
     char *Returns = NULL;

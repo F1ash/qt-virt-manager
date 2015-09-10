@@ -51,10 +51,10 @@ void VirtInterfaceControl::stopProcessing()
     virtIfaceModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
 
 }
-bool VirtInterfaceControl::setCurrentWorkConnect(virConnect *conn)
+bool VirtInterfaceControl::setCurrentWorkConnect(virConnectPtr *connPtr)
 {
     stopProcessing();
-    currWorkConnection = conn;
+    currConnPtr = connPtr;
     toolBar->enableAutoReload();
     return true;
 }
@@ -144,7 +144,7 @@ void VirtInterfaceControl::reloadState()
 {
     TASK task;
     task.type = "iface";
-    task.sourceConn = currWorkConnection;
+    task.srcConnPtr = currConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtInterface";
@@ -192,7 +192,7 @@ void VirtInterfaceControl::execAction(const QStringList &l)
         QString networkName = virtIfaceModel->DataList.at(idx.row())->getName();
         TASK task;
         task.type = "iface";
-        task.sourceConn = currWorkConnection;
+        task.srcConnPtr = currConnPtr;
         task.srcConName = currConnName;
         task.object     = networkName;
         if        ( l.first()=="startVirtInterface" ) {
@@ -271,7 +271,7 @@ void VirtInterfaceControl::newVirtEntityFromXML(const QStringList &_args)
                 QString xml = args.first();
                 task.args.path = xml;
             };
-            task.sourceConn = currWorkConnection;
+            task.srcConnPtr = currConnPtr;
             task.srcConName = currConnName;
             task.method     = actName;
             task.action     = act;

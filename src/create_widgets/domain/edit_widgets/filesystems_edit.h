@@ -8,8 +8,8 @@ class FileSystems_Edit : public FileSystems
     Q_OBJECT
 public:
     explicit FileSystems_Edit(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
 
 signals:
 

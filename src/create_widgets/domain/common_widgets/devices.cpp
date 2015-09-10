@@ -66,9 +66,9 @@
 
 */
 
-Devices::Devices(QWidget *parent,
-        virConnectPtr conn, QString _xmlDesc) :
-    _QWidget(parent, conn), xmlDesc(_xmlDesc)
+Devices::Devices(
+        QWidget *parent, virConnectPtr *connPtr, QString _xmlDesc) :
+    _QWidget(parent, connPtr), xmlDesc(_xmlDesc)
 {
     setObjectName("Computer:Device");
     usedDeviceList = new QListWidget(this);
@@ -96,14 +96,14 @@ Devices::Devices(QWidget *parent,
     listWidget = new QWidget(this);
     listWidget->setLayout(listLayout);
 
-    infoWidget = new DeviceData(this, currWorkConnection);
+    infoWidget = new DeviceData(this, currConnPtr);
     baseLayout = new QHBoxLayout(this);
     baseLayout->addWidget(listWidget, 3);
     baseLayout->addWidget(infoWidget, 8);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
 
-    deviceStack = new DeviceStack(this, currWorkConnection);
+    deviceStack = new DeviceStack(this, currConnPtr);
     stackWdg = new QStackedWidget(this);
     stackWdg->addWidget(baseWdg);
     stackWdg->addWidget(deviceStack);

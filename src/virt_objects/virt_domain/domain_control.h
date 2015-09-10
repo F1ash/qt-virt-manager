@@ -19,8 +19,8 @@ public:
     ~VirtDomainControl();
 
 signals:
-    void                     displayRequest(virConnect*, QString, QString);
-    void                     addToStateMonitor(virConnectPtr, QString&, QString&);
+    void                     displayRequest(virConnectPtr*, QString, QString);
+    void                     addToStateMonitor(virConnectPtr*, QString&, QString&);
     void                     domainClosed(QString, QString);
     void                     migrateToConnect(TASK);
     void                     domainToEditor(TASK);
@@ -31,10 +31,10 @@ private:
 
 public slots:
     void                     stopProcessing();
-    bool                     setCurrentWorkConnect(virConnect*);
+    bool                     setCurrentWorkConnect(virConnectPtr*);
     void                     setListHeader(QString&);
-    virConnect*              getConnection() const;
-    void                     execMigrateAction(virConnectPtr, TASK);
+    virConnectPtr*           getConnectionPtr();
+    void                     execMigrateAction(virConnectPtr*, TASK);
     void                     resultReceiver(Result);
 
 private slots:

@@ -51,10 +51,10 @@ void VirtStoragePoolControl::stopProcessing()
     storagePoolModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
 
 }
-bool VirtStoragePoolControl::setCurrentWorkConnect(virConnect *conn)
+bool VirtStoragePoolControl::setCurrentWorkConnect(virConnectPtr *connPtr)
 {
     stopProcessing();
-    currWorkConnection = conn;
+    currConnPtr = connPtr;
     toolBar->enableAutoReload();
     return true;
 }
@@ -153,7 +153,7 @@ void VirtStoragePoolControl::reloadState()
 {
     TASK task;
     task.type = "pool";
-    task.sourceConn = currWorkConnection;
+    task.srcConnPtr = currConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtStoragePool";
@@ -202,7 +202,7 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
         QString storagePoolName = storagePoolModel->DataList.at(idx.row())->getName();
         TASK task;
         task.type = "pool";
-        task.sourceConn = currWorkConnection;
+        task.srcConnPtr = currConnPtr;
         task.srcConName = currConnName;
         task.object     = storagePoolName;
         if        ( l.first()=="startVirtStoragePool" ) {
@@ -240,7 +240,7 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
             //for ( int i=0; i<storagePoolModel->DataList.count(); i++ ) {
             //    storagePoolModel->DataList.at(i)->setOnView(i==row);
             //};
-            emit overviewStPool(currWorkConnection, currConnName, storagePoolName);
+            emit overviewStPool(currConnPtr, currConnName, storagePoolName);
         } else if ( l.first()=="reloadVirtStoragePool" ) {
             reloadState();
         };
@@ -271,14 +271,14 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const QStringList &_args)
                 // show SRC Creator widget
                 // get path for method
                 CreatePool *createPoolDialog =
-                        new CreatePool(this, currWorkConnection, act);
+                        new CreatePool(this, currConnPtr, act);
                 connect(createPoolDialog, SIGNAL(finished(int)),
                         this, SLOT(doneEntityCreationDialog()));
                 createPoolDialog->show();
             } else {
                 QString path    = args.first();
                 task.args.path  = path;
-                task.sourceConn = currWorkConnection;
+                task.srcConnPtr = currConnPtr;
                 task.srcConName = currConnName;
                 task.method     = actName;
                 task.action     = act;
@@ -306,7 +306,7 @@ void VirtStoragePoolControl::doneEntityCreationDialog()
                        this, SLOT(doneEntityCreationDialog()));
             TASK task;
             task.type = "pool";
-            task.sourceConn = currWorkConnection;
+            task.srcConnPtr = currConnPtr;
             task.srcConName = currConnName;
             task.action     = act;
             task.method     =

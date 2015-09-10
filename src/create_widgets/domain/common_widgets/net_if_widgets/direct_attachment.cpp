@@ -1,9 +1,8 @@
 #include "direct_attachment.h"
 
 DirectAttachment::DirectAttachment(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     netSourceLabel = new QLabel("Network source:", this);
     sourceModeLabel = new QLabel("Source mode:", this);
@@ -166,10 +165,10 @@ void DirectAttachment::setDataDescription(QString &xmlDesc)
 void DirectAttachment::setAvailableSources()
 {
     virNodeDevice  **nodeDevices = NULL;
-    if ( currWorkConnection!=NULL ) {
+    if ( currConnPtr!=NULL ) {
         unsigned int flags =
                 VIR_CONNECT_LIST_NODE_DEVICES_CAP_NET;
-        int ret = virConnectListAllNodeDevices(currWorkConnection, &nodeDevices, flags);
+        int ret = virConnectListAllNodeDevices(*currConnPtr, &nodeDevices, flags);
         if ( ret<0 ) {
             netSource->insertItem(0, "NetSource detect failed", "");
         } else {

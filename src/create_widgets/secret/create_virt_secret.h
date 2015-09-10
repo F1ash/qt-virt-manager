@@ -25,8 +25,8 @@ class CreateVirtSecret : public QDialog
     Q_OBJECT
 public:
     explicit CreateVirtSecret(
-            QWidget         *parent = NULL,
-            virConnectPtr    conn = NULL);
+            QWidget         *parent     = NULL,
+            virConnectPtr*   connPtr    = NULL);
     ~CreateVirtSecret();
 
 signals:
@@ -35,7 +35,7 @@ signals:
 private:
     QSettings        settings;
     QString          UUID;
-    virConnectPtr    currConnection;
+    virConnectPtr*   currConnPtr;
 
     QScrollArea     *scroll;
     QWidget         *scrolled;

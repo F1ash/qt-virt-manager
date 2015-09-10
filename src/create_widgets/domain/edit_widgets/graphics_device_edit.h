@@ -8,8 +8,8 @@ class GraphicsDevice_Edit : public GraphicsDevice
     Q_OBJECT
 public:
     explicit GraphicsDevice_Edit(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
 
 signals:
 

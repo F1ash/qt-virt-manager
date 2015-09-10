@@ -13,8 +13,8 @@ class Disk : public _QWidget
     Q_OBJECT
 public:
     explicit Disk(
-            QWidget *parent = NULL,
-            virConnectPtr conn = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
     QComboBox       *source;
     QStackedWidget  *info;
 

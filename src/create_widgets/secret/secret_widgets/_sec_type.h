@@ -13,11 +13,11 @@ class _SecType : public QWidget
     Q_OBJECT
 public:
     explicit _SecType(
-            QWidget        *parent = NULL,
-            virConnectPtr   _conn  = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL);
     QLabel                 *info;
     QVBoxLayout            *baseLayout;
-    virConnectPtr           currWorkConnection;
+    virConnectPtr*          currConnPtr;
 
 public slots:
     virtual QDomDocument    getSecStuff() const;

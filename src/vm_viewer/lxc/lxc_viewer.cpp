@@ -1,30 +1,30 @@
 #include "lxc_viewer.h"
 
-lxcHlpThread::lxcHlpThread(QObject *parent, virConnect *_conn, QString _domain) :
-    QThread(parent), currWorkConnection(_conn), domain(_domain)
+lxcHlpThread::lxcHlpThread(
+        QObject *parent, virConnectPtr* connPtr, QString _domain) :
+    QThread(parent), currConnPtr(connPtr), domain(_domain)
 {
 
 }
 void lxcHlpThread::run()
 {
-    if ( NULL!=currWorkConnection )
-        domainPtr =virDomainLookupByName(
-                    currWorkConnection, domain.toUtf8().data());
+    if ( NULL==currConnPtr ) return;
+    if ( virConnectRef(*currConnPtr)<0 ) return;
+    domainPtr =virDomainLookupByName(
+                    *currConnPtr, domain.toUtf8().data());
+    virConnectClose(*currConnPtr);
 }
 
 LXC_Viewer::LXC_Viewer(
-        QWidget *parent,
-        virConnect *conn,
-        QString arg1,
-        QString arg2,
-        const QString& work_dir,
-        const QString& command) :
-    TermMainWindow(parent, conn, arg1, arg2, work_dir, command)
+        QWidget *parent, virConnectPtr *connPtr,
+        QString arg1, QString arg2,
+        const QString& work_dir, const QString& command) :
+    TermMainWindow(parent, connPtr, arg1, arg2, work_dir, command)
 {
     TYPE = "LXC";
     // unused toolbar
     // viewerToolBar->setVisible(false);
-    hlpThread = new lxcHlpThread(this, jobConnect, domain);
+    hlpThread = new lxcHlpThread(this, currConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
     hlpThread->start();
@@ -85,7 +85,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             counter = 0;
             viewerThread->setData(
                         domain, hlpThread->domainPtr, ptySlaveFd);
-            if ( viewerThread->setCurrentWorkConnect(jobConnect) ) {
+            if ( viewerThread->setCurrentWorkConnect(currConnPtr) ) {
                 setTerminalParameters();
             };
         } else if ( TIMEOUT<counter*PERIOD ) {
@@ -113,8 +113,8 @@ void LXC_Viewer::setTerminalParameters()
                 viewerThread, SLOT(sendDataToVMachine(const char*,int)));
         connect(viewerThread, SIGNAL(errorMsg(QString&, uint)),
                 this, SLOT(sendErrMsg(QString&, uint)));
-        connect(viewerThread, SIGNAL(finished()),
-                this, SLOT(startCloseProcess()));
+        //connect(viewerThread, SIGNAL(finished()),
+        //        this, SLOT(startCloseProcess()));
         viewerThread->start();
         if ( viewerThread->keep_alive ) {
             QString msg = QString("In '<b>%1</b>': Stream Registation success. \

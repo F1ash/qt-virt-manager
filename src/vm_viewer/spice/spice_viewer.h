@@ -13,15 +13,15 @@ class spcHlpThread : public QThread
     Q_OBJECT
 public:
     explicit spcHlpThread(
-            QObject     *parent = NULL,
-            virConnect  *_conn  = NULL,
-            QString      _domain= QString());
+            QObject        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL,
+            QString         _domain = QString());
     const QString    domain;
     virDomainPtr     domainPtr = NULL;
     QString          uri, runXmlDesc;
     void             run();
 private:
-    virConnect      *currWorkConnection = NULL;
+    virConnectPtr*   currConnPtr;
 };
 
 class Spice_Viewer : public VM_Viewer
@@ -29,10 +29,10 @@ class Spice_Viewer : public VM_Viewer
     Q_OBJECT
 public:
     explicit Spice_Viewer(
-            QWidget *parent = NULL,
-            virConnect *conn = NULL,
-            QString arg1 = QString(),
-            QString arg2 = QString());
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL,
+            QString         arg1    = QString(),
+            QString         arg2    = QString());
 
 private:
     spcHlpThread    *hlpThread;

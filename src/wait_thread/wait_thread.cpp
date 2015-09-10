@@ -16,8 +16,8 @@ void Wait::run()
         for (int i=0; i<count; i++) {
             ConnItemIndex *idx = wdg->connItemModel->connItemDataList.at(i);
             if ( NULL==idx ) continue;
-            QString state = idx->getState();
-            if ( state!="OPENED" ) {
+            DATA _data = idx->getData();
+            if ( _data.value("isRunning").toInt()!=RUNNING ) {
                 to_Delete.append(idx->getName());
             } else {
                 wdg->connections->value(idx->getName())->closeConnection();

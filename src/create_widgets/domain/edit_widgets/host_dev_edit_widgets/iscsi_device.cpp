@@ -1,6 +1,6 @@
 #include "iscsi_device.h"
 
-ISCSI_Device::ISCSI_Device(QWidget *parent, virConnectPtr _conn) :
+ISCSI_Device::ISCSI_Device(QWidget *parent, virConnectPtr *connPtr) :
     QWidget(parent)
 {
     hostLabel = new QLabel("Host:", this);
@@ -15,7 +15,7 @@ ISCSI_Device::ISCSI_Device(QWidget *parent, virConnectPtr _conn) :
     hostLayout->addWidget(port, 3);
     hostWdg = new QWidget(this);
     hostWdg->setLayout(hostLayout);
-    auth = new _Storage_Auth(this, _conn);
+    auth = new _Storage_Auth(this, connPtr);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(hostWdg);
     commonLayout->addWidget(auth);

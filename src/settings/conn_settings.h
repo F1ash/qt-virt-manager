@@ -21,12 +21,11 @@ class ConnSettings : public QDialog
 {
     Q_OBJECT
 public:
-    ConnSettings(QWidget *parent=0);
-    ~ConnSettings();
-    QSettings    settings;
+    explicit ConnSettings(QWidget *parent = NULL);
+    QSettings            settings;
 
 signals:
-    void creationConnCancelled();
+    void                 creationConnCancelled();
 
 private:
     ConnItemIndex       *own_index;

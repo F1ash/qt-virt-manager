@@ -19,7 +19,7 @@ public:
     QString                  currConnName;
     QSettings                settings;
     QTreeView               *entityList;
-    virConnect              *currWorkConnection = NULL;
+    virConnectPtr           *currConnPtr = NULL;
 
     virtual void             reloadState();
     virtual void             changeDockVisibility();
@@ -36,7 +36,7 @@ signals:
 public slots:
     void                     msgRepeater(QString&);
     virtual void             stopProcessing();
-    virtual bool             setCurrentWorkConnect(virConnect*);
+    virtual bool             setCurrentWorkConnect(virConnectPtr*);
     virtual void             setListHeader(QString&);
     virtual void             resultReceiver(Result);
 };

@@ -4,8 +4,8 @@
  * http://libvirt.org/storage.html#StorageBackendRBD
  */
 
-RBD_Pool_Stuff::RBD_Pool_Stuff(QWidget *parent, virConnectPtr _conn) :
-    _Pool_Stuff(parent, _conn)
+RBD_Pool_Stuff::RBD_Pool_Stuff(QWidget *parent, virConnectPtr *connPtr) :
+    _Pool_Stuff(parent, connPtr)
 {
     source->namedLabel->setVisible(true);
     source->named->setVisible(true);

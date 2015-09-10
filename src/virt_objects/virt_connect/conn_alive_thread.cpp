@@ -41,9 +41,9 @@ void ConnAliveThread::closeConnection()
     };
     emit changeConnState(state);
 }
-virConnect* ConnAliveThread::getConnection() const
+virConnectPtr *ConnAliveThread::getConnectionPtr()
 {
-    return conn;
+    return &conn;
 }
 void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
 {

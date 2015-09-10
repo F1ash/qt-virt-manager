@@ -1,11 +1,9 @@
 #include "char_device_edit.h"
 
 CharDevice_Edit::CharDevice_Edit(
-        QWidget *parent,
-        virConnectPtr conn,
-        virDomainPtr domain,
-        QString _tag) :
-    CharDevice(parent, conn, domain, _tag)
+        QWidget *parent, virConnectPtr *connPtr,
+        virDomainPtr domain, QString _tag) :
+    CharDevice(parent, connPtr, domain, _tag)
 {
     connect(devType, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));

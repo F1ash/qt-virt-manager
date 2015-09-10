@@ -14,11 +14,11 @@ class ControlThread : public QThread
 public:
     explicit ControlThread(QObject *parent = NULL);
     virtual ~ControlThread();
-    bool             keep_alive = false;
+    bool             keep_alive;
     uint             number;
     TASK             task;
     QString          currConnName;
-    virConnect      *currWorkConnection = NULL;
+    virConnectPtr   *currConnPtr;
     virErrorPtr      virtErrors;
 
 signals:
@@ -27,7 +27,7 @@ signals:
 
 public slots:
     bool             setCurrentWorkConnect(
-                        virConnectPtr,
+                        virConnectPtr*,
                         uint i=0,
                         QString _name="");
 

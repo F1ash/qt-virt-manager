@@ -1,9 +1,8 @@
 #include "graphics_device_edit.h"
 
 GraphicsDevice_Edit::GraphicsDevice_Edit(
-        QWidget *parent,
-        virConnectPtr conn) :
-    GraphicsDevice(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    GraphicsDevice(parent, connPtr)
 {
     // dataChanged signals
     for (int i=0; i<info->count(); i++) {

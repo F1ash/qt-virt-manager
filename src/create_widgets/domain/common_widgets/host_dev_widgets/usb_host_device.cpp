@@ -1,9 +1,8 @@
 #include "usb_host_device.h"
 
 USB_Host_Device::USB_Host_Device(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _QWidget(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     devList = new QListWidget(this);
     devList->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -50,10 +49,10 @@ void USB_Host_Device::setAvailabledUSBDevices()
     int i = 0;
     QStringList      devices;
     virNodeDevice  **nodeDevices = NULL;
-    if ( currWorkConnection!=NULL ) {
+    if ( currConnPtr!=NULL ) {
         unsigned int flags =
                 VIR_CONNECT_LIST_NODE_DEVICES_CAP_USB_DEV;
-        int ret = virConnectListAllNodeDevices(currWorkConnection, &nodeDevices, flags);
+        int ret = virConnectListAllNodeDevices(*currConnPtr, &nodeDevices, flags);
         if ( ret<0 ) {
             sendConnErrors();
         } else {
@@ -68,7 +67,7 @@ void USB_Host_Device::setAvailabledUSBDevices()
         };
         free(nodeDevices);
     };
-    //int devs = virNodeNumOfDevices(currWorkConnection, NULL, 0);
+    //int devs = virNodeNumOfDevices(currConnPtr, NULL, 0);
     //qDebug()<<"Devices("<<devs<<i<<"):\n"<<devices.join("\n");
     // set unique device description to devList
     foreach (QString _dev, devices) {
@@ -109,7 +108,7 @@ void USB_Host_Device::setAvailabledUSBDevices()
 
 void USB_Host_Device::sendConnErrors()
 {
-    virtErrors = virConnGetLastError(currWorkConnection);
+    virtErrors = virConnGetLastError(*currConnPtr);
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
                        .arg(QString().fromUtf8(virtErrors->message)) );

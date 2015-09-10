@@ -12,23 +12,25 @@ void StoragePoolControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
-    keep_alive = true;
-    // for new virConnect usage create the new virConnectRef[erence]
-    int ret = virConnectRef(task.sourceConn);
-    if ( ret<0 ) {
-        task.sourceConn = NULL;
-        sendConnErrors();
-        keep_alive = false;
+    if ( NULL!=task.srcConnPtr ) {
+        // for new virConnect usage create the new virConnectRef[erence]
+        int ret = virConnectRef(*task.srcConnPtr);
+        if ( ret<0 ) {
+            task.srcConnPtr = NULL;
+            sendConnErrors();
+            keep_alive = false;
+        } else
+            keep_alive = true;
     };
     if ( keep_alive && !isRunning() ) {
-        if ( NULL!=task.sourceConn ) start();
-        else {
-            Result result;
-            result.type   = "pool";
-            result.number = number;
-            result.action = _EMPTY_ACTION;
-            emit resultData(result);
-        };
+        currConnPtr = task.srcConnPtr;
+        start();
+    } else {
+        Result result;
+        result.type   = "pool";
+        result.number = number;
+        result.action = _EMPTY_ACTION;
+        emit resultData(result);
     };
 }
 
@@ -70,7 +72,8 @@ void StoragePoolControlThread::run()
     default:
         break;
     };
-    virConnectClose(task.sourceConn);
+    // task.srcConnPtr reference will closed in destructor as currConnPtr
+    //virConnectClose(*task.srcConnPtr);
     result.type   = "pool";
     result.number = number;
     result.action = task.action;
@@ -80,12 +83,12 @@ Result StoragePoolControlThread::getAllStoragePoolList()
 {
     Result result;
     QStringList storagePoolList;
-    if ( task.sourceConn!=NULL && keep_alive ) {
+    if ( task.srcConnPtr!=NULL && keep_alive ) {
         virStoragePoolPtr *storagePool = NULL;
         unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                              VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
         int ret = virConnectListAllStoragePools(
-                    task.sourceConn, &storagePool, flags);
+                    *task.srcConnPtr, &storagePool, flags);
         if ( ret<0 ) {
             result.err = sendConnErrors();
             result.result = false;
@@ -121,12 +124,12 @@ Result StoragePoolControlThread::getAllStoragePoolDataList()
 {
     Result result;
     QStringList storagePoolDataList;
-    if ( task.sourceConn!=NULL && keep_alive ) {
+    if ( task.srcConnPtr!=NULL && keep_alive ) {
         virStoragePoolPtr *storagePool = NULL;
         unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                              VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
         int ret = virConnectListAllStoragePools(
-                    task.sourceConn, &storagePool, flags);
+                    *task.srcConnPtr, &storagePool, flags);
         if ( ret<0 ) {
             result.err = sendConnErrors();
             result.result = false;
@@ -189,7 +192,7 @@ Result StoragePoolControlThread::createStoragePool()
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     virStoragePoolPtr storagePool = virStoragePoolCreateXML(
-                task.sourceConn, xmlData.data(), flags);
+                *task.srcConnPtr, xmlData.data(), flags);
     if ( storagePool==NULL ) {
         result.err = sendConnErrors();
         result.result = false;
@@ -221,7 +224,7 @@ Result StoragePoolControlThread::defineStoragePool()
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     virStoragePoolPtr storagePool = virStoragePoolDefineXML(
-                task.sourceConn, xmlData.data(), flags);
+                *task.srcConnPtr, xmlData.data(), flags);
     if ( storagePool==NULL ) {
         result.err = sendConnErrors();
         result.result = false;
@@ -245,7 +248,7 @@ Result StoragePoolControlThread::startStoragePool()
     // flags: extra flags; not used yet, so callers should always pass 0
     flags = 0;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         started = (virStoragePoolCreate(storagePool, flags)+1) ? true : false;
         if (!started)
@@ -265,7 +268,7 @@ Result StoragePoolControlThread::destroyStoragePool()
     QString name = task.object;
     bool deleted = false;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         deleted = (virStoragePoolDestroy(storagePool)+1) ? true : false;
         if (!deleted)
@@ -285,7 +288,7 @@ Result StoragePoolControlThread::undefineStoragePool()
     QString name = task.object;
     bool deleted = false;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         deleted = (virStoragePoolUndefine(storagePool)+1) ? true : false;
         if (!deleted)
@@ -306,7 +309,7 @@ Result StoragePoolControlThread::changeAutoStartStoragePool()
     int autostart = task.args.sign;
     bool set = false;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         set = (virStoragePoolSetAutostart(storagePool, autostart)+1) ? true : false;
         if (!set)
@@ -328,7 +331,7 @@ Result StoragePoolControlThread::deleteStoragePool()
                                  : VIR_STORAGE_POOL_DELETE_NORMAL;
     bool deleted = false;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         deleted = (virStoragePoolDelete(storagePool, flags)+1) ? true : false;
         if (!deleted)
@@ -348,7 +351,8 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     QString name = task.object;
     bool read = false;
     char *Returns = NULL;
-    virStoragePoolPtr storagePool = virStoragePoolLookupByName(task.sourceConn, name.toUtf8().data());
+    virStoragePoolPtr storagePool = virStoragePoolLookupByName(
+                *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=NULL ) {
         Returns = (virStoragePoolGetXMLDesc(storagePool, VIR_STORAGE_XML_INACTIVE));
         if ( Returns==NULL )

@@ -1,12 +1,10 @@
 #include "char_device.h"
 
 CharDevice::CharDevice(
-        QWidget *parent,
-        virConnectPtr conn,
-        virDomainPtr domain,
-        QString _tag
+        QWidget *parent, virConnectPtr *connPtr,
+        virDomainPtr domain, QString _tag
         ) :
-    _QWidget(parent, conn, domain), tag(_tag)
+    _QWidget(parent, connPtr, domain), tag(_tag)
 {
     devType = new QComboBox(this);
     devType->addItem("Pseudo TTY", "pty");

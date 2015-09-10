@@ -1,9 +1,8 @@
 #include "file_disk.h"
 
 File_Disk::File_Disk(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _Disk(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _Disk(parent, connPtr)
 {
     browse = new QPushButton("File:", this);
     path = new QLineEdit(this);

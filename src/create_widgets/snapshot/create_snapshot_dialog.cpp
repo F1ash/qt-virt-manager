@@ -12,10 +12,8 @@
     <<"System Checkpoint + external form"
 
 CreateSnapshotDialog::CreateSnapshotDialog(
-        QWidget *parent,
-        QString domainName,
-        bool _state,
-        virConnectPtr _conn) :
+        QWidget *parent, QString domainName,
+        bool _state, virConnectPtr *connPtr) :
     QDialog(parent)
 {
     QString winTitle = QString("Create Snapshot <%1>").arg(domainName);
@@ -95,7 +93,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     for (int i=0; i<baseWdg->count(); i++) {
         _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(
                     baseWdg->widget(i));
-        if ( NULL!=wdg ) wdg->setParameters(_conn, domainName);
+        if ( NULL!=wdg ) wdg->setParameters(connPtr, domainName);
         connect(wdg, SIGNAL(errMsg(QString&)),
                 this, SIGNAL(errMsg(QString&)));
     };

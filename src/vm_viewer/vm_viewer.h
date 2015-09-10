@@ -26,13 +26,13 @@ class VM_Viewer : public QMainWindow
     Q_OBJECT
 public:
     explicit VM_Viewer(
-            QWidget *parent = NULL,
-            virConnect *conn = NULL,
-            QString arg1 = QString(),
-            QString arg2 = QString());
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL,
+            QString         arg1    = QString(),
+            QString         arg2    = QString());
     virtual ~VM_Viewer();
     QString          connName, domain, TYPE;
-    virConnect      *jobConnect = NULL;
+    virConnectPtr*   currConnPtr;
     virErrorPtr      virtErrors = NULL;
     bool             VM_State;
     QSettings        settings;

@@ -22,50 +22,50 @@ public:
     ConnItemModel       *connItemModel;
 
 signals:
-    void clickedItem(QString);
-    void removeConnection(QString&);
-    void messageShowed();
-    void warning(QString&);
-    void connPtr(virConnect*, QString&);
-    void connToClose(int);
-    void connClosed(bool, QString&);
-    void domResult(Result);
-    void netResult(Result);
+    void                 clickedItem(QString);
+    void                 removeConnection(QString&);
+    void                 messageShowed();
+    void                 warning(QString&);
+    void                 connPtr(virConnectPtr*, QString&);
+    void                 connToClose(int);
+    void                 connClosed(bool, QString&);
+    void                 domResult(Result);
+    void                 netResult(Result);
 
 public slots:
-    int  connItemEditAction();
-    void searchLocalhostConnections();
-    void refreshLocalhostConnection();
-    void addConnItem(QString&);
-    void deleteCurrentConnection();
-    void openConnection(QModelIndex&);
-    void showConnection(QModelIndex&);
-    void closeConnection(QModelIndex&);
-    virConnectPtr getConnection(QString&);
-    void stopProcessing();
+    int                  connItemEditAction();
+    void                 searchLocalhostConnections();
+    void                 refreshLocalhostConnection();
+    void                 addConnItem(QString&);
+    void                 deleteCurrentConnection();
+    void                 openConnection(QModelIndex&);
+    void                 showConnection(QModelIndex&);
+    void                 closeConnection(QModelIndex&);
+    virConnectPtr       *getConnectionPtr(QString&);
+    void                 stopProcessing();
 
 private :
-    ConnSettings         *sDialog;
-    ProgressBarDelegate  *progressBarDlg;
-    SearchThread         *searchThread;
-    WaitLocalConn        *waitLocalConn;
-    int                   localConn = 0;
+    ConnSettings        *sDialog;
+    ProgressBarDelegate *progressBarDlg;
+    SearchThread        *searchThread;
+    WaitLocalConn       *waitLocalConn;
+    int                  localConn = 0;
 
 private slots:
-    void connItemClicked(const QPoint&);
-    void connItemDoubleClicked(const QModelIndex&);
-    void connItemKillAction();
-    void connItemRunAction();
-    void connItemShowAction();
-    void createConnection(QModelIndex&);
-    void createLocalConnection(QString&);
-    void checkConnection(QModelIndex&, bool);
-    void deleteCancelledCreation();
-    void showMessage(QString, QString);
-    void sendWarning(QString&);
-    void mainWindowUp();
-    void sendConnPtr(virConnect*, QString&);
-    void getAuthCredentials(QString&);
+    void                 connItemClicked(const QPoint&);
+    void                 connItemDoubleClicked(const QModelIndex&);
+    void                 connItemKillAction();
+    void                 connItemRunAction();
+    void                 connItemShowAction();
+    void                 createConnection(QModelIndex&);
+    void                 createLocalConnection(QString&);
+    void                 checkConnection(QModelIndex&, bool);
+    void                 deleteCancelledCreation();
+    void                 showMessage(QString, QString);
+    void                 sendWarning(QString&);
+    void                 mainWindowUp();
+    void                 sendConnPtr(virConnectPtr*, QString&);
+    void                 getAuthCredentials(QString&);
 };
 
 #endif   // CONN_LIST_WIDGET_H

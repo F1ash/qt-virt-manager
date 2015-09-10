@@ -26,7 +26,7 @@ private:
 
 public slots:
     void                       stopProcessing();
-    bool                       setCurrentStoragePool(virConnect*, QString&, QString&);
+    bool                       setCurrentStoragePool(virConnectPtr*, QString&, QString&);
     QString                    getCurrentVolumeName() const;
     QString                    getCurrentVolumePath() const;
     void                       resultReceiver(Result);

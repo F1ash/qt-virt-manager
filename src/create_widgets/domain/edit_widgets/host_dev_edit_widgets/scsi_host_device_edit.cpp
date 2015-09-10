@@ -1,7 +1,8 @@
 #include "scsi_host_device_edit.h"
 
-SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(QWidget *parent, virConnectPtr _conn) :
-    _QWidget(parent, _conn)
+SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(
+        QWidget *parent, virConnectPtr *connPtr) :
+    _QWidget(parent, connPtr)
 {
     info = new QLabel(this);
     info->setPixmap(QIcon::fromTheme("dialog-warning")
@@ -14,7 +15,7 @@ SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(QWidget *parent, virConnectPtr _con
     devName = new QLineEdit(this);
     devName->setPlaceholderText("scsi_hostN");
     scsiDevice = new AdapterAddress(this);
-    iscsiDevice = new ISCSI_Device(this, currWorkConnection);
+    iscsiDevice = new ISCSI_Device(this, currConnPtr);
     scsiDevices = new QStackedWidget(this);
     scsiDevices->addWidget(scsiDevice);
     scsiDevices->addWidget(iscsiDevice);

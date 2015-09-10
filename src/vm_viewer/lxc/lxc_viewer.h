@@ -11,16 +11,14 @@ class lxcHlpThread : public QThread
     Q_OBJECT
 public:
     explicit lxcHlpThread(
-            QObject     *parent = NULL,
-            virConnect  *_conn  = NULL,
-            QString      _domain= QString());
+            QObject        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL,
+            QString         _domain = QString());
     const QString    domain;
     virDomainPtr     domainPtr = NULL;
     void             run();
-signals:
-    void             result(QString&);
 private:
-    virConnect      *currWorkConnection = NULL;
+    virConnectPtr*   currConnPtr;
 };
 
 class LXC_Viewer : public TermMainWindow
@@ -28,12 +26,12 @@ class LXC_Viewer : public TermMainWindow
     Q_OBJECT
 public:
     explicit LXC_Viewer(
-            QWidget         *parent = NULL,
-            virConnect      *conn = NULL,
-            QString          arg1 = QString(),
-            QString          arg2 = QString(),
-            const QString&   work_dir = NULL,
-            const QString&   command = NULL);
+            QWidget        *parent  = NULL,
+            virConnectPtr*  connPtr = NULL,
+            QString         arg1    = QString(),
+            QString         arg2    = QString(),
+            const QString&  work_dir= NULL,
+            const QString&  command = NULL);
     ~LXC_Viewer();
 
 signals:

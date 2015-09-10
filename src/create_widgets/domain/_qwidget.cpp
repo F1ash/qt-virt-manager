@@ -1,7 +1,7 @@
 #include "_qwidget.h"
 
-_QWidget::_QWidget(QWidget *parent, virConnectPtr conn, virDomainPtr domain) :
-    _Changed(parent), currWorkConnection(conn), currDomain(domain)
+_QWidget::_QWidget(QWidget *parent, virConnectPtr *connPtr, virDomainPtr domain) :
+    _Changed(parent), currConnPtr(connPtr), currDomain(domain)
 {
 }
 

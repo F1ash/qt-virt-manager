@@ -10,23 +10,25 @@ void InterfaceControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
-    keep_alive = true;
-    // for new virConnect usage create the new virConnectRef[erence]
-    int ret = virConnectRef(task.sourceConn);
-    if ( ret<0 ) {
-        task.sourceConn = NULL;
-        sendConnErrors();
-        keep_alive = false;
+    if ( NULL!=task.srcConnPtr ) {
+        // for new virConnect usage create the new virConnectRef[erence]
+        int ret = virConnectRef(*task.srcConnPtr);
+        if ( ret<0 ) {
+            task.srcConnPtr = NULL;
+            sendConnErrors();
+            keep_alive = false;
+        } else
+            keep_alive = true;
     };
     if ( keep_alive && !isRunning() ) {
-        if ( NULL!=task.sourceConn ) start();
-        else {
-            Result result;
-            result.type   = "iface";
-            result.number = number;
-            result.action = _EMPTY_ACTION;
-            emit resultData(result);
-        };
+        currConnPtr = task.srcConnPtr;
+        start();
+    } else {
+        Result result;
+        result.type   = "iface";
+        result.number = number;
+        result.action = _EMPTY_ACTION;
+        emit resultData(result);
     };
 }
 
@@ -65,7 +67,8 @@ void InterfaceControlThread::run()
     default:
         break;
     };
-    virConnectClose(task.sourceConn);
+    // task.srcConnPtr reference will closed in destructor as currConnPtr
+    //virConnectClose(*task.srcConnPtr);
     result.type   = "iface";
     result.number = number;
     result.action = task.action;
@@ -75,13 +78,13 @@ Result InterfaceControlThread::getAllIfaceList()
 {
     Result result;
     QStringList virtIfaceList;
-    if ( task.sourceConn!=NULL && keep_alive ) {
+    if ( task.srcConnPtr!=NULL && keep_alive ) {
         virInterfacePtr *ifaces = NULL;
         //get all ifaces
         unsigned int flags =
                 VIR_CONNECT_LIST_INTERFACES_INACTIVE |
                 VIR_CONNECT_LIST_INTERFACES_ACTIVE;
-        int ret = virConnectListAllInterfaces(task.sourceConn, &ifaces, flags);
+        int ret = virConnectListAllInterfaces(*task.srcConnPtr, &ifaces, flags);
         if ( ret<0 ) {
             result.err = sendConnErrors();
             return result;
@@ -114,7 +117,7 @@ Result InterfaceControlThread::startIface()
     QString name = task.object;
     bool started = false;
     virInterfacePtr iface = virInterfaceLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( iface!=NULL ) {
         // extra flags; not used yet, so callers should always pass 0
         started = (virInterfaceCreate(iface, 0)+1) ? true : false;
@@ -136,7 +139,7 @@ Result InterfaceControlThread::destroyIface()
     QString name = task.object;
     bool destroyed = false;
     virInterfacePtr iface = virInterfaceLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( iface!=NULL ) {
         // extra flags; not used yet, so callers should always pass 0
         destroyed = (virInterfaceDestroy(iface, 0)+1) ? true : false;
@@ -170,7 +173,7 @@ Result InterfaceControlThread::defineIface()
     //extra flags; not used yet, so callers should always pass 0
     int flags = 0;
     virInterfacePtr iface = virInterfaceDefineXML(
-                task.sourceConn, xmlData.data(), flags);
+                *task.srcConnPtr, xmlData.data(), flags);
     if ( iface==NULL ) {
         result.err = sendConnErrors();
         return result;
@@ -189,7 +192,7 @@ Result InterfaceControlThread::undefineIface()
     QString name = task.object;
     bool deleted = false;
     virInterfacePtr iface = virInterfaceLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( iface!=NULL ) {
         deleted = (virInterfaceUndefine(iface)+1) ? true : false;
         if (!deleted)
@@ -210,7 +213,7 @@ Result InterfaceControlThread::ifaceChangeBegin()
     QString name = task.object;
     bool processed = false;
     // extra flags; not used yet, so callers should always pass 0
-    processed = (virInterfaceChangeBegin(task.sourceConn, 0)+1) ? true : false;
+    processed = (virInterfaceChangeBegin(*task.srcConnPtr, 0)+1) ? true : false;
     if (!processed)
         result.err = sendConnErrors();
 
@@ -227,7 +230,7 @@ Result InterfaceControlThread::ifaceChangeCommit()
     QString name = task.object;
     bool processed = false;
     // extra flags; not used yet, so callers should always pass 0
-    processed = (virInterfaceChangeCommit(task.sourceConn, 0)+1) ? true : false;
+    processed = (virInterfaceChangeCommit(*task.srcConnPtr, 0)+1) ? true : false;
     if (!processed)
         result.err = sendConnErrors();
 
@@ -244,7 +247,7 @@ Result InterfaceControlThread::ifaceChangeRollback()
     QString name = task.object;
     bool processed = false;
     // extra flags; not used yet, so callers should always pass 0
-    processed = (virInterfaceChangeRollback(task.sourceConn, 0)+1) ? true : false;
+    processed = (virInterfaceChangeRollback(*task.srcConnPtr, 0)+1) ? true : false;
     if (!processed)
         result.err = sendConnErrors();
 
@@ -263,7 +266,7 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
     bool read = false;
     char *Returns = NULL;
     virInterfacePtr iface = virInterfaceLookupByName(
-                task.sourceConn, name.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     if ( iface!=NULL ) {
         //extra flags; not used yet, so callers should always pass 0
         int flags = 0;

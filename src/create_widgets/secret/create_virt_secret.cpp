@@ -4,8 +4,8 @@
  * http://libvirt.org/formatsecret.html
  */
 
-CreateVirtSecret::CreateVirtSecret(QWidget *parent, virConnectPtr conn) :
-    QDialog(parent), currConnection(conn)
+CreateVirtSecret::CreateVirtSecret(QWidget *parent, virConnectPtr *connPtr) :
+    QDialog(parent), currConnPtr(connPtr)
 {
     setModal(true);
     setWindowTitle("Secret Settings");
@@ -61,9 +61,9 @@ nor to any other node");
     secValue = new QLineEdit(this);
     secValue->setPlaceholderText("Enter secret value/phrase");
     stuffWdg = new QStackedWidget(this);
-    stuffWdg->addWidget(new VolumeSecType(this, currConnection));
-    stuffWdg->addWidget(new CephSecType(this, currConnection));
-    stuffWdg->addWidget(new iSCSISecType(this, currConnection));
+    stuffWdg->addWidget(new VolumeSecType(this, currConnPtr));
+    stuffWdg->addWidget(new CephSecType(this, currConnPtr));
+    stuffWdg->addWidget(new iSCSISecType(this, currConnPtr));
 
     baseLayout->addWidget(uuid);
     baseLayout->addWidget(secDesc);

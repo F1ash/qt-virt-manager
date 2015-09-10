@@ -66,7 +66,7 @@ private:
 public slots:
     void            setData(QString&);
     void            closeConnection();
-    virConnect*     getConnection() const;
+    virConnectPtr*  getConnectionPtr();
     void            setAuthCredentials(QString&, QString&);
 
 private slots:

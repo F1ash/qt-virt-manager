@@ -1,9 +1,8 @@
 #include "volume_disk.h"
 
 Volume_Disk::Volume_Disk(
-        QWidget *parent,
-        virConnectPtr conn) :
-    _Disk(parent, conn)
+        QWidget *parent, virConnectPtr *connPtr) :
+    _Disk(parent, connPtr)
 {
     poolLabel = new QLabel("Pool:", this);
     pool = new QLabel(this);
@@ -15,7 +14,7 @@ Volume_Disk::Volume_Disk(
     mode = new QComboBox(this);
     mode->addItems(QStringList()<<"Host"<<"Direct");
     mode->setEnabled(false);
-    auth = new _Storage_Auth(this, currWorkConnection);
+    auth = new _Storage_Auth(this, currConnPtr);
     auth->setVisible(false);
 
     secLabels->setVisible(true);
@@ -259,7 +258,7 @@ void Volume_Disk::getVolumeNames()
 {
     VVD_Result _ret;
     if ( volumeDialog==NULL ) {
-        volumeDialog = new VirtVolumeDialog(this, currWorkConnection);
+        volumeDialog = new VirtVolumeDialog(this, currConnPtr);
     };
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();
