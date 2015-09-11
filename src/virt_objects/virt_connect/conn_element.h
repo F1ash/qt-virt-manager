@@ -26,6 +26,7 @@ signals:
     void              domStateChanged(Result);
     void              netStateChanged(Result);
     void              connClosed(bool, QString&);
+    void              domainEnd(QString&);
 
 private:
     ConnItemModel    *own_model;
@@ -69,6 +70,7 @@ private slots:
     void              forwardConnClosedSignal(bool);
     void              connAliveThreadStarted();
     void              connAliveThreadFinished();
+    void              emitDomainKeyToCloseViewer(QString&);
 };
 
 #endif   // CONN_ELEMENT_H

@@ -110,7 +110,6 @@ private slots:
     void stopProcessing();
     void invokeVMDisplay(virConnectPtr*, QString, QString);
     void deleteVMDisplay(QString&);
-    void deleteVMDisplay(QString, QString);
     void buildMigrateArgs(TASK);
     void overviewStoragePool(virConnectPtr*, QString&, QString&);
     void deleteStPoolOverview(QString&);

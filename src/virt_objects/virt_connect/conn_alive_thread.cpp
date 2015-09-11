@@ -271,11 +271,14 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
     //qDebug()<<"domEventCallback"<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
     if ( NULL==obj || obj->conn!=_conn ) return 0;
-    QString msg;
+    bool end = false;
+    QString msg, domainName;
+    domainName = QString(virDomainGetName(dom));
     msg = QString("<b>'%1'</b> Domain %2 %3\n")
-           .arg(virDomainGetName(dom))
+           .arg(domainName)
            .arg(obj->domEventToString(event))
-           .arg(obj->domEventDetailToString(event, detail));
+           .arg(obj->domEventDetailToString(event, detail, &end));
+    if ( end ) emit obj->domainEnd(domainName);
     emit obj->connMsg(msg);
     if ( obj->onView ) {
         Result result;
@@ -444,7 +447,7 @@ const char* ConnAliveThread::domEventToString(int event)
     };
     return ret;
 }
-const char* ConnAliveThread::domEventDetailToString(int event, int detail)
+const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool *end)
 {
     const char *ret = "";
     switch ((virDomainEventType) event) {
@@ -528,12 +531,15 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail)
             switch ((virDomainEventStoppedDetailType) detail) {
                 case VIR_DOMAIN_EVENT_STOPPED_SHUTDOWN:
                     ret = "Shutdown";
+                    *end = true;
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_DESTROYED:
                     ret = "Destroyed";
+                    *end = true;
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_CRASHED:
                     ret = "Crashed";
+                    *end = true;
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_MIGRATED:
                     ret = "Migrated";
@@ -543,12 +549,14 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail)
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_FAILED:
                     ret = "Failed";
+                    *end = true;
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_FROM_SNAPSHOT:
                     ret = "Snapshot";
                     break;
                 default:
                     ret = "Unknown";
+                    *end = true;
                     break;
             };
             break;
@@ -556,9 +564,11 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail)
             switch ((virDomainEventShutdownDetailType) detail) {
                 case VIR_DOMAIN_EVENT_SHUTDOWN_FINISHED:
                     ret = "Finished";
+                    *end = true;
                     break;
                 default:
                     ret = "Unknown";
+                    *end = true;
                     break;
                 };
             break;
@@ -576,11 +586,13 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail)
            switch ((virDomainEventCrashedDetailType) detail) {
            case VIR_DOMAIN_EVENT_CRASHED_PANICKED:
                ret = "Panicked";
+               *end = true;
                break;
            };
            break;
         default:
             ret = "Unknown";
+            *end = true;
             break;
     };
     return ret;

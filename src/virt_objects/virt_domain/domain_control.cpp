@@ -135,13 +135,15 @@ void VirtDomainControl::resultReceiver(Result data)
         };
         if ( data.result ) {
             reloadState();
+            /*
             switch (data.action) {
             case DESTROY_ENTITY:
-                emit domainClosed(currConnName, data.name);
+                // don't use because implemented domainEnd signal
                 break;
             default:
                 break;
             }
+            */
         };
     };
 }

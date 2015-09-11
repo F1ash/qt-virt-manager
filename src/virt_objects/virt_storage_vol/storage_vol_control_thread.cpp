@@ -3,7 +3,6 @@
 StorageVolControlThread::StorageVolControlThread(QObject *parent) :
     ControlThread(parent)
 {
-    currConnPtr = NULL;
 }
 
 /* public slots */

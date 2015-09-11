@@ -95,12 +95,15 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             QString msg = QString("In '<b>%1</b>': Open PTY Error...").arg(domain);
             sendErrMsg(msg);
             getCurrentTerminal()->impl()->sendText(msg);
+            startCloseProcess();
         }
     } else if ( ev->timerId()==killTimerId ) {
         counter++;
         closeProcess->setValue(counter*PERIOD*6);
         if ( TIMEOUT<counter*PERIOD*6 ) {
             counter = 0;
+            killTimer(killTimerId);
+            killTimerId = 0;
             close();
         };
     }
@@ -113,8 +116,6 @@ void LXC_Viewer::setTerminalParameters()
                 viewerThread, SLOT(sendDataToVMachine(const char*,int)));
         connect(viewerThread, SIGNAL(errorMsg(QString&, uint)),
                 this, SLOT(sendErrMsg(QString&, uint)));
-        //connect(viewerThread, SIGNAL(finished()),
-        //        this, SLOT(startCloseProcess()));
         viewerThread->start();
         if ( viewerThread->keep_alive ) {
             QString msg = QString("In '<b>%1</b>': Stream Registation success. \

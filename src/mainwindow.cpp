@@ -285,6 +285,8 @@ void MainWindow::initConnListWidget()
           this, SLOT(stopConnProcessing(bool, QString&)));
   connect(connListWidget, SIGNAL(connToClose(int)),
           this, SLOT(closeConnGenerations(int)));
+  connect(connListWidget, SIGNAL(domainEnd(QString&)),
+          this, SLOT(deleteVMDisplay(QString&)));
 }
 void MainWindow::initToolBar()
 {
@@ -390,8 +392,6 @@ void MainWindow::initDockWidgets()
             this, SLOT(invokeVMDisplay(virConnectPtr*,QString,QString)));
     connect(domainDockContent, SIGNAL(addToStateMonitor(virConnectPtr*,QString&,QString&)),
             domainsStateMonitor, SLOT(setNewMonitoredDomain(virConnectPtr*,QString&,QString&)));
-    connect(domainDockContent, SIGNAL(domainClosed(QString,QString)),
-            this, SLOT(deleteVMDisplay(QString,QString)));
     connect(domainDockContent, SIGNAL(migrateToConnect(TASK)),
             this, SLOT(buildMigrateArgs(TASK)));
     connect(domainDockContent, SIGNAL(addNewTask(TASK)),
@@ -808,27 +808,6 @@ void MainWindow::deleteVMDisplay(QString &key)
         };
         VM_Displayed_Map.remove(key);
     }
-}
-void MainWindow::deleteVMDisplay(QString connName, QString domName)
-{
-    QString key = QString("%1_%2").arg(connName).arg(domName);
-    if ( VM_Displayed_Map.contains(key) ) {
-        VM_Viewer *value = NULL;
-        QString _type = VM_Displayed_Map.value(key, NULL)->TYPE.toUpper();
-        if ( _type=="LXC" ) {
-            value = static_cast<LXC_Viewer*>(
-                        VM_Displayed_Map.value(key, NULL));
-        } else if ( _type=="SPICE" ) {
-            value = static_cast<Spice_Viewer*>(
-                        VM_Displayed_Map.value(key, NULL));
-        };
-        if ( NULL!=value ) {
-            if ( value->isActive() ) value->close();
-            // don't anymore, because VM_Viewer emit finished signal and
-            // VM_Viewer will cleaned from VM list
-            // in <MainWindow::deleteVMDisplay(QString&)>
-        };
-    };
 }
 void MainWindow::buildMigrateArgs(TASK _task)
 {

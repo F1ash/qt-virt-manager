@@ -120,6 +120,8 @@ void ConnectionList::deleteCurrentConnection()
                      this, SIGNAL(netResult(Result)));
           disconnect(connections->value(connection), SIGNAL(connClosed(bool, QString&)),
                      this, SIGNAL(connClosed(bool, QString&)));
+          disconnect(connections->value(connection), SIGNAL(domainEnd(QString&)),
+                     this, SIGNAL(domainEnd(QString&)));
           emit removeConnection(connection);
           connections->remove(connection);
           connItemModel->removeRow(_item.row());
@@ -302,6 +304,8 @@ void ConnectionList::createConnection(QModelIndex &_item)
             this, SIGNAL(netResult(Result)));
     connect(connections->value(key), SIGNAL(connClosed(bool, QString&)),
             this, SIGNAL(connClosed(bool, QString&)));
+    connect(connections->value(key), SIGNAL(domainEnd(QString&)),
+            this, SIGNAL(domainEnd(QString&)));
     //qDebug()<<key<<" create Connection item";
     if ( !searchThread->isFinished() && !searchThread->isRunning() ) {
         QString uri(conn->getURI());
@@ -349,6 +353,8 @@ void ConnectionList::createLocalConnection(QString &uri)
             this, SIGNAL(netResult(Result)));
     connect(connections->value(key), SIGNAL(connClosed(bool, QString&)),
             this, SIGNAL(connClosed(bool, QString&)));
+    connect(connections->value(key), SIGNAL(domainEnd(QString&)),
+            this, SIGNAL(domainEnd(QString&)));
     //qDebug()<<key<<" create Local Connection item";
 }
 void ConnectionList::refreshLocalhostConnection()

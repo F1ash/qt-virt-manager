@@ -21,7 +21,6 @@ public:
 signals:
     void                     displayRequest(virConnectPtr*, QString, QString);
     void                     addToStateMonitor(virConnectPtr*, QString&, QString&);
-    void                     domainClosed(QString, QString);
     void                     migrateToConnect(TASK);
     void                     domainToEditor(TASK);
 

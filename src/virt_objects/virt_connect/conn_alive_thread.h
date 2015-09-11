@@ -50,6 +50,7 @@ signals:
     void            domStateChanged(Result);
     void            netStateChanged(Result);
     void            connClosed(bool);
+    void            domainEnd(QString&);
 
 private:
     int             domainsLifeCycleCallback;
@@ -84,11 +85,9 @@ private slots:
     static  int     netEventCallback(virConnectPtr, virNetworkPtr,
                                      int, int, void*);
     const char*     domEventToString(int event);
-    static const char*
-                    domEventDetailToString(int event, int detail);
+    const char*     domEventDetailToString(int event, int detail, bool *end);
     const char*     netEventToString(int event);
-    static const char*
-                    netEventDetailToString(int event, int detail);
+    const char*     netEventDetailToString(int event, int detail);
     void            closeConnection(int);
     void            getAuthCredentials(QString&);
 };

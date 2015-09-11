@@ -31,6 +31,7 @@ signals:
     void                 connClosed(bool, QString&);
     void                 domResult(Result);
     void                 netResult(Result);
+    void                 domainEnd(QString&);
 
 public slots:
     int                  connItemEditAction();

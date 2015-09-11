@@ -28,6 +28,8 @@ ConnElement::ConnElement(QObject *parent) :
             this, SLOT(connAliveThreadStarted()));
     connect(connAliveThread, SIGNAL(finished()),
             this, SLOT(connAliveThreadFinished()));
+    connect(connAliveThread, SIGNAL(domainEnd(QString&)),
+            this, SLOT(emitDomainKeyToCloseViewer(QString&)));
 }
 
 /* public slots */
@@ -268,4 +270,10 @@ void ConnElement::connAliveThreadFinished()
 {
     conn_Status.insert("isRunning", QVariant(STOPPED));
     own_index->setData(conn_Status);
+}
+void ConnElement::emitDomainKeyToCloseViewer(QString &_domName)
+{
+    QString key;
+    key = QString("%1_%2").arg(name).arg(_domName);
+    emit domainEnd(key);
 }

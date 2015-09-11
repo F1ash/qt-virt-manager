@@ -32,7 +32,7 @@ private slots:
     static void     freeData(void*);
     static void     streamEventCallBack(virStreamPtr, int, void*);
     void            updateStreamEvents(virStreamPtr, int);
-    void            sendDataToDisplay(virStreamPtr);
+    void            sendDataToDisplay();
     void            closeStream();
 };
 
