@@ -21,6 +21,7 @@ LXC_ViewerThread::~LXC_ViewerThread()
     };
     closeStream();
     if ( connRef ) virConnectClose(*currConnPtr);
+    keep_alive = false;
     wait(30000);
 }
 
@@ -60,11 +61,6 @@ void LXC_ViewerThread::run()
     while (keep_alive) {
         msleep(100);
     };
-}
-void LXC_ViewerThread::stop()
-{
-    qDebug()<<"stop";
-    keep_alive = false;
 }
 
 /* private slots */

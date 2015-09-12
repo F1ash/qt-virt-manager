@@ -67,7 +67,7 @@ TermMainWindow::TermMainWindow(
     //consoleTabulator->setShellProgram(command);
     consoleTabulator->addNewTab(QString("<%2> Domain Terminal in [ %1 ] Connection").arg(arg1).arg(arg2));
 
-    setWindowTitle(QString("<%2> Domain Terminal in <%1> Connection").arg(arg1).arg(arg2));
+    setWindowTitle(QString("<%2> Domain Terminal in [ %1 ] Connection").arg(arg1).arg(arg2));
     setWindowIcon(QIcon::fromTheme("utilities-terminal"));
 
     setup_FileMenu_Actions();

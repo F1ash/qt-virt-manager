@@ -44,7 +44,6 @@ LXC_Viewer::~LXC_Viewer()
     QString msg;
     if ( NULL!=viewerThread ) {
         viewerThread->blockSignals(true);
-        viewerThread->stop();
         delete viewerThread;
         viewerThread = NULL;
     };
