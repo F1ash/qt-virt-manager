@@ -17,9 +17,9 @@ LXC_ViewerThread::~LXC_ViewerThread()
     if (ptySlaveFd) {
         close(ptySlaveFd);
         ptySlaveFd = -1;
-        qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd;
+        qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"in delete";
     };
-    closeStream();
+    unregisterStreamEvents();
     if ( connRef ) virConnectClose(*currConnPtr);
     keep_alive = false;
     wait(30000);
@@ -34,7 +34,7 @@ void LXC_ViewerThread::setData(QString &_dom, virDomainPtr _domPtr, int fd)
 }
 void LXC_ViewerThread::run()
 {
-    connRef = virConnectRef(*currConnPtr)+1>0;
+    connRef = !(virConnectRef(*currConnPtr)<0);
     stream = (connRef)?
                 virStreamNew( *currConnPtr, VIR_STREAM_NONBLOCK ):NULL;
     if ( NULL==stream ) {
@@ -82,17 +82,18 @@ int  LXC_ViewerThread::registerStreamEvents()
 void LXC_ViewerThread::unregisterStreamEvents()
 {
     qDebug()<<"unregisterStreamEvents";
-    if ( !streamRegistered ) return;
-    streamRegistered = virStreamEventRemoveCallback(stream)!=0;
-    if ( !streamRegistered ) sendConnErrors();
-    if ( NULL!=stream || streamRegistered ) {
+    if ( NULL!=stream && streamRegistered ) {
+        streamRegistered = (virStreamEventRemoveCallback(stream)!=0);
+        if ( streamRegistered ) {
+            sendConnErrors();
+            streamRegistered = false;
+        };
         if ( virStreamAbort(stream)<0 ) {
             sendConnErrors();
         };
         if ( virStreamFree(stream)<0 ) {
             sendConnErrors();
-        } else
-            stream = NULL;
+        };
     };
 }
 void LXC_ViewerThread::freeData(void *opaque)
@@ -112,7 +113,7 @@ void LXC_ViewerThread::streamEventCallBack(virStreamPtr _stream, int events, voi
         return;
     };
     if ( obj->EndOfFile ) {
-        obj->closeStream();
+        obj->unregisterStreamEvents();
         obj->keep_alive = false;
         return;
     };
@@ -120,7 +121,7 @@ void LXC_ViewerThread::streamEventCallBack(virStreamPtr _stream, int events, voi
          events & VIR_STREAM_EVENT_HANGUP ) {
         qDebug()<<"VIR_STREAM_EVENT_HANGUP";
         // Received stream ERROR/HANGUP, closing console
-        obj->closeStream();
+        obj->unregisterStreamEvents();
         obj->keep_alive = false;
     } else if ( events & VIR_STREAM_EVENT_READABLE ) {
         qDebug()<<"VIR_STREAM_EVENT_READABLE"<<obj->stream;
@@ -130,7 +131,7 @@ void LXC_ViewerThread::streamEventCallBack(virStreamPtr _stream, int events, voi
         //obj->sendDataToVMachine();
     } else {
         qDebug()<<"streamEventCallBack"<<"unused case";
-        obj->closeStream();
+        obj->unregisterStreamEvents();
         obj->keep_alive = false;
     };
 }
@@ -146,7 +147,6 @@ void LXC_ViewerThread::sendDataToDisplay()
     qDebug()<<"sendDataToDisplay"<<"to"<<ptySlaveFd;
     if ( NULL==stream || !keep_alive || !streamRegistered || EndOfFile ) {
         qDebug()<<"sendDataToDisplay"<<"callback stream is NULL or deregistered or thread is died or stream EOF";
-        msleep(333);
         return;
     };
     QString msg;
@@ -163,16 +163,16 @@ void LXC_ViewerThread::sendDataToDisplay()
         qDebug()<<"sendDataToDisplay"<<"Received EOF";
         if ( !EndOfFile ) {
             EndOfFile = true;
-            closeStream();
+            unregisterStreamEvents();
             if (ptySlaveFd) {
                 write(ptySlaveFd, "\nEOF...", 7);
                 close(ptySlaveFd);
                 ptySlaveFd = -1;
-                qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd;
+                qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"in EOF";
             };
-            msg = QString("In '<b>%1</b>': EOF.").arg(domain);
-            emit errorMsg(msg, number);
-            qDebug()<<"emit errMsg";
+            //msg = QString("In '<b>%1</b>': EOF.").arg(domain);
+            //emit errorMsg(msg, number);
+            //qDebug()<<"emit errMsg";
         };
         break;
     case -1:
@@ -202,14 +202,14 @@ void LXC_ViewerThread::sendDataToDisplay()
 void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
 {
     qDebug()<<"sendDataToVMachine"<<"from"<<ptySlaveFd;
-    if ( got<=0 || NULL==stream || !keep_alive ) return;
+    if ( got<=0 || NULL==stream || !keep_alive || !streamRegistered || EndOfFile ) return;
     int saved = virStreamSend(stream, buff, got);
     if ( saved==-2 ) {
         // This is basically EAGAIN
         return;
     } else if ( saved==-1 ) {
         sendConnErrors();
-        closeStream();
+        unregisterStreamEvents();
         return;
     } else {
         //qDebug()<<saved<<"sent";
@@ -219,11 +219,4 @@ void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
                 VIR_STREAM_EVENT_READABLE |
                 VIR_STREAM_EVENT_ERROR    |
                 VIR_STREAM_EVENT_HANGUP);
-}
-void LXC_ViewerThread::closeStream()
-{
-    if ( NULL!=stream ) {
-        unregisterStreamEvents();
-        qDebug()<<"stream registered state:"<<streamRegistered;
-    };
 }

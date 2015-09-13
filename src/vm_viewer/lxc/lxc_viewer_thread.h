@@ -8,7 +8,7 @@ class LXC_ViewerThread : public ControlThread
 {
     Q_OBJECT
 public:
-    LXC_ViewerThread(QObject *parent = NULL);
+    explicit LXC_ViewerThread(QObject *parent = NULL);
     ~LXC_ViewerThread();
 
 signals:
@@ -32,7 +32,6 @@ private slots:
     static void     streamEventCallBack(virStreamPtr, int, void*);
     void            updateStreamEvents(virStreamPtr, int);
     void            sendDataToDisplay();
-    void            closeStream();
 };
 
 #endif // LXC_VIEWER_THREAD_H
