@@ -2,7 +2,7 @@
 
 VM_Viewer::VM_Viewer(
         QWidget *parent, virConnectPtr *connPtr, QString arg1, QString arg2) :
-    QMainWindow(parent), currConnPtr(connPtr), connName(arg1), domain(arg2)
+    QMainWindow(parent), ptr_ConnPtr(connPtr), connName(arg1), domain(arg2)
 {
     qRegisterMetaType<QString>("QString&");
     setMinimumSize(100, 100);
@@ -72,7 +72,7 @@ void VM_Viewer::sendErrMsg(QString &msg, uint _number)
 
 void VM_Viewer::sendConnErrors()
 {
-    virtErrors = virConnGetLastError(*currConnPtr);
+    virtErrors = (*ptr_ConnPtr)? virConnGetLastError(*ptr_ConnPtr):NULL;
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
@@ -96,7 +96,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
     args.append(domain);
     TASK task;
     task.type = "domain";
-    task.srcConnPtr = currConnPtr;
+    task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = connName;
     task.object     = domain;
     if        ( method.first()=="startVirtDomain" ) {
@@ -141,7 +141,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
         //qDebug()<<"createVirtDomainSnapshot";
         CreateSnapshotDialog *_dialog =
                 new CreateSnapshotDialog(
-                    this, domain, true, currConnPtr);
+                    this, domain, true, ptr_ConnPtr);
         connect(_dialog, SIGNAL(errMsg(QString&)),
                 this, SLOT(sendErrMsg(QString&)));
         int exitCode = _dialog->exec();
@@ -158,7 +158,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
     } else if ( method.first()=="moreSnapshotActions" ) {
         //qDebug()<<"moreSnapshotActions";
         SnapshotActionDialog *_dialog =
-               new SnapshotActionDialog(this, currConnPtr, domain);
+               new SnapshotActionDialog(this, ptr_ConnPtr, domain);
         int exitCode = _dialog->exec();
         if ( exitCode ) {
             QStringList params = _dialog->getParameters();

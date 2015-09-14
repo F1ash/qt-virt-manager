@@ -21,7 +21,7 @@ public:
     QString          uri, runXmlDesc;
     void             run();
 private:
-    virConnectPtr*   currConnPtr;
+    virConnectPtr*   ptr_ConnPtr;
 };
 
 class Spice_Viewer : public VM_Viewer

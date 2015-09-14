@@ -46,10 +46,10 @@ void VirtSecretControl::stopProcessing()
                 0, Qt::Horizontal, QString("UUID"), Qt::EditRole);
 
 }
-bool VirtSecretControl::setCurrentWorkConnect(virConnectPtr *connPtr)
+bool VirtSecretControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
-    currConnPtr = connPtr;
+    ptr_ConnPtr = connPtrPtr;
     toolBar->enableAutoReload();
     return true;
 }
@@ -147,7 +147,7 @@ void VirtSecretControl::reloadState()
 {
     TASK task;
     task.type = "secret";
-    task.srcConnPtr = currConnPtr;
+    task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtSecret";
@@ -191,7 +191,7 @@ void VirtSecretControl::execAction(const QStringList &l)
 {
     TASK task;
     task.type = "secret";
-    task.srcConnPtr = currConnPtr;
+    task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtSecretModel->DataList.count()>idx.row() ) {
@@ -201,7 +201,7 @@ void VirtSecretControl::execAction(const QStringList &l)
             QString xml;
             bool show = false;
             // show Secret Creator widget
-            CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, currConnPtr);
+            CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, ptr_ConnPtr);
             int result = createVirtSec->exec();
             if ( createVirtSec!=NULL && result==QDialog::Accepted ) {
                 xml = createVirtSec->getXMLDescFileName();
@@ -239,7 +239,7 @@ void VirtSecretControl::execAction(const QStringList &l)
         QString xml;
         bool show = false;
         // show Secret Creator widget
-        CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, currConnPtr);
+        CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, ptr_ConnPtr);
         int result = createVirtSec->exec();
         if ( createVirtSec!=NULL && result==QDialog::Accepted ) {
             xml = createVirtSec->getXMLDescFileName();

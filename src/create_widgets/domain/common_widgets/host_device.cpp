@@ -15,22 +15,22 @@ HostDevice::HostDevice(QWidget *parent, virConnectPtr *connPtr) :
 {
     type = new QComboBox(this);
     info = new QStackedWidget(this);
-    QString connType = QString(virConnectGetType(*currConnPtr)).toLower();
+    QString connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
     if ( connType=="qemu" ) {
         type->addItems(QEMU_DEV_LIST);
-        info->addWidget(new USB_Host_Device(this, currConnPtr));
-        info->addWidget(new PCI_Host_Device(this, currConnPtr));
-        info->addWidget(new SCSI_Host_Device(this, currConnPtr));
+        info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));
+        info->addWidget(new PCI_Host_Device(this, ptr_ConnPtr));
+        info->addWidget(new SCSI_Host_Device(this, ptr_ConnPtr));
     } else if ( connType=="lxc" ) {
         type->addItems(LXC_DEV_LIST);
-        info->addWidget(new USB_Host_Device(this, currConnPtr));
-        info->addWidget(new BCh_Host_Device(this, currConnPtr));
+        info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));
+        info->addWidget(new BCh_Host_Device(this, ptr_ConnPtr));
     };
     /*
-    info->addWidget(new USB_Host_Device(this, currConnPtr));
-    info->addWidget(new PCI_Host_Device(this, currConnPtr));
-    info->addWidget(new SCSI_Host_Device(this, currConnPtr));
-    info->addWidget(new BCh_Host_Device(this, currConnPtr));
+    info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));
+    info->addWidget(new PCI_Host_Device(this, ptr_ConnPtr));
+    info->addWidget(new SCSI_Host_Device(this, ptr_ConnPtr));
+    info->addWidget(new BCh_Host_Device(this, ptr_ConnPtr));
     type->addItem("USB Host Device");
     type->addItem("PCI Host Device");
     type->addItem("SCSI Host Device");

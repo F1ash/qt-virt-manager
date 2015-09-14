@@ -159,10 +159,10 @@ void ConnectionList::closeConnection(QModelIndex &_item)
 {
     checkConnection(_item, TO_STOP);
 }
-virConnectPtr* ConnectionList::getConnectionPtr(QString &name)
+virConnectPtr* ConnectionList::getPtr_connectionPtr(QString &name)
 {
     return (connections->contains(name)) ?
-            connections->value(name)->getConnectionPtr()
+            connections->value(name)->getPtr_connectionPtr()
             : NULL;
 }
 void ConnectionList::stopProcessing()

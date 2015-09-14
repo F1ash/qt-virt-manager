@@ -20,7 +20,7 @@ LXC_ViewerThread::~LXC_ViewerThread()
         qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"in delete";
     };
     unregisterStreamEvents();
-    if ( connRef ) virConnectClose(*currConnPtr);
+    if ( connRef ) virConnectClose(*ptr_ConnPtr);
     keep_alive = false;
     wait(30000);
 }
@@ -34,9 +34,9 @@ void LXC_ViewerThread::setData(QString &_dom, virDomainPtr _domPtr, int fd)
 }
 void LXC_ViewerThread::run()
 {
-    connRef = !(virConnectRef(*currConnPtr)<0);
+    connRef = !(virConnectRef(*ptr_ConnPtr)<0);
     stream = (connRef)?
-                virStreamNew( *currConnPtr, VIR_STREAM_NONBLOCK ):NULL;
+                virStreamNew( *ptr_ConnPtr, VIR_STREAM_NONBLOCK ):NULL;
     if ( NULL==stream ) {
         sendConnErrors();
         keep_alive = false;
@@ -57,7 +57,7 @@ void LXC_ViewerThread::run()
             keep_alive = false;
         };
     };
-    qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd;
+    qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"init in run";
     while (keep_alive) {
         msleep(100);
     };
@@ -86,15 +86,13 @@ void LXC_ViewerThread::unregisterStreamEvents()
         streamRegistered = (virStreamEventRemoveCallback(stream)!=0);
         if ( streamRegistered ) {
             sendConnErrors();
-            streamRegistered = false;
-        };
-        if ( virStreamAbort(stream)<0 ) {
-            sendConnErrors();
+            //streamRegistered = false;
         };
         if ( virStreamFree(stream)<0 ) {
             sendConnErrors();
         };
     };
+    qDebug()<<"StreamEvents state:"<<streamRegistered;
 }
 void LXC_ViewerThread::freeData(void *opaque)
 {
@@ -147,12 +145,14 @@ void LXC_ViewerThread::sendDataToDisplay()
     qDebug()<<"sendDataToDisplay"<<"to"<<ptySlaveFd;
     if ( NULL==stream || !keep_alive || !streamRegistered || EndOfFile ) {
         qDebug()<<"sendDataToDisplay"<<"callback stream is NULL or deregistered or thread is died or stream EOF";
+        keep_alive = false;
         return;
     };
     QString msg;
-    char buff[BLOCK_SIZE];
-    memset( buff, '\0', BLOCK_SIZE );
-    int got = virStreamRecv(stream, buff, BLOCK_SIZE);
+    size_t _size = sizeof(char)*BLOCK_SIZE;
+    char *buff = (char*) malloc(_size);
+    if (buff==NULL) return;
+    int got = virStreamRecv(stream, buff, _size);
     switch ( got ) {
     case -2:
         // This is basically EAGAIN
@@ -163,6 +163,9 @@ void LXC_ViewerThread::sendDataToDisplay()
         qDebug()<<"sendDataToDisplay"<<"Received EOF";
         if ( !EndOfFile ) {
             EndOfFile = true;
+            if ( virStreamAbort(stream)<0 ) {
+                sendConnErrors();
+            };
             unregisterStreamEvents();
             if (ptySlaveFd) {
                 write(ptySlaveFd, "\nEOF...", 7);
@@ -170,9 +173,9 @@ void LXC_ViewerThread::sendDataToDisplay()
                 ptySlaveFd = -1;
                 qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"in EOF";
             };
-            //msg = QString("In '<b>%1</b>': EOF.").arg(domain);
-            //emit errorMsg(msg, number);
-            //qDebug()<<"emit errMsg";
+            msg = QString("In '<b>%1</b>': EOF.").arg(domain);
+            emit errorMsg(msg, number);
+            qDebug()<<"emit errMsg";
         };
         break;
     case -1:
@@ -181,6 +184,9 @@ void LXC_ViewerThread::sendDataToDisplay()
             write(ptySlaveFd, "\nError in callback stream...", 19);
         };
         sendConnErrors();
+        if ( virStreamAbort(stream)<0 ) {
+            sendConnErrors();
+        };
         qDebug()<<"sendDataToDisplay"<<"Error in callback stream"<<stream;
         keep_alive = false;
         break;
@@ -191,6 +197,9 @@ void LXC_ViewerThread::sendDataToDisplay()
             if (ptySlaveFd) {
                 int sent = write(ptySlaveFd, &buff[i], 1);
                 if ( sent<0 ) {
+                    if ( virStreamAbort(stream)<0 ) {
+                        sendConnErrors();
+                    };
                     keep_alive = false;
                     break;
                 };
@@ -198,6 +207,7 @@ void LXC_ViewerThread::sendDataToDisplay()
         };
         break;
     };
+    free(buff);
 }
 void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
 {
@@ -209,7 +219,10 @@ void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
         return;
     } else if ( saved==-1 ) {
         sendConnErrors();
-        unregisterStreamEvents();
+        if ( virStreamAbort(stream)<0 ) {
+            sendConnErrors();
+        };
+        keep_alive = false;
         return;
     } else {
         //qDebug()<<saved<<"sent";

@@ -215,7 +215,7 @@ void Virtual_Network::setAvailableVirtNetworks()
     virNetworkPtr *networks = NULL;
     unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                          VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks(*currConnPtr, &networks, flags);
+    int ret = virConnectListAllNetworks(*ptr_ConnPtr, &networks, flags);
     if ( ret<0 ) {
         // if failed, then set to default virtual network
         network->addItem("VirtNetwork detect failed", "default");

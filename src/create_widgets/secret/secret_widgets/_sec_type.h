@@ -17,7 +17,7 @@ public:
             virConnectPtr*  connPtr = NULL);
     QLabel                 *info;
     QVBoxLayout            *baseLayout;
-    virConnectPtr*          currConnPtr;
+    virConnectPtr*          ptr_ConnPtr;
 
 public slots:
     virtual QDomDocument    getSecStuff() const;

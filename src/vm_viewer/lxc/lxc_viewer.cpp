@@ -2,17 +2,17 @@
 
 lxcHlpThread::lxcHlpThread(
         QObject *parent, virConnectPtr* connPtr, QString _domain) :
-    QThread(parent), currConnPtr(connPtr), domain(_domain)
+    QThread(parent), ptr_ConnPtr(connPtr), domain(_domain)
 {
 
 }
 void lxcHlpThread::run()
 {
-    if ( NULL==currConnPtr ) return;
-    if ( virConnectRef(*currConnPtr)<0 ) return;
+    if ( NULL==ptr_ConnPtr ) return;
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) return;
     domainPtr =virDomainLookupByName(
-                    *currConnPtr, domain.toUtf8().data());
-    virConnectClose(*currConnPtr);
+                    *ptr_ConnPtr, domain.toUtf8().data());
+    virConnectClose(*ptr_ConnPtr);
 }
 
 LXC_Viewer::LXC_Viewer(
@@ -24,7 +24,7 @@ LXC_Viewer::LXC_Viewer(
     TYPE = "LXC";
     // unused toolbar
     // viewerToolBar->setVisible(false);
-    hlpThread = new lxcHlpThread(this, currConnPtr, domain);
+    hlpThread = new lxcHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
     hlpThread->start();
@@ -84,7 +84,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             counter = 0;
             viewerThread->setData(
                         domain, hlpThread->domainPtr, ptySlaveFd);
-            if ( viewerThread->setCurrentWorkConnect(currConnPtr) ) {
+            if ( viewerThread->setCurrentWorkConnect(ptr_ConnPtr) ) {
                 setTerminalParameters();
             };
         } else if ( TIMEOUT<counter*PERIOD ) {

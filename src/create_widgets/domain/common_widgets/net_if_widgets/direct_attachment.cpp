@@ -165,10 +165,10 @@ void DirectAttachment::setDataDescription(QString &xmlDesc)
 void DirectAttachment::setAvailableSources()
 {
     virNodeDevice  **nodeDevices = NULL;
-    if ( currConnPtr!=NULL ) {
+    if ( ptr_ConnPtr!=NULL ) {
         unsigned int flags =
                 VIR_CONNECT_LIST_NODE_DEVICES_CAP_NET;
-        int ret = virConnectListAllNodeDevices(*currConnPtr, &nodeDevices, flags);
+        int ret = virConnectListAllNodeDevices(*ptr_ConnPtr, &nodeDevices, flags);
         if ( ret<0 ) {
             netSource->insertItem(0, "NetSource detect failed", "");
         } else {

@@ -6,10 +6,10 @@
 
 SnapshotActionDialog::SnapshotActionDialog(
         QWidget         *parent,
-        virConnectPtr   *currConnPtr,
+        virConnectPtr   *ptr_ConnPtr,
         QString          _domName) :
     QDialog(parent),
-    currConnPtr(currConnPtr),
+    ptr_ConnPtr(ptr_ConnPtr),
     domName(_domName)
 {
     params.clear();
@@ -147,7 +147,7 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
 void SnapshotActionDialog::setDomainSnapshots()
 {
     domain = virDomainLookupByName(
-                *currConnPtr, domName.toUtf8().data());
+                *ptr_ConnPtr, domName.toUtf8().data());
     int namesLen = virDomainSnapshotNum(
                 domain, VIR_DOMAIN_SNAPSHOT_LIST_ROOTS);
     if ( namesLen>0 ) {

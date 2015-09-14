@@ -1,7 +1,7 @@
 #include "_sec_type.h"
 
 _SecType::_SecType(QWidget *parent, virConnectPtr* connPtr) :
-    QWidget(parent), currConnPtr(connPtr)
+    QWidget(parent), ptr_ConnPtr(connPtr)
 {
     info = new QLabel(this);
     baseLayout = new QVBoxLayout(this);

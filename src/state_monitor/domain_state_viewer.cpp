@@ -4,7 +4,7 @@
 
 DomainStateViewer::DomainStateViewer(
         QWidget *parent, virConnectPtr *connPtr, QString _domainName) :
-    QWidget(parent), currConnPtr(connPtr), domainName(_domainName)
+    QWidget(parent), ptr_ConnPtr(connPtr), domainName(_domainName)
 {
     monitorName = new QLabel(domainName, this);
     closeViewer = new QPushButton(
@@ -31,7 +31,7 @@ DomainStateViewer::DomainStateViewer(
     // TODO: implement the display of different domain states:
     // CPU Usage, Disk I/O (?), Network I/O (?), MemoryStats.
     domainMonitorThread = new DomainMonitorThread(
-                this, currConnPtr, domainName);
+                this, ptr_ConnPtr, domainName);
     connect(domainMonitorThread, SIGNAL(dataChanged(int, int, int, int)),
             this, SLOT(setData(int, int, int, int)));
 
@@ -47,7 +47,7 @@ DomainStateViewer::DomainStateViewer(
     memPercent = memDoc.firstChildElement("svg")
             .firstChildElement("text");
     timerId = startTimer(PERIOD*1000);
-    if ( NULL==currConnPtr ) {
+    if ( NULL==ptr_ConnPtr ) {
         monitorName->setText("State:<br><b>Connection Error</b></br>");
     };
 }
@@ -68,7 +68,7 @@ void DomainStateViewer::closeDomainStateViewer()
 /* private slots */
 void DomainStateViewer::timerEvent(QTimerEvent *ev)
 {
-    if ( timerId==ev->timerId() && currConnPtr!=NULL ) {
+    if ( timerId==ev->timerId() && ptr_ConnPtr!=NULL ) {
         if ( !domainMonitorThread->isRunning() )
             domainMonitorThread->start();
     }

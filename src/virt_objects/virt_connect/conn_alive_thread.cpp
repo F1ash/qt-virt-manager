@@ -2,9 +2,10 @@
 #define MINUTE 60000
 
 ConnAliveThread::ConnAliveThread(QObject *parent) :
-    QThread(parent)
+    _VirtThread(parent)
 {
     qRegisterMetaType<CONN_STATE>("CONN_STATE");
+    _connPtr = NULL;
     onView = false;
     closeCallbackRegistered = false;
     domainsLifeCycleCallback = 0;
@@ -15,16 +16,16 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
 void ConnAliveThread::setData(QString &uri) { URI = uri; }
 void ConnAliveThread::closeConnection()
 {
-    //qDebug()<<"closeConnection0"<<conn<<URI;
+    //qDebug()<<"closeConnection0"<<*ptr_ConnPtr<<URI;
     if ( keep_alive ) {
         keep_alive = false;
         return;
     };
-    //qDebug()<<"closeConnection1"<<conn<<URI;
+    //qDebug()<<"closeConnection1"<<*ptr_ConnPtr<<URI;
     CONN_STATE state;
-    if ( conn!=NULL ) {
+    if ( *ptr_ConnPtr!=NULL ) {
         unregisterConnEvents();
-        int ret = virConnectClose(conn);
+        int ret = virConnectClose(*ptr_ConnPtr);
         //qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
         if ( ret<0 ) {
             state = FAILED;
@@ -34,16 +35,17 @@ void ConnAliveThread::closeConnection()
             state = STOPPED;
             emit connClosed(onView);
         };
-        conn = NULL;
+        *ptr_ConnPtr = NULL;
     } else {
         emit connMsg( QString("connect is NULL") );
         state = FAILED;
     };
     emit changeConnState(state);
 }
-virConnectPtr *ConnAliveThread::getConnectionPtr()
+virConnectPtr *ConnAliveThread::getPtr_connectionPtr()
 {
-    return &conn;
+    qDebug()<<"ptr_ConnPtr"<<ptr_ConnPtr;
+    return ptr_ConnPtr;
 }
 void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
 {
@@ -58,96 +60,39 @@ void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
 void ConnAliveThread::run()
 {
     openConnection();
-    if (!keep_alive) return;
-    int probe = 0;
-    int ret = virConnectSetKeepAlive(conn, 3, 10);
-    if ( ret!=0 ) {
-        emit connMsg( "Remote party doesn't support keepalive messages or error is occurred." );
-        /* virConnectIsAlive() --
-         * Determine if the connection to the hypervisor is still alive
-         * A connection will be classed as alive if it is either local,
-         * or running over a channel (TCP or UNIX socket) which is not closed.
-         *
-         * WARNING: current policy for close Connection is 3 error per minute;
-         * It maybe improved later.
-         */
-        emit connMsg( "The check of the alive connection in the loop." );
-        QTime timeMark;
-        timeMark.start();
-        while ( keep_alive && NULL!=conn ) {
-            ret = virConnectIsAlive(conn);
-            if ( ret<0 ) {
-                sendConnErrors();
-                if ( ++probe>2 ) {
-                    if ( timeMark.elapsed()>MINUTE ) {
-                        emit connMsg("The connection is not stable and it was automatically closed.");
-                        break;
-                    } else {
-                        probe = 0;
-                        timeMark.restart();
-                    };
-                };
-            } else if ( ret==0 ) {
-                emit connMsg("Connection is died or this connection type is unsupported.");
-                break;
-            };
-            msleep(500);
-        };
-    } else {
-        emit connMsg( "Set keepalive messages." );
-        while ( keep_alive && NULL!=conn ) {
-            if ( virEventRunDefaultImpl() < 0 ) {
-                sendConnErrors();
-                //if ( ++probe>2 ) break;
-            };
-        };
+    while ( keep_alive && NULL!=*ptr_ConnPtr ) {
+        msleep(1000);
     };
     keep_alive = false;
     closeConnection();
 }
 void ConnAliveThread::openConnection()
 {
-    //conn = virConnectOpen(URI.toUtf8().constData());
+    //*ptr_ConnPtr = virConnectOpen(URI.toUtf8().constData());
     auth.cb = authCallback;
     auth.cbdata = this;
-    conn = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
-    if (conn==NULL) {
+    virConnectPtr _connPtr = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
+    ptr_ConnPtr = &_connPtr;
+    if (*ptr_ConnPtr==NULL) {
         sendConnErrors();
         keep_alive = false;
         emit connMsg( "Connection to the Hypervisor is failed." );
         emit changeConnState(FAILED);
     } else {
-        //qDebug()<<" openConnection"<<conn<<URI;
+        //qDebug()<<" openConnection"<<*ptr_ConnPtr<<URI;
         keep_alive = true;
         emit connMsg( QString("connect opened: %1")
-                      .arg(QVariant(conn!=NULL)
+                      .arg(QVariant(*ptr_ConnPtr!=NULL)
                            .toString()) );
         emit changeConnState(RUNNING);
         registerConnEvents();
     };
-    //qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI<<(conn!=NULL);
-}
-void ConnAliveThread::sendConnErrors()
-{
-    virtErrors = virConnGetLastError(conn);
-    if ( virtErrors!=NULL && virtErrors->code>0 ) {
-        emit connMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                      .arg(QString().fromUtf8(virtErrors->message)) );
-        virResetError(virtErrors);
-    } else sendGlobalErrors();
-}
-void ConnAliveThread::sendGlobalErrors()
-{
-    virtErrors = virGetLastError();
-    if ( virtErrors!=NULL && virtErrors->code>0 )
-        emit connMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                      .arg(QString().fromUtf8(virtErrors->message)) );
-    virResetLastError();
+    //qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI<<(*ptr_ConnPtr!=NULL);
 }
 void ConnAliveThread::registerConnEvents()
 {
     int ret = virConnectRegisterCloseCallback(
-                conn,
+                *ptr_ConnPtr,
                 connEventCallBack,
                 this,
     // don't register freeData, because it remove this thread
@@ -155,19 +100,20 @@ void ConnAliveThread::registerConnEvents()
     closeCallbackRegistered = !(ret<0);
     if (ret<0) sendConnErrors();
     domainsLifeCycleCallback = virConnectDomainEventRegisterAny(
-                conn,
+                *ptr_ConnPtr,
                 NULL,
-                VIR_DOMAIN_EVENT_ID_LIFECYCLE,
     // set domainsLifeCycleCallback signature
+                VIR_DOMAIN_EVENT_ID_LIFECYCLE,
                 VIR_DOMAIN_EVENT_CALLBACK(domEventCallback),
                 this,
     // don't register freeData, because it remove this thread
                 NULL);
+    if (ret<0) sendConnErrors();
     networkLifeCycleCallback = virConnectNetworkEventRegisterAny(
-                conn,
+                *ptr_ConnPtr,
                 NULL,
+    // set networksLifeCycleCallback signature
                 VIR_NETWORK_EVENT_ID_LIFECYCLE,
-    // set domainsLifeCycleCallback signature
                 VIR_NETWORK_EVENT_CALLBACK(netEventCallback),
                 this,
     // don't register freeData, because it remove this thread
@@ -176,26 +122,26 @@ void ConnAliveThread::registerConnEvents()
 }
 void ConnAliveThread::unregisterConnEvents()
 {
-    //qDebug()<<"unregisterConnEvents0"<<conn<<URI;
+    //qDebug()<<"unregisterConnEvents0"<<*ptr_ConnPtr<<URI;
     if ( closeCallbackRegistered ) {
         int ret = virConnectUnregisterCloseCallback(
-                    conn, connEventCallBack);
+                    *ptr_ConnPtr, connEventCallBack);
         if (ret<0) sendConnErrors();
         else closeCallbackRegistered = false;
     };
     if ( domainsLifeCycleCallback ) {
         int ret = virConnectDomainEventDeregisterAny(
-                    conn, domainsLifeCycleCallback);
+                    *ptr_ConnPtr, domainsLifeCycleCallback);
         if (ret<0) sendConnErrors();
         domainsLifeCycleCallback = 0;
     };
     if ( networkLifeCycleCallback ) {
         int ret = virConnectNetworkEventDeregisterAny(
-                    conn, networkLifeCycleCallback);
+                    *ptr_ConnPtr, networkLifeCycleCallback);
         if (ret<0) sendConnErrors();
         networkLifeCycleCallback = 0;
     };
-    //qDebug()<<"unregisterConnEvents1"<<conn<<URI;
+    //qDebug()<<"unregisterConnEvents1"<<*ptr_ConnPtr<<URI;
 }
 void ConnAliveThread::freeData(void *opaque)
 {
@@ -208,7 +154,7 @@ void ConnAliveThread::connEventCallBack(virConnectPtr _conn, int reason, void *o
 {
     //qDebug()<<"connEventCallBack"<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
-    if ( NULL!=obj && obj->conn==_conn) {
+    if ( NULL!=obj && *(obj->ptr_ConnPtr)==_conn) {
         obj->closeConnection(reason);
     };
 }
@@ -270,7 +216,7 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
 {
     //qDebug()<<"domEventCallback"<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
-    if ( NULL==obj || obj->conn!=_conn ) return 0;
+    if ( NULL==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
     bool end = false;
     QString msg, domainName;
     domainName = QString(virDomainGetName(dom));
@@ -362,7 +308,7 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
 {
     //qDebug()<<"netEventCallback"<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
-    if ( NULL==obj || obj->conn!=_conn ) return 0;
+    if ( NULL==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
     QString msg;
     msg = QString("<b>'%1'</b> Network %2 %3\n")
            .arg(virNetworkGetName(net))
@@ -643,7 +589,7 @@ const char* ConnAliveThread::netEventDetailToString(int event, int detail)
 }
 void ConnAliveThread::closeConnection(int reason)
 {
-    //qDebug()<<"closeConnection(reason)"<<conn<<URI;
+    //qDebug()<<"closeConnection(reason)"<<*ptr_ConnPtr<<URI;
     keep_alive = false;
     switch (reason) {
         case VIR_CONNECT_CLOSE_REASON_ERROR:

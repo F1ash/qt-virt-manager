@@ -1,9 +1,9 @@
 #ifndef CONN_ALIVE_THREAD_H
 #define CONN_ALIVE_THREAD_H
 
-#include <QThread>
-#include <QTime>
 #include "virt_objects/virt_entity_config.h"
+#include "virt_objects/_virt_thread.h"
+#include <QTime>
 #include <QDebug>
 
 #define WAIT_AUTH 300    // dev 10 (sec.)
@@ -36,7 +36,7 @@ static virConnectAuth auth = {
     NULL, // cbdata will be initialized in thread
 };
 
-class ConnAliveThread : public QThread
+class ConnAliveThread : public _VirtThread
 {
     Q_OBJECT
 public:
@@ -55,26 +55,21 @@ signals:
 private:
     int             domainsLifeCycleCallback;
     int             networkLifeCycleCallback;
-    bool            keep_alive;
     bool            authWaitKey;
     AuthData        authData;
     QString         URI;
     bool            closeCallbackRegistered;
-
-    virConnectPtr   conn = NULL;
-    virErrorPtr     virtErrors;
+    virConnectPtr   _connPtr;
 
 public slots:
     void            setData(QString&);
     void            closeConnection();
-    virConnectPtr*  getConnectionPtr();
+    virConnectPtr*  getPtr_connectionPtr();
     void            setAuthCredentials(QString&, QString&);
 
 private slots:
     void            run();
     void            openConnection();
-    void            sendConnErrors();
-    void            sendGlobalErrors();
     void            registerConnEvents();
     void            unregisterConnEvents();
     static void     freeData(void*);

@@ -21,7 +21,7 @@ signals:
     void                 dataChanged(int, int, int, int);
 
 private:
-    virConnectPtr*       currConnPtr;
+    virConnectPtr*       ptr_ConnPtr;
     virDomainPtr         domain;
     const QString        domainName;
     quint64              prev_cpuTime;

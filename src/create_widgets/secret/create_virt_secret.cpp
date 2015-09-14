@@ -5,7 +5,7 @@
  */
 
 CreateVirtSecret::CreateVirtSecret(QWidget *parent, virConnectPtr *connPtr) :
-    QDialog(parent), currConnPtr(connPtr)
+    QDialog(parent), ptr_ConnPtr(connPtr)
 {
     setModal(true);
     setWindowTitle("Secret Settings");
@@ -61,9 +61,9 @@ nor to any other node");
     secValue = new QLineEdit(this);
     secValue->setPlaceholderText("Enter secret value/phrase");
     stuffWdg = new QStackedWidget(this);
-    stuffWdg->addWidget(new VolumeSecType(this, currConnPtr));
-    stuffWdg->addWidget(new CephSecType(this, currConnPtr));
-    stuffWdg->addWidget(new iSCSISecType(this, currConnPtr));
+    stuffWdg->addWidget(new VolumeSecType(this, ptr_ConnPtr));
+    stuffWdg->addWidget(new CephSecType(this, ptr_ConnPtr));
+    stuffWdg->addWidget(new iSCSISecType(this, ptr_ConnPtr));
 
     baseLayout->addWidget(uuid);
     baseLayout->addWidget(secDesc);

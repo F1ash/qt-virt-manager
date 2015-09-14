@@ -32,7 +32,7 @@ public:
             QString         arg2    = QString());
     virtual ~VM_Viewer();
     QString          connName, domain, TYPE;
-    virConnectPtr*   currConnPtr;
+    virConnectPtr*   ptr_ConnPtr;
     virErrorPtr      virtErrors = NULL;
     bool             VM_State;
     QSettings        settings;

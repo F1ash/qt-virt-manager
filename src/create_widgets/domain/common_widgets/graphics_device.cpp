@@ -43,9 +43,9 @@ void GraphicsDevice::setWidgets(int i)
     if ( _type == "sdl" ) {
         info->addWidget(new SDL_Graphics(this));
     } else if ( _type == "vnc" ) {
-        info->addWidget(new VNC_Graphics(this, currConnPtr));
+        info->addWidget(new VNC_Graphics(this, ptr_ConnPtr));
     } else if ( _type == "spice" ) {
-        info->addWidget(new Spice_Graphics(this, currConnPtr));
+        info->addWidget(new Spice_Graphics(this, ptr_ConnPtr));
     } else if ( _type == "rdp" ) {
         info->addWidget( new RDP_Graphics(this));
     } else if ( _type == "desktop" ) {

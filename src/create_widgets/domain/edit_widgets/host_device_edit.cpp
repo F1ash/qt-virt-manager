@@ -6,11 +6,11 @@ HostDevice_Edit::HostDevice_Edit(
 {
     info->setVisible(false);
     infoEdit = new QStackedWidget(this);
-    QString connType = QString(virConnectGetType(*currConnPtr)).toLower();
+    QString connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
     if ( connType=="qemu" ) {
         infoEdit->addWidget(new USB_Host_Device_Edit(this));
         infoEdit->addWidget(new PCI_Host_Device_Edit(this));
-        infoEdit->addWidget(new SCSI_Host_Device_Edit(this, currConnPtr));
+        infoEdit->addWidget(new SCSI_Host_Device_Edit(this, ptr_ConnPtr));
     } else if ( connType=="lxc" ) {
         infoEdit->addWidget(new USB_Host_Device_Edit(this));
         infoEdit->addWidget(new BCh_Host_Device_Edit(this));

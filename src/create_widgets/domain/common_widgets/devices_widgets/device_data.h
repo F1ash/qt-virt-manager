@@ -43,7 +43,7 @@ private:
     QString          DeviceXMLDesc;
     QString          currentDeviceXMLDesc;
     int              currentItemRow = -1;
-    virConnectPtr*   currConnPtr;
+    virConnectPtr*   ptr_ConnPtr;
     virNodeDevice  **nodeDevices = NULL;
     virErrorPtr      virtErrors;
 

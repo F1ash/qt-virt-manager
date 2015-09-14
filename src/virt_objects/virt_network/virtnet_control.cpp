@@ -51,10 +51,10 @@ void VirtNetControl::stopProcessing()
     virtNetModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
 
 }
-bool VirtNetControl::setCurrentWorkConnect(virConnectPtr *connPtr)
+bool VirtNetControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
-    currConnPtr = connPtr;
+    ptr_ConnPtr = connPtrPtr;
     toolBar->enableAutoReload();
     return true;
 }
@@ -129,7 +129,7 @@ void VirtNetControl::reloadState()
 {
     TASK task;
     task.type = "network";
-    task.srcConnPtr = currConnPtr;
+    task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtNetwork";
@@ -177,7 +177,7 @@ void VirtNetControl::execAction(const QStringList &l)
         QString networkName = virtNetModel->DataList.at(idx.row())->getName();
         TASK task;
         task.type = "network";
-        task.srcConnPtr = currConnPtr;
+        task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = networkName;
         if        ( l.first()=="startVirtNetwork" ) {
@@ -245,7 +245,7 @@ void VirtNetControl::newVirtEntityFromXML(const QStringList &_args)
             } else {
                 QString xml     = args.first();
                 task.args.path  = xml;
-                task.srcConnPtr = currConnPtr;
+                task.srcConnPtr = ptr_ConnPtr;
                 task.srcConName = currConnName;
                 task.method     = actName;
                 task.action     = act;
@@ -275,7 +275,7 @@ void VirtNetControl::doneEntityCreationDialog()
                        this, SLOT(doneEntityCreationDialog()));
             TASK task;
             task.type = "network";
-            task.srcConnPtr = currConnPtr;
+            task.srcConnPtr = ptr_ConnPtr;
             task.srcConName = currConnName;
             task.action     = act;
             task.method     =

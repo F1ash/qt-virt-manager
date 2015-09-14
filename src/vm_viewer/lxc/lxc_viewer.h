@@ -18,7 +18,7 @@ public:
     virDomainPtr     domainPtr = NULL;
     void             run();
 private:
-    virConnectPtr*   currConnPtr;
+    virConnectPtr*   ptr_ConnPtr;
 };
 
 class LXC_Viewer : public TermMainWindow

@@ -157,6 +157,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
   } else if ( !runningConnExist() &&
               (wait_thread==NULL || !wait_thread->isRunning()) ) {
       saveSettings();
+      virtEventLoop->stop();
       trayIcon->hide();
       ev->accept();
   } else {
@@ -257,36 +258,38 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 }
 void MainWindow::initConnListWidget()
 {
-  connListWidget = new ConnectionList(this);
-  setCentralWidget(connListWidget);
-  settings.beginGroup("ConnectListColumns");
-  connListWidget->setColumnWidth(0, settings.value("column0", 132).toInt());
-  connListWidget->setColumnWidth(1, settings.value("column1", 32).toInt());
-  connListWidget->setColumnWidth(2, settings.value("column2", 32).toInt());
-  settings.endGroup();
-  settings.beginGroup("Connects");
-  QStringList groups = settings.childGroups();
-  settings.endGroup();
-  QList<QString>::const_iterator i;
-  for (i=groups.constBegin(); i!=groups.constEnd(); ++i) {
-      QString s = (*i);
-      connListWidget->addConnItem(s);
-  };
-  connListWidget->searchLocalhostConnections();
-  connect(connListWidget, SIGNAL(removeConnection(QString&)),
-          this, SLOT(removeConnItem(QString&)));
-  connect(connListWidget, SIGNAL(messageShowed()),
-          this, SLOT(mainWindowUp()));
-  connect(connListWidget, SIGNAL(warning(QString&)),
-          this, SLOT(writeToErrorLog(QString&)));
-  connect(connListWidget, SIGNAL(connPtr(virConnectPtr*, QString&)),
-          this, SLOT(receiveConnPtr(virConnectPtr*, QString&)));
-  connect(connListWidget, SIGNAL(connClosed(bool, QString&)),
-          this, SLOT(stopConnProcessing(bool, QString&)));
-  connect(connListWidget, SIGNAL(connToClose(int)),
-          this, SLOT(closeConnGenerations(int)));
-  connect(connListWidget, SIGNAL(domainEnd(QString&)),
-          this, SLOT(deleteVMDisplay(QString&)));
+    virtEventLoop = new VirtEventLoop(this);
+    virtEventLoop->start();
+    connListWidget = new ConnectionList(this);
+    setCentralWidget(connListWidget);
+    settings.beginGroup("ConnectListColumns");
+    connListWidget->setColumnWidth(0, settings.value("column0", 132).toInt());
+    connListWidget->setColumnWidth(1, settings.value("column1", 32).toInt());
+    connListWidget->setColumnWidth(2, settings.value("column2", 32).toInt());
+    settings.endGroup();
+    settings.beginGroup("Connects");
+    QStringList groups = settings.childGroups();
+    settings.endGroup();
+    QList<QString>::const_iterator i;
+    for (i=groups.constBegin(); i!=groups.constEnd(); ++i) {
+        QString s = (*i);
+        connListWidget->addConnItem(s);
+    };
+    connListWidget->searchLocalhostConnections();
+    connect(connListWidget, SIGNAL(removeConnection(QString&)),
+            this, SLOT(removeConnItem(QString&)));
+    connect(connListWidget, SIGNAL(messageShowed()),
+            this, SLOT(mainWindowUp()));
+    connect(connListWidget, SIGNAL(warning(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
+    connect(connListWidget, SIGNAL(connPtr(virConnectPtr*, QString&)),
+            this, SLOT(receiveConnPtr(virConnectPtr*, QString&)));
+    connect(connListWidget, SIGNAL(connClosed(bool, QString&)),
+            this, SLOT(stopConnProcessing(bool, QString&)));
+    connect(connListWidget, SIGNAL(connToClose(int)),
+            this, SLOT(closeConnGenerations(int)));
+    connect(connListWidget, SIGNAL(domainEnd(QString&)),
+            this, SLOT(deleteVMDisplay(QString&)));
 }
 void MainWindow::initToolBar()
 {
@@ -703,18 +706,18 @@ Qt::DockWidgetArea MainWindow::getDockArea(int i) const
     };
     return result;
 }
-void MainWindow::receiveConnPtr(virConnectPtr *connPtr, QString &name)
+void MainWindow::receiveConnPtr(virConnectPtr *connPtrPtr, QString &name)
 {
     // send connect ptr to all related virtual resources for operating
-    if ( domainDockContent->setCurrentWorkConnect(connPtr) )
+    if ( domainDockContent->setCurrentWorkConnect(connPtrPtr) )
         domainDockContent->setListHeader(name);
-    if ( networkDockContent->setCurrentWorkConnect(connPtr) )
+    if ( networkDockContent->setCurrentWorkConnect(connPtrPtr) )
         networkDockContent->setListHeader(name);
-    if ( storagePoolDockContent->setCurrentWorkConnect(connPtr) )
+    if ( storagePoolDockContent->setCurrentWorkConnect(connPtrPtr) )
         storagePoolDockContent->setListHeader(name);
-    if ( secretDockContent->setCurrentWorkConnect(connPtr) )
+    if ( secretDockContent->setCurrentWorkConnect(connPtrPtr) )
         secretDockContent->setListHeader(name);
-    if ( ifaceDockContent->setCurrentWorkConnect(connPtr) )
+    if ( ifaceDockContent->setCurrentWorkConnect(connPtrPtr) )
         ifaceDockContent->setListHeader(name);
 }
 void MainWindow::stopConnProcessing(bool onView, QString &_connName)
@@ -811,7 +814,7 @@ void MainWindow::deleteVMDisplay(QString &key)
 }
 void MainWindow::buildMigrateArgs(TASK _task)
 {
-    virConnectPtr *namedConnect = connListWidget->getConnectionPtr(_task.args.path);
+    virConnectPtr *namedConnect = connListWidget->getPtr_connectionPtr(_task.args.path);
     if ( NULL!=namedConnect ) {
         domainDockContent->execMigrateAction(namedConnect, _task);
     }

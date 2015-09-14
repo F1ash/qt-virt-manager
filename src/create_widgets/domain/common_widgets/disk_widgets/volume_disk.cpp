@@ -14,7 +14,7 @@ Volume_Disk::Volume_Disk(
     mode = new QComboBox(this);
     mode->addItems(QStringList()<<"Host"<<"Direct");
     mode->setEnabled(false);
-    auth = new _Storage_Auth(this, currConnPtr);
+    auth = new _Storage_Auth(this, ptr_ConnPtr);
     auth->setVisible(false);
 
     secLabels->setVisible(true);
@@ -258,7 +258,7 @@ void Volume_Disk::getVolumeNames()
 {
     VVD_Result _ret;
     if ( volumeDialog==NULL ) {
-        volumeDialog = new VirtVolumeDialog(this, currConnPtr);
+        volumeDialog = new VirtVolumeDialog(this, ptr_ConnPtr);
     };
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();

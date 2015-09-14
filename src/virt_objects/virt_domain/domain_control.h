@@ -32,7 +32,7 @@ public slots:
     void                     stopProcessing();
     bool                     setCurrentWorkConnect(virConnectPtr*);
     void                     setListHeader(QString&);
-    virConnectPtr*           getConnectionPtr();
+    virConnectPtr*           getPtr_connectionPtr();
     void                     execMigrateAction(virConnectPtr*, TASK);
     void                     resultReceiver(Result);
 

@@ -9,10 +9,6 @@ class DomControlThread : public ControlThread
 public:
     explicit DomControlThread(QObject *parent = NULL);
 
-signals:
-
-private:
-
 public slots:
     void             execAction(uint, TASK);
 

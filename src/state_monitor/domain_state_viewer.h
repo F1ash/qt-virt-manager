@@ -26,7 +26,7 @@ signals:
     void                 viewerClosed();
 
 private:
-    virConnectPtr*       currConnPtr;
+    virConnectPtr*       ptr_ConnPtr;
     DomainMonitorThread
                         *domainMonitorThread;
     int                  timerId = 0;

@@ -15,7 +15,7 @@ SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(
     devName = new QLineEdit(this);
     devName->setPlaceholderText("scsi_hostN");
     scsiDevice = new AdapterAddress(this);
-    iscsiDevice = new ISCSI_Device(this, currConnPtr);
+    iscsiDevice = new ISCSI_Device(this, ptr_ConnPtr);
     scsiDevices = new QStackedWidget(this);
     scsiDevices->addWidget(scsiDevice);
     scsiDevices->addWidget(iscsiDevice);

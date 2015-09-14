@@ -21,10 +21,10 @@ VirtEntityControl::~VirtEntityControl()
 }
 
 void VirtEntityControl::stopProcessing() {}
-bool VirtEntityControl::setCurrentWorkConnect(virConnectPtr *connPtr)
+bool VirtEntityControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
-    currConnPtr = connPtr;
+    ptr_ConnPtr = connPtrPtr;
     //toolBar->enableAutoReload();
     return true;
 }

@@ -1,28 +1,22 @@
 #ifndef CONTROL_THREAD_H
 #define CONTROL_THREAD_H
 
-#include <QThread>
+#include "_virt_thread.h"
+#include "virt_entity_config.h"
 #include <QDir>
 #include <QTemporaryFile>
 #include <QStringList>
 #include <QDebug>
-#include "virt_entity_config.h"
 
-class ControlThread : public QThread
+class ControlThread : public _VirtThread
 {
     Q_OBJECT
 public:
     explicit ControlThread(QObject *parent = NULL);
-    virtual ~ControlThread();
-    bool             keep_alive;
-    uint             number;
     TASK             task;
     QString          currConnName;
-    virConnectPtr   *currConnPtr;
-    virErrorPtr      virtErrors;
 
 signals:
-    void             errorMsg(QString&, uint);
     void             resultData(Result);
 
 public slots:
@@ -31,12 +25,7 @@ public slots:
                         uint i=0,
                         QString _name="");
 
-    QString          sendConnErrors();
-    QString          sendGlobalErrors();
-
     virtual void     execAction(uint, TASK);
-    virtual void     run();
-    virtual void     stop();
 };
 
 #endif // CONTROL_THREAD_H

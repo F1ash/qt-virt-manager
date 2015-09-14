@@ -35,7 +35,7 @@ private:
     QWidget         *authWdg;
     QVBoxLayout     *commonLayout;
 
-    virConnectPtr*   currConnPtr;
+    virConnectPtr*   ptr_ConnPtr;
 
 public slots:
     void             setSecretType(const QString&);

@@ -1,7 +1,7 @@
 #include "_use_encryption.h"
 
 _UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtr) :
-    QWidget(parent), currConnPtr(connPtr)
+    QWidget(parent), ptr_ConnPtr(connPtr)
 {
     usage = new QCheckBox("Use Encryption", this);
     usage->setLayoutDirection(Qt::RightToLeft);
@@ -51,7 +51,7 @@ void _UseEncryption::emitSecretList()
 {
     TASK _task;
     _task.type          = "secret";
-    _task.srcConnPtr    = currConnPtr;
+    _task.srcConnPtr    = ptr_ConnPtr;
     _task.action        = GET_ALL_ENTITY_STATE;
     thread->execAction(0, _task);
 }
@@ -105,7 +105,7 @@ void _UseEncryption::resultReceiver(Result data)
 void _UseEncryption::setVolumeSecret()
 {
     FindSecretDialog *findSecDialog =
-            new FindSecretDialog(this, currConnPtr);
+            new FindSecretDialog(this, ptr_ConnPtr);
     int result = findSecDialog->exec();
     FSD_Result res = findSecDialog->getResult();
     findSecDialog->deleteLater();

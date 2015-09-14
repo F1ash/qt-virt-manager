@@ -7,6 +7,7 @@
 #include <QSettings>
 #include <QCloseEvent>
 #include "log_dock/log_dock.h"
+#include "virt_objects/virt_event_loop.h"
 #include "virt_objects/virt_network/virtnet_control.h"
 #include "virt_objects/virt_domain/domain_control.h"
 #include "virt_objects/virt_storage_vol/storage_vol_control.h"
@@ -74,6 +75,8 @@ private :
     ViewerMap                    VM_Displayed_Map;
     OverviwedStorageMap          Overviewed_StPool_Map;
     DomainEditorMap              DomainEditor_Map;
+
+    VirtEventLoop               *virtEventLoop;
 
 private slots:
     void saveSettings();

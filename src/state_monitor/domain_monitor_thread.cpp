@@ -2,7 +2,7 @@
 
 DomainMonitorThread::DomainMonitorThread(
         QObject *parent, virConnectPtr* connPtr, QString _domainName) :
-    QThread(parent), currConnPtr(connPtr), domainName(_domainName)
+    QThread(parent), ptr_ConnPtr(connPtr), domainName(_domainName)
 {
     prev_cpuTime = 0;
     firstStep = true;
@@ -11,14 +11,14 @@ DomainMonitorThread::DomainMonitorThread(
 DomainMonitorThread::~DomainMonitorThread()
 {
     // release the reference because no longer required
-    if ( currConnPtr!=NULL ) {
+    if ( ptr_ConnPtr!=NULL ) {
         if ( NULL!=domain ) {
             virDomainFree(domain);
         };
-        int ret = virConnectClose(*currConnPtr);
+        int ret = virConnectClose(*ptr_ConnPtr);
         //qDebug()<<"virConnectRef -1"<<"DomainStateViewer"<<domainName<<(ret+1>0);
         // for reject the multiple releasing the reference
-        currConnPtr = NULL;
+        ptr_ConnPtr = NULL;
     };
     wait(30000);
 }
@@ -30,11 +30,11 @@ void DomainMonitorThread::run()
 {
     if ( firstStep ) {
         // for new virConnect usage create the new virConnectRef[erence]
-        int ret = virConnectRef(*currConnPtr);
-        if ( ret<0 ) currConnPtr = NULL;
+        int ret = virConnectRef(*ptr_ConnPtr);
+        if ( ret<0 ) ptr_ConnPtr = NULL;
         //qDebug()<<"virConnectRef +1"<<"DomainMonitorThread"<<domainName<<(ret+1>0);
         domain = virDomainLookupByName(
-                    *currConnPtr, domainName.toUtf8().data());
+                    *ptr_ConnPtr, domainName.toUtf8().data());
     };
     if ( NULL!=domain ) {
         virDomainInfo info;

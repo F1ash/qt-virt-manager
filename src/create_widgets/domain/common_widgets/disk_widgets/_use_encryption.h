@@ -31,7 +31,7 @@ private:
     QLabel              *info;
     QVBoxLayout         *commonLayout;
 
-    virConnectPtr*       currConnPtr;
+    virConnectPtr*       ptr_ConnPtr;
     SecretControlThread *thread;
 
 public slots:

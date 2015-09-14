@@ -13,7 +13,7 @@ void StorageVolControlThread::stop()
         virStoragePoolFree(currStoragePool);
         currStoragePool = NULL;
     };
-    //qDebug()<<"stVol_thread (stop)\n\tConnect\t\t"<<currConnPtr
+    //qDebug()<<"stVol_thread (stop)\n\tConnect\t\t"<<ptr_ConnPtr
     //        <<"\n\tPool\t\t"<<currStoragePool
     //        <<"\n\tName\t\t"<<currPoolName;
 }
@@ -33,7 +33,7 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
             keep_alive = true;
     };
     if ( keep_alive && !isRunning() ) {
-        currConnPtr = task.srcConnPtr;
+        ptr_ConnPtr = task.srcConnPtr;
         start();
     } else {
         Result result;
@@ -76,7 +76,7 @@ void StorageVolControlThread::run()
     default:
         break;
     };
-    // task.srcConnPtr reference will closed in destructor as currConnPtr
+    // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
     result.type   = "volume";
     result.number = number;

@@ -1,7 +1,7 @@
 #include "find_secret_dialog.h"
 
 FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtr) :
-    QDialog(parent), currConnPtr(connPtr)
+    QDialog(parent), ptr_ConnPtr(connPtr)
 {
     setModal(true);
     setWindowTitle("FindSecretDialog");
@@ -61,7 +61,7 @@ void FindSecretDialog::setSecretList()
 {
     TASK _task;
     _task.type          = "secret";
-    _task.srcConnPtr    = currConnPtr;
+    _task.srcConnPtr    = ptr_ConnPtr;
     _task.action        = GET_ALL_ENTITY_STATE;
     virtSecretThread->execAction(0, _task);
 }

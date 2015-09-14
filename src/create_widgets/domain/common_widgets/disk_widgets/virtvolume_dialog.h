@@ -44,7 +44,7 @@ private:
     QHBoxLayout     *listLayout;
     QWidget         *listWidget;
     QVBoxLayout     *commonLayout;
-    virConnectPtr*   currConnPtr;
+    virConnectPtr*   ptr_ConnPtr;
     StorageVolControlThread
                     *storageVolThread;
     StoragePoolControlThread

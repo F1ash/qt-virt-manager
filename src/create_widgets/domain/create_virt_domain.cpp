@@ -2,14 +2,14 @@
 
 HelperThread::HelperThread(
         QObject *parent, virConnect *_conn) :
-    QThread(parent), currConnPtr(_conn)
+    QThread(parent), ptr_ConnPtr(_conn)
 {
 
 }
 void HelperThread::run()
 {
     QString capabilities = QString("%1")
-            .arg(virConnectGetCapabilities(currConnPtr));
+            .arg(virConnectGetCapabilities(ptr_ConnPtr));
     emit result(capabilities);
 }
 
@@ -101,7 +101,7 @@ CreateVirtDomain::CreateVirtDomain(QWidget *parent, TASK _task) :
     QMainWindow(parent), task(_task)
 {
     xmlFileName = task.args.path;
-    currConnPtr = task.srcConnPtr;
+    ptr_ConnPtr = task.srcConnPtr;
     setWindowTitle("VM Settings");
     restoreGeometry(settings.value("DomCreateGeometry").toByteArray());
     xml = new QTemporaryFile(this);
@@ -113,7 +113,7 @@ CreateVirtDomain::CreateVirtDomain(QWidget *parent, TASK _task) :
     setEnabled(false);
     connect(this, SIGNAL(readyRead(bool)),
             this, SLOT(readyDataLists()));
-    helperThread = new HelperThread(this, *currConnPtr);
+    helperThread = new HelperThread(this, *ptr_ConnPtr);
     connect(helperThread, SIGNAL(result(QString&)),
             this, SLOT(setCapabilities(QString&)));
     helperThread->start();
@@ -294,7 +294,7 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.insert("Memory", new Memory(this, capabilities, xmlDesc));
         wdgList.insert("CPU", new CPU(this, capabilities, xmlDesc));
         wdgList.insert("Computer",
-                       new Devices(this, currConnPtr, xmlDesc));
+                       new Devices(this, ptr_ConnPtr, xmlDesc));
         wdgList.insert("SecurityLabel", new SecurityLabel(this, xmlDesc));
         connect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
                 wdgList.value("General"), SLOT(changeArch(QString&)));

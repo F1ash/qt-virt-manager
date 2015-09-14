@@ -35,7 +35,7 @@ signals:
 private:
     QSettings        settings;
     QString          UUID;
-    virConnectPtr*   currConnPtr;
+    virConnectPtr*   ptr_ConnPtr;
 
     QScrollArea     *scroll;
     QWidget         *scrolled;

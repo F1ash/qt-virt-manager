@@ -37,7 +37,7 @@ private:
     QWidget         *listWidget;
     QWidget         *buttons;
 
-    virConnectPtr*   currConnPtr;
+    virConnectPtr*   ptr_ConnPtr;
     virNodeDevice  **nodeDevices = NULL;
     virErrorPtr      virtErrors;
 

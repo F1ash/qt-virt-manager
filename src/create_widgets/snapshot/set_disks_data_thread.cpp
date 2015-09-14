@@ -15,7 +15,7 @@ void SetDisksDataThread::run()
 {
     // NOTE: currConnName == domainName
     virDomainPtr domain = virDomainLookupByName(
-                *currConnPtr, currConnName.toUtf8().data());
+                *ptr_ConnPtr, currConnName.toUtf8().data());
     if ( NULL!=domain ) {
         char *xmlDesc = virDomainGetXMLDesc(domain, 0);
         virDomainFree(domain);

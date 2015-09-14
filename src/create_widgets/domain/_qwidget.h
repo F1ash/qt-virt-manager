@@ -25,7 +25,7 @@ public:
             virConnectPtr*   connPtr    = NULL,
             virDomainPtr     domain     = NULL);
 
-    virConnectPtr           *currConnPtr;
+    virConnectPtr           *ptr_ConnPtr;
     virDomain               *currDomain = NULL;
 
 public slots:

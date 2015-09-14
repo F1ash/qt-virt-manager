@@ -58,7 +58,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(
         virConnectPtr *connPtr, QString &connName, QString &poolName)
 {
     stopProcessing();
-    currConnPtr = connPtr;
+    ptr_ConnPtr = connPtr;
     setEnabled(true);
     currConnName = connName;
     currPoolName = poolName;
@@ -168,7 +168,7 @@ void VirtStorageVolControl::reloadState()
 {
     TASK task;
     task.type = "volume";
-    task.srcConnPtr = currConnPtr;
+    task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtStorageVol";
@@ -218,7 +218,7 @@ void VirtStorageVolControl::execAction(const QStringList &l)
         QString storageVolName = storageVolModel->DataList.at(idx.row())->getName();
         TASK task;
         task.type = "volume";
-        task.srcConnPtr = currConnPtr;
+        task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = storageVolName;
         task.args.object= currPoolName;
@@ -297,7 +297,7 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                 // show SRC Creator widget
                 // get path for method
                 virStoragePoolPtr _pool = virStoragePoolLookupByName(
-                            *currConnPtr, currPoolName.toUtf8().data());
+                            *ptr_ConnPtr, currPoolName.toUtf8().data());
                 QDomDocument doc;
                 doc.setContent(
                             QString(
@@ -320,7 +320,7 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                 QString path   = args.first();
                 task.args.path = path;
             };
-            task.srcConnPtr = currConnPtr;
+            task.srcConnPtr = ptr_ConnPtr;
             task.srcConName = currConnName;
             task.action     = act;
             task.method     = actName;

@@ -2,7 +2,7 @@
 
 _Storage_Auth::_Storage_Auth(
         QWidget *parent, virConnectPtr *connPtr, QString _type) :
-    QWidget(parent), currConnPtr(connPtr), secType(_type)
+    QWidget(parent), ptr_ConnPtr(connPtr), secType(_type)
 {
     auth = new QCheckBox("Authentication", this);
     auth->setLayoutDirection(Qt::RightToLeft);
@@ -69,7 +69,7 @@ void _Storage_Auth::usageTypeChanged(int i)
 void _Storage_Auth::setSecret()
 {
     FindSecretDialog *findSecDialog =
-            new FindSecretDialog(this, currConnPtr);
+            new FindSecretDialog(this, ptr_ConnPtr);
     int result = findSecDialog->exec();
     FSD_Result res = findSecDialog->getResult();
     findSecDialog->deleteLater();

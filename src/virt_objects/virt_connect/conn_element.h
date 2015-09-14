@@ -50,7 +50,7 @@ public slots:
     void              openConnection();
     void              closeConnection();
     void              showConnectionData();
-    virConnectPtr*    getConnectionPtr() const;
+    virConnectPtr*    getPtr_connectionPtr() const;
     void              setAuthCredentials(QString&, QString&);
     QString           getName() const;
     QString           getURI() const;

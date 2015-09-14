@@ -22,7 +22,7 @@ void SecretControlThread::execAction(uint _num, TASK _task)
             keep_alive = true;
     };
     if ( keep_alive && !isRunning() ) {
-        currConnPtr = task.srcConnPtr;
+        ptr_ConnPtr = task.srcConnPtr;
         start();
     } else {
         Result result;
@@ -53,7 +53,7 @@ void SecretControlThread::run()
     default:
         break;
     };
-    // task.srcConnPtr reference will closed in destructor as currConnPtr
+    // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
     result.type   = "secret";
     result.number = number;

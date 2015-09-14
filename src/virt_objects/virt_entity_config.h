@@ -2,7 +2,6 @@
 #define VIRT_ENTITY_CONFIG
 
 #include <libvirt/libvirt.h>
-#include <libvirt/virterror.h>
 #include <QStringList>
 
 enum Actions {

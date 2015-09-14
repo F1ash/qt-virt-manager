@@ -96,14 +96,14 @@ Devices::Devices(
     listWidget = new QWidget(this);
     listWidget->setLayout(listLayout);
 
-    infoWidget = new DeviceData(this, currConnPtr);
+    infoWidget = new DeviceData(this, ptr_ConnPtr);
     baseLayout = new QHBoxLayout(this);
     baseLayout->addWidget(listWidget, 3);
     baseLayout->addWidget(infoWidget, 8);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
 
-    deviceStack = new DeviceStack(this, currConnPtr);
+    deviceStack = new DeviceStack(this, ptr_ConnPtr);
     stackWdg = new QStackedWidget(this);
     stackWdg->addWidget(baseWdg);
     stackWdg->addWidget(deviceStack);

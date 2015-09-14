@@ -82,15 +82,15 @@ void ConnElement::closeConnection()
 void ConnElement::showConnectionData()
 {
     virConnectPtr *conn = NULL;
-    conn = connAliveThread->getConnectionPtr();
+    conn = connAliveThread->getPtr_connectionPtr();
     //qDebug()<<"showConnectionData:"<<name<<QVariant((conn!=NULL)?true:false).toString()<<conn;
     emit connPtr(conn, name);
     int row = own_model->connItemDataList.indexOf(own_index);
     own_model->setData(own_model->index(row, 0), true, Qt::DecorationRole);
 }
-virConnectPtr* ConnElement::getConnectionPtr() const
+virConnectPtr* ConnElement::getPtr_connectionPtr() const
 {
-    return connAliveThread->getConnectionPtr();
+    return connAliveThread->getPtr_connectionPtr();
 }
 void ConnElement::setAuthCredentials(QString &crd, QString &text)
 {

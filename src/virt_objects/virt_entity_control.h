@@ -19,7 +19,7 @@ public:
     QString                  currConnName;
     QSettings                settings;
     QTreeView               *entityList;
-    virConnectPtr           *currConnPtr = NULL;
+    virConnectPtr           *ptr_ConnPtr = NULL;
 
     virtual void             reloadState();
     virtual void             changeDockVisibility();

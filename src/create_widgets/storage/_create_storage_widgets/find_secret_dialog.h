@@ -33,7 +33,7 @@ private:
     QVBoxLayout         *commonLayout;
     SecretControlThread *virtSecretThread;
 
-    virConnectPtr*       currConnPtr;
+    virConnectPtr*       ptr_ConnPtr;
 
 public slots:
     FSD_Result           getResult() const;

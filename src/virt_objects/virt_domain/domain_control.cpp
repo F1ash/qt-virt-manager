@@ -50,10 +50,10 @@ void VirtDomainControl::stopProcessing()
     };
     domainModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
 }
-bool VirtDomainControl::setCurrentWorkConnect(virConnectPtr *conn)
+bool VirtDomainControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
-    currConnPtr = conn;
+    ptr_ConnPtr = connPtrPtr;
     toolBar->enableAutoReload();
     return true;
 }
@@ -65,9 +65,9 @@ void VirtDomainControl::setListHeader(QString &connName)
     setEnabled(true);
     reloadState();
 }
-virConnectPtr* VirtDomainControl::getConnectionPtr()
+virConnectPtr* VirtDomainControl::getPtr_connectionPtr()
 {
-    return currConnPtr;
+    return ptr_ConnPtr;
 }
 void VirtDomainControl::execMigrateAction(virConnectPtr *conn, TASK task)
 {
@@ -119,7 +119,7 @@ void VirtDomainControl::resultReceiver(Result data)
             // show SRC Creator widget in Edit-mode
             TASK task;
             task.type = "domain";
-            task.srcConnPtr = currConnPtr;
+            task.srcConnPtr = ptr_ConnPtr;
             task.srcConName = currConnName;
             task.object     = QString("DomainEditor_%1")
                     .arg(QTime::currentTime().toString());
@@ -153,7 +153,7 @@ void VirtDomainControl::reloadState()
 {
     TASK task;
     task.type = "domain";
-    task.srcConnPtr = currConnPtr;
+    task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = "reloadVirtDomain";
@@ -192,7 +192,7 @@ void VirtDomainControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
         QString _domainName = domainModel->DataList.at(index.row())->getName();
-        emit addToStateMonitor(currConnPtr, currConnName, _domainName);
+        emit addToStateMonitor(ptr_ConnPtr, currConnName, _domainName);
     }
 }
 void VirtDomainControl::execAction(const QStringList &l)
@@ -202,7 +202,7 @@ void VirtDomainControl::execAction(const QStringList &l)
         QString domainName = domainModel->DataList.at(idx.row())->getName();
         TASK task;
         task.type = "domain";
-        task.srcConnPtr = currConnPtr;
+        task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = domainName;
         if        ( l.first()=="startVirtDomain" ) {
@@ -267,8 +267,8 @@ void VirtDomainControl::execAction(const QStringList &l)
         } else if ( l.first()=="migrateVirtDomain" ) {
             // set Migrate parameters
             // implement in thread or in MigrateDialog  VVV
-            char *hostName = virConnectGetHostname(*currConnPtr);
-            const char *connType = virConnectGetType(*currConnPtr);
+            char *hostName = virConnectGetHostname(*ptr_ConnPtr);
+            const char *connType = virConnectGetType(*ptr_ConnPtr);
             //                                          ^^^
             QStringList list;
             settings.beginGroup("Connects");
@@ -308,10 +308,10 @@ void VirtDomainControl::execAction(const QStringList &l)
             emit addNewTask(task);
         } else if ( l.first()=="displayVirtDomain" ) {
             // send signal with Connection & Domain Names to call VM_Viewer into MainWindow widget
-            emit displayRequest(currConnPtr, currConnName, domainName);
+            emit displayRequest(ptr_ConnPtr, currConnName, domainName);
         } else if ( l.first()=="monitorVirtDomain" ) {
             // send signal with Connection & Domain Names to add into Domain State Monitor
-            emit addToStateMonitor(currConnPtr, currConnName, domainName);
+            emit addToStateMonitor(ptr_ConnPtr, currConnName, domainName);
         } else if ( l.first()=="reloadVirtDomain" ) {
             reloadState();
         } else if ( l.first()=="createVirtDomainSnapshot" ) {
@@ -320,7 +320,7 @@ void VirtDomainControl::execAction(const QStringList &l)
                     .at(idx.row())->getState().startsWith("active");
             CreateSnapshotDialog *_dialog =
                     new CreateSnapshotDialog(
-                        this, domainName, state, currConnPtr);
+                        this, domainName, state, ptr_ConnPtr);
             connect(_dialog, SIGNAL(errMsg(QString&)),
                     this, SLOT(msgRepeater(QString&)));
             int exitCode = _dialog->exec();
@@ -337,7 +337,7 @@ void VirtDomainControl::execAction(const QStringList &l)
         } else if ( l.first()=="moreSnapshotActions" ) {
             //qDebug()<<"moreSnapshotActions";
             SnapshotActionDialog *_dialog =
-                    new SnapshotActionDialog(this, currConnPtr, domainName);
+                    new SnapshotActionDialog(this, ptr_ConnPtr, domainName);
             int exitCode = _dialog->exec();
             if ( exitCode ) {
                 QStringList params = _dialog->getParameters();
@@ -373,7 +373,7 @@ void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
         if ( !args.isEmpty() ) {
             if ( args.first()=="manually" ) {
                 // show SRC Creator widget
-                task.srcConnPtr = currConnPtr;
+                task.srcConnPtr = ptr_ConnPtr;
                 task.srcConName = currConnName;
                 task.object     = QString("DomainEditor_%1")
                         .arg(QTime::currentTime().toString());
@@ -382,7 +382,7 @@ void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
                 emit domainToEditor(task);
             } else {
                 task.args.path  = args.first();
-                task.srcConnPtr = currConnPtr;
+                task.srcConnPtr = ptr_ConnPtr;
                 task.srcConName = currConnName;
                 task.method     = actName;
                 task.action     = act;

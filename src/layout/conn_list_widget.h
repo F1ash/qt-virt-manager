@@ -42,7 +42,7 @@ public slots:
     void                 openConnection(QModelIndex&);
     void                 showConnection(QModelIndex&);
     void                 closeConnection(QModelIndex&);
-    virConnectPtr       *getConnectionPtr(QString&);
+    virConnectPtr       *getPtr_connectionPtr(QString&);
     void                 stopProcessing();
 
 private :
