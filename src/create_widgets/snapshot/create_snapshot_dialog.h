@@ -29,7 +29,7 @@ public:
             QWidget        *parent      = NULL,
             QString         domainName  = QString(),
             bool            _state      = false,
-            virConnectPtr*  connPtr     = NULL);
+            virConnectPtr*  connPtrPtr     = NULL);
 
 signals:
     void             errMsg(QString&);

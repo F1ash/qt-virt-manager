@@ -11,8 +11,8 @@
 #define XEN_FS_TYPES QStringList()<<"None"
 
 FileSystems::FileSystems(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     typeLabel = new QLabel("Type:", this);
     type = new QComboBox(this);

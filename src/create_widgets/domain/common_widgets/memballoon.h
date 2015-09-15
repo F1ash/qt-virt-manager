@@ -10,7 +10,7 @@ class MemBalloon : public _QWidget
 public:
     explicit MemBalloon(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
     QComboBox       *model;
     QCheckBox       *periodLabel;
     QSpinBox        *period;

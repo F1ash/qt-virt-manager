@@ -12,7 +12,7 @@ class Volume_Disk : public _Disk
 public:
     explicit Volume_Disk(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 private:
     QLabel          *poolLabel, *modeLabel,

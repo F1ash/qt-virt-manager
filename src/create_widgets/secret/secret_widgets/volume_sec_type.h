@@ -12,7 +12,7 @@ class VolumeSecType : public _SecType
 public:
     explicit VolumeSecType(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 signals:
 

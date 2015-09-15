@@ -1,7 +1,7 @@
 #include "redirdev_device_edit.h"
 
-RedirDevDevice_Edit::RedirDevDevice_Edit(QWidget *parent, virConnectPtr *connPtr) :
-    RedirDevDevice(parent, connPtr)
+RedirDevDevice_Edit::RedirDevDevice_Edit(QWidget *parent, virConnectPtr *connPtrPtr) :
+    RedirDevDevice(parent, connPtrPtr)
 {
     connect(type, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));

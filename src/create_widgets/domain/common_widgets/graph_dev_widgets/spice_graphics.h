@@ -9,7 +9,7 @@ class Spice_Graphics : public _QWidget
 public:
     explicit Spice_Graphics(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 signals:
     void             errorMsg(QString);

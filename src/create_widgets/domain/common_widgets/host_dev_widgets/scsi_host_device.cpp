@@ -1,8 +1,8 @@
 #include "scsi_host_device.h"
 
 SCSI_Host_Device::SCSI_Host_Device(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     devList = new QListWidget(this);
     devList->setSelectionMode(QAbstractItemView::SingleSelection);

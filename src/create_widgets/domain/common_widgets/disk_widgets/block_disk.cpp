@@ -1,8 +1,8 @@
 #include "block_disk.h"
 
 Block_Disk::Block_Disk(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _Disk(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Disk(parent, connPtrPtr)
 {
     browse = new QPushButton("Block device:", this);
     path = new QLineEdit(this);

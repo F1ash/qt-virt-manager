@@ -1,7 +1,7 @@
 #include "disk_edit.h"
 
-Disk_Edit::Disk_Edit(QWidget *parent, virConnectPtr *connPtr) :
-    Disk(parent, connPtr)
+Disk_Edit::Disk_Edit(QWidget *parent, virConnectPtr *connPtrPtr) :
+    Disk(parent, connPtrPtr)
 {
     connect(source, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));

@@ -12,7 +12,7 @@ class _Pool_Stuff : public QWidget
 public:
     explicit _Pool_Stuff(
             QWidget        *parent = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
     _Storage_Source        *source;
     _Storage_Target        *target;
 

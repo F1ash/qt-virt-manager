@@ -4,8 +4,8 @@
  * http://libvirt.org/formatdomain.html#elementsDisks
  */
 
-Disk::Disk(QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+Disk::Disk(QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     sourceLabel = new QLabel("Source:", this);
     source = new QComboBox(this);

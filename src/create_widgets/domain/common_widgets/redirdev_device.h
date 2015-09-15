@@ -11,7 +11,7 @@ class RedirDevDevice : public _QWidget
 public:
     explicit RedirDevDevice(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
     QComboBox       *type;
     QLineEdit       *host;
     QSpinBox        *port;

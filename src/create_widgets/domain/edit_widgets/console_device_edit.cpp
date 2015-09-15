@@ -1,7 +1,7 @@
 #include "console_device_edit.h"
 
-ConsoleDevice_Edit::ConsoleDevice_Edit(QWidget *parent, virConnectPtr *connPtr) :
-    ConsoleDevice(parent, connPtr)
+ConsoleDevice_Edit::ConsoleDevice_Edit(QWidget *parent, virConnectPtr *connPtrPtr) :
+    ConsoleDevice(parent, connPtrPtr)
 {
     connect(targetType, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));

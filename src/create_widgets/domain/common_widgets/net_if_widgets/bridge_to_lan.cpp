@@ -1,8 +1,8 @@
 #include "bridge_to_lan.h"
 
 Bridge_to_LAN::Bridge_to_LAN(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     bridgeLabel = new QLabel("Bridge:", this);
     bridge = new QLineEdit(this);

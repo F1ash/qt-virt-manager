@@ -43,7 +43,7 @@ DomainStateMonitor::DomainStateMonitor(QWidget *parent) :
 
 /* public slots */
 void DomainStateMonitor::setNewMonitoredDomain(
-        virConnectPtr *connPtr, QString &connName, QString &domainName)
+        virConnectPtr *connPtrPtr, QString &connName, QString &domainName)
 {
     QString _id = QString("Domain : %1\nConnect: %2")
             .arg(domainName)
@@ -56,7 +56,7 @@ void DomainStateMonitor::setNewMonitoredDomain(
         monitoredDomainList->addItem(_id);
         int i = monitoredDomains->addWidget(
                     new DomainStateViewer(
-                        this, connPtr, domainName));
+                        this, connPtrPtr, domainName));
         connect(monitoredDomains->widget(i), SIGNAL(viewerClosed()),
                 this, SLOT(removeClosedViewer()));
         //qDebug()<<domainName<<"add to StateMonitor";

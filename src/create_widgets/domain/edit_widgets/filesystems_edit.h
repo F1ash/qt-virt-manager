@@ -9,7 +9,7 @@ class FileSystems_Edit : public FileSystems
 public:
     explicit FileSystems_Edit(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 signals:
 

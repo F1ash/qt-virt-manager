@@ -12,7 +12,7 @@ class lxcHlpThread : public QThread
 public:
     explicit lxcHlpThread(
             QObject        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL,
+            virConnectPtr*  connPtrPtr = NULL,
             QString         _domain = QString());
     const QString    domain;
     virDomainPtr     domainPtr = NULL;
@@ -27,7 +27,7 @@ class LXC_Viewer : public TermMainWindow
 public:
     explicit LXC_Viewer(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL,
+            virConnectPtr*  connPtrPtr = NULL,
             QString         arg1    = QString(),
             QString         arg2    = QString(),
             const QString&  work_dir= NULL,

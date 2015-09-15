@@ -1,8 +1,8 @@
 #include "pci_passthrough.h"
 
 PCI_Passthrough::PCI_Passthrough(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     attentionIcon = new QLabel(this);
     attentionIcon->setPixmap(QIcon::fromTheme("dialog-warning")

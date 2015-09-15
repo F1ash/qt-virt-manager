@@ -11,7 +11,7 @@ class Dir_Disk : public _Disk
 public:
     explicit Dir_Disk(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 private:
     QPushButton     *browse;

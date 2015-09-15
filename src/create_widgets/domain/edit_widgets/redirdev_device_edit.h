@@ -9,7 +9,7 @@ class RedirDevDevice_Edit : public RedirDevDevice
 public:
     explicit RedirDevDevice_Edit(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 signals:
 

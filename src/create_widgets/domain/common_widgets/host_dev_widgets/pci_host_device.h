@@ -10,7 +10,7 @@ class PCI_Host_Device : public _QWidget
 public:
     explicit PCI_Host_Device(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 private:
     QListWidget     *devList;

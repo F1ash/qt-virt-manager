@@ -83,7 +83,7 @@ void LXC_ViewerThread::unregisterStreamEvents()
 {
     qDebug()<<"unregisterStreamEvents";
     if ( NULL!=stream && streamRegistered ) {
-        streamRegistered = (virStreamEventRemoveCallback(stream)!=0);
+        //streamRegistered = (virStreamEventRemoveCallback(stream)!=0);
         if ( streamRegistered ) {
             sendConnErrors();
             //streamRegistered = false;

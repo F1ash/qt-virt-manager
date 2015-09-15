@@ -55,10 +55,10 @@ void VirtStorageVolControl::stopProcessing()
     storageVolModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
 }
 bool VirtStorageVolControl::setCurrentStoragePool(
-        virConnectPtr *connPtr, QString &connName, QString &poolName)
+        virConnectPtr *connPtrPtr, QString &connName, QString &poolName)
 {
     stopProcessing();
-    ptr_ConnPtr = connPtr;
+    ptr_ConnPtr = connPtrPtr;
     setEnabled(true);
     currConnName = connName;
     currPoolName = poolName;

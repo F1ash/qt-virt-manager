@@ -14,7 +14,7 @@ class spcHlpThread : public QThread
 public:
     explicit spcHlpThread(
             QObject        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL,
+            virConnectPtr*  connPtrPtr = NULL,
             QString         _domain = QString());
     const QString    domain;
     virDomainPtr     domainPtr = NULL;
@@ -30,7 +30,7 @@ class Spice_Viewer : public VM_Viewer
 public:
     explicit Spice_Viewer(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL,
+            virConnectPtr*  connPtrPtr = NULL,
             QString         arg1    = QString(),
             QString         arg2    = QString());
 

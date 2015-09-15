@@ -12,7 +12,7 @@ void DomControlThread::execAction(uint _num, TASK _task)
     task = _task;
     if ( NULL!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
-        qDebug()<<"*task.srcConnPtr"<<(*task.srcConnPtr);
+        //qDebug()<<"*task.srcConnPtr"<<(*task.srcConnPtr);
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
             task.srcConnPtr = NULL;

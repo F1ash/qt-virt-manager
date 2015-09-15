@@ -1,8 +1,8 @@
 #include "lxc_viewer.h"
 
 lxcHlpThread::lxcHlpThread(
-        QObject *parent, virConnectPtr* connPtr, QString _domain) :
-    QThread(parent), ptr_ConnPtr(connPtr), domain(_domain)
+        QObject *parent, virConnectPtr* connPtrPtr, QString _domain) :
+    QThread(parent), ptr_ConnPtr(connPtrPtr), domain(_domain)
 {
 
 }
@@ -16,10 +16,10 @@ void lxcHlpThread::run()
 }
 
 LXC_Viewer::LXC_Viewer(
-        QWidget *parent, virConnectPtr *connPtr,
+        QWidget *parent, virConnectPtr *connPtrPtr,
         QString arg1, QString arg2,
         const QString& work_dir, const QString& command) :
-    TermMainWindow(parent, connPtr, arg1, arg2, work_dir, command)
+    TermMainWindow(parent, connPtrPtr, arg1, arg2, work_dir, command)
 {
     TYPE = "LXC";
     // unused toolbar

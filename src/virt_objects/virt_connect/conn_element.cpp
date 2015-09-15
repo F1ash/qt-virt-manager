@@ -79,12 +79,11 @@ void ConnElement::closeConnection()
 {
     if ( connAliveThread->isRunning() ) connAliveThread->closeConnection();
 }
-void ConnElement::showConnectionData()
+void ConnElement::overviewConnection()
 {
-    virConnectPtr *conn = NULL;
-    conn = connAliveThread->getPtr_connectionPtr();
-    //qDebug()<<"showConnectionData:"<<name<<QVariant((conn!=NULL)?true:false).toString()<<conn;
-    emit connPtr(conn, name);
+    virConnectPtr *_connPtrPtr = connAliveThread->getPtr_connectionPtr();
+    //qDebug()<<"overviewConnection"<<(*_connPtrPtr);
+    emit connPtrPtr(_connPtrPtr, name);
     int row = own_model->connItemDataList.indexOf(own_index);
     own_model->setData(own_model->index(row, 0), true, Qt::DecorationRole);
 }

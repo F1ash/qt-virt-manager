@@ -1,8 +1,8 @@
 #include "volume_disk.h"
 
 Volume_Disk::Volume_Disk(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _Disk(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Disk(parent, connPtrPtr)
 {
     poolLabel = new QLabel("Pool:", this);
     pool = new QLabel(this);

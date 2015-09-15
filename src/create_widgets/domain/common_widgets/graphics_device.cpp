@@ -5,8 +5,8 @@
  */
 
 GraphicsDevice::GraphicsDevice(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     type = new QComboBox(this);
     type->addItem("Displays a window on the host desktop", "sdl");

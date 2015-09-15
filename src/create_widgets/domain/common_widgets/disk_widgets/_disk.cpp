@@ -1,8 +1,8 @@
 #include "_disk.h"
 
 _Disk::_Disk(
-        QWidget *parent, virConnectPtr* connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr* connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     baseLayout = new QGridLayout();
     baseWdg = new QWidget(this);

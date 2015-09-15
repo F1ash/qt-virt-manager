@@ -1,8 +1,8 @@
 #include "bch_host_device.h"
 
 BCh_Host_Device::BCh_Host_Device(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     typeLabel = new QLabel("Type:", this);
     deviceLabel = new QLabel("Device:", this);

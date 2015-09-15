@@ -44,8 +44,7 @@ void ConnAliveThread::closeConnection()
 }
 virConnectPtr *ConnAliveThread::getPtr_connectionPtr()
 {
-    qDebug()<<"ptr_ConnPtr"<<ptr_ConnPtr;
-    return ptr_ConnPtr;
+    return &_connPtr;
 }
 void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
 {
@@ -71,7 +70,7 @@ void ConnAliveThread::openConnection()
     //*ptr_ConnPtr = virConnectOpen(URI.toUtf8().constData());
     auth.cb = authCallback;
     auth.cbdata = this;
-    virConnectPtr _connPtr = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
+    _connPtr = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
     ptr_ConnPtr = &_connPtr;
     if (*ptr_ConnPtr==NULL) {
         sendConnErrors();

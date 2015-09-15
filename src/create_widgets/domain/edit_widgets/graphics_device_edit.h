@@ -9,7 +9,7 @@ class GraphicsDevice_Edit : public GraphicsDevice
 public:
     explicit GraphicsDevice_Edit(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 signals:
 

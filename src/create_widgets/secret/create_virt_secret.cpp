@@ -4,8 +4,8 @@
  * http://libvirt.org/formatsecret.html
  */
 
-CreateVirtSecret::CreateVirtSecret(QWidget *parent, virConnectPtr *connPtr) :
-    QDialog(parent), ptr_ConnPtr(connPtr)
+CreateVirtSecret::CreateVirtSecret(QWidget *parent, virConnectPtr *connPtrPtr) :
+    QDialog(parent), ptr_ConnPtr(connPtrPtr)
 {
     setModal(true);
     setWindowTitle("Secret Settings");

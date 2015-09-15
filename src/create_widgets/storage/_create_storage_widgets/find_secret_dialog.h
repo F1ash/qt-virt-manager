@@ -20,7 +20,7 @@ class FindSecretDialog : public QDialog
 public:
     explicit FindSecretDialog(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 private:
     VirtSecretControl   *secrets;

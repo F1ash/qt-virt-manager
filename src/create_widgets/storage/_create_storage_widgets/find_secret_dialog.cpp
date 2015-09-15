@@ -1,7 +1,7 @@
 #include "find_secret_dialog.h"
 
-FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtr) :
-    QDialog(parent), ptr_ConnPtr(connPtr)
+FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtrPtr) :
+    QDialog(parent), ptr_ConnPtr(connPtrPtr)
 {
     setModal(true);
     setWindowTitle("FindSecretDialog");

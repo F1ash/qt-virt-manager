@@ -1,8 +1,8 @@
 #include "dir_disk.h"
 
 Dir_Disk::Dir_Disk(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _Disk(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Disk(parent, connPtrPtr)
 {
     browse = new QPushButton("Directory:", this);
     path = new QLineEdit(this);

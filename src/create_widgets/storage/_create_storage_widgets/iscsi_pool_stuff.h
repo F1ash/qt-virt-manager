@@ -9,7 +9,7 @@ class iSCSI_Pool_Stuff : public _Pool_Stuff
 public:
     explicit iSCSI_Pool_Stuff(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 signals:
 

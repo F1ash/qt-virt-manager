@@ -11,7 +11,7 @@ class TCP_Tunnel : public _QWidget
 public:
     explicit TCP_Tunnel(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 private:
     QLabel          *addrLabel, *portLabel,

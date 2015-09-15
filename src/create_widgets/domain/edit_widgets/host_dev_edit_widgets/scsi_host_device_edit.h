@@ -12,7 +12,7 @@ class SCSI_Host_Device_Edit : public _QWidget
 public:
     explicit SCSI_Host_Device_Edit(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 private:
     QLabel              *info, *infoText;

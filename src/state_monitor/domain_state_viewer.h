@@ -18,7 +18,7 @@ class DomainStateViewer : public QWidget
 public:
     explicit DomainStateViewer(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL,
+            virConnectPtr*  connPtrPtr = NULL,
             QString         _domainName = QString());
     const QString        domainName;
 

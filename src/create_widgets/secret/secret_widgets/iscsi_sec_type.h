@@ -10,7 +10,7 @@ class iSCSISecType : public _SecType
 public:
     explicit iSCSISecType(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
     QLineEdit      *usage;
     QHBoxLayout    *usageLayout;
     QWidget        *usageWdg;

@@ -5,8 +5,8 @@
  */
 
 CephSecType::CephSecType(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _SecType(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _SecType(parent, connPtrPtr)
 {
     usage = new QLineEdit(this);
     usage->setPlaceholderText("Enter usage name");

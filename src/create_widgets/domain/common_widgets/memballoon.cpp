@@ -1,7 +1,7 @@
 #include "memballoon.h"
 
-MemBalloon::MemBalloon(QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+MemBalloon::MemBalloon(QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     modelLabel = new QLabel("Model for:", this);
     model = new QComboBox(this);

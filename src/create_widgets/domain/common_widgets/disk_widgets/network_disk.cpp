@@ -4,8 +4,8 @@
     <<"nbd"<<"iscsi"<<"rbd"<<"sheepdog"<<"gluster"
 
 Network_Disk::Network_Disk(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _Disk(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Disk(parent, connPtrPtr)
 {
     protocolLabel = new QLabel("Protocol:", this);
     protocol = new QComboBox(this);

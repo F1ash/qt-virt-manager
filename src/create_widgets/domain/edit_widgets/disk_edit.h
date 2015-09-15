@@ -9,7 +9,7 @@ class Disk_Edit : public Disk
 public:
     explicit Disk_Edit(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 signals:
 

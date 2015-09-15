@@ -26,7 +26,7 @@ class CreateVirtSecret : public QDialog
 public:
     explicit CreateVirtSecret(
             QWidget         *parent     = NULL,
-            virConnectPtr*   connPtr    = NULL);
+            virConnectPtr*   connPtrPtr    = NULL);
     ~CreateVirtSecret();
 
 signals:

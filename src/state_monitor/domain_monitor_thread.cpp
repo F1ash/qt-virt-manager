@@ -1,8 +1,8 @@
 #include "domain_monitor_thread.h"
 
 DomainMonitorThread::DomainMonitorThread(
-        QObject *parent, virConnectPtr* connPtr, QString _domainName) :
-    QThread(parent), ptr_ConnPtr(connPtr), domainName(_domainName)
+        QObject *parent, virConnectPtr* connPtrPtr, QString _domainName) :
+    QThread(parent), ptr_ConnPtr(connPtrPtr), domainName(_domainName)
 {
     prev_cpuTime = 0;
     firstStep = true;

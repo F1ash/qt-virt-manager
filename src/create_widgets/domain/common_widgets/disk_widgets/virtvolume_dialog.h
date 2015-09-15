@@ -26,7 +26,7 @@ class VirtVolumeDialog : public QDialog
 public:
     explicit VirtVolumeDialog(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL,
+            virConnectPtr*  connPtrPtr = NULL,
             QString         _type   = QString());
 
 signals:

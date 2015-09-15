@@ -1,8 +1,8 @@
 #include "_auth.h"
 
 _Storage_Auth::_Storage_Auth(
-        QWidget *parent, virConnectPtr *connPtr, QString _type) :
-    QWidget(parent), ptr_ConnPtr(connPtr), secType(_type)
+        QWidget *parent, virConnectPtr *connPtrPtr, QString _type) :
+    QWidget(parent), ptr_ConnPtr(connPtrPtr), secType(_type)
 {
     auth = new QCheckBox("Authentication", this);
     auth->setLayoutDirection(Qt::RightToLeft);

@@ -1,8 +1,8 @@
 #include "virtual_network.h"
 
 Virtual_Network::Virtual_Network(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     networkLabel = new QLabel("Network:", this);
     network = new QComboBox(this);

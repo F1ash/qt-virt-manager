@@ -22,7 +22,7 @@ class _QWidget : public _Changed
 public:
     explicit _QWidget(
             QWidget         *parent     = NULL,
-            virConnectPtr*   connPtr    = NULL,
+            virConnectPtr*   connPtrPtr    = NULL,
             virDomainPtr     domain     = NULL);
 
     virConnectPtr           *ptr_ConnPtr;

@@ -9,7 +9,7 @@ class VNC_Graphics : public _QWidget
 public:
     explicit VNC_Graphics(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 signals:
     void             errorMsg(QString);

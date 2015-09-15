@@ -16,7 +16,7 @@ class _UseEncryption : public QWidget
 public:
     explicit _UseEncryption(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 signals:
     void                 dataChanged();

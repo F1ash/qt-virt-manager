@@ -13,7 +13,7 @@ class HostDevice_Edit : public HostDevice
 public:
     explicit HostDevice_Edit(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 private:
     QStackedWidget  *infoEdit;

@@ -1,8 +1,8 @@
 #include "host_device_edit.h"
 
 HostDevice_Edit::HostDevice_Edit(
-        QWidget *parent, virConnectPtr *connPtr) :
-    HostDevice(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    HostDevice(parent, connPtrPtr)
 {
     info->setVisible(false);
     infoEdit = new QStackedWidget(this);

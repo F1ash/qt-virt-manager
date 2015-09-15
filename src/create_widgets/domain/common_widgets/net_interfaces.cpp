@@ -16,8 +16,8 @@
 #define XEN_NET_TYPES QStringList()<<"None"
 
 NetInterfaces::NetInterfaces(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     typeLabel = new QLabel("Type:", this);
     type = new QComboBox(this);

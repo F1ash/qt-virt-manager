@@ -18,7 +18,7 @@ class _Storage_Auth : public QWidget
 public:
     explicit _Storage_Auth(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL,
+            virConnectPtr*  connPtrPtr = NULL,
             QString         _type   = NOT_VOLUME);
     QCheckBox       *auth;
     QLineEdit       *userName, *usage;

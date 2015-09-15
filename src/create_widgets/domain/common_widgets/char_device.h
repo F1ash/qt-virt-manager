@@ -15,7 +15,7 @@ class CharDevice : public _QWidget
 public:
     explicit CharDevice(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL,
+            virConnectPtr*  connPtrPtr = NULL,
             virDomainPtr    domain  = NULL,
             QString         _tag    = QString());
 

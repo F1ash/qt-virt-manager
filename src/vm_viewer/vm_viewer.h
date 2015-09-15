@@ -27,7 +27,7 @@ class VM_Viewer : public QMainWindow
 public:
     explicit VM_Viewer(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL,
+            virConnectPtr*  connPtrPtr = NULL,
             QString         arg1    = QString(),
             QString         arg2    = QString());
     virtual ~VM_Viewer();

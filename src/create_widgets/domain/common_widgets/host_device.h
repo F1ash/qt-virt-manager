@@ -13,7 +13,7 @@ class HostDevice : public _QWidget
 public:
     explicit HostDevice(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
     QComboBox       *type;
     QStackedWidget  *info;
     QVBoxLayout     *commonLayout;

@@ -108,7 +108,7 @@ private slots:
     void writeToErrorLog(QString&);
     void changeLogViewerVisibility();
     Qt::DockWidgetArea getDockArea(int) const;
-    void receiveConnPtr(virConnectPtr*, QString&);
+    void receiveConnPtrPtr(virConnectPtr*, QString&);
     void stopConnProcessing(bool, QString &);
     void stopProcessing();
     void invokeVMDisplay(virConnectPtr*, QString, QString);

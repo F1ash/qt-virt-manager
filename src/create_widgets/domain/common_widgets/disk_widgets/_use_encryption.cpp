@@ -1,7 +1,7 @@
 #include "_use_encryption.h"
 
-_UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtr) :
-    QWidget(parent), ptr_ConnPtr(connPtr)
+_UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
+    QWidget(parent), ptr_ConnPtr(connPtrPtr)
 {
     usage = new QCheckBox("Use Encryption", this);
     usage->setLayoutDirection(Qt::RightToLeft);

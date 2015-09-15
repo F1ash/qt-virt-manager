@@ -282,8 +282,8 @@ void MainWindow::initConnListWidget()
             this, SLOT(mainWindowUp()));
     connect(connListWidget, SIGNAL(warning(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
-    connect(connListWidget, SIGNAL(connPtr(virConnectPtr*, QString&)),
-            this, SLOT(receiveConnPtr(virConnectPtr*, QString&)));
+    connect(connListWidget, SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
+            this, SLOT(receiveConnPtrPtr(virConnectPtr*, QString&)));
     connect(connListWidget, SIGNAL(connClosed(bool, QString&)),
             this, SLOT(stopConnProcessing(bool, QString&)));
     connect(connListWidget, SIGNAL(connToClose(int)),
@@ -706,18 +706,19 @@ Qt::DockWidgetArea MainWindow::getDockArea(int i) const
     };
     return result;
 }
-void MainWindow::receiveConnPtr(virConnectPtr *connPtrPtr, QString &name)
+void MainWindow::receiveConnPtrPtr(virConnectPtr *_connPtrPtr, QString &name)
 {
+    //qDebug()<<"receiveConnPtrPtr:"<<(*_connPtrPtr);
     // send connect ptr to all related virtual resources for operating
-    if ( domainDockContent->setCurrentWorkConnect(connPtrPtr) )
+    if ( domainDockContent->setCurrentWorkConnect(_connPtrPtr) )
         domainDockContent->setListHeader(name);
-    if ( networkDockContent->setCurrentWorkConnect(connPtrPtr) )
+    if ( networkDockContent->setCurrentWorkConnect(_connPtrPtr) )
         networkDockContent->setListHeader(name);
-    if ( storagePoolDockContent->setCurrentWorkConnect(connPtrPtr) )
+    if ( storagePoolDockContent->setCurrentWorkConnect(_connPtrPtr) )
         storagePoolDockContent->setListHeader(name);
-    if ( secretDockContent->setCurrentWorkConnect(connPtrPtr) )
+    if ( secretDockContent->setCurrentWorkConnect(_connPtrPtr) )
         secretDockContent->setListHeader(name);
-    if ( ifaceDockContent->setCurrentWorkConnect(connPtrPtr) )
+    if ( ifaceDockContent->setCurrentWorkConnect(_connPtrPtr) )
         ifaceDockContent->setListHeader(name);
 }
 void MainWindow::stopConnProcessing(bool onView, QString &_connName)
@@ -738,12 +739,12 @@ void MainWindow::stopProcessing()
     secretDockContent->stopProcessing();
     ifaceDockContent->stopProcessing();
 }
-void MainWindow::invokeVMDisplay(virConnectPtr *connPtr, QString connName, QString domName)
+void MainWindow::invokeVMDisplay(virConnectPtr *connPtrPtr, QString connName, QString domName)
 {
     QString type;
     VM_Viewer *value = NULL;
-    if ( connPtr!=NULL ) {
-        type = QString::fromUtf8(virConnectGetType(*connPtr));
+    if ( connPtrPtr!=NULL ) {
+        type = QString::fromUtf8(virConnectGetType(*connPtrPtr));
     } else type.clear();
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
@@ -753,9 +754,9 @@ void MainWindow::invokeVMDisplay(virConnectPtr *connPtr, QString connName, QStri
         if ( type.isEmpty() ) {
             QMessageBox::information(this, "VM Viewer", "Job empty.");
         } else if ( type.toLower()=="lxc" ) {
-            value = new LXC_Viewer(this, connPtr, connName, domName);
+            value = new LXC_Viewer(this, connPtrPtr, connName, domName);
         } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
-            value = new Spice_Viewer(this, connPtr, connName, domName);
+            value = new Spice_Viewer(this, connPtrPtr, connName, domName);
         } else
             QMessageBox::information(
                         this,
@@ -820,7 +821,7 @@ void MainWindow::buildMigrateArgs(TASK _task)
     }
 }
 
-void MainWindow::overviewStoragePool(virConnectPtr *connPtr, QString &connName, QString &poolName)
+void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connName, QString &poolName)
 {
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
@@ -837,7 +838,7 @@ void MainWindow::overviewStoragePool(virConnectPtr *connPtr, QString &connName, 
                 taskWrHouse, SLOT(addNewTask(TASK)));
         connect(taskWrHouse, SIGNAL(volResult(Result)),
                 Overviewed_StPool_Map.value(key), SLOT(resultReceiver(Result)));
-        Overviewed_StPool_Map.value(key)->setCurrentStoragePool(connPtr, connName, poolName);
+        Overviewed_StPool_Map.value(key)->setCurrentStoragePool(connPtrPtr, connName, poolName);
     };
     Overviewed_StPool_Map.value(key)->show();
     Overviewed_StPool_Map.value(key)->setFocus();

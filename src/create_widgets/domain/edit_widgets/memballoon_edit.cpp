@@ -1,8 +1,8 @@
 #include "memballoon_edit.h"
 
 MemBalloon_Edit::MemBalloon_Edit(
-        QWidget *parent, virConnectPtr *connPtr) :
-    MemBalloon(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    MemBalloon(parent, connPtrPtr)
 {
     connect(model, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));

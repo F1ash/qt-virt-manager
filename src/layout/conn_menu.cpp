@@ -12,16 +12,3 @@ ConnectMenu::ConnectMenu(QWidget *parent)
     setTitle("Connection Control");
     setSeparatorsCollapsible(true);
 }
-ConnectMenu::~ConnectMenu()
-{
-    delete edit;
-    edit = NULL;
-    delete display;
-    display = NULL;
-    delete clean;
-    clean = NULL;
-    delete act;
-    act = NULL;
-    delete refresh;
-    refresh = NULL;
-}

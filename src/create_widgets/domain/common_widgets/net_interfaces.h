@@ -17,7 +17,7 @@ class NetInterfaces : public _QWidget
 public:
     explicit NetInterfaces(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
     QComboBox       *type;
     QStackedWidget  *info;
 

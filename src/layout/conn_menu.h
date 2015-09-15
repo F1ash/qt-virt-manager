@@ -6,22 +6,12 @@ class ConnectMenu : public QMenu
 {
     Q_OBJECT
 public:
-    ConnectMenu(QWidget *parent = NULL);
-    ~ConnectMenu();
+    explicit ConnectMenu(QWidget *parent = NULL);
 
     QAction  *edit;
     QAction  *display;
     QAction  *clean;
     QAction  *act;
     QAction  *refresh;
-
-signals:
-
-public slots:
-
-private:
-
-private slots:
-
 };
 #endif

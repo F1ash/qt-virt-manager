@@ -21,7 +21,7 @@ public:
 signals:
     void              warningShowed();
     void              warning(QString&);
-    void              connPtr(virConnectPtr*, QString&);
+    void              connPtrPtr(virConnectPtr*, QString&);
     void              authRequested(QString&);
     void              domStateChanged(Result);
     void              netStateChanged(Result);
@@ -49,7 +49,7 @@ public slots:
     void              setItemReferenceForLocal(ConnItemModel*, ConnItemIndex*);
     void              openConnection();
     void              closeConnection();
-    void              showConnectionData();
+    void              overviewConnection();
     virConnectPtr*    getPtr_connectionPtr() const;
     void              setAuthCredentials(QString&, QString&);
     QString           getName() const;

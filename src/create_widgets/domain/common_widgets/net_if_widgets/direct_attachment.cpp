@@ -1,8 +1,8 @@
 #include "direct_attachment.h"
 
 DirectAttachment::DirectAttachment(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     netSourceLabel = new QLabel("Network source:", this);
     sourceModeLabel = new QLabel("Source mode:", this);

@@ -14,7 +14,7 @@ class FileSystems : public _QWidget
 public:
     explicit FileSystems(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
     QComboBox       *type;
     QStackedWidget  *info;
 

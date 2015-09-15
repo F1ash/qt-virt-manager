@@ -1,8 +1,8 @@
 #include "virtvolume_dialog.h"
 
 VirtVolumeDialog::VirtVolumeDialog(
-        QWidget *parent, virConnectPtr *connPtr, QString _type) :
-    QDialog(parent), ptr_ConnPtr(connPtr), type(_type)
+        QWidget *parent, virConnectPtr *connPtrPtr, QString _type) :
+    QDialog(parent), ptr_ConnPtr(connPtrPtr), type(_type)
 {
     setModal(true);
     poolList = new QListWidget(this);

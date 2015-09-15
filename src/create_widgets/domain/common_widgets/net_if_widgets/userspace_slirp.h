@@ -11,7 +11,7 @@ class Userspace_SLIRP : public _QWidget
 public:
     explicit Userspace_SLIRP(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 private:
     MAC_Address     *mac;

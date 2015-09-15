@@ -3,8 +3,8 @@
 #define PERIOD 3
 
 DomainStateViewer::DomainStateViewer(
-        QWidget *parent, virConnectPtr *connPtr, QString _domainName) :
-    QWidget(parent), ptr_ConnPtr(connPtr), domainName(_domainName)
+        QWidget *parent, virConnectPtr *connPtrPtr, QString _domainName) :
+    QWidget(parent), ptr_ConnPtr(connPtrPtr), domainName(_domainName)
 {
     monitorName = new QLabel(domainName, this);
     closeViewer = new QPushButton(

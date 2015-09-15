@@ -13,7 +13,7 @@
 
 CreateSnapshotDialog::CreateSnapshotDialog(
         QWidget *parent, QString domainName,
-        bool _state, virConnectPtr *connPtr) :
+        bool _state, virConnectPtr *connPtrPtr) :
     QDialog(parent)
 {
     QString winTitle = QString("Create Snapshot <%1>").arg(domainName);
@@ -93,7 +93,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     for (int i=0; i<baseWdg->count(); i++) {
         _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(
                     baseWdg->widget(i));
-        if ( NULL!=wdg ) wdg->setParameters(connPtr, domainName);
+        if ( NULL!=wdg ) wdg->setParameters(connPtrPtr, domainName);
         connect(wdg, SIGNAL(errMsg(QString&)),
                 this, SIGNAL(errMsg(QString&)));
     };

@@ -10,8 +10,8 @@
 #define LXC_DEV_LIST QStringList()\
     <<"USB"<<"Block/Char"
 
-HostDevice::HostDevice(QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+HostDevice::HostDevice(QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     type = new QComboBox(this);
     info = new QStackedWidget(this);

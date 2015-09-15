@@ -9,7 +9,7 @@ class NetInterfaces_Edit : public NetInterfaces
 public:
     explicit NetInterfaces_Edit(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 signals:
 

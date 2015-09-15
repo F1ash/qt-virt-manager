@@ -1,8 +1,8 @@
 #include "spice_viewer.h"
 
 spcHlpThread::spcHlpThread(
-        QObject *parent, virConnectPtr *connPtr, QString _domain) :
-    QThread(parent), ptr_ConnPtr(connPtr), domain(_domain)
+        QObject *parent, virConnectPtr *connPtrPtr, QString _domain) :
+    QThread(parent), ptr_ConnPtr(connPtrPtr), domain(_domain)
 {
 
 }
@@ -19,9 +19,9 @@ void spcHlpThread::run()
 }
 
 Spice_Viewer::Spice_Viewer(
-        QWidget *parent, virConnectPtr *connPtr,
+        QWidget *parent, virConnectPtr *connPtrPtr,
         QString arg1, QString arg2) :
-    VM_Viewer(parent, connPtr, arg1, arg2)
+    VM_Viewer(parent, connPtrPtr, arg1, arg2)
 {
     TYPE = "SPICE";
     hlpThread = new spcHlpThread(this, ptr_ConnPtr, domain);

@@ -110,8 +110,8 @@ void ConnectionList::deleteCurrentConnection()
                      this, SLOT(mainWindowUp()));
           disconnect(connections->value(connection), SIGNAL(warning(QString&)),
                      this, SLOT(sendWarning(QString&)));
-          disconnect(connections->value(connection), SIGNAL(connPtr(virConnectPtr*, QString&)),
-                     this, SLOT(sendConnPtr(virConnectPtr*, QString&)));
+          disconnect(connections->value(connection), SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
+                     this, SLOT(sendConnPtrPtr(virConnectPtr*, QString&)));
           disconnect(connections->value(connection), SIGNAL(authRequested(QString&)),
                      this, SLOT(getAuthCredentials(QString&)));
           disconnect(connections->value(connection), SIGNAL(domStateChanged(Result)),
@@ -148,7 +148,7 @@ void ConnectionList::showConnection(QModelIndex &_item)
             conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
             conn_availability = idx->getData().value(QString("availability"), NOT_AVAILABLE).toBool();
             if ( conn_state==RUNNING && conn_availability ) {
-                conn->showConnectionData();
+                conn->overviewConnection();
             };
         } else
             connItemModel->setData(connItemModel->index(i, 0), false, Qt::DecorationRole);
@@ -161,6 +161,7 @@ void ConnectionList::closeConnection(QModelIndex &_item)
 }
 virConnectPtr* ConnectionList::getPtr_connectionPtr(QString &name)
 {
+    //qDebug()<<name<<connections->contains(name);
     return (connections->contains(name)) ?
             connections->value(name)->getPtr_connectionPtr()
             : NULL;
@@ -294,8 +295,8 @@ void ConnectionList::createConnection(QModelIndex &_item)
             this, SLOT(mainWindowUp()));
     connect(connections->value(key), SIGNAL(warning(QString&)),
             this, SLOT(sendWarning(QString&)));
-    connect(connections->value(key), SIGNAL(connPtr(virConnectPtr*, QString&)),
-            this, SLOT(sendConnPtr(virConnectPtr*, QString&)));
+    connect(connections->value(key), SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
+            this, SLOT(sendConnPtrPtr(virConnectPtr*, QString&)));
     connect(connections->value(key), SIGNAL(authRequested(QString&)),
             this, SLOT(getAuthCredentials(QString&)));
     connect(connections->value(key), SIGNAL(domStateChanged(Result)),
@@ -343,8 +344,8 @@ void ConnectionList::createLocalConnection(QString &uri)
             this, SLOT(mainWindowUp()));
     connect(connections->value(key), SIGNAL(warning(QString&)),
             this, SLOT(sendWarning(QString&)));
-    connect(connections->value(key), SIGNAL(connPtr(virConnectPtr*, QString&)),
-            this, SLOT(sendConnPtr(virConnectPtr*, QString&)));
+    connect(connections->value(key), SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
+            this, SLOT(sendConnPtrPtr(virConnectPtr*, QString&)));
     connect(connections->value(key), SIGNAL(authRequested(QString&)),
             this, SLOT(getAuthCredentials(QString&)));
     connect(connections->value(key), SIGNAL(domStateChanged(Result)),
@@ -388,9 +389,10 @@ void ConnectionList::mainWindowUp()
 {
     emit messageShowed();
 }
-void ConnectionList::sendConnPtr(virConnectPtr *_connPtr, QString &name)
+void ConnectionList::sendConnPtrPtr(virConnectPtr *_connPtrPtr, QString &name)
 {
-    emit connPtr(_connPtr, name);
+    //qDebug()<<"sendConnPtrPtr"<<(*_connPtrPtr);
+    emit connPtrPtr(_connPtrPtr, name);
 }
 void ConnectionList::getAuthCredentials(QString &crd)
 {

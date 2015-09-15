@@ -31,8 +31,8 @@ Since 1.0.2
  */
 
 ConsoleDevice::ConsoleDevice(
-        QWidget *parent, virConnectPtr *connPtr, virDomainPtr domain) :
-    CharDevice(parent, connPtr, domain, QString("console"))
+        QWidget *parent, virConnectPtr *connPtrPtr, virDomainPtr domain) :
+    CharDevice(parent, connPtrPtr, domain, QString("console"))
 {
     QString connType = QString::fromUtf8(virConnectGetType(*ptr_ConnPtr));
     devType->clear();

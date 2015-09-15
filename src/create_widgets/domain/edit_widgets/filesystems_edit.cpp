@@ -1,8 +1,8 @@
 #include "filesystems_edit.h"
 
 FileSystems_Edit::FileSystems_Edit(
-        QWidget *parent, virConnectPtr *connPtr) :
-    FileSystems(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    FileSystems(parent, connPtrPtr)
 {
     connect(type, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));

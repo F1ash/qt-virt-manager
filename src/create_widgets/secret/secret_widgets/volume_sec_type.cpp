@@ -4,8 +4,8 @@
  * http://libvirt.org/formatsecret.html#VolumeUsageType
  */
 
-VolumeSecType::VolumeSecType(QWidget *parent, virConnectPtr *connPtr) :
-    _SecType(parent, connPtr)
+VolumeSecType::VolumeSecType(QWidget *parent, virConnectPtr *connPtrPtr) :
+    _SecType(parent, connPtrPtr)
 {
     usage = new QLineEdit(this);
     find  = new QPushButton(QIcon::fromTheme("edit-find"), "", this);

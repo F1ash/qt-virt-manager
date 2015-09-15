@@ -33,9 +33,9 @@
 #define QSS_DROP    "TermMainWindow {border: 1px solid rgba(0, 0, 0, 50%);}\n"
 
 TermMainWindow::TermMainWindow(
-        QWidget *parent, virConnectPtr *connPtr, QString arg1,
+        QWidget *parent, virConnectPtr *connPtrPtr, QString arg1,
         QString arg2, const QString& work_dir, const QString& command) :
-      VM_Viewer(parent, connPtr, arg1, arg2),
+      VM_Viewer(parent, connPtrPtr, arg1, arg2),
       m_initShell(command),
       m_initWorkDir(work_dir)
 {

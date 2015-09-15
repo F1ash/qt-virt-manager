@@ -26,7 +26,7 @@ signals:
     void                 removeConnection(QString&);
     void                 messageShowed();
     void                 warning(QString&);
-    void                 connPtr(virConnectPtr*, QString&);
+    void                 connPtrPtr(virConnectPtr*, QString&);
     void                 connToClose(int);
     void                 connClosed(bool, QString&);
     void                 domResult(Result);
@@ -65,7 +65,7 @@ private slots:
     void                 showMessage(QString, QString);
     void                 sendWarning(QString&);
     void                 mainWindowUp();
-    void                 sendConnPtr(virConnectPtr*, QString&);
+    void                 sendConnPtrPtr(virConnectPtr*, QString&);
     void                 getAuthCredentials(QString&);
 };
 

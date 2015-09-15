@@ -34,7 +34,7 @@ class TermMainWindow : public VM_Viewer , private Ui::mainWindow
 public:
     TermMainWindow(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL,
+            virConnectPtr*  connPtrPtr = NULL,
             QString         arg1    = QString(),
             QString         arg2    = QString(),
             const QString&  work_dir= NULL,

@@ -13,7 +13,7 @@ class Virtual_Network : public _QWidget
 public:
     explicit Virtual_Network(
             QWidget        *parent  = NULL,
-            virConnectPtr*  connPtr = NULL);
+            virConnectPtr*  connPtrPtr = NULL);
 
 private:
     QLabel          *networkLabel, *targetLabel;

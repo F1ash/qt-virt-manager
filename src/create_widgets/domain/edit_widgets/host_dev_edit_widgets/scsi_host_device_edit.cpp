@@ -1,8 +1,8 @@
 #include "scsi_host_device_edit.h"
 
 SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(
-        QWidget *parent, virConnectPtr *connPtr) :
-    _QWidget(parent, connPtr)
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _QWidget(parent, connPtrPtr)
 {
     info = new QLabel(this);
     info->setPixmap(QIcon::fromTheme("dialog-warning")
