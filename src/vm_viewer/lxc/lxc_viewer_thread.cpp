@@ -17,7 +17,7 @@ LXC_ViewerThread::~LXC_ViewerThread()
     if (ptySlaveFd) {
         close(ptySlaveFd);
         ptySlaveFd = -1;
-        qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"in delete";
+        //qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"in delete";
     };
     unregisterStreamEvents();
     if ( connRef ) virConnectClose(*ptr_ConnPtr);
@@ -57,7 +57,7 @@ void LXC_ViewerThread::run()
             keep_alive = false;
         };
     };
-    qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"init in run";
+    //qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"init in run";
     while (keep_alive) {
         msleep(100);
     };
@@ -66,7 +66,7 @@ void LXC_ViewerThread::run()
 /* private slots */
 int  LXC_ViewerThread::registerStreamEvents()
 {
-    qDebug()<<"registerStreamEvents";
+    //qDebug()<<"registerStreamEvents";
     int ret = virStreamEventAddCallback(
                 stream,
                 VIR_STREAM_EVENT_READABLE |
@@ -81,18 +81,21 @@ int  LXC_ViewerThread::registerStreamEvents()
 }
 void LXC_ViewerThread::unregisterStreamEvents()
 {
-    qDebug()<<"unregisterStreamEvents";
+    //qDebug()<<"unregisterStreamEvents";
     if ( NULL!=stream && streamRegistered ) {
-        //streamRegistered = (virStreamEventRemoveCallback(stream)!=0);
+        streamRegistered = (virStreamEventRemoveCallback(stream)!=0);
         if ( streamRegistered ) {
             sendConnErrors();
-            //streamRegistered = false;
-        };
-        if ( virStreamFree(stream)<0 ) {
-            sendConnErrors();
+        } else {
+            if ( virStreamAbort(stream)<0 ) {
+                sendConnErrors();
+            };
+            if ( virStreamFree(stream)<0 ) {
+                sendConnErrors();
+            };
         };
     };
-    qDebug()<<"StreamEvents state:"<<streamRegistered;
+    //qDebug()<<"StreamEvents state:"<<streamRegistered;
 }
 void LXC_ViewerThread::freeData(void *opaque)
 {
@@ -104,47 +107,49 @@ void LXC_ViewerThread::freeData(void *opaque)
 void LXC_ViewerThread::streamEventCallBack(virStreamPtr _stream, int events, void *opaque)
 {
     Q_UNUSED(_stream);
-    qDebug()<<"streamEventCallBack";
+    //qDebug()<<"streamEventCallBack";
     LXC_ViewerThread *obj = static_cast<LXC_ViewerThread*>(opaque);
     if ( NULL==obj ) {
-        qDebug()<<"streamEventCallBack"<<"static_cast returns NULL";
+        //qDebug()<<"streamEventCallBack"<<"static_cast returns NULL";
         return;
     };
     if ( obj->EndOfFile ) {
+        //qDebug()<<"streamEventCallBack"<<"EndOfFile cause";
         obj->unregisterStreamEvents();
         obj->keep_alive = false;
         return;
     };
     if ( events & VIR_STREAM_EVENT_ERROR ||
          events & VIR_STREAM_EVENT_HANGUP ) {
-        qDebug()<<"VIR_STREAM_EVENT_HANGUP";
+        //qDebug()<<"VIR_STREAM_EVENT_HANGUP";
         // Received stream ERROR/HANGUP, closing console
         obj->unregisterStreamEvents();
         obj->keep_alive = false;
     } else if ( events & VIR_STREAM_EVENT_READABLE ) {
-        qDebug()<<"VIR_STREAM_EVENT_READABLE"<<obj->stream;
+        //qDebug()<<"VIR_STREAM_EVENT_READABLE"<<obj->stream;
         if ( obj->streamRegistered ) obj->sendDataToDisplay();
     } else if ( events & VIR_STREAM_EVENT_WRITABLE ) {
-        qDebug()<<"VIR_STREAM_EVENT_WRITABLE";
+        //qDebug()<<"VIR_STREAM_EVENT_WRITABLE";
         //obj->sendDataToVMachine();
     } else {
-        qDebug()<<"streamEventCallBack"<<"unused case";
+        //qDebug()<<"streamEventCallBack"<<"unused case";
         obj->unregisterStreamEvents();
         obj->keep_alive = false;
     };
 }
 void LXC_ViewerThread::updateStreamEvents(virStreamPtr _stream, int type)
 {
-    qDebug()<<"updateStreamEvents";
-    if ( !streamRegistered ) return;
-    int ret = virStreamEventUpdateCallback(_stream, type);
+    Q_UNUSED(_stream);
+    //qDebug()<<"updateStreamEvents";
+    //if ( !streamRegistered ) return;
+    int ret = virStreamEventUpdateCallback(stream, type);
     if (ret<0) sendConnErrors();
 }
 void LXC_ViewerThread::sendDataToDisplay()
 {
-    qDebug()<<"sendDataToDisplay"<<"to"<<ptySlaveFd;
+    //qDebug()<<"sendDataToDisplay"<<"to"<<ptySlaveFd;
     if ( NULL==stream || !keep_alive || !streamRegistered || EndOfFile ) {
-        qDebug()<<"sendDataToDisplay"<<"callback stream is NULL or deregistered or thread is died or stream EOF";
+        //qDebug()<<"sendDataToDisplay"<<"callback stream is NULL or deregistered or thread is died or stream EOF";
         keep_alive = false;
         return;
     };
@@ -156,26 +161,23 @@ void LXC_ViewerThread::sendDataToDisplay()
     switch ( got ) {
     case -2:
         // This is basically EAGAIN
-        qDebug()<<"sendDataToDisplay"<<"EAGAIN";
+        //qDebug()<<"sendDataToDisplay"<<"EAGAIN";
         break;
     case 0:
         // Received EOF from stream, closing
-        qDebug()<<"sendDataToDisplay"<<"Received EOF";
+        //qDebug()<<"sendDataToDisplay"<<"Received EOF";
         if ( !EndOfFile ) {
             EndOfFile = true;
-            if ( virStreamAbort(stream)<0 ) {
-                sendConnErrors();
-            };
             unregisterStreamEvents();
             if (ptySlaveFd) {
                 write(ptySlaveFd, "\nEOF...", 7);
                 close(ptySlaveFd);
                 ptySlaveFd = -1;
-                qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"in EOF";
+                //qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"in EOF";
             };
             msg = QString("In '<b>%1</b>': EOF.").arg(domain);
             emit errorMsg(msg, number);
-            qDebug()<<"emit errMsg";
+            //qDebug()<<"emit errMsg";
         };
         break;
     case -1:
@@ -184,22 +186,16 @@ void LXC_ViewerThread::sendDataToDisplay()
             write(ptySlaveFd, "\nError in callback stream...", 19);
         };
         sendConnErrors();
-        if ( virStreamAbort(stream)<0 ) {
-            sendConnErrors();
-        };
-        qDebug()<<"sendDataToDisplay"<<"Error in callback stream"<<stream;
+        //qDebug()<<"sendDataToDisplay"<<"Error in callback stream"<<stream;
         keep_alive = false;
         break;
     default:
         // send to TermEmulator stdout useing ptySlaveFd
-        qDebug()<<"sendDataToDisplay"<<"send to TermEmulator stdout"<<ptySlaveFd;
+        //qDebug()<<"sendDataToDisplay"<<"send to TermEmulator stdout"<<ptySlaveFd;
         for ( int i=0; i<got; i++ ) {
             if (ptySlaveFd) {
                 int sent = write(ptySlaveFd, &buff[i], 1);
                 if ( sent<0 ) {
-                    if ( virStreamAbort(stream)<0 ) {
-                        sendConnErrors();
-                    };
                     keep_alive = false;
                     break;
                 };
@@ -211,7 +207,7 @@ void LXC_ViewerThread::sendDataToDisplay()
 }
 void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
 {
-    qDebug()<<"sendDataToVMachine"<<"from"<<ptySlaveFd;
+    //qDebug()<<"sendDataToVMachine"<<"from"<<ptySlaveFd;
     if ( got<=0 || NULL==stream || !keep_alive || !streamRegistered || EndOfFile ) return;
     int saved = virStreamSend(stream, buff, got);
     if ( saved==-2 ) {
@@ -219,9 +215,6 @@ void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
         return;
     } else if ( saved==-1 ) {
         sendConnErrors();
-        if ( virStreamAbort(stream)<0 ) {
-            sendConnErrors();
-        };
         keep_alive = false;
         return;
     } else {

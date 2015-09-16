@@ -149,15 +149,15 @@ void MainWindow::closeEvent(QCloseEvent *ev)
       DomainEditor_Map.clear();
       //qDebug()<<"DomainEditors cleared";
       wait_thread = new Wait(this, connListWidget);
+      // stop virtEventLoop after closing all connections
       connect(wait_thread, SIGNAL(finished()),
-              this, SLOT(close()));
+              virtEventLoop, SLOT(stop()));
       wait_thread->start();
       ev->ignore();
       startCloseProcess();
   } else if ( !runningConnExist() &&
               (wait_thread==NULL || !wait_thread->isRunning()) ) {
       saveSettings();
-      virtEventLoop->stop();
       trayIcon->hide();
       ev->accept();
   } else {
@@ -259,6 +259,11 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 void MainWindow::initConnListWidget()
 {
     virtEventLoop = new VirtEventLoop(this);
+    // close application after closing virtEventLoop
+    connect(virtEventLoop, SIGNAL(finished()),
+            this, SLOT(close()));
+    connect(virtEventLoop, SIGNAL(errorMsg(QString&,uint)),
+            this, SLOT(writeToErrorLog(QString&,uint)));
     virtEventLoop->start();
     connListWidget = new ConnectionList(this);
     setCentralWidget(connListWidget);
@@ -669,6 +674,15 @@ void MainWindow::autoHide()
 void MainWindow::writeToErrorLog(QString &msg)
 {
     logDockContent->appendMsgToLog(msg);
+}
+void MainWindow::writeToErrorLog(QString &msg, uint _number)
+{
+    Q_UNUSED(_number);
+    QString time = QTime::currentTime().toString();
+    QString title("Libvirt Event");
+    QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
+    logDockContent->appendMsgToLog(currMsg);
 }
 void MainWindow::changeLogViewerVisibility()
 {

@@ -9,11 +9,6 @@ _VirtThread::_VirtThread(QObject *parent) :
     number = 0;
 }
 _VirtThread::~_VirtThread() {}
-void _VirtThread::stop()
-{
-    keep_alive = false;
-}
-
 QString _VirtThread::sendConnErrors()
 {
     QString msg;
@@ -38,4 +33,10 @@ QString _VirtThread::sendGlobalErrors()
     };
     virResetLastError();
     return msg;
+}
+
+/* public slots */
+void _VirtThread::stop()
+{
+    keep_alive = false;
 }

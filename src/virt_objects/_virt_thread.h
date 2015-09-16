@@ -17,12 +17,13 @@ public:
     virConnectPtr   *ptr_ConnPtr;
     virErrorPtr      virtErrors;
 
-    virtual void     stop();
     virtual QString  sendConnErrors();
     virtual QString  sendGlobalErrors();
 
 signals:
     virtual void     errorMsg(QString&, uint);
+public slots:
+    virtual void     stop();
 };
 
 #endif // _VIRT_THREAD_H

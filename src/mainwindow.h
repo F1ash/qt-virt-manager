@@ -106,6 +106,7 @@ private slots:
     bool runningConnExist();
     void autoHide();
     void writeToErrorLog(QString&);
+    void writeToErrorLog(QString&, uint);
     void changeLogViewerVisibility();
     Qt::DockWidgetArea getDockArea(int) const;
     void receiveConnPtrPtr(virConnectPtr*, QString&);

@@ -31,7 +31,7 @@ LXC_Viewer::LXC_Viewer(
 }
 LXC_Viewer::~LXC_Viewer()
 {
-    qDebug()<<"LXC_Viewer destroy:";
+    //qDebug()<<"LXC_Viewer destroy:";
     if ( timerId>0 ) {
         killTimer(timerId);
         timerId = 0;
@@ -50,7 +50,7 @@ LXC_Viewer::~LXC_Viewer()
     msg = QString("In '<b>%1</b>': Display destroyed.")
             .arg(domain);
     sendErrMsg(msg);
-    qDebug()<<"LXC_Viewer destroyed";
+    //qDebug()<<"LXC_Viewer destroyed";
 }
 
 /* public slots */
