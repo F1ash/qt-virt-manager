@@ -9,8 +9,6 @@ class TcpWidget : public _QWidget
 public:
     explicit TcpWidget(QWidget *parent = NULL, QString _tag = "");
 
-signals:
-
 private:
     QLabel          *modeLabel;
     QComboBox       *mode;

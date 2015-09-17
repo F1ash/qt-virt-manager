@@ -10,7 +10,9 @@ class _VirtThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit _VirtThread(QObject *parent = NULL);
+    explicit _VirtThread(
+            QObject        *parent      = NULL,
+            virConnectPtr  *connPtrPtr  = NULL);
     virtual ~_VirtThread();
     bool             keep_alive;
     uint             number;

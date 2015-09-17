@@ -18,7 +18,7 @@ class _FsType : public _QWidget
 public:
     explicit _FsType(
             QWidget *parent = NULL,
-            QString _type = "lxc");
+            QString  _type  = "lxc");
     QString          connType;
     QLabel          *driverLabel, *wrPolicyLabel,
                     *formatLabel, *accessModeLabel,

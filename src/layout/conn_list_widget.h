@@ -64,6 +64,7 @@ private slots:
     void                 deleteCancelledCreation();
     void                 showMessage(QString, QString);
     void                 sendWarning(QString&);
+    void                 sendWarning(QString&, uint);
     void                 mainWindowUp();
     void                 sendConnPtrPtr(virConnectPtr*, QString&);
     void                 getAuthCredentials(QString&);

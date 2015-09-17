@@ -19,7 +19,7 @@ public:
             ConnItemModel   *_model = NULL);
     CONN_LIST       *connections;
     ConnItemModel   *connItemModel;
-    void run();
+    void             run();
 
 signals:
     void             uriToCompare(QString&);

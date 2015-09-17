@@ -15,11 +15,12 @@ class _UseEncryption : public QWidget
     Q_OBJECT
 public:
     explicit _UseEncryption(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL);
+            QWidget        *parent      = NULL,
+            virConnectPtr*  connPtrPtr  = NULL);
 
 signals:
     void                 dataChanged();
+    void                 errorMsg(QString&);
 
 private:
     QString              currVolumePath;

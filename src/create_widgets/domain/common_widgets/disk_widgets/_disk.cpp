@@ -16,6 +16,8 @@ _Disk::_Disk(
     secLabels->setVisible(false);
     encrypt = new _UseEncryption(this, ptr_ConnPtr);
     encrypt->setVisible(false);
+    connect(encrypt, SIGNAL(errorMsg(QString&)),
+            this, SIGNAL(errorMsg(QString&)));
     readOnly = new _ReadOnly(this);
     addr = new DeviceAddress(this);
     addr->info->widget(2)->setEnabled(false);

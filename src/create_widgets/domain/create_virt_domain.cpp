@@ -1,15 +1,22 @@
 #include "create_virt_domain.h"
 
-HelperThread::HelperThread(
-        QObject *parent, virConnect *_conn) :
-    QThread(parent), ptr_ConnPtr(_conn)
+HelperThread::HelperThread(QObject *parent, virConnectPtr *connPtrPtr) :
+    _VirtThread(parent, connPtrPtr)
 {
 
 }
 void HelperThread::run()
 {
+    if ( NULL==ptr_ConnPtr ) return;
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
     QString capabilities = QString("%1")
-            .arg(virConnectGetCapabilities(ptr_ConnPtr));
+            .arg(virConnectGetCapabilities(*ptr_ConnPtr));
+    if ( capabilities.isEmpty() ) sendConnErrors();
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
     emit result(capabilities);
 }
 
@@ -113,9 +120,11 @@ CreateVirtDomain::CreateVirtDomain(QWidget *parent, TASK _task) :
     setEnabled(false);
     connect(this, SIGNAL(readyRead(bool)),
             this, SLOT(readyDataLists()));
-    helperThread = new HelperThread(this, *ptr_ConnPtr);
+    helperThread = new HelperThread(this, ptr_ConnPtr);
     connect(helperThread, SIGNAL(result(QString&)),
             this, SLOT(setCapabilities(QString&)));
+    connect(helperThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
     helperThread->start();
 }
 CreateVirtDomain::~CreateVirtDomain()
@@ -350,7 +359,10 @@ void CreateVirtDomain::set_specified_Tabs()
             if ( idx == 2 ) {
                 static_cast<OS_Booting*>(Wdg)->initMaxVCPU();
             } else if ( idx == 5 ) {
-                static_cast<Devices*>(Wdg)->initBootDevices();
+                Devices *wdg = static_cast<Devices*>(Wdg);
+                connect(wdg, SIGNAL(errorMsg(QString&)),
+                        this, SIGNAL(errorMsg(QString&)));
+                wdg->initBootDevices();
             };
         } else
             continue;

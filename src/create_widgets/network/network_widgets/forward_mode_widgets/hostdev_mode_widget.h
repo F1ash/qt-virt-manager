@@ -9,14 +9,9 @@ class HOSTDEV_Mode_widget : public _QWidget
 public:
     explicit HOSTDEV_Mode_widget(QWidget *parent = 0);
 
-signals:
-
 private:
     QLabel          *info;
     QVBoxLayout     *commonLayout;
-
-public slots:
-
 };
 
 #endif // HOSTDEV_MODE_WIDGET_H

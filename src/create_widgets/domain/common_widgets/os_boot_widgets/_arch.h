@@ -12,7 +12,7 @@ class _Arch : public _QWidget
     Q_OBJECT
 public:
     explicit _Arch(QWidget *parent = 0,
-                   QString _caps = "");
+                   QString  _caps  = "");
 
 signals:
     void             domainType(QString&);

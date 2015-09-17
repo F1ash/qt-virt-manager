@@ -13,18 +13,16 @@
 #include "common_widgets/devices.h"
 #include <QDebug>
 
-class HelperThread : public QThread
+class HelperThread : public _VirtThread
 {
     Q_OBJECT
 public:
     explicit HelperThread(
-            QObject     *parent = NULL,
-            virConnect  *_conn  = NULL);
+            QObject        *parent      = NULL,
+            virConnectPtr  *connPtrPtr  = NULL);
     void             run();
 signals:
     void             result(QString&);
-private:
-    virConnect      *ptr_ConnPtr = NULL;
 };
 
 typedef QMap<QString, _QWidget*> WidgetList;

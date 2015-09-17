@@ -3,33 +3,40 @@
 
 #include "create_widgets/domain/_qwidget.h"
 #include <QListWidget>
+#include "virt_objects/_virt_thread.h"
+
+class iscsi_hostHlpThread : public _VirtThread
+{
+    Q_OBJECT
+public:
+    explicit iscsi_hostHlpThread(
+            QObject        *parent      = NULL,
+            virConnectPtr*  connPtrPtr  = NULL);
+    void             run();
+signals:
+    void             result(QStringList&);
+};
 
 class SCSI_Host_Device : public _QWidget
 {
     Q_OBJECT
 public:
     explicit SCSI_Host_Device(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL);
+            QWidget        *parent      = NULL,
+            virConnectPtr*  connPtrPtr  = NULL);
 
 private:
     QListWidget     *devList;
     QVBoxLayout     *commonLayout;
 
-    virErrorPtr      virtErrors;
-
-signals:
-    // TODO: write to Log
-    void             errorMsg(QString);
+    iscsi_hostHlpThread
+                    *hlpThread;
 
 public slots:
     QDomDocument     getDataDocument() const;
 
 private slots:
-    void             setAvailabledSCSIDevices();
-
-    void             sendConnErrors();
-    void             sendGlobalErrors();
+    void             setAvailabledSCSIDevices(QStringList&);
 };
 
 #endif // SCSI_HOST_DEVICE_H

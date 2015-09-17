@@ -65,6 +65,8 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
         device = new Disk_Edit(
                     this,
                     ptr_ConnPtr);
+        connect(device, SIGNAL(errorMsg(QString&)),
+                this, SIGNAL(errorMsg(QString&)));
     } else if ( deviceType == "interface" ) {
         device = new NetInterfaces_Edit(
                     this,

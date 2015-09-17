@@ -6,19 +6,17 @@
 #include "lxc_viewer_thread.h"
 #include <QDebug>
 
-class lxcHlpThread : public QThread
+class lxcHlpThread : public _VirtThread
 {
     Q_OBJECT
 public:
     explicit lxcHlpThread(
-            QObject        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL,
-            QString         _domain = QString());
+            QObject        *parent      = NULL,
+            virConnectPtr*  connPtrPtr  = NULL,
+            QString         _domain     = QString());
     const QString    domain;
     virDomainPtr     domainPtr = NULL;
     void             run();
-private:
-    virConnectPtr*   ptr_ConnPtr;
 };
 
 class LXC_Viewer : public TermMainWindow

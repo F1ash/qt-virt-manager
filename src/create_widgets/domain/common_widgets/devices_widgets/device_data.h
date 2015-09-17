@@ -19,7 +19,7 @@ public:
             virConnectPtr*  conn    = NULL);
 
 signals:
-    void             errorMsg(QString);
+    void             errorMsg(QString&);
     void             saveDeviceXMLDesc(int, QString&);
 
 private:

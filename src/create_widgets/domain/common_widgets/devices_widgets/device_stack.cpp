@@ -171,6 +171,8 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         device = new Disk(
                     this,
                     ptr_ConnPtr);
+        connect(device, SIGNAL(errorMsg(QString&)),
+                this, SIGNAL(errorMsg(QString&)));
     } else if ( deviceType == "interface" ) {
         device = new NetInterfaces(
                     this,

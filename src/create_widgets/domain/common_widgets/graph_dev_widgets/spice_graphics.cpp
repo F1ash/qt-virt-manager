@@ -1,12 +1,44 @@
 #include "spice_graphics.h"
 
+spice_graphHlpThread::spice_graphHlpThread(QObject *parent, virConnectPtr* connPtrPtr) :
+    _VirtThread(parent, connPtrPtr)
+{
+    qRegisterMetaType<QStringList>("QStringList&");
+}
+void spice_graphHlpThread::run()
+{
+    if ( NULL==ptr_ConnPtr ) return;
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
+    QStringList nets;
+    virNetworkPtr *networks = NULL;
+    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
+                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
+    int ret = virConnectListAllNetworks(*ptr_ConnPtr, &networks, flags);
+    if ( ret<0 ) {
+        sendConnErrors();
+    } else {
+        // therefore correctly to use for() command, because networks[0] can not exist.
+        for (int i = 0; i < ret; i++) {
+            nets.append( virNetworkGetName(networks[i]) );
+            virNetworkFree(networks[i]);
+        };
+        free(networks);
+    };
+    //int devs = virNodeNumOfDevices(ptr_ConnPtr, NULL, 0);
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
+    emit result(nets);
+}
+
 #define KEYMAPs QStringList()<<"auto"<<"en-gb"<<"en-us"<<"ru"<<"fr"<<"de"<<"is"<<"it"<<"ja"
 
 Spice_Graphics::Spice_Graphics(
         QWidget *parent, virConnectPtr *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
-    readNetworkList();
     addrLabel = new QLabel("Address:", this);
     address = new QComboBox(this);
     address->setEditable(false);
@@ -18,7 +50,6 @@ Spice_Graphics::Spice_Graphics(
     address->insertSeparator(4);
     networks = new QComboBox(this);
     networks->setVisible(false);
-    networks->addItems(nets);
     autoPort = new QCheckBox("AutoPort", this);
     port = new QSpinBox(this);
     port->setRange(10, 65535);
@@ -277,6 +308,12 @@ Spice_Graphics::Spice_Graphics(
             mouseElement, SLOT(setEnabled(bool)));
     connect(filetransfer, SIGNAL(toggled(bool)),
             filetransferElement, SLOT(setEnabled(bool)));
+    hlpThread = new spice_graphHlpThread(this, connPtrPtr);
+    connect(hlpThread, SIGNAL(result(QStringList&)),
+            this, SLOT(readNetworkList(QStringList&)));
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
+    hlpThread->start();
     // dataChanged connections
     connect(address, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));
@@ -741,38 +778,8 @@ void Spice_Graphics::additionStateChanged(bool state)
 {
     additionElements->setVisible(state);
 }
-void Spice_Graphics::readNetworkList()
+void Spice_Graphics::readNetworkList(QStringList &_nets)
 {
-    virNetworkPtr *networks = NULL;
-    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks(*ptr_ConnPtr, &networks, flags);
-    if ( ret<0 ) {
-        sendConnErrors();
-    } else {
-        // therefore correctly to use for() command, because networks[0] can not exist.
-        for (int i = 0; i < ret; i++) {
-            nets.append( virNetworkGetName(networks[i]) );
-            virNetworkFree(networks[i]);
-        };
-        free(networks);
-    };
-}
-
-void Spice_Graphics::sendConnErrors()
-{
-    virtErrors = (*ptr_ConnPtr)? virConnGetLastError(*ptr_ConnPtr):NULL;
-    if ( virtErrors!=NULL && virtErrors->code>0 ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-        virResetError(virtErrors);
-    } else sendGlobalErrors();
-}
-void Spice_Graphics::sendGlobalErrors()
-{
-    virtErrors = virGetLastError();
-    if ( virtErrors!=NULL && virtErrors->code>0 )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-    virResetLastError();
+    nets = _nets;
+    networks->addItems(nets);
 }

@@ -14,6 +14,7 @@
 #include <QLabel>
 #include "vm_viewer/viewer_toolbar.h"
 #include "virt_objects/virt_entity_config.h"
+#include "virt_objects/_virt_thread.h"
 #include "create_widgets/snapshot/create_snapshot_dialog.h"
 #include "create_widgets/snapshot/snapshot_action_dialog.h"
 #include <QDebug>

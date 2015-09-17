@@ -2,20 +2,24 @@
 
 spcHlpThread::spcHlpThread(
         QObject *parent, virConnectPtr *connPtrPtr, QString _domain) :
-    QThread(parent), ptr_ConnPtr(connPtrPtr), domain(_domain)
+    _VirtThread(parent, connPtrPtr), domain(_domain)
 {
 
 }
 void spcHlpThread::run()
 {
     if ( NULL==ptr_ConnPtr ) return;
-    if ( virConnectRef(*ptr_ConnPtr)<0 ) return;
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
     domainPtr =virDomainLookupByName(
                     *ptr_ConnPtr, domain.toUtf8().data());
     uri.append(virConnectGetURI(*ptr_ConnPtr));
     // flag=0 for get running domain xml-description
     runXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
-    virConnectClose(*ptr_ConnPtr);
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
 }
 
 Spice_Viewer::Spice_Viewer(
@@ -27,6 +31,8 @@ Spice_Viewer::Spice_Viewer(
     hlpThread = new spcHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
     hlpThread->start();
 }
 

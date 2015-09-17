@@ -22,11 +22,14 @@ class _QWidget : public _Changed
 public:
     explicit _QWidget(
             QWidget         *parent     = NULL,
-            virConnectPtr*   connPtrPtr    = NULL,
+            virConnectPtr*   connPtrPtr = NULL,
             virDomainPtr     domain     = NULL);
 
     virConnectPtr           *ptr_ConnPtr;
     virDomain               *currDomain = NULL;
+
+signals:
+    void                     errorMsg(QString&);
 
 public slots:
     virtual QDomDocument     getDataDocument() const;

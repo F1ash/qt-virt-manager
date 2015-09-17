@@ -1,9 +1,8 @@
 #include "_virt_thread.h"
 
-_VirtThread::_VirtThread(QObject *parent) :
-    QThread(parent)
+_VirtThread::_VirtThread(QObject *parent, virConnectPtr *connPtrPtr) :
+    QThread(parent), ptr_ConnPtr(connPtrPtr)
 {
-    ptr_ConnPtr = NULL;
     virtErrors  = NULL;
     keep_alive = false;
     number = 0;
@@ -12,7 +11,7 @@ _VirtThread::~_VirtThread() {}
 QString _VirtThread::sendConnErrors()
 {
     QString msg;
-    virtErrors = (*ptr_ConnPtr)? virConnGetLastError(*ptr_ConnPtr):NULL;
+    virtErrors = (NULL!=ptr_ConnPtr && *ptr_ConnPtr)? virConnGetLastError(*ptr_ConnPtr):NULL;
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));

@@ -9,8 +9,6 @@ class UnixWidget : public _QWidget
 public:
     explicit UnixWidget(QWidget *parent = NULL, QString _tag = "");
 
-signals:
-
 private:
     QLabel          *pathLabel;
     QLineEdit       *path;

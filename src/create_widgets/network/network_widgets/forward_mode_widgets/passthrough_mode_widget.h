@@ -9,14 +9,9 @@ class PASSTHROUGH_Mode_widget : public _QWidget
 public:
     explicit PASSTHROUGH_Mode_widget(QWidget *parent = 0);
 
-signals:
-
 private:
     QLabel          *info;
     QVBoxLayout     *commonLayout;
-
-public slots:
-
 };
 
 #endif // PASSTHROUGH_MODE_WIDGET_H

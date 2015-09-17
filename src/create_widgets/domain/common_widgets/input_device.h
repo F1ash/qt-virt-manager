@@ -13,15 +13,12 @@ public:
     QComboBox       *bus;
     DeviceAddress   *addr;
 
-signals:
-
 private:
     QLabel          *info;
     QVBoxLayout     *commonLayout;
 
 public slots:
     QDomDocument     getDataDocument() const;
-
 };
 
 #endif // INPUT_DEVICE_H

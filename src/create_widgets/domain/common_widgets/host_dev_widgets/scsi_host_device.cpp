@@ -1,5 +1,42 @@
 #include "scsi_host_device.h"
 
+iscsi_hostHlpThread::iscsi_hostHlpThread(QObject *parent, virConnectPtr* connPtrPtr) :
+    _VirtThread(parent, connPtrPtr)
+{
+    qRegisterMetaType<QStringList>("QStringList&");
+}
+void iscsi_hostHlpThread::run()
+{
+    if ( NULL==ptr_ConnPtr ) return;
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
+    int i = 0;
+    QStringList      devices;
+    virNodeDevice  **nodeDevices = NULL;
+    unsigned int flags =
+            VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI ;
+    int ret = virConnectListAllNodeDevices(*ptr_ConnPtr, &nodeDevices, flags);
+    if ( ret<0 ) {
+        sendConnErrors();
+    } else {
+        while ( nodeDevices[i] != NULL ) {
+            devices.append( QString("%1\n")
+                            // flags: extra flags; not used yet,
+                            // so callers should always pass 0
+                            .arg(virNodeDeviceGetXMLDesc(nodeDevices[i], 0)));
+            virNodeDeviceFree(nodeDevices[i]);
+            i++;
+        };
+    };
+    free(nodeDevices);
+    //int devs = virNodeNumOfDevices(ptr_ConnPtr, NULL, 0);
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
+    emit result(devices);
+}
+
 SCSI_Host_Device::SCSI_Host_Device(
         QWidget *parent, virConnectPtr *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
@@ -10,7 +47,12 @@ SCSI_Host_Device::SCSI_Host_Device(
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(devList);
     setLayout(commonLayout);
-    setAvailabledSCSIDevices();
+    hlpThread = new iscsi_hostHlpThread(this, connPtrPtr);
+    connect(hlpThread, SIGNAL(result(QStringList&)),
+            this, SLOT(setAvailabledSCSIDevices(QStringList&)));
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
+    hlpThread->start();
 }
 
 /* public slots */
@@ -54,30 +96,8 @@ QDomDocument SCSI_Host_Device::getDataDocument() const
 }
 
 /* private slots */
-void SCSI_Host_Device::setAvailabledSCSIDevices()
+void SCSI_Host_Device::setAvailabledSCSIDevices(QStringList &devices)
 {
-    int i = 0;
-    QStringList      devices;
-    virNodeDevice  **nodeDevices = NULL;
-    if ( ptr_ConnPtr!=NULL ) {
-        unsigned int flags =
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_SCSI ;
-        int ret = virConnectListAllNodeDevices(*ptr_ConnPtr, &nodeDevices, flags);
-        if ( ret<0 ) {
-            sendConnErrors();
-        } else {
-            while ( nodeDevices[i] != NULL ) {
-                devices.append( QString("%1\n")
-                                // flags: extra flags; not used yet,
-                                // so callers should always pass 0
-                                .arg(virNodeDeviceGetXMLDesc(nodeDevices[i], 0)));
-                virNodeDeviceFree(nodeDevices[i]);
-                i++;
-            };
-        };
-        free(nodeDevices);
-    };
-    //int devs = virNodeNumOfDevices(ptr_ConnPtr, NULL, 0);
     //qDebug()<<"Devices("<<devs<<i<<"):\n"<<devices.join("\n");
     // set unique device description to devList
     foreach (QString _dev, devices) {
@@ -133,22 +153,4 @@ void SCSI_Host_Device::setAvailabledSCSIDevices()
         };
     };
     devList->setCurrentRow(0);
-}
-
-void SCSI_Host_Device::sendConnErrors()
-{
-    virtErrors = (*ptr_ConnPtr)? virConnGetLastError(*ptr_ConnPtr):NULL;
-    if ( virtErrors!=NULL && virtErrors->code>0 ) {
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-        virResetError(virtErrors);
-    } else sendGlobalErrors();
-}
-void SCSI_Host_Device::sendGlobalErrors()
-{
-    virtErrors = virGetLastError();
-    if ( virtErrors!=NULL && virtErrors->code>0 )
-        emit errorMsg( QString("VirtError(%1) : %2").arg(virtErrors->code)
-                       .arg(QString().fromUtf8(virtErrors->message)) );
-    virResetLastError();
 }

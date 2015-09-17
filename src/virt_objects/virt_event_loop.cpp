@@ -10,8 +10,7 @@ void VirtEventLoop::run()
     keep_alive = true;
     while ( keep_alive ) {
         if ( virEventRunDefaultImpl() < 0 ) {
-            sendConnErrors();
-            //if ( ++probe>2 ) break;
+            sendGlobalErrors();
         };
     };
 }

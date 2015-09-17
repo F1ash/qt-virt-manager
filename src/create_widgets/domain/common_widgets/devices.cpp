@@ -119,8 +119,12 @@ Devices::Devices(
             this, SLOT(showDevice()));
     connect(infoWidget, SIGNAL(saveDeviceXMLDesc(int, QString&)),
             this, SLOT(saveDeviceXMLDescription(int, QString&)));
+    connect(infoWidget, SIGNAL(errorMsg(QString&)),
+            this, SIGNAL(errorMsg(QString&)));
     connect(deviceStack, SIGNAL(finished(int)),
             this, SLOT(addDevice()));
+    connect(deviceStack, SIGNAL(errorMsg(QString&)),
+            this, SIGNAL(errorMsg(QString&)));
 }
 
 /* public slots */

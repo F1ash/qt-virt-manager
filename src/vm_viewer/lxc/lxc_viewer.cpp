@@ -2,17 +2,21 @@
 
 lxcHlpThread::lxcHlpThread(
         QObject *parent, virConnectPtr* connPtrPtr, QString _domain) :
-    QThread(parent), ptr_ConnPtr(connPtrPtr), domain(_domain)
+    _VirtThread(parent, connPtrPtr), domain(_domain)
 {
 
 }
 void lxcHlpThread::run()
 {
     if ( NULL==ptr_ConnPtr ) return;
-    if ( virConnectRef(*ptr_ConnPtr)<0 ) return;
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
     domainPtr =virDomainLookupByName(
                     *ptr_ConnPtr, domain.toUtf8().data());
-    virConnectClose(*ptr_ConnPtr);
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
 }
 
 LXC_Viewer::LXC_Viewer(
@@ -27,6 +31,8 @@ LXC_Viewer::LXC_Viewer(
     hlpThread = new lxcHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
     hlpThread->start();
 }
 LXC_Viewer::~LXC_Viewer()

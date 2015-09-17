@@ -679,8 +679,8 @@ void MainWindow::writeToErrorLog(QString &msg, uint _number)
 {
     Q_UNUSED(_number);
     QString time = QTime::currentTime().toString();
-    QString title("Libvirt Event");
-    QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+    QString title("Libvirt EventLoop");
+    QString currMsg = QString("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     logDockContent->appendMsgToLog(currMsg);
 }

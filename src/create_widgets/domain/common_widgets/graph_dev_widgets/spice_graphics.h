@@ -2,17 +2,27 @@
 #define SPICE_GRAPHICS_H
 
 #include "create_widgets/domain/_qwidget.h"
+#include "virt_objects/_virt_thread.h"
+
+class spice_graphHlpThread : public _VirtThread
+{
+    Q_OBJECT
+public:
+    explicit spice_graphHlpThread(
+            QObject        *parent      = NULL,
+            virConnectPtr*  connPtrPtr  = NULL);
+    void             run();
+signals:
+    void             result(QStringList&);
+};
 
 class Spice_Graphics : public _QWidget
 {
     Q_OBJECT
 public:
     explicit Spice_Graphics(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL);
-
-signals:
-    void             errorMsg(QString);
+            QWidget        *parent      = NULL,
+            virConnectPtr*  connPtrPtr  = NULL);
 
 private:
     QLabel          *addrLabel;
@@ -51,7 +61,8 @@ private:
     QVBoxLayout     *commonLayout;
 
     QStringList      nets;
-    virErrorPtr      virtErrors;
+    spice_graphHlpThread
+                    *hlpThread;
 
 public slots:
     QDomDocument     getDataDocument() const;
@@ -66,10 +77,7 @@ private slots:
     void             defaultPolicyChanged(int);
     void             compressStateChanged(bool);
     void             additionStateChanged(bool);
-    void             readNetworkList();
-
-    void             sendConnErrors();
-    void             sendGlobalErrors();
+    void             readNetworkList(QStringList&);
 };
 
 #endif // SPICE_GRAPHICS_H

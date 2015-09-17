@@ -14,17 +14,15 @@ class CharDevice : public _QWidget
     Q_OBJECT
 public:
     explicit CharDevice(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL,
-            virDomainPtr    domain  = NULL,
-            QString         _tag    = QString());
+            QWidget        *parent      = NULL,
+            virConnectPtr*  connPtrPtr  = NULL,
+            virDomainPtr    domain      = NULL,
+            QString         _tag        = QString());
 
     QComboBox       *devType;
     QStackedWidget  *charDevWdg;
     QVBoxLayout     *commonLayout;
     QString          tag;
-
-signals:
 
 private:
     PtyWidget       *ptyWdg;

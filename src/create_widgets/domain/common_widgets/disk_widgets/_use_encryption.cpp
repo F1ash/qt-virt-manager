@@ -36,6 +36,8 @@ _UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
     thread = new SecretControlThread(this);
     connect(thread, SIGNAL(resultData(Result)),
             this, SLOT(resultReceiver(Result)));
+    connect(thread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
 }
 
 /* public slots */

@@ -10,8 +10,8 @@ class DirectAttachment : public _QWidget
     Q_OBJECT
 public:
     explicit DirectAttachment(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL);
+            QWidget        *parent      = NULL,
+            virConnectPtr*  connPtrPtr  = NULL);
 
 private:
     QLabel              *netSourceLabel, *sourceModeLabel;

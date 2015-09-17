@@ -9,8 +9,6 @@ class UdpWidget : public _QWidget
 public:
     explicit UdpWidget(QWidget *parent = NULL, QString _tag = "");
 
-signals:
-
 private:
     QLabel          *hostLabel;
     QLineEdit       *host;

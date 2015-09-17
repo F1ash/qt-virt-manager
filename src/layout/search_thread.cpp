@@ -1,7 +1,7 @@
 #include "search_thread.h"
 
 SearchThread::SearchThread(QObject *parent) :
-    QThread(parent)
+    _VirtThread(parent)
 {
     qRegisterMetaType<QString>("QString&");
     setURIList();
@@ -11,23 +11,27 @@ void SearchThread::run()
 {
     //qDebug()<<URIs;
     foreach (QString uri, URIs) {
-        virConnect *conn = virConnectOpenReadOnly(uri.toUtf8().data());
-        if ( NULL!=conn ) {
+        virConnect *connPtr = virConnectOpenReadOnly(uri.toUtf8().data());
+        ptr_ConnPtr = &connPtr;
+        if ( NULL!=connPtr ) {
             // don't work for VBox
-            // int num = virConnectNumOfDefinedDomains(conn);
+            // int num = virConnectNumOfDefinedDomains(connPtr);
             virDomainPtr *domains;
-            int ret = virConnectListAllDomains(conn, &domains, 0);
+            int ret = virConnectListAllDomains(connPtr, &domains, 0);
             if ( ret+1 ) {
                 for (int i = 0; i < ret; i++) {
-                     virDomainFree(domains[i]);
+                     if ( virDomainFree(domains[i]) <0 )
+                         sendConnErrors();
                 };
                 free(domains);
-            };
-            virConnectClose(conn);
+            } else
+                sendConnErrors();
+            virConnectClose(connPtr);
             if ( ret ) {
                 emit localConnFound(uri);
             };
-        };
+        } else
+            sendConnErrors();
     };
 }
 void SearchThread::setURIList()

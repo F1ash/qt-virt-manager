@@ -12,8 +12,6 @@ class PtyWidget : public _QWidget
 public:
     explicit PtyWidget(QWidget *parent=0, QString _tag = "");
 
-signals:
-
 private:
     QGridLayout     *ptyLayout;
     QString          tag;
@@ -21,9 +19,6 @@ private:
 public slots:
     QDomDocument     getDataDocument() const;
     void             setDataDescription(QString&);
-
-private slots:
-
 };
 
 #endif // PTY_WIDGET_H

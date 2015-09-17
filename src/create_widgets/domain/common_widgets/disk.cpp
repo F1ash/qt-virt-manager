@@ -31,6 +31,12 @@ Disk::Disk(QWidget *parent, virConnectPtr *connPtrPtr) :
     info->addWidget(new Dir_Disk(this, ptr_ConnPtr));
     info->addWidget(new File_Disk(this, ptr_ConnPtr));
     info->addWidget(new Network_Disk(this, ptr_ConnPtr));
+    for(int i=0; i<info->count(); i++) {
+        _Disk *_d = static_cast<_Disk*>(info->widget(i));
+        if ( NULL==_d ) continue;
+        connect(_d, SIGNAL(errorMsg(QString&)),
+                this, SIGNAL(errorMsg(QString&)));
+    };
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(sourceWdg);

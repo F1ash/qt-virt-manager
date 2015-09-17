@@ -18,6 +18,7 @@ public:
             virConnectPtr*  conn    = NULL);
 
 signals:
+    void             errorMsg(QString&);
 
 private:
     QSettings        settings;

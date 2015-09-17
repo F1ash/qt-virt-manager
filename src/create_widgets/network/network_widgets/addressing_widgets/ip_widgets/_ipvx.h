@@ -9,7 +9,7 @@ class _IPvX : public _QWidget
     Q_OBJECT
 public:
     explicit _IPvX(
-            QWidget *parent = NULL,
+            QWidget *parent  = NULL,
             bool    *hasDHCP = NULL);
     QLineEdit       *address, *gateway;
     QSpinBox        *prefix, *metric;

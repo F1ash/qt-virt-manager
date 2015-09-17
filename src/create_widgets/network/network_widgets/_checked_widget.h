@@ -9,7 +9,7 @@ class _Checked_Widget : public _QWidget
 public:
     _Checked_Widget(
             QWidget *parent = NULL,
-            QString _tag = QString());
+            QString  _tag   = QString());
     const QString        tag;
     QVBoxLayout         *baseLayout;
 

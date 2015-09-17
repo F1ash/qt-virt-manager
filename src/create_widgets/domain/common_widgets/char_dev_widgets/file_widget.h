@@ -9,8 +9,6 @@ class FileWidget : public _QWidget
 public:
     explicit FileWidget(QWidget *parent = NULL, QString _tag = "");
 
-signals:
-
 private:
     QLabel          *pathLabel;
     QLineEdit       *path;

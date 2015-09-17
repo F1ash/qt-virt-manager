@@ -27,6 +27,8 @@ ConnectionList::ConnectionList(QWidget *parent)
           searchThread, SLOT(compareURI(QString&)));
   connect(waitLocalConn, SIGNAL(finished()),
           this, SLOT(searchLocalhostConnections()));
+  connect(searchThread, SIGNAL(errorMsg(QString&,uint)),
+          this, SLOT(sendWarning(QString&,uint)));
 }
 
 /* public slots */
@@ -384,6 +386,15 @@ void ConnectionList::showMessage(QString title, QString msg)
 void ConnectionList::sendWarning(QString &msg)
 {
     emit warning(msg);
+}
+void ConnectionList::sendWarning(QString &msg, uint _num)
+{
+    Q_UNUSED(_num);
+    QString title("Search local connections");
+    QString time = QTime::currentTime().toString();
+    QString errorMsg = QString("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
+    emit warning(errorMsg);
 }
 void ConnectionList::mainWindowUp()
 {

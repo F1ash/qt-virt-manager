@@ -8,7 +8,7 @@
 #include "vm_viewer/vm_viewer.h"
 #include "vm_viewer/qspice_widgets/qspicewidget.h"
 
-class spcHlpThread : public QThread
+class spcHlpThread : public _VirtThread
 {
     Q_OBJECT
 public:
@@ -20,8 +20,6 @@ public:
     virDomainPtr     domainPtr = NULL;
     QString          uri, runXmlDesc;
     void             run();
-private:
-    virConnectPtr*   ptr_ConnPtr;
 };
 
 class Spice_Viewer : public VM_Viewer

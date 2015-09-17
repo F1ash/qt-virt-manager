@@ -34,6 +34,8 @@ DomainStateViewer::DomainStateViewer(
                 this, ptr_ConnPtr, domainName);
     connect(domainMonitorThread, SIGNAL(dataChanged(int, int, int, int)),
             this, SLOT(setData(int, int, int, int)));
+    connect(domainMonitorThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
 
     cpuDoc.setContent(HOST_CPU_USAGE_SVG_TEMPLATE);
     cpuPaint = cpuDoc.firstChildElement("svg")

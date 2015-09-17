@@ -4,16 +4,15 @@
 #include <QThread>
 #include <QTime>
 #include <QDebug>
-#include <libvirt/libvirt.h>
-#include <libvirt/virterror.h>
+#include "virt_objects/_virt_thread.h"
 
-class DomainMonitorThread : public QThread
+class DomainMonitorThread : public _VirtThread
 {
     Q_OBJECT
 public:
     explicit DomainMonitorThread(
-            QObject        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL,
+            QObject        *parent      = NULL,
+            virConnectPtr*  connPtrPtr  = NULL,
             QString         _domainName = QString());
     ~DomainMonitorThread();
 
@@ -21,7 +20,6 @@ signals:
     void                 dataChanged(int, int, int, int);
 
 private:
-    virConnectPtr*       ptr_ConnPtr;
     virDomainPtr         domain;
     const QString        domainName;
     quint64              prev_cpuTime;

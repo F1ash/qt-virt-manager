@@ -3,11 +3,10 @@
 
 #include <QThread>
 #include <QStringList>
-#include <libvirt/libvirt.h>
-#include <libvirt/virterror.h>
+#include "virt_objects/_virt_thread.h"
 #include <QDebug>
 
-class SearchThread : public QThread
+class SearchThread : public _VirtThread
 {
     Q_OBJECT
 public:

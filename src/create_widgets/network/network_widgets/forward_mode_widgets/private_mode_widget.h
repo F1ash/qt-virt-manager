@@ -9,14 +9,9 @@ class PRIVATE_Mode_widget : public _QWidget
 public:
     explicit PRIVATE_Mode_widget(QWidget *parent = 0);
 
-signals:
-
 private:
     QLabel          *info;
     QVBoxLayout     *commonLayout;
-
-public slots:
-
 };
 
 #endif // PRIVATE_MODE_WIDGET_H

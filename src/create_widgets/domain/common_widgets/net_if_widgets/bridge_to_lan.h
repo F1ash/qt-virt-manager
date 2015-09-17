@@ -11,8 +11,8 @@ class Bridge_to_LAN : public _QWidget
     Q_OBJECT
 public:
     explicit Bridge_to_LAN(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL);
+            QWidget        *parent      = NULL,
+            virConnectPtr*  connPtrPtr  = NULL);
 
 private:
     QLabel          *bridgeLabel, *targetLabel;
