@@ -72,7 +72,8 @@ void VM_Viewer::sendErrMsg(QString &msg, uint _number)
 
 void VM_Viewer::sendConnErrors()
 {
-    virtErrors = (*ptr_ConnPtr)? virConnGetLastError(*ptr_ConnPtr):NULL;
+    virtErrors = (NULL!=ptr_ConnPtr && *ptr_ConnPtr)?
+                virConnGetLastError(*ptr_ConnPtr):NULL;
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));

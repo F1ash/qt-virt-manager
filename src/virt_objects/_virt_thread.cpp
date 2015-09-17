@@ -11,7 +11,8 @@ _VirtThread::~_VirtThread() {}
 QString _VirtThread::sendConnErrors()
 {
     QString msg;
-    virtErrors = (NULL!=ptr_ConnPtr && *ptr_ConnPtr)? virConnGetLastError(*ptr_ConnPtr):NULL;
+    virtErrors = (NULL!=ptr_ConnPtr && *ptr_ConnPtr)?
+                virConnGetLastError(*ptr_ConnPtr):NULL;
     if ( virtErrors!=NULL && virtErrors->code>0 ) {
         msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
