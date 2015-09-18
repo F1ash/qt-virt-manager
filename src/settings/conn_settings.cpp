@@ -38,7 +38,6 @@ ConnSettings::ConnSettings(QWidget *parent) :
     commonLayout->insertStretch(-1);
     setLayout(commonLayout);
     initParameters();
-    timerId = startTimer(1000);
 }
 void ConnSettings::initParamLayout()
 {
@@ -57,7 +56,7 @@ void ConnSettings::initParamLayout()
         Drivers->setItemData(i, getDriverName( _text ));
     };
     connect(Drivers, SIGNAL(currentIndexChanged(QString)),
-            this, SLOT(changeConnParameters(QString)));
+            this, SLOT(changeDriver(QString)));
     transport = new QLabel("Transport:", this);
     Transports = new QComboBox(this);
     Transports->addItems(TRANSPORTS);
@@ -90,6 +89,14 @@ void ConnSettings::initParamLayout()
     paramLayout->addWidget(Extra, 5, 1);
     parameters = new QWidget(this);
     parameters->setLayout(paramLayout);
+    connect(Transports, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(changeURI()));
+    connect(Host, SIGNAL(textChanged(QString)),
+            this, SLOT(changeURI()));
+    connect(Path, SIGNAL(textChanged(QString)),
+            this, SLOT(changeURI()));
+    connect(Extra, SIGNAL(textChanged(QString)),
+            this, SLOT(changeURI()));
 }
 void ConnSettings::initButtons()
 {
@@ -122,29 +129,33 @@ void ConnSettings::saveConnect()
     settings.beginGroup("Connects");
     QStringList groups = settings.childGroups();
     settings.endGroup();
-    setResult(QDialog::Accepted);
-    if ( name.isEmpty() ) QMessageBox::information(
+    //setResult(QDialog::Accepted);
+    if ( name.isEmpty() ) {
+        QMessageBox::information(
                 this, QString("Info"), QString("Connection Name is empty."));
-    else if ( groups.contains(name) && !newbe && name==previousName ) {
+        return;
+    } else if ( groups.contains(name) && !newbe && name==previousName ) {
         saveParameters();
-        close();
     } else if ( groups.contains(name) && newbe ) {
         QMessageBox::information(
                     this, QString("Info"), QString("Same Connection Name is exist."));
+        return;
     } else if ( groups.contains(name) && !newbe && name!=previousName ) {
         QMessageBox::information(
                     this, QString("Info"), QString("Same Connection Name is exist."));
+        return;
     } else if ( !groups.contains(name) && newbe ) {
         saveParameters();
-        close();
     } else if ( !groups.contains(name) && !newbe ) {
         settings.beginGroup("Connects");
         settings.remove(previousName);
         settings.endGroup();
         //qDebug()<<previousName<<"included deleted";
         saveParameters();
-        close();
     };
+    settings.setValue("SetDlgGeometry", saveGeometry());
+    settings.sync();
+    done(QDialog::Accepted);
 }
 void ConnSettings::cancelConnect()
 {
@@ -155,8 +166,10 @@ void ConnSettings::cancelConnect()
         settings.endGroup();
         emit creationConnCancelled();
     };
-    setResult(QDialog::Rejected);
-    close();
+    //setResult(QDialog::Rejected);
+    settings.setValue("SetDlgGeometry", saveGeometry());
+    settings.sync();
+    done(QDialog::Rejected);
 }
 void ConnSettings::initParameters()
 {
@@ -206,10 +219,7 @@ void ConnSettings::saveParameters()
 }
 void ConnSettings::closeEvent(QCloseEvent *ev)
 {
-    settings.setValue("SetDlgGeometry", saveGeometry());
-    settings.sync();
-    killTimer(timerId);
-    ev->accept();
+    ev->ignore();
 }
 void ConnSettings::set_Title_Name(QString s)
 {
@@ -217,44 +227,41 @@ void ConnSettings::set_Title_Name(QString s)
     ConnName->setText(s);
     setWindowTitle(QString("Connection: %1").arg(s));
 }
-void ConnSettings::timerEvent(QTimerEvent *event)
+void ConnSettings::changeURI()
 {
-    int _timerId = event->timerId();
-    if ( _timerId && timerId==_timerId ) {
-        // URI building
-        QStringList _uri;
+    // URI building
+    QStringList _uri;
 #if QT_VERSION>=0x050200
-        _uri.append(Drivers->currentData(Qt::UserRole).toString());
+    _uri.append(Drivers->currentData(Qt::UserRole).toString());
 #else
-        QString _data = Drivers->itemData(Drivers->currentIndex()).toString();
-        _uri.append(_data);
+    QString _data = Drivers->itemData(Drivers->currentIndex()).toString();
+    _uri.append(_data);
 #endif
-        QString _transport;
+    QString _transport;
 #if QT_VERSION>=0x050200
-        _transport = Transports->currentData(Qt::UserRole).toString();
+    _transport = Transports->currentData(Qt::UserRole).toString();
 #else
-        _transport = Transports->itemData(Transports->currentIndex()).toString();
+    _transport = Transports->itemData(Transports->currentIndex()).toString();
 #endif
-        if ( !_transport.isEmpty() ) {
-            _uri.append("+");
-            _uri.append(Transports->currentText().toLower());
-        };
-        _uri.append("://");
-        if ( !Host->text().isEmpty() ) {
-            _uri.append(Host->text());
-        };
-        _uri.append("/");
-        if ( !Path->text().isEmpty() ) {
-            _uri.append(Path->text());
-        };
-        if ( !Extra->text().isEmpty() ) {
-            _uri.append("?");
-            _uri.append(Extra->text());
-        };
-        URI->setText(_uri.join(""));
+    if ( !_transport.isEmpty() ) {
+        _uri.append("+");
+        _uri.append(Transports->currentText().toLower());
     };
+    _uri.append("://");
+    if ( !Host->text().isEmpty() ) {
+        _uri.append(Host->text());
+    };
+    _uri.append("/");
+    if ( !Path->text().isEmpty() ) {
+        _uri.append(Path->text());
+    };
+    if ( !Extra->text().isEmpty() ) {
+        _uri.append("?");
+        _uri.append(Extra->text());
+    };
+    URI->setText(_uri.join(""));
 }
-void ConnSettings::changeConnParameters(QString s)
+void ConnSettings::changeDriver(QString s)
 {
     QString _name = getIconName(s);
     Transports->setEnabled(true);
@@ -285,6 +292,7 @@ void ConnSettings::changeConnParameters(QString s)
     } else if ( getDriverName(s)=="test" ) {
         Path->setText( "default" );
     } else Path->clear();
+    changeURI();
 }
 QString ConnSettings::getIconName(QString &_text) const
 {

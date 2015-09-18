@@ -41,15 +41,21 @@ int  ConnectionList::connItemEditAction()
         return exitCode;
     };
     ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-    sDialog = new ConnSettings(this->parentWidget());
+    ConnSettings *sDialog = new ConnSettings(this->parentWidget());
     sDialog->setConnectItem(idx);
     connect(sDialog, SIGNAL(creationConnCancelled()),
             this, SLOT(deleteCancelledCreation()));
     exitCode = sDialog->exec();
     disconnect(sDialog, SIGNAL(creationConnCancelled()),
                this, SLOT(deleteCancelledCreation()));
-
     sDialog->deleteLater();
+    if ( exitCode==QDialog::Accepted && !idx->getData().value("isRunning").toBool() ) {
+        QString key = idx->getName();
+        ConnElement *conn = static_cast<ConnElement*>(connections->value(key));
+        if ( NULL!=conn ) {
+            conn->buildURI();
+        };
+    };
     return exitCode;
 }
 void ConnectionList::searchLocalhostConnections()
@@ -84,51 +90,50 @@ void ConnectionList::addConnItem(QString &s)
           _createConnect = connItemEditAction();
       };
       // check item if it exist and correct
-      if ( _createConnect ) createConnection(item);
+      if ( _createConnect==QDialog::Accepted ) createConnection(item);
   };
 }
 void ConnectionList::deleteCurrentConnection()
 {
-  QModelIndex _item = currentIndex();
-  if ( _item.isValid() ) {
-      ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-      QString connection = idx->getName();
-      ConnElement *conn;
-      conn = connections->value(connection);
-      int conn_state;
-      bool conn_availability;
-      conn_availability = idx->getData().value(QString("availability"), AVAILABLE).toBool();
-      if ( !conn_availability ) {
-          showMessage(QString("Connection '%1'").arg(connection), "Connection is Busy.");
-          clearSelection();
-          return;
-      };
-      conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
-      if ( conn && conn_state==RUNNING ) {
-          showMessage(QString("Connection '%1'").arg(connection), "Connection is Running.");
-      } else {
-          //if ( conn && !conn_state ) conn->closeConnection();
-          disconnect(connections->value(connection), SIGNAL(warningShowed()),
-                     this, SLOT(mainWindowUp()));
-          disconnect(connections->value(connection), SIGNAL(warning(QString&)),
-                     this, SLOT(sendWarning(QString&)));
-          disconnect(connections->value(connection), SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
-                     this, SLOT(sendConnPtrPtr(virConnectPtr*, QString&)));
-          disconnect(connections->value(connection), SIGNAL(authRequested(QString&)),
-                     this, SLOT(getAuthCredentials(QString&)));
-          disconnect(connections->value(connection), SIGNAL(domStateChanged(Result)),
-                     this, SIGNAL(domResult(Result)));
-          disconnect(connections->value(connection), SIGNAL(netStateChanged(Result)),
-                     this, SIGNAL(netResult(Result)));
-          disconnect(connections->value(connection), SIGNAL(connClosed(bool, QString&)),
-                     this, SIGNAL(connClosed(bool, QString&)));
-          disconnect(connections->value(connection), SIGNAL(domainEnd(QString&)),
-                     this, SIGNAL(domainEnd(QString&)));
-          emit removeConnection(connection);
-          connections->remove(connection);
-          connItemModel->removeRow(_item.row());
-      };
-  } else showMessage("Info", "Item not exist.");
+    QModelIndex _item = currentIndex();
+    if ( _item.isValid() ) {
+        ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
+        QString connection = idx->getName();
+        ConnElement *conn = connections->value(connection);
+        bool conn_availability;
+        conn_availability = idx->getData().value(QString("availability"), AVAILABLE).toBool();
+        if ( !conn_availability ) {
+            showMessage(QString("Connection '%1'").arg(connection), "Connection is Busy.");
+            clearSelection();
+            return;
+        };
+        int conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
+        if ( conn && conn_state==RUNNING ) {
+            showMessage(QString("Connection '%1'").arg(connection), "Connection is Running.");
+        } else {
+            if ( conn ) {
+                disconnect(connections->value(connection), SIGNAL(warningShowed()),
+                           this, SLOT(mainWindowUp()));
+                disconnect(connections->value(connection), SIGNAL(warning(QString&)),
+                           this, SLOT(sendWarning(QString&)));
+                disconnect(connections->value(connection), SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
+                           this, SLOT(sendConnPtrPtr(virConnectPtr*, QString&)));
+                disconnect(connections->value(connection), SIGNAL(authRequested(QString&)),
+                           this, SLOT(getAuthCredentials(QString&)));
+                disconnect(connections->value(connection), SIGNAL(domStateChanged(Result)),
+                           this, SIGNAL(domResult(Result)));
+                disconnect(connections->value(connection), SIGNAL(netStateChanged(Result)),
+                           this, SIGNAL(netResult(Result)));
+                disconnect(connections->value(connection), SIGNAL(connClosed(bool, QString&)),
+                           this, SIGNAL(connClosed(bool, QString&)));
+                disconnect(connections->value(connection), SIGNAL(domainEnd(QString&)),
+                           this, SIGNAL(domainEnd(QString&)));
+                emit removeConnection(connection);
+                connections->remove(connection);
+            };
+            connItemModel->removeRow(_item.row());
+        };
+    } else showMessage("Info", "Item not exist.");
 }
 void ConnectionList::openConnection(QModelIndex &_item)
 {

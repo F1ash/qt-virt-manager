@@ -59,7 +59,6 @@ private:
     QTextEdit           *URI;
 
     bool                 newbe;
-    int                  timerId;
 
 public slots:
     void                 setConnectItem(ConnItemIndex*);
@@ -73,8 +72,8 @@ private slots:
     void                 saveParameters();
     void                 closeEvent(QCloseEvent*);
     void                 set_Title_Name(QString);
-    void                 timerEvent(QTimerEvent*);
-    void                 changeConnParameters(QString);
+    void                 changeURI();
+    void                 changeDriver(QString);
     QString              getIconName(QString&) const;
     QString              getDriverName(QString&) const;
 };

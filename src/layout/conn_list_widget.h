@@ -46,7 +46,6 @@ public slots:
     void                 stopProcessing();
 
 private :
-    ConnSettings        *sDialog;
     ProgressBarDelegate *progressBarDlg;
     SearchThread        *searchThread;
     WaitLocalConn       *waitLocalConn;

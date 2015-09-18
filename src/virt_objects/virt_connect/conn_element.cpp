@@ -7,9 +7,7 @@
 ConnElement::ConnElement(QObject *parent) :
     QObject(parent)
 {
-    //connect(this, SIGNAL(readyRead()), this, SLOT(sendMessage()));
     waitTimerId = 0;
-
     connAliveThread = new ConnAliveThread(this);
     connect(connAliveThread, SIGNAL(connMsg(QString)),
             this, SLOT(receiveConnMessage(QString)));
@@ -23,6 +21,8 @@ ConnElement::ConnElement(QObject *parent) :
             this, SIGNAL(netStateChanged(Result)));
     connect(connAliveThread, SIGNAL(connClosed(bool)),
             this, SLOT(forwardConnClosedSignal(bool)));
+    connect(connAliveThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SLOT(writeErrorToLog(QString&,uint)));
     // change element state in the thread's state changed case only
     connect(connAliveThread, SIGNAL(started()),
             this, SLOT(connAliveThreadStarted()));
@@ -30,6 +30,59 @@ ConnElement::ConnElement(QObject *parent) :
             this, SLOT(connAliveThreadFinished()));
     connect(connAliveThread, SIGNAL(domainEnd(QString&)),
             this, SLOT(emitDomainKeyToCloseViewer(QString&)));
+}
+void ConnElement::buildURI()
+{
+    settings.beginGroup("Connects");
+    settings.beginGroup(name);
+    checkTimeout = settings.value("TimeOut", TIMEOUT).toInt();
+    QString Driver = settings.value("Driver", "").toString();
+    QString Transport = settings.value("Transport", "").toString();
+    Host = settings.value("Host", "").toString();
+    QString Path = settings.value("Path", "").toString();
+    QString Extra = settings.value("Extra", "").toString();
+    settings.endGroup();
+    settings.endGroup();
+
+    // URI building
+    QStringList _uri;
+    QString _driver, _drv_row;
+    _drv_row = Driver.toLower().split("/").first();
+    if ( _drv_row.startsWith("vmware") ) {
+        if ( _drv_row.endsWith("player") ) {
+            _driver.append("vmwareplayer");
+        } else if ( _drv_row.endsWith("workstation") ) {
+            _driver.append("vmwarews");
+        } else if ( _drv_row.endsWith("fusion") ) {
+            _driver.append("vmwarefusion");
+        } else if ( _drv_row.endsWith("esx") ) {
+            _driver.append("esx");
+        } else if ( _drv_row.endsWith("gsx") ) {
+            _driver.append("gsx");
+        } else if ( _drv_row.endsWith("vpx") ) {
+            _driver.append("vpx");
+        };
+    } else
+        _driver = _drv_row;
+    _uri.append(_driver);
+    if ( !Transport.isEmpty() ) {
+        _uri.append("+");
+        _uri.append(Transport.toLower());
+    };
+    _uri.append("://");
+    if ( !Host.isEmpty() ) {
+        _uri.append(Host);
+    };
+    _uri.append("/");
+    if ( !Path.isEmpty() ) {
+        _uri.append(Path);
+    };
+    if ( !Extra.isEmpty() ) {
+        _uri.append("?");
+        _uri.append(Extra);
+    };
+    URI = _uri.join("");
+    own_index->setURI(URI);
 }
 
 /* public slots */
@@ -119,58 +172,6 @@ void ConnElement::setOnViewConnAliveThread(bool state)
 }
 
 /* private slots */
-void ConnElement::buildURI()
-{
-    settings.beginGroup("Connects");
-    settings.beginGroup(name);
-    checkTimeout = settings.value("TimeOut", TIMEOUT).toInt();
-    QString Driver = settings.value("Driver", "").toString();
-    QString Transport = settings.value("Transport", "").toString();
-    Host = settings.value("Host", "").toString();
-    QString Path = settings.value("Path", "").toString();
-    QString Extra = settings.value("Extra", "").toString();
-    settings.endGroup();
-    settings.endGroup();
-
-    // URI building
-    QStringList _uri;
-    QString _driver, _drv_row;
-    _drv_row = Driver.toLower().split("/").first();
-    if ( _drv_row.startsWith("vmware") ) {
-        if ( _drv_row.endsWith("player") ) {
-            _driver.append("vmwareplayer");
-        } else if ( _drv_row.endsWith("workstation") ) {
-            _driver.append("vmwarews");
-        } else if ( _drv_row.endsWith("fusion") ) {
-            _driver.append("vmwarefusion");
-        } else if ( _drv_row.endsWith("esx") ) {
-            _driver.append("esx");
-        } else if ( _drv_row.endsWith("gsx") ) {
-            _driver.append("gsx");
-        } else if ( _drv_row.endsWith("vpx") ) {
-            _driver.append("vpx");
-        };
-    } else
-        _driver = _drv_row;
-    _uri.append(_driver);
-    if ( !Transport.isEmpty() ) {
-        _uri.append("+");
-        _uri.append(Transport.toLower());
-    };
-    _uri.append("://");
-    if ( !Host.isEmpty() ) {
-        _uri.append(Host);
-    };
-    _uri.append("/");
-    if ( !Path.isEmpty() ) {
-        _uri.append(Path);
-    };
-    if ( !Extra.isEmpty() ) {
-        _uri.append("?");
-        _uri.append(Extra);
-    };
-    URI = _uri.join("");
-}
 void ConnElement::setConnectionState(CONN_STATE status)
 {
   //qDebug()<<"setConnectionState0"<<status;
@@ -179,10 +180,7 @@ void ConnElement::setConnectionState(CONN_STATE status)
           killTimer(waitTimerId);
           waitTimerId = 0;
       };
-      // don't clear URI because openConnection()
-      // not contains buildURI().
-      //URI.clear();
-      //URI.append("-");
+      buildURI();
   } else _diff = checkTimeout + 1;
   conn_Status.insert("availability", QVariant(AVAILABLE));
   conn_Status.insert("onView", QVariant(false));
@@ -195,7 +193,7 @@ void ConnElement::setConnectionState(CONN_STATE status)
           data = name;
           break;
       case 1:
-          data = ( status!=RUNNING )? "-" : URI;
+          data = URI;
           break;
       case 2:
           switch (status) {
@@ -247,6 +245,15 @@ void ConnElement::addMsgToLog(QString title, QString msg)
 void ConnElement::sendWarning(QString &msg)
 {
     emit warning(msg);
+}
+void ConnElement::writeErrorToLog(QString &msg, uint _num)
+{
+    Q_UNUSED(_num);
+    QString time = QTime::currentTime().toString();
+    QString title(QString("Connection '%1'").arg(name));
+    QString errorMsg = QString("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
+    sendWarning(errorMsg);
 }
 void ConnElement::mainWindowUp()
 {

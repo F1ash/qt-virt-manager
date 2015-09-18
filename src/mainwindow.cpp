@@ -181,6 +181,7 @@ void MainWindow::timerEvent(QTimerEvent *ev)
             killTimer(killTimerId);
             killTimerId = 0;
             counter = 0;
+            wait_thread->terminate();
         };
     };
 }

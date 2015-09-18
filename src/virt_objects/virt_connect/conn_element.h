@@ -17,6 +17,7 @@ class ConnElement : public QObject
     Q_OBJECT
 public:
     explicit ConnElement(QObject *parent = NULL);
+    void              buildURI();
 
 signals:
     void              warningShowed();
@@ -59,12 +60,12 @@ public slots:
     void              setOnViewConnAliveThread(bool);
 
 private slots:
-    void              buildURI();
     void              setConnectionState(CONN_STATE);
     void              timerEvent(QTimerEvent*);
     void              receiveConnMessage(QString);
     void              addMsgToLog(QString, QString);
     void              sendWarning(QString&);
+    void              writeErrorToLog(QString&, uint);
     void              mainWindowUp();
     void              getAuthCredentials(QString&);
     void              forwardConnClosedSignal(bool);
