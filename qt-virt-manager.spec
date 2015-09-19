@@ -28,6 +28,8 @@ Requires:       libvirt-daemon-driver-qemu
 Requires:       spice-vdagent
 # for scrubbing (optional)
 Requires:       scrub
+# for ssh-transported remote connections (optional)
+Requires:       nc6
 
 %if %with qt4
 BuildRequires:  qt4-devel
