@@ -74,3 +74,12 @@ some improvements:
     fixed closing with systemtray;
     improved Taskware Tooltip;
     fixed icon theme in qrc-file;
+
+v.0.16.38 :
+added VirtSecretControl and VirtInterfaceControl;
+reimplemented with TASK;
+reimplemented VirtEventLoop;
+fixes and enhancements in Spice/LXC-Viewers,
+    MainWindow, CreateDomain, Connection Settings,
+    LogDock, TrayIcon, WaitThread, VirtEntity widgets;
+enhanced the sending error messages to Log;

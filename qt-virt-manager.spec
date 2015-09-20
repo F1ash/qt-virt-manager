@@ -4,7 +4,7 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.12.28
+Version:        0.16.38
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -132,6 +132,10 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %endif
 
 %changelog
+* Sun Sep 20 2015 Fl@sh <kaperang07@gmail.com> - 0.16.38-1
+- improved spec for using SPICE, Qemu/KVM, ssh connections;
+- version updated;
+
 * Tue Jun 23 2015 Fl@sh <kaperang07@gmail.com> - 0.12.28-1
 - version updated;
 
