@@ -175,6 +175,12 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
         reconnectToDomain();
     } else if ( method.first()=="sendKeySeqToVirtDomain" ) {
         sendKeySeqToDomain((Qt::Key)method.last().toInt());
+    } else if ( method.first()=="copyFilesToVirtDomain" ) {
+        copyFilesToVirtDomain();
+    } else if ( method.first()=="copyToClipboardFromVirtDomain" ) {
+        copyToClipboardFromVirtDomain();
+    } else if ( method.first()=="pasteClipboardToVirtDomain" ) {
+        pasteClipboardToVirtDomain();
     };
 
 }
@@ -194,6 +200,18 @@ void VM_Viewer::reconnectToDomain()
 void VM_Viewer::sendKeySeqToDomain(Qt::Key key)
 {
     Q_UNUSED(key);
+}
+void VM_Viewer::copyFilesToVirtDomain()
+{
+
+}
+void VM_Viewer::copyToClipboardFromVirtDomain()
+{
+
+}
+void VM_Viewer::pasteClipboardToVirtDomain()
+{
+
 }
 void VM_Viewer::showErrorInfo(QString &_msg)
 {

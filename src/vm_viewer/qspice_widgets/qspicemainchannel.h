@@ -19,6 +19,7 @@
 #define QSPICEMAINCHANNEL_H
 
 #include "qspicechannel.h"
+#include <QStringList>
 
 class QSpiceMainChannel : public QSpiceChannel
 {
@@ -29,8 +30,22 @@ public:
     void mainSetDisplayEnabled(int id, bool enabled);
     void mainSendMonitorConfig();
 
-signals:
+    void mainClipboardSelectionGrab(uint selection, quint32 *types, int ntypes);
+    void mainClipboardSelectionRelease();
+    void mainClipboardSelectionNotify(QString&);
+    void mainClipboardSelectionRequest();
 
+    void mainFileCopyAsync(QStringList&);
+
+    static void mainFileCopyFinish(void*, void*, void*);
+
+signals:
+    void main_AgentUpdate();
+    void main_ClipboardSelection(QString&);
+    void main_ClipboardSelectionGrab(uint, void*, uint);
+    void main_ClipboardSelectionRelease(uint);
+    void main_ClipboardSelectionRequest(uint, uint);
+    void main_MouseUpdate();
 
 protected:
     inline QSpiceMainChannel(void *channel) : QSpiceChannel(channel) {initCallbacks();}

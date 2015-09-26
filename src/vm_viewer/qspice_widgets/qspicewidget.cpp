@@ -5,6 +5,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QMouseEvent>
+#include <QClipboard>
 
 QSpiceWidget::QSpiceWidget(QWidget *parent) :
     QScrollArea(parent)
@@ -59,7 +60,20 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     if (_main)
     {
         main = _main;
-        connect(main, SIGNAL(channelDestroyed()), SLOT(channelDestroyed()));
+        connect(main, SIGNAL(channelDestroyed()),
+                SLOT(channelDestroyed()));
+        connect(main, SIGNAL(main_AgentUpdate()),
+                SLOT(mainAgentUpdate()));
+        connect(main, SIGNAL(main_ClipboardSelection(QString&)),
+                SLOT(mainClipboardSelection(QString&)));
+        connect(main, SIGNAL(main_ClipboardSelectionGrab(uint,void*,uint)),
+                SLOT(mainClipboardSelectionGrab()));
+        connect(main, SIGNAL(main_ClipboardSelectionRelease(uint)),
+                SLOT(mainClipboardSelectionRelease()));
+        connect(main, SIGNAL(main_ClipboardSelectionRequest(uint,uint)),
+                SLOT(mainClipboardSelectionRequest()));
+        connect(main, SIGNAL(main_MouseUpdate()),
+                SLOT(mainMouseUpdate()));
         main->Connect();
         return;
     }
@@ -118,6 +132,49 @@ void QSpiceWidget::channelDestroyed()
     }
 }
 
+
+void QSpiceWidget::mainAgentUpdate()
+{
+    qDebug()<<"mainAgentUpdate";
+}
+
+void QSpiceWidget::mainClipboardSelection(QString &cp)
+{
+    QApplication::clipboard()->setText(cp);
+    mainClipboardSelectionRelease();
+}
+
+void QSpiceWidget::mainClipboardSelectionGrab()
+{
+    qDebug()<<"mainClipboardSelectionGrab";
+}
+
+void QSpiceWidget::mainClipboardSelectionRelease()
+{
+    qDebug()<<"mainClipboardSelectionRelease";
+    main->mainClipboardSelectionRelease();
+}
+
+void QSpiceWidget::mainClipboardSelectionRequest()
+{
+    qDebug()<<"mainClipboardSelectionRequest";
+    main->mainClipboardSelectionRequest();
+}
+
+void QSpiceWidget::mainMouseUpdate()
+{
+    qDebug()<<"mainMouseUpdate";
+}
+
+void QSpiceWidget::mainFileCopyAsync(QStringList &fileNames)
+{
+    main->mainFileCopyAsync(fileNames);
+}
+
+void QSpiceWidget::sendClipboardDataToGuest(QString &_data)
+{
+    main->mainClipboardSelectionNotify(_data);
+}
 
 void QSpiceWidget::displayPrimaryCreate(
      int                 format,

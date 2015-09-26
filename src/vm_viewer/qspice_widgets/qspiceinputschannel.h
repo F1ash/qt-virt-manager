@@ -38,7 +38,7 @@ public:
     void inputsButtonRelease(int button, int button_state);
 
     // keyboard
-    // XT Scan Codes (not AT)
+    // SPICE protocol use PC AT scan codes
     void inputsKeyPress(uint scancode);
     void inputsKeyPressAndRelease(uint scancode);
     void inputsKeyRelease(uint scancode);

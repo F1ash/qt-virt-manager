@@ -64,6 +64,9 @@ public slots:
     void             startCloseProcess();
     virtual void     reconnectToDomain();
     virtual void     sendKeySeqToDomain(Qt::Key);
+    virtual void     copyFilesToVirtDomain();
+    virtual void     copyToClipboardFromVirtDomain();
+    virtual void     pasteClipboardToVirtDomain();
     void             showErrorInfo(QString&);
 };
 

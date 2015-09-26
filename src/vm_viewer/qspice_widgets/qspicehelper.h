@@ -74,6 +74,31 @@ public:
                            gpointer            rgba,
                            gpointer            user_data);
 
+    // Main Channel
+    static void main_agent_update(SpiceMainChannel *mainchannel, gpointer user_data);
+    static void main_clipboard_selection(SpiceMainChannel *main,
+                                         guint             selection,
+                                         guint             type,
+                                         gpointer          data,
+                                         guint             size,
+                                         gpointer          user_data);
+    static void main_clipboard_selection_grab(SpiceMainChannel *main,
+                                              guint             selection,
+                                              gpointer          types,
+                                              guint             ntypes,
+                                              gpointer          user_data);
+    static void main_clipboard_selection_release(SpiceMainChannel *main,
+                                                 guint             selection,
+                                                 gpointer          user_data);
+    static void main_clipboard_selection_request(SpiceMainChannel *main,
+                                                 guint             selection,
+                                                 guint             types,
+                                                 gpointer          user_data);
+    static void main_mouse_update(SpiceMainChannel *mainchannel, gpointer user_data);
+    static void migration_started(SpiceMainChannel *main,
+                                  GObject          *session,
+                                  gpointer          user_data);
+
 };
 
 #endif // QSPICEHELPER_H

@@ -93,8 +93,10 @@ void QSpiceHelper::ss_channel_destroy(SpiceSession *session, SpiceChannel *chann
 void QSpiceSession::init()
 {
     gobject = spice_session_new ();
-    g_signal_connect(gobject, "channel-new", (GCallback) QSpiceHelper::ss_channel_new, this);
-    g_signal_connect(gobject, "channel-destroy", (GCallback) QSpiceHelper::ss_channel_destroy, this);
+    g_signal_connect(gobject, "channel-new",
+                     (GCallback) QSpiceHelper::ss_channel_new, this);
+    g_signal_connect(gobject, "channel-destroy",
+                     (GCallback) QSpiceHelper::ss_channel_destroy, this);
 }
 
 

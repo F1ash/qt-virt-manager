@@ -19,7 +19,7 @@
 
 #include <QObject>
 #include "qspiceobject.h"
-
+#include <QDebug>
 
 class QSpiceChannel : public QSpiceObject
 {

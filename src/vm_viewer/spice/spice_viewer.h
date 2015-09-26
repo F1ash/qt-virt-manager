@@ -43,6 +43,9 @@ public slots:
     void             init();
     void             reconnectToDomain();
     void             sendKeySeqToDomain(Qt::Key);
+    void             copyFilesToVirtDomain();
+    void             copyToClipboardFromVirtDomain();
+    void             pasteClipboardToVirtDomain();
 
 private slots:
     void             timerEvent(QTimerEvent*);

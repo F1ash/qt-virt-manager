@@ -38,6 +38,9 @@ public:
     QAction         *sendKeySeq_6;
     QAction         *sendKeySeq_7;
     QAction         *sendKeySeq_8;
+    QAction         *copyFiles_Action;
+    QAction         *copyToClipboard;
+    QAction         *pasteClipboard;
 
 signals:
     void             execMethod(const QStringList&);

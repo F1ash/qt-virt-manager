@@ -55,6 +55,15 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     sendKeySeq_6 = keySequenceMenu->addAction("Ctrl+Alt+F6");
     sendKeySeq_7 = keySequenceMenu->addAction("Ctrl+Alt+F7");
     sendKeySeq_8 = keySequenceMenu->addAction("Ctrl+Alt+F8");
+    copyFiles_Action = new QAction(this);
+    copyFiles_Action->setIcon(QIcon::fromTheme("document-send"));
+    copyFiles_Action->setToolTip("Copy Files to Guest");
+    copyToClipboard = new QAction(this);
+    copyToClipboard->setIcon(QIcon::fromTheme("edit-copy"));
+    copyToClipboard->setToolTip("Copy from Guest to Clipboard");
+    pasteClipboard = new QAction(this);
+    pasteClipboard->setIcon(QIcon::fromTheme("edit-paste"));
+    pasteClipboard->setToolTip("Paste Clipboard to Guest");
 
     addAction(start_Action);
     addAction(pause_Action);
@@ -63,7 +72,12 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     addAction(snapshot_Action);
     addSeparator();
     addAction(reconnect_Action);
+    addSeparator();
     addAction(keySeq_Action);
+    addAction(copyFiles_Action);
+    addAction(copyToClipboard);
+    addAction(pasteClipboard);
+    addSeparator();
 
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
@@ -128,6 +142,12 @@ void ViewerToolBar::detectTriggerredAction(QAction *action)
         parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_LaunchB);
     } else if ( action == sendKeySeq_Del ) {
         parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_LaunchD);
+    } else if ( action == copyFiles_Action ) {
+        parameters << "copyFilesToVirtDomain";
+    } else if ( action == copyToClipboard ) {
+        parameters << "copyToClipboardFromVirtDomain";
+    } else if ( action == pasteClipboard ) {
+        parameters << "pasteClipboardToVirtDomain";
     } else return;
     emit execMethod(parameters);
 }

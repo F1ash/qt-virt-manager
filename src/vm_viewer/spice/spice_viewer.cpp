@@ -1,4 +1,6 @@
 #include "spice_viewer.h"
+#include <QApplication>
+#include <QClipboard>
 
 spcHlpThread::spcHlpThread(
         QObject *parent, virConnectPtr *connPtrPtr, QString _domain) :
@@ -121,6 +123,25 @@ void Spice_Viewer::reconnectToDomain()
 void Spice_Viewer::sendKeySeqToDomain(Qt::Key key)
 {
     spiceWdg->SendKeySequience(key);
+}
+void Spice_Viewer::copyFilesToVirtDomain()
+{
+    if ( NULL==spiceWdg ) return;
+    QStringList fileNames = QFileDialog::getOpenFileNames(
+                this, "Copy files to Guest", "~");
+    spiceWdg->mainFileCopyAsync(fileNames);
+}
+void Spice_Viewer::copyToClipboardFromVirtDomain()
+{
+    if ( NULL==spiceWdg ) return;
+    spiceWdg->mainClipboardSelectionRequest();
+}
+void Spice_Viewer::pasteClipboardToVirtDomain()
+{
+    if ( NULL==spiceWdg ) return;
+    QString _data = QApplication::clipboard()->text();
+    //qDebug()<<"pasteClipboardToVirtDomain"<<_data;
+    spiceWdg->sendClipboardDataToGuest(_data);
 }
 
 /* private slots */

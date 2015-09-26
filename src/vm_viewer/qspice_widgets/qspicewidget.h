@@ -21,6 +21,8 @@ public:
     bool Connect(QString uri);
     void Disconnect();
     void SendKeySequience(Qt::Key);
+    void mainFileCopyAsync(QStringList&);
+    void sendClipboardDataToGuest(QString&);
 
 signals:
     void DisplayResize(const QSize &size);
@@ -37,12 +39,19 @@ protected:
 
 
 protected slots:
-
+    friend class Spice_Viewer;
     void resizeDone();
 
     void ChannelNew(QSpiceChannel *channel);
 
     void channelDestroyed();
+
+    void mainAgentUpdate();
+    void mainClipboardSelection(QString&);
+    void mainClipboardSelectionGrab();
+    void mainClipboardSelectionRelease();
+    void mainClipboardSelectionRequest();
+    void mainMouseUpdate();
 
     void displayPrimaryCreate(
          int                 format,
