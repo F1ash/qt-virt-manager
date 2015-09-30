@@ -13,6 +13,9 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     spiceSession = new QSpiceSession(this);
     display = NULL;
     inputs = NULL;
+    cursor = NULL;
+    smartcard = NULL;
+    usbredir = NULL;
 
     m_Image = new QLabel(this);
     m_Image->setAlignment(Qt::AlignTop | Qt::AlignLeft);
@@ -74,6 +77,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
                 SLOT(mainClipboardSelectionRequest()));
         connect(main, SIGNAL(main_MouseUpdate()),
                 SLOT(mainMouseUpdate()));
+        connect(main, SIGNAL(downloaded(int,int)),
+                this, SIGNAL(downloaded(int,int)));
         main->Connect();
         return;
     }
@@ -94,6 +99,7 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
                 SLOT(displayPrimaryDestroy()));
 
         display->Connect();
+        emit displayChannelChanged(true);
         return;
     }
 
@@ -103,6 +109,7 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         inputs = _inputs;
         connect(inputs, SIGNAL(channelDestroyed()), SLOT(channelDestroyed()));
         inputs->Connect();
+        emit inputsChannelChanged(true);
         return;
     }
 
@@ -114,6 +121,25 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         connect(cursor, SIGNAL(cursorSet(int,int,int,int,void*)),
                 SLOT(cursorSet(int,int,int,int,void*)));
         cursor->Connect();
+        emit cursorChannelChanged(true);
+        return;
+    }
+
+    QSpiceSmartcardChannel * _smartcard = dynamic_cast<QSpiceSmartcardChannel *>(channel);
+    if (_smartcard)
+    {
+        smartcard = _smartcard;
+        smartcard->Connect();
+        emit smartcardChannelChanged(true);
+        return;
+    }
+
+    QSpiceUSBRedirChannel * _usbredir = dynamic_cast<QSpiceUSBRedirChannel *>(channel);
+    if (_usbredir)
+    {
+        usbredir = _usbredir;
+        usbredir->Connect();
+        emit removableChannelChanged(true);
         return;
     }
 
@@ -123,12 +149,22 @@ void QSpiceWidget::channelDestroyed()
 {
     if (QObject::sender() == main)
         main = NULL;
-    else if (QObject::sender() == inputs)
+    else if (QObject::sender() == inputs) {
         inputs = NULL;
-    else if (QObject::sender() == cursor)
-    {
+        emit inputsChannelChanged(false);
+    } else if (QObject::sender() == cursor) {
         m_Image->setCursor(Qt::ArrowCursor);
         cursor = NULL;
+        emit cursorChannelChanged(false);
+    } else if (QObject::sender() == display) {
+        display = NULL;
+        emit displayChannelChanged(false);
+    } else if (QObject::sender() == smartcard) {
+        smartcard = NULL;
+        emit smartcardChannelChanged(false);
+    } else if (QObject::sender() == usbredir) {
+        usbredir = NULL;
+        emit removableChannelChanged(false);
     }
 }
 

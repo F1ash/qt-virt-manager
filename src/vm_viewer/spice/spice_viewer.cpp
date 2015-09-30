@@ -89,6 +89,18 @@ void Spice_Viewer::init()
             actFullScreen = new QShortcut(QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
             connect(actFullScreen, SIGNAL(activated()), SLOT(FullScreenTriggered()));
             connect(spiceWdg, SIGNAL(DisplayResize(QSize)), SLOT(DisplayResize(QSize)));
+            connect(spiceWdg, SIGNAL(downloaded(int,int)),
+                    vm_stateWdg, SLOT(setDownloadProcessValue(int,int)));
+            connect(spiceWdg, SIGNAL(displayChannelChanged(bool)),
+                    vm_stateWdg, SLOT(changeDisplayState(bool)));
+            connect(spiceWdg, SIGNAL(cursorChannelChanged(bool)),
+                    vm_stateWdg, SLOT(changeMouseState(bool)));
+            connect(spiceWdg, SIGNAL(inputsChannelChanged(bool)),
+                    vm_stateWdg, SLOT(changeKeyboardState(bool)));
+            connect(spiceWdg, SIGNAL(removableChannelChanged(bool)),
+                    vm_stateWdg, SLOT(changeRemovableState(bool)));
+            connect(spiceWdg, SIGNAL(smartcardChannelChanged(bool)),
+                    vm_stateWdg, SLOT(changeSmartcardState(bool)));
             spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
         } else {
             msg = QString("In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")
@@ -149,7 +161,7 @@ void Spice_Viewer::timerEvent(QTimerEvent *ev)
 {
     if ( ev->timerId()==killTimerId ) {
         counter++;
-        closeProcess->setValue(counter*PERIOD*6);
+        vm_stateWdg->setCloseProcessValue(counter*PERIOD*6);
         if ( TIMEOUT<counter*PERIOD*6 ) {
             killTimer(killTimerId);
             killTimerId = 0;

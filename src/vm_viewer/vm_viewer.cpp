@@ -14,10 +14,8 @@ VM_Viewer::VM_Viewer(
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(resendExecMethod(const QStringList&)));
-    closeProcess = new QProgressBar(this);
-    closeProcess->setRange(0, TIMEOUT);
-    statusBar()->addPermanentWidget(closeProcess);
-    statusBar()->hide();
+    vm_stateWdg = new VM_State_Widget(this);
+    statusBar()->addPermanentWidget(vm_stateWdg, -1);
 }
 VM_Viewer::~VM_Viewer()
 {

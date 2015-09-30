@@ -104,7 +104,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
         }
     } else if ( ev->timerId()==killTimerId ) {
         counter++;
-        closeProcess->setValue(counter*PERIOD*6);
+        vm_stateWdg->setCloseProcessValue(counter*PERIOD*6);
         if ( TIMEOUT<counter*PERIOD*6 ) {
             counter = 0;
             killTimer(killTimerId);

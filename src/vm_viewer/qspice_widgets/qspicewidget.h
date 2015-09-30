@@ -10,6 +10,8 @@
 #include "qspicedisplaychannel.h"
 #include "qspiceinputschannel.h"
 #include "qspicecursorchannel.h"
+#include "qspicesmartcardchannel.h"
+#include "qspiceusbredirchannel.h"
 
 class QSpiceWidget : public QScrollArea
 {
@@ -26,13 +28,22 @@ public:
 
 signals:
     void DisplayResize(const QSize &size);
+    void downloaded(int, int);
+    void cursorChannelChanged(bool);
+    void inputsChannelChanged(bool);
+    void displayChannelChanged(bool);
+    void removableChannelChanged(bool);
+    void smartcardChannelChanged(bool);
 
 protected:
+    friend class Spice_Viewer;
     QSpiceSession           *spiceSession;
     QSpiceMainChannel       *main;
     QSpiceDisplayChannel    *display;
     QSpiceInputsChannel     *inputs;
     QSpiceCursorChannel     *cursor;
+    QSpiceSmartcardChannel  *smartcard;
+    QSpiceUSBRedirChannel   *usbredir;
 
     QLabel                  *m_Image;
     QTimer                   resizeTimer;

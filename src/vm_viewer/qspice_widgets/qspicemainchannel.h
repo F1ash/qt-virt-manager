@@ -38,6 +38,7 @@ public:
     void mainFileCopyAsync(QStringList&);
 
     static void mainFileCopyFinish(void*, void*, void*);
+    static void progressCallback(uint, uint, void*);
 
 signals:
     void main_AgentUpdate();
@@ -46,6 +47,7 @@ signals:
     void main_ClipboardSelectionRelease(uint);
     void main_ClipboardSelectionRequest(uint, uint);
     void main_MouseUpdate();
+    void downloaded(int, int);
 
 protected:
     inline QSpiceMainChannel(void *channel) : QSpiceChannel(channel) {initCallbacks();}

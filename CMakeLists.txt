@@ -343,6 +343,7 @@ set (HEADERS
 
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
+  src/vm_viewer/vm_state_widget.h
 
   src/vm_viewer/lxc/lxc_viewer.h
   src/vm_viewer/lxc/lxc_viewer_thread.h
@@ -367,6 +368,8 @@ set (HEADERS
   src/vm_viewer/qspice_widgets/qspiceobject.h
   src/vm_viewer/qspice_widgets/qspicesession.h
   src/vm_viewer/qspice_widgets/qspicewidget.h
+  src/vm_viewer/qspice_widgets/qspicesmartcardchannel.h
+  src/vm_viewer/qspice_widgets/qspiceusbredirchannel.h
 
   src/state_monitor/domain_state_monitor.h
   src/state_monitor/domain_monitor_thread.h
@@ -659,6 +662,7 @@ set (SOURCES
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp
+  src/vm_viewer/vm_state_widget.cpp
 
   src/vm_viewer/lxc/lxc_viewer.cpp
   src/vm_viewer/lxc/lxc_viewer_thread.cpp
@@ -683,6 +687,8 @@ set (SOURCES
   src/vm_viewer/qspice_widgets/qspiceobject.cpp
   src/vm_viewer/qspice_widgets/qspicesession.cpp
   src/vm_viewer/qspice_widgets/qspicewidget.cpp
+  src/vm_viewer/qspice_widgets/qspicesmartcardchannel.cpp
+  src/vm_viewer/qspice_widgets/qspiceusbredirchannel.cpp
 
   src/state_monitor/domain_state_monitor.cpp
   src/state_monitor/domain_monitor_thread.cpp

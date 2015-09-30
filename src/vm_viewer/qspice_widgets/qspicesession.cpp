@@ -26,6 +26,8 @@
 #include "qspiceinputschannel.h"
 #include "qspicemainchannel.h"
 #include "qspicecursorchannel.h"
+#include "qspicesmartcardchannel.h"
+#include "qspiceusbredirchannel.h"
 
 #include <QDebug>
 
@@ -65,6 +67,14 @@ void QSpiceHelper::ss_channel_new(SpiceSession *session, SpiceChannel *channel, 
 
     case SPICE_CHANNEL_CURSOR:
         _channel = new QSpiceCursorChannel(channel);
+        break;
+
+    case SPICE_CHANNEL_SMARTCARD:
+        _channel = new QSpiceSmartcardChannel(channel);
+        break;
+
+    case SPICE_CHANNEL_USBREDIR:
+        _channel = new QSpiceUSBRedirChannel(channel);
         break;
 
     default:

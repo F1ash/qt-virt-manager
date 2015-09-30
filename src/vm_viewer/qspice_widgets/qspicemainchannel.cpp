@@ -130,19 +130,19 @@ void QSpiceMainChannel::mainClipboardSelectionNotify(QString &_data)
 {
     qDebug()<<"mainClipboardSelectionNotify"<<_data.toUtf8().data();
     QByteArray data = _data.toUtf8();
-    size_t size = data.size()*sizeof(char);
-    uchar *buff = (uchar*) malloc(size);
-    for (int i=0; i<size; i++) {
+    size_t size = data.size()*sizeof(char)+1;
+    uchar buff[size];
+    for (int i=0; i<size-1; i++) {
         buff[i] = uchar(data.data()[i]);
         qDebug()<<"mainClipboardSelectionNotify"<<QString(buff[i]);
     };
+    buff[size] = '\0';
     spice_main_clipboard_selection_notify(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
                 VD_AGENT_CLIPBOARD_UTF8_TEXT,
-                (const guchar*)buff,
+                buff,
                 size);
-    free(buff);
 }
 
 void QSpiceMainChannel::mainClipboardSelectionRequest()
@@ -158,30 +158,46 @@ void QSpiceMainChannel::mainFileCopyAsync(QStringList &fileNames)
 {
     if ( fileNames.isEmpty() ) return;
     uint count = fileNames.count();
-    qDebug()<<fileNames<<count;
+    //qDebug()<<fileNames<<count;
     GFile* sources[count];
     uint i = 0;
     foreach (QString _path, fileNames) {
-        GFile *file = g_file_new_for_path(_path.toUtf8().constData());
-        sources[i] = file;
+        sources[i] = g_file_new_for_path(_path.toUtf8().constData());
         i++;
     };
-    qDebug()<<"SpiceMainChannel"<<this->gobject;
+    sources[count] = NULL;
+    //qDebug()<<"SpiceMainChannel"<<this->gobject;
+    GCancellable *cancellable = g_cancellable_new();
     spice_main_file_copy_async(
                 (SpiceMainChannel *) gobject,
                 sources,
                 G_FILE_COPY_BACKUP,
-                NULL,
-                NULL,
-                NULL,
+                cancellable,
+                (GFileProgressCallback)progressCallback,
+                this,
                 (GAsyncReadyCallback)mainFileCopyFinish,
                 this);
 }
 
-void QSpiceMainChannel::mainFileCopyFinish(void *obj, void *result, void *error)
+void QSpiceMainChannel::mainFileCopyFinish(void *channel, void *result, void *error)
 {
-    bool res = spice_main_file_copy_finish(
-                (SpiceMainChannel *)obj,
-                (GAsyncResult *)result,
-                (GError **)error);
+    GAsyncResult *asyncResult = (GAsyncResult *)result;
+    GError **errors = (GError **)error;
+    spice_main_file_copy_finish(
+                (SpiceMainChannel *)channel,
+                asyncResult,
+                errors);
+    QSpiceMainChannel *obj = static_cast<QSpiceMainChannel*>(g_async_result_get_user_data(asyncResult));
+    size_t count = sizeof(errors)/sizeof(*errors);
+    for ( uint i = 0; i<count; i++ ) {
+        //qDebug()<<errors[i]->code<< QString::fromUtf8(errors[i]->message);
+        if (obj) emit obj->downloaded(0, 100);
+    };
+}
+
+void QSpiceMainChannel::progressCallback(uint current_num_bytes, uint total_num_bytes, void *user_data)
+{
+    QSpiceMainChannel *obj = static_cast<QSpiceMainChannel*>(user_data);
+    //qDebug()<<current_num_bytes<<total_num_bytes;
+    if (obj) emit obj->downloaded(current_num_bytes, total_num_bytes);
 }
