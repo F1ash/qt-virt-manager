@@ -108,11 +108,10 @@ void QSpiceMainChannel::mainSetDisplayEnabled(int id, bool enabled)
     spice_main_set_display_enabled((SpiceMainChannel *) gobject, id, enabled);
 }
 
-void QSpiceMainChannel::mainSendMonitorConfig()
+bool QSpiceMainChannel::mainSendMonitorConfig()
 {
-    spice_main_send_monitor_config((SpiceMainChannel *) gobject);
+    return spice_main_send_monitor_config((SpiceMainChannel *) gobject);
 }
-
 
 void QSpiceMainChannel::mainClipboardSelectionGrab(uint selection, quint32 *types, int ntypes)
 {
@@ -129,19 +128,13 @@ void QSpiceMainChannel::mainClipboardSelectionRelease()
 void QSpiceMainChannel::mainClipboardSelectionNotify(QString &_data)
 {
     qDebug()<<"mainClipboardSelectionNotify"<<_data.toUtf8().data();
-    QByteArray data = _data.toUtf8();
-    size_t size = data.size()*sizeof(char)+1;
-    uchar buff[size];
-    for (int i=0; i<size-1; i++) {
-        buff[i] = uchar(data.data()[i]);
-        qDebug()<<"mainClipboardSelectionNotify"<<QString(buff[i]);
-    };
-    buff[size] = '\0';
+    const char *data = _data.toUtf8().data();
+    size_t size = strlen(data);
     spice_main_clipboard_selection_notify(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
                 VD_AGENT_CLIPBOARD_UTF8_TEXT,
-                buff,
+                (const guchar*)data,
                 size);
 }
 
@@ -165,7 +158,7 @@ void QSpiceMainChannel::mainFileCopyAsync(QStringList &fileNames)
         sources[i] = g_file_new_for_path(_path.toUtf8().constData());
         i++;
     };
-    sources[count] = NULL;
+    sources[i] = NULL;
     //qDebug()<<"SpiceMainChannel"<<this->gobject;
     GCancellable *cancellable = g_cancellable_new();
     spice_main_file_copy_async(

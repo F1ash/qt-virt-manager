@@ -4,11 +4,13 @@ ChannelDevice::ChannelDevice(QWidget *parent) :
     CharDevice(parent, NULL, NULL, QString("channel"))
 {
     devType->insertItem(6, "Spice Agent", "spicevmc");
+    devType->insertItem(7, "Spice WebDAV", "spiceport");
     chanType = new QComboBox(this);
     chanType->setEditable(true);
     chanType->addItem("com.redhat.spice.0");
     chanType->addItem("org.qemu.guest_agent.0");
     chanType->addItem("org.libguestfs.channel.0");
+    chanType->addItem("org.spice-space.webdav.0");
     commonLayout->insertWidget(0, chanType, -1);
     connect(chanType, SIGNAL(editTextChanged(const QString&)),
             this, SLOT(chanNameChanged(const QString&)));
@@ -35,7 +37,8 @@ QDomDocument ChannelDevice::getDataDocument() const
         _device.appendChild(_devDesc);
         doc.appendChild(_device);
     };
-    QDomElement _target = doc.createElement("target");
+    QDomElement _source, _target;
+    _target = doc.createElement("target");
     _target.setAttribute("type", "virtio");
     _target.setAttribute("name", chanType->currentText());
     doc.firstChildElement("device")
@@ -47,6 +50,13 @@ QDomDocument ChannelDevice::getDataDocument() const
     doc.firstChildElement("device")
             .firstChildElement("channel")
             .setAttribute("type", _type);
+    if ( _type=="spiceport" ) {
+        _source = doc.createElement("source");
+        _source.setAttribute("channel", chanType->currentText());
+        doc.firstChildElement("device")
+                .firstChildElement("channel")
+                .appendChild(_source);
+    };
     return doc;
 }
 void ChannelDevice::setDataDescription(QString &xmlDesc)
@@ -54,11 +64,15 @@ void ChannelDevice::setDataDescription(QString &xmlDesc)
     //qDebug()<<xmlDesc;
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QDomElement _target, _device;
+    QDomElement _source, _target, _device;
     _device = doc.firstChildElement("device")
             .firstChildElement("channel");
+    _source = _device.firstChildElement("source");
     _target = _device.firstChildElement("target");
     QString _chanType;
+    // now source element used for WebDAV only
+    // some work with source element
+    //
     while ( !_target.isNull() ) {
         if ( _target.hasAttribute("name") ) {
             _chanType = _target.attribute("name", "com.redhat.spice.0");
@@ -84,7 +98,12 @@ void ChannelDevice::chanNameChanged(const QString &text)
 {
     //qDebug()<<text;
     if ( text.contains("spice") ) {
-        devType->setCurrentIndex(6);
+        if ( text.contains("webdav") )
+            devType->setCurrentIndex(7);
+        else
+            devType->setCurrentIndex(6);
+        // show empty widget
+        charDevWdg->setCurrentIndex(charDevWdg->count()-1);
     } else {
         devType->setCurrentIndex(5);
         UnixWidget *wdg = static_cast<UnixWidget*>(charDevWdg->currentWidget());

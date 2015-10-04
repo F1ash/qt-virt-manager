@@ -370,6 +370,8 @@ set (HEADERS
   src/vm_viewer/qspice_widgets/qspicewidget.h
   src/vm_viewer/qspice_widgets/qspicesmartcardchannel.h
   src/vm_viewer/qspice_widgets/qspiceusbredirchannel.h
+  src/vm_viewer/qspice_widgets/qspicewebdavchannel.h
+  src/vm_viewer/qspice_widgets/qspiceusbdevicemanager.h
 
   src/state_monitor/domain_state_monitor.h
   src/state_monitor/domain_monitor_thread.h
@@ -689,6 +691,8 @@ set (SOURCES
   src/vm_viewer/qspice_widgets/qspicewidget.cpp
   src/vm_viewer/qspice_widgets/qspicesmartcardchannel.cpp
   src/vm_viewer/qspice_widgets/qspiceusbredirchannel.cpp
+  src/vm_viewer/qspice_widgets/qspicewebdavchannel.cpp
+  src/vm_viewer/qspice_widgets/qspiceusbdevicemanager.cpp
 
   src/state_monitor/domain_state_monitor.cpp
   src/state_monitor/domain_monitor_thread.cpp

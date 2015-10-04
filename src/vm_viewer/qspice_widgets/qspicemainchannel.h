@@ -28,7 +28,7 @@ public:
 
     void mainSetDisplay(int id, int x, int y, int width, int height);
     void mainSetDisplayEnabled(int id, bool enabled);
-    void mainSendMonitorConfig();
+    bool mainSendMonitorConfig();
 
     void mainClipboardSelectionGrab(uint selection, quint32 *types, int ntypes);
     void mainClipboardSelectionRelease();

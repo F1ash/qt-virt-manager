@@ -3,7 +3,7 @@
 
 #include <QTimer>
 #include <QLabel>
-#include <QScrollArea>
+#include <QHBoxLayout>
 
 #include "qspicesession.h"
 #include "qspicemainchannel.h"
@@ -12,8 +12,10 @@
 #include "qspicecursorchannel.h"
 #include "qspicesmartcardchannel.h"
 #include "qspiceusbredirchannel.h"
+#include "qspicewebdavchannel.h"
+#include "qspiceusbdevicemanager.h"
 
-class QSpiceWidget : public QScrollArea
+class QSpiceWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -24,6 +26,7 @@ public:
     void Disconnect();
     void SendKeySequience(Qt::Key);
     void mainFileCopyAsync(QStringList&);
+    void copyClipboardFromGuest();
     void sendClipboardDataToGuest(QString&);
 
 signals:
@@ -32,8 +35,9 @@ signals:
     void cursorChannelChanged(bool);
     void inputsChannelChanged(bool);
     void displayChannelChanged(bool);
-    void removableChannelChanged(bool);
+    void usbredirChannelChanged(bool);
     void smartcardChannelChanged(bool);
+    void webdavChannelChanged(bool);
 
 protected:
     friend class Spice_Viewer;
@@ -44,10 +48,13 @@ protected:
     QSpiceCursorChannel     *cursor;
     QSpiceSmartcardChannel  *smartcard;
     QSpiceUSBRedirChannel   *usbredir;
+    QSpiceWebDAVChannel     *webdav;
+    QSpiceUsbDeviceManager  *usbDevManager;
 
     QLabel                  *m_Image;
     QTimer                   resizeTimer;
-
+    QHBoxLayout             *commonLayout;
+    int                      _height, _width, WIDTH;
 
 protected slots:
     friend class Spice_Viewer;
@@ -60,8 +67,8 @@ protected slots:
     void mainAgentUpdate();
     void mainClipboardSelection(QString&);
     void mainClipboardSelectionGrab();
-    void mainClipboardSelectionRelease();
-    void mainClipboardSelectionRequest();
+    void mainClipboardSelectionRelease(uint);
+    void mainClipboardSelectionRequest(uint, uint);
     void mainMouseUpdate();
 
     void displayPrimaryCreate(
@@ -91,7 +98,8 @@ protected slots:
 
 
     bool eventFilter(QObject *object, QEvent *event);
-    void resizeEvent ( QResizeEvent * event );
+    void resizeEvent(QResizeEvent *event);
+    void setDifferentSize(int, int, int);
 };
 
 #endif // QSPICEWIDGET_H

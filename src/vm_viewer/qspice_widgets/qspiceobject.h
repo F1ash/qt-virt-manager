@@ -35,6 +35,7 @@ signals:
 public slots:
 
 protected:
+    friend class QSpiceUsbDeviceManager;
     void *gobject;
 
     QSpiceObject(void *_gobject);

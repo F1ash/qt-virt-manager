@@ -81,6 +81,7 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
 
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
+    setContentsMargins(0,0,0,0);
 }
 
 /* public slots */

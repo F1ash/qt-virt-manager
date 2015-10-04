@@ -6,6 +6,7 @@ VM_Viewer::VM_Viewer(
 {
     qRegisterMetaType<QString>("QString&");
     setMinimumSize(100, 100);
+    setContentsMargins(0,0,0,0);
     setWindowTitle(QString("<%1> Virtual Machine in [ %2 ] connection")
                    .arg(domain).arg(connName));
     VM_State = true;

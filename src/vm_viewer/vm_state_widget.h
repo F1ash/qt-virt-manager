@@ -20,7 +20,7 @@ signals:
 
 private:
     QLabel          *smartCard, *mouse, *keyboard,
-                    *display, *removable;
+                    *display, *removable, *webdav;
     QProgressBar    *closeProcess;
     QProgressBar    *downloadProcess;
     QHBoxLayout     *commoLayout;
@@ -32,7 +32,8 @@ public slots:
     void             changeMouseState(bool);
     void             changeKeyboardState(bool);
     void             changeDisplayState(bool);
-    void             changeRemovableState(bool);
+    void             changeUsbredirState(bool);
+    void             changeWebDAVState(bool);
 };
 
 #endif // VM_STATE_WIDGET_H

@@ -82,10 +82,24 @@ void Spice_Viewer::init()
         //qDebug()<<"address:"<<addr<<port;
         if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
             spiceWdg = new QSpiceWidget(this);
-            spiceWdg->setWidgetResizable(true);
             setCentralWidget(spiceWdg);
             // use toolbar
             viewerToolBar->setVisible(true);
+
+            int left, top, right, bottom, _width, _height;
+            viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
+            _width = left+right;
+            _height = top +bottom;
+            vm_stateWdg->getContentsMargins(&left, &top, &right, &bottom);
+            _width += left+right;
+            _height += top +bottom;
+            getContentsMargins(&left, &top, &right, &bottom);
+            _width += left+right;
+            _height += vm_stateWdg->size().height()
+                    +viewerToolBar->size().height()
+                    +top +bottom;
+            spiceWdg->setDifferentSize(_width, _height, size().width());
+
             actFullScreen = new QShortcut(QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
             connect(actFullScreen, SIGNAL(activated()), SLOT(FullScreenTriggered()));
             connect(spiceWdg, SIGNAL(DisplayResize(QSize)), SLOT(DisplayResize(QSize)));
@@ -97,10 +111,12 @@ void Spice_Viewer::init()
                     vm_stateWdg, SLOT(changeMouseState(bool)));
             connect(spiceWdg, SIGNAL(inputsChannelChanged(bool)),
                     vm_stateWdg, SLOT(changeKeyboardState(bool)));
-            connect(spiceWdg, SIGNAL(removableChannelChanged(bool)),
-                    vm_stateWdg, SLOT(changeRemovableState(bool)));
+            connect(spiceWdg, SIGNAL(usbredirChannelChanged(bool)),
+                    vm_stateWdg, SLOT(changeUsbredirState(bool)));
             connect(spiceWdg, SIGNAL(smartcardChannelChanged(bool)),
                     vm_stateWdg, SLOT(changeSmartcardState(bool)));
+            connect(spiceWdg, SIGNAL(webdavChannelChanged(bool)),
+                    vm_stateWdg, SLOT(changeWebDAVState(bool)));
             spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
         } else {
             msg = QString("In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")
@@ -127,8 +143,20 @@ void Spice_Viewer::reconnectToDomain()
         delete wdg;
         wdg = NULL;
         spiceWdg = new QSpiceWidget(this);
-        spiceWdg->setWidgetResizable(true);
         setCentralWidget(spiceWdg);
+        int left, top, right, bottom, _width, _height;
+        viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
+        _width = left+right;
+        _height = top +bottom;
+        vm_stateWdg->getContentsMargins(&left, &top, &right, &bottom);
+        _width += left+right;
+        _height += top +bottom;
+        getContentsMargins(&left, &top, &right, &bottom);
+        _width += left+right;
+        _height += vm_stateWdg->size().height()
+                +viewerToolBar->size().height()
+                +top +bottom;
+        spiceWdg->setDifferentSize(_width, _height, size().width());
         spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
     };
 }
@@ -146,7 +174,7 @@ void Spice_Viewer::copyFilesToVirtDomain()
 void Spice_Viewer::copyToClipboardFromVirtDomain()
 {
     if ( NULL==spiceWdg ) return;
-    spiceWdg->mainClipboardSelectionRequest();
+    spiceWdg->copyClipboardFromGuest();
 }
 void Spice_Viewer::pasteClipboardToVirtDomain()
 {
@@ -184,3 +212,22 @@ void Spice_Viewer::FullScreenTriggered()
         setWindowState(Qt::WindowFullScreen);
 }
 
+void Spice_Viewer::resizeEvent(QResizeEvent *ev)
+{
+    int left, top, right, bottom, _width, _height;
+    viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
+    _width = left+right;
+    _height = top +bottom;
+    vm_stateWdg->getContentsMargins(&left, &top, &right, &bottom);
+    _width += left+right;
+    _height += top +bottom;
+    getContentsMargins(&left, &top, &right, &bottom);
+    _width += left+right;
+    _height += vm_stateWdg->size().height()
+            +viewerToolBar->size().height()
+            +top +bottom;
+    if ( NULL!=spiceWdg ) {
+        spiceWdg->setDifferentSize(_width, _height, ev->size().width());
+        spiceWdg->resizeDone();
+    };
+}

@@ -28,6 +28,7 @@
 #include "qspicecursorchannel.h"
 #include "qspicesmartcardchannel.h"
 #include "qspiceusbredirchannel.h"
+#include "qspicewebdavchannel.h"
 
 #include <QDebug>
 
@@ -75,6 +76,10 @@ void QSpiceHelper::ss_channel_new(SpiceSession *session, SpiceChannel *channel, 
 
     case SPICE_CHANNEL_USBREDIR:
         _channel = new QSpiceUSBRedirChannel(channel);
+        break;
+
+    case SPICE_CHANNEL_WEBDAV:
+        _channel = new QSpiceWebDAVChannel(channel);
         break;
 
     default:

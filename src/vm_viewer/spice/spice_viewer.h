@@ -51,6 +51,7 @@ private slots:
     void             timerEvent(QTimerEvent*);
     void             DisplayResize(const QSize&);
     void             FullScreenTriggered();
+    void             resizeEvent(QResizeEvent*);
 };
 
 #endif // SPICE_VIEWER_H

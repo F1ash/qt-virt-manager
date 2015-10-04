@@ -30,6 +30,8 @@ Requires:       spice-vdagent
 Requires:       scrub
 # for ssh-transported remote connections (optional)
 Requires:       nc6
+# for use WebDAV shared directory (optional)
+Requires:       spice-webdavd
 
 %if %with qt4
 BuildRequires:  qt4-devel

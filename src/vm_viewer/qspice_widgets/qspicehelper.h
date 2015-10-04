@@ -99,6 +99,22 @@ public:
                                   GObject          *session,
                                   gpointer          user_data);
 
+    // USB Device Manager
+    static void auto_connect_failed(SpiceUsbDeviceManager *manager,
+                                    SpiceUsbDevice        *device,
+                                    GError                *error,
+                                    gpointer               user_data);
+    static void device_added(SpiceUsbDeviceManager *manager,
+                             SpiceUsbDevice        *device,
+                             gpointer               user_data);
+    static void device_error(SpiceUsbDeviceManager *manager,
+                             SpiceUsbDevice        *device,
+                             GError                *error,
+                             gpointer               user_data);
+    static void device_removed(SpiceUsbDeviceManager *manager,
+                               SpiceUsbDevice        *device,
+                               gpointer               user_data);
+
 };
 
 #endif // QSPICEHELPER_H

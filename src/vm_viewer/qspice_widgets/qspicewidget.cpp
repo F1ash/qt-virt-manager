@@ -6,9 +6,12 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QClipboard>
+#include <spice/vd_agent.h>
+
+#define MARGIN 5
 
 QSpiceWidget::QSpiceWidget(QWidget *parent) :
-    QScrollArea(parent)
+    QWidget(parent)
 {
     spiceSession = new QSpiceSession(this);
     display = NULL;
@@ -16,12 +19,20 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     cursor = NULL;
     smartcard = NULL;
     usbredir = NULL;
+    webdav = NULL;
+    usbDevManager = NULL;
+    _width = 0;
+    _height = 0;
+    WIDTH = 0;
 
     m_Image = new QLabel(this);
-    m_Image->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_Image->setAlignment(Qt::AlignTop | Qt::AlignJustify);
+    m_Image->setContentsMargins(0,0,0,0);
 
-    setWidget(m_Image);
-    setFrameStyle(QFrame::NoFrame);
+    commonLayout = new QHBoxLayout(this);
+    commonLayout->addWidget(m_Image, -1, Qt::AlignJustify);
+    commonLayout->setContentsMargins(0,0,0,0);
+    setLayout(commonLayout);
 
     resizeTimer.setSingleShot( true );
     connect(&resizeTimer, SIGNAL(timeout()), SLOT(resizeDone()));
@@ -31,11 +42,13 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     m_Image->setMouseTracking(true);
     m_Image->setFocusPolicy(Qt::StrongFocus);
     m_Image->installEventFilter( this );
+    setContentsMargins(MARGIN,MARGIN,MARGIN,MARGIN);
 }
 
 QSpiceWidget::~QSpiceWidget()
 {
     delete spiceSession;
+    delete usbDevManager;
 }
 
 bool QSpiceWidget::Connect(QString uri)
@@ -72,9 +85,9 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         connect(main, SIGNAL(main_ClipboardSelectionGrab(uint,void*,uint)),
                 SLOT(mainClipboardSelectionGrab()));
         connect(main, SIGNAL(main_ClipboardSelectionRelease(uint)),
-                SLOT(mainClipboardSelectionRelease()));
+                SLOT(mainClipboardSelectionRelease(uint)));
         connect(main, SIGNAL(main_ClipboardSelectionRequest(uint,uint)),
-                SLOT(mainClipboardSelectionRequest()));
+                SLOT(mainClipboardSelectionRequest(uint,uint)));
         connect(main, SIGNAL(main_MouseUpdate()),
                 SLOT(mainMouseUpdate()));
         connect(main, SIGNAL(downloaded(int,int)),
@@ -98,8 +111,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         connect(display, SIGNAL(channelDestroyed()),
                 SLOT(displayPrimaryDestroy()));
 
-        display->Connect();
-        emit displayChannelChanged(true);
+        bool online = display->Connect();
+        emit displayChannelChanged(online);
         return;
     }
 
@@ -108,8 +121,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     {
         inputs = _inputs;
         connect(inputs, SIGNAL(channelDestroyed()), SLOT(channelDestroyed()));
-        inputs->Connect();
-        emit inputsChannelChanged(true);
+        bool online = inputs->Connect();
+        emit inputsChannelChanged(online);
         return;
     }
 
@@ -120,8 +133,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         connect(cursor, SIGNAL(channelDestroyed()), SLOT(channelDestroyed()));
         connect(cursor, SIGNAL(cursorSet(int,int,int,int,void*)),
                 SLOT(cursorSet(int,int,int,int,void*)));
-        cursor->Connect();
-        emit cursorChannelChanged(true);
+        bool online = cursor->Connect();
+        emit cursorChannelChanged(online);
         return;
     }
 
@@ -129,8 +142,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     if (_smartcard)
     {
         smartcard = _smartcard;
-        smartcard->Connect();
-        emit smartcardChannelChanged(true);
+        bool online = smartcard->Connect();
+        emit smartcardChannelChanged(online);
         return;
     }
 
@@ -138,8 +151,20 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     if (_usbredir)
     {
         usbredir = _usbredir;
-        usbredir->Connect();
-        emit removableChannelChanged(true);
+        bool online = usbredir->Connect();
+        if ( online ) {
+            usbDevManager = new QSpiceUsbDeviceManager(this, spiceSession);
+            emit usbredirChannelChanged(usbDevManager? true:false);
+        };
+        return;
+    }
+
+    QSpiceWebDAVChannel * _webdav = dynamic_cast<QSpiceWebDAVChannel *>(channel);
+    if (_webdav)
+    {
+        webdav = _webdav;
+        bool online = webdav->Connect();
+        emit webdavChannelChanged(online);
         return;
     }
 
@@ -164,47 +189,100 @@ void QSpiceWidget::channelDestroyed()
         emit smartcardChannelChanged(false);
     } else if (QObject::sender() == usbredir) {
         usbredir = NULL;
-        emit removableChannelChanged(false);
+        emit usbredirChannelChanged(false);
+    } else if (QObject::sender() == webdav) {
+        webdav = NULL;
+        emit webdavChannelChanged(false);
     }
 }
 
 
 void QSpiceWidget::mainAgentUpdate()
 {
-    qDebug()<<"mainAgentUpdate";
+    qDebug()<<"main: AgentUpdate";
 }
 
 void QSpiceWidget::mainClipboardSelection(QString &cp)
 {
+    qDebug()<<"main: ClipboardSelection"<<cp;
     QApplication::clipboard()->setText(cp);
-    mainClipboardSelectionRelease();
 }
 
 void QSpiceWidget::mainClipboardSelectionGrab()
 {
-    qDebug()<<"mainClipboardSelectionGrab";
+    qDebug()<<"main: ClipboardSelectionGrab";
 }
 
-void QSpiceWidget::mainClipboardSelectionRelease()
+void QSpiceWidget::mainClipboardSelectionRelease(uint selection)
 {
-    qDebug()<<"mainClipboardSelectionRelease";
-    main->mainClipboardSelectionRelease();
+    switch (selection) {
+    case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
+        qDebug()<<"guestClipboard_CLIPBOARDSelectionRelease";
+        break;
+    case VD_AGENT_CLIPBOARD_SELECTION_PRIMARY:
+        qDebug()<<"guestClipboard_PRIMARYSelectionRelease";
+        break;
+    case VD_AGENT_CLIPBOARD_SELECTION_SECONDARY:
+        qDebug()<<"guestClipboard_SECONDARYSelectionRelease";
+        break;
+    default:
+        break;
+    }
 }
 
-void QSpiceWidget::mainClipboardSelectionRequest()
+void QSpiceWidget::mainClipboardSelectionRequest(uint selection, uint type)
 {
-    qDebug()<<"mainClipboardSelectionRequest";
-    main->mainClipboardSelectionRequest();
+    QString dataType;
+    switch (type) {
+    case VD_AGENT_CLIPBOARD_NONE:
+        dataType.append("None");
+        break;
+    case VD_AGENT_CLIPBOARD_UTF8_TEXT:
+        dataType.append("UTF8_TEXT");
+        break;
+    case VD_AGENT_CLIPBOARD_IMAGE_PNG:
+        dataType.append("IMAGE_PNG");
+        break;
+    case VD_AGENT_CLIPBOARD_IMAGE_BMP:
+        dataType.append("IMAGE_BMP");
+        break;
+    case VD_AGENT_CLIPBOARD_IMAGE_JPG:
+        dataType.append("IMAGE_JPG");
+        break;
+    case VD_AGENT_CLIPBOARD_IMAGE_TIFF:
+        dataType.append("IMAGE_TIFF");
+        break;
+    default:
+        break;
+    };
+    switch (selection) {
+    case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
+        qDebug()<<"guestClipboard_CLIPBOARDSelectionRequest"<<dataType;
+        break;
+    case VD_AGENT_CLIPBOARD_SELECTION_PRIMARY:
+        qDebug()<<"guestClipboard_PRIMARYSelectionRequest"<<dataType;
+        break;
+    case VD_AGENT_CLIPBOARD_SELECTION_SECONDARY:
+        qDebug()<<"guestClipboard_SECONDARYSelectionRequest"<<dataType;
+        break;
+    default:
+        break;
+    }
 }
 
 void QSpiceWidget::mainMouseUpdate()
 {
-    qDebug()<<"mainMouseUpdate";
+    qDebug()<<"main: MouseUpdate";
 }
 
 void QSpiceWidget::mainFileCopyAsync(QStringList &fileNames)
 {
     main->mainFileCopyAsync(fileNames);
+}
+
+void QSpiceWidget::copyClipboardFromGuest()
+{
+    main->mainClipboardSelectionRequest();
 }
 
 void QSpiceWidget::sendClipboardDataToGuest(QString &_data)
@@ -223,7 +301,7 @@ void QSpiceWidget::displayPrimaryCreate(
     Q_UNUSED(shmid);
     m_Image->setUpdatesEnabled(false);
 
-    //qDebug() << "Display Create(" << width << ", " << height << ")";
+    qDebug() << "Display Create(" << width << ", " << height << ")";
 
     QImage *img = NULL;
     switch(format)
@@ -255,12 +333,15 @@ void QSpiceWidget::displayPrimaryCreate(
         m_Image->setUpdatesEnabled(false);
         QPixmap pix =  QPixmap::fromImage(*img);
         delete img;
+        //pix.scaledToWidth(WIDTH-_width-2*MARGIN);
         m_Image->setPixmap(pix);
-        //m_Image->setFixedSize(width, height);
-        //resize(m_Image->frameSize());
-        //emit DisplayResize(m_Image->frameSize());
-        QSize _size(width, height);
-        resize(_size);
+        //resize(m_Image->pixmap()->size());
+        //resize(QSize(width, height));
+        //int left, top, right, bottom;
+        //getContentsMargins(&left, &top, &right, &bottom);
+        //QSize _size(width+_width+left+right, height+_height+top+bottom+4);
+        QSize _size(width+_width+2*MARGIN, height+_height+2*MARGIN+4);
+        qDebug()<<_size<<"emit";
         emit DisplayResize(_size);
     }
 }
@@ -421,9 +502,24 @@ void QSpiceWidget::resizeDone()
 {
     if (m_Image->updatesEnabled() && main && display)
     {
-        main->mainSetDisplay(display->getId(), 0, 0, size().width(), height());
+        //int left, top, right, bottom;
+        //getContentsMargins(&left, &top, &right, &bottom);
+        main->mainSetDisplay(
+                    display->getId(),
+                    0,
+                    0,
+                    WIDTH-_width-2*MARGIN,
+                    WIDTH-_height-2*MARGIN-4);
         main->mainSetDisplayEnabled(display->getId(), true);
-        main->mainSendMonitorConfig();
+        qDebug()<<"configured"<<main->mainSendMonitorConfig();
     }
 
+}
+
+void QSpiceWidget::setDifferentSize(int _d1, int _d2, int _d3)
+{
+    _width  = _d1;
+    _height = _d2;
+    WIDTH   = _d3;
+    qDebug()<<_width<<_height<<WIDTH;
 }
