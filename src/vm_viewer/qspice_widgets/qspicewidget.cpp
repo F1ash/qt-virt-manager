@@ -47,8 +47,8 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
 
 QSpiceWidget::~QSpiceWidget()
 {
+    if (usbDevManager) delete usbDevManager;
     delete spiceSession;
-    delete usbDevManager;
 }
 
 bool QSpiceWidget::Connect(QString uri)
@@ -70,6 +70,22 @@ void QSpiceWidget::SendKeySequience(Qt::Key key)
     };
 }
 
+void QSpiceWidget::mainFileCopyAsync(QStringList &fileNames)
+{
+    main->mainFileCopyAsync(fileNames);
+}
+
+void QSpiceWidget::copyClipboardFromGuest()
+{
+    main->mainClipboardSelectionRequest();
+}
+
+void QSpiceWidget::sendClipboardDataToGuest(QString &_data)
+{
+    main->mainClipboardSelectionNotify(_data);
+}
+
+/* private slots */
 void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
 {
     QSpiceMainChannel * _main = dynamic_cast<QSpiceMainChannel *>(channel);
@@ -154,7 +170,18 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         bool online = usbredir->Connect();
         if ( online ) {
             usbDevManager = new QSpiceUsbDeviceManager(this, spiceSession);
-            emit usbredirChannelChanged(usbDevManager? true:false);
+            bool _inited = usbDevManager? true:false;
+            emit usbredirChannelChanged(_inited);
+            if ( _inited ) {
+                connect(usbDevManager, SIGNAL(autoConnectFailed(QString&,QString&)),
+                        this, SLOT(usbDevAutoConnectFailed(QString&,QString&)));
+                connect(usbDevManager, SIGNAL(deviceAdded(QString&)),
+                        this, SLOT(usbDevAdded(QString&)));
+                connect(usbDevManager, SIGNAL(deviceError(QString&,QString&)),
+                        this, SLOT(usbDevError(QString&,QString&)));
+                connect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
+                        this, SLOT(usbDevRemoved(QString&)));
+            };
         };
         return;
     }
@@ -192,6 +219,17 @@ void QSpiceWidget::channelDestroyed()
         emit usbredirChannelChanged(false);
     } else if (QObject::sender() == webdav) {
         webdav = NULL;
+        if ( usbDevManager ) {
+            disconnect(usbDevManager, SIGNAL(autoConnectFailed(QString&,QString&)),
+                       this, SLOT(usbDevAutoConnectFailed(QString&,QString&)));
+            disconnect(usbDevManager, SIGNAL(deviceAdded(QString&)),
+                       this, SLOT(usbDevAdded(QString&)));
+            disconnect(usbDevManager, SIGNAL(deviceError(QString&,QString&)),
+                       this, SLOT(usbDevError(QString&,QString&)));
+            disconnect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
+                       this, SLOT(usbDevRemoved(QString&)));
+            usbDevManager->unrefManager();
+        };
         emit webdavChannelChanged(false);
     }
 }
@@ -275,19 +313,24 @@ void QSpiceWidget::mainMouseUpdate()
     qDebug()<<"main: MouseUpdate";
 }
 
-void QSpiceWidget::mainFileCopyAsync(QStringList &fileNames)
+void QSpiceWidget::usbDevAutoConnectFailed(QString &dev, QString &err)
 {
-    main->mainFileCopyAsync(fileNames);
+    qDebug()<<"usbDevAutoConnectFailed:"<< dev<< err;
 }
 
-void QSpiceWidget::copyClipboardFromGuest()
+void QSpiceWidget::usbDevAdded(QString &dev)
 {
-    main->mainClipboardSelectionRequest();
+    qDebug()<<"usbDevAdded:"<< dev;
 }
 
-void QSpiceWidget::sendClipboardDataToGuest(QString &_data)
+void QSpiceWidget::usbDevError(QString &dev, QString &err)
 {
-    main->mainClipboardSelectionNotify(_data);
+    qDebug()<<"usbDevError:"<< dev<< err;
+}
+
+void QSpiceWidget::usbDevRemoved(QString &dev)
+{
+    qDebug()<<"usbDevRemoved:"<< dev;
 }
 
 void QSpiceWidget::displayPrimaryCreate(
@@ -498,6 +541,8 @@ void QSpiceWidget::resizeEvent ( QResizeEvent * event )
         resizeTimer.start(500);
 }
 
+
+/* protected slots */
 void QSpiceWidget::resizeDone()
 {
     if (m_Image->updatesEnabled() && main && display)

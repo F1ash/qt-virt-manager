@@ -56,12 +56,8 @@ protected:
     QHBoxLayout             *commonLayout;
     int                      _height, _width, WIDTH;
 
-protected slots:
-    friend class Spice_Viewer;
-    void resizeDone();
-
+private slots:
     void ChannelNew(QSpiceChannel *channel);
-
     void channelDestroyed();
 
     void mainAgentUpdate();
@@ -70,6 +66,11 @@ protected slots:
     void mainClipboardSelectionRelease(uint);
     void mainClipboardSelectionRequest(uint, uint);
     void mainMouseUpdate();
+
+    void usbDevAutoConnectFailed(QString&, QString&);
+    void usbDevAdded(QString&);
+    void usbDevError(QString&, QString&);
+    void usbDevRemoved(QString&);
 
     void displayPrimaryCreate(
          int                 format,
@@ -96,9 +97,12 @@ protected slots:
             int                hot_y,
             void *             rgba);
 
-
     bool eventFilter(QObject *object, QEvent *event);
     void resizeEvent(QResizeEvent *event);
+
+protected slots:
+    friend class Spice_Viewer;
+    void resizeDone();
     void setDifferentSize(int, int, int);
 };
 

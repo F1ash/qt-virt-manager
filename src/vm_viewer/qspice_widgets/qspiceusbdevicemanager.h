@@ -10,6 +10,8 @@ public:
     explicit QSpiceUsbDeviceManager(
             QObject        *parent  = 0,
             QSpiceSession  *s       = 0);
+    ~QSpiceUsbDeviceManager();
+
     void*       spice_usb_device_manager_get_devices();
     void*       spice_usb_device_manager_get_devices_with_filter
                                                     (const char*);
@@ -26,16 +28,17 @@ public:
     char*       spice_usb_device_get_description    (void*, const char*);
 
 signals:
-    void        autoConnectFailed();
-    void        deviceAdded();
-    void        deviceError();
-    void        deviceRemoved();
+    void        autoConnectFailed(QString&, QString&);
+    void        deviceAdded(QString&);
+    void        deviceError(QString&, QString&);
+    void        deviceRemoved(QString&);
 
 protected:
     friend class QSpiceHelper;
     void        init(QSpiceSession *);
 
 public slots:
+    void        unrefManager();
 };
 
 #endif // QSPICEUSBDEVICEMANAGER_H

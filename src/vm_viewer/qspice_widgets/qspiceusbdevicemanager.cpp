@@ -10,7 +10,10 @@ QSpiceUsbDeviceManager::QSpiceUsbDeviceManager(
     gobject = NULL;
     init(s);
 }
-
+QSpiceUsbDeviceManager::~QSpiceUsbDeviceManager()
+{
+    unrefManager();
+}
 
 void QSpiceHelper::auto_connect_failed(SpiceUsbDeviceManager *manager,
                                        SpiceUsbDevice        *device,
@@ -20,7 +23,13 @@ void QSpiceHelper::auto_connect_failed(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
-    emit _manager->autoConnectFailed();
+    QString err, dev;
+    err.append(error->code);
+    err.append(error->message);
+    gchar *dev_desc = spice_usb_device_get_description(device, NULL);
+    dev.append(dev_desc);
+    if ( dev_desc ) g_free(dev_desc);
+    emit _manager->autoConnectFailed(dev, err);
 }
 
 void QSpiceHelper::device_added(SpiceUsbDeviceManager *manager,
@@ -30,7 +39,11 @@ void QSpiceHelper::device_added(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
-    emit _manager->deviceAdded();
+    QString dev;
+    gchar *dev_desc = spice_usb_device_get_description(device, NULL);
+    dev.append(dev_desc);
+    if ( dev_desc ) g_free(dev_desc);
+    emit _manager->deviceAdded(dev);
 }
 
 void QSpiceHelper::device_error(SpiceUsbDeviceManager *manager,
@@ -41,7 +54,13 @@ void QSpiceHelper::device_error(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
-    emit _manager->deviceError();
+    QString err, dev;
+    err.append(error->code);
+    err.append(error->message);
+    gchar *dev_desc = spice_usb_device_get_description(device, NULL);
+    dev.append(dev_desc);
+    if ( dev_desc ) g_free(dev_desc);
+    emit _manager->deviceError(dev, err);
 }
 
 void QSpiceHelper::device_removed(SpiceUsbDeviceManager *manager,
@@ -51,7 +70,11 @@ void QSpiceHelper::device_removed(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
-    emit _manager->deviceRemoved();
+    QString dev;
+    gchar *dev_desc = spice_usb_device_get_description(device, NULL);
+    dev.append(dev_desc);
+    if ( dev_desc ) g_free(dev_desc);
+    emit _manager->deviceRemoved(dev);
 }
 
 void QSpiceUsbDeviceManager::init(QSpiceSession *session)
@@ -122,4 +145,10 @@ char* QSpiceUsbDeviceManager::spice_usb_device_get_description
 {
     char *_desc;
     return _desc;
+}
+
+/* public slots */
+void QSpiceUsbDeviceManager::unrefManager()
+{
+    if (gobject) gobject = NULL;
 }
