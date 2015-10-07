@@ -117,6 +117,10 @@ void Spice_Viewer::init()
                     vm_stateWdg, SLOT(changeSmartcardState(bool)));
             connect(spiceWdg, SIGNAL(webdavChannelChanged(bool)),
                     vm_stateWdg, SLOT(changeWebDAVState(bool)));
+            connect(vm_stateWdg, SIGNAL(showUsbDevWidget()),
+                    spiceWdg, SLOT(showUsbDevWidget()));
+            connect(spiceWdg, SIGNAL(errMsg(QString&)),
+                    this, SLOT(sendErrMsg(QString&)));
             spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
         } else {
             msg = QString("In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")

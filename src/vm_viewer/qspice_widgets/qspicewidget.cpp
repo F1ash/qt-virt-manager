@@ -169,6 +169,10 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         usbredir = _usbredir;
         bool online = usbredir->Connect();
         if ( online ) {
+            if (usbDevManager) {
+                delete usbDevManager;
+                usbDevManager = NULL;
+            };
             usbDevManager = new QSpiceUsbDeviceManager(this, spiceSession);
             bool _inited = usbDevManager? true:false;
             emit usbredirChannelChanged(_inited);
@@ -177,7 +181,7 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
                         this, SLOT(usbDevAutoConnectFailed(QString&,QString&)));
                 connect(usbDevManager, SIGNAL(deviceAdded(QString&)),
                         this, SLOT(usbDevAdded(QString&)));
-                connect(usbDevManager, SIGNAL(deviceError(QString&,QString&)),
+                connect(usbDevManager, SIGNAL(deviceInfo(QString&,QString&)),
                         this, SLOT(usbDevError(QString&,QString&)));
                 connect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
                         this, SLOT(usbDevRemoved(QString&)));
@@ -224,7 +228,7 @@ void QSpiceWidget::channelDestroyed()
                        this, SLOT(usbDevAutoConnectFailed(QString&,QString&)));
             disconnect(usbDevManager, SIGNAL(deviceAdded(QString&)),
                        this, SLOT(usbDevAdded(QString&)));
-            disconnect(usbDevManager, SIGNAL(deviceError(QString&,QString&)),
+            disconnect(usbDevManager, SIGNAL(deviceInfo(QString&,QString&)),
                        this, SLOT(usbDevError(QString&,QString&)));
             disconnect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
                        this, SLOT(usbDevRemoved(QString&)));
@@ -237,7 +241,7 @@ void QSpiceWidget::channelDestroyed()
 
 void QSpiceWidget::mainAgentUpdate()
 {
-    qDebug()<<"main: AgentUpdate";
+    //qDebug()<<"main: AgentUpdate";
 }
 
 void QSpiceWidget::mainClipboardSelection(QString &cp)
@@ -310,27 +314,39 @@ void QSpiceWidget::mainClipboardSelectionRequest(uint selection, uint type)
 
 void QSpiceWidget::mainMouseUpdate()
 {
-    qDebug()<<"main: MouseUpdate";
+    //qDebug()<<"main: MouseUpdate";
 }
 
 void QSpiceWidget::usbDevAutoConnectFailed(QString &dev, QString &err)
 {
-    qDebug()<<"usbDevAutoConnectFailed:"<< dev<< err;
+    QString _msg = QString("<font color='red'>UsbDevAutoConnectFailed</font>: %1 : %2")
+            .arg(dev).arg(err);
+    emit errMsg(_msg);
+    //qDebug()<<"usbDevAutoConnectFailed:"<< dev<< err;
 }
 
 void QSpiceWidget::usbDevAdded(QString &dev)
 {
-    qDebug()<<"usbDevAdded:"<< dev;
+    QString _msg = QString("<font color='blue'>UsbDevAdded</font>: %1")
+            .arg(dev);
+    emit errMsg(_msg);
+    //qDebug()<<"usbDevAdded:"<< dev;
 }
 
 void QSpiceWidget::usbDevError(QString &dev, QString &err)
 {
-    qDebug()<<"usbDevError:"<< dev<< err;
+    QString _msg = QString("<font color='blue'>UsbDevInfo</font>: %1 : %2")
+            .arg(dev).arg(err);
+    emit errMsg(_msg);
+    //qDebug()<<"usbDevError"<< dev<< err;
 }
 
 void QSpiceWidget::usbDevRemoved(QString &dev)
 {
-    qDebug()<<"usbDevRemoved:"<< dev;
+    QString _msg = QString("<font color='blue'>UsbDevRemoved</font>: %1")
+            .arg(dev);
+    emit errMsg(_msg);
+    //qDebug()<<"usbDevRemoved:"<< dev;
 }
 
 void QSpiceWidget::displayPrimaryCreate(
@@ -344,7 +360,7 @@ void QSpiceWidget::displayPrimaryCreate(
     Q_UNUSED(shmid);
     m_Image->setUpdatesEnabled(false);
 
-    qDebug() << "Display Create(" << width << ", " << height << ")";
+    //qDebug() << "Display Create(" << width << ", " << height << ")";
 
     QImage *img = NULL;
     switch(format)
@@ -384,7 +400,7 @@ void QSpiceWidget::displayPrimaryCreate(
         //getContentsMargins(&left, &top, &right, &bottom);
         //QSize _size(width+_width+left+right, height+_height+top+bottom+4);
         QSize _size(width+_width+2*MARGIN, height+_height+2*MARGIN+4);
-        qDebug()<<_size<<"emit";
+        //qDebug()<<_size<<"emit";
         emit DisplayResize(_size);
     }
 }
@@ -541,6 +557,30 @@ void QSpiceWidget::resizeEvent ( QResizeEvent * event )
         resizeTimer.start(500);
 }
 
+void QSpiceWidget::reloadUsbDevList(void *obj)
+{
+    SpiceUsbDeviceWidget *usbDevWdg = static_cast<SpiceUsbDeviceWidget*>(obj);
+    if ( usbDevWdg ) {
+        usbDevWdg->setEnabled(false);
+        usbDevWdg->clearList();
+        QStringList _devList = usbDevManager->spiceUsbDeviceManager_get_devices();
+        foreach (QString _dev, _devList) {
+            QString _name, _desc;
+            QStringList _split = _dev.split("<||>");
+            _name = _split.first();
+            _desc = _split.last();
+            QString _id = QString("%1 %2").arg(_name).arg(_desc);
+            bool connected = usbDevManager->
+                    spiceUsbDeviceManager_is_device_connected(_id);
+            QListWidgetItem *item = new QListWidgetItem();
+            item->setText(_name);
+            item->setData(Qt::UserRole, _desc);
+            item->setCheckState(connected? Qt::Checked:Qt::Unchecked);
+            usbDevWdg->addItem(item);
+        };
+        usbDevWdg->setEnabled(true);
+    };
+}
 
 /* protected slots */
 void QSpiceWidget::resizeDone()
@@ -566,5 +606,23 @@ void QSpiceWidget::setDifferentSize(int _d1, int _d2, int _d3)
     _width  = _d1;
     _height = _d2;
     WIDTH   = _d3;
-    qDebug()<<_width<<_height<<WIDTH;
+    //qDebug()<<_width<<_height<<WIDTH;
+}
+
+void QSpiceWidget::showUsbDevWidget()
+{
+    SpiceUsbDeviceWidget *usbDevWdg = new SpiceUsbDeviceWidget(this);
+    connect(usbDevManager, SIGNAL(deviceAdded(QString&)),
+            usbDevWdg, SLOT(addDevice(QString&)));
+    connect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
+            usbDevWdg, SLOT(removeDevice(QString&)));
+    connect(usbDevWdg, SIGNAL(connectDevice(QString&)),
+            usbDevManager, SLOT(spiceUsbDeviceManager_connect_device(QString&)));
+    connect(usbDevWdg, SIGNAL(disconnectDevice(QString&)),
+            usbDevManager, SLOT(spiceUsbDeviceManager_disconnect_device(QString&)));
+    connect(usbDevWdg, SIGNAL(devicesChanged(void*)),
+            this, SLOT(reloadUsbDevList(void*)));
+    reloadUsbDevList(usbDevWdg);
+    usbDevWdg->exec();
+    usbDevWdg->deleteLater();
 }

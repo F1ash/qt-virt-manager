@@ -2,6 +2,7 @@
 #define QSPICEUSBDEVICEMANAGER_H
 
 #include "qspicesession.h"
+#include <QStringList>
 
 class QSpiceUsbDeviceManager : public QSpiceObject
 {
@@ -12,25 +13,18 @@ public:
             QSpiceSession  *s       = 0);
     ~QSpiceUsbDeviceManager();
 
-    void*       spice_usb_device_manager_get_devices();
-    void*       spice_usb_device_manager_get_devices_with_filter
-                                                    (const char*);
-    bool        spice_usb_device_manager_is_device_connected
-                                                    (void*);
-    void                spice_usb_device_manager_disconnect_device
-                                                    (void*);
-    bool        spice_usb_device_manager_can_redirect_device
-                                                    (void*, void*);
-    void        spice_usb_device_manager_connect_device_async
-                                                    (void*, void*, void*, void*);
-    bool        spice_usb_device_manager_connect_device_finish
-                                                    (void*, void*);
-    char*       spice_usb_device_get_description    (void*, const char*);
+    QStringList spiceUsbDeviceManager_get_devices();
+    QStringList spiceUsbDeviceManager_get_devices_with_filter
+                                                    (QString&);
+    bool        spiceUsbDeviceManager_is_device_connected
+                                                    (QString&);
+    static void spiceUsbDeviceManager_connect_device_finish
+                                                    (void*, void*, void*);
 
 signals:
     void        autoConnectFailed(QString&, QString&);
     void        deviceAdded(QString&);
-    void        deviceError(QString&, QString&);
+    void        deviceInfo(QString&, QString&);
     void        deviceRemoved(QString&);
 
 protected:
@@ -39,6 +33,8 @@ protected:
 
 public slots:
     void        unrefManager();
+    void        spiceUsbDeviceManager_connect_device(QString&);
+    void        spiceUsbDeviceManager_disconnect_device(QString&);
 };
 
 #endif // QSPICEUSBDEVICEMANAGER_H

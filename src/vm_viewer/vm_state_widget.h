@@ -5,6 +5,7 @@
 #include <QProgressBar>
 #include <QLabel>
 #include <QIcon>
+#include <QPushButton>
 #include <QHBoxLayout>
 
 #define TIMEOUT     60*1000
@@ -17,10 +18,12 @@ public:
     void             setCloseProcessValue(int);
 
 signals:
+    void             showUsbDevWidget();
 
 private:
     QLabel          *smartCard, *mouse, *keyboard,
-                    *display, *removable, *webdav;
+                    *display, *webdav;
+    QPushButton     *usbRedir;
     QProgressBar    *closeProcess;
     QProgressBar    *downloadProcess;
     QHBoxLayout     *commoLayout;

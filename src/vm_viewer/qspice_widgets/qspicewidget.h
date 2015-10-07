@@ -14,6 +14,7 @@
 #include "qspiceusbredirchannel.h"
 #include "qspicewebdavchannel.h"
 #include "qspiceusbdevicemanager.h"
+#include "spiceusbdevicewidget.h"
 
 class QSpiceWidget : public QWidget
 {
@@ -38,6 +39,8 @@ signals:
     void usbredirChannelChanged(bool);
     void smartcardChannelChanged(bool);
     void webdavChannelChanged(bool);
+
+    void errMsg(QString&);
 
 protected:
     friend class Spice_Viewer;
@@ -99,11 +102,13 @@ private slots:
 
     bool eventFilter(QObject *object, QEvent *event);
     void resizeEvent(QResizeEvent *event);
+    void reloadUsbDevList(void*);
 
 protected slots:
     friend class Spice_Viewer;
     void resizeDone();
     void setDifferentSize(int, int, int);
+    void showUsbDevWidget();
 };
 
 #endif // QSPICEWIDGET_H

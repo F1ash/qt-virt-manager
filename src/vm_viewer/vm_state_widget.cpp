@@ -18,10 +18,10 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     display->setContentsMargins(0,0,0,0);
     display->setPixmap(QIcon::fromTheme("video-display")
                        .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
-    removable = new QLabel(this);
-    removable->setContentsMargins(0,0,0,0);
-    removable->setPixmap(QIcon::fromTheme("drive-removable-media")
-                         .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
+    usbRedir = new QPushButton(QIcon::fromTheme("drive-removable-media"), "", this);
+    usbRedir->setContentsMargins(0,0,0,0);
+    usbRedir->setEnabled(false);
+    usbRedir->setFlat(true);
     webdav = new QLabel(this);
     webdav->setContentsMargins(0,0,0,0);
     webdav->setPixmap(QIcon::fromTheme("folder-remote")
@@ -39,7 +39,7 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     commoLayout->addWidget(mouse);
     commoLayout->addWidget(keyboard);
     commoLayout->addWidget(display);
-    commoLayout->addWidget(removable);
+    commoLayout->addWidget(usbRedir);
     commoLayout->addWidget(webdav);
     setLayout(commoLayout);
     closeProcess->hide();
@@ -48,9 +48,11 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     mouse->setToolTip("Cursor channel");
     keyboard->setToolTip("Inputs channel");
     display->setToolTip("Display channel");
-    removable->setToolTip("USB Redir channel");
+    usbRedir->setToolTip("USB Redir channel\nClick to choose devices");
     webdav->setToolTip("WebDAV channel");
     setContentsMargins(0,0,0,0);
+    connect(usbRedir, SIGNAL(released()),
+            this, SIGNAL(showUsbDevWidget()));
 }
 
 /* public slots */
@@ -65,7 +67,8 @@ void VM_State_Widget::setDownloadProcessRange(int _value)
 void VM_State_Widget::setDownloadProcessValue(int _val1, int _val2)
 {
     downloadProcess->setRange(0, _val2);
-    downloadProcess->setValue(_val1);
+    int value = downloadProcess->value()+_val1;
+    downloadProcess->setValue(value);
 }
 void VM_State_Widget::changeSmartcardState(bool state)
 {
@@ -93,9 +96,7 @@ void VM_State_Widget::changeDisplayState(bool state)
 }
 void VM_State_Widget::changeUsbredirState(bool state)
 {
-    removable->setPixmap(
-                QIcon::fromTheme("drive-removable-media")
-                .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+    usbRedir->setEnabled(state);
 }
 void VM_State_Widget::changeWebDAVState(bool state)
 {
