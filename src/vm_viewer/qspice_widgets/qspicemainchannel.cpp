@@ -25,7 +25,7 @@ void QSpiceHelper::main_agent_update(SpiceMainChannel *spicemainchannel, gpointe
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
-
+    if ( NULL==_mainchannel ) return;
     emit _mainchannel->main_AgentUpdate();
 }
 void QSpiceHelper::main_clipboard_selection(SpiceMainChannel *spicemainchannel,
@@ -38,6 +38,7 @@ void QSpiceHelper::main_clipboard_selection(SpiceMainChannel *spicemainchannel,
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
+    if ( NULL==_mainchannel ) return;
     QString cp = QString::fromUtf8((char*)data);
     emit _mainchannel->main_ClipboardSelection(cp);
 }
@@ -50,6 +51,7 @@ void QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *spicemainchan
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
+    if ( NULL==_mainchannel ) return;
     emit _mainchannel->main_ClipboardSelectionGrab(selection, (void*)types, ntypes);
 }
 void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *spicemainchannel,
@@ -59,7 +61,7 @@ void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *spicemainc
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
-
+    if ( NULL==_mainchannel ) return;
     emit _mainchannel->main_ClipboardSelectionRelease(selection);
 }
 void QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainchannel,
@@ -70,7 +72,7 @@ void QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainc
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
-
+    if ( NULL==_mainchannel ) return;
     emit _mainchannel->main_ClipboardSelectionRequest(selection, types);
 }
 void QSpiceHelper::main_mouse_update(SpiceMainChannel *spicemainchannel, gpointer user_data)
@@ -78,7 +80,7 @@ void QSpiceHelper::main_mouse_update(SpiceMainChannel *spicemainchannel, gpointe
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
-
+    if ( NULL==_mainchannel ) return;
     emit _mainchannel->main_MouseUpdate();
 }
 

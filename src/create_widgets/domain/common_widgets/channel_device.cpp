@@ -57,6 +57,7 @@ QDomDocument ChannelDevice::getDataDocument() const
                 .firstChildElement("channel")
                 .appendChild(_source);
     };
+    //qDebug()<<doc.toByteArray(4).data();
     return doc;
 }
 void ChannelDevice::setDataDescription(QString &xmlDesc)

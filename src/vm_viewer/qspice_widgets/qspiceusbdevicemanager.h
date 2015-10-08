@@ -11,7 +11,6 @@ public:
     explicit QSpiceUsbDeviceManager(
             QObject        *parent  = 0,
             QSpiceSession  *s       = 0);
-    ~QSpiceUsbDeviceManager();
 
     QStringList spiceUsbDeviceManager_get_devices();
     QStringList spiceUsbDeviceManager_get_devices_with_filter
@@ -32,7 +31,6 @@ protected:
     void        init(QSpiceSession *);
 
 public slots:
-    void        unrefManager();
     void        spiceUsbDeviceManager_connect_device(QString&);
     void        spiceUsbDeviceManager_disconnect_device(QString&);
 };

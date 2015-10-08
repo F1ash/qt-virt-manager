@@ -81,47 +81,11 @@ void Spice_Viewer::init()
                     graph.attribute("port").toInt() : 5900;
         //qDebug()<<"address:"<<addr<<port;
         if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
-            spiceWdg = new QSpiceWidget(this);
-            setCentralWidget(spiceWdg);
+            initSpiceWidget();
             // use toolbar
             viewerToolBar->setVisible(true);
-
-            int left, top, right, bottom, _width, _height;
-            viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
-            _width = left+right;
-            _height = top +bottom;
-            vm_stateWdg->getContentsMargins(&left, &top, &right, &bottom);
-            _width += left+right;
-            _height += top +bottom;
-            getContentsMargins(&left, &top, &right, &bottom);
-            _width += left+right;
-            _height += vm_stateWdg->size().height()
-                    +viewerToolBar->size().height()
-                    +top +bottom;
-            spiceWdg->setDifferentSize(_width, _height, size().width());
-
             actFullScreen = new QShortcut(QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
             connect(actFullScreen, SIGNAL(activated()), SLOT(FullScreenTriggered()));
-            connect(spiceWdg, SIGNAL(DisplayResize(QSize)), SLOT(DisplayResize(QSize)));
-            connect(spiceWdg, SIGNAL(downloaded(int,int)),
-                    vm_stateWdg, SLOT(setDownloadProcessValue(int,int)));
-            connect(spiceWdg, SIGNAL(displayChannelChanged(bool)),
-                    vm_stateWdg, SLOT(changeDisplayState(bool)));
-            connect(spiceWdg, SIGNAL(cursorChannelChanged(bool)),
-                    vm_stateWdg, SLOT(changeMouseState(bool)));
-            connect(spiceWdg, SIGNAL(inputsChannelChanged(bool)),
-                    vm_stateWdg, SLOT(changeKeyboardState(bool)));
-            connect(spiceWdg, SIGNAL(usbredirChannelChanged(bool)),
-                    vm_stateWdg, SLOT(changeUsbredirState(bool)));
-            connect(spiceWdg, SIGNAL(smartcardChannelChanged(bool)),
-                    vm_stateWdg, SLOT(changeSmartcardState(bool)));
-            connect(spiceWdg, SIGNAL(webdavChannelChanged(bool)),
-                    vm_stateWdg, SLOT(changeWebDAVState(bool)));
-            connect(vm_stateWdg, SIGNAL(showUsbDevWidget()),
-                    spiceWdg, SLOT(showUsbDevWidget()));
-            connect(spiceWdg, SIGNAL(errMsg(QString&)),
-                    this, SLOT(sendErrMsg(QString&)));
-            spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
         } else {
             msg = QString("In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")
                     .arg(domain).arg((!graph.isNull())? graph.attribute("type"):"???");
@@ -146,22 +110,7 @@ void Spice_Viewer::reconnectToDomain()
         wdg->Disconnect();
         delete wdg;
         wdg = NULL;
-        spiceWdg = new QSpiceWidget(this);
-        setCentralWidget(spiceWdg);
-        int left, top, right, bottom, _width, _height;
-        viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
-        _width = left+right;
-        _height = top +bottom;
-        vm_stateWdg->getContentsMargins(&left, &top, &right, &bottom);
-        _width += left+right;
-        _height += top +bottom;
-        getContentsMargins(&left, &top, &right, &bottom);
-        _width += left+right;
-        _height += vm_stateWdg->size().height()
-                +viewerToolBar->size().height()
-                +top +bottom;
-        spiceWdg->setDifferentSize(_width, _height, size().width());
-        spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
+        initSpiceWidget();
     };
 }
 void Spice_Viewer::sendKeySeqToDomain(Qt::Key key)
@@ -189,6 +138,46 @@ void Spice_Viewer::pasteClipboardToVirtDomain()
 }
 
 /* private slots */
+void Spice_Viewer::initSpiceWidget()
+{
+    spiceWdg = new QSpiceWidget(this);
+    setCentralWidget(spiceWdg);
+    connect(spiceWdg, SIGNAL(DisplayResize(QSize)),SLOT(DisplayResize(QSize)));
+    connect(spiceWdg, SIGNAL(downloaded(int,int)),
+            vm_stateWdg, SLOT(setDownloadProcessValue(int,int)));
+    connect(spiceWdg, SIGNAL(displayChannelChanged(bool)),
+            vm_stateWdg, SLOT(changeDisplayState(bool)));
+    connect(spiceWdg, SIGNAL(cursorChannelChanged(bool)),
+            vm_stateWdg, SLOT(changeMouseState(bool)));
+    connect(spiceWdg, SIGNAL(inputsChannelChanged(bool)),
+            vm_stateWdg, SLOT(changeKeyboardState(bool)));
+    connect(spiceWdg, SIGNAL(usbredirChannelChanged(bool)),
+            vm_stateWdg, SLOT(changeUsbredirState(bool)));
+    connect(spiceWdg, SIGNAL(smartcardChannelChanged(bool)),
+            vm_stateWdg, SLOT(changeSmartcardState(bool)));
+    connect(spiceWdg, SIGNAL(webdavChannelChanged(bool)),
+            vm_stateWdg, SLOT(changeWebDAVState(bool)));
+    connect(vm_stateWdg, SIGNAL(showUsbDevWidget()),
+            spiceWdg, SLOT(showUsbDevWidget()));
+    connect(spiceWdg, SIGNAL(errMsg(QString&)),
+            this, SLOT(sendErrMsg(QString&)));
+
+    int left, top, right, bottom, _width, _height;
+    viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
+    _width = left+right;
+    _height = top +bottom;
+    vm_stateWdg->getContentsMargins(&left, &top, &right, &bottom);
+    _width += left+right;
+    _height += top +bottom;
+    getContentsMargins(&left, &top, &right, &bottom);
+    _width += left+right;
+    _height += vm_stateWdg->size().height()
+            +viewerToolBar->size().height()
+            +top +bottom;
+    spiceWdg->setDifferentSize(_width, _height, size().width());
+    spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
+}
+
 void Spice_Viewer::timerEvent(QTimerEvent *ev)
 {
     if ( ev->timerId()==killTimerId ) {

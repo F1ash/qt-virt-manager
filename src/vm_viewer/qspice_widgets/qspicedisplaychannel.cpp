@@ -32,6 +32,7 @@ void QSpiceHelper::display_primary_create(SpiceDisplayChannel *display,
     Q_UNUSED(display)
 
     QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
+    if ( NULL==_display ) return;
     emit _display->displayPrimaryCreate(format, width, height, stride, shmid, imgdata);
 }
 
@@ -40,7 +41,7 @@ void QSpiceHelper::display_primary_destroy(SpiceDisplayChannel *display,
 {
     Q_UNUSED(display)
     QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
-
+    if ( NULL==_display ) return;
     emit _display->displayPrimaryDestroy();
 }
 
@@ -54,6 +55,7 @@ void QSpiceHelper::display_invalidate (SpiceDisplayChannel *display,
     Q_UNUSED(display)
 
     QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
+    if ( NULL==_display ) return;
     emit _display->displayInvalidate(x, y, width, height);
 }
 
@@ -64,16 +66,20 @@ void QSpiceHelper::display_mark(SpiceDisplayChannel *display,
     Q_UNUSED(display)
 
     QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
-
+    if ( NULL==_display ) return;
     emit _display->displayMark(mark);
 }
 
 
 void QSpiceDisplayChannel::initCallbacks()
 {
-    g_signal_connect(gobject, "display-primary-create", (GCallback) QSpiceHelper::display_primary_create, this);
-    g_signal_connect(gobject, "display-invalidate", (GCallback) QSpiceHelper::display_invalidate, this);
-    g_signal_connect(gobject, "display-primary-destroy", (GCallback) QSpiceHelper::display_primary_destroy, this);
-    g_signal_connect(gobject, "display-mark", (GCallback) QSpiceHelper::display_mark, this);
+    g_signal_connect(gobject, "display-primary-create",
+                     (GCallback) QSpiceHelper::display_primary_create, this);
+    g_signal_connect(gobject, "display-invalidate",
+                     (GCallback) QSpiceHelper::display_invalidate, this);
+    g_signal_connect(gobject, "display-primary-destroy",
+                     (GCallback) QSpiceHelper::display_primary_destroy, this);
+    g_signal_connect(gobject, "display-mark",
+                     (GCallback) QSpiceHelper::display_mark, this);
 }
 

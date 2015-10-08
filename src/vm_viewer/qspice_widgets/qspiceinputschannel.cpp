@@ -28,14 +28,15 @@ void QSpiceHelper::inputs_modifiers(SpiceInputsChannel *spiceinputschannel, gpoi
     Q_UNUSED(spiceinputschannel)
 
     QSpiceInputsChannel *inputs = static_cast<QSpiceInputsChannel*>(user_data);
-
+    if ( NULL==inputs ) return;
     emit inputs->inputsModifiers();
 }
 
 
 void QSpiceInputsChannel::initCallbacks()
 {
-    g_signal_connect(gobject, "inputs-modifiers", (GCallback) QSpiceHelper::inputs_modifiers, this);
+    g_signal_connect(gobject, "inputs-modifiers",
+                     (GCallback) QSpiceHelper::inputs_modifiers, this);
 }
 
 void QSpiceInputsChannel::inputsPosition(

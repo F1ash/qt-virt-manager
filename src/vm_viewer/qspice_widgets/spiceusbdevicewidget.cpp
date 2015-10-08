@@ -3,6 +3,7 @@
 SpiceUsbDeviceWidget::SpiceUsbDeviceWidget(QWidget *parent) :
     QDialog(parent)
 {
+    setWindowTitle("USB Redirection");
     usbDevList = new QListWidget(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(usbDevList);

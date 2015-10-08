@@ -24,7 +24,7 @@
 #include <spice-channel.h>
 #include <channel-display.h>
 #include <channel-main.h>
-
+#include <cacard/vreader.h>
 
 class QSpiceHelper
 {
@@ -113,6 +113,20 @@ public:
                              gpointer               user_data);
     static void device_removed(SpiceUsbDeviceManager *manager,
                                SpiceUsbDevice        *device,
+                               gpointer               user_data);
+
+    // Smartcard Manager
+    static void card_inserted(SpiceSmartcardManager *manager,
+                              VReader               *vreader,
+                              gpointer               user_data);
+    static void card_removed(SpiceSmartcardManager *manager,
+                             VReader               *vreader,
+                             gpointer               user_data);
+    static void reader_added(SpiceSmartcardManager *manager,
+                             VReader               *vreader,
+                             gpointer               user_data);
+    static void reader_removed(SpiceSmartcardManager *manager,
+                               VReader               *vreader,
                                gpointer               user_data);
 
 };

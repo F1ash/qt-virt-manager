@@ -49,6 +49,13 @@ BuildRequires:  cmake
 BuildRequires:  glib2-devel
 BuildRequires:  spice-protocol
 BuildRequires:  spice-glib-devel
+BuildRequires:  libcacard-devel
+# Fedora requires of libcacard-devel
+#BuildRequires:  nspr-devel
+#BuildRequires:  nss-devel
+#BuildRequires:  nss-softokn-devel
+#BuildRequires:  nss-softokn-freebl-devel
+#BuildRequires:  nss-util-devel
 
 %description
 Qt Virtual Machine Manager provides a graphical tool for administering virtual

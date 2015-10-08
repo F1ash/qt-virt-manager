@@ -48,12 +48,12 @@ QDomDocument SmartCardDevice::getDataDocument() const
     };
 
     _device.appendChild(_devDesc);
-    _devDesc.setAttribute(
-                "mode",
-                mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
-    if ( mode->itemData(mode->currentIndex(), Qt::UserRole).toString()=="passthrough" ) {
-        _channel = static_cast<CharDevice*>(
-                    channel->charDevWdg->currentWidget())->getDataDocument();
+    QString _mode = mode->itemData(mode->currentIndex(), Qt::UserRole).toString();
+    _devDesc.setAttribute("mode", _mode);
+    if ( _mode=="passthrough" ) {
+        //_channel = static_cast<CharDevice*>(
+        //            channel->charDevWdg->currentWidget())->getDataDocument();
+        _channel = channel->getDataDocument();
         /*
          * current DomNode is removed to root-element
          * but NULL-elemens not removed
@@ -71,7 +71,13 @@ QDomDocument SmartCardDevice::getDataDocument() const
                 _devDesc.appendChild(list.item(j));
             else ++j;
         };
-        QString _type = channel->devType->currentText().split("/").last();
+        QString _type;
+#if QT_VERSION>=0x050200
+        _type = channel->devType->currentData(Qt::UserRole).toString();
+#else
+        _type = channel->devType->itemData(
+                    channel->devType->currentIndex(), Qt::UserRole).toString();
+#endif
         _devDesc.setAttribute("type", _type);
     };
     doc.appendChild(_device);

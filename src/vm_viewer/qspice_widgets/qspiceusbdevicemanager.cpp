@@ -10,10 +10,6 @@ QSpiceUsbDeviceManager::QSpiceUsbDeviceManager(
     gobject = NULL;
     init(s);
 }
-QSpiceUsbDeviceManager::~QSpiceUsbDeviceManager()
-{
-    unrefManager();
-}
 
 void QSpiceHelper::auto_connect_failed(SpiceUsbDeviceManager *manager,
                                        SpiceUsbDevice        *device,
@@ -23,6 +19,7 @@ void QSpiceHelper::auto_connect_failed(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
+    if ( NULL==_manager ) return;
     QString err, dev;
     err.append(error->code);
     err.append(error->message);
@@ -39,6 +36,7 @@ void QSpiceHelper::device_added(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
+    if ( NULL==_manager ) return;
     QString dev;
     gchar *dev_desc = spice_usb_device_get_description(device, NULL);
     dev.append(dev_desc);
@@ -54,6 +52,7 @@ void QSpiceHelper::device_error(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
+    if ( NULL==_manager ) return;
     QString err, dev;
     err.append(error->code);
     err.append(error->message);
@@ -70,6 +69,7 @@ void QSpiceHelper::device_removed(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
+    if ( NULL==_manager ) return;
     QString dev;
     gchar *dev_desc = spice_usb_device_get_description(device, NULL);
     dev.append(dev_desc);
@@ -182,10 +182,6 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device_finish
 
 
 /* public slots */
-void QSpiceUsbDeviceManager::unrefManager()
-{
-    if (gobject) gobject = NULL;
-}
 void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
 {
     if ( _id.isEmpty() ) return;

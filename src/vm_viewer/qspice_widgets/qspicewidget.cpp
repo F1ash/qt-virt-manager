@@ -21,6 +21,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     usbredir = NULL;
     webdav = NULL;
     usbDevManager = NULL;
+    smartcardManager = NULL;
     _width = 0;
     _height = 0;
     WIDTH = 0;
@@ -159,7 +160,21 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     {
         smartcard = _smartcard;
         bool online = smartcard->Connect();
-        emit smartcardChannelChanged(online);
+        if ( online ) {
+            smartcardManager = new QSpiceSmartcardManager(this);
+            bool _inited = smartcardManager? true:false;
+            if ( _inited ) {
+                connect(smartcardManager, SIGNAL(cardInserted(QString&)),
+                        this, SLOT(cardInserted(QString&)));
+                connect(smartcardManager, SIGNAL(cardRemoved(QString&)),
+                        this, SLOT(cardRemoved(QString&)));
+                connect(smartcardManager, SIGNAL(readerAdded(QString&)),
+                        this, SLOT(readerAdded(QString&)));
+                connect(smartcardManager, SIGNAL(readerRemoved(QString&)),
+                        this, SLOT(readerRemoved(QString&)));
+            };
+            emit smartcardChannelChanged(_inited);
+        };
         return;
     }
 
@@ -169,13 +184,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         usbredir = _usbredir;
         bool online = usbredir->Connect();
         if ( online ) {
-            if (usbDevManager) {
-                delete usbDevManager;
-                usbDevManager = NULL;
-            };
             usbDevManager = new QSpiceUsbDeviceManager(this, spiceSession);
             bool _inited = usbDevManager? true:false;
-            emit usbredirChannelChanged(_inited);
             if ( _inited ) {
                 connect(usbDevManager, SIGNAL(autoConnectFailed(QString&,QString&)),
                         this, SLOT(usbDevAutoConnectFailed(QString&,QString&)));
@@ -186,6 +196,7 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
                 connect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
                         this, SLOT(usbDevRemoved(QString&)));
             };
+            emit usbredirChannelChanged(_inited);
         };
         return;
     }
@@ -203,9 +214,9 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
 
 void QSpiceWidget::channelDestroyed()
 {
-    if (QObject::sender() == main)
+    if (QObject::sender() == main) {
         main = NULL;
-    else if (QObject::sender() == inputs) {
+    } else if (QObject::sender() == inputs) {
         inputs = NULL;
         emit inputsChannelChanged(false);
     } else if (QObject::sender() == cursor) {
@@ -216,24 +227,21 @@ void QSpiceWidget::channelDestroyed()
         display = NULL;
         emit displayChannelChanged(false);
     } else if (QObject::sender() == smartcard) {
+        if (smartcardManager) {
+            delete smartcardManager;
+            smartcardManager = NULL;
+        };
         smartcard = NULL;
         emit smartcardChannelChanged(false);
     } else if (QObject::sender() == usbredir) {
+        if ( usbDevManager ) {
+            delete usbDevManager;
+            usbDevManager = NULL;
+        };
         usbredir = NULL;
         emit usbredirChannelChanged(false);
     } else if (QObject::sender() == webdav) {
         webdav = NULL;
-        if ( usbDevManager ) {
-            disconnect(usbDevManager, SIGNAL(autoConnectFailed(QString&,QString&)),
-                       this, SLOT(usbDevAutoConnectFailed(QString&,QString&)));
-            disconnect(usbDevManager, SIGNAL(deviceAdded(QString&)),
-                       this, SLOT(usbDevAdded(QString&)));
-            disconnect(usbDevManager, SIGNAL(deviceInfo(QString&,QString&)),
-                       this, SLOT(usbDevError(QString&,QString&)));
-            disconnect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
-                       this, SLOT(usbDevRemoved(QString&)));
-            usbDevManager->unrefManager();
-        };
         emit webdavChannelChanged(false);
     }
 }
@@ -347,6 +355,26 @@ void QSpiceWidget::usbDevRemoved(QString &dev)
             .arg(dev);
     emit errMsg(_msg);
     //qDebug()<<"usbDevRemoved:"<< dev;
+}
+
+void QSpiceWidget::cardInserted(QString &_vcard)
+{
+    qDebug()<<"cardInserted"<<_vcard;
+}
+
+void QSpiceWidget::cardRemoved(QString &_vcard)
+{
+    qDebug()<<"cardRemoved"<<_vcard;
+}
+
+void QSpiceWidget::readerAdded(QString &_vreader)
+{
+    qDebug()<<"readerAdded"<<_vreader;
+}
+
+void QSpiceWidget::readerRemoved(QString &_vreader)
+{
+    qDebug()<<"readerRemoved"<<_vreader;
 }
 
 void QSpiceWidget::displayPrimaryCreate(

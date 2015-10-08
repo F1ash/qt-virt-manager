@@ -369,6 +369,7 @@ set (HEADERS
   src/vm_viewer/qspice_widgets/qspicesession.h
   src/vm_viewer/qspice_widgets/qspicewidget.h
   src/vm_viewer/qspice_widgets/qspicesmartcardchannel.h
+  src/vm_viewer/qspice_widgets/qspicesmartcardmanager.h
   src/vm_viewer/qspice_widgets/qspiceusbredirchannel.h
   src/vm_viewer/qspice_widgets/qspicewebdavchannel.h
   src/vm_viewer/qspice_widgets/qspiceusbdevicemanager.h
@@ -691,6 +692,7 @@ set (SOURCES
   src/vm_viewer/qspice_widgets/qspicesession.cpp
   src/vm_viewer/qspice_widgets/qspicewidget.cpp
   src/vm_viewer/qspice_widgets/qspicesmartcardchannel.cpp
+  src/vm_viewer/qspice_widgets/qspicesmartcardmanager.cpp
   src/vm_viewer/qspice_widgets/qspiceusbredirchannel.cpp
   src/vm_viewer/qspice_widgets/qspicewebdavchannel.cpp
   src/vm_viewer/qspice_widgets/qspiceusbdevicemanager.cpp
@@ -743,12 +745,14 @@ find_package(GObject REQUIRED)
 find_package(Gio     REQUIRED)
 find_package(Spice1  REQUIRED)
 find_package(SpiceClientGLib2     REQUIRED)
+find_package(CACard  REQUIRED)
 find_package(LibVirt REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
 include_directories(
     ${GLib2_INCLUDE_DIRS}
     ${GOBJECT_INCLUDE_DIRS}
     ${GIO_INCLUDE_DIRS}
+    ${CACard_INCLUDE_DIRS}
     ${Spice1_INCLUDE_DIRS}
     ${SPICE_CLIENT_GLIB2_INCLUDE_DIRS}
     ${LibVirt_INCLUDE_DIRS}
@@ -760,6 +764,7 @@ list(APPEND BUILD_PROJECT_LIBRARIES
     ${GLib2_LIBRARIES}
     ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
+    ${CACard_LIBRARIES}
     ${Spice1_LIBRARIES}
     ${SPICE_CLIENT_GLIB2_LIBRARIES}
 )

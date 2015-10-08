@@ -48,6 +48,7 @@ public slots:
     void             pasteClipboardToVirtDomain();
 
 private slots:
+    void             initSpiceWidget();
     void             timerEvent(QTimerEvent*);
     void             DisplayResize(const QSize&);
     void             FullScreenTriggered();

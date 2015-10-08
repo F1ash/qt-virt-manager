@@ -15,6 +15,7 @@
 #include "qspicewebdavchannel.h"
 #include "qspiceusbdevicemanager.h"
 #include "spiceusbdevicewidget.h"
+#include "qspicesmartcardmanager.h"
 
 class QSpiceWidget : public QWidget
 {
@@ -53,6 +54,7 @@ protected:
     QSpiceUSBRedirChannel   *usbredir;
     QSpiceWebDAVChannel     *webdav;
     QSpiceUsbDeviceManager  *usbDevManager;
+    QSpiceSmartcardManager  *smartcardManager;
 
     QLabel                  *m_Image;
     QTimer                   resizeTimer;
@@ -74,6 +76,11 @@ private slots:
     void usbDevAdded(QString&);
     void usbDevError(QString&, QString&);
     void usbDevRemoved(QString&);
+
+    void cardInserted(QString&);
+    void cardRemoved(QString&);
+    void readerAdded(QString&);
+    void readerRemoved(QString&);
 
     void displayPrimaryCreate(
          int                 format,
@@ -105,7 +112,6 @@ private slots:
     void reloadUsbDevList(void*);
 
 protected slots:
-    friend class Spice_Viewer;
     void resizeDone();
     void setDifferentSize(int, int, int);
     void showUsbDevWidget();
