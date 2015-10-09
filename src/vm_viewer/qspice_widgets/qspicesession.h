@@ -30,6 +30,12 @@ class QSpiceSession : public QSpiceObject
     Q_OBJECT
 public:
     explicit QSpiceSession(QObject *parent = 0);
+    friend class QSpiceHelper;
+    friend class QSpiceWidget;
+    Q_GPROP_BOOL(EnableAudio, "enable-audio")           // doc default TRUE
+    Q_GPROP_BOOL(EnableSmartcard, "enable-smartcard")   // doc default FALSE
+    Q_GPROP_BOOL(EnableUsbredir, "enable-usbredir")     // doc default TRUE
+    Q_GPROP_STR (SharedDir, "shared-dir")               // doc default "/home/elmarco/Public"
     
 signals:
     void channelNew(QSpiceChannel *channel);
@@ -38,7 +44,6 @@ signals:
 public slots:
 
 private:
-    friend class QSpiceHelper;
 
 protected:
     void init();

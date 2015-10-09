@@ -48,7 +48,7 @@ int QSpiceObject::getPropInt(QString name)
 {
     gint v = 0;
     g_object_get(G_OBJECT (gobject),
-                 name.toLatin1().data(), &v,
+                 name.toUtf8().data(), &v,
                  NULL);
 
     return v;
@@ -56,8 +56,8 @@ int QSpiceObject::getPropInt(QString name)
 
 void QSpiceObject::setProp(QString name, const int i)
 {
-    g_object_set (G_OBJECT (gobject),
-              name.toLatin1().data(), i,
+    g_object_set(G_OBJECT (gobject),
+              name.toUtf8().data(), i,
               NULL);
 }
 
@@ -65,7 +65,7 @@ QString QSpiceObject::getPropString(QString name)
 {
     gchar *v = NULL;
     g_object_get(G_OBJECT (gobject),
-                 name.toLatin1().data(), &v,
+                 name.toUtf8().data(), &v,
                  NULL);
 
     if (v)
@@ -79,9 +79,26 @@ QString QSpiceObject::getPropString(QString name)
         return "";
 }
 
-void QSpiceObject::setProp(QString name, const QString& s)
+void QSpiceObject::setProp(QString name, const QString &s)
 {
-    g_object_set (G_OBJECT (gobject),
-              name.toLatin1().data(), s.toLatin1().data(),
+    g_object_set(G_OBJECT (gobject),
+              name.toUtf8().data(), s.toUtf8().data(),
+              NULL);
+}
+
+bool QSpiceObject::getPropBool(QString name)
+{
+    bool v = 0;
+    g_object_get(G_OBJECT (gobject),
+                 name.toUtf8().data(), &v,
+                 NULL);
+
+    return v;
+}
+
+void QSpiceObject::setProp(QString name, const bool b)
+{
+    g_object_set(G_OBJECT (gobject),
+              name.toUtf8().data(), b,
               NULL);
 }

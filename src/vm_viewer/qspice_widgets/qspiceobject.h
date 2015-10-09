@@ -44,16 +44,22 @@ protected:
     void setProp(QString name, const int i);
 
     QString getPropString(QString name);
-    void setProp(QString name, const QString& s);
+    void setProp(QString name, const QString &s);
+
+    bool getPropBool(QString name);
+    void setProp(QString name, const bool v);
 
 #define Q_GPROP_INT(name, propname) \
     inline int get ## name() {return getPropInt(propname);}; \
-    inline void set ## name(const QString& v) {setProp(propname, v);}
+    inline void set ## name(const int v) {setProp(propname, v);}
 
 #define Q_GPROP_STR(name, propname) \
     inline QString get ## name() {return getPropString(propname);}; \
-    inline void set ## name(const QString& v) {setProp(propname, v);}
+    inline void set ## name(const QString &v) {setProp(propname, v);}
 
+#define Q_GPROP_BOOL(name, propname) \
+    inline bool get ## name() {return getPropBool(propname);}; \
+    inline void set ## name(const bool v) {setProp(propname, v);}
 };
 
 

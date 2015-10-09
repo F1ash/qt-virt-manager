@@ -46,12 +46,6 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     setContentsMargins(MARGIN,MARGIN,MARGIN,MARGIN);
 }
 
-QSpiceWidget::~QSpiceWidget()
-{
-    if (usbDevManager) delete usbDevManager;
-    delete spiceSession;
-}
-
 bool QSpiceWidget::Connect(QString uri)
 {
     spiceSession->setUri(uri);
@@ -652,5 +646,6 @@ void QSpiceWidget::showUsbDevWidget()
             this, SLOT(reloadUsbDevList(void*)));
     reloadUsbDevList(usbDevWdg);
     usbDevWdg->exec();
-    usbDevWdg->deleteLater();
+    delete usbDevWdg;
+    usbDevWdg = NULL;
 }

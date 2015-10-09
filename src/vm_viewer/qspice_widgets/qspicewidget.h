@@ -22,7 +22,6 @@ class QSpiceWidget : public QWidget
     Q_OBJECT
 public:
     explicit QSpiceWidget(QWidget *parent = 0);
-    ~QSpiceWidget();
 
     bool Connect(QString uri);
     void Disconnect();

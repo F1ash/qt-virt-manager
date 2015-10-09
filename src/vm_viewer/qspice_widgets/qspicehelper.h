@@ -29,7 +29,7 @@
 class QSpiceHelper
 {
 public:
-    QSpiceHelper();
+    explicit QSpiceHelper();
 
     // Session callbacks
     static void ss_channel_new(SpiceSession *session, SpiceChannel *channel, gpointer user_data);
