@@ -25,6 +25,7 @@ class QSpiceMainChannel : public QSpiceChannel
 {
     Q_OBJECT
 public:
+    Q_GPROP_BOOL(AgentConnected, "agent-connected")     // doc default FALSE
 
     void mainSetDisplay(int id, int x, int y, int width, int height);
     void mainSetDisplayEnabled(int id, bool enabled);

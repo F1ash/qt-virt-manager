@@ -11,24 +11,26 @@ class VirtNetControlMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit VirtNetControlMenu(QWidget *parent = NULL, QStringList params = QStringList(), bool state = false);
-    ~VirtNetControlMenu();
+    explicit VirtNetControlMenu(
+            QWidget     *parent = NULL,
+            QStringList  params = QStringList(),
+            bool         state  = false);
 
 signals:
     void execMethod(const QStringList&);
 
 private:
     bool            autoReloadState;
-    QAction        *start;
-    QAction        *destroy;
-    QAction        *undefine;
-    QAction        *autoStart;
-    QAction        *getXMLDesc;
-    QAction        *reload;
+    QAction        *start = NULL;
+    QAction        *destroy = NULL;
+    QAction        *undefine = NULL;
+    QAction        *autoStart = NULL;
+    QAction        *getXMLDesc = NULL;
+    QAction        *reload = NULL;
     QStringList     parameters;
 
 private slots:
-    void emitExecMethod(QAction*);
+    void            emitExecMethod(QAction*);
 
 };
 

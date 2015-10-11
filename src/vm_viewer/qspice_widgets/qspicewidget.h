@@ -31,7 +31,7 @@ public:
     void sendClipboardDataToGuest(QString&);
 
 signals:
-    void DisplayResize(const QSize &size);
+    void DisplayResize(const QSize&);
     void downloaded(int, int);
     void cursorChannelChanged(bool);
     void inputsChannelChanged(bool);
@@ -58,7 +58,7 @@ protected:
     QLabel                  *m_Image;
     QTimer                   resizeTimer;
     QHBoxLayout             *commonLayout;
-    int                      _height, _width, WIDTH;
+    int                      _height, _width;
 
 private slots:
     void ChannelNew(QSpiceChannel *channel);
@@ -112,7 +112,7 @@ private slots:
 
 protected slots:
     void resizeDone();
-    void setDifferentSize(int, int, int);
+    void setDifferentSize(int, int);
     void showUsbDevWidget();
 };
 

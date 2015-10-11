@@ -145,6 +145,9 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
         connect(_dialog, SIGNAL(errMsg(QString&)),
                 this, SLOT(sendErrMsg(QString&)));
         int exitCode = _dialog->exec();
+        disconnect(_dialog, SIGNAL(errMsg(QString&)),
+                   this, SLOT(sendErrMsg(QString&)));
+        _dialog->deleteLater();
         if ( exitCode ) {
             task.action      = CREATE_DOMAIN_SNAPSHOT;
             task.method      = "createVirtDomainSnapshot";
@@ -152,14 +155,12 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
             task.args.sign   = _dialog->getSnapshotFlags();
             emit addNewTask(task);
         };
-        disconnect(_dialog, SIGNAL(errMsg(QString&)),
-                   this, SLOT(sendErrMsg(QString&)));
-        _dialog->deleteLater();
     } else if ( method.first()=="moreSnapshotActions" ) {
         //qDebug()<<"moreSnapshotActions";
         SnapshotActionDialog *_dialog =
                new SnapshotActionDialog(this, ptr_ConnPtr, domain);
         int exitCode = _dialog->exec();
+        _dialog->deleteLater();
         if ( exitCode ) {
             QStringList params = _dialog->getParameters();
             task.action      = static_cast<Actions>(exitCode);
@@ -169,7 +170,6 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
             task.args.sign   = _dialog->getSnapshotFlags();
             emit addNewTask(task);
         };
-        _dialog->deleteLater();
     } else if ( method.first()=="reconnectToVirtDomain" ) {
         reconnectToDomain();
     } else if ( method.first()=="sendKeySeqToVirtDomain" ) {

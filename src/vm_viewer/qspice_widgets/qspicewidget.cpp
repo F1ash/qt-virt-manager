@@ -24,7 +24,6 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     smartcardManager = NULL;
     _width = 0;
     _height = 0;
-    WIDTH = 0;
 
     m_Image = new QLabel(this);
     m_Image->setAlignment(Qt::AlignTop | Qt::AlignJustify);
@@ -382,7 +381,7 @@ void QSpiceWidget::displayPrimaryCreate(
     Q_UNUSED(shmid);
     m_Image->setUpdatesEnabled(false);
 
-    //qDebug() << "Display Create(" << width << ", " << height << ")";
+    qDebug() << "Display Create(" << width << ", " << height << ")";
 
     QImage *img = NULL;
     switch(format)
@@ -611,24 +610,24 @@ void QSpiceWidget::resizeDone()
     {
         //int left, top, right, bottom;
         //getContentsMargins(&left, &top, &right, &bottom);
+        QPoint pos = mapToGlobal(m_Image->pos());
         main->mainSetDisplay(
                     display->getId(),
-                    0,
-                    0,
-                    WIDTH-_width-2*MARGIN,
-                    WIDTH-_height-2*MARGIN-4);
+                    pos.x(),
+                    pos.y(),
+                    _width-2*MARGIN,
+                    _height-2*MARGIN-4);
         main->mainSetDisplayEnabled(display->getId(), true);
         qDebug()<<"configured"<<main->mainSendMonitorConfig();
     }
 
 }
 
-void QSpiceWidget::setDifferentSize(int _d1, int _d2, int _d3)
+void QSpiceWidget::setDifferentSize(int _d1, int _d2)
 {
     _width  = _d1;
     _height = _d2;
-    WIDTH   = _d3;
-    //qDebug()<<_width<<_height<<WIDTH;
+    qDebug()<<_width<<_height;
 }
 
 void QSpiceWidget::showUsbDevWidget()

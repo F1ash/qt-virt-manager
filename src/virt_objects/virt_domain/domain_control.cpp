@@ -324,6 +324,9 @@ void VirtDomainControl::execAction(const QStringList &l)
             connect(_dialog, SIGNAL(errMsg(QString&)),
                     this, SLOT(msgRepeater(QString&)));
             int exitCode = _dialog->exec();
+            disconnect(_dialog, SIGNAL(errMsg(QString&)),
+                       this, SLOT(msgRepeater(QString&)));
+            _dialog->deleteLater();
             if ( exitCode ) {
                 task.action      = CREATE_DOMAIN_SNAPSHOT;
                 task.method      = "createVirtDomainSnapshot";
@@ -331,14 +334,12 @@ void VirtDomainControl::execAction(const QStringList &l)
                 task.args.sign   = _dialog->getSnapshotFlags();
                 emit addNewTask(task);
             };
-            disconnect(_dialog, SIGNAL(errMsg(QString&)),
-                       this, SLOT(msgRepeater(QString&)));
-            _dialog->deleteLater();
         } else if ( l.first()=="moreSnapshotActions" ) {
             //qDebug()<<"moreSnapshotActions";
             SnapshotActionDialog *_dialog =
                     new SnapshotActionDialog(this, ptr_ConnPtr, domainName);
             int exitCode = _dialog->exec();
+            _dialog->deleteLater();
             if ( exitCode ) {
                 QStringList params = _dialog->getParameters();
                 task.action      = static_cast<Actions>(exitCode);
@@ -348,7 +349,6 @@ void VirtDomainControl::execAction(const QStringList &l)
                 task.args.sign   = _dialog->getSnapshotFlags();
                 emit addNewTask(task);
             };
-            _dialog->deleteLater();
         };
     } else if ( l.first()=="reloadVirtDomain" ) {
         reloadState();

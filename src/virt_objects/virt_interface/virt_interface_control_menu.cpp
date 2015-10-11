@@ -43,28 +43,7 @@ IfaceControlMenu::IfaceControlMenu(QWidget *parent, QStringList params, bool sta
     addAction(reload);
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
 }
-IfaceControlMenu::~IfaceControlMenu()
-{
-    disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
-    if ( !parameters.isEmpty() ) {
-        delete start;
-        start = NULL;
-        delete destroy;
-        destroy = NULL;
-        delete undefine;
-        undefine = NULL;
-        delete changeBegin;
-        changeBegin = NULL;
-        delete changeCommit;
-        changeCommit = NULL;
-        delete changeRollback;
-        changeRollback = NULL;
-        delete getXMLDesc;
-        getXMLDesc = NULL;
-    };
-    delete reload;
-    reload = NULL;
-}
+
 void IfaceControlMenu::emitExecMethod(QAction *action)
 {
     QStringList paramList;

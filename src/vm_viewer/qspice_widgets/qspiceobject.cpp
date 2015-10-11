@@ -88,7 +88,7 @@ void QSpiceObject::setProp(QString name, const QString &s)
 
 bool QSpiceObject::getPropBool(QString name)
 {
-    bool v = 0;
+    bool v = false;
     g_object_get(G_OBJECT (gobject),
                  name.toUtf8().data(), &v,
                  NULL);
@@ -100,5 +100,22 @@ void QSpiceObject::setProp(QString name, const bool b)
 {
     g_object_set(G_OBJECT (gobject),
               name.toUtf8().data(), b,
+              NULL);
+}
+
+void* QSpiceObject::getPropPointer(QString name)
+{
+    void* v = NULL;
+    g_object_get(G_OBJECT (gobject),
+                 name.toUtf8().data(), &v,
+                 NULL);
+
+    return v;
+}
+
+void QSpiceObject::setProp(QString name, const void *v)
+{
+    g_object_set(G_OBJECT (gobject),
+              name.toUtf8().data(), v,
               NULL);
 }

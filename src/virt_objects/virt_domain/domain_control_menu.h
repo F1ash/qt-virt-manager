@@ -12,32 +12,32 @@ class DomainControlMenu : public QMenu
     Q_OBJECT
 public:
     explicit DomainControlMenu(
-            QWidget *parent = NULL,
-            QStringList params = QStringList(),
-            bool state = false);
+            QWidget     *parent = NULL,
+            QStringList  params = QStringList(),
+            bool         state  = false);
 
 signals:
     void            execMethod(const QStringList&);
 
 private:
     bool            autoReloadState;
-    QAction        *start;
-    QAction        *pause;
-    QAction        *destroy;
-    QAction        *edit;
-    QAction        *reset;
-    QAction        *reboot;
-    QAction        *shutdown;
-    QAction        *save;
-    QAction        *undefine;
-    QAction        *autoStart;
-    QAction        *getXMLDesc;
-    QAction        *migrate;
-    QAction        *display;
-    QAction        *addToMonitor;
-    QAction        *reload;
-    QAction        *createSnapshot;
-    QAction        *moreSnapshot_Actions;
+    QAction        *start = NULL;
+    QAction        *pause = NULL;
+    QAction        *destroy = NULL;
+    QAction        *edit = NULL;
+    QAction        *reset = NULL;
+    QAction        *reboot = NULL;
+    QAction        *shutdown = NULL;
+    QAction        *save = NULL;
+    QAction        *undefine = NULL;
+    QAction        *autoStart = NULL;
+    QAction        *getXMLDesc = NULL;
+    QAction        *migrate = NULL;
+    QAction        *display = NULL;
+    QAction        *addToMonitor = NULL;
+    QAction        *reload = NULL;
+    QAction        *createSnapshot = NULL;
+    QAction        *moreSnapshot_Actions = NULL;
     QStringList     parameters;
 
 private slots:

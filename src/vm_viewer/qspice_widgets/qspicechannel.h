@@ -25,6 +25,7 @@ class QSpiceChannel : public QSpiceObject
 {
     Q_OBJECT
 public:
+    Q_GPROP_POINTER(SessionPtr, "spice-session")
 
     virtual bool objectDisposed();
 

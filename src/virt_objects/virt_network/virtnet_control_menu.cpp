@@ -35,24 +35,7 @@ VirtNetControlMenu::VirtNetControlMenu(QWidget *parent, QStringList params, bool
     addAction(reload);
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
 }
-VirtNetControlMenu::~VirtNetControlMenu()
-{
-    disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
-    if ( !parameters.isEmpty() ) {
-        delete start;
-        start = NULL;
-        delete destroy;
-        destroy = NULL;
-        delete undefine;
-        undefine = NULL;
-        delete autoStart;
-        autoStart = NULL;
-        delete getXMLDesc;
-        getXMLDesc = NULL;
-    };
-    delete reload;
-    reload = NULL;
-}
+
 void VirtNetControlMenu::emitExecMethod(QAction *action)
 {
     QStringList paramList;

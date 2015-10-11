@@ -47,32 +47,7 @@ StoragePoolControlMenu::StoragePoolControlMenu(QWidget *parent, QStringList para
     addAction(reload);
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
 }
-StoragePoolControlMenu::~StoragePoolControlMenu()
-{
-    disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
-    if ( !parameters.isEmpty() ) {
-        disconnect(delete_Menu, SIGNAL(execMethod(const QStringList&)),
-                   this, SIGNAL(execMethod(const QStringList&)));
-        delete start;
-        start = NULL;
-        delete destroy;
-        destroy = NULL;
-        delete undefine;
-        undefine = NULL;
-        delete autoStart;
-        autoStart = NULL;
-        delete delete_Menu;
-        delete_Menu = NULL;
-        delete delete_Action;
-        delete_Action = NULL;
-        delete getXMLDesc;
-        getXMLDesc = NULL;
-        delete overview;
-        overview = NULL;
-    };
-    delete reload;
-    reload = NULL;
-}
+
 void StoragePoolControlMenu::emitExecMethod(QAction *action)
 {
     QStringList paramList;

@@ -142,7 +142,8 @@ void Spice_Viewer::initSpiceWidget()
 {
     spiceWdg = new QSpiceWidget(this);
     setCentralWidget(spiceWdg);
-    connect(spiceWdg, SIGNAL(DisplayResize(QSize)),SLOT(DisplayResize(QSize)));
+    connect(spiceWdg, SIGNAL(DisplayResize(const QSize&)),
+            SLOT(DisplayResize(const QSize&)));
     connect(spiceWdg, SIGNAL(downloaded(int,int)),
             vm_stateWdg, SLOT(setDownloadProcessValue(int,int)));
     connect(spiceWdg, SIGNAL(displayChannelChanged(bool)),
@@ -174,7 +175,7 @@ void Spice_Viewer::initSpiceWidget()
     _height += vm_stateWdg->size().height()
             +viewerToolBar->size().height()
             +top +bottom;
-    spiceWdg->setDifferentSize(_width, _height, size().width());
+    spiceWdg->setDifferentSize(_width, _height);
     spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
 }
 
@@ -220,7 +221,9 @@ void Spice_Viewer::resizeEvent(QResizeEvent *ev)
             +viewerToolBar->size().height()
             +top +bottom;
     if ( NULL!=spiceWdg ) {
-        spiceWdg->setDifferentSize(_width, _height, ev->size().width());
+        spiceWdg->setDifferentSize(
+                    ev->size().width()-_width,
+                    ev->size().height()-_height);
         spiceWdg->resizeDone();
     };
 }

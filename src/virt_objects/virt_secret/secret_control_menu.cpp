@@ -23,18 +23,7 @@ VirtSecretControlMenu::VirtSecretControlMenu(
     addAction(reload);
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
 }
-VirtSecretControlMenu::~VirtSecretControlMenu()
-{
-    disconnect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
-    if ( !parameters.isEmpty() ) {
-        delete undefine;
-        undefine = NULL;
-        delete getXMLDesc;
-        getXMLDesc = NULL;
-    };
-    delete reload;
-    reload = NULL;
-}
+
 void VirtSecretControlMenu::emitExecMethod(QAction *action)
 {
     QStringList paramList;

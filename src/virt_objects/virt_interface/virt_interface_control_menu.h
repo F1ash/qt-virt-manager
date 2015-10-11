@@ -15,21 +15,20 @@ public:
             QWidget *parent = NULL,
             QStringList params = QStringList(),
             bool state = false);
-    ~IfaceControlMenu();
 
 signals:
     void            execMethod(const QStringList&);
 
 private:
     bool            autoReloadState;
-    QAction        *start;
-    QAction        *destroy;
-    QAction        *undefine;
-    QAction        *changeBegin;
-    QAction        *changeCommit;
-    QAction        *changeRollback;
-    QAction        *getXMLDesc;
-    QAction        *reload;
+    QAction        *start = NULL;
+    QAction        *destroy = NULL;
+    QAction        *undefine = NULL;
+    QAction        *changeBegin = NULL;
+    QAction        *changeCommit = NULL;
+    QAction        *changeRollback = NULL;
+    QAction        *getXMLDesc = NULL;
+    QAction        *reload = NULL;
     QStringList     parameters;
 
 private slots:

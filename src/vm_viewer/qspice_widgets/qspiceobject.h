@@ -49,6 +49,9 @@ protected:
     bool getPropBool(QString name);
     void setProp(QString name, const bool v);
 
+    void* getPropPointer(QString name);
+    void  setProp(QString name, const void *v);
+
 #define Q_GPROP_INT(name, propname) \
     inline int get ## name() {return getPropInt(propname);}; \
     inline void set ## name(const int v) {setProp(propname, v);}
@@ -60,6 +63,10 @@ protected:
 #define Q_GPROP_BOOL(name, propname) \
     inline bool get ## name() {return getPropBool(propname);}; \
     inline void set ## name(const bool v) {setProp(propname, v);}
+
+#define Q_GPROP_POINTER(name, propname) \
+    inline void* get ## name() {return getPropPointer(propname);}; \
+    inline void  set ## name(const void* v) {setProp(propname, v);}
 };
 
 
