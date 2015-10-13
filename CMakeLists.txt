@@ -372,6 +372,7 @@ set (HEADERS
   src/vm_viewer/qspice_widgets/qspicesmartcardmanager.h
   src/vm_viewer/qspice_widgets/qspiceusbredirchannel.h
   src/vm_viewer/qspice_widgets/qspicewebdavchannel.h
+  src/vm_viewer/qspice_widgets/qspiceportchannel.h
   src/vm_viewer/qspice_widgets/qspiceusbdevicemanager.h
   src/vm_viewer/qspice_widgets/spiceusbdevicewidget.h
 
@@ -676,7 +677,6 @@ set (SOURCES
   src/vm_viewer/qterminal/bookmarkswidget.cpp
   src/vm_viewer/qterminal/tabwidget.cpp
   src/vm_viewer/qterminal/termwidgetholder.cpp
-  #src/vm_viewer/qterminal/main.cpp
   src/vm_viewer/qterminal/propertiesdialog.cpp
   src/vm_viewer/qterminal/term_mainwindow.cpp
   src/vm_viewer/qterminal/termwidget.cpp
@@ -694,6 +694,7 @@ set (SOURCES
   src/vm_viewer/qspice_widgets/qspicesmartcardchannel.cpp
   src/vm_viewer/qspice_widgets/qspicesmartcardmanager.cpp
   src/vm_viewer/qspice_widgets/qspiceusbredirchannel.cpp
+  src/vm_viewer/qspice_widgets/qspiceportchannel.cpp
   src/vm_viewer/qspice_widgets/qspicewebdavchannel.cpp
   src/vm_viewer/qspice_widgets/qspiceusbdevicemanager.cpp
   src/vm_viewer/qspice_widgets/spiceusbdevicewidget.cpp

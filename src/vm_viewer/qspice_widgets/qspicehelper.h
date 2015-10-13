@@ -24,6 +24,7 @@
 #include <spice-channel.h>
 #include <channel-display.h>
 #include <channel-main.h>
+#include <channel-port.h>
 #include <cacard/vreader.h>
 
 class QSpiceHelper
@@ -35,7 +36,7 @@ public:
     static void ss_channel_new(SpiceSession *session, SpiceChannel *channel, gpointer user_data);
     static void ss_channel_destroy(SpiceSession *session, SpiceChannel *channel, gpointer user_data);
 
-    // channel
+    // Spice client Channels
     static void GDisposeEvent(gpointer data, GObject *_channel);
 
     // Display Channel
@@ -128,6 +129,15 @@ public:
     static void reader_removed(SpiceSmartcardManager *manager,
                                VReader               *vreader,
                                gpointer               user_data);
+
+    // Port Channel
+    static void port_data(SpicePortChannel *spiceportchannel,
+                          gpointer          arg1,
+                          gint              arg2,
+                          gpointer          user_data);
+    static void port_event(SpicePortChannel *spiceportchannel,
+                           gint              arg1,
+                           gpointer          user_data);
 
 };
 

@@ -182,7 +182,8 @@ void QSpiceMainChannel::mainFileCopyFinish(void *channel, void *result, void *er
                 (SpiceMainChannel *)channel,
                 asyncResult,
                 errors);
-    QSpiceMainChannel *obj = static_cast<QSpiceMainChannel*>(g_async_result_get_user_data(asyncResult));
+    QSpiceMainChannel *obj = static_cast<QSpiceMainChannel*>(
+                g_async_result_get_user_data(asyncResult));
     size_t count = sizeof(errors)/sizeof(*errors);
     for ( uint i = 0; i<count; i++ ) {
         //qDebug()<<errors[i]->code<< QString::fromUtf8(errors[i]->message);

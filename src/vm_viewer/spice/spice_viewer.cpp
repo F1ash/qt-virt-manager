@@ -175,7 +175,7 @@ void Spice_Viewer::initSpiceWidget()
     _height += vm_stateWdg->size().height()
             +viewerToolBar->size().height()
             +top +bottom;
-    spiceWdg->setDifferentSize(_width, _height);
+    spiceWdg->setNewSize(_width, _height);
     spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
 }
 
@@ -221,7 +221,7 @@ void Spice_Viewer::resizeEvent(QResizeEvent *ev)
             +viewerToolBar->size().height()
             +top +bottom;
     if ( NULL!=spiceWdg ) {
-        spiceWdg->setDifferentSize(
+        spiceWdg->setNewSize(
                     ev->size().width()-_width,
                     ev->size().height()-_height);
         spiceWdg->resizeDone();

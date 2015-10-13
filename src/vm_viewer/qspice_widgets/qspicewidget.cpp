@@ -613,8 +613,8 @@ void QSpiceWidget::resizeDone()
         QPoint pos = mapToGlobal(m_Image->pos());
         main->mainSetDisplay(
                     display->getId(),
-                    pos.x(),
-                    pos.y(),
+                    0,
+                    0,
                     _width-2*MARGIN,
                     _height-2*MARGIN-4);
         main->mainSetDisplayEnabled(display->getId(), true);
@@ -623,11 +623,11 @@ void QSpiceWidget::resizeDone()
 
 }
 
-void QSpiceWidget::setDifferentSize(int _d1, int _d2)
+void QSpiceWidget::setNewSize(int _d1, int _d2)
 {
     _width  = _d1;
     _height = _d2;
-    qDebug()<<_width<<_height;
+    qDebug()<<"setNewSize"<<_width-2*MARGIN<<_height-2*MARGIN-4;
 }
 
 void QSpiceWidget::showUsbDevWidget()

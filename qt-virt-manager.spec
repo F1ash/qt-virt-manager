@@ -13,6 +13,7 @@ Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 URL:            https://github.com/F1ash/%{name}
 
 Requires:       libvirt
+Requires:       hicolor-icon-theme
 %if %with qt4
 Requires:       qtermwidget >= 0.6.0-2
 %endif
@@ -125,7 +126,8 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 
 %if %with qt4
 %files -n qt4-virt-manager
-%doc README.md LICENSE Licenses Changelog
+%license LICENSE
+%doc README.md Licenses Changelog
 %{_bindir}/qt4-virt-manager
 %{_datadir}/applications/qt4-virt-manager.desktop
 %{_datadir}/qt4-virt-manager
@@ -133,7 +135,8 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %endif
 %if %with qt5
 %files -n qt5-virt-manager
-%doc README.md LICENSE Licenses Changelog
+%license LICENSE
+%doc README.md Licenses Changelog
 %{_bindir}/qt5-virt-manager
 %{_datadir}/applications/qt5-virt-manager.desktop
 %{_datadir}/qt5-virt-manager

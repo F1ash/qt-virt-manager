@@ -107,9 +107,9 @@ void QSpiceHelper::ss_channel_destroy(SpiceSession *session, SpiceChannel *chann
 
 void QSpiceSession::init()
 {
-    spice_util_set_debug(true);
-    qDebug()<<"Spice.ver.:"<<spice_util_get_version_string()
-           <<"\nDEBUG mode:"<<(bool)spice_util_get_debug();
+    //spice_util_set_debug(true);
+    //qDebug()<<"Spice.ver.:"<<spice_util_get_version_string()
+    //       <<"\nDEBUG mode:"<<(bool)spice_util_get_debug();
     gobject = spice_session_new ();
     setEnableAudio(true);
     setEnableSmartcard(true);

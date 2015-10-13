@@ -1,9 +1,9 @@
 #ifndef QSPICEWEBDAVCHANNEL_H
 #define QSPICEWEBDAVCHANNEL_H
 
-#include "qspicechannel.h"
+#include "qspiceportchannel.h"
 
-class QSpiceWebDAVChannel : public QSpiceChannel
+class QSpiceWebDAVChannel : public QSpicePortChannel
 {
     Q_OBJECT
 public:
@@ -11,8 +11,8 @@ public:
 signals:
 
 protected:
-    inline QSpiceWebDAVChannel(void *channel) : QSpiceChannel(channel) {initCallbacks();}
     friend class QSpiceHelper;
+    inline QSpiceWebDAVChannel(void *channel) : QSpicePortChannel(channel) {initCallbacks();}
 
     void initCallbacks();
 };

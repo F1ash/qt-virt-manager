@@ -112,7 +112,7 @@ private slots:
 
 protected slots:
     void resizeDone();
-    void setDifferentSize(int, int);
+    void setNewSize(int, int);
     void showUsbDevWidget();
 };
 
