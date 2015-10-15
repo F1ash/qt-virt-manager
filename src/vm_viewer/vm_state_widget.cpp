@@ -26,6 +26,10 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     webdav->setContentsMargins(0,0,0,0);
     webdav->setPixmap(QIcon::fromTheme("folder-remote")
                          .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
+    playback = new QLabel(this);
+    playback->setContentsMargins(0,0,0,0);
+    playback->setPixmap(QIcon::fromTheme("audio-card")
+                       .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
     closeProcess = new QProgressBar(this);
     closeProcess->setContentsMargins(0,0,0,0);
     closeProcess->setRange(0, TIMEOUT);
@@ -41,6 +45,7 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     commoLayout->addWidget(display);
     commoLayout->addWidget(usbRedir);
     commoLayout->addWidget(webdav);
+    commoLayout->addWidget(playback);
     setLayout(commoLayout);
     closeProcess->hide();
     downloadProcess->setToolTip("File download progress");
@@ -50,6 +55,7 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     display->setToolTip("Display channel");
     usbRedir->setToolTip("USB Redir channel\nClick to choose devices");
     webdav->setToolTip("WebDAV channel");
+    playback->setToolTip("Playback channel");
     setContentsMargins(0,0,0,0);
     connect(usbRedir, SIGNAL(released()),
             this, SIGNAL(showUsbDevWidget()));
@@ -102,5 +108,11 @@ void VM_State_Widget::changeWebDAVState(bool state)
 {
     webdav->setPixmap(
                 QIcon::fromTheme("folder-remote")
+                .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+}
+void VM_State_Widget::changePlaybackState(bool state)
+{
+    playback->setPixmap(
+                QIcon::fromTheme("audio-card")
                 .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
 }

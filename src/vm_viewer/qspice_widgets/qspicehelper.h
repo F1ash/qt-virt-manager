@@ -139,6 +139,21 @@ public:
                            gint              arg1,
                            gpointer          user_data);
 
+    // Playback Channel
+    static void playback_data(SpicePlaybackChannel *channel,
+                              gpointer              data,
+                              gint                  data_size,
+                              gpointer              user_data);
+    static void playback_get_delay(SpicePlaybackChannel *channel,
+                                   gpointer              user_data);
+    static void playback_start(SpicePlaybackChannel *channel,
+                               gint                  format,
+                               gint                  channels,
+                               gint                  rate,
+                               gpointer              user_data);
+    static void playback_stop(SpicePlaybackChannel *channel,
+                              gpointer              user_data);
+
 };
 
 #endif // QSPICEHELPER_H

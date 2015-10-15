@@ -158,6 +158,8 @@ void Spice_Viewer::initSpiceWidget()
             vm_stateWdg, SLOT(changeSmartcardState(bool)));
     connect(spiceWdg, SIGNAL(webdavChannelChanged(bool)),
             vm_stateWdg, SLOT(changeWebDAVState(bool)));
+    connect(spiceWdg, SIGNAL(playbackChannelChanged(bool)),
+            vm_stateWdg, SLOT(changePlaybackState(bool)));
     connect(vm_stateWdg, SIGNAL(showUsbDevWidget()),
             spiceWdg, SLOT(showUsbDevWidget()));
     connect(spiceWdg, SIGNAL(errMsg(QString&)),

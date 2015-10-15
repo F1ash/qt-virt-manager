@@ -22,7 +22,7 @@ signals:
 
 private:
     QLabel          *smartCard, *mouse, *keyboard,
-                    *display, *webdav;
+                    *display, *webdav, *playback;
     QPushButton     *usbRedir;
     QProgressBar    *closeProcess;
     QProgressBar    *downloadProcess;
@@ -37,6 +37,7 @@ public slots:
     void             changeDisplayState(bool);
     void             changeUsbredirState(bool);
     void             changeWebDAVState(bool);
+    void             changePlaybackState(bool);
 };
 
 #endif // VM_STATE_WIDGET_H

@@ -16,6 +16,7 @@
 #include "qspiceusbdevicemanager.h"
 #include "spiceusbdevicewidget.h"
 #include "qspicesmartcardmanager.h"
+#include "qspiceplaybackchannel.h"
 
 class QSpiceWidget : public QWidget
 {
@@ -39,6 +40,7 @@ signals:
     void usbredirChannelChanged(bool);
     void smartcardChannelChanged(bool);
     void webdavChannelChanged(bool);
+    void playbackChannelChanged(bool);
 
     void errMsg(QString&);
 
@@ -52,6 +54,7 @@ protected:
     QSpiceSmartcardChannel  *smartcard;
     QSpiceUSBRedirChannel   *usbredir;
     QSpiceWebDAVChannel     *webdav;
+    QSpicePlaybackChannel   *playback;
     QSpiceUsbDeviceManager  *usbDevManager;
     QSpiceSmartcardManager  *smartcardManager;
 
@@ -80,6 +83,11 @@ private slots:
     void cardRemoved(QString&);
     void readerAdded(QString&);
     void readerRemoved(QString&);
+
+    void playbackData(void*, int);
+    void playbackGetDelay();
+    void playbackStart(int, int, int);
+    void playbackStop();
 
     void displayPrimaryCreate(
          int                 format,

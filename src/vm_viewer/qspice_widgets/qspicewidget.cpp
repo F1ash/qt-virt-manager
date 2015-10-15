@@ -20,6 +20,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     smartcard = NULL;
     usbredir = NULL;
     webdav = NULL;
+    playback = NULL;
     usbDevManager = NULL;
     smartcardManager = NULL;
     _width = 0;
@@ -203,6 +204,23 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         return;
     }
 
+    QSpicePlaybackChannel * _playback = dynamic_cast<QSpicePlaybackChannel *>(channel);
+    if (_playback)
+    {
+        playback = _playback;
+        connect(playback, SIGNAL(playbackData(void*,int)),
+                this, SLOT(playbackData(void*,int)));
+        connect(playback, SIGNAL(playbackGetDelay()),
+                this, SLOT(playbackGetDelay()));
+        connect(playback, SIGNAL(playbackStart(int,int,int)),
+                this, SLOT(playbackStart(int,int,int)));
+        connect(playback, SIGNAL(playbackStop()),
+                this, SLOT(playbackStop()));
+        bool online = playback->Connect();
+        emit playbackChannelChanged(online);
+        return;
+    }
+
 }
 
 void QSpiceWidget::channelDestroyed()
@@ -236,6 +254,9 @@ void QSpiceWidget::channelDestroyed()
     } else if (QObject::sender() == webdav) {
         webdav = NULL;
         emit webdavChannelChanged(false);
+    } else if (QObject::sender() == playback) {
+        playback = NULL;
+        emit playbackChannelChanged(false);
     }
 }
 
@@ -370,6 +391,26 @@ void QSpiceWidget::readerRemoved(QString &_vreader)
     qDebug()<<"readerRemoved"<<_vreader;
 }
 
+void QSpiceWidget::playbackData(void *data, int data_size)
+{
+
+}
+
+void QSpiceWidget::playbackGetDelay()
+{
+
+}
+
+void QSpiceWidget::playbackStart(int format, int channels, int rate)
+{
+
+}
+
+void QSpiceWidget::playbackStop()
+{
+
+}
+
 void QSpiceWidget::displayPrimaryCreate(
      int                 format,
      int                 width,
@@ -413,13 +454,7 @@ void QSpiceWidget::displayPrimaryCreate(
         m_Image->setUpdatesEnabled(false);
         QPixmap pix =  QPixmap::fromImage(*img);
         delete img;
-        //pix.scaledToWidth(WIDTH-_width-2*MARGIN);
         m_Image->setPixmap(pix);
-        //resize(m_Image->pixmap()->size());
-        //resize(QSize(width, height));
-        //int left, top, right, bottom;
-        //getContentsMargins(&left, &top, &right, &bottom);
-        //QSize _size(width+_width+left+right, height+_height+top+bottom+4);
         QSize _size(width+_width+2*MARGIN, height+_height+2*MARGIN+4);
         //qDebug()<<_size<<"emit";
         emit DisplayResize(_size);
@@ -608,8 +643,6 @@ void QSpiceWidget::resizeDone()
 {
     if (m_Image->updatesEnabled() && main && display)
     {
-        //int left, top, right, bottom;
-        //getContentsMargins(&left, &top, &right, &bottom);
         QPoint pos = mapToGlobal(m_Image->pos());
         main->mainSetDisplay(
                     display->getId(),
