@@ -376,6 +376,8 @@ set (HEADERS
   src/vm_viewer/qspice_widgets/qspiceusbdevicemanager.h
   src/vm_viewer/qspice_widgets/spiceusbdevicewidget.h
   src/vm_viewer/qspice_widgets/qspiceplaybackchannel.h
+  src/vm_viewer/qspice_widgets/qspicerecordchannel.h
+  src/vm_viewer/qspice_widgets/qspiceaudio.h
 
   src/state_monitor/domain_state_monitor.h
   src/state_monitor/domain_monitor_thread.h
@@ -700,6 +702,8 @@ set (SOURCES
   src/vm_viewer/qspice_widgets/qspiceusbdevicemanager.cpp
   src/vm_viewer/qspice_widgets/spiceusbdevicewidget.cpp
   src/vm_viewer/qspice_widgets/qspiceplaybackchannel.cpp
+  src/vm_viewer/qspice_widgets/qspicerecordchannel.cpp
+  src/vm_viewer/qspice_widgets/qspiceaudio.cpp
 
   src/state_monitor/domain_state_monitor.cpp
   src/state_monitor/domain_monitor_thread.cpp

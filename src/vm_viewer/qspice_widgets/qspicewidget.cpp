@@ -221,6 +221,19 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         return;
     }
 
+    QSpiceRecordChannel * _record = dynamic_cast<QSpiceRecordChannel *>(channel);
+    if (_record)
+    {
+        record = _record;
+        connect(record, SIGNAL(recordStart(int,int,int)),
+                this, SLOT(recordStart(int,int,int)));
+        connect(record, SIGNAL(recordStop()),
+                this, SLOT(recordStop()));
+        bool online = record->Connect();
+        emit recordChannelChanged(online);
+        return;
+    }
+
 }
 
 void QSpiceWidget::channelDestroyed()
@@ -407,6 +420,16 @@ void QSpiceWidget::playbackStart(int format, int channels, int rate)
 }
 
 void QSpiceWidget::playbackStop()
+{
+
+}
+
+void QSpiceWidget::recordStart(int format, int channels, int rate)
+{
+
+}
+
+void QSpiceWidget::recordStop()
 {
 
 }

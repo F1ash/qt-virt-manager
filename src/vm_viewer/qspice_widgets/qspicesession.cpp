@@ -30,6 +30,7 @@
 #include "qspiceusbredirchannel.h"
 #include "qspicewebdavchannel.h"
 #include "qspiceplaybackchannel.h"
+#include "qspicerecordchannel.h"
 
 #include <QDebug>
 
@@ -85,6 +86,10 @@ void QSpiceHelper::ss_channel_new(SpiceSession *session, SpiceChannel *channel, 
 
     case SPICE_CHANNEL_PLAYBACK:
         _channel = new QSpicePlaybackChannel(channel);
+        break;
+
+    case SPICE_CHANNEL_RECORD:
+        _channel = new QSpiceRecordChannel(channel);
         break;
 
     default:

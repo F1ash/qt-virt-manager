@@ -154,6 +154,15 @@ public:
     static void playback_stop(SpicePlaybackChannel *channel,
                               gpointer              user_data);
 
+    // Record Channel
+    static void record_start(SpiceRecordChannel *channel,
+                             gint                format,
+                             gint                channels,
+                             gint                rate,
+                             gpointer            user_data);
+    static void record_stop(SpiceRecordChannel *channel,
+                            gpointer            user_data);
+
 };
 
 #endif // QSPICEHELPER_H
