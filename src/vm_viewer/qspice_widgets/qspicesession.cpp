@@ -32,8 +32,6 @@
 #include "qspiceplaybackchannel.h"
 #include "qspicerecordchannel.h"
 
-#include <QDebug>
-
 QSpiceSession::QSpiceSession(QObject *parent) :
     QSpiceObject(parent)
 {

@@ -24,7 +24,6 @@
 #include "task_warehouse/task_warehouse.h"
 #include "dock_head_widgets/dock_widget.h"
 #include "dock_head_widgets/dock_head_widget.h"
-#include <QDebug>
 
 typedef QMap<QString, VM_Viewer*> ViewerMap;
 typedef QMap<QString, VirtStorageVolControl*> OverviwedStorageMap;

@@ -3,7 +3,6 @@
 
 #include "qspiceobject.h"
 #include <QStringList>
-#include <QDebug>
 
 class QSpiceSmartcardManager : public QSpiceObject
 {

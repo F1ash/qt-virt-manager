@@ -94,20 +94,24 @@ bool QSpiceSmartcardManager::spiceSmartcardManager_insert_card()
 
 bool QSpiceSmartcardManager::spiceSmartcardManager_remove_card()
 {
-    return true;
+    return spice_smartcard_manager_remove_card(
+                (SpiceSmartcardManager*)gobject);
 }
 
-bool QSpiceSmartcardManager::spiceSmartcardReader_is_software (void*)
+bool QSpiceSmartcardManager::spiceSmartcardReader_is_software (void *reader)
 {
-    return true;
+    return spice_smartcard_reader_is_software(
+                (SpiceSmartcardReader*)reader);
 }
 
-bool QSpiceSmartcardManager::spiceSmartcardReader_insert_card (void*)
+bool QSpiceSmartcardManager::spiceSmartcardReader_insert_card (void *reader)
 {
-    return true;
+    return spice_smartcard_reader_insert_card(
+                (SpiceSmartcardReader*)reader);
 }
 
-bool QSpiceSmartcardManager::spiceSmartcardReader_remove_card (void*)
+bool QSpiceSmartcardManager::spiceSmartcardReader_remove_card (void *reader)
 {
-    return true;
+    return spice_smartcard_reader_remove_card(
+                (SpiceSmartcardReader*)reader);
 }

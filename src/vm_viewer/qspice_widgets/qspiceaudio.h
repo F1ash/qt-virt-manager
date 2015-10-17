@@ -11,7 +11,6 @@ public:
     Q_GPROP_POINTER(MainContext, "main-context")
     Q_GPROP_POINTER(Session, "session")
 
-    friend class QSpiceWidget;
     SpiceAudio *spiceAudio_get(SpiceSession *session,
                                GMainContext *context);
     // deprecated since 0.8

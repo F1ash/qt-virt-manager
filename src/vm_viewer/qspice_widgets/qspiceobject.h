@@ -22,6 +22,8 @@
 
 #include <QObject>
 
+#include <QDebug>
+
 class QSpiceObject : public QObject
 {
     Q_OBJECT

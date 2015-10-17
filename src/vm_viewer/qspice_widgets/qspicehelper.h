@@ -25,7 +25,8 @@
 #include <channel-display.h>
 #include <channel-main.h>
 #include <channel-port.h>
-#include <cacard/vreader.h>
+#include <vreader.h>
+#include <QDebug>
 
 class QSpiceHelper
 {
