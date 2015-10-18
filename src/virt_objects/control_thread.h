@@ -6,7 +6,6 @@
 #include <QDir>
 #include <QTemporaryFile>
 #include <QStringList>
-#include <QDebug>
 
 class ControlThread : public _VirtThread
 {

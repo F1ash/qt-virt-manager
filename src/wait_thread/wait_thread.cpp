@@ -20,7 +20,9 @@ void Wait::run()
             if ( _data.value("isRunning").toInt()!=RUNNING ) {
                 to_Delete.append(idx->getName());
             } else {
-                wdg->connections->value(idx->getName())->closeConnection();
+                ConnElement *el = static_cast<ConnElement*>(
+                            wdg->connections->value(idx->getName()));
+                if ( NULL!=el ) el->closeConnection();
             };
         };
         foreach (QString key, to_Delete) {

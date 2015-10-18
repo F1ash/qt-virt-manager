@@ -4,7 +4,6 @@
 #include "virt_objects/virt_entity_config.h"
 #include "virt_objects/_virt_thread.h"
 #include <QTime>
-#include <QDebug>
 
 #define WAIT_AUTH 300    // dev 10 (sec.)
 
