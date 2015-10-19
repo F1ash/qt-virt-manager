@@ -9,8 +9,9 @@
 
 enum CONN_STATE {
     FAILED  = -1,
-    STOPPED,
-    RUNNING
+    CLOSED,
+    RUNNING,
+    CONNECT
 };
 
 /* Struct to pass the credentials to the auth callback via the cbdata pointer */

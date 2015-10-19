@@ -11,14 +11,7 @@ void ProgressBarDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
         bool ok = false;
         int progress = index.data().toInt(&ok);
         if ( ok ) {
-            QString _suff;
-            if (progress%3==0) {
-                _suff.append("...");
-            } else if (progress%2==0) {
-                _suff.append("..");
-            } else
-                _suff.append(".");
-            State = (progress==100)? "Complete":"Connect";
+            State = "Connect";
         } else
             State = index.data().toString();
 

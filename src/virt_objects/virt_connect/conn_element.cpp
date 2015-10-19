@@ -92,7 +92,7 @@ void ConnElement::setItemReference(ConnItemModel *model, ConnItemIndex *idx)
     own_index = idx;
     name = idx->getName();
     conn_Status.insert("availability", QVariant(AVAILABLE));
-    conn_Status.insert("isRunning", QVariant(STOPPED));
+    conn_Status.insert("isRunning", QVariant(CLOSED));
     conn_Status.insert("initName", QVariant(name));
     idx->setData(conn_Status);
     settings.beginGroup("Connects");
@@ -109,7 +109,7 @@ void ConnElement::setItemReferenceForLocal(ConnItemModel *model, ConnItemIndex *
     own_index = idx;
     name = idx->getName();
     conn_Status.insert("availability", QVariant(AVAILABLE));
-    conn_Status.insert("isRunning", QVariant(STOPPED));
+    conn_Status.insert("isRunning", QVariant(CLOSED));
     conn_Status.insert("initName", QVariant(name));
     idx->setData(conn_Status);
     openConnection();
@@ -174,60 +174,57 @@ void ConnElement::setOnViewConnAliveThread(bool state)
 /* private slots */
 void ConnElement::setConnectionState(CONN_STATE status)
 {
-  //qDebug()<<"setConnectionState0"<<status;
-  if ( status!=RUNNING ) {
-      if (waitTimerId) {
-          killTimer(waitTimerId);
-          waitTimerId = 0;
-      };
-      buildURI();
-  } else _diff = checkTimeout + 1;
-  conn_Status.insert("availability", QVariant(AVAILABLE));
-  conn_Status.insert("onView", QVariant(false));
-  own_index->setData(conn_Status);
-  int row = own_model->connItemDataList.indexOf(own_index);
-  QString data;
-  for (int i=0; i<own_model->columnCount(); i++) {
-      switch (i) {
-      case 0:
-          data = name;
-          break;
-      case 1:
-          data = URI;
-          break;
-      case 2:
-          switch (status) {
-          case FAILED:
-              data = "FAILED";
-              break;
-          case RUNNING:
-              data = "OPENED";
-              break;
-          case STOPPED:
-              data = "CLOSED";
-              break;
-          default:
-              break;
-          };
-          break;
-      default:
-          break;
-      };
-      own_model->setData(own_model->index(row, i), data, Qt::EditRole);
-  };
-  //qDebug()<<"setConnectionState1"<<status;
+    //qDebug()<<"setConnectionState0"<<status;
+    if (waitTimerId) {
+        killTimer(waitTimerId);
+        waitTimerId = 0;
+    };
+    conn_Status.insert("availability", QVariant(AVAILABLE));
+    conn_Status.insert("isRunning", QVariant(status));
+    conn_Status.insert("onView", QVariant(false));
+    own_index->setData(conn_Status);
+    int row = own_model->connItemDataList.indexOf(own_index);
+    QString data;
+    for (int i=0; i<own_model->columnCount(); i++) {
+        switch (i) {
+        case 0:
+            data = name;
+            break;
+        case 1:
+            data = URI;
+            break;
+        case 2:
+            switch (status) {
+            case FAILED:
+                data = "FAILED";
+                break;
+            case CLOSED:
+                data = "CLOSED";
+                break;
+            case RUNNING:
+                data = "OPENED";
+                break;
+            default:
+                break;
+            };
+            break;
+        default:
+            break;
+        };
+        own_model->setData(own_model->index(row, i), data, Qt::EditRole);
+    };
+    //qDebug()<<"setConnectionState1"<<status;
 }
 void ConnElement::timerEvent(QTimerEvent *event)
 {
     int percent = 0;
     int _timerId = event->timerId();
     if ( _timerId && waitTimerId==_timerId ) {
-        if ( checkTimeout - _diff + 1 ) {
-            percent = int ((float(_diff)/checkTimeout)*100.0);
-            QModelIndex _idx = own_model->index( own_model->connItemDataList.indexOf( own_index ), 2 );
-            own_model->setData(_idx, QString::number(percent), Qt::EditRole);
-            _diff++;
-        };
+        percent = int ((float(_diff)/checkTimeout)*100.0);
+        QModelIndex _idx = own_model->index(
+                    own_model->connItemDataList.indexOf( own_index ), 2);
+        own_model->setData(_idx, QString::number(percent), Qt::EditRole);
+        _diff++;
     };
 }
 void ConnElement::receiveConnMessage(QString msg)
@@ -269,12 +266,12 @@ void ConnElement::forwardConnClosedSignal(bool onView)
 }
 void ConnElement::connAliveThreadStarted()
 {
-    conn_Status.insert("isRunning", QVariant(RUNNING));
+    conn_Status.insert("isRunning", QVariant(CONNECT));
     own_index->setData(conn_Status);
 }
 void ConnElement::connAliveThreadFinished()
 {
-    conn_Status.insert("isRunning", QVariant(STOPPED));
+    conn_Status.insert("isRunning", QVariant(CLOSED));
     own_index->setData(conn_Status);
 }
 void ConnElement::emitDomainKeyToCloseViewer(QString &_domName)

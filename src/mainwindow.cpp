@@ -27,7 +27,9 @@ MainWindow::MainWindow(QWidget *parent)
     this->setVisible(!settings.value("Visible", false).toBool());
     changeVisibility();
     closeProgress = new QProgressBar(this);
-    closeProgress->setRange(0, TIMEOUT);
+    // TODO: use instead 3*TIMEOUT the default from libvirt
+    closeProgress->setRange(0, 3*TIMEOUT);
+    closeProgress->setToolTip("Progress for waiting the connection close");
     statusBar()->addPermanentWidget(closeProgress);
     statusBar()->hide();
 }
@@ -177,7 +179,8 @@ void MainWindow::timerEvent(QTimerEvent *ev)
     if ( ev->timerId()==killTimerId ) {
         counter++;
         closeProgress->setValue(counter*PERIOD);
-        if ( TIMEOUT<counter*PERIOD ) {
+        // TODO: use instead 3*TIMEOUT the default from libvirt
+        if ( 3*TIMEOUT<counter*PERIOD ) {
             killTimer(killTimerId);
             killTimerId = 0;
             counter = 0;

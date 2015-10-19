@@ -107,7 +107,7 @@ void ConnectionList::deleteCurrentConnection()
             clearSelection();
             return;
         };
-        int conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
+        int conn_state = idx->getData().value(QString("isRunning"), CLOSED).toInt();
         if ( conn && conn_state==RUNNING ) {
             showMessage(QString("Connection '%1'").arg(connection), "Connection is Running.");
         } else {
@@ -152,7 +152,7 @@ void ConnectionList::showConnection(QModelIndex &_item)
         conn->setOnViewConnAliveThread(i==_item.row());
         //qDebug()<<_name<<(i==_item.row());
         if ( i==_item.row() ) {
-            conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
+            conn_state = idx->getData().value(QString("isRunning"), CLOSED).toInt();
             conn_availability = idx->getData().value(QString("availability"), NOT_AVAILABLE).toBool();
             if ( conn_state==RUNNING && conn_availability ) {
                 conn->overviewConnection();
@@ -203,7 +203,7 @@ void ConnectionList::connItemClicked(const QPoint &pos)
   if ( !conn_Status.value("availability", NOT_AVAILABLE).toBool() ) return;
   bool to_run = TO_RUN;
   ConnectMenu *connectMenu = new ConnectMenu(this);
-  if ( conn_Status.value("isRunning", STOPPED).toInt()==RUNNING ) {
+  if ( conn_Status.value("isRunning", CLOSED).toInt()==RUNNING ) {
       connectMenu->act->setText("Close Connection");
       connectMenu->act->setIcon(QIcon::fromTheme("stop"));
       connect(connectMenu->act, SIGNAL(triggered()),
@@ -264,7 +264,7 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
   };
   //qDebug()<<key<<" Connection doubleClicked"<<conn;
   int conn_state;
-  conn_state = conn_Status.value(QString("isRunning"), STOPPED).toInt();
+  conn_state = conn_Status.value(QString("isRunning"), FAILED).toInt();
   if ( !conn_Status.value(QString("availability"), NOT_AVAILABLE).toBool() ) {
       showMessage("Info", "Connection is busy.");
   } else if ( conn_state!=RUNNING ) {
@@ -375,7 +375,7 @@ void ConnectionList::checkConnection(QModelIndex &_item, bool to_run = TO_RUN)
 {
     int conn_state;
     ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
-    conn_state = idx->getData().value(QString("isRunning"), STOPPED).toInt();
+    conn_state = idx->getData().value(QString("isRunning"), CLOSED).toInt();
     if ( (to_run && conn_state!=RUNNING) || (!to_run && conn_state==RUNNING) )
         connItemDoubleClicked(_item);
 }

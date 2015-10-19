@@ -73,6 +73,8 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
     QString _name  = connItemDataList.at(index.row())->getName();
     QString _uri   = connItemDataList.at(index.row())->getURI();
     QString _state = connItemDataList.at(index.row())->getState();
+    bool ok = false;
+    int percent = _state.toInt(&ok);
     if ( role==Qt::DisplayRole ) {
         switch (index.column()) {
         case 0:
@@ -125,7 +127,11 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
             res = QString("URI: %1").arg(_uri);
             break;
         case 2:
-            res = QString("State: %1").arg(_state);
+            if ( ok && percent>=100 ) {
+                res = QString("State: waiting period has expired");
+            } else {
+                res = QString("State: %1").arg(_state);
+            };
             break;
         default:
             break;

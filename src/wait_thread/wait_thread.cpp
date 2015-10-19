@@ -17,13 +17,24 @@ void Wait::run()
             ConnItemIndex *idx = wdg->connItemModel->connItemDataList.at(i);
             if ( NULL==idx ) continue;
             DATA _data = idx->getData();
-            if ( _data.value("isRunning").toInt()!=RUNNING ) {
+            ConnElement *el = static_cast<ConnElement*>(
+                        wdg->connections->value(idx->getName()));
+            switch (_data.value("isRunning").toInt()) {
+            case FAILED:
                 to_Delete.append(idx->getName());
-            } else {
-                ConnElement *el = static_cast<ConnElement*>(
-                            wdg->connections->value(idx->getName()));
+                break;
+            case CLOSED:
+                to_Delete.append(idx->getName());
+                break;
+            case RUNNING:
                 if ( NULL!=el ) el->closeConnection();
-            };
+                break;
+            case CONNECT:
+                // undefined, still waiting to close the opening of connection
+                break;
+            default:
+                break;
+            }
         };
         foreach (QString key, to_Delete) {
             ConnElement *el = static_cast<ConnElement*>(
@@ -41,10 +52,8 @@ void Wait::run()
                         break;
                     };
                 };
-                delete el;
-                el = NULL;
-                wdg->connections->remove(key);
             };
+            wdg->connections->remove(key);
         };
         msleep(PERIOD);
     };

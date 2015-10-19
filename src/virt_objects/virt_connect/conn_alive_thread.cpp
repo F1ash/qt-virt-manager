@@ -7,9 +7,11 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
     qRegisterMetaType<CONN_STATE>("CONN_STATE");
     _connPtr = NULL;
     onView = false;
-    closeCallbackRegistered = false;
-    domainsLifeCycleCallback = 0;
-    networkLifeCycleCallback = 0;
+    // virConnectRegisterCloseCallback && virConnectDomainEventRegisterAny
+    // -1 on error; another is success or a callback identifier
+    closeCallbackRegistered  = false;
+    domainsLifeCycleCallback = -1;
+    networkLifeCycleCallback = -1;
 }
 
 /* public slots */
@@ -24,7 +26,9 @@ void ConnAliveThread::closeConnection()
     //qDebug()<<"closeConnection1"<<*ptr_ConnPtr<<URI;
     CONN_STATE state;
     if ( *ptr_ConnPtr!=NULL ) {
+        //qDebug()<<"closeConnection2"<<*ptr_ConnPtr<<URI;
         unregisterConnEvents();
+        //qDebug()<<"closeConnection3"<<*ptr_ConnPtr<<URI;
         int ret = virConnectClose(*ptr_ConnPtr);
         //qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
         if ( ret<0 ) {
@@ -32,7 +36,7 @@ void ConnAliveThread::closeConnection()
             sendConnErrors();
         } else {
             emit connMsg( QString("close exit code: %1").arg(ret) );
-            state = STOPPED;
+            state = CLOSED;
             emit connClosed(onView);
         };
         *ptr_ConnPtr = NULL;
@@ -67,11 +71,12 @@ void ConnAliveThread::run()
 }
 void ConnAliveThread::openConnection()
 {
-    //*ptr_ConnPtr = virConnectOpen(URI.toUtf8().constData());
+    //qDebug()<<"openConnection0"<<ptr_ConnPtr<<URI;
     auth.cb = authCallback;
     auth.cbdata = this;
     _connPtr = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
     ptr_ConnPtr = &_connPtr;
+    //qDebug()<<"openConnection1"<<*ptr_ConnPtr<<URI;
     if (*ptr_ConnPtr==NULL) {
         sendConnErrors();
         keep_alive = false;
@@ -132,13 +137,13 @@ void ConnAliveThread::unregisterConnEvents()
         int ret = virConnectDomainEventDeregisterAny(
                     *ptr_ConnPtr, domainsLifeCycleCallback);
         if (ret<0) sendConnErrors();
-        domainsLifeCycleCallback = 0;
+        domainsLifeCycleCallback = -1;
     };
     if ( networkLifeCycleCallback ) {
         int ret = virConnectNetworkEventDeregisterAny(
                     *ptr_ConnPtr, networkLifeCycleCallback);
         if (ret<0) sendConnErrors();
-        networkLifeCycleCallback = 0;
+        networkLifeCycleCallback = -1;
     };
     //qDebug()<<"unregisterConnEvents1"<<*ptr_ConnPtr<<URI;
 }
