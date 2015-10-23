@@ -61,8 +61,9 @@ public slots:
     void             sendGlobalErrors();
     void             resendExecMethod(const QStringList&);
     void             startCloseProcess();
-    virtual void     reconnectToDomain();
-    virtual void     sendKeySeqToDomain(Qt::Key);
+    virtual void     reconnectToVirtDomain();
+    virtual void     sendKeySeqToVirtDomain(Qt::Key);
+    virtual void     getScreenshotFromVirtDomain();
     virtual void     copyFilesToVirtDomain();
     virtual void     copyToClipboardFromVirtDomain();
     virtual void     pasteClipboardToVirtDomain();

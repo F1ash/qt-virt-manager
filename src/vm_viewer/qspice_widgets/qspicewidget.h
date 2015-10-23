@@ -1,8 +1,11 @@
 #ifndef QSPICEWIDGET_H
 #define QSPICEWIDGET_H
 
+#include <QTime>
+#include <QDate>
 #include <QTimer>
 #include <QLabel>
+#include <QFileDialog>
 #include <QHBoxLayout>
 
 #include "qspicesession.h"
@@ -46,8 +49,10 @@ signals:
 
     void errMsg(QString&);
 
+private:
+    QString                  guestName;
+
 protected:
-    friend class Spice_Viewer;
     QSpiceSession           *spiceSession;
     QSpiceMainChannel       *main;
     QSpiceDisplayChannel    *display;
@@ -61,10 +66,14 @@ protected:
     QSpiceUsbDeviceManager  *usbDevManager;
     QSpiceSmartcardManager  *smartcardManager;
 
+    Qt::TransformationMode   tr_mode;
+    QImage                  *img;
     QLabel                  *m_Image;
     QTimer                   resizeTimer;
     QHBoxLayout             *commonLayout;
-    int                      _height, _width;
+    int                      _height, _width,
+                             init_h, init_w;
+    qreal                    zoom;
 
 private slots:
     void ChannelNew(QSpiceChannel *channel);
@@ -123,11 +132,14 @@ private slots:
     bool eventFilter(QObject *object, QEvent *event);
     void resizeEvent(QResizeEvent *event);
     void reloadUsbDevList(void*);
-
-protected slots:
     void resizeDone();
+
+public slots:
+    void setGuestName(QString&);
     void setNewSize(int, int);
     void showUsbDevWidget();
+    void getScreenshot();
+    void setTransformationMode(Qt::TransformationMode);
 };
 
 #endif // QSPICEWIDGET_H

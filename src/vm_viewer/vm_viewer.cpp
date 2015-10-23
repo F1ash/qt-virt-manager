@@ -171,9 +171,11 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
             emit addNewTask(task);
         };
     } else if ( method.first()=="reconnectToVirtDomain" ) {
-        reconnectToDomain();
+        reconnectToVirtDomain();
     } else if ( method.first()=="sendKeySeqToVirtDomain" ) {
-        sendKeySeqToDomain((Qt::Key)method.last().toInt());
+        sendKeySeqToVirtDomain((Qt::Key)method.last().toInt());
+    } else if ( method.first()=="getScreenshotFromVirtDomain" ) {
+        getScreenshotFromVirtDomain();
     } else if ( method.first()=="copyFilesToVirtDomain" ) {
         copyFilesToVirtDomain();
     } else if ( method.first()=="copyToClipboardFromVirtDomain" ) {
@@ -192,13 +194,17 @@ void VM_Viewer::startCloseProcess()
     };
     //qDebug()<<killTimerId<<"killTimer";
 }
-void VM_Viewer::reconnectToDomain()
+void VM_Viewer::reconnectToVirtDomain()
 {
 
 }
-void VM_Viewer::sendKeySeqToDomain(Qt::Key key)
+void VM_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
 {
     Q_UNUSED(key);
+}
+void VM_Viewer::getScreenshotFromVirtDomain()
+{
+
 }
 void VM_Viewer::copyFilesToVirtDomain()
 {

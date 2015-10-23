@@ -53,7 +53,6 @@ void QSpiceHelper::display_invalidate (SpiceDisplayChannel *display,
                                 gpointer             user_data)
 {
     Q_UNUSED(display)
-
     QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
     if ( NULL==_display ) return;
     emit _display->displayInvalidate(x, y, width, height);
@@ -64,7 +63,6 @@ void QSpiceHelper::display_mark(SpiceDisplayChannel *display,
                          gpointer             user_data)
 {
     Q_UNUSED(display)
-
     QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
     if ( NULL==_display ) return;
     emit _display->displayMark(mark);

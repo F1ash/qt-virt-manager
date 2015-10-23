@@ -344,6 +344,7 @@ set (HEADERS
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
   src/vm_viewer/vm_state_widget.h
+  src/vm_viewer/transformation_mode_menu.h
 
   src/vm_viewer/lxc/lxc_viewer.h
   src/vm_viewer/lxc/lxc_viewer_thread.h
@@ -671,6 +672,7 @@ set (SOURCES
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp
   src/vm_viewer/vm_state_widget.cpp
+  src/vm_viewer/transformation_mode_menu.cpp
 
   src/vm_viewer/lxc/lxc_viewer.cpp
   src/vm_viewer/lxc/lxc_viewer_thread.cpp

@@ -41,8 +41,9 @@ private:
 
 public slots:
     void             init();
-    void             reconnectToDomain();
-    void             sendKeySeqToDomain(Qt::Key);
+    void             reconnectToVirtDomain();
+    void             sendKeySeqToVirtDomain(Qt::Key);
+    void             getScreenshotFromVirtDomain();
     void             copyFilesToVirtDomain();
     void             copyToClipboardFromVirtDomain();
     void             pasteClipboardToVirtDomain();
@@ -53,6 +54,7 @@ private slots:
     void             DisplayResize(const QSize&);
     void             FullScreenTriggered();
     void             resizeEvent(QResizeEvent*);
+    QSize            getWidgetSizeAroundDisplay();
 };
 
 #endif // SPICE_VIEWER_H

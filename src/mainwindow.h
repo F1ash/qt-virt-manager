@@ -70,6 +70,7 @@ private :
     QProgressBar                *closeProgress;
     int                          killTimerId = 0;
     int                          counter = 0;
+    int                          waitAtClose;
 
     ViewerMap                    VM_Displayed_Map;
     OverviwedStorageMap          Overviewed_StPool_Map;

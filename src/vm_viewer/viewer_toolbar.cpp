@@ -55,6 +55,8 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     sendKeySeq_6 = keySequenceMenu->addAction("Ctrl+Alt+F6");
     sendKeySeq_7 = keySequenceMenu->addAction("Ctrl+Alt+F7");
     sendKeySeq_8 = keySequenceMenu->addAction("Ctrl+Alt+F8");
+    keySequenceMenu->addSeparator();
+    getScreenshot = keySequenceMenu->addAction("get Guest Screenshot");
     copyFiles_Action = new QAction(this);
     copyFiles_Action->setIcon(QIcon::fromTheme("document-send"));
     copyFiles_Action->setToolTip("Copy Files to Guest");
@@ -139,6 +141,8 @@ void ViewerToolBar::detectTriggerredAction(QAction *action)
         parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch7);
     } else if ( action == sendKeySeq_8 ) {
         parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch8);
+    } else if ( action == getScreenshot ) {
+        parameters << "getScreenshotFromVirtDomain";
     } else if ( action == sendKeySeq_BackSpc ) {
         parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_LaunchB);
     } else if ( action == sendKeySeq_Del ) {

@@ -38,6 +38,7 @@ public:
     QAction         *sendKeySeq_6;
     QAction         *sendKeySeq_7;
     QAction         *sendKeySeq_8;
+    QAction         *getScreenshot;
     QAction         *copyFiles_Action;
     QAction         *copyToClipboard;
     QAction         *pasteClipboard;

@@ -1,6 +1,5 @@
 #include "qspicewidget.h"
 
-#include <QDebug>
 #include <QApplication>
 #include <QImage>
 #include <QPixmap>
@@ -25,7 +24,12 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     smartcardManager = NULL;
     _width = 0;
     _height = 0;
+    init_h = 0;
+    init_w = 0;
+    zoom = 1.0;
 
+    tr_mode = Qt::SmoothTransformation;
+    img = NULL;
     m_Image = new QLabel(this);
     m_Image->setAlignment(Qt::AlignTop | Qt::AlignJustify);
     m_Image->setContentsMargins(0,0,0,0);
@@ -445,40 +449,40 @@ void QSpiceWidget::displayPrimaryCreate(
     Q_UNUSED(shmid);
     m_Image->setUpdatesEnabled(false);
 
-    qDebug() << "Display Create(" << width << ", " << height << ")";
+    //qDebug() << "Display Create(" << width << ", " << height << ")";
+    init_h = height; init_w = width;
+    QImage::Format _format = QImage::Format_Invalid;
 
-    QImage *img = NULL;
-    switch(format)
-    {
+    if (img) {
+        delete img;
+        img = NULL;
+    };
+    switch(format) {
     case SPICE_SURFACE_FMT_32_xRGB:
-        img = new QImage(
-                    static_cast<uchar *>(imgdata),
-                    width,
-                    height,
-                    stride,
-                    QImage::Format_RGB32);
+        _format = QImage::Format_RGB32;
         break;
 
     case SPICE_SURFACE_FMT_16_555:
-        img = new QImage(
-                    static_cast<uchar *>(imgdata),
-                    width,
-                    height,
-                    stride,
-                    QImage::Format_RGB555);
+        _format = QImage::Format_RGB555;
         break;
 
     default:
-        qDebug() << "Unknown display format " << format;
-    }
+        qDebug() << "Unknown display format " << _format;
+    };
+    if ( _format!=QImage::Format_Invalid ) {
+        img = new QImage(
+                    static_cast<uchar *>(imgdata),
+                    init_w,
+                    init_h,
+                    stride,
+                    _format);
+    };
 
-    if (img)
-    {
+    if (img) {
         m_Image->setUpdatesEnabled(false);
         QPixmap pix =  QPixmap::fromImage(*img);
-        delete img;
         m_Image->setPixmap(pix);
-        QSize _size(width+_width+2*MARGIN, height+_height+2*MARGIN+4);
+        QSize _size(init_w+2*MARGIN, init_h+2*MARGIN+4);
         //qDebug()<<_size<<"emit";
         emit DisplayResize(_size);
     }
@@ -491,7 +495,21 @@ void QSpiceWidget::displayInvalidate(
     int                 width,
     int                 height)
 {
-    m_Image->update(x, y, width, height);
+    //qDebug()<<"displayInvalidate"<<x<<y<<width<<height<<":"<<x*zoom<<y*zoom<<width*zoom<<height*zoom;
+    // for optimal processing
+    if ( zoom == 1.0 ) {
+        // faster
+        m_Image->update(x, y, width, height);
+    } else {
+        // slower
+        QPixmap pix = QPixmap::fromImage(
+                    img->scaled(
+                        _width,
+                        _height,
+                        Qt::KeepAspectRatio,
+                        tr_mode));
+        m_Image->setPixmap(pix);
+    };
 }
 
 void QSpiceWidget::displayPrimaryDestroy()
@@ -514,13 +532,10 @@ void QSpiceWidget::cursorSet(
         int                hot_y,
         void *             rgba)
 {
-    QImage img((uchar *) rgba, width, height, QImage::Format_ARGB32);
-    QPixmap pix = QPixmap::fromImage(img);
+    QImage c_img((uchar *) rgba, width, height, QImage::Format_ARGB32);
+    QPixmap pix = QPixmap::fromImage(c_img);
     QCursor c(pix, hot_x, hot_y);
-
     m_Image->setCursor(c);
-
-
 }
 
 
@@ -572,7 +587,9 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     if (event->type() == QEvent::MouseMove )
     {
         QMouseEvent *ev = (QMouseEvent *) event;
-        inputs->inputsPosition(ev->x(), ev->y(), display->getId(), QtButtonsMaskToSpice(ev));
+        //qDebug()<<ev->x()<<ev->y()<<":"<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
+        inputs->inputsPosition(ev->x()*zoom, ev->y()*zoom,
+                               display->getId(), QtButtonsMaskToSpice(ev));
         return true;
     }
     else if (event->type() == QEvent::MouseButtonPress)
@@ -661,29 +678,54 @@ void QSpiceWidget::reloadUsbDevList(void *obj)
     };
 }
 
-/* protected slots */
 void QSpiceWidget::resizeDone()
 {
     if (m_Image->updatesEnabled() && main && display)
     {
-        QPoint pos = mapToGlobal(m_Image->pos());
         main->mainSetDisplay(
                     display->getId(),
                     0,
                     0,
-                    _width-2*MARGIN,
-                    _height-2*MARGIN-4);
+                    _width,
+                    _height);
         main->mainSetDisplayEnabled(display->getId(), true);
-        qDebug()<<"configured"<<main->mainSendMonitorConfig();
+        //qDebug()<<"configured"<<
+        main->mainSendMonitorConfig();
     }
 
 }
 
-void QSpiceWidget::setNewSize(int _d1, int _d2)
+/* public slots */
+void QSpiceWidget::setGuestName(QString &_name)
 {
-    _width  = _d1;
-    _height = _d2;
-    qDebug()<<"setNewSize"<<_width-2*MARGIN<<_height-2*MARGIN-4;
+    guestName = _name;
+}
+
+void QSpiceWidget::setNewSize(int _w, int _h)
+{
+    _width  = _w-2*MARGIN;
+    _height = _h-2*MARGIN-4;
+    //qDebug()<<"setNewSize"<<_width<<_height;
+    // for optimal processing
+    if ( _width==init_w && _height==init_h ) {
+        // faster
+        zoom = 1.0;
+        return;
+    };
+    if ( _width-2*MARGIN && init_w ) {
+        // slower
+        if ( img ) {
+            QPixmap pix = QPixmap::fromImage(
+                        img->scaled(
+                            _width,
+                            _height,
+                            Qt::KeepAspectRatio,
+                            tr_mode));
+            m_Image->setUpdatesEnabled(true);
+            m_Image->setPixmap(pix);
+            zoom = init_w/(qreal)pix.width();
+        };
+    };
 }
 
 void QSpiceWidget::showUsbDevWidget()
@@ -703,4 +745,29 @@ void QSpiceWidget::showUsbDevWidget()
     usbDevWdg->exec();
     delete usbDevWdg;
     usbDevWdg = NULL;
+}
+
+void QSpiceWidget::getScreenshot()
+{
+    // WARNING: used %1%2%3.snapshot template,
+    // because filter will added to tail the template
+    // after last dot.
+    QString fileName = QFileDialog::getSaveFileName(
+                this,
+                "Save Image to",
+                QString("%1%2%3_%4_%5.snapshot")
+                    .arg(QDir::homePath())
+                    .arg(QDir::separator())
+                    .arg(guestName)
+                    .arg(QDate::currentDate().toString("dd.MM.yyyy"))
+                    .arg(QTime::currentTime().toString()),
+                "Images (*.png)");
+    if ( !fileName.isNull() ) {
+        img->save(fileName, "png");
+    };
+}
+
+void QSpiceWidget::setTransformationMode(Qt::TransformationMode _mode)
+{
+    tr_mode = _mode;
 }

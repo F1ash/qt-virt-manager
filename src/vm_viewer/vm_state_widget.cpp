@@ -14,10 +14,12 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     keyboard->setContentsMargins(0,0,0,0);
     keyboard->setPixmap(QIcon::fromTheme("input-keyboard")
                         .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
-    display = new QLabel(this);
+    tr_menu = new TransformationModeMenu(this);
+    display = new QPushButton(QIcon::fromTheme("video-display"), "", this);
     display->setContentsMargins(0,0,0,0);
-    display->setPixmap(QIcon::fromTheme("video-display")
-                       .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
+    display->setEnabled(false);
+    display->setMenu(tr_menu);
+    display->setFlat(true);
     usbRedir = new QPushButton(QIcon::fromTheme("drive-removable-media"), "", this);
     usbRedir->setContentsMargins(0,0,0,0);
     usbRedir->setEnabled(false);
@@ -65,6 +67,8 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     setContentsMargins(0,0,0,0);
     connect(usbRedir, SIGNAL(released()),
             this, SIGNAL(showUsbDevWidget()));
+    connect(tr_menu, SIGNAL(new_mode(Qt::TransformationMode)),
+            this, SIGNAL(transformationMode(Qt::TransformationMode)));
 }
 
 /* public slots */
@@ -102,9 +106,7 @@ void VM_State_Widget::changeKeyboardState(bool state)
 }
 void VM_State_Widget::changeDisplayState(bool state)
 {
-    display->setPixmap(
-                QIcon::fromTheme("video-display")
-                .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+    display->setEnabled(state);
 }
 void VM_State_Widget::changeUsbredirState(bool state)
 {

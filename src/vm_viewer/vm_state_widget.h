@@ -7,6 +7,7 @@
 #include <QIcon>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include "transformation_mode_menu.h"
 
 #define TIMEOUT     60*1000
 
@@ -18,15 +19,18 @@ public:
     void             setCloseProcessValue(int);
 
 signals:
+    void             transformationMode(Qt::TransformationMode);
     void             showUsbDevWidget();
 
 private:
     QLabel          *smartCard, *mouse, *keyboard,
-                    *display, *webdav, *playback, *record;
-    QPushButton     *usbRedir;
+                    *webdav, *playback, *record;
+    QPushButton     *display, *usbRedir;
     QProgressBar    *closeProcess;
     QProgressBar    *downloadProcess;
     QHBoxLayout     *commoLayout;
+    TransformationModeMenu
+                    *tr_menu;
 
 public slots:
     void             setDownloadProcessRange(int);

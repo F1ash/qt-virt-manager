@@ -103,7 +103,7 @@ void Spice_Viewer::init()
     sendConnErrors();
     //qDebug()<<msg<<"viewer inits";
 }
-void Spice_Viewer::reconnectToDomain()
+void Spice_Viewer::reconnectToVirtDomain()
 {
     QSpiceWidget *wdg = static_cast<QSpiceWidget*>(centralWidget());
     if ( NULL!=wdg ) {
@@ -113,9 +113,13 @@ void Spice_Viewer::reconnectToDomain()
         initSpiceWidget();
     };
 }
-void Spice_Viewer::sendKeySeqToDomain(Qt::Key key)
+void Spice_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
 {
     spiceWdg->SendKeySequience(key);
+}
+void Spice_Viewer::getScreenshotFromVirtDomain()
+{
+    spiceWdg->getScreenshot();
 }
 void Spice_Viewer::copyFilesToVirtDomain()
 {
@@ -142,6 +146,8 @@ void Spice_Viewer::initSpiceWidget()
 {
     spiceWdg = new QSpiceWidget(this);
     setCentralWidget(spiceWdg);
+    QString _name = QString("%1[%2]").arg(domain).arg(connName);
+    spiceWdg->setGuestName(_name);
     connect(spiceWdg, SIGNAL(DisplayResize(const QSize&)),
             SLOT(DisplayResize(const QSize&)));
     connect(spiceWdg, SIGNAL(downloaded(int,int)),
@@ -164,22 +170,13 @@ void Spice_Viewer::initSpiceWidget()
             vm_stateWdg, SLOT(changeRecordState(bool)));
     connect(vm_stateWdg, SIGNAL(showUsbDevWidget()),
             spiceWdg, SLOT(showUsbDevWidget()));
+    connect(vm_stateWdg, SIGNAL(transformationMode(Qt::TransformationMode)),
+            spiceWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
     connect(spiceWdg, SIGNAL(errMsg(QString&)),
             this, SLOT(sendErrMsg(QString&)));
 
-    int left, top, right, bottom, _width, _height;
-    viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
-    _width = left+right;
-    _height = top +bottom;
-    vm_stateWdg->getContentsMargins(&left, &top, &right, &bottom);
-    _width += left+right;
-    _height += top +bottom;
-    getContentsMargins(&left, &top, &right, &bottom);
-    _width += left+right;
-    _height += vm_stateWdg->size().height()
-            +viewerToolBar->size().height()
-            +top +bottom;
-    spiceWdg->setNewSize(_width, _height);
+    QSize around_size = getWidgetSizeAroundDisplay();
+    spiceWdg->setNewSize(around_size.width(), around_size.height());
     spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
 }
 
@@ -199,7 +196,8 @@ void Spice_Viewer::timerEvent(QTimerEvent *ev)
 
 void Spice_Viewer::DisplayResize(const QSize &size)
 {
-    resize(size);
+    QSize around_size = getWidgetSizeAroundDisplay();
+    resize(size+around_size);
 }
 
 void Spice_Viewer::FullScreenTriggered()
@@ -211,6 +209,16 @@ void Spice_Viewer::FullScreenTriggered()
 }
 
 void Spice_Viewer::resizeEvent(QResizeEvent *ev)
+{
+    QSize around_size = getWidgetSizeAroundDisplay();
+    if ( NULL!=spiceWdg ) {
+        spiceWdg->setNewSize(
+                    ev->size().width()-around_size.width(),
+                    ev->size().height()-around_size.height());
+    };
+}
+
+QSize Spice_Viewer::getWidgetSizeAroundDisplay()
 {
     int left, top, right, bottom, _width, _height;
     viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
@@ -224,10 +232,6 @@ void Spice_Viewer::resizeEvent(QResizeEvent *ev)
     _height += vm_stateWdg->size().height()
             +viewerToolBar->size().height()
             +top +bottom;
-    if ( NULL!=spiceWdg ) {
-        spiceWdg->setNewSize(
-                    ev->size().width()-_width,
-                    ev->size().height()-_height);
-        spiceWdg->resizeDone();
-    };
+    QSize _size(_width, _height);
+    return _size;
 }

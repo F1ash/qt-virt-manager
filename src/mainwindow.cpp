@@ -26,9 +26,11 @@ MainWindow::MainWindow(QWidget *parent)
     restoreState(settings.value("State").toByteArray());
     this->setVisible(!settings.value("Visible", false).toBool());
     changeVisibility();
+    // TODO: use instead waitAtClose application's default value
+    // the value from libvirt for timeout of connection
+    waitAtClose = settings.value("WaitAtClose", 180).toInt();
     closeProgress = new QProgressBar(this);
-    // TODO: use instead 3*TIMEOUT the default from libvirt
-    closeProgress->setRange(0, 3*TIMEOUT);
+    closeProgress->setRange(0, waitAtClose*1000);
     closeProgress->setToolTip("Progress for waiting the connection close");
     statusBar()->addPermanentWidget(closeProgress);
     statusBar()->hide();
@@ -42,6 +44,7 @@ void MainWindow::saveSettings()
     settings.setValue("State", saveState());
     settings.setValue("ToolBarArea", toolBarArea(toolBar));
     settings.setValue("Visible", this->isVisible());
+    settings.setValue("WaitAtClose", waitAtClose);
     settings.beginGroup("LogDock");
     settings.setValue("DockArea", dockWidgetArea(logDock));
     settings.setValue("Visible", logDock->isVisible());
@@ -87,85 +90,85 @@ void MainWindow::saveSettings()
 }
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
-  if ( !this->isVisible() ) changeVisibility();
-  if ( runningConnExist() && wait_thread==NULL ) {
-      connListWidget->setEnabled(false);
-      toolBar->setEnabled(false);
-      logDock->setEnabled(false);
-      domainDock->setEnabled(false);
-      networkDock->setEnabled(false);
-      storagePoolDock->setEnabled(false);
-      secretDock->setEnabled(false);
-      ifaceDock->setEnabled(false);
-      domainsStateMonitor->stopMonitoring();
-      taskWrHouse->stopTaskComputing();
-      // close VM Displays
-      QStringList keys(VM_Displayed_Map.keys());
-      foreach ( QString key, keys ) {
-          if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
-              VM_Viewer *value = NULL;
-              QString _type = VM_Displayed_Map.value(key, NULL)->TYPE.toUpper();
-              if ( _type=="LXC" ) {
-                  value = static_cast<LXC_Viewer*>(
-                              VM_Displayed_Map.value(key, NULL));
-              } else if ( _type=="SPICE" ) {
-                  value = static_cast<Spice_Viewer*>(
-                              VM_Displayed_Map.value(key, NULL));
-              };
-              if ( NULL!=value ) {
-                  // close&delete into deleteVMDisplay
-                  if ( value->isActive() ) value->close();
-              };
-              VM_Displayed_Map.remove(key);
-              //qDebug()<<key<<"removed into Close";
-          };
-      };
-      VM_Displayed_Map.clear();
-      //qDebug()<<"Viewers cleared";
-      // close StorageVolControls
-      keys = Overviewed_StPool_Map.keys();
-      foreach ( QString key, keys ) {
-          if ( Overviewed_StPool_Map.value(key, NULL)!=NULL ) {
-              VirtStorageVolControl *value = NULL;
-              value = static_cast<VirtStorageVolControl*>(
-                              Overviewed_StPool_Map.value(key, NULL));
-              if ( NULL!=value ) value->close();
-              Overviewed_StPool_Map.remove(key);
-              //qDebug()<<key<<"removed into Close";
-          };
-      };
-      Overviewed_StPool_Map.clear();
-      //qDebug()<<"StorageVolControls cleared";
-      // close DomainEditors
-      keys = DomainEditor_Map.keys();
-      foreach ( QString key, keys ) {
-          if ( DomainEditor_Map.value(key, NULL)!=NULL ) {
-              CreateVirtDomain *value = NULL;
-              value = static_cast<CreateVirtDomain*>(
-                              DomainEditor_Map.value(key, NULL));
-              if ( NULL!=value ) value->close();
-              DomainEditor_Map.remove(key);
-              //qDebug()<<key<<"removed into Close";
-          };
-      };
-      DomainEditor_Map.clear();
-      //qDebug()<<"DomainEditors cleared";
-      wait_thread = new Wait(this, connListWidget);
-      // stop virtEventLoop after closing all connections
-      connect(wait_thread, SIGNAL(finished()),
-              virtEventLoop, SLOT(stop()));
-      wait_thread->start();
-      ev->ignore();
-      startCloseProcess();
-  } else if ( !runningConnExist() &&
-              (wait_thread==NULL || !wait_thread->isRunning()) ) {
-      saveSettings();
-      trayIcon->hide();
-      ev->accept();
-  } else {
-      //  ( wait_thread!=NULL || wait_thread->isRunning() )
-      ev->ignore();
-  };
+    if ( !this->isVisible() ) changeVisibility();
+    if ( runningConnExist() && wait_thread==NULL ) {
+        connListWidget->setEnabled(false);
+        toolBar->setEnabled(false);
+        logDock->setEnabled(false);
+        domainDock->setEnabled(false);
+        networkDock->setEnabled(false);
+        storagePoolDock->setEnabled(false);
+        secretDock->setEnabled(false);
+        ifaceDock->setEnabled(false);
+        domainsStateMonitor->stopMonitoring();
+        taskWrHouse->stopTaskComputing();
+        // close VM Displays
+        QStringList keys(VM_Displayed_Map.keys());
+        foreach ( QString key, keys ) {
+            if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
+                VM_Viewer *value = NULL;
+                QString _type = VM_Displayed_Map.value(key, NULL)->TYPE.toUpper();
+                if ( _type=="LXC" ) {
+                    value = static_cast<LXC_Viewer*>(
+                                VM_Displayed_Map.value(key, NULL));
+                } else if ( _type=="SPICE" ) {
+                    value = static_cast<Spice_Viewer*>(
+                                VM_Displayed_Map.value(key, NULL));
+                };
+                if ( NULL!=value ) {
+                    // close&delete into deleteVMDisplay
+                    if ( value->isActive() ) value->close();
+                };
+                VM_Displayed_Map.remove(key);
+                //qDebug()<<key<<"removed into Close";
+            };
+        };
+        VM_Displayed_Map.clear();
+        //qDebug()<<"Viewers cleared";
+        // close StorageVolControls
+        keys = Overviewed_StPool_Map.keys();
+        foreach ( QString key, keys ) {
+            if ( Overviewed_StPool_Map.value(key, NULL)!=NULL ) {
+                VirtStorageVolControl *value = NULL;
+                value = static_cast<VirtStorageVolControl*>(
+                                Overviewed_StPool_Map.value(key, NULL));
+                if ( NULL!=value ) value->close();
+                Overviewed_StPool_Map.remove(key);
+                //qDebug()<<key<<"removed into Close";
+            };
+        };
+        Overviewed_StPool_Map.clear();
+        //qDebug()<<"StorageVolControls cleared";
+        // close DomainEditors
+        keys = DomainEditor_Map.keys();
+        foreach ( QString key, keys ) {
+            if ( DomainEditor_Map.value(key, NULL)!=NULL ) {
+                CreateVirtDomain *value = NULL;
+                value = static_cast<CreateVirtDomain*>(
+                                DomainEditor_Map.value(key, NULL));
+                if ( NULL!=value ) value->close();
+                DomainEditor_Map.remove(key);
+                //qDebug()<<key<<"removed into Close";
+            };
+        };
+        DomainEditor_Map.clear();
+        //qDebug()<<"DomainEditors cleared";
+        wait_thread = new Wait(this, connListWidget);
+        // stop virtEventLoop after closing all connections
+        connect(wait_thread, SIGNAL(finished()),
+                virtEventLoop, SLOT(stop()));
+        wait_thread->start();
+        ev->ignore();
+        startCloseProcess();
+    } else if ( !runningConnExist() &&
+                (wait_thread==NULL || !wait_thread->isRunning()) ) {
+        saveSettings();
+        trayIcon->hide();
+        ev->accept();
+    } else {
+        //  ( wait_thread!=NULL || wait_thread->isRunning() )
+        ev->ignore();
+    };
 }
 void MainWindow::startCloseProcess()
 {
@@ -180,7 +183,7 @@ void MainWindow::timerEvent(QTimerEvent *ev)
         counter++;
         closeProgress->setValue(counter*PERIOD);
         // TODO: use instead 3*TIMEOUT the default from libvirt
-        if ( 3*TIMEOUT<counter*PERIOD ) {
+        if ( waitAtClose*1000<counter*PERIOD ) {
             killTimer(killTimerId);
             killTimerId = 0;
             counter = 0;
@@ -302,36 +305,36 @@ void MainWindow::initConnListWidget()
 }
 void MainWindow::initToolBar()
 {
-  toolBar = new ToolBar(this);
-  toolBar->setObjectName("toolBar");
-  connect(toolBar->_hideAction, SIGNAL(triggered()),
-          this, SLOT(changeVisibility()));
-  connect(toolBar->_createAction, SIGNAL(triggered()),
-          this, SLOT(createNewConnection()));
-  connect(toolBar->_editAction, SIGNAL(triggered()),
-          this, SLOT(editCurrentConnection()));
-  connect(toolBar->_deleteAction, SIGNAL(triggered()),
-          this, SLOT(deleteCurrentConnection()));
-  connect(toolBar->_openAction, SIGNAL(triggered()),
-          this, SLOT(openCurrentConnection()));
-  connect(toolBar->_showAction, SIGNAL(triggered()),
-          this, SLOT(showCurrentConnection()));
-  connect(toolBar->_closeAction, SIGNAL(triggered()),
-          this, SLOT(closeCurrentConnection()));
-  connect(toolBar->_closeAllAction, SIGNAL(triggered()),
-          this, SLOT(closeAllConnections()));
-  connect(toolBar->_logUpAction, SIGNAL(triggered()),
-          this, SLOT(changeLogViewerVisibility()));
-  connect(toolBar->_closeOverview, SIGNAL(triggered()),
-          connListWidget, SLOT(stopProcessing()));
-  connect(toolBar->_closeOverview, SIGNAL(triggered()),
-          this, SLOT(stopProcessing()));
-  connect(toolBar->_exitAction, SIGNAL(triggered()),
-          this, SLOT(close()));
-  connect(toolBar, SIGNAL(warningShowed()),
-          this, SLOT(mainWindowUp()));
-  int area_int = settings.value("ToolBarArea", 4).toInt();
-  this->addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
+    toolBar = new ToolBar(this);
+    toolBar->setObjectName("toolBar");
+    connect(toolBar->_hideAction, SIGNAL(triggered()),
+            this, SLOT(changeVisibility()));
+    connect(toolBar->_createAction, SIGNAL(triggered()),
+            this, SLOT(createNewConnection()));
+    connect(toolBar->_editAction, SIGNAL(triggered()),
+            this, SLOT(editCurrentConnection()));
+    connect(toolBar->_deleteAction, SIGNAL(triggered()),
+            this, SLOT(deleteCurrentConnection()));
+    connect(toolBar->_openAction, SIGNAL(triggered()),
+            this, SLOT(openCurrentConnection()));
+    connect(toolBar->_showAction, SIGNAL(triggered()),
+            this, SLOT(showCurrentConnection()));
+    connect(toolBar->_closeAction, SIGNAL(triggered()),
+            this, SLOT(closeCurrentConnection()));
+    connect(toolBar->_closeAllAction, SIGNAL(triggered()),
+            this, SLOT(closeAllConnections()));
+    connect(toolBar->_logUpAction, SIGNAL(triggered()),
+            this, SLOT(changeLogViewerVisibility()));
+    connect(toolBar->_closeOverview, SIGNAL(triggered()),
+            connListWidget, SLOT(stopProcessing()));
+    connect(toolBar->_closeOverview, SIGNAL(triggered()),
+            this, SLOT(stopProcessing()));
+    connect(toolBar->_exitAction, SIGNAL(triggered()),
+            this, SLOT(close()));
+    connect(toolBar, SIGNAL(warningShowed()),
+            this, SLOT(mainWindowUp()));
+    int area_int = settings.value("ToolBarArea", 4).toInt();
+    this->addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
 }
 void MainWindow::initDockWidgets()
 {
