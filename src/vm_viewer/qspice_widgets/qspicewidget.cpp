@@ -398,14 +398,14 @@ void QSpiceWidget::cardRemoved(QString &_vcard)
     qDebug()<<"cardRemoved"<<_vcard;
 }
 
-void QSpiceWidget::readerAdded(QString &_vreader)
+void QSpiceWidget::readerAdded(QString &_reader)
 {
-    qDebug()<<"readerAdded"<<_vreader;
+    qDebug()<<"readerAdded"<<_reader;
 }
 
-void QSpiceWidget::readerRemoved(QString &_vreader)
+void QSpiceWidget::readerRemoved(QString &_reader)
 {
-    qDebug()<<"readerRemoved"<<_vreader;
+    qDebug()<<"readerRemoved"<<_reader;
 }
 
 void QSpiceWidget::playbackData(void *data, int data_size)

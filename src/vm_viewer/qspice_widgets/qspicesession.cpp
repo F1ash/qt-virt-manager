@@ -122,11 +122,12 @@ void QSpiceSession::init()
     setEnableAudio(true);
     setEnableSmartcard(true);
     setEnableUsbredir(true);
-    setSharedDir(QString("/home/%1/Public").arg(qgetenv("USER").data()));
+    //setSharedDir(QString("/home/%1/Public").arg(qgetenv("USER").data()));
     g_signal_connect(gobject, "channel-new",
                      (GCallback) QSpiceHelper::ss_channel_new, this);
     g_signal_connect(gobject, "channel-destroy",
                      (GCallback) QSpiceHelper::ss_channel_destroy, this);
+    //qDebug()<<getSharedDir()<<"shared";
 }
 
 

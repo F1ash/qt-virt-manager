@@ -142,7 +142,6 @@ void QSpiceMainChannel::mainClipboardSelectionNotify(QString &_data)
 
 void QSpiceMainChannel::mainClipboardSelectionRequest()
 {
-    //spice_main_clipboard_selection_request((SpiceMainChannel *) gobject, selection, type);
     spice_main_clipboard_selection_request(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,

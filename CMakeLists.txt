@@ -754,14 +754,14 @@ find_package(GObject REQUIRED)
 find_package(Gio     REQUIRED)
 find_package(Spice1  REQUIRED)
 find_package(SpiceClientGLib2     REQUIRED)
-find_package(CACard  REQUIRED)
+#find_package(CACard  REQUIRED)
 find_package(LibVirt REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
 include_directories(
     ${GLib2_INCLUDE_DIRS}
     ${GOBJECT_INCLUDE_DIRS}
     ${GIO_INCLUDE_DIRS}
-    ${CACard_INCLUDE_DIRS}
+    #${CACard_INCLUDE_DIRS}
     ${Spice1_INCLUDE_DIRS}
     ${SPICE_CLIENT_GLIB2_INCLUDE_DIRS}
     ${LibVirt_INCLUDE_DIRS}
@@ -773,7 +773,7 @@ list(APPEND BUILD_PROJECT_LIBRARIES
     ${GLib2_LIBRARIES}
     ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
-    ${CACard_LIBRARIES}
+    #${CACard_LIBRARIES}
     ${Spice1_LIBRARIES}
     ${SPICE_CLIENT_GLIB2_LIBRARIES}
 )
