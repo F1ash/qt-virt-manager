@@ -43,7 +43,7 @@ public:
 
 signals:
     void main_AgentUpdate();
-    void main_ClipboardSelection(QString&);
+    void main_ClipboardSelection(uint, void*, uint);
     void main_ClipboardSelectionGrab(uint, void*, uint);
     void main_ClipboardSelectionRelease(uint);
     void main_ClipboardSelectionRequest(uint, uint);

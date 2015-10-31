@@ -80,7 +80,7 @@ private slots:
     void channelDestroyed();
 
     void mainAgentUpdate();
-    void mainClipboardSelection(QString&);
+    void mainClipboardSelection(uint, void*, uint);
     void mainClipboardSelectionGrab();
     void mainClipboardSelectionRelease(uint);
     void mainClipboardSelectionRequest(uint, uint);

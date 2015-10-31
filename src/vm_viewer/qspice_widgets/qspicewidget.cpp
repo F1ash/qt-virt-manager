@@ -95,8 +95,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
                 SLOT(channelDestroyed()));
         connect(main, SIGNAL(main_AgentUpdate()),
                 SLOT(mainAgentUpdate()));
-        connect(main, SIGNAL(main_ClipboardSelection(QString&)),
-                SLOT(mainClipboardSelection(QString&)));
+        connect(main, SIGNAL(main_ClipboardSelection(uint,void*,uint)),
+                SLOT(mainClipboardSelection(uint,void*,uint)));
         connect(main, SIGNAL(main_ClipboardSelectionGrab(uint,void*,uint)),
                 SLOT(mainClipboardSelectionGrab()));
         connect(main, SIGNAL(main_ClipboardSelectionRelease(uint)),
@@ -283,10 +283,37 @@ void QSpiceWidget::mainAgentUpdate()
     //qDebug()<<"main: AgentUpdate";
 }
 
-void QSpiceWidget::mainClipboardSelection(QString &cp)
+void QSpiceWidget::mainClipboardSelection(uint type, void *_data, uint _size)
 {
-    qDebug()<<"main: ClipboardSelection"<<cp;
-    QApplication::clipboard()->setText(cp);
+    //qDebug()<<"main: ClipboardSelection";
+    QImage _img;
+    bool res;
+    switch (type) {
+    case VD_AGENT_CLIPBOARD_NONE:
+        break;
+    case VD_AGENT_CLIPBOARD_UTF8_TEXT:
+        QApplication::clipboard()->setText(
+                    QString::fromUtf8((char*)_data, _size));
+        break;
+    case VD_AGENT_CLIPBOARD_IMAGE_PNG:
+        res = _img.loadFromData((uchar*)_data, _size, "PNG");
+        if (res) QApplication::clipboard()->setImage(_img);
+        break;
+    case VD_AGENT_CLIPBOARD_IMAGE_BMP:
+        res = _img.loadFromData((uchar*)_data, _size, "BMP");
+        if (res) QApplication::clipboard()->setImage(_img);
+        break;
+    case VD_AGENT_CLIPBOARD_IMAGE_JPG:
+        res = _img.loadFromData((uchar*)_data, _size, "JPG");
+        if (res) QApplication::clipboard()->setImage(_img);
+        break;
+    case VD_AGENT_CLIPBOARD_IMAGE_TIFF:
+        res = _img.loadFromData((uchar*)_data, _size, "TIFF");
+        if (res) QApplication::clipboard()->setImage(_img);
+        break;
+    default:
+        break;
+    };
 }
 
 void QSpiceWidget::mainClipboardSelectionGrab()

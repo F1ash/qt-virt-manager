@@ -36,11 +36,10 @@ void QSpiceHelper::main_clipboard_selection(SpiceMainChannel *spicemainchannel,
                                             gpointer user_data)
 {
     Q_UNUSED(spicemainchannel)
-
+    Q_UNUSED(selection)
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
     if ( NULL==_mainchannel ) return;
-    QString cp = QString::fromUtf8((char*)data);
-    emit _mainchannel->main_ClipboardSelection(cp);
+    emit _mainchannel->main_ClipboardSelection(type, (void*)data, size);
 }
 void QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *spicemainchannel,
                                                  guint selection,
@@ -146,6 +145,22 @@ void QSpiceMainChannel::mainClipboardSelectionRequest()
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
                 VD_AGENT_CLIPBOARD_UTF8_TEXT);
+    spice_main_clipboard_selection_request(
+                (SpiceMainChannel *) gobject,
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_PNG);
+    spice_main_clipboard_selection_request(
+                (SpiceMainChannel *) gobject,
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_JPG);
+    spice_main_clipboard_selection_request(
+                (SpiceMainChannel *) gobject,
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_BMP);
+    spice_main_clipboard_selection_request(
+                (SpiceMainChannel *) gobject,
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_TIFF);
 }
 
 void QSpiceMainChannel::mainFileCopyAsync(QStringList &fileNames)
