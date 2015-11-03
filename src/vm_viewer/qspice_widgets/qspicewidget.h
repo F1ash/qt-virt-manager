@@ -33,7 +33,7 @@ public:
     void SendKeySequience(Qt::Key);
     void mainFileCopyAsync(QStringList&);
     void copyClipboardFromGuest();
-    void sendClipboardDataToGuest(QString&);
+    void sendClipboardDataToGuest(uint, const uchar*, uint);
 
 signals:
     void DisplayResize(const QSize&);

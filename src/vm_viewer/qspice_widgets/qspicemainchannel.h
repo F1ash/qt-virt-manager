@@ -20,6 +20,7 @@
 
 #include "qspicechannel.h"
 #include <QStringList>
+#include <spice/vd_agent.h>
 
 class QSpiceMainChannel : public QSpiceChannel
 {
@@ -33,7 +34,7 @@ public:
 
     void mainClipboardSelectionGrab(uint selection, quint32 *types, int ntypes);
     void mainClipboardSelectionRelease();
-    void mainClipboardSelectionNotify(QString&);
+    void mainClipboardSelectionNotify(uint, const uchar*, uint);
     void mainClipboardSelectionRequest();
 
     void mainFileCopyAsync(QStringList&);

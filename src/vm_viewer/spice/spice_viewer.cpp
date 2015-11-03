@@ -136,9 +136,44 @@ void Spice_Viewer::copyToClipboardFromVirtDomain()
 void Spice_Viewer::pasteClipboardToVirtDomain()
 {
     if ( NULL==spiceWdg ) return;
-    QString _data = QApplication::clipboard()->text();
-    //qDebug()<<"pasteClipboardToVirtDomain"<<_data;
-    spiceWdg->sendClipboardDataToGuest(_data);
+    QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
+    QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
+    if ( !_text.isEmpty() ) {
+        spiceWdg->sendClipboardDataToGuest(
+                    VD_AGENT_CLIPBOARD_UTF8_TEXT,
+                    (const uchar*)_text.toUtf8().data(),
+                    _text.size());
+    };
+    if ( !_image.isNull() ) {
+        QString _format = _text.split(".").last();
+        qint32 _frmt;
+        if ( _format.isEmpty() ) {
+            QMessageBox::information(
+                        this,
+                        "INFO",
+                        QString("Unknown image format:\n'%1'")
+                        .arg(_text));
+            return;
+        } else if ( _format.toLower()=="png" ) {
+            _frmt = VD_AGENT_CLIPBOARD_IMAGE_PNG;
+        } else if ( _format.toLower()=="bmp" ) {
+            _frmt = VD_AGENT_CLIPBOARD_IMAGE_BMP;
+        } else if ( _format.toLower()=="jpg" ) {
+            _frmt = VD_AGENT_CLIPBOARD_IMAGE_JPG;
+        } else if ( _format.toLower()=="tiff" ) {
+            _frmt = VD_AGENT_CLIPBOARD_IMAGE_TIFF;
+        } else {
+            QMessageBox::information(
+                        this,
+                        "INFO",
+                        "Unknown image format.");
+            return;
+        };
+        spiceWdg->sendClipboardDataToGuest(
+                    _frmt,
+                    _image.constBits(),
+                    _image.byteCount());
+    };
 }
 
 /* private slots */

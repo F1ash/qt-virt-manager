@@ -17,7 +17,6 @@
 
 #include "qspicehelper.h"
 #include "qspicemainchannel.h"
-#include <spice/vd_agent.h>
 
 
 void QSpiceHelper::main_agent_update(SpiceMainChannel *spicemainchannel, gpointer user_data)
@@ -126,16 +125,14 @@ void QSpiceMainChannel::mainClipboardSelectionRelease()
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD);
 }
 
-void QSpiceMainChannel::mainClipboardSelectionNotify(QString &_data)
+void QSpiceMainChannel::mainClipboardSelectionNotify(uint type, const uchar *data, uint size)
 {
-    qDebug()<<"mainClipboardSelectionNotify"<<_data.toUtf8().data();
-    const char *data = _data.toUtf8().data();
-    size_t size = strlen(data);
+    qDebug()<<"mainClipboardSelectionNotify";
     spice_main_clipboard_selection_notify(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
-                VD_AGENT_CLIPBOARD_UTF8_TEXT,
-                (const guchar*)data,
+                type,
+                data,
                 size);
 }
 
