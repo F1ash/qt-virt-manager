@@ -83,8 +83,7 @@ void VM_State_Widget::setDownloadProcessRange(int _value)
 void VM_State_Widget::setDownloadProcessValue(int _val1, int _val2)
 {
     downloadProcess->setRange(0, _val2);
-    int value = downloadProcess->value()+_val1;
-    downloadProcess->setValue(value);
+    downloadProcess->setValue(_val1);
 }
 void VM_State_Widget::changeSmartcardState(bool state)
 {

@@ -138,6 +138,7 @@ void Spice_Viewer::pasteClipboardToVirtDomain()
     if ( NULL==spiceWdg ) return;
     QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
     QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
+    //qDebug()<<"copy:"<<_text<<_image.text()<<";";
     if ( !_text.isEmpty() ) {
         spiceWdg->sendClipboardDataToGuest(
                     VD_AGENT_CLIPBOARD_UTF8_TEXT,

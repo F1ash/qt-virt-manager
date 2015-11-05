@@ -83,3 +83,12 @@ fixes and enhancements in Spice/LXC-Viewers,
     MainWindow, CreateDomain, Connection Settings,
     LogDock, TrayIcon, WaitThread, VirtEntity widgets;
 enhanced the sending error messages to Log;
+
+0.21.40 :
+implemented resizing of Spice_Viewer display;
+implemented async file copy to guest;
+implemented UsbDevice manager;
+implemented the saving a screenshot/pixbuff of guest display;
+improved copying Clipboard from Guest to host Client for images;
+some improvements for close connection at app exit;
+some fixes and improvements;

@@ -4,7 +4,7 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.16.38
+Version:        0.21.40
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -50,13 +50,6 @@ BuildRequires:  cmake
 BuildRequires:  glib2-devel
 BuildRequires:  spice-protocol
 BuildRequires:  spice-glib-devel
-#BuildRequires:  libcacard-devel
-# Fedora requires of libcacard-devel
-#BuildRequires:  nspr-devel
-#BuildRequires:  nss-devel
-#BuildRequires:  nss-softokn-devel
-#BuildRequires:  nss-softokn-freebl-devel
-#BuildRequires:  nss-util-devel
 
 %description
 Qt Virtual Machine Manager provides a graphical tool for administering virtual
@@ -144,6 +137,10 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %endif
 
 %changelog
+* Thu Nov  5 2015 Fl@sh <kaperang07@gmail.com> - 0.21.40-1
+- erased libcacard-devel BR;
+- version updated;
+
 * Sun Sep 20 2015 Fl@sh <kaperang07@gmail.com> - 0.16.38-1
 - improved spec for using SPICE, Qemu/KVM, ssh connections;
 - version updated;

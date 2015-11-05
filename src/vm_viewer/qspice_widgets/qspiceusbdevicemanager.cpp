@@ -92,9 +92,9 @@ void QSpiceUsbDeviceManager::init(QSpiceSession *session)
                              (GCallback) QSpiceHelper::device_error, this);
             g_signal_connect(gobject, "device-removed",
                              (GCallback) QSpiceHelper::device_removed, this);
-            qDebug()<<"UsbDeviceManager initiated";
+            //qDebug()<<"UsbDeviceManager initiated";
         } else {
-            qDebug()<<"UsbDeviceManager not initiated";
+            //qDebug()<<"UsbDeviceManager not initiated";
         }
     };
 }
