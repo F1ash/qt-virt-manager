@@ -69,9 +69,9 @@ void QSpiceSmartcardManager::init()
                          (GCallback) QSpiceHelper::reader_added, this);
         g_signal_connect(gobject, "reader-removed",
                          (GCallback) QSpiceHelper::reader_removed, this);
-        qDebug()<<"SpiceSmartcardManager initiated";
+        //qDebug()<<"SpiceSmartcardManager initiated";
     } else {
-        qDebug()<<"SpiceSmartcardManager not initiated";
+        //qDebug()<<"SpiceSmartcardManager not initiated";
     }
 }
 

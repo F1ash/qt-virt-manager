@@ -308,16 +308,13 @@ Result StorageVolControlThread::resizeStorageVol()
                 currStoragePool, name.toUtf8().data());
     if ( storageVol!=NULL ) {
         int ret = virStorageVolResize(
-                    storageVol, capacity, VIR_STORAGE_VOL_RESIZE_ALLOCATE);
-//                                 | VIR_STORAGE_VOL_RESIZE_SHRINK);
-// TODO: add SHRINK-flag when fixed
-// See for: <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>
+                    storageVol, capacity,
+                    VIR_STORAGE_VOL_RESIZE_ALLOCATE |
+                    VIR_STORAGE_VOL_RESIZE_SHRINK);
         if ( ret<0 ) {
             result.err = sendConnErrors();
-            QString msg(
-"ResizeError: Maybe <a href='https://bugzilla.redhat.com/show_bug.cgi?id=1021802'>Red Hat Bugzilla #1021802</a>");
-            emit errorMsg(msg, number);
-        } else resized = true;
+        } else
+            resized = true;
         virStorageVolFree(storageVol);
     } else
         result.err = sendConnErrors();
