@@ -170,6 +170,7 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device_finish
         QString err;
         size_t count = sizeof(errors)/sizeof(*errors);
         for ( uint i = 0; i<count; i++ ) {
+            if ( NULL==errors[i] ) continue;
             GError *error = errors[i];
             err.append(error->code);
             err.append(error->message);
@@ -202,6 +203,7 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
                 QString err;
                 size_t count = sizeof(errors)/sizeof(*errors);
                 for ( uint i = 0; i<count; i++ ) {
+                    if ( NULL==errors[i] ) continue;
                     GError *error = errors[i];
                     err.append(error->code);
                     err.append(error->message);

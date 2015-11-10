@@ -197,6 +197,7 @@ void QSpiceMainChannel::mainFileCopyFinish(void *channel, void *result, void *er
                 g_async_result_get_user_data(asyncResult));
     size_t count = sizeof(errors)/sizeof(*errors);
     for ( uint i = 0; i<count; i++ ) {
+        if ( NULL==errors[i] ) continue;
         //qDebug()<<errors[i]->code<< QString::fromUtf8(errors[i]->message);
         if (obj) emit obj->downloaded(0, 100);
     };
