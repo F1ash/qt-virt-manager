@@ -494,4 +494,8 @@
         <file alias="22x22/actions/iface-undefine.png">icons/22x22/actions/iface-undefine.png</file>
         <file alias="22x22/actions/iface-xml.png">icons/22x22/actions/iface-xml.png</file>
     </qresource>
+    <qresource prefix="/misc">
+        <file alias="domain/lxc_example1.xml">misc/domain/lxc_example1.xml</file>
+        <file alias="domain/qemu_guest_x86_64.xml">misc/domain/qemu_guest_x86_64.xml</file>
+    </qresource>
 </RCC>

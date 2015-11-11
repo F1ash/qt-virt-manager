@@ -13,11 +13,13 @@ class OpenFileMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit OpenFileMenu(QWidget *parent = NULL, QString str = "create", QString src = "Network");
-    ~OpenFileMenu();
+    explicit OpenFileMenu(
+            QWidget *parent = NULL,
+            QString str = "create",
+            QString src = "Network");
 
 signals:
-    void fileForMethod(QStringList&);
+    void        fileForMethod(QStringList&);
 
 private:
     QString     method;
@@ -29,10 +31,10 @@ private:
     QAction    *manual;
 
 private slots:
-    void exampleChoised();
-    void customChoised();
-    void manualChoised();
-    void emitParameters(const QString&, const QString&);
+    void        exampleChoised();
+    void        customChoised();
+    void        manualChoised();
+    void        emitParameters(const QString&, const QString&);
 
 };
 

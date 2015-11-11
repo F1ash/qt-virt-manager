@@ -22,17 +22,7 @@ OpenFileMenu::OpenFileMenu(QWidget *parent, QString str, QString src) :
     addSeparator();
     addAction(manual);
 }
-OpenFileMenu::~OpenFileMenu()
-{
-    disconnect(examples, SIGNAL(triggered()), this, SLOT(exampleChoised()));
-    disconnect(custom, SIGNAL(triggered()), this, SLOT(customChoised()));
-    delete examples;
-    examples = NULL;
-    delete custom;
-    custom = NULL;
-    delete manual;
-    manual = NULL;
-}
+
 void OpenFileMenu::exampleChoised()
 {
     QString path = QString("%1/%2").arg(EXAMPLES).arg(source.toLower());

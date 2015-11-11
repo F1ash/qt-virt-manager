@@ -170,6 +170,17 @@ void CreateVirtDomain::readCapabilities()
         ready = false;
     if ( xmlFileName.isEmpty() ) {
         // create/define new VM
+        if (type.toLower()=="lxc") {
+            QFile _xml(":/misc/domain/lxc_example1.xml", this);
+            _xml.open(QIODevice::ReadOnly);
+            xmlDesc.append(_xml.readAll().constData());
+            _xml.close();
+        } else if ( type.toLower()=="qemu" ) {
+            QFile _xml(":/misc/domain/qemu_guest_x86_64.xml", this);
+            _xml.open(QIODevice::ReadOnly);
+            xmlDesc.append(_xml.readAll().constData());
+            _xml.close();
+        }
     } else {
         // read for edit exist VM parameters
         QTemporaryFile *_xml =
@@ -181,8 +192,8 @@ void CreateVirtDomain::readCapabilities()
         _xml->close();
         delete _xml;
         _xml = NULL;
-        //qDebug()<<xmlDesc<<"desc";
     };
+    //qDebug()<<xmlDesc<<"desc"<<type;
     emit readyRead(ready);
 }
 void CreateVirtDomain::readyDataLists()

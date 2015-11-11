@@ -1,32 +1,65 @@
-<!--
-QEMU emulated guest on x86_64
-http://libvirt.org/drvqemu.html#xmlconfig
--->
-
-<domain type='qemu'>
-  <name>QEmu-fedora-i686</name>
-  <uuid>c7a5fdbd-cdaf-9455-926a-d65c16db1809</uuid>
-  <memory>219200</memory>
-  <currentMemory>219200</currentMemory>
-  <vcpu>2</vcpu>
-  <os>
-    <type arch='i686' machine='pc'>hvm</type>
-    <boot dev='cdrom'/>
-  </os>
-  <devices>
-    <emulator>/usr/bin/qemu-system-x86_64</emulator>
-    <disk type='file' device='cdrom'>
-      <source file='/home/user/boot.iso'/>
-      <target dev='hdc'/>
-      <readonly/>
-    </disk>
-    <disk type='file' device='disk'>
-      <source file='/home/user/fedora.img'/>
-      <target dev='hda'/>
-    </disk>
-    <interface type='network'>
-      <source network='default'/>
-    </interface>
-    <graphics type='vnc' port='-1'/>
-  </devices>
+<domain type="qemu">
+    <vcpu placement="static">1</vcpu>
+    <name>QEmu-x86_64</name>
+    <uuid></uuid>
+    <title></title>
+    <description></description>
+    <memory unit="KiB">1245000</memory>
+    <currentMemory unit="KiB">1245000</currentMemory>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <os>
+        <type machine="pc" arch="x86_64">hvm</type>
+        <bootmenu enable="no" timeout="0"/>
+    </os>
+    <devices>
+        <emulator>/usr/bin/qemu-kvm</emulator>
+        <controller type="usb" index="0">
+            <address domain="0x0000" type="pci" bus="0x00" function="0x2" slot="0x01"/>
+        </controller>
+        <controller model="pci-root" type="pci" index="0"/>
+        <controller type="ide" index="0">
+            <address domain="0x0000" type="pci" bus="0x00" function="0x1" slot="0x01"/>
+        </controller>
+        <controller type="virtio-serial" index="0">
+            <address domain="0x0000" type="pci" bus="0x00" function="0x0" slot="0x04"/>
+        </controller>
+        <redirdev type="spicevmc" bus="usb"/>
+        <input type="mouse" bus="ps2"/>
+        <input type="keyboard" bus="ps2"/>
+        <graphics autoport="yes" type="spice"/>
+        <video>
+            <model vgamem="16384" ram="65536" vram="131072" type="qxl" heads="1"/>
+            <address domain="0x0000" type="pci" bus="0x00" function="0x0" slot="0x02"/>
+        </video>
+        <channel type="spicevmc">
+            <target type="virtio" name="com.redhat.spice.0"/>
+            <address port="1" type="virtio-serial" bus="0" controller="0"/>
+        </channel>
+        <memballoon model="virtio">
+            <address domain="0x0000" type="pci" bus="0x00" function="0x0" slot="0x05"/>
+        </memballoon>
+        <disk device="disk" type="file">
+            <driver type="raw" name="qemu"/>
+            <source file="/home/user/fedora.img"/>
+            <target bus="ide" dev="hda"/>
+            <address target="0" unit="0" type="drive" bus="0" controller="0"/>
+            <boot order="2"/>
+        </disk>
+        <disk device="cdrom" type="file">
+            <driver type="raw" name="qemu"/>
+            <source file="/home/user/boot.iso"/>
+            <target bus="ide" dev="hdc"/>
+            <readonly/>
+            <address target="0" unit="0" type="drive" bus="1" controller="0"/>
+            <boot order="1"/>
+        </disk>
+        <interface type="network">
+            <mac address="52:54:00:2f:01:27"/>
+            <source network="default"/>
+            <model type="rtl8139"/>
+            <address domain="0x0000" type="pci" bus="0x00" function="0x0" slot="0x03"/>
+        </interface>
+    </devices>
 </domain>
