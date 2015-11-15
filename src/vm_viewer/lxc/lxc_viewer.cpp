@@ -26,8 +26,9 @@ LXC_Viewer::LXC_Viewer(
     TermMainWindow(parent, connPtrPtr, arg1, arg2, work_dir, command)
 {
     TYPE = "LXC";
-    // unused toolbar
-    // viewerToolBar->setVisible(false);
+    // unused toolbar & state widget
+    viewerToolBar->setVisible(false);
+    vm_stateWdg->setVisible(false);
     hlpThread = new lxcHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));

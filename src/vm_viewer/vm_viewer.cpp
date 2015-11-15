@@ -11,7 +11,7 @@ VM_Viewer::VM_Viewer(
                    .arg(domain).arg(connName));
     VM_State = true;
     viewerToolBar = new ViewerToolBar(this);
-    viewerToolBar->setVisible(false);
+    viewerToolBar->setVisible(true);
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(resendExecMethod(const QStringList&)));

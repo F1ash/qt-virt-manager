@@ -81,8 +81,6 @@ void Spice_Viewer::init()
                     graph.attribute("port").toInt() : 5900;
         //qDebug()<<"address:"<<addr<<port;
         if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
-            // use toolbar
-            viewerToolBar->setVisible(true);
             initSpiceWidget();
             actFullScreen = new QShortcut(QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
             connect(actFullScreen, SIGNAL(activated()), SLOT(FullScreenTriggered()));

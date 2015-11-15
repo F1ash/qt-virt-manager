@@ -56,14 +56,14 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     setLayout(commoLayout);
     closeProcess->hide();
     downloadProcess->setToolTip("File download progress");
-    smartCard->setToolTip("SmartCard channel");
-    mouse->setToolTip("Cursor channel");
-    keyboard->setToolTip("Inputs channel");
-    display->setToolTip("Display channel");
-    usbRedir->setToolTip("USB Redir channel\nClick to choose devices");
-    webdav->setToolTip("WebDAV channel");
-    playback->setToolTip("Playback channel");
-    record->setToolTip("Record channel");
+    smartCard->setObjectName("SmartCard channel");
+    mouse->setObjectName("Cursor channel");
+    keyboard->setObjectName("Inputs channel");
+    display->setObjectName("Display channel");
+    usbRedir->setObjectName("USB Redir channel");
+    webdav->setObjectName("WebDAV channel");
+    playback->setObjectName("Playback channel");
+    record->setObjectName("Record channel");
     setContentsMargins(0,0,0,0);
     connect(usbRedir, SIGNAL(released()),
             this, SIGNAL(showUsbDevWidget()));
@@ -90,42 +90,74 @@ void VM_State_Widget::changeSmartcardState(bool state)
     smartCard->setPixmap(
                 QIcon::fromTheme("media-flash")
                 .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+    smartCard->setToolTip(
+                QString("%1 (%2)")
+                .arg(smartCard->objectName())
+                .arg(state? "ON":"OFF"));
 }
 void VM_State_Widget::changeMouseState(bool state)
 {
     mouse->setPixmap(
                 QIcon::fromTheme("input-mouse")
                 .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+    mouse->setToolTip(
+                QString("%1 (%2)")
+                .arg(mouse->objectName())
+                .arg(state? "ON":"OFF"));
 }
 void VM_State_Widget::changeKeyboardState(bool state)
 {
     keyboard->setPixmap(
                 QIcon::fromTheme("input-keyboard")
                 .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+    keyboard->setToolTip(
+                QString("%1 (%2)")
+                .arg(keyboard->objectName())
+                .arg(state? "ON":"OFF"));
 }
 void VM_State_Widget::changeDisplayState(bool state)
 {
     display->setEnabled(state);
+    display->setToolTip(
+                QString("%1 (%2)")
+                .arg(display->objectName())
+                .arg(state? "ON":"OFF"));
 }
 void VM_State_Widget::changeUsbredirState(bool state)
 {
     usbRedir->setEnabled(state);
+    usbRedir->setToolTip(
+                QString("%1 (%2)\nClick to choose devices")
+                .arg(usbRedir->objectName())
+                .arg(state? "ON":"OFF"));
 }
 void VM_State_Widget::changeWebDAVState(bool state)
 {
     webdav->setPixmap(
                 QIcon::fromTheme("folder-remote")
                 .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+    webdav->setToolTip(
+                QString("%1 (%2)")
+                .arg(webdav->objectName())
+                .arg(state? "ON":"OFF"));
 }
 void VM_State_Widget::changePlaybackState(bool state)
 {
     playback->setPixmap(
                 QIcon::fromTheme("audio-card")
                 .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+    playback->setToolTip(
+                QString("%1 (%2)")
+                .arg(playback->objectName())
+                .arg(state? "ON":"OFF"));
 }
 void VM_State_Widget::changeRecordState(bool state)
 {
     record->setPixmap(
                 QIcon::fromTheme("audio-card")
                 .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+    record->setToolTip(
+                QString("%1 (%2)")
+                .arg(record->objectName())
+                .arg(state? "ON":"OFF"));
 }
