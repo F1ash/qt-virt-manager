@@ -25,11 +25,12 @@ void spice_graphHlpThread::run()
             nets.append( virNetworkGetName(networks[i]) );
             virNetworkFree(networks[i]);
         };
-        free(networks);
+        if (ret) free(networks);
     };
     //int devs = virNodeNumOfDevices(ptr_ConnPtr, NULL, 0);
-    if ( virConnectClose(*ptr_ConnPtr)<0 )
+    if ( virConnectClose(*ptr_ConnPtr)<0 ) {
         sendConnErrors();
+    };
     emit result(nets);
 }
 
@@ -146,23 +147,25 @@ Spice_Graphics::Spice_Graphics(
     usbredir->addItem("secure");
     usbredir->addItem("insecure");
     usbredir->setEnabled(false);
+    channelLabel = new QLabel("<b>Channels</b>", this);
     policyElementsLayout = new QGridLayout();
-    policyElementsLayout->addWidget(mainLabel, 0, 0);
-    policyElementsLayout->addWidget(main, 0, 1);
-    policyElementsLayout->addWidget(displayLabel, 1, 0);
-    policyElementsLayout->addWidget(display, 1, 1);
-    policyElementsLayout->addWidget(inputsLabel, 2, 0);
-    policyElementsLayout->addWidget(inputs, 2, 1);
-    policyElementsLayout->addWidget(cursorLabel, 3, 0);
-    policyElementsLayout->addWidget(cursor, 3, 1);
-    policyElementsLayout->addWidget(playbackLabel, 4, 0);
-    policyElementsLayout->addWidget(playback, 4, 1);
-    policyElementsLayout->addWidget(recordLabel, 5, 0);
-    policyElementsLayout->addWidget(record, 5, 1);
-    policyElementsLayout->addWidget(smartcardLabel, 6, 0);
-    policyElementsLayout->addWidget(smartcard, 6, 1);
-    policyElementsLayout->addWidget(usbredirLabel, 7, 0, Qt::AlignTop);
-    policyElementsLayout->addWidget(usbredir, 7, 1, Qt::AlignTop);
+    policyElementsLayout->addWidget(channelLabel, 0, 0, Qt::AlignRight);
+    policyElementsLayout->addWidget(mainLabel, 1, 0);
+    policyElementsLayout->addWidget(main, 1, 1);
+    policyElementsLayout->addWidget(displayLabel, 2, 0);
+    policyElementsLayout->addWidget(display, 2, 1);
+    policyElementsLayout->addWidget(inputsLabel, 3, 0);
+    policyElementsLayout->addWidget(inputs, 3, 1);
+    policyElementsLayout->addWidget(cursorLabel, 4, 0);
+    policyElementsLayout->addWidget(cursor, 4, 1);
+    policyElementsLayout->addWidget(playbackLabel, 5, 0);
+    policyElementsLayout->addWidget(playback, 5, 1);
+    policyElementsLayout->addWidget(recordLabel, 6, 0);
+    policyElementsLayout->addWidget(record, 6, 1);
+    policyElementsLayout->addWidget(smartcardLabel, 7, 0);
+    policyElementsLayout->addWidget(smartcard, 7, 1);
+    policyElementsLayout->addWidget(usbredirLabel, 8, 0, Qt::AlignTop);
+    policyElementsLayout->addWidget(usbredir, 8, 1, Qt::AlignTop);
     policyElements = new QWidget(this);
     policyElements->setVisible(false);
     policyElements->setLayout(policyElementsLayout);
@@ -219,6 +222,7 @@ Spice_Graphics::Spice_Graphics(
     mouse = new QCheckBox("Mouse", this);
     mouse->setLayoutDirection(Qt::RightToLeft);
     filetransfer = new QCheckBox("File transfer", this);
+    filetransfer->setLayoutDirection(Qt::RightToLeft);
     streamingElement = new QComboBox(this);
     streamingElement->setEnabled(false);
     streamingElement->addItem("filter");

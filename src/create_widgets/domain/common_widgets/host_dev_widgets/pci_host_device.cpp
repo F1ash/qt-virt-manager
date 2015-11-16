@@ -12,7 +12,6 @@ void pci_hostHlpThread::run()
         sendConnErrors();
         return;
     };
-    int i = 0;
     QStringList      devices;
     virNodeDevice  **nodeDevices = NULL;
     unsigned int flags =
@@ -21,16 +20,16 @@ void pci_hostHlpThread::run()
     if ( ret<0 ) {
         sendConnErrors();
     } else {
-        while ( nodeDevices[i] != NULL ) {
+        // therefore correctly to use for() command, because networks[0] can not exist.
+        for (int i = 0; i < ret; i++) {
             devices.append( QString("%1\n")
                             // flags: extra flags; not used yet,
                             // so callers should always pass 0
                             .arg(virNodeDeviceGetXMLDesc(nodeDevices[i], 0)));
             virNodeDeviceFree(nodeDevices[i]);
-            i++;
         };
+        if (ret) free(nodeDevices);
     };
-    free(nodeDevices);
     //int devs = virNodeNumOfDevices(ptr_ConnPtr, NULL, 0);
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();

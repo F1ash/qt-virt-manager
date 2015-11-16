@@ -1,23 +1,17 @@
 #include "qspiceaudio.h"
 
-QSpiceAudio::QSpiceAudio(QObject *parent) :
+QSpiceAudio::QSpiceAudio(QObject *parent, void *_session) :
     QSpiceObject(parent)
 {
-
+    // deprecated since 0.8
+    // spice_audio_new(session, context, name);
+    SpiceSession *session =
+            static_cast<SpiceSession*>(_session);
+    gobject = spice_audio_get(session, NULL);
+    state = (gobject)? true : false;
 }
 
-SpiceAudio* QSpiceAudio::spiceAudio_get(SpiceSession *session,
-                                        GMainContext *context)
+bool QSpiceAudio::isAssociated()
 {
-    return spice_audio_get(session, context);
+    return state;
 }
-
-// deprecated since 0.8
-/*
-SpiceAudio* QSpiceAudio::spiceAudio_new(SpiceSession *session,
-                                        GMainContext *context,
-                                        const char *name)
-{
-    return spice_audio_new(session, context, name);
-}
-*/

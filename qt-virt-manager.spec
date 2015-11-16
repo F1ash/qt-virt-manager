@@ -27,11 +27,13 @@ Requires:       libvirt-daemon-driver-qemu
 # spice-server exist in libvirt-daemon-driver-qemu Requires in Fedora
 #Requires:      spice-server
 Requires:       spice-vdagent
+Requires:       xorg-x11-drv-qxl
 # for scrubbing (optional)
 Requires:       scrub
 # for ssh-transported remote connections (optional)
 Requires:       nc6
 # for use WebDAV shared directory (optional)
+#? need on guest ?
 Requires:       spice-webdavd
 
 %if %with qt4

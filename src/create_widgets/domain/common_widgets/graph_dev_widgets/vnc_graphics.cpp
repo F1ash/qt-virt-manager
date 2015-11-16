@@ -25,7 +25,7 @@ void vnc_graphHlpThread::run()
             nets.append( virNetworkGetName(networks[i]) );
             virNetworkFree(networks[i]);
         };
-        free(networks);
+        if (ret) free(networks);
     };
     //int devs = virNodeNumOfDevices(ptr_ConnPtr, NULL, 0);
     if ( virConnectClose(*ptr_ConnPtr)<0 )

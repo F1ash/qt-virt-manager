@@ -21,6 +21,7 @@
 #include "qspicesmartcardmanager.h"
 #include "qspiceplaybackchannel.h"
 #include "qspicerecordchannel.h"
+#include "qspiceaudio.h"
 
 class QSpiceWidget : public QWidget
 {
@@ -65,6 +66,7 @@ protected:
     QSpiceRecordChannel     *record;
     QSpiceUsbDeviceManager  *usbDevManager;
     QSpiceSmartcardManager  *smartcardManager;
+    QSpiceAudio             *spiceAudio;
 
     Qt::TransformationMode   tr_mode;
     QImage                  *img;

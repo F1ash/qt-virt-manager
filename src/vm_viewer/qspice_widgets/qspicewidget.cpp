@@ -22,6 +22,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     playback = NULL;
     usbDevManager = NULL;
     smartcardManager = NULL;
+    spiceAudio = NULL;
     _width = 0;
     _height = 0;
     init_h = 0;
@@ -171,8 +172,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
                 connect(smartcardManager, SIGNAL(readerRemoved(QString&)),
                         this, SLOT(readerRemoved(QString&)));
             };
-            emit smartcardChannelChanged(_inited);
         };
+        emit smartcardChannelChanged(online);
         return;
     }
 
@@ -194,8 +195,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
                 connect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
                         this, SLOT(usbDevRemoved(QString&)));
             };
-            emit usbredirChannelChanged(_inited);
         };
+        emit usbredirChannelChanged(online);
         return;
     }
 
@@ -221,6 +222,14 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         connect(playback, SIGNAL(playbackStop()),
                 this, SLOT(playbackStop()));
         bool online = playback->Connect();
+        if ( online && !spiceAudio ) {
+            spiceAudio = new QSpiceAudio(
+                        this, (SpiceSession*)spiceSession->gobject);
+            qDebug()<<"spiceAudioo is associated:"<<spiceAudio->isAssociated();
+            if ( spiceAudio->isAssociated() ) {
+                // reserved for some work
+            };
+        };
         emit playbackChannelChanged(online);
         return;
     }
@@ -234,6 +243,14 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         connect(record, SIGNAL(recordStop()),
                 this, SLOT(recordStop()));
         bool online = record->Connect();
+        if ( online && !spiceAudio ) {
+            spiceAudio = new QSpiceAudio(
+                        this, (SpiceSession*)spiceSession->gobject);
+            qDebug()<<"spiceAudioo is associated:"<<spiceAudio->isAssociated();
+            if ( spiceAudio->isAssociated() ) {
+                // reserved for some work
+            };
+        };
         emit recordChannelChanged(online);
         return;
     }
@@ -274,6 +291,17 @@ void QSpiceWidget::channelDestroyed()
     } else if (QObject::sender() == playback) {
         playback = NULL;
         emit playbackChannelChanged(false);
+        if ( spiceAudio ) {
+            delete spiceAudio;
+            spiceAudio = NULL;
+        };
+    } else if (QObject::sender() == record) {
+        record = NULL;
+        emit recordChannelChanged(false);
+        if ( spiceAudio ) {
+            delete spiceAudio;
+            spiceAudio = NULL;
+        };
     }
 }
 

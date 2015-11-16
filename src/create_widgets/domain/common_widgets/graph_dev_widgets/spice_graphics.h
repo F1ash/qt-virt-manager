@@ -34,7 +34,7 @@ private:
     QSpinBox        *tlsPort;
     QCheckBox       *usePassw;
     QLineEdit       *passw;
-    QLabel          *keymapLabel;
+    QLabel          *keymapLabel, *channelLabel;
     QComboBox       *keymap;
     QLabel          *defaultLabel;
     QComboBox       *defaultPolicy;

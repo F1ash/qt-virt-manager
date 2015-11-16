@@ -35,8 +35,9 @@ void QSpiceRecordChannel::initCallbacks()
 
 void QSpiceRecordChannel::spiceRecord_send_data(void *data, size_t bytes, quint32 time)
 {
-    spice_record_send_data((SpiceRecordChannel*)gobject,
-                           data,
-                           bytes,
-                           time);
+    spice_record_send_data(
+                (SpiceRecordChannel*)gobject,
+                data,
+                bytes,
+                time);
 }
