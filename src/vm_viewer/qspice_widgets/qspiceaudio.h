@@ -1,7 +1,6 @@
 #ifndef QSPICEAUDIO_H
 #define QSPICEAUDIO_H
 
-#include <spice-audio.h>
 #include "qspiceobject.h"
 
 class QSpiceAudio : public QSpiceObject

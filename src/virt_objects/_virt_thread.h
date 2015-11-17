@@ -24,7 +24,7 @@ public:
     virtual QString  sendGlobalErrors();
 
 signals:
-    virtual void     errorMsg(QString&, uint);
+    void             errorMsg(QString&, uint);
 public slots:
     virtual void     stop();
 };

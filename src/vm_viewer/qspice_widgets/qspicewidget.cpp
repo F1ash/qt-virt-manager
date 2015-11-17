@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QClipboard>
 #include <spice/vd_agent.h>
+#include <spice-session.h>
 
 #define MARGIN 5
 
@@ -225,7 +226,7 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
                         this, (SpiceSession*)spiceSession->gobject);
-            qDebug()<<"spiceAudioo is associated:"<<spiceAudio->isAssociated();
+            qDebug()<<"spiceAudio is associated:"<<spiceAudio->isAssociated();
             if ( spiceAudio->isAssociated() ) {
                 // reserved for some work
             };
@@ -246,7 +247,7 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
                         this, (SpiceSession*)spiceSession->gobject);
-            qDebug()<<"spiceAudioo is associated:"<<spiceAudio->isAssociated();
+            qDebug()<<"spiceAudio is associated:"<<spiceAudio->isAssociated();
             if ( spiceAudio->isAssociated() ) {
                 // reserved for some work
             };

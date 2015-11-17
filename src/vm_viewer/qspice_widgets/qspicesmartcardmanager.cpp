@@ -1,4 +1,5 @@
 
+#include <vreader.h>
 #include "qspicehelper.h"
 #include "qspicesmartcardmanager.h"
 
@@ -78,19 +79,21 @@ void QSpiceSmartcardManager::init()
 
 QStringList QSpiceSmartcardManager::spiceSmartcardManager_get_readers()
 {
-    QStringList _cardList;
+    QStringList _readerList;
     GList *_list = spice_smartcard_manager_get_readers(
                 (SpiceSmartcardManager*)gobject);
     size_t count = g_list_length(_list);
     for ( uint i = 0; i<count; i++ ) {
-        //_cardList.append();
+        VReader *_reader =
+                static_cast<VReader*>(g_list_nth_data(_list, i));
+        _readerList.append(vreader_get_name(_reader));
     };
     if ( _list ) {
         // When no longer needed, the list must be freed
         // after unreferencing its elements with g_boxed_free()
-        g_free(_list);
+        g_list_free(_list);
     };
-    return _cardList;
+    return _readerList;
 }
 
 bool QSpiceSmartcardManager::spiceSmartcardManager_insert_card()

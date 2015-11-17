@@ -1,3 +1,5 @@
+
+#include <spice-audio.h>
 #include "qspiceaudio.h"
 
 QSpiceAudio::QSpiceAudio(QObject *parent, void *_session) :

@@ -52,6 +52,7 @@ BuildRequires:  cmake
 BuildRequires:  glib2-devel
 BuildRequires:  spice-protocol
 BuildRequires:  spice-glib-devel
+BuildRequires:  libcacard-devel
 
 %description
 Qt Virtual Machine Manager provides a graphical tool for administering virtual
