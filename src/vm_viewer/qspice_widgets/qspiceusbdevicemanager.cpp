@@ -1,7 +1,6 @@
 
 #include "qspicehelper.h"
 #include "qspiceusbdevicemanager.h"
-#include <usb-device-manager.h>
 
 QSpiceUsbDeviceManager::QSpiceUsbDeviceManager(
         QObject *parent, QSpiceSession *s) :

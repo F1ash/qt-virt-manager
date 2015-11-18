@@ -25,7 +25,6 @@
 #include <channel-display.h>
 #include <channel-main.h>
 #include <channel-port.h>
-#include <smartcard-manager.h>
 #include <QDebug>
 
 class QSpiceHelper

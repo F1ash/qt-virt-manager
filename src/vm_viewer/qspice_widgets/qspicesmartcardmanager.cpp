@@ -84,9 +84,9 @@ QStringList QSpiceSmartcardManager::spiceSmartcardManager_get_readers()
                 (SpiceSmartcardManager*)gobject);
     size_t count = g_list_length(_list);
     for ( uint i = 0; i<count; i++ ) {
-        VReader *_reader =
-                static_cast<VReader*>(g_list_nth_data(_list, i));
-        _readerList.append(vreader_get_name(_reader));
+        //VReader *_reader =
+        //        static_cast<VReader*>(g_list_nth_data(_list, i));
+        //_readerList.append(_reader->name);
     };
     if ( _list ) {
         // When no longer needed, the list must be freed
