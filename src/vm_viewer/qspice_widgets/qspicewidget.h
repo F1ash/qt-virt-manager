@@ -98,10 +98,12 @@ private slots:
     void readerAdded(QString&);
     void readerRemoved(QString&);
 
+    /*
     void playbackData(void*, int);
     void playbackGetDelay();
     void playbackStart(int, int, int);
     void playbackStop();
+    */
 
     void recordStart(int, int, int);
     void recordStop();

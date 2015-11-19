@@ -19,6 +19,8 @@ Requires:       qtermwidget >= 0.6.0-2
 %endif
 %if %with qt5
 Requires:       qtermwidget-qt5 >= 0.6.0-2
+# for SPICE audio channels
+Requires:       qt5-qtmultimedia
 %endif
 # for use qemu-kvm (more useful)
 Requires:       qemu-kvm
