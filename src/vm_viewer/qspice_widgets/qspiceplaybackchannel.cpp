@@ -2,6 +2,19 @@
 #include "qspicehelper.h"
 #include "qspiceplaybackchannel.h"
 
+QSpicePlaybackChannel::~QSpicePlaybackChannel()
+{
+    if ( audioOutput!=NULL ) {
+        //qDebug()<<"~QSpicePlaybackChannel";
+        _dev->close();
+        audioOutput->stop();
+        delete _dev;
+        _dev = NULL;
+        delete audioOutput;
+        audioOutput = NULL;
+    };
+}
+
 void QSpiceHelper::playback_data(SpicePlaybackChannel *channel,
                                  gpointer data,
                                  gint data_size,
@@ -11,7 +24,12 @@ void QSpiceHelper::playback_data(SpicePlaybackChannel *channel,
     QSpicePlaybackChannel *_playback =
             static_cast<QSpicePlaybackChannel*>(user_data);
     if ( NULL==_playback ) return;
-    //emit _playback->playbackData((void*)data, data_size);
+    if ( _playback->audioOutput!=NULL ) {
+        if ( _playback->_dev ) {
+            qint64 written = _playback->_dev->write((const char*)data, data_size);
+            //qDebug()<<data_size<<"playback_data_written"<<written;
+        };
+    };
 }
 
 void QSpiceHelper::playback_get_delay(SpicePlaybackChannel *channel,
@@ -22,11 +40,14 @@ void QSpiceHelper::playback_get_delay(SpicePlaybackChannel *channel,
             static_cast<QSpicePlaybackChannel*>(user_data);
     if ( NULL==_playback ) return;
     if ( _playback->audioOutput!=NULL ) {
+        //qDebug()<<"playback_get_delay";
+        /*
         if ( _playback->audioOutput->state()==QAudio::ActiveState ) {
             _playback->audioOutput->suspend();
         } else if ( _playback->audioOutput->state()==QAudio::SuspendedState ) {
             _playback->audioOutput->resume();
         };
+        */
     };
 }
 void QSpiceHelper::playback_start(SpicePlaybackChannel *channel,
@@ -43,7 +64,14 @@ void QSpiceHelper::playback_start(SpicePlaybackChannel *channel,
     _playback->audioFormat.setChannelCount(channels);
     _playback->audioFormat.setSampleRate(rate);
     if ( _playback->audioOutput==NULL ) {
-        _playback->audioOutput = new QAudioOutput(_playback->audioFormat, _playback);
+        _playback->audioOutput = new QAudioOutput(
+                    _playback->audioFormat, _playback);
+        //qDebug()<<"playback_start"<<_playback->audioOutput;
+        _playback->_dev = _playback->audioOutput->start();
+        if ( _playback->_dev && !_playback->_dev->isOpen() ) {
+            bool opened = _playback->_dev->open(QIODevice::WriteOnly);
+            //qDebug()<<"playback_dev_opened"<<opened;
+        };
     };
 }
 
@@ -54,10 +82,7 @@ void QSpiceHelper::playback_stop(SpicePlaybackChannel *channel,
     QSpicePlaybackChannel *_playback =
             static_cast<QSpicePlaybackChannel*>(user_data);
     if ( NULL==_playback ) return;
-    if ( _playback->audioOutput!=NULL ) {
-        delete _playback->audioOutput;
-        _playback->audioOutput = NULL;
-    };
+    //qDebug()<<"playback_stop";
 }
 
 void QSpicePlaybackChannel::initCallbacks()

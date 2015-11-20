@@ -214,16 +214,6 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     if (_playback)
     {
         playback = _playback;
-        /*
-        connect(playback, SIGNAL(playbackData(void*,int)),
-                this, SLOT(playbackData(void*,int)));
-        connect(playback, SIGNAL(playbackGetDelay()),
-                this, SLOT(playbackGetDelay()));
-        connect(playback, SIGNAL(playbackStart(int,int,int)),
-                this, SLOT(playbackStart(int,int,int)));
-        connect(playback, SIGNAL(playbackStop()),
-                this, SLOT(playbackStop()));
-         */
         bool online = playback->Connect();
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
@@ -465,28 +455,6 @@ void QSpiceWidget::readerRemoved(QString &_reader)
 {
     qDebug()<<"readerRemoved"<<_reader;
 }
-
-/*
-void QSpiceWidget::playbackData(void *data, int data_size)
-{
-    qDebug()<<"playbackData"<<data_size;
-}
-
-void QSpiceWidget::playbackGetDelay()
-{
-    qDebug()<<"playbackGetDelay";
-}
-
-void QSpiceWidget::playbackStart(int format, int channels, int rate)
-{
-    qDebug()<<"playbackStart(F Ch R)"<<format<<channels<<rate;
-}
-
-void QSpiceWidget::playbackStop()
-{
-    qDebug()<<"playbackStop";
-}
-*/
 
 void QSpiceWidget::recordStart(int format, int channels, int rate)
 {

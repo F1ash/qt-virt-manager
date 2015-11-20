@@ -3,6 +3,7 @@
 
 #include <QtMultimedia/QAudioFormat>
 #include <QtMultimedia/QAudioOutput>
+#include <QIODevice>
 #include "qspicechannel.h"
 
 class QSpicePlaybackChannel : public QSpiceChannel
@@ -10,26 +11,24 @@ class QSpicePlaybackChannel : public QSpiceChannel
     Q_OBJECT
 public:
 
-signals:
-    /*
-    void playbackData(void*, int);
-    void playbackGetDelay();
-    void playbackStart(int, int, int);
-    void playbackStop();
-    */
-
 protected:
     friend class QSpiceHelper;
     inline QSpicePlaybackChannel(void *channel) : QSpiceChannel(channel)
     {
         audioFormat.setCodec("audio/pcm");
+        audioFormat.setByteOrder(QAudioFormat::LittleEndian);
+        audioFormat.setSampleType(QAudioFormat::Float);
+        audioFormat.setSampleSize(16);
         audioOutput = NULL;
+        _dev = NULL;
         initCallbacks();
     }
+    ~QSpicePlaybackChannel();
 
     void initCallbacks();
 
 private:
+    QIODevice    *_dev;
     QAudioFormat  audioFormat;
     QAudioOutput *audioOutput;
 };
