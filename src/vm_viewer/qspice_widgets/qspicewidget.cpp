@@ -51,6 +51,10 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     m_Image->installEventFilter( this );
     setContentsMargins(MARGIN,MARGIN,MARGIN,MARGIN);
 }
+QSpiceWidget::~QSpiceWidget()
+{
+    Disconnect();
+}
 
 bool QSpiceWidget::Connect(QString uri)
 {
@@ -231,10 +235,6 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     if (_record)
     {
         record = _record;
-        connect(record, SIGNAL(recordStart(int,int,int)),
-                this, SLOT(recordStart(int,int,int)));
-        connect(record, SIGNAL(recordStop()),
-                this, SLOT(recordStop()));
         bool online = record->Connect();
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
@@ -454,16 +454,6 @@ void QSpiceWidget::readerAdded(QString &_reader)
 void QSpiceWidget::readerRemoved(QString &_reader)
 {
     qDebug()<<"readerRemoved"<<_reader;
-}
-
-void QSpiceWidget::recordStart(int format, int channels, int rate)
-{
-
-}
-
-void QSpiceWidget::recordStop()
-{
-
 }
 
 void QSpiceWidget::displayPrimaryCreate(

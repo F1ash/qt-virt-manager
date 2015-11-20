@@ -6,12 +6,9 @@ QSpicePlaybackChannel::~QSpicePlaybackChannel()
 {
     if ( audioOutput!=NULL ) {
         //qDebug()<<"~QSpicePlaybackChannel";
-        _dev->close();
+        // close the buffer before audioOutput stopped
+        if ( _dev && _dev->isOpen() ) _dev->close();
         audioOutput->stop();
-        delete _dev;
-        _dev = NULL;
-        delete audioOutput;
-        audioOutput = NULL;
     };
 }
 
@@ -26,6 +23,7 @@ void QSpiceHelper::playback_data(SpicePlaybackChannel *channel,
     if ( NULL==_playback ) return;
     if ( _playback->audioOutput!=NULL ) {
         if ( _playback->_dev ) {
+            _playback->_dev->seek(0);
             qint64 written = _playback->_dev->write((const char*)data, data_size);
             //qDebug()<<data_size<<"playback_data_written"<<written;
         };
@@ -63,6 +61,11 @@ void QSpiceHelper::playback_start(SpicePlaybackChannel *channel,
     if ( NULL==_playback ) return;
     _playback->audioFormat.setChannelCount(channels);
     _playback->audioFormat.setSampleRate(rate);
+    QAudioDeviceInfo info(QAudioDeviceInfo::defaultInputDevice());
+    if (!info.isFormatSupported(_playback->audioFormat)) {
+        qWarning()<<"default format not supported, try to use nearest";
+        _playback->audioFormat = info.nearestFormat(_playback->audioFormat);
+    };
     if ( _playback->audioOutput==NULL ) {
         _playback->audioOutput = new QAudioOutput(
                     _playback->audioFormat, _playback);

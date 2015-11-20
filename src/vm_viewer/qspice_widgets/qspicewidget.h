@@ -28,6 +28,7 @@ class QSpiceWidget : public QWidget
     Q_OBJECT
 public:
     explicit QSpiceWidget(QWidget *parent = 0);
+    ~QSpiceWidget();
 
     bool Connect(QString uri);
     void Disconnect();
@@ -97,9 +98,6 @@ private slots:
     void cardRemoved(QString&);
     void readerAdded(QString&);
     void readerRemoved(QString&);
-
-    void recordStart(int, int, int);
-    void recordStop();
 
     void displayPrimaryCreate(
          int                 format,
