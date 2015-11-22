@@ -519,14 +519,14 @@ Result DomControlThread::getDomainXMLDesc()
 {
     Result result;
     QString name = task.object;
+    unsigned int flags = task.args.sign;
 
     bool read = false;
     char *Returns = NULL;
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( domain!=NULL ) {
-        Returns = (virDomainGetXMLDesc(
-                       domain, VIR_DOMAIN_XML_INACTIVE));
+        Returns = (virDomainGetXMLDesc(domain, flags));
         if ( Returns==NULL )
             result.err = sendConnErrors();
         else read = true;

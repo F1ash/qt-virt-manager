@@ -40,6 +40,12 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         getXMLDesc = new QAction("get XML Description", this);
         getXMLDesc->setIcon(QIcon::fromTheme("domain-xml"));
         getXMLDesc->setVisible(true);
+        RunningData = new QAction("current state data", this);
+        InactiveData = new QAction("inactive state data", this);
+        xmlDescParams = new QMenu(this);
+        xmlDescParams->addAction(RunningData);
+        xmlDescParams->addAction(InactiveData);
+        getXMLDesc->setMenu(xmlDescParams);
         display = new QAction("display VM", this);
         display->setIcon(QIcon::fromTheme("display"));
         display->setVisible(parameters[1]=="active");
@@ -80,7 +86,8 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
     setSeparatorsCollapsible(true);
 
     addAction(reload);
-    connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
+    connect(this, SIGNAL(triggered(QAction*)),
+            this, SLOT(emitExecMethod(QAction*)));
 }
 
 /* private slots */
@@ -109,8 +116,12 @@ void DomainControlMenu::emitExecMethod(QAction *action)
         } else if ( action == autoStart ) {
             paramList.append("setAutostartVirtDomain");
             paramList.append(QString((parameters[2]=="yes")? "0" : "1"));
-        } else if ( action == getXMLDesc ) {
+        } else if ( action == RunningData ) {
             paramList.append("getVirtDomainXMLDesc");
+            paramList.append("AS_IS");
+        } else if ( action == InactiveData ) {
+            paramList.append("getVirtDomainXMLDesc");
+            paramList.append("");
         } else if ( action == display ) {
             paramList.append("displayVirtDomain");
         } else if ( action == addToMonitor ) {

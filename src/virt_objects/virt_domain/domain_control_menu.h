@@ -32,6 +32,9 @@ private:
     QAction        *undefine = NULL;
     QAction        *autoStart = NULL;
     QAction        *getXMLDesc = NULL;
+    QAction        *RunningData = NULL;
+    QAction        *InactiveData = NULL;
+    QMenu          *xmlDescParams = NULL;
     QAction        *migrate = NULL;
     QAction        *display = NULL;
     QAction        *addToMonitor = NULL;

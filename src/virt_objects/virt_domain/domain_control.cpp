@@ -305,6 +305,7 @@ void VirtDomainControl::execAction(const QStringList &l)
         } else if ( l.first()=="getVirtDomainXMLDesc" ) {
             task.method     = l.first();
             task.action     = GET_XML_DESCRIPTION;
+            task.args.sign  = (l.at(1)=="AS_IS")? 0:VIR_DOMAIN_XML_INACTIVE;
             emit addNewTask(task);
         } else if ( l.first()=="displayVirtDomain" ) {
             // send signal with Connection & Domain Names to call VM_Viewer into MainWindow widget

@@ -213,7 +213,7 @@ void DomainToolBar::detectTriggerredAction(QAction *action)
     } else if ( action == setAutostart_Action ) {
         parameters << "setAutostartVirtDomain";
     } else if ( action == getXMLDesc_Action ) {
-        parameters << "getVirtDomainXMLDesc";
+        parameters << "getVirtDomainXMLDesc" << "";
     } else if ( action == migrate_Action ) {
         parameters << "migrateVirtDomain";
     } else if ( action == snapshot_Action ) {
