@@ -22,10 +22,16 @@ void QSpiceHelper::playback_data(SpicePlaybackChannel *channel,
             static_cast<QSpicePlaybackChannel*>(user_data);
     if ( NULL==_playback ) return;
     if ( _playback->audioOutput!=NULL ) {
-        if ( _playback->_dev ) {
-            _playback->_dev->seek(0);
-            qint64 written = _playback->_dev->write((const char*)data, data_size);
-            //qDebug()<<data_size<<"playback_data_written"<<written;
+        if ( _playback->_dev!=NULL ) {
+            bool opened = (_playback->_dev->isOpen())?
+                        true :
+                        _playback->_dev->open(QIODevice::WriteOnly);
+            if ( opened ) {
+                qint64 written = _playback->_dev->write(
+                            (const char*)data, data_size);
+                qDebug()<<data_size<<"playback_data_written"<<written;
+                _playback->_dev->close();
+            };
         };
     };
 }
