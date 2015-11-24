@@ -163,6 +163,8 @@ void MainWindow::closeEvent(QCloseEvent *ev)
     } else if ( !runningConnExist() &&
                 (wait_thread==NULL || !wait_thread->isRunning()) ) {
         saveSettings();
+        taskWrHouse->hide();
+        domainsStateMonitor->hide();
         trayIcon->hide();
         ev->accept();
     } else {
@@ -193,13 +195,13 @@ void MainWindow::timerEvent(QTimerEvent *ev)
 }
 void MainWindow::initTaskWareHouse()
 {
-    taskWrHouse = new TaskWareHouse(this);
+    taskWrHouse = new TaskWareHouse();
     connect(taskWrHouse, SIGNAL(taskMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
 }
 void MainWindow::initDomainStateMonitor()
 {
-    domainsStateMonitor = new DomainStateMonitor(this);
+    domainsStateMonitor = new DomainStateMonitor();
 }
 void MainWindow::initTrayIcon()
 {
@@ -775,9 +777,9 @@ void MainWindow::invokeVMDisplay(virConnectPtr *connPtrPtr, QString connName, QS
         if ( type.isEmpty() ) {
             QMessageBox::information(this, "VM Viewer", "Job empty.");
         } else if ( type.toLower()=="lxc" ) {
-            value = new LXC_Viewer(this, connPtrPtr, connName, domName);
+            value = new LXC_Viewer(NULL, connPtrPtr, connName, domName);
         } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
-            value = new Spice_Viewer(this, connPtrPtr, connName, domName);
+            value = new Spice_Viewer(NULL, connPtrPtr, connName, domName);
         } else
             QMessageBox::information(
                         this,
@@ -848,7 +850,7 @@ void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connNam
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(poolName);
     if ( !Overviewed_StPool_Map.contains(key) ) {
-        Overviewed_StPool_Map.insert(key, new VirtStorageVolControl(this));
+        Overviewed_StPool_Map.insert(key, new VirtStorageVolControl());
         Overviewed_StPool_Map.value(key)->setObjectName(key);
         Overviewed_StPool_Map.value(key)->setWindowTitle(QString("%1 Pool").arg(key));
         connect(Overviewed_StPool_Map.value(key), SIGNAL(entityMsg(QString&)),
@@ -891,7 +893,7 @@ void MainWindow::invokeDomainEditor(TASK task)
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(task.srcConName).arg(task.object);
     if ( !DomainEditor_Map.contains(key) ) {
-        DomainEditor_Map.insert(key, new CreateVirtDomain(this, task));
+        DomainEditor_Map.insert(key, new CreateVirtDomain(NULL, task));
         DomainEditor_Map.value(key)->setObjectName(key);
         DomainEditor_Map.value(key)->setWindowTitle(
                     QString("VM Settings / %1").arg(task.object));

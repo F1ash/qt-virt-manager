@@ -29,7 +29,7 @@ void QSpiceHelper::playback_data(SpicePlaybackChannel *channel,
             if ( opened ) {
                 qint64 written = _playback->_dev->write(
                             (const char*)data, data_size);
-                qDebug()<<data_size<<"playback_data_written"<<written;
+                //qDebug()<<data_size<<"playback_data_written"<<written;
                 _playback->_dev->close();
             };
         };
