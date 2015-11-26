@@ -43,14 +43,14 @@
         <disk device="disk" type="file">
             <driver type="raw" name="qemu"/>
             <source file="/home/user/fedora.img"/>
-            <target bus="ide" dev="hda"/>
+            <target bus="virtio" dev="hda"/>
             <address target="0" unit="0" type="drive" bus="0" controller="0"/>
             <boot order="2"/>
         </disk>
         <disk device="cdrom" type="file">
             <driver type="raw" name="qemu"/>
             <source file="/home/user/boot.iso"/>
-            <target bus="ide" dev="hdc"/>
+            <target bus="virtio" dev="hdc"/>
             <readonly/>
             <address target="0" unit="0" type="drive" bus="1" controller="0"/>
             <boot order="1"/>

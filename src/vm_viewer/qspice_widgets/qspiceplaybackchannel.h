@@ -4,7 +4,6 @@
 #include <QtMultimedia/QAudioDeviceInfo>
 #include <QtMultimedia/QAudioFormat>
 #include <QtMultimedia/QAudioOutput>
-#include <QBuffer>
 #include "qspicechannel.h"
 
 class QSpicePlaybackChannel : public QSpiceChannel
