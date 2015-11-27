@@ -195,7 +195,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
                 cred[i].resultlen = strlen(cred[i].result);
                 // clear/shred authData credential for more security
                 if ( obj->authData.username!=NULL )
-                    memset(&obj->authData.username[0], 0, sizeof(obj->authData.username));
+                    memset(&obj->authData.username[0], 0, strlen(obj->authData.username));
                 break;
             case VIR_CRED_PASSPHRASE:
                 crd = "Password";
@@ -207,7 +207,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
                 cred[i].resultlen = strlen(cred[i].result);
                 // clear/shred authData credential for more security
                 if ( obj->authData.password!=NULL )
-                    memset(&obj->authData.password[0], 0, sizeof(obj->authData.password));
+                    memset(&obj->authData.password[0], 0, strlen(obj->authData.password));
                 break;
             default:
                 qDebug()<<cred[i].type<<"unused credential type";
