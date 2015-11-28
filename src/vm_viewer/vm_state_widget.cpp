@@ -64,6 +64,14 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     webdav->setObjectName("WebDAV channel");
     playback->setObjectName("Playback channel");
     record->setObjectName("Record channel");
+    changeSmartcardState(false);
+    changeMouseState(false);
+    changeKeyboardState(false);
+    changeDisplayState(false);
+    changeUsbredirState(false);
+    changeWebDAVState(false);
+    changePlaybackState(false);
+    changeRecordState(false);
     setContentsMargins(0,0,0,0);
     connect(usbRedir, SIGNAL(released()),
             this, SIGNAL(showUsbDevWidget()));
@@ -127,9 +135,10 @@ void VM_State_Widget::changeUsbredirState(bool state)
 {
     usbRedir->setEnabled(state);
     usbRedir->setToolTip(
-                QString("%1 (%2)\nClick to choose devices")
+                QString("%1 (%2)%3")
                 .arg(usbRedir->objectName())
-                .arg(state? "ON":"OFF"));
+                .arg(state? "ON":"OFF")
+                .arg(state? "\nClick to choose devices":""));
 }
 void VM_State_Widget::changeWebDAVState(bool state)
 {
