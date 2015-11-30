@@ -34,9 +34,6 @@ Requires:       xorg-x11-drv-qxl
 Requires:       scrub
 # for ssh-transported remote connections (optional)
 Requires:       nc6
-# for use WebDAV shared directory (optional)
-#? need on guest ?
-Requires:       spice-webdavd
 
 %if %with qt4
 BuildRequires:  qt4-devel
