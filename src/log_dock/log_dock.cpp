@@ -25,7 +25,7 @@ LogDock::LogDock(QWidget *parent) :
     autoSaveLog->setToolTip("AutoSave");
     saveLog = new QPushButton(QIcon::fromTheme("document-save"), "", this);
     saveLog->setToolTip("Save Log to File");
-    saveLog->setMaximumSize(QSize(_size, _size));
+    //saveLog->setMaximumSize(QSize(_size, _size));
     titleLayout = new QHBoxLayout();
     titleLayout->addWidget(currentTime, 0, Qt::AlignRight);
     titleLayout->addStretch(-1);

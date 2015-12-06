@@ -1,6 +1,6 @@
 <domain type="qemu">
     <vcpu placement="static">1</vcpu>
-    <name>QEmu-x86_64</name>
+    <name>QEmu-</name>
     <uuid></uuid>
     <title></title>
     <description></description>
@@ -19,9 +19,6 @@
             <address domain="0x0000" type="pci" bus="0x00" function="0x2" slot="0x01"/>
         </controller>
         <controller model="pci-root" type="pci" index="0"/>
-        <controller type="ide" index="0">
-            <address domain="0x0000" type="pci" bus="0x00" function="0x1" slot="0x01"/>
-        </controller>
         <controller type="virtio-serial" index="0">
             <address domain="0x0000" type="pci" bus="0x00" function="0x0" slot="0x04"/>
         </controller>
