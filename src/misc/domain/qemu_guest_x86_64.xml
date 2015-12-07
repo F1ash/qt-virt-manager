@@ -1,8 +1,6 @@
 <domain type="qemu">
     <vcpu placement="static">1</vcpu>
     <name>QEmu-</name>
-    <uuid></uuid>
-    <title></title>
     <description></description>
     <memory unit="KiB">1245000</memory>
     <currentMemory unit="KiB">1245000</currentMemory>
@@ -34,6 +32,14 @@
             <target type="virtio" name="com.redhat.spice.0"/>
             <address port="1" type="virtio-serial" bus="0" controller="0"/>
         </channel>
+        <channel type="spiceport">
+            <source channel="org.spice-space.webdav.0"/>
+            <target type="virtio" name="org.spice-space.webdav.0"/>
+            <address type="virtio-serial" bus="0" port="2" controller="0"/>
+        </channel>
+        <sound model="ich6">
+            <address type="pci" bus="0x00" function="0x0" domain="0x0000" slot="0x07"/>
+        </sound>
         <memballoon model="virtio">
             <address domain="0x0000" type="pci" bus="0x00" function="0x0" slot="0x05"/>
         </memballoon>

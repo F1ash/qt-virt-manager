@@ -1,16 +1,17 @@
 #include "transformation_mode_menu.h"
 
-TransformationModeMenu::TransformationModeMenu(QWidget *parent) :
-    QMenu(parent)
+TransformationModeMenu::TransformationModeMenu(
+        QWidget *parent, Qt::TransformationMode _mode) :
+    QMenu(parent), mode(_mode)
 {
     act_group = new QActionGroup(this);
     fast    = addAction("fast (no smoothing)");
     fast->setCheckable(true);
-    fast->setChecked(false);
+    fast->setChecked(mode==Qt::FastTransformation);
     fast->setActionGroup(act_group);
     smooth  = addAction("smooth (slower)");
     smooth->setCheckable(true);
-    smooth->setChecked(true);
+    smooth->setChecked(mode==Qt::SmoothTransformation);
     smooth->setActionGroup(act_group);
     act_group->setExclusive(true);
     connect(this, SIGNAL(triggered(QAction*)),
@@ -22,9 +23,15 @@ void TransformationModeMenu::emitNewMode(QAction *act)
 {
     if ( act == fast ) {
         fast->setChecked(true);
-        emit new_mode(Qt::FastTransformation);
+        mode = Qt::FastTransformation;
     } else if ( act == smooth ) {
         smooth->setChecked(true);
-        emit new_mode(Qt::SmoothTransformation);
+        mode = Qt::SmoothTransformation;
     };
+}
+
+/* public slots */
+Qt::TransformationMode TransformationModeMenu::getMode() const
+{
+    return mode;
 }

@@ -3,11 +3,10 @@
 
 #include <QWidget>
 #include <QProgressBar>
-#include <QLabel>
 #include <QIcon>
-#include <QPushButton>
 #include <QHBoxLayout>
 #include "transformation_mode_menu.h"
+#include "click_label.h"
 
 #define TIMEOUT     60*1000
 
@@ -25,12 +24,12 @@ signals:
 private:
     QLabel          *smartCard, *mouse, *keyboard,
                     *webdav, *playback, *record;
-    QPushButton     *display, *usbRedir;
+    Click_Label     *display, *usbRedir;
     QProgressBar    *closeProcess;
     QProgressBar    *downloadProcess;
     QHBoxLayout     *commoLayout;
-    TransformationModeMenu
-                    *tr_menu;
+    Qt::TransformationMode
+                     tr_mode;
 
 public slots:
     void             setDownloadProcessRange(int);
@@ -43,6 +42,9 @@ public slots:
     void             changeWebDAVState(bool);
     void             changePlaybackState(bool);
     void             changeRecordState(bool);
+
+private slots:
+    void             showTransformationModeMenu();
 };
 
 #endif // VM_STATE_WIDGET_H

@@ -1,41 +1,49 @@
 #include "vm_state_widget.h"
 
-VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
+VM_State_Widget::VM_State_Widget(QWidget *parent) :
+    QWidget(parent)
 {
+    tr_mode = Qt::SmoothTransformation;
     smartCard = new QLabel(this);
     smartCard->setContentsMargins(0,0,0,0);
     smartCard->setPixmap(QIcon::fromTheme("media-flash")
-                         .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
+                         .pixmap(fontInfo().pixelSize(),
+                                 QIcon::Disabled));
     mouse = new QLabel(this);
     mouse->setContentsMargins(0,0,0,0);
     mouse->setPixmap(QIcon::fromTheme("input-mouse")
-                     .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
+                     .pixmap(fontInfo().pixelSize(),
+                             QIcon::Disabled));
     keyboard = new QLabel(this);
     keyboard->setContentsMargins(0,0,0,0);
     keyboard->setPixmap(QIcon::fromTheme("input-keyboard")
-                        .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
-    tr_menu = new TransformationModeMenu(this);
-    display = new QPushButton(QIcon::fromTheme("video-display"), "", this);
+                        .pixmap(fontInfo().pixelSize(),
+                                QIcon::Disabled));
+    display = new Click_Label(this);
     display->setContentsMargins(0,0,0,0);
-    display->setEnabled(false);
-    display->setMenu(tr_menu);
-    display->setFlat(true);
-    usbRedir = new QPushButton(QIcon::fromTheme("drive-removable-media"), "", this);
+    display->setPixmap(QIcon::fromTheme("video-display")
+                       .pixmap(fontInfo().pixelSize(),
+                               QIcon::Disabled));
+    usbRedir = new Click_Label(this);
     usbRedir->setContentsMargins(0,0,0,0);
-    usbRedir->setEnabled(false);
-    usbRedir->setFlat(true);
+    usbRedir->setPixmap(QIcon::fromTheme("drive-removable-media")
+                        .pixmap(fontInfo().pixelSize(),
+                                QIcon::Disabled));
     webdav = new QLabel(this);
     webdav->setContentsMargins(0,0,0,0);
     webdav->setPixmap(QIcon::fromTheme("folder-remote")
-                         .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
+                         .pixmap(fontInfo().pixelSize(),
+                                 QIcon::Disabled));
     playback = new QLabel(this);
     playback->setContentsMargins(0,0,0,0);
     playback->setPixmap(QIcon::fromTheme("audio-card")
-                       .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
+                       .pixmap(fontInfo().pixelSize(),
+                               QIcon::Disabled));
     record = new QLabel(this);
     record->setContentsMargins(0,0,0,0);
     record->setPixmap(QIcon::fromTheme("audio-card")
-                      .pixmap(fontInfo().pixelSize(), QIcon::Disabled));
+                      .pixmap(fontInfo().pixelSize(),
+                              QIcon::Disabled));
     closeProcess = new QProgressBar(this);
     closeProcess->setContentsMargins(0,0,0,0);
     closeProcess->setRange(0, TIMEOUT);
@@ -75,8 +83,8 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) : QWidget(parent)
     setContentsMargins(0,0,0,0);
     connect(usbRedir, SIGNAL(released()),
             this, SIGNAL(showUsbDevWidget()));
-    connect(tr_menu, SIGNAL(new_mode(Qt::TransformationMode)),
-            this, SIGNAL(transformationMode(Qt::TransformationMode)));
+    connect(display, SIGNAL(released()),
+            this, SLOT(showTransformationModeMenu()));
 }
 
 /* public slots */
@@ -97,7 +105,8 @@ void VM_State_Widget::changeSmartcardState(bool state)
 {
     smartCard->setPixmap(
                 QIcon::fromTheme("media-flash")
-                .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+                .pixmap(fontInfo().pixelSize(),
+                        (state)? QIcon::Active : QIcon::Disabled));
     smartCard->setToolTip(
                 QString("%1 (%2)")
                 .arg(smartCard->objectName())
@@ -107,7 +116,8 @@ void VM_State_Widget::changeMouseState(bool state)
 {
     mouse->setPixmap(
                 QIcon::fromTheme("input-mouse")
-                .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+                .pixmap(fontInfo().pixelSize(),
+                        (state)? QIcon::Active : QIcon::Disabled));
     mouse->setToolTip(
                 QString("%1 (%2)")
                 .arg(mouse->objectName())
@@ -117,7 +127,8 @@ void VM_State_Widget::changeKeyboardState(bool state)
 {
     keyboard->setPixmap(
                 QIcon::fromTheme("input-keyboard")
-                .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+                .pixmap(fontInfo().pixelSize(),
+                        (state)? QIcon::Active : QIcon::Disabled));
     keyboard->setToolTip(
                 QString("%1 (%2)")
                 .arg(keyboard->objectName())
@@ -125,15 +136,22 @@ void VM_State_Widget::changeKeyboardState(bool state)
 }
 void VM_State_Widget::changeDisplayState(bool state)
 {
-    display->setEnabled(state);
+    display->setPixmap(
+                QIcon::fromTheme("video-display")
+                .pixmap(fontInfo().pixelSize(),
+                        (state)? QIcon::Active : QIcon::Disabled));
     display->setToolTip(
-                QString("%1 (%2)")
+                QString("%1 (%2)%3")
                 .arg(display->objectName())
-                .arg(state? "ON":"OFF"));
+                .arg(state? "ON":"OFF")
+                .arg(state? "\nClick to choose mode":""));
 }
 void VM_State_Widget::changeUsbredirState(bool state)
 {
-    usbRedir->setEnabled(state);
+    usbRedir->setPixmap(
+                QIcon::fromTheme("drive-removable-media")
+                .pixmap(fontInfo().pixelSize(),
+                        (state)? QIcon::Active : QIcon::Disabled));
     usbRedir->setToolTip(
                 QString("%1 (%2)%3")
                 .arg(usbRedir->objectName())
@@ -144,7 +162,8 @@ void VM_State_Widget::changeWebDAVState(bool state)
 {
     webdav->setPixmap(
                 QIcon::fromTheme("folder-remote")
-                .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+                .pixmap(fontInfo().pixelSize(),
+                        (state)? QIcon::Active : QIcon::Disabled));
     webdav->setToolTip(
                 QString("%1 (%2)")
                 .arg(webdav->objectName())
@@ -154,7 +173,8 @@ void VM_State_Widget::changePlaybackState(bool state)
 {
     playback->setPixmap(
                 QIcon::fromTheme("audio-card")
-                .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+                .pixmap(fontInfo().pixelSize(),
+                        (state)? QIcon::Active : QIcon::Disabled));
     playback->setToolTip(
                 QString("%1 (%2)")
                 .arg(playback->objectName())
@@ -164,9 +184,22 @@ void VM_State_Widget::changeRecordState(bool state)
 {
     record->setPixmap(
                 QIcon::fromTheme("audio-card")
-                .pixmap(fontInfo().pixelSize(), (state)? QIcon::Active : QIcon::Disabled));
+                .pixmap(fontInfo().pixelSize(),
+                        (state)? QIcon::Active : QIcon::Disabled));
     record->setToolTip(
                 QString("%1 (%2)")
                 .arg(record->objectName())
                 .arg(state? "ON":"OFF"));
+}
+
+void VM_State_Widget::showTransformationModeMenu()
+{
+    TransformationModeMenu *tr_menu =
+            new TransformationModeMenu(this, tr_mode);
+    tr_menu->move(mapToGlobal(display->pos()));
+    tr_menu->exec();
+    tr_mode = tr_menu->getMode();
+    delete tr_menu;
+    tr_menu = NULL;
+    emit transformationMode(tr_mode);
 }
