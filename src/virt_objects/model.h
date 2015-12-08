@@ -17,15 +17,15 @@ public:
     QIcon    activeIcon;
     QIcon    no_activeIcon;
     QIcon    defined;
-    QIcon    created;
+    //QIcon    created;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role);
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
     bool insertRow(int);
     bool removeRow(int);
 

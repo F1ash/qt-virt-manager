@@ -3,6 +3,6 @@
 VirtNetModel::VirtNetModel(QObject *parent) :
     Model(parent)
 {
-    defined = QIcon::fromTheme("network-define");
-    created = QIcon::fromTheme("network-create");
+    defined = QIcon::fromTheme("network");
+    //created = QIcon::fromTheme("network-create");
 }

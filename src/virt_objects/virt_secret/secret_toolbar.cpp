@@ -4,13 +4,13 @@ VirtSecretToolBar::VirtSecretToolBar(QWidget *parent) :
     QToolBar(parent)
 {
     define_Action = new QAction(this);
-    define_Action->setIcon(QIcon::fromTheme("security-define"));
-    define_Action->setToolTip("Define");
+    define_Action->setIcon(QIcon::fromTheme("define"));
+    define_Action->setToolTip("Define for persistent usage");
     undefine_Action = new QAction(this);
-    undefine_Action->setIcon(QIcon::fromTheme("security-undefine"));
+    undefine_Action->setIcon(QIcon::fromTheme("undefine"));
     undefine_Action->setToolTip("Undefine");
     getXMLDesc_Action = new QAction(this);
-    getXMLDesc_Action->setIcon(QIcon::fromTheme("security-xml"));
+    getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
     getXMLDesc_Action->setToolTip("Get XML Description");
     _autoReload = new QPushButton(this);
     _autoReload->setToolTip("AutoReload Secret Overview");

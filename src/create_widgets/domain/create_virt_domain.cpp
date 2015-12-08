@@ -110,6 +110,7 @@ CreateVirtDomain::CreateVirtDomain(QWidget *parent, TASK _task) :
     xmlFileName = task.args.path;
     ptr_ConnPtr = task.srcConnPtr;
     setWindowTitle("VM Settings");
+    setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     restoreGeometry(settings.value("DomCreateGeometry").toByteArray());
     xml = new QTemporaryFile(this);
     xml->setAutoRemove(false);

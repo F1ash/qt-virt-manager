@@ -17,30 +17,30 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     QToolBar(parent)
 {
     create_Action = new QAction(this);
-    create_Action->setIcon(QIcon::fromTheme("storageVol-create"));
+    create_Action->setIcon(QIcon::fromTheme("create"));
     create_Action->setToolTip("Create");
     create_Menu = new OpenFileMenu(this, "create", "storageVol");
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     delete_Action = new QAction(this);
-    delete_Action->setIcon(QIcon::fromTheme("storageVol-delete"));
+    delete_Action->setIcon(QIcon::fromTheme("delete"));
     delete_Action->setToolTip("Delete");
     download_Action = new QAction(this);
-    download_Action->setIcon(QIcon::fromTheme("storageVol-download"));
+    download_Action->setIcon(QIcon::fromTheme("download"));
     download_Action->setToolTip("Download");
     resize_Action = new QAction(this);
-    resize_Action->setIcon(QIcon::fromTheme("storageVol-resize"));
+    resize_Action->setIcon(QIcon::fromTheme("resize"));
     resize_Action->setToolTip("Resize");
     upload_Action = new QAction(this);
-    upload_Action->setIcon(QIcon::fromTheme("storageVol-upload"));
+    upload_Action->setIcon(QIcon::fromTheme("upload"));
     upload_Action->setToolTip("Upload");
     wipe_Menu = new WipeMenu(this);
     wipe_Action = new QAction(this);
-    wipe_Action->setIcon(QIcon::fromTheme("storageVol-wipe"));
+    wipe_Action->setIcon(QIcon::fromTheme("wipe"));
     wipe_Action->setToolTip("Wipe");
     wipe_Action->setMenu(wipe_Menu);
     getXMLDesc_Action = new QAction(this);
-    getXMLDesc_Action->setIcon(QIcon::fromTheme("storageVol-xml"));
+    getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
     getXMLDesc_Action->setToolTip("Get XML Description");
     _autoReload = new QPushButton(this);
     _autoReload->setToolTip("AutoReload Volume Overview");

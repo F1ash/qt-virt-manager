@@ -21,13 +21,25 @@ SnapshotActionDialog::SnapshotActionDialog(
     int c1 = settings.value("column1", 64).toInt();
     settings.endGroup();
     revertFlagsMenu = new RevertSnapshotFlags(this);
-    revertAction = new QAction(QIcon::fromTheme("document-revert"), "Revert To", this);
+    revertAction = new QAction(
+                QIcon::fromTheme("document-revert"),
+                "Revert To",
+                this);
     revertAction->setMenu(revertFlagsMenu);
     deleteFlagsMenu = new DeleteSnapshotFlags(this);
-    deleteAction = new QAction(QIcon::fromTheme("list-remove"), "Delete", this);
+    deleteAction = new QAction(
+                QIcon::fromTheme("list-remove"),
+                "Delete",
+                this);
     deleteAction->setMenu(deleteFlagsMenu);
-    refreshAction = new QAction(QIcon::fromTheme("view-refresh"), "Refresh", this);
-    getXMLDescAction = new QAction(QIcon::fromTheme("application-xml"), "get XML Description", this);
+    refreshAction = new QAction(
+                QIcon::fromTheme("view-refresh"),
+                "Refresh",
+                this);
+    getXMLDescAction = new QAction(
+                QIcon::fromTheme("application-xml"),
+                "get XML Description",
+                this);
     toolBar = new QToolBar(this);
     toolBar->addAction(revertAction);
     toolBar->addAction(deleteAction);

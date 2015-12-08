@@ -24,13 +24,11 @@ DockHeadWidget::DockHeadWidget(
 void DockHeadWidget::setTabBarName(const QString &_name)
 {
     floatStateChanged(false);
-    /*
     int _size = this->fontInfo().pixelSize();
     icon->setPixmap(
                 QIcon::fromTheme(_name)
                 .pixmap(_size));
-    floatIt->setMaximumSize(QSize(_size, _size));
-     */
+    //floatIt->setMaximumSize(QSize(_size, _size));
     setLayout(commonLayout);
 }
 void DockHeadWidget::floatStateChanged(bool _floated)

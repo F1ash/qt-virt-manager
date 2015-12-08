@@ -19,6 +19,7 @@ ConnSettings::ConnSettings(QWidget *parent) :
     QDialog(parent)
 {
     setWindowTitle("Connection: <noname>");
+    setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     restoreGeometry(settings.value("SetDlgGeometry").toByteArray());
     setModal(false);
     setContentsMargins(1,1,1,1);

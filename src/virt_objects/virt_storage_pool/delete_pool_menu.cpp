@@ -4,15 +4,17 @@ Delete_Pool_Menu::Delete_Pool_Menu(QWidget *parent) :
     QMenu(parent)
 {
     delete_Normal = new QAction("Delete Normal", this);
-    delete_Normal->setIcon(QIcon::fromTheme("storageVol-delete"));
+    delete_Normal->setIcon(QIcon::fromTheme("delete"));
     delete_Zeroed = new QAction("Delete Zeroed", this);
-    delete_Zeroed->setIcon(QIcon::fromTheme("storageVol-delete"));
+    delete_Zeroed->setIcon(QIcon::fromTheme("delete"));
 
     addAction(delete_Normal);
     addAction(delete_Zeroed);
 
-    connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
-    connect(this, SIGNAL(hovered(QAction*)), this, SLOT(showActionToolTip(QAction*)));
+    connect(this, SIGNAL(triggered(QAction*)),
+            this, SLOT(emitExecMethod(QAction*)));
+    connect(this, SIGNAL(hovered(QAction*)),
+            this, SLOT(showActionToolTip(QAction*)));
 }
 
 /* private slots */

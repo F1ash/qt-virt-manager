@@ -4,8 +4,8 @@ ConnItemModel::ConnItemModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
     onViewIcon = QIcon::fromTheme("overview");
-    activeIcon = QIcon::fromTheme("run");
-    no_activeIcon = QIcon::fromTheme("network-server");
+    activeIcon = QIcon::fromTheme("connect");
+    no_activeIcon = QIcon::fromTheme("disconnect");
     uri_logo.insert("test", QIcon::fromTheme("user-trash"));
     uri_logo.insert("lxc", QIcon::fromTheme("lxc"));
     uri_logo.insert("qemu", QIcon::fromTheme("qemu"));

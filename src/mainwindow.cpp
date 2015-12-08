@@ -506,7 +506,7 @@ void MainWindow::initDockWidgets()
         QDockWidget::DockWidgetVerticalTitleBar
     );
     scrtHeadWdg = new DockHeadWidget(this, "Secrets");
-    scrtHeadWdg->setTabBarName("security-high");
+    scrtHeadWdg->setTabBarName("security");
     secretDock->setTitleBarWidget(scrtHeadWdg);
     connect(scrtHeadWdg, SIGNAL(floatChanged(bool)),
             secretDock, SLOT(_setFloating(bool)));

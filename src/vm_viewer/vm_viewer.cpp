@@ -9,6 +9,7 @@ VM_Viewer::VM_Viewer(
     setContentsMargins(0,0,0,0);
     setWindowTitle(QString("<%1> Virtual Machine in [ %2 ] connection")
                    .arg(domain).arg(connName));
+    setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     VM_State = true;
     viewerToolBar = new ViewerToolBar(this);
     viewerToolBar->setVisible(true);

@@ -205,7 +205,7 @@ void ConnectionList::connItemClicked(const QPoint &pos)
   ConnectMenu *connectMenu = new ConnectMenu(this);
   if ( conn_Status.value("isRunning", CLOSED).toInt()==RUNNING ) {
       connectMenu->act->setText("Close Connection");
-      connectMenu->act->setIcon(QIcon::fromTheme("stop"));
+      connectMenu->act->setIcon(QIcon::fromTheme("disconnect"));
       connect(connectMenu->act, SIGNAL(triggered()),
               this, SLOT(connItemKillAction()));
       //connectMenu->clean->setEnabled(true);
@@ -213,7 +213,7 @@ void ConnectionList::connItemClicked(const QPoint &pos)
       to_run = TO_STOP;
   } else {
       connectMenu->act->setText("Open Connection");
-      connectMenu->act->setIcon(QIcon::fromTheme("run"));
+      connectMenu->act->setIcon(QIcon::fromTheme("connect"));
       connect(connectMenu->act, SIGNAL(triggered()), this, SLOT(connItemRunAction()));
       //connectMenu->clean->setEnabled(false);
       connectMenu->display->setEnabled(false);

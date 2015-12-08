@@ -6,21 +6,21 @@ StorageVolControlMenu::StorageVolControlMenu(
 {
     if ( !parameters.isEmpty() ) {
         delete_Action = new QAction("Delete", this);
-        delete_Action->setIcon(QIcon::fromTheme("storageVol-delete"));
+        delete_Action->setIcon(QIcon::fromTheme("delete"));
         download_Action = new QAction("Download", this);
-        download_Action->setIcon(QIcon::fromTheme("storageVol-download"));
+        download_Action->setIcon(QIcon::fromTheme("download"));
         resize_Action = new QAction("Resize", this);
-        resize_Action->setIcon(QIcon::fromTheme("storageVol-resize"));
+        resize_Action->setIcon(QIcon::fromTheme("resize"));
         upload_Action = new QAction("Upload", this);
-        upload_Action->setIcon(QIcon::fromTheme("storageVol-upload"));
+        upload_Action->setIcon(QIcon::fromTheme("upload"));
         wipe_Menu = new WipeMenu(this);
         wipe_Action = new QAction("Wipe", this);
-        wipe_Action->setIcon(QIcon::fromTheme("storageVol-wipe"));
+        wipe_Action->setIcon(QIcon::fromTheme("wipe"));
         wipe_Action->setMenu(wipe_Menu);
         connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)),
                 this, SIGNAL(execMethod(const QStringList&)));
         getXMLDesc_Action = new QAction("get XML Description", this);
-        getXMLDesc_Action->setIcon(QIcon::fromTheme("storageVol-xml"));
+        getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
 
         addAction(delete_Action);
         addAction(download_Action);

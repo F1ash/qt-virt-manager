@@ -5,25 +5,25 @@ StoragePoolControlMenu::StoragePoolControlMenu(QWidget *parent, QStringList para
 {
     if ( !parameters.isEmpty() ) {
         start = new QAction("Start", this);
-        start->setIcon(QIcon::fromTheme("storagePool-start"));
+        start->setIcon(QIcon::fromTheme("start"));
         start->setEnabled(parameters.last()=="yes" && parameters[1]!="active" );
         destroy = new QAction("Destroy", this);
-        destroy->setIcon(QIcon::fromTheme("storagePool-stop"));
+        destroy->setIcon(QIcon::fromTheme("destroy"));
         destroy->setEnabled(parameters[1]=="active");
         undefine = new QAction("Undefine", this);
-        undefine->setIcon(QIcon::fromTheme("storagePool-undefine"));
+        undefine->setIcon(QIcon::fromTheme("undefine"));
         undefine->setEnabled(parameters.last()=="yes");
         autoStart = new QAction("change AutoStart", this);
-        autoStart->setIcon(QIcon::fromTheme("storagePool-autostart"));
+        autoStart->setIcon(QIcon::fromTheme("autostart"));
         autoStart->setEnabled(parameters.last()=="yes");
         delete_Menu = new Delete_Pool_Menu(this);
         delete_Action = new QAction("Delete", this);
-        delete_Action->setIcon(QIcon::fromTheme("storageVol-delete"));
+        delete_Action->setIcon(QIcon::fromTheme("delete"));
         delete_Action->setMenu(delete_Menu);
         connect(delete_Menu, SIGNAL(execMethod(const QStringList&)),
                 this, SIGNAL(execMethod(const QStringList&)));
         getXMLDesc = new QAction("get XML Description", this);
-        getXMLDesc->setIcon(QIcon::fromTheme("storagePool-xml"));
+        getXMLDesc->setIcon(QIcon::fromTheme("application-xml"));
         getXMLDesc->setEnabled(true);
         overview = new QAction("overview Pool", this);
         overview->setIcon(QIcon::fromTheme("overview"));

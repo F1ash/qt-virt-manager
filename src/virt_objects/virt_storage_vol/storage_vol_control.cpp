@@ -5,7 +5,7 @@ VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
 {
     setObjectName("VirtStorageVolControl");
     setWindowTitle("StorageVol Control");
-    setWindowIcon(QIcon::fromTheme("storageVol"));
+    setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     storageVolModel = new StorageVolModel();
     entityList->setModel(storageVolModel);
     //connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
@@ -65,7 +65,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(
     storageVolModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Name (Pool: \"%1\")").arg(poolName),
+                QString("Name in [ %1 ]").arg(poolName),
                 Qt::EditRole);
     toolBar->enableAutoReload();
     // for initiation content

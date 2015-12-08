@@ -4,14 +4,14 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     QToolBar(parent)
 {
     start_Action = new QAction(this);
-    start_Action->setIcon(QIcon::fromTheme("domain-start"));
+    start_Action->setIcon(QIcon::fromTheme("start"));
     start_Action->setToolTip("Start");
     start_Menu = new QMenu(this);
     restore_Action = start_Menu->addAction("Restore");
-    restore_Action->setIcon(QIcon::fromTheme("domain-start"));
+    restore_Action->setIcon(QIcon::fromTheme("start"));
     start_Action->setMenu(start_Menu);
     pause_Action = new QAction(this);
-    pause_Action->setIcon(QIcon::fromTheme("domain-pause"));
+    pause_Action->setIcon(QIcon::fromTheme("pause"));
     pause_Action->setToolTip("Pause");
     destroy_Menu = new QMenu(this);
     reboot_Action = destroy_Menu->addAction("Reboot");
@@ -24,7 +24,7 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     save_Action = destroy_Menu->addAction("Save");
     save_Action->setIcon(QIcon::fromTheme("save"));
     destroy_Action = new QAction(this);
-    destroy_Action->setIcon(QIcon::fromTheme("domain-stop"));
+    destroy_Action->setIcon(QIcon::fromTheme("destroy"));
     destroy_Action->setToolTip("Stop");
     destroy_Action->setMenu(destroy_Menu);
     snapshot_Menu = new QMenu(this);

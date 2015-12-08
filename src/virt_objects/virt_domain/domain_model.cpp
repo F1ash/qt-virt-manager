@@ -3,8 +3,8 @@
 DomainModel::DomainModel(QObject *parent) :
     Model(parent)
 {
-    defined = QIcon::fromTheme("domain-define");
-    created = QIcon::fromTheme("domain-create");
+    defined = QIcon::fromTheme("domain");
+    //created = QIcon::fromTheme("domain-create");
 }
 QVariant DomainModel::data(const QModelIndex &index, int role) const
 {
@@ -18,9 +18,7 @@ QVariant DomainModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::DecorationRole ) {
         switch (index.column()) {
         case 0:
-            if ( DataList.at(index.row())->getPersistent()=="yes" ) {
-                res = defined;
-            } else res = created;
+            res = defined;
             break;
         case 1:
             if ( DataList.at(index.row())->getState().split(":").first()=="active" ) {

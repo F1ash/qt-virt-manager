@@ -3,9 +3,9 @@
 StoragePoolModel::StoragePoolModel(QObject *parent) :
     Model(parent)
 {
-    defined = QIcon::fromTheme("storagePool-define");
-    created = QIcon::fromTheme("storagePool-create");
-    onViewIcon = QIcon::fromTheme("overview");
+    defined = QIcon::fromTheme("storage");
+    //created = QIcon::fromTheme("storagePool-create");
+    //onViewIcon = QIcon::fromTheme("overview");
 }
 QVariant StoragePoolModel::data(const QModelIndex &index, int role) const
 {
@@ -16,11 +16,14 @@ QVariant StoragePoolModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::DecorationRole ) {
         switch (index.column()) {
         case 0:
+            /*
             if ( DataList.at(index.row())->getOnView() ) {
                 res = onViewIcon;
-            } else if ( DataList.at(index.row())->getPersistent()=="yes" ) {
+            } else {
                 res = defined;
-            } else res = created;
+            };
+            */
+            res = defined;
             break;
         case 1:
             if ( DataList.at(index.row())->getState()=="active" ) {

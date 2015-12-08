@@ -18,6 +18,7 @@ DomainStateMonitor::DomainStateMonitor(QWidget *parent) :
     setMinimumSize(100, 100);
     setContentsMargins(0, 0, 0, 5);
     setWindowTitle("Domain State Monitor");
+    setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     settings.beginGroup("DomainStateMonitor");
     //restoreState(settings.value("State").toByteArray());
     restoreGeometry(settings.value("Geometry").toByteArray());

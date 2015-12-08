@@ -62,8 +62,8 @@ void VirtInterfaceControl::setListHeader(QString &connName)
 {
     virtIfaceModel->setHeaderData(
                 0, Qt::Horizontal,
-                QString("Name (Conn: \"%1\")")
-                .arg(connName), Qt::EditRole);
+                QString("Name in [ %1 ]").arg(connName),
+                Qt::EditRole);
     currConnName = connName;
     setEnabled(true);
     // for initiation content

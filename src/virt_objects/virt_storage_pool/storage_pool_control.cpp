@@ -62,7 +62,8 @@ void VirtStoragePoolControl::setListHeader(QString &connName)
 {
     storagePoolModel->setHeaderData(
                 0, Qt::Horizontal,
-                QString("Name (Conn: \"%1\")").arg(connName), Qt::EditRole);
+                QString("Name in [ %1 ]").arg(connName),
+                Qt::EditRole);
     currConnName = connName;
     setEnabled(true);
     // for initiation content
@@ -236,6 +237,7 @@ void VirtStoragePoolControl::execAction(const QStringList &l)
             task.method     = l.first();
             emit addNewTask(task);
         } else if ( l.first()=="overviewVirtStoragePool" ) {
+            // don't set onView state, because it can be multiplicate
             //uint row = idx.row();
             //for ( int i=0; i<storagePoolModel->DataList.count(); i++ ) {
             //    storagePoolModel->DataList.at(i)->setOnView(i==row);

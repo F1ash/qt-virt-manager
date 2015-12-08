@@ -4,7 +4,7 @@ OpenFileMenu::OpenFileMenu(QWidget *parent, QString str, QString src) :
     QMenu(parent), method(str), source(src)
 {
     fullMethodName = QString("%1_FromXML").arg(method.toLower());
-    icon = QIcon::fromTheme( QString("%1-%2").arg(source).arg(method) );
+    icon = QIcon::fromTheme( QString("%1").arg(method) );
     examples = new QAction(this);
     examples->setText(QString("%1 Virtual %2 from example XML description").arg(method).arg(source));
     examples->setIcon(icon);

@@ -5,7 +5,7 @@ VirtSecretControl::VirtSecretControl(QWidget *parent) :
 {
     setObjectName("VirtSecretControl");
     setWindowTitle("VirtSecret Control");
-    setWindowIcon(QIcon::fromTheme("security-high"));
+    setWindowIcon(QIcon::fromTheme("security"));
     virtSecretModel = new VirtSecretModel();
     entityList->setModel(virtSecretModel);
     //connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
@@ -57,7 +57,7 @@ void VirtSecretControl::setListHeader(QString &connName)
 {
     virtSecretModel->setHeaderData(
                 0, Qt::Horizontal,
-                QString("UUID (Conn: \"%1\")").arg(connName),
+                QString("UUID in [ %1 ]").arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);

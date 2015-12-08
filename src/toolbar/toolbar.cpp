@@ -35,19 +35,19 @@ void ToolBar::addItemControlMenu()
     itemControlMenu = new QMenu(this);
 
     _createAction = new QAction(QString("New Connection"), this);
-    _createAction->setIcon ( QIcon::fromTheme("install") );
+    _createAction->setIcon ( QIcon::fromTheme("list-add") );
     _editAction = new QAction(QString("Edit selected Connection"), this);
     _editAction->setIcon ( QIcon::fromTheme("configure") );
     _deleteAction = new QAction(QString("Delete selected Connection"), this);
-    _deleteAction->setIcon ( QIcon::fromTheme("clean") );
+    _deleteAction->setIcon ( QIcon::fromTheme("list-remove") );
     _openAction = new QAction(QString("Open selected Connection"), this);
-    _openAction->setIcon ( QIcon::fromTheme("run") );
+    _openAction->setIcon ( QIcon::fromTheme("connect") );
     _showAction = new QAction(QString("Overview selected Connection"), this);
     _showAction->setIcon ( QIcon::fromTheme("overview") );
     _closeAction = new QAction(QString("Close selected Connection"), this);
-    _closeAction->setIcon ( QIcon::fromTheme("stop") );
+    _closeAction->setIcon ( QIcon::fromTheme("disconnect") );
     _closeAllAction = new QAction(QString("Close all Connection"), this);
-    _closeAllAction->setIcon ( QIcon::fromTheme("stop-all") );
+    _closeAllAction->setIcon ( QIcon::fromTheme("disconnect") );
 
     itemControlMenu->addAction(_createAction);
     itemControlMenu->addAction(_editAction);

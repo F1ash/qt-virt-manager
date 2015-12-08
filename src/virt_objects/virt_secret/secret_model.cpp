@@ -3,7 +3,7 @@
 VirtSecretModel::VirtSecretModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
-    defined = QIcon::fromTheme("security-define");
+    defined = QIcon::fromTheme("security");
     column0 = "UUID";
     column1 = "UsageID";
 }

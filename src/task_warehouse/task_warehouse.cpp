@@ -20,6 +20,7 @@ TaskWareHouse::TaskWareHouse(QWidget *parent) :
                    QSizePolicy::MinimumExpanding));
     setContentsMargins(0, 0, 0, 5);
     setWindowTitle("Task WareHouse");
+    setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     settings.beginGroup("TaskWareHouse");
     QByteArray _geometry = settings.value("Geometry").toByteArray();
     if ( !_geometry.isEmpty() ) {

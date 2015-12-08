@@ -5,8 +5,6 @@ Model::Model(QObject *parent) :
 {
     activeIcon = QIcon::fromTheme("list-add");
     no_activeIcon = QIcon::fromTheme("list-remove");
-    //defined = QIcon::fromTheme("network-define");
-    //created = QIcon::fromTheme("network-create");
     column0 = "Name";
     column1 = "State";
     column2 = "Auto";
@@ -94,9 +92,7 @@ QVariant Model::data(const QModelIndex &index, int role) const
     if ( role==Qt::DecorationRole ) {
         switch (index.column()) {
         case 0:
-            if ( DataList.at(index.row())->getPersistent()=="yes" ) {
-                res = defined;
-            } else res = created;
+            res = defined;
             break;
         case 1:
             if ( DataList.at(index.row())->getState()=="active" ) {
