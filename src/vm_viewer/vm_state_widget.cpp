@@ -68,7 +68,7 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) :
     mouse->setObjectName("Cursor channel");
     keyboard->setObjectName("Inputs channel");
     display->setObjectName("Display channel");
-    usbRedir->setObjectName("USB Redir channel");
+    usbRedir->setObjectName("USB Redirect channel");
     webdav->setObjectName("WebDAV channel");
     playback->setObjectName("Playback channel");
     record->setObjectName("Record channel");
