@@ -7,7 +7,7 @@ HelperThread::HelperThread(QObject *parent, virConnectPtr *connPtrPtr) :
 }
 void HelperThread::run()
 {
-    if ( NULL==ptr_ConnPtr ) return;
+    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) return;
     if ( virConnectRef(*ptr_ConnPtr)<0 ) {
         sendConnErrors();
         return;

@@ -7,7 +7,7 @@ spice_graphHlpThread::spice_graphHlpThread(QObject *parent, virConnectPtr* connP
 }
 void spice_graphHlpThread::run()
 {
-    if ( NULL==ptr_ConnPtr ) return;
+    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) return;
     if ( virConnectRef(*ptr_ConnPtr)<0 ) {
         sendConnErrors();
         return;

@@ -49,7 +49,7 @@ DomainStateViewer::DomainStateViewer(
     memPercent = memDoc.firstChildElement("svg")
             .firstChildElement("text");
     timerId = startTimer(PERIOD*1000);
-    if ( NULL==ptr_ConnPtr ) {
+    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
         monitorName->setText("State:<br><b>Connection Error</b></br>");
     };
 }
