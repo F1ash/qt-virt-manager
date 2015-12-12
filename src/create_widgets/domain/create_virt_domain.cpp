@@ -7,13 +7,18 @@ HelperThread::HelperThread(QObject *parent, virConnectPtr *connPtrPtr) :
 }
 void HelperThread::run()
 {
-    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) return;
-    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
-        sendConnErrors();
+    QString capabilities;
+    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+        emit result(capabilities);
         return;
     };
-    QString capabilities = QString("%1")
-            .arg(virConnectGetCapabilities(*ptr_ConnPtr));
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        emit result(capabilities);
+        return;
+    };
+    capabilities = QString(
+                virConnectGetCapabilities(*ptr_ConnPtr));
     if ( capabilities.isEmpty() ) sendConnErrors();
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();
@@ -119,8 +124,6 @@ CreateVirtDomain::CreateVirtDomain(QWidget *parent, TASK _task) :
                 .arg(QDir::tempPath())
                 .arg(QDir::separator()));
     setEnabled(false);
-    connect(this, SIGNAL(readyRead(bool)),
-            this, SLOT(readyDataLists()));
     helperThread = new HelperThread(this, ptr_ConnPtr);
     connect(helperThread, SIGNAL(result(QString&)),
             this, SLOT(setCapabilities(QString&)));
@@ -195,9 +198,9 @@ void CreateVirtDomain::readCapabilities()
         _xml = NULL;
     };
     //qDebug()<<xmlDesc<<"desc"<<type;
-    emit readyRead(ready);
+    readDataLists();
 }
-void CreateVirtDomain::readyDataLists()
+void CreateVirtDomain::readDataLists()
 {
     if ( ready ) {
         commonLayout = new QVBoxLayout();

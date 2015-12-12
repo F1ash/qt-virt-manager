@@ -38,7 +38,6 @@ public:
 
 signals:
     void             errorMsg(QString&);
-    void             readyRead(bool);
     void             finished(QString&);
     void             addNewTask(TASK);
 
@@ -73,7 +72,7 @@ public slots:
 private slots:
     void             setCapabilities(QString&);
     void             readCapabilities();
-    void             readyDataLists();
+    void             readDataLists();
     void             buildXMLDescription();
     void             set_Result();
     void             create_specified_widgets();

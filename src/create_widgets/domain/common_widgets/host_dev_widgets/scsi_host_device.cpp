@@ -28,7 +28,7 @@ void iscsi_hostHlpThread::run()
                             .arg(virNodeDeviceGetXMLDesc(nodeDevices[i], 0)));
             virNodeDeviceFree(nodeDevices[i]);
         };
-        if (ret) free(nodeDevices);
+        if (nodeDevices) free(nodeDevices);
     };
     //int devs = virNodeNumOfDevices(ptr_ConnPtr, NULL, 0);
     if ( virConnectClose(*ptr_ConnPtr)<0 )
