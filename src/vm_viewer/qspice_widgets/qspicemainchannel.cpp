@@ -18,6 +18,89 @@
 #include "qspicehelper.h"
 #include "qspicemainchannel.h"
 
+// from spice-util.c
+typedef enum {
+    NEWLINE_TYPE_LF,
+    NEWLINE_TYPE_CR_LF
+} NewlineType;
+
+static gssize get_line(const gchar *str, gsize len,
+                       NewlineType type, gsize *nl_len,
+                       GError **error)
+{
+    const gchar *p, *endl;
+    gsize nl = 0;
+
+    endl = (type == NEWLINE_TYPE_CR_LF) ? "\r\n" : "\n";
+    p = g_strstr_len(str, len, endl);
+    if (p) {
+        len = p - str;
+        nl = strlen(endl);
+    }
+
+    *nl_len = nl;
+    return len;
+}
+
+static gchar* spice_convert_newlines(const gchar *str, gssize len,
+                                     NewlineType from,
+                                     NewlineType to,
+                                     GError **error)
+{
+    GError *err = NULL;
+    gssize length;
+    gsize nl;
+    GString *output;
+    gboolean free_segment = FALSE;
+    gint i;
+
+    g_return_val_if_fail(str != NULL, NULL);
+    g_return_val_if_fail(len >= -1, NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
+    /* only 2 supported combinations */
+    g_return_val_if_fail((from == NEWLINE_TYPE_LF &&
+                          to == NEWLINE_TYPE_CR_LF) ||
+                         (from == NEWLINE_TYPE_CR_LF &&
+                          to == NEWLINE_TYPE_LF), NULL);
+
+    if (len == -1)
+        len = strlen(str);
+    /* sometime we get \0 terminated strings, skip that, or it fails
+       to utf8 validate line with \0 end */
+    else if (len > 0 && str[len-1] == 0)
+        len -= 1;
+
+    /* allocate worst case, if it's small enough, we don't care much,
+     * if it's big, malloc will put us in mmap'd region, and we can
+     * over allocate.
+     */
+    output = g_string_sized_new(len * 2 + 1);
+
+    for (i = 0; i < len; i += length + nl) {
+        length = get_line(str + i, len - i, from, &nl, &err);
+        if (length < 0)
+            break;
+
+        g_string_append_len(output, str + i, length);
+
+        if (nl) {
+            /* let's not double \r if it's already in the line */
+            if (to == NEWLINE_TYPE_CR_LF &&
+                output->str[output->len - 1] != '\r')
+                g_string_append_c(output, '\r');
+
+            g_string_append_c(output, '\n');
+        }
+    }
+
+    if (err) {
+        g_propagate_error(error, err);
+        free_segment = TRUE;
+    }
+
+    return g_string_free(output, free_segment);
+}
+//  ^^spice-util.c
 
 void QSpiceHelper::main_agent_update(SpiceMainChannel *spicemainchannel, gpointer user_data)
 {
@@ -128,6 +211,40 @@ void QSpiceMainChannel::mainClipboardSelectionRelease()
 void QSpiceMainChannel::mainClipboardSelectionNotify(uint type, const uchar *data, uint size)
 {
     //qDebug()<<"mainClipboardSelectionNotify";
+    char *conv;
+    gint len = 0;
+    if (spice_main_agent_test_capability(
+                (SpiceMainChannel *) gobject,
+                VD_AGENT_CAP_GUEST_LINEEND_CRLF)) {
+        GError *err = NULL;
+
+        conv = spice_convert_newlines(
+                    data,
+                    size,
+                    NEWLINE_TYPE_LF,
+                    NEWLINE_TYPE_CR_LF,
+                    &err);
+        if (err) {
+            g_warning("Failed to convert text line ending: %s", err->message);
+            g_clear_error(&err);
+            return;
+        }
+
+        len = strlen(conv);
+    } else {
+        /* On Windows, with some versions of gtk+, GtkSelectionData::length
+         * will include the final '\0'. When a string with this trailing '\0'
+         * is pasted in some linux applications, it will be pasted as <NIL> or
+         * as an invisible character, which is unwanted. Ensure the length we
+         * send to the agent does not include any trailing '\0'
+         * This is gtk+ bug https://bugzilla.gnome.org/show_bug.cgi?id=734670
+         */
+        len = strlen((const char *)data);
+    }
+    //if (!check_clipboard_size_limits(self, len)) {
+    //    g_free(conv);
+    //    return;
+    //}
     spice_main_clipboard_selection_notify(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
