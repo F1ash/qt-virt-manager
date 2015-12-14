@@ -42,7 +42,7 @@ static gssize get_line(const gchar *str, gsize len,
     return len;
 }
 
-static gchar* spice_convert_newlines(const gchar *str, gssize len,
+static char* spice_convert_newlines(const gchar *str, gssize len,
                                      NewlineType from,
                                      NewlineType to,
                                      GError **error)
@@ -211,7 +211,7 @@ void QSpiceMainChannel::mainClipboardSelectionRelease()
 void QSpiceMainChannel::mainClipboardSelectionNotify(uint type, const uchar *data, uint size)
 {
     //qDebug()<<"mainClipboardSelectionNotify";
-    char *conv;
+    gpointer conv = NULL;
     gint len = 0;
     if (spice_main_agent_test_capability(
                 (SpiceMainChannel *) gobject,
@@ -219,7 +219,7 @@ void QSpiceMainChannel::mainClipboardSelectionNotify(uint type, const uchar *dat
         GError *err = NULL;
 
         conv = spice_convert_newlines(
-                    data,
+                    (char*)data,
                     size,
                     NEWLINE_TYPE_LF,
                     NEWLINE_TYPE_CR_LF,
@@ -230,7 +230,7 @@ void QSpiceMainChannel::mainClipboardSelectionNotify(uint type, const uchar *dat
             return;
         }
 
-        len = strlen(conv);
+        len = strlen((char*)conv);
     } else {
         /* On Windows, with some versions of gtk+, GtkSelectionData::length
          * will include the final '\0'. When a string with this trailing '\0'
@@ -240,17 +240,13 @@ void QSpiceMainChannel::mainClipboardSelectionNotify(uint type, const uchar *dat
          * This is gtk+ bug https://bugzilla.gnome.org/show_bug.cgi?id=734670
          */
         len = strlen((const char *)data);
-    }
-    //if (!check_clipboard_size_limits(self, len)) {
-    //    g_free(conv);
-    //    return;
-    //}
+    };
     spice_main_clipboard_selection_notify(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
                 type,
-                data,
-                size);
+                conv ? (uchar*)conv : data,
+                len);
 }
 
 void QSpiceMainChannel::mainClipboardSelectionRequest()
