@@ -92,3 +92,8 @@ implemented the saving a screenshot/pixbuff of guest display;
 improved copying Clipboard from Guest to host Client for images;
 some improvements for close connection at app exit;
 some fixes and improvements;
+
+0.22.42 :
+implemented spice playback/record channel;
+changed icon set;
+some enhancements and fixes for stability;

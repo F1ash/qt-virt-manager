@@ -4,7 +4,7 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.21.40
+Version:        0.22.42
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -23,7 +23,7 @@ Requires:       qtermwidget-qt5 >= 0.6.0-2
 Requires:       qt5-qtmultimedia
 %endif
 # for use qemu-kvm (more useful)
-Requires:       qemu-kvm
+Requires:       qemu-kvm < 2.5.0
 Requires:       libvirt-daemon-driver-qemu
 # for use SPICE viewer
 # spice-server exist in libvirt-daemon-driver-qemu Requires in Fedora
@@ -51,7 +51,7 @@ BuildRequires:  cmake
 BuildRequires:  glib2-devel
 BuildRequires:  spice-protocol
 BuildRequires:  spice-glib-devel
-BuildRequires:  libcacard-devel
+BuildRequires:  libcacard-devel < 2.5.0
 
 %description
 Qt Virtual Machine Manager provides a graphical tool for administering virtual
@@ -139,6 +139,12 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %endif
 
 %changelog
+* Tue Dec 15 2015 Fl@sh <kaperang07@gmail.com> - 0.22.42-1
+- added libcacard-devel BR;
+- added qt5-qtmultimedia, hicolor-icon-theme to R;
+- set version control for qemu and libcacard-devel;
+- version updated;
+
 * Thu Nov  5 2015 Fl@sh <kaperang07@gmail.com> - 0.21.40-1
 - erased libcacard-devel BR;
 - version updated;
