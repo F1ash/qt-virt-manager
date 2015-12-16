@@ -19,6 +19,7 @@
 #include "qspiceusbdevicemanager.h"
 #include "spiceusbdevicewidget.h"
 #include "qspicesmartcardmanager.h"
+#include "spicesmartcardwidget.h"
 #include "qspiceplaybackchannel.h"
 #include "qspicerecordchannel.h"
 #include "qspiceaudio.h"
@@ -127,12 +128,14 @@ private slots:
     bool eventFilter(QObject *object, QEvent *event);
     void resizeEvent(QResizeEvent *event);
     void reloadUsbDevList(void*);
+    void reloadSmartcardList(void*);
     void resizeDone();
 
 public slots:
     void setGuestName(QString&);
     void setNewSize(int, int);
     void showUsbDevWidget();
+    void showSmartCardWidget();
     void getScreenshot();
     void setTransformationMode(Qt::TransformationMode);
 };

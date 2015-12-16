@@ -204,6 +204,8 @@ void Spice_Viewer::initSpiceWidget()
             vm_stateWdg, SLOT(changeRecordState(bool)));
     connect(vm_stateWdg, SIGNAL(showUsbDevWidget()),
             spiceWdg, SLOT(showUsbDevWidget()));
+    connect(vm_stateWdg, SIGNAL(showSmartCardWidget()),
+            spiceWdg, SLOT(showSmartCardWidget()));
     connect(vm_stateWdg, SIGNAL(transformationMode(Qt::TransformationMode)),
             spiceWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
     connect(spiceWdg, SIGNAL(errMsg(QString&)),

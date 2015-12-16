@@ -166,8 +166,7 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         bool online = smartcard->Connect();
         if ( online ) {
             smartcardManager = new QSpiceSmartcardManager(this);
-            bool _inited = smartcardManager? true:false;
-            if ( _inited ) {
+            if ( smartcardManager ) {
                 connect(smartcardManager, SIGNAL(cardInserted(QString&)),
                         this, SLOT(cardInserted(QString&)));
                 connect(smartcardManager, SIGNAL(cardRemoved(QString&)),
@@ -189,8 +188,7 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         bool online = usbredir->Connect();
         if ( online ) {
             usbDevManager = new QSpiceUsbDeviceManager(this, spiceSession);
-            bool _inited = usbDevManager? true:false;
-            if ( _inited ) {
+            if ( usbDevManager ) {
                 connect(usbDevManager, SIGNAL(autoConnectFailed(QString&,QString&)),
                         this, SLOT(usbDevAutoConnectFailed(QString&,QString&)));
                 connect(usbDevManager, SIGNAL(deviceAdded(QString&)),
@@ -222,7 +220,7 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
                         this, (SpiceSession*)spiceSession->gobject);
-            qDebug()<<"spiceAudio is associated:"<<spiceAudio->isAssociated();
+            //qDebug()<<"spiceAudio is associated:"<<spiceAudio->isAssociated();
             if ( spiceAudio->isAssociated() ) {
                 // reserved for some work
             };
@@ -239,7 +237,7 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
                         this, (SpiceSession*)spiceSession->gobject);
-            qDebug()<<"spiceAudio is associated:"<<spiceAudio->isAssociated();
+            //qDebug()<<"spiceAudio is associated:"<<spiceAudio->isAssociated();
             if ( spiceAudio->isAssociated() ) {
                 // reserved for some work
             };
@@ -677,7 +675,8 @@ void QSpiceWidget::reloadUsbDevList(void *obj)
     if ( usbDevWdg ) {
         usbDevWdg->setEnabled(false);
         usbDevWdg->clearList();
-        QStringList _devList = usbDevManager->spiceUsbDeviceManager_get_devices();
+        QStringList _devList =
+                usbDevManager->spiceUsbDeviceManager_get_devices();
         foreach (QString _dev, _devList) {
             QString _name, _desc;
             QStringList _split = _dev.split("<||>");
@@ -693,6 +692,24 @@ void QSpiceWidget::reloadUsbDevList(void *obj)
             usbDevWdg->addItem(item);
         };
         usbDevWdg->setEnabled(true);
+    };
+}
+
+void QSpiceWidget::reloadSmartcardList(void *obj)
+{
+    SpiceSmartcardWidget *smartcardWdg = static_cast<SpiceSmartcardWidget*>(obj);
+    if ( smartcardWdg ) {
+        smartcardWdg->setEnabled(false);
+        smartcardWdg->clearList();
+        QStringList _cardList =
+                smartcardManager->spiceSmartcardManager_get_readers();
+        foreach (QString _card, _cardList) {
+            QListWidgetItem *item = new QListWidgetItem();
+            item->setText(_card);
+            item->setCheckState(Qt::Checked);
+            smartcardWdg->addItem(item);
+        };
+        smartcardWdg->setEnabled(true);
     };
 }
 
@@ -749,20 +766,43 @@ void QSpiceWidget::setNewSize(int _w, int _h)
 void QSpiceWidget::showUsbDevWidget()
 {
     SpiceUsbDeviceWidget *usbDevWdg = new SpiceUsbDeviceWidget(this);
-    connect(usbDevManager, SIGNAL(deviceAdded(QString&)),
-            usbDevWdg, SLOT(addDevice(QString&)));
-    connect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
-            usbDevWdg, SLOT(removeDevice(QString&)));
-    connect(usbDevWdg, SIGNAL(connectDevice(QString&)),
-            usbDevManager, SLOT(spiceUsbDeviceManager_connect_device(QString&)));
-    connect(usbDevWdg, SIGNAL(disconnectDevice(QString&)),
-            usbDevManager, SLOT(spiceUsbDeviceManager_disconnect_device(QString&)));
-    connect(usbDevWdg, SIGNAL(devicesChanged(void*)),
-            this, SLOT(reloadUsbDevList(void*)));
-    reloadUsbDevList(usbDevWdg);
+    if ( usbDevManager ) {
+        connect(usbDevManager, SIGNAL(deviceAdded(QString&)),
+                usbDevWdg, SLOT(addDevice(QString&)));
+        connect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
+                usbDevWdg, SLOT(removeDevice(QString&)));
+        connect(usbDevWdg, SIGNAL(connectDevice(QString&)),
+                usbDevManager, SLOT(spiceUsbDeviceManager_connect_device(QString&)));
+        connect(usbDevWdg, SIGNAL(disconnectDevice(QString&)),
+                usbDevManager, SLOT(spiceUsbDeviceManager_disconnect_device(QString&)));
+        connect(usbDevWdg, SIGNAL(devicesChanged(void*)),
+                this, SLOT(reloadUsbDevList(void*)));
+        reloadUsbDevList(usbDevWdg);
+    };
     usbDevWdg->exec();
     delete usbDevWdg;
     usbDevWdg = NULL;
+}
+
+void QSpiceWidget::showSmartCardWidget()
+{
+    SpiceSmartcardWidget *smartcardWdg = new SpiceSmartcardWidget(this);
+    if ( smartcardManager ) {
+        connect(smartcardManager, SIGNAL(cardInserted(QString&)),
+                smartcardWdg, SLOT(addCard(QString&)));
+        connect(smartcardManager, SIGNAL(cardRemoved(QString&)),
+                smartcardWdg, SLOT(removeCard(QString&)));
+        connect(smartcardWdg, SIGNAL(connectCard(QString&)),
+                smartcardManager, SLOT(spiceSmartcardReader_insert_card(QString&)));
+        connect(smartcardWdg, SIGNAL(disconnectCard(QString&)),
+                smartcardManager, SLOT(spiceSmartcardReader_remove_card(QString&)));
+        connect(smartcardWdg, SIGNAL(cardsChanged(void*)),
+                this, SLOT(reloadSmartcardList(void*)));
+        reloadSmartcardList(smartcardWdg);
+    };
+    smartcardWdg->exec();
+    delete smartcardWdg;
+    smartcardWdg = NULL;
 }
 
 void QSpiceWidget::getScreenshot()

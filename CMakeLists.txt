@@ -372,6 +372,7 @@ set (HEADERS
   src/vm_viewer/qspice_widgets/qspicewidget.h
   src/vm_viewer/qspice_widgets/qspicesmartcardchannel.h
   src/vm_viewer/qspice_widgets/qspicesmartcardmanager.h
+  src/vm_viewer/qspice_widgets/spicesmartcardwidget.h
   src/vm_viewer/qspice_widgets/qspiceusbredirchannel.h
   src/vm_viewer/qspice_widgets/qspicewebdavchannel.h
   src/vm_viewer/qspice_widgets/qspiceportchannel.h
@@ -700,6 +701,7 @@ set (SOURCES
   src/vm_viewer/qspice_widgets/qspicewidget.cpp
   src/vm_viewer/qspice_widgets/qspicesmartcardchannel.cpp
   src/vm_viewer/qspice_widgets/qspicesmartcardmanager.cpp
+  src/vm_viewer/qspice_widgets/spicesmartcardwidget.cpp
   src/vm_viewer/qspice_widgets/qspiceusbredirchannel.cpp
   src/vm_viewer/qspice_widgets/qspiceportchannel.cpp
   src/vm_viewer/qspice_widgets/qspicewebdavchannel.cpp

@@ -20,11 +20,12 @@ public:
 signals:
     void             transformationMode(Qt::TransformationMode);
     void             showUsbDevWidget();
+    void             showSmartCardWidget();
 
 private:
-    QLabel          *smartCard, *mouse, *keyboard,
+    QLabel          *mouse, *keyboard,
                     *webdav, *playback, *record;
-    Click_Label     *display, *usbRedir;
+    Click_Label     *smartCard, *display, *usbRedir;
     QProgressBar    *closeProcess;
     QProgressBar    *downloadProcess;
     QHBoxLayout     *commoLayout;

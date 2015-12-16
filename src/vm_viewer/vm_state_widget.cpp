@@ -4,7 +4,7 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) :
     QWidget(parent)
 {
     tr_mode = Qt::SmoothTransformation;
-    smartCard = new QLabel(this);
+    smartCard = new Click_Label(this);
     smartCard->setContentsMargins(0,0,0,0);
     smartCard->setPixmap(QIcon::fromTheme("media-flash")
                          .pixmap(fontInfo().pixelSize(),
@@ -81,6 +81,8 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) :
     changePlaybackState(false);
     changeRecordState(false);
     setContentsMargins(0,0,0,0);
+    connect(smartCard, SIGNAL(released()),
+            this, SIGNAL(showSmartCardWidget()));
     connect(usbRedir, SIGNAL(released()),
             this, SIGNAL(showUsbDevWidget()));
     connect(display, SIGNAL(released()),
