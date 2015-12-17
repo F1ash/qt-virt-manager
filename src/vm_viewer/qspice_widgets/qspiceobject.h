@@ -21,7 +21,7 @@
 #include <spice/enums.h>
 
 #include <QObject>
-
+#include <QStringList>
 #include <QDebug>
 
 class QSpiceObject : public QObject
@@ -54,6 +54,9 @@ protected:
     void* getPropPointer(QString name);
     void  setProp(QString name, const void *v);
 
+    QStringList getPropStrList(QString name);
+    void  setProp(QString name, const QStringList &v);
+
 #define Q_GPROP_INT(name, propname) \
     inline int get ## name() {return getPropInt(propname);}; \
     inline void set ## name(const int v) {setProp(propname, v);}
@@ -69,6 +72,10 @@ protected:
 #define Q_GPROP_POINTER(name, propname) \
     inline void* get ## name() {return getPropPointer(propname);}; \
     inline void  set ## name(const void* v) {setProp(propname, v);}
+
+#define Q_GPROP_STRLIST(name, propname) \
+    inline QStringList get ## name() {return getPropStrList(propname);}; \
+    inline void  set ## name(const QStringList &v) {setProp(propname, v);}
 };
 
 

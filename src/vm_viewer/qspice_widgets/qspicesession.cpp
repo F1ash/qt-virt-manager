@@ -127,7 +127,14 @@ void QSpiceSession::init()
                      (GCallback) QSpiceHelper::ss_channel_new, this);
     g_signal_connect(gobject, "channel-destroy",
                      (GCallback) QSpiceHelper::ss_channel_destroy, this);
-    //qDebug()<<getSharedDir()<<"shared";
+    qDebug()<<getSharedDir()<<"shared";
+    // http://www.spice-space.org/page/SmartcardUsage#Using_a_software_smartcard
+    // for test only
+    if ( getSmartcardDB().isEmpty() ) {
+        setSmartcardDB("/home/Flash/.netscape");
+        setSmartcardCAC(QStringList()<<"cert1"<<"cert2"<<"cert3");
+    };
+    qDebug()<<getSmartcardDB()<<"DB"<<getSmartcardCAC()<<"SmartcardCAC";
 }
 
 

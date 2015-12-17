@@ -119,3 +119,37 @@ void QSpiceObject::setProp(QString name, const void *v)
               name.toUtf8().data(), v,
               NULL);
 }
+
+QStringList QSpiceObject::getPropStrList(QString name)
+{
+    GStrv l = NULL;
+    g_object_get(G_OBJECT (gobject),
+                 name.toUtf8().data(), &l,
+                 NULL);
+
+    QStringList r;
+    if (l) {
+        guint count = g_strv_length(l);
+        for(int i=0; i<count; i++) {
+            //qDebug()<<(char*)l[i];
+            r.append(l[i]);
+        };
+        g_strfreev(l);
+    };
+    return r;
+}
+
+void QSpiceObject::setProp(QString name, const QStringList &v)
+{
+    uint count = v.size();
+    gchar *l[count+1];
+    for(int i=0; i<count; i++) {
+        char *s = v.at(i).toUtf8().data();
+        l[i] = s;
+        //qDebug()<<(char*)s;
+    };
+    l[count] = NULL;
+    g_object_set(G_OBJECT (gobject),
+              name.toUtf8().data(), l,
+              NULL);
+}

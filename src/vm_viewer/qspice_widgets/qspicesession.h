@@ -32,10 +32,17 @@ public:
     explicit QSpiceSession(QObject *parent = 0);
     friend class QSpiceHelper;
     friend class QSpiceWidget;
+
+    Q_GPROP_STR (Uri, "uri")
     Q_GPROP_BOOL(EnableAudio, "enable-audio")           // doc default TRUE
     Q_GPROP_BOOL(EnableSmartcard, "enable-smartcard")   // doc default FALSE
     Q_GPROP_BOOL(EnableUsbredir, "enable-usbredir")     // doc default TRUE
     Q_GPROP_STR (SharedDir, "shared-dir")               // doc default "/home/elmarco/Public"
+    Q_GPROP_STR (SmartcardDB, "smartcard-db")
+    Q_GPROP_STRLIST (SmartcardCAC, "smartcard-certificates")
+
+    bool Connect();
+    void Disconnect();
     
 signals:
     void channelNew(QSpiceChannel *channel);
@@ -47,13 +54,6 @@ private:
 
 protected:
     void init();
-
-
-public:
-    bool Connect();
-    void Disconnect();
-
-    Q_GPROP_STR(Uri, "uri")
 };
 
 #endif // QSPICESESSION_H

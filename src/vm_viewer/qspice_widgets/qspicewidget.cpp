@@ -792,10 +792,10 @@ void QSpiceWidget::showSmartCardWidget()
                 smartcardWdg, SLOT(addCard(QString&)));
         connect(smartcardManager, SIGNAL(cardRemoved(QString&)),
                 smartcardWdg, SLOT(removeCard(QString&)));
-        connect(smartcardWdg, SIGNAL(connectCard(QString&)),
-                smartcardManager, SLOT(spiceSmartcardReader_insert_card(QString&)));
-        connect(smartcardWdg, SIGNAL(disconnectCard(QString&)),
-                smartcardManager, SLOT(spiceSmartcardReader_remove_card(QString&)));
+        //connect(smartcardWdg, SIGNAL(connectCard(QString&)),
+        //        smartcardManager, SLOT(spiceSmartcardReader_insert_card(QString&)));
+        //connect(smartcardWdg, SIGNAL(disconnectCard(QString&)),
+        //        smartcardManager, SLOT(spiceSmartcardReader_remove_card(QString&)));
         connect(smartcardWdg, SIGNAL(cardsChanged(void*)),
                 this, SLOT(reloadSmartcardList(void*)));
         reloadSmartcardList(smartcardWdg);

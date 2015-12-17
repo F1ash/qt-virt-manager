@@ -36,14 +36,14 @@ void SpiceSmartcardWidget::clearList()
     smartcardList->clear();
 }
 
-void SpiceSmartcardWidget::addCard(QString &dev)
+void SpiceSmartcardWidget::addCard(QString &card)
 {
-    Q_UNUSED(dev);
+    Q_UNUSED(card);
     emit cardsChanged((void*)this);
 }
 
-void SpiceSmartcardWidget::removeCard(QString &dev)
+void SpiceSmartcardWidget::removeCard(QString &card)
 {
-    Q_UNUSED(dev);
+    Q_UNUSED(card);
     emit cardsChanged((void*)this);
 }

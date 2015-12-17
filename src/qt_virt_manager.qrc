@@ -1,4 +1,3 @@
-<?xml version="1.0" ?>
 <RCC>
     <qresource prefix="/icons/QtVirtManager">
         <file alias="index.theme">icons/index.theme</file>
