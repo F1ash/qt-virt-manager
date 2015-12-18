@@ -110,9 +110,10 @@ void VM_State_Widget::changeSmartcardState(bool state)
                 .pixmap(fontInfo().pixelSize(),
                         (state)? QIcon::Active : QIcon::Disabled));
     smartCard->setToolTip(
-                QString("%1 (%2)")
+                QString("%1 (%2)%3")
                 .arg(smartCard->objectName())
-                .arg(state? "ON":"OFF"));
+                .arg(state? "ON":"OFF")
+                .arg(state? "\nClick to choose devices":""));
 }
 void VM_State_Widget::changeMouseState(bool state)
 {

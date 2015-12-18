@@ -296,26 +296,28 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                 bool show = false;
                 // show SRC Creator widget
                 // get path for method
-                virStoragePoolPtr _pool = virStoragePoolLookupByName(
+                if ( NULL!=ptr_ConnPtr || NULL!=*ptr_ConnPtr ) {
+                    virStoragePoolPtr _pool = virStoragePoolLookupByName(
                             *ptr_ConnPtr, currPoolName.toUtf8().data());
-                QDomDocument doc;
-                doc.setContent(
-                            QString(
-                                virStoragePoolGetXMLDesc(_pool, VIR_STORAGE_XML_INACTIVE))
-                            );
-                _poolType = doc.firstChildElement("pool").attribute("type");
-                CreateVolume *createVolumeDialog =
-                        new CreateVolume(this, _poolType);
-                int result = createVolumeDialog->exec();
-                if ( result==QDialog::Accepted ) {
-                    path = createVolumeDialog->getXMLDescFileName();
-                    show = createVolumeDialog->showXMLDescription();
+                    QDomDocument doc;
+                    doc.setContent(
+                                QString(
+                                    virStoragePoolGetXMLDesc(_pool, VIR_STORAGE_XML_INACTIVE))
+                                );
+                    _poolType = doc.firstChildElement("pool").attribute("type");
+                    CreateVolume *createVolumeDialog =
+                            new CreateVolume(this, _poolType);
+                    int result = createVolumeDialog->exec();
+                    if ( result==QDialog::Accepted ) {
+                        path = createVolumeDialog->getXMLDescFileName();
+                        show = createVolumeDialog->showXMLDescription();
+                    };
+                    delete createVolumeDialog;
+                    createVolumeDialog = NULL;
+                    if ( result==QDialog::Rejected ) return;
+                    task.args.path = path;
+                    if ( show ) QDesktopServices::openUrl(QUrl(path));
                 };
-                delete createVolumeDialog;
-                createVolumeDialog = NULL;
-                if ( result==QDialog::Rejected ) return;
-                task.args.path = path;
-                if ( show ) QDesktopServices::openUrl(QUrl(path));
             } else {
                 QString path   = args.first();
                 task.args.path = path;

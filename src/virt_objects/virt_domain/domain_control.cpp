@@ -268,41 +268,43 @@ void VirtDomainControl::execAction(const QStringList &l)
             task.args.sign  = autostartState;
             emit addNewTask(task);
         } else if ( l.first()=="migrateVirtDomain" ) {
-            // set Migrate parameters
-            // implement in thread or in MigrateDialog  VVV
-            char *hostName = virConnectGetHostname(*ptr_ConnPtr);
-            const char *connType = virConnectGetType(*ptr_ConnPtr);
-            //                                          ^^^
-            QStringList list;
-            settings.beginGroup("Connects");
-            foreach (QString conn, settings.childGroups()) {
-                settings.beginGroup(conn);
-                list.append(QString("%1\t(%2)")
-                            .arg(conn)
-                            .arg(settings.value("Driver").toString()));
+            if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+                // set Migrate parameters
+                // implement in thread or in MigrateDialog  VVV
+                char *hostName = virConnectGetHostname(*ptr_ConnPtr);
+                const char *connType = virConnectGetType(*ptr_ConnPtr);
+                //                                          ^^^
+                QStringList list;
+                settings.beginGroup("Connects");
+                foreach (QString conn, settings.childGroups()) {
+                    settings.beginGroup(conn);
+                    list.append(QString("%1\t(%2)")
+                                .arg(conn)
+                                .arg(settings.value("Driver").toString()));
+                    settings.endGroup();
+                };
                 settings.endGroup();
-            };
-            settings.endGroup();
-            MigrateDialog *migrateDialog = new MigrateDialog(
-                        this, domainName, hostName, connType, list);
-            int exitCode = migrateDialog->exec();
-            MIGR_ARGS migrArgs = migrateDialog->getMigrateArgs();
-            migrateDialog->deleteLater();
-            task.action      = MIGRATE_ENTITY;
-            task.method      = l.first();
-            task.args.sign   = migrArgs.flags;
-            task.args.object = migrArgs.new_name;
-            task.args.size   = migrArgs.bandwidth;
-            task.args.offset = migrArgs.maxDownTime;
-            if ( exitCode ) {
-                if ( migrArgs.connName.isEmpty() ) {
-                    // migrate useing specified URI
-                    task.args.path = migrArgs.uri;
-                    emit addNewTask(task);
-                } else {
-                    // migrate useing specified connect
-                    task.args.path = migrArgs.connName;
-                    emit migrateToConnect(task);
+                MigrateDialog *migrateDialog = new MigrateDialog(
+                            this, domainName, hostName, connType, list);
+                int exitCode = migrateDialog->exec();
+                MIGR_ARGS migrArgs = migrateDialog->getMigrateArgs();
+                migrateDialog->deleteLater();
+                task.action      = MIGRATE_ENTITY;
+                task.method      = l.first();
+                task.args.sign   = migrArgs.flags;
+                task.args.object = migrArgs.new_name;
+                task.args.size   = migrArgs.bandwidth;
+                task.args.offset = migrArgs.maxDownTime;
+                if ( exitCode ) {
+                    if ( migrArgs.connName.isEmpty() ) {
+                        // migrate useing specified URI
+                        task.args.path = migrArgs.uri;
+                        emit addNewTask(task);
+                    } else {
+                        // migrate useing specified connect
+                        task.args.path = migrArgs.connName;
+                        emit migrateToConnect(task);
+                    };
                 };
             };
         } else if ( l.first()=="getVirtDomainXMLDesc" ) {

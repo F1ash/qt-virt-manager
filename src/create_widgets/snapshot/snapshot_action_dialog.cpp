@@ -158,6 +158,7 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
 }
 void SnapshotActionDialog::setDomainSnapshots()
 {
+    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) return;
     domain = virDomainLookupByName(
                 *ptr_ConnPtr, domName.toUtf8().data());
     int namesLen = virDomainSnapshotNum(

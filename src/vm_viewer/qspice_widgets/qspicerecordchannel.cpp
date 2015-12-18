@@ -5,11 +5,12 @@
 QSpiceRecordChannel::~QSpiceRecordChannel()
 {
     if ( audioInput!=NULL ) {
-        qDebug()<<"~QSpiceRecordChannel";
+        //qDebug()<<"~QSpiceRecordChannel";
         // close the buffer before audioInput stopped
-        if ( _dev && _dev->isOpen() ) {
-            _dev->close();
-            _dev->remove();
+        if ( _dev ) {
+            if ( _dev->isOpen() ) _dev->close();
+            bool removed = _dev->remove();
+            //qDebug()<<"record_dev_removed"<<removed;
         };
         audioInput->stop();
     };
@@ -61,6 +62,7 @@ void QSpiceHelper::record_stop(SpiceRecordChannel *channel,
                         _record->_dev->size(),
                         _record->audioInput->processedUSecs());
             _record->_dev->close();
+            //qDebug()<<"record_dev_closed";
         };
     };
 }

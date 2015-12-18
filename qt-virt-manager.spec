@@ -43,6 +43,7 @@ BuildRequires:  qtermwidget-devel >= 0.6.0-2
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtsvg-devel
 BuildRequires:  qtermwidget-qt5-devel >= 0.6.0-2
+BuildRequires:  qt5-qtmultimedia-devel
 %endif
 BuildRequires:  libvirt-devel
 BuildRequires:  glibc-headers

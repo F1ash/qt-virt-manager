@@ -16,7 +16,10 @@ bool ControlThread::setCurrentWorkConnect(
     currConnName = _name;
     ptr_ConnPtr = _connPtrPtr;
     // for new virConnect usage create the new virConnectRef[erence]
-    int ret = virConnectRef(*ptr_ConnPtr);
+    int ret = -1;
+    if ( ptr_ConnPtr ) {
+        ret = virConnectRef(*ptr_ConnPtr);
+    };
     if ( ret<0 ) {
         ptr_ConnPtr = NULL;
         sendConnErrors();

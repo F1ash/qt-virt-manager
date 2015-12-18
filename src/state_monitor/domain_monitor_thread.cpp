@@ -32,14 +32,16 @@ void DomainMonitorThread::run()
 {
     if ( firstStep ) {
         // for new virConnect usage create the new virConnectRef[erence]
-        if ( virConnectRef(*ptr_ConnPtr)<0 ) {
-            ptr_ConnPtr = NULL;
-            sendConnErrors();
+        if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+            if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+                ptr_ConnPtr = NULL;
+                sendConnErrors();
+            };
+            //qDebug()<<"virConnectRef +1"<<"DomainMonitorThread"<<domainName<<(ret+1>0);
+            domain = virDomainLookupByName(
+                        *ptr_ConnPtr, domainName.toUtf8().data());
+            if ( NULL==domain ) sendConnErrors();
         };
-        //qDebug()<<"virConnectRef +1"<<"DomainMonitorThread"<<domainName<<(ret+1>0);
-        domain = virDomainLookupByName(
-                    *ptr_ConnPtr, domainName.toUtf8().data());
-        if ( NULL==domain ) sendConnErrors();
     };
     if ( NULL!=domain ) {
         virDomainInfo info;

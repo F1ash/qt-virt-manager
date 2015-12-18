@@ -6,7 +6,10 @@ HostDevice_Edit::HostDevice_Edit(
 {
     info->setVisible(false);
     infoEdit = new QStackedWidget(this);
-    QString connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
+    QString connType;
+    if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+        connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
+    };
     if ( connType=="qemu" ) {
         infoEdit->addWidget(new USB_Host_Device_Edit(this));
         infoEdit->addWidget(new PCI_Host_Device_Edit(this));

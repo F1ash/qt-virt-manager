@@ -77,7 +77,10 @@ DeviceStack::DeviceStack(
     scrolled->setLayout(infoLayout);
     infoWidget->setWidget(scrolled);
     infoWidget->setWidgetResizable(true);
-    QString connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
+    QString connType;
+    if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+        connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
+    };
     QStringList devSet, devList, devType;
     devList = DEV_LIST;
     devType = DEV_TYPE;

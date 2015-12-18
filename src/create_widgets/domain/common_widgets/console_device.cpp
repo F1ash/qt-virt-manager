@@ -34,7 +34,10 @@ ConsoleDevice::ConsoleDevice(
         QWidget *parent, virConnectPtr *connPtrPtr, virDomainPtr domain) :
     CharDevice(parent, connPtrPtr, domain, QString("console"))
 {
-    QString connType = QString::fromUtf8(virConnectGetType(*ptr_ConnPtr));
+    QString connType;
+    if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+        connType = QString::fromUtf8(virConnectGetType(*ptr_ConnPtr));
+    };
     devType->clear();
     devType->addItem("PseudoTTY (pty)", "pty");
     targetType = new QComboBox(this);
