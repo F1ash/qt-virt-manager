@@ -32,6 +32,7 @@ public:
 signals:
     void                     entityMsg(QString&);
     void                     addNewTask(TASK);
+    void                     ptrIsNull();
 
 public slots:
     void                     msgRepeater(QString&);

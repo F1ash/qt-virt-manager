@@ -13,7 +13,10 @@ SetDisksDataThread::~SetDisksDataThread()
 
 void SetDisksDataThread::run()
 {
-    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) return;
+    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+        emit ptrIsNull();
+        return;
+    };
     // NOTE: currConnName == domainName
     virDomainPtr domain = virDomainLookupByName(
                 *ptr_ConnPtr, currConnName.toUtf8().data());

@@ -80,7 +80,8 @@ DeviceStack::DeviceStack(
     QString connType;
     if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
         connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
-    };
+    } else
+        emit ptrIsNull();
     QStringList devSet, devList, devType;
     devList = DEV_LIST;
     devType = DEV_TYPE;

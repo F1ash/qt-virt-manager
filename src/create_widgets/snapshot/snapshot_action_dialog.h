@@ -33,6 +33,7 @@ public:
     ~SnapshotActionDialog();
 
 signals:
+    void                 ptrIsNull();
 
 private:
     virConnectPtr*       ptr_ConnPtr;

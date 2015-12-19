@@ -13,7 +13,8 @@ PCI_Passthrough::PCI_Passthrough(
     QString connType;
     if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
         connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
-    };
+    } else
+        emit ptrIsNull();
     if ( connType=="lxc" ) {
         driver->addItem("VFIO");
     } else if ( connType=="qemu" ) {

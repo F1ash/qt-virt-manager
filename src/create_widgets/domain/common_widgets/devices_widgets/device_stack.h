@@ -19,6 +19,7 @@ public:
 
 signals:
     void             errorMsg(QString&);
+    void             ptrIsNull();
 
 private:
     QSettings        settings;

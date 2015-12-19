@@ -18,7 +18,8 @@ HostDevice::HostDevice(QWidget *parent, virConnectPtr *connPtrPtr) :
     QString connType;
     if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
         connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
-    };
+    } else
+        emit ptrIsNull();
     if ( connType=="qemu" ) {
         type->addItems(QEMU_DEV_LIST);
         info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));

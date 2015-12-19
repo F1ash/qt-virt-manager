@@ -28,14 +28,6 @@ DomainStateViewer::DomainStateViewer(
     setLayout(commonLayout);
     connect(closeViewer, SIGNAL(clicked()),
             this, SLOT(closeDomainStateViewer()));
-    // TODO: implement the display of different domain states:
-    // CPU Usage, Disk I/O (?), Network I/O (?), MemoryStats.
-    domainMonitorThread = new DomainMonitorThread(
-                this, ptr_ConnPtr, domainName);
-    connect(domainMonitorThread, SIGNAL(dataChanged(int, int, int, int)),
-            this, SLOT(setData(int, int, int, int)));
-    connect(domainMonitorThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
 
     cpuDoc.setContent(HOST_CPU_USAGE_SVG_TEMPLATE);
     cpuPaint = cpuDoc.firstChildElement("svg")
@@ -48,8 +40,18 @@ DomainStateViewer::DomainStateViewer(
             .firstChildElement("g");
     memPercent = memDoc.firstChildElement("svg")
             .firstChildElement("text");
-    timerId = startTimer(PERIOD*1000);
-    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+
+    // TODO: implement the display of different domain states:
+    // CPU Usage, Disk I/O (?), Network I/O (?), MemoryStats.
+    if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+        domainMonitorThread = new DomainMonitorThread(
+                    this, ptr_ConnPtr, domainName);
+        connect(domainMonitorThread, SIGNAL(dataChanged(int, int, int, int)),
+                this, SLOT(setData(int, int, int, int)));
+        connect(domainMonitorThread, SIGNAL(errorMsg(QString&,uint)),
+                this, SIGNAL(errorMsg(QString&)));
+        timerId = startTimer(PERIOD*1000);
+    } else {
         monitorName->setText("State:<br><b>Connection Error</b></br>");
     };
 }

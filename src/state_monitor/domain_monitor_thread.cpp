@@ -36,12 +36,14 @@ void DomainMonitorThread::run()
             if ( virConnectRef(*ptr_ConnPtr)<0 ) {
                 ptr_ConnPtr = NULL;
                 sendConnErrors();
+            } else {
+                //qDebug()<<"virConnectRef +1"<<"DomainMonitorThread"<<domainName<<(ret+1>0);
+                domain = virDomainLookupByName(
+                            *ptr_ConnPtr, domainName.toUtf8().data());
+                if ( NULL==domain ) sendConnErrors();
             };
-            //qDebug()<<"virConnectRef +1"<<"DomainMonitorThread"<<domainName<<(ret+1>0);
-            domain = virDomainLookupByName(
-                        *ptr_ConnPtr, domainName.toUtf8().data());
-            if ( NULL==domain ) sendConnErrors();
-        };
+        } else
+            emit ptrIsNull();
     };
     if ( NULL!=domain ) {
         virDomainInfo info;

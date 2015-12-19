@@ -25,6 +25,7 @@ public:
 
 signals:
     void             errorMsg(QString&, uint);
+    void             ptrIsNull();
 public slots:
     virtual void     stop();
 };

@@ -37,7 +37,8 @@ ConsoleDevice::ConsoleDevice(
     QString connType;
     if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
         connType = QString::fromUtf8(virConnectGetType(*ptr_ConnPtr));
-    };
+    } else
+        emit ptrIsNull();
     devType->clear();
     devType->addItem("PseudoTTY (pty)", "pty");
     targetType = new QComboBox(this);

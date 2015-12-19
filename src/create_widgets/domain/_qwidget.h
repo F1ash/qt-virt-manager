@@ -30,6 +30,7 @@ public:
 
 signals:
     void                     errorMsg(QString&);
+    void                     ptrIsNull();
 
 public slots:
     virtual QDomDocument     getDataDocument() const;

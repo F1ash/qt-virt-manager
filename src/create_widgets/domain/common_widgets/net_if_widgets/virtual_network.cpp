@@ -218,7 +218,8 @@ void Virtual_Network::setAvailableVirtNetworks()
     int ret = -1;
     if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
         ret = virConnectListAllNetworks(*ptr_ConnPtr, &networks, flags);
-    };
+    } else
+        emit ptrIsNull();
     if ( ret<0 ) {
         // if failed, then set to default virtual network
         network->addItem("VirtNetwork detect failed", "default");

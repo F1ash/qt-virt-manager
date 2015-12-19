@@ -19,7 +19,8 @@ FileSystems::FileSystems(
     QString connType;
     if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
         connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
-    };
+    } else
+        emit ptrIsNull();
     if ( connType=="lxc" ) {
         type->addItems(LXC_FS_TYPES);
     } else if ( connType=="qemu" ) {

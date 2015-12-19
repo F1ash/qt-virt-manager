@@ -306,7 +306,8 @@ void VirtDomainControl::execAction(const QStringList &l)
                         emit migrateToConnect(task);
                     };
                 };
-            };
+            } else
+                emit ptrIsNull();
         } else if ( l.first()=="getVirtDomainXMLDesc" ) {
             task.method     = l.first();
             task.action     = GET_XML_DESCRIPTION;

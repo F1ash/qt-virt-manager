@@ -10,6 +10,7 @@ void HelperThread::run()
     QString capabilities;
     if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
         emit result(capabilities);
+        emit ptrIsNull();
         return;
     };
     if ( virConnectRef(*ptr_ConnPtr)<0 ) {
