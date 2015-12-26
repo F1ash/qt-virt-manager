@@ -102,7 +102,7 @@ void TermWidgetImpl::customContextMenuCall(const QPoint & pos)
     menu.addAction(Properties::Instance()->actions[CLEAR_TERMINAL]);
     menu.addAction(Properties::Instance()->actions[SPLIT_HORIZONTAL]);
     menu.addAction(Properties::Instance()->actions[SPLIT_VERTICAL]);
-#warning TODO/FIXME: disable the action when there is only one terminal
+    // TODO/FIXME: disable the action when there is only one terminal
     menu.addAction(Properties::Instance()->actions[SUB_COLLAPSE]);
     menu.exec(mapToGlobal(pos));
 }

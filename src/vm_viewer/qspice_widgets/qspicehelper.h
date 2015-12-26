@@ -26,7 +26,6 @@
 #include <channel-main.h>
 #include <channel-port.h>
 #include <QDebug>
-#include <libcacard.h>
 
 class QSpiceHelper
 {
@@ -119,16 +118,16 @@ public:
 
     // Smartcard Manager
     static void card_inserted(SpiceSmartcardManager *manager,
-                              VReader  *reader,
+                              SpiceSmartcardReader  *reader,
                               gpointer               user_data);
     static void card_removed(SpiceSmartcardManager *manager,
-                             VReader  *reader,
+                             SpiceSmartcardReader  *reader,
                              gpointer               user_data);
     static void reader_added(SpiceSmartcardManager *manager,
-                             VReader  *reader,
+                             SpiceSmartcardReader  *reader,
                              gpointer               user_data);
     static void reader_removed(SpiceSmartcardManager *manager,
-                               VReader *reader,
+                               SpiceSmartcardReader  *reader,
                                gpointer               user_data);
 
     // Port Channel
