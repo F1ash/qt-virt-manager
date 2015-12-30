@@ -764,12 +764,19 @@ else ( QT4_BUILD )
 endif( QT4_BUILD )
 ##
 
+if (NOT DEFINED WITHOUT_LIBCACARD)
+    set (WITHOUT_LIBCACARD 0)
+endif ()
+
 find_package(GLib2   REQUIRED)
 find_package(GObject REQUIRED)
 find_package(Gio     REQUIRED)
 find_package(Spice1  REQUIRED)
 find_package(SpiceClientGLib2     REQUIRED)
-find_package(CACard  REQUIRED)
+if ( WITHOUT_LIBCACARD STREQUAL 0)
+    find_package(CACard  REQUIRED)
+endif()
+message(STATUS "Build without Libcacard: ${WITHOUT_LIBCACARD}")
 find_package(LibVirt REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
 include_directories(

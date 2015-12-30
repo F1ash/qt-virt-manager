@@ -105,6 +105,7 @@ void VM_State_Widget::setDownloadProcessValue(int _val1, int _val2)
 }
 void VM_State_Widget::changeSmartcardState(bool state)
 {
+    smartCard->blockSignals(!state);
     smartCard->setPixmap(
                 QIcon::fromTheme("media-flash")
                 .pixmap(fontInfo().pixelSize(),
@@ -139,6 +140,7 @@ void VM_State_Widget::changeKeyboardState(bool state)
 }
 void VM_State_Widget::changeDisplayState(bool state)
 {
+    display->blockSignals(!state);
     display->setPixmap(
                 QIcon::fromTheme("video-display")
                 .pixmap(fontInfo().pixelSize(),
@@ -151,6 +153,7 @@ void VM_State_Widget::changeDisplayState(bool state)
 }
 void VM_State_Widget::changeUsbredirState(bool state)
 {
+    usbRedir->blockSignals(!state);
     usbRedir->setPixmap(
                 QIcon::fromTheme("drive-removable-media")
                 .pixmap(fontInfo().pixelSize(),
