@@ -14,7 +14,7 @@ public:
     explicit _VirtThread(
             QObject        *parent      = NULL,
             virConnectPtr  *connPtrPtr  = NULL);
-    virtual ~_VirtThread();
+    virtual ~_VirtThread()              = 0;
     bool             keep_alive;
     uint             number;
     virConnectPtr   *ptr_ConnPtr;

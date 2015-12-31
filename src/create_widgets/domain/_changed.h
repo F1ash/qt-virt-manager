@@ -9,6 +9,7 @@ class _Changed : public QWidget
     Q_OBJECT
 public:
     explicit _Changed(QWidget *parent = NULL);
+    virtual ~_Changed()               = 0;
 
 signals:
     void dataChanged();

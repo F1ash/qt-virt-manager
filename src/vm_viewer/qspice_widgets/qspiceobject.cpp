@@ -23,6 +23,10 @@ QSpiceObject::QSpiceObject(QObject *parent) :
     QObject(parent)
 {
 }
+QSpiceObject::~QSpiceObject()
+{
+
+}
 
 void QSpiceHelper::GDisposeEvent(gpointer data, GObject *gobject)
 {

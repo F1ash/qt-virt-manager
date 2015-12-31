@@ -29,17 +29,11 @@ class QSpiceObject : public QObject
     Q_OBJECT
 public:
     explicit QSpiceObject(QObject *parent = 0);
-
+    virtual ~QSpiceObject()               = 0;
     virtual bool objectDisposed();
 
-signals:
-
-public slots:
-
 protected:
-    friend class QSpiceUsbDeviceManager;
     void *gobject;
-
     QSpiceObject(void *_gobject);
 
     int getPropInt(QString name);

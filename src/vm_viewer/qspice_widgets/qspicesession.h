@@ -32,6 +32,7 @@ public:
     explicit QSpiceSession(QObject *parent = 0);
     friend class QSpiceHelper;
     friend class QSpiceWidget;
+    friend class QSpiceUsbDeviceManager;
 
     Q_GPROP_STR (Uri, "uri")
     Q_GPROP_BOOL(EnableAudio, "enable-audio")           // doc default TRUE
