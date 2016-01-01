@@ -56,7 +56,7 @@ QSpiceWidget::~QSpiceWidget()
     Disconnect();
 }
 
-bool QSpiceWidget::Connect(QString uri)
+bool QSpiceWidget::Connect(QString &uri)
 {
     spiceSession->setUri(uri);
     return spiceSession->Connect();

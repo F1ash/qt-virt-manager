@@ -215,8 +215,9 @@ void Spice_Viewer::initSpiceWidget()
             this, SLOT(sendErrMsg(QString&)));
 
     QSize around_size = getWidgetSizeAroundDisplay();
+    QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
     spiceWdg->setNewSize(around_size.width(), around_size.height());
-    spiceWdg->Connect(QString("spice://%1:%2").arg(addr).arg(port));
+    spiceWdg->Connect(_uri);
 }
 
 void Spice_Viewer::timerEvent(QTimerEvent *ev)

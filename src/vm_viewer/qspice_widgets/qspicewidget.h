@@ -31,25 +31,90 @@ public:
     explicit QSpiceWidget(QWidget *parent = 0);
     virtual ~QSpiceWidget();
 
-    bool Connect(QString uri);
+    /*
+     *  Connect to guest by uri, start spice-session.
+     */
+    bool Connect(QString &uri);
+
+    /*
+     * Disconnect from guest, stop spice-session.
+     */
     void Disconnect();
+
+    /*
+     * Send key sequience to guest.
+     */
     void SendKeySequience(Qt::Key);
+
+    /*
+     * Send files to guest.
+     */
     void mainFileCopyAsync(QStringList&);
+
+    /*
+     * Copy guest Clipboard current data to client Clipboard.
+     */
     void copyClipboardFromGuest();
+
+    /*
+     * Send current client Clipboard data to guest Clipboard.
+     */
     void sendClipboardDataToGuest(uint, const uchar*, uint);
 
 signals:
+    /*
+     * Emitted, when display resize event occurred.
+     */
     void DisplayResize(const QSize&);
+
+    /*
+     * Emitted, when new portion of files will downloaded to guest.
+     */
     void downloaded(int, int);
+
+    /*
+     * Emitted the state, when channel will initiated.
+     */
     void cursorChannelChanged(bool);
+
+    /*
+     * Emitted the state, when channel will initiated.
+     */
     void inputsChannelChanged(bool);
+
+    /*
+     * Emitted the state, when channel will initiated.
+     */
     void displayChannelChanged(bool);
+
+    /*
+     * Emitted the state, when channel will initiated.
+     */
     void usbredirChannelChanged(bool);
+
+    /*
+     * Emitted the state, when channel will initiated.
+     */
     void smartcardChannelChanged(bool);
+
+    /*
+     * Emitted the state, when channel will initiated.
+     */
     void webdavChannelChanged(bool);
+
+    /*
+     * Emitted the state, when channel will initiated.
+     */
     void playbackChannelChanged(bool);
+
+    /*
+     * Emitted the state, when channel will initiated.
+     */
     void recordChannelChanged(bool);
 
+    /*
+     * Emitted, when some error occured.
+     */
     void errMsg(QString&);
 
 private:
@@ -132,11 +197,34 @@ private slots:
     void resizeDone();
 
 public slots:
+    /*
+     * Set basic name for shapshots.
+     */
     void setGuestName(QString&);
+
+    /*
+     * Set new widget size (width, height).
+     */
     void setNewSize(int, int);
+
+    /*
+     * Show up USB Device widget.
+     */
     void showUsbDevWidget();
+
+    /*
+     * Show up Smartcard widget.
+     */
     void showSmartCardWidget();
+
+    /*
+     * Get and save Screenshot (pixbuff) from guest.
+     */
     void getScreenshot();
+
+    /*
+     * Set transformation mode for display.
+     */
     void setTransformationMode(Qt::TransformationMode);
 };
 
