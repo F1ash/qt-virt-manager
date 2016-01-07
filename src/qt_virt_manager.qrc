@@ -1,6 +1,15 @@
+<?xml version="1.0" ?>
 <RCC>
     <qresource prefix="/icons/QtVirtManager">
         <file alias="index.theme">icons/index.theme</file>
+        <file alias="22x22/places/folder-remote.png">icons/22x22/places/folder-remote.png</file>
+        <file alias="22x22/devices/audio-card.png">icons/22x22/devices/audio-card.png</file>
+        <file alias="22x22/devices/camera-photo.png">icons/22x22/devices/camera-photo.png</file>
+        <file alias="22x22/devices/input-mouse.png">icons/22x22/devices/input-mouse.png</file>
+        <file alias="22x22/devices/drive-removable-media.png">icons/22x22/devices/drive-removable-media.png</file>
+        <file alias="22x22/devices/media-flash.png">icons/22x22/devices/media-flash.png</file>
+        <file alias="22x22/devices/video-display.png">icons/22x22/devices/video-display.png</file>
+        <file alias="22x22/devices/input-keyboard.png">icons/22x22/devices/input-keyboard.png</file>
         <file alias="22x22/categories/preferences-other.png">icons/22x22/categories/preferences-other.png</file>
         <file alias="22x22/categories/preferences-system-network.png">icons/22x22/categories/preferences-system-network.png</file>
         <file alias="22x22/categories/preferences-desktop.png">icons/22x22/categories/preferences-desktop.png</file>
@@ -9,6 +18,7 @@
         <file alias="22x22/status/leddarkblue.png">icons/22x22/status/leddarkblue.png</file>
         <file alias="22x22/status/ledlightgreen.png">icons/22x22/status/ledlightgreen.png</file>
         <file alias="22x22/status/ledlightred.png">icons/22x22/status/ledlightred.png</file>
+        <file alias="22x22/emblems/face-sad.png">icons/22x22/emblems/face-sad.png</file>
         <file alias="22x22/emblems/memory.png">icons/22x22/emblems/memory.png</file>
         <file alias="22x22/emblems/xen.png">icons/22x22/emblems/xen.png</file>
         <file alias="22x22/emblems/qemu.png">icons/22x22/emblems/qemu.png</file>
@@ -66,6 +76,14 @@
         <file alias="22x22/apps/utilities-monitor.png">icons/22x22/apps/utilities-monitor.png</file>
         <file alias="22x22/apps/utilities-terminal.png">icons/22x22/apps/utilities-terminal.png</file>
         <file alias="22x22/apps/utilities-log-viewer.png">icons/22x22/apps/utilities-log-viewer.png</file>
+        <file alias="32x32/places/folder-remote.png">icons/32x32/places/folder-remote.png</file>
+        <file alias="32x32/devices/audio-card.png">icons/32x32/devices/audio-card.png</file>
+        <file alias="32x32/devices/camera-photo.png">icons/32x32/devices/camera-photo.png</file>
+        <file alias="32x32/devices/input-mouse.png">icons/32x32/devices/input-mouse.png</file>
+        <file alias="32x32/devices/drive-removable-media.png">icons/32x32/devices/drive-removable-media.png</file>
+        <file alias="32x32/devices/media-flash.png">icons/32x32/devices/media-flash.png</file>
+        <file alias="32x32/devices/video-display.png">icons/32x32/devices/video-display.png</file>
+        <file alias="32x32/devices/input-keyboard.png">icons/32x32/devices/input-keyboard.png</file>
         <file alias="32x32/categories/preferences-other.png">icons/32x32/categories/preferences-other.png</file>
         <file alias="32x32/categories/network.png">icons/32x32/categories/network.png</file>
         <file alias="32x32/categories/preferences-desktop.png">icons/32x32/categories/preferences-desktop.png</file>
@@ -74,6 +92,7 @@
         <file alias="32x32/status/leddarkblue.png">icons/32x32/status/leddarkblue.png</file>
         <file alias="32x32/status/ledlightgreen.png">icons/32x32/status/ledlightgreen.png</file>
         <file alias="32x32/status/ledlightred.png">icons/32x32/status/ledlightred.png</file>
+        <file alias="32x32/emblems/face-sad.png">icons/32x32/emblems/face-sad.png</file>
         <file alias="32x32/emblems/memory.png">icons/32x32/emblems/memory.png</file>
         <file alias="32x32/emblems/xen.png">icons/32x32/emblems/xen.png</file>
         <file alias="32x32/emblems/qemu.png">icons/32x32/emblems/qemu.png</file>
@@ -133,6 +152,14 @@
         <file alias="32x32/apps/utilities-monitor.png">icons/32x32/apps/utilities-monitor.png</file>
         <file alias="32x32/apps/utilities-terminal.png">icons/32x32/apps/utilities-terminal.png</file>
         <file alias="32x32/apps/utilities-log-viewer.png">icons/32x32/apps/utilities-log-viewer.png</file>
+        <file alias="48x48/places/folder-remote.png">icons/48x48/places/folder-remote.png</file>
+        <file alias="48x48/devices/audio-card.png">icons/48x48/devices/audio-card.png</file>
+        <file alias="48x48/devices/camera-photo.png">icons/48x48/devices/camera-photo.png</file>
+        <file alias="48x48/devices/input-mouse.png">icons/48x48/devices/input-mouse.png</file>
+        <file alias="48x48/devices/drive-removable-media.png">icons/48x48/devices/drive-removable-media.png</file>
+        <file alias="48x48/devices/media-flash.png">icons/48x48/devices/media-flash.png</file>
+        <file alias="48x48/devices/video-display.png">icons/48x48/devices/video-display.png</file>
+        <file alias="48x48/devices/input-keyboard.png">icons/48x48/devices/input-keyboard.png</file>
         <file alias="48x48/categories/preferences-other.png">icons/48x48/categories/preferences-other.png</file>
         <file alias="48x48/categories/network.png">icons/48x48/categories/network.png</file>
         <file alias="48x48/categories/preferences-desktop.png">icons/48x48/categories/preferences-desktop.png</file>
@@ -141,6 +168,7 @@
         <file alias="48x48/status/leddarkblue.png">icons/48x48/status/leddarkblue.png</file>
         <file alias="48x48/status/ledlightgreen.png">icons/48x48/status/ledlightgreen.png</file>
         <file alias="48x48/status/ledlightred.png">icons/48x48/status/ledlightred.png</file>
+        <file alias="48x48/emblems/face-sad.png">icons/48x48/emblems/face-sad.png</file>
         <file alias="48x48/emblems/memory.png">icons/48x48/emblems/memory.png</file>
         <file alias="48x48/emblems/xen.png">icons/48x48/emblems/xen.png</file>
         <file alias="48x48/emblems/qemu.png">icons/48x48/emblems/qemu.png</file>
@@ -200,6 +228,14 @@
         <file alias="48x48/apps/utilities-monitor.png">icons/48x48/apps/utilities-monitor.png</file>
         <file alias="48x48/apps/utilities-terminal.png">icons/48x48/apps/utilities-terminal.png</file>
         <file alias="48x48/apps/utilities-log-viewer.png">icons/48x48/apps/utilities-log-viewer.png</file>
+        <file alias="24x24/places/folder-remote.png">icons/24x24/places/folder-remote.png</file>
+        <file alias="24x24/devices/audio-card.png">icons/24x24/devices/audio-card.png</file>
+        <file alias="24x24/devices/camera-photo.png">icons/24x24/devices/camera-photo.png</file>
+        <file alias="24x24/devices/input-mouse.png">icons/24x24/devices/input-mouse.png</file>
+        <file alias="24x24/devices/drive-removable-media.png">icons/24x24/devices/drive-removable-media.png</file>
+        <file alias="24x24/devices/media-flash.png">icons/24x24/devices/media-flash.png</file>
+        <file alias="24x24/devices/video-display.png">icons/24x24/devices/video-display.png</file>
+        <file alias="24x24/devices/input-keyboard.png">icons/24x24/devices/input-keyboard.png</file>
         <file alias="24x24/categories/preferences-other.png">icons/24x24/categories/preferences-other.png</file>
         <file alias="24x24/categories/network.png">icons/24x24/categories/network.png</file>
         <file alias="24x24/categories/preferences-desktop.png">icons/24x24/categories/preferences-desktop.png</file>
@@ -208,6 +244,7 @@
         <file alias="24x24/status/leddarkblue.png">icons/24x24/status/leddarkblue.png</file>
         <file alias="24x24/status/ledlightgreen.png">icons/24x24/status/ledlightgreen.png</file>
         <file alias="24x24/status/ledlightred.png">icons/24x24/status/ledlightred.png</file>
+        <file alias="24x24/emblems/face-sad.png">icons/24x24/emblems/face-sad.png</file>
         <file alias="24x24/emblems/memory.png">icons/24x24/emblems/memory.png</file>
         <file alias="24x24/emblems/xen.png">icons/24x24/emblems/xen.png</file>
         <file alias="24x24/emblems/qemu.png">icons/24x24/emblems/qemu.png</file>
@@ -266,6 +303,14 @@
         <file alias="24x24/apps/utilities-monitor.png">icons/24x24/apps/utilities-monitor.png</file>
         <file alias="24x24/apps/utilities-terminal.png">icons/24x24/apps/utilities-terminal.png</file>
         <file alias="24x24/apps/utilities-log-viewer.png">icons/24x24/apps/utilities-log-viewer.png</file>
+        <file alias="64x64/places/folder-remote.png">icons/64x64/places/folder-remote.png</file>
+        <file alias="64x64/devices/audio-card.png">icons/64x64/devices/audio-card.png</file>
+        <file alias="64x64/devices/camera-photo.png">icons/64x64/devices/camera-photo.png</file>
+        <file alias="64x64/devices/input-mouse.png">icons/64x64/devices/input-mouse.png</file>
+        <file alias="64x64/devices/drive-removable-media.png">icons/64x64/devices/drive-removable-media.png</file>
+        <file alias="64x64/devices/media-flash.png">icons/64x64/devices/media-flash.png</file>
+        <file alias="64x64/devices/video-display.png">icons/64x64/devices/video-display.png</file>
+        <file alias="64x64/devices/input-keyboard.png">icons/64x64/devices/input-keyboard.png</file>
         <file alias="64x64/categories/storagePool.png">icons/64x64/categories/storagePool.png</file>
         <file alias="64x64/categories/preferences-other.png">icons/64x64/categories/preferences-other.png</file>
         <file alias="64x64/categories/network.png">icons/64x64/categories/network.png</file>
@@ -275,6 +320,7 @@
         <file alias="64x64/status/leddarkblue.png">icons/64x64/status/leddarkblue.png</file>
         <file alias="64x64/status/ledlightgreen.png">icons/64x64/status/ledlightgreen.png</file>
         <file alias="64x64/status/ledlightred.png">icons/64x64/status/ledlightred.png</file>
+        <file alias="64x64/emblems/face-sad.png">icons/64x64/emblems/face-sad.png</file>
         <file alias="64x64/emblems/memory.png">icons/64x64/emblems/memory.png</file>
         <file alias="64x64/emblems/xen.png">icons/64x64/emblems/xen.png</file>
         <file alias="64x64/emblems/qemu.png">icons/64x64/emblems/qemu.png</file>
