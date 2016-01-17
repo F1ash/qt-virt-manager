@@ -26,7 +26,7 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) :
                                QIcon::Disabled));
     usbRedir = new Click_Label(this);
     usbRedir->setContentsMargins(0,0,0,0);
-    usbRedir->setPixmap(QIcon::fromTheme("drive-removable-media")
+    usbRedir->setPixmap(QIcon::fromTheme("drive-removable-media-usb")
                         .pixmap(fontInfo().pixelSize(),
                                 QIcon::Disabled));
     webdav = new QLabel(this);
@@ -157,7 +157,7 @@ void VM_State_Widget::changeUsbredirState(bool state)
 {
     usbRedir->blockSignals(!state);
     usbRedir->setPixmap(
-                QIcon::fromTheme("drive-removable-media")
+                QIcon::fromTheme("drive-removable-media-usb")
                 .pixmap(fontInfo().pixelSize(),
                         (state)? QIcon::Active : QIcon::Disabled));
     usbRedir->setToolTip(
