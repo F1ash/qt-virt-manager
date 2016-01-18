@@ -351,7 +351,7 @@ void MainWindow::initDockWidgets()
         QDockWidget::DockWidgetVerticalTitleBar
     );
     logHeadWdg = new DockHeadWidget(this, "Events & Errors");
-    logHeadWdg->setTabBarName("document-properties");
+    logHeadWdg->setTabBarName("utilities-log-viewer");
     logDock->setTitleBarWidget(logHeadWdg);
     connect(logHeadWdg, SIGNAL(floatChanged(bool)),
             logDock, SLOT(_setFloating(bool)));

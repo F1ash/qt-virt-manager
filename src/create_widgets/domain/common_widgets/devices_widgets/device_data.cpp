@@ -14,7 +14,7 @@ DeviceData::DeviceData(
     restoreMenu = new DeviceRestoreMenu(this);
     restoreMenu->revertData->setEnabled(false);
     revert->setMenu(restoreMenu);
-    _close = new QPushButton(QIcon::fromTheme("window-close"), "Close", this);
+    _close = new QPushButton(QIcon::fromTheme("dialog-close"), "Close", this);
     _close->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     panelLayout = new QHBoxLayout(this);
     panelLayout->addWidget(devName, 10, Qt::AlignLeft);

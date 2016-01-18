@@ -6,7 +6,7 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) :
     tr_mode = Qt::SmoothTransformation;
     smartCard = new Click_Label(this);
     smartCard->setContentsMargins(0,0,0,0);
-    smartCard->setPixmap(QIcon::fromTheme("media-flash")
+    smartCard->setPixmap(QIcon::fromTheme("media-flash-sd-mmc")
                          .pixmap(fontInfo().pixelSize(),
                                  QIcon::Disabled));
     mouse = new QLabel(this);
@@ -109,7 +109,7 @@ void VM_State_Widget::changeSmartcardState(bool state)
 {
     smartCard->blockSignals(!state);
     smartCard->setPixmap(
-                QIcon::fromTheme("media-flash")
+                QIcon::fromTheme("media-flash-sd-mmc")
                 .pixmap(fontInfo().pixelSize(),
                         (state)? QIcon::Active : QIcon::Disabled));
     smartCard->setToolTip(

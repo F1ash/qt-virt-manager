@@ -12,7 +12,7 @@ _Device::_Device(QWidget *parent) :
     devType->setItemIcon(0, QIcon::fromTheme("drive-harddisk"));
     devType->setItemIcon(1, QIcon::fromTheme("media-floppy"));
     devType->setItemIcon(2, QIcon::fromTheme("drive-optical"));
-    devType->setItemIcon(3, QIcon::fromTheme("network-server"));
+    devType->setItemIcon(3, QIcon::fromTheme("network-server-database"));
     commonLayout = new QHBoxLayout(this);
     commonLayout->addWidget(devTypeLabel);
     commonLayout->addWidget(devType);

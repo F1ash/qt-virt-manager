@@ -13,6 +13,7 @@ Random::Random(QWidget *parent) :
     model->addItem("virtio");
     model->insertSeparator(1);
     model->addItem("Custom model");
+    model->setItemIcon(0, QIcon::fromTheme("drive-virtual-io"));
     rate = new QCheckBox("Use Rate:", this);
     periodLabel = new QLabel("Period:", this);
     periodLabel->setEnabled(false);

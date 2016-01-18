@@ -8,6 +8,9 @@ MemBalloon::MemBalloon(QWidget *parent, virConnectPtr *connPtrPtr) :
     model->addItem("NONE", "none");
     model->addItem("QEMU/KVM", "virtio");
     model->addItem("XEN", "xen");
+    model->setItemIcon(0, QIcon::fromTheme(""));
+    model->setItemIcon(1, QIcon::fromTheme("qemu"));
+    model->setItemIcon(2, QIcon::fromTheme("xen"));
     periodLabel = new QCheckBox("Period", this);
     periodLabel->setVisible(false);
     period = new QSpinBox(this);

@@ -30,9 +30,11 @@ void Boot_Devices::addNewDevice(QDomElement &_el)
     QString _devType = _el.attribute("type");
     _devName.append(" ");
     _devName.append(_devType);
+    QString _dev;
     if ( _el.hasAttribute("device") ) {
+        _dev.append(_el.attribute("device"));
         _devName.append(" ");
-        _devName.append(_el.attribute("device"));
+        _devName.append(_dev);
     };
     if ( !_el.firstChildElement("target").isNull() ) {
         _devName.append(" ");
@@ -57,7 +59,18 @@ void Boot_Devices::addNewDevice(QDomElement &_el)
     QListWidgetItem *_item = new QListWidgetItem();
     _item->setText(_devName);
     _item->setCheckState( (_used)? Qt::Checked:Qt::Unchecked );
-    _item->setIcon(QIcon::fromTheme("computer"));
+    QString icon;
+    if ( _dev.toLower().contains("cdrom") ) {
+        icon.append("drive-optical");
+    } else if ( _dev.toLower().contains("floppy") ) {
+        icon.append("media-floppy");
+    } else if ( _dev.toLower().contains("disk") ) {
+        icon.append("drive-harddisk");
+    } else if ( _dev.toLower().contains("lun") ) {
+        icon.append("network-server-database");
+    } else
+        icon.append("network-wired");
+    _item->setIcon(QIcon::fromTheme(icon));
     _item->setData(Qt::UserRole, _data);
     devices->insertItem(_order, _item);
 }

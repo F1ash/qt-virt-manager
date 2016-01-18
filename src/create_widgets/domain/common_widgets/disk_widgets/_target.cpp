@@ -11,6 +11,14 @@ _Target::_Target(QWidget *parent) :
     busLabel = new QLabel("Bus:", this);
     bus = new QComboBox(this);
     bus->addItems(BUS_TYPES);
+    bus->setItemIcon(0, QIcon::fromTheme(""));
+    bus->setItemIcon(1, QIcon::fromTheme("drive-ide"));
+    bus->setItemIcon(2, QIcon::fromTheme("drive-sata"));
+    bus->setItemIcon(3, QIcon::fromTheme("drive-scsi"));
+    bus->setItemIcon(4, QIcon::fromTheme("drive-usb"));
+    bus->setItemIcon(5, QIcon::fromTheme("drive-sd"));
+    bus->setItemIcon(6, QIcon::fromTheme("drive-virtual-io"));
+    bus->setItemIcon(7, QIcon::fromTheme("xen"));
     devNameLabel = new QLabel("Logical Device name:", this);
     devName = new QLineEdit(this);
     devName->setPlaceholderText("sda");

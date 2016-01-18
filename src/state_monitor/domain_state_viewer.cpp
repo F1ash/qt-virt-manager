@@ -8,7 +8,7 @@ DomainStateViewer::DomainStateViewer(
 {
     monitorName = new QLabel(domainName, this);
     closeViewer = new QPushButton(
-                QIcon::fromTheme("window-close"), "", this);
+                QIcon::fromTheme("dialog-close"), "", this);
     cpuLabel = new QLabel("Host CPU\nUsage:", this);
     memLabel = new QLabel("Guest Memory\nUsage:", this);
     cpuGraphic = new QSvgWidget(this);
