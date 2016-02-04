@@ -96,6 +96,7 @@ void QSpiceHelper::playback_stop(SpicePlaybackChannel *channel,
 
 void QSpicePlaybackChannel::initCallbacks()
 {
+#if USE_SPICE_AUDIO
     g_signal_connect(gobject, "playback-data",
                      (GCallback) QSpiceHelper::playback_data, this);
     g_signal_connect(gobject, "playback-get-delay",
@@ -104,5 +105,6 @@ void QSpicePlaybackChannel::initCallbacks()
                      (GCallback) QSpiceHelper::playback_start, this);
     g_signal_connect(gobject, "playback-stop",
                      (GCallback) QSpiceHelper::playback_stop, this);
+#endif
 }
 

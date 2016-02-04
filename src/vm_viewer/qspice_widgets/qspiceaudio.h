@@ -7,7 +7,7 @@ class QSpiceAudio : public QSpiceObject
 {
 public:
     explicit QSpiceAudio(
-            QObject *parent = NULL,
+            QObject *parent   = NULL,
             void    *_session = NULL);
     Q_GPROP_POINTER(MainContext, "main-context")
     Q_GPROP_POINTER(Session, "session")

@@ -163,7 +163,13 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     if (_smartcard)
     {
         smartcard = _smartcard;
-        bool online = smartcard->Connect();
+        bool online = false;
+#if WITH_LIBCACARD
+        online = smartcard->Connect();
+        qDebug()<<"WITH_LIBCACARD";
+#else
+        qDebug()<<"NOT WITH_LIBCACARD";
+#endif
         if ( online ) {
             smartcardManager = new QSpiceSmartcardManager(this);
             if ( smartcardManager ) {
@@ -216,7 +222,13 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     if (_playback)
     {
         playback = _playback;
-        bool online = playback->Connect();
+        bool online = false;
+#if USE_SPICE_AUDIO
+        online = playback->Connect();
+        qDebug()<<"USE_SPICE_AUDIO";
+#else
+        qDebug()<<"NOT USE_SPICE_AUDIO";
+#endif
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
                         this, (SpiceSession*)spiceSession->gobject);
@@ -233,7 +245,13 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
     if (_record)
     {
         record = _record;
-        bool online = record->Connect();
+        bool online = false;
+#if USE_SPICE_AUDIO
+        online = record->Connect();
+        qDebug()<<"USE_SPICE_AUDIO";
+#else
+        qDebug()<<"NOT USE_SPICE_AUDIO";
+#endif
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
                         this, (SpiceSession*)spiceSession->gobject);

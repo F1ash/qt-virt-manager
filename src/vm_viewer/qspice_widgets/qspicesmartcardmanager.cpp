@@ -1,5 +1,5 @@
 
-#if WITHOUT_LIBCACARD & 0
+#if WITH_LIBCACARD
 #include <libcacard.h>
 #endif
 #include "qspicehelper.h"
@@ -17,7 +17,7 @@ void QSpiceHelper::card_inserted(SpiceSmartcardManager *manager,
                                  gpointer user_data)
 {
     Q_UNUSED(manager);
-#if WITHOUT_LIBCACARD & 0
+#if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
     if ( NULL==obj ) return;
@@ -26,9 +26,11 @@ void QSpiceHelper::card_inserted(SpiceSmartcardManager *manager,
     _name.append(vreader_get_name(_reader));
     if (_reader) vreader_free(_reader);
     if (!_name.isEmpty()) obj->cardInserted(_name);
+    qDebug()<<"WITH_LIBCACARD";
 #else
     Q_UNUSED(reader);
     Q_UNUSED(user_data);
+    qDebug()<<"WITHOUT_LIBCACARD";
 #endif
 }
 
@@ -37,7 +39,7 @@ void QSpiceHelper::card_removed(SpiceSmartcardManager *manager,
                                 gpointer user_data)
 {
     Q_UNUSED(manager);
-#if WITHOUT_LIBCACARD & 0
+#if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
     if ( NULL==obj ) return;
@@ -57,7 +59,7 @@ void QSpiceHelper::reader_added(SpiceSmartcardManager *manager,
                                 gpointer user_data)
 {
     Q_UNUSED(manager);
-#if WITHOUT_LIBCACARD & 0
+#if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
     if ( NULL==obj ) return;
@@ -77,7 +79,7 @@ void QSpiceHelper::reader_removed(SpiceSmartcardManager *manager,
                                   gpointer user_data)
 {
     Q_UNUSED(manager);
-#if WITHOUT_LIBCACARD & 0
+#if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
     if ( NULL==obj ) return;
@@ -111,7 +113,7 @@ void QSpiceSmartcardManager::init()
 }
 
 
-#if WITHOUT_LIBCACARD & 0
+#if WITH_LIBCACARD
 QStringList QSpiceSmartcardManager::spiceSmartcardManager_get_readers()
 {
     QStringList _readerList;

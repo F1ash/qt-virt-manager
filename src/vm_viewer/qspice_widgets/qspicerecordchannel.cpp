@@ -69,10 +69,12 @@ void QSpiceHelper::record_stop(SpiceRecordChannel *channel,
 
 void QSpiceRecordChannel::initCallbacks()
 {
+#if USE_SPICE_AUDIO
     g_signal_connect(gobject, "record-start",
                      (GCallback) QSpiceHelper::record_start, this);
     g_signal_connect(gobject, "record-stop",
                      (GCallback) QSpiceHelper::record_stop, this);
+#endif
 }
 
 void QSpiceRecordChannel::spiceRecord_send_data(void *data, size_t bytes, quint32 time)

@@ -764,8 +764,8 @@ else ( QT4_BUILD )
 endif( QT4_BUILD )
 ##
 
-if (NOT DEFINED WITHOUT_LIBCACARD)
-    set (WITHOUT_LIBCACARD 0)
+if (NOT WITH_LIBCACARD)
+    set (WITH_LIBCACARD 0)
 endif ()
 
 find_package(GLib2   REQUIRED)
@@ -773,10 +773,10 @@ find_package(GObject REQUIRED)
 find_package(Gio     REQUIRED)
 find_package(Spice1  REQUIRED)
 find_package(SpiceClientGLib2     REQUIRED)
-if ( WITHOUT_LIBCACARD STREQUAL 0)
+if ( WITH_LIBCACARD STREQUAL 1 )
     find_package(CACard  REQUIRED)
 endif()
-message(STATUS "Build without Libcacard: ${WITHOUT_LIBCACARD}")
+message(STATUS "Build with Libcacard: ${WITH_LIBCACARD}")
 find_package(LibVirt REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
 include_directories(
@@ -811,9 +811,17 @@ MESSAGE(STATUS "Found includes :
 MESSAGE(STATUS "Found BUILD_PROJECT_LIBRARIES: ${BUILD_PROJECT_LIBRARIES}")
 
 # * build & install application & files
+if (NOT USE_SPICE_AUDIO)
+    set (USE_SPICE_AUDIO 0)
+endif ()
+message(STATUS "Build with SPICE_AUDIO: ${USE_SPICE_AUDIO}")
 add_executable (${PROJECT_NAME}
     ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS} ${QTERM_RCC} ${QTERM_QM})
 target_link_libraries (${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
+SET_TARGET_PROPERTIES(${PROJECT_NAME}
+    PROPERTIES COMPILE_FLAGS -DWITH_LIBCACARD=${WITH_LIBCACARD})
+SET_TARGET_PROPERTIES(${PROJECT_NAME}
+    PROPERTIES COMPILE_FLAGS -DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO})
 
 configure_file ( ${DESKTOP_FILE}.in ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE} )
 install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE}
