@@ -4,7 +4,7 @@ ConsoleDevice_Edit::ConsoleDevice_Edit(QWidget *parent, virConnectPtr *connPtrPt
     ConsoleDevice(parent, connPtrPtr)
 {
     connect(targetType, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

@@ -7,8 +7,9 @@
 #include <QGridLayout>
 #include <QDomDocument>
 #include <QDebug>
+#include "create_widgets/domain/_changed.h"
 
-class Boot_Devices : public QWidget
+class Boot_Devices : public _Changed
 {
     Q_OBJECT
 public:
@@ -16,7 +17,7 @@ public:
     QListWidget     *devices;
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
 
 private:
     QPushButton     *up, *down;

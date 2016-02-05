@@ -128,6 +128,7 @@ void QSpiceSession::init()
     g_signal_connect(gobject, "channel-destroy",
                      (GCallback) QSpiceHelper::ss_channel_destroy, this);
     qDebug()<<getSharedDir()<<"shared";
+#if WITH_LIBCACARD
     // http://www.spice-space.org/page/SmartcardUsage#Using_a_software_smartcard
     // for test only
     if ( getSmartcardDB().isEmpty() ) {
@@ -135,6 +136,7 @@ void QSpiceSession::init()
         setSmartcardCAC(QStringList()<<"cert1"<<"cert2"<<"cert3");
     };
     qDebug()<<getSmartcardDB()<<"DB"<<getSmartcardCAC()<<"SmartcardCAC";
+#endif
 }
 
 

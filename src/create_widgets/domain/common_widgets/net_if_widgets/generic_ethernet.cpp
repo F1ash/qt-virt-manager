@@ -31,11 +31,11 @@ Generic_Ethernet::Generic_Ethernet(
     setLayout(commonLayout);
     // dataChanged connects
     connect(target, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(script, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(addr, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

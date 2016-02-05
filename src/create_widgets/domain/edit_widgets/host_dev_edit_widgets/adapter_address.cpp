@@ -28,11 +28,11 @@ AdapterAddress::AdapterAddress(QWidget *parent) :
             scsiAddr, SLOT(setEnabled(bool)));
     // dataChanged signals
     connect(adapterAddr, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(bus, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(target, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(unit, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }

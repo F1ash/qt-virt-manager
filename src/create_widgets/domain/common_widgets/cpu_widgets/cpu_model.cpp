@@ -1,7 +1,7 @@
 #include "cpu_model.h"
 
 CPU_Model::CPU_Model(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     doc.setContent(CPU_MODELS);
     QDomElement _el = doc
@@ -46,15 +46,15 @@ CPU_Model::CPU_Model(QWidget *parent) :
             this, SLOT(modelChanged(int)));
     // dataChanged connections
     connect(useModel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(allowFallback, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(copyHostCPU, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(model, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(match, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

@@ -1,7 +1,7 @@
 #include "cpu_topology.h"
 
 CPU_Topology::CPU_Topology(QWidget *parent) :
-    QWidget(parent)
+    _QWidget(parent)
 {
     use = new QCheckBox("Use Topology", this);
     socketsLabel = new QLabel("Sockets", this);
@@ -48,13 +48,13 @@ CPU_Topology::CPU_Topology(QWidget *parent) :
             this, SLOT(newValue(int)));
     // dataChanged connections
     connect(use, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(sockets, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(cores, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(threads, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

@@ -9,8 +9,9 @@
 #include <QDomDocument>
 #include "CPU_Models.h"
 #include <QDebug>
+#include "create_widgets/domain/_changed.h"
 
-class CPU_Model : public QWidget
+class CPU_Model : public _Changed
 {
     Q_OBJECT
 public:
@@ -18,7 +19,7 @@ public:
     QCheckBox       *copyHostCPU, *allowFallback;
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
     void             cpuUseElements(bool);
 
 private:

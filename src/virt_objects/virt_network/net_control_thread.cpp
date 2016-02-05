@@ -10,13 +10,13 @@ void NetControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
+    keep_alive = false;
     if ( NULL!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
             task.srcConnPtr = NULL;
             sendConnErrors();
-            keep_alive = false;
         } else
             keep_alive = true;
     };
@@ -101,7 +101,7 @@ Result NetControlThread::getAllNetworkList()
             //qDebug()<<currentAttr;
             virNetworkFree(networks[i]);
         };
-        free(networks);
+        if (networks) free(networks);
     };
     result.result = true;
     result.msg = virtNetList;
@@ -254,8 +254,8 @@ Result NetControlThread::getVirtNetXMLDesc()
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( network!=NULL ) {
-        Returns = (virNetworkGetXMLDesc(
-                       network, VIR_NETWORK_XML_INACTIVE));
+        Returns = virNetworkGetXMLDesc(
+                    network, VIR_NETWORK_XML_INACTIVE);
         if ( Returns==NULL )
             result.err = sendConnErrors();
         else read = true;

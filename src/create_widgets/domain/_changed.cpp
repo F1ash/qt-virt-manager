@@ -9,7 +9,7 @@ _Changed::~_Changed()
 
 }
 
-/* private slots */
+/* public slots */
 void _Changed::stateChanged()
 {
     emit dataChanged();

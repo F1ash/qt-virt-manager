@@ -5,8 +5,9 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
+#include "create_widgets/domain/_changed.h"
 
-class Events : public QWidget
+class Events : public _Changed
 {
     Q_OBJECT
 public:
@@ -17,7 +18,7 @@ public:
                     *on_crash, *on_lockfailure;
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
 
 private:
     QGridLayout     *commonLayout;

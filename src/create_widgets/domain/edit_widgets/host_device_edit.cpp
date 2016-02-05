@@ -31,8 +31,10 @@ HostDevice_Edit::HostDevice_Edit(
 /* public slots */
 QDomDocument HostDevice_Edit::getDataDocument() const
 {
+    QDomDocument doc;
     _QWidget *wdg = static_cast<_QWidget*>(infoEdit->currentWidget());
-    return ( NULL!=wdg )? wdg->getDataDocument():QDomDocument();
+    if ( NULL!=wdg ) doc = wdg->getDataDocument();
+    return doc;
 }
 void HostDevice_Edit::setDataDescription(QString &xmlDesc)
 {

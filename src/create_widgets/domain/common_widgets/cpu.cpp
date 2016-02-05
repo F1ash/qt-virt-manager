@@ -35,11 +35,11 @@ CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
             cpuAlloc->vcpu, SLOT(setDisabled(bool)));
     // dataChanged connections
     connect(cpuAlloc, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(cpuModel, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(cpuTopology, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(this, SIGNAL(dataChanged()),
             restorePanel, SLOT(stateChanged()));
     // action connections

@@ -5,8 +5,9 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QHBoxLayout>
+#include "create_widgets/domain/_changed.h"
 
-class _Device : public QWidget
+class _Device : public _Changed
 {
     Q_OBJECT
 public:
@@ -14,7 +15,7 @@ public:
     QComboBox   *devType;
 
 signals:
-    void         dataChanged();
+    //void         dataChanged();
 
 private:
     QLabel      *devTypeLabel;

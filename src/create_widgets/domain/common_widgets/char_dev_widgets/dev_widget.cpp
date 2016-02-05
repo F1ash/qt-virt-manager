@@ -10,7 +10,7 @@ DevWidget::DevWidget(QWidget *parent, QString _tag) :
     devLayout->addWidget(path, 0, 1);
     setLayout(devLayout);
     connect(path, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

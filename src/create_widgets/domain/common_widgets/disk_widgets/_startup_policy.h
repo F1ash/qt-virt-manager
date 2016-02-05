@@ -5,15 +5,16 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QHBoxLayout>
+#include "create_widgets/domain/_changed.h"
 
-class _StartupPolicy : public QWidget
+class _StartupPolicy : public _Changed
 {
     Q_OBJECT
 public:
     explicit _StartupPolicy(QWidget *parent = NULL);
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
 
 private:
     QCheckBox       *startupPolicyLabel;

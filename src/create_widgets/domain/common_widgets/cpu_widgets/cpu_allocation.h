@@ -10,8 +10,9 @@
 #include <QGridLayout>
 #include <QDomDocument>
 #include <QDebug>
+#include "create_widgets/domain/_changed.h"
 
-class CPU_Allocation : public QWidget
+class CPU_Allocation : public _Changed
 {
     Q_OBJECT
 public:
@@ -25,7 +26,7 @@ public:
     QComboBox       *placement;
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
     void             currentVCPU(int);
 
 private:

@@ -16,7 +16,7 @@ Random_Edit::Random_Edit(QWidget *parent) :
     connect(bytes, SIGNAL(valueChanged(int)),
             this, SLOT(stateChanged()));
     connect(bkEGD->devType, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     for (int i=0; i<bkEGD->charDevWdg->count(); i++) {
         connect(bkEGD->charDevWdg->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));

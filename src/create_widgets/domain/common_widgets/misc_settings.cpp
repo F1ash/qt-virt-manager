@@ -46,15 +46,15 @@ Misc_Settings::Misc_Settings(QWidget *parent, QString _caps, QString _xmlDesc) :
             this, SLOT(saveData()));
     // dataChanged connections
     connect(powerLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(featuresLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(eventsWdg, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(powerWdg, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(featuresWdg, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(this, SIGNAL(dataChanged()),
             restorePanel, SLOT(stateChanged()));
 }

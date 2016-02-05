@@ -6,7 +6,7 @@ CharDevice_Edit::CharDevice_Edit(
     CharDevice(parent, connPtrPtr, domain, _tag)
 {
     connect(devType, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     for (int i=0; i<charDevWdg->count(); i++) {
         connect(charDevWdg->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));

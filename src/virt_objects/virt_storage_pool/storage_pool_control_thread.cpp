@@ -12,13 +12,13 @@ void StoragePoolControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
+    keep_alive = false;
     if ( NULL!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
             task.srcConnPtr = NULL;
             sendConnErrors();
-            keep_alive = false;
         } else
             keep_alive = true;
     };
@@ -112,7 +112,7 @@ Result StoragePoolControlThread::getAllStoragePoolList()
             //qDebug()<<currentAttr;
             virStoragePoolFree(storagePool[i]);
         };
-        free(storagePool);
+        if (storagePool) free(storagePool);
         result.result = true;
     } else {
         result.result = false;
@@ -141,7 +141,8 @@ Result StoragePoolControlThread::getAllStoragePoolDataList()
         for (int i = 0; i < ret; i++) {
             QStringList currentAttr;
             QString type, source, target;
-            char *Returns = (virStoragePoolGetXMLDesc(storagePool[i], VIR_STORAGE_XML_INACTIVE));
+            char *Returns = virStoragePoolGetXMLDesc(
+                        storagePool[i], VIR_STORAGE_XML_INACTIVE);
             if ( Returns!=NULL ) {
                 QDomDocument doc;
                 QString s;
@@ -165,7 +166,7 @@ Result StoragePoolControlThread::getAllStoragePoolDataList()
             //qDebug()<<currentAttr;
             virStoragePoolFree(storagePool[i]);
         };
-        free(storagePool);
+        if (storagePool) free(storagePool);
         result.result = true;
     } else {
         result.result = false;
@@ -354,7 +355,7 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=NULL ) {
-        Returns = (virStoragePoolGetXMLDesc(storagePool, VIR_STORAGE_XML_INACTIVE));
+        Returns = virStoragePoolGetXMLDesc(storagePool, VIR_STORAGE_XML_INACTIVE);
         if ( Returns==NULL )
             result.err = sendConnErrors();
         else read = true;

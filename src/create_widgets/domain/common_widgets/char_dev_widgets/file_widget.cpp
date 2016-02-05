@@ -11,7 +11,7 @@ FileWidget::FileWidget(QWidget *parent, QString _tag) :
     fileLayout->addWidget(path, 0, 1);
     setLayout(fileLayout);
     connect(path, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

@@ -36,15 +36,15 @@ Bridge_to_LAN::Bridge_to_LAN(
     virtPort->type->setCurrentIndex( virtPort->type->findText("Open vSwitch") );
     // dataChanged connections
     connect(bridge, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(target, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(mac, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(virtPort, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(addr, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

@@ -17,7 +17,7 @@ ChannelDevice::ChannelDevice(QWidget *parent) :
     devType->setCurrentIndex(6);
     // see for: CharDevice_Edit
     connect(devType, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     for (int i=0; i<charDevWdg->count(); i++) {
         connect(charDevWdg->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));
@@ -29,7 +29,7 @@ QDomDocument ChannelDevice::getDataDocument() const
 {
     QDomDocument doc;
     CharDevice *wdg = static_cast<CharDevice*>(charDevWdg->currentWidget());
-    doc = wdg->getDataDocument();
+    if ( NULL!=wdg ) doc = wdg->getDataDocument();
     if ( doc.isNull() ) {
         QDomElement _device, _devDesc;
         _device = doc.createElement("device");

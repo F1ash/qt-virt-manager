@@ -5,7 +5,7 @@
     <<"pcnet"<<"rtl8139"<<"e1000"<<"virtio"
 
 NIC_Model::NIC_Model(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     useModel = new QCheckBox("Device model:", this);
     useModel->setLayoutDirection(Qt::RightToLeft);
@@ -20,9 +20,9 @@ NIC_Model::NIC_Model(QWidget *parent) :
             model, SLOT(setEnabled(bool)));
     // dataChanged connections
     connect(useModel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(model, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

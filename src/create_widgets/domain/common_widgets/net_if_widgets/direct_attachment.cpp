@@ -37,13 +37,13 @@ DirectAttachment::DirectAttachment(
     virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
     // dataChanged connections
     connect(netSource, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(sourceMode, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(virtPort, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(addr, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
@@ -55,7 +55,8 @@ QDomDocument DirectAttachment::getDataDocument() const
     _device = doc.createElement("device");
     _devDesc = doc.createElement("interface");
     _source = doc.createElement("source");
-    QString _dev = netSource->itemData(netSource->currentIndex(), Qt::UserRole).toString();
+    QString _dev = netSource->itemData(
+                netSource->currentIndex(), Qt::UserRole).toString();
     if ( !_dev.isEmpty() ) _source.setAttribute("dev", _dev);
     _source.setAttribute("mode", sourceMode->currentText().toLower());
     _devDesc.appendChild(_source);

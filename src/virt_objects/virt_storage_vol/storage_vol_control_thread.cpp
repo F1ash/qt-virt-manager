@@ -21,6 +21,7 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
+    keep_alive = false;
     currPoolName = task.args.object;
     if ( NULL!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
@@ -28,7 +29,6 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
         if ( ret<0 ) {
             task.srcConnPtr = NULL;
             sendConnErrors();
-            keep_alive = false;
         } else
             keep_alive = true;
     };
@@ -147,7 +147,7 @@ Result StorageVolControlThread::getAllStorageVolList()
             //qDebug()<<currentAttr<<"Volume";
             virStorageVolFree(storageVol[i]);
         };
-        free(storageVol);
+        if (storageVol) free(storageVol);
     } else
         result.err = sendConnErrors();
     result.result = true;

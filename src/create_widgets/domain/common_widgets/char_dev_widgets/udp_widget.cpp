@@ -28,13 +28,13 @@ UdpWidget::UdpWidget(QWidget *parent, QString _tag) :
     udpLayout->addWidget(port2, 1, 3);
     setLayout(udpLayout);
     connect(host, SIGNAL(textChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(bindHost, SIGNAL(textChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(port1, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(port2, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

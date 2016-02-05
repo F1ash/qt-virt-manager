@@ -15,7 +15,7 @@
     <<"ignore"
 
 Events::Events(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     powerOffLabel = new QCheckBox("PowerOff", this);
     rebootLabel = new QCheckBox("Reboot", this);
@@ -58,19 +58,19 @@ Events::Events(QWidget *parent) :
     on_lockfailure->setEnabled(false);
     // dataChanged connections
     connect(powerOffLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(rebootLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(crashLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(lockFailureLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(on_powerOff, SIGNAL(currentIndexChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(on_reboot, SIGNAL(currentIndexChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(on_crash, SIGNAL(currentIndexChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(on_lockfailure, SIGNAL(currentIndexChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }

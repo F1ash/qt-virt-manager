@@ -10,13 +10,13 @@ void InterfaceControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
+    keep_alive = false;
     if ( NULL!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
             task.srcConnPtr = NULL;
             sendConnErrors();
-            keep_alive = false;
         } else
             keep_alive = true;
     };
@@ -105,7 +105,7 @@ Result InterfaceControlThread::getAllIfaceList()
             virtIfaceList.append(currentAttr.join(DFR));
             virInterfaceFree(ifaces[i]);
         };
-        free(ifaces);
+        if (ifaces) free(ifaces);
     };
     result.result = true;
     result.msg = virtIfaceList;
@@ -270,7 +270,7 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
     if ( iface!=NULL ) {
         //extra flags; not used yet, so callers should always pass 0
         int flags = 0;
-        Returns = (virInterfaceGetXMLDesc(iface, flags));
+        Returns = virInterfaceGetXMLDesc(iface, flags);
         if ( Returns==NULL )
             result.err = sendConnErrors();
         else read = true;

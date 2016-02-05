@@ -1,7 +1,7 @@
 #include "power.h"
 
 Power::Power(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     suspend_to_disk = new QCheckBox("Suspend_to_Disk", this);
     suspend_to_mem = new QCheckBox("Suspend_to_Memory", this);
@@ -12,7 +12,7 @@ Power::Power(QWidget *parent) :
     setLayout(commonLayout);
     // dataChanged connections
     connect(suspend_to_disk, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(suspend_to_mem, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }

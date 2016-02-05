@@ -14,8 +14,8 @@ public:
 signals:
     void dataChanged();
 
-private slots:
-    void stateChanged();
+public slots:
+    virtual void stateChanged();
 };
 
 #endif // _CHANGED_H

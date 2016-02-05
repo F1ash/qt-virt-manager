@@ -51,7 +51,7 @@ RedirDevDevice::RedirDevDevice(
 /* public slots */
 QDomDocument RedirDevDevice::getDataDocument() const
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _address, _source, _device, _devDesc, _redirFilter;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("redirdev");

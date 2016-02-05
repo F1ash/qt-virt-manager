@@ -138,13 +138,15 @@ QDomDocument Devices::getDataDocument() const
     infoWidget->closeDataEdit();
     QDomElement devices = doc.createElement("devices");
     for (int i=0; i<usedDeviceList->count(); i++) {
+        QListWidgetItem *item = usedDeviceList->item(i);
+        if ( NULL==item ) continue;
         QDomDocument _doc;
-        _doc.setContent(usedDeviceList->item(i)->data(Qt::UserRole).toString());
+        _doc.setContent(item->data(Qt::UserRole).toString());
         QDomNodeList list = _doc.firstChildElement("device").childNodes();
         int j = 0;
         uint count = list.length();
-        for (int i=0; i<count;i++) {
-            //qDebug()<<list.item(j).nodeName()<<i;
+        for (int k=0; k<count;k++) {
+            //qDebug()<<list.item(j).nodeName()<<k;
             if (!list.item(j).isNull()) {
                 devices.appendChild(list.item(j));
             } else ++j;

@@ -31,13 +31,13 @@ TcpWidget::TcpWidget(QWidget *parent, QString _tag) :
     tcpLayout->addWidget(telnet, 3, 1);
     setLayout(tcpLayout);
     connect(mode, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(host, SIGNAL(textChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(port, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(telnet, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

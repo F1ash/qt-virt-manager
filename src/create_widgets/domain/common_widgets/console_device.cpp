@@ -56,7 +56,7 @@ ConsoleDevice::ConsoleDevice(
 /* public slots */
 QDomDocument ConsoleDevice::getDataDocument() const
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _target, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("console");

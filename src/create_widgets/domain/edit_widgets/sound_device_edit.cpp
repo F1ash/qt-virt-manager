@@ -4,13 +4,13 @@ SoundDevice_Edit::SoundDevice_Edit(QWidget *parent) :
     SoundDevice(parent)
 {
     connect(model, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(defaultICH6reg, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(duplexICH6reg, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(microICH6reg, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(addr, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
 }

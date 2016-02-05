@@ -23,11 +23,11 @@ SDL_Graphics::SDL_Graphics(QWidget *parent) :
             this, SLOT(getPathToXauthority()));
     // dataChanged connections
     connect(display, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(xauth, SIGNAL(textChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(fullscreen, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

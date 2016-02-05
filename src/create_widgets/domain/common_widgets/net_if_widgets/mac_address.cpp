@@ -1,7 +1,7 @@
 #include "mac_address.h"
 
 MAC_Address::MAC_Address(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     useMac = new QCheckBox("MAC:", this);
     useMac->setLayoutDirection(Qt::RightToLeft);
@@ -16,9 +16,9 @@ MAC_Address::MAC_Address(QWidget *parent) :
             mac, SLOT(setEnabled(bool)));
     // dataChanged connects
     connect(useMac, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(mac, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

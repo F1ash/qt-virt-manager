@@ -1,7 +1,7 @@
 #include "_read_only.h"
 
 _ReadOnly::_ReadOnly(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     readOnly = new QCheckBox("Read Only", this);
     readOnly->setLayoutDirection(Qt::RightToLeft);
@@ -10,7 +10,7 @@ _ReadOnly::_ReadOnly(QWidget *parent) :
     commonLayout->setAlignment(Qt::AlignLeft);
     setLayout(commonLayout);
     connect(readOnly, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

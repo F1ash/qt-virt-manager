@@ -8,8 +8,9 @@
 #include <QWidget>
 #include <QCheckBox>
 #include <QHBoxLayout>
+#include "create_widgets/domain/_changed.h"
 
-class Power : public QWidget
+class Power : public _Changed
 {
     Q_OBJECT
 public:
@@ -18,7 +19,7 @@ public:
                     *suspend_to_mem;
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
 
 private:
     QHBoxLayout     *commonLayout;

@@ -1,7 +1,7 @@
 #include "boot_devices.h"
 
 Boot_Devices::Boot_Devices(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     up = new QPushButton(QIcon::fromTheme("go-up"), "", this);
     down = new QPushButton(QIcon::fromTheme("go-down"), "", this);
@@ -15,11 +15,11 @@ Boot_Devices::Boot_Devices(QWidget *parent) :
     connect(down, SIGNAL(clicked()), this, SLOT(itemDown()));
     // dataChanged connections
     connect(devices, SIGNAL(itemChanged(QListWidgetItem*)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(devices, SIGNAL(itemChanged(QListWidgetItem*)),
             this, SLOT(orderChanged(QListWidgetItem*)));
     connect(devices, SIGNAL(currentRowChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

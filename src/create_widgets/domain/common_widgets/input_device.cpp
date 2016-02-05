@@ -36,7 +36,7 @@ InputDevice::InputDevice(QWidget *parent) :
 /* public slots */
 QDomDocument InputDevice::getDataDocument() const
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _address, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("input");
@@ -51,8 +51,14 @@ QDomDocument InputDevice::getDataDocument() const
         _devDesc.appendChild(_address);
     };
     _device.appendChild(_devDesc);
-    _devDesc.setAttribute("type", type->itemData(type->currentIndex(), Qt::UserRole).toString());
-    _devDesc.setAttribute("bus", bus->itemData(bus->currentIndex(), Qt::UserRole).toString());
+    _devDesc.setAttribute(
+                "type",
+                type->itemData(type->currentIndex(),
+                               Qt::UserRole).toString());
+    _devDesc.setAttribute(
+                "bus",
+                bus->itemData(bus->currentIndex(),
+                              Qt::UserRole).toString());
     doc.appendChild(_device);
     return doc;
 }

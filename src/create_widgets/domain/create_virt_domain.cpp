@@ -318,8 +318,7 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.insert("OS_Booting", new OS_Booting(this, capabilities, xmlDesc));
         wdgList.insert("Memory", new Memory(this, capabilities, xmlDesc));
         wdgList.insert("CPU", new CPU(this, capabilities, xmlDesc));
-        wdgList.insert("Computer",
-                       new Devices(this, ptr_ConnPtr, xmlDesc));
+        wdgList.insert("Computer", new Devices(this, ptr_ConnPtr, xmlDesc));
         wdgList.insert("SecurityLabel", new SecurityLabel(this, xmlDesc));
         connect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
                 wdgList.value("General"), SLOT(changeArch(QString&)));

@@ -22,9 +22,9 @@ ISCSI_Device::ISCSI_Device(QWidget *parent, virConnectPtr *connPtrPtr) :
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(host, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(port, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(auth, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }

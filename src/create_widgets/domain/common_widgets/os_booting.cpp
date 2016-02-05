@@ -40,7 +40,7 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
     connect(this, SIGNAL(dataChanged()),
             restorePanel, SLOT(stateChanged()));
     connect(bootType->osType, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     // action connections
     connect(restorePanel, SIGNAL(resetData()),
             this, SLOT(resetData()));
@@ -69,9 +69,8 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
 QDomDocument OS_Booting::getDataDocument() const
 {
     QDomDocument doc;
-    _QWidget *wdg = static_cast<_QWidget*>(
-                bootSet->currentWidget());
-    doc = wdg->getDataDocument();
+    _QWidget *wdg = static_cast<_QWidget*>(bootSet->currentWidget());
+    if ( NULL!=wdg ) doc = wdg->getDataDocument();
     QDomElement _os, _type;
     _os = doc
             .firstChildElement("data")

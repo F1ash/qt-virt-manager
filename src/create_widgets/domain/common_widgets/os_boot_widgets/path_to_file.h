@@ -6,15 +6,16 @@
 #include <QPushButton>
 #include <QFileDialog>
 #include <QHBoxLayout>
+#include "create_widgets/domain/_changed.h"
 
-class Path_To_File : public QWidget
+class Path_To_File : public _Changed
 {
     Q_OBJECT
 public:
     explicit Path_To_File(QWidget *parent = 0);
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
 
 private:
     QPushButton     *button;

@@ -7,8 +7,9 @@
 #include <QSpinBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include "create_widgets/domain/_qwidget.h"
 
-class CPU_Topology : public QWidget
+class CPU_Topology : public _QWidget
 {
     Q_OBJECT
 public:

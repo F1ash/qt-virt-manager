@@ -10,10 +10,11 @@
 #include <QComboBox>
 #include <QGridLayout>
 #include <QVBoxLayout>
+#include "create_widgets/domain/_changed.h"
 
 typedef QMap<QString, QString> ParameterList;
 
-class VirtualPort : public QWidget
+class VirtualPort : public _Changed
 {
     Q_OBJECT
 public:
@@ -24,7 +25,7 @@ public:
                         *interfaceId, *profileId;
 
 signals:
-    void                 dataChanged();
+    //void                 dataChanged();
 
 private:
     QCheckBox           *useVirtPort;

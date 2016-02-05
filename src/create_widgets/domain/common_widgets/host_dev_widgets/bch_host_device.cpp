@@ -55,7 +55,10 @@ QDomDocument BCh_Host_Device::getDataDocument() const
     _source.appendChild(_dev);
     _devDesc.appendChild(_source);
     _device.appendChild(_devDesc);
-    _devDesc.setAttribute("type", type->itemData(type->currentIndex(), Qt::UserRole).toString());
+    _devDesc.setAttribute(
+                "type",
+                type->itemData(type->currentIndex(),
+                               Qt::UserRole).toString());
     _devDesc.setAttribute("mode", "capabilities");
     doc.appendChild(_device);
     return doc;

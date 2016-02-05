@@ -9,10 +9,11 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include "find_secret_dialog.h"
+#include "create_widgets/domain/_qwidget.h"
 
 #define NOT_VOLUME QString("NOT_VOLUME")
 
-class _Storage_Auth : public QWidget
+class _Storage_Auth : public _Changed
 {
     Q_OBJECT
 public:
@@ -25,7 +26,7 @@ public:
     QComboBox       *usageType;
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
 
 private:
     QString          secType;

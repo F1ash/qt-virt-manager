@@ -1,7 +1,7 @@
 #include "boot_menu.h"
 
 BootMenu::BootMenu(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     timeLabel = new QLabel("Timeout:", this);
     menu = new QCheckBox("BootMenu", this);
@@ -16,7 +16,7 @@ BootMenu::BootMenu(QWidget *parent) :
     setLayout(commonLayout);
     // dataChanged connections
     connect(menu, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(timeOut, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }

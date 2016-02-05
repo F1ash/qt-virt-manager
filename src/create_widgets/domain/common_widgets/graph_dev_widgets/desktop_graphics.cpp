@@ -14,9 +14,9 @@ Desktop_Graphics::Desktop_Graphics(QWidget *parent) :
     setLayout(commonLayout);
     // dataChanged connections
     connect(display, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(fullscreen, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

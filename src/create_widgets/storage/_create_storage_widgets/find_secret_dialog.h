@@ -31,7 +31,7 @@ private:
     QHBoxLayout         *buttonLayout;
     QWidget             *buttons;
     QVBoxLayout         *commonLayout;
-    SecretControlThread *virtSecretThread;
+    SecretControlThread *thread;
 
     virConnectPtr*       ptr_ConnPtr;
 

@@ -5,15 +5,16 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QGridLayout>
+#include "create_widgets/domain/_changed.h"
 
-class MAC_Address : public QWidget
+class MAC_Address : public _Changed
 {
     Q_OBJECT
 public:
     explicit MAC_Address(QWidget *parent = NULL);
 
 signals:
-    void                 dataChanged();
+    //void                 dataChanged();
 
 private:
     QCheckBox           *useMac;

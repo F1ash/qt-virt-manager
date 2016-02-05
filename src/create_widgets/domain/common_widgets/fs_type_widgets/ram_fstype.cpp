@@ -31,7 +31,7 @@ RAMFsType::RAMFsType(QWidget *parent, QString _type) :
 /* public slots */
 QDomDocument RAMFsType::getDataDocument() const
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _source, _target, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("filesystem");

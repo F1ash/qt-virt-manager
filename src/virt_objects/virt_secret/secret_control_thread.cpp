@@ -11,13 +11,13 @@ void SecretControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
+    keep_alive = false;
     if ( NULL!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
             task.srcConnPtr = NULL;
             sendConnErrors();
-            keep_alive = false;
         } else
             keep_alive = true;
     };
@@ -119,8 +119,9 @@ Result SecretControlThread::getAllSecretList()
             //    qDebug()<<( value[k] );
             //};
             virSecretFree(secrets[i]);
+            if (xmlDesc) free(xmlDesc);
         };
-        free(secrets);
+        if (secrets) free(secrets);
     };
     result.result = true;
     result.msg = virtSecretList;

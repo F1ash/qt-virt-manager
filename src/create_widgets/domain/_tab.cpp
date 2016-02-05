@@ -23,8 +23,6 @@ QString _Tab::closeDataEdit()
     };
     return QString();
 }
-
-/* private slots */
 void _Tab::stateChanged()
 {
     if ( currentStateSaved ) {

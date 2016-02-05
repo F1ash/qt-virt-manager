@@ -35,9 +35,9 @@ Userspace_SLIRP::Userspace_SLIRP(
     setLayout(commonLayout);
     // dataChanged connects
     connect(mac, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(addr, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

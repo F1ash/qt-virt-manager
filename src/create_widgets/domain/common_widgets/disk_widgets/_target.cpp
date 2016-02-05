@@ -6,7 +6,7 @@
     <<"VirtIO"<<"XEN"
 
 _Target::_Target(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     busLabel = new QLabel("Bus:", this);
     bus = new QComboBox(this);
@@ -48,17 +48,17 @@ _Target::_Target(QWidget *parent) :
             removable, SLOT(setEnabled(bool)));
     // dataChanged connections
     connect(bus, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(devName, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(trayLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(tray, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(removableLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(removable, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

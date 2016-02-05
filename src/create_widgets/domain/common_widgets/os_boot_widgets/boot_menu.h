@@ -6,8 +6,9 @@
 #include <QCheckBox>
 #include <QSpinBox>
 #include <QHBoxLayout>
+#include "create_widgets/domain/_changed.h"
 
-class BootMenu : public QWidget
+class BootMenu : public _Changed
 {
     Q_OBJECT
 public:
@@ -16,7 +17,7 @@ public:
     QSpinBox        *timeOut;
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
 
 private:
     QLabel          *timeLabel;

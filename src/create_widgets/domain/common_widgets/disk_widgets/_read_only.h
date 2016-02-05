@@ -4,8 +4,9 @@
 #include <QWidget>
 #include <QCheckBox>
 #include <QHBoxLayout>
+#include "create_widgets/domain/_changed.h"
 
-class _ReadOnly : public QWidget
+class _ReadOnly : public _Changed
 {
     Q_OBJECT
 public:
@@ -13,7 +14,7 @@ public:
     QCheckBox       *readOnly;
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
 
 private:
     QHBoxLayout     *commonLayout;

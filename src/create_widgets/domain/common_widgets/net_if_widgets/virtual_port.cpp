@@ -1,7 +1,7 @@
 #include "virtual_port.h"
 
 VirtualPort::VirtualPort(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     useVirtPort = new QCheckBox("VirtualPort", this);
     typeLabel = new QLabel("Type:", this);
@@ -54,23 +54,23 @@ VirtualPort::VirtualPort(QWidget *parent) :
     type->setCurrentIndex(type->count()-1);
     // dataChanged connects
     connect(useVirtPort, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(type, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(type, SIGNAL(editTextChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(managerId, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(typeId, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(typeIdVer, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(instanceId, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(interfaceId, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(profileId, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

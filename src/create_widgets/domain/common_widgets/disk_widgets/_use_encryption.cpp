@@ -1,7 +1,7 @@
 #include "_use_encryption.h"
 
 _UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
-    QWidget(parent), ptr_ConnPtr(connPtrPtr)
+    _Changed(parent), ptr_ConnPtr(connPtrPtr)
 {
     usage = new QCheckBox("Use Encryption", this);
     usage->setLayoutDirection(Qt::RightToLeft);
@@ -29,9 +29,9 @@ _UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
             this, SLOT(emitSecretList()));
     // dataChanged signals
     connect(usage, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(secUsage, SIGNAL(textChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 
     thread = new SecretControlThread(this);
     connect(thread, SIGNAL(resultData(Result)),

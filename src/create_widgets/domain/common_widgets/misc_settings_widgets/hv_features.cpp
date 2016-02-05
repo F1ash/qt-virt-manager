@@ -1,7 +1,7 @@
 #include "hv_features.h"
 
 HV_Features::HV_Features(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     // workaround
     features = new QTextEdit(this);
@@ -12,7 +12,7 @@ HV_Features::HV_Features(QWidget *parent) :
     setLayout(commonLayout);
     // dataChanged connections
     connect(features, SIGNAL(textChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

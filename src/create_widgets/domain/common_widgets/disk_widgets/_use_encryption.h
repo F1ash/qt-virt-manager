@@ -9,8 +9,9 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include "create_widgets/storage/_create_storage_widgets/find_secret_dialog.h"
+#include "create_widgets/domain/_changed.h"
 
-class _UseEncryption : public QWidget
+class _UseEncryption : public _Changed
 {
     Q_OBJECT
 public:
@@ -19,7 +20,7 @@ public:
             virConnectPtr*  connPtrPtr  = NULL);
 
 signals:
-    void                 dataChanged();
+    //void                 dataChanged();
     void                 errorMsg(QString&);
 
 private:

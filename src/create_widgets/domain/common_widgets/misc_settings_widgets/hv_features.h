@@ -5,8 +5,9 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 #include <QDomDocument>
+#include "create_widgets/domain/_changed.h"
 
-class HV_Features : public QWidget
+class HV_Features : public _Changed
 {
     Q_OBJECT
 public:
@@ -14,7 +15,7 @@ public:
     QTextEdit       *features;
 
 signals:
-    void             dataChanged();
+    //void             dataChanged();
 
 private:
     QVBoxLayout     *commonLayout;

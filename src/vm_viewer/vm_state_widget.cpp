@@ -88,6 +88,13 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) :
             this, SIGNAL(showUsbDevWidget()));
     connect(display, SIGNAL(released()),
             this, SLOT(showTransformationModeMenu()));
+#if WITH_LIBCACARD<1
+    smartCard->setVisible(false);
+#endif
+#if USE_SPICE_AUDIO<1
+    playback->setVisible(false);
+    record->setVisible(false);
+#endif
 }
 
 /* public slots */

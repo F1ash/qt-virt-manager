@@ -10,14 +10,13 @@ void DomControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;
     task = _task;
+    keep_alive = false;
     if ( NULL!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
-        //qDebug()<<"*task.srcConnPtr"<<(*task.srcConnPtr);
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
             task.srcConnPtr = NULL;
             sendConnErrors();
-            keep_alive = false;
         } else
             keep_alive = true;
     };
@@ -186,7 +185,7 @@ Result DomControlThread::getAllDomainList()
             */
             virDomainFree(domains[i]);
         };
-        free(domains);
+        if (domains) free(domains);
     };
     result.result = true;
     result.msg = domainList;

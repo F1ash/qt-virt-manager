@@ -60,7 +60,7 @@ General::General(QWidget *parent, QString _caps, QString _xmlDesc) :
 QDomDocument General::getDataDocument() const
 {
     QDomText data;
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _name, _uuid, _title, _desc, _data;
     _data = doc.createElement("data");
     _name= doc.createElement("name");

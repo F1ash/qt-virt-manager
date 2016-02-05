@@ -1,7 +1,7 @@
 #include "_startup_policy.h"
 
 _StartupPolicy::_StartupPolicy(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     startupPolicyLabel = new QCheckBox("startupPolicy:", this);
     startupPolicyLabel->setLayoutDirection(Qt::RightToLeft);
@@ -15,9 +15,9 @@ _StartupPolicy::_StartupPolicy(QWidget *parent) :
     connect(startupPolicyLabel, SIGNAL(toggled(bool)),
             startupPolicy, SLOT(setEnabled(bool)));
     connect(startupPolicyLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(startupPolicy, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

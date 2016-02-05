@@ -16,9 +16,9 @@ UnixWidget::UnixWidget(QWidget *parent, QString _tag) :
     unixLayout->addWidget(mode, 1, 1);
     setLayout(unixLayout);
     connect(path, SIGNAL(textChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(mode, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */
@@ -30,7 +30,10 @@ QDomDocument UnixWidget::getDataDocument() const
     _devDesc = doc.createElement(tag);
     _source = doc.createElement("source");
     _source.setAttribute("path", path->text());
-    _source.setAttribute("mode", mode->itemData(mode->currentIndex(), Qt::UserRole).toString());
+    _source.setAttribute(
+                "mode",
+                mode->itemData(mode->currentIndex(),
+                               Qt::UserRole).toString());
     _devDesc.appendChild(_source);
 
     _target = doc.createElement("target");

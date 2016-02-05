@@ -50,6 +50,8 @@ Disk::Disk(QWidget *parent, virConnectPtr *connPtrPtr) :
 /* public slots */
 QDomDocument Disk::getDataDocument() const
 {
+    QDomDocument doc;
     _Disk *wdg = static_cast<_Disk*>(info->currentWidget());
-    return wdg->getDataDocument();
+    if ( NULL!=wdg ) doc = wdg->getDataDocument();
+    return doc;
 }

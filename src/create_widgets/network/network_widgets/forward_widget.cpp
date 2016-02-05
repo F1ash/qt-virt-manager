@@ -55,9 +55,11 @@ Forward_Widget::Forward_Widget(
 /* public slots */
 QDomDocument Forward_Widget::getDataDocument() const
 {
+    QDomDocument doc;
     _QWidget *wdg = static_cast<_QWidget*>(
                 frwdModeSet->currentWidget());
-    return wdg->getDataDocument();
+    if( NULL!=wdg ) doc = wdg->getDataDocument();
+    return doc;
 }
 
 /* private slots */

@@ -1,7 +1,7 @@
 #include "cpu_allocation.h"
 
 CPU_Allocation::CPU_Allocation(QWidget *parent, QString _caps) :
-    QWidget(parent), capabilities(_caps)
+    _Changed(parent), capabilities(_caps)
 {
     QDomDocument doc;
     doc.setContent(capabilities);
@@ -50,19 +50,19 @@ CPU_Allocation::CPU_Allocation(QWidget *parent, QString _caps) :
             this, SLOT(placementStateChanged(bool)));
     // dataChanged connections
     connect(vcpu, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(cpuset, SIGNAL(textChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(placement, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(cpusetLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(currLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(current, SIGNAL(valueChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(placementLabel, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

@@ -9,10 +9,11 @@
 #include <QGridLayout>
 #include <QMap>
 #include <QString>
+#include "create_widgets/domain/_changed.h"
 
 typedef QMap<QString, QString> TargetAttrs;
 
-class _Target : public QWidget
+class _Target : public _Changed
 {
     Q_OBJECT
 public:
@@ -22,7 +23,7 @@ public:
     QComboBox   *bus, *tray, *removable;
 
 signals:
-    void         dataChanged();
+    //void         dataChanged();
 
 private:
     QLabel      *devNameLabel, *busLabel;

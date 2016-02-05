@@ -1,7 +1,7 @@
 #include "path_to_file.h"
 
 Path_To_File::Path_To_File(QWidget *parent) :
-    QWidget(parent)
+    _Changed(parent)
 {
     button = new QPushButton(
                 QIcon::fromTheme("edit-find"),
@@ -15,7 +15,7 @@ Path_To_File::Path_To_File(QWidget *parent) :
     connect(button, SIGNAL(clicked()),
             this, SLOT(searchPath()));
     connect(path, SIGNAL(textChanged(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

@@ -2,7 +2,7 @@
 
 _Storage_Auth::_Storage_Auth(
         QWidget *parent, virConnectPtr *connPtrPtr, QString _type) :
-    QWidget(parent), ptr_ConnPtr(connPtrPtr), secType(_type)
+    _Changed(parent), ptr_ConnPtr(connPtrPtr), secType(_type)
 {
     auth = new QCheckBox("Authentication", this);
     auth->setLayoutDirection(Qt::RightToLeft);
@@ -34,13 +34,13 @@ _Storage_Auth::_Storage_Auth(
     connect(usageType, SIGNAL(currentIndexChanged(int)),
             this, SLOT(usageTypeChanged(int)));
     connect(auth, SIGNAL(toggled(bool)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(userName, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(usageType, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(usage, SIGNAL(textEdited(QString)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(findSecret, SIGNAL(clicked(bool)),
             this, SLOT(setSecret()));
 }

@@ -42,7 +42,7 @@ VideoDevice::VideoDevice(QWidget *parent) :
 /* public slots */
 QDomDocument VideoDevice::getDataDocument() const
 {
-    QDomDocument doc = QDomDocument();
+    QDomDocument doc;
     QDomElement _model, _acceleration, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("video");

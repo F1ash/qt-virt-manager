@@ -6,9 +6,9 @@ SmartCardDevice_Edit::SmartCardDevice_Edit(QWidget *parent) :
     connect(addr, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(mode, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
     connect(channel, SIGNAL(dataChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SLOT(stateChanged()));
 }
 
 /* public slots */

@@ -4,7 +4,6 @@ ControlThread::ControlThread(QObject *parent) :
     _VirtThread(parent)
 {
     qRegisterMetaType<Result>("Result");
-    qRegisterMetaType<Actions>("Actions");
 }
 
 /* public slots */

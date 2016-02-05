@@ -5,15 +5,16 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
+#include "create_widgets/domain/_changed.h"
 
-class NIC_Model : public QWidget
+class NIC_Model : public _Changed
 {
     Q_OBJECT
 public:
     explicit NIC_Model(QWidget *parent = NULL);
 
 signals:
-    void                 dataChanged();
+    //void                 dataChanged();
 
 private:
     QCheckBox           *useModel;
