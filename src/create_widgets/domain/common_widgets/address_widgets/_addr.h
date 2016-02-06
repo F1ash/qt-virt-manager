@@ -1,7 +1,6 @@
 #ifndef _ADDR_H
 #define _ADDR_H
 
-#include <QWidget>
 #include <QMap>
 #include <QString>
 #include <QLabel>

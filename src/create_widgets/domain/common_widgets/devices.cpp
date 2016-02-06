@@ -177,7 +177,8 @@ void Devices::setEmulator(QString &_emulator)
             item = NULL;
         };
     };
-    addDeviceToUsedDevList(doc);
+    // drop the infinite loop
+    addDeviceToUsedDevList(doc, false);
 }
 void Devices::initBootDevices()
 {
@@ -200,7 +201,7 @@ void Devices::addDevice()
     deviceStack->clearDevice();
     stackWdg->setCurrentWidget(baseWdg);
 }
-void Devices::addDeviceToUsedDevList(QDomDocument &doc)
+void Devices::addDeviceToUsedDevList(QDomDocument &doc, bool flag)
 {
     QDomNodeList list = doc.firstChildElement("device").childNodes();
     if ( list.length()==0 ) return;
@@ -252,7 +253,8 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc)
     } else if ( device=="video" ) {
         // Video
         if (list.item(0).firstChildElement("model").attributes().contains("type"))
-            desc = list.item(0).firstChildElement("model").attributes().namedItem("type").nodeValue();
+            desc = list.item(0).firstChildElement("model")
+                    .attributes().namedItem("type").nodeValue();
         name.append(QString("Video %1").arg(desc.toUpper()));
     } else if ( device=="sound" ) {
         // Sound
@@ -351,7 +353,8 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc)
          inserted = true;
     } while ( !inserted );
     //qDebug()<<"added New Device:"<<name;
-    initBootDevices();
+    // check the flag for dropping infinite loop
+    if (flag) initBootDevices();
 }
 void Devices::delDevice()
 {

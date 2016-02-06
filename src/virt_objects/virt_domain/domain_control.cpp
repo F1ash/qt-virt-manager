@@ -195,7 +195,8 @@ void VirtDomainControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
         QString _domainName = domainModel->DataList.at(index.row())->getName();
-        emit addToStateMonitor(ptr_ConnPtr, currConnName, _domainName);
+        //emit addToStateMonitor(ptr_ConnPtr, currConnName, _domainName);
+        emit displayRequest(ptr_ConnPtr, currConnName, _domainName);
     }
 }
 void VirtDomainControl::execAction(const QStringList &l)
