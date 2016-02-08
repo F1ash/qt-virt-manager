@@ -25,8 +25,6 @@ _UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
             baseWdg, SLOT(setVisible(bool)));
     connect(findSecret, SIGNAL(released()),
             this, SLOT(setVolumeSecret()));
-    connect(secUsage, SIGNAL(textChanged(QString)),
-            this, SLOT(emitSecretList()));
     // dataChanged signals
     connect(usage, SIGNAL(toggled(bool)),
             this, SLOT(stateChanged()));
@@ -38,6 +36,8 @@ _UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
             this, SLOT(resultReceiver(Result)));
     connect(thread, SIGNAL(errorMsg(QString&,uint)),
             this, SIGNAL(errorMsg(QString&)));
+    connect(secUsage, SIGNAL(textChanged(QString)),
+            this, SLOT(emitSecretList()));
 }
 
 /* public slots */
@@ -49,16 +49,9 @@ void _UseEncryption::setUsage(bool state)
 {
     usage->setChecked(state);
 }
-void _UseEncryption::emitSecretList()
-{
-    TASK _task;
-    _task.type          = "secret";
-    _task.srcConnPtr    = ptr_ConnPtr;
-    _task.action        = GET_ALL_ENTITY_STATE;
-    thread->execAction(0, _task);
-}
 void _UseEncryption::setCurrVolumePath(const QString &s)
 {
+    // is only used when changing the current volume path
     currVolumePath = s;
     emitSecretList();
 }
@@ -68,16 +61,28 @@ QString _UseEncryption::getSecretUUID() const
 }
 void _UseEncryption::setSecretUUID(const QString &s)
 {
+    // used once at setting xmlData Description from ****_disk
     secUsage->setText(s);
 }
 
 /* private slots */
+void _UseEncryption::emitSecretList()
+{
+    // start only if thread not running, because this thread
+    // can be used from different place spontaneously
+    if ( thread->isRunning() ) return;
+    TASK _task;
+    _task.type          = "secret";
+    _task.srcConnPtr    = ptr_ConnPtr;
+    _task.action        = GET_ALL_ENTITY_STATE;
+    thread->execAction(0, _task);
+}
 void _UseEncryption::resultReceiver(Result data)
 {
     //qDebug()<<currVolumePath<<"currVolumePath";
     /*
-     * after set secUsage->setText() then emitted textChanged()
-     * and find secret for current volume path
+     * after set secUsage->setText() will emitted textChanged()
+     * and search the secret for current volume path will started
      */
     QString _text;
     QStringList _secUUIDs, _secUsages;
@@ -86,6 +91,10 @@ void _UseEncryption::resultReceiver(Result data)
         _secUUIDs.append(_data.at(0));
         _secUsages.append(_data.at(1));
     };
+    // block the signals for dropping indefinite loop,
+    // because textChanged() signal emitted,
+    // when text set programmatically
+    secUsage->blockSignals(true);
     if ( currVolumePath.isEmpty() ) {
         if ( _secUUIDs.contains(secUsage->text()) ) {
             _text = "Secret is exist";
@@ -102,6 +111,8 @@ void _UseEncryption::resultReceiver(Result data)
             secUsage->clear();
         };
     };
+    // unblock signals
+    secUsage->blockSignals(false);
     info->setText(_text);
 }
 void _UseEncryption::setVolumeSecret()

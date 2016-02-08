@@ -257,9 +257,7 @@ void Volume_Disk::setDataDescription(QString &xmlDesc)
 void Volume_Disk::getVolumeNames()
 {
     VVD_Result _ret;
-    if ( volumeDialog==NULL ) {
-        volumeDialog = new VirtVolumeDialog(this, ptr_ConnPtr);
-    };
+    VirtVolumeDialog *volumeDialog = new VirtVolumeDialog(this, ptr_ConnPtr);
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();
         pool->setText(_ret.pool);

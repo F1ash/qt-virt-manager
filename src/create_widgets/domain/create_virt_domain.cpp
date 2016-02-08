@@ -372,23 +372,25 @@ void CreateVirtDomain::set_specified_Tabs()
         _QWidget *Wdg = static_cast<_QWidget*>(wdgList.value(key));
         if ( NULL!=Wdg ) {
             if ( idx == 2 ) {
-                static_cast<OS_Booting*>(Wdg)->initMaxVCPU();
+                OS_Booting *wdg = static_cast<OS_Booting*>(Wdg);
+                if ( NULL!=wdg ) wdg->initMaxVCPU();
             } else if ( idx == 5 ) {
                 Devices *wdg = static_cast<Devices*>(Wdg);
-                connect(wdg, SIGNAL(errorMsg(QString&)),
-                        this, SIGNAL(errorMsg(QString&)));
-                wdg->initBootDevices();
+                if ( NULL!=wdg ) {
+                    connect(wdg, SIGNAL(errorMsg(QString&)),
+                            this, SIGNAL(errorMsg(QString&)));
+                    wdg->initBootDevices();
+                };
             };
-        } else
-            continue;
-        tabWidget->insertTab(
-                    idx,
-                    Wdg,
-                    QIcon::fromTheme(Wdg->objectName()
-                                     .toLower()
-                                     .split(":")
-                                     .first()),
-                    key);
+            tabWidget->insertTab(
+                        idx,
+                        Wdg,
+                        QIcon::fromTheme(Wdg->objectName()
+                                         .toLower()
+                                         .split(":")
+                                         .first()),
+                        key);
+        };
     };
     tabWidget->setCurrentIndex(0);
 }
@@ -396,15 +398,16 @@ void CreateVirtDomain::restoreParameters()
 {
     setEnabled(false);
     tabWidget->clear();
-    disconnect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
-               wdgList.value("General"), SLOT(changeArch(QString&)));
-    disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
-               wdgList.value("Computer"), SLOT(setEmulator(QString&)));
+    //disconnect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
+    //           wdgList.value("General"), SLOT(changeArch(QString&)));
+    //disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
+    //           wdgList.value("Computer"), SLOT(setEmulator(QString&)));
     foreach (QString key, wdgList.keys()) {
         _QWidget *Wdg = static_cast<_QWidget*>(
                     wdgList.value(key));
         if ( NULL!=Wdg ) {
             delete Wdg;
+            Wdg = NULL;
         };
     };
     wdgList.clear();

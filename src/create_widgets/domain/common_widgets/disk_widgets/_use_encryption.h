@@ -39,12 +39,12 @@ private:
 public slots:
     bool                 isUsed() const;
     void                 setUsage(bool);
-    void                 emitSecretList();
     void                 setCurrVolumePath(const QString&);
     QString              getSecretUUID() const;
     void                 setSecretUUID(const QString&);
 
 private slots:
+    void                 emitSecretList();
     void                 resultReceiver(Result);
     void                 setVolumeSecret();
 };

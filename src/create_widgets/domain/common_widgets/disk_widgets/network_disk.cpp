@@ -273,11 +273,9 @@ void Network_Disk::protocolTypeChanged(QString _type)
 void Network_Disk::getVolumeNames()
 {
     VVD_Result _ret;
-    if ( volumeDialog==NULL ) {
-        QString _type = protocol->currentText().toLower();
-        volumeDialog = new VirtVolumeDialog(
+    QString _type = protocol->currentText().toLower();
+    VirtVolumeDialog *volumeDialog = new VirtVolumeDialog(
                     this, ptr_ConnPtr, _type);
-    };
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();
         if ( _ret.type=="iscsi" ) {

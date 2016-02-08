@@ -20,8 +20,6 @@ private:
     QPushButton     *volumeLabel;
     QLineEdit       *volume;
     QComboBox       *mode;
-    VirtVolumeDialog
-                    *volumeDialog = NULL;
     _Storage_Auth   *auth;
 
 public slots:

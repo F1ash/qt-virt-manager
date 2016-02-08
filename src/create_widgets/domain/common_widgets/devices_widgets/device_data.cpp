@@ -59,8 +59,12 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
     devName->setText(QString("<b>%1</b>").arg(deviceName));
     QDomDocument doc;
     doc.setContent(xmlDesc);
-    QString deviceType = doc.firstChildElement("device").
-            firstChild().nodeName();
+    QString deviceType;
+    QDomElement _el = doc.firstChildElement("device");
+    if ( _el.isNull() ) return;
+    QDomNode _node = _el.firstChild();
+    if ( _node.isNull() ) return;
+    deviceType = _node.nodeName();
     if ( deviceType == "disk" ) {
         device = new Disk_Edit(
                     this,
@@ -149,8 +153,8 @@ void DeviceData::closeDataEdit()
     };
     if ( NULL!=device ) {
         infoLayout->removeWidget(device);
-        disconnect(device, SIGNAL(dataChanged()),
-                   this, SLOT(currentStateChanged()));
+        //disconnect(device, SIGNAL(dataChanged()),
+        //           this, SLOT(currentStateChanged()));
         delete device;
         device = NULL;
     };
