@@ -23,7 +23,7 @@ Requires:       qtermwidget-qt5 >= 0.6.0-2
 Requires:       qt5-qtmultimedia
 %endif
 # for use qemu-kvm (more useful)
-Requires:       qemu-kvm >= 2.5.0
+Requires:       qemu-kvm
 Requires:       libvirt-daemon-driver-qemu
 # for use SPICE viewer
 # spice-server exist in libvirt-daemon-driver-qemu Requires in Fedora
@@ -52,7 +52,9 @@ BuildRequires:  cmake
 BuildRequires:  glib2-devel
 BuildRequires:  spice-protocol
 BuildRequires:  spice-glib-devel
-BuildRequires:  libcacard-devel >= 2.5.0
+%if (%{fedora}>=24)
+BuildRequires:  libcacard-devel
+%endif
 
 %description
 Qt Virtual Machine Manager provides a graphical tool for administering virtual
@@ -88,14 +90,22 @@ Uses libvirt as the backend management API.
 %if %with qt4
 mkdir %{cmake_build_dir}-qt4
 pushd %{cmake_build_dir}-qt4
+%if (%{fedora}>=24)
       %cmake -DWITH_LIBCACARD=1 ..
+%else
+      %cmake ..
+%endif
       %{make_build}
 popd
 %endif
 %if %with qt5
 mkdir %{cmake_build_dir}-qt5
 pushd %{cmake_build_dir}-qt5
+%if (%{fedora}>=24)
       %cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=1 ..
+%else
+      %cmake -DBUILD_QT_VERSION=5 ..
+%endif
       %{make_build}
 popd
 %endif
