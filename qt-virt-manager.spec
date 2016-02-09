@@ -52,7 +52,7 @@ BuildRequires:  cmake
 BuildRequires:  glib2-devel
 BuildRequires:  spice-protocol
 BuildRequires:  spice-glib-devel
-%if 0 %{?fedora}>=24
+%if %{?fedora}>=24
 BuildRequires:  libcacard-devel
 %endif
 
@@ -90,7 +90,7 @@ Uses libvirt as the backend management API.
 %if %with qt4
 mkdir %{cmake_build_dir}-qt4
 pushd %{cmake_build_dir}-qt4
-%if 0 %{?fedora}>=24
+%if %{?fedora}>=24
       %cmake -DWITH_LIBCACARD=1 ..
 %else
       %cmake ..
@@ -101,7 +101,7 @@ popd
 %if %with qt5
 mkdir %{cmake_build_dir}-qt5
 pushd %{cmake_build_dir}-qt5
-%if 0 %{?fedora}>=24
+%if %{?fedora}>=24
       %cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=1 ..
 %else
       %cmake -DBUILD_QT_VERSION=5 ..
