@@ -4,7 +4,7 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.22.42
+Version:        0.22.43
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -88,14 +88,14 @@ Uses libvirt as the backend management API.
 %if %with qt4
 mkdir %{cmake_build_dir}-qt4
 pushd %{cmake_build_dir}-qt4
-      %cmake ..
+      %cmake -DWITH_LIBCACARD=1 ..
       %{make_build}
 popd
 %endif
 %if %with qt5
 mkdir %{cmake_build_dir}-qt5
 pushd %{cmake_build_dir}-qt5
-      %cmake -DBUILD_QT_VERSION=5 ..
+      %cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=1 ..
       %{make_build}
 popd
 %endif
@@ -140,6 +140,10 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.des
 %endif
 
 %changelog
+* Tue Feb 09 2016 Fl@sh <kaperang07@gmail.com> - 0.22.43-1
+- added WITH_LIBCACARD build parameter;
+- version updated;
+
 * Tue Dec 15 2015 Fl@sh <kaperang07@gmail.com> - 0.22.42-1
 - added libcacard-devel BR;
 - added qt5-qtmultimedia, hicolor-icon-theme to R;
