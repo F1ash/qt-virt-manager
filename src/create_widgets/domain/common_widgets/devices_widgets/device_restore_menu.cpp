@@ -5,13 +5,13 @@ DeviceRestoreMenu::DeviceRestoreMenu(QWidget *parent) :
 {
     revertData = addAction(
                 QIcon::fromTheme("document-revert"),
-                "Revert");
-    revertData->setToolTip("Revert to previous state");
+                "Revert to previous state");
+    //revertData->setToolTip("Revert to previous state");
     addSeparator();
     resetData = addAction(
                 QIcon::fromTheme("go-first"),
-                "Reset");
-    resetData->setToolTip("Reset to first state");
+                "Reset to first state");
+    //resetData->setToolTip("Reset to first state");
     connect(revertData, SIGNAL(hovered()),
             this, SLOT(actionHovered()));
     connect(resetData, SIGNAL(hovered()),

@@ -9,9 +9,9 @@ VirtSecretToolBar::VirtSecretToolBar(QWidget *parent) :
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
     undefine_Action->setToolTip("Undefine");
-    getXMLDesc_Action = new QAction(this);
-    getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
-    getXMLDesc_Action->setToolTip("Get XML Description");
+    //getXMLDesc_Action = new QAction(this);
+    //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
+    //getXMLDesc_Action->setToolTip("Get XML Description");
     _autoReload = new QPushButton(this);
     _autoReload->setToolTip("AutoReload Secret Overview");
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
@@ -19,8 +19,8 @@ VirtSecretToolBar::VirtSecretToolBar(QWidget *parent) :
 
     addAction(define_Action);
     addAction(undefine_Action);
-    addSeparator();
-    addAction(getXMLDesc_Action);
+    //addSeparator();
+    //addAction(getXMLDesc_Action);
     addSeparator();
     autoReload = addWidget(_autoReload);
     addAction(autoReload);
@@ -101,8 +101,8 @@ void VirtSecretToolBar::detectTriggerredAction(QAction *action)
         parameters << "defineVirtSecret";
     } else if ( action == undefine_Action ) {
         parameters << "undefineVirtSecret";
-    } else if ( action == getXMLDesc_Action ) {
-        parameters << "getVirtSecretXMLDesc";
+    //} else if ( action == getXMLDesc_Action ) {
+    //    parameters << "getVirtSecretXMLDesc";
     } else return;
     emit execMethod(parameters);
 }

@@ -1,7 +1,6 @@
 #ifndef OS_BOOTING_H
 #define OS_BOOTING_H
 
-#include <QScrollArea>
 #include <QStackedWidget>
 #include "create_widgets/domain/_tab.h"
 #include "create_widgets/domain/lxc_widgets/lxc_os_booting.h"
@@ -35,9 +34,9 @@ private:
     BootType        *bootType;
     QStackedWidget  *bootSet;
 
-    QScrollArea     *commonWdg;
-    QVBoxLayout     *scrolledLayout;
-    QWidget         *scrolled;
+    //QScrollArea     *commonWdg;
+    //QVBoxLayout     *scrolledLayout;
+    //QWidget         *scrolled;
 
 public slots:
     QDomDocument     getDataDocument() const;

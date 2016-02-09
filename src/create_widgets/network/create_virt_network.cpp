@@ -36,8 +36,8 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent, Actions _act) :
     addressingWdg = new Addressing_Widget(this);
     forwardWdg = new Forward_Widget(this);
 
-    showDescription = new QCheckBox("Show XML Description\nat close", this);
-    showDescription->setChecked(showDesc);
+    //showDescription = new QCheckBox("Show XML Description\nat close", this);
+    //showDescription->setChecked(showDesc);
     about = new QLabel("<a href='http://libvirt.org/formatnetwork.html'>About</a>", this);
     about->setOpenExternalLinks(true);
     about->setToolTip("http://libvirt.org/formatnetwork.html");
@@ -49,7 +49,7 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent, Actions _act) :
     connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(about);
-    buttonLayout->addWidget(showDescription);
+    //buttonLayout->addWidget(showDescription);
     buttonLayout->addWidget(ok);
     buttonLayout->addWidget(cancel);
     buttons = new QWidget(this);
@@ -92,7 +92,7 @@ CreateVirtNetwork::~CreateVirtNetwork()
 {
     settings.beginGroup("VirtNetControl");
     settings.setValue("NetCreateGeometry", saveGeometry());
-    settings.setValue("NetCreateShowDesc", showDescription->isChecked());
+    //settings.setValue("NetCreateShowDesc", showDescription->isChecked());
     settings.endGroup();
 }
 
@@ -111,7 +111,8 @@ QString CreateVirtNetwork::getXMLDescFileName() const
 }
 bool CreateVirtNetwork::getShowing() const
 {
-    return showDescription->isChecked();
+    //return showDescription->isChecked();
+    return false;
 }
 
 /* private slots */

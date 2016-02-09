@@ -27,9 +27,9 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
     changeRollback_Action = new QAction(this);
     changeRollback_Action->setIcon(QIcon::fromTheme("document-revert"));
     changeRollback_Action->setToolTip("Change Rollback");
-    getXMLDesc_Action = new QAction(this);
-    getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
-    getXMLDesc_Action->setToolTip("Get XML Description");
+    //getXMLDesc_Action = new QAction(this);
+    //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
+    //getXMLDesc_Action->setToolTip("Get XML Description");
     _autoReload = new QPushButton(this);
     _autoReload->setToolTip("AutoReload Interface Overview");
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
@@ -43,8 +43,8 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
     addAction(changeBegin_Action);
     addAction(changeCommit_Action);
     addAction(changeRollback_Action);
-    addSeparator();
-    addAction(getXMLDesc_Action);
+    //addSeparator();
+    //addAction(getXMLDesc_Action);
     addSeparator();
     autoReload = addWidget(_autoReload);
     addAction(autoReload);
@@ -149,8 +149,8 @@ void InterfaceToolBar::detectTriggerredAction(QAction *action)
         parameters << "changeCommitVirtInterface";
     } else if ( action == changeRollback_Action ) {
         parameters << "changeRollbackVirtInterface";
-    } else if ( action == getXMLDesc_Action ) {
-        parameters << "getVirtInterfaceXMLDesc";
+    //} else if ( action == getXMLDesc_Action ) {
+    //    parameters << "getVirtInterfaceXMLDesc";
     } else return;
     emit execMethod(parameters);
 }

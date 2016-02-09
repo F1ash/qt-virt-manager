@@ -7,6 +7,7 @@
 #include "boot_menu.h"
 #include "boot_devices.h"
 #include <QList>
+#include <QScrollArea>
 
 struct BootOrder {
     QString     deviceDesc;
@@ -41,6 +42,10 @@ private:
     BootMenu        *bootMenu;
     Boot_Devices    *bootDevices;
     QVBoxLayout     *commonLayout;
+
+    QScrollArea     *commonWdg;
+    QVBoxLayout     *scrolledLayout;
+    QWidget         *scrolled;
 
 public slots:
     QDomDocument     getDataDocument() const;

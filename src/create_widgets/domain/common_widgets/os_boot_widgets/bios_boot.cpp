@@ -29,7 +29,15 @@ BIOS_Boot::BIOS_Boot(QWidget *parent, QString _caps) :
     commonLayout->addWidget(templateLabel);
     commonLayout->addWidget(nvramTemplate);
     commonLayout->insertStretch(-1);
-    setLayout(commonLayout);
+    scrolled = new QWidget(this);
+    scrolled->setLayout(commonLayout);
+    commonWdg = new QScrollArea(this);
+    commonWdg->setWidget(scrolled);
+    commonWdg->setWidgetResizable(true);
+    scrolledLayout = new QVBoxLayout(this);
+    scrolledLayout->addWidget(commonWdg);
+    scrolledLayout->addStretch(-1);
+    setLayout(scrolledLayout);
     connect(architecture, SIGNAL(domainType(QString&)),
             this, SIGNAL(domainType(QString&)));
     connect(architecture, SIGNAL(osType(QString&)),

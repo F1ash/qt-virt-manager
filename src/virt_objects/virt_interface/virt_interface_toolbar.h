@@ -30,7 +30,7 @@ private:
     QAction         *changeBegin_Action;
     QAction         *changeCommit_Action;
     QAction         *changeRollback_Action;
-    QAction         *getXMLDesc_Action;
+    //QAction         *getXMLDesc_Action;
     QPushButton     *_autoReload;
     QAction         *autoReload;
 

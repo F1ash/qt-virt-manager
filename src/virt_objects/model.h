@@ -17,7 +17,6 @@ public:
     QIcon    activeIcon;
     QIcon    no_activeIcon;
     QIcon    defined;
-    //QIcon    created;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;

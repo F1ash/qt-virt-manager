@@ -3,6 +3,9 @@
 DomainToolBar::DomainToolBar(QWidget *parent) :
     QToolBar(parent)
 {
+    setAllowedAreas(Qt::AllToolBarAreas);
+    setMovable(true);
+    setFloatable(false);
     start_Action = new QAction(this);
     start_Action->setIcon(QIcon::fromTheme("start"));
     start_Action->setToolTip("Start");
@@ -42,28 +45,22 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
     undefine_Action->setToolTip("Undefine");
-    setAutostart_Action = new QAction(this);
-    setAutostart_Action->setIcon(QIcon::fromTheme("autostart"));
-    setAutostart_Action->setToolTip("Change AutoStart State");
-    getXMLDesc_Action = new QAction(this);
-    getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
-    getXMLDesc_Action->setToolTip("Get XML Description");
-    migrate_Action = new QAction(this);
-    migrate_Action->setIcon(QIcon::fromTheme("migrate"));
-    migrate_Action->setToolTip("Migrate");
+    //setAutostart_Action = new QAction(this);
+    //setAutostart_Action->setIcon(QIcon::fromTheme("autostart"));
+    //setAutostart_Action->setToolTip("Change AutoStart State");
+    //getXMLDesc_Action = new QAction(this);
+    //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
+    //getXMLDesc_Action->setToolTip("Get XML Description");
+    //migrate_Action = new QAction(this);
+    //migrate_Action->setIcon(QIcon::fromTheme("migrate"));
+    //migrate_Action->setToolTip("Migrate");
     _autoReload = new QPushButton(this);
     _autoReload->setToolTip("AutoReload Domain Overview");
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
     _autoReload->setCheckable(true);
-    snapshot_Menu = new QMenu(this);
-    createSnapshot = snapshot_Menu->addAction("create Snapshot of Current Domain");
+    createSnapshot = new QAction(this);
     createSnapshot->setIcon(QIcon::fromTheme("camera-photo"));
-    moreSnapshot_Actions = snapshot_Menu->addAction("more Snapshot actions for Domain");
-    moreSnapshot_Actions->setIcon(QIcon::fromTheme("camera-photo"));
-    snapshot_Action = new QAction(this);
-    snapshot_Action->setIcon(QIcon::fromTheme("camera-photo"));
-    snapshot_Action->setToolTip("Snapshot now!");
-    snapshot_Action->setMenu(snapshot_Menu);
+    createSnapshot->setToolTip("Snapshot now!");
 
     addAction(start_Action);
     addAction(pause_Action);
@@ -73,13 +70,13 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     addAction(define_Action);
     addAction(undefine_Action);
     //addSeparator();
-    addAction(setAutostart_Action);
+    //addAction(setAutostart_Action);
     addSeparator();
-    addAction(snapshot_Action);
-    addSeparator();
-    addAction(getXMLDesc_Action);
-    addSeparator();
-    addAction(migrate_Action);
+    addAction(createSnapshot);
+    //addSeparator();
+    //addAction(getXMLDesc_Action);
+    //addSeparator();
+    //addAction(migrate_Action);
     addSeparator();
     autoReload = addWidget(_autoReload);
     addAction(autoReload);
@@ -210,18 +207,14 @@ void DomainToolBar::detectTriggerredAction(QAction *action)
         parameters << "restoreVirtDomain";
     } else if ( action == undefine_Action ) {
         parameters << "undefineVirtDomain";
-    } else if ( action == setAutostart_Action ) {
-        parameters << "setAutostartVirtDomain";
-    } else if ( action == getXMLDesc_Action ) {
-        parameters << "getVirtDomainXMLDesc" << "";
-    } else if ( action == migrate_Action ) {
-        parameters << "migrateVirtDomain";
-    } else if ( action == snapshot_Action ) {
-        parameters << "createVirtDomainSnapshot";
+    //} else if ( action == setAutostart_Action ) {
+    //    parameters << "setAutostartVirtDomain";
+    //} else if ( action == getXMLDesc_Action ) {
+    //    parameters << "getVirtDomainXMLDesc" << "";
+    //} else if ( action == migrate_Action ) {
+    //    parameters << "migrateVirtDomain";
     } else if ( action == createSnapshot ) {
         parameters << "createVirtDomainSnapshot";
-    } else if ( action == moreSnapshot_Actions ) {
-        parameters << "moreSnapshotActions";
     } else return;
     emit execMethod(parameters);
 }

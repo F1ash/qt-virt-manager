@@ -244,7 +244,8 @@ void VirtDomainControl::execAction(const QStringList &l)
                 task.method     = l.first();
                 task.action     = SAVE_ENTITY;
                 task.args.path  = to;
-                task.args.state = domainModel->DataList.at(idx.row())->getState().split(":").last();
+                task.args.state = domainModel->DataList
+                        .at(idx.row())->getState().split(":").last();
                 emit addNewTask(task);
             };
         } else if ( l.first()=="restoreVirtDomain" ) {

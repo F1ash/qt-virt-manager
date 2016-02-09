@@ -49,7 +49,7 @@ private:
     QString          capabilities;
     QString          type;
     QTabWidget      *tabWidget = NULL;
-    QCheckBox       *showDescription;
+    //QCheckBox       *showDescription;
     QLabel          *about;
     QPushButton     *ok;
     QPushButton     *restore;

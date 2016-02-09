@@ -5,16 +5,16 @@ DeviceData::DeviceData(
     QWidget(parent), ptr_ConnPtr(conn)
 {
     devName = new QLabel(this);
-    save = new QPushButton(QIcon::fromTheme("document-save"), "Save", this);
+    save = new QPushButton(QIcon::fromTheme("document-save"), "", this);
     save->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    save->setToolTip("Save current state");
-    revert = new QPushButton(QIcon::fromTheme("document-revert"), "Revert", this);
-    revert->setToolTip("Revert to previous state");
+    save->setToolTip("Save current device state");
+    revert = new QPushButton(QIcon::fromTheme("document-revert"), "", this);
+    revert->setToolTip("Revert to previous device state");
     revert->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     restoreMenu = new DeviceRestoreMenu(this);
     restoreMenu->revertData->setEnabled(false);
     revert->setMenu(restoreMenu);
-    _close = new QPushButton(QIcon::fromTheme("dialog-close"), "Close", this);
+    _close = new QPushButton(QIcon::fromTheme("dialog-close"), "", this);
     _close->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     panelLayout = new QHBoxLayout(this);
     panelLayout->addWidget(devName, 10, Qt::AlignLeft);

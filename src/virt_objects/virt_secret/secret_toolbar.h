@@ -22,7 +22,7 @@ signals:
 private:
     QAction         *define_Action;
     QAction         *undefine_Action;
-    QAction         *getXMLDesc_Action;
+    //QAction         *getXMLDesc_Action;
     QPushButton     *_autoReload;
     QAction         *autoReload;
 

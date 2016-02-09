@@ -38,15 +38,12 @@ private:
     QAction         *create_Action;
     QAction         *define_Action;
     QAction         *undefine_Action;
-    QAction         *setAutostart_Action;
-    QAction         *getXMLDesc_Action;
-    QAction         *migrate_Action;
+    //QAction         *setAutostart_Action;
+    //QAction         *getXMLDesc_Action;
+    //QAction         *migrate_Action;
     QPushButton     *_autoReload;
     QAction         *autoReload;
-    QMenu           *snapshot_Menu;
     QAction         *createSnapshot;
-    QAction         *moreSnapshot_Actions;
-    QAction         *snapshot_Action;
 
     QSettings        settings;
     int              interval;

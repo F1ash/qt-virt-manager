@@ -7,13 +7,18 @@ LogicalHostCPU::LogicalHostCPU(
     QDomDocument doc;
     doc.setContent(capabilities);
     //qDebug()<<capabilities;
-    cores = doc.firstChildElement("capabilities")
+    QDomElement _topology = doc
+            .firstChildElement("capabilities")
             .firstChildElement("host")
             .firstChildElement("cpu")
-            .firstChildElement("topology")
-            .attribute("cores").toInt();
-    cores = (cores>0)? cores : 1 ;
-    QString _label = QString("Logical host CPUs: %1").arg(cores);
+            .firstChildElement("topology");
+    if ( _topology.isNull() )
+        cores = 1;
+    else {
+        int sockets = _topology.attribute("sockets").toInt();
+        cores = _topology.attribute("cores").toInt()*sockets;
+    };
+    QString _label = QString("Logical host cores: %1").arg(cores);
     logicCPULabel = new QLabel(_label, this);
     icon = new QLabel(this);
     icon->setVisible(false);

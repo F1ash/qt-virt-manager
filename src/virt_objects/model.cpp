@@ -8,7 +8,7 @@ Model::Model(QObject *parent) :
     column0 = "Name";
     column1 = "State";
     column2 = "Auto";
-    column3 = "Prst";
+    column3 = "Persistent";
 }
 Model::~Model()
 {

@@ -6,6 +6,11 @@ Boot_Devices::Boot_Devices(QWidget *parent) :
     up = new QPushButton(QIcon::fromTheme("go-up"), "", this);
     down = new QPushButton(QIcon::fromTheme("go-down"), "", this);
     devices = new QListWidget(this);
+    devices->setSizePolicy(
+                QSizePolicy(
+                    QSizePolicy::MinimumExpanding,
+                    QSizePolicy::MinimumExpanding));
+    devices->setMinimumSize(100, 200);
     commonLayout = new QGridLayout();
     commonLayout->addWidget(devices, 0, 1, 2, 1);
     commonLayout->addWidget(up, 0, 2);

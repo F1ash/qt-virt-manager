@@ -8,7 +8,7 @@
 #include <QTimerEvent>
 #include <QSettings>
 #include "virt_objects/open_file_menu.h"
-#include "delete_pool_menu.h"
+//#include "delete_pool_menu.h"
 #include <QDebug>
 
 class StoragePoolToolBar : public QToolBar
@@ -30,12 +30,12 @@ private:
     QAction         *create_Action;
     QAction         *define_Action;
     QAction         *undefine_Action;
-    QAction         *setAutostart_Action;
-    QAction         *delete_Action;
-    QAction         *getXMLDesc_Action;
+    //QAction         *setAutostart_Action;
+    //QAction         *delete_Action;
+    //QAction         *getXMLDesc_Action;
     QAction         *overview_Action;
-    Delete_Pool_Menu
-                    *delete_Menu;
+    //Delete_Pool_Menu
+    //                *delete_Menu;
     QPushButton     *_autoReload;
     QAction         *autoReload;
 

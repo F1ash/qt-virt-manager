@@ -136,7 +136,7 @@ CreateVirtDomain::~CreateVirtDomain()
 {
     settings.setValue("DomCreateGeometry", saveGeometry());
     if ( ready ) {
-        settings.setValue("DomCreateShowDesc", showDescription->isChecked());
+        //settings.setValue("DomCreateShowDesc", showDescription->isChecked());
     };
 }
 
@@ -210,20 +210,20 @@ void CreateVirtDomain::readDataLists()
         about = new QLabel("<a href='http://libvirt.org/formatdomain.html'>About</a>", this);
         about->setToolTip("http://libvirt.org/formatdomain.html");
         about->setOpenExternalLinks(true);
-        showDescription = new QCheckBox("Show XML Description\nat close", this);
-        showDescription->setChecked(settings.value("DomCreateShowDesc").toBool());
+        //showDescription = new QCheckBox("Show XML Description\nat close", this);
+        //showDescription->setChecked(settings.value("DomCreateShowDesc").toBool());
         ok = new QPushButton(QIcon::fromTheme("dialog-ok"), "Ok", this);
         ok->setAutoDefault(true);
         connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
-        restore = new QPushButton(QIcon::fromTheme("go-first"), "Restore", this);
-        restore->setToolTip("Restore all");
+        restore = new QPushButton(QIcon::fromTheme("go-first"), "Restore all", this);
+        restore->setToolTip("Restore all pages to first state");
         connect(restore, SIGNAL(clicked()), this, SLOT(restoreParameters()));
         cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
         cancel->setAutoDefault(true);
         connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
         buttonLayout = new QHBoxLayout();
         buttonLayout->addWidget(about);
-        buttonLayout->addWidget(showDescription);
+        //buttonLayout->addWidget(showDescription);
         buttonLayout->addWidget(ok);
         buttonLayout->addWidget(restore);
         buttonLayout->addWidget(cancel);
@@ -304,7 +304,7 @@ void CreateVirtDomain::set_Result()
         data.append(QString("to <a href='%1'>%1</a>").arg(_xml));
         QString msg = data.join(" ");
         sendMsg(msg);
-        if ( showDescription->isChecked() ) QDesktopServices::openUrl(QUrl(_xml));
+        //if ( showDescription->isChecked() ) QDesktopServices::openUrl(QUrl(_xml));
         task.args.path = _xml;
         emit addNewTask(task);
     };

@@ -39,9 +39,9 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     wipe_Action->setIcon(QIcon::fromTheme("wipe"));
     wipe_Action->setToolTip("Wipe");
     wipe_Action->setMenu(wipe_Menu);
-    getXMLDesc_Action = new QAction(this);
-    getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
-    getXMLDesc_Action->setToolTip("Get XML Description");
+    //getXMLDesc_Action = new QAction(this);
+    //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
+    //getXMLDesc_Action->setToolTip("Get XML Description");
     _autoReload = new QPushButton(this);
     _autoReload->setToolTip("AutoReload Volume Overview");
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
@@ -49,12 +49,13 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
 
     addAction(create_Action);
     addAction(delete_Action);
+    addSeparator();
     addAction(download_Action);
     addAction(resize_Action);
     addAction(upload_Action);
     addAction(wipe_Action);
-    addSeparator();
-    addAction(getXMLDesc_Action);
+    //addSeparator();
+    //addAction(getXMLDesc_Action);
     addSeparator();
     autoReload = addWidget(_autoReload);
     addAction(autoReload);
@@ -80,40 +81,6 @@ StorageVolToolBar::~StorageVolToolBar()
     settings.setValue("UpdateTime", interval);
     settings.setValue("AutoReload", _autoReload->isChecked());
     settings.endGroup();
-    disconnect(_autoReload, SIGNAL(toggled(bool)),
-               this, SLOT(changeAutoReloadState(bool)));
-    disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)),
-               this, SLOT(repeatParameters(QStringList&)));
-    disconnect(wipe_Menu, SIGNAL(execMethod(const QStringList&)),
-               this, SIGNAL(execMethod(const QStringList&)));
-    disconnect(this, SIGNAL(actionTriggered(QAction*)),
-               this, SLOT(detectTriggerredAction(QAction*)));
-
-    disconnect(create_Action, SIGNAL(triggered()),
-               this, SLOT(showMenu()));
-
-    delete create_Action;
-    create_Action = NULL;
-    delete create_Menu;
-    create_Menu = NULL;
-    delete delete_Action;
-    delete_Action = NULL;
-    delete download_Action;
-    download_Action = NULL;
-    delete resize_Action;
-    resize_Action = NULL;
-    delete upload_Action;
-    upload_Action = NULL;
-    delete wipe_Menu;
-    wipe_Menu = NULL;
-    delete wipe_Action;
-    wipe_Action = NULL;
-    delete getXMLDesc_Action;
-    getXMLDesc_Action = NULL;
-    delete _autoReload;
-    _autoReload = NULL;
-    delete autoReload;
-    autoReload = NULL;
 }
 
 /* public slots */
@@ -192,8 +159,8 @@ void StorageVolToolBar::detectTriggerredAction(QAction *action)
         parameters << "resizeVirtStorageVol";
     } else if ( action == wipe_Action ) {
         parameters << "wipeVirtStorageVol" << "0";
-    } else if ( action == getXMLDesc_Action ) {
-        parameters << "getVirtStorageVolXMLDesc";
+    //} else if ( action == getXMLDesc_Action ) {
+    //    parameters << "getVirtStorageVolXMLDesc";
     } else return;
     emit execMethod(parameters);
 }

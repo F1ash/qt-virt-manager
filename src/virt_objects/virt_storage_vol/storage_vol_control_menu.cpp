@@ -23,6 +23,7 @@ StorageVolControlMenu::StorageVolControlMenu(
         getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
 
         addAction(delete_Action);
+        addSeparator();
         addAction(download_Action);
         addAction(resize_Action);
         addAction(upload_Action);

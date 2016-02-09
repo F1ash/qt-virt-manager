@@ -29,8 +29,8 @@ private:
     QAction         *create_Action;
     QAction         *define_Action;
     QAction         *undefine_Action;
-    QAction         *setAutostart_Action;
-    QAction         *getXMLDesc_Action;
+    //QAction         *setAutostart_Action;
+    //QAction         *getXMLDesc_Action;
     QPushButton     *_autoReload;
     QAction         *autoReload;
 

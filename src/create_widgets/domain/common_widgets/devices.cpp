@@ -203,8 +203,10 @@ void Devices::addDevice()
 }
 void Devices::addDeviceToUsedDevList(QDomDocument &doc, bool flag)
 {
-    QDomNodeList list = doc.firstChildElement("device").childNodes();
-    if ( list.length()==0 ) return;
+    QDomElement _el = doc.firstChildElement("device");
+    if ( _el.isNull() ) return;
+    QDomNodeList list = _el.childNodes();
+    if ( list.isEmpty() ) return;
     QString device, desc, name;
     device = list.item(0).nodeName();
     if ( device=="disk" ) {

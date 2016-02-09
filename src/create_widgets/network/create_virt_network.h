@@ -42,7 +42,7 @@ private:
                     *addressingWdg;
     Forward_Widget  *forwardWdg;
 
-    QCheckBox       *showDescription;
+    //QCheckBox       *showDescription;
     QLabel          *about;
     QPushButton     *ok;
     QPushButton     *cancel;

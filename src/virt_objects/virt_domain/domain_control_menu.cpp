@@ -37,6 +37,8 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         autoStart->setVisible(parameters.last()=="yes");
         createSnapshot = new QAction("Snapshot now!", this);
         createSnapshot->setIcon(QIcon::fromTheme("camera-photo"));
+        moreSnapshot_Actions = new QAction("more Snapshot actions", this);
+        moreSnapshot_Actions->setIcon(QIcon::fromTheme("camera-photo"));
         getXMLDesc = new QAction("get XML Description", this);
         getXMLDesc->setIcon(QIcon::fromTheme("application-xml"));
         getXMLDesc->setVisible(true);
@@ -59,25 +61,25 @@ DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool s
         addAction(start);
         addAction(pause);
         addAction(destroy);
-        addSeparator();
-        addAction(edit);
-        addSeparator();
-        addAction(reset);
-        addAction(reboot);
-        addAction(shutdown);
-        addAction(save);
-        addSeparator();
         addAction(undefine);
         addAction(autoStart);
         addSeparator();
-        addAction(createSnapshot);
+        addAction(edit);
         addSeparator();
-        addAction(getXMLDesc);
+        addAction(createSnapshot);
+        addAction(moreSnapshot_Actions);
         addSeparator();
         addAction(display);
         addAction(addToMonitor);
         addSeparator();
         addAction(migrate);
+        addSeparator();
+        addAction(getXMLDesc);
+        addSeparator();
+        addAction(reset);
+        addAction(reboot);
+        addAction(shutdown);
+        addAction(save);
         addSeparator();
     };
     reload = new QAction("Reload Domain OverView", this);
@@ -131,7 +133,9 @@ void DomainControlMenu::emitExecMethod(QAction *action)
         } else if ( action == reload ) {
             paramList.append("reloadVirtDomain");
         } else if ( action == createSnapshot ) {
-            paramList.append("createVirtDomainSnapshot");
+            paramList.append( "createVirtDomainSnapshot" );
+        } else if ( action == moreSnapshot_Actions ) {
+            paramList.append( "moreSnapshotActions" );
         } else return;
         if ( action != reload ) paramList.append(parameters.first());
     } else if ( action == reload ) {

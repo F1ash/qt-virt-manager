@@ -24,17 +24,17 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
     undefine_Action->setToolTip("Undefine");
-    setAutostart_Action = new QAction(this);
-    setAutostart_Action->setIcon(QIcon::fromTheme("autostart"));
-    setAutostart_Action->setToolTip("Change AutoStart State");
-    delete_Menu = new Delete_Pool_Menu(this);
-    delete_Action = new QAction(this);
-    delete_Action->setIcon(QIcon::fromTheme("delete"));
-    delete_Action->setToolTip("Delete");
-    delete_Action->setMenu(delete_Menu);
-    getXMLDesc_Action = new QAction(this);
-    getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
-    getXMLDesc_Action->setToolTip("Get XML Description");
+    //setAutostart_Action = new QAction(this);
+    //setAutostart_Action->setIcon(QIcon::fromTheme("autostart"));
+    //setAutostart_Action->setToolTip("Change AutoStart State");
+    //delete_Menu = new Delete_Pool_Menu(this);
+    //delete_Action = new QAction(this);
+    //delete_Action->setIcon(QIcon::fromTheme("delete"));
+    //delete_Action->setToolTip("Delete");
+    //delete_Action->setMenu(delete_Menu);
+    //getXMLDesc_Action = new QAction(this);
+    //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
+    //getXMLDesc_Action->setToolTip("Get XML Description");
     overview_Action = new QAction(this);
     overview_Action->setIcon(QIcon::fromTheme("overview"));
     overview_Action->setToolTip("Overview Pool");
@@ -50,10 +50,10 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
     addAction(define_Action);
     addAction(undefine_Action);
     //addSeparator();
-    addAction(setAutostart_Action);
-    addAction(delete_Action);
-    addSeparator();
-    addAction(getXMLDesc_Action);
+    //addAction(setAutostart_Action);
+    //addAction(delete_Action);
+    //addSeparator();
+    //addAction(getXMLDesc_Action);
     addSeparator();
     addAction(overview_Action);
     addSeparator();
@@ -65,14 +65,15 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
     _autoReload->setChecked(settings.value("AutoReload", false).toBool());
     settings.endGroup();
 
-    connect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
+    connect(_autoReload, SIGNAL(toggled(bool)),
+            this, SLOT(changeAutoReloadState(bool)));
 
     connect(create_Menu, SIGNAL(fileForMethod(QStringList&)),
             this, SLOT(repeatParameters(QStringList&)));
     connect(define_Menu, SIGNAL(fileForMethod(QStringList&)),
             this, SLOT(repeatParameters(QStringList&)));
-    connect(delete_Menu, SIGNAL(execMethod(const QStringList&)),
-            this, SIGNAL(execMethod(const QStringList&)));
+    //connect(delete_Menu, SIGNAL(execMethod(const QStringList&)),
+    //        this, SIGNAL(execMethod(const QStringList&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
 }
@@ -82,48 +83,6 @@ StoragePoolToolBar::~StoragePoolToolBar()
     settings.setValue("UpdateTime", interval);
     settings.setValue("AutoReload", _autoReload->isChecked());
     settings.endGroup();
-    disconnect(_autoReload, SIGNAL(toggled(bool)),
-               this, SLOT(changeAutoReloadState(bool)));
-    disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)),
-               this, SLOT(repeatParameters(QStringList&)));
-    disconnect(define_Menu, SIGNAL(fileForMethod(QStringList&)),
-               this, SLOT(repeatParameters(QStringList&)));
-    disconnect(delete_Menu, SIGNAL(execMethod(const QStringList&)),
-               this, SIGNAL(execMethod(const QStringList&)));
-    disconnect(this, SIGNAL(actionTriggered(QAction*)),
-               this, SLOT(detectTriggerredAction(QAction*)));
-
-    disconnect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
-    disconnect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
-
-    delete start_Action;
-    start_Action = NULL;
-    delete destroy_Action;
-    destroy_Action = NULL;
-    delete create_Menu;
-    create_Menu = NULL;
-    delete define_Menu;
-    define_Menu = NULL;
-    delete create_Action;
-    create_Action = NULL;
-    delete define_Action;
-    define_Action = NULL;
-    delete undefine_Action;
-    undefine_Action = NULL;
-    delete setAutostart_Action;
-    setAutostart_Action = NULL;
-    delete delete_Menu;
-    delete_Menu = NULL;
-    delete delete_Action;
-    delete_Action = NULL;
-    delete getXMLDesc_Action;
-    getXMLDesc_Action = NULL;
-    delete overview_Action;
-    overview_Action = NULL;
-    delete _autoReload;
-    _autoReload = NULL;
-    delete autoReload;
-    autoReload = NULL;
 }
 
 /* public slots */
@@ -218,10 +177,10 @@ void StoragePoolToolBar::detectTriggerredAction(QAction *action)
         parameters << "destroyVirtStoragePool";
     } else if ( action == undefine_Action ) {
         parameters << "undefineVirtStoragePool";
-    } else if ( action == setAutostart_Action ) {
-        parameters << "setAutostartVirtStoragePool";
-    } else if ( action == getXMLDesc_Action ) {
-        parameters << "getVirtStoragePoolXMLDesc";
+    //} else if ( action == setAutostart_Action ) {
+    //    parameters << "setAutostartVirtStoragePool";
+    //} else if ( action == getXMLDesc_Action ) {
+    //    parameters << "getVirtStoragePoolXMLDesc";
     } else if ( action == overview_Action ) {
         parameters << "overviewVirtStoragePool";
     } else return;

@@ -137,6 +137,7 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
             break;
         }
     };
+    /*
     if ( role==Qt::TextAlignmentRole ) {
         switch (index.column()) {
         case 1:
@@ -149,6 +150,7 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
             break;
         }
     };
+    */
     //qDebug()<<res<<"data";
     return res;
 }

@@ -50,13 +50,14 @@ void ToolBar::addItemControlMenu()
     _closeAllAction->setIcon ( QIcon::fromTheme("disconnect") );
 
     itemControlMenu->addAction(_createAction);
-    itemControlMenu->addAction(_editAction);
-    itemControlMenu->addAction(_deleteAction);
     itemControlMenu->addSeparator();
     itemControlMenu->addAction(_openAction);
     itemControlMenu->addAction(_showAction);
     itemControlMenu->addAction(_closeAction);
     itemControlMenu->addAction(_closeAllAction);
+    itemControlMenu->addSeparator();
+    itemControlMenu->addAction(_editAction);
+    itemControlMenu->addAction(_deleteAction);
 
     itemControlAction = new QAction(this);
     itemControlAction->setIcon(QIcon::fromTheme("job"));

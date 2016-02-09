@@ -24,12 +24,12 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
     undefine_Action->setToolTip("Undefine");
-    setAutostart_Action = new QAction(this);
-    setAutostart_Action->setIcon(QIcon::fromTheme("autostart"));
-    setAutostart_Action->setToolTip("Change AutoStart State");
-    getXMLDesc_Action = new QAction(this);
-    getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
-    getXMLDesc_Action->setToolTip("Get XML Description");
+    //setAutostart_Action = new QAction(this);
+    //setAutostart_Action->setIcon(QIcon::fromTheme("autostart"));
+    //setAutostart_Action->setToolTip("Change AutoStart State");
+    //getXMLDesc_Action = new QAction(this);
+    //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
+    //getXMLDesc_Action->setToolTip("Get XML Description");
     _autoReload = new QPushButton(this);
     _autoReload->setToolTip("AutoReload Network Overview");
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
@@ -42,9 +42,9 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     addAction(define_Action);
     addAction(undefine_Action);
     //addSeparator();
-    addAction(setAutostart_Action);
-    addSeparator();
-    addAction(getXMLDesc_Action);
+    //addAction(setAutostart_Action);
+    //addSeparator();
+    //addAction(getXMLDesc_Action);
     addSeparator();
     autoReload = addWidget(_autoReload);
     addAction(autoReload);
@@ -73,43 +73,6 @@ VirtNetToolBar::~VirtNetToolBar()
     settings.setValue("UpdateTime", interval);
     settings.setValue("AutoReload", _autoReload->isChecked());
     settings.endGroup();
-    //disconnect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(define_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //disconnect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    disconnect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
-    disconnect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    disconnect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    disconnect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
-
-    disconnect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
-    disconnect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
-
-    delete start_Action;
-    start_Action = NULL;
-    delete destroy_Action;
-    destroy_Action = NULL;
-    delete create_Menu;
-    create_Menu = NULL;
-    delete define_Menu;
-    define_Menu = NULL;
-    delete create_Action;
-    create_Action = NULL;
-    delete define_Action;
-    define_Action = NULL;
-    delete undefine_Action;
-    undefine_Action = NULL;
-    delete setAutostart_Action;
-    setAutostart_Action = NULL;
-    delete getXMLDesc_Action;
-    getXMLDesc_Action = NULL;
-    delete _autoReload;
-    _autoReload = NULL;
-    delete autoReload;
-    autoReload = NULL;
 }
 
 /* public slots */
@@ -204,10 +167,10 @@ void VirtNetToolBar::detectTriggerredAction(QAction *action)
         parameters << "destroyVirtNetwork";
     } else if ( action == undefine_Action ) {
         parameters << "undefineVirtNetwork";
-    } else if ( action == setAutostart_Action ) {
-        parameters << "setAutostartVirtNetwork";
-    } else if ( action == getXMLDesc_Action ) {
-        parameters << "getVirtNetworkXMLDesc";
+    //} else if ( action == setAutostart_Action ) {
+    //    parameters << "setAutostartVirtNetwork";
+    //} else if ( action == getXMLDesc_Action ) {
+    //    parameters << "getVirtNetworkXMLDesc";
     } else return;
     emit execMethod(parameters);
 }
