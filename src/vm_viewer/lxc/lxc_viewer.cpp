@@ -18,6 +18,7 @@ void lxcHlpThread::run()
     };
     domainPtr =virDomainLookupByName(
                     *ptr_ConnPtr, domain.toUtf8().data());
+    domainIsActive = (virDomainIsActive(domainPtr)>0);
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();
 }
@@ -67,11 +68,11 @@ LXC_Viewer::~LXC_Viewer()
 void LXC_Viewer::init()
 {
     QString msg;
-    if ( hlpThread->domainPtr!=NULL ) {
+    if ( hlpThread->domainPtr!=NULL && hlpThread->domainIsActive ) {
         viewerThread = new LXC_ViewerThread(this);
         timerId = startTimer(PERIOD);
     } else {
-        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL...")
+        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL or inactive")
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);

@@ -17,6 +17,7 @@ public:
             virConnectPtr*  connPtrPtr = NULL,
             QString         _domain = QString());
     const QString    domain;
+    bool             domainIsActive = false;
     virDomainPtr     domainPtr = NULL;
     QString          uri, runXmlDesc;
     void             run();

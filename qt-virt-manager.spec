@@ -130,6 +130,18 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt4-virt-manager.des
 desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.desktop
 %endif
 
+%post
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+
+%postun
+if [ $1 -eq 0 ] ; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+fi
+
+%posttrans
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+
 %if %with qt4
 %files -n qt4-virt-manager
 %license LICENSE

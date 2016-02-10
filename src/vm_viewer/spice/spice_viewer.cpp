@@ -20,6 +20,7 @@ void spcHlpThread::run()
     };
     domainPtr =virDomainLookupByName(
                     *ptr_ConnPtr, domain.toUtf8().data());
+    domainIsActive = (virDomainIsActive(domainPtr)>0);
     uri.append(virConnectGetURI(*ptr_ConnPtr));
     // flag=0 for get running domain xml-description
     runXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
@@ -47,7 +48,7 @@ void Spice_Viewer::init()
     // get address or hostname from URI
     // driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
     QString msg;
-    if ( hlpThread->domainPtr!=NULL ) {
+    if ( hlpThread->domainPtr!=NULL && hlpThread->domainIsActive ) {
         addr = hlpThread->uri.split("://").last();
         hlpThread->uri = addr;
         addr = hlpThread->uri.split("/").first();
@@ -85,17 +86,22 @@ void Spice_Viewer::init()
         //qDebug()<<"address:"<<addr<<port;
         if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
             initSpiceWidget();
-            actFullScreen = new QShortcut(QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
-            connect(actFullScreen, SIGNAL(activated()), SLOT(FullScreenTriggered()));
+            actFullScreen = new QShortcut(
+                        QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
+            connect(actFullScreen, SIGNAL(activated()),
+                    SLOT(FullScreenTriggered()));
         } else {
             msg = QString("In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")
-                    .arg(domain).arg((!graph.isNull())? graph.attribute("type"):"???");
+                    .arg(domain)
+                    .arg((!graph.isNull())?
+                             graph.attribute("type"):"???");
             sendErrMsg(msg);
             showErrorInfo(msg);
             startCloseProcess();
         };
     } else {
-        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL...")
+        viewerToolBar->setEnabled(false);
+        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL or inactive")
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);
