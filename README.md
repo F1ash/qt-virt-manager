@@ -21,3 +21,31 @@ Building parameters:
         if not defined or above zero, then will used
         Spice[Playback/Record] Channels for audio
 
+Buid requires:
+
+    `with Qt4:`
+    libQtCore.so
+    libQtGui.so
+    libQtMultimedia.so
+    libQtSvg.so
+    libQtXml.so
+    libqtermwidget4.so
+
+    `with Qt5:`
+    libQt5Core.so
+    libQt5Gui.so
+    libQt5Multimedia.so
+    libQt5Svg.so
+    libQt5Widgets.so
+    libQt5Xml.so
+    libqtermwidget5.so
+
+    libcacard.so            (optional, WITH_LIBCACARD)
+    libgio-2.0.so
+    libglib-2.0.so
+    libgmodule-2.0.so
+    libgobject-2.0.so
+    libgthread-2.0.so
+    libspice-client-glib-2.0.so
+    libvirt.so.0
+
