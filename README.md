@@ -23,7 +23,7 @@ Building parameters:
 
 Buid requires:
 
-    `with Qt4:`
+    * with Qt4
     libQtCore.so
     libQtGui.so
     libQtMultimedia.so
@@ -31,7 +31,7 @@ Buid requires:
     libQtXml.so
     libqtermwidget4.so
 
-    `with Qt5:`
+    * with Qt5
     libQt5Core.so
     libQt5Gui.so
     libQt5Multimedia.so
@@ -47,5 +47,5 @@ Buid requires:
     libgobject-2.0.so
     libgthread-2.0.so
     libspice-client-glib-2.0.so
-    libvirt.so.0
+    libvirt.so
 
