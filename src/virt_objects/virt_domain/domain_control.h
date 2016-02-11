@@ -19,7 +19,7 @@ public:
     ~VirtDomainControl();
 
 signals:
-    void                     displayRequest(virConnectPtr*, QString, QString);
+    void                     displayRequest(TASK);
     void                     addToStateMonitor(virConnectPtr*, QString&, QString&);
     void                     migrateToConnect(TASK);
     void                     domainToEditor(TASK);

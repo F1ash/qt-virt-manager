@@ -40,6 +40,9 @@ void DomControlThread::run()
     case GET_ALL_ENTITY_STATE :
         result = getAllDomainList();
         break;
+    case GET_ALL_ENTITY_DATA :
+        result = getAllDomainData();
+        break;
     case CREATE_ENTITY :
         result = createDomain();
         break;
@@ -189,6 +192,15 @@ Result DomControlThread::getAllDomainList()
     };
     result.result = true;
     result.msg = domainList;
+    return result;
+}
+Result DomControlThread::getAllDomainData()
+{
+    Result result;
+    QString name = task.object;
+    const char *_type = virConnectGetType(*task.srcConnPtr);
+    result.name   = name;
+    result.msg.append( _type );
     return result;
 }
 Result DomControlThread::createDomain()

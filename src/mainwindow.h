@@ -112,7 +112,7 @@ private slots:
     void receiveConnPtrPtr(virConnectPtr*, QString&);
     void stopConnProcessing(bool, QString &);
     void stopProcessing();
-    void invokeVMDisplay(virConnectPtr*, QString, QString);
+    void invokeVMDisplay(TASK);
     void deleteVMDisplay(QString&);
     void buildMigrateArgs(TASK);
     void overviewStoragePool(virConnectPtr*, QString&, QString&);

@@ -405,8 +405,8 @@ void MainWindow::initDockWidgets()
             domainDock, SLOT(setVisible(bool)));
     connect(domainDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
-    connect(domainDockContent, SIGNAL(displayRequest(virConnectPtr*,QString,QString)),
-            this, SLOT(invokeVMDisplay(virConnectPtr*,QString,QString)));
+    connect(domainDockContent, SIGNAL(displayRequest(TASK)),
+            this, SLOT(invokeVMDisplay(TASK)));
     connect(domainDockContent, SIGNAL(addToStateMonitor(virConnectPtr*,QString&,QString&)),
             domainsStateMonitor, SLOT(setNewMonitoredDomain(virConnectPtr*,QString&,QString&)));
     connect(domainDockContent, SIGNAL(migrateToConnect(TASK)),
@@ -762,13 +762,13 @@ void MainWindow::stopProcessing()
     secretDockContent->stopProcessing();
     ifaceDockContent->stopProcessing();
 }
-void MainWindow::invokeVMDisplay(virConnectPtr *connPtrPtr, QString connName, QString domName)
+void MainWindow::invokeVMDisplay(TASK _task)
 {
-    QString type;
+    virConnectPtr *connPtrPtr = _task.srcConnPtr;
+    QString connName = _task.srcConName;
+    QString domName = _task.object;
+    QString type = _task.type;
     VM_Viewer *value = NULL;
-    if ( connPtrPtr!=NULL ) {
-        type = QString::fromUtf8(virConnectGetType(*connPtrPtr));
-    } else type.clear();
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(domName);

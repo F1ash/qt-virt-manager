@@ -131,6 +131,16 @@ void VirtDomainControl::resultReceiver(Result data)
             task.action     = DEFINE_ENTITY;
             emit domainToEditor(task);
         };
+    } else if ( data.action == GET_ALL_ENTITY_DATA ) {
+        if ( !data.msg.isEmpty() ) {
+            TASK task;
+            task.srcConnPtr = ptr_ConnPtr;
+            task.srcConName = currConnName;
+            task.object     = data.name;
+            task.type       = data.msg.first();
+            emit displayRequest(task);
+        } else
+            msgRepeater(data.err);
     } else if ( data.action < GET_XML_DESCRIPTION ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
@@ -196,7 +206,15 @@ void VirtDomainControl::entityDoubleClicked(const QModelIndex &index)
     if ( index.isValid() ) {
         QString _domainName = domainModel->DataList.at(index.row())->getName();
         //emit addToStateMonitor(ptr_ConnPtr, currConnName, _domainName);
-        emit displayRequest(ptr_ConnPtr, currConnName, _domainName);
+        //emit displayRequest(ptr_ConnPtr, currConnName, _domainName);
+        TASK task;
+        task.type = "domain";
+        task.srcConnPtr = ptr_ConnPtr;
+        task.srcConName = currConnName;
+        task.object     = _domainName;
+        task.method     = "displayVirtDomain";
+        task.action     = GET_ALL_ENTITY_DATA;
+        emit addNewTask(task);
     }
 }
 void VirtDomainControl::execAction(const QStringList &l)
@@ -216,7 +234,8 @@ void VirtDomainControl::execAction(const QStringList &l)
         } else if ( l.first()=="pauseVirtDomain" ) {
             task.method     = l.first();
             task.action     = PAUSE_ENTITY;
-            task.args.state = domainModel->DataList.at(idx.row())->getState().split(":").last();
+            task.args.state = domainModel->DataList
+                    .at(idx.row())->getState().split(":").last();
             emit addNewTask(task);
         } else if ( l.first()=="destroyVirtDomain" ) {
             task.method     = l.first();
@@ -316,10 +335,15 @@ void VirtDomainControl::execAction(const QStringList &l)
             task.args.sign  = (l.at(1)=="AS_IS")? 0:VIR_DOMAIN_XML_INACTIVE;
             emit addNewTask(task);
         } else if ( l.first()=="displayVirtDomain" ) {
-            // send signal with Connection & Domain Names to call VM_Viewer into MainWindow widget
-            emit displayRequest(ptr_ConnPtr, currConnName, domainName);
+            // send signal with Connection & Domain Names
+            // to call VM_Viewer into MainWindow widget
+            // emit displayRequest(ptr_ConnPtr, currConnName, domainName);
+            task.method     = l.first();
+            task.action     = GET_ALL_ENTITY_DATA;
+            emit addNewTask(task);
         } else if ( l.first()=="monitorVirtDomain" ) {
-            // send signal with Connection & Domain Names to add into Domain State Monitor
+            // send signal with Connection & Domain Names
+            // to add into Domain State Monitor
             emit addToStateMonitor(ptr_ConnPtr, currConnName, domainName);
         } else if ( l.first()=="reloadVirtDomain" ) {
             reloadState();

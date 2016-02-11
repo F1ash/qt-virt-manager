@@ -15,6 +15,7 @@ public slots:
 private slots:
     void             run();
     Result           getAllDomainList();
+    Result           getAllDomainData();
     Result           createDomain();
     Result           defineDomain();
     Result           startDomain();
