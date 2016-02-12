@@ -10,7 +10,10 @@ ConnItemModel::ConnItemModel(QObject *parent) :
     uri_logo.insert("lxc", QIcon::fromTheme("lxc"));
     uri_logo.insert("qemu", QIcon::fromTheme("qemu"));
     uri_logo.insert("xen", QIcon::fromTheme("xen"));
-    uri_logo.insert("vnware", QIcon::fromTheme("vnware"));
+    uri_logo.insert("vmware", QIcon::fromTheme("vmware"));
+    uri_logo.insert("esx", QIcon::fromTheme("vmware"));
+    uri_logo.insert("gsx", QIcon::fromTheme("vmware"));
+    uri_logo.insert("vpx", QIcon::fromTheme("vmware"));
     uri_logo.insert("vbox", QIcon::fromTheme("vbox"));
     uri_logo.insert("openvz", QIcon::fromTheme("openvz"));
     rootIdx = QModelIndex();
