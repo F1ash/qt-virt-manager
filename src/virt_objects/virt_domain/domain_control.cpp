@@ -124,8 +124,7 @@ void VirtDomainControl::resultReceiver(Result data)
             task.type = "domain";
             task.srcConnPtr = ptr_ConnPtr;
             task.srcConName = currConnName;
-            task.object     = QString("DomainEditor_%1")
-                    .arg(QTime::currentTime().toString());
+            task.object     = data.name;
             task.args.path  = data.fileName;
             task.method     = "editVirtDomain";
             task.action     = DEFINE_ENTITY;
@@ -408,8 +407,7 @@ void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
                 // show SRC Creator widget
                 task.srcConnPtr = ptr_ConnPtr;
                 task.srcConName = currConnName;
-                task.object     = QString("DomainEditor_%1")
-                        .arg(QTime::currentTime().toString());
+                task.object     = QTime::currentTime().toString();
                 task.method     = actName;
                 task.action     = act;
                 emit domainToEditor(task);

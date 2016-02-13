@@ -887,16 +887,19 @@ void MainWindow::deleteStPoolOverview(QString &key)
         Overviewed_StPool_Map.remove(key);
     };
 }
-void MainWindow::invokeDomainEditor(TASK task)
+void MainWindow::invokeDomainEditor(TASK _task)
 {
+    QString connName = _task.srcConName;
+    QString domName = _task.object;
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
-    QString key = QString("%1_%2").arg(task.srcConName).arg(task.object);
+    QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( !DomainEditor_Map.contains(key) ) {
-        DomainEditor_Map.insert(key, new CreateVirtDomain(NULL, task));
+        DomainEditor_Map.insert(key, new CreateVirtDomain(NULL, _task));
         DomainEditor_Map.value(key)->setObjectName(key);
         DomainEditor_Map.value(key)->setWindowTitle(
-                    QString("VM Settings / %1").arg(task.object));
+                    QString("VM Settings / <%1> in [%2]")
+                    .arg(domName).arg(connName));
         connect(DomainEditor_Map.value(key), SIGNAL(errorMsg(QString&)),
                 this, SLOT(writeToErrorLog(QString&)));
         connect(DomainEditor_Map.value(key), SIGNAL(finished(QString&)),
