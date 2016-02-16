@@ -17,11 +17,18 @@ private:
     QString               currPoolName;
     virStoragePool       *currStoragePool = NULL;
 
+    const unsigned long long   bytes = 1;
+    const unsigned long long   KiB   = 1024;
+    const unsigned long long   MiB   = 1048576;
+    const unsigned long long   GiB   = 1073741824;
+    const unsigned long long   TiB   = 1099511627776;
+
 public slots:
     void                  stop();
     void                  execAction(uint, TASK);
 
 private slots:
+    QString               intToRangedStr(unsigned long long);
     void                  run();
     Result                getAllStorageVolList();
     Result                createStorageVol();

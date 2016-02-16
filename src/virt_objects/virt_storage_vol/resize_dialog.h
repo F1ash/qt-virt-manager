@@ -7,15 +7,31 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include "virt_objects/_virt_thread.h"
+
+class resizeHelperThread : public _VirtThread
+{
+    Q_OBJECT
+public:
+    explicit resizeHelperThread(QObject        *parent      = NULL,
+            virConnectPtr  *connPtrPtr  = NULL,
+            QString         _poolName   = QString(),
+            QString         _volName    = QString());
+    unsigned long long  _size;
+    QString             poolName, volName;
+    bool                result;
+    void                run();
+};
 
 class ResizeDialog : public QDialog
 {
     Q_OBJECT
 public:
     explicit ResizeDialog(
-            QWidget *parent = NULL,
-            unsigned long long i = 0);
-    ~ResizeDialog();
+            QWidget        *parent      = NULL,
+            virConnectPtr  *connPtrPtr  = NULL,
+            QString         _poolName   = QString(),
+            QString         _volName    = QString());
 
 private:
     const unsigned long long   bytes = 1;
@@ -34,11 +50,14 @@ private:
     QWidget             *buttons;
     QVBoxLayout         *commonlayout;
 
+    resizeHelperThread  *helperThread;
+
 private slots:
     void okClicked();
     void cancelClicked();
     void changeRange(int);
     void changeRangeLong(unsigned long long);
+    void setCurrentSize();
 
 public slots:
     unsigned long long getNewSize() const;

@@ -1,18 +1,78 @@
 #include "resize_dialog.h"
 
-ResizeDialog::ResizeDialog(QWidget *parent, unsigned long long i) :
-    QDialog(parent), _size(i)
+resizeHelperThread::resizeHelperThread(
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          _poolName,
+        QString          _volName) :
+    _VirtThread(parent, connPtrPtr),
+    poolName(_poolName), volName(_volName)
 {
+    _size  = 0;
+    result = false;
+}
+void resizeHelperThread::run()
+{
+    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+        emit ptrIsNull();
+        return;
+    };
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
+
+    virStoragePoolPtr currStoragePool = virStoragePoolLookupByName(
+                *ptr_ConnPtr, poolName.toUtf8().data());
+    if ( currStoragePool!=NULL ) {
+        virStorageVolPtr storageVol = virStorageVolLookupByName(
+                    currStoragePool, volName.toUtf8().data());
+        if ( storageVol!=NULL ) {
+            virStorageVolInfo info;
+            if ( virStorageVolGetInfo(storageVol, &info)+1 ) {
+                switch (info.type) {
+                case VIR_STORAGE_VOL_FILE:
+                case VIR_STORAGE_VOL_NETWORK:
+                    _size = info.capacity;
+                    result = true;
+                    break;
+                default:
+                    break;
+                };
+            };
+            virStorageVolFree(storageVol);
+        };
+        virStoragePoolFree(currStoragePool);
+    };
+
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
+}
+
+
+ResizeDialog::ResizeDialog(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          _poolName,
+        QString          _volName) :
+    QDialog(parent)
+{
+    setEnabled(false);
+    helperThread = new resizeHelperThread(
+                this, connPtrPtr,
+                _poolName, _volName);
+    connect(helperThread, SIGNAL(finished()),
+            this, SLOT(setCurrentSize()));
     sizeLabel = new QLabel("Size:", this);
     size = new QSpinBox(this);
-    size->setRange(0, KiB);
-    connect(size, SIGNAL(valueChanged(int)), this, SLOT(changeRange(int)));
-    currentRange = bytes;
-    changeRangeLong(_size);
+    connect(size, SIGNAL(valueChanged(int)),
+            this, SLOT(changeRange(int)));
     ok = new QPushButton("Ok", this);
     cancel = new QPushButton("Cancel", this);
-    connect(ok, SIGNAL(clicked()), this, SLOT(okClicked()));
-    connect(cancel, SIGNAL(clicked()), this, SLOT(cancelClicked()));
+    connect(ok, SIGNAL(clicked()),
+            this, SLOT(okClicked()));
+    connect(cancel, SIGNAL(clicked()),
+            this, SLOT(cancelClicked()));
     buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(ok);
     buttonLayout->addWidget(cancel);
@@ -24,26 +84,7 @@ ResizeDialog::ResizeDialog(QWidget *parent, unsigned long long i) :
     commonlayout->addWidget(buttons);
     setLayout(commonlayout);
     setResult(0);
-}
-ResizeDialog::~ResizeDialog()
-{
-    disconnect(size, SIGNAL(valueChanged(int)), this, SLOT(changeRange(int)));
-    disconnect(ok, SIGNAL(clicked()), this, SLOT(okClicked()));
-    disconnect(cancel, SIGNAL(clicked()), this, SLOT(cancelClicked()));
-    delete sizeLabel;
-    sizeLabel = NULL;
-    delete size;
-    size = NULL;
-    delete ok;
-    ok = NULL;
-    delete cancel;
-    cancel = NULL;
-    delete buttonLayout;
-    buttonLayout = NULL;
-    delete buttons;
-    buttons = NULL;
-    delete commonlayout;
-    commonlayout = NULL;
+    helperThread->start();
 }
 
 /* private slots */
@@ -90,6 +131,14 @@ void ResizeDialog::changeRangeLong(unsigned long long i)
         currentRange = bytes;
         size->setValue(i);
     };
+}
+void ResizeDialog::setCurrentSize()
+{
+    if ( !helperThread->result ) return;
+    setEnabled(true);
+    size->setRange(0, KiB);
+    currentRange = bytes;
+    changeRangeLong(helperThread->_size);
 }
 
 /* public slots */

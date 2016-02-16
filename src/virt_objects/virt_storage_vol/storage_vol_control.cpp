@@ -234,13 +234,16 @@ void VirtStorageVolControl::execAction(const QStringList &l)
                 task.action     = DOWNLOAD_ENTITY;
                 task.method     = l.first();
                 task.args.path  = path;
-                task.args.size  = storageVolModel->DataList
-                        .at(idx.row())->getCurrSize().toULongLong();
+                //task.args.size  = storageVolModel->DataList
+                //        .at(idx.row())->getCurrSize().toULongLong();
                 emit addNewTask(task);
             } else return;
         } else if ( l.first()=="resizeVirtStorageVol" ) {
-            ResizeDialog *resizeDialog = new ResizeDialog(this,
-                storageVolModel->DataList.at(idx.row())->getLogicSize().toULongLong());
+            ResizeDialog *resizeDialog = new ResizeDialog(
+                        this,
+                        ptr_ConnPtr,
+                        currPoolName,
+                        storageVolName);
             int res = resizeDialog->exec();
             unsigned long long size = resizeDialog->getNewSize();
             resizeDialog->deleteLater();

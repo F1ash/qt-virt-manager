@@ -124,19 +124,24 @@ QVariant StorageVolModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::ToolTipRole && index.column() ) {
         switch (index.column()) {
         case 0:
-            res = QString("Path: %1").arg(DataList.at(index.row())->getName());
+            res = QString("Path: %1")
+                    .arg(DataList.at(index.row())->getName());
             break;
         case 1:
-            res = QString("Path: %1").arg(DataList.at(index.row())->getPath());
+            res = QString("Path: %1")
+                    .arg(DataList.at(index.row())->getPath());
             break;
         case 2:
-            res = QString("Type: %1").arg(DataList.at(index.row())->getType());
+            res = QString("Type: %1")
+                    .arg(DataList.at(index.row())->getType());
             break;
         case 3:
-            res = QString("Current Size: %1").arg(DataList.at(index.row())->getCurrSize());
+            res = QString("Current Size: %1")
+                    .arg(DataList.at(index.row())->getCurrSize());
             break;
         case 4:
-            res = QString("Logic Volume Size: %1").arg(DataList.at(index.row())->getLogicSize());
+            res = QString("Logic Volume Size: %1")
+                    .arg(DataList.at(index.row())->getLogicSize());
             break;
         default:
             break;

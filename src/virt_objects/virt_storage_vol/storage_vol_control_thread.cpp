@@ -45,6 +45,22 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
 }
 
 /* private slots */
+QString StorageVolControlThread::intToRangedStr(unsigned long long i)
+{
+    QString res;
+    if        ( i >= TiB ) {
+        res = QString("%1 TiB").arg(QString::number((float)i/TiB, 'f', 2));
+    } else if ( i >= GiB ) {
+        res = QString("%1 GiB").arg(QString::number((float)i/GiB, 'f', 2));
+    } else if ( i >= MiB ) {
+        res = QString("%1 MiB").arg(QString::number((float)i/MiB, 'f', 2));
+    } else if ( i >= KiB ) {
+        res = QString("%1 KiB").arg(QString::number((float)i/KiB, 'f', 2));
+    } else {
+        res = QString("%1 Bytes").arg(QString::number(i));
+    };
+    return res;
+}
 void StorageVolControlThread::run()
 {
     Result result;
@@ -107,7 +123,8 @@ Result StorageVolControlThread::getAllStorageVolList()
             return result;
         };
 
-        // therefore correctly to use for() command, because storageVol[0] can not exist.
+        // therefore correctly to use for() command,
+        // because storageVol[0] can not exist.
         for (int i = 0; i < ret; i++) {
             QString type, capacity, allocation;
             virStorageVolInfo info;
@@ -129,8 +146,8 @@ Result StorageVolControlThread::getAllStorageVolList()
                     type.append("-");
                     break;
                 };
-                allocation.append(QString("%1").arg(info.allocation));
-                capacity.append(QString("%1").arg(info.capacity));
+                allocation.append(intToRangedStr(info.allocation));
+                capacity.append(intToRangedStr(info.capacity));
             } else {
                 sendConnErrors();
                 type.append("-");
@@ -241,7 +258,8 @@ Result StorageVolControlThread::downloadStorageVol()
     bool downloaded = false;
     virStreamPtr stream = virStreamNew(*task.srcConnPtr, 0);
     unsigned long long offset = 0;
-    unsigned long long length = task.args.size;
+    // unsigned long long length = task.args.size;
+    unsigned long long length = 0;
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     virStorageVol *storageVol = virStorageVolLookupByName(

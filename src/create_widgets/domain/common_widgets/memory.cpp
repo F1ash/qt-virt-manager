@@ -6,15 +6,19 @@ Memory::Memory(
 {
     setObjectName("Memory");
     readCapabilities();
-    hostMemory = new QLabel(QString("Host Memory (%1): %2").arg(memUnit).arg(memValue), this);
+    hostMemory = new QLabel(
+                QString("Host Memory (%1): %2")
+                .arg(memUnit).arg(memValue), this);
     maxMemLabel = new QLabel("Maximum Memory (KiB):", this);
     maxMemValue = new QSpinBox(this);
     maxMemValue->setRange(0, memValue.toULongLong());
-    connect(maxMemValue, SIGNAL(valueChanged(int)), this, SLOT(changeCurrentMemValue(int)));
+    connect(maxMemValue, SIGNAL(valueChanged(int)),
+            this, SLOT(changeCurrentMemValue(int)));
     currMemLabel = new QLabel("Current Memory (KiB):", this);
     currMemValue = new QSpinBox(this);
     currMemValue->setRange(0, memValue.toULongLong());
-    connect(currMemValue, SIGNAL(valueChanged(int)), this, SLOT(changeMaximumMemValue(int)));
+    connect(currMemValue, SIGNAL(valueChanged(int)),
+            this, SLOT(changeMaximumMemValue(int)));
     memLayout = new QGridLayout();
     memLayout->addWidget(maxMemLabel, 0, 0);
     memLayout->addWidget(maxMemValue, 0, 1);
@@ -131,12 +135,14 @@ QDomDocument Memory::getDataDocument() const
     QDomElement _memory, _currMemory, _memTune, _memBacking, _el, _data;
     _data = doc.createElement("data");
     _memory= doc.createElement("memory");
-    data = doc.createTextNode(QString("%1").arg(maxMemValue->value()));
+    data = doc.createTextNode(
+                QString("%1").arg(maxMemValue->value()));
     _memory.appendChild(data);
     _memory.setAttribute("unit", "KiB");
     _data.appendChild(_memory);
     _currMemory = doc.createElement("currentMemory");
-    data = doc.createTextNode(QString("%1").arg(currMemValue->value()));
+    data = doc.createTextNode(
+                QString("%1").arg(currMemValue->value()));
     _currMemory.appendChild(data);
     _currMemory.setAttribute("unit", "KiB");
     _data.appendChild(_currMemory);
@@ -174,28 +180,34 @@ QDomDocument Memory::getDataDocument() const
         _data.appendChild(_memTune);
         if ( hard_limit->value() ) {
             _el = doc.createElement("hard_limit");
-            data = doc.createTextNode(QString("%1").arg(hard_limit->value()));
+            data = doc.createTextNode(
+                        QString("%1").arg(hard_limit->value()));
             _el.appendChild(data);
             _el.setAttribute("unit", "KiB");
             _memTune.appendChild(_el);
         };
         if ( soft_limit->value() ) {
             _el = doc.createElement("soft_limit");
-            data = doc.createTextNode(QString("%1").arg(soft_limit->value()));
+            data = doc.createTextNode(
+                        QString("%1").arg(soft_limit->value()));
             _el.appendChild(data);
             _el.setAttribute("unit", "KiB");
             _memTune.appendChild(_el);
         };
         if ( swap_hard_limit->value() ) {
             _el = doc.createElement("swap_hard_limit");
-            data = doc.createTextNode(QString("%1").arg(swap_hard_limit->value()));
+            data = doc.createTextNode(
+                        QString("%1")
+                        .arg(swap_hard_limit->value()));
             _el.appendChild(data);
             _el.setAttribute("unit", "KiB");
             _memTune.appendChild(_el);
         };
         if ( min_guarantee->value() ) {
             _el = doc.createElement("min_guarantee");
-            data = doc.createTextNode(QString("%1").arg(min_guarantee->value()));
+            data = doc.createTextNode(
+                        QString("%1")
+                        .arg(min_guarantee->value()));
             _el.appendChild(data);
             _el.setAttribute("unit", "KiB");
             _memTune.appendChild(_el);
@@ -265,11 +277,13 @@ void Memory::readXMLDesciption(QString &_xmlDesc)
             .attribute("unit");
     currMemValue->setValue(
                 convertNiBtoKiB(_value, _unit));
-    QDomElement _memoryBacking = _domain.firstChildElement("memoryBacking");
+    QDomElement _memoryBacking = _domain
+            .firstChildElement("memoryBacking");
     enableMemBacking->setChecked( !_memoryBacking.isNull() );
     if ( !_memoryBacking.isNull() ) {
-        hugepages->setChecked( !_memoryBacking
-                               .firstChildElement("hugepages").isNull() );
+        hugepages->setChecked(
+                    !_memoryBacking
+                    .firstChildElement("hugepages").isNull() );
         if ( !_memoryBacking
              .firstChildElement("hugepages").isNull() ) {
             QDomElement _page = _memoryBacking
