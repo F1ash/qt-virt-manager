@@ -863,8 +863,11 @@ void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connNam
                 Overviewed_StPool_Map.value(key), SLOT(resultReceiver(Result)));
         Overviewed_StPool_Map.value(key)->setCurrentStoragePool(connPtrPtr, connName, poolName);
     };
-    Overviewed_StPool_Map.value(key)->show();
-    Overviewed_StPool_Map.value(key)->setFocus();
+    if ( Overviewed_StPool_Map.value(key)!=NULL ) {
+        Overviewed_StPool_Map.value(key)->show();
+        Overviewed_StPool_Map.value(key)->setFocus();
+    } else
+        Overviewed_StPool_Map.value(key);
 }
 void MainWindow::deleteStPoolOverview(QString &key)
 {
@@ -873,18 +876,8 @@ void MainWindow::deleteStPoolOverview(QString &key)
         value = static_cast<VirtStorageVolControl*>(
                         Overviewed_StPool_Map.value(key, NULL));
         if ( NULL!=value ) {
-            disconnect(Overviewed_StPool_Map.value(key), SIGNAL(entityMsg(QString&)),
-                       this, SLOT(writeToErrorLog(QString&)));
-            disconnect(Overviewed_StPool_Map.value(key), SIGNAL(finished(QString&)),
-                       this, SLOT(deleteStPoolOverview(QString&)));
-            disconnect(Overviewed_StPool_Map.value(key), SIGNAL(addNewTask(TASK)),
-                       taskWrHouse, SLOT(addNewTask(TASK)));
-            disconnect(taskWrHouse, SIGNAL(volResult(Result)),
-                       Overviewed_StPool_Map.value(key), SLOT(resultReceiver(Result)));
-            delete value;
-            value = NULL;
+            Overviewed_StPool_Map.remove(key);
         };
-        Overviewed_StPool_Map.remove(key);
     };
 }
 void MainWindow::invokeDomainEditor(TASK _task)
@@ -907,8 +900,11 @@ void MainWindow::invokeDomainEditor(TASK _task)
         connect(DomainEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
     };
-    DomainEditor_Map.value(key)->show();
-    DomainEditor_Map.value(key)->setFocus();
+    if ( DomainEditor_Map.value(key)!=NULL ) {
+        DomainEditor_Map.value(key)->show();
+        DomainEditor_Map.value(key)->setFocus();
+    } else
+        DomainEditor_Map.remove(key);
 }
 void MainWindow::deleteDomainEditor(QString &key)
 {
@@ -917,15 +913,7 @@ void MainWindow::deleteDomainEditor(QString &key)
         value = static_cast<CreateVirtDomain*>(
                         DomainEditor_Map.value(key, NULL));
         if ( NULL!=value ) {
-            disconnect(DomainEditor_Map.value(key), SIGNAL(errorMsg(QString&)),
-                       this, SLOT(writeToErrorLog(QString&)));
-            disconnect(DomainEditor_Map.value(key), SIGNAL(finished(QString&)),
-                       this, SLOT(deleteDomainEditor(QString&)));
-            disconnect(DomainEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
-                       taskWrHouse, SLOT(addNewTask(TASK)));
-            delete value;
-            value = NULL;
+            DomainEditor_Map.remove(key);
         };
-        DomainEditor_Map.remove(key);
     };
 }

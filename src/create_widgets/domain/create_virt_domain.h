@@ -8,7 +8,6 @@
 #include <QTemporaryFile>
 #include <QTabWidget>
 #include <QPushButton>
-#include <QThread>
 #include "domain_widgets.h"
 #include "common_widgets/devices.h"
 #include <QDebug>
