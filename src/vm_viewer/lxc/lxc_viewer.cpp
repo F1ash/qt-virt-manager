@@ -51,7 +51,6 @@ LXC_Viewer::~LXC_Viewer()
         killTimer(killTimerId);
         killTimerId = 0;
     };
-    VM_State = false;
     QString msg;
     if ( NULL!=viewerThread ) {
         viewerThread->blockSignals(true);
@@ -152,6 +151,6 @@ void LXC_Viewer::closeEvent(QCloseEvent *ev)
     if ( ev->type()==QEvent::Close ) {
         ev->ignore();
         QString key = QString("%1_%2").arg(connName).arg(domain);
-        if (VM_State) emit finished(key);
+        emit finished(key);
     };
 }

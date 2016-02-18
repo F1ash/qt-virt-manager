@@ -34,7 +34,6 @@ public:
     QString          connName, domain, TYPE;
     virConnectPtr*   ptr_ConnPtr;
     virErrorPtr      virtErrors = NULL;
-    bool             VM_State;
     QSettings        settings;
     ViewerToolBar   *viewerToolBar = NULL;
     VM_State_Widget *vm_stateWdg = NULL;
@@ -53,7 +52,6 @@ signals:
 
 public slots:
     virtual void     init();
-    virtual bool     isActive() const;
     virtual void     closeEvent(QCloseEvent *ev);
     void             sendErrMsg(QString&);
     void             sendErrMsg(QString&, uint);

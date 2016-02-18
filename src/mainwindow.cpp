@@ -115,11 +115,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
                     value = static_cast<Spice_Viewer*>(
                                 VM_Displayed_Map.value(key, NULL));
                 };
-                if ( NULL!=value ) {
-                    // close&delete into deleteVMDisplay
-                    if ( value->isActive() ) value->close();
-                };
-                VM_Displayed_Map.remove(key);
+                if ( NULL!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -133,7 +129,6 @@ void MainWindow::closeEvent(QCloseEvent *ev)
                 value = static_cast<VirtStorageVolControl*>(
                                 Overviewed_StPool_Map.value(key, NULL));
                 if ( NULL!=value ) value->close();
-                Overviewed_StPool_Map.remove(key);
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -147,7 +142,6 @@ void MainWindow::closeEvent(QCloseEvent *ev)
                 value = static_cast<CreateVirtDomain*>(
                                 DomainEditor_Map.value(key, NULL));
                 if ( NULL!=value ) value->close();
-                DomainEditor_Map.remove(key);
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -768,52 +762,44 @@ void MainWindow::invokeVMDisplay(TASK _task)
     QString connName = _task.srcConName;
     QString domName = _task.object;
     QString type = _task.type;
-    VM_Viewer *value = NULL;
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( !VM_Displayed_Map.contains(key) ) {
         //qDebug()<<key<<"vm invoked"<<"new";
-        if ( type.isEmpty() ) {
-            QMessageBox::information(this, "VM Viewer", "Job empty.");
-        } else if ( type.toLower()=="lxc" ) {
-            value = new LXC_Viewer(NULL, connPtrPtr, connName, domName);
+        if ( type.toLower()=="lxc" ) {
+            VM_Displayed_Map.insert(
+                        key,
+                        new LXC_Viewer(NULL, connPtrPtr, connName, domName));
         } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
-            value = new Spice_Viewer(NULL, connPtrPtr, connName, domName);
-        } else
+            VM_Displayed_Map.insert(
+                        key,
+                        new Spice_Viewer(NULL, connPtrPtr, connName, domName));
+        } else {
             QMessageBox::information(
                         this,
                         "VM Viewer",
                         QString("Not implemented type: %1").arg(type));
-        if ( value==NULL ) return;
-        value->setObjectName(key);
-        VM_Displayed_Map.insert(key, value);
-        connect(value, SIGNAL(finished(QString&)),
+            return;
+        };
+        VM_Displayed_Map.value(key)->setObjectName(key);
+        connect(VM_Displayed_Map.value(key), SIGNAL(finished(QString&)),
                 this, SLOT(deleteVMDisplay(QString&)));
-        connect(value, SIGNAL(errorMsg(QString&)),
+        connect(VM_Displayed_Map.value(key), SIGNAL(errorMsg(QString&)),
                 logDockContent, SLOT(appendMsgToLog(QString&)));
-        connect(value, SIGNAL(addNewTask(TASK)),
+        connect(VM_Displayed_Map.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
-        value->show();
+        VM_Displayed_Map.value(key)->show();
     } else {
         //qDebug()<<key<<"vm invoked"<<"exist";
-        if ( type.isEmpty() ) {
-            QMessageBox::information(this, "VM Viewer", "Job empty.");
-        } else if ( type.toLower()=="lxc" ) {
-            value = static_cast<LXC_Viewer*>(
-                        VM_Displayed_Map.value(key, NULL));
-        } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
-            value = static_cast<Spice_Viewer*>(
-                        VM_Displayed_Map.value(key, NULL));
-        };
-        if ( value!=NULL ) value->show();
+        if ( VM_Displayed_Map.value(key)!=NULL )
+            VM_Displayed_Map.value(key)->show();
         else VM_Displayed_Map.remove(key);
     };
 }
 void MainWindow::deleteVMDisplay(QString &key)
 {
     if ( VM_Displayed_Map.contains(key) ) {
-        // disconnect before close for don't loop it
         VM_Viewer *value = NULL;
         QString _type = VM_Displayed_Map.value(key, NULL)->TYPE.toUpper();
         if ( _type=="LXC" ) {
@@ -824,12 +810,6 @@ void MainWindow::deleteVMDisplay(QString &key)
                         VM_Displayed_Map.value(key, NULL));
         };
         if ( NULL!=value ) {
-            disconnect(value, SIGNAL(finished(QString&)),
-                       this, SLOT(deleteVMDisplay(QString&)));
-            disconnect(value, SIGNAL(errorMsg(QString&)),
-                       logDockContent, SLOT(appendMsgToLog(QString&)));
-            disconnect(value, SIGNAL(addNewTask(TASK)),
-                       taskWrHouse, SLOT(addNewTask(TASK)));
             delete value;
             value = NULL;
         };
@@ -876,8 +856,10 @@ void MainWindow::deleteStPoolOverview(QString &key)
         value = static_cast<VirtStorageVolControl*>(
                         Overviewed_StPool_Map.value(key, NULL));
         if ( NULL!=value ) {
-            Overviewed_StPool_Map.remove(key);
+            delete value;
+            value = NULL;
         };
+        Overviewed_StPool_Map.remove(key);
     };
 }
 void MainWindow::invokeDomainEditor(TASK _task)
@@ -913,7 +895,9 @@ void MainWindow::deleteDomainEditor(QString &key)
         value = static_cast<CreateVirtDomain*>(
                         DomainEditor_Map.value(key, NULL));
         if ( NULL!=value ) {
-            DomainEditor_Map.remove(key);
+            delete value;
+            value = NULL;
         };
+        DomainEditor_Map.remove(key);
     };
 }

@@ -286,23 +286,33 @@ Result DomControlThread::pauseDomain()
 {
     Result result;
     QString name = task.object;
-    QString state = task.args.state;
     bool invoked = false;
 
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
 
     if ( domain!=NULL ) {
-        if ( state=="RUNNING" ) {
-            invoked = (virDomainSuspend(domain)+1) ? true : false;
-            if (!invoked)
-                result.err = sendConnErrors();
-        } else if ( state=="PAUSED" ) {
-            invoked = (virDomainResume(domain)+1) ? true : false;
-            if (!invoked)
-                result.err = sendConnErrors();
-        } else 0;
-        virDomainFree(domain);
+        int state;
+        int reason;
+        // flags : extra flags; not used yet, so callers should always pass 0
+        unsigned int flags = 0;
+        if ( virDomainGetState(domain, &state, &reason, flags)+1 ) {
+            switch (state) {
+            case VIR_DOMAIN_RUNNING:
+                invoked = (virDomainSuspend(domain)+1) ? true : false;
+                if (!invoked)
+                    result.err = sendConnErrors();
+                break;
+            case VIR_DOMAIN_PAUSED:
+                invoked = (virDomainResume(domain)+1) ? true : false;
+                if (!invoked)
+                    result.err = sendConnErrors();
+                break;
+            default:
+                break;
+            virDomainFree(domain);
+            };
+        };
     } else
         result.err = sendConnErrors();
     result.name = name;
@@ -423,19 +433,30 @@ Result DomControlThread::saveDomain()
     QString name = task.object;
     const char *to = task.args.path.toUtf8().data();
     const char *dxml = NULL;
-    QString state = task.args.state;
     bool invoked = false;
     unsigned int flags = VIR_DOMAIN_SAVE_BYPASS_CACHE;
-    if ( state=="RUNNING" ) {
-        flags = flags | VIR_DOMAIN_SAVE_RUNNING;
-    } else if ( state=="PAUSED" ) {
-        flags = flags | VIR_DOMAIN_SAVE_PAUSED;
-    };
 
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
 
     if ( domain!=NULL ) {
+        int state;
+        int reason;
+        // flags : extra flags; not used yet, so callers should always pass 0
+        unsigned int st_flags = 0;
+        if ( virDomainGetState(domain, &state, &reason, st_flags)+1 ) {
+            switch (state) {
+            case VIR_DOMAIN_RUNNING:
+                flags = flags | VIR_DOMAIN_SAVE_RUNNING;
+                break;
+                break;
+            case VIR_DOMAIN_PAUSED:
+                flags = flags | VIR_DOMAIN_SAVE_PAUSED;
+                break;
+            default:
+                break;
+            };
+        };
         invoked = (virDomainSaveFlags(
                        domain, to, dxml, flags)+1)
                 ? true : false;

@@ -10,7 +10,6 @@ VM_Viewer::VM_Viewer(
     setWindowTitle(QString("<%1> Virtual Machine in [ %2 ] connection")
                    .arg(domain).arg(connName));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
-    VM_State = true;
     viewerToolBar = new ViewerToolBar(this);
     viewerToolBar->setVisible(true);
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
@@ -30,7 +29,6 @@ VM_Viewer::~VM_Viewer()
         killTimer(killTimerId);
         killTimerId = 0;
     };
-    VM_State = false;
     //qDebug()<<"VM_Viewer destroyed";
 }
 
@@ -38,10 +36,6 @@ VM_Viewer::~VM_Viewer()
 void VM_Viewer::init()
 {
 
-}
-bool VM_Viewer::isActive() const
-{
-    return VM_State;
 }
 
 void VM_Viewer::closeEvent(QCloseEvent *ev)
@@ -52,8 +46,7 @@ void VM_Viewer::closeEvent(QCloseEvent *ev)
         QString msg = QString("'<b>%1</b>' VM viewer closed.")
                 .arg(domain);
         sendErrMsg(msg);
-        if (VM_State) emit finished(key);
-        VM_State = false;
+        emit finished(key);
     }
 }
 void VM_Viewer::sendErrMsg(QString &msg)
@@ -107,7 +100,6 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
     } else if ( method.first()=="pauseVirtDomain" ) {
         task.method     = method.first();
         task.action     = PAUSE_ENTITY;
-        task.args.state = VM_State ? 1 : 0;
         emit addNewTask(task);
     } else if ( method.first()=="destroyVirtDomain" ) {
         task.method     = method.first();
@@ -127,7 +119,6 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
             task.method     = method.first();
             task.action     = SAVE_ENTITY;
             task.args.path  = to;
-            task.args.state = VM_State ? 1 : 0;
             emit addNewTask(task);
         };
     } else if ( method.first()=="restoreVirtDomain" ) {
