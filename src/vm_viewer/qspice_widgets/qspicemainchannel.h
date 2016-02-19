@@ -34,7 +34,7 @@ public:
 
     void mainClipboardSelectionGrab(uint selection, quint32 *types, int ntypes);
     void mainClipboardSelectionRelease();
-    void mainClipboardSelectionNotify(uint, const uchar*, uint);
+    void mainClipboardSelectionNotify(quint32, const uchar*, size_t);
     void mainClipboardSelectionRequest();
 
     void mainFileCopyAsync(QStringList&);

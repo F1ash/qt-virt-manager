@@ -85,7 +85,7 @@ void QSpiceWidget::copyClipboardFromGuest()
     main->mainClipboardSelectionRequest();
 }
 
-void QSpiceWidget::sendClipboardDataToGuest(uint type, const uchar *_data, uint _size)
+void QSpiceWidget::sendClipboardDataToGuest(quint32 type, const uchar *_data, size_t _size)
 {
     main->mainClipboardSelectionNotify(type, _data, _size);
 }

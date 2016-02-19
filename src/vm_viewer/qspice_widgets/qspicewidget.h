@@ -59,7 +59,7 @@ public:
     /*
      * Send current client Clipboard data to guest Clipboard.
      */
-    void sendClipboardDataToGuest(uint, const uchar*, uint);
+    void sendClipboardDataToGuest(quint32, const uchar*, size_t);
 
 signals:
     /*

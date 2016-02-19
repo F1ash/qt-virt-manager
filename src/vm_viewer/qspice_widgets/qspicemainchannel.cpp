@@ -208,9 +208,10 @@ void QSpiceMainChannel::mainClipboardSelectionRelease()
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD);
 }
 
-void QSpiceMainChannel::mainClipboardSelectionNotify(uint type, const uchar *data, uint size)
+void QSpiceMainChannel::mainClipboardSelectionNotify(quint32 type, const uchar *data, size_t size)
 {
     //qDebug()<<"mainClipboardSelectionNotify";
+    /*
     gpointer conv = NULL;
     gint len = 0;
     if (spice_main_agent_test_capability(
@@ -225,13 +226,14 @@ void QSpiceMainChannel::mainClipboardSelectionNotify(uint type, const uchar *dat
                     NEWLINE_TYPE_CR_LF,
                     &err);
         if (err) {
-            g_warning("Failed to convert text line ending: %s", err->message);
+            qWarning("Failed to convert text line ending: %s", err->message);
             g_clear_error(&err);
             return;
         }
 
         len = strlen((char*)conv);
     } else {
+    */
         /* On Windows, with some versions of gtk+, GtkSelectionData::length
          * will include the final '\0'. When a string with this trailing '\0'
          * is pasted in some linux applications, it will be pasted as <NIL> or
@@ -239,14 +241,17 @@ void QSpiceMainChannel::mainClipboardSelectionNotify(uint type, const uchar *dat
          * send to the agent does not include any trailing '\0'
          * This is gtk+ bug https://bugzilla.gnome.org/show_bug.cgi?id=734670
          */
+    /*
         len = strlen((const char *)data);
     };
+*/
+    qDebug()<<data<<size;
     spice_main_clipboard_selection_notify(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
                 type,
-                conv ? (uchar*)conv : data,
-                len);
+                (const guchar*)data,
+                size);
 }
 
 void QSpiceMainChannel::mainClipboardSelectionRequest()
