@@ -146,7 +146,7 @@ virConnectPtr* ConnElement::getPtr_connectionPtr() const
 }
 void ConnElement::setAuthCredentials(QString &crd, QString &text)
 {
-    if ( connAliveThread!=NULL ) {
+    if ( connAliveThread!=nullptr ) {
         connAliveThread->setAuthCredentials(crd, text);
     }
 }

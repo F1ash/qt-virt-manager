@@ -8,7 +8,7 @@ class LXC_ViewerThread : public ControlThread
 {
     Q_OBJECT
 public:
-    explicit LXC_ViewerThread(QObject *parent = NULL);
+    explicit LXC_ViewerThread(QObject *parent = nullptr);
     ~LXC_ViewerThread();
 
 signals:

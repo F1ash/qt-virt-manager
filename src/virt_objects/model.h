@@ -11,7 +11,7 @@ class Model : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit Model(QObject *parent = NULL);
+    explicit Model(QObject *parent = nullptr);
     ~Model();
     QList<Index *>  DataList;
     QIcon    activeIcon;

@@ -29,7 +29,7 @@ class QSpiceSession : public QSpiceObject
 {
     Q_OBJECT
 public:
-    explicit QSpiceSession(QObject *parent = 0);
+    explicit QSpiceSession(QObject *parent = nullptr);
     friend class QSpiceHelper;
     friend class QSpiceWidget;
     friend class QSpiceUsbDeviceManager;

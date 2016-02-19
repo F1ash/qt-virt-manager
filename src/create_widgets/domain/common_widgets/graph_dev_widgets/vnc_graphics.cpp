@@ -7,7 +7,7 @@ vnc_graphHlpThread::vnc_graphHlpThread(QObject *parent, virConnectPtr* connPtrPt
 }
 void vnc_graphHlpThread::run()
 {
-    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -16,7 +16,7 @@ void vnc_graphHlpThread::run()
         return;
     };
     QStringList nets;
-    virNetworkPtr *networks = NULL;
+    virNetworkPtr *networks = nullptr;
     unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                          VIR_CONNECT_LIST_NETWORKS_INACTIVE;
     int ret = virConnectListAllNetworks(*ptr_ConnPtr, &networks, flags);
@@ -30,7 +30,7 @@ void vnc_graphHlpThread::run()
         };
         if (networks) free(networks);
     };
-    //int devs = virNodeNumOfDevices(ptr_ConnPtr, NULL, 0);
+    //int devs = virNodeNumOfDevices(ptr_ConnPtr, nullptr, 0);
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();
     emit result(nets);

@@ -7,7 +7,7 @@ class Emulator : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit Emulator(QWidget *parent = NULL);
+    explicit Emulator(QWidget *parent = nullptr);
     QLabel          *emulator;
 
 private:

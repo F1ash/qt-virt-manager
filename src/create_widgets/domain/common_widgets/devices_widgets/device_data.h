@@ -15,8 +15,8 @@ class DeviceData : public QWidget
     Q_OBJECT
 public:
     explicit DeviceData(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  conn    = NULL);
+            QWidget        *parent  = nullptr,
+            virConnectPtr*  conn    = nullptr);
 
 signals:
     void             errorMsg(QString&);
@@ -32,8 +32,8 @@ private:
     QHBoxLayout     *panelLayout;
     QWidget         *panel;
 
-    _QWidget        *device = NULL;
-    QWidget         *scrolled = NULL;
+    _QWidget        *device = nullptr;
+    QWidget         *scrolled = nullptr;
     QVBoxLayout     *infoLayout;
     QScrollArea     *infoWidget;
     QVBoxLayout     *commonLayout;
@@ -44,7 +44,7 @@ private:
     QString          currentDeviceXMLDesc;
     int              currentItemRow = -1;
     virConnectPtr*   ptr_ConnPtr;
-    virNodeDevice  **nodeDevices = NULL;
+    virNodeDevice  **nodeDevices = nullptr;
     virErrorPtr      virtErrors;
 
 public slots:

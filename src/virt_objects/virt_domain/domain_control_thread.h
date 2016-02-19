@@ -7,7 +7,7 @@ class DomControlThread : public ControlThread
 {
     Q_OBJECT
 public:
-    explicit DomControlThread(QObject *parent = NULL);
+    explicit DomControlThread(QObject *parent = nullptr);
 
 public slots:
     void             execAction(uint, TASK);

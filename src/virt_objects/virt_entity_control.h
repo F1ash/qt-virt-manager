@@ -14,12 +14,12 @@ class VirtEntityControl : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit VirtEntityControl(QWidget *parent = NULL);
+    explicit VirtEntityControl(QWidget *parent = nullptr);
     virtual ~VirtEntityControl()               = 0;
     QString                  currConnName;
     QSettings                settings;
     QTreeView               *entityList;
-    virConnectPtr           *ptr_ConnPtr = NULL;
+    virConnectPtr           *ptr_ConnPtr = nullptr;
 
     virtual void             reloadState();
     virtual void             changeDockVisibility();

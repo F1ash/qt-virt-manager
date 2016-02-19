@@ -8,8 +8,8 @@ class Disk_Edit : public Disk
     Q_OBJECT
 public:
     explicit Disk_Edit(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL);
+            QWidget        *parent     = nullptr,
+            virConnectPtr*  connPtrPtr = nullptr);
 
 signals:
 

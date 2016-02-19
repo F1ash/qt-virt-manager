@@ -9,8 +9,8 @@ class spice_graphHlpThread : public _VirtThread
     Q_OBJECT
 public:
     explicit spice_graphHlpThread(
-            QObject        *parent      = NULL,
-            virConnectPtr*  connPtrPtr  = NULL);
+            QObject        *parent      = nullptr,
+            virConnectPtr*  connPtrPtr  = nullptr);
     void             run();
 signals:
     void             result(QStringList&);
@@ -21,8 +21,8 @@ class Spice_Graphics : public _QWidget
     Q_OBJECT
 public:
     explicit Spice_Graphics(
-            QWidget        *parent      = NULL,
-            virConnectPtr*  connPtrPtr  = NULL);
+            QWidget        *parent      = nullptr,
+            virConnectPtr*  connPtrPtr  = nullptr);
 
 private:
     QLabel          *addrLabel;

@@ -11,7 +11,7 @@ class Encryption : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Encryption(QWidget *parent = NULL);
+    explicit Encryption(QWidget *parent = nullptr);
 
 private:
     QCheckBox           *useEncryption;

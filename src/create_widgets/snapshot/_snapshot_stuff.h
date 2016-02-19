@@ -15,7 +15,7 @@ class _SnapshotStuff : public QWidget
     Q_OBJECT
 public:
     explicit _SnapshotStuff(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             bool     _state = false,
             bool     _external = false);
     const bool               state;

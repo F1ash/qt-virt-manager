@@ -8,7 +8,7 @@ class RAMFsType : public _FsType
     Q_OBJECT
 public:
     explicit RAMFsType(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString _type = "lxc");
 
 private:

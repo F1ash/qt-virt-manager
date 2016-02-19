@@ -7,7 +7,7 @@ class USBAddr : public _Addr
 {
     Q_OBJECT
 public:
-    explicit USBAddr(QWidget *parent = NULL);
+    explicit USBAddr(QWidget *parent = nullptr);
     QLineEdit       *bus;
     QLineEdit       *port;
 

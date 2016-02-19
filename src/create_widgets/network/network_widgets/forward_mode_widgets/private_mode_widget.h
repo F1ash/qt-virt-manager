@@ -7,7 +7,7 @@ class PRIVATE_Mode_widget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit PRIVATE_Mode_widget(QWidget *parent = 0);
+    explicit PRIVATE_Mode_widget(QWidget *parent = nullptr);
 
 private:
     QLabel          *info;

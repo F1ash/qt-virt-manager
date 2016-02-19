@@ -14,7 +14,7 @@ class InterfaceToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit InterfaceToolBar(QWidget *parent = NULL);
+    explicit InterfaceToolBar(QWidget *parent = nullptr);
     ~InterfaceToolBar();
 
 signals:

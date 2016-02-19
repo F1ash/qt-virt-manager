@@ -1,6 +1,6 @@
 #include "traywidget.h"
 
-TrayIcon::TrayIcon(QWidget *parent = NULL)
+TrayIcon::TrayIcon(QWidget *parent = nullptr)
   : QSystemTrayIcon(parent)
 {
     _mark = false;

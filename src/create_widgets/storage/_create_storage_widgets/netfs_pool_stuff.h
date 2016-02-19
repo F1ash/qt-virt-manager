@@ -7,7 +7,7 @@ class NetFs_Pool_Stuff : public _Pool_Stuff
 {
     Q_OBJECT
 public:
-    explicit NetFs_Pool_Stuff(QWidget *parent = NULL);
+    explicit NetFs_Pool_Stuff(QWidget *parent = nullptr);
 
 signals:
 

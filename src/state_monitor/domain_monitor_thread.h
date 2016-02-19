@@ -11,8 +11,8 @@ class DomainMonitorThread : public _VirtThread
     Q_OBJECT
 public:
     explicit DomainMonitorThread(
-            QObject        *parent      = NULL,
-            virConnectPtr*  connPtrPtr  = NULL,
+            QObject        *parent      = nullptr,
+            virConnectPtr*  connPtrPtr  = nullptr,
             QString         _domainName = QString());
     ~DomainMonitorThread();
 

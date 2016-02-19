@@ -58,7 +58,7 @@ QDomDocument Forward_Widget::getDataDocument() const
     QDomDocument doc;
     _QWidget *wdg = static_cast<_QWidget*>(
                 frwdModeSet->currentWidget());
-    if( NULL!=wdg ) doc = wdg->getDataDocument();
+    if( nullptr!=wdg ) doc = wdg->getDataDocument();
     return doc;
 }
 

@@ -15,7 +15,7 @@ class OS_Booting : public _Tab
     Q_OBJECT
 public:
     explicit OS_Booting(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString  _caps  = "",
             QString  _xmlDesc = QString());
 

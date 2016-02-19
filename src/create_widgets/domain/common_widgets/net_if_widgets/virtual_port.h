@@ -18,7 +18,7 @@ class VirtualPort : public _Changed
 {
     Q_OBJECT
 public:
-    explicit VirtualPort(QWidget *parent = NULL);
+    explicit VirtualPort(QWidget *parent = nullptr);
     QComboBox           *type;
     QLineEdit           *managerId, *typeId,
                         *typeIdVer, *instanceId,

@@ -7,7 +7,7 @@ class VideoDevice_Edit : public VideoDevice
 {
     Q_OBJECT
 public:
-    explicit VideoDevice_Edit(QWidget *parent = 0);
+    explicit VideoDevice_Edit(QWidget *parent = nullptr);
 
 signals:
 

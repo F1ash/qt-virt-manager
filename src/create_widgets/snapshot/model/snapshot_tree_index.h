@@ -7,7 +7,7 @@
 class TreeItem
 {
 public:
-    TreeItem(const QString &data, TreeItem *parent = NULL);
+    TreeItem(const QString &data, TreeItem *parent = nullptr);
 
     void                 appendChild(TreeItem *child);
     void                 removeChild(TreeItem *child);

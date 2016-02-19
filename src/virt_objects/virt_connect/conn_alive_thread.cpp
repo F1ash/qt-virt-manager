@@ -5,7 +5,7 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
     _VirtThread(parent)
 {
     qRegisterMetaType<CONN_STATE>("CONN_STATE");
-    _connPtr = NULL;
+    _connPtr = nullptr;
     onView = false;
     // virConnectRegisterCloseCallback && virConnectDomainEventRegisterAny
     // -1 on error; another is success or a callback identifier
@@ -25,7 +25,7 @@ void ConnAliveThread::closeConnection()
     };
     //qDebug()<<"closeConnection1"<<*ptr_ConnPtr<<URI;
     CONN_STATE state;
-    if ( *ptr_ConnPtr!=NULL ) {
+    if ( *ptr_ConnPtr!=nullptr ) {
         //qDebug()<<"closeConnection2"<<*ptr_ConnPtr<<URI;
         unregisterConnEvents();
         //qDebug()<<"closeConnection3"<<*ptr_ConnPtr<<URI;
@@ -39,9 +39,9 @@ void ConnAliveThread::closeConnection()
             state = CLOSED;
             emit connClosed(onView);
         };
-        *ptr_ConnPtr = NULL;
+        *ptr_ConnPtr = nullptr;
     } else {
-        emit connMsg( QString("connect is NULL") );
+        emit connMsg( QString("connect is nullptr") );
         state = FAILED;
     };
     emit changeConnState(state);
@@ -63,7 +63,7 @@ void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
 void ConnAliveThread::run()
 {
     openConnection();
-    while ( keep_alive && NULL!=*ptr_ConnPtr ) {
+    while ( keep_alive && nullptr!=*ptr_ConnPtr ) {
         msleep(1000);
     };
     keep_alive = false;
@@ -77,7 +77,7 @@ void ConnAliveThread::openConnection()
     _connPtr = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
     ptr_ConnPtr = &_connPtr;
     //qDebug()<<"openConnection1"<<*ptr_ConnPtr<<URI;
-    if (*ptr_ConnPtr==NULL) {
+    if (*ptr_ConnPtr==nullptr) {
         sendConnErrors();
         keep_alive = false;
         emit connMsg( "Connection to the Hypervisor is failed." );
@@ -86,12 +86,12 @@ void ConnAliveThread::openConnection()
         //qDebug()<<" openConnection"<<*ptr_ConnPtr<<URI;
         keep_alive = true;
         emit connMsg( QString("connect opened: %1")
-                      .arg(QVariant(*ptr_ConnPtr!=NULL)
+                      .arg(QVariant(*ptr_ConnPtr!=nullptr)
                            .toString()) );
         emit changeConnState(RUNNING);
         registerConnEvents();
     };
-    //qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI<<(*ptr_ConnPtr!=NULL);
+    //qDebug()<<"virConnectRef +1"<<"ConnAliveThread"<<URI<<(*ptr_ConnPtr!=nullptr);
 }
 void ConnAliveThread::registerConnEvents()
 {
@@ -100,28 +100,28 @@ void ConnAliveThread::registerConnEvents()
                 connEventCallBack,
                 this,
     // don't register freeData, because it remove this thread
-                NULL);
+                nullptr);
     closeCallbackRegistered = !(ret<0);
     if (ret<0) sendConnErrors();
     domainsLifeCycleCallback = virConnectDomainEventRegisterAny(
                 *ptr_ConnPtr,
-                NULL,
+                nullptr,
     // set domainsLifeCycleCallback signature
                 VIR_DOMAIN_EVENT_ID_LIFECYCLE,
                 VIR_DOMAIN_EVENT_CALLBACK(domEventCallback),
                 this,
     // don't register freeData, because it remove this thread
-                NULL);
+                nullptr);
     if (ret<0) sendConnErrors();
     networkLifeCycleCallback = virConnectNetworkEventRegisterAny(
                 *ptr_ConnPtr,
-                NULL,
+                nullptr,
     // set networksLifeCycleCallback signature
                 VIR_NETWORK_EVENT_ID_LIFECYCLE,
                 VIR_NETWORK_EVENT_CALLBACK(netEventCallback),
                 this,
     // don't register freeData, because it remove this thread
-                NULL);
+                nullptr);
     if (ret<0) sendConnErrors();
 }
 void ConnAliveThread::unregisterConnEvents()
@@ -149,7 +149,7 @@ void ConnAliveThread::unregisterConnEvents()
 }
 void ConnAliveThread::freeData(void *opaque)
 {
-    if ( opaque!=NULL ) {
+    if ( opaque!=nullptr ) {
         void *data = opaque;
         free(data);
     }
@@ -158,7 +158,7 @@ void ConnAliveThread::connEventCallBack(virConnectPtr _conn, int reason, void *o
 {
     //qDebug()<<"connEventCallBack"<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
-    if ( NULL!=obj && *(obj->ptr_ConnPtr)==_conn) {
+    if ( nullptr!=obj && *(obj->ptr_ConnPtr)==_conn) {
         obj->closeConnection(reason);
     };
 }
@@ -167,7 +167,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
     //qDebug()<<ncred<<"keep auth";
     size_t i;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(cbdata);
-    if ( NULL==obj ) return -1;
+    if ( nullptr==obj ) return -1;
 
     /* libvirt might request multiple credentials in a single call.
      * This example supports VIR_CRED_AUTHNAME and VIR_CRED_PASSPHRASE
@@ -180,8 +180,8 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
      * For example the ESX driver passes the hostname of the ESX or vCenter
      * server as challenge. This allows a auth callback to return the
      * proper credentials. */
-    obj->authData.username = NULL;
-    obj->authData.password = NULL;
+    obj->authData.username = nullptr;
+    obj->authData.password = nullptr;
     QString crd;
     for (i = 0; i < ncred; ++i) {
         switch (cred[i].type) {
@@ -189,24 +189,24 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
                 crd = "Username";
                 obj->getAuthCredentials(crd);
                 cred[i].result = strdup(obj->authData.username);
-                if (cred[i].result == NULL) {
+                if (cred[i].result == nullptr) {
                     return -1;
                 };
                 cred[i].resultlen = strlen(cred[i].result);
                 // clear/shred authData credential for more security
-                if ( obj->authData.username!=NULL )
+                if ( obj->authData.username!=nullptr )
                     memset(&obj->authData.username[0], 0, strlen(obj->authData.username));
                 break;
             case VIR_CRED_PASSPHRASE:
                 crd = "Password";
                 obj->getAuthCredentials(crd);
                 cred[i].result = strdup(obj->authData.password);
-                if (cred[i].result == NULL) {
+                if (cred[i].result == nullptr) {
                     return -1;
                 };
                 cred[i].resultlen = strlen(cred[i].result);
                 // clear/shred authData credential for more security
-                if ( obj->authData.password!=NULL )
+                if ( obj->authData.password!=nullptr )
                     memset(&obj->authData.password[0], 0, strlen(obj->authData.password));
                 break;
             default:
@@ -220,7 +220,7 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
 {
     //qDebug()<<"domEventCallback"<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
-    if ( NULL==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
+    if ( nullptr==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
     bool end = false;
     QString msg, domainName;
     domainName = QString(virDomainGetName(dom));
@@ -233,8 +233,8 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
     if ( obj->onView ) {
         Result result;
         QStringList domainList;
-        if ( _conn!=NULL && obj->keep_alive ) {
-            virDomainPtr *domains = NULL;
+        if ( _conn!=nullptr && obj->keep_alive ) {
+            virDomainPtr *domains = nullptr;
             unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
                                  VIR_CONNECT_LIST_DOMAINS_INACTIVE;
             // the number of domains found or -1 and sets domains to NULL in case of error.
@@ -312,7 +312,7 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
 {
     //qDebug()<<"netEventCallback"<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
-    if ( NULL==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
+    if ( nullptr==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
     QString msg;
     msg = QString("<b>'%1'</b> Network %2 %3\n")
            .arg(virNetworkGetName(net))
@@ -322,8 +322,8 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
     if ( obj->onView ) {
         Result result;
         QStringList virtNetList;
-        if ( _conn!=NULL && obj->keep_alive ) {
-            virNetworkPtr *networks = NULL;
+        if ( _conn!=nullptr && obj->keep_alive ) {
+            virNetworkPtr *networks = nullptr;
             unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                                  VIR_CONNECT_LIST_NETWORKS_INACTIVE;
             // the number of networks found or -1 and sets networks to NULL in case of error.

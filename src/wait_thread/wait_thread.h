@@ -9,8 +9,8 @@ class Wait : public QThread
     Q_OBJECT
 public:
     explicit Wait(
-            QObject        *parent  = NULL,
-            ConnectionList *wdgList = NULL);
+            QObject        *parent  = nullptr,
+            ConnectionList *wdgList = nullptr);
 
 private:
     ConnectionList     *wdg;

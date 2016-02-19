@@ -15,7 +15,7 @@ class CPU_Model : public _Changed
 {
     Q_OBJECT
 public:
-    explicit CPU_Model(QWidget *parent = 0);
+    explicit CPU_Model(QWidget *parent = nullptr);
     QCheckBox       *copyHostCPU, *allowFallback;
 
 signals:

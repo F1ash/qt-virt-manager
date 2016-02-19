@@ -9,7 +9,7 @@ class SecurityLabel : public _Tab
     Q_OBJECT
 public:
     explicit SecurityLabel(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString  _xmlDesc = QString());
 
 private:

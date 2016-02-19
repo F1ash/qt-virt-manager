@@ -11,9 +11,9 @@ class _IP_Widget : public _QWidget
     Q_OBJECT
 public:
     explicit _IP_Widget(
-            QWidget *parent = NULL,
-            bool    *_IPv4HasDHCP = NULL,
-            bool    *_IPv6HasDHCP = NULL);
+            QWidget *parent       = nullptr,
+            bool    *_IPv4HasDHCP = nullptr,
+            bool    *_IPv6HasDHCP = nullptr);
     QCheckBox       *ipv6, *staticRoute;
     _IPv4           *_ipv4;
     _IPv6           *_ipv6;

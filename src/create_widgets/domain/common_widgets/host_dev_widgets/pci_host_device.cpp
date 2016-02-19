@@ -7,7 +7,7 @@ pci_hostHlpThread::pci_hostHlpThread(QObject *parent, virConnectPtr* connPtrPtr)
 }
 void pci_hostHlpThread::run()
 {
-    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -16,7 +16,7 @@ void pci_hostHlpThread::run()
         return;
     };
     QStringList      devices;
-    virNodeDevice  **nodeDevices = NULL;
+    virNodeDevice  **nodeDevices = nullptr;
     unsigned int flags =
             VIR_CONNECT_LIST_NODE_DEVICES_CAP_PCI_DEV;
     int ret = virConnectListAllNodeDevices(*ptr_ConnPtr, &nodeDevices, flags);
@@ -33,7 +33,7 @@ void pci_hostHlpThread::run()
         };
         if (nodeDevices) free(nodeDevices);
     };
-    //int devs = virNodeNumOfDevices(ptr_ConnPtr, NULL, 0);
+    //int devs = virNodeNumOfDevices(ptr_ConnPtr, nullptr, 0);
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();
     emit result(devices);

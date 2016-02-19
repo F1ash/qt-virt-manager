@@ -35,7 +35,7 @@
 QSpiceSession::QSpiceSession(QObject *parent) :
     QSpiceObject(parent)
 {
-    gobject = NULL;
+    gobject = nullptr;
     init();
 }
 
@@ -47,10 +47,10 @@ void QSpiceHelper::ss_channel_new(SpiceSession *session, SpiceChannel *channel, 
     gint channelType = 0;
     g_object_get(G_OBJECT (channel),
                  "channel-type", &channelType,
-                 NULL);
+                 nullptr);
 
     QSpiceSession *_session = static_cast<QSpiceSession *>(user_data);
-    QSpiceChannel *_channel = NULL;
+    QSpiceChannel *_channel = nullptr;
 
     switch(channelType)
     {
@@ -108,7 +108,7 @@ void QSpiceHelper::ss_channel_destroy(SpiceSession *session, SpiceChannel *chann
 
     g_object_get(G_OBJECT (channel),
                  "channel-type", &channelType,
-                 NULL);
+                 nullptr);
 
     //qDebug() << "channel-destroy signal " << channelType  << endl;
 }

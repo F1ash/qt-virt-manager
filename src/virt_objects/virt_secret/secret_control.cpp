@@ -203,7 +203,7 @@ void VirtSecretControl::execAction(const QStringList &l)
             // show Secret Creator widget
             CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, ptr_ConnPtr);
             int result = createVirtSec->exec();
-            if ( createVirtSec!=NULL && result==QDialog::Accepted ) {
+            if ( createVirtSec!=nullptr && result==QDialog::Accepted ) {
                 xml = createVirtSec->getXMLDescFileName();
                 show = createVirtSec->getShowing();
                 QStringList data;
@@ -220,7 +220,7 @@ void VirtSecretControl::execAction(const QStringList &l)
                 emit addNewTask(task);
             };
             delete createVirtSec;
-            createVirtSec = NULL;
+            createVirtSec = nullptr;
             //qDebug()<<xml<<"path"<<result;
         } else if ( l.first()=="undefineVirtSecret" ) {
             task.action     = UNDEFINE_ENTITY;
@@ -241,7 +241,7 @@ void VirtSecretControl::execAction(const QStringList &l)
         // show Secret Creator widget
         CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, ptr_ConnPtr);
         int result = createVirtSec->exec();
-        if ( createVirtSec!=NULL && result==QDialog::Accepted ) {
+        if ( createVirtSec!=nullptr && result==QDialog::Accepted ) {
             xml = createVirtSec->getXMLDescFileName();
             show = createVirtSec->getShowing();
             QStringList data;
@@ -258,7 +258,7 @@ void VirtSecretControl::execAction(const QStringList &l)
             emit addNewTask(task);
         };
         delete createVirtSec;
-        createVirtSec = NULL;
+        createVirtSec = nullptr;
         //qDebug()<<xml<<"path"<<result;
     };
 }

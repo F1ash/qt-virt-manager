@@ -22,7 +22,7 @@ class TaskWareHouse : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit TaskWareHouse(QWidget *parent = NULL);
+    explicit TaskWareHouse(QWidget *parent = nullptr);
 
 signals:
     void             visibilityChanged(bool);

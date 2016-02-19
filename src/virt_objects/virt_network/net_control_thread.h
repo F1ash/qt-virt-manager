@@ -7,7 +7,7 @@ class NetControlThread : public ControlThread
 {
     Q_OBJECT
 public:
-    explicit NetControlThread(QObject *parent = NULL);
+    explicit NetControlThread(QObject *parent = nullptr);
 
 signals:
 

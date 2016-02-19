@@ -311,7 +311,7 @@ bool TermMainWindow::event(QEvent *event)
     {
         if (false &&
             !Properties::Instance()->dropKeepOpen &&
-            qApp->activeWindow() == 0
+            qApp->activeWindow() == nullptr
            )
            hide();
     }
@@ -337,7 +337,7 @@ void TermMainWindow::addNewTab()
 int TermMainWindow::getPtySlaveFd() const
 {
     TermWidget *t = consoleTabulator->terminalHolder()->currentTerminal();
-    if ( NULL!=t ) return t->getPtySlaveFd();
+    if ( nullptr!=t ) return t->getPtySlaveFd();
     else return -1;
 }
 

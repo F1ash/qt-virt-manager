@@ -11,7 +11,7 @@ class VirtSecretControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
-    explicit VirtSecretControl(QWidget *parent = NULL);
+    explicit VirtSecretControl(QWidget *parent = nullptr);
     ~VirtSecretControl();
 
 private:

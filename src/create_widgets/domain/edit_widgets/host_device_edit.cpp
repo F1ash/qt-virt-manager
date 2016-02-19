@@ -7,7 +7,7 @@ HostDevice_Edit::HostDevice_Edit(
     info->setVisible(false);
     infoEdit = new QStackedWidget(this);
     QString connType;
-    if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
         connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
     } else
         emit ptrIsNull();
@@ -33,7 +33,7 @@ QDomDocument HostDevice_Edit::getDataDocument() const
 {
     QDomDocument doc;
     _QWidget *wdg = static_cast<_QWidget*>(infoEdit->currentWidget());
-    if ( NULL!=wdg ) doc = wdg->getDataDocument();
+    if ( nullptr!=wdg ) doc = wdg->getDataDocument();
     return doc;
 }
 void HostDevice_Edit::setDataDescription(QString &xmlDesc)
@@ -49,5 +49,5 @@ void HostDevice_Edit::setDataDescription(QString &xmlDesc)
     type->setCurrentIndex( (idx<0)? type->count()-1:idx );
     type->setEnabled(false);
     _QWidget *wdg = static_cast<_QWidget*>(infoEdit->currentWidget());
-    if ( NULL!=wdg ) wdg->setDataDescription(xmlDesc);
+    if ( nullptr!=wdg ) wdg->setDataDescription(xmlDesc);
 }

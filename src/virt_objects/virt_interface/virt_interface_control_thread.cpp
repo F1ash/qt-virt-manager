@@ -11,11 +11,11 @@ void InterfaceControlThread::execAction(uint _num, TASK _task)
     number = _num;
     task = _task;
     keep_alive = false;
-    if ( NULL!=task.srcConnPtr ) {
+    if ( nullptr!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
-            task.srcConnPtr = NULL;
+            task.srcConnPtr = nullptr;
             sendConnErrors();
         } else
             keep_alive = true;
@@ -78,8 +78,8 @@ Result InterfaceControlThread::getAllIfaceList()
 {
     Result result;
     QStringList virtIfaceList;
-    if ( task.srcConnPtr!=NULL && keep_alive ) {
-        virInterfacePtr *ifaces = NULL;
+    if ( task.srcConnPtr!=nullptr && keep_alive ) {
+        virInterfacePtr *ifaces = nullptr;
         //get all ifaces
         unsigned int flags =
                 VIR_CONNECT_LIST_INTERFACES_INACTIVE |
@@ -118,7 +118,7 @@ Result InterfaceControlThread::startIface()
     bool started = false;
     virInterfacePtr iface = virInterfaceLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( iface!=NULL ) {
+    if ( iface!=nullptr ) {
         // extra flags; not used yet, so callers should always pass 0
         started = (virInterfaceCreate(iface, 0)+1) ? true : false;
         if (!started)
@@ -140,7 +140,7 @@ Result InterfaceControlThread::destroyIface()
     bool destroyed = false;
     virInterfacePtr iface = virInterfaceLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( iface!=NULL ) {
+    if ( iface!=nullptr ) {
         // extra flags; not used yet, so callers should always pass 0
         destroyed = (virInterfaceDestroy(iface, 0)+1) ? true : false;
         if (!destroyed)
@@ -174,7 +174,7 @@ Result InterfaceControlThread::defineIface()
     int flags = 0;
     virInterfacePtr iface = virInterfaceDefineXML(
                 *task.srcConnPtr, xmlData.data(), flags);
-    if ( iface==NULL ) {
+    if ( iface==nullptr ) {
         result.err = sendConnErrors();
         return result;
     };
@@ -193,7 +193,7 @@ Result InterfaceControlThread::undefineIface()
     bool deleted = false;
     virInterfacePtr iface = virInterfaceLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( iface!=NULL ) {
+    if ( iface!=nullptr ) {
         deleted = (virInterfaceUndefine(iface)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -264,14 +264,14 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
     QString name = task.object;
     result.name = name;
     bool read = false;
-    char *Returns = NULL;
+    char *Returns = nullptr;
     virInterfacePtr iface = virInterfaceLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( iface!=NULL ) {
+    if ( iface!=nullptr ) {
         //extra flags; not used yet, so callers should always pass 0
         int flags = 0;
         Returns = virInterfaceGetXMLDesc(iface, flags);
-        if ( Returns==NULL )
+        if ( Returns==nullptr )
             result.err = sendConnErrors();
         else read = true;
         virInterfaceFree(iface);
@@ -287,7 +287,7 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
     if (read) f.write(Returns);
     result.fileName.append(f.fileName());
     f.close();
-    if ( Returns!=NULL ) free(Returns);
+    if ( Returns!=nullptr ) free(Returns);
     result.result = read;
     result.msg.append(
                 QString("'<b>%1</b>' Interface %2 XML'ed")

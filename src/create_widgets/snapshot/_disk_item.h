@@ -13,7 +13,7 @@ class _DiskItem : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _DiskItem(QWidget *parent = NULL);
+    explicit _DiskItem(QWidget *parent = nullptr);
 
 signals:
 

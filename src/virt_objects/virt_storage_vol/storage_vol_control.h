@@ -13,7 +13,7 @@ class VirtStorageVolControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
-    explicit VirtStorageVolControl(QWidget *parent = NULL);
+    explicit VirtStorageVolControl(QWidget *parent = nullptr);
     ~VirtStorageVolControl();
 
 signals:

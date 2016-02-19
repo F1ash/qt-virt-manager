@@ -22,7 +22,7 @@ NetInterfaces::NetInterfaces(
     typeLabel = new QLabel("Type:", this);
     type = new QComboBox(this);
     QString connType;
-    if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
         connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
     } else
         emit ptrIsNull();
@@ -58,7 +58,7 @@ QDomDocument NetInterfaces::getDataDocument() const
 {
     QDomDocument doc;
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    if ( NULL!=wdg ) doc = wdg->getDataDocument();
+    if ( nullptr!=wdg ) doc = wdg->getDataDocument();
     return doc;
 }
 

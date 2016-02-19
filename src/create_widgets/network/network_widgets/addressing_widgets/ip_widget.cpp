@@ -21,7 +21,7 @@ QDomDocument IP_Widget::getDataDocument() const
     doc.setContent(QString());
     for (int i=0; i<ipSet->count(); i++) {
         _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
-        if ( NULL==wdg ) continue;
+        if ( nullptr==wdg ) continue;
         doc.appendChild(wdg->getDataDocument());
     };
     return doc;
@@ -35,7 +35,7 @@ void IP_Widget::updateDHCPUsage()
 
     for (int i=0; i<ipSet->count(); i++) {
         _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
-        if ( NULL==wdg ) continue;
+        if ( nullptr==wdg ) continue;
         wdg->updateDHCPUsage();
     };
 }
@@ -49,13 +49,13 @@ void IP_Widget::showCustomMenu(QPoint pos)
     disconnect(addMenu->addTabAction, SIGNAL(triggered()),
                this, SLOT(addTab()));
     delete addMenu;
-    addMenu = NULL;
+    addMenu = nullptr;
 }
 void IP_Widget::addTab()
 {
     int i = ipSet->addTab(new _IP_Widget(this, &IPv4HasDHCP, &IPv6HasDHCP), "IP Element");
     _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
-    if ( NULL!=wdg ) {
+    if ( nullptr!=wdg ) {
         connect(wdg, SIGNAL(dhcpUsageChanged()),
                 this, SLOT(updateDHCPUsage()));
     };
@@ -64,13 +64,13 @@ void IP_Widget::closeTab(int i)
 {
     if ( ipSet->count()<2 ) return;
     _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
-    if ( NULL!=wdg ) {
+    if ( nullptr!=wdg ) {
         wdg->ipv6->click();
         wdg->updateDHCPUsage();
         disconnect(wdg, SIGNAL(dhcpUsageChanged()),
                    this, SLOT(updateDHCPUsage()));
         ipSet->removeTab(i);
         delete wdg;
-        wdg = NULL;
+        wdg = nullptr;
     };
 }

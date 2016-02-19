@@ -16,7 +16,7 @@ class TabWidget : public QTabWidget
 {
 Q_OBJECT
 public:
-    TabWidget(QWidget* parent = 0,
+    TabWidget(QWidget* parent = nullptr,
               QString  _name = QString());
 
     TermWidgetHolder * terminalHolder();

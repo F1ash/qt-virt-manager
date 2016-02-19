@@ -10,7 +10,7 @@ class SpiceSmartcardWidget : public QDialog
 {
     Q_OBJECT
 public:
-    explicit SpiceSmartcardWidget(QWidget *parent = 0);
+    explicit SpiceSmartcardWidget(QWidget *parent = nullptr);
 
 signals:
     void             connectCard(QString&);

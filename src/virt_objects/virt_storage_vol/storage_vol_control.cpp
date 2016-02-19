@@ -299,7 +299,7 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                 bool show = false;
                 // show SRC Creator widget
                 // get path for method
-                if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+                if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
                     virStoragePoolPtr _pool = virStoragePoolLookupByName(
                             *ptr_ConnPtr, currPoolName.toUtf8().data());
                     QDomDocument doc;
@@ -316,7 +316,7 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                         show = createVolumeDialog->showXMLDescription();
                     };
                     delete createVolumeDialog;
-                    createVolumeDialog = NULL;
+                    createVolumeDialog = nullptr;
                     if ( result==QDialog::Rejected ) return;
                     task.args.path = path;
                     if ( show ) QDesktopServices::openUrl(QUrl(path));

@@ -11,7 +11,7 @@ class VirtInterfaceControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
-    explicit VirtInterfaceControl(QWidget *parent = NULL);
+    explicit VirtInterfaceControl(QWidget *parent = nullptr);
     ~VirtInterfaceControl();
 
 private:

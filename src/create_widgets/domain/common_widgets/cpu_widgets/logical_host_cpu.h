@@ -13,7 +13,7 @@ class LogicalHostCPU : public QWidget
     Q_OBJECT
 public:
     explicit LogicalHostCPU(
-            QWidget *parent = 0,
+            QWidget *parent = nullptr,
             QString  _caps = "");
 
 signals:

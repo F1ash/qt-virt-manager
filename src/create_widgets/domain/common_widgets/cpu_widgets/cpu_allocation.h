@@ -17,7 +17,7 @@ class CPU_Allocation : public _Changed
     Q_OBJECT
 public:
     explicit CPU_Allocation(
-            QWidget *parent = 0,
+            QWidget *parent = nullptr,
             QString  _caps = "");
     QCheckBox       *cpusetLabel, *currLabel,
                     *placementLabel;

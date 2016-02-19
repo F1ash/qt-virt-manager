@@ -13,7 +13,7 @@ void SearchThread::run()
     foreach (QString uri, URIs) {
         virConnect *connPtr = virConnectOpenReadOnly(uri.toUtf8().data());
         ptr_ConnPtr = &connPtr;
-        if ( NULL!=connPtr ) {
+        if ( nullptr!=connPtr ) {
             // don't work for VBox
             // int num = virConnectNumOfDefinedDomains(connPtr);
             virDomainPtr *domains;

@@ -207,7 +207,7 @@ void VirtDomainControl::entityDoubleClicked(const QModelIndex &index)
         //emit addToStateMonitor(ptr_ConnPtr, currConnName, _domainName);
         //emit displayRequest(ptr_ConnPtr, currConnName, _domainName);
         TASK task;
-        task.type = "domain";
+        task.type       = "domain";
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = _domainName;
@@ -288,7 +288,7 @@ void VirtDomainControl::execAction(const QStringList &l)
             task.args.sign  = autostartState;
             emit addNewTask(task);
         } else if ( l.first()=="migrateVirtDomain" ) {
-            if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+            if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
                 // set Migrate parameters
                 // implement in thread or in MigrateDialog  VVV
                 char *hostName = virConnectGetHostname(*ptr_ConnPtr);

@@ -8,8 +8,8 @@ class _IPv4 : public _IPvX
     Q_OBJECT
 public:
     explicit _IPv4(
-            QWidget *parent = NULL,
-            bool    *hasDHCP = NULL);
+            QWidget *parent  = nullptr,
+            bool    *hasDHCP = nullptr);
 
 private:
 

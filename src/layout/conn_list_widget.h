@@ -17,7 +17,7 @@ class ConnectionList : public QTreeView
 {
     Q_OBJECT
 public:
-    explicit ConnectionList(QWidget *parent = NULL);
+    explicit ConnectionList(QWidget *parent = nullptr);
     CONN_LIST           *connections;
     ConnItemModel       *connItemModel;
 

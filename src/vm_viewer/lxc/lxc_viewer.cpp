@@ -8,7 +8,7 @@ lxcHlpThread::lxcHlpThread(
 }
 void lxcHlpThread::run()
 {
-    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -52,10 +52,10 @@ LXC_Viewer::~LXC_Viewer()
         killTimerId = 0;
     };
     QString msg;
-    if ( NULL!=viewerThread ) {
+    if ( nullptr!=viewerThread ) {
         viewerThread->blockSignals(true);
         delete viewerThread;
-        viewerThread = NULL;
+        viewerThread = nullptr;
     };
     msg = QString("In '<b>%1</b>': Display destroyed.")
             .arg(domain);
@@ -67,7 +67,7 @@ LXC_Viewer::~LXC_Viewer()
 void LXC_Viewer::init()
 {
     QString msg;
-    if ( hlpThread->domainPtr!=NULL && hlpThread->domainIsActive ) {
+    if ( hlpThread->domainPtr!=nullptr && hlpThread->domainIsActive ) {
         viewerThread = new LXC_ViewerThread(this);
         timerId = startTimer(PERIOD);
     } else {
@@ -88,7 +88,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
         int ptySlaveFd = this->getPtySlaveFd();
         counter++;
         //qDebug()<<counter<<ptySlaveFd;
-        if ( ptySlaveFd>0 && NULL!=viewerThread ) {
+        if ( ptySlaveFd>0 && nullptr!=viewerThread ) {
             killTimer(timerId);
             timerId = 0;
             counter = 0;
@@ -120,7 +120,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
 void LXC_Viewer::setTerminalParameters()
 {
     TermWidget *t = getCurrentTerminal();
-    if ( NULL!=t ) {
+    if ( nullptr!=t ) {
         connect(t->impl(), SIGNAL(sendData(const char*,int)),
                 viewerThread, SLOT(sendDataToVMachine(const char*,int)));
         connect(viewerThread, SIGNAL(errorMsg(QString&, uint)),

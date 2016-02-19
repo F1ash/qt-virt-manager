@@ -12,23 +12,23 @@ class IfaceControlMenu : public QMenu
     Q_OBJECT
 public:
     explicit IfaceControlMenu(
-            QWidget *parent = NULL,
+            QWidget *parent    = nullptr,
             QStringList params = QStringList(),
-            bool state = false);
+            bool state         = false);
 
 signals:
     void            execMethod(const QStringList&);
 
 private:
     bool            autoReloadState;
-    QAction        *start = NULL;
-    QAction        *destroy = NULL;
-    QAction        *undefine = NULL;
-    QAction        *changeBegin = NULL;
-    QAction        *changeCommit = NULL;
-    QAction        *changeRollback = NULL;
-    QAction        *getXMLDesc = NULL;
-    QAction        *reload = NULL;
+    QAction        *start = nullptr;
+    QAction        *destroy = nullptr;
+    QAction        *undefine = nullptr;
+    QAction        *changeBegin = nullptr;
+    QAction        *changeCommit = nullptr;
+    QAction        *changeRollback = nullptr;
+    QAction        *getXMLDesc = nullptr;
+    QAction        *reload = nullptr;
     QStringList     parameters;
 
 private slots:

@@ -7,7 +7,7 @@ class BCh_Host_Device_Edit : public BCh_Host_Device
 {
     Q_OBJECT
 public:
-    explicit BCh_Host_Device_Edit(QWidget *parent = 0);
+    explicit BCh_Host_Device_Edit(QWidget *parent = nullptr);
 
 signals:
 

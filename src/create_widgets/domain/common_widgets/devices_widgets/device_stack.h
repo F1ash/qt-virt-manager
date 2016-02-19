@@ -14,8 +14,8 @@ class DeviceStack : public QDialog
     Q_OBJECT
 public:
     explicit DeviceStack(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  conn    = NULL);
+            QWidget        *parent  = nullptr,
+            virConnectPtr*  conn    = nullptr);
 
 signals:
     void             errorMsg(QString&);
@@ -35,15 +35,15 @@ private:
     QVBoxLayout     *commonLayout;
 
     QScrollArea     *infoWidget;
-    QWidget         *scrolled = NULL;
+    QWidget         *scrolled = nullptr;
     QWidget         *listWidget;
     QWidget         *buttons;
 
     virConnectPtr*   ptr_ConnPtr;
-    virNodeDevice  **nodeDevices = NULL;
+    virNodeDevice  **nodeDevices = nullptr;
     virErrorPtr      virtErrors;
 
-    _QWidget        *device = NULL;
+    _QWidget        *device = nullptr;
 
 public slots:
     QDomDocument     getResult() const;

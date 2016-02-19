@@ -7,7 +7,7 @@ class VirtEventLoop : public _VirtThread
 {
     Q_OBJECT
 public:
-    explicit VirtEventLoop(QObject *parent = NULL);
+    explicit VirtEventLoop(QObject *parent = nullptr);
     void run();
 };
 

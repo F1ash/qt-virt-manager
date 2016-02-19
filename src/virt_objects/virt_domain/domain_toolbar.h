@@ -14,7 +14,7 @@ class DomainToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit DomainToolBar(QWidget *parent = NULL);
+    explicit DomainToolBar(QWidget *parent = nullptr);
     ~DomainToolBar();
 
 signals:

@@ -20,7 +20,7 @@ bool ControlThread::setCurrentWorkConnect(
         ret = virConnectRef(*ptr_ConnPtr);
     };
     if ( ret<0 ) {
-        ptr_ConnPtr = NULL;
+        ptr_ConnPtr = nullptr;
         sendConnErrors();
         keep_alive = false;
     };

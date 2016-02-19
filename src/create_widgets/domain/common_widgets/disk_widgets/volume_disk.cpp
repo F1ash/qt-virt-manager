@@ -276,5 +276,5 @@ void Volume_Disk::getVolumeNames()
         };
     };
     delete volumeDialog;
-    volumeDialog = NULL;
+    volumeDialog = nullptr;
 }

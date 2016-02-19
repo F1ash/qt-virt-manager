@@ -7,7 +7,7 @@ class Logical_Pool_Stuff : public _Pool_Stuff
 {
     Q_OBJECT
 public:
-    explicit Logical_Pool_Stuff(QWidget *parent = NULL);
+    explicit Logical_Pool_Stuff(QWidget *parent = nullptr);
 
 signals:
 

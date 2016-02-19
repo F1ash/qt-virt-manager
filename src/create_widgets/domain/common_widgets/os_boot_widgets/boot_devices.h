@@ -13,7 +13,7 @@ class Boot_Devices : public _Changed
 {
     Q_OBJECT
 public:
-    explicit Boot_Devices(QWidget *parent = 0);
+    explicit Boot_Devices(QWidget *parent = nullptr);
     QListWidget     *devices;
 
 signals:

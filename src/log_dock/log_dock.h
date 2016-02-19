@@ -25,7 +25,7 @@ class LogDock : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LogDock(QWidget *parent = NULL);
+    explicit LogDock(QWidget *parent = nullptr);
     ~LogDock();
 
 private:

@@ -7,7 +7,7 @@ class SoundDevice_Edit : public SoundDevice
 {
     Q_OBJECT
 public:
-    explicit SoundDevice_Edit(QWidget *parent = NULL);
+    explicit SoundDevice_Edit(QWidget *parent = nullptr);
 
 signals:
 

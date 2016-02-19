@@ -7,7 +7,7 @@ class FileWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit FileWidget(QWidget *parent = NULL, QString _tag = "");
+    explicit FileWidget(QWidget *parent = nullptr, QString _tag = "");
 
 private:
     QLabel          *pathLabel;

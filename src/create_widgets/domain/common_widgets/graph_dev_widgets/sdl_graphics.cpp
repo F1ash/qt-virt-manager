@@ -65,7 +65,7 @@ void SDL_Graphics::setDataDescription(QString &_xmlDesc)
 void SDL_Graphics::getPathToXauthority() const
 {
     QString file = QFileDialog::getOpenFileName(
-                NULL,
+                nullptr,
                 tr("Specify Xauth"),
                 "/home",
                 tr("Xauth (.Xauthority)"));

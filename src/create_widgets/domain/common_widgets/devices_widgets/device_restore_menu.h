@@ -7,7 +7,7 @@ class DeviceRestoreMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit DeviceRestoreMenu(QWidget *parent = NULL);
+    explicit DeviceRestoreMenu(QWidget *parent = nullptr);
     QAction    *resetData, *revertData;
 
 signals:

@@ -13,7 +13,7 @@ resizeHelperThread::resizeHelperThread(
 }
 void resizeHelperThread::run()
 {
-    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -24,10 +24,10 @@ void resizeHelperThread::run()
 
     virStoragePoolPtr currStoragePool = virStoragePoolLookupByName(
                 *ptr_ConnPtr, poolName.toUtf8().data());
-    if ( currStoragePool!=NULL ) {
+    if ( currStoragePool!=nullptr ) {
         virStorageVolPtr storageVol = virStorageVolLookupByName(
                     currStoragePool, volName.toUtf8().data());
-        if ( storageVol!=NULL ) {
+        if ( storageVol!=nullptr ) {
             virStorageVolInfo info;
             if ( virStorageVolGetInfo(storageVol, &info)+1 ) {
                 switch (info.type) {

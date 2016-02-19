@@ -16,7 +16,7 @@ class ConnElement : public QObject
 {
     Q_OBJECT
 public:
-    explicit ConnElement(QObject *parent = NULL);
+    explicit ConnElement(QObject *parent = nullptr);
     void              buildURI();
 
 signals:

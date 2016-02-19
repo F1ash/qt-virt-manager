@@ -12,8 +12,8 @@ class Virtual_Network : public _QWidget
     Q_OBJECT
 public:
     explicit Virtual_Network(
-            QWidget        *parent      = NULL,
-            virConnectPtr*  connPtrPtr  = NULL);
+            QWidget        *parent      = nullptr,
+            virConnectPtr*  connPtrPtr  = nullptr);
 
 private:
     QLabel          *networkLabel, *targetLabel;

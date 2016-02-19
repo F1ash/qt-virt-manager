@@ -11,7 +11,7 @@ class NIC_Model : public _Changed
 {
     Q_OBJECT
 public:
-    explicit NIC_Model(QWidget *parent = NULL);
+    explicit NIC_Model(QWidget *parent = nullptr);
 
 signals:
     //void                 dataChanged();

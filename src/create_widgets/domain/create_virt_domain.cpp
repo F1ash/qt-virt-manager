@@ -8,7 +8,7 @@ HelperThread::HelperThread(QObject *parent, virConnectPtr *connPtrPtr) :
 void HelperThread::run()
 {
     QString capabilities;
-    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
         emit result(capabilities);
         emit ptrIsNull();
         return;
@@ -196,7 +196,7 @@ void CreateVirtDomain::readCapabilities()
         xmlDesc.append(_xml->readAll().constData());
         _xml->close();
         delete _xml;
-        _xml = NULL;
+        _xml = nullptr;
     };
     //qDebug()<<xmlDesc<<"desc"<<type;
     readDataLists();
@@ -259,7 +259,7 @@ void CreateVirtDomain::buildXMLDescription()
     foreach (QString key, wdgList.keys()) {
         _QWidget *Wdg = static_cast<_QWidget*>(
                     wdgList.value(key));
-        if ( NULL==Wdg ) continue;
+        if ( nullptr==Wdg ) continue;
         tabWidget->setCurrentWidget(Wdg);
         QDomNodeList list;
         if ( key=="Computer" ) {
@@ -276,8 +276,8 @@ void CreateVirtDomain::buildXMLDescription()
         };
         /*
          * current DomNode is removed to root-element
-         * but NULL-elemens not removed
-         * therefore keep to seek on not-NULL next element
+         * but nullptr-elemens not removed
+         * therefore keep to seek on not-nullptr next element
          */
         uint j = 0;
         uint count = list.length();
@@ -341,7 +341,7 @@ void CreateVirtDomain::create_specified_widgets()
 }
 void CreateVirtDomain::set_specified_Tabs()
 {
-    if ( NULL==tabWidget ) tabWidget = new QTabWidget(this);
+    if ( nullptr==tabWidget ) tabWidget = new QTabWidget(this);
     for (int idx=0; idx<wdgList.count(); idx++ ) {
         QString key;
         switch (idx) {
@@ -370,13 +370,13 @@ void CreateVirtDomain::set_specified_Tabs()
             break;
         };
         _QWidget *Wdg = static_cast<_QWidget*>(wdgList.value(key));
-        if ( NULL!=Wdg ) {
+        if ( nullptr!=Wdg ) {
             if ( idx == 2 ) {
                 OS_Booting *wdg = static_cast<OS_Booting*>(Wdg);
-                if ( NULL!=wdg ) wdg->initMaxVCPU();
+                if ( nullptr!=wdg ) wdg->initMaxVCPU();
             } else if ( idx == 5 ) {
                 Devices *wdg = static_cast<Devices*>(Wdg);
-                if ( NULL!=wdg ) {
+                if ( nullptr!=wdg ) {
                     connect(wdg, SIGNAL(errorMsg(QString&)),
                             this, SIGNAL(errorMsg(QString&)));
                     wdg->initBootDevices();
@@ -405,9 +405,9 @@ void CreateVirtDomain::restoreParameters()
     foreach (QString key, wdgList.keys()) {
         _QWidget *Wdg = static_cast<_QWidget*>(
                     wdgList.value(key));
-        if ( NULL!=Wdg ) {
+        if ( nullptr!=Wdg ) {
             delete Wdg;
-            Wdg = NULL;
+            Wdg = nullptr;
         };
     };
     wdgList.clear();
@@ -419,7 +419,7 @@ void CreateVirtDomain::setBootOrder(QDomElement *_devices)
 {
     OS_Booting *Wdg = static_cast<OS_Booting*>(
                 wdgList.value("OS_Booting"));
-    if ( NULL!=Wdg ) {
+    if ( nullptr!=Wdg ) {
         BootOrderList list = Wdg->getBootOrder();
         QDomDocument _bootDevDoc;
         _bootDevDoc.setContent(QString());

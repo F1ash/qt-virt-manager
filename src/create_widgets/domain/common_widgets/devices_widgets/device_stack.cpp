@@ -78,7 +78,7 @@ DeviceStack::DeviceStack(
     infoWidget->setWidget(scrolled);
     infoWidget->setWidgetResizable(true);
     QString connType;
-    if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
         connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
     } else
         emit ptrIsNull();
@@ -150,7 +150,7 @@ QDomDocument DeviceStack::getResult() const
 {
     //qDebug()<<"DeviceStack result";
     QDomDocument doc;
-    if ( device!=NULL ) {
+    if ( device!=nullptr ) {
         doc = device->getDataDocument();
     };
     return doc;
@@ -158,10 +158,10 @@ QDomDocument DeviceStack::getResult() const
 void DeviceStack::clearDevice()
 {
     deviceList->clearSelection();
-    if ( device!=NULL ) {
+    if ( device!=nullptr ) {
         infoLayout->removeWidget(device);
         delete device;
-        device = NULL;
+        device = nullptr;
     };
 }
 
@@ -182,9 +182,9 @@ void DeviceStack::showDevice(QListWidgetItem *item)
                     this,
                     ptr_ConnPtr);
     } else if ( deviceType == "serial" ) {
-        device = new CharDevice(this, NULL, NULL, deviceType);
+        device = new CharDevice(this, nullptr, nullptr, deviceType);
     } else if ( deviceType == "parallel" ) {
-        device = new CharDevice(this, NULL, NULL, deviceType);
+        device = new CharDevice(this, nullptr, nullptr, deviceType);
     } else if ( deviceType == "channel" ) {
         device = new ChannelDevice(this);
     } else if ( deviceType == "console" ) {

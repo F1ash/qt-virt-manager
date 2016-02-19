@@ -12,7 +12,7 @@ class Path_To_File : public _Changed
 {
     Q_OBJECT
 public:
-    explicit Path_To_File(QWidget *parent = 0);
+    explicit Path_To_File(QWidget *parent = nullptr);
 
 signals:
     //void             dataChanged();

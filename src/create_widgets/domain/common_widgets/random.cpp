@@ -53,7 +53,7 @@ Random::Random(QWidget *parent) :
     bkRandomWdg = new QWidget(this);
     bkRandomWdg->setLayout(bkRandomLayout);
 
-    bkEGD = new CharDevice(this, NULL, NULL, "serial");
+    bkEGD = new CharDevice(this, nullptr, nullptr, "serial");
 
     bkWdg = new QStackedWidget(this);
     bkWdg->addWidget(bkRandomWdg);

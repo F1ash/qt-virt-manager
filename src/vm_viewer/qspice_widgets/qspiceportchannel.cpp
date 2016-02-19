@@ -10,7 +10,7 @@ void QSpiceHelper::port_data(SpicePortChannel *spiceportchannel,
     // emitted when data is available for receiving from port
     Q_UNUSED(spiceportchannel)
     QSpicePortChannel *_port = static_cast<QSpicePortChannel*>(user_data);
-    if ( NULL==_port ) return;
+    if ( nullptr==_port ) return;
     emit _port->portData((void*)arg1, arg2);
 }
 
@@ -20,7 +20,7 @@ void QSpiceHelper::port_event(SpicePortChannel *spiceportchannel,
 {
     Q_UNUSED(spiceportchannel)
     QSpicePortChannel *_port = static_cast<QSpicePortChannel*>(user_data);
-    if ( NULL==_port ) return;
+    if ( nullptr==_port ) return;
     emit _port->portEvent(arg1);
 }
 
@@ -43,7 +43,7 @@ void QSpicePortChannel::writeBuffToPort(const void *buff, size_t _size)
                 (SpicePortChannel*)gobject,
                 buff,
                 _size,
-                NULL,
+                nullptr,
                 (GAsyncReadyCallback)writeFinishToPort,
                 this);
 }
@@ -60,7 +60,7 @@ void QSpicePortChannel::writeFinishToPort(void *_port, void *_res, void *_errs)
                 g_async_result_get_user_data(result));
     size_t count = sizeof(errors)/sizeof(*errors);
     for ( uint i = 0; i<count; i++ ) {
-        if ( NULL==errors[i] ) continue;
+        if ( nullptr==errors[i] ) continue;
         qDebug()<<errors[i]->code<< QString::fromUtf8(errors[i]->message);
     };
 }

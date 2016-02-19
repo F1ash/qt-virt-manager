@@ -13,8 +13,8 @@ class GraphicsDevice : public _QWidget
     Q_OBJECT
 public:
     explicit GraphicsDevice(
-            QWidget        *parent      = NULL,
-            virConnectPtr*  connPtrPtr  = NULL);
+            QWidget        *parent      = nullptr,
+            virConnectPtr*  connPtrPtr  = nullptr);
     QComboBox       *type;
     QStackedWidget  *info;
 

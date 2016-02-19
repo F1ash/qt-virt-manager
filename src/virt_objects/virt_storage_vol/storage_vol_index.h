@@ -7,7 +7,7 @@ class StorageVolIndex : public QObject
 {
     Q_OBJECT
 public:
-    explicit StorageVolIndex(QObject *parent = NULL);
+    explicit StorageVolIndex(QObject *parent = nullptr);
 
 signals:
 

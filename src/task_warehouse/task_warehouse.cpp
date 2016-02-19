@@ -119,7 +119,7 @@ void TaskWareHouse::addNewTask(TASK task)
     } else return;
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));
-    if ( NULL!=cThread ) {
+    if ( nullptr!=cThread ) {
         connect(cThread, SIGNAL(errorMsg(QString&,uint)),
                 this, SLOT(msgRepeater(QString&, uint)));
         connect(cThread, SIGNAL(resultData(Result)),
@@ -160,7 +160,7 @@ void TaskWareHouse::taskResultReceiver(Result data)
     QString _number = QString("").sprintf("%08d", data.number);
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));
-    if ( NULL!=cThread ) {
+    if ( nullptr!=cThread ) {
         //qDebug()<<_number<<"delete";
         disconnect(cThread, SIGNAL(errorMsg(QString&, uint)),
                    this, SLOT(msgRepeater(QString&, uint)));
@@ -168,7 +168,7 @@ void TaskWareHouse::taskResultReceiver(Result data)
                    this, SLOT(taskResultReceiver(Result)));
         threadPool->value(_number)->quit();
         delete cThread;
-        cThread = NULL;
+        cThread = nullptr;
         //delete threadPool->value(_number);
         int deleted = threadPool->remove(_number);
         //qDebug()<<_number<<"deleted:"<<deleted;

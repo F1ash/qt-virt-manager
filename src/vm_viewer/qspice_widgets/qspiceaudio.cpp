@@ -10,7 +10,7 @@ QSpiceAudio::QSpiceAudio(QObject *parent, void *_session) :
     // spice_audio_new(session, context, name);
     SpiceSession *session =
             static_cast<SpiceSession*>(_session);
-    gobject = spice_audio_get(session, NULL);
+    gobject = spice_audio_get(session, nullptr);
     state = (gobject)? true : false;
 #else
     Q_UNUSED(_session);

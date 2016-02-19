@@ -6,8 +6,8 @@ LXC_ViewerThread::LXC_ViewerThread(QObject *parent) :
     ControlThread(parent)
 {
     ptySlaveFd = -1;
-    stream = NULL;
-    domainPtr = NULL;
+    stream = nullptr;
+    domainPtr = nullptr;
     streamRegistered = false;
     connRef = false;
     EndOfFile = false;
@@ -39,14 +39,14 @@ void LXC_ViewerThread::run()
     } else
         connRef = false;
     stream = (connRef)?
-                virStreamNew( *ptr_ConnPtr, VIR_STREAM_NONBLOCK ):NULL;
-    if ( NULL==stream ) {
+                virStreamNew( *ptr_ConnPtr, VIR_STREAM_NONBLOCK ):nullptr;
+    if ( nullptr==stream ) {
         sendConnErrors();
         keep_alive = false;
     } else {
         int ret = -1;
         QString msg;
-        if ( ret=virDomainOpenConsole( domainPtr, NULL, stream, 0 )+1 ) {
+        if ( ret=virDomainOpenConsole( domainPtr, nullptr, stream, 0 )+1 ) {
             msg = QString("In '<b>%1</b>': Console opened in ZERO-mode...").arg(domain);
             emit errorMsg(msg, number);
         } else {
@@ -78,14 +78,14 @@ int  LXC_ViewerThread::registerStreamEvents()
                 streamEventCallBack,
                 this,
     //  don't register freeCallback, because it remove itself
-                NULL);
+                nullptr);
     if (ret<0) sendConnErrors();
     return ret;
 }
 void LXC_ViewerThread::unregisterStreamEvents()
 {
     //qDebug()<<"unregisterStreamEvents";
-    if ( NULL!=stream && streamRegistered ) {
+    if ( nullptr!=stream && streamRegistered ) {
         streamRegistered = (virStreamEventRemoveCallback(stream)!=0);
         if ( streamRegistered ) {
             sendConnErrors();
@@ -102,7 +102,7 @@ void LXC_ViewerThread::unregisterStreamEvents()
 }
 void LXC_ViewerThread::freeData(void *opaque)
 {
-    if ( NULL!=opaque ) {
+    if ( nullptr!=opaque ) {
         void *data = opaque;
         free(data);
     }
@@ -112,8 +112,8 @@ void LXC_ViewerThread::streamEventCallBack(virStreamPtr _stream, int events, voi
     Q_UNUSED(_stream);
     //qDebug()<<"streamEventCallBack";
     LXC_ViewerThread *obj = static_cast<LXC_ViewerThread*>(opaque);
-    if ( NULL==obj ) {
-        //qDebug()<<"streamEventCallBack"<<"static_cast returns NULL";
+    if ( nullptr==obj ) {
+        //qDebug()<<"streamEventCallBack"<<"static_cast returns nullptr";
         return;
     };
     if ( obj->EndOfFile ) {
@@ -151,15 +151,15 @@ void LXC_ViewerThread::updateStreamEvents(virStreamPtr _stream, int type)
 void LXC_ViewerThread::sendDataToDisplay()
 {
     //qDebug()<<"sendDataToDisplay"<<"to"<<ptySlaveFd;
-    if ( NULL==stream || !keep_alive || !streamRegistered || EndOfFile ) {
-        //qDebug()<<"sendDataToDisplay"<<"callback stream is NULL or deregistered or thread is died or stream EOF";
+    if ( nullptr==stream || !keep_alive || !streamRegistered || EndOfFile ) {
+        //qDebug()<<"sendDataToDisplay"<<"callback stream is nullptr or deregistered or thread is died or stream EOF";
         keep_alive = false;
         return;
     };
     QString msg;
     size_t _size = sizeof(char)*BLOCK_SIZE;
     char *buff = (char*) malloc(_size);
-    if (buff==NULL) return;
+    if (buff==nullptr) return;
     int got = virStreamRecv(stream, buff, _size);
     switch ( got ) {
     case -2:
@@ -211,7 +211,7 @@ void LXC_ViewerThread::sendDataToDisplay()
 void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
 {
     //qDebug()<<"sendDataToVMachine"<<"from"<<ptySlaveFd;
-    if ( got<=0 || NULL==stream || !keep_alive || !streamRegistered || EndOfFile ) return;
+    if ( got<=0 || nullptr==stream || !keep_alive || !streamRegistered || EndOfFile ) return;
     int saved = virStreamSend(stream, buff, got);
     if ( saved==-2 ) {
         // This is basically EAGAIN

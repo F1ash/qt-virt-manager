@@ -8,7 +8,7 @@ class ProgressBarDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit ProgressBarDelegate(QObject *parent = NULL);
+    explicit ProgressBarDelegate(QObject *parent = nullptr);
 
 signals:
 

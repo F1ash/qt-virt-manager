@@ -14,7 +14,7 @@ class _BlockDevices : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _BlockDevices(QWidget *parent = NULL);
+    explicit _BlockDevices(QWidget *parent = nullptr);
     QLineEdit       *name;
 
 private:

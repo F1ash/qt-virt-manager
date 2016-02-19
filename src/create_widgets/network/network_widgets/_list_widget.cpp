@@ -27,8 +27,8 @@ void _List_Widget::delItem()
 {
     int row = list->currentRow();
     QListWidgetItem *_item = list->takeItem(row);
-    if ( NULL!=_item ) {
+    if ( nullptr!=_item ) {
         delete _item;
-        _item = NULL;
+        _item = nullptr;
     };
 }

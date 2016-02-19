@@ -11,7 +11,7 @@ class SecLabels : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit SecLabels(QWidget *parent = 0);
+    explicit SecLabels(QWidget *parent = nullptr);
     QComboBox       *type, *model, *relabel,
                     *labelTypeLabel;
     QLineEdit       *label;

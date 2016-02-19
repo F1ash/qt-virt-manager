@@ -11,7 +11,7 @@ PCI_Passthrough::PCI_Passthrough(
     driverLabel = new QLabel("Driver:", this);
     driver = new QComboBox(this);
     QString connType;
-    if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
         connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
     } else
         emit ptrIsNull();

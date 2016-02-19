@@ -16,8 +16,8 @@ class _Disk : public _QWidget
     Q_OBJECT
 public:
     explicit _Disk(
-            QWidget        *parent      = NULL,
-            virConnectPtr*  connPtrPtr  = NULL);
+            QWidget        *parent      = nullptr,
+            virConnectPtr*  connPtrPtr  = nullptr);
     _Hosts              *hosts;
     _StartupPolicy      *startupPolicy;
     _Device             *devType;

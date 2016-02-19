@@ -7,7 +7,7 @@ class ChannelDevice : public CharDevice
 {
     Q_OBJECT
 public:
-    explicit ChannelDevice(QWidget *parent = NULL);
+    explicit ChannelDevice(QWidget *parent = nullptr);
     QComboBox       *chanType;
 
 signals:

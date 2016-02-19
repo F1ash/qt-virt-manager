@@ -83,7 +83,7 @@ SnapshotActionDialog::SnapshotActionDialog(
 }
 SnapshotActionDialog::~SnapshotActionDialog()
 {
-    if ( NULL!=domain ) virDomainFree(domain);
+    if ( nullptr!=domain ) virDomainFree(domain);
 }
 
 /* public slots */
@@ -111,7 +111,7 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
     char *xmlDesc = virDomainSnapshotGetXMLDesc(snapShot, 0);
     QString _desc;
     QString _data(" -- ");
-    if ( NULL!=xmlDesc ) {
+    if ( nullptr!=xmlDesc ) {
         QDomDocument doc;
         doc.setContent(QString(xmlDesc));
         free(xmlDesc);
@@ -135,7 +135,7 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
     };
     // flags: extra flags; not used yet, so callers should always pass 0
     int current = virDomainSnapshotIsCurrent(snapShot, 0);
-    if ( NULL!=snapShot ) {
+    if ( nullptr!=snapShot ) {
         model->insertRow(row, parent);
         model->setData(model->index(row, 0, parent), name, Qt::DisplayRole);
         model->setData(model->index(row, 0, parent), (current>0), Qt::DecorationRole);
@@ -158,7 +158,7 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
 }
 void SnapshotActionDialog::setDomainSnapshots()
 {
-    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -181,7 +181,7 @@ void SnapshotActionDialog::accept()
 {
     TreeItem *item = static_cast<TreeItem*>(
             snapshotTree->currentIndex().internalPointer());
-    if ( NULL==item ) {
+    if ( nullptr==item ) {
         cancelled();
     } else {
         settings.beginGroup("SnapshotActionDialog");
@@ -246,13 +246,13 @@ void SnapshotActionDialog::showSnapsotXMLDesc()
     if ( snapshotTree->currentIndex().isValid() ) {
         TreeItem *item = static_cast<TreeItem*>(
                 snapshotTree->currentIndex().internalPointer());
-        if ( NULL!=item ) {
+        if ( nullptr!=item ) {
             // flags: extra flags; not used yet, so callers should always pass 0
             virDomainSnapshotPtr snapShot =
                     virDomainSnapshotLookupByName(
                         domain, item->data(0).toByteArray().data(), 0);
             char *xmlDesc = virDomainSnapshotGetXMLDesc(snapShot, 0);
-            if ( NULL!=xmlDesc ) {
+            if ( nullptr!=xmlDesc ) {
                 QTemporaryFile f;
                 f.setAutoRemove(false);
                 f.setFileTemplate(

@@ -14,7 +14,7 @@ class _Hosts : public QWidget
 {
     Q_OBJECT
 public:
-    explicit _Hosts(QWidget *parent = NULL);
+    explicit _Hosts(QWidget *parent = nullptr);
 
 signals:
     void             dataChanged();

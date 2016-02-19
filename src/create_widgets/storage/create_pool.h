@@ -20,8 +20,8 @@ class CreatePool : public _CreateStorage
     Q_OBJECT
 public:
     explicit CreatePool(
-            QWidget         *parent     = NULL,
-            virConnectPtr   *_connPtr   = NULL,
+            QWidget         *parent     = nullptr,
+            virConnectPtr   *_connPtr   = nullptr,
             Actions          _act       = _EMPTY_ACTION);
 
 signals:

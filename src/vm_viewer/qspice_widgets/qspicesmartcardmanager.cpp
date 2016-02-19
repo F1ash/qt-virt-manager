@@ -8,7 +8,7 @@
 QSpiceSmartcardManager::QSpiceSmartcardManager(QObject *parent) :
     QSpiceObject(parent)
 {
-    gobject = NULL;
+    gobject = nullptr;
     init();
 }
 
@@ -20,7 +20,7 @@ void QSpiceHelper::card_inserted(SpiceSmartcardManager *manager,
 #if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
-    if ( NULL==obj ) return;
+    if ( nullptr==obj ) return;
     QString _name;
     VReader *_reader = (VReader*)reader;
     _name.append(vreader_get_name(_reader));
@@ -41,7 +41,7 @@ void QSpiceHelper::card_removed(SpiceSmartcardManager *manager,
 #if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
-    if ( NULL==obj ) return;
+    if ( nullptr==obj ) return;
     QString _name;
     VReader *_reader = (VReader*)reader;
     _name.append(vreader_get_name(_reader));
@@ -61,7 +61,7 @@ void QSpiceHelper::reader_added(SpiceSmartcardManager *manager,
 #if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
-    if ( NULL==obj ) return;
+    if ( nullptr==obj ) return;
     QString _name;
     VReader *_reader = (VReader*)reader;
     _name.append(vreader_get_name(_reader));
@@ -81,7 +81,7 @@ void QSpiceHelper::reader_removed(SpiceSmartcardManager *manager,
 #if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
-    if ( NULL==obj ) return;
+    if ( nullptr==obj ) return;
     QString _name;
     VReader *_reader = (VReader*)reader;
     _name.append(vreader_get_name(_reader));

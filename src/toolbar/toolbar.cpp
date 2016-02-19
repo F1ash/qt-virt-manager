@@ -1,6 +1,6 @@
 #include "toolbar.h"
 
-ToolBar::ToolBar (QWidget *parent = NULL) : QToolBar(parent)
+ToolBar::ToolBar (QWidget *parent = nullptr) : QToolBar(parent)
 {
   setAllowedAreas(Qt::AllToolBarAreas);
   setMovable(true);

@@ -33,7 +33,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = NULL);
+    explicit MainWindow(QWidget *parent = nullptr);
 
 signals:
 
@@ -44,7 +44,7 @@ private :
     ConnectionList              *connListWidget;
     TrayIcon                    *trayIcon;
     ToolBar                     *toolBar;
-    Wait                        *wait_thread = NULL;
+    Wait                        *wait_thread = nullptr;
     DockWidget                  *logDock;
     LogDock                     *logDockContent;
     DockWidget                  *domainDock;

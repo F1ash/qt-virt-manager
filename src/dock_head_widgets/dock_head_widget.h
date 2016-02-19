@@ -13,7 +13,7 @@ class DockHeadWidget : public QWidget
     Q_OBJECT
 public:
     explicit DockHeadWidget(
-            QWidget *parent = 0,
+            QWidget *parent = nullptr,
             const QString = QString());
 
 signals:

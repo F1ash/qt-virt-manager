@@ -11,7 +11,7 @@ class DockWidget : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit DockWidget(QWidget *parent = NULL);
+    explicit DockWidget(QWidget *parent = nullptr);
 
 private:
     bool            state, _mark;

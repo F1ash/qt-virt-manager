@@ -38,7 +38,7 @@ TermWidgetHolder::~TermWidgetHolder()
 void TermWidgetHolder::setInitialFocus()
 {
     QList<TermWidget*> list = findChildren<TermWidget*>();
-    TermWidget * w = list.count() == 0 ? 0 : list.at(0);
+    TermWidget * w = list.count() == 0 ? nullptr : list.at(0);
     if (w)
         w->setFocus(Qt::OtherFocusReason);
 }
@@ -58,7 +58,7 @@ void TermWidgetHolder::loadSession()
         if (w)
         {
             delete w;
-            w = 0;
+            w = nullptr;
         }
     }
 
@@ -277,7 +277,7 @@ TermWidget *TermWidgetHolder::newTerm(const QString & wdir, const QString & shel
 
 void TermWidgetHolder::setCurrentTerminal(TermWidget* term)
 {
-    if ( NULL==m_currentTerm ) {
+    if ( nullptr==m_currentTerm ) {
         //qDebug() << "set current term:" << term;
         m_currentTerm = term;
     };

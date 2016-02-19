@@ -14,7 +14,7 @@ class HugePages : public QWidget
 {
     Q_OBJECT
 public:
-    explicit HugePages(QWidget *parent = NULL);
+    explicit HugePages(QWidget *parent = nullptr);
     QListWidget     *pages;
     QSpinBox        *size;
     QComboBox       *units;

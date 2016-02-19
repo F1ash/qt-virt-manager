@@ -8,8 +8,8 @@ class NetInterfaces_Edit : public NetInterfaces
     Q_OBJECT
 public:
     explicit NetInterfaces_Edit(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL);
+            QWidget        *parent     = nullptr,
+            virConnectPtr*  connPtrPtr = nullptr);
 
 signals:
 

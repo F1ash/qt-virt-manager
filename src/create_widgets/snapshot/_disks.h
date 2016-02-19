@@ -12,7 +12,7 @@ class _Disks : public QScrollArea
 {
     Q_OBJECT
 public:
-    explicit _Disks(QWidget *parent = NULL);
+    explicit _Disks(QWidget *parent = nullptr);
 
 private:
     QWidget         *scrolled;

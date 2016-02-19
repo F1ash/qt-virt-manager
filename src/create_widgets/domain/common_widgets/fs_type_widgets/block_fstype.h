@@ -8,7 +8,7 @@ class BlockFsType : public _FsType
     Q_OBJECT
 public:
     explicit BlockFsType(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString _type = "lxc");
 
 public slots:

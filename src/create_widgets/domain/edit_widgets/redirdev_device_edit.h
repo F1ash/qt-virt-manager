@@ -8,8 +8,8 @@ class RedirDevDevice_Edit : public RedirDevDevice
     Q_OBJECT
 public:
     explicit RedirDevDevice_Edit(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL);
+            QWidget        *parent     = nullptr,
+            virConnectPtr*  connPtrPtr = nullptr);
 
 signals:
 

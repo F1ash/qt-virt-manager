@@ -13,12 +13,12 @@ class TermMainWindow : public VM_Viewer , private Ui::mainWindow
 
 public:
     TermMainWindow(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL,
-            QString         arg1    = QString(),
-            QString         arg2    = QString(),
-            const QString&  work_dir= NULL,
-            const QString&  command = NULL);
+            QWidget        *parent     = nullptr,
+            virConnectPtr*  connPtrPtr = nullptr,
+            QString         arg1       = QString(),
+            QString         arg2       = QString(),
+            const QString&  work_dir   = nullptr,
+            const QString&  command    = nullptr);
     ~TermMainWindow();
     int getPtySlaveFd() const;
     TermWidget* getCurrentTerminal() const;

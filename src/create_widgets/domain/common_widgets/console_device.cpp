@@ -35,7 +35,7 @@ ConsoleDevice::ConsoleDevice(
     CharDevice(parent, connPtrPtr, domain, QString("console"))
 {
     QString connType;
-    if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
         connType = QString::fromUtf8(virConnectGetType(*ptr_ConnPtr));
     } else
         emit ptrIsNull();

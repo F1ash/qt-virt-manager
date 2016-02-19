@@ -12,7 +12,7 @@ class DomainControlMenu : public QMenu
     Q_OBJECT
 public:
     explicit DomainControlMenu(
-            QWidget     *parent = NULL,
+            QWidget     *parent = nullptr,
             QStringList  params = QStringList(),
             bool         state  = false);
 
@@ -21,26 +21,26 @@ signals:
 
 private:
     bool            autoReloadState;
-    QAction        *start = NULL;
-    QAction        *pause = NULL;
-    QAction        *destroy = NULL;
-    QAction        *edit = NULL;
-    QAction        *reset = NULL;
-    QAction        *reboot = NULL;
-    QAction        *shutdown = NULL;
-    QAction        *save = NULL;
-    QAction        *undefine = NULL;
-    QAction        *autoStart = NULL;
-    QAction        *getXMLDesc = NULL;
-    QAction        *RunningData = NULL;
-    QAction        *InactiveData = NULL;
-    QMenu          *xmlDescParams = NULL;
-    QAction        *migrate = NULL;
-    QAction        *display = NULL;
-    QAction        *addToMonitor = NULL;
-    QAction        *reload = NULL;
-    QAction        *createSnapshot = NULL;
-    QAction        *moreSnapshot_Actions = NULL;
+    QAction        *start = nullptr;
+    QAction        *pause = nullptr;
+    QAction        *destroy = nullptr;
+    QAction        *edit = nullptr;
+    QAction        *reset = nullptr;
+    QAction        *reboot = nullptr;
+    QAction        *shutdown = nullptr;
+    QAction        *save = nullptr;
+    QAction        *undefine = nullptr;
+    QAction        *autoStart = nullptr;
+    QAction        *getXMLDesc = nullptr;
+    QAction        *RunningData = nullptr;
+    QAction        *InactiveData = nullptr;
+    QMenu          *xmlDescParams = nullptr;
+    QAction        *migrate = nullptr;
+    QAction        *display = nullptr;
+    QAction        *addToMonitor = nullptr;
+    QAction        *reload = nullptr;
+    QAction        *createSnapshot = nullptr;
+    QAction        *moreSnapshot_Actions = nullptr;
     QStringList     parameters;
 
 private slots:

@@ -9,7 +9,7 @@ class BarNameLabel : public QLabel
 {
     Q_OBJECT
 public:
-    explicit BarNameLabel(QWidget *parent = 0);
+    explicit BarNameLabel(QWidget *parent = nullptr);
 
 private:
     int _size = 0;

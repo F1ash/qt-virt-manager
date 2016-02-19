@@ -18,7 +18,7 @@ QDomDocument DHCP_Range::getDataDocument() const
     QDomElement _range;
     for (int i=0; i<list->count(); i++) {
         QListWidgetItem *item = list->item(i);
-        if ( NULL==item ) continue;
+        if ( nullptr==item ) continue;
         QStringList _item = item->text().split("|");
         _range = doc.createElement("range");
         _range.setAttribute("start", _item.first());

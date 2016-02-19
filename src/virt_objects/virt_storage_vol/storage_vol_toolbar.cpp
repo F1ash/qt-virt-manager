@@ -17,9 +17,9 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     QToolBar(parent)
 {
     create_Action = new QAction(this);
-    create_Action->setIcon(QIcon::fromTheme("create"));
-    create_Action->setToolTip("Create");
-    create_Menu = new OpenFileMenu(this, "create", "storageVol");
+    create_Action->setIcon(QIcon::fromTheme("define"));
+    create_Action->setToolTip("New volume");
+    create_Menu = new OpenFileMenu(this, "define", "storageVol");
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     delete_Action = new QAction(this);

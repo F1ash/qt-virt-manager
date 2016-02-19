@@ -10,7 +10,7 @@ class _ReadOnly : public _Changed
 {
     Q_OBJECT
 public:
-    explicit _ReadOnly(QWidget *parent = NULL);
+    explicit _ReadOnly(QWidget *parent = nullptr);
     QCheckBox       *readOnly;
 
 signals:

@@ -8,7 +8,7 @@ class WipeMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit WipeMenu(QWidget *parent = NULL);
+    explicit WipeMenu(QWidget *parent = nullptr);
 
 signals:
     void             execMethod(const QStringList&);

@@ -10,7 +10,7 @@ class SpiceUsbDeviceWidget : public QDialog
 {
     Q_OBJECT
 public:
-    explicit SpiceUsbDeviceWidget(QWidget *parent = 0);
+    explicit SpiceUsbDeviceWidget(QWidget *parent = nullptr);
 
 signals:
     void             connectDevice(QString&);

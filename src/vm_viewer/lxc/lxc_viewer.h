@@ -11,12 +11,12 @@ class lxcHlpThread : public _VirtThread
     Q_OBJECT
 public:
     explicit lxcHlpThread(
-            QObject        *parent      = NULL,
-            virConnectPtr*  connPtrPtr  = NULL,
+            QObject        *parent      = nullptr,
+            virConnectPtr*  connPtrPtr  = nullptr,
             QString         _domain     = QString());
     const QString    domain;
     bool             domainIsActive = false;
-    virDomainPtr     domainPtr = NULL;
+    virDomainPtr     domainPtr      = nullptr;
     void             run();
 };
 
@@ -25,19 +25,19 @@ class LXC_Viewer : public TermMainWindow
     Q_OBJECT
 public:
     explicit LXC_Viewer(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL,
-            QString         arg1    = QString(),
-            QString         arg2    = QString(),
-            const QString&  work_dir= NULL,
-            const QString&  command = NULL);
+            QWidget        *parent     = nullptr,
+            virConnectPtr*  connPtrPtr = nullptr,
+            QString         arg1       = QString(),
+            QString         arg2       = QString(),
+            const QString&  work_dir   = nullptr,
+            const QString&  command    = nullptr);
     ~LXC_Viewer();
 
 signals:
 
 private:
     lxcHlpThread        *hlpThread;
-    LXC_ViewerThread    *viewerThread = NULL;
+    LXC_ViewerThread    *viewerThread = nullptr;
 
 public slots:
     void                 init();

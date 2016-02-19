@@ -8,8 +8,8 @@ class RBD_Pool_Stuff : public _Pool_Stuff
     Q_OBJECT
 public:
     explicit RBD_Pool_Stuff(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL);
+            QWidget        *parent     = nullptr,
+            virConnectPtr*  connPtrPtr = nullptr);
 
 signals:
 

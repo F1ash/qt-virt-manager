@@ -18,9 +18,9 @@ class _Storage_Auth : public _Changed
     Q_OBJECT
 public:
     explicit _Storage_Auth(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL,
-            QString         _type   = NOT_VOLUME);
+            QWidget        *parent     = nullptr,
+            virConnectPtr*  connPtrPtr = nullptr,
+            QString         _type      = NOT_VOLUME);
     QCheckBox       *auth;
     QLineEdit       *userName, *usage;
     QComboBox       *usageType;

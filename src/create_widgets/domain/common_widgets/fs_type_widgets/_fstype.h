@@ -17,7 +17,7 @@ class _FsType : public _QWidget
     Q_OBJECT
 public:
     explicit _FsType(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString  _type  = "lxc");
     QString          connType;
     QLabel          *driverLabel, *wrPolicyLabel,

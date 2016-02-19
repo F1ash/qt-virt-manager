@@ -7,7 +7,7 @@ class Desktop_Graphics : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit Desktop_Graphics(QWidget *parent = NULL);
+    explicit Desktop_Graphics(QWidget *parent = nullptr);
 
 private:
     QLabel          *displayLabel;

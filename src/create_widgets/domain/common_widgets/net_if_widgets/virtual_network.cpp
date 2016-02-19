@@ -212,11 +212,11 @@ void Virtual_Network::networkChanged(int i)
 }
 void Virtual_Network::setAvailableVirtNetworks()
 {
-    virNetworkPtr *networks = NULL;
+    virNetworkPtr *networks = nullptr;
     unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                          VIR_CONNECT_LIST_NETWORKS_INACTIVE;
     int ret = -1;
-    if ( NULL!=ptr_ConnPtr && NULL!=*ptr_ConnPtr ) {
+    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
         ret = virConnectListAllNetworks(*ptr_ConnPtr, &networks, flags);
     } else
         emit ptrIsNull();

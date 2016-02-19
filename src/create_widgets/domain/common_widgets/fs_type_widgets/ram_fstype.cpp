@@ -12,11 +12,11 @@ RAMFsType::RAMFsType(QWidget *parent, QString _type) :
     readOnly->setVisible(false);
     commonLayout->removeWidget(sourceLabel);
     delete sourceLabel;
-    sourceLabel = NULL;
+    sourceLabel = nullptr;
     commonLayout->addWidget(new QLabel("Usage (MiB):", this), 4, 0);
     commonLayout->removeWidget(source);
     delete source;
-    source = NULL;
+    source = nullptr;
     usage = new QSpinBox(this);
     usage->setRange(0, 1024);
     commonLayout->addWidget(usage, 4, 1);

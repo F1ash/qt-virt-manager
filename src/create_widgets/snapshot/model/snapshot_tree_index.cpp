@@ -22,7 +22,7 @@ void TreeItem::removeChild(TreeItem *item)
 
 TreeItem *TreeItem::child(int row)
 {
-    return childItems.value(row, NULL);
+    return childItems.value(row, nullptr);
 }
 
 int TreeItem::childCount() const

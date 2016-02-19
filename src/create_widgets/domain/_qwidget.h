@@ -21,12 +21,12 @@ class _QWidget : public _Changed
     Q_OBJECT
 public:
     explicit _QWidget(
-            QWidget         *parent     = NULL,
-            virConnectPtr*   connPtrPtr = NULL,
-            virDomainPtr     domain     = NULL);
+            QWidget         *parent     = nullptr,
+            virConnectPtr*   connPtrPtr = nullptr,
+            virDomainPtr     domain     = nullptr);
 
     virConnectPtr           *ptr_ConnPtr;
-    virDomain               *currDomain = NULL;
+    virDomain               *currDomain = nullptr;
 
 signals:
     void                     errorMsg(QString&);

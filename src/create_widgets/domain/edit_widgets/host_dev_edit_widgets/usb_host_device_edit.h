@@ -9,7 +9,7 @@ class USB_Host_Device_Edit : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit USB_Host_Device_Edit(QWidget *parent = NULL);
+    explicit USB_Host_Device_Edit(QWidget *parent = nullptr);
     DeviceAddress       *addr;
 
 private:

@@ -9,8 +9,8 @@ class _IPvX : public _QWidget
     Q_OBJECT
 public:
     explicit _IPvX(
-            QWidget *parent  = NULL,
-            bool    *hasDHCP = NULL);
+            QWidget *parent  = nullptr,
+            bool    *hasDHCP = nullptr);
     QLineEdit       *address, *gateway;
     QSpinBox        *prefix, *metric;
     DHCP_Widget     *useDHCP;

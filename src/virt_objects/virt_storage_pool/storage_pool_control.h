@@ -11,7 +11,7 @@ class VirtStoragePoolControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
-    explicit VirtStoragePoolControl(QWidget *parent = NULL);
+    explicit VirtStoragePoolControl(QWidget *parent = nullptr);
     ~VirtStoragePoolControl();
 
 signals:

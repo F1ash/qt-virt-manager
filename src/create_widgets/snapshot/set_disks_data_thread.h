@@ -8,7 +8,7 @@ class SetDisksDataThread : public ControlThread
 {
     Q_OBJECT
 public:
-    explicit SetDisksDataThread(QObject *parent = NULL);
+    explicit SetDisksDataThread(QObject *parent = nullptr);
     ~SetDisksDataThread();
     void        run();
 

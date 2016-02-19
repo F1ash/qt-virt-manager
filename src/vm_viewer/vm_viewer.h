@@ -26,24 +26,24 @@ class VM_Viewer : public QMainWindow
     Q_OBJECT
 public:
     explicit VM_Viewer(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL,
-            QString         arg1    = QString(),
-            QString         arg2    = QString());
+            QWidget        *parent     = nullptr,
+            virConnectPtr*  connPtrPtr = nullptr,
+            QString         arg1       = QString(),
+            QString         arg2       = QString());
     virtual ~VM_Viewer();
     QString          connName, domain, TYPE;
     virConnectPtr*   ptr_ConnPtr;
-    virErrorPtr      virtErrors = NULL;
+    virErrorPtr      virtErrors = nullptr;
     QSettings        settings;
-    ViewerToolBar   *viewerToolBar = NULL;
-    VM_State_Widget *vm_stateWdg = NULL;
+    ViewerToolBar   *viewerToolBar = nullptr;
+    VM_State_Widget *vm_stateWdg = nullptr;
     uint             timerId = 0;
     uint             killTimerId = 0;
     uint             counter = 0;
 
-    QVBoxLayout     *infoLayout = NULL;
-    QLabel          *icon = NULL, *msg = NULL;
-    QWidget         *info = NULL;
+    QVBoxLayout     *infoLayout = nullptr;
+    QLabel          *icon = nullptr, *msg = nullptr;
+    QWidget         *info = nullptr;
 
 signals:
     void             finished(QString&);

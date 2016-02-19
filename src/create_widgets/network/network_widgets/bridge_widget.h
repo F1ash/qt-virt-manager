@@ -8,7 +8,7 @@ class Bridge_Widget : public _Checked_Widget
     Q_OBJECT
 public:
     explicit Bridge_Widget(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString  tag = "Bridge");
     QLineEdit       *bridgeName;
     QCheckBox       *stp;

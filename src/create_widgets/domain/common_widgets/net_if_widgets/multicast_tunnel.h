@@ -10,8 +10,8 @@ class MultiCast_Tunnel : public _QWidget
     Q_OBJECT
 public:
     explicit MultiCast_Tunnel(
-            QWidget        *parent      = NULL,
-            virConnectPtr*  connPtrPtr  = NULL);
+            QWidget        *parent      = nullptr,
+            virConnectPtr*  connPtrPtr  = nullptr);
 
 private:
     QLabel          *addrLabel, *portLabel,

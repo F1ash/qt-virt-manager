@@ -165,8 +165,8 @@ void DirectAttachment::setDataDescription(QString &xmlDesc)
 /* private slots */
 void DirectAttachment::setAvailableSources()
 {
-    virNodeDevice  **nodeDevices = NULL;
-    if ( ptr_ConnPtr!=NULL ) {
+    virNodeDevice  **nodeDevices = nullptr;
+    if ( ptr_ConnPtr!=nullptr ) {
         unsigned int flags =
                 VIR_CONNECT_LIST_NODE_DEVICES_CAP_NET;
         int ret = virConnectListAllNodeDevices(*ptr_ConnPtr, &nodeDevices, flags);
@@ -174,7 +174,7 @@ void DirectAttachment::setAvailableSources()
             netSource->insertItem(0, "NetSource detect failed", "");
         } else {
             int i = 0;
-            while ( nodeDevices[i] != NULL ) {
+            while ( nodeDevices[i] != nullptr ) {
                 QDomDocument doc;
                 QString _dev, _interface;
                 // flags: extra flags; not used yet,

@@ -215,6 +215,6 @@ void VM_State_Widget::showTransformationModeMenu()
     tr_menu->exec();
     tr_mode = tr_menu->getMode();
     delete tr_menu;
-    tr_menu = NULL;
+    tr_menu = nullptr;
     emit transformationMode(tr_mode);
 }

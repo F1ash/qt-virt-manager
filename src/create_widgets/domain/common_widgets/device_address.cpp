@@ -47,7 +47,7 @@ DeviceAddress::DeviceAddress(QWidget *parent) :
 AttrList DeviceAddress::getAttrList() const
 {
     AttrList _ret;
-    if ( use->isChecked() && info!=NULL ) {
+    if ( use->isChecked() && info!=nullptr ) {
         // get attribute list from current address type
         _Addr *wdg = static_cast<_Addr*>(info->currentWidget());
         _ret = wdg->getAttrList();
@@ -77,6 +77,6 @@ void DeviceAddress::setCurrentAddrWidget(int i)
 void DeviceAddress::addressUsed(bool state)
 {
     type->setVisible(state);
-    if ( info!=NULL ) info->setVisible(state);
+    if ( info!=nullptr ) info->setVisible(state);
     emit dataChanged();
 }

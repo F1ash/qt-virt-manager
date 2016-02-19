@@ -6,7 +6,7 @@ QSpiceUsbDeviceManager::QSpiceUsbDeviceManager(
         QObject *parent, QSpiceSession *s) :
     QSpiceObject(parent)
 {
-    gobject = NULL;
+    gobject = nullptr;
     init(s);
 }
 
@@ -18,11 +18,11 @@ void QSpiceHelper::auto_connect_failed(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
-    if ( NULL==_manager ) return;
+    if ( nullptr==_manager ) return;
     QString err, dev;
     err.append(error->code);
     err.append(error->message);
-    gchar *dev_desc = spice_usb_device_get_description(device, NULL);
+    gchar *dev_desc = spice_usb_device_get_description(device, nullptr);
     dev.append(dev_desc);
     if ( dev_desc ) g_free(dev_desc);
     emit _manager->autoConnectFailed(dev, err);
@@ -35,9 +35,9 @@ void QSpiceHelper::device_added(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
-    if ( NULL==_manager ) return;
+    if ( nullptr==_manager ) return;
     QString dev;
-    gchar *dev_desc = spice_usb_device_get_description(device, NULL);
+    gchar *dev_desc = spice_usb_device_get_description(device, nullptr);
     dev.append(dev_desc);
     if ( dev_desc ) g_free(dev_desc);
     emit _manager->deviceAdded(dev);
@@ -51,11 +51,11 @@ void QSpiceHelper::device_error(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
-    if ( NULL==_manager ) return;
+    if ( nullptr==_manager ) return;
     QString err, dev;
     err.append(error->code);
     err.append(error->message);
-    gchar *dev_desc = spice_usb_device_get_description(device, NULL);
+    gchar *dev_desc = spice_usb_device_get_description(device, nullptr);
     dev.append(dev_desc);
     if ( dev_desc ) g_free(dev_desc);
     emit _manager->deviceInfo(dev, err);
@@ -68,9 +68,9 @@ void QSpiceHelper::device_removed(SpiceUsbDeviceManager *manager,
     Q_UNUSED(manager)
     QSpiceUsbDeviceManager *_manager =
             static_cast<QSpiceUsbDeviceManager *>(user_data);
-    if ( NULL==_manager ) return;
+    if ( nullptr==_manager ) return;
     QString dev;
-    gchar *dev_desc = spice_usb_device_get_description(device, NULL);
+    gchar *dev_desc = spice_usb_device_get_description(device, nullptr);
     dev.append(dev_desc);
     if ( dev_desc ) g_free(dev_desc);
     emit _manager->deviceRemoved(dev);
@@ -80,7 +80,7 @@ void QSpiceUsbDeviceManager::init(QSpiceSession *session)
 {
     SpiceSession *_session = static_cast<SpiceSession *>(session->gobject);
     if ( _session ) {
-        GError **err = NULL;
+        GError **err = nullptr;
         gobject = spice_usb_device_manager_get(_session, err);
         if ( gobject ) {
             g_signal_connect(gobject, "auto-connect-failed",
@@ -169,7 +169,7 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device_finish
         QString err;
         size_t count = sizeof(errors)/sizeof(*errors);
         for ( uint i = 0; i<count; i++ ) {
-            if ( NULL==errors[i] ) continue;
+            if ( nullptr==errors[i] ) continue;
             GError *error = errors[i];
             err.append(error->code);
             err.append(error->message);
@@ -195,14 +195,14 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
         dev.append(dev_desc);
         if ( dev_desc ) g_free(dev_desc);
         if ( dev.contains(_id) ) {
-            GError **errors = NULL;
+            GError **errors = nullptr;
             bool possibility = spice_usb_device_manager_can_redirect_device(
                         (SpiceUsbDeviceManager *)gobject, _dev, errors);
             if (!possibility) {
                 QString err;
                 size_t count = sizeof(errors)/sizeof(*errors);
                 for ( uint i = 0; i<count; i++ ) {
-                    if ( NULL==errors[i] ) continue;
+                    if ( nullptr==errors[i] ) continue;
                     GError *error = errors[i];
                     err.append(error->code);
                     err.append(error->message);
@@ -214,7 +214,7 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
             spice_usb_device_manager_connect_device_async(
                         (SpiceUsbDeviceManager *)gobject,
                         _dev,
-                        NULL,
+                        nullptr,
                         (GAsyncReadyCallback)spiceUsbDeviceManager_connect_device_finish,
                         this);
             QString _msg("connected to guest.");

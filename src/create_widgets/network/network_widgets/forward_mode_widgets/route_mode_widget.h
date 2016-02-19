@@ -7,7 +7,7 @@ class ROUTE_Mode_widget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit ROUTE_Mode_widget(QWidget *parent = 0);
+    explicit ROUTE_Mode_widget(QWidget *parent = nullptr);
 
 private:
     QVBoxLayout     *commonLayout;

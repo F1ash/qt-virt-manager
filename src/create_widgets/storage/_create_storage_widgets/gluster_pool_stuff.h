@@ -7,7 +7,7 @@ class Gluster_Pool_Stuff : public _Pool_Stuff
 {
     Q_OBJECT
 public:
-    explicit Gluster_Pool_Stuff(QWidget *parent = NULL);
+    explicit Gluster_Pool_Stuff(QWidget *parent = nullptr);
 
 signals:
 

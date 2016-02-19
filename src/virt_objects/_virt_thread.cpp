@@ -3,7 +3,7 @@
 _VirtThread::_VirtThread(QObject *parent, virConnectPtr *connPtrPtr) :
     QThread(parent), ptr_ConnPtr(connPtrPtr)
 {
-    virtErrors  = NULL;
+    virtErrors  = nullptr;
     keep_alive = false;
     number = 0;
 }
@@ -11,9 +11,9 @@ _VirtThread::~_VirtThread() {}
 QString _VirtThread::sendConnErrors()
 {
     QString msg;
-    virtErrors = (NULL!=ptr_ConnPtr && *ptr_ConnPtr)?
-                virConnGetLastError(*ptr_ConnPtr):NULL;
-    if ( virtErrors!=NULL && virtErrors->code>0 ) {
+    virtErrors = (nullptr!=ptr_ConnPtr && *ptr_ConnPtr)?
+                virConnGetLastError(*ptr_ConnPtr):nullptr;
+    if ( virtErrors!=nullptr && virtErrors->code>0 ) {
         msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
         emit errorMsg( msg, number );
@@ -26,7 +26,7 @@ QString _VirtThread::sendGlobalErrors()
 {
     QString msg;
     virtErrors = virGetLastError();
-    if ( virtErrors!=NULL && virtErrors->code>0 ) {
+    if ( virtErrors!=nullptr && virtErrors->code>0 ) {
         msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
         emit errorMsg( msg, number );

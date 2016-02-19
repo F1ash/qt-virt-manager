@@ -11,7 +11,7 @@ class VirtIfaceModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit VirtIfaceModel(QObject *parent = NULL);
+    explicit VirtIfaceModel(QObject *parent = nullptr);
     ~VirtIfaceModel();
     QList<Interface_Index *>  DataList;
     QIcon    activeIcon;

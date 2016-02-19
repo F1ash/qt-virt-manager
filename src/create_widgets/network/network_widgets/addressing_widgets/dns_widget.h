@@ -11,7 +11,7 @@ class DNS_Widget : public _Checked_Widget
     Q_OBJECT
 public:
     DNS_Widget(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString  tag = "DNS");
 
 private:

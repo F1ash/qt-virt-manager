@@ -10,7 +10,7 @@ class RestorePanel : public QWidget
 {
     Q_OBJECT
 public:
-    explicit RestorePanel(QWidget *parent = NULL);
+    explicit RestorePanel(QWidget *parent = nullptr);
 
 signals:
     void             saveData();

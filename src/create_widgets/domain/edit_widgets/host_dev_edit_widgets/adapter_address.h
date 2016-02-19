@@ -11,7 +11,7 @@ class AdapterAddress : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AdapterAddress(QWidget *parent = 0);
+    explicit AdapterAddress(QWidget *parent = nullptr);
     QCheckBox           *adapterAddr;
     QSpinBox            *bus, *target, *unit;
 

@@ -48,14 +48,14 @@ QDomDocument DeviceData::getResult() const
 {
     //qDebug()<<"DeviceData result";
     QDomDocument doc;
-    if ( device!=NULL ) {
+    if ( device!=nullptr ) {
         doc = device->getDataDocument();
     };
     return doc;
 }
 void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
 {
-    if ( device!=NULL ) closeDataEdit();
+    if ( device!=nullptr ) closeDataEdit();
     devName->setText(QString("<b>%1</b>").arg(deviceName));
     QDomDocument doc;
     doc.setContent(xmlDesc);
@@ -76,9 +76,9 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
                     this,
                     ptr_ConnPtr);
     } else if ( deviceType == "serial" ) {
-        device = new CharDevice_Edit(this, NULL, NULL, deviceType);
+        device = new CharDevice_Edit(this, nullptr, nullptr, deviceType);
     } else if ( deviceType == "parallel" ) {
-        device = new CharDevice_Edit(this, NULL, NULL, deviceType);
+        device = new CharDevice_Edit(this, nullptr, nullptr, deviceType);
     } else if ( deviceType == "channel" ) {
         device = new ChannelDevice(this);
     } else if ( deviceType == "console" ) {
@@ -144,19 +144,19 @@ void DeviceData::closeDataEdit()
         } else
             setStartState();
     };
-    if ( NULL!=device && changed ) {
+    if ( nullptr!=device && changed ) {
         QString xmlDesc = currentDeviceXMLDesc;
         int row = currentItemRow;
         setStartState();
         emit saveDeviceXMLDesc(row, xmlDesc);
         //qDebug()<<"emited"<<devName->text();
     };
-    if ( NULL!=device ) {
+    if ( nullptr!=device ) {
         infoLayout->removeWidget(device);
         //disconnect(device, SIGNAL(dataChanged()),
         //           this, SLOT(currentStateChanged()));
         delete device;
-        device = NULL;
+        device = nullptr;
     };
 }
 
@@ -170,7 +170,7 @@ void DeviceData::currentStateChanged()
 void DeviceData::saveDeviceData()
 {
     // save device data as previous state
-    if ( NULL!=device ) {
+    if ( nullptr!=device ) {
         currentDeviceXMLDesc = device->getDataDocument().toString();
     };
     currentStateSaved = true;
@@ -178,7 +178,7 @@ void DeviceData::saveDeviceData()
 }
 void DeviceData::revertDeviceData()
 {
-    if ( NULL==device ) return;
+    if ( nullptr==device ) return;
     QAction *act = static_cast<QAction*>(sender());
     if ( act==restoreMenu->revertData ) {
         // revert device data from previous state

@@ -4,7 +4,7 @@
 
 QSpicePlaybackChannel::~QSpicePlaybackChannel()
 {
-    if ( audioOutput!=NULL ) {
+    if ( audioOutput!=nullptr ) {
         //qDebug()<<"~QSpicePlaybackChannel";
         // close the buffer before audioOutput stopped
         if ( _dev && _dev->isOpen() ) _dev->close();
@@ -20,9 +20,9 @@ void QSpiceHelper::playback_data(SpicePlaybackChannel *channel,
     Q_UNUSED(channel);
     QSpicePlaybackChannel *_playback =
             static_cast<QSpicePlaybackChannel*>(user_data);
-    if ( NULL==_playback ) return;
-    if ( _playback->audioOutput!=NULL ) {
-        if ( _playback->_dev!=NULL ) {
+    if ( nullptr==_playback ) return;
+    if ( _playback->audioOutput!=nullptr ) {
+        if ( _playback->_dev!=nullptr ) {
             bool opened = (_playback->_dev->isOpen())?
                         true :
                         _playback->_dev->open(QIODevice::WriteOnly);
@@ -42,8 +42,8 @@ void QSpiceHelper::playback_get_delay(SpicePlaybackChannel *channel,
     Q_UNUSED(channel);
     QSpicePlaybackChannel *_playback =
             static_cast<QSpicePlaybackChannel*>(user_data);
-    if ( NULL==_playback ) return;
-    if ( _playback->audioOutput!=NULL ) {
+    if ( nullptr==_playback ) return;
+    if ( _playback->audioOutput!=nullptr ) {
         //qDebug()<<"playback_get_delay";
         /*
         if ( _playback->audioOutput->state()==QAudio::ActiveState ) {
@@ -64,7 +64,7 @@ void QSpiceHelper::playback_start(SpicePlaybackChannel *channel,
     if ( SPICE_AUDIO_FMT_S16!=format ) return;
     QSpicePlaybackChannel *_playback =
             static_cast<QSpicePlaybackChannel*>(user_data);
-    if ( NULL==_playback ) return;
+    if ( nullptr==_playback ) return;
     _playback->audioFormat.setChannelCount(channels);
     _playback->audioFormat.setSampleRate(rate);
     QAudioDeviceInfo info(QAudioDeviceInfo::defaultInputDevice());
@@ -72,7 +72,7 @@ void QSpiceHelper::playback_start(SpicePlaybackChannel *channel,
         qWarning()<<"default format not supported, try to use nearest";
         _playback->audioFormat = info.nearestFormat(_playback->audioFormat);
     };
-    if ( _playback->audioOutput==NULL ) {
+    if ( _playback->audioOutput==nullptr ) {
         _playback->audioOutput = new QAudioOutput(
                     _playback->audioFormat, _playback);
         //qDebug()<<"playback_start"<<_playback->audioOutput;
@@ -90,7 +90,7 @@ void QSpiceHelper::playback_stop(SpicePlaybackChannel *channel,
     Q_UNUSED(channel);
     QSpicePlaybackChannel *_playback =
             static_cast<QSpicePlaybackChannel*>(user_data);
-    if ( NULL==_playback ) return;
+    if ( nullptr==_playback ) return;
     //qDebug()<<"playback_stop";
 }
 

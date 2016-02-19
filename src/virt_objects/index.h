@@ -7,7 +7,7 @@ class Index : public QObject
 {
     Q_OBJECT
 public:
-    explicit Index(QObject *parent = NULL);
+    explicit Index(QObject *parent = nullptr);
 
 signals:
 

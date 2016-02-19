@@ -9,8 +9,8 @@ class QSpiceUsbDeviceManager : public QSpiceObject
     Q_OBJECT
 public:
     explicit QSpiceUsbDeviceManager(
-            QObject        *parent  = 0,
-            QSpiceSession  *s       = 0);
+            QObject        *parent  = nullptr,
+            QSpiceSession  *s       = nullptr);
 
     QStringList spiceUsbDeviceManager_get_devices();
     QStringList spiceUsbDeviceManager_get_devices_with_filter

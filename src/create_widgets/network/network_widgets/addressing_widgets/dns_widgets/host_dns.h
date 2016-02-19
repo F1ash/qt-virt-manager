@@ -8,7 +8,7 @@ class Host_DNS : public _List_Widget
     Q_OBJECT
 public:
     Host_DNS(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString  tag = "HOSTs");
 
 private:

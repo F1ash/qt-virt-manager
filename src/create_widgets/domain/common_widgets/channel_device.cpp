@@ -1,7 +1,7 @@
 #include "channel_device.h"
 
 ChannelDevice::ChannelDevice(QWidget *parent) :
-    CharDevice(parent, NULL, NULL, QString("channel"))
+    CharDevice(parent, nullptr, nullptr, QString("channel"))
 {
     devType->insertItem(6, "Spice Agent", "spicevmc");
     devType->insertItem(7, "Spice WebDAV", "spiceport");
@@ -29,7 +29,7 @@ QDomDocument ChannelDevice::getDataDocument() const
 {
     QDomDocument doc;
     CharDevice *wdg = static_cast<CharDevice*>(charDevWdg->currentWidget());
-    if ( NULL!=wdg ) doc = wdg->getDataDocument();
+    if ( nullptr!=wdg ) doc = wdg->getDataDocument();
     if ( doc.isNull() ) {
         QDomElement _device, _devDesc;
         _device = doc.createElement("device");

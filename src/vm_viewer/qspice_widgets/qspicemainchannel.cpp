@@ -47,21 +47,21 @@ static char* spice_convert_newlines(const gchar *str, gssize len,
                                      NewlineType to,
                                      GError **error)
 {
-    GError *err = NULL;
+    GError *err = nullptr;
     gssize length;
     gsize nl;
     GString *output;
     gboolean free_segment = FALSE;
     gint i;
 
-    g_return_val_if_fail(str != NULL, NULL);
-    g_return_val_if_fail(len >= -1, NULL);
-    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
+    g_return_val_if_fail(str != nullptr, nullptr);
+    g_return_val_if_fail(len >= -1, nullptr);
+    g_return_val_if_fail(error == nullptr || *error == nullptr, nullptr);
     /* only 2 supported combinations */
     g_return_val_if_fail((from == NEWLINE_TYPE_LF &&
                           to == NEWLINE_TYPE_CR_LF) ||
                          (from == NEWLINE_TYPE_CR_LF &&
-                          to == NEWLINE_TYPE_LF), NULL);
+                          to == NEWLINE_TYPE_LF), nullptr);
 
     if (len == -1)
         len = strlen(str);
@@ -107,7 +107,7 @@ void QSpiceHelper::main_agent_update(SpiceMainChannel *spicemainchannel, gpointe
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
-    if ( NULL==_mainchannel ) return;
+    if ( nullptr==_mainchannel ) return;
     emit _mainchannel->main_AgentUpdate();
 }
 void QSpiceHelper::main_clipboard_selection(SpiceMainChannel *spicemainchannel,
@@ -120,7 +120,7 @@ void QSpiceHelper::main_clipboard_selection(SpiceMainChannel *spicemainchannel,
     Q_UNUSED(spicemainchannel)
     Q_UNUSED(selection)
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
-    if ( NULL==_mainchannel ) return;
+    if ( nullptr==_mainchannel ) return;
     emit _mainchannel->main_ClipboardSelection(type, (void*)data, size);
 }
 void QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *spicemainchannel,
@@ -132,7 +132,7 @@ void QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *spicemainchan
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
-    if ( NULL==_mainchannel ) return;
+    if ( nullptr==_mainchannel ) return;
     emit _mainchannel->main_ClipboardSelectionGrab(selection, (void*)types, ntypes);
 }
 void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *spicemainchannel,
@@ -142,7 +142,7 @@ void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *spicemainc
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
-    if ( NULL==_mainchannel ) return;
+    if ( nullptr==_mainchannel ) return;
     emit _mainchannel->main_ClipboardSelectionRelease(selection);
 }
 void QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainchannel,
@@ -153,7 +153,7 @@ void QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainc
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
-    if ( NULL==_mainchannel ) return;
+    if ( nullptr==_mainchannel ) return;
     emit _mainchannel->main_ClipboardSelectionRequest(selection, types);
 }
 void QSpiceHelper::main_mouse_update(SpiceMainChannel *spicemainchannel, gpointer user_data)
@@ -161,7 +161,7 @@ void QSpiceHelper::main_mouse_update(SpiceMainChannel *spicemainchannel, gpointe
     Q_UNUSED(spicemainchannel)
 
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
-    if ( NULL==_mainchannel ) return;
+    if ( nullptr==_mainchannel ) return;
     emit _mainchannel->main_MouseUpdate();
 }
 
@@ -212,12 +212,12 @@ void QSpiceMainChannel::mainClipboardSelectionNotify(quint32 type, const uchar *
 {
     //qDebug()<<"mainClipboardSelectionNotify";
     /*
-    gpointer conv = NULL;
+    gpointer conv = nullptr;
     gint len = 0;
     if (spice_main_agent_test_capability(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CAP_GUEST_LINEEND_CRLF)) {
-        GError *err = NULL;
+        GError *err = nullptr;
 
         conv = spice_convert_newlines(
                     (char*)data,
@@ -289,7 +289,7 @@ void QSpiceMainChannel::mainFileCopyAsync(QStringList &fileNames)
         sources[i] = g_file_new_for_path(_path.toUtf8().constData());
         i++;
     };
-    sources[i] = NULL;
+    sources[i] = nullptr;
     //qDebug()<<"SpiceMainChannel"<<this->gobject;
     GCancellable *cancellable = g_cancellable_new();
     spice_main_file_copy_async(
@@ -315,7 +315,7 @@ void QSpiceMainChannel::mainFileCopyFinish(void *channel, void *result, void *er
                 g_async_result_get_user_data(asyncResult));
     size_t count = sizeof(errors)/sizeof(*errors);
     for ( uint i = 0; i<count; i++ ) {
-        if ( NULL==errors[i] ) continue;
+        if ( nullptr==errors[i] ) continue;
         //qDebug()<<errors[i]->code<< QString::fromUtf8(errors[i]->message);
         if (obj) emit obj->downloaded(0, 100);
     };

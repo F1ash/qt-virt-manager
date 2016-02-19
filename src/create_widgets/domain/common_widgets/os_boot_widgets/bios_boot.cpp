@@ -247,7 +247,7 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
     for (int i=_unexist.count(); i>0; i--) {
         QListWidgetItem *_item = bootDevices->devices->takeItem(_unexist.at(i-1));
         delete _item;
-        _item = NULL;
+        _item = nullptr;
     };
     // append new bootable devices
     for (int i=0; i<_bootable.count(); i++) {

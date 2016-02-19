@@ -22,7 +22,7 @@ _IP_Widget::_IP_Widget(
             this, SLOT(ipv6StateChanged(bool)));
     for (int i=0; i<sets->count(); i++) {
         _IPvX *wdg = static_cast<_IPvX*>(sets->widget(i));
-        if ( NULL==wdg ) continue;
+        if ( nullptr==wdg ) continue;
         connect(staticRoute, SIGNAL(toggled(bool)),
                 wdg, SLOT(setStaticRouteMode(bool)));
         connect(wdg, SIGNAL(dhcpUsageChanged()),
@@ -42,7 +42,7 @@ QDomDocument _IP_Widget::getDataDocument() const
         if ( ipv6->isChecked() )
             _addrElement.setAttribute("family", "ipv6");
         _IPvX *wdg = static_cast<_IPvX*>(sets->currentWidget());
-        if ( NULL!=wdg ) {
+        if ( nullptr!=wdg ) {
             _addrElement.setAttribute(
                         "address",
                         wdg->address->text());
@@ -60,7 +60,7 @@ QDomDocument _IP_Widget::getDataDocument() const
         if ( ipv6->isChecked() )
             _addrElement.setAttribute("family", "ipv6");
         _IPvX *wdg = static_cast<_IPvX*>(sets->currentWidget());
-        if ( NULL!=wdg ) {
+        if ( nullptr!=wdg ) {
             _addrElement.setAttribute(
                         "address",
                         wdg->address->text());
@@ -78,7 +78,7 @@ void _IP_Widget::updateDHCPUsage()
 {
     for (int i=0; i<sets->count(); i++) {
         _IPvX *wdg = static_cast<_IPvX*>(sets->widget(i));
-        if ( NULL==wdg ) continue;
+        if ( nullptr==wdg ) continue;
         wdg->updateDHCPUsage();
     };
 }
@@ -89,5 +89,5 @@ void _IP_Widget::ipv6StateChanged(bool state)
     sets->setCurrentIndex( (state)? 1:0 );
     _IPvX *wdg = static_cast<_IPvX*>(
                 sets->widget( (state)? 0:1 ));
-    if ( NULL!=wdg ) wdg->setDHCPState(false);
+    if ( nullptr!=wdg ) wdg->setDHCPState(false);
 }

@@ -26,11 +26,10 @@ class CreateSnapshotDialog : public QDialog
     Q_OBJECT
 public:
     explicit CreateSnapshotDialog(
-            QWidget        *parent      = NULL,
+            QWidget        *parent      = nullptr,
             QString         domainName  = QString(),
             bool            _state      = false,
-            virConnectPtr*  connPtrPtr     = NULL);
-
+            virConnectPtr*  connPtrPtr  = nullptr);
 signals:
     void             errMsg(QString&);
 
@@ -54,7 +53,7 @@ private:
     QHBoxLayout     *typeLayout;
     QPushButton     *flags;
     CreateSnapshotFlags
-                    *flagsMenu = NULL;
+                    *flagsMenu = nullptr;
     QSettings        settings;
 
 public slots:

@@ -12,8 +12,8 @@ class _VirtThread : public QThread
     Q_OBJECT
 public:
     explicit _VirtThread(
-            QObject        *parent      = NULL,
-            virConnectPtr  *connPtrPtr  = NULL);
+            QObject        *parent      = nullptr,
+            virConnectPtr  *connPtrPtr  = nullptr);
     virtual ~_VirtThread()              = 0;
     bool             keep_alive;
     uint             number;

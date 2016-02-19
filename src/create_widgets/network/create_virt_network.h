@@ -19,7 +19,7 @@ class CreateVirtNetwork : public QDialog
     Q_OBJECT
 public:
     explicit CreateVirtNetwork(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             Actions  _act   = _EMPTY_ACTION);
     ~CreateVirtNetwork();
 

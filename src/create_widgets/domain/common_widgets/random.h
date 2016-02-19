@@ -8,7 +8,7 @@ class Random : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit Random(QWidget *parent = NULL);
+    explicit Random(QWidget *parent = nullptr);
     QComboBox       *model, *bkModel;
     QCheckBox       *rate;
     QSpinBox        *period, *bytes;

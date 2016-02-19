@@ -7,7 +7,7 @@ class Dir_Pool_Stuff : public _Pool_Stuff
 {
     Q_OBJECT
 public:
-    explicit Dir_Pool_Stuff(QWidget *parent = NULL);
+    explicit Dir_Pool_Stuff(QWidget *parent = nullptr);
 
 signals:
 

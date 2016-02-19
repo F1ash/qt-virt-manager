@@ -91,7 +91,7 @@ void MainWindow::saveSettings()
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
     if ( !this->isVisible() ) changeVisibility();
-    if ( runningConnExist() && wait_thread==NULL ) {
+    if ( runningConnExist() && wait_thread==nullptr ) {
         connListWidget->setEnabled(false);
         toolBar->setEnabled(false);
         logDock->setEnabled(false);
@@ -105,17 +105,17 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         // close VM Displays
         QStringList keys(VM_Displayed_Map.keys());
         foreach ( QString key, keys ) {
-            if ( VM_Displayed_Map.value(key, NULL)!=NULL ) {
-                VM_Viewer *value = NULL;
-                QString _type = VM_Displayed_Map.value(key, NULL)->TYPE.toUpper();
+            if ( VM_Displayed_Map.value(key, nullptr)!=nullptr ) {
+                VM_Viewer *value = nullptr;
+                QString _type = VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
                 if ( _type=="LXC" ) {
                     value = static_cast<LXC_Viewer*>(
-                                VM_Displayed_Map.value(key, NULL));
+                                VM_Displayed_Map.value(key, nullptr));
                 } else if ( _type=="SPICE" ) {
                     value = static_cast<Spice_Viewer*>(
-                                VM_Displayed_Map.value(key, NULL));
+                                VM_Displayed_Map.value(key, nullptr));
                 };
-                if ( NULL!=value ) value->close();
+                if ( nullptr!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -124,11 +124,11 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         // close StorageVolControls
         keys = Overviewed_StPool_Map.keys();
         foreach ( QString key, keys ) {
-            if ( Overviewed_StPool_Map.value(key, NULL)!=NULL ) {
-                VirtStorageVolControl *value = NULL;
+            if ( Overviewed_StPool_Map.value(key, nullptr)!=nullptr ) {
+                VirtStorageVolControl *value = nullptr;
                 value = static_cast<VirtStorageVolControl*>(
-                                Overviewed_StPool_Map.value(key, NULL));
-                if ( NULL!=value ) value->close();
+                                Overviewed_StPool_Map.value(key, nullptr));
+                if ( nullptr!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -137,11 +137,11 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         // close DomainEditors
         keys = DomainEditor_Map.keys();
         foreach ( QString key, keys ) {
-            if ( DomainEditor_Map.value(key, NULL)!=NULL ) {
-                CreateVirtDomain *value = NULL;
+            if ( DomainEditor_Map.value(key, nullptr)!=nullptr ) {
+                CreateVirtDomain *value = nullptr;
                 value = static_cast<CreateVirtDomain*>(
-                                DomainEditor_Map.value(key, NULL));
-                if ( NULL!=value ) value->close();
+                                DomainEditor_Map.value(key, nullptr));
+                if ( nullptr!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -155,14 +155,14 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         ev->ignore();
         startCloseProcess();
     } else if ( !runningConnExist() &&
-                (wait_thread==NULL || !wait_thread->isRunning()) ) {
+                (wait_thread==nullptr || !wait_thread->isRunning()) ) {
         saveSettings();
         taskWrHouse->hide();
         domainsStateMonitor->hide();
         trayIcon->hide();
         ev->accept();
     } else {
-        //  ( wait_thread!=NULL || wait_thread->isRunning() )
+        //  ( wait_thread!=nullptr || wait_thread->isRunning() )
         ev->ignore();
     };
 }
@@ -628,7 +628,7 @@ void MainWindow::closeConnGenerations(int i)
     ConnItemIndex *idx = static_cast<ConnItemIndex*>(
                 connListWidget->connItemModel->
                 connItemDataList.at(i));
-    if ( idx!=NULL ) {
+    if ( idx!=nullptr ) {
         QString conn_to_close = idx->getName();
         closeConnGenerations(conn_to_close);
     };
@@ -770,11 +770,11 @@ void MainWindow::invokeVMDisplay(TASK _task)
         if ( type.toLower()=="lxc" ) {
             VM_Displayed_Map.insert(
                         key,
-                        new LXC_Viewer(NULL, connPtrPtr, connName, domName));
+                        new LXC_Viewer(nullptr, connPtrPtr, connName, domName));
         } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
             VM_Displayed_Map.insert(
                         key,
-                        new Spice_Viewer(NULL, connPtrPtr, connName, domName));
+                        new Spice_Viewer(nullptr, connPtrPtr, connName, domName));
         } else {
             QMessageBox::information(
                         this,
@@ -792,7 +792,7 @@ void MainWindow::invokeVMDisplay(TASK _task)
         VM_Displayed_Map.value(key)->show();
     } else {
         //qDebug()<<key<<"vm invoked"<<"exist";
-        if ( VM_Displayed_Map.value(key)!=NULL )
+        if ( VM_Displayed_Map.value(key)!=nullptr )
             VM_Displayed_Map.value(key)->show();
         else VM_Displayed_Map.remove(key);
     };
@@ -800,18 +800,18 @@ void MainWindow::invokeVMDisplay(TASK _task)
 void MainWindow::deleteVMDisplay(QString &key)
 {
     if ( VM_Displayed_Map.contains(key) ) {
-        VM_Viewer *value = NULL;
-        QString _type = VM_Displayed_Map.value(key, NULL)->TYPE.toUpper();
+        VM_Viewer *value = nullptr;
+        QString _type = VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
         if ( _type=="LXC" ) {
             value = static_cast<LXC_Viewer*>(
-                        VM_Displayed_Map.value(key, NULL));
+                        VM_Displayed_Map.value(key, nullptr));
         } else if ( _type=="SPICE" ) {
             value = static_cast<Spice_Viewer*>(
-                        VM_Displayed_Map.value(key, NULL));
+                        VM_Displayed_Map.value(key, nullptr));
         };
-        if ( NULL!=value ) {
+        if ( nullptr!=value ) {
             delete value;
-            value = NULL;
+            value = nullptr;
         };
         VM_Displayed_Map.remove(key);
     }
@@ -819,7 +819,7 @@ void MainWindow::deleteVMDisplay(QString &key)
 void MainWindow::buildMigrateArgs(TASK _task)
 {
     virConnectPtr *namedConnect = connListWidget->getPtr_connectionPtr(_task.args.path);
-    if ( NULL!=namedConnect ) {
+    if ( nullptr!=namedConnect ) {
         domainDockContent->execMigrateAction(namedConnect, _task);
     }
 }
@@ -843,7 +843,7 @@ void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connNam
                 Overviewed_StPool_Map.value(key), SLOT(resultReceiver(Result)));
         Overviewed_StPool_Map.value(key)->setCurrentStoragePool(connPtrPtr, connName, poolName);
     };
-    if ( Overviewed_StPool_Map.value(key)!=NULL ) {
+    if ( Overviewed_StPool_Map.value(key)!=nullptr ) {
         Overviewed_StPool_Map.value(key)->show();
         Overviewed_StPool_Map.value(key)->setFocus();
     } else
@@ -852,12 +852,12 @@ void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connNam
 void MainWindow::deleteStPoolOverview(QString &key)
 {
     if ( Overviewed_StPool_Map.contains(key) ) {
-        VirtStorageVolControl *value = NULL;
+        VirtStorageVolControl *value = nullptr;
         value = static_cast<VirtStorageVolControl*>(
-                        Overviewed_StPool_Map.value(key, NULL));
-        if ( NULL!=value ) {
+                        Overviewed_StPool_Map.value(key, nullptr));
+        if ( nullptr!=value ) {
             delete value;
-            value = NULL;
+            value = nullptr;
         };
         Overviewed_StPool_Map.remove(key);
     };
@@ -870,7 +870,7 @@ void MainWindow::invokeDomainEditor(TASK _task)
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( !DomainEditor_Map.contains(key) ) {
-        DomainEditor_Map.insert(key, new CreateVirtDomain(NULL, _task));
+        DomainEditor_Map.insert(key, new CreateVirtDomain(nullptr, _task));
         DomainEditor_Map.value(key)->setObjectName(key);
         DomainEditor_Map.value(key)->setWindowTitle(
                     QString("VM Settings / <%1> in [%2]")
@@ -882,7 +882,7 @@ void MainWindow::invokeDomainEditor(TASK _task)
         connect(DomainEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
     };
-    if ( DomainEditor_Map.value(key)!=NULL ) {
+    if ( DomainEditor_Map.value(key)!=nullptr ) {
         DomainEditor_Map.value(key)->show();
         DomainEditor_Map.value(key)->setFocus();
     } else
@@ -891,12 +891,12 @@ void MainWindow::invokeDomainEditor(TASK _task)
 void MainWindow::deleteDomainEditor(QString &key)
 {
     if ( DomainEditor_Map.contains(key) ) {
-        CreateVirtDomain *value = NULL;
+        CreateVirtDomain *value = nullptr;
         value = static_cast<CreateVirtDomain*>(
-                        DomainEditor_Map.value(key, NULL));
-        if ( NULL!=value ) {
+                        DomainEditor_Map.value(key, nullptr));
+        if ( nullptr!=value ) {
             delete value;
-            value = NULL;
+            value = nullptr;
         };
         DomainEditor_Map.remove(key);
     };

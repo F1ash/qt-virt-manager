@@ -17,8 +17,8 @@ class HelperThread : public _VirtThread
     Q_OBJECT
 public:
     explicit HelperThread(
-            QObject        *parent      = NULL,
-            virConnectPtr  *connPtrPtr  = NULL);
+            QObject        *parent      = nullptr,
+            virConnectPtr  *connPtrPtr  = nullptr);
     void             run();
 signals:
     void             result(QString&);
@@ -31,7 +31,7 @@ class CreateVirtDomain : public QMainWindow
     Q_OBJECT
 public:
     explicit CreateVirtDomain(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             TASK     _task  = TASK());
     ~CreateVirtDomain();
 
@@ -42,12 +42,12 @@ signals:
 
 private:
     QSettings        settings;
-    virConnectPtr*   ptr_ConnPtr = NULL;
+    virConnectPtr*   ptr_ConnPtr = nullptr;
     QString          xmlFileName, xmlDesc;
     virErrorPtr      virtErrors;
     QString          capabilities;
     QString          type;
-    QTabWidget      *tabWidget = NULL;
+    QTabWidget      *tabWidget = nullptr;
     //QCheckBox       *showDescription;
     QLabel          *about;
     QPushButton     *ok;
@@ -57,13 +57,13 @@ private:
     QHBoxLayout     *buttonLayout;
     QVBoxLayout     *commonLayout;
 
-    QTemporaryFile  *xml = NULL;
+    QTemporaryFile  *xml = nullptr;
     WidgetList       wdgList;
     bool             ready = false;
     TASK             task;
 
     HelperThread    *helperThread;
-    QWidget         *baseWdg = NULL;
+    QWidget         *baseWdg = nullptr;
 
 public slots:
     void             closeEvent(QCloseEvent*);

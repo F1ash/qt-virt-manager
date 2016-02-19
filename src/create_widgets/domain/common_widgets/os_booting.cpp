@@ -72,7 +72,7 @@ QDomDocument OS_Booting::getDataDocument() const
 {
     QDomDocument doc;
     _QWidget *wdg = static_cast<_QWidget*>(bootSet->currentWidget());
-    if ( NULL!=wdg ) doc = wdg->getDataDocument();
+    if ( nullptr!=wdg ) doc = wdg->getDataDocument();
     QDomElement _os, _type;
     _os = doc
             .firstChildElement("data")
@@ -101,7 +101,7 @@ QDomDocument OS_Booting::getDataDocument() const
 void OS_Booting::searchBootableDevices(QDomDocument &_doc)
 {
     BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
-    if ( NULL!=wdg ) wdg->searchBootableDevices(_doc);
+    if ( nullptr!=wdg ) wdg->searchBootableDevices(_doc);
 }
 BootOrderList OS_Booting::getBootOrder() const
 {
@@ -110,7 +110,7 @@ BootOrderList OS_Booting::getBootOrder() const
     if ( idx==0 ) {
         BIOS_Boot *wdg = static_cast<BIOS_Boot*>(
                     bootSet->currentWidget());
-        if ( NULL!=wdg ) {
+        if ( nullptr!=wdg ) {
             _ret = wdg->getBootOrderData();
         };
     };

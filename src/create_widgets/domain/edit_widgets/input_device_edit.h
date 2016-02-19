@@ -7,7 +7,7 @@ class InputDevice_Edit : public InputDevice
 {
     Q_OBJECT
 public:
-    explicit InputDevice_Edit(QWidget *parent = NULL);
+    explicit InputDevice_Edit(QWidget *parent = nullptr);
 
 signals:
 

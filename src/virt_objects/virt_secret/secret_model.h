@@ -11,7 +11,7 @@ class VirtSecretModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit VirtSecretModel(QObject *parent = NULL);
+    explicit VirtSecretModel(QObject *parent = nullptr);
     ~VirtSecretModel();
     QList<Secret_Index *>  DataList;
     QIcon    defined;

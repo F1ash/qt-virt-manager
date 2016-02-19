@@ -11,8 +11,8 @@ class SCSI_Host_Device_Edit : public _QWidget
     Q_OBJECT
 public:
     explicit SCSI_Host_Device_Edit(
-            QWidget        *parent      = NULL,
-            virConnectPtr*  connPtrPtr  = NULL);
+            QWidget        *parent      = nullptr,
+            virConnectPtr*  connPtrPtr  = nullptr);
 
 private:
     QLabel              *info, *infoText;

@@ -15,7 +15,7 @@ void Wait::run()
         QStringList to_Delete;
         for (int i=0; i<count; i++) {
             ConnItemIndex *idx = wdg->connItemModel->connItemDataList.at(i);
-            if ( NULL==idx ) continue;
+            if ( nullptr==idx ) continue;
             DATA _data = idx->getData();
             ConnElement *el = static_cast<ConnElement*>(
                         wdg->connections->value(idx->getName()));
@@ -27,7 +27,7 @@ void Wait::run()
                 to_Delete.append(idx->getName());
                 break;
             case RUNNING:
-                if ( NULL!=el ) el->closeConnection();
+                if ( nullptr!=el ) el->closeConnection();
                 break;
             case CONNECT:
                 // undefined, still waiting to close the opening of connection
@@ -39,10 +39,10 @@ void Wait::run()
         foreach (QString key, to_Delete) {
             ConnElement *el = static_cast<ConnElement*>(
                         wdg->connections->value(key));
-            if ( NULL!=el ) {
+            if ( nullptr!=el ) {
                 QString _name = el->getName();
                 int count = wdg->connItemModel->rowCount();
-                ConnItemIndex *idx = NULL;
+                ConnItemIndex *idx = nullptr;
                 for (int i=0; i<count; i++) {
                     idx = wdg->connItemModel->connItemDataList.at(i);
                     if ( idx->getName()==_name ) {

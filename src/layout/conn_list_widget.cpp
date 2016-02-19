@@ -52,7 +52,7 @@ int  ConnectionList::connItemEditAction()
     if ( exitCode==QDialog::Accepted && !idx->getData().value("isRunning").toBool() ) {
         QString key = idx->getName();
         ConnElement *conn = static_cast<ConnElement*>(connections->value(key));
-        if ( NULL!=conn ) {
+        if ( nullptr!=conn ) {
             conn->buildURI();
         };
     };
@@ -145,7 +145,7 @@ void ConnectionList::showConnection(QModelIndex &_item)
         int conn_state;
         bool conn_availability;
         ConnItemIndex *idx = connItemModel->connItemDataList.at(i);
-        if ( idx==NULL ) return;
+        if ( idx==nullptr ) return;
         QString _name = idx->getName();
         ConnElement *conn;
         conn = connections->value(_name);
@@ -171,13 +171,13 @@ virConnectPtr* ConnectionList::getPtr_connectionPtr(QString &name)
     //qDebug()<<name<<connections->contains(name);
     return (connections->contains(name)) ?
             connections->value(name)->getPtr_connectionPtr()
-            : NULL;
+            : nullptr;
 }
 void ConnectionList::stopProcessing()
 {
     for (int i=0; i<connections->count(); i++) {
         ConnItemIndex *idx = connItemModel->connItemDataList.at(i);
-        if ( idx==NULL ) return;
+        if ( idx==nullptr ) return;
         QString _name = idx->getName();
         ConnElement *conn;
         conn = connections->value(_name);
@@ -252,7 +252,7 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
   conn_Status = idx->getData();
   QString key = conn_Status.value(QString("initName")).toString();
   ConnElement *conn = static_cast<ConnElement*>(connections->value(key));
-  if ( NULL==conn ) {
+  if ( nullptr==conn ) {
       clearSelection();
       return;
   };
@@ -413,7 +413,7 @@ void ConnectionList::sendConnPtrPtr(virConnectPtr *_connPtrPtr, QString &name)
 void ConnectionList::getAuthCredentials(QString &crd)
 {
     ConnElement *obj = static_cast<ConnElement*>(sender());
-    if ( NULL==obj ) return;
+    if ( nullptr==obj ) return;
     QString text;
     QLineEdit::EchoMode mode = (crd.toLower()=="password") ?
                 QLineEdit::PasswordEchoOnEdit :

@@ -7,7 +7,7 @@ class RDP_Graphics : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit RDP_Graphics(QWidget *parent = NULL);
+    explicit RDP_Graphics(QWidget *parent = nullptr);
 
 private:
     QCheckBox       *autoPort;

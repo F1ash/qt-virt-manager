@@ -9,7 +9,7 @@ class PciAddr : public _Addr
 {
     Q_OBJECT
 public:
-    explicit PciAddr(QWidget *parent = NULL);
+    explicit PciAddr(QWidget *parent = nullptr);
     QLineEdit       *domain;
     QLineEdit       *bus;
     QLineEdit       *slot;

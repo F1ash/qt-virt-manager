@@ -42,7 +42,7 @@ QDomDocument _Disks::getElements(bool all) const
     for (int i=0; i<disksLayout->count(); i++) {
         _DiskItem *wdg = static_cast<_DiskItem*>(
                     disksLayout->itemAt(i)->widget());
-        if ( wdg==NULL ) continue;
+        if ( wdg==nullptr ) continue;
         QDomElement _disk = doc.createElement("disk");
         if ( wdg->isUsed() || all ) {
             _disk.setAttribute("name", wdg->getName());

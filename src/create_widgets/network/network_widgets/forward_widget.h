@@ -16,7 +16,7 @@ class Forward_Widget : public _Checked_Widget
     Q_OBJECT
 public:
     explicit Forward_Widget(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString  tag = "Forwards");
     QComboBox       *mode;
     QCheckBox       *devLabel;

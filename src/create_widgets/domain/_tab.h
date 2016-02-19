@@ -9,7 +9,7 @@ class _Tab : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit _Tab(QWidget *parent = 0);
+    explicit _Tab(QWidget *parent = nullptr);
     bool             currentStateSaved = true;
     QString          currentDeviceXMLDesc;
     RestorePanel    *restorePanel;

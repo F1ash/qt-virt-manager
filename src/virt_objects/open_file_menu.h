@@ -14,7 +14,7 @@ class OpenFileMenu : public QMenu
     Q_OBJECT
 public:
     explicit OpenFileMenu(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString str = "create",
             QString src = "Network");
 

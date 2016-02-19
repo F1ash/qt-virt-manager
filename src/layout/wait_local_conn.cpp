@@ -12,20 +12,20 @@ WaitLocalConn::WaitLocalConn(
 void WaitLocalConn::run()
 {
     localConnsClosed = false;
-    if ( connections==NULL || connItemModel==NULL ) return;
+    if ( connections==nullptr || connItemModel==nullptr ) return;
     while (!localConnsClosed) {
         QStringList to_Delete;
         bool exist = false;
         foreach (QString key, connections->keys()) {
             ConnElement *el = static_cast<ConnElement*>(
                         connections->value(key));
-            if ( NULL!=el ) {
+            if ( nullptr!=el ) {
                 QRegExp rx("^\\{Local([0-9]+)_([A-Z]+)\\}$");
                 QString _name = el->getName();
                 if ( _name.contains(rx) ) {
                     exist = true;
                     int count = connItemModel->rowCount();
-                    ConnItemIndex *idx = NULL;
+                    ConnItemIndex *idx = nullptr;
                     for (int i=0; i<count; i++) {
                         idx = connItemModel->connItemDataList.at(i);
                         if ( idx->getName()==_name ) {
@@ -47,10 +47,10 @@ void WaitLocalConn::run()
         foreach (QString key, to_Delete) {
             ConnElement *el = static_cast<ConnElement*>(
                         connections->value(key));
-            if ( NULL!=el ) {
+            if ( nullptr!=el ) {
                 QString _name = el->getName();
                 int count = connItemModel->rowCount();
-                ConnItemIndex *idx = NULL;
+                ConnItemIndex *idx = nullptr;
                 for (int i=0; i<count; i++) {
                     idx = connItemModel->connItemDataList.at(i);
                     if ( idx->getName()==_name ) {
@@ -61,7 +61,7 @@ void WaitLocalConn::run()
                     };
                 };
                 delete el;
-                el = NULL;
+                el = nullptr;
                 connections->remove(key);
             };
         };

@@ -8,7 +8,7 @@ class FileFsType : public _FsType
     Q_OBJECT
 public:
     explicit FileFsType(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString _type = "lxc");
 
 public slots:

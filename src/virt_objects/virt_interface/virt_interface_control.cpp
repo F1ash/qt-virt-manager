@@ -252,7 +252,7 @@ void VirtInterfaceControl::newVirtEntityFromXML(const QStringList &_args)
                 // show SRC Creator widget
                 CreateInterface *createIface = new CreateInterface(this);
                 int result = createIface->exec();
-                if ( createIface!=NULL && result==QDialog::Accepted ) {
+                if ( createIface!=nullptr && result==QDialog::Accepted ) {
                     xml = createIface->getXMLDescFileName();
                     show = createIface->getShowing();
                     QStringList data;
@@ -263,7 +263,7 @@ void VirtInterfaceControl::newVirtEntityFromXML(const QStringList &_args)
                     if ( show ) QDesktopServices::openUrl(QUrl(xml));
                 };
                 delete createIface;
-                createIface = NULL;
+                createIface = nullptr;
                 if ( result==QDialog::Rejected ) return;
                 //qDebug()<<xml<<"path"<<result;
                 task.args.path = xml;

@@ -11,7 +11,7 @@ class HV_Features : public _Changed
 {
     Q_OBJECT
 public:
-    explicit HV_Features(QWidget *parent = 0);
+    explicit HV_Features(QWidget *parent = nullptr);
     QTextEdit       *features;
 
 signals:

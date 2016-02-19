@@ -10,7 +10,7 @@ SnapshotTreeModel::SnapshotTreeModel(QObject *parent) :
 SnapshotTreeModel::~SnapshotTreeModel()
 {
     delete rootItem;
-    rootItem = NULL;
+    rootItem = nullptr;
 }
 
 QModelIndex SnapshotTreeModel::index(int row, int column, const QModelIndex &parent) const

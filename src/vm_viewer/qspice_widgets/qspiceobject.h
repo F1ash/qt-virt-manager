@@ -28,7 +28,7 @@ class QSpiceObject : public QObject
 {
     Q_OBJECT
 public:
-    explicit QSpiceObject(QObject *parent = 0);
+    explicit QSpiceObject(QObject *parent = nullptr);
     virtual ~QSpiceObject()               = 0;
     virtual bool objectDisposed();
 

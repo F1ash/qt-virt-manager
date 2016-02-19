@@ -10,7 +10,7 @@ spcHlpThread::spcHlpThread(
 }
 void spcHlpThread::run()
 {
-    if ( NULL==ptr_ConnPtr || NULL==*ptr_ConnPtr ) {
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -48,7 +48,7 @@ void Spice_Viewer::init()
     // get address or hostname from URI
     // driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
     QString msg;
-    if ( hlpThread->domainPtr!=NULL && hlpThread->domainIsActive ) {
+    if ( hlpThread->domainPtr!=nullptr && hlpThread->domainIsActive ) {
         addr = hlpThread->uri.split("://").last();
         hlpThread->uri = addr;
         addr = hlpThread->uri.split("/").first();
@@ -113,10 +113,10 @@ void Spice_Viewer::init()
 void Spice_Viewer::reconnectToVirtDomain()
 {
     QSpiceWidget *wdg = static_cast<QSpiceWidget*>(centralWidget());
-    if ( NULL!=wdg ) {
+    if ( nullptr!=wdg ) {
         wdg->Disconnect();
         delete wdg;
-        wdg = NULL;
+        wdg = nullptr;
         initSpiceWidget();
     };
 }
@@ -130,19 +130,19 @@ void Spice_Viewer::getScreenshotFromVirtDomain()
 }
 void Spice_Viewer::copyFilesToVirtDomain()
 {
-    if ( NULL==spiceWdg ) return;
+    if ( nullptr==spiceWdg ) return;
     QStringList fileNames = QFileDialog::getOpenFileNames(
                 this, "Copy files to Guest", "~");
     spiceWdg->mainFileCopyAsync(fileNames);
 }
 void Spice_Viewer::copyToClipboardFromVirtDomain()
 {
-    if ( NULL==spiceWdg ) return;
+    if ( nullptr==spiceWdg ) return;
     spiceWdg->copyClipboardFromGuest();
 }
 void Spice_Viewer::pasteClipboardToVirtDomain()
 {
-    if ( NULL==spiceWdg ) return;
+    if ( nullptr==spiceWdg ) return;
     QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
     QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
     qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
@@ -260,7 +260,7 @@ void Spice_Viewer::FullScreenTriggered()
 void Spice_Viewer::resizeEvent(QResizeEvent *ev)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
-    if ( NULL!=spiceWdg ) {
+    if ( nullptr!=spiceWdg ) {
         spiceWdg->setNewSize(
                     ev->size().width()-around_size.width(),
                     ev->size().height()-around_size.height());

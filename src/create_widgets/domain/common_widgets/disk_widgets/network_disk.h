@@ -10,8 +10,8 @@ class Network_Disk : public _Disk
     Q_OBJECT
 public:
     explicit Network_Disk(
-            QWidget        *parent  = NULL,
-            virConnectPtr*  connPtrPtr = NULL);
+            QWidget        *parent     = nullptr,
+            virConnectPtr*  connPtrPtr = nullptr);
 
 private:
     QLabel          *protocolLabel, *authLabel;

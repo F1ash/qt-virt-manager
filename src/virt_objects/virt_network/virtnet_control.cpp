@@ -257,7 +257,7 @@ void VirtNetControl::newVirtEntityFromXML(const QStringList &_args)
 void VirtNetControl::doneEntityCreationDialog()
 {
     CreateVirtNetwork *createVirtNet = static_cast<CreateVirtNetwork*>(sender());
-    if ( createVirtNet!=NULL ) {
+    if ( createVirtNet!=nullptr ) {
         if ( createVirtNet->getResult()==QDialog::Accepted ) {
             // get path for method
             Actions act = createVirtNet->getAction();

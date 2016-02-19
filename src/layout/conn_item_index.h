@@ -12,7 +12,7 @@ class ConnItemIndex : public QObject
 {
     Q_OBJECT
 public:
-    explicit ConnItemIndex(QObject *parent = NULL);
+    explicit ConnItemIndex(QObject *parent = nullptr);
 
 signals:
 

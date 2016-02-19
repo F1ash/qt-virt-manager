@@ -8,7 +8,7 @@ class Domain_Widget : public _Checked_Widget
     Q_OBJECT
 public:
     explicit Domain_Widget(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString  tag = "DNS Domain");
     QLineEdit       *domain;
 };

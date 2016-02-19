@@ -7,7 +7,7 @@ class CCIDAddr : public _Addr
 {
     Q_OBJECT
 public:
-    explicit CCIDAddr(QWidget *parent = NULL);
+    explicit CCIDAddr(QWidget *parent = nullptr);
     QLineEdit       *bus;
     QLineEdit       *slot;
 

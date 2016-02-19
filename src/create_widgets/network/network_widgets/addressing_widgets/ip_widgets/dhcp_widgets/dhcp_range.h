@@ -8,7 +8,7 @@ class DHCP_Range : public _List_Widget
     Q_OBJECT
 public:
     explicit DHCP_Range(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             QString  tag = "");
 
 private:

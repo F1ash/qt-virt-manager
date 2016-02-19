@@ -93,7 +93,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     for (int i=0; i<baseWdg->count(); i++) {
         _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(
                     baseWdg->widget(i));
-        if ( NULL!=wdg ) wdg->setParameters(connPtrPtr, domainName);
+        if ( nullptr!=wdg ) wdg->setParameters(connPtrPtr, domainName);
         connect(wdg, SIGNAL(errMsg(QString&)),
                 this, SIGNAL(errMsg(QString&)));
     };
@@ -125,7 +125,7 @@ QString CreateSnapshotDialog::getSnapshotXMLDesc() const
         _desc.appendChild(_text);
     };
     _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(baseWdg->currentWidget());
-    if ( NULL!=wdg ) {
+    if ( nullptr!=wdg ) {
         _doc = wdg->getElements();
         QDomNodeList _nodeList = _doc.childNodes();
         int count = _nodeList.count();

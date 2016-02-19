@@ -14,16 +14,16 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     QWidget(parent)
 {
     spiceSession = new QSpiceSession(this);
-    display = NULL;
-    inputs = NULL;
-    cursor = NULL;
-    smartcard = NULL;
-    usbredir = NULL;
-    webdav = NULL;
-    playback = NULL;
-    usbDevManager = NULL;
-    smartcardManager = NULL;
-    spiceAudio = NULL;
+    display = nullptr;
+    inputs = nullptr;
+    cursor = nullptr;
+    smartcard = nullptr;
+    usbredir = nullptr;
+    webdav = nullptr;
+    playback = nullptr;
+    usbDevManager = nullptr;
+    smartcardManager = nullptr;
+    spiceAudio = nullptr;
     _width = 0;
     _height = 0;
     init_h = 0;
@@ -31,7 +31,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     zoom = 1.0;
 
     tr_mode = Qt::SmoothTransformation;
-    img = NULL;
+    img = nullptr;
     m_Image = new QLabel(this);
     m_Image->setAlignment(Qt::AlignTop | Qt::AlignJustify);
     m_Image->setContentsMargins(0,0,0,0);
@@ -67,7 +67,7 @@ void QSpiceWidget::Disconnect()
 }
 void QSpiceWidget::SendKeySequience(Qt::Key key)
 {
-    if ( NULL!=inputs ) {
+    if ( nullptr!=inputs ) {
         // inputs->inputsKeyPressAndRelease()
         // does not give the desired effect
         inputs->inputsQKeyPress(key);
@@ -269,47 +269,47 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
 void QSpiceWidget::channelDestroyed()
 {
     if (QObject::sender() == main) {
-        main = NULL;
+        main = nullptr;
     } else if (QObject::sender() == inputs) {
-        inputs = NULL;
+        inputs = nullptr;
         emit inputsChannelChanged(false);
     } else if (QObject::sender() == cursor) {
         m_Image->setCursor(Qt::ArrowCursor);
-        cursor = NULL;
+        cursor = nullptr;
         emit cursorChannelChanged(false);
     } else if (QObject::sender() == display) {
-        display = NULL;
+        display = nullptr;
         emit displayChannelChanged(false);
     } else if (QObject::sender() == smartcard) {
         if (smartcardManager) {
             delete smartcardManager;
-            smartcardManager = NULL;
+            smartcardManager = nullptr;
         };
-        smartcard = NULL;
+        smartcard = nullptr;
         emit smartcardChannelChanged(false);
     } else if (QObject::sender() == usbredir) {
         if ( usbDevManager ) {
             delete usbDevManager;
-            usbDevManager = NULL;
+            usbDevManager = nullptr;
         };
-        usbredir = NULL;
+        usbredir = nullptr;
         emit usbredirChannelChanged(false);
     } else if (QObject::sender() == webdav) {
-        webdav = NULL;
+        webdav = nullptr;
         emit webdavChannelChanged(false);
     } else if (QObject::sender() == playback) {
-        playback = NULL;
+        playback = nullptr;
         emit playbackChannelChanged(false);
         if ( spiceAudio ) {
             delete spiceAudio;
-            spiceAudio = NULL;
+            spiceAudio = nullptr;
         };
     } else if (QObject::sender() == record) {
-        record = NULL;
+        record = nullptr;
         emit recordChannelChanged(false);
         if ( spiceAudio ) {
             delete spiceAudio;
-            spiceAudio = NULL;
+            spiceAudio = nullptr;
         };
     }
 }
@@ -489,7 +489,7 @@ void QSpiceWidget::displayPrimaryCreate(
 
     if (img) {
         delete img;
-        img = NULL;
+        img = nullptr;
     };
     switch(format) {
     case SPICE_SURFACE_FMT_32_xRGB:
@@ -799,7 +799,7 @@ void QSpiceWidget::showUsbDevWidget()
     };
     usbDevWdg->exec();
     delete usbDevWdg;
-    usbDevWdg = NULL;
+    usbDevWdg = nullptr;
 }
 
 void QSpiceWidget::showSmartCardWidget()
@@ -820,7 +820,7 @@ void QSpiceWidget::showSmartCardWidget()
     };
     smartcardWdg->exec();
     delete smartcardWdg;
-    smartcardWdg = NULL;
+    smartcardWdg = nullptr;
 }
 
 void QSpiceWidget::getScreenshot()

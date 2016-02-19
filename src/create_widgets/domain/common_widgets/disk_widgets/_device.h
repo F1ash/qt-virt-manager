@@ -11,7 +11,7 @@ class _Device : public _Changed
 {
     Q_OBJECT
 public:
-    explicit _Device(QWidget *parent = NULL);
+    explicit _Device(QWidget *parent = nullptr);
     QComboBox   *devType;
 
 signals:

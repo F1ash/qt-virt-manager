@@ -74,7 +74,7 @@ void CreateSnapshotFlags::changeAvailableFlags(int control)
 void CreateSnapshotFlags::changeFlagCompatibility()
 {
     QAction *act = static_cast<QAction*>(sender());
-    if ( NULL==act ) return;
+    if ( nullptr==act ) return;
     switch ( act->data().toInt() ) {
     case 1:
         if ( !act->isChecked() ) {

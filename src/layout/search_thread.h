@@ -10,7 +10,7 @@ class SearchThread : public _VirtThread
 {
     Q_OBJECT
 public:
-    explicit SearchThread(QObject *parent = NULL);
+    explicit SearchThread(QObject *parent = nullptr);
 
 signals:
     void        localConnFound(QString&);

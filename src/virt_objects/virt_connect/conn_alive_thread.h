@@ -32,15 +32,15 @@ static int credTypes[] = {
 static virConnectAuth auth = {
     credTypes,
     sizeof(credTypes) / sizeof(int),
-    NULL, // cb will be initialized in thread
-    NULL, // cbdata will be initialized in thread
+    nullptr, // cb will be initialized in thread
+    nullptr, // cbdata will be initialized in thread
 };
 
 class ConnAliveThread : public _VirtThread
 {
     Q_OBJECT
 public:
-    explicit ConnAliveThread(QObject *parent = NULL);
+    explicit ConnAliveThread(QObject *parent = nullptr);
     bool            onView;
 
 signals:

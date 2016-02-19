@@ -8,8 +8,8 @@ VirtStoragePoolControl::VirtStoragePoolControl(QWidget *parent) :
     setWindowIcon(QIcon::fromTheme("storagePool"));
     storagePoolModel = new StoragePoolModel();
     entityList->setModel(storagePoolModel);
-    //connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
-    //        this, SLOT(entityDoubleClicked(const QModelIndex&)));
+    connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
+            this, SLOT(entityDoubleClicked(const QModelIndex&)));
     connect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(entityClicked(const QPoint&)));
     settings.beginGroup("VirtStoragePoolControl");
@@ -194,6 +194,8 @@ void VirtStoragePoolControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
         //qDebug()<<storagePoolModel->DataList.at(index.row())->getName();
+        QString storagePoolName = storagePoolModel->DataList.at(index.row())->getName();
+        emit overviewStPool(ptr_ConnPtr, currConnName, storagePoolName);
     }
 }
 void VirtStoragePoolControl::execAction(const QStringList &l)
@@ -292,7 +294,7 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const QStringList &_args)
 void VirtStoragePoolControl::doneEntityCreationDialog()
 {
     CreatePool *createPoolDialog = static_cast<CreatePool*>(sender());
-    if ( createPoolDialog!=NULL ) {
+    if ( createPoolDialog!=nullptr ) {
         if ( createPoolDialog->getResult()==QDialog::Accepted ) {
             // get path for method
             Actions act = createPoolDialog->getAction();

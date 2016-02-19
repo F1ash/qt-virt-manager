@@ -12,11 +12,11 @@ void SecretControlThread::execAction(uint _num, TASK _task)
     number = _num;
     task = _task;
     keep_alive = false;
-    if ( NULL!=task.srcConnPtr ) {
+    if ( nullptr!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
-            task.srcConnPtr = NULL;
+            task.srcConnPtr = nullptr;
             sendConnErrors();
         } else
             keep_alive = true;
@@ -64,8 +64,8 @@ Result SecretControlThread::getAllSecretList()
 {
     Result result;
     QStringList virtSecretList;
-    if ( task.srcConnPtr!=NULL && keep_alive ) {
-        virSecretPtr *secrets = NULL;
+    if ( task.srcConnPtr!=nullptr && keep_alive ) {
+        virSecretPtr *secrets = nullptr;
         //extra flags; not used yet, so callers should always pass 0
         unsigned int flags = 0;
         int ret = virConnectListAllSecrets(*task.srcConnPtr, &secrets, flags);
@@ -100,7 +100,7 @@ Result SecretControlThread::getAllSecretList()
                 type.append("NONE");
                 break;
             };
-            char *xmlDesc = NULL;
+            char *xmlDesc = nullptr;
             xmlDesc = virSecretGetXMLDesc(secrets[i], 0);
             QDomDocument doc;
             doc.setContent(QString::fromUtf8(xmlDesc));
@@ -146,7 +146,7 @@ Result SecretControlThread::defineSecret()
     int flags = 0;
     virSecretPtr secret = virSecretDefineXML(
                 *task.srcConnPtr, xmlData.data(), flags);
-    if ( secret==NULL ) {
+    if ( secret==nullptr ) {
         result.err = sendConnErrors();
         return result;
     };
@@ -175,7 +175,7 @@ Result SecretControlThread::undefineSecret()
     bool deleted = false;
     virSecretPtr secret = virSecretLookupByUUIDString(
                 *task.srcConnPtr, uuid.toUtf8().data());
-    if ( secret!=NULL ) {
+    if ( secret!=nullptr ) {
         deleted = (virSecretUndefine(secret)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -194,14 +194,14 @@ Result SecretControlThread::getVirtSecretXMLDesc()
     QString uuid = task.object;
     result.name = uuid;
     bool read = false;
-    char *Returns = NULL;
+    char *Returns = nullptr;
     virSecretPtr secret = virSecretLookupByUUIDString(
                 *task.srcConnPtr, uuid.toUtf8().data());
-    if ( secret!=NULL ) {
+    if ( secret!=nullptr ) {
         //extra flags; not used yet, so callers should always pass 0
         int flags = 0;
         Returns = (virSecretGetXMLDesc(secret, flags));
-        if ( Returns==NULL )
+        if ( Returns==nullptr )
             result.err = sendConnErrors();
         else read = true;
         virSecretFree(secret);
@@ -217,7 +217,7 @@ Result SecretControlThread::getVirtSecretXMLDesc()
     if (read) f.write(Returns);
     result.fileName.append(f.fileName());
     f.close();
-    if ( Returns!=NULL ) free(Returns);
+    if ( Returns!=nullptr ) free(Returns);
     result.result = read;
     result.msg.append(QString("'<b>%1</b>' Secret %2 XML'ed")
                       .arg(uuid).arg((read)?"":"don't"));

@@ -11,11 +11,11 @@ void NetControlThread::execAction(uint _num, TASK _task)
     number = _num;
     task = _task;
     keep_alive = false;
-    if ( NULL!=task.srcConnPtr ) {
+    if ( nullptr!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
-            task.srcConnPtr = NULL;
+            task.srcConnPtr = nullptr;
             sendConnErrors();
         } else
             keep_alive = true;
@@ -75,8 +75,8 @@ Result NetControlThread::getAllNetworkList()
 {
     Result result;
     QStringList virtNetList;
-    if ( task.srcConnPtr!=NULL && keep_alive ) {
-        virNetworkPtr *networks = NULL;
+    if ( task.srcConnPtr!=nullptr && keep_alive ) {
+        virNetworkPtr *networks = nullptr;
         unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                              VIR_CONNECT_LIST_NETWORKS_INACTIVE;
         int ret = virConnectListAllNetworks(*task.srcConnPtr, &networks, flags);
@@ -124,7 +124,7 @@ Result NetControlThread::createNetwork()
     f.close();
     virNetworkPtr network = virNetworkCreateXML(
                 *task.srcConnPtr, xmlData.data());
-    if ( network==NULL ) {
+    if ( network==nullptr ) {
         result.err = sendConnErrors();
         return result;
     };
@@ -152,7 +152,7 @@ Result NetControlThread::defineNetwork()
     f.close();
     virNetworkPtr network = virNetworkDefineXML(
                 *task.srcConnPtr, xmlData.data());
-    if ( network==NULL ) {
+    if ( network==nullptr ) {
         result.err = sendConnErrors();
         return result;
     };
@@ -170,7 +170,7 @@ Result NetControlThread::startNetwork()
     bool started = false;
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( network!=NULL ) {
+    if ( network!=nullptr ) {
         started = (virNetworkCreate(network)+1) ? true : false;
         if (!started)
             result.err = sendConnErrors();
@@ -190,7 +190,7 @@ Result NetControlThread::destroyNetwork()
     bool deleted = false;
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( network!=NULL ) {
+    if ( network!=nullptr ) {
         deleted = (virNetworkDestroy(network)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -210,7 +210,7 @@ Result NetControlThread::undefineNetwork()
     bool deleted = false;
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( network!=NULL ) {
+    if ( network!=nullptr ) {
         deleted = (virNetworkUndefine(network)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -232,7 +232,7 @@ Result NetControlThread::changeAutoStartNetwork()
     bool set = false;
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( network!=NULL ) {
+    if ( network!=nullptr ) {
         set = (virNetworkSetAutostart(network, autostart)+1) ? true : false;
         if (!set)
             result.err = sendConnErrors();
@@ -250,13 +250,13 @@ Result NetControlThread::getVirtNetXMLDesc()
     QString name = task.object;
     result.name = name;
     bool read = false;
-    char *Returns = NULL;
+    char *Returns = nullptr;
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( network!=NULL ) {
+    if ( network!=nullptr ) {
         Returns = virNetworkGetXMLDesc(
                     network, VIR_NETWORK_XML_INACTIVE);
-        if ( Returns==NULL )
+        if ( Returns==nullptr )
             result.err = sendConnErrors();
         else read = true;
         virNetworkFree(network);
@@ -271,7 +271,7 @@ Result NetControlThread::getVirtNetXMLDesc()
     if (read) f.write(Returns);
     result.fileName.append(f.fileName());
     f.close();
-    if ( Returns!=NULL ) free(Returns);
+    if ( Returns!=nullptr ) free(Returns);
     result.result = read;
     result.msg.append(QString("'<b>%1</b>' Network %2 XML'ed")
                       .arg(name).arg((read)?"":"don't"));

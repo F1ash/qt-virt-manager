@@ -8,7 +8,7 @@ class Delete_Pool_Menu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit Delete_Pool_Menu(QWidget *parent = 0);
+    explicit Delete_Pool_Menu(QWidget *parent = nullptr);
 
 signals:
     void             execMethod(const QStringList&);

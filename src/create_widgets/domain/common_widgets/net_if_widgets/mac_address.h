@@ -11,7 +11,7 @@ class MAC_Address : public _Changed
 {
     Q_OBJECT
 public:
-    explicit MAC_Address(QWidget *parent = NULL);
+    explicit MAC_Address(QWidget *parent = nullptr);
 
 signals:
     //void                 dataChanged();

@@ -9,7 +9,7 @@ class TransformationModeMenu : public QMenu
     Q_OBJECT
 public:
     explicit TransformationModeMenu(
-            QWidget *parent = NULL,
+            QWidget *parent = nullptr,
             Qt::TransformationMode
                      _mode  = Qt::SmoothTransformation);
 
