@@ -9,12 +9,12 @@ Memory::Memory(
     hostMemory = new QLabel(
                 QString("Host Memory (%1): %2")
                 .arg(memUnit).arg(memValue), this);
-    maxMemLabel = new QLabel("Maximum Memory (KiB):", this);
+    maxMemLabel = new QLabel("Maximum Memory (MiB):", this);
     maxMemValue = new QSpinBox(this);
     maxMemValue->setRange(0, memValue.toULongLong());
     connect(maxMemValue, SIGNAL(valueChanged(int)),
             this, SLOT(changeCurrentMemValue(int)));
-    currMemLabel = new QLabel("Current Memory (KiB):", this);
+    currMemLabel = new QLabel("Current Memory (MiB):", this);
     currMemValue = new QSpinBox(this);
     currMemValue->setRange(0, memValue.toULongLong());
     connect(currMemValue, SIGNAL(valueChanged(int)),
@@ -41,16 +41,16 @@ Memory::Memory(
     memBackingWdg->setLayout(memBackingLayout);
     memBackingWdg->setVisible(false);
     enableMemTune = new QCheckBox("Enable Memory Tuning", this);
-    hardLabel = new QLabel("Hard limit (KiB)", this);
+    hardLabel = new QLabel("Hard limit (MiB)", this);
     hard_limit = new QSpinBox(this);
     hard_limit->setRange(0, memValue.toULongLong());
-    softLabel = new QLabel("Soft limit (KiB)", this);
+    softLabel = new QLabel("Soft limit (MiB)", this);
     soft_limit = new QSpinBox(this);
     soft_limit->setRange(0, memValue.toULongLong());
-    swapLabel = new QLabel("Swap hard limit (KiB)", this);
+    swapLabel = new QLabel("Swap hard limit (MiB)", this);
     swap_hard_limit = new QSpinBox(this);
     swap_hard_limit->setRange(0, memValue.toULongLong());
-    guaranteeLabel = new QLabel("Min guarantee (KiB)", this);
+    guaranteeLabel = new QLabel("Min guarantee (MiB)", this);
     min_guarantee = new QSpinBox(this);
     min_guarantee->setRange(0, memValue.toULongLong());
     memTuneLayout = new QGridLayout();
@@ -138,13 +138,13 @@ QDomDocument Memory::getDataDocument() const
     data = doc.createTextNode(
                 QString("%1").arg(maxMemValue->value()));
     _memory.appendChild(data);
-    _memory.setAttribute("unit", "KiB");
+    _memory.setAttribute("unit", "MiB");
     _data.appendChild(_memory);
     _currMemory = doc.createElement("currentMemory");
     data = doc.createTextNode(
                 QString("%1").arg(currMemValue->value()));
     _currMemory.appendChild(data);
-    _currMemory.setAttribute("unit", "KiB");
+    _currMemory.setAttribute("unit", "MiB");
     _data.appendChild(_currMemory);
 
     if ( enableMemBacking->isChecked() ) {
@@ -183,7 +183,7 @@ QDomDocument Memory::getDataDocument() const
             data = doc.createTextNode(
                         QString("%1").arg(hard_limit->value()));
             _el.appendChild(data);
-            _el.setAttribute("unit", "KiB");
+            _el.setAttribute("unit", "MiB");
             _memTune.appendChild(_el);
         };
         if ( soft_limit->value() ) {
@@ -191,7 +191,7 @@ QDomDocument Memory::getDataDocument() const
             data = doc.createTextNode(
                         QString("%1").arg(soft_limit->value()));
             _el.appendChild(data);
-            _el.setAttribute("unit", "KiB");
+            _el.setAttribute("unit", "MiB");
             _memTune.appendChild(_el);
         };
         if ( swap_hard_limit->value() ) {
@@ -200,7 +200,7 @@ QDomDocument Memory::getDataDocument() const
                         QString("%1")
                         .arg(swap_hard_limit->value()));
             _el.appendChild(data);
-            _el.setAttribute("unit", "KiB");
+            _el.setAttribute("unit", "MiB");
             _memTune.appendChild(_el);
         };
         if ( min_guarantee->value() ) {
@@ -209,7 +209,7 @@ QDomDocument Memory::getDataDocument() const
                         QString("%1")
                         .arg(min_guarantee->value()));
             _el.appendChild(data);
-            _el.setAttribute("unit", "KiB");
+            _el.setAttribute("unit", "MiB");
             _memTune.appendChild(_el);
         };
     };
@@ -267,7 +267,7 @@ void Memory::readXMLDesciption(QString &_xmlDesc)
             .firstChildElement("memory")
             .attribute("unit");
     maxMemValue->setValue(
-                convertNiBtoKiB(_value, _unit));
+                convertNiBtoMiB(_value, _unit));
     _value = _domain
             .firstChildElement("currentMemory")
             .firstChild().toText().data()
@@ -276,7 +276,7 @@ void Memory::readXMLDesciption(QString &_xmlDesc)
             .firstChildElement("currentMemory")
             .attribute("unit");
     currMemValue->setValue(
-                convertNiBtoKiB(_value, _unit));
+                convertNiBtoMiB(_value, _unit));
     QDomElement _memoryBacking = _domain
             .firstChildElement("memoryBacking");
     enableMemBacking->setChecked( !_memoryBacking.isNull() );
@@ -293,7 +293,7 @@ void Memory::readXMLDesciption(QString &_xmlDesc)
                 QString p;
                 p.append(_page.attribute("size"));
                 p.append(":");
-                p.append(_page.attribute("unit", "K"));
+                p.append(_page.attribute("unit", "M"));
                 p.append("iB");
                 p.append(":");
                 p.append(_page.attribute("nodeset"));
@@ -319,7 +319,7 @@ void Memory::readXMLDesciption(QString &_xmlDesc)
                     .firstChildElement("hard_limit")
                     .attribute("unit");
             hard_limit->setValue(
-                        convertNiBtoKiB(_value, _unit));
+                        convertNiBtoMiB(_value, _unit));
         };
         if ( !_memTune
              .firstChildElement("soft_limit").isNull() ) {
@@ -331,7 +331,7 @@ void Memory::readXMLDesciption(QString &_xmlDesc)
                     .firstChildElement("soft_limit")
                     .attribute("unit");
             soft_limit->setValue(
-                        convertNiBtoKiB(_value, _unit));
+                        convertNiBtoMiB(_value, _unit));
         };
         if ( !_memTune
              .firstChildElement("swap_hard_limit").isNull() ) {
@@ -343,7 +343,7 @@ void Memory::readXMLDesciption(QString &_xmlDesc)
                     .firstChildElement("swap_hard_limit")
                     .attribute("unit");
             swap_hard_limit->setValue(
-                        convertNiBtoKiB(_value, _unit));
+                        convertNiBtoMiB(_value, _unit));
         };
         if ( !_memTune
              .firstChildElement("min_guarantee").isNull() ) {
@@ -355,35 +355,35 @@ void Memory::readXMLDesciption(QString &_xmlDesc)
                     .firstChildElement("min_guarantee")
                     .attribute("unit");
             min_guarantee->setValue(
-                        convertNiBtoKiB(_value, _unit));
+                        convertNiBtoMiB(_value, _unit));
         };
     };
 }
-quint64 Memory::convertNiBtoKiB(quint64 _NiB, QString &_unit)
+quint64 Memory::convertNiBtoMiB(quint64 _NiB, QString &_unit)
 {
     QString bytes = QString("b");
     if ( _unit=="b" || _unit=="bytes" ) {
-        quint64 _res = _NiB / 1024;
+        quint64 _res = _NiB / 1048576;
         return (_res==0)? 1 : _res;
     } else if ( _unit=="K" || _unit=="KiB" ) {
-        return _NiB;
+        return _NiB / 1024;
     } else if ( _unit=="KB" ) {
-        return convertNiBtoKiB(_NiB*1000, bytes);
+        return convertNiBtoMiB(_NiB, bytes);
     } else if ( _unit=="M" || _unit=="MiB" ) {
-        return _NiB*1024;
+        return _NiB;
     } else if ( _unit=="MB" ) {
-        return convertNiBtoKiB(_NiB*1000000, bytes);
+        return convertNiBtoMiB(_NiB*1000, bytes);
     } else if ( _unit=="G" || _unit=="GiB" ) {
-        return _NiB*1048576;
+        return _NiB*1024;
     } else if ( _unit=="GB" ) {
-        return convertNiBtoKiB(_NiB*1000000000, bytes);
+        return convertNiBtoMiB(_NiB*1000000, bytes);
     } else if ( _unit=="T" || _unit=="TiB" ) {
-        return _NiB*1073741824;
+        return _NiB*1048576;
     } else if ( _unit=="TB" ) {
-        return convertNiBtoKiB(_NiB*1000000000000, bytes);
+        return convertNiBtoMiB(_NiB*1000000000, bytes);
     } else if ( _unit=="E" || _unit=="EiB" ) {
-        return _NiB*1099511627776;
+        return _NiB*1073741824;
     } else if ( _unit=="EB" ) {
-        return convertNiBtoKiB(_NiB*1000000000000000, bytes);
+        return convertNiBtoMiB(_NiB*1000000000000, bytes);
     } else return 0;
 }
