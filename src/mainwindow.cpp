@@ -800,19 +800,24 @@ void MainWindow::invokeVMDisplay(TASK _task)
 void MainWindow::deleteVMDisplay(QString &key)
 {
     if ( VM_Displayed_Map.contains(key) ) {
-        VM_Viewer *value = nullptr;
-        QString _type = VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
-        if ( _type=="LXC" ) {
-            value = static_cast<LXC_Viewer*>(
-                        VM_Displayed_Map.value(key, nullptr));
-        } else if ( _type=="SPICE" ) {
-            value = static_cast<Spice_Viewer*>(
-                        VM_Displayed_Map.value(key, nullptr));
-        };
+        /*
+        VM_Viewer *value = static_cast<VM_Viewer*>(
+                    VM_Displayed_Map.value(key, nullptr));
         if ( nullptr!=value ) {
-            delete value;
-            value = nullptr;
+            QString _type = value->TYPE.toUpper();
+            if ( _type=="LXC" ) {
+                value = static_cast<LXC_Viewer*>(
+                            VM_Displayed_Map.value(key, nullptr));
+            } else if ( _type=="SPICE" ) {
+                value = static_cast<Spice_Viewer*>(
+                            VM_Displayed_Map.value(key, nullptr));
+            };
+            if ( nullptr!=value ) {
+                delete value;
+                value = nullptr;
+            };
         };
+        */
         VM_Displayed_Map.remove(key);
     }
 }

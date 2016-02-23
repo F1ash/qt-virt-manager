@@ -65,10 +65,8 @@ private:
     HelperThread    *helperThread;
     QWidget         *baseWdg = nullptr;
 
-public slots:
-    void             closeEvent(QCloseEvent*);
-
 private slots:
+    void             closeEvent(QCloseEvent*);
     void             setCapabilities(QString&);
     void             readCapabilities();
     void             readDataLists();

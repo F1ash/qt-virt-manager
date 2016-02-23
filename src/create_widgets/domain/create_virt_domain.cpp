@@ -113,6 +113,7 @@ void HelperThread::run()
 CreateVirtDomain::CreateVirtDomain(QWidget *parent, TASK _task) :
     QMainWindow(parent), task(_task)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     xmlFileName = task.args.path;
     ptr_ConnPtr = task.srcConnPtr;
     setWindowTitle("VM Settings");
@@ -140,7 +141,7 @@ CreateVirtDomain::~CreateVirtDomain()
     };
 }
 
-/* public slots */
+/* private slots */
 void CreateVirtDomain::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
@@ -151,8 +152,6 @@ void CreateVirtDomain::closeEvent(QCloseEvent *ev)
         emit finished(key);
     };
 }
-
-/* private slots */
 void CreateVirtDomain::setCapabilities(QString &_cap)
 {
     capabilities = _cap;
@@ -304,7 +303,8 @@ void CreateVirtDomain::set_Result()
         data.append(QString("to <a href='%1'>%1</a>").arg(_xml));
         QString msg = data.join(" ");
         sendMsg(msg);
-        //if ( showDescription->isChecked() ) QDesktopServices::openUrl(QUrl(_xml));
+        // if ( showDescription->isChecked() )
+        //     QDesktopServices::openUrl(QUrl(_xml));
         task.args.path = _xml;
         emit addNewTask(task);
     };
