@@ -4,7 +4,7 @@ CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
     _Tab(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("CPU");
-    logicCPULabel = new LogicalHostCPU(this, capabilities);
+    logicCPULabel = new LogicalHostCPU(this);
     cpuAlloc = new CPU_Allocation(this, capabilities);
     cpuModel = new CPU_Model(this);
     cpuTopology = new CPU_Topology(this);

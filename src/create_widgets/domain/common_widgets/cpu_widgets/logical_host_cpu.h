@@ -5,22 +5,18 @@
 #include <QLabel>
 #include <QIcon>
 #include <QHBoxLayout>
-#include <QDomDocument>
 #include <QDebug>
 
 class LogicalHostCPU : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LogicalHostCPU(
-            QWidget *parent = nullptr,
-            QString  _caps = "");
+    explicit LogicalHostCPU(QWidget *parent = nullptr);
 
 signals:
 
 private:
-    QString          capabilities;
-    int              cores = 1;
+    int              cores = 0;
     QLabel          *logicCPULabel;
     QLabel          *icon;
     QLabel          *info;

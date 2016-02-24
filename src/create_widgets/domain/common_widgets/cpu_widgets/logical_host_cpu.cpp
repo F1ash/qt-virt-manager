@@ -1,23 +1,10 @@
 #include "logical_host_cpu.h"
+#include <QThread>
 
-LogicalHostCPU::LogicalHostCPU(
-        QWidget *parent, QString _caps) :
-    QWidget(parent), capabilities(_caps)
+LogicalHostCPU::LogicalHostCPU(QWidget *parent) :
+    QWidget(parent)
 {
-    QDomDocument doc;
-    doc.setContent(capabilities);
-    //qDebug()<<capabilities;
-    QDomElement _topology = doc
-            .firstChildElement("capabilities")
-            .firstChildElement("host")
-            .firstChildElement("cpu")
-            .firstChildElement("topology");
-    if ( _topology.isNull() )
-        cores = 1;
-    else {
-        int sockets = _topology.attribute("sockets").toInt();
-        cores = _topology.attribute("cores").toInt()*sockets;
-    };
+    cores = QThread::idealThreadCount();
     QString _label = QString("Logical host cores: %1").arg(cores);
     logicCPULabel = new QLabel(_label, this);
     icon = new QLabel(this);
