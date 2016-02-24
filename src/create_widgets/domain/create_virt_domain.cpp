@@ -203,7 +203,6 @@ void CreateVirtDomain::readCapabilities()
 void CreateVirtDomain::readDataLists()
 {
     if ( ready ) {
-        commonLayout = new QVBoxLayout();
         create_specified_widgets();
         set_specified_Tabs();
         about = new QLabel("<a href='http://libvirt.org/formatdomain.html'>About</a>", this);
@@ -228,6 +227,7 @@ void CreateVirtDomain::readDataLists()
         buttonLayout->addWidget(cancel);
         buttons = new QWidget(this);
         buttons->setLayout(buttonLayout);
+        commonLayout = new QVBoxLayout();
         commonLayout->addWidget(tabWidget);
         commonLayout->addWidget(buttons);
         baseWdg = new QWidget(this);

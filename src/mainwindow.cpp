@@ -800,24 +800,8 @@ void MainWindow::invokeVMDisplay(TASK _task)
 void MainWindow::deleteVMDisplay(QString &key)
 {
     if ( VM_Displayed_Map.contains(key) ) {
-        /*
-        VM_Viewer *value = static_cast<VM_Viewer*>(
-                    VM_Displayed_Map.value(key, nullptr));
-        if ( nullptr!=value ) {
-            QString _type = value->TYPE.toUpper();
-            if ( _type=="LXC" ) {
-                value = static_cast<LXC_Viewer*>(
-                            VM_Displayed_Map.value(key, nullptr));
-            } else if ( _type=="SPICE" ) {
-                value = static_cast<Spice_Viewer*>(
-                            VM_Displayed_Map.value(key, nullptr));
-            };
-            if ( nullptr!=value ) {
-                delete value;
-                value = nullptr;
-            };
-        };
-        */
+        // set attribute(Qt::WA_DeleteOnClose) in widget;
+        // not need to delete a VM_Viewer
         VM_Displayed_Map.remove(key);
     }
 }
@@ -857,13 +841,8 @@ void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connNam
 void MainWindow::deleteStPoolOverview(QString &key)
 {
     if ( Overviewed_StPool_Map.contains(key) ) {
-        VirtStorageVolControl *value = nullptr;
-        value = static_cast<VirtStorageVolControl*>(
-                        Overviewed_StPool_Map.value(key, nullptr));
-        if ( nullptr!=value ) {
-            delete value;
-            value = nullptr;
-        };
+        // set attribute(Qt::WA_DeleteOnClose) in widget;
+        // not need to delete a VirtStorageVolControl
         Overviewed_StPool_Map.remove(key);
     };
 }
@@ -896,13 +875,8 @@ void MainWindow::invokeDomainEditor(TASK _task)
 void MainWindow::deleteDomainEditor(QString &key)
 {
     if ( DomainEditor_Map.contains(key) ) {
-        CreateVirtDomain *value = nullptr;
-        value = static_cast<CreateVirtDomain*>(
-                        DomainEditor_Map.value(key, nullptr));
-        if ( nullptr!=value ) {
-            delete value;
-            value = nullptr;
-        };
+        // set attribute(Qt::WA_DeleteOnClose) in widget;
+        // not need to delete a CreateVirtDomain
         DomainEditor_Map.remove(key);
     };
 }

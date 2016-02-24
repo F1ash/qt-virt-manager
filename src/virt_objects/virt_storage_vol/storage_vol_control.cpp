@@ -3,6 +3,7 @@
 VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
     VirtEntityControl(parent)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     setObjectName("VirtStorageVolControl");
     setWindowTitle("StorageVol Control");
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
