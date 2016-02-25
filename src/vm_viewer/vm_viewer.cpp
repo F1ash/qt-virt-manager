@@ -42,7 +42,6 @@ void VM_Viewer::init()
 void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
-        ev->ignore();
         QString key = objectName();
         QString msg = QString("'<b>%1</b>' VM viewer closed.")
                 .arg(domain);

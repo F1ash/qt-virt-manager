@@ -5,6 +5,9 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QClipboard>
+#include <QTime>
+#include <QDate>
+#include <QFileDialog>
 #include <spice/vd_agent.h>
 #include <spice-session.h>
 

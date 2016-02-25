@@ -1,11 +1,8 @@
 #ifndef QSPICEWIDGET_H
 #define QSPICEWIDGET_H
 
-#include <QTime>
-#include <QDate>
 #include <QTimer>
 #include <QLabel>
-#include <QFileDialog>
 #include <QHBoxLayout>
 
 #include "qspicesession.h"

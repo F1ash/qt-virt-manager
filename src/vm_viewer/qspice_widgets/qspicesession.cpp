@@ -119,6 +119,7 @@ void QSpiceSession::init()
     //qDebug()<<"Spice.ver.:"<<spice_util_get_version_string()
     //       <<"\nDEBUG mode:"<<(bool)spice_util_get_debug();
     gobject = spice_session_new ();
+    //setEnableClientSockets(true);
     setEnableAudio(true);
     setEnableSmartcard(true);
     setEnableUsbredir(true);

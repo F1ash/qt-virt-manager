@@ -149,7 +149,6 @@ PTY opened. Terminal is active.").arg(domain);
 void LXC_Viewer::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
-        ev->ignore();
         QString key = QString("%1_%2").arg(connName).arg(domain);
         emit finished(key);
     };
