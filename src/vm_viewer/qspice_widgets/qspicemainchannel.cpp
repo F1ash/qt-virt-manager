@@ -130,7 +130,7 @@ void QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *spicemainchan
                                                  gpointer user_data)
 {
     Q_UNUSED(spicemainchannel)
-
+    //qDebug()<<"main_clipboard_selection_grub";
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->main_ClipboardSelectionGrab(selection, (void*)types, ntypes);
@@ -140,10 +140,10 @@ void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *spicemainc
                                                     gpointer user_data)
 {
     Q_UNUSED(spicemainchannel)
-
+    //qDebug()<<"main_clipboard_selection_release";
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
-    emit _mainchannel->main_ClipboardSelectionRelease(selection);
+    emit _mainchannel->guest_ClipboardSelectionRelease(selection);
 }
 void QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainchannel,
                                                     guint selection,
@@ -151,7 +151,7 @@ void QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainc
                                                     gpointer user_data)
 {
     Q_UNUSED(spicemainchannel)
-
+    //qDebug()<<"main_clipboard_selection_request";
     QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->main_ClipboardSelectionRequest(selection, types);
@@ -171,10 +171,10 @@ void QSpiceMainChannel::initCallbacks()
                      (GCallback) QSpiceHelper::main_agent_update, this);
     g_signal_connect(gobject, "main-clipboard-selection",
                      (GCallback) QSpiceHelper::main_clipboard_selection, this);
-    //g_signal_connect(gobject, "main-clipboard-selection-grab",
-    //                 (GCallback) QSpiceHelper::main_clipboard_selection_grab, this);
-    //g_signal_connect(gobject, "main-clipboard-selection-release",
-    //                 (GCallback) QSpiceHelper::main_clipboard_selection_release, this);
+    g_signal_connect(gobject, "main-clipboard-selection-grab",
+                     (GCallback) QSpiceHelper::main_clipboard_selection_grab, this);
+    g_signal_connect(gobject, "main-clipboard-selection-release",
+                     (GCallback) QSpiceHelper::main_clipboard_selection_release, this);
     g_signal_connect(gobject, "main-clipboard-selection-request",
                      (GCallback) QSpiceHelper::main_clipboard_selection_request, this);
     g_signal_connect(gobject, "main-mouse-update",
@@ -254,7 +254,7 @@ void QSpiceMainChannel::mainClipboardSelectionNotify(quint32 type, const uchar *
                 size);
 }
 
-void QSpiceMainChannel::mainClipboardSelectionRequest()
+void QSpiceMainChannel::guestClipboardSelectionRequest()
 {
     spice_main_clipboard_selection_request(
                 (SpiceMainChannel *) gobject,

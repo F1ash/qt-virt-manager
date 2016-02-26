@@ -222,6 +222,8 @@ void Spice_Viewer::initSpiceWidget()
             spiceWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
     connect(spiceWdg, SIGNAL(errMsg(QString&)),
             this, SLOT(sendErrMsg(QString&)));
+    connect(spiceWdg, SIGNAL(clipboardsReleased(bool)),
+            viewerToolBar, SLOT(changeCopypasteState(bool)));
 
     QSize around_size = getWidgetSizeAroundDisplay();
     QString _uri = QString("spice://%1:%2").arg(addr).arg(port);

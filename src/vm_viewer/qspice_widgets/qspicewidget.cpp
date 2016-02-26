@@ -85,12 +85,16 @@ void QSpiceWidget::mainFileCopyAsync(QStringList &fileNames)
 
 void QSpiceWidget::copyClipboardFromGuest()
 {
-    main->mainClipboardSelectionRequest();
+    emit clipboardsReleased(false);
+    main->guestClipboardSelectionRequest();
+    emit clipboardsReleased(true);
 }
 
 void QSpiceWidget::sendClipboardDataToGuest(quint32 type, const uchar *_data, size_t _size)
 {
+    emit clipboardsReleased(false);
     main->mainClipboardSelectionNotify(type, _data, _size);
+    emit clipboardsReleased(true);
 }
 
 /* private slots */
@@ -108,10 +112,10 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
                 SLOT(mainClipboardSelection(uint,void*,uint)));
         connect(main, SIGNAL(main_ClipboardSelectionGrab(uint,void*,uint)),
                 SLOT(mainClipboardSelectionGrab()));
-        connect(main, SIGNAL(main_ClipboardSelectionRelease(uint)),
-                SLOT(mainClipboardSelectionRelease(uint)));
+        connect(main, SIGNAL(guest_ClipboardSelectionRelease(uint)),
+                SLOT(guestClipboardSelectionRelease(uint)));
         connect(main, SIGNAL(main_ClipboardSelectionRequest(uint,uint)),
-                SLOT(mainClipboardSelectionRequest(uint,uint)));
+                SLOT(clientClipboardSelectionRequest(uint,uint)));
         connect(main, SIGNAL(main_MouseUpdate()),
                 SLOT(mainMouseUpdate()));
         connect(main, SIGNAL(downloaded(int,int)),
@@ -361,7 +365,7 @@ void QSpiceWidget::mainClipboardSelectionGrab()
     qDebug()<<"main: ClipboardSelectionGrab";
 }
 
-void QSpiceWidget::mainClipboardSelectionRelease(uint selection)
+void QSpiceWidget::guestClipboardSelectionRelease(uint selection)
 {
     switch (selection) {
     case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
@@ -375,10 +379,11 @@ void QSpiceWidget::mainClipboardSelectionRelease(uint selection)
         break;
     default:
         break;
-    }
+    };
+    emit clipboardsReleased(true);
 }
 
-void QSpiceWidget::mainClipboardSelectionRequest(uint selection, uint type)
+void QSpiceWidget::clientClipboardSelectionRequest(uint selection, uint type)
 {
     QString dataType;
     switch (type) {
@@ -405,13 +410,13 @@ void QSpiceWidget::mainClipboardSelectionRequest(uint selection, uint type)
     };
     switch (selection) {
     case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
-        qDebug()<<"guestClipboard_CLIPBOARDSelectionRequest"<<dataType;
+        qDebug()<<"clientClipboard_CLIPBOARDSelectionRequest"<<dataType;
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_PRIMARY:
-        qDebug()<<"guestClipboard_PRIMARYSelectionRequest"<<dataType;
+        qDebug()<<"clientClipboard_PRIMARYSelectionRequest"<<dataType;
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_SECONDARY:
-        qDebug()<<"guestClipboard_SECONDARYSelectionRequest"<<dataType;
+        qDebug()<<"clientClipboard_SECONDARYSelectionRequest"<<dataType;
         break;
     default:
         break;
@@ -532,7 +537,8 @@ void QSpiceWidget::displayInvalidate(
     int                 width,
     int                 height)
 {
-    //qDebug()<<"displayInvalidate"<<x<<y<<width<<height<<":"<<x*zoom<<y*zoom<<width*zoom<<height*zoom;
+    //qDebug()<<"displayInvalidate"<<x<<y<<width<<height<<":"
+    //       <<x*zoom<<y*zoom<<width*zoom<<height*zoom;
     // for optimal processing
     if ( zoom == 1.0 ) {
         // faster
@@ -624,21 +630,27 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     if (event->type() == QEvent::MouseMove )
     {
         QMouseEvent *ev = (QMouseEvent *) event;
-        //qDebug()<<ev->x()<<ev->y()<<":"<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
-        inputs->inputsPosition(ev->x()*zoom, ev->y()*zoom,
-                               display->getId(), QtButtonsMaskToSpice(ev));
+        //qDebug()<<ev->x()<<ev->y()<<":"
+        //<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
+        inputs->inputsPosition(
+                    ev->x()*zoom,
+                    ev->y()*zoom,
+                    display->getId(),
+                    QtButtonsMaskToSpice(ev));
         return true;
     }
     else if (event->type() == QEvent::MouseButtonPress)
     {
         QMouseEvent *ev = (QMouseEvent *) event;
-        inputs->inputsButtonPress(QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
+        inputs->inputsButtonPress(
+                    QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
         return true;
     }
     else if (event->type() == QEvent::MouseButtonRelease)
     {
         QMouseEvent *ev = (QMouseEvent *) event;
-        inputs->inputsButtonRelease(QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
+        inputs->inputsButtonRelease(
+                    QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
         return true;
     }
     else if (event->type() == QEvent::KeyPress)
@@ -655,8 +667,12 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     }
     else if (event->type() == QEvent::MouseButtonDblClick)
     {
-        inputs->inputsButtonPress(SPICE_MOUSE_BUTTON_LEFT, SPICE_MOUSE_BUTTON_MASK_LEFT);
-        inputs->inputsButtonRelease(SPICE_MOUSE_BUTTON_LEFT, 0);
+        inputs->inputsButtonPress(
+                    SPICE_MOUSE_BUTTON_LEFT,
+                    SPICE_MOUSE_BUTTON_MASK_LEFT);
+        inputs->inputsButtonRelease(
+                    SPICE_MOUSE_BUTTON_LEFT,
+                    0);
         return true;
     }
     else if (event->type() == QEvent::Wheel)
@@ -664,13 +680,25 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         QWheelEvent *ev = (QWheelEvent *) event;
         if (ev->delta() > 0)
         {
-            inputs->inputsButtonPress(SPICE_MOUSE_BUTTON_UP, QtButtonsMaskToSpice(QApplication::mouseButtons()));
-            inputs->inputsButtonRelease(SPICE_MOUSE_BUTTON_UP, QtButtonsMaskToSpice(QApplication::mouseButtons()));
+            inputs->inputsButtonPress(
+                        SPICE_MOUSE_BUTTON_UP,
+                        QtButtonsMaskToSpice(
+                            QApplication::mouseButtons()));
+            inputs->inputsButtonRelease(
+                        SPICE_MOUSE_BUTTON_UP,
+                        QtButtonsMaskToSpice(
+                            QApplication::mouseButtons()));
         }
         else
         {
-            inputs->inputsButtonPress(SPICE_MOUSE_BUTTON_DOWN, QtButtonsMaskToSpice(QApplication::mouseButtons()));
-            inputs->inputsButtonRelease(SPICE_MOUSE_BUTTON_DOWN, QtButtonsMaskToSpice(QApplication::mouseButtons()));
+            inputs->inputsButtonPress(
+                        SPICE_MOUSE_BUTTON_DOWN,
+                        QtButtonsMaskToSpice(
+                            QApplication::mouseButtons()));
+            inputs->inputsButtonRelease(
+                        SPICE_MOUSE_BUTTON_DOWN,
+                        QtButtonsMaskToSpice(
+                            QApplication::mouseButtons()));
 
         }
         ev->accept();
@@ -718,12 +746,13 @@ void QSpiceWidget::reloadUsbDevList(void *obj)
 
 void QSpiceWidget::reloadSmartcardList(void *obj)
 {
-    SpiceSmartcardWidget *smartcardWdg = static_cast<SpiceSmartcardWidget*>(obj);
+    SpiceSmartcardWidget *smartcardWdg =
+            static_cast<SpiceSmartcardWidget*>(obj);
     if ( smartcardWdg ) {
         smartcardWdg->setEnabled(false);
         smartcardWdg->clearList();
-        QStringList _cardList =
-                smartcardManager->spiceSmartcardManager_get_readers();
+        QStringList _cardList = smartcardManager->
+                spiceSmartcardManager_get_readers();
         foreach (QString _card, _cardList) {
             QListWidgetItem *item = new QListWidgetItem();
             item->setText(_card);

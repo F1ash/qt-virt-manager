@@ -1,6 +1,24 @@
 #ifndef QSPICEWIDGET_H
 #define QSPICEWIDGET_H
 
+/* http://www.spice-space.org/page/Whiteboard/AgentProtocol#Clipboard
+ * To do so, the guest agent and the client play a symmetric role:
+ * they can both claim ownership (GRAB), RELEASE ownership,
+ * REQUEST clipboard data and send CLIPBOARD data. For example,
+ * the GRAB message is sent after receiving a system notification of clipboard data
+ * available after a Copy operation in some application.
+ * When the clipboard is emptied, the grab must be RELEASEd. The other side can REQUEST
+ * the data while the GRAB is active, and should expect a CLIPBOARD reply with the data.
+ * Important:
+ * If a GRAB message has been sent and is currently active,
+ * then a successive GRAB message is received from the peer,
+ * no RELEASE message should be sent to the peer for the previous active grab.
+ * It has been implicitly released by the peer. Sending an extra RELEASE message
+ * would only confuse the peer.
+ * ------------------------------------------------------------------------------------
+ * Then will implemented the copy/paste cross blocking.
+ */
+
 #include <QTimer>
 #include <QLabel>
 #include <QHBoxLayout>
@@ -114,6 +132,11 @@ signals:
      */
     void errMsg(QString&);
 
+    /*
+     * Emitted, when guest/client clipboards in processing.
+     */
+    void clipboardsReleased(bool);
+
 private:
     QString                  guestName;
 
@@ -148,8 +171,8 @@ private slots:
     void mainAgentUpdate();
     void mainClipboardSelection(uint, void*, uint);
     void mainClipboardSelectionGrab();
-    void mainClipboardSelectionRelease(uint);
-    void mainClipboardSelectionRequest(uint, uint);
+    void guestClipboardSelectionRelease(uint);
+    void clientClipboardSelectionRequest(uint, uint);
     void mainMouseUpdate();
 
     void usbDevAutoConnectFailed(QString&, QString&);

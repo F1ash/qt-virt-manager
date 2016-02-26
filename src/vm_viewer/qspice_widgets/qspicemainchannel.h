@@ -35,7 +35,7 @@ public:
     void mainClipboardSelectionGrab(uint selection, quint32 *types, int ntypes);
     void mainClipboardSelectionRelease();
     void mainClipboardSelectionNotify(quint32, const uchar*, size_t);
-    void mainClipboardSelectionRequest();
+    void guestClipboardSelectionRequest();
 
     void mainFileCopyAsync(QStringList&);
 
@@ -46,7 +46,7 @@ signals:
     void main_AgentUpdate();
     void main_ClipboardSelection(uint, void*, uint);
     void main_ClipboardSelectionGrab(uint, void*, uint);
-    void main_ClipboardSelectionRelease(uint);
+    void guest_ClipboardSelectionRelease(uint);
     void main_ClipboardSelectionRequest(uint, uint);
     void main_MouseUpdate();
     void downloaded(int, int);

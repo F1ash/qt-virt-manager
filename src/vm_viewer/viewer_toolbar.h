@@ -49,6 +49,9 @@ signals:
 private slots:
     void             showMenu();
     void             detectTriggerredAction(QAction*);
+
+public slots:
+    void             changeCopypasteState(bool);
 };
 
 #endif // VIEWER_TOOLBAR_H
