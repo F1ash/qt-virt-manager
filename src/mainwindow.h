@@ -92,6 +92,8 @@ private slots:
     void initConnListWidget();
     void initToolBar();
     void initDockWidgets();
+    void initVirEventloop();
+    void initConnections();
     void editCurrentConnection();
     void createNewConnection();
     void deleteCurrentConnection();

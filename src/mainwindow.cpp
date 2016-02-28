@@ -26,14 +26,13 @@ MainWindow::MainWindow(QWidget *parent)
     restoreState(settings.value("State").toByteArray());
     this->setVisible(!settings.value("Visible", false).toBool());
     changeVisibility();
-    // TODO: use instead waitAtClose application's default value
-    // the value from libvirt for timeout of connection
     waitAtClose = settings.value("WaitAtClose", 180).toInt();
     closeProgress = new QProgressBar(this);
     closeProgress->setRange(0, waitAtClose*1000);
     closeProgress->setToolTip("Progress for waiting the connection close");
     statusBar()->addPermanentWidget(closeProgress);
     statusBar()->hide();
+    initVirEventloop();
 }
 
 void MainWindow::saveSettings()
@@ -261,13 +260,6 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 }
 void MainWindow::initConnListWidget()
 {
-    virtEventLoop = new VirtEventLoop(this);
-    // close application after closing virtEventLoop
-    connect(virtEventLoop, SIGNAL(finished()),
-            this, SLOT(close()));
-    connect(virtEventLoop, SIGNAL(errorMsg(QString&,uint)),
-            this, SLOT(writeToErrorLog(QString&,uint)));
-    virtEventLoop->start();
     connListWidget = new ConnectionList(this);
     setCentralWidget(connListWidget);
     settings.beginGroup("ConnectListColumns");
@@ -275,29 +267,6 @@ void MainWindow::initConnListWidget()
     connListWidget->setColumnWidth(1, settings.value("column1", 32).toInt());
     connListWidget->setColumnWidth(2, settings.value("column2", 32).toInt());
     settings.endGroup();
-    settings.beginGroup("Connects");
-    QStringList groups = settings.childGroups();
-    settings.endGroup();
-    QList<QString>::const_iterator i;
-    for (i=groups.constBegin(); i!=groups.constEnd(); ++i) {
-        QString s = (*i);
-        connListWidget->addConnItem(s);
-    };
-    connListWidget->searchLocalhostConnections();
-    connect(connListWidget, SIGNAL(removeConnection(QString&)),
-            this, SLOT(removeConnItem(QString&)));
-    connect(connListWidget, SIGNAL(messageShowed()),
-            this, SLOT(mainWindowUp()));
-    connect(connListWidget, SIGNAL(warning(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
-    connect(connListWidget, SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
-            this, SLOT(receiveConnPtrPtr(virConnectPtr*, QString&)));
-    connect(connListWidget, SIGNAL(connClosed(bool, QString&)),
-            this, SLOT(stopConnProcessing(bool, QString&)));
-    connect(connListWidget, SIGNAL(connToClose(int)),
-            this, SLOT(closeConnGenerations(int)));
-    connect(connListWidget, SIGNAL(domainEnd(QString&)),
-            this, SLOT(deleteVMDisplay(QString&)));
 }
 void MainWindow::initToolBar()
 {
@@ -568,6 +537,52 @@ void MainWindow::initDockWidgets()
     storagePoolDockContent->setEnabled(false);
     secretDockContent->setEnabled(false);
     ifaceDockContent->setEnabled(false);
+}
+void MainWindow::initVirEventloop()
+{
+    virtEventLoop = new VirtEventLoop(this);
+    // close application after closing virtEventLoop
+    connect(virtEventLoop, SIGNAL(finished()),
+            this, SLOT(close()));
+    connect(virtEventLoop, SIGNAL(errorMsg(QString&,uint)),
+            this, SLOT(writeToErrorLog(QString&,uint)));
+    connect(virtEventLoop, SIGNAL(started()),
+             this, SLOT(initConnections()));
+    virtEventLoop->start();
+}
+void MainWindow::initConnections()
+{
+    QString time = QTime::currentTime().toString();
+    QString title("App initialization");
+    QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+            .arg(time).arg(title).arg("virtEventLoop started");
+    logDockContent->appendMsgToLog(currMsg);
+    settings.beginGroup("Connects");
+    QStringList groups = settings.childGroups();
+    settings.endGroup();
+    QList<QString>::const_iterator i;
+    for (i=groups.constBegin(); i!=groups.constEnd(); ++i) {
+        QString s = (*i);
+        connListWidget->addConnItem(s);
+    };
+    connListWidget->searchLocalhostConnections();
+    connect(connListWidget, SIGNAL(removeConnection(QString&)),
+            this, SLOT(removeConnItem(QString&)));
+    connect(connListWidget, SIGNAL(messageShowed()),
+            this, SLOT(mainWindowUp()));
+    connect(connListWidget, SIGNAL(warning(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
+    connect(connListWidget, SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
+            this, SLOT(receiveConnPtrPtr(virConnectPtr*, QString&)));
+    connect(connListWidget, SIGNAL(connClosed(bool, QString&)),
+            this, SLOT(stopConnProcessing(bool, QString&)));
+    connect(connListWidget, SIGNAL(connToClose(int)),
+            this, SLOT(closeConnGenerations(int)));
+    connect(connListWidget, SIGNAL(domainEnd(QString&)),
+            this, SLOT(deleteVMDisplay(QString&)));
+    currMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+            .arg(time).arg(title).arg("Connections inited");
+    logDockContent->appendMsgToLog(currMsg);
 }
 void MainWindow::editCurrentConnection()
 {

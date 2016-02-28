@@ -7,7 +7,11 @@ VirtEventLoop::VirtEventLoop(QObject *parent) :
 
 void VirtEventLoop::run()
 {
-    keep_alive = true;
+    int registered = -1;
+    if ( virInitialize()+1 ) {
+        registered = virEventRegisterDefaultImpl();
+    };
+    keep_alive = (registered==0);
     while ( keep_alive ) {
         if ( virEventRunDefaultImpl() < 0 ) {
             sendGlobalErrors();
