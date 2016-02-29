@@ -12,6 +12,7 @@ void VirtEventLoop::run()
         registered = virEventRegisterDefaultImpl();
     };
     keep_alive = (registered==0);
+    emit result(keep_alive);
     while ( keep_alive ) {
         if ( virEventRunDefaultImpl() < 0 ) {
             sendGlobalErrors();

@@ -93,7 +93,7 @@ private slots:
     void initToolBar();
     void initDockWidgets();
     void initVirEventloop();
-    void initConnections();
+    void initConnections(bool);
     void editCurrentConnection();
     void createNewConnection();
     void deleteCurrentConnection();

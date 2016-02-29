@@ -546,16 +546,18 @@ void MainWindow::initVirEventloop()
             this, SLOT(close()));
     connect(virtEventLoop, SIGNAL(errorMsg(QString&,uint)),
             this, SLOT(writeToErrorLog(QString&,uint)));
-    connect(virtEventLoop, SIGNAL(started()),
-             this, SLOT(initConnections()));
+    connect(virtEventLoop, SIGNAL(result(bool)),
+             this, SLOT(initConnections(bool)));
     virtEventLoop->start();
 }
-void MainWindow::initConnections()
+void MainWindow::initConnections(bool started)
 {
     QString time = QTime::currentTime().toString();
     QString title("App initialization");
-    QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
-            .arg(time).arg(title).arg("virtEventLoop started");
+    QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
+                               <b>EVENT</b></font>: virtEventLoop%3%4")
+            .arg(time).arg(title).arg(!started?" not":"").arg(" started");
+    if ( !started ) return;
     logDockContent->appendMsgToLog(currMsg);
     settings.beginGroup("Connects");
     QStringList groups = settings.childGroups();
@@ -580,7 +582,8 @@ void MainWindow::initConnections()
             this, SLOT(closeConnGenerations(int)));
     connect(connListWidget, SIGNAL(domainEnd(QString&)),
             this, SLOT(deleteVMDisplay(QString&)));
-    currMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+    currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
+                       <b>EVENT</b></font>: %3")
             .arg(time).arg(title).arg("Connections inited");
     logDockContent->appendMsgToLog(currMsg);
 }

@@ -9,6 +9,9 @@ class VirtEventLoop : public _VirtThread
 public:
     explicit VirtEventLoop(QObject *parent = nullptr);
     void run();
+
+signals:
+    void result(bool);
 };
 
 #endif // VIRT_EVENT_LOOP_H
