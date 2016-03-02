@@ -166,8 +166,7 @@ bool Model::insertRow(int row)
 {
     if (row == -1) row = 0;
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    Index *newItem = new Index;
-    DataList.insert(row, newItem);
+    DataList.insert(row, new Index);
     endInsertRows();
     return true;
 }

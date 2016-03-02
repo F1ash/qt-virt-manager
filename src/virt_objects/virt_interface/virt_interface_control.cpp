@@ -262,8 +262,7 @@ void VirtInterfaceControl::newVirtEntityFromXML(const QStringList &_args)
                     msgRepeater(msg);
                     if ( show ) QDesktopServices::openUrl(QUrl(xml));
                 };
-                delete createIface;
-                createIface = nullptr;
+                createIface->deleteLater();
                 if ( result==QDialog::Rejected ) return;
                 //qDebug()<<xml<<"path"<<result;
                 task.args.path = xml;

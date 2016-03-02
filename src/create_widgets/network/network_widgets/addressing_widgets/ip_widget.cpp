@@ -48,8 +48,7 @@ void IP_Widget::showCustomMenu(QPoint pos)
     addMenu->exec();
     disconnect(addMenu->addTabAction, SIGNAL(triggered()),
                this, SLOT(addTab()));
-    delete addMenu;
-    addMenu = nullptr;
+    addMenu->deleteLater();
 }
 void IP_Widget::addTab()
 {
@@ -70,7 +69,6 @@ void IP_Widget::closeTab(int i)
         disconnect(wdg, SIGNAL(dhcpUsageChanged()),
                    this, SLOT(updateDHCPUsage()));
         ipSet->removeTab(i);
-        delete wdg;
-        wdg = nullptr;
+        wdg->deleteLater();
     };
 }

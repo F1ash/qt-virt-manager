@@ -151,12 +151,15 @@ void DeviceData::closeDataEdit()
         emit saveDeviceXMLDesc(row, xmlDesc);
         //qDebug()<<"emited"<<devName->text();
     };
+    clearDataEdit();
+}
+void DeviceData::clearDataEdit()
+{
     if ( nullptr!=device ) {
         infoLayout->removeWidget(device);
         //disconnect(device, SIGNAL(dataChanged()),
         //           this, SLOT(currentStateChanged()));
-        delete device;
-        device = nullptr;
+        device->deleteLater();
     };
 }
 

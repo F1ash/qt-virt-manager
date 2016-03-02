@@ -12,7 +12,6 @@ class SnapshotTreeModel : public QAbstractItemModel
     Q_OBJECT
 public:
     explicit SnapshotTreeModel(QObject *parent = nullptr);
-    ~SnapshotTreeModel();
     QIcon                        icon, work;
 
     QModelIndex index(int row, int column, const QModelIndex & parent = QModelIndex()) const;

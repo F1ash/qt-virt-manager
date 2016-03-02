@@ -1,10 +1,10 @@
 #include "logical_host_cpu.h"
 #include <QThread>
 
-LogicalHostCPU::LogicalHostCPU(QWidget *parent) :
-    QWidget(parent)
+LogicalHostCPU::LogicalHostCPU(
+        QWidget *parent, uint _cores) :
+    QWidget(parent), cores(_cores)
 {
-    cores = QThread::idealThreadCount();
     QString _label = QString("Logical host cores: %1").arg(cores);
     logicCPULabel = new QLabel(_label, this);
     icon = new QLabel(this);

@@ -167,9 +167,7 @@ void TaskWareHouse::taskResultReceiver(Result data)
         disconnect(cThread, SIGNAL(resultData(Result)),
                    this, SLOT(taskResultReceiver(Result)));
         threadPool->value(_number)->quit();
-        delete cThread;
-        cThread = nullptr;
-        //delete threadPool->value(_number);
+        cThread->deleteLater();
         int deleted = threadPool->remove(_number);
         //qDebug()<<_number<<"deleted:"<<deleted;
     };

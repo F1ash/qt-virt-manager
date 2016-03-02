@@ -10,8 +10,7 @@ BindFsType::BindFsType(QWidget *parent, QString _type) :
     driverLabel->setVisible(false);
     driver->setVisible(false);
     commonLayout->removeWidget(sourceLabel);
-    delete sourceLabel;
-    sourceLabel = nullptr;
+    sourceLabel->deleteLater();
     commonLayout->addWidget(new QLabel("Source:", this), 4, 0);
     source->setPlaceholderText("Source guest directory");
     target->setPlaceholderText("Target guest directory");

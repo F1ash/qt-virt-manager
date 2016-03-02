@@ -100,7 +100,8 @@ void QSpiceWidget::sendClipboardDataToGuest(quint32 type, const uchar *_data, si
 /* private slots */
 void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
 {
-    QSpiceMainChannel * _main = dynamic_cast<QSpiceMainChannel *>(channel);
+    QSpiceMainChannel * _main =
+            dynamic_cast<QSpiceMainChannel *>(channel);
     if (_main)
     {
         main = _main;
@@ -124,7 +125,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         return;
     }
 
-    QSpiceDisplayChannel *_display = dynamic_cast<QSpiceDisplayChannel *>(channel);
+    QSpiceDisplayChannel *_display =
+            dynamic_cast<QSpiceDisplayChannel *>(channel);
     if (_display)
     {
         display = _display;
@@ -144,21 +146,25 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         return;
     }
 
-    QSpiceInputsChannel * _inputs = dynamic_cast<QSpiceInputsChannel *>(channel);
+    QSpiceInputsChannel * _inputs =
+            dynamic_cast<QSpiceInputsChannel *>(channel);
     if (_inputs)
     {
         inputs = _inputs;
-        connect(inputs, SIGNAL(channelDestroyed()), SLOT(channelDestroyed()));
+        connect(inputs, SIGNAL(channelDestroyed()),
+                SLOT(channelDestroyed()));
         bool online = inputs->Connect();
         emit inputsChannelChanged(online);
         return;
     }
 
-    QSpiceCursorChannel * _cursor = dynamic_cast<QSpiceCursorChannel *>(channel);
+    QSpiceCursorChannel * _cursor =
+            dynamic_cast<QSpiceCursorChannel *>(channel);
     if (_cursor)
     {
         cursor = _cursor;
-        connect(cursor, SIGNAL(channelDestroyed()), SLOT(channelDestroyed()));
+        connect(cursor, SIGNAL(channelDestroyed()),
+                SLOT(channelDestroyed()));
         connect(cursor, SIGNAL(cursorSet(int,int,int,int,void*)),
                 SLOT(cursorSet(int,int,int,int,void*)));
         bool online = cursor->Connect();
@@ -166,7 +172,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         return;
     }
 
-    QSpiceSmartcardChannel * _smartcard = dynamic_cast<QSpiceSmartcardChannel *>(channel);
+    QSpiceSmartcardChannel * _smartcard =
+            dynamic_cast<QSpiceSmartcardChannel *>(channel);
     if (_smartcard)
     {
         smartcard = _smartcard;
@@ -194,7 +201,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         return;
     }
 
-    QSpiceUSBRedirChannel * _usbredir = dynamic_cast<QSpiceUSBRedirChannel *>(channel);
+    QSpiceUSBRedirChannel * _usbredir =
+            dynamic_cast<QSpiceUSBRedirChannel *>(channel);
     if (_usbredir)
     {
         usbredir = _usbredir;
@@ -216,7 +224,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         return;
     }
 
-    QSpiceWebDAVChannel * _webdav = dynamic_cast<QSpiceWebDAVChannel *>(channel);
+    QSpiceWebDAVChannel * _webdav =
+            dynamic_cast<QSpiceWebDAVChannel *>(channel);
     if (_webdav)
     {
         webdav = _webdav;
@@ -225,7 +234,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         return;
     }
 
-    QSpicePlaybackChannel * _playback = dynamic_cast<QSpicePlaybackChannel *>(channel);
+    QSpicePlaybackChannel * _playback =
+            dynamic_cast<QSpicePlaybackChannel *>(channel);
     if (_playback)
     {
         playback = _playback;
@@ -238,7 +248,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
 #endif
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
-                        this, (SpiceSession*)spiceSession->gobject);
+                        this,
+                        static_cast<SpiceSession*>(spiceSession->gobject));
             //qDebug()<<"spiceAudio is associated:"<<spiceAudio->isAssociated();
             if ( spiceAudio->isAssociated() ) {
                 // reserved for some work
@@ -248,7 +259,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
         return;
     }
 
-    QSpiceRecordChannel * _record = dynamic_cast<QSpiceRecordChannel *>(channel);
+    QSpiceRecordChannel * _record =
+            dynamic_cast<QSpiceRecordChannel *>(channel);
     if (_record)
     {
         record = _record;
@@ -261,7 +273,8 @@ void QSpiceWidget::ChannelNew(QSpiceChannel *channel)
 #endif
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
-                        this, (SpiceSession*)spiceSession->gobject);
+                        this,
+                        static_cast<SpiceSession*>(spiceSession->gobject));
             //qDebug()<<"spiceAudio is associated:"<<spiceAudio->isAssociated();
             if ( spiceAudio->isAssociated() ) {
                 // reserved for some work
@@ -289,15 +302,13 @@ void QSpiceWidget::channelDestroyed()
         emit displayChannelChanged(false);
     } else if (QObject::sender() == smartcard) {
         if (smartcardManager) {
-            delete smartcardManager;
-            smartcardManager = nullptr;
+            smartcardManager->deleteLater();
         };
         smartcard = nullptr;
         emit smartcardChannelChanged(false);
     } else if (QObject::sender() == usbredir) {
         if ( usbDevManager ) {
-            delete usbDevManager;
-            usbDevManager = nullptr;
+            usbDevManager->deleteLater();
         };
         usbredir = nullptr;
         emit usbredirChannelChanged(false);
@@ -308,15 +319,13 @@ void QSpiceWidget::channelDestroyed()
         playback = nullptr;
         emit playbackChannelChanged(false);
         if ( spiceAudio ) {
-            delete spiceAudio;
-            spiceAudio = nullptr;
+            spiceAudio->deleteLater();
         };
     } else if (QObject::sender() == record) {
         record = nullptr;
         emit recordChannelChanged(false);
         if ( spiceAudio ) {
-            delete spiceAudio;
-            spiceAudio = nullptr;
+            spiceAudio->deleteLater();
         };
     }
 }
@@ -629,7 +638,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
 
     if (event->type() == QEvent::MouseMove )
     {
-        QMouseEvent *ev = (QMouseEvent *) event;
+        QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         //qDebug()<<ev->x()<<ev->y()<<":"
         //<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
         inputs->inputsPosition(
@@ -641,27 +650,27 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     }
     else if (event->type() == QEvent::MouseButtonPress)
     {
-        QMouseEvent *ev = (QMouseEvent *) event;
+        QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         inputs->inputsButtonPress(
                     QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
         return true;
     }
     else if (event->type() == QEvent::MouseButtonRelease)
     {
-        QMouseEvent *ev = (QMouseEvent *) event;
+        QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         inputs->inputsButtonRelease(
                     QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
         return true;
     }
     else if (event->type() == QEvent::KeyPress)
     {
-        QKeyEvent *ev = (QKeyEvent *) event;
+        QKeyEvent *ev = static_cast<QKeyEvent*>(event);
         inputs->inputsQKeyPress(ev->key());
         return true;
     }
     else if (event->type() == QEvent::KeyRelease)
     {
-        QKeyEvent *ev = (QKeyEvent *) event;
+        QKeyEvent *ev = static_cast<QKeyEvent*>(event);
         inputs->inputsQKeyRelease(ev->key());
         return true;
     }
@@ -677,7 +686,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     }
     else if (event->type() == QEvent::Wheel)
     {
-        QWheelEvent *ev = (QWheelEvent *) event;
+        QWheelEvent *ev = static_cast<QWheelEvent*>(event);
         if (ev->delta() > 0)
         {
             inputs->inputsButtonPress(
@@ -720,7 +729,8 @@ void QSpiceWidget::resizeEvent ( QResizeEvent * event )
 
 void QSpiceWidget::reloadUsbDevList(void *obj)
 {
-    SpiceUsbDeviceWidget *usbDevWdg = static_cast<SpiceUsbDeviceWidget*>(obj);
+    SpiceUsbDeviceWidget *usbDevWdg =
+            static_cast<SpiceUsbDeviceWidget*>(obj);
     if ( usbDevWdg ) {
         usbDevWdg->setEnabled(false);
         usbDevWdg->clearList();
@@ -815,7 +825,8 @@ void QSpiceWidget::setNewSize(int _w, int _h)
 
 void QSpiceWidget::showUsbDevWidget()
 {
-    SpiceUsbDeviceWidget *usbDevWdg = new SpiceUsbDeviceWidget(this);
+    SpiceUsbDeviceWidget *usbDevWdg =
+            new SpiceUsbDeviceWidget(this);
     if ( usbDevManager ) {
         connect(usbDevManager, SIGNAL(deviceAdded(QString&)),
                 usbDevWdg, SLOT(addDevice(QString&)));
@@ -830,13 +841,13 @@ void QSpiceWidget::showUsbDevWidget()
         reloadUsbDevList(usbDevWdg);
     };
     usbDevWdg->exec();
-    delete usbDevWdg;
-    usbDevWdg = nullptr;
+    usbDevWdg->deleteLater();
 }
 
 void QSpiceWidget::showSmartCardWidget()
 {
-    SpiceSmartcardWidget *smartcardWdg = new SpiceSmartcardWidget(this);
+    SpiceSmartcardWidget *smartcardWdg =
+            new SpiceSmartcardWidget(this);
     if ( smartcardManager ) {
         connect(smartcardManager, SIGNAL(cardInserted(QString&)),
                 smartcardWdg, SLOT(addCard(QString&)));
@@ -851,8 +862,7 @@ void QSpiceWidget::showSmartCardWidget()
         reloadSmartcardList(smartcardWdg);
     };
     smartcardWdg->exec();
-    delete smartcardWdg;
-    smartcardWdg = nullptr;
+    smartcardWdg->deleteLater();
 }
 
 void QSpiceWidget::getScreenshot()

@@ -300,7 +300,7 @@ Result StorageVolControlThread::downloadStorageVol()
     } else sendConnErrors();
     if ( stream!=nullptr ) virStreamFree(stream);
     f->close();
-    delete f; f = nullptr;
+    f->deleteLater();
     result.msg.append(
                 QString("'<b>%1</b>' StorageVol %2 Downloaded into %3 (%4).")
                 .arg(name).arg((downloaded)?"":"don't")
@@ -405,7 +405,7 @@ Result StorageVolControlThread::uploadStorageVol()
         result.err = sendConnErrors();
     if ( stream!=nullptr ) virStreamFree(stream);
     f->close();
-    delete f; f = 0;
+    f->deleteLater();
     result.msg.append(
                 QString("'<b>%1</b>' StorageVol %2 Uploaded from %3 (%4).")
                 .arg(name).arg((uploaded)?"":"don't")

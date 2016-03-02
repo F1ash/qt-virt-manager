@@ -219,8 +219,7 @@ void VirtSecretControl::execAction(const QStringList &l)
                             createVirtSec->getSecretValue());
                 emit addNewTask(task);
             };
-            delete createVirtSec;
-            createVirtSec = nullptr;
+            createVirtSec->deleteLater();
             //qDebug()<<xml<<"path"<<result;
         } else if ( l.first()=="undefineVirtSecret" ) {
             task.action     = UNDEFINE_ENTITY;
@@ -257,8 +256,7 @@ void VirtSecretControl::execAction(const QStringList &l)
                         createVirtSec->getSecretValue());
             emit addNewTask(task);
         };
-        delete createVirtSec;
-        createVirtSec = nullptr;
+        createVirtSec->deleteLater();
         //qDebug()<<xml<<"path"<<result;
     };
 }

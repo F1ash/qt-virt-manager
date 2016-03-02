@@ -291,8 +291,7 @@ void Network_Disk::getVolumeNames()
         };
         setTypedData(_ret);
     };
-    delete volumeDialog;
-    volumeDialog = nullptr;
+    volumeDialog->deleteLater();
 }
 void Network_Disk::setTypedData(VVD_Result &_data)
 {

@@ -19,9 +19,9 @@ public:
     explicit HelperThread(
             QObject        *parent      = nullptr,
             virConnectPtr  *connPtrPtr  = nullptr);
+    uint             cores = 0;
+    QString          capabilities;
     void             run();
-signals:
-    void             result(QString&);
 };
 
 typedef QMap<QString, _QWidget*> WidgetList;
@@ -45,7 +45,6 @@ private:
     virConnectPtr*   ptr_ConnPtr = nullptr;
     QString          xmlFileName, xmlDesc;
     virErrorPtr      virtErrors;
-    QString          capabilities;
     QString          type;
     QTabWidget      *tabWidget = nullptr;
     //QCheckBox       *showDescription;
@@ -67,7 +66,6 @@ private:
 
 private slots:
     void             closeEvent(QCloseEvent*);
-    void             setCapabilities(QString&);
     void             readCapabilities();
     void             readDataLists();
     void             buildXMLDescription();

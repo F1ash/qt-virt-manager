@@ -214,7 +214,6 @@ void VM_State_Widget::showTransformationModeMenu()
     tr_menu->move(mapToGlobal(display->pos()));
     tr_menu->exec();
     tr_mode = tr_menu->getMode();
-    delete tr_menu;
-    tr_menu = nullptr;
+    tr_menu->deleteLater();
     emit transformationMode(tr_mode);
 }

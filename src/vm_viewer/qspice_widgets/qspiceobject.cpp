@@ -34,7 +34,7 @@ void QSpiceHelper::GDisposeEvent(gpointer data, GObject *gobject)
 
     QSpiceObject *so = static_cast<QSpiceObject *>(data);
     if ( so && so->objectDisposed() )
-        delete so;
+        so->deleteLater();
 
 }
 

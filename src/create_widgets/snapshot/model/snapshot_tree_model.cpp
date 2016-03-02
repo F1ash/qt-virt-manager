@@ -7,11 +7,6 @@ SnapshotTreeModel::SnapshotTreeModel(QObject *parent) :
     work = QIcon::fromTheme("system-run");
     rootItem = new TreeItem("Snapshots");
 }
-SnapshotTreeModel::~SnapshotTreeModel()
-{
-    delete rootItem;
-    rootItem = nullptr;
-}
 
 QModelIndex SnapshotTreeModel::index(int row, int column, const QModelIndex &parent) const
 {

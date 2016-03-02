@@ -100,6 +100,5 @@ void DomainStateMonitor::removeClosedViewer()
     monitoredDomains->removeWidget(wdg);
     monitoredDomainList->removeItem(i);
     //qDebug()<<wdg->domainName<<"remove from StateMonitor";
-    delete wdg;
-    wdg = nullptr;
+    wdg->deleteLater();
 }

@@ -136,8 +136,7 @@ bool VirtSecretModel::insertRow(int row)
 {
     if (row == -1) row = 0;
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    Secret_Index *newItem = new Secret_Index;
-    DataList.insert(row, newItem);
+    DataList.insert(row, new Secret_Index);
     endInsertRows();
     return true;
 }

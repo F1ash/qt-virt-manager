@@ -175,8 +175,7 @@ bool VirtIfaceModel::insertRow(int row)
 {
     if (row == -1) row = 0;
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    Interface_Index *newItem = new Interface_Index;
-    DataList.insert(row, newItem);
+    DataList.insert(row, new Interface_Index);
     endInsertRows();
     return true;
 }

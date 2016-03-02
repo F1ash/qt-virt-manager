@@ -7,23 +7,24 @@ HelperThread::HelperThread(QObject *parent, virConnectPtr *connPtrPtr) :
 }
 void HelperThread::run()
 {
-    QString capabilities;
     if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
-        emit result(capabilities);
         emit ptrIsNull();
         return;
     };
     if ( virConnectRef(*ptr_ConnPtr)<0 ) {
         sendConnErrors();
-        emit result(capabilities);
         return;
     };
     capabilities = QString(
                 virConnectGetCapabilities(*ptr_ConnPtr));
     if ( capabilities.isEmpty() ) sendConnErrors();
+    virNodeInfo info;
+    int res = virNodeGetInfo(*ptr_ConnPtr, &info);
+    if ( res==0 ) {
+        cores = info.cores * info.sockets;
+    };
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();
-    emit result(capabilities);
 }
 
 /*
@@ -127,8 +128,8 @@ CreateVirtDomain::CreateVirtDomain(QWidget *parent, TASK _task) :
                 .arg(QDir::separator()));
     setEnabled(false);
     helperThread = new HelperThread(this, ptr_ConnPtr);
-    connect(helperThread, SIGNAL(result(QString&)),
-            this, SLOT(setCapabilities(QString&)));
+    connect(helperThread, SIGNAL(finished()),
+            this, SLOT(readCapabilities()));
     connect(helperThread, SIGNAL(errorMsg(QString&,uint)),
             this, SIGNAL(errorMsg(QString&)));
     helperThread->start();
@@ -152,16 +153,11 @@ void CreateVirtDomain::closeEvent(QCloseEvent *ev)
         emit finished(key);
     };
 }
-void CreateVirtDomain::setCapabilities(QString &_cap)
-{
-    capabilities = _cap;
-    readCapabilities();
-}
 void CreateVirtDomain::readCapabilities()
 {
-    //qDebug()<<capabilities;
+    //qDebug()<<helperThread->capabilities;
     QDomDocument doc;
-    doc.setContent(capabilities);
+    doc.setContent(helperThread->capabilities);
     QDomElement _domain = doc.
             firstChildElement("capabilities").
             firstChildElement("guest").
@@ -194,8 +190,7 @@ void CreateVirtDomain::readCapabilities()
         _xml->open();
         xmlDesc.append(_xml->readAll().constData());
         _xml->close();
-        delete _xml;
-        _xml = nullptr;
+        _xml->deleteLater();
     };
     //qDebug()<<xmlDesc<<"desc"<<type;
     readDataLists();
@@ -313,13 +308,27 @@ void CreateVirtDomain::set_Result()
 void CreateVirtDomain::create_specified_widgets()
 {
     if ( !type.isEmpty() ) {
-        wdgList.insert("General", new General(this, capabilities, xmlDesc));
-        wdgList.insert("Misc.", new Misc_Settings(this, capabilities, xmlDesc));
-        wdgList.insert("OS_Booting", new OS_Booting(this, capabilities, xmlDesc));
-        wdgList.insert("Memory", new Memory(this, capabilities, xmlDesc));
-        wdgList.insert("CPU", new CPU(this, capabilities, xmlDesc));
-        wdgList.insert("Computer", new Devices(this, ptr_ConnPtr, xmlDesc));
-        wdgList.insert("SecurityLabel", new SecurityLabel(this, xmlDesc));
+        wdgList.insert(
+                    "General",
+                    new General(this, helperThread->capabilities, xmlDesc));
+        wdgList.insert(
+                    "Misc.",
+                    new Misc_Settings(this, helperThread->capabilities, xmlDesc));
+        wdgList.insert(
+                    "OS_Booting",
+                    new OS_Booting(this, helperThread->capabilities, xmlDesc));
+        wdgList.insert(
+                    "Memory",
+                    new Memory(this, helperThread->capabilities, xmlDesc));
+        wdgList.insert(
+                    "CPU",
+                    new CPU(this, helperThread->capabilities, xmlDesc, helperThread->cores));
+        wdgList.insert(
+                    "Computer",
+                    new Devices(this, ptr_ConnPtr, xmlDesc));
+        wdgList.insert(
+                    "SecurityLabel",
+                    new SecurityLabel(this, xmlDesc));
         connect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
                 wdgList.value("General"), SLOT(changeArch(QString&)));
         connect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
@@ -406,8 +415,7 @@ void CreateVirtDomain::restoreParameters()
         _QWidget *Wdg = static_cast<_QWidget*>(
                     wdgList.value(key));
         if ( nullptr!=Wdg ) {
-            delete Wdg;
-            Wdg = nullptr;
+            Wdg->deleteLater();
         };
     };
     wdgList.clear();

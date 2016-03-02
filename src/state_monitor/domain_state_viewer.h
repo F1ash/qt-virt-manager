@@ -29,7 +29,7 @@ signals:
 private:
     virConnectPtr*       ptr_ConnPtr;
     DomainMonitorThread
-                        *domainMonitorThread;
+                        *domainMonitorThread = nullptr;
     int                  timerId = 0;
 
     QLabel              *monitorName, *cpuLabel,

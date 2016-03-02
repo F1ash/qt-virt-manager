@@ -1,10 +1,10 @@
 #include "cpu.h"
 
-CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc) :
+CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc, uint cores) :
     _Tab(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("CPU");
-    logicCPULabel = new LogicalHostCPU(this);
+    logicCPULabel = new LogicalHostCPU(this, cores);
     cpuAlloc = new CPU_Allocation(this, capabilities);
     cpuModel = new CPU_Model(this);
     cpuTopology = new CPU_Topology(this);

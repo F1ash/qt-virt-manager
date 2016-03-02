@@ -60,8 +60,7 @@ void WaitLocalConn::run()
                         break;
                     };
                 };
-                delete el;
-                el = nullptr;
+                el->deleteLater();
                 connections->remove(key);
             };
         };

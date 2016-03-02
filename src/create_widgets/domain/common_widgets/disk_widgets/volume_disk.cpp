@@ -275,6 +275,5 @@ void Volume_Disk::getVolumeNames()
             modeLabel->setEnabled(false);
         };
     };
-    delete volumeDialog;
-    volumeDialog = nullptr;
+    volumeDialog->deleteLater();
 }

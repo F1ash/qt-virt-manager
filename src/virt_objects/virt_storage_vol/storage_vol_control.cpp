@@ -316,8 +316,7 @@ void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
                         path = createVolumeDialog->getXMLDescFileName();
                         show = createVolumeDialog->showXMLDescription();
                     };
-                    delete createVolumeDialog;
-                    createVolumeDialog = nullptr;
+                    createVolumeDialog->deleteLater();
                     if ( result==QDialog::Rejected ) return;
                     task.args.path = path;
                     if ( show ) QDesktopServices::openUrl(QUrl(path));

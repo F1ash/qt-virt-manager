@@ -214,8 +214,7 @@ bool ConnItemModel::insertRow(int row)
 {
     if (row < 0) row = 0;
     beginInsertRows(rootIdx, rowCount(), rowCount());
-    ConnItemIndex *newItem = new ConnItemIndex(this);
-    connItemDataList.insert(row, newItem);
+    connItemDataList.insert(row, new ConnItemIndex(this));
     endInsertRows();
     return true;
 }

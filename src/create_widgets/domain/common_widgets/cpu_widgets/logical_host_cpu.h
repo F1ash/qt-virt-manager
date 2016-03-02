@@ -11,12 +11,14 @@ class LogicalHostCPU : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LogicalHostCPU(QWidget *parent = nullptr);
+    explicit LogicalHostCPU(
+            QWidget *parent = nullptr,
+            uint     _cores = 0);
 
 signals:
 
 private:
-    int              cores = 0;
+    const uint       cores;
     QLabel          *logicCPULabel;
     QLabel          *icon;
     QLabel          *info;

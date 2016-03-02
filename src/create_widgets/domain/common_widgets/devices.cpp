@@ -361,9 +361,9 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc, bool flag)
 void Devices::delDevice()
 {
     //qDebug()<<"Delete"<<usedDeviceList->currentItem()->text();
+    infoWidget->clearDataEdit();
     QListWidgetItem *item =
             usedDeviceList->takeItem(usedDeviceList->currentRow());
-    infoWidget->closeDataEdit();
     if ( nullptr!=item ) {
         delete item;
         item = nullptr;

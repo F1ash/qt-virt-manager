@@ -38,8 +38,7 @@ void _SnapshotStuff::setParameters(virConnectPtr* connPtrPtr, QString &_domName)
                this, SLOT(setDiskItem(QDomElement&)));
     disconnect(setThread, SIGNAL(errorMsg(QString&,uint)),
                this, SIGNAL(errMsg(QString&)));
-    delete setThread;
-    setThread = nullptr;
+    setThread->deleteLater();
     disks->addStretch();
 }
 void _SnapshotStuff::setDiskItem(QDomElement &_el)

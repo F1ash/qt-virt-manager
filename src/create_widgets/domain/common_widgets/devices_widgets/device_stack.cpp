@@ -160,8 +160,7 @@ void DeviceStack::clearDevice()
     deviceList->clearSelection();
     if ( device!=nullptr ) {
         infoLayout->removeWidget(device);
-        delete device;
-        device = nullptr;
+        device->deleteLater();
     };
 }
 

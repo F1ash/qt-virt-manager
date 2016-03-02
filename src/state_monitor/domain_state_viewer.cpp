@@ -64,7 +64,6 @@ void DomainStateViewer::closeDomainStateViewer()
         timerId = 0;
     };
     setEnabled(false);
-    domainMonitorThread->deleteLater();
     close();
     emit viewerClosed();
 }
@@ -73,7 +72,7 @@ void DomainStateViewer::closeDomainStateViewer()
 void DomainStateViewer::timerEvent(QTimerEvent *ev)
 {
     if ( timerId==ev->timerId() && ptr_ConnPtr!=nullptr ) {
-        if ( !domainMonitorThread->isRunning() )
+        if ( domainMonitorThread && !domainMonitorThread->isRunning() )
             domainMonitorThread->start();
     }
 }

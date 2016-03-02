@@ -185,8 +185,7 @@ bool StorageVolModel::insertRow(int row)
 {
     if (row == -1) row = 0;
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    StorageVolIndex *newItem = new StorageVolIndex;
-    DataList.insert(row, newItem);
+    DataList.insert(row, new StorageVolIndex);
     endInsertRows();
     emit dataChanged(index(0,0), index(0,0).sibling(rowCount(), columnCount()));
     return true;

@@ -54,8 +54,7 @@ LXC_Viewer::~LXC_Viewer()
     QString msg;
     if ( nullptr!=viewerThread ) {
         viewerThread->blockSignals(true);
-        delete viewerThread;
-        viewerThread = nullptr;
+        viewerThread->deleteLater();
     };
     msg = QString("In '<b>%1</b>': Display destroyed.")
             .arg(domain);

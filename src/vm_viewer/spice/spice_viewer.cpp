@@ -115,8 +115,7 @@ void Spice_Viewer::reconnectToVirtDomain()
     QSpiceWidget *wdg = static_cast<QSpiceWidget*>(centralWidget());
     if ( nullptr!=wdg ) {
         wdg->Disconnect();
-        delete wdg;
-        wdg = nullptr;
+        wdg->deleteLater();
         initSpiceWidget();
     };
 }

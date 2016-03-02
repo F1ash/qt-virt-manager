@@ -51,6 +51,7 @@ public slots:
     QDomDocument     getResult() const;
     void             showDevice(int, QString&, QString&);
     void             closeDataEdit();
+    void             clearDataEdit();
 
 private slots:
     void             currentStateChanged();
