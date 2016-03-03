@@ -25,9 +25,9 @@ void WaitLocalConn::run()
                 if ( _name.contains(rx) ) {
                     exist = true;
                     int count = connItemModel->rowCount();
-                    ConnItemIndex *idx = nullptr;
                     for (int i=0; i<count; i++) {
-                        idx = connItemModel->connItemDataList.at(i);
+                        ConnItemIndex *idx = connItemModel->connItemDataList.at(i);
+                        if ( nullptr==idx ) continue;
                         if ( idx->getName()==_name ) {
                             DATA _data = idx->getData();
                             if ( _data.value("isRunning").toInt()!=RUNNING ) {
@@ -50,9 +50,9 @@ void WaitLocalConn::run()
             if ( nullptr!=el ) {
                 QString _name = el->getName();
                 int count = connItemModel->rowCount();
-                ConnItemIndex *idx = nullptr;
                 for (int i=0; i<count; i++) {
-                    idx = connItemModel->connItemDataList.at(i);
+                    ConnItemIndex *idx = connItemModel->connItemDataList.at(i);
+                    if ( nullptr==idx ) continue;
                     if ( idx->getName()==_name ) {
                         int row = connItemModel->connItemDataList.indexOf(idx);
                         connItemModel->removeRow(row);
@@ -60,9 +60,9 @@ void WaitLocalConn::run()
                         break;
                     };
                 };
-                el->deleteLater();
-                connections->remove(key);
+                //el->deleteLater();
             };
+            connections->remove(key);
         };
         msleep(333);
     };

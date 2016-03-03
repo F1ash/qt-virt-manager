@@ -41,6 +41,7 @@ class ConnAliveThread : public _VirtThread
     Q_OBJECT
 public:
     explicit ConnAliveThread(QObject *parent = nullptr);
+    ~ConnAliveThread();
     bool            onView;
 
 signals:

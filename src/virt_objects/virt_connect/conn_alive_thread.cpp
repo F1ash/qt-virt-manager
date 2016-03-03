@@ -13,16 +13,22 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
     domainsLifeCycleCallback = -1;
     networkLifeCycleCallback = -1;
 }
+ConnAliveThread::~ConnAliveThread()
+{
+    keep_alive = false;
+}
 
 /* public slots */
 void ConnAliveThread::setData(QString &uri) { URI = uri; }
 void ConnAliveThread::closeConnection()
 {
     //qDebug()<<"closeConnection0"<<*ptr_ConnPtr<<URI;
+    /*
     if ( keep_alive ) {
         keep_alive = false;
         return;
     };
+    */
     //qDebug()<<"closeConnection1"<<*ptr_ConnPtr<<URI;
     CONN_STATE state;
     if ( *ptr_ConnPtr!=nullptr ) {
@@ -30,6 +36,7 @@ void ConnAliveThread::closeConnection()
         unregisterConnEvents();
         //qDebug()<<"closeConnection3"<<*ptr_ConnPtr<<URI;
         int ret = virConnectClose(*ptr_ConnPtr);
+        *ptr_ConnPtr = nullptr;
         //qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
         if ( ret<0 ) {
             state = FAILED;
@@ -39,7 +46,6 @@ void ConnAliveThread::closeConnection()
             state = CLOSED;
             emit connClosed(onView);
         };
-        *ptr_ConnPtr = nullptr;
     } else {
         emit connMsg( QString("connect is nullptr") );
         state = FAILED;
@@ -48,7 +54,7 @@ void ConnAliveThread::closeConnection()
 }
 virConnectPtr *ConnAliveThread::getPtr_connectionPtr()
 {
-    return &_connPtr;
+    return ptr_ConnPtr;
 }
 void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
 {
@@ -67,7 +73,7 @@ void ConnAliveThread::run()
         msleep(1000);
     };
     keep_alive = false;
-    closeConnection();
+    //closeConnection();
 }
 void ConnAliveThread::openConnection()
 {
@@ -75,7 +81,7 @@ void ConnAliveThread::openConnection()
     auth.cb = authCallback;
     auth.cbdata = this;
     _connPtr = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
-    ptr_ConnPtr = &_connPtr;
+    ptr_ConnPtr = ( nullptr!=_connPtr )? &_connPtr : nullptr;
     //qDebug()<<"openConnection1"<<*ptr_ConnPtr<<URI;
     if (*ptr_ConnPtr==nullptr) {
         sendConnErrors();

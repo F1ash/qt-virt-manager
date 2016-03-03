@@ -67,6 +67,7 @@ private slots:
     void                 mainWindowUp();
     void                 sendConnPtrPtr(virConnectPtr*, QString&);
     void                 getAuthCredentials(QString&);
+    void                 searchLocalhostConnComplete();
 };
 
 #endif   // CONN_LIST_WIDGET_H
