@@ -31,7 +31,7 @@ void ConnAliveThread::closeConnection()
     */
     //qDebug()<<"closeConnection1"<<*ptr_ConnPtr<<URI;
     CONN_STATE state;
-    if ( *ptr_ConnPtr!=nullptr ) {
+    if ( nullptr!=ptr_ConnPtr && *ptr_ConnPtr!=nullptr ) {
         //qDebug()<<"closeConnection2"<<*ptr_ConnPtr<<URI;
         unregisterConnEvents();
         //qDebug()<<"closeConnection3"<<*ptr_ConnPtr<<URI;
@@ -83,7 +83,7 @@ void ConnAliveThread::openConnection()
     _connPtr = virConnectOpenAuth(URI.toUtf8().constData(), &auth, 0);
     ptr_ConnPtr = ( nullptr!=_connPtr )? &_connPtr : nullptr;
     //qDebug()<<"openConnection1"<<*ptr_ConnPtr<<URI;
-    if (*ptr_ConnPtr==nullptr) {
+    if ( nullptr==ptr_ConnPtr || *ptr_ConnPtr==nullptr ) {
         sendConnErrors();
         keep_alive = false;
         emit connMsg( "Connection to the Hypervisor is failed." );

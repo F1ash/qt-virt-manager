@@ -497,7 +497,7 @@ void QSpiceWidget::displayPrimaryCreate(
      int                 shmid,
      void  *             imgdata)
 {
-    Q_UNUSED(shmid);
+    Q_UNUSED(shmid)
     m_Image->setUpdatesEnabled(false);
 
     //qDebug() << "Display Create(" << width << ", " << height << ")";
@@ -546,22 +546,19 @@ void QSpiceWidget::displayInvalidate(
     int                 width,
     int                 height)
 {
+    Q_UNUSED(width)
+    Q_UNUSED(height)
+    Q_UNUSED(x)
+    Q_UNUSED(y)
     //qDebug()<<"displayInvalidate"<<x<<y<<width<<height<<":"
     //       <<x*zoom<<y*zoom<<width*zoom<<height*zoom;
-    // for optimal processing
-    if ( zoom == 1.0 ) {
-        // faster
-        m_Image->update(x, y, width, height);
-    } else {
-        // slower
-        QPixmap pix = QPixmap::fromImage(
-                    img->scaled(
-                        _width,
-                        _height,
-                        Qt::KeepAspectRatio,
-                        tr_mode));
-        m_Image->setPixmap(pix);
-    };
+    QPixmap pix = QPixmap::fromImage(
+                img->scaled(
+                    _width,
+                    _height,
+                    Qt::KeepAspectRatio,
+                    tr_mode));
+    m_Image->setPixmap(pix);
 }
 
 void QSpiceWidget::displayPrimaryDestroy()
@@ -631,7 +628,7 @@ int QtButtonsMaskToSpice(QMouseEvent *ev)
 
 bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
 {
-    Q_UNUSED(object);
+    Q_UNUSED(object)
 
     if (! (display && inputs))
         return false;
@@ -801,25 +798,16 @@ void QSpiceWidget::setNewSize(int _w, int _h)
     _width  = _w-2*MARGIN;
     _height = _h-2*MARGIN-4;
     //qDebug()<<"setNewSize"<<_width<<_height;
-    // for optimal processing
-    if ( _width==init_w && _height==init_h ) {
-        // faster
-        zoom = 1.0;
-        return;
-    };
-    if ( _width-2*MARGIN && init_w ) {
-        // slower
-        if ( img ) {
-            QPixmap pix = QPixmap::fromImage(
-                        img->scaled(
-                            _width,
-                            _height,
-                            Qt::KeepAspectRatio,
-                            tr_mode));
-            m_Image->setUpdatesEnabled(true);
-            m_Image->setPixmap(pix);
-            zoom = init_w/(qreal)pix.width();
-        };
+    if ( img ) {
+        QPixmap pix = QPixmap::fromImage(
+                    img->scaled(
+                        _width,
+                        _height,
+                        Qt::KeepAspectRatio,
+                        tr_mode));
+        m_Image->setUpdatesEnabled(true);
+        m_Image->setPixmap(pix);
+        zoom = init_w/(qreal)pix.width();
     };
 }
 
