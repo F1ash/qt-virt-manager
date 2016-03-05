@@ -86,6 +86,7 @@ void VirtSecretControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.name<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
+        entityList->setEnabled(true);
         if ( data.msg.count() > virtSecretModel->DataList.count() ) {
             int _diff = data.msg.count() - virtSecretModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -145,6 +146,8 @@ void VirtSecretControl::resultReceiver(Result data)
 /* private slots */
 void VirtSecretControl::reloadState()
 {
+    entityList->setEnabled(false);
+    entityList->clearSelection();
     TASK task;
     task.type = "secret";
     task.srcConnPtr = ptr_ConnPtr;

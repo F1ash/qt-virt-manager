@@ -90,6 +90,7 @@ void VirtStorageVolControl::resultReceiver(Result data)
     if ( data.name!=objectName() ) return;
     //qDebug()<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
+        entityList->setEnabled(true);
         int chain  = storageVolModel->columnCount();
         int chains = data.msg.count()/chain;
         if ( chains > storageVolModel->DataList.count() ) {
@@ -167,6 +168,8 @@ void VirtStorageVolControl::closeEvent(QCloseEvent *ev)
 /* private slots */
 void VirtStorageVolControl::reloadState()
 {
+    entityList->setEnabled(false);
+    entityList->clearSelection();
     TASK task;
     task.type = "volume";
     task.srcConnPtr = ptr_ConnPtr;

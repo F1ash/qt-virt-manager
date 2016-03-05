@@ -73,6 +73,7 @@ void VirtStoragePoolControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
+        entityList->setEnabled(true);
         if ( data.msg.count() > storagePoolModel->DataList.count() ) {
             int _diff = data.msg.count() - storagePoolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -152,6 +153,8 @@ void VirtStoragePoolControl::stopOverView()
 /* private slots */
 void VirtStoragePoolControl::reloadState()
 {
+    entityList->setEnabled(false);
+    entityList->clearSelection();
     TASK task;
     task.type = "pool";
     task.srcConnPtr = ptr_ConnPtr;

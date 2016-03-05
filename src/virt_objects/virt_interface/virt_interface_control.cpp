@@ -73,6 +73,7 @@ void VirtInterfaceControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
+        entityList->setEnabled(true);
         if ( data.msg.count() > virtIfaceModel->DataList.count() ) {
             int _diff = data.msg.count() - virtIfaceModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -142,6 +143,8 @@ void VirtInterfaceControl::resultReceiver(Result data)
 /* private slots */
 void VirtInterfaceControl::reloadState()
 {
+    entityList->setEnabled(false);
+    entityList->clearSelection();
     TASK task;
     task.type = "iface";
     task.srcConnPtr = ptr_ConnPtr;

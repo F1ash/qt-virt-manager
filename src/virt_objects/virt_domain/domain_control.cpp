@@ -82,6 +82,7 @@ void VirtDomainControl::resultReceiver(Result data)
 {
     //qDebug()<<data.number<<data.action<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
+        entityList->setEnabled(true);
         if ( data.msg.count() > domainModel->DataList.count() ) {
             int _diff = data.msg.count() - domainModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -163,6 +164,8 @@ void VirtDomainControl::resultReceiver(Result data)
 /* private slots */
 void VirtDomainControl::reloadState()
 {
+    entityList->setEnabled(false);
+    entityList->clearSelection();
     TASK task;
     task.type = "domain";
     task.srcConnPtr = ptr_ConnPtr;
