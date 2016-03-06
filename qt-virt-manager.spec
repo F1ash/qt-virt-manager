@@ -4,13 +4,13 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.22.43
+Version:        0.22.45
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
 License:        GPLv2+
 Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
-URL:            https://github.com/F1ash/%{name}
+URL:            http://f1ash.github.io/%{name}
 
 Requires:       libvirt
 Requires:       hicolor-icon-theme
@@ -61,7 +61,7 @@ Qt Virtual Machine Manager provides a graphical tool for administering virtual
 machines for QEMU/KVM, Xen, and LXC and other Virtual Entities.
 Start, stop, add or remove virtual devices, connect to a graphical or serial console,
 and see resource usage statistics for existing VMs on local or remote machines.
-Uses libvirt as the backend management API.
+Uses libvirt as the back-end management API.
 
 %package -n qt4-virt-manager
 Summary:        Qt4 Virtual Machine Manager
@@ -71,7 +71,7 @@ Qt4 Virtual Machine Manager provides a graphical tool for administering virtual
 machines for QEMU/KVM, Xen, and LXC and other Virtual Entities.
 Start, stop, add or remove virtual devices, connect to a graphical or serial console,
 and see resource usage statistics for existing VMs on local or remote machines.
-Uses libvirt as the backend management API.
+Uses libvirt as the back-end management API.
 
 %package -n qt5-virt-manager
 Summary:        Qt5 Virtual Machine Manager
@@ -81,7 +81,7 @@ Qt5 Virtual Machine Manager provides a graphical tool for administering virtual
 machines for QEMU/KVM, Xen, and LXC and other Virtual Entities.
 Start, stop, add or remove virtual devices, connect to a graphical or serial console,
 and see resource usage statistics for existing VMs on local or remote machines.
-Uses libvirt as the backend management API.
+Uses libvirt as the back-end management API.
 
 %prep
 %setup -q
@@ -162,6 +162,11 @@ fi
 %endif
 
 %changelog
+* Sun Mar 06 2016 Fl@sh <kaperang07@gmail.com> - 0.22.45-1
+- changed URL and fixed grammar mistakes;
+- added icon cache update;
+- version updated;
+
 * Tue Feb 09 2016 Fl@sh <kaperang07@gmail.com> - 0.22.43-1
 - added WITH_LIBCACARD build parameter;
 - version updated;

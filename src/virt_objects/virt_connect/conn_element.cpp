@@ -266,13 +266,11 @@ void ConnElement::forwardConnClosedSignal(bool onView)
 }
 void ConnElement::connAliveThreadStarted()
 {
-    conn_Status.insert("isRunning", QVariant(CONNECT));
-    own_index->setData(conn_Status);
+    setConnectionState(CONNECT);
 }
 void ConnElement::connAliveThreadFinished()
 {
-    conn_Status.insert("isRunning", QVariant(CLOSED));
-    own_index->setData(conn_Status);
+    setConnectionState(CLOSED);
 }
 void ConnElement::emitDomainKeyToCloseViewer(QString &_domName)
 {

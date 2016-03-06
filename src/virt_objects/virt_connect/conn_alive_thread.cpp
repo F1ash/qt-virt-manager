@@ -618,6 +618,9 @@ void ConnAliveThread::closeConnection(int reason)
             emit connMsg("Connection closed: Unknown reason");
             break;
     };
+    // emit connCloseed(bool), because thread is finished
+    // and closeConnection() will not be called
+    emit connClosed(onView);
 }
 void ConnAliveThread::getAuthCredentials(QString &crd)
 {
