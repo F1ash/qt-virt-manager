@@ -184,8 +184,8 @@ void ConnElement::setConnectionState(CONN_STATE status)
     conn_Status.insert("onView", QVariant(false));
     own_index->setData(conn_Status);
     int row = own_model->connItemDataList.indexOf(own_index);
-    QString data;
     for (int i=0; i<own_model->columnCount(); i++) {
+        QString data{"?"};
         switch (i) {
         case 0:
             data = name;

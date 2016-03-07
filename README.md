@@ -11,7 +11,19 @@ Known issues:
 
     2. Adding devices implemented partially.
 
+    3. In Spice client viewer:
+
+        * the paste from client system clipboard
+
+          to guests clipboard is not work;
+
+        * the Smartcard manager is not implemented yet.
+
 Building parameters:
+
+    BUILD_QT_VERSION
+        if not defined or equal 4, then will build with Qt4,
+        if equal 5, then with Qt5
 
     WITH_LIBCACARD
         if defined and above zero, then libcacard.h required
@@ -21,9 +33,9 @@ Building parameters:
         if not defined or above zero, then will used
         Spice[Playback/Record] Channels for audio
 
-Buid requires:
+Build requires:
 
-    * with Qt4
+    * with Qt4              (optional, BUILD_QT_VERSION=4)
     libQtCore.so
     libQtGui.so
     libQtMultimedia.so
@@ -31,7 +43,7 @@ Buid requires:
     libQtXml.so
     libqtermwidget4.so
 
-    * with Qt5
+    * with Qt5              (required, BUILD_QT_VERSION=5)
     libQt5Core.so
     libQt5Gui.so
     libQt5Multimedia.so
