@@ -28,8 +28,10 @@ public:
     explicit CreateSnapshotDialog(
             QWidget        *parent      = nullptr,
             QString         domainName  = QString(),
+            QString         _conName    = QString(),
             bool            _state      = false,
             virConnectPtr*  connPtrPtr  = nullptr);
+    ~CreateSnapshotDialog();
 signals:
     void             errMsg(QString&);
 

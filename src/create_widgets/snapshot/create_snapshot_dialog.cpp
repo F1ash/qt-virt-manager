@@ -12,11 +12,15 @@
     <<"System Checkpoint + external form"
 
 CreateSnapshotDialog::CreateSnapshotDialog(
-        QWidget *parent, QString domainName,
-        bool _state, virConnectPtr *connPtrPtr) :
+        QWidget       *parent,
+        QString        domainName,
+        QString        _conName,
+        bool           _state,
+        virConnectPtr *connPtrPtr) :
     QDialog(parent)
 {
-    QString winTitle = QString("Create Snapshot <%1>").arg(domainName);
+    QString winTitle = QString("Create Snapshot <%1> in [ %2 ] connection")
+            .arg(domainName).arg(_conName);
     setWindowTitle(winTitle);
     settings.beginGroup("CreateSnapshotDialog");
     restoreGeometry( settings.value("Geometry").toByteArray() );
@@ -99,6 +103,13 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     };
     timerID = startTimer(1000);
 }
+CreateSnapshotDialog::~CreateSnapshotDialog()
+{
+    settings.beginGroup("CreateSnapshotDialog");
+    settings.setValue("Geometry", saveGeometry());
+    settings.endGroup();
+    settings.sync();
+}
 
 /* public slots */
 QString CreateSnapshotDialog::getSnapshotXMLDesc() const
@@ -157,18 +168,12 @@ void CreateSnapshotDialog::accept()
                     QString("Count of disk subset not can be equal zero"));
     } else {
         killTimer(timerID);
-        settings.beginGroup("CreateSnapshotDialog");
-        settings.setValue("Geometry", saveGeometry());
-        settings.endGroup();
         done(1);
     };
 }
 void CreateSnapshotDialog::reject()
 {
     killTimer(timerID);
-    settings.beginGroup("CreateSnapshotDialog");
-    settings.setValue("Geometry", saveGeometry());
-    settings.endGroup();
     done(0);
 }
 void CreateSnapshotDialog::snapshotTypeChange(int i)

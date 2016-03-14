@@ -133,7 +133,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
         //qDebug()<<"createVirtDomainSnapshot";
         CreateSnapshotDialog *_dialog =
                 new CreateSnapshotDialog(
-                    this, domain, true, ptr_ConnPtr);
+                    this, domain, connName, true, ptr_ConnPtr);
         connect(_dialog, SIGNAL(errMsg(QString&)),
                 this, SLOT(sendErrMsg(QString&)));
         int exitCode = _dialog->exec();
@@ -150,7 +150,7 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
     } else if ( method.first()=="moreSnapshotActions" ) {
         //qDebug()<<"moreSnapshotActions";
         SnapshotActionDialog *_dialog =
-               new SnapshotActionDialog(this, ptr_ConnPtr, domain);
+               new SnapshotActionDialog(this, ptr_ConnPtr, domain, connName);
         int exitCode = _dialog->exec();
         _dialog->deleteLater();
         if ( exitCode ) {

@@ -355,7 +355,7 @@ void VirtDomainControl::execAction(const QStringList &l)
                     .at(idx.row())->getState().startsWith("active");
             CreateSnapshotDialog *_dialog =
                     new CreateSnapshotDialog(
-                        this, domainName, state, ptr_ConnPtr);
+                        this, domainName, currConnName, state, ptr_ConnPtr);
             connect(_dialog, SIGNAL(errMsg(QString&)),
                     this, SLOT(msgRepeater(QString&)));
             int exitCode = _dialog->exec();
@@ -372,7 +372,8 @@ void VirtDomainControl::execAction(const QStringList &l)
         } else if ( l.first()=="moreSnapshotActions" ) {
             //qDebug()<<"moreSnapshotActions";
             SnapshotActionDialog *_dialog =
-                    new SnapshotActionDialog(this, ptr_ConnPtr, domainName);
+                    new SnapshotActionDialog(
+                        this, ptr_ConnPtr, domainName, currConnName);
             int exitCode = _dialog->exec();
             _dialog->deleteLater();
             if ( exitCode ) {

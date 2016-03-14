@@ -4,7 +4,7 @@ SnapshotTreeModel::SnapshotTreeModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     icon = QIcon::fromTheme("camera-photo");
-    work = QIcon::fromTheme("system-run");
+    work = QIcon::fromTheme("run");
     rootItem = new TreeItem("Snapshots");
 }
 

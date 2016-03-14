@@ -29,7 +29,8 @@ public:
     explicit SnapshotActionDialog(
             QWidget        *parent      = nullptr,
             virConnectPtr*  ptr_ConnPtr = nullptr,
-            QString         _domName    = QString());
+            QString         _domName    = QString(),
+            QString         _conName    = QString());
     ~SnapshotActionDialog();
 
 signals:

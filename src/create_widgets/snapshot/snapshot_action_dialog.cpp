@@ -7,13 +7,15 @@
 SnapshotActionDialog::SnapshotActionDialog(
         QWidget         *parent,
         virConnectPtr   *ptr_ConnPtr,
-        QString          _domName) :
+        QString          _domName,
+        QString          _conName) :
     QDialog(parent),
     ptr_ConnPtr(ptr_ConnPtr),
     domName(_domName)
 {
     params.clear();
-    QString winTitle = QString("<%1> Snapshot Actions").arg(domName);
+    QString winTitle = QString("<%1> Snapshot Actions in [ %2 ] connection")
+            .arg(domName).arg(_conName);
     setWindowTitle(winTitle);
     settings.beginGroup("SnapshotActionDialog");
     restoreGeometry( settings.value("Geometry").toByteArray() );
@@ -84,6 +86,12 @@ SnapshotActionDialog::SnapshotActionDialog(
 SnapshotActionDialog::~SnapshotActionDialog()
 {
     if ( nullptr!=domain ) virDomainFree(domain);
+    settings.beginGroup("SnapshotActionDialog");
+    settings.setValue("Geometry", saveGeometry());
+    settings.setValue("column0", snapshotTree->columnWidth(0));
+    settings.setValue("column1", snapshotTree->columnWidth(1));
+    settings.endGroup();
+    settings.sync();
 }
 
 /* public slots */
@@ -184,12 +192,6 @@ void SnapshotActionDialog::accept()
     if ( nullptr==item ) {
         cancelled();
     } else {
-        settings.beginGroup("SnapshotActionDialog");
-        settings.setValue("Geometry", saveGeometry());
-        settings.setValue("column0", snapshotTree->columnWidth(0));
-        settings.setValue("column1", snapshotTree->columnWidth(1));
-        settings.endGroup();
-        settings.sync();
         params.append(item->data(0).toString());
         //qDebug()<<params;
         done(result());
@@ -197,12 +199,6 @@ void SnapshotActionDialog::accept()
 }
 void SnapshotActionDialog::reject()
 {
-    settings.beginGroup("SnapshotActionDialog");
-    settings.setValue("Geometry", saveGeometry());
-    settings.setValue("column0", snapshotTree->columnWidth(0));
-    settings.setValue("column1", snapshotTree->columnWidth(1));
-    settings.endGroup();
-    settings.sync();
     done(0);
 }
 void SnapshotActionDialog::cancelled()
