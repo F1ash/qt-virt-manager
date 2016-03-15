@@ -19,7 +19,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
         virConnectPtr *connPtrPtr) :
     QDialog(parent)
 {
-    QString winTitle = QString("Create Snapshot <%1> in [ %2 ] connection")
+    QString winTitle = QString("Create Snapshot of <%1> in [ %2 ] connection")
             .arg(domainName).arg(_conName);
     setWindowTitle(winTitle);
     settings.beginGroup("CreateSnapshotDialog");
@@ -28,6 +28,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     titleLayout = new QHBoxLayout(this);
     nameLabel = new QLabel("Name:", this);
     name = new QLineEdit(this);
+    name->setPlaceholderText("generate if omit");
     name->setMinimumWidth(100);
     addTimeSuff = new QCheckBox(this);
     addTimeSuff->setToolTip("Add Time to Snapshot Name");
@@ -51,7 +52,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     flags = new QPushButton(QIcon::fromTheme("flag"), "", this);
     flags->setMenu(flagsMenu);
     flags->setMaximumWidth(flags->sizeHint().width());
-    flags->setToolTip("Create Snapshot Flags");
+    flags->setToolTip("Creation Snapshot Flags");
     // because first item is non-actual there
     flags->setEnabled(false);
     typeLayout = new QHBoxLayout(this);

@@ -56,6 +56,7 @@
         <file alias="22x22/actions/job.png">icons/22x22/actions/job.png</file>
         <file alias="22x22/actions/archive-insert.png">icons/22x22/actions/archive-insert.png</file>
         <file alias="22x22/actions/dialog-close.png">icons/22x22/actions/dialog-close.png</file>
+        <file alias="22x22/actions/flag.png">icons/22x22/actions/flag.png</file>
         <file alias="22x22/actions/down.png">icons/22x22/actions/down.png</file>
         <file alias="22x22/actions/undefine.png">icons/22x22/actions/undefine.png</file>
         <file alias="22x22/actions/document-export.png">icons/22x22/actions/document-export.png</file>
@@ -153,6 +154,7 @@
         <file alias="32x32/actions/job.png">icons/32x32/actions/job.png</file>
         <file alias="32x32/actions/archive-insert.png">icons/32x32/actions/archive-insert.png</file>
         <file alias="32x32/actions/dialog-close.png">icons/32x32/actions/dialog-close.png</file>
+        <file alias="32x32/actions/flag.png">icons/32x32/actions/flag.png</file>
         <file alias="32x32/actions/down.png">icons/32x32/actions/down.png</file>
         <file alias="32x32/actions/undefine.png">icons/32x32/actions/undefine.png</file>
         <file alias="32x32/actions/document-export.png">icons/32x32/actions/document-export.png</file>
@@ -251,6 +253,7 @@
         <file alias="48x48/actions/job.png">icons/48x48/actions/job.png</file>
         <file alias="48x48/actions/archive-insert.png">icons/48x48/actions/archive-insert.png</file>
         <file alias="48x48/actions/dialog-close.png">icons/48x48/actions/dialog-close.png</file>
+        <file alias="48x48/actions/flag.png">icons/48x48/actions/flag.png</file>
         <file alias="48x48/actions/down.png">icons/48x48/actions/down.png</file>
         <file alias="48x48/actions/undefine.png">icons/48x48/actions/undefine.png</file>
         <file alias="48x48/actions/document-export.png">icons/48x48/actions/document-export.png</file>
@@ -349,6 +352,7 @@
         <file alias="24x24/actions/job.png">icons/24x24/actions/job.png</file>
         <file alias="24x24/actions/archive-insert.png">icons/24x24/actions/archive-insert.png</file>
         <file alias="24x24/actions/dialog-close.png">icons/24x24/actions/dialog-close.png</file>
+        <file alias="24x24/actions/flag.png">icons/24x24/actions/flag.png</file>
         <file alias="24x24/actions/down.png">icons/24x24/actions/down.png</file>
         <file alias="24x24/actions/undefine.png">icons/24x24/actions/undefine.png</file>
         <file alias="24x24/actions/document-export.png">icons/24x24/actions/document-export.png</file>
@@ -447,6 +451,7 @@
         <file alias="64x64/actions/job.png">icons/64x64/actions/job.png</file>
         <file alias="64x64/actions/archive-insert.png">icons/64x64/actions/archive-insert.png</file>
         <file alias="64x64/actions/dialog-close.png">icons/64x64/actions/dialog-close.png</file>
+        <file alias="64x64/actions/flag.png">icons/64x64/actions/flag.png</file>
         <file alias="64x64/actions/down.png">icons/64x64/actions/down.png</file>
         <file alias="64x64/actions/undefine.png">icons/64x64/actions/undefine.png</file>
         <file alias="64x64/actions/document-export.png">icons/64x64/actions/document-export.png</file>
