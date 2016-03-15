@@ -15,6 +15,7 @@ DeviceData::DeviceData(
     restoreMenu->revertData->setEnabled(false);
     revert->setMenu(restoreMenu);
     _close = new QPushButton(QIcon::fromTheme("dialog-close"), "", this);
+    _close->setToolTip("Close device editor");
     _close->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     panelLayout = new QHBoxLayout(this);
     panelLayout->addWidget(devName, 10, Qt::AlignLeft);
@@ -159,7 +160,9 @@ void DeviceData::clearDataEdit()
         infoLayout->removeWidget(device);
         //disconnect(device, SIGNAL(dataChanged()),
         //           this, SLOT(currentStateChanged()));
-        device->deleteLater();
+        //device->deleteLater();
+        delete device;
+        device = nullptr;
     };
 }
 
