@@ -230,11 +230,17 @@ void QSpiceMainChannel::updateDisplay(int id, int x, int y, int width, int heigh
 
 void QSpiceMainChannel::updateDisplayEnabled(int id, bool enabled, bool update)
 {
+#if SPICE_GTK_CHECK_VERSION(0, 30, 0)
     spice_main_update_display_enabled(
                 (SpiceMainChannel *) gobject,
                 id,
                 enabled,
                 update);
+#else
+    Q_UNUSED(id)
+    Q_UNUSED(enabled)
+    Q_UNUSED(update)
+#endif
 }
 
 bool QSpiceMainChannel::sendMonitorConfig()
