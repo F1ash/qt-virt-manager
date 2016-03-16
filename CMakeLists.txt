@@ -372,26 +372,26 @@ set (HEADERS
   src/vm_viewer/qterminal/termwidget.h
   src/vm_viewer/qterminal/propertiesdialog.h
 
-  src/vm_viewer/qspice_widgets/qspicechannel.h
-  src/vm_viewer/qspice_widgets/qspicecursorchannel.h
-  src/vm_viewer/qspice_widgets/qspicedisplaychannel.h
-  src/vm_viewer/qspice_widgets/qspicehelper.h
-  src/vm_viewer/qspice_widgets/qspiceinputschannel.h
-  src/vm_viewer/qspice_widgets/qspicemainchannel.h
-  src/vm_viewer/qspice_widgets/qspiceobject.h
-  src/vm_viewer/qspice_widgets/qspicesession.h
-  src/vm_viewer/qspice_widgets/qspicewidget.h
-  src/vm_viewer/qspice_widgets/qspicesmartcardchannel.h
-  src/vm_viewer/qspice_widgets/qspicesmartcardmanager.h
-  src/vm_viewer/qspice_widgets/spicesmartcardwidget.h
-  src/vm_viewer/qspice_widgets/qspiceusbredirchannel.h
-  src/vm_viewer/qspice_widgets/qspicewebdavchannel.h
-  src/vm_viewer/qspice_widgets/qspiceportchannel.h
-  src/vm_viewer/qspice_widgets/qspiceusbdevicemanager.h
-  src/vm_viewer/qspice_widgets/spiceusbdevicewidget.h
-  src/vm_viewer/qspice_widgets/qspiceplaybackchannel.h
-  src/vm_viewer/qspice_widgets/qspicerecordchannel.h
-  src/vm_viewer/qspice_widgets/qspiceaudio.h
+  src/vm_viewer/qspice_widgets/qspice-channel.h
+  src/vm_viewer/qspice_widgets/qspice-cursor-channel.h
+  src/vm_viewer/qspice_widgets/qspice-display-channel.h
+  src/vm_viewer/qspice_widgets/qspice-helper.h
+  src/vm_viewer/qspice_widgets/qspice-inputs-channel.h
+  src/vm_viewer/qspice_widgets/qspice-main-channel.h
+  src/vm_viewer/qspice_widgets/qspice-object.h
+  src/vm_viewer/qspice_widgets/qspice-session.h
+  src/vm_viewer/qspice_widgets/qspice-widget.h
+  src/vm_viewer/qspice_widgets/qspice-smartcard-channel.h
+  src/vm_viewer/qspice_widgets/qspice-smartcard-manager.h
+  src/vm_viewer/qspice_widgets/qspice-smartcard-widget.h
+  src/vm_viewer/qspice_widgets/qspice-usbredir-channel.h
+  src/vm_viewer/qspice_widgets/qspice-webdav-channel.h
+  src/vm_viewer/qspice_widgets/qspice-port-channel.h
+  src/vm_viewer/qspice_widgets/qspice-usbdevice-manager.h
+  src/vm_viewer/qspice_widgets/qspice-usbdevice-widget.h
+  src/vm_viewer/qspice_widgets/qspice-playback-channel.h
+  src/vm_viewer/qspice_widgets/qspice-record-channel.h
+  src/vm_viewer/qspice_widgets/qspice-audio.h
 
   src/state_monitor/domain_state_monitor.h
   src/state_monitor/domain_monitor_thread.h
@@ -701,26 +701,26 @@ set (SOURCES
   src/vm_viewer/qterminal/termwidget.cpp
   src/vm_viewer/qterminal/fontdialog.cpp
 
-  src/vm_viewer/qspice_widgets/qspicechannel.cpp
-  src/vm_viewer/qspice_widgets/qspicecursorchannel.cpp
-  src/vm_viewer/qspice_widgets/qspicedisplaychannel.cpp
-  src/vm_viewer/qspice_widgets/qspicehelper.cpp
-  src/vm_viewer/qspice_widgets/qspiceinputschannel.cpp
-  src/vm_viewer/qspice_widgets/qspicemainchannel.cpp
-  src/vm_viewer/qspice_widgets/qspiceobject.cpp
-  src/vm_viewer/qspice_widgets/qspicesession.cpp
-  src/vm_viewer/qspice_widgets/qspicewidget.cpp
-  src/vm_viewer/qspice_widgets/qspicesmartcardchannel.cpp
-  src/vm_viewer/qspice_widgets/qspicesmartcardmanager.cpp
-  src/vm_viewer/qspice_widgets/spicesmartcardwidget.cpp
-  src/vm_viewer/qspice_widgets/qspiceusbredirchannel.cpp
-  src/vm_viewer/qspice_widgets/qspiceportchannel.cpp
-  src/vm_viewer/qspice_widgets/qspicewebdavchannel.cpp
-  src/vm_viewer/qspice_widgets/qspiceusbdevicemanager.cpp
-  src/vm_viewer/qspice_widgets/spiceusbdevicewidget.cpp
-  src/vm_viewer/qspice_widgets/qspiceplaybackchannel.cpp
-  src/vm_viewer/qspice_widgets/qspicerecordchannel.cpp
-  src/vm_viewer/qspice_widgets/qspiceaudio.cpp
+  src/vm_viewer/qspice_widgets/qspice-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-cursor-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-display-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-helper.cpp
+  src/vm_viewer/qspice_widgets/qspice-inputs-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-main-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-object.cpp
+  src/vm_viewer/qspice_widgets/qspice-session.cpp
+  src/vm_viewer/qspice_widgets/qspice-widget.cpp
+  src/vm_viewer/qspice_widgets/qspice-smartcard-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-smartcard-manager.cpp
+  src/vm_viewer/qspice_widgets/qspice-smartcard-widget.cpp
+  src/vm_viewer/qspice_widgets/qspice-usbredir-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-port-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-webdav-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-usbdevice-manager.cpp
+  src/vm_viewer/qspice_widgets/qspice-usbdevice-widget.cpp
+  src/vm_viewer/qspice_widgets/qspice-playback-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-record-channel.cpp
+  src/vm_viewer/qspice_widgets/qspice-audio.cpp
 
   src/state_monitor/domain_state_monitor.cpp
   src/state_monitor/domain_monitor_thread.cpp
@@ -819,7 +819,8 @@ add_executable (${PROJECT_NAME}
     ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS} ${QTERM_RCC} ${QTERM_QM})
 target_link_libraries (${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS
-    "-DWITH_LIBCACARD=${WITH_LIBCACARD} -DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO}")
+    "-DWITH_LIBCACARD=${WITH_LIBCACARD} -DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO}\
+     -DQSPICE_WIDGET_COMPILATION")
 
 configure_file ( ${DESKTOP_FILE}.in ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE} )
 install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE}

@@ -1,6 +1,7 @@
 #include "spice_viewer.h"
 #include <QApplication>
 #include <QClipboard>
+#include <spice/vd_agent.h>
 
 spcHlpThread::spcHlpThread(
         QObject *parent, virConnectPtr *connPtrPtr, QString _domain) :
@@ -89,7 +90,7 @@ void Spice_Viewer::init()
             actFullScreen = new QShortcut(
                         QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
             connect(actFullScreen, SIGNAL(activated()),
-                    SLOT(FullScreenTriggered()));
+                    SLOT(fullScreenTriggered()));
         } else {
             msg = QString("In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")
                     .arg(domain)
@@ -112,16 +113,24 @@ void Spice_Viewer::init()
 }
 void Spice_Viewer::reconnectToVirtDomain()
 {
-    QSpiceWidget *wdg = static_cast<QSpiceWidget*>(centralWidget());
-    if ( nullptr!=wdg ) {
-        wdg->Disconnect();
-        wdg->deleteLater();
+    if ( nullptr!=spiceWdg ) {
+        delete spiceWdg;
+        spiceWdg = nullptr;
+        // resizing to any,
+        // because will need to init new display configuration
+        //resize(getWidgetSizeAroundDisplay());
         initSpiceWidget();
+        QSize around_size = getWidgetSizeAroundDisplay();
+        if ( nullptr!=spiceWdg ) {
+            spiceWdg->updateSize(
+                        size().width()-around_size.width(),
+                        size().height()-around_size.height());
+        };
     };
 }
 void Spice_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
 {
-    spiceWdg->SendKeySequience(key);
+    spiceWdg->sendKeySequience(key);
 }
 void Spice_Viewer::getScreenshotFromVirtDomain()
 {
@@ -132,12 +141,12 @@ void Spice_Viewer::copyFilesToVirtDomain()
     if ( nullptr==spiceWdg ) return;
     QStringList fileNames = QFileDialog::getOpenFileNames(
                 this, "Copy files to Guest", "~");
-    spiceWdg->mainFileCopyAsync(fileNames);
+    spiceWdg->fileCopyAsync(fileNames);
 }
 void Spice_Viewer::copyToClipboardFromVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
-    spiceWdg->copyClipboardFromGuest();
+    spiceWdg->copyClipboardDataFromGuest();
 }
 void Spice_Viewer::pasteClipboardToVirtDomain()
 {
@@ -193,8 +202,8 @@ void Spice_Viewer::initSpiceWidget()
     setCentralWidget(spiceWdg);
     QString _name = QString("%1[%2]").arg(domain).arg(connName);
     spiceWdg->setGuestName(_name);
-    connect(spiceWdg, SIGNAL(DisplayResize(const QSize&)),
-            SLOT(DisplayResize(const QSize&)));
+    connect(spiceWdg, SIGNAL(displayResized(const QSize&)),
+            SLOT(resizeViewer(const QSize&)));
     connect(spiceWdg, SIGNAL(downloaded(int,int)),
             vm_stateWdg, SLOT(setDownloadProcessValue(int,int)));
     connect(spiceWdg, SIGNAL(displayChannelChanged(bool)),
@@ -226,8 +235,8 @@ void Spice_Viewer::initSpiceWidget()
 
     QSize around_size = getWidgetSizeAroundDisplay();
     QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
+    spiceWdg->connectToSpiceSource(_uri);
     spiceWdg->setNewSize(around_size.width(), around_size.height());
-    spiceWdg->Connect(_uri);
 }
 
 void Spice_Viewer::timerEvent(QTimerEvent *ev)
@@ -244,13 +253,13 @@ void Spice_Viewer::timerEvent(QTimerEvent *ev)
     }
 }
 
-void Spice_Viewer::DisplayResize(const QSize &size)
+void Spice_Viewer::resizeViewer(const QSize &size)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
     resize(size+around_size);
 }
 
-void Spice_Viewer::FullScreenTriggered()
+void Spice_Viewer::fullScreenTriggered()
 {
     if (isFullScreen())
         setWindowState(Qt::WindowNoState);
@@ -262,7 +271,7 @@ void Spice_Viewer::resizeEvent(QResizeEvent *ev)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
     if ( nullptr!=spiceWdg ) {
-        spiceWdg->setNewSize(
+        spiceWdg->updateSize(
                     ev->size().width()-around_size.width(),
                     ev->size().height()-around_size.height());
     };

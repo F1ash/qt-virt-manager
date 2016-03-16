@@ -6,7 +6,7 @@
 #include <QShortcut>
 #include <QTimerEvent>
 #include "vm_viewer/vm_viewer.h"
-#include "vm_viewer/qspice_widgets/qspicewidget.h"
+#include "vm_viewer/qspice_widgets/qspice-widget.h"
 
 class spcHlpThread : public _VirtThread
 {
@@ -52,8 +52,8 @@ public slots:
 private slots:
     void             initSpiceWidget();
     void             timerEvent(QTimerEvent*);
-    void             DisplayResize(const QSize&);
-    void             FullScreenTriggered();
+    void             resizeViewer(const QSize&);
+    void             fullScreenTriggered();
     void             resizeEvent(QResizeEvent*);
     QSize            getWidgetSizeAroundDisplay();
 };
