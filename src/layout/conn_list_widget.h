@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 #include "conn_menu.h"
-#include "progressbar_delegate.h"
+#include "conn_list_delegate.h"
 #include "search_thread.h"
 #include "wait_local_conn.h"
 #include <QDebug>
@@ -46,7 +46,7 @@ public slots:
     void                 stopProcessing();
 
 private :
-    ProgressBarDelegate *progressBarDlg;
+    ConnListDelegate    *connListDlg;
     SearchThread        *searchThread;
     WaitLocalConn       *waitLocalConn;
     int                  localConn = 0;

@@ -40,7 +40,6 @@ private:
     QWidget         *buttons;
 
     virConnectPtr*   ptr_ConnPtr;
-    virNodeDevice  **nodeDevices = nullptr;
     virErrorPtr      virtErrors;
 
     _QWidget        *device = nullptr;
@@ -53,6 +52,7 @@ private slots:
     void             showDevice(QListWidgetItem*);
     void             showDevice();
     void             set_Result();
+    void             deviceDataProcessed();
 };
 
 #endif // DEVICE_STACK_H

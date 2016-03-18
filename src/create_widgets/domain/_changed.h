@@ -13,9 +13,11 @@ public:
 
 signals:
     void dataChanged();
+    void complete();
 
 public slots:
     virtual void stateChanged();
+    virtual void emitCompleteSignal();
 };
 
 #endif // _CHANGED_H

@@ -237,7 +237,7 @@ void CreateVirtDomain::readDataLists()
         set_Result();
     };
 }
-void CreateVirtDomain::buildXMLDescription()
+bool CreateVirtDomain::buildXMLDescription()
 {
     /*
      * build Device description
@@ -263,7 +263,8 @@ void CreateVirtDomain::buildXMLDescription()
             _element = devices;
         } else {
             tabWidget->setCurrentWidget(Wdg);
-            Wdg->closeDataEdit();
+            bool ret = Wdg->closeDataEdit();
+            if ( !ret ) return false;
             _el = Wdg->getDataDocument().firstChildElement("data");
             if ( !_el.isNull() ) list = _el.childNodes();
             _element = root;
@@ -287,11 +288,15 @@ void CreateVirtDomain::buildXMLDescription()
     bool read = xml->open();
     if (read) xml->write(doc.toByteArray(4).data());
     xml->close();
+    return true;
 }
 void CreateVirtDomain::set_Result()
 {
     if ( sender()==ok ) {
-        buildXMLDescription();
+        if ( !buildXMLDescription() ) {
+            this->setEnabled(true);
+            return;
+        };
         QString _xml = xml->fileName();
         QStringList data;
         data.append("New Domain XML'ed");

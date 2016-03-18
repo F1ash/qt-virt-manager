@@ -21,6 +21,7 @@ public:
 signals:
     void             errorMsg(QString&);
     void             saveDeviceXMLDesc(int, QString&);
+    void             dataProcessed(bool);
 
 private:
     QLabel          *devName;
@@ -58,6 +59,7 @@ private slots:
     void             saveDeviceData();
     void             revertDeviceData();
     void             setStartState();
+    void             deviceDataProcessed();
 };
 
 #endif // DEVICE_DATA_H

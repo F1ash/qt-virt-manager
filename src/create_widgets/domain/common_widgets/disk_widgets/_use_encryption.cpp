@@ -31,13 +31,15 @@ _UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
     connect(secUsage, SIGNAL(textChanged(QString)),
             this, SLOT(stateChanged()));
 
-    thread = new SecretControlThread(this);
-    connect(thread, SIGNAL(resultData(Result)),
+    hlpThread = new SecretControlThread(this);
+    connect(hlpThread, SIGNAL(resultData(Result)),
             this, SLOT(resultReceiver(Result)));
-    connect(thread, SIGNAL(errorMsg(QString&,uint)),
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
             this, SIGNAL(errorMsg(QString&)));
     connect(secUsage, SIGNAL(textChanged(QString)),
             this, SLOT(emitSecretList()));
+    connect(hlpThread, SIGNAL(finished()),
+            this, SLOT(emitCompleteSignal()));
 }
 
 /* public slots */
@@ -70,12 +72,12 @@ void _UseEncryption::emitSecretList()
 {
     // start only if thread not running, because this thread
     // can be used from different place spontaneously
-    if ( thread->isRunning() ) return;
+    if ( hlpThread->isRunning() ) return;
     TASK _task;
     _task.type          = "secret";
     _task.srcConnPtr    = ptr_ConnPtr;
     _task.action        = GET_ALL_ENTITY_STATE;
-    thread->execAction(0, _task);
+    hlpThread->execAction(0, _task);
 }
 void _UseEncryption::resultReceiver(Result data)
 {
@@ -129,4 +131,11 @@ void _UseEncryption::setVolumeSecret()
     };
     if ( result==QDialog::Rejected ) return;
     secUsage->setText(res.uuid);
+}
+void _UseEncryption::emitCompleteSignal()
+{
+    if ( sender()==hlpThread ) {
+        setEnabled(true);
+        emit complete();
+    }
 }

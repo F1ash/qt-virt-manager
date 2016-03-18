@@ -47,6 +47,14 @@ HostDevice::HostDevice(QWidget *parent, virConnectPtr *connPtrPtr) :
     setLayout(commonLayout);
     connect(type, SIGNAL(currentIndexChanged(int)),
             info, SLOT(setCurrentIndex(int)));
+    for(uint i=0; i<info->count(); ++i) {
+        _QWidget *wdg = static_cast<_QWidget*>(
+                    info->widget(i));
+        if ( wdg!=nullptr ) {
+            connect(wdg, SIGNAL(complete()),
+                    this, SLOT(emitCompleteSignal()));
+        }
+    };
 }
 
 /* public slots */
@@ -57,3 +65,17 @@ QDomDocument HostDevice::getDataDocument() const
     if ( nullptr!=wdg ) doc = wdg->getDataDocument();
     return doc;
 }
+
+/* private slots */
+void HostDevice::emitCompleteSignal()
+{
+    _QWidget *wdg = static_cast<_QWidget*>(sender());
+    if ( wdg!=nullptr ) {
+        ++completedWdg;
+        if ( completedWdg>=info->count() ) {
+            setEnabled(true);
+            emit complete();
+        }
+    }
+}
+

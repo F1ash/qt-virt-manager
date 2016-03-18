@@ -12,8 +12,8 @@ ConnectionList::ConnectionList(QWidget *parent)
     this->setRootIsDecorated(false);
     connItemModel = new ConnItemModel(this);
     this->setModel(connItemModel);
-    progressBarDlg = new ProgressBarDelegate();
-    this->setItemDelegate(progressBarDlg);
+    connListDlg = new ConnListDelegate();
+    this->setItemDelegate(connListDlg);
     connections = new CONN_LIST();
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(connItemClicked(const QPoint &)));

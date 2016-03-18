@@ -6,8 +6,9 @@ _Tab::_Tab(QWidget *parent) :
 }
 
 /* public slots */
-QString _Tab::closeDataEdit()
+bool _Tab::closeDataEdit()
 {
+    bool ret = true;
     if ( !currentStateSaved ) {
         int answer = QMessageBox::question(
                     this,
@@ -16,12 +17,14 @@ QString _Tab::closeDataEdit()
                     .arg(objectName()),
                     QMessageBox::Ok,
                     QMessageBox::Cancel);
-        if ( answer==QMessageBox::Ok )
+        if ( answer==QMessageBox::Ok ) {
             saveData();
-        else
+        } else {
             revertData();
+            ret = false;
+        };
     };
-    return QString();
+    return ret;
 }
 void _Tab::stateChanged()
 {

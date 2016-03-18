@@ -18,8 +18,14 @@ public:
     QStackedWidget  *info;
     QVBoxLayout     *commonLayout;
 
+private:
+    uint             completedWdg = 0;
+
 public slots:
     QDomDocument     getDataDocument() const;
+
+private slots:
+    void             emitCompleteSignal();
 };
 
 #endif // HOST_DEVICE_H

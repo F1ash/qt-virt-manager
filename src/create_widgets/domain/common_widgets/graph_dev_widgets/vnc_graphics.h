@@ -51,6 +51,7 @@ private slots:
     void             usePassword(bool);
     void             addressEdit(QString);
     void             readNetworkList(QStringList&);
+    void             emitCompleteSignal();
 };
 
 #endif // VNC_GRAPHICS_H

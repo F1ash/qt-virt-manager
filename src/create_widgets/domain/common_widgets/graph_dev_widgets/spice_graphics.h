@@ -78,6 +78,7 @@ private slots:
     void             compressStateChanged(bool);
     void             additionStateChanged(bool);
     void             readNetworkList(QStringList&);
+    void             emitCompleteSignal();
 };
 
 #endif // SPICE_GRAPHICS_H

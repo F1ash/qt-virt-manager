@@ -1,6 +1,8 @@
 #include "usb_host_device.h"
 
-usb_hostHlpThread::usb_hostHlpThread(QObject *parent, virConnectPtr* connPtrPtr) :
+usb_hostHlpThread::usb_hostHlpThread(
+        QObject *parent,
+        virConnectPtr* connPtrPtr) :
     _VirtThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
@@ -15,20 +17,23 @@ void usb_hostHlpThread::run()
         sendConnErrors();
         return;
     };
-    QStringList      devices;
-    virNodeDevice  **nodeDevices = nullptr;
+    QStringList       devices;
+    virNodeDevicePtr *nodeDevices;
     unsigned int flags =
             VIR_CONNECT_LIST_NODE_DEVICES_CAP_USB_DEV;
-    int ret = virConnectListAllNodeDevices(*ptr_ConnPtr, &nodeDevices, flags);
+    int ret = virConnectListAllNodeDevices(
+                *ptr_ConnPtr, &nodeDevices, flags);
     if ( ret<0 ) {
         sendConnErrors();
     } else {
-        // therefore correctly to use for() command, because networks[0] can not exist.
+        // therefore correctly to use for() command,
+        // because networks[0] can not exist.
         for (int i = 0; i < ret; i++) {
             devices.append( QString("%1\n")
                             // flags: extra flags; not used yet,
                             // so callers should always pass 0
-                            .arg(virNodeDeviceGetXMLDesc(nodeDevices[i], 0)));
+                            .arg(virNodeDeviceGetXMLDesc(
+                                     nodeDevices[i], 0)));
             virNodeDeviceFree(nodeDevices[i]);
         };
         if (nodeDevices) free(nodeDevices);
@@ -54,6 +59,8 @@ USB_Host_Device::USB_Host_Device(
             this, SLOT(setAvailabledUSBDevices(QStringList&)));
     connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
             this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(finished()),
+            this, SLOT(emitCompleteSignal()));
     hlpThread->start();
 }
 
@@ -126,4 +133,11 @@ void USB_Host_Device::setAvailabledUSBDevices(QStringList &devices)
         };
     };
     devList->setCurrentRow(0);
+}
+void USB_Host_Device::emitCompleteSignal()
+{
+    if ( sender()==hlpThread ) {
+        setEnabled(true);
+        emit complete();
+    }
 }

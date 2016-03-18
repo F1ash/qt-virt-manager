@@ -20,7 +20,6 @@ public:
             virConnectPtr*  connPtrPtr  = nullptr);
 
 signals:
-    //void                 dataChanged();
     void                 errorMsg(QString&);
 
 private:
@@ -34,7 +33,7 @@ private:
     QVBoxLayout         *commonLayout;
 
     virConnectPtr*       ptr_ConnPtr;
-    SecretControlThread *thread;
+    SecretControlThread *hlpThread;
 
 public slots:
     bool                 isUsed() const;
@@ -47,6 +46,7 @@ private slots:
     void                 emitSecretList();
     void                 resultReceiver(Result);
     void                 setVolumeSecret();
+    void                 emitCompleteSignal();
 };
 
 #endif // _USE_ENCRYPTION_H

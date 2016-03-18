@@ -320,6 +320,8 @@ Spice_Graphics::Spice_Graphics(
             this, SLOT(readNetworkList(QStringList&)));
     connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
             this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(finished()),
+            this, SLOT(emitCompleteSignal()));
     hlpThread->start();
     // dataChanged connections
     connect(address, SIGNAL(currentIndexChanged(int)),
@@ -789,4 +791,11 @@ void Spice_Graphics::readNetworkList(QStringList &_nets)
 {
     nets = _nets;
     networks->addItems(nets);
+}
+void Spice_Graphics::emitCompleteSignal()
+{
+    if ( sender()==hlpThread ) {
+        setEnabled(true);
+        emit complete();
+    }
 }

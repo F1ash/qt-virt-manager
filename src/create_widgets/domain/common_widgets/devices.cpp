@@ -113,14 +113,14 @@ Devices::Devices(
     setLayout(commonLayout);
 
     detectAttachedDevicesFromXMLDesc();
-    //connect(usedDeviceList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
-    //        this, SLOT(showDevice(QListWidgetItem*,QListWidgetItem*)));
     connect(usedDeviceList, SIGNAL(itemSelectionChanged()),
             this, SLOT(showDevice()));
     connect(infoWidget, SIGNAL(saveDeviceXMLDesc(int, QString&)),
             this, SLOT(saveDeviceXMLDescription(int, QString&)));
     connect(infoWidget, SIGNAL(errorMsg(QString&)),
             this, SIGNAL(errorMsg(QString&)));
+    connect(infoWidget, SIGNAL(dataProcessed(bool)),
+            listWidget, SLOT(setEnabled(bool)));
     connect(deviceStack, SIGNAL(finished(int)),
             this, SLOT(addDevice()));
     connect(deviceStack, SIGNAL(errorMsg(QString&)),
@@ -170,7 +170,8 @@ void Devices::setEmulator(QString &_emulator)
     _dev.appendChild(_emul);
     doc.appendChild(_dev);
     if ( !_family.isEmpty() ) {
-        QListWidgetItem *item = usedDeviceList->takeItem(
+        QListWidgetItem *item =
+                usedDeviceList->takeItem(
                     usedDeviceList->row(_family.at(0)));
         if ( nullptr!=item ) {
             delete item;
@@ -289,7 +290,19 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc, bool flag)
             desc = list.item(0).attributes().namedItem("type").nodeValue();
         name.append(QString("Controller %1").arg(desc.toUpper()));
     } else if ( device=="emulator" ) {
-        // Emulator
+        // Emulator should be unique
+        QList<QListWidgetItem*> _family =
+                usedDeviceList->findItems(
+                    "emulator", Qt::MatchContains);
+        if ( !_family.isEmpty() ) {
+            QListWidgetItem *item =
+                    usedDeviceList->takeItem(
+                        usedDeviceList->row(_family.at(0)));
+            if ( nullptr!=item ) {
+                delete item;
+                item = nullptr;
+            };
+        };
         name.append(QString("Emulator"));
     } else if ( device=="watchdog" ) {
         // WatchDog
@@ -351,12 +364,14 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc, bool flag)
          usedDeviceList->insertItem(row, item);
          //usedDeviceList->insertItem(row, name);
          //usedDeviceList->item(row)->setData(Qt::UserRole, doc.toString());
-         showDevice(item, nullptr);
+         // don't show device here, because this metod
+         // fill the device list only
+         // showDevice(item, nullptr);
          inserted = true;
     } while ( !inserted );
     //qDebug()<<"added New Device:"<<name;
     // check the flag for dropping infinite loop
-    if (flag) initBootDevices();
+    if ( flag ) initBootDevices();
 }
 void Devices::delDevice()
 {

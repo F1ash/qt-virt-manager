@@ -68,7 +68,7 @@ private slots:
     void             closeEvent(QCloseEvent*);
     void             readCapabilities();
     void             readDataLists();
-    void             buildXMLDescription();
+    bool             buildXMLDescription();
     void             set_Result();
     void             create_specified_widgets();
     void             set_specified_Tabs();

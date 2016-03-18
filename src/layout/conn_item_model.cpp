@@ -16,6 +16,10 @@ ConnItemModel::ConnItemModel(QObject *parent) :
     uri_logo.insert("vpx", QIcon::fromTheme("vmware"));
     uri_logo.insert("vbox", QIcon::fromTheme("vbox"));
     uri_logo.insert("openvz", QIcon::fromTheme("openvz"));
+    state_logo.insert("opened", QIcon::fromTheme("approved"));
+    state_logo.insert("?", QIcon::fromTheme("unknown"));
+    state_logo.insert("closed", QIcon::fromTheme("delete"));
+    state_logo.insert("-", QIcon::fromTheme("untouched"));
     rootIdx = QModelIndex();
 }
 ConnItemModel::~ConnItemModel()
@@ -87,19 +91,16 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
             res = _uri;
             break;
         case 2:
-            res = _state;
+            //res = _state;
             break;
         default:
             break;
         };
     };
     if ( role==Qt::DecorationRole ) {
-        DATA _data = connItemDataList.at(index.row())->getData();
         switch (index.column()) {
         case 0:
-            if ( _data.value("onView").toBool() ) {
-                res = onViewIcon;
-            } else if ( _state.toLower()=="opened" ) {
+            if ( _state.toLower()=="opened" ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
@@ -110,6 +111,9 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
                     break;
                 };
             };
+            break;
+        case 2:
+            res = state_logo.value(_state.toLower());
             break;
         default:
             break;
@@ -139,6 +143,20 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
         default:
             break;
         }
+    };
+    if ( role==Qt::UserRole ) {
+        DATA _data = connItemDataList.at(index.row())->getData();
+        switch (index.column()) {
+        case 2:
+            if ( _data.value("onView").toBool() ) {
+                res = onViewIcon;
+            } else {
+                res = QIcon::fromTheme("");
+            };
+            break;
+        default:
+            break;
+        };
     };
     /*
     if ( role==Qt::TextAlignmentRole ) {

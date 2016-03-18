@@ -14,9 +14,9 @@ void _QWidget::setDataDescription(QString &xmlDesc)
 {
 
 }
-QString _QWidget::closeDataEdit()
+bool _QWidget::closeDataEdit()
 {
-    return QString();
+    return true;
 }
 void _QWidget::setInitState()
 {

@@ -81,7 +81,7 @@ set (HEADERS
   src/layout/conn_menu.h
   src/layout/conn_item_index.h
   src/layout/conn_item_model.h
-  src/layout/progressbar_delegate.h
+  src/layout/conn_list_delegate.h
   src/layout/search_thread.h
   src/layout/wait_local_conn.h
 
@@ -413,7 +413,7 @@ set (SOURCES
   src/layout/conn_menu.cpp
   src/layout/conn_item_index.cpp
   src/layout/conn_item_model.cpp
-  src/layout/progressbar_delegate.cpp
+  src/layout/conn_list_delegate.cpp
   src/layout/search_thread.cpp
   src/layout/wait_local_conn.cpp
 

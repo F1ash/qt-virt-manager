@@ -16,7 +16,7 @@ public:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    QString          closeDataEdit();
+    bool             closeDataEdit();
     void             stateChanged();
     virtual void     readXMLDesciption();
     virtual void     readXMLDesciption(QString&);

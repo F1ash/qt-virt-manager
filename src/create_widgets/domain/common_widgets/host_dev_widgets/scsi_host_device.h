@@ -37,6 +37,7 @@ public slots:
 
 private slots:
     void             setAvailabledSCSIDevices(QStringList&);
+    void             emitCompleteSignal();
 };
 
 #endif // SCSI_HOST_DEVICE_H

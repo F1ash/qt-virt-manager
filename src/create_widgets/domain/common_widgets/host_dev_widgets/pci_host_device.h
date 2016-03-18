@@ -37,6 +37,7 @@ public slots:
 
 private slots:
     void             setAvailabledPCIDevices(QStringList&);
+    void             emitCompleteSignal();
 };
 
 #endif // PCI_HOST_DEVICE_H

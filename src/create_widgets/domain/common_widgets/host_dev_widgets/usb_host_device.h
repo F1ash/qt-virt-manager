@@ -37,6 +37,7 @@ public slots:
 
 private slots:
     void             setAvailabledUSBDevices(QStringList&);
+    void             emitCompleteSignal();
 };
 
 #endif // USB_HOST_DEVICE_H

@@ -34,6 +34,8 @@ private:
     QIcon        no_activeIcon;
     QMap<QString, QIcon>
                  uri_logo;
+    QMap<QString, QIcon>
+                 state_logo;
 
 };
 

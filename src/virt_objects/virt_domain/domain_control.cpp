@@ -84,14 +84,16 @@ void VirtDomainControl::resultReceiver(Result data)
     if ( data.action == GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);
         if ( data.msg.count() > domainModel->DataList.count() ) {
-            int _diff = data.msg.count() - domainModel->DataList.count();
+            int _diff = data.msg.count()
+                    - domainModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 domainModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
         if ( domainModel->DataList.count() > data.msg.count() ) {
-            int _diff = domainModel->DataList.count() - data.msg.count();
+            int _diff = domainModel->DataList.count()
+                    - data.msg.count();
             for ( int i = 0; i<_diff; i++ ) {
                 domainModel->removeRow(0);
                 //qDebug()<<i<<"remove";
@@ -103,7 +105,10 @@ void VirtDomainControl::resultReceiver(Result data)
             if (chain.isEmpty()) continue;
             int count = chain.size();
             for (int j=0; j<count; j++) {
-                domainModel->setData(domainModel->index(i,j), chain.at(j), Qt::EditRole);
+                domainModel->setData(
+                            domainModel->index(i,j),
+                            chain.at(j),
+                            Qt::EditRole);
             };
             i++;
         };
@@ -293,7 +298,7 @@ void VirtDomainControl::execAction(const QStringList &l)
         } else if ( l.first()=="migrateVirtDomain" ) {
             if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
                 // set Migrate parameters
-                // implement in thread or in MigrateDialog  VVV
+                // TODO: implement in thread or in MigrateDialog  VVV
                 char *hostName = virConnectGetHostname(*ptr_ConnPtr);
                 const char *connType = virConnectGetType(*ptr_ConnPtr);
                 //                                          ^^^

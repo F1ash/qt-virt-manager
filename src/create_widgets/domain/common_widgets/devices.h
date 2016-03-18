@@ -58,7 +58,8 @@ public slots:
 private slots:
     void             showDeviceStack();
     void             addDevice();
-    void             addDeviceToUsedDevList(QDomDocument &doc, bool flag = true);
+    void             addDeviceToUsedDevList(
+                                QDomDocument &doc, bool flag = true);
     void             delDevice();
     void             showDevice();
     void             showDevice(QListWidgetItem*,QListWidgetItem*);

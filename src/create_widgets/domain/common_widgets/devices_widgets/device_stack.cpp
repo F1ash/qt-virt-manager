@@ -79,6 +79,8 @@ DeviceStack::DeviceStack(
     infoWidget->setWidgetResizable(true);
     QString connType;
     if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
+        // TODO: reimplement for using in thread
+        // and in another same widgets
         connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
     } else
         emit ptrIsNull();
@@ -104,7 +106,9 @@ DeviceStack::DeviceStack(
     for (int i=0; i<devList.count();i++) {
         if ( devSet.contains(devType.at(i)) ) {
             deviceList->addItem(devList.at(i));
-            QListWidgetItem *item = deviceList->item(deviceList->count()-1);
+            QListWidgetItem *item =
+                    deviceList->item(
+                        deviceList->count()-1);
             /*
             item->setIcon(
                   QIcon::fromTheme(
@@ -113,14 +117,13 @@ DeviceStack::DeviceStack(
                          .first()
                          .toLower()));
              */
-            item->setData(Qt::UserRole, QVariant(devType.at(i)));
+            item->setData(
+                        Qt::UserRole,
+                        QVariant(devType.at(i)));
             //qDebug()<<item->text();
         };
     };
 
-    // double event for selection item
-    //connect(deviceList, SIGNAL(itemClicked(QListWidgetItem*)),
-    //        this, SLOT(showDevice(QListWidgetItem*)));
     connect(deviceList, SIGNAL(itemSelectionChanged()),
             this, SLOT(showDevice()));
     listLayout = new QHBoxLayout(this);
@@ -131,8 +134,10 @@ DeviceStack::DeviceStack(
 
     addDevice = new QPushButton(QIcon::fromTheme("dialog-ok"), "Add Device", this);
     cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
-    connect(addDevice, SIGNAL(clicked()), this, SLOT(set_Result()));
-    connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
+    connect(addDevice, SIGNAL(clicked()),
+            this, SLOT(set_Result()));
+    connect(cancel, SIGNAL(clicked()),
+            this, SLOT(set_Result()));
     buttonlayout = new QHBoxLayout(this);
     buttonlayout->addWidget(addDevice);
     buttonlayout->addWidget(cancel);
@@ -157,16 +162,20 @@ QDomDocument DeviceStack::getResult() const
 }
 void DeviceStack::clearDevice()
 {
-    deviceList->clearSelection();
     if ( device!=nullptr ) {
         infoLayout->removeWidget(device);
-        device->deleteLater();
+        delete device;
+        device = nullptr;
     };
 }
 
 /* private slots */
 void DeviceStack::showDevice(QListWidgetItem *item)
 {
+    if ( item==nullptr ) {
+        deviceDataProcessed();
+        return;
+    };
     clearDevice();
     QString deviceType = item->data(Qt::UserRole).toString();
     //qDebug()<<item->text()<<deviceType;
@@ -181,15 +190,23 @@ void DeviceStack::showDevice(QListWidgetItem *item)
                     this,
                     ptr_ConnPtr);
     } else if ( deviceType == "serial" ) {
-        device = new CharDevice(this, nullptr, nullptr, deviceType);
+        device = new CharDevice(
+                    this,
+                    nullptr,
+                    nullptr,
+                    deviceType);
     } else if ( deviceType == "parallel" ) {
-        device = new CharDevice(this, nullptr, nullptr, deviceType);
+        device = new CharDevice(
+                    this,
+                    nullptr,
+                    nullptr,
+                    deviceType);
     } else if ( deviceType == "channel" ) {
         device = new ChannelDevice(this);
     } else if ( deviceType == "console" ) {
         device = new ConsoleDevice(
-                          this,
-                          ptr_ConnPtr);
+                    this,
+                     ptr_ConnPtr);
     } else if ( deviceType == "smartcard" ) {
         device = new SmartCardDevice(this);
     } else if ( deviceType == "input" ) {
@@ -202,8 +219,8 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         device = new SoundDevice(this);
     } else if ( deviceType == "hostdev" ) {
         device = new HostDevice(
-                          this,
-                          ptr_ConnPtr);
+                    this,
+                    ptr_ConnPtr);
     } else if ( deviceType == "graphics" ) {
         device = new GraphicsDevice(
                     this,
@@ -230,10 +247,13 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     } else {
         device = new _QWidget(this);
     };
+    connect(device, SIGNAL(complete()),
+            this, SLOT(deviceDataProcessed()));
     infoLayout->insertWidget(0, device, -1);
 }
 void DeviceStack::showDevice()
 {
+    listWidget->setEnabled(false);
     showDevice(deviceList->currentItem());
 }
 void DeviceStack::set_Result()
@@ -242,4 +262,8 @@ void DeviceStack::set_Result()
                    QDialog::Accepted : QDialog::Rejected );
     done(result());
     //qDebug()<<"done";
+}
+void DeviceStack::deviceDataProcessed()
+{
+    listWidget->setEnabled(true);
 }

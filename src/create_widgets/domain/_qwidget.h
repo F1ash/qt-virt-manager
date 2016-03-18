@@ -26,7 +26,7 @@ public:
             virDomainPtr     domain     = nullptr);
 
     virConnectPtr           *ptr_ConnPtr;
-    virDomain               *currDomain = nullptr;
+    virDomain               *currDomain;
 
 signals:
     void                     errorMsg(QString&);
@@ -35,7 +35,7 @@ signals:
 public slots:
     virtual QDomDocument     getDataDocument() const;
     virtual void             setDataDescription(QString&);
-    virtual QString          closeDataEdit();
+    virtual bool             closeDataEdit();
     virtual void             setInitState();
 };
 

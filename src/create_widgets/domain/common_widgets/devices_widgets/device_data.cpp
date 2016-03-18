@@ -57,6 +57,7 @@ QDomDocument DeviceData::getResult() const
 void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
 {
     if ( device!=nullptr ) closeDataEdit();
+    emit dataProcessed(false);
     devName->setText(QString("<b>%1</b>").arg(deviceName));
     QDomDocument doc;
     doc.setContent(xmlDesc);
@@ -77,9 +78,17 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
                     this,
                     ptr_ConnPtr);
     } else if ( deviceType == "serial" ) {
-        device = new CharDevice_Edit(this, nullptr, nullptr, deviceType);
+        device = new CharDevice_Edit(
+                    this,
+                    nullptr,
+                    nullptr,
+                    deviceType);
     } else if ( deviceType == "parallel" ) {
-        device = new CharDevice_Edit(this, nullptr, nullptr, deviceType);
+        device = new CharDevice_Edit(
+                    this,
+                    nullptr,
+                    nullptr,
+                    deviceType);
     } else if ( deviceType == "channel" ) {
         device = new ChannelDevice(this);
     } else if ( deviceType == "console" ) {
@@ -123,6 +132,8 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
     } else {
         device = new _QWidget(this);
     };
+    connect(device, SIGNAL(complete()),
+            this, SLOT(deviceDataProcessed()));
     infoLayout->insertWidget(0, device, -1);
     DeviceXMLDesc = xmlDesc;
     currentDeviceXMLDesc = xmlDesc;
@@ -158,12 +169,10 @@ void DeviceData::clearDataEdit()
 {
     if ( nullptr!=device ) {
         infoLayout->removeWidget(device);
-        //disconnect(device, SIGNAL(dataChanged()),
-        //           this, SLOT(currentStateChanged()));
-        //device->deleteLater();
         delete device;
         device = nullptr;
     };
+    deviceDataProcessed();
 }
 
 /* private slots */
@@ -207,4 +216,8 @@ void DeviceData::setStartState()
     currentStateSaved = true;
     restoreMenu->revertData->setEnabled(false);
     changed = false;
+}
+void DeviceData::deviceDataProcessed()
+{
+    emit dataProcessed(true);
 }
