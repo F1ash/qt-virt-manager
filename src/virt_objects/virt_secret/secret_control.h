@@ -5,6 +5,7 @@
 #include "secret_model.h"
 #include "secret_toolbar.h"
 #include "secret_control_menu.h"
+#include "secret_list_delegate.h"
 #include "create_widgets/secret/create_virt_secret.h"
 
 class VirtSecretControl : public VirtEntityControl
@@ -17,6 +18,7 @@ public:
 private:
     VirtSecretModel     *virtSecretModel;
     VirtSecretToolBar   *toolBar;
+    SecretListDelegate  *secListDlg;
 
 public slots:
     void                 stopProcessing();

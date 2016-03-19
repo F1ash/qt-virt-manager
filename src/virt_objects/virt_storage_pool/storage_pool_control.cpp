@@ -8,6 +8,8 @@ VirtStoragePoolControl::VirtStoragePoolControl(QWidget *parent) :
     setWindowIcon(QIcon::fromTheme("storagePool"));
     storagePoolModel = new StoragePoolModel();
     entityList->setModel(storagePoolModel);
+    storagePoolListDlg = new StoragePoolListDelegate();
+    entityList->setItemDelegate(storagePoolListDlg);
     connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
             this, SLOT(entityDoubleClicked(const QModelIndex&)));
     connect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),

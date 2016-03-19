@@ -5,6 +5,7 @@
 #include "storage_pool_model.h"
 #include "storage_pool_toolbar.h"
 #include "storage_pool_control_menu.h"
+#include "storage_pool_list_delegate.h"
 #include "create_widgets/storage/create_pool.h"
 
 class VirtStoragePoolControl : public VirtEntityControl
@@ -20,6 +21,7 @@ signals:
 private:
     StoragePoolModel          *storagePoolModel;
     StoragePoolToolBar        *toolBar;
+    StoragePoolListDelegate   *storagePoolListDlg;
 
 public slots:
     void                       stopProcessing();

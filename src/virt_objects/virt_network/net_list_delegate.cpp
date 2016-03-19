@@ -1,26 +1,21 @@
-#include "conn_list_delegate.h"
-#include <QDebug>
+#include "net_list_delegate.h"
 
-ConnListDelegate::ConnListDelegate(
+NetworkListDelegate::NetworkListDelegate(
         QObject *parent) :
     QStyledItemDelegate(parent)
 {
 }
-void ConnListDelegate::paint(
+void NetworkListDelegate::paint(
         QPainter *painter,
         const QStyleOptionViewItem &option,
         const QModelIndex &index) const
 {
-    if ( index.column() == 2 ) {
-        QIcon onView = qvariant_cast<QIcon>(
-                    index.model()->data(
-                        index, Qt::UserRole));
+    if ( index.column() > 0 ) {
         QIcon icon = qvariant_cast<QIcon>(
                     index.model()->data(
                         index, Qt::DecorationRole));
         icon.paint(painter, option.rect, Qt::AlignCenter);
-        onView.paint(painter, option.rect, Qt::AlignLeading);
-    } else if ( index.column() < 2 ) {
+    } else if ( index.column() == 0 ) {
 #if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
         QStyleOptionViewItem _option = option;
         _option.rect = option.rect;

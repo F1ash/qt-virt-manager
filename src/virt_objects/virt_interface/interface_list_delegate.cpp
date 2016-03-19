@@ -1,25 +1,20 @@
-#include "conn_list_delegate.h"
-#include <QDebug>
+#include "interface_list_delegate.h"
 
-ConnListDelegate::ConnListDelegate(
+IfaceListDelegate::IfaceListDelegate(
         QObject *parent) :
     QStyledItemDelegate(parent)
 {
 }
-void ConnListDelegate::paint(
+void IfaceListDelegate::paint(
         QPainter *painter,
         const QStyleOptionViewItem &option,
         const QModelIndex &index) const
 {
-    if ( index.column() == 2 ) {
-        QIcon onView = qvariant_cast<QIcon>(
-                    index.model()->data(
-                        index, Qt::UserRole));
+    if ( index.column() > 1 ) {
         QIcon icon = qvariant_cast<QIcon>(
                     index.model()->data(
                         index, Qt::DecorationRole));
         icon.paint(painter, option.rect, Qt::AlignCenter);
-        onView.paint(painter, option.rect, Qt::AlignLeading);
     } else if ( index.column() < 2 ) {
 #if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
         QStyleOptionViewItem _option = option;
@@ -28,7 +23,8 @@ void ConnListDelegate::paint(
         _option.text = index.model()->data(
                     index, Qt::DisplayRole).toString();
 
-        QStyledItemDelegate::paint(painter, option, index);
+        QStyledItemDelegate::paint(painter, _option, index);
+
         QIcon icon = qvariant_cast<QIcon>(
                     index.model()->data(
                         index, Qt::DecorationRole));

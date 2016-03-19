@@ -5,6 +5,7 @@
 #include "virtnet_model.h"
 #include "virtnet_toolbar.h"
 #include "virtnet_control_menu.h"
+#include "net_list_delegate.h"
 #include "create_widgets/network/create_virt_network.h"
 
 class VirtNetControl : public VirtEntityControl
@@ -17,6 +18,7 @@ public:
 private:
     VirtNetModel        *virtNetModel;
     VirtNetToolBar      *toolBar;
+    NetworkListDelegate *netListDlg;
 
 public slots:
     void                 stopProcessing();

@@ -1,13 +1,13 @@
-#ifndef CONN_LIST_DELEGATE_H
-#define CONN_LIST_DELEGATE_H
+#ifndef INTERFACE_LIST_DELEGATE_H
+#define INTERFACE_LIST_DELEGATE_H
 
 #include <QStyledItemDelegate>
 
-class ConnListDelegate : public QStyledItemDelegate
+class IfaceListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit ConnListDelegate(QObject *parent = nullptr);
+    explicit IfaceListDelegate(QObject *parent = nullptr);
 
 private slots:
     void paint(
@@ -16,4 +16,4 @@ private slots:
             const QModelIndex &index) const;
 };
 
-#endif // CONN_LIST_DELEGATE_H
+#endif // INTERFACE_LIST_DELEGATE_H

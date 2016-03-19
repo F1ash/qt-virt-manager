@@ -53,26 +53,26 @@ int ConnItemModel::columnCount(const QModelIndex &parent) const
 }
 QVariant ConnItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if ( orientation == Qt::Horizontal ) {
-    if ( role == Qt::DisplayRole ) {
-      switch (section) {
-      case 0:
-        return QString("Name");
-        break;
-      case 1:
-        return QString("URI");
-        break;
-      case 2:
-        return QString("State");
-        break;
-      default:
-        break;
-      }
-    } else if ( role==Qt::TextAlignmentRole ) {
-        return Qt::AlignCenter;
+    if ( orientation == Qt::Horizontal ) {
+        if ( role == Qt::DisplayRole ) {
+            switch (section) {
+            case 0:
+                return QString("Name");
+                break;
+            case 1:
+                return QString("URI");
+                break;
+            case 2:
+                return QString("State");
+                break;
+            default:
+                break;
+            }
+        } else if ( role==Qt::TextAlignmentRole ) {
+            return Qt::AlignCenter;
+        };
     };
-  };
-  return QAbstractTableModel::headerData( section, orientation, role );
+    return QAbstractTableModel::headerData( section, orientation, role );
 }
 QVariant ConnItemModel::data(const QModelIndex &index, int role) const
 {

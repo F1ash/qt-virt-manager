@@ -8,6 +8,7 @@
 #include "create_widgets/domain/create_virt_domain.h"
 #include "vm_viewer/vm_viewer.h"
 #include "migrate_dialog.h"
+#include "domain_list_delegate.h"
 #include "create_widgets/snapshot/create_snapshot_dialog.h"
 #include "create_widgets/snapshot/snapshot_action_dialog.h"
 
@@ -27,6 +28,7 @@ signals:
 private:
     DomainModel             *domainModel;
     DomainToolBar           *toolBar;
+    DomainListDelegate      *domListDlg;
 
 public slots:
     void                     stopProcessing();

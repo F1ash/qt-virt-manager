@@ -8,6 +8,8 @@ VirtInterfaceControl::VirtInterfaceControl(QWidget *parent) :
     setWindowIcon(QIcon::fromTheme("network-wired"));
     virtIfaceModel = new VirtIfaceModel();
     entityList->setModel(virtIfaceModel);
+    ifaceListDelegate = new IfaceListDelegate();
+    entityList->setItemDelegate(ifaceListDelegate);
     //connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
     //        this, SLOT(entityDoubleClicked(const QModelIndex&)));
     connect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),

@@ -107,12 +107,14 @@ set (HEADERS
   src/virt_objects/virt_domain/domain_control_menu.h
   src/virt_objects/virt_domain/domain_control_thread.h
   src/virt_objects/virt_domain/migrate_dialog.h
+  src/virt_objects/virt_domain/domain_list_delegate.h
   
   src/virt_objects/virt_network/virtnet_control.h
   src/virt_objects/virt_network/virtnet_model.h
   src/virt_objects/virt_network/virtnet_toolbar.h
   src/virt_objects/virt_network/virtnet_control_menu.h
   src/virt_objects/virt_network/net_control_thread.h
+  src/virt_objects/virt_network/net_list_delegate.h
   
   src/virt_objects/virt_storage_pool/storage_pool_control.h
   src/virt_objects/virt_storage_pool/storage_pool_model.h
@@ -120,6 +122,7 @@ set (HEADERS
   src/virt_objects/virt_storage_pool/storage_pool_control_thread.h
   src/virt_objects/virt_storage_pool/storage_pool_control_menu.h
   src/virt_objects/virt_storage_pool/delete_pool_menu.h
+  src/virt_objects/virt_storage_pool/storage_pool_list_delegate.h
   
   src/virt_objects/virt_storage_vol/storage_vol_control.h
   src/virt_objects/virt_storage_vol/storage_vol_index.h
@@ -136,6 +139,7 @@ set (HEADERS
   src/virt_objects/virt_secret/secret_toolbar.h
   src/virt_objects/virt_secret/secret_model.h
   src/virt_objects/virt_secret/secret_index.h
+  src/virt_objects/virt_secret/secret_list_delegate.h
 
   src/virt_objects/virt_interface/virt_interface_control.h
   src/virt_objects/virt_interface/virt_interface_toolbar.h
@@ -143,6 +147,7 @@ set (HEADERS
   src/virt_objects/virt_interface/virt_interface_model.h
   src/virt_objects/virt_interface/virt_interface_index.h
   src/virt_objects/virt_interface/virt_interface_control_menu.h
+  src/virt_objects/virt_interface/interface_list_delegate.h
   
   src/create_widgets/domain/domain_widgets.h
   src/create_widgets/domain/_qwidget.h
@@ -438,12 +443,14 @@ set (SOURCES
   src/virt_objects/virt_domain/domain_control_thread.cpp
   src/virt_objects/virt_domain/domain_control_menu.cpp
   src/virt_objects/virt_domain/migrate_dialog.cpp
+  src/virt_objects/virt_domain/domain_list_delegate.cpp
   
   src/virt_objects/virt_network/virtnet_control.cpp
   src/virt_objects/virt_network/virtnet_model.cpp
   src/virt_objects/virt_network/virtnet_toolbar.cpp
   src/virt_objects/virt_network/net_control_thread.cpp
   src/virt_objects/virt_network/virtnet_control_menu.cpp
+  src/virt_objects/virt_network/net_list_delegate.cpp
   
   src/virt_objects/virt_storage_pool/storage_pool_control.cpp
   src/virt_objects/virt_storage_pool/storage_pool_model.cpp
@@ -451,6 +458,7 @@ set (SOURCES
   src/virt_objects/virt_storage_pool/storage_pool_control_thread.cpp
   src/virt_objects/virt_storage_pool/storage_pool_control_menu.cpp
   src/virt_objects/virt_storage_pool/delete_pool_menu.cpp
+  src/virt_objects/virt_storage_pool/storage_pool_list_delegate.cpp
   
   src/virt_objects/virt_storage_vol/storage_vol_control.cpp
   src/virt_objects/virt_storage_vol/storage_vol_index.cpp
@@ -467,6 +475,7 @@ set (SOURCES
   src/virt_objects/virt_secret/secret_toolbar.cpp
   src/virt_objects/virt_secret/secret_model.cpp
   src/virt_objects/virt_secret/secret_index.cpp
+  src/virt_objects/virt_secret/secret_list_delegate.cpp
 
   src/virt_objects/virt_interface/virt_interface_control.cpp
   src/virt_objects/virt_interface/virt_interface_toolbar.cpp
@@ -474,6 +483,7 @@ set (SOURCES
   src/virt_objects/virt_interface/virt_interface_model.cpp
   src/virt_objects/virt_interface/virt_interface_index.cpp
   src/virt_objects/virt_interface/virt_interface_control_menu.cpp
+  src/virt_objects/virt_interface/interface_list_delegate.cpp
   
   src/create_widgets/domain/create_virt_domain.cpp
   src/create_widgets/domain/_qwidget.cpp

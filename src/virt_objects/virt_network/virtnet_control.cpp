@@ -8,6 +8,8 @@ VirtNetControl::VirtNetControl(QWidget *parent) :
     setWindowIcon(QIcon::fromTheme("network"));
     virtNetModel = new VirtNetModel();
     entityList->setModel(virtNetModel);
+    netListDlg = new NetworkListDelegate();
+    entityList->setItemDelegate(netListDlg);
     //connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
     //        this, SLOT(entityDoubleClicked(const QModelIndex&)));
     connect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),

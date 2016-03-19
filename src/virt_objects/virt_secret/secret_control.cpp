@@ -8,6 +8,8 @@ VirtSecretControl::VirtSecretControl(QWidget *parent) :
     setWindowIcon(QIcon::fromTheme("security"));
     virtSecretModel = new VirtSecretModel();
     entityList->setModel(virtSecretModel);
+    secListDlg = new SecretListDelegate();
+    entityList->setItemDelegate(secListDlg);
     //connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
     //        this, SLOT(entityDoubleClicked(const QModelIndex&)));
     connect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),

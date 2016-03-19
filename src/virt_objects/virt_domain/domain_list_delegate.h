@@ -1,13 +1,13 @@
-#ifndef CONN_LIST_DELEGATE_H
-#define CONN_LIST_DELEGATE_H
+#ifndef DOMAIN_LIST_DELEGATE_H
+#define DOMAIN_LIST_DELEGATE_H
 
 #include <QStyledItemDelegate>
 
-class ConnListDelegate : public QStyledItemDelegate
+class DomainListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit ConnListDelegate(QObject *parent = nullptr);
+    explicit DomainListDelegate(QObject *parent = nullptr);
 
 private slots:
     void paint(
@@ -16,4 +16,4 @@ private slots:
             const QModelIndex &index) const;
 };
 
-#endif // CONN_LIST_DELEGATE_H
+#endif // DOMAIN_LIST_DELEGATE_H

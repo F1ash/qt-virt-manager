@@ -12,6 +12,8 @@ VirtDomainControl::VirtDomainControl(QWidget *parent) :
     connect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(entityClicked(const QPoint&)));
     entityList->setModel(domainModel);
+    domListDlg = new DomainListDelegate();
+    entityList->setItemDelegate(domListDlg);
     settings.beginGroup("VirtDomainControl");
     entityList->setColumnWidth(0, settings.value("column0", 132).toInt());
     entityList->setColumnWidth(1, settings.value("column1", 32).toInt());

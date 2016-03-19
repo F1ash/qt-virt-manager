@@ -5,6 +5,7 @@
 #include "virt_interface_toolbar.h"
 #include "virt_interface_model.h"
 #include "virt_interface_control_menu.h"
+#include "interface_list_delegate.h"
 #include "create_widgets/interface/create_interface.h"
 
 class VirtInterfaceControl : public VirtEntityControl
@@ -17,6 +18,7 @@ public:
 private:
     VirtIfaceModel      *virtIfaceModel;
     InterfaceToolBar    *toolBar;
+    IfaceListDelegate   *ifaceListDelegate;
 
 public slots:
     void                 stopProcessing();

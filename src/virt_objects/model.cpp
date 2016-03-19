@@ -65,23 +65,25 @@ bool Model::setHeaderData(int section, Qt::Orientation orientation, const QVaria
 }
 QVariant Model::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if ( orientation == Qt::Horizontal ) {
-    if ( role == Qt::DisplayRole ) {
-      switch (section) {
-      case 0:
-        return column0;
-      case 1:
-        return column1;
-      case 2:
-        return column2;
-      case 3:
-        return column3;
-      default:
-        break;
-      }
-    }
-  };
-  return QAbstractTableModel::headerData( section, orientation, role );
+    if ( orientation == Qt::Horizontal ) {
+        if ( role == Qt::DisplayRole ) {
+            switch (section) {
+            case 0:
+                return column0;
+            case 1:
+                return column1;
+            case 2:
+                return column2;
+            case 3:
+                return column3;
+            default:
+                break;
+            };
+        } else if ( section && role==Qt::TextAlignmentRole ) {
+            return Qt::AlignCenter;
+        };
+    };
+    return QAbstractTableModel::headerData( section, orientation, role );
 }
 QVariant Model::data(const QModelIndex &index, int role) const
 {
