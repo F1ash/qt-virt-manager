@@ -104,3 +104,16 @@ some enhancements for stability and GUI;
 0.22.45 :
 fixes for CPU, Memory in CreateDomain widget;
 some enhancements for stability and cosmetic;
+
+0.25.47 :
+enhanced GUI:
+    some enhancements for Snapshot widgets;
+    dropped scaling as method for VM displaying;
+    improved GUI with item delegates;
+fixes for stability at using CreateDomain widget:
+    fixed segfault in DeviceData widget;
+    added complete-signal in _Changed abstract class
+        for atomization an actions;
+improved save data in CreateDomain
+    for availability edit data in pages
+    with unsaved state;

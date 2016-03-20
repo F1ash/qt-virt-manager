@@ -20,10 +20,10 @@ void DomainListDelegate::paint(
         QStyleOptionViewItem _option = option;
         _option.rect = option.rect;
         _option.displayAlignment = Qt::AlignLeft;
-        //_option.text = index.model()->data(
-        //            index, Qt::DisplayRole).toString();
-
+        _option.text = index.model()->data(
+                    index, Qt::DisplayRole).toString();
         QStyledItemDelegate::paint(painter, _option, index);
+
         QIcon icon = qvariant_cast<QIcon>(
                     index.model()->data(
                         index, Qt::DecorationRole));
