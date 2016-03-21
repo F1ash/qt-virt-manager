@@ -296,6 +296,8 @@ void MainWindow::initToolBar()
             this, SLOT(stopProcessing()));
     connect(toolBar->_exitAction, SIGNAL(triggered()),
             this, SLOT(close()));
+    connect(toolBar->_infoAction, SIGNAL(triggered()),
+            this, SLOT(showAboutInfo()));
     connect(toolBar, SIGNAL(warningShowed()),
             this, SLOT(mainWindowUp()));
     int area_int = settings.value("ToolBarArea", 4).toInt();
@@ -897,4 +899,14 @@ void MainWindow::deleteDomainEditor(QString &key)
         // not need to delete a CreateVirtDomain
         DomainEditor_Map.remove(key);
     };
+}
+void MainWindow::showAboutInfo()
+{
+    QMessageBox::about(
+                this,
+                "Qt VirtManager",
+                "Qt Virtual machines manager.\
+\nUsed libvirt API.\nImplemented terminals for\
+\nLXC containers and VM displays by SPICE client."
+                );
 }

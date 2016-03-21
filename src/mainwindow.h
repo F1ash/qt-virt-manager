@@ -121,6 +121,7 @@ private slots:
     void deleteStPoolOverview(QString&);
     void invokeDomainEditor(TASK);
     void deleteDomainEditor(QString&);
+    void showAboutInfo();
 };
 
 #endif // MAINWINDOW_H

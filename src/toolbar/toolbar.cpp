@@ -16,6 +16,8 @@ void ToolBar::initActions()
     _closeOverview->setIcon ( QIcon::fromTheme("overview-stop") );
     _exitAction = new QAction(QString("Exit"), this);
     _exitAction->setIcon ( QIcon::fromTheme("exit") );
+    _infoAction = new QAction(QString("About"), this);
+    _infoAction->setIcon( QIcon::fromTheme("info") );
 
     addAction(_hideAction);
     addSeparator();
@@ -24,6 +26,8 @@ void ToolBar::initActions()
     addDocksControlMenu();
     addSeparator();
     addAction(_closeOverview);
+    addSeparator();
+    addAction(_infoAction);
     addSeparator();
     addAction(_exitAction);
 

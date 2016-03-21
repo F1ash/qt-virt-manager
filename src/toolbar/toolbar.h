@@ -22,6 +22,7 @@ public:
   QAction    *_docsUpAction;
   QAction    *_closeOverview;
   QAction    *_exitAction;
+  QAction    *_infoAction;
 
   QAction    *_logUpAction;
   QAction    *_domUpAction;
@@ -36,7 +37,6 @@ signals:
 private:
   QAction    *itemControlAction;
   QMenu      *itemControlMenu;
-
   QMenu      *showDocksControlMenu;
 
 private slots:

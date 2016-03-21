@@ -70,6 +70,7 @@
         <file alias="22x22/actions/disconnect.png">icons/22x22/actions/disconnect.png</file>
         <file alias="22x22/actions/document-revert.png">icons/22x22/actions/document-revert.png</file>
         <file alias="22x22/actions/dock_up.png">icons/22x22/actions/dock_up.png</file>
+        <file alias="22x22/actions/info.png">icons/22x22/actions/info.png</file>
         <file alias="22x22/actions/document-open.png">icons/22x22/actions/document-open.png</file>
         <file alias="22x22/actions/dialog-warning.png">icons/22x22/actions/dialog-warning.png</file>
         <file alias="22x22/actions/view-refresh.png">icons/22x22/actions/view-refresh.png</file>
@@ -171,6 +172,7 @@
         <file alias="32x32/actions/disconnect.png">icons/32x32/actions/disconnect.png</file>
         <file alias="32x32/actions/document-revert.png">icons/32x32/actions/document-revert.png</file>
         <file alias="32x32/actions/dock_up.png">icons/32x32/actions/dock_up.png</file>
+        <file alias="32x32/actions/info.png">icons/32x32/actions/info.png</file>
         <file alias="32x32/actions/document-open.png">icons/32x32/actions/document-open.png</file>
         <file alias="32x32/actions/dialog-warning.png">icons/32x32/actions/dialog-warning.png</file>
         <file alias="32x32/actions/view-refresh.png">icons/32x32/actions/view-refresh.png</file>
@@ -273,6 +275,7 @@
         <file alias="48x48/actions/disconnect.png">icons/48x48/actions/disconnect.png</file>
         <file alias="48x48/actions/document-revert.png">icons/48x48/actions/document-revert.png</file>
         <file alias="48x48/actions/dock_up.png">icons/48x48/actions/dock_up.png</file>
+        <file alias="48x48/actions/info.png">icons/48x48/actions/info.png</file>
         <file alias="48x48/actions/document-open.png">icons/48x48/actions/document-open.png</file>
         <file alias="48x48/actions/dialog-warning.png">icons/48x48/actions/dialog-warning.png</file>
         <file alias="48x48/actions/view-refresh.png">icons/48x48/actions/view-refresh.png</file>
@@ -375,6 +378,7 @@
         <file alias="24x24/actions/disconnect.png">icons/24x24/actions/disconnect.png</file>
         <file alias="24x24/actions/document-revert.png">icons/24x24/actions/document-revert.png</file>
         <file alias="24x24/actions/dock_up.png">icons/24x24/actions/dock_up.png</file>
+        <file alias="24x24/actions/info.png">icons/24x24/actions/info.png</file>
         <file alias="24x24/actions/document-open.png">icons/24x24/actions/document-open.png</file>
         <file alias="24x24/actions/dialog-warning.png">icons/24x24/actions/dialog-warning.png</file>
         <file alias="24x24/actions/view-refresh.png">icons/24x24/actions/view-refresh.png</file>
@@ -477,6 +481,7 @@
         <file alias="64x64/actions/disconnect.png">icons/64x64/actions/disconnect.png</file>
         <file alias="64x64/actions/document-revert.png">icons/64x64/actions/document-revert.png</file>
         <file alias="64x64/actions/dock_up.png">icons/64x64/actions/dock_up.png</file>
+        <file alias="64x64/actions/info.png">icons/64x64/actions/info.png</file>
         <file alias="64x64/actions/document-open.png">icons/64x64/actions/document-open.png</file>
         <file alias="64x64/actions/dialog-warning.png">icons/64x64/actions/dialog-warning.png</file>
         <file alias="64x64/actions/view-refresh.png">icons/64x64/actions/view-refresh.png</file>
