@@ -902,11 +902,32 @@ void MainWindow::deleteDomainEditor(QString &key)
 }
 void MainWindow::showAboutInfo()
 {
+    ulong libVer;
+    QString libVersion;
+    int ret = virConnectGetLibVersion(
+                virConnectOpenReadOnly(nullptr),
+                &libVer);
+    if (ret<0) {
+        libVersion.append("?.??.???");
+    } else {
+        uint maj, min, rel;
+        maj = libVer/1000000;
+        min = (libVer-maj*1000000)/1000;
+        rel = (libVer-maj*1000000-min*1000);
+        libVersion = QString("%1.%2.%3")
+                .arg(maj).arg(min).arg(rel);
+    };
+    QString message = QString(
+                "Qt Virtual machines manager.\
+                \nBased on Qt %1.\
+                \nUsed libvirt (%2) API.\
+                \nImplemented graphical consoles for\
+                \nVirtual Machines displays by SPICE client\
+                \nand LXC terminals.")
+                .arg(QT_VERSION_STR)
+                .arg(libVersion);
     QMessageBox::about(
                 this,
-                "Qt VirtManager",
-                "Qt Virtual machines manager.\
-\nUsed libvirt API.\nImplemented terminals for\
-\nLXC containers and VM displays by SPICE client."
-                );
+                qApp->applicationName(),
+                message);
 }
