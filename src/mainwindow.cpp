@@ -918,16 +918,16 @@ void MainWindow::showAboutInfo()
                 .arg(maj).arg(min).arg(rel);
     };
     QString message = QString(
-                "Qt Virtual machines manager.\
+                "Qt Virtual machine manager.\
                 \nBased on Qt %1.\
                 \nUsed libvirt (%2) API.\
                 \nImplemented graphical consoles for\
-                \nVirtual Machines displays by SPICE client\
+                \nVirtual Machine displays by SPICE client\
                 \nand LXC terminals.")
                 .arg(QT_VERSION_STR)
                 .arg(libVersion);
     QMessageBox::about(
                 this,
-                qApp->applicationName(),
+                "Qt VirtManager",
                 message);
 }
