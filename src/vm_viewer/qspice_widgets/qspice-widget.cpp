@@ -610,6 +610,7 @@ void QSpiceWidget::displayInvalidate(
     //                tr_mode));
     //zoom = init_w/(qreal)pix.width();
     //m_Image->setPixmap(pix);
+    // TODO: implement the update the sent rectangle only
     m_Image->update();
 }
 
@@ -927,7 +928,7 @@ void QSpiceWidget::getScreenshot()
                     .arg(QDate::currentDate().toString("dd.MM.yyyy"))
                     .arg(QTime::currentTime().toString()),
                 "Images (*.png)");
-    if ( !fileName.isNull() ) {
+    if ( !fileName.isNull() && img!=nullptr ) {
         img->save(fileName, "png");
     };
 }

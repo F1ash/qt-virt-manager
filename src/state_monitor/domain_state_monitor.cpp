@@ -81,8 +81,9 @@ void DomainStateMonitor::stopMonitoring()
 {
     while (monitoredDomainList->count()>0) {
         DomainStateViewer *wdg =
-                static_cast<DomainStateViewer*>(monitoredDomains->widget(0));
-        wdg->closeDomainStateViewer();
+                static_cast<DomainStateViewer*>(
+                    monitoredDomains->widget(0));
+        if ( wdg!=nullptr ) wdg->closeDomainStateViewer();
     };
 }
 
@@ -93,12 +94,15 @@ void DomainStateMonitor::closeEvent(QCloseEvent *ev)
 }
 void DomainStateMonitor::removeClosedViewer()
 {
-    DomainStateViewer *wdg = static_cast<DomainStateViewer*>(sender());
+    DomainStateViewer *wdg =
+            static_cast<DomainStateViewer*>(sender());
+    if ( wdg==nullptr ) return;
     int i = monitoredDomains->indexOf(wdg);
     disconnect(monitoredDomains->widget(i), SIGNAL(viewerClosed()),
                this, SLOT(removeClosedViewer()));
     monitoredDomains->removeWidget(wdg);
     monitoredDomainList->removeItem(i);
     //qDebug()<<wdg->domainName<<"remove from StateMonitor";
-    wdg->deleteLater();
+    delete wdg;
+    wdg = nullptr;
 }

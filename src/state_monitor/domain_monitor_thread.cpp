@@ -11,7 +11,7 @@ DomainMonitorThread::DomainMonitorThread(
 DomainMonitorThread::~DomainMonitorThread()
 {
     // release the reference because no longer required
-    if ( ptr_ConnPtr!=nullptr ) {
+    if ( ptr_ConnPtr!=nullptr && nullptr!=*ptr_ConnPtr ) {
         if ( nullptr!=domain ) {
             if ( virDomainFree(domain)<0 )
                 sendConnErrors();
@@ -20,9 +20,8 @@ DomainMonitorThread::~DomainMonitorThread()
         //qDebug()<<"virConnectRef -1"<<"DomainStateViewer"<<domainName<<(ret+1>0);
         // for reject the multiple releasing the reference
         if ( ret<0 ) sendConnErrors();
-        ptr_ConnPtr = nullptr;
+        //*ptr_ConnPtr = nullptr;
     };
-    wait(30000);
 }
 
 /* public slots */
@@ -55,13 +54,14 @@ void DomainMonitorThread::run()
             cpu_time_diff = (firstStep)? 0 : curr_cpuTime - prev_cpuTime;
             CPU_percent = (qreal)100/(_time_diff * info.nrVirtCpu)*(qreal)cpu_time_diff/1000000000;
             tMark.restart();
-            MEM = info.memory;
-            MEM_percent = 100*(qreal)MEM / info.maxMem;
+            MEM = info.maxMem;
+            MEM_percent = 100*(qreal)info.memory / MEM;
+            //qDebug()<<CPU_percent<< MEM_percent<<info.memory<< MEM;
             prev_cpuTime = curr_cpuTime;
             if ( firstStep ) firstStep = false;
         };
         if ( info.state == VIR_DOMAIN_RUNNING || info.state == VIR_DOMAIN_PAUSED ) {
-            emit dataChanged(info.state, CPU_percent, MEM_percent, MEM);
+            emit dataChanged(info.state, CPU_percent, MEM_percent, MEM/1024);
         } else
             emit dataChanged(info.state, 0, 0, 0);
     } else {

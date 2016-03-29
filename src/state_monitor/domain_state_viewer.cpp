@@ -3,12 +3,17 @@
 #define PERIOD 3
 
 DomainStateViewer::DomainStateViewer(
-        QWidget *parent, virConnectPtr *connPtrPtr, QString _domainName) :
-    QWidget(parent), ptr_ConnPtr(connPtrPtr), domainName(_domainName)
+        QWidget *parent,
+        virConnectPtr *connPtrPtr,
+        QString _domainName) :
+    QWidget(parent),
+    ptr_ConnPtr(connPtrPtr),
+    domainName(_domainName)
 {
     monitorName = new QLabel(domainName, this);
     closeViewer = new QPushButton(
                 QIcon::fromTheme("dialog-close"), "", this);
+    closeViewer->setToolTip("Close current state viewer");
     cpuLabel = new QLabel("Host CPU\nUsage:", this);
     memLabel = new QLabel("Guest Memory\nUsage:", this);
     cpuGraphic = new QSvgWidget(this);
@@ -136,6 +141,7 @@ void DomainStateViewer::setData(
     cpuPercent.appendChild(_data);
     cpuGraphic->load(cpuDoc.toByteArray());
 
+    _l.clear();
     _l = memPaint.firstChildElement("line");
     if ( memPaint.childNodes().count()>100 ) {
         memPaint.removeChild(memPaint.childNodes().at(101));
@@ -154,7 +160,7 @@ void DomainStateViewer::setData(
     memPaint.insertBefore(line, memPaint.childNodes().at(0));
     memPercent.removeChild( memPercent.firstChild() );
     _data = memDoc.createTextNode(
-                QString("%1 KiB").arg(_mem));
+                QString("%1 MB").arg(_mem));
     memPercent.appendChild(_data);
     memGraphic->load(memDoc.toByteArray());
 }

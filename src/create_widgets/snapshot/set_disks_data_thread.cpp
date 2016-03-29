@@ -8,7 +8,6 @@ SetDisksDataThread::SetDisksDataThread(QObject *parent) :
 
 SetDisksDataThread::~SetDisksDataThread()
 {
-    wait(30000);
 }
 
 void SetDisksDataThread::run()

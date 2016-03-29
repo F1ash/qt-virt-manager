@@ -922,7 +922,7 @@ void MainWindow::showAboutInfo()
                 \nBased on Qt %1.\
                 \nUsed libvirt (%2) API.\
                 \nImplemented graphical consoles for\
-                \nVirtual Machine displays by SPICE client\
+                \nVirtual Machine displays (by SPICE client)\
                 \nand LXC terminals.")
                 .arg(QT_VERSION_STR)
                 .arg(libVersion);

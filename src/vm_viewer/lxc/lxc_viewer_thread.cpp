@@ -22,7 +22,6 @@ LXC_ViewerThread::~LXC_ViewerThread()
     unregisterStreamEvents();
     if ( connRef ) virConnectClose(*ptr_ConnPtr);
     keep_alive = false;
-    wait(30000);
 }
 
 /* public slots */
