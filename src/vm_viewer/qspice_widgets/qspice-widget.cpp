@@ -595,10 +595,10 @@ void QSpiceWidget::displayInvalidate(
     int                 width,
     int                 height)
 {
-    Q_UNUSED(width)
-    Q_UNUSED(height)
-    Q_UNUSED(x)
-    Q_UNUSED(y)
+    //Q_UNUSED(width)
+    //Q_UNUSED(height)
+    //Q_UNUSED(x)
+    //Q_UNUSED(y)
     //qDebug()<<"displayInvalidate"<<x<<y<<width<<height<<":"
     //       <<x*zoom<<y*zoom<<width*zoom<<height*zoom;
     //if (img==nullptr) return;
@@ -610,8 +610,7 @@ void QSpiceWidget::displayInvalidate(
     //                tr_mode));
     //zoom = init_w/(qreal)pix.width();
     //m_Image->setPixmap(pix);
-    // TODO: implement the update the sent rectangle only
-    m_Image->update();
+    m_Image->update(x, y, width, height);
 }
 
 void QSpiceWidget::displayPrimaryDestroy()
