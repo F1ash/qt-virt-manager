@@ -595,21 +595,7 @@ void QSpiceWidget::displayInvalidate(
     int                 width,
     int                 height)
 {
-    //Q_UNUSED(width)
-    //Q_UNUSED(height)
-    //Q_UNUSED(x)
-    //Q_UNUSED(y)
-    //qDebug()<<"displayInvalidate"<<x<<y<<width<<height<<":"
-    //       <<x*zoom<<y*zoom<<width*zoom<<height*zoom;
-    //if (img==nullptr) return;
-    //QPixmap pix = QPixmap::fromImage(
-    //            img->scaled(
-    //                _width,
-    //                _height,
-    //                Qt::KeepAspectRatio,
-    //                tr_mode));
-    //zoom = init_w/(qreal)pix.width();
-    //m_Image->setPixmap(pix);
+    //qDebug()<<"displayInvalidate"<<x<<y<<width<<height;
     m_Image->update(x, y, width, height);
 }
 

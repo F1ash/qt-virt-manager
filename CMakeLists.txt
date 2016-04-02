@@ -69,7 +69,10 @@ ENDIF (NOT LIB_SUFFIX)
 
 set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
 set (PROJECT_VERSION 1.0.0)
-set (HEADERS 
+set (VERSION_MAJOR   0)
+set (VERSION_MIDDLE  25)
+set (VERSION_MINOR   47)
+set (HEADERS
   src/mainwindow.h
   src/log_dock/log_dock.h
   src/tray/traywidget.h
@@ -742,7 +745,13 @@ set (SOURCES_DIRS src)
 set (DESKTOP_FILE qt-virt-manager.desktop)
 
 project (${PROJECT_NAME})
-include_directories (${CMAKE_CURRENT_BINARY_DIR} ${SOURCES_DIRS})
+include_directories (
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${SOURCES_DIRS})
+configure_file (
+    ${CMAKE_SOURCE_DIR}/src/version.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/version.h
+)
 
 set(QTERM_UI_SRC
     src/vm_viewer/qterminal/forms/qterminal.ui
@@ -829,7 +838,8 @@ add_executable (${PROJECT_NAME}
     ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS} ${QTERM_RCC} ${QTERM_QM})
 target_link_libraries (${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS
-    "-DWITH_LIBCACARD=${WITH_LIBCACARD} -DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO}\
+    "-DWITH_LIBCACARD=${WITH_LIBCACARD} \
+     -DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO} \
      -DQSPICE_WIDGET_COMPILATION")
 
 configure_file ( ${DESKTOP_FILE}.in ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE} )

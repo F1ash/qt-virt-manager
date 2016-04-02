@@ -8,10 +8,11 @@ class VirtEventLoop : public _VirtThread
     Q_OBJECT
 public:
     explicit VirtEventLoop(QObject *parent = nullptr);
-    void run();
+    QString     libVersion;
+    void        run();
 
 signals:
-    void result(bool);
+    void        result(bool);
 };
 
 #endif // VIRT_EVENT_LOOP_H

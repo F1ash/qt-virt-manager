@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "version.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -902,32 +903,22 @@ void MainWindow::deleteDomainEditor(QString &key)
 }
 void MainWindow::showAboutInfo()
 {
-    ulong libVer;
-    QString libVersion;
-    int ret = virConnectGetLibVersion(
-                virConnectOpenReadOnly(nullptr),
-                &libVer);
-    if (ret<0) {
-        libVersion.append("?.??.???");
-    } else {
-        uint maj, min, rel;
-        maj = libVer/1000000;
-        min = (libVer-maj*1000000)/1000;
-        rel = (libVer-maj*1000000-min*1000);
-        libVersion = QString("%1.%2.%3")
-                .arg(maj).arg(min).arg(rel);
-    };
     QString message = QString(
                 "Qt Virtual machine manager.\
-                \nBased on Qt %1.\
-                \nUsed libvirt (%2) API.\
+                \nVersion %1.\
+                \nBased on Qt %2.\
+                \nUsed libvirt (%3) API.\
                 \nImplemented graphical consoles for\
                 \nVirtual Machine displays (by SPICE client)\
                 \nand LXC terminals.")
+                .arg(QString("%1.%2.%3")
+                     .arg(VERSION_MAJOR)
+                     .arg(VERSION_MIDDLE)
+                     .arg(VERSION_MINOR))
                 .arg(QT_VERSION_STR)
-                .arg(libVersion);
+                .arg(virtEventLoop->libVersion);
     QMessageBox::about(
                 this,
-                "Qt VirtManager",
+                "About QtVirtManager",
                 message);
 }
