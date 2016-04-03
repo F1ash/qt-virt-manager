@@ -904,8 +904,8 @@ void MainWindow::deleteDomainEditor(QString &key)
 void MainWindow::showAboutInfo()
 {
     QString message = QString(
-                "Qt Virtual machine manager.\
-                \nVersion %1.\
+                "Qt Virtual machine manager,\
+                \nversion %1.\
                 \nBased on Qt %2.\
                 \nUsed libvirt (%3) API.\
                 \nImplemented graphical consoles for\

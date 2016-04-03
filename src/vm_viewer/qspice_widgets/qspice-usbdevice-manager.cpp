@@ -6,6 +6,8 @@ struct RES {
     void        *obj    = nullptr;
     QString      id;
     bool         result = false;
+    int          idx    = -1;
+    int          size   = 0;
 };
 
 QSpiceUsbDeviceManager::QSpiceUsbDeviceManager(
@@ -170,7 +172,22 @@ bool QSpiceUsbDeviceManager::spiceUsbDeviceManager_is_device_connected
     return _res.result;
 }
 
-void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device_finish
+void get_device_idx(gpointer item, void *res)
+{
+    RES *_res = static_cast<RES*>(res);
+    SpiceUsbDevice *_dev = (SpiceUsbDevice*) item;
+    QString dev;
+    gchar *dev_desc = spice_usb_device_get_description(
+                _dev, "%s %s %s at %d-%d");
+    dev.append(dev_desc);
+    if ( dev_desc ) g_free(dev_desc);
+    if ( dev.contains(_res->id) ) {
+        _res->idx = _res->size;
+    };
+    ++_res->size;
+}
+
+void QSpiceUsbDeviceManager::spiceUsbDeviceManager_finish_callback
                                                 (void *self, void *res, void *err)
 {
     GError **errors = (GError**) err;
@@ -189,6 +206,7 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device_finish
             err.append(error->code);
             err.append(error->message);
             err.append('\n');
+            g_error_free(error);
         };
         QString dev("???");
         emit obj->deviceInfo(dev, err);
@@ -200,42 +218,45 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device_finish
 void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
 {
     if ( _id.isEmpty() ) return;
+    RES _res;
+    _res.id = _id;
     GPtrArray *_devs = spice_usb_device_manager_get_devices(
                 (SpiceUsbDeviceManager*) gobject);
-    size_t count = _devs->len;
-    for ( uint i = 0; i<count; i++ ) {
-        SpiceUsbDevice *_dev = (SpiceUsbDevice*) _devs->pdata[i];
-        QString dev;
-        gchar *dev_desc = spice_usb_device_get_description(
-                    _dev, "%s %s %s at %d-%d");
-        dev.append(dev_desc);
-        if ( dev_desc ) g_free(dev_desc);
-        if ( dev.contains(_id) ) {
-            GError **errors = nullptr;
-            bool possibility = spice_usb_device_manager_can_redirect_device(
-                        (SpiceUsbDeviceManager*) gobject, _dev, errors);
-            if (!possibility) {
-                QString err;
-                size_t count = sizeof(errors)/sizeof(*errors);
-                for ( uint i = 0; i<count; i++ ) {
-                    if ( nullptr==errors[i] ) continue;
-                    GError *error = errors[i];
-                    err.append(error->code);
-                    err.append(error->message);
-                    err.append('\n');
-                };
-                emit deviceInfo(dev, err);
-                break;
+    g_ptr_array_foreach(_devs, get_device_idx, &_res);
+    if ( _res.idx!=-1 ) {
+        SpiceUsbDevice *_dev =
+                (SpiceUsbDevice*) g_ptr_array_index (_devs, _res.idx);
+        GError **errors = nullptr;
+        bool possibility = spice_usb_device_manager_can_redirect_device(
+                    (SpiceUsbDeviceManager*) gobject, _dev, errors);
+        if (!possibility) {
+            QString err;
+            size_t count = sizeof(errors)/sizeof(*errors);
+            for ( uint i = 0; i<count; i++ ) {
+                if ( nullptr==errors[i] ) continue;
+                GError *error = errors[i];
+                err.append(error->code);
+                err.append(error->message);
+                err.append('\n');
+                g_error_free(error);
             };
-            spice_usb_device_manager_connect_device_async(
-                        (SpiceUsbDeviceManager*) gobject,
-                        _dev,
-                        nullptr,
-                        (GAsyncReadyCallback)spiceUsbDeviceManager_connect_device_finish,
-                        this);
-            QString _msg("connected to guest.");
-            emit deviceInfo(dev, _msg);
-            break;
+            emit deviceInfo(_id, err);
+        } else {
+            bool connected = spice_usb_device_manager_is_device_connected(
+                        (SpiceUsbDeviceManager*) gobject, _dev);
+            QString _msg;
+            if ( !connected ) {
+                spice_usb_device_manager_connect_device_async(
+                            (SpiceUsbDeviceManager*) gobject,
+                            _dev,
+                            nullptr,
+                            (GAsyncReadyCallback)spiceUsbDeviceManager_finish_callback,
+                            this);
+                _msg.append("connected to guest.");
+            } else {
+                _msg.append("connected to guest already.");
+            };
+            emit deviceInfo(_id, _msg);
         };
     };
     g_ptr_array_free(_devs, true);
@@ -243,23 +264,25 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
 void QSpiceUsbDeviceManager::spiceUsbDeviceManager_disconnect_device(QString &_id)
 {
     if ( _id.isEmpty() ) return;
+    RES _res;
+    _res.id = _id;
     GPtrArray *_devs = spice_usb_device_manager_get_devices(
                 (SpiceUsbDeviceManager*) gobject);
-    size_t count = _devs->len;
-    for ( uint i = 0; i<count; i++ ) {
-        SpiceUsbDevice *_dev = (SpiceUsbDevice*) _devs->pdata[i];
-        QString dev;
-        gchar *dev_desc = spice_usb_device_get_description(
-                    _dev, "%s %s %s at %d-%d");
-        dev.append(dev_desc);
-        if ( dev_desc ) g_free(dev_desc);
-        if ( dev.contains(_id) ) {
+    g_ptr_array_foreach(_devs, get_device_idx, &_res);
+    if ( _res.idx!=-1 ) {
+        SpiceUsbDevice *_dev =
+                (SpiceUsbDevice*) g_ptr_array_index (_devs, _res.idx);
+        bool connected = spice_usb_device_manager_is_device_connected(
+                    (SpiceUsbDeviceManager*) gobject, _dev);
+        QString _msg;
+        if ( connected ) {
             spice_usb_device_manager_disconnect_device(
                         (SpiceUsbDeviceManager*) gobject, _dev);
-            QString _msg("disconnected from guest.");
-            emit deviceInfo(dev, _msg);
-            break;
+            _msg.append("disconnected from guest.");
+        } else {
+            _msg.append("disconnected from guest already.");
         };
+        emit deviceInfo(_id, _msg);
     };
     g_ptr_array_free(_devs, true);
 }

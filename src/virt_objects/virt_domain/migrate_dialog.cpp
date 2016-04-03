@@ -1,5 +1,4 @@
 #include "migrate_dialog.h"
-#include <libvirt/libvirt.h>
 
 #define APPEND_URI_HELP_0 QString("The destination libvirtd server \
 will automatically determine the native hypervisor URI for migration, \
@@ -65,28 +64,46 @@ virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system qemu+tls:/destho
 <i>eg using different libvirt URI hostname for peer2peer connections</i>:<br><br>\
 virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system qemu+ssh://10.0.0.1/system")
 
-MigrateDialog::MigrateDialog(QWidget *parent,
-                             const QString arg1,
-                             const QString arg2,
-                             const QString arg3,
-                             const QStringList list) :
-    QDialog(parent), domainName(arg1), hostName(arg2),
-    connType(arg3), connList(list)
+mgrHelpThread::mgrHelpThread(
+            QObject         *parent,
+            virConnectPtr   *connPtrPtr) :
+    _VirtThread(parent, connPtrPtr)
+{
+}
+void mgrHelpThread::run()
+{
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+        emit ptrIsNull();
+        return;
+    };
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
+    hostName.append(virConnectGetHostname(*ptr_ConnPtr));
+    connType.append(virConnectGetType(*ptr_ConnPtr));
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
+}
+
+MigrateDialog::MigrateDialog(
+            QWidget *parent,
+            QString _domain,
+            virConnectPtr *connPtrPtr) :
+    QDialog(parent), domainName(_domain)
 {
     setWindowTitle(QString("Migrate '%1'").arg(domainName));
     commonLayout = new QVBoxLayout();
     Name = new QLineEdit(this);
     Name->setText(domainName);
     Name->setPlaceholderText("Enter new VM name");
-    commonLayout->addWidget(Name);
-    host = new QLabel(QString("Original Host / Connection Type : %1 / %2")
-                      .arg(hostName).arg(connType.toUpper()), this);
-    commonLayout->addWidget(host);
+    Name->setToolTip("migrate as <Name>");
+    host = new QLabel(this);
     newHost = new QLabel("Destination Host / Connection :", this);
-    commonLayout->addWidget(newHost);
     connectList = new QComboBox(this);
-    connList.prepend("Set Host/URI manually");
-    connectList->addItems(connList);
+    commonLayout->addWidget(host);
+    commonLayout->addWidget(Name);
+    commonLayout->addWidget(newHost);
     commonLayout->addWidget(connectList);
 
     connLayout = new QGridLayout();
@@ -116,19 +133,23 @@ MigrateDialog::MigrateDialog(QWidget *parent,
     advanced = new QWidget(this);
     advanced->setEnabled(false);
     advLayout = new QGridLayout();
-    nativeMigration = new QRadioButton("Native migration data\nover hypervisor transport\n(encrypt if HV support it)", this);
+    nativeMigration = new QRadioButton(
+                "Native migration data\nover hypervisor transport\n(encrypt if HV support it)",
+                this);
     nativeMigration->setChecked(true);
     nativeMigration->setLayoutDirection(Qt::RightToLeft);
-    tunnelMigration = new QRadioButton("Tunnel migration data\nover libvirtd connection\n(encrypt always)", this);
+    tunnelMigration = new QRadioButton(
+                "Tunnel migration data\nover libvirtd connection\n(encrypt always)",
+                this);
     tunnelMigration->setLayoutDirection(Qt::LeftToRight);
     p2pMigration = new QLabel("Use peer2peer", this);
-    maxDownTimeLabel = new QLabel("Maximum tolerable downtime\nfor live migration (ms)", this);
-    maxDownTimeLabel->setEnabled( connType.toLower()!="lxc" );
+    maxDownTimeLabel = new QLabel(
+                "Maximum tolerable downtime\nfor live migration (ms)",
+                this);
     p2pCheck = new QCheckBox(this);
     p2pCheck->setChecked(p2p);
     maxDownCheck = new QCheckBox(this);
     maxDownCheck->setChecked(false);
-    maxDownCheck->setEnabled( connType.toLower()!="lxc" );
     maxDownTime = new QSpinBox(this);
     maxDownTime->setEnabled(false);
     maxDownTime->setValue(30);
@@ -139,23 +160,39 @@ MigrateDialog::MigrateDialog(QWidget *parent,
     bandwidth->setEnabled(false);
     liveMigration = new QCheckBox("Live migration", this);
     liveMigration->setLayoutDirection(Qt::RightToLeft);
-    persistDestMigration = new QCheckBox("Persist the VM\non the destination", this);
+    persistDestMigration = new QCheckBox(
+                "Persist the VM\non the destination",
+                this);
     persistDestMigration->setLayoutDirection(Qt::LeftToRight);
-    undefineSourceMigration = new QCheckBox("Undefine the VM\non the source", this);
+    undefineSourceMigration = new QCheckBox(
+                "Undefine the VM\non the source",
+                this);
     undefineSourceMigration->setLayoutDirection(Qt::RightToLeft);
-    pausedMigration = new QCheckBox("Leave\nthe domain suspended\non the remote side", this);
+    pausedMigration = new QCheckBox(
+                "Leave\nthe domain suspended\non the remote side",
+                this);
     pausedMigration->setLayoutDirection(Qt::LeftToRight);
-    fullNonSharedDiskMigration = new QCheckBox("Migration with\nnon-shared storage\nwith full disk copy", this);
+    fullNonSharedDiskMigration = new QCheckBox(
+                "Migration with\nnon-shared storage\nwith full disk copy",
+                this);
     fullNonSharedDiskMigration->setLayoutDirection(Qt::RightToLeft);
-    incNonSharedDiskMigration = new QCheckBox("Migration with\nnon-shared storage\nwith incremental copy", this);
+    incNonSharedDiskMigration = new QCheckBox(
+                "Migration with\nnon-shared storage\nwith incremental copy",
+                this);
     incNonSharedDiskMigration->setLayoutDirection(Qt::LeftToRight);
-    unsafeMigration = new QCheckBox("Force migration even\nif it is considered unsafe", this);
+    unsafeMigration = new QCheckBox(
+                "Force migration even\nif it is considered unsafe",
+                this);
     unsafeMigration->setLayoutDirection(Qt::RightToLeft);
     offlineMigration = new QCheckBox("Migrate offline", this);
     offlineMigration->setLayoutDirection(Qt::LeftToRight);
-    compressedMigration = new QCheckBox("Compress data\nduring migration", this);
+    compressedMigration = new QCheckBox(
+                "Compress data\nduring migration",
+                this);
     compressedMigration->setLayoutDirection(Qt::RightToLeft);
-    abortOnMigration = new QCheckBox("Abort migration\non I/O errors happened\nduring migration", this);
+    abortOnMigration = new QCheckBox(
+                "Abort migration\non I/O errors happened\nduring migration",
+                this);
     abortOnMigration->setLayoutDirection(Qt::LeftToRight);
     advLayout->addWidget(nativeMigration, 0, 0);
     advLayout->addWidget(tunnelMigration, 0, 2);
@@ -186,7 +223,9 @@ MigrateDialog::MigrateDialog(QWidget *parent,
     splitter->addWidget(flags);
     commonLayout->addWidget(splitter);
 
-    helpLinkLabel = new QLabel("<a href='http://libvirt.org/migration.html'>About Migration</a>", this);
+    helpLinkLabel = new QLabel(
+                "<a href='http://libvirt.org/migration.html'>About Migration</a>",
+                this);
     helpLinkLabel->setOpenExternalLinks(true);
     ok = new QPushButton("Migrate", this);
     ok->setIcon(QIcon::fromTheme("migrate"));
@@ -200,19 +239,37 @@ MigrateDialog::MigrateDialog(QWidget *parent,
     buttons->setLayout(buttonLayout);
     commonLayout->addWidget(buttons);
     setLayout(commonLayout);
-    connect(useAdvanced, SIGNAL(toggled(bool)), this, SLOT(advancedVisibility(bool)));
-    connect(ok, SIGNAL(clicked()), this, SLOT(migrateClicked()));
-    connect(cancel, SIGNAL(clicked()), this, SLOT(cancelClicked()));
-    connect(connectList, SIGNAL(currentIndexChanged(int)), this, SLOT(connectChanged(int)));
-    connect(bandWdthCheck, SIGNAL(toggled(bool)), this, SLOT(bandWdthVisibility(bool)));
-    connect(maxDownCheck, SIGNAL(toggled(bool)), this, SLOT(maxDownTimeVisibility(bool)));
-    connect(nativeMigration, SIGNAL(clicked()), this, SLOT(migrTransportChanged()));
-    connect(tunnelMigration, SIGNAL(clicked()), this, SLOT(migrTransportChanged()));
-    connect(p2pCheck, SIGNAL(clicked(bool)), this, SLOT(p2pChanged(bool)));
-    connect(fullNonSharedDiskMigration, SIGNAL(clicked()), this, SLOT(migrDiskRegimeChanged()));
-    connect(incNonSharedDiskMigration, SIGNAL(clicked()), this, SLOT(migrDiskRegimeChanged()));
+    connect(useAdvanced, SIGNAL(toggled(bool)),
+            this, SLOT(advancedVisibility(bool)));
+    connect(ok, SIGNAL(clicked()),
+            this, SLOT(migrateClicked()));
+    connect(cancel, SIGNAL(clicked()),
+            this, SLOT(cancelClicked()));
+    connect(connectList, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(connectChanged(int)));
+    connect(bandWdthCheck, SIGNAL(toggled(bool)),
+            this, SLOT(bandWdthVisibility(bool)));
+    connect(maxDownCheck, SIGNAL(toggled(bool)),
+            this, SLOT(maxDownTimeVisibility(bool)));
+    connect(nativeMigration, SIGNAL(clicked()),
+            this, SLOT(migrTransportChanged()));
+    connect(tunnelMigration, SIGNAL(clicked()),
+            this, SLOT(migrTransportChanged()));
+    connect(p2pCheck, SIGNAL(clicked(bool)),
+            this, SLOT(p2pChanged(bool)));
+    connect(fullNonSharedDiskMigration, SIGNAL(clicked()),
+            this, SLOT(migrDiskRegimeChanged()));
+    connect(incNonSharedDiskMigration, SIGNAL(clicked()),
+            this, SLOT(migrDiskRegimeChanged()));
     migrTransportChanged(connectList->currentIndex()==0);
-    restoreGeometry(settings.value("MigrationDialogGeometry").toByteArray());
+    restoreGeometry(
+                settings
+                .value("MigrationDialogGeometry")
+                .toByteArray());
+    hlpThread = new mgrHelpThread(this, connPtrPtr);
+    connect(hlpThread, SIGNAL(finished()),
+            this, SLOT(fillData()));
+    hlpThread->start();
 }
 
 /* public slots */
@@ -222,6 +279,29 @@ MIGR_ARGS MigrateDialog::getMigrateArgs() const
 }
 
 /* private slots */
+void MigrateDialog::fillData()
+{
+    QStringList connList;
+    connList.prepend("Set Host/URI manually");
+    settings.beginGroup("Connects");
+    foreach (QString conn, settings.childGroups()) {
+        settings.beginGroup(conn);
+        connList.append(QString("%1\t(%2)")
+                    .arg(conn)
+                    .arg(settings.value("Driver").toString()));
+        settings.endGroup();
+    };
+    settings.endGroup();
+    host->setText(
+                QString("Original Host / Connection Type : %1 / %2")
+                .arg(hlpThread->hostName)
+                .arg(hlpThread->connType.toUpper()));
+    connectList->addItems(connList);
+    maxDownTimeLabel->setEnabled(
+                hlpThread->connType.toLower()!="lxc" );
+    maxDownCheck->setEnabled(
+                hlpThread->connType.toLower()!="lxc" );
+}
 void MigrateDialog::closeEvent(QCloseEvent *ev)
 {
     settings.setValue("MigrationDialogGeometry", saveGeometry());
@@ -316,7 +396,8 @@ void MigrateDialog::bandWdthVisibility(bool state)
 }
 void MigrateDialog::maxDownTimeVisibility(bool state)
 {
-    if ( connType.toLower()!="lxc" ) maxDownTime->setEnabled(state);
+    if ( hlpThread->connType.toLower()!="lxc" )
+        maxDownTime->setEnabled(state);
 }
 void MigrateDialog::migrDiskRegimeChanged()
 {

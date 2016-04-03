@@ -1,7 +1,6 @@
 #ifndef SEARCH_THREAD_H
 #define SEARCH_THREAD_H
 
-#include <QThread>
 #include <QStringList>
 #include "virt_objects/_virt_thread.h"
 #include <QDebug>

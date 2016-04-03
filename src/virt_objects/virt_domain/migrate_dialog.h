@@ -17,6 +17,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
+#include "virt_objects/_virt_thread.h"
 #include <QDebug>
 
 struct MIGR_ARGS {
@@ -28,16 +29,24 @@ struct MIGR_ARGS {
     QString connName    = QString();
 };
 
+class mgrHelpThread : public _VirtThread
+{
+public:
+    explicit mgrHelpThread(
+            QObject         *parent     = nullptr,
+            virConnectPtr   *connPtrPtr = nullptr);
+    QString hostName, connType;
+    void    run();
+};
+
 class MigrateDialog : public QDialog
 {
     Q_OBJECT
 public:
     explicit MigrateDialog(
-            QWidget *parent    = nullptr,
-            const QString arg1 = "-",
-            const QString arg2 = "-",
-            const QString arg3 = "-",
-            const QStringList list = QStringList());
+            QWidget         *parent      = nullptr,
+            QString          _domain     = QString(),
+            virConnectPtr   *connPtrPtr  = nullptr);
 
 signals:
 
@@ -47,7 +56,6 @@ private:
     int              m_flags = 0;
     bool             p2p = false;
     MIGR_ARGS        migrateArgs;
-    QStringList      connList;
     QComboBox       *connectList;
     QWidget         *advanced;
     QSplitter       *splitter;
@@ -59,8 +67,6 @@ private:
     QCheckBox       *useAdvanced;
 
     const QString    domainName;
-    const QString    hostName;
-    const QString    connType;
     QLineEdit       *Name;
     QLabel          *host;
     QLabel          *newHost;
@@ -97,10 +103,13 @@ private:
     QHBoxLayout     *buttonLayout;
     QVBoxLayout     *commonLayout;
 
+    mgrHelpThread   *hlpThread;
+
 public slots:
     MIGR_ARGS        getMigrateArgs() const;
 
 private slots:
+    void fillData();
     void closeEvent(QCloseEvent *ev);
     void cancelClicked();
     void migrateClicked();

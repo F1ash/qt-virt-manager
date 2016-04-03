@@ -299,23 +299,9 @@ void VirtDomainControl::execAction(const QStringList &l)
             emit addNewTask(task);
         } else if ( l.first()=="migrateVirtDomain" ) {
             if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
-                // set Migrate parameters
-                // TODO: implement in thread or in MigrateDialog  VVV
-                char *hostName = virConnectGetHostname(*ptr_ConnPtr);
-                const char *connType = virConnectGetType(*ptr_ConnPtr);
-                //                                          ^^^
-                QStringList list;
-                settings.beginGroup("Connects");
-                foreach (QString conn, settings.childGroups()) {
-                    settings.beginGroup(conn);
-                    list.append(QString("%1\t(%2)")
-                                .arg(conn)
-                                .arg(settings.value("Driver").toString()));
-                    settings.endGroup();
-                };
-                settings.endGroup();
-                MigrateDialog *migrateDialog = new MigrateDialog(
-                            this, domainName, hostName, connType, list);
+                MigrateDialog *migrateDialog =
+                        new MigrateDialog(
+                            this, domainName, ptr_ConnPtr);
                 int exitCode = migrateDialog->exec();
                 MIGR_ARGS migrArgs = migrateDialog->getMigrateArgs();
                 migrateDialog->deleteLater();
