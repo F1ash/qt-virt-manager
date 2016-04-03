@@ -311,6 +311,8 @@ void VirtDomainControl::execAction(const QStringList &l)
                 task.args.object = migrArgs.new_name;
                 task.args.size   = migrArgs.bandwidth;
                 task.args.offset = migrArgs.maxDownTime;
+                //qDebug()<<exitCode<<migrArgs.new_name
+                //       <<migrArgs.connName<<task.object;
                 if ( exitCode ) {
                     if ( migrArgs.connName.isEmpty() ) {
                         // migrate useing specified URI

@@ -52,7 +52,6 @@ signals:
 
 private:
     QSettings        settings;
-    int              exitCode = 0;
     int              m_flags = 0;
     bool             p2p = false;
     MIGR_ARGS        migrateArgs;
@@ -110,7 +109,7 @@ public slots:
 
 private slots:
     void fillData();
-    void closeEvent(QCloseEvent *ev);
+    void closeEvent(QCloseEvent*);
     void cancelClicked();
     void migrateClicked();
     void advancedVisibility(bool);

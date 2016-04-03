@@ -831,6 +831,15 @@ void MainWindow::buildMigrateArgs(TASK _task)
     virConnectPtr *namedConnect = connListWidget->getPtr_connectionPtr(_task.args.path);
     if ( nullptr!=namedConnect ) {
         domainDockContent->execMigrateAction(namedConnect, _task);
+    } else {
+        QString time = QTime::currentTime().toString();
+        QString title = QString("Domain Migration '%1'")
+                .arg(_task.object);
+        QString msg = QString("Migation not possible to NULL connection.");
+        QString currMsg = QString(
+                    "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+                .arg(time).arg(title).arg(msg);
+        logDockContent->appendMsgToLog(currMsg);
     }
 }
 

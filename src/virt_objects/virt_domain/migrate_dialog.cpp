@@ -304,13 +304,13 @@ void MigrateDialog::fillData()
 }
 void MigrateDialog::closeEvent(QCloseEvent *ev)
 {
+    Q_UNUSED(ev)
     settings.setValue("MigrationDialogGeometry", saveGeometry());
-    done(exitCode);
+    done(0);
 }
 void MigrateDialog::cancelClicked()
 {
-    exitCode = 0;
-    close();
+    done(0);
 }
 void MigrateDialog::migrateClicked()
 {
@@ -341,10 +341,10 @@ void MigrateDialog::migrateClicked()
             m_flags |= VIR_MIGRATE_ABORT_ON_ERROR;
     };
     migrateArgs.flags = m_flags;
-    exitCode = 1;
     // build migrate parameters
     if ( connectList->currentIndex() ) {
-        migrateArgs.connName =connectList->currentText().split('\t').first();
+        migrateArgs.connName =connectList->currentText()
+                .split('\t').first();
     };
     if ( uri->isEnabled() ) {
         migrateArgs.uri = uri->text();
@@ -358,8 +358,7 @@ void MigrateDialog::migrateClicked()
         };
     };
     migrateArgs.new_name = Name->text();
-    //qDebug()<<migrateArgs;
-    close();
+    done(1);
 }
 void MigrateDialog::advancedVisibility(bool state)
 {
