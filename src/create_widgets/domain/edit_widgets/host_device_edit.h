@@ -21,6 +21,9 @@ private:
 public slots:
     QDomDocument     getDataDocument() const;
     void             setDataDescription(QString&);
+
+private slots:
+    void             init_wdg();
 };
 
 #endif // HOST_DEVICE_EDIT_H

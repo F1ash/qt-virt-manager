@@ -5,27 +5,9 @@ HostDevice_Edit::HostDevice_Edit(
     HostDevice(parent, connPtrPtr)
 {
     info->setVisible(false);
+    info->blockSignals(true);
     infoEdit = new QStackedWidget(this);
-    QString connType;
-    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
-        connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
-    } else
-        emit ptrIsNull();
-    if ( connType=="qemu" ) {
-        infoEdit->addWidget(new USB_Host_Device_Edit(this));
-        infoEdit->addWidget(new PCI_Host_Device_Edit(this));
-        infoEdit->addWidget(new SCSI_Host_Device_Edit(this, ptr_ConnPtr));
-    } else if ( connType=="lxc" ) {
-        infoEdit->addWidget(new USB_Host_Device_Edit(this));
-        infoEdit->addWidget(new BCh_Host_Device_Edit(this));
-    };
     commonLayout->insertWidget(2, infoEdit);
-    connect(type, SIGNAL(currentIndexChanged(int)),
-            infoEdit, SLOT(setCurrentIndex(int)));
-    for (int i=0; i<infoEdit->count(); i++) {
-        connect(infoEdit->widget(i), SIGNAL(dataChanged()),
-                this, SLOT(stateChanged()));
-    };
 }
 
 /* public slots */
@@ -38,7 +20,6 @@ QDomDocument HostDevice_Edit::getDataDocument() const
 }
 void HostDevice_Edit::setDataDescription(QString &xmlDesc)
 {
-    //qDebug()<<xmlDesc;
     QDomDocument doc;
     doc.setContent(xmlDesc);
     QDomElement _device;
@@ -50,4 +31,29 @@ void HostDevice_Edit::setDataDescription(QString &xmlDesc)
     type->setEnabled(false);
     _QWidget *wdg = static_cast<_QWidget*>(infoEdit->currentWidget());
     if ( nullptr!=wdg ) wdg->setDataDescription(xmlDesc);
+}
+
+/* private slots */
+void HostDevice_Edit::init_wdg()
+{
+    if ( hlpThread->connType.toLower()=="qemu" ) {
+        type->addItems(QEMU_DEV_LIST);
+        infoEdit->addWidget(new USB_Host_Device_Edit(this));
+        infoEdit->addWidget(new PCI_Host_Device_Edit(this));
+        infoEdit->addWidget(new SCSI_Host_Device_Edit(this, ptr_ConnPtr));
+    } else if ( hlpThread->connType.toLower()=="lxc" ) {
+        type->addItems(LXC_DEV_LIST);
+        infoEdit->addWidget(new USB_Host_Device_Edit(this));
+        infoEdit->addWidget(new BCh_Host_Device_Edit(this));
+    };
+    connect(type, SIGNAL(currentIndexChanged(int)),
+            infoEdit, SLOT(setCurrentIndex(int)));
+    for (uint i=0; i<infoEdit->count(); i++) {
+        _QWidget *wdg = static_cast<_QWidget*>(
+                    infoEdit->widget(i));
+        if ( wdg!=nullptr ) {
+            connect(wdg, SIGNAL(dataChanged()),
+                    this, SLOT(stateChanged()));
+        };
+    };
 }

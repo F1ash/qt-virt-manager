@@ -154,6 +154,7 @@ set (HEADERS
   
   src/create_widgets/domain/domain_widgets.h
   src/create_widgets/domain/_qwidget.h
+  src/create_widgets/domain/_qwidget_threaded.h
   src/create_widgets/domain/_changed.h
   src/create_widgets/domain/restore_panel.h
   src/create_widgets/domain/create_virt_domain.h
@@ -490,6 +491,7 @@ set (SOURCES
   
   src/create_widgets/domain/create_virt_domain.cpp
   src/create_widgets/domain/_qwidget.cpp
+  src/create_widgets/domain/_qwidget_threaded.cpp
   src/create_widgets/domain/_changed.cpp
   src/create_widgets/domain/restore_panel.cpp
   src/create_widgets/domain/_tab.cpp

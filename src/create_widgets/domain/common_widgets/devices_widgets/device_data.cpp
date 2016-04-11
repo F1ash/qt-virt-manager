@@ -138,9 +138,6 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
     DeviceXMLDesc = xmlDesc;
     currentDeviceXMLDesc = xmlDesc;
     currentItemRow = idx;
-    device->setDataDescription(xmlDesc);
-    connect(device, SIGNAL(dataChanged()),
-            this, SLOT(currentStateChanged()));
 }
 void DeviceData::closeDataEdit()
 {
@@ -219,5 +216,10 @@ void DeviceData::setStartState()
 }
 void DeviceData::deviceDataProcessed()
 {
+    if ( nullptr!=device ) {
+        device->setDataDescription(currentDeviceXMLDesc);
+        connect(device, SIGNAL(dataChanged()),
+                this, SLOT(currentStateChanged()));
+    };
     emit dataProcessed(true);
 }

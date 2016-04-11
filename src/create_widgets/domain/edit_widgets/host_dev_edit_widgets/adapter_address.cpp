@@ -36,3 +36,9 @@ AdapterAddress::AdapterAddress(QWidget *parent) :
     connect(unit, SIGNAL(valueChanged(int)),
             this, SLOT(stateChanged()));
 }
+
+/* public slots */
+void AdapterAddress::stateChanged()
+{
+    emit dataChanged();
+}

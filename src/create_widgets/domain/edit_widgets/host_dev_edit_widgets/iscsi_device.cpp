@@ -28,3 +28,9 @@ ISCSI_Device::ISCSI_Device(QWidget *parent, virConnectPtr *connPtrPtr) :
     connect(auth, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
 }
+
+/* public slots */
+void ISCSI_Device::stateChanged()
+{
+    emit dataChanged();
+}

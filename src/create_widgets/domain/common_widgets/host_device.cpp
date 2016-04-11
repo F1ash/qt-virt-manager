@@ -4,32 +4,13 @@
  * http://libvirt.org/formatdomain.html#elementsHostDev
  */
 
-#define QEMU_DEV_LIST QStringList()\
-    <<"USB"<<"PCI"<<"SCSI"
-
-#define LXC_DEV_LIST QStringList()\
-    <<"USB"<<"Block/Char"
-
-HostDevice::HostDevice(QWidget *parent, virConnectPtr *connPtrPtr) :
-    _QWidget(parent, connPtrPtr)
+HostDevice::HostDevice(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
+    _QWidget_Threaded(parent, connPtrPtr)
 {
     type = new QComboBox(this);
     info = new QStackedWidget(this);
-    QString connType;
-    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
-        connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
-    } else
-        emit ptrIsNull();
-    if ( connType=="qemu" ) {
-        type->addItems(QEMU_DEV_LIST);
-        info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));
-        info->addWidget(new PCI_Host_Device(this, ptr_ConnPtr));
-        info->addWidget(new SCSI_Host_Device(this, ptr_ConnPtr));
-    } else if ( connType=="lxc" ) {
-        type->addItems(LXC_DEV_LIST);
-        info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));
-        info->addWidget(new BCh_Host_Device(this, ptr_ConnPtr));
-    };
     /*
     info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));
     info->addWidget(new PCI_Host_Device(this, ptr_ConnPtr));
@@ -45,16 +26,7 @@ HostDevice::HostDevice(QWidget *parent, virConnectPtr *connPtrPtr) :
     commonLayout->addWidget(info);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    connect(type, SIGNAL(currentIndexChanged(int)),
-            info, SLOT(setCurrentIndex(int)));
-    for(uint i=0; i<info->count(); ++i) {
-        _QWidget *wdg = static_cast<_QWidget*>(
-                    info->widget(i));
-        if ( wdg!=nullptr ) {
-            connect(wdg, SIGNAL(complete()),
-                    this, SLOT(emitCompleteSignal()));
-        }
-    };
+    hlpThread->start();
 }
 
 /* public slots */
@@ -67,6 +39,29 @@ QDomDocument HostDevice::getDataDocument() const
 }
 
 /* private slots */
+void HostDevice::init_wdg()
+{
+    if ( hlpThread->connType.toLower()=="qemu" ) {
+        type->addItems(QEMU_DEV_LIST);
+        info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));
+        info->addWidget(new PCI_Host_Device(this, ptr_ConnPtr));
+        info->addWidget(new SCSI_Host_Device(this, ptr_ConnPtr));
+    } else if ( hlpThread->connType.toLower()=="lxc" ) {
+        type->addItems(LXC_DEV_LIST);
+        info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));
+        info->addWidget(new BCh_Host_Device(this, ptr_ConnPtr));
+    };
+    connect(type, SIGNAL(currentIndexChanged(int)),
+            info, SLOT(setCurrentIndex(int)));
+    for(uint i=0; i<info->count(); ++i) {
+        _QWidget *wdg = static_cast<_QWidget*>(
+                    info->widget(i));
+        if ( wdg!=nullptr ) {
+            connect(wdg, SIGNAL(complete()),
+                    this, SLOT(emitCompleteSignal()));
+        }
+    };
+}
 void HostDevice::emitCompleteSignal()
 {
     _QWidget *wdg = static_cast<_QWidget*>(sender());
@@ -78,4 +73,3 @@ void HostDevice::emitCompleteSignal()
         }
     }
 }
-

@@ -26,7 +26,7 @@ private:
     QVBoxLayout         *commonLayout;
 
 public slots:
-
+    void                 stateChanged();
 };
 
 #endif // ISCSI_DEVICE_H

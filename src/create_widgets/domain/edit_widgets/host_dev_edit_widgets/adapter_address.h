@@ -26,7 +26,7 @@ private:
     QHBoxLayout         *commonLayout;
 
 public slots:
-
+    void                 stateChanged();
 };
 
 #endif // ADAPTER_ADDRESS_H

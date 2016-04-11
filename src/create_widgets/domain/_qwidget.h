@@ -11,7 +11,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
-#include <QtXml/QDomDocument>
+#include <QDomDocument>
 #include <libvirt/libvirt.h>
 #include <libvirt/virterror.h>
 #include "_changed.h"

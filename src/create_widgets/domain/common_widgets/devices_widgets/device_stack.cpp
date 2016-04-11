@@ -132,8 +132,14 @@ DeviceStack::DeviceStack(
     listWidget = new QWidget(this);
     listWidget->setLayout(listLayout);
 
-    addDevice = new QPushButton(QIcon::fromTheme("dialog-ok"), "Add Device", this);
-    cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
+    addDevice = new QPushButton(
+                QIcon::fromTheme("dialog-ok"),
+                "Add Device",
+                this);
+    cancel = new QPushButton(
+                QIcon::fromTheme("dialog-cancel"),
+                "Cancel",
+                this);
     connect(addDevice, SIGNAL(clicked()),
             this, SLOT(set_Result()));
     connect(cancel, SIGNAL(clicked()),

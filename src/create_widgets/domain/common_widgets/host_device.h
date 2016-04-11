@@ -6,8 +6,15 @@
 #include "host_dev_widgets/pci_host_device.h"
 #include "host_dev_widgets/scsi_host_device.h"
 #include "host_dev_widgets/bch_host_device.h"
+#include "create_widgets/domain/_qwidget_threaded.h"
 
-class HostDevice : public _QWidget
+#define QEMU_DEV_LIST QStringList()\
+    <<"USB"<<"PCI"<<"SCSI"
+
+#define LXC_DEV_LIST QStringList()\
+    <<"USB"<<"Block/Char"
+
+class HostDevice : public _QWidget_Threaded
 {
     Q_OBJECT
 public:
@@ -25,6 +32,7 @@ public slots:
     QDomDocument     getDataDocument() const;
 
 private slots:
+    virtual void     init_wdg();
     void             emitCompleteSignal();
 };
 
