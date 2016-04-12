@@ -2,25 +2,16 @@
 
 PCI_Passthrough::PCI_Passthrough(
         QWidget *parent, virConnectPtr *connPtrPtr) :
-    _QWidget(parent, connPtrPtr)
+    _QWidget_Threaded(parent, connPtrPtr)
 {
     attentionIcon = new QLabel(this);
     attentionIcon->setPixmap(QIcon::fromTheme("dialog-warning")
                              .pixmap(this->fontInfo().pixelSize()));
-    attention = new QLabel("WARNING: only for SR-IOV\n(Single Root I/O Virtualization)", this);
+    attention = new QLabel(
+                "WARNING: only for SR-IOV\n(Single Root I/O Virtualization)",
+                this);
     driverLabel = new QLabel("Driver:", this);
     driver = new QComboBox(this);
-    QString connType;
-    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
-        connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
-    } else
-        emit ptrIsNull();
-    if ( connType=="lxc" ) {
-        driver->addItem("VFIO");
-    } else if ( connType=="qemu" ) {
-        driver->addItem("VFIO");
-        driver->addItem("KVM");
-    };
     macLabel = new QLabel("MAC:", this);
     mac = new QLineEdit(this);
     mac->setPlaceholderText("11:22:33:44:55:66");
@@ -51,18 +42,7 @@ PCI_Passthrough::PCI_Passthrough(
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
-    // dataChanged connections
-    connect(driver, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(stateChanged()));
-    connect(mac, SIGNAL(textEdited(QString)),
-            this, SLOT(stateChanged()));
-    connect(pciAddr, SIGNAL(dataChanged()),
-            this, SLOT(stateChanged()));
-    connect(virtPort, SIGNAL(dataChanged()),
-            this, SLOT(stateChanged()));
-    connect(addr, SIGNAL(dataChanged()),
-            this, SLOT(stateChanged()));
+    hlpThread->start();
 }
 
 /* public slots */
@@ -196,4 +176,28 @@ void PCI_Passthrough::setDataDescription(QString &xmlDesc)
                         _addr.attribute("multifunction")=="on" );
         };
     };
+}
+
+/* private slots */
+void PCI_Passthrough::init_wdg()
+{
+    if ( hlpThread->connType.toLower()=="lxc" ) {
+        driver->addItem("VFIO");
+    } else if ( hlpThread->connType.toLower()=="qemu" ) {
+        driver->addItem("VFIO");
+        driver->addItem("KVM");
+    };
+    virtPort->type->setCurrentIndex(
+                virtPort->type->findText("802.1Qbh") );
+    // dataChanged connections
+    connect(driver, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChanged()));
+    connect(mac, SIGNAL(textEdited(QString)),
+            this, SLOT(stateChanged()));
+    connect(pciAddr, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(virtPort, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(addr, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
 }

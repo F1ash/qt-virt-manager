@@ -34,23 +34,11 @@ ConsoleDevice::ConsoleDevice(
         QWidget *parent, virConnectPtr *connPtrPtr, virDomainPtr domain) :
     CharDevice(parent, connPtrPtr, domain, QString("console"))
 {
-    QString connType;
-    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
-        connType = QString::fromUtf8(virConnectGetType(*ptr_ConnPtr));
-    } else
-        emit ptrIsNull();
     devType->clear();
     devType->addItem("PseudoTTY (pty)", "pty");
     targetType = new QComboBox(this);
-    if ( connType.toLower()=="lxc" ) {
-        targetType->addItem("LXC", "lxc");
-    } else if ( connType.toLower()=="qemu" ) {
-        targetType->addItem("Default device type is according to the HV's rules", "");
-        targetType->addItem("Only the first console element may use 'serial' Type", "serial");
-        targetType->addItem("Secondary consoles must all be paravirtualized 'virtio'", "virtio");
-        targetType->addItem("SCLP is the native console type for s390", "sclp");
-    };
     commonLayout->insertWidget(1, targetType, -1);
+    hlpThread->start();
 }
 
 /* public slots */
@@ -72,4 +60,25 @@ QDomDocument ConsoleDevice::getDataDocument() const
     doc.appendChild(_device);
     //qDebug()<<doc.toString();
     return doc;
+}
+
+/* private slots */
+void ConsoleDevice::init_wdg()
+{
+    if ( hlpThread->connType.toLower()=="lxc" ) {
+        targetType->addItem("LXC", "lxc");
+    } else if ( hlpThread->connType.toLower()=="qemu" ) {
+        targetType->addItem(
+                    "Default device type is according to the HV's rules",
+                    "");
+        targetType->addItem(
+                    "Only the first console element may use 'serial' Type",
+                    "serial");
+        targetType->addItem(
+                    "Secondary consoles must all be paravirtualized 'virtio'",
+                    "virtio");
+        targetType->addItem(
+                    "SCLP is the native console type for s390",
+                    "sclp");
+    };
 }

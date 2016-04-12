@@ -18,7 +18,10 @@ signals:
 private:
 
 public slots:
-QDomDocument         getDataDocument() const;
+    QDomDocument         getDataDocument() const;
+
+private slots:
+    void                 init_wdg();
 };
 
 #endif // CONSOLE_DEVICE_H

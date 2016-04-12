@@ -7,8 +7,9 @@
 #include "fs_type_widgets/block_fstype.h"
 #include "fs_type_widgets/ram_fstype.h"
 #include "fs_type_widgets/bind_fstype.h"
+#include "create_widgets/domain/_qwidget_threaded.h"
 
-class FileSystems : public _QWidget
+class FileSystems : public _QWidget_Threaded
 {
     Q_OBJECT
 public:
@@ -30,6 +31,7 @@ public slots:
     QDomDocument     getDataDocument() const;
 
 private slots:
+    void             init_wdg();
     void             setWidgets(QString);
 };
 

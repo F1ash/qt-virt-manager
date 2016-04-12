@@ -1,5 +1,29 @@
 #include "device_stack.h"
 
+devstackHelpThread::devstackHelpThread(
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
+    _VirtThread(parent, connPtrPtr)
+{
+
+}
+void devstackHelpThread::run()
+{
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+        emit ptrIsNull();
+        return;
+    };
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
+    connType = QString::fromUtf8(
+                virConnectGetType(*ptr_ConnPtr))
+            .toLower();
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
+}
+
 #define DEV_LIST QStringList()\
     <<"Emulator"\
     <<"Disk"<<"FileSystem"<<"Controller"<<"Host Devices"\
@@ -77,55 +101,8 @@ DeviceStack::DeviceStack(
     scrolled->setLayout(infoLayout);
     infoWidget->setWidget(scrolled);
     infoWidget->setWidgetResizable(true);
-    QString connType;
-    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
-        // TODO: reimplement for using in thread
-        // and in another same widgets
-        connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
-    } else
-        emit ptrIsNull();
-    QStringList devSet, devList, devType;
-    devList = DEV_LIST;
-    devType = DEV_TYPE;
-    if ( connType=="qemu" ) {
-        devSet = QEMU_DEVICE_LIST;
-    } else if ( connType=="lxc" ) {
-        devSet = LXC_DEVICE_LIST;
-    } else if ( connType=="xen" ) {
-        devSet = XEN_DEVICE_LIST;
-    } else if ( connType=="vbox" ) {
-        devSet = VBOX_DEVICE_LIST;
-    } else if ( connType=="vbox" ) {
-        devSet = VMWARE_DEVICE_LIST;
-    } else if ( connType=="vbox" ) {
-        devSet = OPENVZ_DEVICE_LIST;
-    };
     deviceList = new QListWidget(this);
     deviceList->setSortingEnabled(false);
-    /* set icons & user data */
-    for (int i=0; i<devList.count();i++) {
-        if ( devSet.contains(devType.at(i)) ) {
-            deviceList->addItem(devList.at(i));
-            QListWidgetItem *item =
-                    deviceList->item(
-                        deviceList->count()-1);
-            /*
-            item->setIcon(
-                  QIcon::fromTheme(
-                         item->text()
-                         .split(" ")
-                         .first()
-                         .toLower()));
-             */
-            item->setData(
-                        Qt::UserRole,
-                        QVariant(devType.at(i)));
-            //qDebug()<<item->text();
-        };
-    };
-
-    connect(deviceList, SIGNAL(itemSelectionChanged()),
-            this, SLOT(showDevice()));
     listLayout = new QHBoxLayout(this);
     listLayout->addWidget(deviceList, 3);
     listLayout->addWidget(infoWidget, 8);
@@ -154,6 +131,10 @@ DeviceStack::DeviceStack(
     commonLayout->addWidget(listWidget);
     commonLayout->addWidget(buttons);
     setLayout(commonLayout);
+    hlpThread = new devstackHelpThread(this, ptr_ConnPtr);
+    connect(hlpThread, SIGNAL(finished()),
+            this, SLOT(init_wdg()));
+    hlpThread->start();
 }
 
 /* public slots */
@@ -176,6 +157,49 @@ void DeviceStack::clearDevice()
 }
 
 /* private slots */
+void DeviceStack::init_wdg()
+{
+    QStringList devSet, devList, devType;
+    devList = DEV_LIST;
+    devType = DEV_TYPE;
+    if ( hlpThread->connType.toLower()=="qemu" ) {
+        devSet = QEMU_DEVICE_LIST;
+    } else if ( hlpThread->connType.toLower()=="lxc" ) {
+        devSet = LXC_DEVICE_LIST;
+    } else if ( hlpThread->connType.toLower()=="xen" ) {
+        devSet = XEN_DEVICE_LIST;
+    } else if ( hlpThread->connType.toLower()=="vbox" ) {
+        devSet = VBOX_DEVICE_LIST;
+    } else if ( hlpThread->connType.toLower()=="vmware" ) {
+        devSet = VMWARE_DEVICE_LIST;
+    } else if ( hlpThread->connType.toLower()=="openvz" ) {
+        devSet = OPENVZ_DEVICE_LIST;
+    };
+    /* set icons & user data */
+    for (int i=0; i<devList.count();i++) {
+        if ( devSet.contains(devType.at(i)) ) {
+            deviceList->addItem(devList.at(i));
+            QListWidgetItem *item =
+                    deviceList->item(
+                        deviceList->count()-1);
+            /*
+            item->setIcon(
+                  QIcon::fromTheme(
+                         item->text()
+                         .split(" ")
+                         .first()
+                         .toLower()));
+             */
+            item->setData(
+                        Qt::UserRole,
+                        QVariant(devType.at(i)));
+            //qDebug()<<item->text();
+        };
+    };
+
+    connect(deviceList, SIGNAL(itemSelectionChanged()),
+            this, SLOT(showDevice()));
+}
 void DeviceStack::showDevice(QListWidgetItem *item)
 {
     if ( item==nullptr ) {

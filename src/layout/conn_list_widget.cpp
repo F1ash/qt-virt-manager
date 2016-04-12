@@ -3,6 +3,7 @@
 ConnectionList::ConnectionList(QWidget *parent)
     : QTreeView(parent)
 {
+    this->setEnabled(false);
     this->setContextMenuPolicy ( Qt::CustomContextMenu );
     setContentsMargins (1, 1, 1, 1);
     setDefaultDropAction ( Qt::IgnoreAction );

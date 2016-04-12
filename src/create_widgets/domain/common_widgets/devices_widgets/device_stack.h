@@ -8,6 +8,17 @@
 #include <QStringList>
 #include <QScrollArea>
 #include "create_widgets/domain/domain_widgets.h"
+#include "virt_objects/_virt_thread.h"
+
+class devstackHelpThread : public _VirtThread
+{
+public:
+    explicit devstackHelpThread(
+            QObject         *parent     = nullptr,
+            virConnectPtr   *connPtrPtr = nullptr);
+    QString         connType;
+    virtual void    run();
+};
 
 class DeviceStack : public QDialog
 {
@@ -43,12 +54,15 @@ private:
     virErrorPtr      virtErrors;
 
     _QWidget        *device = nullptr;
+    devstackHelpThread
+                    *hlpThread;
 
 public slots:
     QDomDocument     getResult() const;
     void             clearDevice();
 
 private slots:
+    void             init_wdg();
     void             showDevice(QListWidgetItem*);
     void             showDevice();
     void             set_Result();

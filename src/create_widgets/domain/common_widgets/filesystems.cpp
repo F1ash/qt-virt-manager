@@ -12,22 +12,10 @@
 
 FileSystems::FileSystems(
         QWidget *parent, virConnectPtr *connPtrPtr) :
-    _QWidget(parent, connPtrPtr)
+    _QWidget_Threaded(parent, connPtrPtr)
 {
     typeLabel = new QLabel("Type:", this);
     type = new QComboBox(this);
-    QString connType;
-    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
-        connType = QString(virConnectGetType(*ptr_ConnPtr)).toLower();
-    } else
-        emit ptrIsNull();
-    if ( connType=="lxc" ) {
-        type->addItems(LXC_FS_TYPES);
-    } else if ( connType=="qemu" ) {
-        type->addItems(QEMU_FS_TYPES);
-    } else if ( connType=="xen" ) {
-        type->addItems(XEN_FS_TYPES);
-    };
     typeLayout = new QHBoxLayout(this);
     typeLayout->addWidget(typeLabel);
     typeLayout->addWidget(type);
@@ -35,17 +23,13 @@ FileSystems::FileSystems(
     typeWdg->setLayout(typeLayout);
 
     info = new QStackedWidget(this);
-    for (int i=0; i<type->count(); i++) {
-        setWidgets(type->itemText(i));
-    };
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(typeWdg);
     commonLayout->addWidget(info);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    connect(type, SIGNAL(currentIndexChanged(int)),
-            info, SLOT(setCurrentIndex(int)));
+    hlpThread->start();
 }
 
 /* public slots */
@@ -58,6 +42,21 @@ QDomDocument FileSystems::getDataDocument() const
 }
 
 /* private slots */
+void FileSystems::init_wdg()
+{
+    if ( hlpThread->connType.toLower()=="lxc" ) {
+        type->addItems(LXC_FS_TYPES);
+    } else if ( hlpThread->connType.toLower()=="qemu" ) {
+        type->addItems(QEMU_FS_TYPES);
+    } else if ( hlpThread->connType.toLower()=="xen" ) {
+        type->addItems(XEN_FS_TYPES);
+    };
+    for (int i=0; i<type->count(); i++) {
+        setWidgets(type->itemText(i));
+    };
+    connect(type, SIGNAL(currentIndexChanged(int)),
+            info, SLOT(setCurrentIndex(int)));
+}
 void FileSystems::setWidgets(QString _type)
 {
     if ( _type.toLower()=="mount" ) {

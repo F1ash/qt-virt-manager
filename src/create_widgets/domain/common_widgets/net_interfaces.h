@@ -10,8 +10,9 @@
 #include "net_if_widgets/userspace_slirp.h"
 #include "net_if_widgets/bridge_to_lan.h"
 #include "net_if_widgets/virtual_network.h"
+#include "create_widgets/domain/_qwidget_threaded.h"
 
-class NetInterfaces : public _QWidget
+class NetInterfaces : public _QWidget_Threaded
 {
     Q_OBJECT
 public:
@@ -33,6 +34,7 @@ public slots:
     QDomDocument     getDataDocument() const;
 
 private slots:
+    void             init_wdg();
     void             setWidgets(QString);
 };
 
