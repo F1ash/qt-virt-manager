@@ -38,7 +38,8 @@ void LXC_ViewerThread::run()
     } else
         connRef = false;
     stream = (connRef)?
-                virStreamNew( *ptr_ConnPtr, VIR_STREAM_NONBLOCK ):nullptr;
+                virStreamNew( *ptr_ConnPtr, VIR_STREAM_NONBLOCK )
+              : nullptr;
     if ( nullptr==stream ) {
         sendConnErrors();
         keep_alive = false;
@@ -46,10 +47,14 @@ void LXC_ViewerThread::run()
         int ret = -1;
         QString msg;
         if ( ret=virDomainOpenConsole( domainPtr, nullptr, stream, 0 )+1 ) {
-            msg = QString("In '<b>%1</b>': Console opened in ZERO-mode...").arg(domain);
+            msg = QString(
+                        "In '<b>%1</b>': Console opened in ZERO-mode...")
+                    .arg(domain);
             emit errorMsg(msg, number);
         } else {
-            msg = QString("In '<b>%1</b>': Open console failed...").arg(domain);
+            msg = QString(
+                        "In '<b>%1</b>': Open console failed...")
+                    .arg(domain);
             emit errorMsg(msg, number);
             sendConnErrors();
         };
@@ -113,6 +118,7 @@ void LXC_ViewerThread::streamEventCallBack(virStreamPtr _stream, int events, voi
     LXC_ViewerThread *obj = static_cast<LXC_ViewerThread*>(opaque);
     if ( nullptr==obj ) {
         //qDebug()<<"streamEventCallBack"<<"static_cast returns nullptr";
+        obj->keep_alive = false;
         return;
     };
     if ( obj->EndOfFile ) {
@@ -150,7 +156,8 @@ void LXC_ViewerThread::updateStreamEvents(virStreamPtr _stream, int type)
 void LXC_ViewerThread::sendDataToDisplay()
 {
     //qDebug()<<"sendDataToDisplay"<<"to"<<ptySlaveFd;
-    if ( nullptr==stream || !keep_alive || !streamRegistered || EndOfFile ) {
+    if ( nullptr==stream || !keep_alive ||
+         !streamRegistered || EndOfFile ) {
         //qDebug()<<"sendDataToDisplay"<<"callback stream is nullptr or deregistered or thread is died or stream EOF";
         keep_alive = false;
         return;
@@ -181,6 +188,7 @@ void LXC_ViewerThread::sendDataToDisplay()
             emit errorMsg(msg, number);
             //qDebug()<<"emit errMsg";
         };
+        keep_alive = false;
         break;
     case -1:
         // Error stream
@@ -210,7 +218,8 @@ void LXC_ViewerThread::sendDataToDisplay()
 void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
 {
     //qDebug()<<"sendDataToVMachine"<<"from"<<ptySlaveFd;
-    if ( got<=0 || nullptr==stream || !keep_alive || !streamRegistered || EndOfFile ) return;
+    if ( got<=0 || nullptr==stream ||
+         !keep_alive || !streamRegistered || EndOfFile ) return;
     int saved = virStreamSend(stream, buff, got);
     if ( saved==-2 ) {
         // This is basically EAGAIN

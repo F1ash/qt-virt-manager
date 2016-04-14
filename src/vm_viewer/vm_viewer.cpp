@@ -5,7 +5,7 @@ VM_Viewer::VM_Viewer(
     QMainWindow(parent), ptr_ConnPtr(connPtrPtr), connName(arg1), domain(arg2)
 {
     qRegisterMetaType<QString>("QString&");
-    setAttribute(Qt::WA_DeleteOnClose);
+    //setAttribute(Qt::WA_DeleteOnClose);
     setMinimumSize(100, 100);
     setContentsMargins(0,0,0,0);
     setWindowTitle(QString("<%1> Virtual Machine in [ %2 ] connection")

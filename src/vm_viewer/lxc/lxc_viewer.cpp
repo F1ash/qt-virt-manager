@@ -54,6 +54,8 @@ LXC_Viewer::~LXC_Viewer()
     QString msg;
     if ( nullptr!=viewerThread ) {
         viewerThread->blockSignals(true);
+        viewerThread->keep_alive = false;
+        viewerThread->wait(1000);
         viewerThread->deleteLater();
     };
     msg = QString("In '<b>%1</b>': Display destroyed.")
@@ -70,7 +72,8 @@ void LXC_Viewer::init()
         viewerThread = new LXC_ViewerThread(this);
         timerId = startTimer(PERIOD);
     } else {
-        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL or inactive")
+        msg = QString(
+                    "In '<b>%1</b>':<br> Connection or Domain is NULL or inactive")
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);
@@ -100,7 +103,9 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             killTimer(timerId);
             timerId = 0;
             counter = 0;
-            QString msg = QString("In '<b>%1</b>': Open PTY Error...").arg(domain);
+            QString msg = QString(
+                        "In '<b>%1</b>': Open PTY Error...")
+                    .arg(domain);
             sendErrMsg(msg);
             getCurrentTerminal()->impl()->sendText(msg);
             startCloseProcess();
@@ -126,8 +131,10 @@ void LXC_Viewer::setTerminalParameters()
                 this, SLOT(sendErrMsg(QString&, uint)));
         viewerThread->start();
         if ( viewerThread->keep_alive ) {
-            QString msg = QString("In '<b>%1</b>': Stream Registation success. \
-PTY opened. Terminal is active.").arg(domain);
+            QString msg = QString(
+                        "In '<b>%1</b>': Stream Registation success. \
+PTY opened. Terminal is active.")
+                        .arg(domain);
             sendErrMsg(msg);
         };
         /*
