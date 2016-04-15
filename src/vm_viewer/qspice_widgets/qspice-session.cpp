@@ -126,7 +126,7 @@ void QSpiceSession::init()
     setEnableAudio(true);
     setEnableSmartcard(true);
     setEnableUsbredir(true);
-    //setSharedDir(QString("/home/%1/Public").arg(qgetenv("USER").data()));
+    //setSharedDir(QString("%1/Public").arg(qgetenv("HOME").data()));
     g_signal_connect(gobject, "channel-new",
                      (GCallback) QSpiceHelper::ss_channel_new, this);
     g_signal_connect(gobject, "channel-destroy",
@@ -136,7 +136,7 @@ void QSpiceSession::init()
     // http://www.spice-space.org/page/SmartcardUsage#Using_a_software_smartcard
     // for test only
     if ( getSmartcardDB().isEmpty() ) {
-        setSmartcardDB("/home/Flash/.netscape");
+        setSmartcardDB(QString("%1/.netscape").arg(qgetenv("HOME").data()));
         setSmartcardCAC(QStringList()<<"cert1"<<"cert2"<<"cert3");
     };
     qDebug()<<getSmartcardDB()<<"DB"<<getSmartcardCAC()<<"SmartcardCAC";
