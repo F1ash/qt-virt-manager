@@ -388,7 +388,7 @@ void QSpiceWidget::mainAgentUpdate()
 
 void QSpiceWidget::mainClipboardSelection(uint type, void *_data, uint _size)
 {
-    //qDebug()<<"main: ClipboardSelection";
+    qDebug()<<"main: ClipboardSelection";
     QImage _img;
     bool res;
     switch (type) {
@@ -421,20 +421,20 @@ void QSpiceWidget::mainClipboardSelection(uint type, void *_data, uint _size)
 
 void QSpiceWidget::clipboardSelectionGrab()
 {
-    qDebug()<<"main: ClipboardSelectionGrab";
+    qDebug()<<"main: ClipboardSelectionGrabbed";
 }
 
 void QSpiceWidget::guestClipboardSelectionRelease(uint selection)
 {
     switch (selection) {
     case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
-        qDebug()<<"guestClipboard_CLIPBOARDSelectionRelease";
+        qDebug()<<"guestClipboard_CLIPBOARDSelectionReleased";
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_PRIMARY:
-        qDebug()<<"guestClipboard_PRIMARYSelectionRelease";
+        qDebug()<<"guestClipboard_PRIMARYSelectionReleased";
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_SECONDARY:
-        qDebug()<<"guestClipboard_SECONDARYSelectionRelease";
+        qDebug()<<"guestClipboard_SECONDARYSelectionReleased";
         break;
     default:
         break;
@@ -444,42 +444,46 @@ void QSpiceWidget::guestClipboardSelectionRelease(uint selection)
 
 void QSpiceWidget::clientClipboardSelectionRequest(uint selection, uint type)
 {
-    QString dataType;
+    QString dataRequested;
     switch (type) {
     case VD_AGENT_CLIPBOARD_NONE:
-        dataType.append("None");
+        dataRequested.append("None");
         break;
     case VD_AGENT_CLIPBOARD_UTF8_TEXT:
-        dataType.append("UTF8_TEXT");
+        dataRequested.append("UTF8_TEXT");
         break;
     case VD_AGENT_CLIPBOARD_IMAGE_PNG:
-        dataType.append("IMAGE_PNG");
+        dataRequested.append("IMAGE_PNG");
         break;
     case VD_AGENT_CLIPBOARD_IMAGE_BMP:
-        dataType.append("IMAGE_BMP");
+        dataRequested.append("IMAGE_BMP");
         break;
     case VD_AGENT_CLIPBOARD_IMAGE_JPG:
-        dataType.append("IMAGE_JPG");
+        dataRequested.append("IMAGE_JPG");
         break;
     case VD_AGENT_CLIPBOARD_IMAGE_TIFF:
-        dataType.append("IMAGE_TIFF");
+        dataRequested.append("IMAGE_TIFF");
         break;
     default:
         break;
     };
     switch (selection) {
     case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
-        qDebug()<<"clientClipboard_CLIPBOARDSelectionRequest"<<dataType;
+        dataRequested
+                .append("clientClipboard_CLIPBOARDSelectionRequested");
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_PRIMARY:
-        qDebug()<<"clientClipboard_PRIMARYSelectionRequest"<<dataType;
+        dataRequested
+                .append("clientClipboard_PRIMARYSelectionRequested");
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_SECONDARY:
-        qDebug()<<"clientClipboard_SECONDARYSelectionRequest"<<dataType;
+        dataRequested
+                .append("clientClipboard_SECONDARYSelectionRequested");
         break;
     default:
         break;
-    }
+    };
+    qDebug()<<dataRequested;
 }
 
 void QSpiceWidget::mainMouseUpdate()
@@ -489,7 +493,8 @@ void QSpiceWidget::mainMouseUpdate()
 
 void QSpiceWidget::usbDevAutoConnectFailed(QString &dev, QString &err)
 {
-    QString _msg = QString("<font color='red'>UsbDevAutoConnectFailed</font>: %1 : %2")
+    QString _msg = QString(
+                "<font color='red'>UsbDevAutoConnectFailed</font>: %1 : %2")
             .arg(dev).arg(err);
     emit errMsg(_msg);
     //qDebug()<<"usbDevAutoConnectFailed:"<< dev<< err;
@@ -497,7 +502,8 @@ void QSpiceWidget::usbDevAutoConnectFailed(QString &dev, QString &err)
 
 void QSpiceWidget::usbDevAdded(QString &dev)
 {
-    QString _msg = QString("<font color='blue'>UsbDevAdded</font>: %1")
+    QString _msg = QString(
+                "<font color='blue'>UsbDevAdded</font>: %1")
             .arg(dev);
     emit errMsg(_msg);
     //qDebug()<<"usbDevAdded:"<< dev;
@@ -505,7 +511,8 @@ void QSpiceWidget::usbDevAdded(QString &dev)
 
 void QSpiceWidget::usbDevError(QString &dev, QString &err)
 {
-    QString _msg = QString("<font color='blue'>UsbDevInfo</font>: %1 : %2")
+    QString _msg = QString(
+                "<font color='blue'>UsbDevInfo</font>: %1 : %2")
             .arg(dev).arg(err);
     emit errMsg(_msg);
     //qDebug()<<"usbDevError"<< dev<< err;
@@ -513,7 +520,8 @@ void QSpiceWidget::usbDevError(QString &dev, QString &err)
 
 void QSpiceWidget::usbDevRemoved(QString &dev)
 {
-    QString _msg = QString("<font color='blue'>UsbDevRemoved</font>: %1")
+    QString _msg = QString(
+                "<font color='blue'>UsbDevRemoved</font>: %1")
             .arg(dev);
     emit errMsg(_msg);
     //qDebug()<<"usbDevRemoved:"<< dev;

@@ -7,9 +7,12 @@ A GUI application for managing virtual machines.
 
 Known issues:
 
-    1. You need to create the following symlink in order to use askpass in KDE:
-
-        `$ sudo ln -s /usr/bin/ksshaskpass /usr/libexec/openssh/ssh-askpass`
+    1. If failures occur in connections that are using ssh,
+       you must ensure that in the system installed ssh
+       and an application like ssh-askpass for your DE,
+       also the environment variable SSH_ASKPASS was set.
+       For example: SSH_ASKPASS=/usr/bin/ksshaskpass
+       You can do it in $HOME/.bash_profile file at least.
 
     2. Adding devices implemented partially.
 

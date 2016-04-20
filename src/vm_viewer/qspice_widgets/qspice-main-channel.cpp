@@ -250,7 +250,11 @@ bool QSpiceMainChannel::sendMonitorConfig()
 
 void QSpiceMainChannel::clipboardSelectionGrab(uint selection, quint32 *types, int ntypes)
 {
-    spice_main_clipboard_selection_grab((SpiceMainChannel *) gobject, selection, types, ntypes);
+    spice_main_clipboard_selection_grab(
+                (SpiceMainChannel *) gobject,
+                selection,
+                types,
+                ntypes);
 }
 
 void QSpiceMainChannel::clipboardSelectionRelease()

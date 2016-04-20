@@ -1,6 +1,7 @@
 #include "cpu_allocation.h"
 
-CPU_Allocation::CPU_Allocation(QWidget *parent, QString _caps) :
+CPU_Allocation::CPU_Allocation(
+        QWidget *parent, QString _caps) :
     _Changed(parent), capabilities(_caps)
 {
     QDomDocument doc;
