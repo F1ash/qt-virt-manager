@@ -821,8 +821,6 @@ void MainWindow::invokeVMDisplay(TASK _task)
 void MainWindow::deleteVMDisplay(QString &key)
 {
     if ( VM_Displayed_Map.contains(key) ) {
-        // set attribute(Qt::WA_DeleteOnClose) in widget;
-        // not need to delete a VM_Viewer
         VM_Viewer *v = static_cast<VM_Viewer*>(
                     VM_Displayed_Map.value(key));
         if ( nullptr!=v ) {

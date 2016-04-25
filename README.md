@@ -58,6 +58,7 @@ Build requires:
     libqtermwidget5.so
 
     libcacard.so            (optional, WITH_LIBCACARD)
+
     libgio-2.0.so
     libglib-2.0.so
     libgmodule-2.0.so
