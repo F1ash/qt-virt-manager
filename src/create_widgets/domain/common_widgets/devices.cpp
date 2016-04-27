@@ -210,7 +210,7 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc, bool flag)
     if ( list.isEmpty() ) return;
     QString device, desc, name;
     device = list.item(0).nodeName();
-    if ( device=="disk" ) {
+    if        ( device=="disk" ) {
         // Hard drives, floppy disks, CDROMs
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
@@ -361,6 +361,8 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc, bool flag)
          QListWidgetItem *item = new QListWidgetItem();
          item->setText(name);
          item->setData(Qt::UserRole, doc.toString());
+         item->setIcon(QIcon::fromTheme(
+                           QString("device-%1").arg(device)));
          usedDeviceList->insertItem(row, item);
          //usedDeviceList->insertItem(row, name);
          //usedDeviceList->item(row)->setData(Qt::UserRole, doc.toString());
