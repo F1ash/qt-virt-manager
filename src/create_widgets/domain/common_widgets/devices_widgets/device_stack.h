@@ -54,6 +54,7 @@ private:
     virErrorPtr      virtErrors;
 
     _QWidget        *device = nullptr;
+    QLabel          *devIcon = nullptr;
     devstackHelpThread
                     *hlpThread;
 

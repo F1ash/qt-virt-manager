@@ -154,6 +154,11 @@ void DeviceStack::clearDevice()
         delete device;
         device = nullptr;
     };
+    if ( devIcon!=nullptr ) {
+        infoLayout->removeWidget(devIcon);
+        delete devIcon;
+        devIcon = nullptr;
+    };
 }
 
 /* private slots */
@@ -182,14 +187,10 @@ void DeviceStack::init_wdg()
             QListWidgetItem *item =
                     deviceList->item(
                         deviceList->count()-1);
-            /*
             item->setIcon(
                   QIcon::fromTheme(
-                         item->text()
-                         .split(" ")
-                         .first()
-                         .toLower()));
-             */
+                            QString("device-%1")
+                            .arg(devType.at(i))));
             item->setData(
                         Qt::UserRole,
                         QVariant(devType.at(i)));
@@ -209,7 +210,11 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     clearDevice();
     QString deviceType = item->data(Qt::UserRole).toString();
     //qDebug()<<item->text()<<deviceType;
-    if ( deviceType == "disk" ) {
+    devIcon = new QLabel(this);
+    devIcon->setPixmap(QIcon::fromTheme(
+                           QString("device-%1").arg(deviceType))
+                       .pixmap(64));
+    if        ( deviceType == "disk" ) {
         device = new Disk(
                     this,
                     ptr_ConnPtr);
@@ -279,7 +284,8 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     };
     connect(device, SIGNAL(complete()),
             this, SLOT(deviceDataProcessed()));
-    infoLayout->insertWidget(0, device, -1);
+    infoLayout->insertWidget(0, devIcon, 0, Qt::AlignHCenter);
+    infoLayout->insertWidget(1, device, -1);
 }
 void DeviceStack::showDevice()
 {

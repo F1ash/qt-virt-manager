@@ -24,7 +24,8 @@ signals:
     void             dataProcessed(bool);
 
 private:
-    QLabel          *devName;
+    QLabel          *devName,
+                    *devIcon = nullptr;
     QPushButton     *save;
     QPushButton     *revert;
     DeviceRestoreMenu

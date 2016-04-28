@@ -67,7 +67,11 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
     QDomNode _node = _el.firstChild();
     if ( _node.isNull() ) return;
     deviceType = _node.nodeName();
-    if ( deviceType == "disk" ) {
+    devIcon = new QLabel(this);
+    devIcon->setPixmap(QIcon::fromTheme(
+                           QString("device-%1").arg(deviceType))
+                       .pixmap(64));
+    if        ( deviceType == "disk" ) {
         device = new Disk_Edit(
                     this,
                     ptr_ConnPtr);
@@ -134,7 +138,8 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
     };
     connect(device, SIGNAL(complete()),
             this, SLOT(deviceDataProcessed()));
-    infoLayout->insertWidget(0, device, -1);
+    infoLayout->insertWidget(0, devIcon, 0, Qt::AlignHCenter);
+    infoLayout->insertWidget(1, device, -1);
     DeviceXMLDesc = xmlDesc;
     currentDeviceXMLDesc = xmlDesc;
     currentItemRow = idx;
@@ -168,6 +173,11 @@ void DeviceData::clearDataEdit()
         infoLayout->removeWidget(device);
         delete device;
         device = nullptr;
+    };
+    if ( devIcon!=nullptr ) {
+        infoLayout->removeWidget(devIcon);
+        delete devIcon;
+        devIcon = nullptr;
     };
     deviceDataProcessed();
 }
