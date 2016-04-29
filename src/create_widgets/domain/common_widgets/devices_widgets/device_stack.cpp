@@ -284,8 +284,9 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     };
     connect(device, SIGNAL(complete()),
             this, SLOT(deviceDataProcessed()));
-    infoLayout->insertWidget(0, devIcon, 0, Qt::AlignHCenter);
+    infoLayout->insertWidget(0, devIcon, -1, Qt::AlignHCenter);
     infoLayout->insertWidget(1, device, -1);
+    infoLayout->insertStretch(-1);
 }
 void DeviceStack::showDevice()
 {
