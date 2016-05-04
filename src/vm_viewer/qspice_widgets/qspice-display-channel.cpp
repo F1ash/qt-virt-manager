@@ -55,7 +55,13 @@ void QSpiceHelper::display_invalidate (SpiceDisplayChannel *display,
     Q_UNUSED(display)
     QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
     if ( nullptr==_display ) return;
-    emit _display->displayInvalidated(x, y, width, height);
+    //emit _display->displayInvalidated(x, y, width, height);
+    // avoiding additional delay in updating
+    // the display of the virtual machine
+    // that is related with the receipt of signals
+    // to the slot using eventloop.
+    if ( _display->imageObj!=nullptr )
+        _display->imageObj->update(x, y, width, height);
 }
 
 void QSpiceHelper::display_mark(SpiceDisplayChannel *display,
@@ -81,3 +87,7 @@ void QSpiceDisplayChannel::initCallbacks()
                      (GCallback) QSpiceHelper::display_mark, this);
 }
 
+void QSpiceDisplayChannel::setImageObject(void *_obj)
+{
+    imageObj = static_cast<QLabel*>(_obj);
+}

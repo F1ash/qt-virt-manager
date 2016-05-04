@@ -155,10 +155,11 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_display)
     {
         display = _display;
+        display->setImageObject((void*)m_Image);
         connect(display, SIGNAL(displayPrimaryCreated(int,int,int,int,int,void*)),
                 SLOT(displayPrimaryCreate(int,int,int,int,int,void*)));
-        connect(display, SIGNAL(displayInvalidated(int,int,int,int)),
-                SLOT(displayInvalidate(int,int,int,int)));
+        //connect(display, SIGNAL(displayInvalidated(int,int,int,int)),
+        //        SLOT(displayInvalidate(int,int,int,int)));
         connect(display, SIGNAL(displayPrimaryDestroyed()),
                 SLOT(displayPrimaryDestroy()));
         connect(display, SIGNAL(displayMarked(int)),
