@@ -37,18 +37,18 @@ public:
 
 signals:
     void displayPrimaryCreated(
-         int                 format,
-         int                 width,
-         int                 height,
-         int                 stride,
-         int                 shmid,
-         void *              imgdata);
-
-    void displayInvalidated(
-        int                 x,
-        int                 y,
+        int                 format,
         int                 width,
-        int                 height);
+        int                 height,
+        int                 stride,
+        int                 shmid,
+        void*               imgdata);
+
+    //void displayInvalidated(
+    //    int                 x,
+    //    int                 y,
+    //    int                 width,
+    //    int                 height);
 
     void displayPrimaryDestroyed();
 
