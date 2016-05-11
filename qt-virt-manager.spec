@@ -4,7 +4,7 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.25.47
+Version:        0.27.50
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -162,40 +162,6 @@ fi
 %endif
 
 %changelog
-* Sun Mar 20 2016 Fl@sh <kaperang07@gmail.com> - 0.25.47-1
-- fixed RHBZ#1319386;
-- version updated;
-
-* Sun Mar 06 2016 Fl@sh <kaperang07@gmail.com> - 0.22.45-1
-- changed URL and fixed grammar mistakes;
-- added icon cache update;
-- version updated;
-
-* Tue Feb 09 2016 Fl@sh <kaperang07@gmail.com> - 0.22.43-1
-- added WITH_LIBCACARD build parameter;
-- version updated;
-
-* Tue Dec 15 2015 Fl@sh <kaperang07@gmail.com> - 0.22.42-1
-- added libcacard-devel BR;
-- added qt5-qtmultimedia, hicolor-icon-theme to R;
-- set version control for qemu and libcacard-devel;
-- version updated;
-
-* Thu Nov  5 2015 Fl@sh <kaperang07@gmail.com> - 0.21.40-1
-- erased libcacard-devel BR;
-- version updated;
-
-* Sun Sep 20 2015 Fl@sh <kaperang07@gmail.com> - 0.16.38-1
-- improved spec for using SPICE, Qemu/KVM, ssh connections;
-- version updated;
-
-* Tue Jun 23 2015 Fl@sh <kaperang07@gmail.com> - 0.12.28-1
-- version updated;
-
-* Wed May 13 2015 Fl@sh <kaperang07@gmail.com> - 0.10.25-1
-- changed %%files for desktop icon;
-- version updated;
-
-* Thu Apr 23 2015 Fl@sh <kaperang07@gmail.com> - 0.10.21-1
+* Wed May 11 2016 Fl@sh <kaperang07@gmail.com> - 0.27.50-1
 - version updated;
 - clear %%changelog;

@@ -117,3 +117,11 @@ fixes for stability at using CreateDomain widget:
 improved save data in CreateDomain
     for availability edit data in pages
     with unsaved state;
+
+0.27.50 :
+fixed updating the changed display region only
+    in Spice VM Viewer;
+fixed crash in LXC terminal at close;
+enhanced CreateDomain in Devices;
+added About;
+some fixes and enhancements;

@@ -70,8 +70,8 @@ ENDIF (NOT LIB_SUFFIX)
 set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
 set (PROJECT_VERSION 1.0.0)
 set (VERSION_MAJOR   0)
-set (VERSION_MIDDLE  25)
-set (VERSION_MINOR   47)
+set (VERSION_MIDDLE  27)
+set (VERSION_MINOR   50)
 set (HEADERS
   src/mainwindow.h
   src/log_dock/log_dock.h
