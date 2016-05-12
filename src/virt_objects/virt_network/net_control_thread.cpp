@@ -112,6 +112,11 @@ Result NetControlThread::createNetwork()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
@@ -140,6 +145,11 @@ Result NetControlThread::defineNetwork()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
@@ -168,6 +178,11 @@ Result NetControlThread::startNetwork()
     Result result;
     QString name = task.object;
     bool started = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( network!=nullptr ) {
@@ -188,6 +203,11 @@ Result NetControlThread::destroyNetwork()
     Result result;
     QString name = task.object;
     bool deleted = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( network!=nullptr ) {
@@ -208,6 +228,11 @@ Result NetControlThread::undefineNetwork()
     Result result;
     QString name = task.object;
     bool deleted = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( network!=nullptr ) {
@@ -230,6 +255,11 @@ Result NetControlThread::changeAutoStartNetwork()
     result.name = name;
     int autostart = task.args.sign;
     bool set = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( network!=nullptr ) {
@@ -251,6 +281,11 @@ Result NetControlThread::getVirtNetXMLDesc()
     result.name = name;
     bool read = false;
     char *Returns = nullptr;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( network!=nullptr ) {

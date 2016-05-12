@@ -20,6 +20,7 @@
 #include "wait_thread/wait_thread.h"
 #include "vm_viewer/lxc/lxc_viewer.h"
 #include "vm_viewer/spice/spice_viewer.h"
+#include "vm_viewer/vnc/vnc_viewer.h"
 #include "state_monitor/domain_state_monitor.h"
 #include "task_warehouse/task_warehouse.h"
 #include "dock_head_widgets/dock_widget.h"

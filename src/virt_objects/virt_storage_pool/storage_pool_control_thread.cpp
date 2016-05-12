@@ -179,6 +179,11 @@ Result StoragePoolControlThread::createStoragePool()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
@@ -211,6 +216,11 @@ Result StoragePoolControlThread::defineStoragePool()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
@@ -246,6 +256,11 @@ Result StoragePoolControlThread::startStoragePool()
     unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                          VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
     bool started = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     // flags: extra flags; not used yet, so callers should always pass 0
     flags = 0;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
@@ -268,6 +283,11 @@ Result StoragePoolControlThread::destroyStoragePool()
     Result result;
     QString name = task.object;
     bool deleted = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=nullptr ) {
@@ -288,6 +308,11 @@ Result StoragePoolControlThread::undefineStoragePool()
     Result result;
     QString name = task.object;
     bool deleted = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=nullptr ) {
@@ -309,6 +334,11 @@ Result StoragePoolControlThread::changeAutoStartStoragePool()
     QString name = task.object;
     int autostart = task.args.sign;
     bool set = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=nullptr ) {
@@ -331,6 +361,11 @@ Result StoragePoolControlThread::deleteStoragePool()
     uint flags = (task.args.sign)? VIR_STORAGE_POOL_DELETE_ZEROED
                                  : VIR_STORAGE_POOL_DELETE_NORMAL;
     bool deleted = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=nullptr ) {
@@ -352,6 +387,11 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     QString name = task.object;
     bool read = false;
     char *Returns = nullptr;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( storagePool!=nullptr ) {

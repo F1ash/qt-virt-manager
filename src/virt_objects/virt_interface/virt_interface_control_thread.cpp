@@ -116,6 +116,11 @@ Result InterfaceControlThread::startIface()
     Result result;
     QString name = task.object;
     bool started = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virInterfacePtr iface = virInterfaceLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( iface!=nullptr ) {
@@ -138,6 +143,11 @@ Result InterfaceControlThread::destroyIface()
     Result result;
     QString name = task.object;
     bool destroyed = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virInterfacePtr iface = virInterfaceLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( iface!=nullptr ) {
@@ -160,6 +170,11 @@ Result InterfaceControlThread::defineIface()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
@@ -191,6 +206,11 @@ Result InterfaceControlThread::undefineIface()
     Result result;
     QString name = task.object;
     bool deleted = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virInterfacePtr iface = virInterfaceLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( iface!=nullptr ) {
@@ -212,6 +232,11 @@ Result InterfaceControlThread::ifaceChangeBegin()
     Result result;
     QString name = task.object;
     bool processed = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     // extra flags; not used yet, so callers should always pass 0
     processed = (virInterfaceChangeBegin(*task.srcConnPtr, 0)+1) ? true : false;
     if (!processed)
@@ -229,6 +254,11 @@ Result InterfaceControlThread::ifaceChangeCommit()
     Result result;
     QString name = task.object;
     bool processed = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     // extra flags; not used yet, so callers should always pass 0
     processed = (virInterfaceChangeCommit(*task.srcConnPtr, 0)+1) ? true : false;
     if (!processed)
@@ -246,6 +276,11 @@ Result InterfaceControlThread::ifaceChangeRollback()
     Result result;
     QString name = task.object;
     bool processed = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     // extra flags; not used yet, so callers should always pass 0
     processed = (virInterfaceChangeRollback(*task.srcConnPtr, 0)+1) ? true : false;
     if (!processed)
@@ -265,6 +300,11 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
     result.name = name;
     bool read = false;
     char *Returns = nullptr;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virInterfacePtr iface = virInterfaceLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( iface!=nullptr ) {

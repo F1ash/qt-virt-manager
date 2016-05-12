@@ -1,17 +1,17 @@
-#ifndef SPICE_VIEWER_H
-#define SPICE_VIEWER_H
+#ifndef VNC_VIEWER_H
+#define VNC_VIEWER_H
 
 #include <QDomDocument>
 #include <QShortcut>
 #include <QTimerEvent>
 #include "vm_viewer/vm_viewer.h"
-#include "vm_viewer/qspice_widgets/qspice-widget.h"
+#include "vm_viewer/krdc_vnc_qtonly/Machine_View.h"
 
-class spcHlpThread : public _VirtThread
+class vncHlpThread : public _VirtThread
 {
     Q_OBJECT
 public:
-    explicit spcHlpThread(
+    explicit vncHlpThread(
             QObject        *parent     = nullptr,
             virConnectPtr*  connPtrPtr = nullptr,
             QString         _domain    = QString());
@@ -22,21 +22,21 @@ public:
     void             run();
 };
 
-class Spice_Viewer : public VM_Viewer
+class VNC_Viewer : public VM_Viewer
 {
     Q_OBJECT
 public:
-    explicit Spice_Viewer(
+    explicit VNC_Viewer(
             QWidget        *parent     = nullptr,
             virConnectPtr*  connPtrPtr = nullptr,
             QString         arg1       = QString(),
             QString         arg2       = QString());
 
 private:
-    spcHlpThread    *hlpThread;
-    QString          addr;
+    vncHlpThread    *hlpThread;
+    QString          addr, guestName;
     uint             port = 0;
-    QSpiceWidget    *spiceWdg = nullptr;
+    MachineView     *vncWdg = nullptr;
     QShortcut       *actFullScreen = nullptr;
 
 public slots:
@@ -49,7 +49,7 @@ public slots:
     void             pasteClipboardToVirtDomain();
 
 private slots:
-    void             initSpiceWidget();
+    void             initVNCWidget();
     void             timerEvent(QTimerEvent*);
     void             resizeViewer(const QSize&);
     void             fullScreenTriggered();
@@ -57,4 +57,4 @@ private slots:
     QSize            getWidgetSizeAroundDisplay();
 };
 
-#endif // SPICE_VIEWER_H
+#endif // VNC_VIEWER_H

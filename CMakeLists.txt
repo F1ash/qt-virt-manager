@@ -369,6 +369,7 @@ set (HEADERS
   src/vm_viewer/lxc/lxc_viewer.h
   src/vm_viewer/lxc/lxc_viewer_thread.h
   src/vm_viewer/spice/spice_viewer.h
+  src/vm_viewer/vnc/vnc_viewer.h
   src/vm_viewer/click_label.h
   
   src/vm_viewer/qterminal/tabwidget.h
@@ -401,6 +402,11 @@ set (HEADERS
   src/vm_viewer/qspice_widgets/qspice-playback-channel.h
   src/vm_viewer/qspice_widgets/qspice-record-channel.h
   src/vm_viewer/qspice_widgets/qspice-audio.h
+
+  src/vm_viewer/krdc_vnc_qtonly/Machine_View.h
+  src/vm_viewer/krdc_vnc_qtonly/remoteview.h
+  src/vm_viewer/krdc_vnc_qtonly/vncclientthread.h
+  src/vm_viewer/krdc_vnc_qtonly/vncview.h
 
   src/state_monitor/domain_state_monitor.h
   src/state_monitor/domain_monitor_thread.h
@@ -706,6 +712,7 @@ set (SOURCES
   src/vm_viewer/lxc/lxc_viewer.cpp
   src/vm_viewer/lxc/lxc_viewer_thread.cpp
   src/vm_viewer/spice/spice_viewer.cpp
+  src/vm_viewer/vnc/vnc_viewer.cpp
   
   src/vm_viewer/qterminal/properties.cpp
   src/vm_viewer/qterminal/bookmarkswidget.cpp
@@ -736,6 +743,11 @@ set (SOURCES
   src/vm_viewer/qspice_widgets/qspice-playback-channel.cpp
   src/vm_viewer/qspice_widgets/qspice-record-channel.cpp
   src/vm_viewer/qspice_widgets/qspice-audio.cpp
+
+  src/vm_viewer/krdc_vnc_qtonly/Machine_View.cpp
+  src/vm_viewer/krdc_vnc_qtonly/remoteview.cpp
+  src/vm_viewer/krdc_vnc_qtonly/vncclientthread.cpp
+  src/vm_viewer/krdc_vnc_qtonly/vncview.cpp
 
   src/state_monitor/domain_state_monitor.cpp
   src/state_monitor/domain_monitor_thread.cpp
@@ -789,17 +801,18 @@ if (NOT DEFINED WITH_LIBCACARD)
     set (WITH_LIBCACARD 0)
 endif ()
 
-find_package(GLib2   REQUIRED)
-find_package(GObject REQUIRED)
-find_package(Gio     REQUIRED)
-find_package(Spice1  REQUIRED)
+find_package(GLib2                REQUIRED)
+find_package(GObject              REQUIRED)
+find_package(Gio                  REQUIRED)
+find_package(Spice1               REQUIRED)
 find_package(SpiceClientGLib2     REQUIRED)
 if ( WITH_LIBCACARD )
-    find_package(CACard  REQUIRED)
+    find_package(CACard           REQUIRED)
 endif()
 message(STATUS "Build with Libcacard: ${WITH_LIBCACARD}")
 find_package(LibVirt REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
+find_package(LibVNCServer         REQUIRED)
 include_directories(
     ${GLib2_INCLUDE_DIRS}
     ${GOBJECT_INCLUDE_DIRS}
@@ -809,6 +822,7 @@ include_directories(
     ${SPICE_CLIENT_GLIB2_INCLUDE_DIRS}
     ${LibVirt_INCLUDE_DIRS}
     ${QTERMWIDGET_INCLUDE_DIRS}
+    ${LIBVNCCLIENT_INCLUDE_DIR}
 )
 list(APPEND BUILD_PROJECT_LIBRARIES
     ${LibVirt_LIBRARIES}
@@ -819,6 +833,7 @@ list(APPEND BUILD_PROJECT_LIBRARIES
     ${CACard_LIBRARIES}
     ${Spice1_LIBRARIES}
     ${SPICE_CLIENT_GLIB2_LIBRARIES}
+    ${LIBVNCCLIENT_LIBRARIES}
 )
 MESSAGE(STATUS "Found includes :
     ${GLib2_INCLUDE_DIRS}
@@ -828,7 +843,8 @@ MESSAGE(STATUS "Found includes :
     ${Spice1_INCLUDE_DIRS}
     ${SPICE_CLIENT_GLIB2_INCLUDE_DIRS}
     ${LibVirt_INCLUDE_DIRS}
-    ${QTERMWIDGET_INCLUDE_DIRS}")
+    ${QTERMWIDGET_INCLUDE_DIRS}
+    ${LIBVNCCLIENT_INCLUDE_DIR}")
 MESSAGE(STATUS "Found BUILD_PROJECT_LIBRARIES: ${BUILD_PROJECT_LIBRARIES}")
 
 # * build & install application & files
@@ -842,7 +858,8 @@ target_link_libraries (${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
 SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS
     "-DWITH_LIBCACARD=${WITH_LIBCACARD} \
      -DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO} \
-     -DQSPICE_WIDGET_COMPILATION")
+     -DQSPICE_WIDGET_COMPILATION \
+     -DQTONLY")
 
 configure_file ( ${DESKTOP_FILE}.in ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE} )
 install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE}

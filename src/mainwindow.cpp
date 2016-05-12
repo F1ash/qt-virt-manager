@@ -114,6 +114,9 @@ void MainWindow::closeEvent(QCloseEvent *ev)
                 } else if ( _type=="SPICE" ) {
                     value = static_cast<Spice_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
+                } else if ( _type=="VNC" ) {
+                    value = static_cast<VNC_Viewer*>(
+                                VM_Displayed_Map.value(key, nullptr));
                 };
                 if ( nullptr!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
@@ -783,6 +786,7 @@ void MainWindow::invokeVMDisplay(TASK _task)
     QString connName = _task.srcConName;
     QString domName = _task.object;
     QString type = _task.type;
+    QString viewerType = _task.method;
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(domName);
@@ -792,7 +796,11 @@ void MainWindow::invokeVMDisplay(TASK _task)
             VM_Displayed_Map.insert(
                         key,
                         new LXC_Viewer(nullptr, connPtrPtr, connName, domName));
-        } else if ( type.toLower()=="qemu" || type.toLower()=="xen" ) {
+        } else if ( viewerType=="vnc" ) {
+            VM_Displayed_Map.insert(
+                        key,
+                        new VNC_Viewer(nullptr, connPtrPtr, connName, domName));
+        } else if ( viewerType=="spice" ) {
             VM_Displayed_Map.insert(
                         key,
                         new Spice_Viewer(nullptr, connPtrPtr, connName, domName));
@@ -800,7 +808,8 @@ void MainWindow::invokeVMDisplay(TASK _task)
             QMessageBox::information(
                         this,
                         "VM Viewer",
-                        QString("Not implemented type: %1").arg(type));
+                        QString("Not implemented type: %1\n or viewer: %2")
+                        .arg(type).arg(viewerType));
             return;
         };
         VM_Displayed_Map.value(key)->setObjectName(key);

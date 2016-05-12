@@ -49,8 +49,10 @@
         <file alias="22x22/categories/preferences-desktop.png">icons/22x22/categories/preferences-desktop.png</file>
         <file alias="22x22/categories/security.png">icons/22x22/categories/security.png</file>
         <file alias="22x22/categories/domain.png">icons/22x22/categories/domain.png</file>
+        <file alias="22x22/status/pointcursormask.png">icons/22x22/status/pointcursormask.png</file>
         <file alias="22x22/status/leddarkblue.png">icons/22x22/status/leddarkblue.png</file>
         <file alias="22x22/status/untouched.png">icons/22x22/status/untouched.png</file>
+        <file alias="22x22/status/pointcursor.png">icons/22x22/status/pointcursor.png</file>
         <file alias="22x22/status/ledlightgreen.png">icons/22x22/status/ledlightgreen.png</file>
         <file alias="22x22/status/ledlightred.png">icons/22x22/status/ledlightred.png</file>
         <file alias="22x22/status/approved.png">icons/22x22/status/approved.png</file>

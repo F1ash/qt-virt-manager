@@ -1,15 +1,15 @@
-#include "spice_viewer.h"
+#include "vnc_viewer.h"
 #include <QApplication>
 #include <QClipboard>
 #include <spice/vd_agent.h>
 
-spcHlpThread::spcHlpThread(
+vncHlpThread::vncHlpThread(
         QObject *parent, virConnectPtr *connPtrPtr, QString _domain) :
     _VirtThread(parent, connPtrPtr), domain(_domain)
 {
 
 }
-void spcHlpThread::run()
+void vncHlpThread::run()
 {
     if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
         emit ptrIsNull();
@@ -29,13 +29,13 @@ void spcHlpThread::run()
         sendConnErrors();
 }
 
-Spice_Viewer::Spice_Viewer(
+VNC_Viewer::VNC_Viewer(
         QWidget *parent, virConnectPtr *connPtrPtr,
         QString arg1, QString arg2) :
     VM_Viewer(parent, connPtrPtr, arg1, arg2)
 {
-    TYPE = "SPICE";
-    hlpThread = new spcHlpThread(this, ptr_ConnPtr, domain);
+    TYPE = "VNC";
+    hlpThread = new vncHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
     connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
@@ -44,8 +44,9 @@ Spice_Viewer::Spice_Viewer(
 }
 
 /* public slots */
-void Spice_Viewer::init()
+void VNC_Viewer::init()
 {
+    guestName = QString("%1[%2]").arg(domain).arg(connName);
     // get address or hostname from URI
     // driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
     QString msg;
@@ -85,8 +86,8 @@ void Spice_Viewer::init()
         port = (graph.hasAttribute("port"))?
                     graph.attribute("port").toInt() : 5900;
         //qDebug()<<"address:"<<addr<<port;
-        if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
-            initSpiceWidget();
+        if ( !graph.isNull() && graph.attribute("type")=="vnc" ) {
+            initVNCWidget();
             actFullScreen = new QShortcut(
                         QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
             connect(actFullScreen, SIGNAL(activated()),
@@ -111,56 +112,75 @@ void Spice_Viewer::init()
     sendConnErrors();
     //qDebug()<<msg<<"viewer inits";
 }
-void Spice_Viewer::reconnectToVirtDomain()
+void VNC_Viewer::reconnectToVirtDomain()
 {
-    if ( nullptr!=spiceWdg ) {
-        delete spiceWdg;
-        spiceWdg = nullptr;
+    if ( nullptr!=vncWdg ) {
+        //delete vncWdg;
+        //vncWdg = nullptr;
         // resizing to any,
         // because will need to init new display configuration
         //resize(getWidgetSizeAroundDisplay());
-        initSpiceWidget();
+        vncWdg->reinitVNC();
         QSize around_size = getWidgetSizeAroundDisplay();
-        if ( nullptr!=spiceWdg ) {
-            spiceWdg->updateSize(
+        resize(around_size);
+        if ( nullptr!=vncWdg ) {
+            vncWdg->newViewSize(
                         size().width()-around_size.width(),
                         size().height()-around_size.height());
         };
     };
 }
-void Spice_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
+void VNC_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
 {
-    if ( nullptr==spiceWdg ) return;
-    spiceWdg->sendKeySequience(key);
+    if ( nullptr==vncWdg ) return;
+    //vncWdg->sendKeySequience(key);
 }
-void Spice_Viewer::getScreenshotFromVirtDomain()
+void VNC_Viewer::getScreenshotFromVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
-    spiceWdg->getScreenshot();
+    if ( nullptr==vncWdg ) return;
+    /*
+    QImage img = vncWdg->getScreenCapture();
+    // WARNING: used %1%2%3.snapshot template,
+    // because filter will added to tail the template
+    // after last dot.
+    QString fileName = QFileDialog::getSaveFileName(
+                this,
+                "Save Image to",
+                QString("%1%2%3_%4_%5.snapshot")
+                    .arg(QDir::homePath())
+                    .arg(QDir::separator())
+                    .arg(guestName)
+                    .arg(QDate::currentDate().toString("dd.MM.yyyy"))
+                    .arg(QTime::currentTime().toString()),
+                "Images (*.png)");
+    if ( !fileName.isNull() ) {
+        img.save(fileName, "png");
+    };
+    */
 }
-void Spice_Viewer::copyFilesToVirtDomain()
+void VNC_Viewer::copyFilesToVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
+    if ( nullptr==vncWdg ) return;
     QStringList fileNames = QFileDialog::getOpenFileNames(
                 this, "Copy files to Guest", "~");
-    spiceWdg->fileCopyAsync(fileNames);
+    //vncWdg->fileCopyAsync(fileNames);
 }
-void Spice_Viewer::copyToClipboardFromVirtDomain()
+void VNC_Viewer::copyToClipboardFromVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
-    spiceWdg->copyClipboardDataFromGuest();
+    if ( nullptr==vncWdg ) return;
+    //vncWdg->copyClipboardDataFromGuest();
 }
-void Spice_Viewer::pasteClipboardToVirtDomain()
+void VNC_Viewer::pasteClipboardToVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
+    if ( nullptr==vncWdg ) return;
     QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
     QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
     qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
     if ( !_text.isEmpty() ) {
-        spiceWdg->sendClipboardDataToGuest(
-                    VD_AGENT_CLIPBOARD_UTF8_TEXT,
-                    (const uchar*)_text.toUtf8().data(),
-                    _text.size());
+        //vncWdg->sendClipboardDataToGuest(
+        //            VD_AGENT_CLIPBOARD_UTF8_TEXT,
+        //            (const uchar*)_text.toUtf8().data(),
+        //            _text.size());
     };
     if ( !_image.isNull() ) {
         /*
@@ -190,58 +210,59 @@ void Spice_Viewer::pasteClipboardToVirtDomain()
             return;
         };
         */
-        spiceWdg->sendClipboardDataToGuest(
-                    VD_AGENT_CLIPBOARD_IMAGE_PNG,
-                    _image.constBits(),
-                    _image.byteCount());
+        //vncWdg->sendClipboardDataToGuest(
+        //            VD_AGENT_CLIPBOARD_IMAGE_PNG,
+        //            _image.constBits(),
+        //            _image.byteCount());
     };
 }
 
 /* private slots */
-void Spice_Viewer::initSpiceWidget()
+void VNC_Viewer::initVNCWidget()
 {
-    spiceWdg = new QSpiceWidget(this);
-    setCentralWidget(spiceWdg);
-    QString _name = QString("%1[%2]").arg(domain).arg(connName);
-    spiceWdg->setGuestName(_name);
-    connect(spiceWdg, SIGNAL(displayResized(const QSize&)),
+    vncWdg = new MachineView(this);
+    setCentralWidget(vncWdg);
+    /*
+    connect(vncWdg, SIGNAL(displayResized(const QSize&)),
             SLOT(resizeViewer(const QSize&)));
-    connect(spiceWdg, SIGNAL(downloaded(int,int)),
+    connect(vncWdg, SIGNAL(downloaded(int,int)),
             vm_stateWdg, SLOT(setDownloadProcessValue(int,int)));
-    connect(spiceWdg, SIGNAL(displayChannelChanged(bool)),
+    connect(vncWdg, SIGNAL(displayChannelChanged(bool)),
             vm_stateWdg, SLOT(changeDisplayState(bool)));
-    connect(spiceWdg, SIGNAL(cursorChannelChanged(bool)),
+    connect(vncWdg, SIGNAL(cursorChannelChanged(bool)),
             vm_stateWdg, SLOT(changeMouseState(bool)));
-    connect(spiceWdg, SIGNAL(inputsChannelChanged(bool)),
+    connect(vncWdg, SIGNAL(inputsChannelChanged(bool)),
             vm_stateWdg, SLOT(changeKeyboardState(bool)));
-    connect(spiceWdg, SIGNAL(usbredirChannelChanged(bool)),
+    connect(vncWdg, SIGNAL(usbredirChannelChanged(bool)),
             vm_stateWdg, SLOT(changeUsbredirState(bool)));
-    connect(spiceWdg, SIGNAL(smartcardChannelChanged(bool)),
+    connect(vncWdg, SIGNAL(smartcardChannelChanged(bool)),
             vm_stateWdg, SLOT(changeSmartcardState(bool)));
-    connect(spiceWdg, SIGNAL(webdavChannelChanged(bool)),
+    connect(vncWdg, SIGNAL(webdavChannelChanged(bool)),
             vm_stateWdg, SLOT(changeWebDAVState(bool)));
-    connect(spiceWdg, SIGNAL(playbackChannelChanged(bool)),
+    connect(vncWdg, SIGNAL(playbackChannelChanged(bool)),
             vm_stateWdg, SLOT(changePlaybackState(bool)));
-    connect(spiceWdg, SIGNAL(recordChannelChanged(bool)),
+    connect(vncWdg, SIGNAL(recordChannelChanged(bool)),
             vm_stateWdg, SLOT(changeRecordState(bool)));
     connect(vm_stateWdg, SIGNAL(showUsbDevWidget()),
-            spiceWdg, SLOT(showUsbDevWidget()));
+            vncWdg, SLOT(showUsbDevWidget()));
     connect(vm_stateWdg, SIGNAL(showSmartCardWidget()),
-            spiceWdg, SLOT(showSmartCardWidget()));
+            vncWdg, SLOT(showSmartCardWidget()));
     connect(vm_stateWdg, SIGNAL(transformationMode(Qt::TransformationMode)),
-            spiceWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
-    connect(spiceWdg, SIGNAL(errMsg(QString&)),
+            vncWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
+    connect(vncWdg, SIGNAL(errMsg(QString&)),
             this, SLOT(sendErrMsg(QString&)));
-    connect(spiceWdg, SIGNAL(clipboardsReleased(bool)),
+    connect(vncWdg, SIGNAL(clipboardsReleased(bool)),
             viewerToolBar, SLOT(changeCopypasteState(bool)));
+    */
 
     QSize around_size = getWidgetSizeAroundDisplay();
-    QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
-    spiceWdg->connectToSpiceSource(_uri);
-    spiceWdg->setNewSize(around_size.width(), around_size.height());
+    qDebug()<<"address:"<<addr<<port;
+    vncWdg->Set_VNC_URL(addr, port);
+    vncWdg->initView();
+    vncWdg->newViewSize(around_size.width(), around_size.height());
 }
 
-void Spice_Viewer::timerEvent(QTimerEvent *ev)
+void VNC_Viewer::timerEvent(QTimerEvent *ev)
 {
     if ( ev->timerId()==killTimerId ) {
         counter++;
@@ -255,13 +276,13 @@ void Spice_Viewer::timerEvent(QTimerEvent *ev)
     }
 }
 
-void Spice_Viewer::resizeViewer(const QSize &size)
+void VNC_Viewer::resizeViewer(const QSize &size)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
     resize(size+around_size);
 }
 
-void Spice_Viewer::fullScreenTriggered()
+void VNC_Viewer::fullScreenTriggered()
 {
     if (isFullScreen())
         setWindowState(Qt::WindowNoState);
@@ -269,17 +290,17 @@ void Spice_Viewer::fullScreenTriggered()
         setWindowState(Qt::WindowFullScreen);
 }
 
-void Spice_Viewer::resizeEvent(QResizeEvent *ev)
+void VNC_Viewer::resizeEvent(QResizeEvent *ev)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
-    if ( nullptr!=spiceWdg ) {
-        spiceWdg->updateSize(
+    if ( nullptr!=vncWdg ) {
+        vncWdg->newViewSize(
                     ev->size().width()-around_size.width(),
                     ev->size().height()-around_size.height());
     };
 }
 
-QSize Spice_Viewer::getWidgetSizeAroundDisplay()
+QSize VNC_Viewer::getWidgetSizeAroundDisplay()
 {
     int left, top, right, bottom, _width, _height;
     viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);

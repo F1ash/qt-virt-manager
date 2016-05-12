@@ -145,6 +145,7 @@ void VirtDomainControl::resultReceiver(Result data)
             task.srcConName = currConnName;
             task.object     = data.name;
             task.type       = data.msg.first();
+            task.method     = data.msg.last();
             emit displayRequest(task);
         } else
             msgRepeater(data.err);

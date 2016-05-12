@@ -108,6 +108,11 @@ Result StorageVolControlThread::getAllStorageVolList()
         virStoragePoolFree(currStoragePool);
         currStoragePool = nullptr;
     };
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     currStoragePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, currPoolName.toUtf8().data());
     if ( currStoragePool!=nullptr && keep_alive ) {
@@ -177,6 +182,11 @@ Result StorageVolControlThread::createStorageVol()
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString path = task.args.path;
     QByteArray xmlData;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
@@ -218,6 +228,11 @@ Result StorageVolControlThread::deleteStorageVol()
         virStoragePoolFree(currStoragePool);
         currStoragePool = nullptr;
     };
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     currStoragePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, currPoolName.toUtf8().data());
 
@@ -249,6 +264,11 @@ Result StorageVolControlThread::downloadStorageVol()
     if (currStoragePool!=nullptr) {
         virStoragePoolFree(currStoragePool);
         currStoragePool = nullptr;
+    };
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
     };
     currStoragePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, currPoolName.toUtf8().data());
@@ -317,6 +337,11 @@ Result StorageVolControlThread::resizeStorageVol()
         virStoragePoolFree(currStoragePool);
         currStoragePool = nullptr;
     };
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     currStoragePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, currPoolName.toUtf8().data());
 
@@ -353,6 +378,11 @@ Result StorageVolControlThread::uploadStorageVol()
     if (currStoragePool!=nullptr) {
         virStoragePoolFree(currStoragePool);
         currStoragePool = nullptr;
+    };
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
     };
     currStoragePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, currPoolName.toUtf8().data());
@@ -423,6 +453,11 @@ Result StorageVolControlThread::wipeStorageVol()
         virStoragePoolFree(currStoragePool);
         currStoragePool = nullptr;
     };
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     currStoragePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, currPoolName.toUtf8().data());
 
@@ -486,6 +521,11 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
     if (currStoragePool!=nullptr) {
         virStoragePoolFree(currStoragePool);
         currStoragePool = nullptr;
+    };
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
     };
     currStoragePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, currPoolName.toUtf8().data());

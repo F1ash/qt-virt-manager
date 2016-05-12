@@ -132,6 +132,11 @@ Result SecretControlThread::defineSecret()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
@@ -173,6 +178,11 @@ Result SecretControlThread::undefineSecret()
     Result result;
     QString uuid = task.object;
     bool deleted = false;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virSecretPtr secret = virSecretLookupByUUIDString(
                 *task.srcConnPtr, uuid.toUtf8().data());
     if ( secret!=nullptr ) {
@@ -195,6 +205,11 @@ Result SecretControlThread::getVirtSecretXMLDesc()
     result.name = uuid;
     bool read = false;
     char *Returns = nullptr;
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
     virSecretPtr secret = virSecretLookupByUUIDString(
                 *task.srcConnPtr, uuid.toUtf8().data());
     if ( secret!=nullptr ) {
