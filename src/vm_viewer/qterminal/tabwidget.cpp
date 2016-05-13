@@ -111,7 +111,7 @@ void TabWidget::removeFinished()
     if(prop.isValid() && prop.canConvert(QVariant::Int))
     {
         int index = prop.toInt();
-	    removeTab(index);
+        removeTab(index);
 //        if (count() == 0)
 //            emit closeTabNotification();
     }

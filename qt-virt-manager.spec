@@ -33,6 +33,10 @@ Requires:       spice-vdagent
 Requires:       scrub
 # for ssh-transported remote connections (optional)
 Requires:       nc6
+# for use VNC viewer
+Requires:       libvncserver
+# for use VNC client with tls (optional)
+Requires:       gnutls
 
 %if %with qt4
 BuildRequires:  qt4-devel
@@ -51,6 +55,7 @@ BuildRequires:  cmake
 BuildRequires:  glib2-devel
 BuildRequires:  spice-protocol
 BuildRequires:  spice-glib-devel
+BuildRequires:  libvncserver-devel
 %if %{?fedora}>=24
 BuildRequires:  libcacard-devel
 %endif

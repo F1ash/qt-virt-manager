@@ -17,8 +17,10 @@
  * Then will implemented the copy/paste cross blocking.
  */
 
+extern "C" {
 #include <spice-client.h>
 #include <spice/vd_agent.h>
+}
 #include "qspice-widget.h"
 #include "qspice-smartcard-widget.h"
 #include "qspice-usbdevice-widget.h"
@@ -81,6 +83,10 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
 }
 QSpiceWidget::~QSpiceWidget()
 {
+    // set NULL for drop signals from
+    // display-channel with changes data
+    if ( display!=nullptr )
+        display->setImageObject(nullptr);
     disconnectFromSpiceSource();
 }
 
@@ -316,6 +322,10 @@ void QSpiceWidget::obstructChannel(int channelType)
         break;
 
     case SPICE_CHANNEL_DISPLAY:
+        // set NULL for drop signals from
+        // display-channel with changes data
+        if ( display!=nullptr )
+            display->setImageObject(nullptr);
         delete display;
         display = nullptr;
         emit displayChannelChanged(false);

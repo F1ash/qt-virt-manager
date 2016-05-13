@@ -1,4 +1,5 @@
 .                   (root)
+├── Pictures            (images with running application)
 ├── cmake               (CMake modules for building)
 └── src                 (MainWindow widget and the rest)
     ├── create_widgets      (widgets for creation/setting virt_entities)
@@ -28,10 +29,12 @@
     │   ├── virt_storage_vol    (for virStorageVol)
     │   └──                     (parent classes for virt_objects)
     ├── vm_viewer           (Viewer for virtual machines)
+    │   ├── krdc_vnc_qtonly     (widgets for VNC viewer)
     │   ├── lxc                 (LXC Viewer)
     │   ├── qspice_widgets      (wrapper for spice-glib-client)
     │   ├── qterminal           (terminal for LXC viewer)
     │   ├── spice               (Spice Viewer)
+    │   ├── vnc                 (VNC Viewer)
     │   └──                     (parent classes for viewers)
     └── wait_thread         (Wait thread for close connections)
 

@@ -931,7 +931,8 @@ void MainWindow::showAboutInfo()
                 \nBased on Qt %2.\
                 \nUsed libvirt (%3) API.\
                 \nImplemented graphical consoles for\
-                \nVirtual Machine displays (by SPICE client)\
+                \nVirtual Machine displays\
+                \n(by SPICE/VNC client)\
                 \nand LXC terminals.")
                 .arg(QString("%1.%2.%3")
                      .arg(VERSION_MAJOR)

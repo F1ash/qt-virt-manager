@@ -1,7 +1,9 @@
 #include "spice_viewer.h"
 #include <QApplication>
 #include <QClipboard>
+extern "C" {
 #include <spice/vd_agent.h>
+}
 
 spcHlpThread::spcHlpThread(
         QObject *parent, virConnectPtr *connPtrPtr, QString _domain) :

@@ -36,63 +36,63 @@
 #include <QPalette>
 
 /**
-	@author Ben Klopfenstein <benklop@gmail.com>
-	@author Andrey Rijov <ANDron142@yandex.ru>
+    @author Ben Klopfenstein <benklop@gmail.com>
+    @author Andrey Rijov <ANDron142@yandex.ru>
 */
 class MachineView : public QScrollArea
 {
-	Q_OBJECT
-	
-	public:
-		MachineView( QWidget *parent = 0 );
-		
-		void Set_VNC_URL( const QString &host, int port );
-		void Set_Scaling( bool s );
-		void Set_Fullscreen( bool on );
-		
-		void showSplash( bool show );
-		void captureAllKeys( bool enabled );
-		void sendKey( QKeyEvent *event );
-		
-	protected:
-		bool event( QEvent *event );
-		
-	public slots:
-		void newViewSize( int w, int h );
-		void fullscreen( bool enable );
-		void initView();
-		void Check_Connection();
-		void VNC_Connected_OK();
-		void reinitVNC();
-		void disconnectVNC();
-		
-	signals:
-		void fullscreenToggled( bool enabled );
-		void Full_Size( int width, int height );
-		void Connected();
-		
-	private:
-		void resizeEvent( QResizeEvent *event );
-		void resizeView( int widgetWidth, int widgetHeight );
-		
-		bool VNC_Connected;
-		
-		VncView *View;
-		int VNC_Port;
-		QString VNC_Host;
-		bool Scaling;
-		
-		bool splashShown;
-		bool fullscreenEnabled;
-		int Port;
-		QTimer *Reinit_Timer;
-		bool stop_reinit;
-		
-		QAction *scaleAction;
-		
-		int Init_Count;
-		int VNC_Width;
-		int VNC_Height;
+    Q_OBJECT
+    
+    public:
+        MachineView( QWidget *parent = 0 );
+        
+        void Set_VNC_URL( const QString &host, int port );
+        void Set_Scaling( bool s );
+        void Set_Fullscreen( bool on );
+        
+        void showSplash( bool show );
+        void captureAllKeys( bool enabled );
+        void sendKey( QKeyEvent *event );
+        
+    protected:
+        bool event( QEvent *event );
+        
+    public slots:
+        void newViewSize( int w, int h );
+        void fullscreen( bool enable );
+        void initView();
+        void Check_Connection();
+        void VNC_Connected_OK();
+        void reinitVNC();
+        void disconnectVNC();
+        
+    signals:
+        void fullscreenToggled( bool enabled );
+        void Full_Size( int width, int height );
+        void Connected();
+        
+    private:
+        void resizeEvent( QResizeEvent *event );
+        void resizeView( int widgetWidth, int widgetHeight );
+        
+        bool VNC_Connected;
+        
+        VncView *View;
+        int VNC_Port;
+        QString VNC_Host;
+        bool Scaling;
+        
+        bool splashShown;
+        bool fullscreenEnabled;
+        int Port;
+        QTimer *Reinit_Timer;
+        bool stop_reinit;
+        
+        QAction *scaleAction;
+        
+        int Init_Count;
+        int VNC_Width;
+        int VNC_Height;
 };
 
 #endif

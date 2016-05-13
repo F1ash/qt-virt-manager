@@ -17,7 +17,9 @@
 
 #include "qspice-helper.h"
 #include "qspice-main-channel.h"
+extern "C" {
 #include <spice/vd_agent.h>
+}
 
 // from spice-util.c
 typedef enum {

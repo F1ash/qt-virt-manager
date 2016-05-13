@@ -1,8 +1,14 @@
 #include "vm_viewer.h"
 
 VM_Viewer::VM_Viewer(
-        QWidget *parent, virConnectPtr *connPtrPtr, QString arg1, QString arg2) :
-    QMainWindow(parent), ptr_ConnPtr(connPtrPtr), connName(arg1), domain(arg2)
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          arg1,
+        QString          arg2) :
+    QMainWindow(parent),
+    ptr_ConnPtr(connPtrPtr),
+    connName(arg1),
+    domain(arg2)
 {
     qRegisterMetaType<QString>("QString&");
     //setAttribute(Qt::WA_DeleteOnClose);
@@ -182,7 +188,7 @@ void VM_Viewer::startCloseProcess()
     //qDebug()<<"startCloseProcess";
     if ( killTimerId==0 ) {
         killTimerId = startTimer(PERIOD);
-        statusBar()->show();
+        if ( nullptr!=statusBar() ) statusBar()->show();
     };
     //qDebug()<<killTimerId<<"killTimer";
 }

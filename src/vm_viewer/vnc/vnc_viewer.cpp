@@ -1,10 +1,11 @@
 #include "vnc_viewer.h"
 #include <QApplication>
 #include <QClipboard>
-#include <spice/vd_agent.h>
 
 vncHlpThread::vncHlpThread(
-        QObject *parent, virConnectPtr *connPtrPtr, QString _domain) :
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          _domain) :
     _VirtThread(parent, connPtrPtr), domain(_domain)
 {
 
@@ -30,11 +31,14 @@ void vncHlpThread::run()
 }
 
 VNC_Viewer::VNC_Viewer(
-        QWidget *parent, virConnectPtr *connPtrPtr,
-        QString arg1, QString arg2) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          arg1,
+        QString          arg2) :
     VM_Viewer(parent, connPtrPtr, arg1, arg2)
 {
     TYPE = "VNC";
+    statusBar()->hide();
     hlpThread = new vncHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
@@ -115,14 +119,14 @@ void VNC_Viewer::init()
 void VNC_Viewer::reconnectToVirtDomain()
 {
     if ( nullptr!=vncWdg ) {
-        //delete vncWdg;
-        //vncWdg = nullptr;
+        delete vncWdg;
+        vncWdg = nullptr;
         // resizing to any,
         // because will need to init new display configuration
         //resize(getWidgetSizeAroundDisplay());
-        vncWdg->reinitVNC();
+        initVNCWidget();
         QSize around_size = getWidgetSizeAroundDisplay();
-        resize(around_size);
+        //resize(around_size);
         if ( nullptr!=vncWdg ) {
             vncWdg->newViewSize(
                         size().width()-around_size.width(),
@@ -225,30 +229,6 @@ void VNC_Viewer::initVNCWidget()
     /*
     connect(vncWdg, SIGNAL(displayResized(const QSize&)),
             SLOT(resizeViewer(const QSize&)));
-    connect(vncWdg, SIGNAL(downloaded(int,int)),
-            vm_stateWdg, SLOT(setDownloadProcessValue(int,int)));
-    connect(vncWdg, SIGNAL(displayChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeDisplayState(bool)));
-    connect(vncWdg, SIGNAL(cursorChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeMouseState(bool)));
-    connect(vncWdg, SIGNAL(inputsChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeKeyboardState(bool)));
-    connect(vncWdg, SIGNAL(usbredirChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeUsbredirState(bool)));
-    connect(vncWdg, SIGNAL(smartcardChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeSmartcardState(bool)));
-    connect(vncWdg, SIGNAL(webdavChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeWebDAVState(bool)));
-    connect(vncWdg, SIGNAL(playbackChannelChanged(bool)),
-            vm_stateWdg, SLOT(changePlaybackState(bool)));
-    connect(vncWdg, SIGNAL(recordChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeRecordState(bool)));
-    connect(vm_stateWdg, SIGNAL(showUsbDevWidget()),
-            vncWdg, SLOT(showUsbDevWidget()));
-    connect(vm_stateWdg, SIGNAL(showSmartCardWidget()),
-            vncWdg, SLOT(showSmartCardWidget()));
-    connect(vm_stateWdg, SIGNAL(transformationMode(Qt::TransformationMode)),
-            vncWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
     connect(vncWdg, SIGNAL(errMsg(QString&)),
             this, SLOT(sendErrMsg(QString&)));
     connect(vncWdg, SIGNAL(clipboardsReleased(bool)),
