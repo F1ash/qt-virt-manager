@@ -31,16 +31,19 @@ void QSpiceHelper::display_primary_create(SpiceDisplayChannel *display,
 {
     Q_UNUSED(display)
 
-    QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
+    QSpiceDisplayChannel *_display =
+            static_cast<QSpiceDisplayChannel*>(user_data);
     if ( nullptr==_display ) return;
-    emit _display->displayPrimaryCreated(format, width, height, stride, shmid, imgdata);
+    emit _display->displayPrimaryCreated(
+                format, width, height, stride, shmid, imgdata);
 }
 
 void QSpiceHelper::display_primary_destroy(SpiceDisplayChannel *display,
                              gpointer             user_data)
 {
     Q_UNUSED(display)
-    QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
+    QSpiceDisplayChannel *_display =
+            static_cast<QSpiceDisplayChannel*>(user_data);
     if ( nullptr==_display ) return;
     emit _display->displayPrimaryDestroyed();
 }
@@ -53,7 +56,8 @@ void QSpiceHelper::display_invalidate (SpiceDisplayChannel *display,
                                 gpointer             user_data)
 {
     Q_UNUSED(display)
-    QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
+    QSpiceDisplayChannel *_display =
+            static_cast<QSpiceDisplayChannel*>(user_data);
     //if ( nullptr==_display ) return;
     //emit _display->displayInvalidated(x, y, width, height);
     // avoiding additional delay in updating
@@ -69,7 +73,8 @@ void QSpiceHelper::display_mark(SpiceDisplayChannel *display,
                          gpointer             user_data)
 {
     Q_UNUSED(display)
-    QSpiceDisplayChannel *_display = static_cast<QSpiceDisplayChannel*>(user_data);
+    QSpiceDisplayChannel *_display =
+            static_cast<QSpiceDisplayChannel*>(user_data);
     if ( nullptr==_display ) return;
     emit _display->displayMarked(mark);
 }

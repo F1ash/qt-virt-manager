@@ -648,7 +648,7 @@ void QSpiceWidget::reloadUsbDevList(void *obj)
 {
     QSpiceUsbDeviceWidget *usbDevWdg =
             static_cast<QSpiceUsbDeviceWidget*>(obj);
-    if ( usbDevWdg ) {
+    if ( usbDevWdg && usbDevManager ) {
         usbDevWdg->setEnabled(false);
         usbDevWdg->clearList();
         QStringList _devList =

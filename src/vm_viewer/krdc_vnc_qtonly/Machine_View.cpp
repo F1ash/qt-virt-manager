@@ -133,8 +133,8 @@ void MachineView::reinitVNC()
 {
     if( stop_reinit ) return;
 
-    qWarning( "void MachineView::reinitVNC()",
-               "Reinit VNC. Attempt #" + QString::number(Init_Count+1) );
+    //qWarning( "void MachineView::reinitVNC()",
+    //           "Reinit VNC. Attempt #" + QString::number(Init_Count+1) );
 
     if( Init_Count < 10 )
     {
@@ -182,8 +182,8 @@ void MachineView::reinitVNC()
     {
         Reinit_Timer->stop();
 
-        qWarning("void MachineView::reinitVNC()", tr("Error!"),
-                         tr("Cannot Reinit VNC Connection!"), false );
+        //qWarning("void MachineView::reinitVNC()", tr("Error!"),
+        //                 tr("Cannot Reinit VNC Connection!"), false );
     }
 }
 
