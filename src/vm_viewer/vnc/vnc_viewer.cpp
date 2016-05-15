@@ -39,6 +39,9 @@ VNC_Viewer::VNC_Viewer(
 {
     TYPE = "VNC";
     statusBar()->hide();
+    viewerToolBar->copyFiles_Action->setEnabled(false);
+    viewerToolBar->copyToClipboard->setEnabled(false);
+    viewerToolBar->pasteClipboard->setEnabled(false);
     hlpThread = new vncHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
@@ -226,14 +229,14 @@ void VNC_Viewer::initVNCWidget()
 {
     vncWdg = new MachineView(this);
     setCentralWidget(vncWdg);
-    /*
-    connect(vncWdg, SIGNAL(displayResized(const QSize&)),
-            SLOT(resizeViewer(const QSize&)));
-    connect(vncWdg, SIGNAL(errMsg(QString&)),
-            this, SLOT(sendErrMsg(QString&)));
-    connect(vncWdg, SIGNAL(clipboardsReleased(bool)),
-            viewerToolBar, SLOT(changeCopypasteState(bool)));
-    */
+    //connect(vncWdg, SIGNAL(errMsg(QString&)),
+    //        this, SLOT(sendErrMsg(QString&)));
+    //connect(vncWdg, SIGNAL(clipboardsReleased(bool)),
+    //        viewerToolBar, SLOT(changeCopypasteState(bool)));
+    connect(vncWdg, SIGNAL(boarderTouched()),
+            this, SLOT(startAnimatedShow()));
+    connect(vncWdg, SIGNAL(mouseClickedInto()),
+            this, SLOT(startAnimatedHide()));
 
     QSize around_size = getWidgetSizeAroundDisplay();
     qDebug()<<"address:"<<addr<<port;
@@ -253,6 +256,8 @@ void VNC_Viewer::timerEvent(QTimerEvent *ev)
             counter = 0;
             close();
         };
+    } else if ( ev->timerId()==toolBarTimerId ) {
+        startAnimatedHide();
     }
 }
 

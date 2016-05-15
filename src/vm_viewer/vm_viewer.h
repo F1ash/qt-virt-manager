@@ -11,6 +11,7 @@
 #include <QIcon>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QPropertyAnimation>
 #include "vm_viewer/viewer_toolbar.h"
 #include "vm_state_widget.h"
 #include "virt_objects/virt_entity_config.h"
@@ -39,6 +40,7 @@ public:
     VM_State_Widget *vm_stateWdg = nullptr;
     uint             timerId = 0;
     uint             killTimerId = 0;
+    uint             toolBarTimerId = 0;
     uint             counter = 0;
 
     QVBoxLayout     *infoLayout = nullptr;
@@ -49,6 +51,23 @@ signals:
     void             finished(QString&);
     void             errorMsg(QString&);
     void             addNewTask(TASK);
+
+    /*
+     * Emitted, when user touched top boarder.
+     * Used for show toolbar.
+     */
+    void boarderTouched();
+
+    /*
+     * Emitted, when user clicked onto widget area.
+     * Used for hide toolbar.
+     */
+    void mouseClickedInto();
+
+private:
+    QPropertyAnimation
+                    *animatedShowToolBar,
+                    *animatedHideToolBar;
 
 public slots:
     virtual void     init();
@@ -66,6 +85,11 @@ public slots:
     virtual void     copyToClipboardFromVirtDomain();
     virtual void     pasteClipboardToVirtDomain();
     void             showErrorInfo(QString&);
+    void             startAnimatedShow();
+    void             startAnimatedHide();
+
+private slots:
+    void             hideToolBar();
 };
 
 #endif // VM_VIEWER_H

@@ -70,6 +70,18 @@ class MachineView : public QScrollArea
         void fullscreenToggled( bool enabled );
         void Full_Size( int width, int height );
         void Connected();
+
+        /*
+         * Emitted, when user touched top boarder.
+         * Used for show toolbar.
+         */
+        void boarderTouched();
+
+        /*
+         * Emitted, when user clicked onto widget area.
+         * Used for hide toolbar.
+         */
+        void mouseClickedInto();
         
     private:
         void resizeEvent( QResizeEvent *event );

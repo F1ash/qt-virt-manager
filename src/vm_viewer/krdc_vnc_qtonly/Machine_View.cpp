@@ -114,6 +114,11 @@ void MachineView::initView()
     connect( View, SIGNAL(framebufferSizeChanged(int, int)),
              this, SLOT(newViewSize(int, int)) );
 
+    connect( View, SIGNAL(boarderTouched()),
+              this, SIGNAL(boarderTouched()));
+    connect( View, SIGNAL(mouseClickedInto()),
+             this, SIGNAL(mouseClickedInto()));
+
     // This for auto reinit VNC
     QTimer::singleShot( 1000, this, SLOT(Check_Connection()) );
 }
@@ -148,6 +153,11 @@ void MachineView::reinitVNC()
 
         disconnect( View, SIGNAL(framebufferSizeChanged(int, int)),
                     this, SLOT(newViewSize(int, int)) );
+
+        disconnect( View, SIGNAL(boarderTouched()),
+                    this, SIGNAL(boarderTouched()));
+        disconnect( View, SIGNAL(mouseClickedInto()),
+                    this, SIGNAL(mouseClickedInto()));
         /*
         View = new VncView( this );
         splashShown = true;
@@ -177,6 +187,11 @@ void MachineView::reinitVNC()
 
         connect( View, SIGNAL(framebufferSizeChanged(int, int)),
                  this, SLOT(newViewSize(int, int)) );
+
+        connect( View, SIGNAL(boarderTouched()),
+                  this, SIGNAL(boarderTouched()));
+        connect( View, SIGNAL(mouseClickedInto()),
+                 this, SIGNAL(mouseClickedInto()));
     }
     else
     {

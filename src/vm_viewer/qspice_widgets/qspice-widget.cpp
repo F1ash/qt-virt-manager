@@ -740,6 +740,8 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         //qDebug()<<ev->x()<<ev->y()<<":"
         //<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
+        if ( 0<=ev->y() && ev->y()<= 3 )
+            emit boarderTouched();
         inputs->inputsPosition(
                     //ev->x()*zoom,
                     //ev->y()*zoom,
@@ -758,6 +760,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     }
     else if (event->type() == QEvent::MouseButtonRelease)
     {
+        emit mouseClickedInto();
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         inputs->inputsButtonRelease(
                     QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));

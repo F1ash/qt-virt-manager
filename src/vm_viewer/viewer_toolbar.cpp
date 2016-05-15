@@ -3,13 +3,13 @@
 ViewerToolBar::ViewerToolBar(QWidget *parent) :
     QToolBar(parent)
 {
-    start_Action = new QAction(this);
-    start_Action->setIcon(QIcon::fromTheme("start"));
-    start_Action->setToolTip("Start");
-    start_Menu = new QMenu(this);
-    restore_Action = start_Menu->addAction("Restore");
-    restore_Action->setIcon(QIcon::fromTheme("start"));
-    start_Action->setMenu(start_Menu);
+    //start_Action = new QAction(this);
+    //start_Action->setIcon(QIcon::fromTheme("start"));
+    //start_Action->setToolTip("Start");
+    //start_Menu = new QMenu(this);
+    //restore_Action = start_Menu->addAction("Restore");
+    //restore_Action->setIcon(QIcon::fromTheme("start"));
+    //start_Action->setMenu(start_Menu);
     pause_Action = new QAction(this);
     pause_Action->setIcon(QIcon::fromTheme("pause"));
     pause_Action->setToolTip("Pause");
@@ -28,9 +28,11 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     destroy_Action->setToolTip("Stop");
     destroy_Action->setMenu(destroy_Menu);
     snapshot_Menu = new QMenu(this);
-    createSnapshot = snapshot_Menu->addAction("create Snapshot of Current Domain");
+    createSnapshot = snapshot_Menu->addAction(
+                "create Snapshot of Current Domain");
     createSnapshot->setIcon(QIcon::fromTheme("camera-photo"));
-    moreSnapshot_Actions = snapshot_Menu->addAction("more Snapshot actions for Domain");
+    moreSnapshot_Actions = snapshot_Menu->addAction(
+                "more Snapshot actions for Domain");
     moreSnapshot_Actions->setIcon(QIcon::fromTheme("camera-photo"));
     snapshot_Action = new QAction(this);
     snapshot_Action->setIcon(QIcon::fromTheme("camera-photo"));
@@ -67,7 +69,7 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     pasteClipboard->setIcon(QIcon::fromTheme("edit-paste"));
     pasteClipboard->setToolTip("Paste Clipboard to Guest");
 
-    addAction(start_Action);
+    //addAction(start_Action);
     addAction(pause_Action);
     addAction(destroy_Action);
     addSeparator();
@@ -106,9 +108,10 @@ void ViewerToolBar::showMenu()
 void ViewerToolBar::detectTriggerredAction(QAction *action)
 {
     QStringList parameters;
-    if ( action == start_Action) {
-        parameters << "startVirtDomain";
-    } else if ( action == pause_Action ) {
+    //if ( action == start_Action) {
+    //    parameters << "startVirtDomain";
+    //} else
+    if        ( action == pause_Action ) {
         parameters << "pauseVirtDomain";
     } else if ( action == destroy_Action ) {
         parameters << "destroyVirtDomain";
@@ -131,27 +134,37 @@ void ViewerToolBar::detectTriggerredAction(QAction *action)
     } else if ( action == reconnect_Action ) {
         parameters << "reconnectToVirtDomain";
     } else if ( action == sendKeySeq_1 ) {
-        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch1);
+        parameters << "sendKeySeqToVirtDomain"
+                   << QString::number(Qt::Key_Launch1);
     } else if ( action == sendKeySeq_2 ) {
-        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch2);
+        parameters << "sendKeySeqToVirtDomain"
+                   << QString::number(Qt::Key_Launch2);
     } else if ( action == sendKeySeq_3 ) {
-        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch3);
+        parameters << "sendKeySeqToVirtDomain"
+                   << QString::number(Qt::Key_Launch3);
     } else if ( action == sendKeySeq_4 ) {
-        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch4);
+        parameters << "sendKeySeqToVirtDomain"
+                   << QString::number(Qt::Key_Launch4);
     } else if ( action == sendKeySeq_5 ) {
-        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch5);
+        parameters << "sendKeySeqToVirtDomain"
+                   << QString::number(Qt::Key_Launch5);
     } else if ( action == sendKeySeq_6 ) {
-        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch6);
+        parameters << "sendKeySeqToVirtDomain"
+                   << QString::number(Qt::Key_Launch6);
     } else if ( action == sendKeySeq_7 ) {
-        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch7);
+        parameters << "sendKeySeqToVirtDomain"
+                   << QString::number(Qt::Key_Launch7);
     } else if ( action == sendKeySeq_8 ) {
-        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_Launch8);
+        parameters << "sendKeySeqToVirtDomain"
+                   << QString::number(Qt::Key_Launch8);
     } else if ( action == getScreenshot ) {
         parameters << "getScreenshotFromVirtDomain";
     } else if ( action == sendKeySeq_BackSpc ) {
-        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_LaunchB);
+        parameters << "sendKeySeqToVirtDomain"
+                   << QString::number(Qt::Key_LaunchB);
     } else if ( action == sendKeySeq_Del ) {
-        parameters << "sendKeySeqToVirtDomain"<< QString::number(Qt::Key_LaunchD);
+        parameters << "sendKeySeqToVirtDomain"
+                   << QString::number(Qt::Key_LaunchD);
     } else if ( action == copyFiles_Action ) {
         parameters << "copyFilesToVirtDomain";
     } else if ( action == copyToClipboard ) {

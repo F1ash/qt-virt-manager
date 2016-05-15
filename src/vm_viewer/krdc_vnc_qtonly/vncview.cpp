@@ -502,6 +502,7 @@ void VncView::resizeEvent(QResizeEvent *event)
 
 bool VncView::event(QEvent *event)
 {
+    QMouseEvent *ev = static_cast<QMouseEvent*>(event);
     switch (event->type()) {
     case QEvent::KeyPress:
     case QEvent::KeyRelease:
@@ -512,9 +513,15 @@ bool VncView::event(QEvent *event)
     case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonRelease:
+        emit mouseClickedInto();
+        mouseEventHandler(ev);
+        return true;
+        break;
     case QEvent::MouseMove:
 //         kDebug(5011) << "mouseEvent";
-        mouseEventHandler(static_cast<QMouseEvent*>(event));
+        if ( 0<=ev->y() && ev->y()<= 3 )
+            emit boarderTouched();
+        mouseEventHandler(ev);
         return true;
         break;
     case QEvent::Wheel:

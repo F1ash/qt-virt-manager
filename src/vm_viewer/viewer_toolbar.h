@@ -5,13 +5,16 @@
 #include <QAction>
 #include <QIcon>
 #include <QMenu>
+#include <QTimerEvent>
+#include <QShowEvent>
+#include <QDebug>
 
 class ViewerToolBar : public QToolBar
 {
     Q_OBJECT
 public:
     explicit ViewerToolBar(QWidget *parent = nullptr);
-    QAction         *start_Action;
+    //QAction         *start_Action;
     QAction         *restore_Action;
     QMenu           *start_Menu;
     QAction         *destroy_Action;

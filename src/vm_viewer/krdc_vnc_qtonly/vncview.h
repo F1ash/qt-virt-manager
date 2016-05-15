@@ -69,6 +69,19 @@ public:
     
     virtual void updateConfiguration();
 
+signals:
+    /*
+     * Emitted, when user touched top boarder.
+     * Used for show toolbar.
+     */
+    void boarderTouched();
+
+    /*
+     * Emitted, when user clicked onto widget area.
+     * Used for hide toolbar.
+     */
+    void mouseClickedInto();
+
 public slots:
     void scaleResize(int w, int h);
 

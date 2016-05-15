@@ -18,12 +18,21 @@ VM_Viewer::VM_Viewer(
                    .arg(domain).arg(connName));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     viewerToolBar = new ViewerToolBar(this);
-    viewerToolBar->setVisible(true);
+    viewerToolBar->hide();
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(resendExecMethod(const QStringList&)));
     vm_stateWdg = new VM_State_Widget(this);
     statusBar()->addPermanentWidget(vm_stateWdg, -1);
+
+    animatedShowToolBar = new QPropertyAnimation(
+                viewerToolBar, "pos");
+    animatedShowToolBar->setDuration(333);
+    animatedHideToolBar = new QPropertyAnimation(
+                viewerToolBar, "pos");
+    animatedHideToolBar->setDuration(333);
+    connect(animatedHideToolBar, SIGNAL(finished()),
+            this, SLOT(hideToolBar()));
 }
 VM_Viewer::~VM_Viewer()
 {
@@ -230,4 +239,36 @@ void VM_Viewer::showErrorInfo(QString &_msg)
     info = new QWidget(this);
     info->setLayout(infoLayout);
     setCentralWidget(info);
+}
+void VM_Viewer::startAnimatedShow()
+{
+    if ( viewerToolBar->isVisible() ) return;
+    viewerToolBar->setWindowFlags(
+                Qt::Window | Qt::FramelessWindowHint);
+    viewerToolBar->show();
+    animatedShowToolBar->setStartValue(
+                mapToGlobal(QPoint(0,0)));
+    animatedShowToolBar->setEndValue(
+                mapToGlobal(QPoint(100,0)));
+    animatedShowToolBar->start();
+    if ( toolBarTimerId==0 )
+        toolBarTimerId = startTimer(15000);
+}
+void VM_Viewer::startAnimatedHide()
+{
+    if ( toolBarTimerId>0 ) {
+        animatedHideToolBar->setStartValue(
+                    mapToGlobal(QPoint(100,0)));
+        animatedHideToolBar->setEndValue(
+                    mapToGlobal(QPoint(0,0)));
+        animatedHideToolBar->start();
+    };
+}
+
+/* private slots */
+void VM_Viewer::hideToolBar()
+{
+    killTimer(toolBarTimerId);
+    toolBarTimerId = 0;
+    viewerToolBar->hide();
 }

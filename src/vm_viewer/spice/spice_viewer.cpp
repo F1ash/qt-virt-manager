@@ -236,6 +236,10 @@ void Spice_Viewer::initSpiceWidget()
             this, SLOT(sendErrMsg(QString&)));
     connect(spiceWdg, SIGNAL(clipboardsReleased(bool)),
             viewerToolBar, SLOT(changeCopypasteState(bool)));
+    connect(spiceWdg, SIGNAL(boarderTouched()),
+            this, SLOT(startAnimatedShow()));
+    connect(spiceWdg, SIGNAL(mouseClickedInto()),
+            this, SLOT(startAnimatedHide()));
 
     QSize around_size = getWidgetSizeAroundDisplay();
     QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
@@ -254,6 +258,8 @@ void Spice_Viewer::timerEvent(QTimerEvent *ev)
             counter = 0;
             close();
         };
+    } else if ( ev->timerId()==toolBarTimerId ) {
+        startAnimatedHide();
     }
 }
 
