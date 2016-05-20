@@ -258,7 +258,7 @@ void VM_Viewer::startAnimatedHide()
 {
     if ( toolBarTimerId>0 ) {
         animatedHideToolBar->setStartValue(
-                    mapToGlobal(QPoint(100,0)));
+                    viewerToolBar->pos());
         animatedHideToolBar->setEndValue(
                     mapToGlobal(QPoint(0,0)));
         animatedHideToolBar->start();
