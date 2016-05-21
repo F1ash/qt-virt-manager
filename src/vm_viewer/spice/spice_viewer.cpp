@@ -296,11 +296,17 @@ QSize Spice_Viewer::getWidgetSizeAroundDisplay()
     vm_stateWdg->getContentsMargins(&left, &top, &right, &bottom);
     _width += left+right;
     _height += top +bottom;
+    if ( nullptr!=spiceWdg ) {
+        spiceWdg->getContentsMargins(&left, &top, &right, &bottom);
+        _width += left+right;
+        _height += top +bottom;
+    };
+    // add the count [equal 5] of included widgets into spiceWdg
     getContentsMargins(&left, &top, &right, &bottom);
-    _width += left+right;
+    _width += left+right+5;
     _height += vm_stateWdg->size().height()
-            +viewerToolBar->size().height()
-            +top +bottom;
+            //+viewerToolBar->size().height()
+            +top +bottom +5;
     QSize _size(_width, _height);
     return _size;
 }

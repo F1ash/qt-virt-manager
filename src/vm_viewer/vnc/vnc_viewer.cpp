@@ -229,6 +229,8 @@ void VNC_Viewer::initVNCWidget()
 {
     vncWdg = new MachineView(this);
     setCentralWidget(vncWdg);
+    connect(vncWdg, SIGNAL(Full_Size(int,int)),
+            SLOT(resizeViewer(const int, const int)));
     //connect(vncWdg, SIGNAL(errMsg(QString&)),
     //        this, SLOT(sendErrMsg(QString&)));
     //connect(vncWdg, SIGNAL(clipboardsReleased(bool)),
@@ -261,10 +263,10 @@ void VNC_Viewer::timerEvent(QTimerEvent *ev)
     }
 }
 
-void VNC_Viewer::resizeViewer(const QSize &size)
+void VNC_Viewer::resizeViewer(const int h, const int w)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
-    resize(size+around_size);
+    resize(QSize(h,w)+around_size);
 }
 
 void VNC_Viewer::fullScreenTriggered()
@@ -296,8 +298,9 @@ QSize VNC_Viewer::getWidgetSizeAroundDisplay()
     _height += top +bottom;
     getContentsMargins(&left, &top, &right, &bottom);
     _width += left+right;
-    _height += vm_stateWdg->size().height()
-            +viewerToolBar->size().height()
+    // VNC viewer don't uses state & toolbar widgets
+    _height += //vm_stateWdg->size().height()
+            //+viewerToolBar->size().height()
             +top +bottom;
     QSize _size(_width, _height);
     return _size;

@@ -51,7 +51,7 @@ public slots:
 private slots:
     void             initVNCWidget();
     void             timerEvent(QTimerEvent*);
-    void             resizeViewer(const QSize&);
+    void             resizeViewer(const int, const int);
     void             fullScreenTriggered();
     void             resizeEvent(QResizeEvent*);
     QSize            getWidgetSizeAroundDisplay();

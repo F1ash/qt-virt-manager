@@ -32,7 +32,7 @@ extern "C" {
 #include <QDate>
 #include <QFileDialog>
 
-#define MARGIN 5
+#define MARGIN 0
 
 QSpiceWidget::QSpiceWidget(QWidget *parent) :
     QWidget(parent)
@@ -57,7 +57,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     tr_mode = Qt::SmoothTransformation;
     img = nullptr;
     m_Image = new QLabel(this);
-    m_Image->setAlignment(Qt::AlignTop | Qt::AlignJustify);
+    m_Image->setAlignment(Qt::AlignCenter);
     m_Image->setContentsMargins(0,0,0,0);
     scrolled = new QScrollArea(this);
     scrolled->setWidgetResizable(true);
