@@ -65,5 +65,6 @@ Build requires:
     libgobject-2.0.so
     libgthread-2.0.so
     libspice-client-glib-2.0.so
+    libvncclient.so
     libvirt.so
 
