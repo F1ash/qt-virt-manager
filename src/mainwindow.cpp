@@ -107,7 +107,8 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         foreach ( QString key, keys ) {
             if ( VM_Displayed_Map.value(key, nullptr)!=nullptr ) {
                 VM_Viewer *value = nullptr;
-                QString _type = VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
+                QString _type =
+                        VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
                 if ( _type=="LXC" ) {
                     value = static_cast<LXC_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
@@ -830,11 +831,16 @@ void MainWindow::invokeVMDisplay(TASK _task)
 void MainWindow::deleteVMDisplay(QString &key)
 {
     if ( VM_Displayed_Map.contains(key) ) {
-        VM_Viewer *v = static_cast<VM_Viewer*>(
-                    VM_Displayed_Map.value(key));
-        if ( nullptr!=v ) {
-            delete v;
-            v = nullptr;
+        VM_Viewer *value = nullptr;
+        QString _type =
+                VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
+        if ( _type!="LXC" ) {
+            value = static_cast<VM_Viewer*>(
+                        VM_Displayed_Map.value(key, nullptr));
+            if ( nullptr!=value ) {
+                delete value;
+                value = nullptr;
+            };
         };
         VM_Displayed_Map.remove(key);
     }

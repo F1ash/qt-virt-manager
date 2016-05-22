@@ -25,14 +25,19 @@ VM_Viewer::VM_Viewer(
     vm_stateWdg = new VM_State_Widget(this);
     statusBar()->addPermanentWidget(vm_stateWdg, -1);
 
+    toolBarPoint = QPoint(0,0);
     animatedShowToolBar = new QPropertyAnimation(
                 viewerToolBar, "pos");
     animatedShowToolBar->setDuration(333);
     animatedHideToolBar = new QPropertyAnimation(
                 viewerToolBar, "pos");
     animatedHideToolBar->setDuration(333);
+    connect(animatedShowToolBar, SIGNAL(finished()),
+            this, SLOT(toolBarShowed()));
     connect(animatedHideToolBar, SIGNAL(finished()),
             this, SLOT(hideToolBar()));
+    connect(viewerToolBar, SIGNAL(positionChanged(const QPoint&)),
+            this, SLOT(setNewPosition(const QPoint&)));
 }
 VM_Viewer::~VM_Viewer()
 {
@@ -243,13 +248,21 @@ void VM_Viewer::showErrorInfo(QString &_msg)
 void VM_Viewer::startAnimatedShow()
 {
     if ( viewerToolBar->isVisible() ) return;
+    viewerToolBar->blockSignals(true);
     viewerToolBar->setWindowFlags(
                 Qt::Window | Qt::FramelessWindowHint);
     viewerToolBar->show();
+    if ( toolBarPoint.x()==0 && toolBarPoint.y()==0 ) {
+        toolBarPoint =
+                QPoint(
+                    (this->size().width()
+                     -viewerToolBar->size().width()
+                     )/2, 0);
+    };
     animatedShowToolBar->setStartValue(
                 mapToGlobal(QPoint(0,0)));
     animatedShowToolBar->setEndValue(
-                mapToGlobal(QPoint(100,0)));
+                mapToGlobal(toolBarPoint));
     animatedShowToolBar->start();
     if ( toolBarTimerId==0 )
         toolBarTimerId = startTimer(15000);
@@ -261,14 +274,24 @@ void VM_Viewer::startAnimatedHide()
                     viewerToolBar->pos());
         animatedHideToolBar->setEndValue(
                     mapToGlobal(QPoint(0,0)));
+        viewerToolBar->blockSignals(true);
         animatedHideToolBar->start();
     };
 }
 
 /* private slots */
+void VM_Viewer::toolBarShowed()
+{
+    viewerToolBar->blockSignals(false);
+}
 void VM_Viewer::hideToolBar()
 {
     killTimer(toolBarTimerId);
     toolBarTimerId = 0;
     viewerToolBar->hide();
+    viewerToolBar->blockSignals(false);
+}
+void VM_Viewer::setNewPosition(const QPoint &_pos)
+{
+    toolBarPoint = mapFromParent(_pos);
 }

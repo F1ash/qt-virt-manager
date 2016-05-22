@@ -12,6 +12,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPropertyAnimation>
+#include <QPoint>
 #include "vm_viewer/viewer_toolbar.h"
 #include "vm_state_widget.h"
 #include "virt_objects/virt_entity_config.h"
@@ -65,6 +66,7 @@ signals:
     void mouseClickedInto();
 
 private:
+    QPoint           toolBarPoint;
     QPropertyAnimation
                     *animatedShowToolBar,
                     *animatedHideToolBar;
@@ -89,7 +91,9 @@ public slots:
     void             startAnimatedHide();
 
 private slots:
+    void             toolBarShowed();
     void             hideToolBar();
+    void             setNewPosition(const QPoint&);
 };
 
 #endif // VM_VIEWER_H

@@ -174,3 +174,7 @@ void ViewerToolBar::detectTriggerredAction(QAction *action)
     } else return;
     emit execMethod(parameters);
 }
+void ViewerToolBar::moveEvent(QMoveEvent *ev)
+{
+    emit positionChanged(ev->pos());
+}

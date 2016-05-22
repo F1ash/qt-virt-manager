@@ -46,6 +46,7 @@ Build requires:
     libQtMultimedia.so
     libQtSvg.so
     libQtXml.so
+    libQtNetwork.so
     libqtermwidget4.so
 
     * with Qt5              (required, BUILD_QT_VERSION=5)
@@ -55,6 +56,7 @@ Build requires:
     libQt5Svg.so
     libQt5Widgets.so
     libQt5Xml.so
+    libQt5Network.so
     libqtermwidget5.so
 
     libcacard.so            (optional, WITH_LIBCACARD)

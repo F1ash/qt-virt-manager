@@ -6,7 +6,7 @@
 #include <QIcon>
 #include <QMenu>
 #include <QTimerEvent>
-#include <QShowEvent>
+#include <QMoveEvent>
 #include <QDebug>
 
 class ViewerToolBar : public QToolBar
@@ -48,10 +48,12 @@ public:
 
 signals:
     void             execMethod(const QStringList&);
+    void             positionChanged(const QPoint&);
 
 private slots:
     void             showMenu();
     void             detectTriggerredAction(QAction*);
+    void             moveEvent(QMoveEvent*);
 
 public slots:
     void             changeCopypasteState(bool);
