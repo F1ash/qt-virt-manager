@@ -45,6 +45,7 @@ public:
     QAction         *copyFiles_Action;
     QAction         *copyToClipboard;
     QAction         *pasteClipboard;
+    QAction         *fullScreen;
 
 signals:
     void             execMethod(const QStringList&);

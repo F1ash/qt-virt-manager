@@ -34,6 +34,8 @@ public:
     Q_GPROP_INT(MaxMonitors, "monitors-max")
     Q_GPROP_INT(Width, "width")
     void setImageObject(void*);
+    void setPositionDelta(int, int);
+    bool deltaIsZeroes();
 
 signals:
     void displayPrimaryCreated(
@@ -67,6 +69,7 @@ private:
     // pointer to m_Image in QSpiceWidget:
     // used pointer to QLabel with shared buffer;
     QLabel *imageObj = nullptr;
+    int d_X, d_Y;
 };
 
 #endif // QSPICE_DISPLAY_CHANNEL_H

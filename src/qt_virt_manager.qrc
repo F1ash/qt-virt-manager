@@ -122,6 +122,7 @@
         <file alias="22x22/actions/download.png">icons/22x22/actions/download.png</file>
         <file alias="22x22/actions/dialog-ok.png">icons/22x22/actions/dialog-ok.png</file>
         <file alias="22x22/actions/document-send.png">icons/22x22/actions/document-send.png</file>
+        <file alias="22x22/actions/fullscreen.png">icons/22x22/actions/fullscreen.png</file>
         <file alias="22x22/actions/folder-sync.png">icons/22x22/actions/folder-sync.png</file>
         <file alias="22x22/actions/create.png">icons/22x22/actions/create.png</file>
         <file alias="22x22/actions/pause.png">icons/22x22/actions/pause.png</file>
@@ -248,6 +249,7 @@
         <file alias="32x32/actions/download.png">icons/32x32/actions/download.png</file>
         <file alias="32x32/actions/dialog-ok.png">icons/32x32/actions/dialog-ok.png</file>
         <file alias="32x32/actions/document-send.png">icons/32x32/actions/document-send.png</file>
+        <file alias="32x32/actions/fullscreen.png">icons/32x32/actions/fullscreen.png</file>
         <file alias="32x32/actions/folder-sync.png">icons/32x32/actions/folder-sync.png</file>
         <file alias="32x32/actions/create.png">icons/32x32/actions/create.png</file>
         <file alias="32x32/actions/pause.png">icons/32x32/actions/pause.png</file>
@@ -374,6 +376,7 @@
         <file alias="48x48/actions/download.png">icons/48x48/actions/download.png</file>
         <file alias="48x48/actions/dialog-ok.png">icons/48x48/actions/dialog-ok.png</file>
         <file alias="48x48/actions/document-send.png">icons/48x48/actions/document-send.png</file>
+        <file alias="48x48/actions/fullscreen.png">icons/48x48/actions/fullscreen.png</file>
         <file alias="48x48/actions/folder-sync.png">icons/48x48/actions/folder-sync.png</file>
         <file alias="48x48/actions/create.png">icons/48x48/actions/create.png</file>
         <file alias="48x48/actions/pause.png">icons/48x48/actions/pause.png</file>
@@ -499,6 +502,7 @@
         <file alias="24x24/actions/download.png">icons/24x24/actions/download.png</file>
         <file alias="24x24/actions/dialog-ok.png">icons/24x24/actions/dialog-ok.png</file>
         <file alias="24x24/actions/document-send.png">icons/24x24/actions/document-send.png</file>
+        <file alias="24x24/actions/fullscreen.png">icons/24x24/actions/fullscreen.png</file>
         <file alias="24x24/actions/folder-sync.png">icons/24x24/actions/folder-sync.png</file>
         <file alias="24x24/actions/create.png">icons/24x24/actions/create.png</file>
         <file alias="24x24/actions/pause.png">icons/24x24/actions/pause.png</file>
@@ -626,6 +630,7 @@
         <file alias="64x64/actions/download.png">icons/64x64/actions/download.png</file>
         <file alias="64x64/actions/dialog-ok.png">icons/64x64/actions/dialog-ok.png</file>
         <file alias="64x64/actions/document-send.png">icons/64x64/actions/document-send.png</file>
+        <file alias="64x64/actions/fullscreen.png">icons/64x64/actions/fullscreen.png</file>
         <file alias="64x64/actions/folder-sync.png">icons/64x64/actions/folder-sync.png</file>
         <file alias="64x64/actions/create.png">icons/64x64/actions/create.png</file>
         <file alias="64x64/actions/pause.png">icons/64x64/actions/pause.png</file>

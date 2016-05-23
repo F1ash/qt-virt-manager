@@ -86,6 +86,7 @@ public slots:
     virtual void     copyFilesToVirtDomain();
     virtual void     copyToClipboardFromVirtDomain();
     virtual void     pasteClipboardToVirtDomain();
+    virtual void     fullScreenVirtDomain();
     void             showErrorInfo(QString&);
     void             startAnimatedShow();
     void             startAnimatedHide();

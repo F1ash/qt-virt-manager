@@ -58,6 +58,7 @@ public:
     bool start();
     bool supportsScaling() const;
     bool supportsLocalCursor() const;
+    QImage getImageLink() const;
     
 #ifndef QTONLY
     HostPreferences* hostPreferences();

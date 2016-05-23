@@ -118,6 +118,7 @@ void MachineView::initView()
               this, SIGNAL(boarderTouched()));
     connect( View, SIGNAL(mouseClickedInto()),
              this, SIGNAL(mouseClickedInto()));
+    setAlignment(Qt::AlignCenter);
 
     // This for auto reinit VNC
     QTimer::singleShot( 1000, this, SLOT(Check_Connection()) );
@@ -332,4 +333,9 @@ bool MachineView::event( QEvent *event )
     }
 
     return QScrollArea::event( event );
+}
+
+QImage MachineView::getScreenCapture() const
+{
+    return View->getImageLink();
 }

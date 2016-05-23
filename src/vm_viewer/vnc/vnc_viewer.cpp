@@ -96,7 +96,8 @@ void VNC_Viewer::init()
         if ( !graph.isNull() && graph.attribute("type")=="vnc" ) {
             initVNCWidget();
             actFullScreen = new QShortcut(
-                        QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
+                        QKeySequence(tr("Shift+F11", "View|Full Screen")),
+                        this);
             connect(actFullScreen, SIGNAL(activated()),
                     SLOT(fullScreenTriggered()));
         } else {
@@ -145,7 +146,6 @@ void VNC_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
 void VNC_Viewer::getScreenshotFromVirtDomain()
 {
     if ( nullptr==vncWdg ) return;
-    /*
     QImage img = vncWdg->getScreenCapture();
     // WARNING: used %1%2%3.snapshot template,
     // because filter will added to tail the template
@@ -163,7 +163,6 @@ void VNC_Viewer::getScreenshotFromVirtDomain()
     if ( !fileName.isNull() ) {
         img.save(fileName, "png");
     };
-    */
 }
 void VNC_Viewer::copyFilesToVirtDomain()
 {
@@ -223,6 +222,10 @@ void VNC_Viewer::pasteClipboardToVirtDomain()
         //            _image.byteCount());
     };
 }
+void VNC_Viewer::fullScreenVirtDomain()
+{
+    fullScreenTriggered();
+}
 
 /* private slots */
 void VNC_Viewer::initVNCWidget()
@@ -271,10 +274,13 @@ void VNC_Viewer::resizeViewer(const int h, const int w)
 
 void VNC_Viewer::fullScreenTriggered()
 {
-    if (isFullScreen())
+    if (isFullScreen()) {
         setWindowState(Qt::WindowNoState);
-    else
+        vncWdg->fullscreen(false);
+    } else {
         setWindowState(Qt::WindowFullScreen);
+        vncWdg->fullscreen(true);
+    };
 }
 
 void VNC_Viewer::resizeEvent(QResizeEvent *ev)

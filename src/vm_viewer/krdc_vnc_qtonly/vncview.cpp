@@ -239,6 +239,11 @@ bool VncView::supportsLocalCursor() const
     return true;
 }
 
+QImage VncView::getImageLink() const
+{
+    return m_frame;
+}
+
 void VncView::requestPassword()
 {
     kDebug(5011) << "request password";

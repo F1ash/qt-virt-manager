@@ -90,7 +90,8 @@ void Spice_Viewer::init()
         if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
             initSpiceWidget();
             actFullScreen = new QShortcut(
-                        QKeySequence(tr("Shift+F11", "View|Full Screen")), this);
+                        QKeySequence(tr("Shift+F11", "View|Full Screen")),
+                        this);
             connect(actFullScreen, SIGNAL(activated()),
                     SLOT(fullScreenTriggered()));
         } else {
@@ -198,6 +199,10 @@ void Spice_Viewer::pasteClipboardToVirtDomain()
                     _image.byteCount());
     };
 }
+void Spice_Viewer::fullScreenVirtDomain()
+{
+    fullScreenTriggered();
+}
 
 /* private slots */
 void Spice_Viewer::initSpiceWidget()
@@ -271,10 +276,13 @@ void Spice_Viewer::resizeViewer(const QSize &size)
 
 void Spice_Viewer::fullScreenTriggered()
 {
-    if (isFullScreen())
+    if (isFullScreen()) {
         setWindowState(Qt::WindowNoState);
-    else
+        spiceWdg->setFullScreen(false);
+    } else {
         setWindowState(Qt::WindowFullScreen);
+        spiceWdg->setFullScreen(true);
+    };
 }
 
 void Spice_Viewer::resizeEvent(QResizeEvent *ev)

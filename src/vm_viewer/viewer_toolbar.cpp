@@ -68,6 +68,9 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     pasteClipboard = new QAction(this);
     pasteClipboard->setIcon(QIcon::fromTheme("edit-paste"));
     pasteClipboard->setToolTip("Paste Clipboard to Guest");
+    fullScreen = new QAction(this);
+    fullScreen->setIcon(QIcon::fromTheme("fullscreen"));
+    fullScreen->setToolTip("FullScreen");
 
     //addAction(start_Action);
     addAction(pause_Action);
@@ -82,6 +85,7 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     addAction(copyToClipboard);
     addAction(pasteClipboard);
     addSeparator();
+    addAction(fullScreen);
 
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
@@ -171,6 +175,8 @@ void ViewerToolBar::detectTriggerredAction(QAction *action)
         parameters << "copyToClipboardFromVirtDomain";
     } else if ( action == pasteClipboard ) {
         parameters << "pasteClipboardToVirtDomain";
+    } else if ( action == fullScreen ) {
+        parameters << "fullScreenVirtDomain";
     } else return;
     emit execMethod(parameters);
 }

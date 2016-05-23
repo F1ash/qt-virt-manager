@@ -30,7 +30,7 @@ public:
     virtual ~QSpiceWidget();
 
     /*
-     *  Connect to SPICE source by uri, start spice-session.
+     * Connect to SPICE source by uri, start spice-session.
      */
     bool connectToSpiceSource(QString &uri);
 
@@ -115,7 +115,6 @@ signals:
     /*
      * Emitted the state, when channel will initiated.
      * true is success.
-     * true is success.
      */
     void recordChannelChanged(bool);
 
@@ -151,7 +150,8 @@ private:
     QTimer                   resizeTimer;
     QHBoxLayout             *commonLayout;
     int                      _height, _width,
-                             init_h, init_w;
+                             init_h, init_w,
+                             d_X, d_Y;
     qreal                    zoom;
 
 protected:
@@ -253,6 +253,11 @@ public slots:
      * Set transformation mode for display.
      */
     void setTransformationMode(Qt::TransformationMode);
+
+    /*
+     * Set fullscreen mode for display.
+     */
+    void setFullScreen(bool);
 };
 
 #undef QSPICE_WIDGET_H_INSIDE

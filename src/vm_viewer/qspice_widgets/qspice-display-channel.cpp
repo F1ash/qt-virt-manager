@@ -58,14 +58,25 @@ void QSpiceHelper::display_invalidate (SpiceDisplayChannel *display,
     Q_UNUSED(display)
     QSpiceDisplayChannel *_display =
             static_cast<QSpiceDisplayChannel*>(user_data);
-    //if ( nullptr==_display ) return;
+    if ( nullptr==_display || _display->imageObj==nullptr ) return;
     //emit _display->displayInvalidated(x, y, width, height);
     // avoiding additional delay in updating
     // the display of the virtual machine
     // that is related with the receipt of signals
     // to the slot using eventloop.
-    if ( nullptr!=_display && _display->imageObj!=nullptr )
+    //if ( nullptr!=_display && _display->imageObj!=nullptr )
+    //    _display->imageObj->update(x, y, width, height);
+    if ( !_display->deltaIsZeroes() ) {
+        // increment between scrollArea and pixbuffer
+        // x=5, y=6; then for fullscreen the correction used.
+        _display->imageObj->update(
+                    x + _display->d_X-5,
+                    y + _display->d_Y-6,
+                    width + 15,
+                    height + 18);
+    } else {
         _display->imageObj->update(x, y, width, height);
+    }
 }
 
 void QSpiceHelper::display_mark(SpiceDisplayChannel *display,
@@ -82,6 +93,7 @@ void QSpiceHelper::display_mark(SpiceDisplayChannel *display,
 
 void QSpiceDisplayChannel::initCallbacks()
 {
+    d_Y = d_X = 0;
     g_signal_connect(gobject, "display-primary-create",
                      (GCallback) QSpiceHelper::display_primary_create, this);
     g_signal_connect(gobject, "display-invalidate",
@@ -95,4 +107,14 @@ void QSpiceDisplayChannel::initCallbacks()
 void QSpiceDisplayChannel::setImageObject(void *_obj)
 {
     imageObj = static_cast<QLabel*>(_obj);
+}
+
+void QSpiceDisplayChannel::setPositionDelta(int _dX, int _dY)
+{
+    d_X = _dX; d_Y = _dY;
+}
+
+bool QSpiceDisplayChannel::deltaIsZeroes()
+{
+    return ( d_X==0 && d_Y==0 );
 }

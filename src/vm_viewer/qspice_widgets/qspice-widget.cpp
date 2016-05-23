@@ -52,6 +52,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     _height = 0;
     init_h = 0;
     init_w = 0;
+    d_X = d_Y = 0;
     zoom = 1.0;
 
     tr_mode = Qt::SmoothTransformation;
@@ -63,6 +64,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     scrolled->setWidgetResizable(true);
     scrolled->setContentsMargins(0,0,0,0);
     scrolled->setWidget(m_Image);
+    scrolled->setAlignment(Qt::AlignCenter);
 
     commonLayout = new QHBoxLayout(this);
     commonLayout->addWidget(scrolled);
@@ -615,7 +617,13 @@ void QSpiceWidget::displayInvalidate(
     int                 height)
 {
     //qDebug()<<"displayInvalidate"<<x<<y<<width<<height;
-    m_Image->update(x, y, width, height);
+    if ( scrolled->isFullScreen() ) {
+        // increment between scrollArea and pixbuffer
+        // x=5, y=6; then for fullscreen the correction used.
+        m_Image->update(x+d_X-5, y+d_Y-6, width+15, height+18);
+    } else {
+        m_Image->update(x, y, width, height);
+    }
 }
 
 void QSpiceWidget::displayPrimaryDestroy()
@@ -740,13 +748,28 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         //qDebug()<<ev->x()<<ev->y()<<":"
         //<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
-        if ( 0<=ev->y() && ev->y()<= 3 )
+        if ( scrolled->isFullScreen() ) {
+            if ( d_X==0 || d_Y==0 ) {
+                d_X = (frameSize().width() -
+                      m_Image->pixmap()->size().width())/2;
+                d_Y = (frameSize().height() -
+                       m_Image->pixmap()->size().height())/2;
+                if ( display!=nullptr )
+                    display->setPositionDelta(d_X, d_Y);
+            };
+        } else {
+            d_X = d_Y = 0;
+            if ( display!=nullptr && !display->deltaIsZeroes() )
+                display->setPositionDelta(d_X, d_Y);
+        };
+        QPoint position = ev->pos()-QPoint(d_X, d_Y);
+        if ( 0<=position.y() && position.y()<= 3 )
             emit boarderTouched();
         inputs->inputsPosition(
                     //ev->x()*zoom,
                     //ev->y()*zoom,
-                    ev->x(),
-                    ev->y(),
+                    position.x(),
+                    position.y(),
                     display->getId(),
                     QtButtonsMaskToSpice(ev));
         return true;
@@ -943,4 +966,19 @@ void QSpiceWidget::getScreenshot()
 void QSpiceWidget::setTransformationMode(Qt::TransformationMode _mode)
 {
     tr_mode = _mode;
+}
+
+void QSpiceWidget::setFullScreen(bool enable)
+{
+    if( enable ) {
+        scrolled->setWindowFlags( Qt::Window );
+        scrolled->showFullScreen();
+        QPalette p;
+        p.setColor( QPalette::Background, QColor(22,22,22) );
+        scrolled->setPalette( p );
+    } else {
+        scrolled->setWindowFlags( Qt::Widget );
+        scrolled->showNormal();
+        scrolled->setPalette( QPalette() );
+    };
 }

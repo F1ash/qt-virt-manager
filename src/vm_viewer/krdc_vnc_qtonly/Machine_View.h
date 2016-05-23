@@ -53,6 +53,7 @@ class MachineView : public QScrollArea
         void showSplash( bool show );
         void captureAllKeys( bool enabled );
         void sendKey( QKeyEvent *event );
+        QImage getScreenCapture() const;
         
     protected:
         bool event( QEvent *event );

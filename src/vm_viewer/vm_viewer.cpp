@@ -78,7 +78,8 @@ void VM_Viewer::sendErrMsg(QString &msg, uint _number)
     Q_UNUSED(_number);
     QString time = QTime::currentTime().toString();
     QString title = QString("Connection '%1'").arg(connName);
-    QString errMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+    QString errMsg = QString(
+                "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     emit errorMsg(errMsg);
 }
@@ -98,7 +99,8 @@ void VM_Viewer::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
     if ( virtErrors!=nullptr && virtErrors->code>0 ) {
-        QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
+        QString msg = QString("VirtError(%1) : %2")
+                .arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
         emit errorMsg( msg );
     };
@@ -194,6 +196,8 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
         copyToClipboardFromVirtDomain();
     } else if ( method.first()=="pasteClipboardToVirtDomain" ) {
         pasteClipboardToVirtDomain();
+    } else if ( method.first()=="fullScreenVirtDomain" ) {
+        fullScreenVirtDomain();
     };
 
 }
@@ -227,6 +231,10 @@ void VM_Viewer::copyToClipboardFromVirtDomain()
 
 }
 void VM_Viewer::pasteClipboardToVirtDomain()
+{
+
+}
+void VM_Viewer::fullScreenVirtDomain()
 {
 
 }
