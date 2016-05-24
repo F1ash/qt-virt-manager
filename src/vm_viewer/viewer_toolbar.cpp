@@ -71,6 +71,7 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     fullScreen = new QAction(this);
     fullScreen->setIcon(QIcon::fromTheme("fullscreen"));
     fullScreen->setToolTip("FullScreen");
+    vm_stateWdg = new VM_State_Widget(this);
 
     //addAction(start_Action);
     addAction(pause_Action);
@@ -86,6 +87,8 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     addAction(pasteClipboard);
     addSeparator();
     addAction(fullScreen);
+    addSeparator();
+    stateWdg_Action = addWidget(vm_stateWdg);
 
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));

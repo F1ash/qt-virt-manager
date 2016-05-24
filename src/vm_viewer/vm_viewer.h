@@ -13,8 +13,7 @@
 #include <QLabel>
 #include <QPropertyAnimation>
 #include <QPoint>
-#include "vm_viewer/viewer_toolbar.h"
-#include "vm_state_widget.h"
+#include "viewer_toolbar.h"
 #include "virt_objects/virt_entity_config.h"
 #include "virt_objects/_virt_thread.h"
 #include "create_widgets/snapshot/create_snapshot_dialog.h"
@@ -38,7 +37,6 @@ public:
     virErrorPtr      virtErrors = nullptr;
     QSettings        settings;
     ViewerToolBar   *viewerToolBar = nullptr;
-    VM_State_Widget *vm_stateWdg = nullptr;
     uint             timerId = 0;
     uint             killTimerId = 0;
     uint             toolBarTimerId = 0;

@@ -214,28 +214,30 @@ void Spice_Viewer::initSpiceWidget()
     connect(spiceWdg, SIGNAL(displayResized(const QSize&)),
             SLOT(resizeViewer(const QSize&)));
     connect(spiceWdg, SIGNAL(downloaded(int,int)),
-            vm_stateWdg, SLOT(setDownloadProcessValue(int,int)));
+            viewerToolBar->vm_stateWdg,
+            SLOT(setDownloadProcessValue(int,int)));
     connect(spiceWdg, SIGNAL(displayChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeDisplayState(bool)));
+            viewerToolBar->vm_stateWdg, SLOT(changeDisplayState(bool)));
     connect(spiceWdg, SIGNAL(cursorChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeMouseState(bool)));
+            viewerToolBar->vm_stateWdg, SLOT(changeMouseState(bool)));
     connect(spiceWdg, SIGNAL(inputsChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeKeyboardState(bool)));
+            viewerToolBar->vm_stateWdg, SLOT(changeKeyboardState(bool)));
     connect(spiceWdg, SIGNAL(usbredirChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeUsbredirState(bool)));
+            viewerToolBar->vm_stateWdg, SLOT(changeUsbredirState(bool)));
     connect(spiceWdg, SIGNAL(smartcardChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeSmartcardState(bool)));
+            viewerToolBar->vm_stateWdg, SLOT(changeSmartcardState(bool)));
     connect(spiceWdg, SIGNAL(webdavChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeWebDAVState(bool)));
+            viewerToolBar->vm_stateWdg, SLOT(changeWebDAVState(bool)));
     connect(spiceWdg, SIGNAL(playbackChannelChanged(bool)),
-            vm_stateWdg, SLOT(changePlaybackState(bool)));
+            viewerToolBar->vm_stateWdg, SLOT(changePlaybackState(bool)));
     connect(spiceWdg, SIGNAL(recordChannelChanged(bool)),
-            vm_stateWdg, SLOT(changeRecordState(bool)));
-    connect(vm_stateWdg, SIGNAL(showUsbDevWidget()),
+            viewerToolBar->vm_stateWdg, SLOT(changeRecordState(bool)));
+    connect(viewerToolBar->vm_stateWdg, SIGNAL(showUsbDevWidget()),
             spiceWdg, SLOT(showUsbDevWidget()));
-    connect(vm_stateWdg, SIGNAL(showSmartCardWidget()),
+    connect(viewerToolBar->vm_stateWdg, SIGNAL(showSmartCardWidget()),
             spiceWdg, SLOT(showSmartCardWidget()));
-    connect(vm_stateWdg, SIGNAL(transformationMode(Qt::TransformationMode)),
+    connect(viewerToolBar->vm_stateWdg,
+            SIGNAL(transformationMode(Qt::TransformationMode)),
             spiceWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
     connect(spiceWdg, SIGNAL(errMsg(QString&)),
             this, SLOT(sendErrMsg(QString&)));
@@ -256,7 +258,7 @@ void Spice_Viewer::timerEvent(QTimerEvent *ev)
 {
     if ( ev->timerId()==killTimerId ) {
         counter++;
-        vm_stateWdg->setCloseProcessValue(counter*PERIOD*6);
+        viewerToolBar->vm_stateWdg->setCloseProcessValue(counter*PERIOD*6);
         if ( TIMEOUT<counter*PERIOD*6 ) {
             killTimer(killTimerId);
             killTimerId = 0;
@@ -301,9 +303,6 @@ QSize Spice_Viewer::getWidgetSizeAroundDisplay()
     viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
     _width = left+right;
     _height = top +bottom;
-    vm_stateWdg->getContentsMargins(&left, &top, &right, &bottom);
-    _width += left+right;
-    _height += top +bottom;
     if ( nullptr!=spiceWdg ) {
         spiceWdg->getContentsMargins(&left, &top, &right, &bottom);
         _width += left+right;
@@ -312,9 +311,7 @@ QSize Spice_Viewer::getWidgetSizeAroundDisplay()
     // add the count [equal 5] of included widgets into spiceWdg
     getContentsMargins(&left, &top, &right, &bottom);
     _width += left+right+5;
-    _height += vm_stateWdg->size().height()
-            //+viewerToolBar->size().height()
-            +top +bottom +5;
+    _height += top +bottom +5;
     QSize _size(_width, _height);
     return _size;
 }

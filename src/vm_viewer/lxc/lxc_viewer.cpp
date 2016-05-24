@@ -32,7 +32,6 @@ LXC_Viewer::LXC_Viewer(
     TYPE = "LXC";
     // unused toolbar & state widget
     viewerToolBar->setVisible(false);
-    vm_stateWdg->setVisible(false);
     hlpThread = new lxcHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
@@ -112,7 +111,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
         }
     } else if ( ev->timerId()==killTimerId ) {
         counter++;
-        vm_stateWdg->setCloseProcessValue(counter*PERIOD*6);
+        viewerToolBar->vm_stateWdg->setCloseProcessValue(counter*PERIOD*6);
         if ( TIMEOUT<counter*PERIOD*6 ) {
             counter = 0;
             killTimer(killTimerId);

@@ -7,6 +7,7 @@
 #include <QMenu>
 #include <QTimerEvent>
 #include <QMoveEvent>
+#include "vm_state_widget.h"
 #include <QDebug>
 
 class ViewerToolBar : public QToolBar
@@ -46,6 +47,8 @@ public:
     QAction         *copyToClipboard;
     QAction         *pasteClipboard;
     QAction         *fullScreen;
+    VM_State_Widget *vm_stateWdg;
+    QAction         *stateWdg_Action;
 
 signals:
     void             execMethod(const QStringList&);

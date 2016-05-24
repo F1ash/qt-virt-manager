@@ -31,8 +31,6 @@ MainWindow::MainWindow(QWidget *parent)
     closeProgress = new QProgressBar(this);
     closeProgress->setRange(0, waitAtClose*1000);
     closeProgress->setToolTip("Progress for waiting the connection close");
-    statusBar()->addPermanentWidget(closeProgress);
-    statusBar()->hide();
     initVirEventloop();
 }
 
@@ -174,7 +172,6 @@ void MainWindow::startCloseProcess()
 {
     //qDebug()<<"startCloseProcess";
     killTimerId = startTimer(PERIOD);
-    statusBar()->show();
     //qDebug()<<killTimerId<<"killTimer";
 }
 void MainWindow::timerEvent(QTimerEvent *ev)

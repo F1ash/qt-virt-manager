@@ -22,8 +22,6 @@ VM_Viewer::VM_Viewer(
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(resendExecMethod(const QStringList&)));
-    vm_stateWdg = new VM_State_Widget(this);
-    statusBar()->addPermanentWidget(vm_stateWdg, -1);
 
     toolBarPoint = QPoint(0,0);
     animatedShowToolBar = new QPropertyAnimation(

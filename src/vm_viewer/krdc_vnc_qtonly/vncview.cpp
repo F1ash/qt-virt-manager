@@ -71,7 +71,8 @@ VncView::VncView(
     m_port = url.port();
 
     connect(&vncThread, SIGNAL(imageUpdated(int, int, int, int)),
-            this, SLOT(updateImage(int, int, int, int)), Qt::BlockingQueuedConnection);
+            this, SLOT(updateImage(int, int, int, int)),
+            Qt::BlockingQueuedConnection);
     connect(&vncThread, SIGNAL(gotCut(const QString&)),
             this, SLOT(setCut(const QString&)), Qt::BlockingQueuedConnection);
     connect(&vncThread, SIGNAL(passwordRequest()),
