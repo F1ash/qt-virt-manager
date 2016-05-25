@@ -363,11 +363,13 @@ void VNC_Viewer::fullScreenTriggered()
 {
     if (isFullScreen()) {
         setWindowState(Qt::WindowNoState);
-        vncWdg->fullscreen(false);
+        vncWdg->Set_Fullscreen(false);
     } else {
         setWindowState(Qt::WindowFullScreen);
-        vncWdg->fullscreen(true);
+        vncWdg->Set_Fullscreen(true);
     };
+    vncWdg->Set_Scaling(vncWdg->isFullScreen());
+    startAnimatedHide();
 }
 
 void VNC_Viewer::resizeEvent(QResizeEvent *ev)
