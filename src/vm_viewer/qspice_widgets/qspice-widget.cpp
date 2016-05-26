@@ -31,6 +31,7 @@ extern "C" {
 #include <QTime>
 #include <QDate>
 #include <QFileDialog>
+#include <QPainter>
 
 #define MARGIN 0
 
@@ -57,19 +58,6 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
 
     tr_mode = Qt::SmoothTransformation;
     img = nullptr;
-    m_Image = new QLabel(this);
-    m_Image->setAlignment(Qt::AlignCenter);
-    m_Image->setContentsMargins(0,0,0,0);
-    scrolled = new QScrollArea(this);
-    scrolled->setWidgetResizable(true);
-    scrolled->setContentsMargins(0,0,0,0);
-    scrolled->setWidget(m_Image);
-    scrolled->setAlignment(Qt::AlignCenter);
-
-    commonLayout = new QHBoxLayout(this);
-    commonLayout->addWidget(scrolled);
-    commonLayout->setContentsMargins(0,0,0,0);
-    setLayout(commonLayout);
 
     resizeTimer.setSingleShot( true );
     connect(&resizeTimer, SIGNAL(timeout()), SLOT(resizeDone()));
@@ -78,9 +66,9 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
             SLOT(setChannel(QSpiceChannel*)));
     connect(spiceSession, SIGNAL(channelDestroyed(int)),
             SLOT(obstructChannel(int)));
-    m_Image->setMouseTracking(true);
-    m_Image->setFocusPolicy(Qt::StrongFocus);
-    m_Image->installEventFilter( this );
+    setMouseTracking(true);
+    setFocusPolicy(Qt::StrongFocus);
+    installEventFilter( this );
     setContentsMargins(MARGIN,MARGIN,MARGIN,MARGIN);
 }
 QSpiceWidget::~QSpiceWidget()
@@ -88,7 +76,7 @@ QSpiceWidget::~QSpiceWidget()
     // set NULL for drop signals from
     // display-channel with changes data
     if ( display!=nullptr )
-        display->setImageObject(nullptr);
+        display->setParentWidget(nullptr);
     disconnectFromSpiceSource();
 }
 
@@ -163,7 +151,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_display)
     {
         display = _display;
-        display->setImageObject((void*)m_Image);
+        display->setParentWidget((void*)this);
         connect(display, SIGNAL(displayPrimaryCreated(int,int,int,int,int,void*)),
                 SLOT(displayPrimaryCreate(int,int,int,int,int,void*)));
         //connect(display, SIGNAL(displayInvalidated(int,int,int,int)),
@@ -327,7 +315,7 @@ void QSpiceWidget::obstructChannel(int channelType)
         // set NULL for drop signals from
         // display-channel with changes data
         if ( display!=nullptr )
-            display->setImageObject(nullptr);
+            display->setParentWidget(nullptr);
         delete display;
         display = nullptr;
         emit displayChannelChanged(false);
@@ -340,7 +328,7 @@ void QSpiceWidget::obstructChannel(int channelType)
         break;
 
     case SPICE_CHANNEL_CURSOR:
-        m_Image->setCursor(Qt::ArrowCursor);
+        setCursor(Qt::ArrowCursor);
         delete cursor;
         cursor = nullptr;
         emit cursorChannelChanged(false);
@@ -569,7 +557,6 @@ void QSpiceWidget::displayPrimaryCreate(
      void*               imgdata)
 {
     Q_UNUSED(shmid)
-    m_Image->setUpdatesEnabled(false);
 
     //qDebug() << "Display Create(" << width << ", " << height << ")";
     init_h = height; init_w = width;
@@ -601,42 +588,31 @@ void QSpiceWidget::displayPrimaryCreate(
     };
 
     if (img) {
-        m_Image->setUpdatesEnabled(true);
-        QPixmap pix = QPixmap::fromImage(*img);
-        m_Image->setPixmap(pix);
-        QSize _size(init_w+2*MARGIN, init_h+2*MARGIN+4);
+        QSize _size(init_w+2*MARGIN, init_h+2*MARGIN);
         //qDebug()<<_size<<"emit";
         emit displayResized(_size);
+        repaint(0, 0, init_w, init_h);
     }
 }
 
-void QSpiceWidget::displayInvalidate(
-    int                 x,
-    int                 y,
-    int                 width,
-    int                 height)
-{
-    //qDebug()<<"displayInvalidate"<<x<<y<<width<<height;
-    if ( scrolled->isFullScreen() ) {
-        // increment between scrollArea and pixbuffer
-        // x=5, y=6; then for fullscreen the correction used.
-        m_Image->update(x+d_X-5, y+d_Y-6, width+15, height+18);
-    } else {
-        m_Image->update(x, y, width, height);
-    }
-}
+//void QSpiceWidget::displayInvalidate(
+//    int                 x,
+//    int                 y,
+//    int                 width,
+//    int                 height)
+//{
+//    //qDebug()<<"displayInvalidate"<<x<<y<<width<<height;
+//    repaint(x, y, width, height);
+//}
 
 void QSpiceWidget::displayPrimaryDestroy()
 {
     //qDebug() << "Display Destroyed";
-    m_Image->setPixmap(QPixmap());
-    m_Image->setUpdatesEnabled(false);
 }
 
 void QSpiceWidget::displayMark(int mark)
 {
-    //qDebug() << "Display Mark " << mark;
-    m_Image->setUpdatesEnabled(mark != 0);
+    qDebug() << "Display Mark " << mark;
 }
 
 void QSpiceWidget::setClientCursor(
@@ -649,7 +625,7 @@ void QSpiceWidget::setClientCursor(
     QImage c_img((uchar*) rgba, width, height, QImage::Format_ARGB32);
     QPixmap pix = QPixmap::fromImage(c_img);
     QCursor c(pix, hot_x, hot_y);
-    m_Image->setCursor(c);
+    setCursor(c);
 }
 
 void QSpiceWidget::reloadUsbDevList(void *obj)
@@ -748,19 +724,15 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         //qDebug()<<ev->x()<<ev->y()<<":"
         //<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
-        if ( scrolled->isFullScreen() ) {
+        if ( isFullScreen() ) {
             if ( d_X==0 || d_Y==0 ) {
                 d_X = (frameSize().width() -
-                      m_Image->pixmap()->size().width())/2;
+                      init_w)/2;
                 d_Y = (frameSize().height() -
-                       m_Image->pixmap()->size().height())/2;
-                if ( display!=nullptr )
-                    display->setPositionDelta(d_X, d_Y);
+                       init_h)/2;
             };
         } else {
             d_X = d_Y = 0;
-            if ( display!=nullptr && !display->deltaIsZeroes() )
-                display->setPositionDelta(d_X, d_Y);
         };
         QPoint position = ev->pos()-QPoint(d_X, d_Y);
         if ( 0<=position.y() && position.y()<= 3 )
@@ -854,6 +826,28 @@ void QSpiceWidget::resizeEvent ( QResizeEvent * event )
         resizeTimer.start(500);
 }
 
+void QSpiceWidget::paintEvent(QPaintEvent *event)
+{
+    if ( img==nullptr ||
+         img->isNull() ||
+         img->format() == QImage::Format_Invalid ) {
+        event->ignore();
+        return;
+    };
+
+    event->accept();
+
+    QPainter painter(this);
+
+    QRect _rec = event->rect();
+    if ( isFullScreen() ) {
+        //_rec.moveTo(d_X, d_Y);
+        painter.drawImage(_rec, img->copy(event->rect()));
+    } else {
+        painter.drawImage(_rec, img->copy(_rec));
+    };
+}
+
 void QSpiceWidget::resizeDone()
 {
     if ( main && display ) {
@@ -898,7 +892,7 @@ void QSpiceWidget::updateSize(int _w, int _h)
                      _height,
                      true);
     };
-    displayInvalidate(0,0,0,0);
+    //displayInvalidate(0,0,0,0);
 }
 
 void QSpiceWidget::showUsbDevWidget()
@@ -971,14 +965,14 @@ void QSpiceWidget::setTransformationMode(Qt::TransformationMode _mode)
 void QSpiceWidget::setFullScreen(bool enable)
 {
     if( enable ) {
-        scrolled->setWindowFlags( Qt::Window );
-        scrolled->showFullScreen();
+        this->setWindowFlags( Qt::Window );
+        this->showFullScreen();
         QPalette p;
         p.setColor( QPalette::Background, QColor(22,22,22) );
-        scrolled->setPalette( p );
+        this->setPalette( p );
     } else {
-        scrolled->setWindowFlags( Qt::Widget );
-        scrolled->showNormal();
-        scrolled->setPalette( QPalette() );
+        this->setWindowFlags( Qt::Widget );
+        this->showNormal();
+        this->setPalette( QPalette() );
     };
 }

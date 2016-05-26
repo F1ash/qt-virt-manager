@@ -285,6 +285,7 @@ void Spice_Viewer::fullScreenTriggered()
         setWindowState(Qt::WindowFullScreen);
         spiceWdg->setFullScreen(true);
     };
+    startAnimatedHide();
 }
 
 void Spice_Viewer::resizeEvent(QResizeEvent *ev)
@@ -308,10 +309,9 @@ QSize Spice_Viewer::getWidgetSizeAroundDisplay()
         _width += left+right;
         _height += top +bottom;
     };
-    // add the count [equal 5] of included widgets into spiceWdg
     getContentsMargins(&left, &top, &right, &bottom);
-    _width += left+right+5;
-    _height += top +bottom +5;
+    _width += left+right;
+    _height += top +bottom;
     QSize _size(_width, _height);
     return _size;
 }

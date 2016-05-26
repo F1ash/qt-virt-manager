@@ -23,7 +23,7 @@
 #endif
 
 #include "qspice-channel.h"
-#include <QLabel>
+#include <QWidget>
 
 class QSpiceDisplayChannel : public QSpiceChannel
 {
@@ -33,9 +33,7 @@ public:
     Q_GPROP_INT(Height, "height")
     Q_GPROP_INT(MaxMonitors, "monitors-max")
     Q_GPROP_INT(Width, "width")
-    void setImageObject(void*);
-    void setPositionDelta(int, int);
-    bool deltaIsZeroes();
+    void setParentWidget(void*);
 
 signals:
     void displayPrimaryCreated(
@@ -66,10 +64,8 @@ protected:
     void initCallbacks();
 
 private:
-    // pointer to m_Image in QSpiceWidget:
-    // used pointer to QLabel with shared buffer;
-    QLabel *imageObj = nullptr;
-    int d_X, d_Y;
+    // pointer to QSpiceWidget:
+    QWidget *parentWdg = nullptr;
 };
 
 #endif // QSPICE_DISPLAY_CHANNEL_H

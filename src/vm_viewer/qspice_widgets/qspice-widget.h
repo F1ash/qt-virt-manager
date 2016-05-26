@@ -2,9 +2,7 @@
 #define QSPICE_WIDGET_H
 
 #include <QTimer>
-#include <QScrollArea>
-#include <QLabel>
-#include <QHBoxLayout>
+#include <QPaintEvent>
 
 #define  QSPICE_WIDGET_H_INSIDE
 
@@ -145,10 +143,7 @@ private:
     QString                  guestName;
     Qt::TransformationMode   tr_mode;
     QImage                  *img;
-    QScrollArea             *scrolled;
-    QLabel                  *m_Image;
     QTimer                   resizeTimer;
-    QHBoxLayout             *commonLayout;
     int                      _height, _width,
                              init_h, init_w,
                              d_X, d_Y;
@@ -198,11 +193,11 @@ private slots:
          int                 shmid,
          void*               imgdata);
 
-    void displayInvalidate(
-        int                  x,
-        int                  y,
-        int                  width,
-        int                  height);
+    //void displayInvalidate(
+    //    int                  x,
+    //    int                  y,
+    //    int                  width,
+    //    int                  height);
 
     void displayPrimaryDestroy();
 
@@ -220,6 +215,7 @@ private slots:
 
     bool eventFilter(QObject *object, QEvent *event);
     void resizeEvent(QResizeEvent *event);
+    void paintEvent(QPaintEvent *event);
     void resizeDone();
 
 public slots:
