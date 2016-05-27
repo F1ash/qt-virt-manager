@@ -725,11 +725,11 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         //qDebug()<<ev->x()<<ev->y()<<":"
         //<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
         if ( isFullScreen() ) {
-            if ( d_X==0 || d_Y==0 ) {
-                d_X = (frameSize().width() -
-                      init_w)/2;
-                d_Y = (frameSize().height() -
-                       init_h)/2;
+            if ( (d_X==0 || d_Y==0) && img!=nullptr ) {
+                //d_X = (frameSize().width() -
+                //      img->size().width())/2;
+                //d_Y = (frameSize().height() -
+                //       img->size().height())/2;
             };
         } else {
             d_X = d_Y = 0;
