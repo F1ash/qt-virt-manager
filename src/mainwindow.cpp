@@ -272,7 +272,8 @@ void MainWindow::initConnListWidget()
 }
 void MainWindow::initToolBar()
 {
-    toolBar = new ToolBar(this);
+    bool again = settings.value("Donate", true).toBool();
+    toolBar = new ToolBar(this, again);
     toolBar->setObjectName("toolBar");
     connect(toolBar->_hideAction, SIGNAL(triggered()),
             this, SLOT(changeVisibility()));
@@ -300,6 +301,8 @@ void MainWindow::initToolBar()
             this, SLOT(close()));
     connect(toolBar->_infoAction, SIGNAL(triggered()),
             this, SLOT(showAboutInfo()));
+    connect(toolBar->_donateAction, SIGNAL(triggered()),
+            this, SLOT(showDonateDialog()));
     connect(toolBar, SIGNAL(warningShowed()),
             this, SLOT(mainWindowUp()));
     int area_int = settings.value("ToolBarArea", 4).toInt();
@@ -947,4 +950,13 @@ void MainWindow::showAboutInfo()
                 this,
                 "About QtVirtManager",
                 message);
+}
+void MainWindow::showDonateDialog()
+{
+    Donate_Dialog *dd = new Donate_Dialog(this);
+    dd->exec();
+    bool again = dd->showAgain();
+    dd->deleteLater();
+    settings.setValue("Donate", again);
+    toolBar->_donateAction->setVisible(again);
 }

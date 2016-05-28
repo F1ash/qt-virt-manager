@@ -148,6 +148,7 @@ private:
                              init_h, init_w,
                              d_X, d_Y;
     qreal                    zoom;
+    uint                     downloadProgress;
 
 protected:
     QSpiceSession           *spiceSession;
@@ -217,6 +218,7 @@ private slots:
     void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *event);
     void resizeDone();
+    void setDownloadProgress(int, int);
 
 public slots:
     /*

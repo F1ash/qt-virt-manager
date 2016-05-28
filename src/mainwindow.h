@@ -25,6 +25,7 @@
 #include "task_warehouse/task_warehouse.h"
 #include "dock_head_widgets/dock_widget.h"
 #include "dock_head_widgets/dock_head_widget.h"
+#include "donate_dialog.h"
 
 typedef QMap<QString, VM_Viewer*> ViewerMap;
 typedef QMap<QString, VirtStorageVolControl*> OverviwedStorageMap;
@@ -123,6 +124,7 @@ private slots:
     void invokeDomainEditor(TASK);
     void deleteDomainEditor(QString&);
     void showAboutInfo();
+    void showDonateDialog();
 };
 
 #endif // MAINWINDOW_H

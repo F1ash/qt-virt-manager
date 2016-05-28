@@ -55,6 +55,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     init_w = 0;
     d_X = d_Y = 0;
     zoom = 1.0;
+    downloadProgress = 0;
 
     tr_mode = Qt::SmoothTransformation;
     img = nullptr;
@@ -141,7 +142,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
         connect(main, SIGNAL(mouseUpdated()),
                 SLOT(mainMouseUpdate()));
         connect(main, SIGNAL(downloaded(int,int)),
-                this, SIGNAL(downloaded(int,int)));
+                this, SLOT(setDownloadProgress(int,int)));
         main->connectToChannel();
         return;
     }
@@ -846,6 +847,21 @@ void QSpiceWidget::paintEvent(QPaintEvent *event)
     } else {
         painter.drawImage(_rec, img->copy(_rec));
     };
+
+    if ( downloadProgress ) {
+        painter.setOpacity(0.10);
+        painter.fillRect(
+                    QRect(10, 10, frameSize().width(), 50),
+                    Qt::blue);
+        painter.setPen(Qt::yellow);
+        painter.setOpacity(0.65);
+        painter.setFont(QFont("Monospace", 30));
+        QString text = QString("Download: %1 %").arg(downloadProgress);
+        painter.drawText(
+                    QRect(10, 10, frameSize().width(), 50),
+                    Qt::AlignLeft|Qt::AlignVCenter,
+                    text);
+    };
 }
 
 void QSpiceWidget::resizeDone()
@@ -862,6 +878,13 @@ void QSpiceWidget::resizeDone()
         main->sendMonitorConfig();
     }
 
+}
+
+void QSpiceWidget::setDownloadProgress(int d, int v)
+{
+    downloadProgress = ((qreal)d/v)*100;
+    repaint(QRect(10, 10, frameSize().width(), 50));
+    emit downloaded(d, v);
 }
 
 /* public slots */

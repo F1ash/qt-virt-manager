@@ -1,12 +1,15 @@
 #include "toolbar.h"
 
-ToolBar::ToolBar (QWidget *parent = nullptr) : QToolBar(parent)
+ToolBar::ToolBar (
+        QWidget *parent = nullptr,
+        bool     again  = true) :
+    QToolBar(parent), showDonate(again)
 {
-  setAllowedAreas(Qt::AllToolBarAreas);
-  setMovable(true);
-  setFloatable(true);
+    setAllowedAreas(Qt::AllToolBarAreas);
+    setMovable(true);
+    setFloatable(true);
 
-  initActions();
+    initActions();
 }
 void ToolBar::initActions()
 {
@@ -18,6 +21,9 @@ void ToolBar::initActions()
     _exitAction->setIcon ( QIcon::fromTheme("exit") );
     _infoAction = new QAction(QString("About"), this);
     _infoAction->setIcon( QIcon::fromTheme("info") );
+    _donateAction = new QAction(QString("Donate"), this);
+    _donateAction->setIcon(QIcon::fromTheme("donate"));
+    _donateAction->setVisible(showDonate);
 
     addAction(_hideAction);
     addSeparator();
@@ -28,6 +34,7 @@ void ToolBar::initActions()
     addAction(_closeOverview);
     addSeparator();
     addAction(_infoAction);
+    addAction(_donateAction);
     addSeparator();
     addAction(_exitAction);
 
@@ -140,23 +147,23 @@ void ToolBar::showMenu()
 
 Qt::ToolBarArea ToolBar::get_ToolBarArea(int i) const
 {
-  Qt::ToolBarArea result;
-  switch (i) {
-  case 1:
-    result = Qt::LeftToolBarArea;
-    break;
-  case 2:
-    result = Qt::RightToolBarArea;
-    break;
-  case 4:
-    result = Qt::TopToolBarArea;
-    break;
-  case 8:
-    result = Qt::BottomToolBarArea;
-    break;
-  default:
-    result = Qt::TopToolBarArea;
-    break;
-  };
-  return result;
+    Qt::ToolBarArea result;
+    switch (i) {
+    case 1:
+        result = Qt::LeftToolBarArea;
+        break;
+    case 2:
+        result = Qt::RightToolBarArea;
+        break;
+    case 4:
+        result = Qt::TopToolBarArea;
+        break;
+    case 8:
+        result = Qt::BottomToolBarArea;
+        break;
+    default:
+        result = Qt::TopToolBarArea;
+        break;
+    };
+    return result;
 }

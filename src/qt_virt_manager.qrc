@@ -93,6 +93,7 @@
         <file alias="22x22/actions/overview.png">icons/22x22/actions/overview.png</file>
         <file alias="22x22/actions/autostart.png">icons/22x22/actions/autostart.png</file>
         <file alias="22x22/actions/disconnect.png">icons/22x22/actions/disconnect.png</file>
+        <file alias="22x22/actions/donate.png">icons/22x22/actions/donate.png</file>
         <file alias="22x22/actions/document-revert.png">icons/22x22/actions/document-revert.png</file>
         <file alias="22x22/actions/dock_up.png">icons/22x22/actions/dock_up.png</file>
         <file alias="22x22/actions/info.png">icons/22x22/actions/info.png</file>
@@ -219,6 +220,7 @@
         <file alias="32x32/actions/overview.png">icons/32x32/actions/overview.png</file>
         <file alias="32x32/actions/autostart.png">icons/32x32/actions/autostart.png</file>
         <file alias="32x32/actions/disconnect.png">icons/32x32/actions/disconnect.png</file>
+        <file alias="32x32/actions/donate.png">icons/32x32/actions/donate.png</file>
         <file alias="32x32/actions/document-revert.png">icons/32x32/actions/document-revert.png</file>
         <file alias="32x32/actions/dock_up.png">icons/32x32/actions/dock_up.png</file>
         <file alias="32x32/actions/info.png">icons/32x32/actions/info.png</file>
@@ -346,6 +348,7 @@
         <file alias="48x48/actions/overview.png">icons/48x48/actions/overview.png</file>
         <file alias="48x48/actions/autostart.png">icons/48x48/actions/autostart.png</file>
         <file alias="48x48/actions/disconnect.png">icons/48x48/actions/disconnect.png</file>
+        <file alias="48x48/actions/donate.png">icons/48x48/actions/donate.png</file>
         <file alias="48x48/actions/document-revert.png">icons/48x48/actions/document-revert.png</file>
         <file alias="48x48/actions/dock_up.png">icons/48x48/actions/dock_up.png</file>
         <file alias="48x48/actions/info.png">icons/48x48/actions/info.png</file>
@@ -473,6 +476,7 @@
         <file alias="24x24/actions/overview.png">icons/24x24/actions/overview.png</file>
         <file alias="24x24/actions/autostart.png">icons/24x24/actions/autostart.png</file>
         <file alias="24x24/actions/disconnect.png">icons/24x24/actions/disconnect.png</file>
+        <file alias="24x24/actions/donate.png">icons/24x24/actions/donate.png</file>
         <file alias="24x24/actions/document-revert.png">icons/24x24/actions/document-revert.png</file>
         <file alias="24x24/actions/dock_up.png">icons/24x24/actions/dock_up.png</file>
         <file alias="24x24/actions/info.png">icons/24x24/actions/info.png</file>
@@ -600,6 +604,7 @@
         <file alias="64x64/actions/overview.png">icons/64x64/actions/overview.png</file>
         <file alias="64x64/actions/autostart.png">icons/64x64/actions/autostart.png</file>
         <file alias="64x64/actions/disconnect.png">icons/64x64/actions/disconnect.png</file>
+        <file alias="64x64/actions/donate.png">icons/64x64/actions/donate.png</file>
         <file alias="64x64/actions/document-revert.png">icons/64x64/actions/document-revert.png</file>
         <file alias="64x64/actions/dock_up.png">icons/64x64/actions/dock_up.png</file>
         <file alias="64x64/actions/info.png">icons/64x64/actions/info.png</file>
@@ -638,6 +643,7 @@
         <file alias="64x64/apps/utilities-terminal.png">icons/64x64/apps/utilities-terminal.png</file>
         <file alias="64x64/apps/utilities-log-viewer.png">icons/64x64/apps/utilities-log-viewer.png</file>
         <file alias="256x256/apps/virtual-engineering.png">icons/256x256/apps/virtual-engineering.png</file>
+        <file alias="128x128/actions/yandex_money.png">icons/128x128/actions/yandex_money.png</file>
     </qresource>
     <qresource prefix="/misc">
         <file alias="domain/lxc_example1.xml">misc/domain/lxc_example1.xml</file>

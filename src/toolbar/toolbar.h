@@ -9,7 +9,7 @@ class ToolBar : public QToolBar
 {
   Q_OBJECT
 public:
-  explicit ToolBar(QWidget *parent);
+  explicit ToolBar(QWidget *parent, bool again);
 
   QAction    *_hideAction;
   QAction    *_createAction;
@@ -23,6 +23,7 @@ public:
   QAction    *_closeOverview;
   QAction    *_exitAction;
   QAction    *_infoAction;
+  QAction    *_donateAction;
 
   QAction    *_logUpAction;
   QAction    *_domUpAction;
@@ -38,6 +39,7 @@ private:
   QAction    *itemControlAction;
   QMenu      *itemControlMenu;
   QMenu      *showDocksControlMenu;
+  bool        showDonate = false;
 
 private slots:
   void initActions();

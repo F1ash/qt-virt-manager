@@ -63,7 +63,7 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) :
     commoLayout->addWidget(record);
     setLayout(commoLayout);
     closeProcess->hide();
-    downloadProcess->hide();
+    //downloadProcess->hide();
     downloadProcess->setToolTip("File download progress");
     smartCard->setObjectName("SmartCard channel");
     mouse->setObjectName("Cursor channel");
@@ -110,7 +110,7 @@ void VM_State_Widget::setDownloadProcessValue(int _val1, int _val2)
 {
     downloadProcess->setRange(0, _val2);
     downloadProcess->setValue(_val1);
-    (_val1)? downloadProcess->show() : downloadProcess->hide();
+    //(_val1)? downloadProcess->show() : downloadProcess->hide();
 }
 void VM_State_Widget::changeSmartcardState(bool state)
 {
