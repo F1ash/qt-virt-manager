@@ -6,11 +6,16 @@ Donate_Dialog::Donate_Dialog(QWidget *parent) :
     QDialog(parent)
 {
     donate1 = new Click_Label(this);
+    donate1->setToolTip("Donate by Yandex.Money");
     donate1->setOpenExternalLinks(true);
     donate1->setPixmap(QIcon::fromTheme("yandex_money").pixmap(128));
+    donateLayout = new QGridLayout(this);
+    donateLayout->addWidget(donate1, 0, 0, Qt::AlignCenter);
+    donateWdg = new QWidget(this);
+    donateWdg->setLayout(donateLayout);
     again = new QCheckBox("don't show again", this);
     commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(donate1);
+    commonLayout->addWidget(donateWdg);
     commonLayout->addWidget(again);
     setLayout(commonLayout);
     connect(donate1, SIGNAL(released()),

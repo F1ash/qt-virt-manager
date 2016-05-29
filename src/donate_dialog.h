@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QCheckBox>
 #include <QHBoxLayout>
+#include <QGridLayout>
 #include "vm_viewer/click_label.h"
 
 class Donate_Dialog : public QDialog
@@ -15,6 +16,8 @@ public:
 
 private:
     Click_Label     *donate1;
+    QGridLayout     *donateLayout;
+    QWidget         *donateWdg;
     QCheckBox       *again;
     QVBoxLayout     *commonLayout;
 
