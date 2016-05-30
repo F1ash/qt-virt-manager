@@ -45,9 +45,11 @@ public slots:
     void             sendKeySeqToVirtDomain(Qt::Key);
     void             getScreenshotFromVirtDomain();
     void             copyFilesToVirtDomain();
+    void             cancelCopyFilesToVirtDomain();
     void             copyToClipboardFromVirtDomain();
     void             pasteClipboardToVirtDomain();
     void             fullScreenVirtDomain();
+    void             scaledScreenVirtDomain();
 
 private slots:
     void             initSpiceWidget();

@@ -82,9 +82,11 @@ public slots:
     virtual void     sendKeySeqToVirtDomain(Qt::Key);
     virtual void     getScreenshotFromVirtDomain();
     virtual void     copyFilesToVirtDomain();
+    virtual void     cancelCopyFilesToVirtDomain();
     virtual void     copyToClipboardFromVirtDomain();
     virtual void     pasteClipboardToVirtDomain();
     virtual void     fullScreenVirtDomain();
+    virtual void     scaledScreenVirtDomain();
     void             showErrorInfo(QString&);
     void             startAnimatedShow();
     void             startAnimatedHide();

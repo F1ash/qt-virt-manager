@@ -3,6 +3,7 @@
 ViewerToolBar::ViewerToolBar(QWidget *parent) :
     QToolBar(parent)
 {
+    downloadIsCompleted = true;
     //start_Action = new QAction(this);
     //start_Action->setIcon(QIcon::fromTheme("start"));
     //start_Action->setToolTip("Start");
@@ -71,6 +72,9 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     fullScreen = new QAction(this);
     fullScreen->setIcon(QIcon::fromTheme("fullscreen"));
     fullScreen->setToolTip("FullScreen");
+    scaled_to = new QAction(this);
+    scaled_to->setIcon(QIcon::fromTheme("scaled_to_window"));
+    scaled_to->setToolTip("Scale to window");
     vm_stateWdg = new VM_State_Widget(this);
 
     //addAction(start_Action);
@@ -87,6 +91,7 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     addAction(pasteClipboard);
     addSeparator();
     addAction(fullScreen);
+    addAction(scaled_to);
     addSeparator();
     stateWdg_Action = addWidget(vm_stateWdg);
 
@@ -100,6 +105,18 @@ void ViewerToolBar::changeCopypasteState(bool state)
 {
     copyToClipboard->setEnabled(state);
     pasteClipboard->setEnabled(state);
+}
+void ViewerToolBar::downloadCancelled()
+{
+    if ( !downloadIsCompleted )
+        copyFiles_Action->setEnabled(false);
+}
+void ViewerToolBar::downloadCompleted()
+{
+    downloadIsCompleted = true;
+    copyFiles_Action->setIcon(QIcon::fromTheme("document-send"));
+    copyFiles_Action->setToolTip("Copy Files to Guest");
+    copyFiles_Action->setEnabled(true);
 }
 
 /* private slots */
@@ -173,13 +190,24 @@ void ViewerToolBar::detectTriggerredAction(QAction *action)
         parameters << "sendKeySeqToVirtDomain"
                    << QString::number(Qt::Key_LaunchD);
     } else if ( action == copyFiles_Action ) {
-        parameters << "copyFilesToVirtDomain";
+        if ( downloadIsCompleted ) {
+            downloadIsCompleted = false;
+            copyFiles_Action->setToolTip(
+                        "Cancel Copying Files to Guest");
+            copyFiles_Action->setIcon(
+                        QIcon::fromTheme("delete"));
+            parameters << "copyFilesToVirtDomain";
+        } else {
+            parameters << "cancelCopyFilesToVirtDomain";
+        };
     } else if ( action == copyToClipboard ) {
         parameters << "copyToClipboardFromVirtDomain";
     } else if ( action == pasteClipboard ) {
         parameters << "pasteClipboardToVirtDomain";
     } else if ( action == fullScreen ) {
         parameters << "fullScreenVirtDomain";
+    } else if ( action == scaled_to ) {
+        parameters << "scaledScreenVirtDomain";
     } else return;
     emit execMethod(parameters);
 }

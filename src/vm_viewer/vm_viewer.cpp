@@ -190,12 +190,16 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
         getScreenshotFromVirtDomain();
     } else if ( method.first()=="copyFilesToVirtDomain" ) {
         copyFilesToVirtDomain();
+    } else if ( method.first()=="cancelCopyFilesToVirtDomain" ) {
+        cancelCopyFilesToVirtDomain();
     } else if ( method.first()=="copyToClipboardFromVirtDomain" ) {
         copyToClipboardFromVirtDomain();
     } else if ( method.first()=="pasteClipboardToVirtDomain" ) {
         pasteClipboardToVirtDomain();
     } else if ( method.first()=="fullScreenVirtDomain" ) {
         fullScreenVirtDomain();
+    } else if ( method.first()=="scaledScreenVirtDomain" ) {
+        scaledScreenVirtDomain();
     };
 
 }
@@ -224,6 +228,10 @@ void VM_Viewer::copyFilesToVirtDomain()
 {
 
 }
+void VM_Viewer::cancelCopyFilesToVirtDomain()
+{
+
+}
 void VM_Viewer::copyToClipboardFromVirtDomain()
 {
 
@@ -233,6 +241,10 @@ void VM_Viewer::pasteClipboardToVirtDomain()
 
 }
 void VM_Viewer::fullScreenVirtDomain()
+{
+
+}
+void VM_Viewer::scaledScreenVirtDomain()
 {
 
 }

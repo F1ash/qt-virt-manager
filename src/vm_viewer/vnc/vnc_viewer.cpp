@@ -372,6 +372,11 @@ void VNC_Viewer::fullScreenTriggered()
     startAnimatedHide();
 }
 
+void VNC_Viewer::scaledScreenVirtDomain()
+{
+    vncWdg->Set_Scaling(true);
+}
+
 void VNC_Viewer::resizeEvent(QResizeEvent *ev)
 {
     QSize around_size = getWidgetSizeAroundDisplay();

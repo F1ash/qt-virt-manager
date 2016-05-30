@@ -47,12 +47,16 @@ public:
     QAction         *copyToClipboard;
     QAction         *pasteClipboard;
     QAction         *fullScreen;
+    QAction         *scaled_to;
     VM_State_Widget *vm_stateWdg;
     QAction         *stateWdg_Action;
 
 signals:
     void             execMethod(const QStringList&);
     void             positionChanged(const QPoint&);
+
+private:
+    bool             downloadIsCompleted;
 
 private slots:
     void             showMenu();
@@ -61,6 +65,8 @@ private slots:
 
 public slots:
     void             changeCopypasteState(bool);
+    void             downloadCancelled();
+    void             downloadCompleted();
 };
 
 #endif // VIEWER_TOOLBAR_H

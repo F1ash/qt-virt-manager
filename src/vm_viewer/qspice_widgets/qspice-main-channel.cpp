@@ -110,7 +110,8 @@ void QSpiceHelper::main_agent_update(SpiceMainChannel *spicemainchannel,
 {
     Q_UNUSED(spicemainchannel)
 
-    QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
+    QSpiceMainChannel *_mainchannel =
+            static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->agentUpdated();
 }
@@ -123,7 +124,8 @@ void QSpiceHelper::main_clipboard_selection(SpiceMainChannel *spicemainchannel,
 {
     Q_UNUSED(spicemainchannel)
     Q_UNUSED(selection)
-    QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
+    QSpiceMainChannel *_mainchannel =
+            static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->clipboardSelection(type, (void*)data, size);
 }
@@ -135,9 +137,11 @@ void QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *spicemainchan
 {
     Q_UNUSED(spicemainchannel)
     //qDebug()<<"main_clipboard_selection_grub";
-    QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
+    QSpiceMainChannel *_mainchannel =
+            static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
-    emit _mainchannel->clipboardSelectionGrabbed(selection, (void*)types, ntypes);
+    emit _mainchannel->clipboardSelectionGrabbed(
+                selection, (void*)types, ntypes);
 }
 void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *spicemainchannel,
                                                     guint selection,
@@ -145,7 +149,8 @@ void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *spicemainc
 {
     Q_UNUSED(spicemainchannel)
     //qDebug()<<"main_clipboard_selection_release";
-    QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
+    QSpiceMainChannel *_mainchannel =
+            static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->clipboardSelectionReleased(selection);
 }
@@ -156,7 +161,8 @@ void QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainc
 {
     Q_UNUSED(spicemainchannel)
     //qDebug()<<"main_clipboard_selection_request";
-    QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
+    QSpiceMainChannel *_mainchannel =
+            static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->clipboardSelectionRequested(selection, types);
 }
@@ -165,7 +171,8 @@ void QSpiceHelper::main_mouse_update(SpiceMainChannel *spicemainchannel,
 {
     Q_UNUSED(spicemainchannel)
 
-    QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
+    QSpiceMainChannel *_mainchannel =
+            static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->mouseUpdated();
 }
@@ -176,13 +183,26 @@ void QSpiceHelper::migration_started(SpiceMainChannel *main,
     Q_UNUSED(main)
     Q_UNUSED(session)
 
-    QSpiceMainChannel *_mainchannel = static_cast<QSpiceMainChannel*>(user_data);
+    QSpiceMainChannel *_mainchannel =
+            static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->migrationStarted();
 }
 
+void QSpiceHelper::operation_cancelled(GCancellable *cancellable,
+                                       gpointer user_data)
+{
+    Q_UNUSED(cancellable)
+
+    QSpiceMainChannel *_mainchannel =
+            static_cast<QSpiceMainChannel*>(user_data);
+    if ( nullptr==_mainchannel ) return;
+    emit _mainchannel->cancelled();
+}
+
 void QSpiceMainChannel::initCallbacks()
 {
+    cancellable = g_cancellable_new();
     g_signal_connect(gobject, "main-agent-update",
                      (GCallback) QSpiceHelper::main_agent_update, this);
     g_signal_connect(gobject, "main-clipboard-selection",
@@ -197,6 +217,8 @@ void QSpiceMainChannel::initCallbacks()
                      (GCallback) QSpiceHelper::main_mouse_update, this);
     g_signal_connect(gobject, "migration-started",
                      (GCallback) QSpiceHelper::migration_started, this);
+    g_signal_connect(cancellable, "cancelled",
+                     (GCallback) QSpiceHelper::operation_cancelled, this);
 }
 
 void QSpiceMainChannel::setDisplay(int id, int x, int y, int width, int height)
@@ -349,12 +371,11 @@ void QSpiceMainChannel::fileCopyAsync(QStringList &fileNames)
     };
     sources[i] = nullptr;
     //qDebug()<<"SpiceMainChannel"<<this->gobject;
-    GCancellable *cancellable = g_cancellable_new();
     spice_main_file_copy_async(
                 (SpiceMainChannel *) gobject,
                 sources,
                 G_FILE_COPY_BACKUP,
-                cancellable,
+                (GCancellable*)cancellable,
                 (GFileProgressCallback)progressCallback,
                 this,
                 (GAsyncReadyCallback)fileCopyFinish,
@@ -377,6 +398,7 @@ void QSpiceMainChannel::fileCopyFinish(void *channel, void *result, void *error)
         //qDebug()<<errors[i]->code<< QString::fromUtf8(errors[i]->message);
         if (obj) emit obj->downloaded(0, 100);
     };
+    if (obj) emit obj->downloadCompleted();
 }
 
 void QSpiceMainChannel::progressCallback(uint current_num_bytes, uint total_num_bytes, void *user_data)
@@ -384,4 +406,11 @@ void QSpiceMainChannel::progressCallback(uint current_num_bytes, uint total_num_
     QSpiceMainChannel *obj = static_cast<QSpiceMainChannel*>(user_data);
     //qDebug()<<current_num_bytes<<total_num_bytes;
     if (obj) emit obj->downloaded(current_num_bytes, total_num_bytes);
+}
+
+void QSpiceMainChannel::cancelFileCopyAsync()
+{
+    GCancellable* c = (GCancellable*)cancellable;
+    if ( !g_cancellable_is_cancelled(c) )
+        g_cancellable_cancel(c);
 }

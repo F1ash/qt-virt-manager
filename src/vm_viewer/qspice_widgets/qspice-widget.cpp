@@ -56,6 +56,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     d_X = d_Y = 0;
     zoom = 1.0;
     downloadProgress = 0;
+    scaled = false;
 
     tr_mode = Qt::SmoothTransformation;
     img = nullptr;
@@ -107,6 +108,11 @@ void QSpiceWidget::fileCopyAsync(QStringList &fileNames)
     main->fileCopyAsync(fileNames);
 }
 
+void QSpiceWidget::cancelFileCopyAsync()
+{
+    main->cancelFileCopyAsync();
+}
+
 void QSpiceWidget::copyClipboardDataFromGuest()
 {
     emit clipboardsReleased(false);
@@ -143,6 +149,10 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
                 SLOT(mainMouseUpdate()));
         connect(main, SIGNAL(downloaded(int,int)),
                 this, SLOT(setDownloadProgress(int,int)));
+        connect(main, SIGNAL(cancelled()),
+                this, SIGNAL(fileTransferIsCancelled()));
+        connect(main, SIGNAL(downloadCompleted()),
+                this, SIGNAL(fileTransferIsCompleted()));
         main->connectToChannel();
         return;
     }
@@ -844,6 +854,16 @@ void QSpiceWidget::paintEvent(QPaintEvent *event)
     if ( isFullScreen() ) {
         //_rec.moveTo(d_X, d_Y);
         painter.drawImage(_rec, img->copy(event->rect()));
+    } else if ( scaled ) {
+        int w = img->size().width()*zoom;
+        int h = img->size().height()*zoom;
+        painter.drawImage(
+                    QRect(0, 0, w, h),
+                    img->copy(_rec).scaled(
+                        w,
+                        h,
+                        Qt::IgnoreAspectRatio,
+                        tr_mode));
     } else {
         painter.drawImage(_rec, img->copy(_rec));
     };
@@ -998,4 +1018,14 @@ void QSpiceWidget::setFullScreen(bool enable)
         this->showNormal();
         this->setPalette( QPalette() );
     };
+}
+
+void QSpiceWidget::setScaledScreen(bool state)
+{
+    scaled = state;
+    if( scaled )
+        zoom = (qreal)img->size().height()/
+                size().height();
+    else
+        zoom = 1.0;
 }

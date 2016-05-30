@@ -48,6 +48,7 @@ public slots:
     void             copyToClipboardFromVirtDomain();
     void             pasteClipboardToVirtDomain();
     void             fullScreenVirtDomain();
+    void             scaledScreenVirtDomain();
 
 private slots:
     void             initVNCWidget();

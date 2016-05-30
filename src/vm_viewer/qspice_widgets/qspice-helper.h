@@ -103,6 +103,8 @@ public:
     static void migration_started(SpiceMainChannel *main,
                                   GObject          *session,
                                   gpointer          user_data);
+    static void operation_cancelled(GCancellable *cancellable,
+                                    gpointer      user_data);
 
     // USB Device Manager
     static void auto_connect_failed(SpiceUsbDeviceManager *manager,

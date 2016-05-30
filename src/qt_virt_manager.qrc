@@ -117,6 +117,7 @@
         <file alias="22x22/actions/define.png">icons/22x22/actions/define.png</file>
         <file alias="22x22/actions/edit-paste.png">icons/22x22/actions/edit-paste.png</file>
         <file alias="22x22/actions/go-up.png">icons/22x22/actions/go-up.png</file>
+        <file alias="22x22/actions/scaled_to_window.png">icons/22x22/actions/scaled_to_window.png</file>
         <file alias="22x22/actions/archive-remove.png">icons/22x22/actions/archive-remove.png</file>
         <file alias="22x22/actions/start.png">icons/22x22/actions/start.png</file>
         <file alias="22x22/actions/save.png">icons/22x22/actions/save.png</file>
@@ -245,6 +246,7 @@
         <file alias="32x32/actions/define.png">icons/32x32/actions/define.png</file>
         <file alias="32x32/actions/edit-paste.png">icons/32x32/actions/edit-paste.png</file>
         <file alias="32x32/actions/go-up.png">icons/32x32/actions/go-up.png</file>
+        <file alias="32x32/actions/scaled_to_window.png">icons/32x32/actions/scaled_to_window.png</file>
         <file alias="32x32/actions/archive-remove.png">icons/32x32/actions/archive-remove.png</file>
         <file alias="32x32/actions/start.png">icons/32x32/actions/start.png</file>
         <file alias="32x32/actions/save.png">icons/32x32/actions/save.png</file>
@@ -373,6 +375,7 @@
         <file alias="48x48/actions/define.png">icons/48x48/actions/define.png</file>
         <file alias="48x48/actions/edit-paste.png">icons/48x48/actions/edit-paste.png</file>
         <file alias="48x48/actions/go-up.png">icons/48x48/actions/go-up.png</file>
+        <file alias="48x48/actions/scaled_to_window.png">icons/48x48/actions/scaled_to_window.png</file>
         <file alias="48x48/actions/archive-remove.png">icons/48x48/actions/archive-remove.png</file>
         <file alias="48x48/actions/start.png">icons/48x48/actions/start.png</file>
         <file alias="48x48/actions/save.png">icons/48x48/actions/save.png</file>
@@ -500,6 +503,7 @@
         <file alias="24x24/actions/define.png">icons/24x24/actions/define.png</file>
         <file alias="24x24/actions/edit-paste.png">icons/24x24/actions/edit-paste.png</file>
         <file alias="24x24/actions/go-up.png">icons/24x24/actions/go-up.png</file>
+        <file alias="24x24/actions/scaled_to_window.png">icons/24x24/actions/scaled_to_window.png</file>
         <file alias="24x24/actions/archive-remove.png">icons/24x24/actions/archive-remove.png</file>
         <file alias="24x24/actions/start.png">icons/24x24/actions/start.png</file>
         <file alias="24x24/actions/save.png">icons/24x24/actions/save.png</file>
@@ -629,6 +633,7 @@
         <file alias="64x64/actions/define.png">icons/64x64/actions/define.png</file>
         <file alias="64x64/actions/edit-paste.png">icons/64x64/actions/edit-paste.png</file>
         <file alias="64x64/actions/go-up.png">icons/64x64/actions/go-up.png</file>
+        <file alias="64x64/actions/scaled_to_window.png">icons/64x64/actions/scaled_to_window.png</file>
         <file alias="64x64/actions/archive-remove.png">icons/64x64/actions/archive-remove.png</file>
         <file alias="64x64/actions/start.png">icons/64x64/actions/start.png</file>
         <file alias="64x64/actions/save.png">icons/64x64/actions/save.png</file>

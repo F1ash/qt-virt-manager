@@ -42,6 +42,7 @@ public:
     void guestClipboardSelectionRequest();
 
     void fileCopyAsync(QStringList&);
+    void cancelFileCopyAsync();
     static void fileCopyFinish(void*, void*, void*);
     static void progressCallback(uint, uint, void*);
 
@@ -54,6 +55,8 @@ signals:
     void mouseUpdated();
     void migrationStarted();
     void downloaded(int, int);
+    void cancelled();
+    void downloadCompleted();
 
 protected:
     inline QSpiceMainChannel(void *channel) :
@@ -62,6 +65,9 @@ protected:
     friend class QSpiceHelper;
 
     void initCallbacks();
+
+private:
+    void *cancellable;
 };
 
 #endif // QSPICE_MAIN_CHANNEL_H

@@ -48,6 +48,11 @@ public:
     void fileCopyAsync(QStringList&);
 
     /*
+     * Cancel transferring files to guest.
+     */
+    void cancelFileCopyAsync();
+
+    /*
      * Copy guest Clipboard data to client Clipboard.
      */
     void copyClipboardDataFromGuest();
@@ -139,6 +144,18 @@ signals:
      */
     void mouseClickedInto();
 
+    /*
+     * Emitted, an operation of the asynchronous
+     * file(s) transferring is cancelled.
+     */
+    void fileTransferIsCancelled();
+
+    /*
+     * Emitted, an operation of the asynchronous
+     * file(s) transferring is completed.
+     */
+    void fileTransferIsCompleted();
+
 private:
     QString                  guestName;
     Qt::TransformationMode   tr_mode;
@@ -149,6 +166,7 @@ private:
                              d_X, d_Y;
     qreal                    zoom;
     uint                     downloadProgress;
+    bool                     scaled;
 
 protected:
     QSpiceSession           *spiceSession;
@@ -256,6 +274,11 @@ public slots:
      * Set fullscreen mode for display.
      */
     void setFullScreen(bool);
+
+    /*
+     * Set scaled mode for display.
+     */
+    void setScaledScreen(bool);
 };
 
 #undef QSPICE_WIDGET_H_INSIDE

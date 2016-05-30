@@ -148,6 +148,11 @@ void Spice_Viewer::copyFilesToVirtDomain()
                 this, "Copy files to Guest", "~");
     spiceWdg->fileCopyAsync(fileNames);
 }
+void Spice_Viewer::cancelCopyFilesToVirtDomain()
+{
+    if ( nullptr==spiceWdg ) return;
+    spiceWdg->cancelFileCopyAsync();
+}
 void Spice_Viewer::copyToClipboardFromVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
@@ -216,6 +221,10 @@ void Spice_Viewer::initSpiceWidget()
     connect(spiceWdg, SIGNAL(downloaded(int,int)),
             viewerToolBar->vm_stateWdg,
             SLOT(setDownloadProcessValue(int,int)));
+    connect(spiceWdg, SIGNAL(fileTransferIsCancelled()),
+            viewerToolBar, SLOT(downloadCancelled()));
+    connect(spiceWdg, SIGNAL(fileTransferIsCompleted()),
+            viewerToolBar, SLOT(downloadCompleted()));
     connect(spiceWdg, SIGNAL(displayChannelChanged(bool)),
             viewerToolBar->vm_stateWdg, SLOT(changeDisplayState(bool)));
     connect(spiceWdg, SIGNAL(cursorChannelChanged(bool)),
@@ -286,6 +295,11 @@ void Spice_Viewer::fullScreenTriggered()
         spiceWdg->setFullScreen(true);
     };
     startAnimatedHide();
+}
+
+void Spice_Viewer::scaledScreenVirtDomain()
+{
+    spiceWdg->setScaledScreen(true);
 }
 
 void Spice_Viewer::resizeEvent(QResizeEvent *ev)
