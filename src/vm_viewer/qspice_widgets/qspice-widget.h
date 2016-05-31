@@ -157,14 +157,14 @@ signals:
     void fileTransferIsCompleted();
 
 private:
-    QString                  guestName;
+    QString                  guestName, connName;
     Qt::TransformationMode   tr_mode;
     QImage                  *img;
     QTimer                   resizeTimer;
     int                      _height, _width,
                              init_h, init_w,
                              d_X, d_Y;
-    qreal                    zoom;
+    qreal                    zoom, w_zoom, h_zoom;
     uint                     downloadProgress;
     bool                     scaled;
 
@@ -237,12 +237,13 @@ private slots:
     void paintEvent(QPaintEvent *event);
     void resizeDone();
     void setDownloadProgress(int, int);
+    void formatMsg(SPICE_CHANNEL_MSG&);
 
 public slots:
     /*
-     * Set basic name for shapshots.
+     * Set "domain", "connection name" attributes for shapshots.
      */
-    void setGuestName(QString&);
+    void setGuestAttr(QString&, QString&);
 
     /*
      * Set new widget size (width, height).

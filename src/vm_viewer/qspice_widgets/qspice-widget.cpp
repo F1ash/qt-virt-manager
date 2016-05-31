@@ -55,6 +55,8 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     init_w = 0;
     d_X = d_Y = 0;
     zoom = 1.0;
+    w_zoom = 1.0;
+    h_zoom = 1.0;
     downloadProgress = 0;
     scaled = false;
 
@@ -153,6 +155,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
                 this, SIGNAL(fileTransferIsCancelled()));
         connect(main, SIGNAL(downloadCompleted()),
                 this, SIGNAL(fileTransferIsCompleted()));
+        connect(main, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         main->connectToChannel();
         return;
     }
@@ -171,6 +175,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
                 SLOT(displayPrimaryDestroy()));
         connect(display, SIGNAL(displayMarked(int)),
                 SLOT(displayMark(int)));
+        connect(display, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
 
         bool online = display->connectToChannel();
         emit displayChannelChanged(online);
@@ -182,6 +188,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_inputs)
     {
         inputs = _inputs;
+        connect(inputs, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = inputs->connectToChannel();
         emit inputsChannelChanged(online);
         return;
@@ -194,6 +202,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
         cursor = _cursor;
         connect(cursor, SIGNAL(cursorData(int,int,int,int,void*)),
                 SLOT(setClientCursor(int,int,int,int,void*)));
+        connect(cursor, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = cursor->connectToChannel();
         emit cursorChannelChanged(online);
         return;
@@ -222,6 +232,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
                         this, SLOT(readerAdded(QString&)));
                 connect(smartcardManager, SIGNAL(readerRemoved(QString&)),
                         this, SLOT(readerRemoved(QString&)));
+                connect(smartcard, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                        this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
             };
         };
         emit smartcardChannelChanged(online);
@@ -245,6 +257,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
                         this, SLOT(usbDevError(QString&,QString&)));
                 connect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
                         this, SLOT(usbDevRemoved(QString&)));
+                connect(usbredir, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                        this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
             };
         };
         emit usbredirChannelChanged(online);
@@ -256,6 +270,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_webdav)
     {
         webdav = _webdav;
+        connect(webdav, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = webdav->connectToChannel();
         emit webdavChannelChanged(online);
         return;
@@ -266,6 +282,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_playback)
     {
         playback = _playback;
+        connect(playback, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = false;
 #if USE_SPICE_AUDIO
         online = playback->connectToChannel();
@@ -291,6 +309,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_record)
     {
         record = _record;
+        connect(record, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = false;
 #if USE_SPICE_AUDIO
         online = record->connectToChannel();
@@ -635,7 +655,7 @@ void QSpiceWidget::setClientCursor(
 {
     QImage c_img((uchar*) rgba, width, height, QImage::Format_ARGB32);
     QPixmap pix = QPixmap::fromImage(c_img);
-    QCursor c(pix, hot_x, hot_y);
+    QCursor c(pix, hot_x*zoom, hot_y*zoom);
     setCursor(c);
 }
 
@@ -751,8 +771,8 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         inputs->inputsPosition(
                     //ev->x()*zoom,
                     //ev->y()*zoom,
-                    position.x(),
-                    position.y(),
+                    qRound(position.x()*w_zoom),
+                    qRound(position.y()*h_zoom),
                     display->getId(),
                     QtButtonsMaskToSpice(ev));
         return true;
@@ -855,15 +875,21 @@ void QSpiceWidget::paintEvent(QPaintEvent *event)
         //_rec.moveTo(d_X, d_Y);
         painter.drawImage(_rec, img->copy(event->rect()));
     } else if ( scaled ) {
-        int w = img->size().width()*zoom;
-        int h = img->size().height()*zoom;
+        int x = qRound(_rec.x()/w_zoom);
+        int y = qRound(_rec.y()/h_zoom);
+        int w = qRound(_rec.width()/w_zoom);
+        int h = qRound(_rec.height()/h_zoom);
         painter.drawImage(
-                    QRect(0, 0, w, h),
+                    x, y,
                     img->copy(_rec).scaled(
                         w,
                         h,
                         Qt::IgnoreAspectRatio,
-                        tr_mode));
+                        tr_mode),
+                    _rec.x(),
+                    _rec.y(),
+                    _rec.width(),
+                    _rec.height());
     } else {
         painter.drawImage(_rec, img->copy(_rec));
     };
@@ -907,10 +933,21 @@ void QSpiceWidget::setDownloadProgress(int d, int v)
     emit downloaded(d, v);
 }
 
+void QSpiceWidget::formatMsg(SPICE_CHANNEL_MSG &_msg)
+{
+    QString msg = QString("Domain: %1<br>Channel: %2<br>Context: %3<br>MSG: %4")
+            .arg(guestName)
+            .arg(_msg.channel)
+            .arg(_msg.context)
+            .arg(_msg.msg);
+    emit errMsg(msg);
+}
+
 /* public slots */
-void QSpiceWidget::setGuestName(QString &_name)
+void QSpiceWidget::setGuestAttr(QString &_name, QString &_conn)
 {
     guestName = _name;
+    connName = _conn;
 }
 
 void QSpiceWidget::setNewSize(int _w, int _h)
@@ -982,16 +1019,17 @@ void QSpiceWidget::showSmartCardWidget()
 
 void QSpiceWidget::getScreenshot()
 {
-    // WARNING: used %1%2%3.snapshot template,
+    // WARNING: used %1%2%3[%4].snapshot template,
     // because filter will added to tail the template
     // after last dot.
     QString fileName = QFileDialog::getSaveFileName(
                 this,
                 "Save Image to",
-                QString("%1%2%3_%4_%5.snapshot")
+                QString("%1%2%3[%4]_%5_%6.snapshot")
                     .arg(QDir::homePath())
                     .arg(QDir::separator())
                     .arg(guestName)
+                    .arg(connName)
                     .arg(QDate::currentDate().toString("dd.MM.yyyy"))
                     .arg(QTime::currentTime().toString()),
                 "Images (*.png)");
@@ -1023,9 +1061,18 @@ void QSpiceWidget::setFullScreen(bool enable)
 void QSpiceWidget::setScaledScreen(bool state)
 {
     scaled = state;
-    if( scaled )
-        zoom = (qreal)img->size().height()/
-                size().height();
-    else
+    if( scaled ) {
+        zoom = (qreal)img->height()/
+                frameSize().height();
+        h_zoom = (qreal)img->height()/
+                frameSize().height();
+        w_zoom = (qreal)img->width()/
+                frameSize().width();
+        w_zoom=h_zoom=qMax(w_zoom, h_zoom);
+    } else {
         zoom = 1.0;
+        h_zoom = 1.0;
+        w_zoom = 1.0;
+    };
+    repaint();
 }

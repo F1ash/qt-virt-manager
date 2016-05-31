@@ -34,7 +34,7 @@ public:
 
 private:
     vncHlpThread    *hlpThread;
-    QString          addr, guestName;
+    QString          addr;
     uint             port = 0;
     MachineView     *vncWdg = nullptr;
     QShortcut       *actFullScreen = nullptr;

@@ -214,8 +214,7 @@ void Spice_Viewer::initSpiceWidget()
 {
     spiceWdg = new QSpiceWidget(this);
     setCentralWidget(spiceWdg);
-    QString _name = QString("%1[%2]").arg(domain).arg(connName);
-    spiceWdg->setGuestName(_name);
+    spiceWdg->setGuestAttr(domain, connName);
     connect(spiceWdg, SIGNAL(displayResized(const QSize&)),
             SLOT(resizeViewer(const QSize&)));
     connect(spiceWdg, SIGNAL(downloaded(int,int)),

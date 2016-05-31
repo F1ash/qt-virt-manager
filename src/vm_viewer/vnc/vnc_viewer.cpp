@@ -74,7 +74,6 @@ VNC_Viewer::VNC_Viewer(
 /* public slots */
 void VNC_Viewer::init()
 {
-    guestName = QString("%1[%2]").arg(domain).arg(connName);
     // get address or hostname from URI
     // driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
     QString msg;
@@ -234,16 +233,16 @@ void VNC_Viewer::getScreenshotFromVirtDomain()
 {
     if ( nullptr==vncWdg ) return;
     QImage img = vncWdg->getScreenCapture();
-    // WARNING: used %1%2%3.snapshot template,
+    // WARNING: used %1%2%3[%4].snapshot template,
     // because filter will added to tail the template
     // after last dot.
     QString fileName = QFileDialog::getSaveFileName(
                 this,
                 "Save Image to",
-                QString("%1%2%3_%4_%5.snapshot")
+                QString("%1%2%3[%4]_%5_%6.snapshot")
                     .arg(QDir::homePath())
                     .arg(QDir::separator())
-                    .arg(guestName)
+                    .arg(domain).arg(connName)
                     .arg(QDate::currentDate().toString("dd.MM.yyyy"))
                     .arg(QTime::currentTime().toString()),
                 "Images (*.png)");

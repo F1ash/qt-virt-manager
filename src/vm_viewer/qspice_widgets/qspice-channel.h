@@ -23,6 +23,12 @@
 
 #include "qspice-object.h"
 
+struct SPICE_CHANNEL_MSG {
+    QString     channel;
+    QString     context;
+    QString     msg;
+};
+
 class QSpiceChannel : public QSpiceObject
 {
     Q_OBJECT
@@ -38,6 +44,7 @@ public:
 
 signals:
     void stateChanged(int);
+    void channelMsg(SPICE_CHANNEL_MSG&);
     // unused, conserved
     void channelDestroyed();
 
