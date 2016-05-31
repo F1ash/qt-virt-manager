@@ -398,7 +398,11 @@ void QSpiceMainChannel::fileCopyFinish(void *channel, void *result, void *error)
         //qDebug()<<errors[i]->code<< QString::fromUtf8(errors[i]->message);
         if (obj) emit obj->downloaded(0, 100);
     };
-    if (obj) emit obj->downloadCompleted();
+    if (obj) {
+        emit obj->downloadCompleted();
+        // reset cancellable for allow the start new task
+        g_cancellable_reset((GCancellable*)obj->cancellable);
+    };
 }
 
 void QSpiceMainChannel::progressCallback(uint current_num_bytes, uint total_num_bytes, void *user_data)
