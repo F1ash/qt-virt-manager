@@ -164,7 +164,7 @@ private:
     int                      _height, _width,
                              init_h, init_w,
                              d_X, d_Y;
-    qreal                    zoom, w_zoom, h_zoom;
+    qreal                    zoom;
     uint                     downloadProgress;
     bool                     scaled;
 
@@ -212,11 +212,11 @@ private slots:
          int                 shmid,
          void*               imgdata);
 
-    //void displayInvalidate(
-    //    int                  x,
-    //    int                  y,
-    //    int                  width,
-    //    int                  height);
+    void displayInvalidate(
+        int                  x,
+        int                  y,
+        int                  width,
+        int                  height);
 
     void displayPrimaryDestroy();
 

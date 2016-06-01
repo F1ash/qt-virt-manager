@@ -55,8 +55,6 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     init_w = 0;
     d_X = d_Y = 0;
     zoom = 1.0;
-    w_zoom = 1.0;
-    h_zoom = 1.0;
     downloadProgress = 0;
     scaled = false;
 
@@ -169,8 +167,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
         display->setParentWidget((void*)this);
         connect(display, SIGNAL(displayPrimaryCreated(int,int,int,int,int,void*)),
                 SLOT(displayPrimaryCreate(int,int,int,int,int,void*)));
-        //connect(display, SIGNAL(displayInvalidated(int,int,int,int)),
-        //        SLOT(displayInvalidate(int,int,int,int)));
+        connect(display, SIGNAL(displayInvalidated(int,int,int,int)),
+                SLOT(displayInvalidate(int,int,int,int)));
         connect(display, SIGNAL(displayPrimaryDestroyed()),
                 SLOT(displayPrimaryDestroy()));
         connect(display, SIGNAL(displayMarked(int)),
@@ -626,15 +624,15 @@ void QSpiceWidget::displayPrimaryCreate(
     }
 }
 
-//void QSpiceWidget::displayInvalidate(
-//    int                 x,
-//    int                 y,
-//    int                 width,
-//    int                 height)
-//{
-//    //qDebug()<<"displayInvalidate"<<x<<y<<width<<height;
-//    repaint(x, y, width, height);
-//}
+void QSpiceWidget::displayInvalidate(
+    int                 x,
+    int                 y,
+    int                 width,
+    int                 height)
+{
+    //qDebug()<<"displayInvalidate"<<x<<y<<width<<height;
+    repaint(x*zoom-1, y*zoom-1, width*zoom+3, height*zoom+3);
+}
 
 void QSpiceWidget::displayPrimaryDestroy()
 {
@@ -771,8 +769,8 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         inputs->inputsPosition(
                     //ev->x()*zoom,
                     //ev->y()*zoom,
-                    qRound(position.x()*w_zoom),
-                    qRound(position.y()*h_zoom),
+                    qRound(position.x()/zoom),
+                    qRound(position.y()/zoom),
                     display->getId(),
                     QtButtonsMaskToSpice(ev));
         return true;
@@ -875,21 +873,18 @@ void QSpiceWidget::paintEvent(QPaintEvent *event)
         //_rec.moveTo(d_X, d_Y);
         painter.drawImage(_rec, img->copy(event->rect()));
     } else if ( scaled ) {
-        int x = qRound(_rec.x()/w_zoom);
-        int y = qRound(_rec.y()/h_zoom);
-        int w = qRound(_rec.width()/w_zoom);
-        int h = qRound(_rec.height()/h_zoom);
+        const int x = qRound(_rec.x()/zoom);
+        const int y = qRound(_rec.y()/zoom);
+        const int w = qRound(_rec.width()/zoom);
+        const int h = qRound(_rec.height()/zoom);
         painter.drawImage(
-                    x, y,
-                    img->copy(_rec).scaled(
-                        w,
-                        h,
+                    _rec,
+                    img->copy(QRect(x, y, w, h))
+                    .scaled(
+                        _rec.width(),
+                        _rec.height(),
                         Qt::IgnoreAspectRatio,
-                        tr_mode),
-                    _rec.x(),
-                    _rec.y(),
-                    _rec.width(),
-                    _rec.height());
+                        tr_mode));
     } else {
         painter.drawImage(_rec, img->copy(_rec));
     };
@@ -922,8 +917,9 @@ void QSpiceWidget::resizeDone()
         //main->setDisplayEnabled(display->getId(), true);
         //qDebug()<<"configured"<<
         main->sendMonitorConfig();
-    }
-
+    };
+    if ( img!=nullptr )
+        setScaledScreen(true);
 }
 
 void QSpiceWidget::setDownloadProgress(int d, int v)
@@ -935,7 +931,8 @@ void QSpiceWidget::setDownloadProgress(int d, int v)
 
 void QSpiceWidget::formatMsg(SPICE_CHANNEL_MSG &_msg)
 {
-    QString msg = QString("Domain: %1<br>Channel: %2<br>Context: %3<br>MSG: %4")
+    QString msg = QString(
+                "Domain: %1<br>Channel: %2<br>Context: %3<br>MSG: %4")
             .arg(guestName)
             .arg(_msg.channel)
             .arg(_msg.context)
@@ -972,7 +969,6 @@ void QSpiceWidget::updateSize(int _w, int _h)
                      _height,
                      true);
     };
-    //displayInvalidate(0,0,0,0);
 }
 
 void QSpiceWidget::showUsbDevWidget()
@@ -1056,23 +1052,25 @@ void QSpiceWidget::setFullScreen(bool enable)
         this->showNormal();
         this->setPalette( QPalette() );
     };
+    setScaledScreen(false);
 }
 
 void QSpiceWidget::setScaledScreen(bool state)
 {
     scaled = state;
     if( scaled ) {
-        zoom = (qreal)img->height()/
-                frameSize().height();
-        h_zoom = (qreal)img->height()/
-                frameSize().height();
-        w_zoom = (qreal)img->width()/
-                frameSize().width();
-        w_zoom=h_zoom=qMax(w_zoom, h_zoom);
+        qreal h_zoom = (qreal)frameSize().height()/
+                img->height();
+        qreal w_zoom = (qreal)frameSize().width()/
+                img->width();
+        zoom=qMin(w_zoom, h_zoom);
+        if ( zoom==1.0 ) scaled = false;
     } else {
         zoom = 1.0;
-        h_zoom = 1.0;
-        w_zoom = 1.0;
     };
+    if ( display!=nullptr )
+        display->setScaled(scaled);
+    emit displayResized(
+                QSize(img->width()*zoom, img->height()*zoom));
     repaint();
 }

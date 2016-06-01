@@ -59,11 +59,15 @@ void QSpiceHelper::display_invalidate (SpiceDisplayChannel *display,
     QSpiceDisplayChannel *_display =
             static_cast<QSpiceDisplayChannel*>(user_data);
     if ( nullptr==_display || _display->parentWdg==nullptr ) return;
-    // avoiding additional delay in updating
-    // the display of the virtual machine
-    // that is related with the receipt of signals
-    // to the slot using eventloop.
-    _display->parentWdg->repaint(x, y, width, height);
+    if ( _display->scaled ) {
+        emit _display->displayInvalidated(x, y, width, height);
+    } else {
+        // avoiding additional delay in updating
+        // the display of the virtual machine
+        // that is related with the receipt of signals
+        // to the slot using eventloop.
+        _display->parentWdg->repaint(x, y, width, height);
+    };
 }
 
 void QSpiceHelper::display_mark(SpiceDisplayChannel *display,
@@ -93,4 +97,9 @@ void QSpiceDisplayChannel::initCallbacks()
 void QSpiceDisplayChannel::setParentWidget(void *_obj)
 {
     parentWdg = static_cast<QWidget*>(_obj);
+}
+
+void QSpiceDisplayChannel::setScaled(bool s)
+{
+    scaled = s;
 }

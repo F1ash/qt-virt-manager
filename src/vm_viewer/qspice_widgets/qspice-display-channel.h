@@ -34,6 +34,7 @@ public:
     Q_GPROP_INT(MaxMonitors, "monitors-max")
     Q_GPROP_INT(Width, "width")
     void setParentWidget(void*);
+    void setScaled(bool);
 
 signals:
     void displayPrimaryCreated(
@@ -44,11 +45,11 @@ signals:
         int                 shmid,
         void*               imgdata);
 
-    //void displayInvalidated(
-    //    int                 x,
-    //    int                 y,
-    //    int                 width,
-    //    int                 height);
+    void displayInvalidated(
+        int                 x,
+        int                 y,
+        int                 width,
+        int                 height);
 
     void displayPrimaryDestroyed();
 
@@ -66,6 +67,7 @@ protected:
 private:
     // pointer to QSpiceWidget:
     QWidget *parentWdg = nullptr;
+    bool     scaled    = false;
 };
 
 #endif // QSPICE_DISPLAY_CHANNEL_H

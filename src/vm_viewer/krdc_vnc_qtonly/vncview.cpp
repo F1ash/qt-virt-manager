@@ -144,7 +144,7 @@ void VncView::scaleResize(int w, int h)
 {
     RemoteView::scaleResize(w, h);
     
-    kDebug(5011) << w << h;
+    //kDebug(5011) << w << h;
     if (m_scale) {
         m_verticalFactor = (qreal) h / m_frame.height();
         m_horizontalFactor = (qreal) w / m_frame.width();
@@ -373,13 +373,13 @@ void VncView::updateImage(int x, int y, int w, int h)
     }
 
     if ((y == 0 && x == 0) && (m_frame.size() != size())) {
-        kDebug(5011) << "Updating framebuffer size";
+        //kDebug(5011) << "Updating framebuffer size";
         if (m_scale) {
             setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
             if (parentWidget())
                 scaleResize(parentWidget()->width(), parentWidget()->height());
         } else {
-            kDebug(5011) << "Resizing: " << m_frame.width() << m_frame.height();
+            //kDebug(5011) << "Resizing: " << m_frame.width() << m_frame.height();
             resize(m_frame.width(), m_frame.height());
             setMaximumSize(m_frame.width(), m_frame.height()); //This is a hack to force Qt to center the view in the scroll area
             setMinimumSize(m_frame.width(), m_frame.height());
@@ -448,7 +448,7 @@ void VncView::paintEvent(QPaintEvent *event)
 {
 //     kDebug(5011) << "paint event: x: " << m_x << ", y: " << m_y << ", w: " << m_w << ", h: " << m_h;
     if (m_frame.isNull() || m_frame.format() == QImage::Format_Invalid) {
-        kDebug(5011) << "no valid image to paint";
+        //kDebug(5011) << "no valid image to paint";
         RemoteView::paintEvent(event);
         return;
     }
