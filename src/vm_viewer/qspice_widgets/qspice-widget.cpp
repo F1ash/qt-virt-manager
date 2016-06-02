@@ -165,7 +165,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     {
         display = _display;
         display->setParentWidget((void*)this);
-        connect(display, SIGNAL(displayPrimaryCreated(int,int,int,int,int,void*)),
+        connect(display,
+                SIGNAL(displayPrimaryCreated(int,int,int,int,int,void*)),
                 SLOT(displayPrimaryCreate(int,int,int,int,int,void*)));
         connect(display, SIGNAL(displayInvalidated(int,int,int,int)),
                 SLOT(displayInvalidate(int,int,int,int)));
