@@ -85,6 +85,7 @@ signals:
 
 public slots:
     void scaleResize(int w, int h);
+    void keyEvent(QKeyEvent *event);
 
 protected:
     void paintEvent(QPaintEvent *event);

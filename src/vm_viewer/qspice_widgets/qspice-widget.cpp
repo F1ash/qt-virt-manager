@@ -1053,7 +1053,7 @@ void QSpiceWidget::setFullScreen(bool enable)
         this->showNormal();
         this->setPalette( QPalette() );
     };
-    setScaledScreen(false);
+    scaled = false;
 }
 
 void QSpiceWidget::setScaledScreen(bool state)

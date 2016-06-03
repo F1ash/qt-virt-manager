@@ -127,6 +127,7 @@ public slots:
     void mouseEvent(int x, int y, int buttonMask);
     void keyEvent(int key, bool pressed);
     void clientCut(const QString &text);
+    void controlKeySequence(int key);
 
 protected:
     void run();

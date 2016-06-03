@@ -356,4 +356,18 @@ void VncClientThread::clientCut(const QString &text)
     m_eventQueue.enqueue(new ClientCutEvent(text));
 }
 
+void VncClientThread::controlKeySequence(int key)
+{
+    QMutexLocker lock(&mutex);
+    if (m_stopped)
+        return;
+    //qDebug()<<"ctrl+alt+"<<key;
+    m_eventQueue.enqueue(new KeyClientEvent(XK_Control_L, true));
+    m_eventQueue.enqueue(new KeyClientEvent(XK_Alt_L, true));
+    m_eventQueue.enqueue(new KeyClientEvent(key, true));
+    m_eventQueue.enqueue(new KeyClientEvent(XK_Control_L, false));
+    m_eventQueue.enqueue(new KeyClientEvent(XK_Alt_L, false));
+    m_eventQueue.enqueue(new KeyClientEvent(key, false));
+}
+
 //#include "moc_vncclientthread.cpp"

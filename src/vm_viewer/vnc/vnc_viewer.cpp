@@ -42,27 +42,6 @@ VNC_Viewer::VNC_Viewer(
     viewerToolBar->removeAction(viewerToolBar->copyToClipboard);
     viewerToolBar->removeAction(viewerToolBar->pasteClipboard);
     viewerToolBar->removeAction(viewerToolBar->stateWdg_Action);
-    // NOTE: Ctr+Alt+* don't work
-    viewerToolBar->keySequenceMenu->removeAction(
-                viewerToolBar->sendKeySeq_1);
-    viewerToolBar->keySequenceMenu->removeAction(
-                viewerToolBar->sendKeySeq_2);
-    viewerToolBar->keySequenceMenu->removeAction(
-                viewerToolBar->sendKeySeq_3);
-    viewerToolBar->keySequenceMenu->removeAction(
-                viewerToolBar->sendKeySeq_4);
-    viewerToolBar->keySequenceMenu->removeAction(
-                viewerToolBar->sendKeySeq_5);
-    viewerToolBar->keySequenceMenu->removeAction(
-                viewerToolBar->sendKeySeq_6);
-    viewerToolBar->keySequenceMenu->removeAction(
-                viewerToolBar->sendKeySeq_7);
-    viewerToolBar->keySequenceMenu->removeAction(
-                viewerToolBar->sendKeySeq_8);
-    viewerToolBar->keySequenceMenu->removeAction(
-                viewerToolBar->sendKeySeq_Del);
-    viewerToolBar->keySequenceMenu->removeAction(
-                viewerToolBar->sendKeySeq_BackSpc);
     hlpThread = new vncHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
@@ -160,73 +139,72 @@ void VNC_Viewer::reconnectToVirtDomain()
 }
 void VNC_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
 {
-    // NOTE: Ctr+Alt+* don't work
     if ( nullptr==vncWdg ) return;
     QKeyEvent *ev;
     switch (key) {
     case Qt::Key_Launch1:
         ev = new QKeyEvent(
                     QEvent::KeyPress,
-                    Qt::Key_F1,
+                    XK_F1,
                     Qt::ControlModifier|Qt::AltModifier);
         break;
     case Qt::Key_Launch2:
         ev = new QKeyEvent(
                     QEvent::KeyPress,
-                    Qt::Key_F2,
+                    XK_F2,
                     Qt::ControlModifier|Qt::AltModifier);
         break;
     case Qt::Key_Launch3:
         ev = new QKeyEvent(
                     QEvent::KeyPress,
-                    Qt::Key_F3,
+                    XK_F3,
                     Qt::ControlModifier|Qt::AltModifier);
         break;
     case Qt::Key_Launch4:
         ev = new QKeyEvent(
                     QEvent::KeyPress,
-                    Qt::Key_F4,
+                    XK_F4,
                     Qt::ControlModifier|Qt::AltModifier);
         break;
     case Qt::Key_Launch5:
         ev = new QKeyEvent(
                     QEvent::KeyPress,
-                    Qt::Key_F5,
+                    XK_F5,
                     Qt::ControlModifier|Qt::AltModifier);
         break;
     case Qt::Key_Launch6:
         ev = new QKeyEvent(
                     QEvent::KeyPress,
-                    Qt::Key_F6,
+                    XK_F6,
                     Qt::ControlModifier|Qt::AltModifier);
         break;
     case Qt::Key_Launch7:
         ev = new QKeyEvent(
                     QEvent::KeyPress,
-                    Qt::Key_F7,
+                    XK_F7,
                     Qt::ControlModifier|Qt::AltModifier);
         break;
     case Qt::Key_Launch8:
         ev = new QKeyEvent(
                     QEvent::KeyPress,
-                    Qt::Key_F8,
+                    XK_F8,
                     Qt::ControlModifier|Qt::AltModifier);
         break;
     case Qt::Key_LaunchB:
         ev = new QKeyEvent(
                     QEvent::KeyPress,
-                    Qt::Key_Backspace,
+                    XK_BackSpace,
                     Qt::ControlModifier|Qt::AltModifier);
         break;
     case Qt::Key_LaunchD:
         ev = new QKeyEvent(
                     QEvent::KeyPress,
-                    Qt::Key_Delete,
+                    XK_Delete,
                     Qt::ControlModifier|Qt::AltModifier);
         break;
     default:
         return;
-    }
+    };
     vncWdg->sendKey(ev);
 }
 void VNC_Viewer::getScreenshotFromVirtDomain()

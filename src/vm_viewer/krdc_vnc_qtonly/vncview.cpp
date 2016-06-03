@@ -540,6 +540,11 @@ bool VncView::event(QEvent *event)
     }
 }
 
+void VncView::keyEvent(QKeyEvent *event)
+{
+    keyEventHandler(event);
+}
+
 void VncView::mouseEventHandler(QMouseEvent *e)
 {
     if (e->type() != QEvent::MouseMove) {
@@ -587,6 +592,12 @@ void VncView::keyEventHandler(QKeyEvent *e)
     // strip away autorepeating KeyRelease; see bug #206598
     if (e->isAutoRepeat() && (e->type() == QEvent::KeyRelease))
         return;
+
+    // check control key sequence
+    if ( e->modifiers()==Qt::ControlModifier|Qt::AltModifier ) {
+        vncThread.controlKeySequence(e->key());
+        return;
+    };
 
 // parts of this code are based on http://italc.sourcearchive.com/documentation/1.0.9.1/vncview_8cpp-source.html
     rfbKeySym k = e->nativeVirtualKey();
