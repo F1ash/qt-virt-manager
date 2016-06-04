@@ -4,7 +4,9 @@
  * http://libvirt.org/formatsecret.html
  */
 
-CreateVirtSecret::CreateVirtSecret(QWidget *parent, virConnectPtr *connPtrPtr) :
+CreateVirtSecret::CreateVirtSecret(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     QDialog(parent), ptr_ConnPtr(connPtrPtr)
 {
     setModal(true);
@@ -17,11 +19,14 @@ CreateVirtSecret::CreateVirtSecret(QWidget *parent, virConnectPtr *connPtrPtr) :
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
 
-    showXMLDescription = new QCheckBox("Show XML Description\nat close", this);
+    showXMLDescription = new QCheckBox(
+                "Show XML Description\nat close", this);
     showXMLDescription->setChecked(showDesc);
-    about = new QLabel("<a href='http://libvirt.org/formatsecret.html'>About</a>", this);
+    about = new QLabel(
+                "<a href='http://libvirt.org/formatsecret.html'>About</a>",
+                this);
     about->setOpenExternalLinks(true);
-    about->setToolTip("http://libvirt.org/formatnetwork.html");
+    about->setToolTip("http://libvirt.org/formatsecret.html");
     ok = new QPushButton("Ok", this);
     ok->setAutoDefault(true);
     connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
