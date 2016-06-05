@@ -328,7 +328,7 @@ void QSpiceMainChannel::clipboardSelectionNotify(quint32 type, const uchar *data
     qDebug()<<data<<size;
     spice_main_clipboard_selection_notify(
                 (SpiceMainChannel *) gobject,
-                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_SELECTION_PRIMARY,
                 type,
                 (const guchar*)data,
                 size);

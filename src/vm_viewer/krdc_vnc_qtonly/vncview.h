@@ -59,6 +59,7 @@ public:
     bool supportsScaling() const;
     bool supportsLocalCursor() const;
     QImage getImageLink() const;
+    void pasteClipboardText(const QString&);
     
 #ifndef QTONLY
     HostPreferences* hostPreferences();

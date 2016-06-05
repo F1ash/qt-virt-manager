@@ -247,17 +247,17 @@ void MachineView::fullscreen( bool enable )
 
     if( enable )
     {
-        setWindowFlags( Qt::Window );
+        //setWindowFlags( Qt::Window );
         showFullScreen();
-        QPalette p;
-        p.setColor( QPalette::Background, QColor(22,22,22) );
-        setPalette( p );
+        //QPalette p;
+        //p.setColor( QPalette::Background, QColor(22,22,22) );
+        //setPalette( p );
     }
     else if( fullscreenEnabled )
     {
-        setWindowFlags( Qt::Widget );
+        //setWindowFlags( Qt::Widget );
         showNormal();
-        setPalette( QPalette() );
+        //setPalette( QPalette() );
     }
 
     fullscreenEnabled = enable;
@@ -338,4 +338,9 @@ bool MachineView::event( QEvent *event )
 QImage MachineView::getScreenCapture() const
 {
     return View->getImageLink();
+}
+
+void MachineView::pasteClipboardTextToGuest(const QString &s)
+{
+    View->pasteClipboardText(s);
 }

@@ -57,6 +57,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     zoom = 1.0;
     downloadProgress = 0;
     scaled = false;
+    is_FullScreen = false;
 
     tr_mode = Qt::SmoothTransformation;
     img = nullptr;
@@ -125,6 +126,11 @@ void QSpiceWidget::sendClipboardDataToGuest(quint32 type, const uchar *_data, si
     emit clipboardsReleased(false);
     main->clipboardSelectionNotify(type, _data, _size);
     emit clipboardsReleased(true);
+}
+
+bool QSpiceWidget::isScaledScreen() const
+{
+    return scaled;
 }
 
 /* private slots */
@@ -754,17 +760,17 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         //qDebug()<<ev->x()<<ev->y()<<":"
         //<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
-        if ( isFullScreen() ) {
-            if ( (d_X==0 || d_Y==0) && img!=nullptr ) {
-                //d_X = (frameSize().width() -
-                //      img->size().width())/2;
-                //d_Y = (frameSize().height() -
-                //       img->size().height())/2;
-            };
-        } else {
-            d_X = d_Y = 0;
-        };
-        QPoint position = ev->pos()-QPoint(d_X, d_Y);
+        //if ( is_FullScreen ) {
+        //    if ( (d_X==0 || d_Y==0) && img!=nullptr ) {
+        //        //d_X = (frameSize().width() -
+        //        //      img->size().width())/2;
+        //        //d_Y = (frameSize().height() -
+        //        //       img->size().height())/2;
+        //    };
+        //} else {
+        //    d_X = d_Y = 0;
+        //};
+        QPoint position = ev->pos();//-QPoint(d_X, d_Y);
         if ( 0<=position.y() && position.y()<= 3 )
             emit boarderTouched();
         inputs->inputsPosition(
@@ -868,12 +874,8 @@ void QSpiceWidget::paintEvent(QPaintEvent *event)
     event->accept();
 
     QPainter painter(this);
-
     QRect _rec = event->rect();
-    if ( isFullScreen() ) {
-        //_rec.moveTo(d_X, d_Y);
-        painter.drawImage(_rec, img->copy(event->rect()));
-    } else if ( scaled ) {
+    if ( scaled ) {
         const int x = qRound(_rec.x()/zoom);
         const int y = qRound(_rec.y()/zoom);
         const int w = qRound(_rec.width()/zoom);
@@ -919,8 +921,7 @@ void QSpiceWidget::resizeDone()
         //qDebug()<<"configured"<<
         main->sendMonitorConfig();
     };
-    if ( img!=nullptr )
-        setScaledScreen(true);
+    setScaledScreen(true);
 }
 
 void QSpiceWidget::setDownloadProgress(int d, int v)
@@ -1042,22 +1043,23 @@ void QSpiceWidget::setTransformationMode(Qt::TransformationMode _mode)
 
 void QSpiceWidget::setFullScreen(bool enable)
 {
+    is_FullScreen = enable;
     if( enable ) {
-        this->setWindowFlags( Qt::Window );
-        this->showFullScreen();
-        QPalette p;
-        p.setColor( QPalette::Background, QColor(22,22,22) );
-        this->setPalette( p );
+        //this->setWindowFlags( Qt::Window );
+        //this->showFullScreen();
+        //QPalette p;
+        //p.setColor( QPalette::Background, QColor(22,22,22) );
+        //this->setPalette( p );
     } else {
-        this->setWindowFlags( Qt::Widget );
-        this->showNormal();
-        this->setPalette( QPalette() );
+        //this->setWindowFlags( Qt::Widget );
+        //this->showNormal();
+        //this->setPalette( QPalette() );
     };
-    scaled = false;
 }
 
 void QSpiceWidget::setScaledScreen(bool state)
 {
+    if ( img==nullptr ) return;
     scaled = state;
     if( scaled ) {
         qreal h_zoom = (qreal)frameSize().height()/
@@ -1071,7 +1073,11 @@ void QSpiceWidget::setScaledScreen(bool state)
     };
     if ( display!=nullptr )
         display->setScaled(scaled);
-    emit displayResized(
-                QSize(img->width()*zoom, img->height()*zoom));
+    if ( !is_FullScreen ) {
+        emit displayResized(
+                QSize(img->width()*zoom,
+                      img->height()*zoom));
+    } else {
+    };
     repaint();
 }

@@ -4,6 +4,7 @@
 #include <QDomDocument>
 #include <QShortcut>
 #include <QTimerEvent>
+#include <QScrollArea>
 #include "vm_viewer/vm_viewer.h"
 #include "vm_viewer/qspice_widgets/qspice-widget.h"
 
@@ -36,6 +37,7 @@ private:
     spcHlpThread    *hlpThread;
     QString          addr;
     uint             port = 0;
+    QScrollArea     *scrolled = nullptr;
     QSpiceWidget    *spiceWdg = nullptr;
     QShortcut       *actFullScreen = nullptr;
 

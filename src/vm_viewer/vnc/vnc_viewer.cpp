@@ -243,14 +243,15 @@ void VNC_Viewer::copyToClipboardFromVirtDomain()
 void VNC_Viewer::pasteClipboardToVirtDomain()
 {
     if ( nullptr==vncWdg ) return;
-    QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
-    QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
+    const QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
+    const QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
     qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
     if ( !_text.isEmpty() ) {
         //vncWdg->sendClipboardDataToGuest(
         //            VD_AGENT_CLIPBOARD_UTF8_TEXT,
         //            (const uchar*)_text.toUtf8().data(),
         //            _text.size());
+        vncWdg->pasteClipboardTextToGuest(_text);
     };
     if ( !_image.isNull() ) {
         /*
@@ -310,6 +311,7 @@ void VNC_Viewer::initVNCWidget()
     QSize around_size = getWidgetSizeAroundDisplay();
     qDebug()<<"address:"<<addr<<port;
     vncWdg->Set_VNC_URL(addr, port);
+    vncWdg->Set_Scaling(true);
     vncWdg->initView();
     vncWdg->newViewSize(around_size.width(), around_size.height());
 }
@@ -343,9 +345,12 @@ void VNC_Viewer::fullScreenTriggered()
         vncWdg->Set_Fullscreen(false);
     } else {
         setWindowState(Qt::WindowFullScreen);
+        QPalette p;
+        p.setColor( QPalette::Background, QColor(22,22,22) );
+        setPalette( p );
         vncWdg->Set_Fullscreen(true);
     };
-    vncWdg->Set_Scaling(vncWdg->isFullScreen());
+    //vncWdg->Set_Scaling(vncWdg->isFullScreen());
     startAnimatedHide();
 }
 

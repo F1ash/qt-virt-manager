@@ -74,9 +74,11 @@ VncView::VncView(
             this, SLOT(updateImage(int, int, int, int)),
             Qt::BlockingQueuedConnection);
     connect(&vncThread, SIGNAL(gotCut(const QString&)),
-            this, SLOT(setCut(const QString&)), Qt::BlockingQueuedConnection);
+            this, SLOT(setCut(const QString&)),
+            Qt::BlockingQueuedConnection);
     connect(&vncThread, SIGNAL(passwordRequest()),
-            this, SLOT(requestPassword()), Qt::BlockingQueuedConnection);
+            this, SLOT(requestPassword()),
+            Qt::BlockingQueuedConnection);
     connect(&vncThread, SIGNAL(outputErrorMessage(QString)),
             this, SLOT(outputErrorMessage(QString)));
 
@@ -97,8 +99,10 @@ VncView::~VncView()
 {
     unpressModifiers();
 
-    // Disconnect all signals so that we don't get any more callbacks from the client thread
-    disconnect(&vncThread, SIGNAL(imageUpdated(int, int, int, int)), this, SLOT(updateImage(int, int, int, int)));
+    // Disconnect all signals so that
+    // we don't get any more callbacks from the client thread
+    disconnect(&vncThread, SIGNAL(imageUpdated(int, int, int, int)),
+               this, SLOT(updateImage(int, int, int, int)));
     disconnect(&vncThread, SIGNAL(gotCut(const QString&)),
                this, SLOT(setCut(const QString&)));
     disconnect(&vncThread, SIGNAL(passwordRequest()),
@@ -663,6 +667,19 @@ void VncView::clipboardDataChanged()
         return;
 
     const QString text = m_clipboard->text(QClipboard::Clipboard);
+
+    vncThread.clientCut(text);
+}
+
+void VncView::pasteClipboardText(const QString &text)
+{
+    kDebug(5011);
+
+    if (m_status != Connected)
+        return;
+
+    if (m_clipboard->ownsClipboard() || m_dontSendClipboard)
+        return;
 
     vncThread.clientCut(text);
 }

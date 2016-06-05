@@ -54,7 +54,8 @@ class MachineView : public QScrollArea
         void captureAllKeys( bool enabled );
         void sendKey( QKeyEvent *event );
         QImage getScreenCapture() const;
-        
+        void pasteClipboardTextToGuest(const QString&);
+
     protected:
         bool event( QEvent *event );
         

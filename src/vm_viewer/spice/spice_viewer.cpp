@@ -161,8 +161,8 @@ void Spice_Viewer::copyToClipboardFromVirtDomain()
 void Spice_Viewer::pasteClipboardToVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
-    QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
-    QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
+    const QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
+    const QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
     qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
     if ( !_text.isEmpty() ) {
         spiceWdg->sendClipboardDataToGuest(
@@ -213,8 +213,13 @@ void Spice_Viewer::fullScreenVirtDomain()
 void Spice_Viewer::initSpiceWidget()
 {
     spiceWdg = new QSpiceWidget(this);
-    setCentralWidget(spiceWdg);
+    scrolled = new QScrollArea(this);
+    scrolled->setWidgetResizable(true);
+    scrolled->setAlignment(Qt::AlignCenter);
+    scrolled->setWidget(spiceWdg);
+    setCentralWidget(scrolled);
     spiceWdg->setGuestAttr(domain, connName);
+    spiceWdg->setFullScreen(isFullScreen());
     connect(spiceWdg, SIGNAL(displayResized(const QSize&)),
             SLOT(resizeViewer(const QSize&)));
     connect(spiceWdg, SIGNAL(downloaded(int,int)),
@@ -278,20 +283,35 @@ void Spice_Viewer::timerEvent(QTimerEvent *ev)
     }
 }
 
-void Spice_Viewer::resizeViewer(const QSize &size)
+void Spice_Viewer::resizeViewer(const QSize &_size)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
-    resize(size+around_size);
+    if ( _size+around_size==size() ) {
+        return;
+    };
+    resize(_size+around_size);
 }
 
 void Spice_Viewer::fullScreenTriggered()
 {
     if (isFullScreen()) {
         setWindowState(Qt::WindowNoState);
+        //scrolled->setWindowFlags( Qt::Widget );
+        //scrolled->showNormal();
         spiceWdg->setFullScreen(false);
+        scrolled->setPalette( QPalette() );
     } else {
         setWindowState(Qt::WindowFullScreen);
+        //scrolled->setWindowFlags( Qt::Window );
+        //scrolled->showFullScreen();
+        QPalette p;
+        p.setColor( QPalette::Background, QColor(22,22,22) );
+        scrolled->setPalette( p );
         spiceWdg->setFullScreen(true);
+        //qreal newW = scrolled->maximumViewportSize().width();
+        //qreal newH = scrolled->maximumViewportSize().height();
+        //spiceWdg->setMaximumSize(newW, newH);
+        //spiceWdg->resize(newW, newH);
     };
     startAnimatedHide();
 }
@@ -317,6 +337,11 @@ QSize Spice_Viewer::getWidgetSizeAroundDisplay()
     viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
     _width = left+right;
     _height = top +bottom;
+    if ( nullptr!=scrolled ) {
+        scrolled->getContentsMargins(&left, &top, &right, &bottom);
+        _width += left+right;
+        _height += top +bottom;
+    };
     if ( nullptr!=spiceWdg ) {
         spiceWdg->getContentsMargins(&left, &top, &right, &bottom);
         _width += left+right;

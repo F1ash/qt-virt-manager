@@ -62,6 +62,11 @@ public:
      */
     void sendClipboardDataToGuest(quint32, const uchar*, size_t);
 
+    /*
+     * Get isScaled state
+     */
+    bool isScaledScreen() const;
+
 signals:
     /*
      * Emitted, when display resize event occurred.
@@ -166,7 +171,7 @@ private:
                              d_X, d_Y;
     qreal                    zoom;
     uint                     downloadProgress;
-    bool                     scaled;
+    bool                     scaled, is_FullScreen;
 
 protected:
     QSpiceSession           *spiceSession;
