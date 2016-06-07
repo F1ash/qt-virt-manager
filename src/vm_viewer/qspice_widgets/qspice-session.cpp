@@ -126,6 +126,7 @@ void QSpiceSession::init()
     setEnableAudio(true);
     setEnableSmartcard(true);
     setEnableUsbredir(true);
+    setReadOnly(false);
     //setSharedDir(QString("%1/Public").arg(qgetenv("HOME").data()));
     g_signal_connect(gobject, "channel-new",
                      (GCallback) QSpiceHelper::ss_channel_new, this);

@@ -129,7 +129,7 @@ void QSpiceHelper::main_clipboard_selection(SpiceMainChannel *spicemainchannel,
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->clipboardSelection(type, (void*)data, size);
 }
-void QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *spicemainchannel,
+bool QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *spicemainchannel,
                                                  guint selection,
                                                  gpointer types,
                                                  guint ntypes,
@@ -139,9 +139,10 @@ void QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *spicemainchan
     //qDebug()<<"main_clipboard_selection_grub";
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
-    if ( nullptr==_mainchannel ) return;
+    if ( nullptr==_mainchannel ) return false;
     emit _mainchannel->clipboardSelectionGrabbed(
                 selection, (void*)types, ntypes);
+    return true;
 }
 void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *spicemainchannel,
                                                     guint selection,
@@ -154,17 +155,18 @@ void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *spicemainc
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->clipboardSelectionReleased(selection);
 }
-void QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainchannel,
+bool QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainchannel,
                                                     guint selection,
                                                     guint types,
                                                     gpointer user_data)
 {
     Q_UNUSED(spicemainchannel)
-    //qDebug()<<"main_clipboard_selection_request";
+    qDebug()<<"main_clipboard_selection_request";
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
-    if ( nullptr==_mainchannel ) return;
+    if ( nullptr==_mainchannel ) return false;
     emit _mainchannel->clipboardSelectionRequested(selection, types);
+    return true;
 }
 void QSpiceHelper::main_mouse_update(SpiceMainChannel *spicemainchannel,
                                      gpointer user_data)
@@ -202,23 +204,43 @@ void QSpiceHelper::operation_cancelled(GCancellable *cancellable,
 
 void QSpiceMainChannel::initCallbacks()
 {
+    //setAgentConnected(true); // not writable, don't use in CONSTRUCT
+    //qDebug()<<getAgentConnected()<<"agent connected"; // crash, at debug mode returns FALSE
+    //qDebug()<<getMaxClipboard()<<"max-clipboard";
     cancellable = g_cancellable_new();
-    g_signal_connect(gobject, "main-agent-update",
-                     (GCallback) QSpiceHelper::main_agent_update, this);
-    g_signal_connect(gobject, "main-clipboard-selection",
-                     (GCallback) QSpiceHelper::main_clipboard_selection, this);
-    g_signal_connect(gobject, "main-clipboard-selection-grab",
-                     (GCallback) QSpiceHelper::main_clipboard_selection_grab, this);
-    g_signal_connect(gobject, "main-clipboard-selection-release",
-                     (GCallback) QSpiceHelper::main_clipboard_selection_release, this);
-    g_signal_connect(gobject, "main-clipboard-selection-request",
-                     (GCallback) QSpiceHelper::main_clipboard_selection_request, this);
-    g_signal_connect(gobject, "main-mouse-update",
-                     (GCallback) QSpiceHelper::main_mouse_update, this);
-    g_signal_connect(gobject, "migration-started",
-                     (GCallback) QSpiceHelper::migration_started, this);
-    g_signal_connect(cancellable, "cancelled",
-                     (GCallback) QSpiceHelper::operation_cancelled, this);
+    g_signal_connect(
+                gobject, "main-agent-update",
+                (GCallback) QSpiceHelper::main_agent_update,
+                this);
+    g_signal_connect(
+                gobject, "main-clipboard-selection",
+                (GCallback) QSpiceHelper::main_clipboard_selection,
+                this);
+    g_signal_connect(
+                gobject, "main-clipboard-selection-grab",
+                (GCallback) QSpiceHelper::main_clipboard_selection_grab,
+                this);
+    g_signal_connect(
+                gobject, "main-clipboard-selection-release",
+                (GCallback) QSpiceHelper::main_clipboard_selection_release,
+                this);
+    g_signal_connect(
+                gobject,
+                "main-clipboard-selection-request",
+                (GCallback) QSpiceHelper::main_clipboard_selection_request,
+                this);
+    g_signal_connect(
+                gobject, "main-mouse-update",
+                (GCallback) QSpiceHelper::main_mouse_update,
+                this);
+    g_signal_connect(
+                gobject, "migration-started",
+                (GCallback) QSpiceHelper::migration_started,
+                this);
+    g_signal_connect(
+                cancellable, "cancelled",
+                (GCallback) QSpiceHelper::operation_cancelled,
+                this);
 }
 
 void QSpiceMainChannel::setDisplay(int id, int x, int y, int width, int height)
@@ -269,7 +291,8 @@ void QSpiceMainChannel::updateDisplayEnabled(int id, bool enabled, bool update)
 
 bool QSpiceMainChannel::sendMonitorConfig()
 {
-    return spice_main_send_monitor_config((SpiceMainChannel *) gobject);
+    return spice_main_send_monitor_config(
+                (SpiceMainChannel *) gobject);
 }
 
 void QSpiceMainChannel::clipboardSelectionGrab(uint selection, quint32 *types, int ntypes)
@@ -291,9 +314,10 @@ void QSpiceMainChannel::clipboardSelectionRelease()
 void QSpiceMainChannel::clipboardSelectionNotify(quint32 type, const uchar *data, size_t size)
 {
     //qDebug()<<"clipboardSelectionNotify";
-    /*
+
     gpointer conv = nullptr;
     gint len = 0;
+    /* gtk+ internal utf8 newline is always LF, even on windows */
     if (spice_main_agent_test_capability(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CAP_GUEST_LINEEND_CRLF)) {
@@ -313,7 +337,7 @@ void QSpiceMainChannel::clipboardSelectionNotify(quint32 type, const uchar *data
 
         len = strlen((char*)conv);
     } else {
-    */
+
         /* On Windows, with some versions of gtk+, GtkSelectionData::length
          * will include the final '\0'. When a string with this trailing '\0'
          * is pasted in some linux applications, it will be pasted as <NIL> or
@@ -321,17 +345,20 @@ void QSpiceMainChannel::clipboardSelectionNotify(quint32 type, const uchar *data
          * send to the agent does not include any trailing '\0'
          * This is gtk+ bug https://bugzilla.gnome.org/show_bug.cgi?id=734670
          */
-    /*
+
         len = strlen((const char *)data);
     };
-*/
-    qDebug()<<data<<size;
+
+    qDebug()<<data<<conv<<len;
+    printf("\n%s\t11\n", (const guchar*)(conv ? conv: data));
+    const guchar *cb = (const guchar*)(conv ? conv: data);
     spice_main_clipboard_selection_notify(
                 (SpiceMainChannel *) gobject,
-                VD_AGENT_CLIPBOARD_SELECTION_PRIMARY,
-                type,
-                (const guchar*)data,
-                size);
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_UTF8_TEXT,
+                cb,
+                len);
+    g_free(conv);
 }
 
 void QSpiceMainChannel::guestClipboardSelectionRequest()

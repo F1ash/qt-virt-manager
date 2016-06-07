@@ -28,7 +28,8 @@ class QSpiceMainChannel : public QSpiceChannel
 {
     Q_OBJECT
 public:
-    Q_GPROP_BOOL(AgentConnected, "agent-connected")     // doc default FALSE
+    Q_GPROP_BOOL(AgentConnected, "agent-connected")  // doc default FALSE
+    Q_GPROP_INT(MaxClipboard, "max-clipboard")       // doc default 104857600
 
     void setDisplay(int, int, int, int, int);
     void setDisplayEnabled(int, bool);

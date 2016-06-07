@@ -161,8 +161,12 @@ void Spice_Viewer::copyToClipboardFromVirtDomain()
 void Spice_Viewer::pasteClipboardToVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
-    const QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
-    const QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
+    const QString _text =
+            QApplication::clipboard()->text(
+                QClipboard::Clipboard);
+    const QImage _image =
+            QApplication::clipboard()->image(
+                QClipboard::Clipboard);
     qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
     if ( !_text.isEmpty() ) {
         spiceWdg->sendClipboardDataToGuest(
