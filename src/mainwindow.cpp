@@ -31,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
     closeProgress = new QProgressBar(this);
     closeProgress->setRange(0, waitAtClose*1000);
     closeProgress->setToolTip("Progress for waiting the connection close");
+    statusBar()->addPermanentWidget(closeProgress);
+    statusBar()->hide();
     initVirEventloop();
 }
 
@@ -171,6 +173,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
 void MainWindow::startCloseProcess()
 {
     //qDebug()<<"startCloseProcess";
+    statusBar()->show();
     killTimerId = startTimer(PERIOD);
     //qDebug()<<killTimerId<<"killTimer";
 }
@@ -273,6 +276,17 @@ void MainWindow::initConnListWidget()
 void MainWindow::initToolBar()
 {
     bool again = settings.value("Donate", true).toBool();
+    QString appVersion = settings.value("AppVersion", "0.0.0").toString();
+    QString currAppVersion =
+            QString("%1.%2.%3")
+            .arg(VERSION_MAJOR)
+            .arg(VERSION_MIDDLE)
+            .arg(VERSION_MINOR);
+    // show Donate button when new/another version runned
+    if ( appVersion!=currAppVersion ) {
+        again = true;
+        settings.setValue("AppVersion", currAppVersion);
+    };
     toolBar = new ToolBar(this, again);
     toolBar->setObjectName("toolBar");
     connect(toolBar->_hideAction, SIGNAL(triggered()),

@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     QString name("qt-virt-manager");
     a.setOrganizationName(name);
     a.setApplicationName(name);
+    QSettings::setDefaultFormat(QSettings::IniFormat);
     MainWindow w;
     w.show();
     return a.exec();

@@ -71,7 +71,7 @@ void TermMainWindow::migrate_settings()
     // If this method becomes unbearably huge we should look at the config-update
     // system used by kde and razor.
     QSettings settings;
-    QString last_version = settings.value("version", "0.0.0").toString();
+    QString last_version = settings.value("QTermVersion", "0.0.0").toString();
     // Handle configchanges in 0.4.0 (renaming 'Paste Selection' -> 'Paste Clipboard')
     if (last_version < "0.4.0")
     {
@@ -82,7 +82,7 @@ void TermMainWindow::migrate_settings()
         settings.remove("Paste Selection");
         settings.endGroup();
 
-        settings.setValue("version", "0.4.0");
+        settings.setValue("QTermVersion", "0.4.0");
     }
 }
 

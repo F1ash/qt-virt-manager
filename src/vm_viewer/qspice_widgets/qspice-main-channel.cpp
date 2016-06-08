@@ -349,14 +349,12 @@ void QSpiceMainChannel::clipboardSelectionNotify(quint32 type, const uchar *data
         len = strlen((const char *)data);
     };
 
-    qDebug()<<data<<conv<<len;
-    printf("\n%s\t11\n", (const guchar*)(conv ? conv: data));
-    const guchar *cb = (const guchar*)(conv ? conv: data);
+    //qDebug()<<data<<conv<<len;
     spice_main_clipboard_selection_notify(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
                 VD_AGENT_CLIPBOARD_UTF8_TEXT,
-                cb,
+                (const guchar*)(conv ? conv: data),
                 len);
     g_free(conv);
 }
