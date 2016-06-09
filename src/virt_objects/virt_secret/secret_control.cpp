@@ -59,7 +59,7 @@ void VirtSecretControl::setListHeader(QString &connName)
 {
     virtSecretModel->setHeaderData(
                 0, Qt::Horizontal,
-                QString("UUID in [ %1 ]").arg(connName),
+                QString("Secret UUID in [ %1 ]").arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);

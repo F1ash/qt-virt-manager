@@ -125,6 +125,7 @@ private slots:
     void deleteDomainEditor(QString&);
     void showAboutInfo();
     void showDonateDialog();
+    void migrate_settings_to_INI_format();
 };
 
 #endif // MAINWINDOW_H

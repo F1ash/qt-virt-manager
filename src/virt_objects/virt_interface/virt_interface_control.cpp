@@ -64,7 +64,7 @@ void VirtInterfaceControl::setListHeader(QString &connName)
 {
     virtIfaceModel->setHeaderData(
                 0, Qt::Horizontal,
-                QString("Name in [ %1 ]").arg(connName),
+                QString("Interface in [ %1 ]").arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);

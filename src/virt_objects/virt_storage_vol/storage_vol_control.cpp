@@ -66,7 +66,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(
     storageVolModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Name in [ %1 ]").arg(poolName),
+                QString("Volume in [ %1 ]").arg(poolName),
                 Qt::EditRole);
     toolBar->enableAutoReload();
     // for initiation content

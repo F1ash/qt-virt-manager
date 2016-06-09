@@ -65,7 +65,7 @@ void VirtNetControl::setListHeader(QString &connName)
     virtNetModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Name in [ %1 ]").arg(connName),
+                QString("Network in [ %1 ]").arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);

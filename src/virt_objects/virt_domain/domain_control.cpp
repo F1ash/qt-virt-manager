@@ -64,7 +64,7 @@ void VirtDomainControl::setListHeader(QString &connName)
     domainModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Name in [ %1 ]").arg(connName),
+                QString("VM in [ %1 ]").arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);

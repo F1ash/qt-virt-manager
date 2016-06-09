@@ -12,7 +12,7 @@ public :
   explicit TrayIcon(QWidget *parent);
 
     QAction   *hideAction;
-    QAction   *logUpAction;
+    //QAction   *logUpAction;
     QAction   *monitorAction;
     QAction   *taskUpAction;
     QAction   *closeAction;

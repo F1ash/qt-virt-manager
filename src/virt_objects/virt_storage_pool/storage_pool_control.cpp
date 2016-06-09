@@ -64,7 +64,7 @@ void VirtStoragePoolControl::setListHeader(QString &connName)
 {
     storagePoolModel->setHeaderData(
                 0, Qt::Horizontal,
-                QString("Name in [ %1 ]").arg(connName),
+                QString("Pool in [ %1 ]").arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);

@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     setDockOptions(
                 QMainWindow::AnimatedDocks |
                 QMainWindow::ForceTabbedDocks);
+    migrate_settings_to_INI_format();
     restoreGeometry(settings.value("Geometry").toByteArray());
     initTaskWareHouse();
     initDomainStateMonitor();
@@ -102,6 +103,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         ifaceDock->setEnabled(false);
         domainsStateMonitor->stopMonitoring();
         taskWrHouse->stopTaskComputing();
+        saveSettings();
         // close VM Displays
         QStringList keys(VM_Displayed_Map.keys());
         foreach ( QString key, keys ) {
@@ -160,10 +162,9 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         startCloseProcess();
     } else if ( !runningConnExist() &&
                 (wait_thread==nullptr || !wait_thread->isRunning()) ) {
-        saveSettings();
-        taskWrHouse->hide();
-        domainsStateMonitor->hide();
         trayIcon->hide();
+        foreach (QWidget *widget, qApp->allWidgets())
+            widget->hide();
         ev->accept();
     } else {
         //  ( wait_thread!=nullptr || wait_thread->isRunning() )
@@ -208,8 +209,8 @@ void MainWindow::initTrayIcon()
             this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
     connect(trayIcon->hideAction, SIGNAL(triggered()),
             this, SLOT(changeVisibility()));
-    connect(trayIcon->logUpAction, SIGNAL(triggered()),
-            this, SLOT(changeLogViewerVisibility()));
+    //connect(trayIcon->logUpAction, SIGNAL(triggered()),
+    //        this, SLOT(changeLogViewerVisibility()));
     connect(trayIcon->monitorAction, SIGNAL(triggered()),
             domainsStateMonitor, SLOT(changeVisibility()));
     connect(trayIcon->taskUpAction, SIGNAL(triggered()),
@@ -247,15 +248,20 @@ void MainWindow::changeVisibility()
         this->show();
         trayIcon->hideAction->setText (QString("Down"));
         trayIcon->hideAction->setIcon (QIcon::fromTheme("down"));
-        if ( domainDock->isFloating() && toolBar->_domUpAction->isChecked() )
+        if ( domainDock->isFloating()
+             && toolBar->_domUpAction->isChecked() )
             domainDock->show();
-        if ( networkDock->isFloating() && toolBar->_netUpAction->isChecked() )
+        if ( networkDock->isFloating()
+             && toolBar->_netUpAction->isChecked() )
             networkDock->show();
-        if ( storagePoolDock->isFloating() && toolBar->_storageUpAction->isChecked() )
+        if ( storagePoolDock->isFloating()
+             && toolBar->_storageUpAction->isChecked() )
             storagePoolDock->show();
-        if ( secretDock->isFloating() && toolBar->_secretsUpAction->isChecked() )
+        if ( secretDock->isFloating()
+             && toolBar->_secretsUpAction->isChecked() )
             secretDock->show();
-        if ( ifaceDock->isFloating() && toolBar->_ifaceUpAction->isChecked() )
+        if ( ifaceDock->isFloating()
+             && toolBar->_ifaceUpAction->isChecked() )
             ifaceDock->show();
     };
 }
@@ -266,6 +272,7 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 void MainWindow::initConnListWidget()
 {
     connListWidget = new ConnectionList(this);
+    connListWidget->setEnabled(false);
     setCentralWidget(connListWidget);
     settings.beginGroup("ConnectListColumns");
     connListWidget->setColumnWidth(0, settings.value("column0", 132).toInt());
@@ -353,7 +360,11 @@ void MainWindow::initDockWidgets()
     connect(logDockContent, SIGNAL(overflow(bool)),
             trayIcon, SLOT(changeWarningState(bool)));
     toolBar->_logUpAction->setChecked(visible);
-    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
     settings.endGroup();
     addDockWidget(area, logDock);
 
@@ -381,7 +392,11 @@ void MainWindow::initDockWidgets()
     visible = settings.value("Visible", true).toBool();
     domainDock->setVisible(visible);
     toolBar->_domUpAction->setChecked(visible);
-    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
     settings.endGroup();
     addDockWidget(area, domainDock);
     tabifyDockWidget(logDock, domainDock);
@@ -428,7 +443,11 @@ void MainWindow::initDockWidgets()
     visible = settings.value("Visible", false).toBool();
     networkDock->setVisible(visible);
     toolBar->_netUpAction->setChecked(visible);
-    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
     settings.endGroup();
     addDockWidget(area, networkDock);
     tabifyDockWidget(domainDock, networkDock);
@@ -466,7 +485,11 @@ void MainWindow::initDockWidgets()
     visible = settings.value("Visible", false).toBool();
     storagePoolDock->setVisible(visible);
     toolBar->_storageUpAction->setChecked(visible);
-    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
     settings.endGroup();
     addDockWidget(area, storagePoolDock);
     tabifyDockWidget(networkDock, storagePoolDock);
@@ -478,7 +501,8 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(poolResult(Result)),
             storagePoolDockContent, SLOT(resultReceiver(Result)));
-    connect(storagePoolDockContent, SIGNAL(overviewStPool(virConnectPtr*,QString&,QString&)),
+    connect(storagePoolDockContent,
+            SIGNAL(overviewStPool(virConnectPtr*,QString&,QString&)),
             this, SLOT(overviewStoragePool(virConnectPtr*,QString&,QString&)));
 
     secretDock = new DockWidget(this);
@@ -504,7 +528,11 @@ void MainWindow::initDockWidgets()
     visible = settings.value("Visible", false).toBool();
     secretDock->setVisible(visible);
     toolBar->_secretsUpAction->setChecked(visible);
-    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
     settings.endGroup();
     addDockWidget(area, secretDock);
     tabifyDockWidget(storagePoolDock, secretDock);
@@ -540,7 +568,11 @@ void MainWindow::initDockWidgets()
     visible = settings.value("Visible", false).toBool();
     ifaceDock->setVisible(visible);
     toolBar->_ifaceUpAction->setChecked(visible);
-    area = getDockArea(settings.value("DockArea", Qt::BottomDockWidgetArea).toInt());
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
     settings.endGroup();
     addDockWidget(area, ifaceDock);
     tabifyDockWidget(secretDock, ifaceDock);
@@ -700,8 +732,11 @@ bool MainWindow::runningConnExist()
     bool result = false;
     int count = connListWidget->connItemModel->rowCount();
     for (int i=0; i<count; i++) {
-        ConnItemIndex *item = connListWidget->connItemModel->connItemDataList.at(i);
-        //qDebug()<<connListWidget->item(i)->text()<< connListWidget->item(i)->data(Qt::UserRole).toMap().value("isRunning").toInt();
+        ConnItemIndex *item =
+                connListWidget->connItemModel->connItemDataList.at(i);
+        //qDebug()<<connListWidget->item(i)->text()
+        //<< connListWidget->item(i)->data(Qt::UserRole)
+        //.toMap().value("isRunning").toInt();
         if ( item->getData().value("isRunning").toInt()==RUNNING ) {
             result = true;
             break;
@@ -810,15 +845,27 @@ void MainWindow::invokeVMDisplay(TASK _task)
         if ( type.toLower()=="lxc" ) {
             VM_Displayed_Map.insert(
                         key,
-                        new LXC_Viewer(nullptr, connPtrPtr, connName, domName));
+                        new LXC_Viewer(
+                            nullptr,
+                            connPtrPtr,
+                            connName,
+                            domName));
         } else if ( viewerType=="vnc" ) {
             VM_Displayed_Map.insert(
                         key,
-                        new VNC_Viewer(nullptr, connPtrPtr, connName, domName));
+                        new VNC_Viewer(
+                            nullptr,
+                            connPtrPtr,
+                            connName,
+                            domName));
         } else if ( viewerType=="spice" ) {
             VM_Displayed_Map.insert(
                         key,
-                        new Spice_Viewer(nullptr, connPtrPtr, connName, domName));
+                        new Spice_Viewer(
+                            nullptr,
+                            connPtrPtr,
+                            connName,
+                            domName));
         } else {
             QMessageBox::information(
                         this,
@@ -861,14 +908,17 @@ void MainWindow::deleteVMDisplay(QString &key)
 }
 void MainWindow::buildMigrateArgs(TASK _task)
 {
-    virConnectPtr *namedConnect = connListWidget->getPtr_connectionPtr(_task.args.path);
+    virConnectPtr *namedConnect =
+            connListWidget->getPtr_connectionPtr(_task.args.path);
     if ( nullptr!=namedConnect ) {
         domainDockContent->execMigrateAction(namedConnect, _task);
     } else {
         QString time = QTime::currentTime().toString();
-        QString title = QString("Domain Migration '%1'")
+        QString title =
+                QString("Domain Migration '%1'")
                 .arg(_task.object);
-        QString msg = QString("Migation not possible to NULL connection.");
+        QString msg =
+                QString("Migation not possible to NULL connection.");
         QString currMsg = QString(
                     "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
                 .arg(time).arg(title).arg(msg);
@@ -884,7 +934,8 @@ void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connNam
     if ( !Overviewed_StPool_Map.contains(key) ) {
         Overviewed_StPool_Map.insert(key, new VirtStorageVolControl());
         Overviewed_StPool_Map.value(key)->setObjectName(key);
-        Overviewed_StPool_Map.value(key)->setWindowTitle(QString("%1 Pool").arg(key));
+        Overviewed_StPool_Map.value(key)
+                ->setWindowTitle(QString("%1 Pool").arg(key));
         connect(Overviewed_StPool_Map.value(key), SIGNAL(entityMsg(QString&)),
                 this, SLOT(writeToErrorLog(QString&)));
         connect(Overviewed_StPool_Map.value(key), SIGNAL(finished(QString&)),
@@ -892,8 +943,11 @@ void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connNam
         connect(Overviewed_StPool_Map.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
         connect(taskWrHouse, SIGNAL(volResult(Result)),
-                Overviewed_StPool_Map.value(key), SLOT(resultReceiver(Result)));
-        Overviewed_StPool_Map.value(key)->setCurrentStoragePool(connPtrPtr, connName, poolName);
+                Overviewed_StPool_Map.value(key),
+                SLOT(resultReceiver(Result)));
+        Overviewed_StPool_Map.value(key)
+                ->setCurrentStoragePool(
+                    connPtrPtr, connName, poolName);
     };
     if ( Overviewed_StPool_Map.value(key)!=nullptr ) {
         Overviewed_StPool_Map.value(key)->show();
@@ -973,4 +1027,34 @@ void MainWindow::showDonateDialog()
     dd->deleteLater();
     settings.setValue("Donate", again);
     toolBar->_donateAction->setVisible(again);
+}
+void MainWindow::migrate_settings_to_INI_format()
+{
+    if ( settings.allKeys().isEmpty() ) {
+        //qDebug()<<"migrate_settings_to_INI_format";
+        QSettings oldSettings(
+                    QSettings::NativeFormat,
+                    QSettings::UserScope,
+                    qApp->organizationName(),
+                    qApp->applicationName());
+        foreach (QString group, oldSettings.childGroups()) {
+            oldSettings.beginGroup(group);
+            settings.beginGroup(group);
+            foreach (QString key, oldSettings.allKeys()) {
+                settings.setValue(
+                            key,
+                            oldSettings.value(key));
+            };
+            settings.endGroup();
+            oldSettings.endGroup();
+        };
+        oldSettings.clear();
+        oldSettings.setValue(
+                    "Cleaned",
+                    "after migration to INI-format.");
+        QMessageBox::information(
+                    this,
+                    qApp->applicationName(),
+                    "Migration the settings to INI-format done successfully.");
+    };
 }

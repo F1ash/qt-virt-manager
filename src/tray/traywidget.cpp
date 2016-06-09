@@ -10,8 +10,8 @@ TrayIcon::TrayIcon(QWidget *parent = nullptr)
     setIcon(appIcon);
     hideAction = new QAction(QString("Down"), this);
     hideAction->setIcon (QIcon::fromTheme("down"));
-    logUpAction = new QAction(QString("Show Log Viewer"), this);
-    logUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
+    //logUpAction = new QAction(QString("Show Log Viewer"), this);
+    //logUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
     monitorAction = new QAction(QString("Domains State Monitor"), this);
     monitorAction->setIcon ( QIcon::fromTheme("utilities-monitor") );
     taskUpAction = new QAction(QString("Task WareHouse"), this);
@@ -22,7 +22,7 @@ TrayIcon::TrayIcon(QWidget *parent = nullptr)
     trayIconMenu = new QMenu(parent);
     trayIconMenu->addAction(hideAction);
     trayIconMenu->addSeparator();
-    trayIconMenu->addAction(logUpAction);
+    //trayIconMenu->addAction(logUpAction);
     trayIconMenu->addAction(monitorAction);
     trayIconMenu->addAction(taskUpAction);
     trayIconMenu->addSeparator();
@@ -36,7 +36,7 @@ TrayIcon::TrayIcon(QWidget *parent = nullptr)
 /* public slots */
 void TrayIcon::setLogUpActionText(QString &s)
 {
-    logUpAction->setText(s);
+    //logUpAction->setText(s);
 }
 void TrayIcon::stateMonitorVisibilityChanged(bool state)
 {
