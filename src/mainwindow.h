@@ -25,7 +25,7 @@
 #include "task_warehouse/task_warehouse.h"
 #include "dock_head_widgets/dock_widget.h"
 #include "dock_head_widgets/dock_head_widget.h"
-#include "donate_dialog.h"
+#include "menubar/menu_bar.h"
 
 typedef QMap<QString, VM_Viewer*> ViewerMap;
 typedef QMap<QString, VirtStorageVolControl*> OverviwedStorageMap;
@@ -45,6 +45,7 @@ private :
     QSettings                    settings;
     ConnectionList              *connListWidget;
     TrayIcon                    *trayIcon;
+    MenuBar                     *menuBar;
     ToolBar                     *toolBar;
     Wait                        *wait_thread = nullptr;
     DockWidget                  *logDock;
@@ -73,6 +74,7 @@ private :
     int                          killTimerId = 0;
     int                          counter = 0;
     int                          waitAtClose;
+    bool                         reloadFlag = false;
 
     ViewerMap                    VM_Displayed_Map;
     OverviwedStorageMap          Overviewed_StPool_Map;
@@ -92,9 +94,12 @@ private slots:
     void initTrayIcon();
     void trayIconActivated(QSystemTrayIcon::ActivationReason);
     void initConnListWidget();
+    void initMenuBar();
     void initToolBar();
     void initDockWidgets();
     void initVirEventloop();
+    void virtEventLoopFinished();
+    void restartApplication();
     void initConnections(bool);
     void editCurrentConnection();
     void createNewConnection();
@@ -111,7 +116,6 @@ private slots:
     void autoHide();
     void writeToErrorLog(QString&);
     void writeToErrorLog(QString&, uint);
-    void changeLogViewerVisibility();
     Qt::DockWidgetArea getDockArea(int) const;
     void receiveConnPtrPtr(virConnectPtr*, QString&);
     void stopConnProcessing(bool, QString &);
@@ -123,8 +127,6 @@ private slots:
     void deleteStPoolOverview(QString&);
     void invokeDomainEditor(TASK);
     void deleteDomainEditor(QString&);
-    void showAboutInfo();
-    void showDonateDialog();
     void migrate_settings_to_INI_format();
 };
 

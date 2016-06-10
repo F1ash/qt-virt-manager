@@ -14,6 +14,7 @@ Donate_Dialog::Donate_Dialog(QWidget *parent) :
     donateWdg = new QWidget(this);
     donateWdg->setLayout(donateLayout);
     again = new QCheckBox("don't show again", this);
+    again->hide();
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(donateWdg);
     commonLayout->addWidget(again);

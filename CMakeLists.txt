@@ -79,7 +79,11 @@ set (HEADERS
   src/toolbar/toolbar.h
   src/settings/conn_settings.h
   src/wait_thread/wait_thread.h
-  src/donate_dialog.h
+  src/menubar/menu_bar.h
+  src/menubar/file_menu.h
+  src/menubar/dock_menu.h
+  src/menubar/help_menu.h
+  src/menubar/donate_dialog.h
   
   src/layout/conn_list_widget.h
   src/layout/conn_menu.h
@@ -424,7 +428,11 @@ set (SOURCES
   src/toolbar/toolbar.cpp
   src/settings/conn_settings.cpp
   src/wait_thread/wait_thread.cpp
-  src/donate_dialog.cpp
+  src/menubar/menu_bar.cpp
+  src/menubar/file_menu.cpp
+  src/menubar/dock_menu.cpp
+  src/menubar/help_menu.cpp
+  src/menubar/donate_dialog.cpp
   
   src/layout/conn_list_widget.cpp
   src/layout/conn_menu.cpp

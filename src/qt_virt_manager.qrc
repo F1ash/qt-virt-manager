@@ -111,6 +111,7 @@
         <file alias="22x22/actions/connect.png">icons/22x22/actions/connect.png</file>
         <file alias="22x22/actions/archive-insert-directory.png">icons/22x22/actions/archive-insert-directory.png</file>
         <file alias="22x22/actions/edit-copy.png">icons/22x22/actions/edit-copy.png</file>
+        <file alias="22x22/actions/connection-wizard.png">icons/22x22/actions/connection-wizard.png</file>
         <file alias="22x22/actions/undock.png">icons/22x22/actions/undock.png</file>
         <file alias="22x22/actions/configure.png">icons/22x22/actions/configure.png</file>
         <file alias="22x22/actions/reset.png">icons/22x22/actions/reset.png</file>
@@ -240,6 +241,7 @@
         <file alias="32x32/actions/connect.png">icons/32x32/actions/connect.png</file>
         <file alias="32x32/actions/archive-insert-directory.png">icons/32x32/actions/archive-insert-directory.png</file>
         <file alias="32x32/actions/edit-copy.png">icons/32x32/actions/edit-copy.png</file>
+        <file alias="32x32/actions/connection-wizard.png">icons/32x32/actions/connection-wizard.png</file>
         <file alias="32x32/actions/undock.png">icons/32x32/actions/undock.png</file>
         <file alias="32x32/actions/configure.png">icons/32x32/actions/configure.png</file>
         <file alias="32x32/actions/reset.png">icons/32x32/actions/reset.png</file>
@@ -369,6 +371,7 @@
         <file alias="48x48/actions/connect.png">icons/48x48/actions/connect.png</file>
         <file alias="48x48/actions/archive-insert-directory.png">icons/48x48/actions/archive-insert-directory.png</file>
         <file alias="48x48/actions/edit-copy.png">icons/48x48/actions/edit-copy.png</file>
+        <file alias="48x48/actions/connection-wizard.png">icons/48x48/actions/connection-wizard.png</file>
         <file alias="48x48/actions/undock.png">icons/48x48/actions/undock.png</file>
         <file alias="48x48/actions/configure.png">icons/48x48/actions/configure.png</file>
         <file alias="48x48/actions/reset.png">icons/48x48/actions/reset.png</file>
@@ -497,6 +500,7 @@
         <file alias="24x24/actions/connect.png">icons/24x24/actions/connect.png</file>
         <file alias="24x24/actions/archive-insert-directory.png">icons/24x24/actions/archive-insert-directory.png</file>
         <file alias="24x24/actions/edit-copy.png">icons/24x24/actions/edit-copy.png</file>
+        <file alias="24x24/actions/connection-wizard.png">icons/24x24/actions/connection-wizard.png</file>
         <file alias="24x24/actions/undock.png">icons/24x24/actions/undock.png</file>
         <file alias="24x24/actions/configure.png">icons/24x24/actions/configure.png</file>
         <file alias="24x24/actions/reset.png">icons/24x24/actions/reset.png</file>
@@ -627,6 +631,7 @@
         <file alias="64x64/actions/connect.png">icons/64x64/actions/connect.png</file>
         <file alias="64x64/actions/archive-insert-directory.png">icons/64x64/actions/archive-insert-directory.png</file>
         <file alias="64x64/actions/edit-copy.png">icons/64x64/actions/edit-copy.png</file>
+        <file alias="64x64/actions/connection-wizard.png">icons/64x64/actions/connection-wizard.png</file>
         <file alias="64x64/actions/undock.png">icons/64x64/actions/undock.png</file>
         <file alias="64x64/actions/configure.png">icons/64x64/actions/configure.png</file>
         <file alias="64x64/actions/reset.png">icons/64x64/actions/reset.png</file>
@@ -648,6 +653,7 @@
         <file alias="64x64/apps/utilities-terminal.png">icons/64x64/apps/utilities-terminal.png</file>
         <file alias="64x64/apps/utilities-log-viewer.png">icons/64x64/apps/utilities-log-viewer.png</file>
         <file alias="256x256/apps/virtual-engineering.png">icons/256x256/apps/virtual-engineering.png</file>
+        <file alias="128x128/actions/qt_icon.png">icons/128x128/actions/qt_icon.png</file>
         <file alias="128x128/actions/yandex_money.png">icons/128x128/actions/yandex_money.png</file>
     </qresource>
     <qresource prefix="/misc">

@@ -35,7 +35,6 @@ signals:
 
 public slots:
     int                  connItemEditAction();
-    void                 searchLocalhostConnections();
     void                 refreshLocalhostConnection();
     void                 addConnItem(QString&);
     void                 deleteCurrentConnection();
@@ -52,6 +51,7 @@ private :
     int                  localConn = 0;
 
 private slots:
+    void                 searchLocalhostConnections();
     void                 connItemClicked(const QPoint&);
     void                 connItemDoubleClicked(const QModelIndex&);
     void                 connItemKillAction();
@@ -61,6 +61,7 @@ private slots:
     void                 createLocalConnection(QString&);
     void                 checkConnection(QModelIndex&, bool);
     void                 deleteCancelledCreation();
+    void                 deleteCurrentConnection(QModelIndex&);
     void                 showMessage(QString, QString);
     void                 sendWarning(QString&);
     void                 sendWarning(QString&, uint);

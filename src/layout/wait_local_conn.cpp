@@ -26,7 +26,8 @@ void WaitLocalConn::run()
                     exist = true;
                     int count = connItemModel->rowCount();
                     for (int i=0; i<count; i++) {
-                        ConnItemIndex *idx = connItemModel->connItemDataList.at(i);
+                        ConnItemIndex *idx =
+                                connItemModel->connItemDataList.at(i);
                         if ( nullptr==idx ) continue;
                         if ( idx->getName()==_name ) {
                             DATA _data = idx->getData();
@@ -51,10 +52,13 @@ void WaitLocalConn::run()
                 QString _name = el->getName();
                 int count = connItemModel->rowCount();
                 for (int i=0; i<count; i++) {
-                    ConnItemIndex *idx = connItemModel->connItemDataList.at(i);
+                    ConnItemIndex *idx =
+                            connItemModel->connItemDataList.at(i);
                     if ( nullptr==idx ) continue;
                     if ( idx->getName()==_name ) {
-                        int row = connItemModel->connItemDataList.indexOf(idx);
+                        int row =
+                                connItemModel
+                                ->connItemDataList.indexOf(idx);
                         connItemModel->removeRow(row);
                         connItemModel->connItemDataList.removeOne(idx);
                         break;

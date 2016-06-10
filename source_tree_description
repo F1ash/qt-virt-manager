@@ -13,6 +13,7 @@
     ├── icons               (Icon set)
     ├── layout              (ConnectionList widgets)
     ├── log_dock            (LogDock widget)
+    ├── menubar             (MenuBar widgets)
     ├── misc                (miscellanious files)
     ├── settings            (Connection settings widget)
     ├── state_monitor       (StateMonitor widget)

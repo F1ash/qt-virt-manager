@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "version.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -23,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     initDomainStateMonitor();
     initTrayIcon();
     initConnListWidget();
+    initMenuBar();
     initToolBar();
     initDockWidgets();
     restoreState(settings.value("State").toByteArray());
@@ -31,7 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
     waitAtClose = settings.value("WaitAtClose", 180).toInt();
     closeProgress = new QProgressBar(this);
     closeProgress->setRange(0, waitAtClose*1000);
-    closeProgress->setToolTip("Progress for waiting the connection close");
+    closeProgress->setToolTip(
+                "Progress for waiting the connection close");
     statusBar()->addPermanentWidget(closeProgress);
     statusBar()->hide();
     initVirEventloop();
@@ -160,6 +161,9 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         wait_thread->start();
         ev->ignore();
         startCloseProcess();
+    } else if ( virtEventLoop->isRunning() ) {
+        virtEventLoop->stop();
+        ev->ignore();
     } else if ( !runningConnExist() &&
                 (wait_thread==nullptr || !wait_thread->isRunning()) ) {
         trayIcon->hide();
@@ -239,6 +243,7 @@ void MainWindow::changeVisibility()
         this->hide();
         trayIcon->hideAction->setText (QString("Up"));
         trayIcon->hideAction->setIcon (QIcon::fromTheme("up"));
+        if ( logDock->isFloating() ) logDock->hide();
         if ( domainDock->isFloating() ) domainDock->hide();
         if ( networkDock->isFloating() ) networkDock->hide();
         if ( storagePoolDock->isFloating() ) storagePoolDock->hide();
@@ -248,20 +253,23 @@ void MainWindow::changeVisibility()
         this->show();
         trayIcon->hideAction->setText (QString("Down"));
         trayIcon->hideAction->setIcon (QIcon::fromTheme("down"));
+        if ( logDock->isFloating()
+             && menuBar->dockMenu->logAct->isChecked() )
+            logDock->show();
         if ( domainDock->isFloating()
-             && toolBar->_domUpAction->isChecked() )
+             && menuBar->dockMenu->domainAct->isChecked() )
             domainDock->show();
         if ( networkDock->isFloating()
-             && toolBar->_netUpAction->isChecked() )
+             && menuBar->dockMenu->networkAct->isChecked() )
             networkDock->show();
         if ( storagePoolDock->isFloating()
-             && toolBar->_storageUpAction->isChecked() )
+             && menuBar->dockMenu->storageAct->isChecked() )
             storagePoolDock->show();
         if ( secretDock->isFloating()
-             && toolBar->_secretsUpAction->isChecked() )
+             && menuBar->dockMenu->secretAct->isChecked() )
             secretDock->show();
         if ( ifaceDock->isFloating()
-             && toolBar->_ifaceUpAction->isChecked() )
+             && menuBar->dockMenu->ifaceAct->isChecked() )
             ifaceDock->show();
     };
 }
@@ -279,25 +287,38 @@ void MainWindow::initConnListWidget()
     connListWidget->setColumnWidth(1, settings.value("column1", 32).toInt());
     connListWidget->setColumnWidth(2, settings.value("column2", 32).toInt());
     settings.endGroup();
+    connect(connListWidget, SIGNAL(removeConnection(QString&)),
+            this, SLOT(removeConnItem(QString&)));
+    connect(connListWidget, SIGNAL(messageShowed()),
+            this, SLOT(mainWindowUp()));
+    connect(connListWidget, SIGNAL(warning(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
+    connect(connListWidget, SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
+            this, SLOT(receiveConnPtrPtr(virConnectPtr*, QString&)));
+    connect(connListWidget, SIGNAL(connClosed(bool, QString&)),
+            this, SLOT(stopConnProcessing(bool, QString&)));
+    connect(connListWidget, SIGNAL(connToClose(int)),
+            this, SLOT(closeConnGenerations(int)));
+    connect(connListWidget, SIGNAL(domainEnd(QString&)),
+            this, SLOT(deleteVMDisplay(QString&)));
+}
+void MainWindow::initMenuBar()
+{
+    menuBar = new MenuBar(this);
+    connect(menuBar->fileMenu->newConn, SIGNAL(triggered()),
+            this, SLOT(createNewConnection()));
+    connect(menuBar->fileMenu->hideToTray, SIGNAL(triggered()),
+            this, SLOT(changeVisibility()));
+    connect(menuBar->fileMenu->restart, SIGNAL(triggered()),
+            this, SLOT(restartApplication()));
+    connect(menuBar->fileMenu->exitApp, SIGNAL(triggered()),
+            this, SLOT(close()));
+    setMenuBar(menuBar);
 }
 void MainWindow::initToolBar()
 {
-    bool again = settings.value("Donate", true).toBool();
-    QString appVersion = settings.value("AppVersion", "0.0.0").toString();
-    QString currAppVersion =
-            QString("%1.%2.%3")
-            .arg(VERSION_MAJOR)
-            .arg(VERSION_MIDDLE)
-            .arg(VERSION_MINOR);
-    // show Donate button when new/another version runned
-    if ( appVersion!=currAppVersion ) {
-        again = true;
-        settings.setValue("AppVersion", currAppVersion);
-    };
-    toolBar = new ToolBar(this, again);
+    toolBar = new ToolBar(this);
     toolBar->setObjectName("toolBar");
-    connect(toolBar->_hideAction, SIGNAL(triggered()),
-            this, SLOT(changeVisibility()));
     connect(toolBar->_createAction, SIGNAL(triggered()),
             this, SLOT(createNewConnection()));
     connect(toolBar->_editAction, SIGNAL(triggered()),
@@ -312,20 +333,10 @@ void MainWindow::initToolBar()
             this, SLOT(closeCurrentConnection()));
     connect(toolBar->_closeAllAction, SIGNAL(triggered()),
             this, SLOT(closeAllConnections()));
-    connect(toolBar->_logUpAction, SIGNAL(triggered()),
-            this, SLOT(changeLogViewerVisibility()));
     connect(toolBar->_closeOverview, SIGNAL(triggered()),
             connListWidget, SLOT(stopProcessing()));
     connect(toolBar->_closeOverview, SIGNAL(triggered()),
             this, SLOT(stopProcessing()));
-    connect(toolBar->_exitAction, SIGNAL(triggered()),
-            this, SLOT(close()));
-    connect(toolBar->_infoAction, SIGNAL(triggered()),
-            this, SLOT(showAboutInfo()));
-    connect(toolBar->_donateAction, SIGNAL(triggered()),
-            this, SLOT(showDonateDialog()));
-    connect(toolBar, SIGNAL(warningShowed()),
-            this, SLOT(mainWindowUp()));
     int area_int = settings.value("ToolBarArea", 4).toInt();
     this->addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
 }
@@ -355,11 +366,12 @@ void MainWindow::initDockWidgets()
     logDock->restoreGeometry(settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", true).toBool();
     logDock->setVisible(visible);
+    connect(menuBar->dockMenu->logAct, SIGNAL(toggled(bool)),
+            logDock, SLOT(setVisible(bool)));
     connect(logDockContent, SIGNAL(overflow(bool)),
             logDock, SLOT(changeWarningState(bool)));
     connect(logDockContent, SIGNAL(overflow(bool)),
             trayIcon, SLOT(changeWarningState(bool)));
-    toolBar->_logUpAction->setChecked(visible);
     area = getDockArea(
                 settings.value(
                     "DockArea",
@@ -367,6 +379,7 @@ void MainWindow::initDockWidgets()
                 .toInt());
     settings.endGroup();
     addDockWidget(area, logDock);
+    menuBar->dockMenu->logAct->setChecked(visible);
 
     domainDock = new DockWidget(this);
     domainDock->setObjectName("domainDock");
@@ -388,10 +401,10 @@ void MainWindow::initDockWidgets()
     domainDock->setWidget( domainDockContent );
     settings.beginGroup("DomainDock");
     domainDock->setFloating(settings.value("Floating", false).toBool());
-    domainDock->restoreGeometry(settings.value("Geometry").toByteArray());
+    domainDock->restoreGeometry(
+                settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", true).toBool();
     domainDock->setVisible(visible);
-    toolBar->_domUpAction->setChecked(visible);
     area = getDockArea(
                 settings.value(
                     "DockArea",
@@ -400,14 +413,16 @@ void MainWindow::initDockWidgets()
     settings.endGroup();
     addDockWidget(area, domainDock);
     tabifyDockWidget(logDock, domainDock);
-    connect(toolBar->_domUpAction, SIGNAL(triggered(bool)),
+    connect(menuBar->dockMenu->domainAct, SIGNAL(toggled(bool)),
             domainDock, SLOT(setVisible(bool)));
     connect(domainDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
     connect(domainDockContent, SIGNAL(displayRequest(TASK)),
             this, SLOT(invokeVMDisplay(TASK)));
-    connect(domainDockContent, SIGNAL(addToStateMonitor(virConnectPtr*,QString&,QString&)),
-            domainsStateMonitor, SLOT(setNewMonitoredDomain(virConnectPtr*,QString&,QString&)));
+    connect(domainDockContent,
+            SIGNAL(addToStateMonitor(virConnectPtr*,QString&,QString&)),
+            domainsStateMonitor,
+            SLOT(setNewMonitoredDomain(virConnectPtr*,QString&,QString&)));
     connect(domainDockContent, SIGNAL(migrateToConnect(TASK)),
             this, SLOT(buildMigrateArgs(TASK)));
     connect(domainDockContent, SIGNAL(addNewTask(TASK)),
@@ -418,6 +433,7 @@ void MainWindow::initDockWidgets()
             domainDockContent, SLOT(resultReceiver(Result)));
     connect(domainDockContent, SIGNAL(domainToEditor(TASK)),
             this, SLOT(invokeDomainEditor(TASK)));
+    menuBar->dockMenu->domainAct->setChecked(visible);
 
     networkDock = new DockWidget(this);
     networkDock->setObjectName("networkDock");
@@ -439,10 +455,10 @@ void MainWindow::initDockWidgets()
     networkDock->setWidget( networkDockContent );
     settings.beginGroup("NetworkDock");
     networkDock->setFloating(settings.value("Floating", false).toBool());
-    networkDock->restoreGeometry(settings.value("Geometry").toByteArray());
+    networkDock->restoreGeometry(
+                settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", false).toBool();
     networkDock->setVisible(visible);
-    toolBar->_netUpAction->setChecked(visible);
     area = getDockArea(
                 settings.value(
                     "DockArea",
@@ -451,7 +467,7 @@ void MainWindow::initDockWidgets()
     settings.endGroup();
     addDockWidget(area, networkDock);
     tabifyDockWidget(domainDock, networkDock);
-    connect(toolBar->_netUpAction, SIGNAL(triggered(bool)),
+    connect(menuBar->dockMenu->networkAct, SIGNAL(toggled(bool)),
             networkDock, SLOT(setVisible(bool)));
     connect(networkDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
@@ -461,6 +477,7 @@ void MainWindow::initDockWidgets()
             networkDockContent, SLOT(resultReceiver(Result)));
     connect(connListWidget, SIGNAL(netResult(Result)),
             networkDockContent, SLOT(resultReceiver(Result)));
+    menuBar->dockMenu->networkAct->setChecked(visible);
 
     storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
@@ -480,11 +497,12 @@ void MainWindow::initDockWidgets()
     storagePoolDockContent = new VirtStoragePoolControl(this);
     storagePoolDock->setWidget( storagePoolDockContent );
     settings.beginGroup("StoragePoolDock");
-    storagePoolDock->setFloating(settings.value("Floating", false).toBool());
-    storagePoolDock->restoreGeometry(settings.value("Geometry").toByteArray());
+    storagePoolDock->setFloating(
+                settings.value("Floating", false).toBool());
+    storagePoolDock->restoreGeometry(
+                settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", false).toBool();
     storagePoolDock->setVisible(visible);
-    toolBar->_storageUpAction->setChecked(visible);
     area = getDockArea(
                 settings.value(
                     "DockArea",
@@ -493,7 +511,7 @@ void MainWindow::initDockWidgets()
     settings.endGroup();
     addDockWidget(area, storagePoolDock);
     tabifyDockWidget(networkDock, storagePoolDock);
-    connect(toolBar->_storageUpAction, SIGNAL(triggered(bool)),
+    connect(menuBar->dockMenu->storageAct, SIGNAL(toggled(bool)),
             storagePoolDock, SLOT(setVisible(bool)));
     connect(storagePoolDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
@@ -503,7 +521,9 @@ void MainWindow::initDockWidgets()
             storagePoolDockContent, SLOT(resultReceiver(Result)));
     connect(storagePoolDockContent,
             SIGNAL(overviewStPool(virConnectPtr*,QString&,QString&)),
-            this, SLOT(overviewStoragePool(virConnectPtr*,QString&,QString&)));
+            this,
+            SLOT(overviewStoragePool(virConnectPtr*,QString&,QString&)));
+    menuBar->dockMenu->storageAct->setChecked(visible);
 
     secretDock = new DockWidget(this);
     secretDock->setObjectName("secretDock");
@@ -523,11 +543,12 @@ void MainWindow::initDockWidgets()
     secretDockContent = new VirtSecretControl(this);
     secretDock->setWidget( secretDockContent );
     settings.beginGroup("SecretDock");
-    secretDock->setFloating(settings.value("Floating", false).toBool());
-    secretDock->restoreGeometry(settings.value("Geometry").toByteArray());
+    secretDock->setFloating(
+                settings.value("Floating", false).toBool());
+    secretDock->restoreGeometry(
+                settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", false).toBool();
     secretDock->setVisible(visible);
-    toolBar->_secretsUpAction->setChecked(visible);
     area = getDockArea(
                 settings.value(
                     "DockArea",
@@ -536,7 +557,7 @@ void MainWindow::initDockWidgets()
     settings.endGroup();
     addDockWidget(area, secretDock);
     tabifyDockWidget(storagePoolDock, secretDock);
-    connect(toolBar->_secretsUpAction, SIGNAL(triggered(bool)),
+    connect(menuBar->dockMenu->secretAct, SIGNAL(toggled(bool)),
             secretDock, SLOT(setVisible(bool)));
     connect(secretDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
@@ -544,6 +565,7 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(secResult(Result)),
             secretDockContent, SLOT(resultReceiver(Result)));
+    menuBar->dockMenu->secretAct->setChecked(visible);
 
     ifaceDock = new DockWidget(this);
     ifaceDock->setObjectName("ifaceDock");
@@ -567,7 +589,6 @@ void MainWindow::initDockWidgets()
     ifaceDock->restoreGeometry(settings.value("Geometry").toByteArray());
     visible = settings.value("Visible", false).toBool();
     ifaceDock->setVisible(visible);
-    toolBar->_ifaceUpAction->setChecked(visible);
     area = getDockArea(
                 settings.value(
                     "DockArea",
@@ -576,7 +597,7 @@ void MainWindow::initDockWidgets()
     settings.endGroup();
     addDockWidget(area, ifaceDock);
     tabifyDockWidget(secretDock, ifaceDock);
-    connect(toolBar->_ifaceUpAction, SIGNAL(triggered(bool)),
+    connect(menuBar->dockMenu->ifaceAct, SIGNAL(toggled(bool)),
             ifaceDock, SLOT(setVisible(bool)));
     connect(ifaceDockContent, SIGNAL(entityMsg(QString&)),
             this, SLOT(writeToErrorLog(QString&)));
@@ -584,6 +605,7 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(ifaceResult(Result)),
             ifaceDockContent, SLOT(resultReceiver(Result)));
+    menuBar->dockMenu->ifaceAct->setChecked(visible);
 
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);
@@ -596,20 +618,48 @@ void MainWindow::initVirEventloop()
     virtEventLoop = new VirtEventLoop(this);
     // close application after closing virtEventLoop
     connect(virtEventLoop, SIGNAL(finished()),
-            this, SLOT(close()));
+            this, SLOT(virtEventLoopFinished()));
     connect(virtEventLoop, SIGNAL(errorMsg(QString&,uint)),
             this, SLOT(writeToErrorLog(QString&,uint)));
     connect(virtEventLoop, SIGNAL(result(bool)),
              this, SLOT(initConnections(bool)));
     virtEventLoop->start();
 }
+void MainWindow::virtEventLoopFinished()
+{
+    if ( reloadFlag ) {
+        delete virtEventLoop;
+        virtEventLoop = nullptr;
+        initVirEventloop();
+        //qDebug()<<"restart Application done";
+    } else {
+        close();
+    };
+}
+void MainWindow::restartApplication()
+{
+    //qDebug()<<"restart Application";
+    QString msg("Reload Application.");
+    QString time = QTime::currentTime().toString();
+    QString title("Libvirt EventLoop");
+    QString currMsg = QString("<b>%1 %2:</b><br><font color='green'><b>ACTION</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
+    logDockContent->appendMsgToLog(currMsg);
+    reloadFlag = true;
+    connListWidget->setEnabled(false);
+    closeAllConnections();
+    virtEventLoop->stop();
+}
 void MainWindow::initConnections(bool started)
 {
+    menuBar->helpMenu->setLibvirtVersion(
+                virtEventLoop->libVersion);
     QString time = QTime::currentTime().toString();
     QString title("App initialization");
     QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
                                <b>EVENT</b></font>: virtEventLoop%3%4")
-            .arg(time).arg(title).arg(!started?" not":"").arg(" started");
+            .arg(time).arg(title)
+            .arg(!started?" not":"").arg(" started");
     if ( !started ) return;
     logDockContent->appendMsgToLog(currMsg);
     settings.beginGroup("Connects");
@@ -620,25 +670,12 @@ void MainWindow::initConnections(bool started)
         QString s = (*i);
         connListWidget->addConnItem(s);
     };
-    connListWidget->searchLocalhostConnections();
-    connect(connListWidget, SIGNAL(removeConnection(QString&)),
-            this, SLOT(removeConnItem(QString&)));
-    connect(connListWidget, SIGNAL(messageShowed()),
-            this, SLOT(mainWindowUp()));
-    connect(connListWidget, SIGNAL(warning(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
-    connect(connListWidget, SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
-            this, SLOT(receiveConnPtrPtr(virConnectPtr*, QString&)));
-    connect(connListWidget, SIGNAL(connClosed(bool, QString&)),
-            this, SLOT(stopConnProcessing(bool, QString&)));
-    connect(connListWidget, SIGNAL(connToClose(int)),
-            this, SLOT(closeConnGenerations(int)));
-    connect(connListWidget, SIGNAL(domainEnd(QString&)),
-            this, SLOT(deleteVMDisplay(QString&)));
+    connListWidget->refreshLocalhostConnection();
     currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
                        <b>EVENT</b></font>: %3")
             .arg(time).arg(title).arg("Connections inited");
     logDockContent->appendMsgToLog(currMsg);
+    reloadFlag = false;
 }
 void MainWindow::editCurrentConnection()
 {
@@ -761,20 +798,6 @@ void MainWindow::writeToErrorLog(QString &msg, uint _number)
             .arg(time).arg(title).arg(msg);
     logDockContent->appendMsgToLog(currMsg);
 }
-void MainWindow::changeLogViewerVisibility()
-{
-    QString text;
-    if ( logDock->isVisible() ) {
-        logDock->hide();
-        text = "Show Log Viewer";
-    } else {
-        logDock->show();
-        text = "Hide Log Viewer";
-    };
-    trayIcon->setLogUpActionText(text);
-    toolBar->_logUpAction->setChecked(logDock->isVisible());
-}
-
 Qt::DockWidgetArea MainWindow::getDockArea(int i) const
 {
     Qt::DockWidgetArea result;
@@ -996,37 +1019,6 @@ void MainWindow::deleteDomainEditor(QString &key)
         // not need to delete a CreateVirtDomain
         DomainEditor_Map.remove(key);
     };
-}
-void MainWindow::showAboutInfo()
-{
-    QString message = QString(
-                "Qt Virtual machine manager,\
-                \nversion %1.\
-                \nBased on Qt %2.\
-                \nUsed libvirt (%3) API.\
-                \nImplemented graphical consoles for\
-                \nVirtual Machine displays\
-                \n(by SPICE/VNC client)\
-                \nand LXC terminals.")
-                .arg(QString("%1.%2.%3")
-                     .arg(VERSION_MAJOR)
-                     .arg(VERSION_MIDDLE)
-                     .arg(VERSION_MINOR))
-                .arg(QT_VERSION_STR)
-                .arg(virtEventLoop->libVersion);
-    QMessageBox::about(
-                this,
-                "About QtVirtManager",
-                message);
-}
-void MainWindow::showDonateDialog()
-{
-    Donate_Dialog *dd = new Donate_Dialog(this);
-    dd->exec();
-    bool again = dd->showAgain();
-    dd->deleteLater();
-    settings.setValue("Donate", again);
-    toolBar->_donateAction->setVisible(again);
 }
 void MainWindow::migrate_settings_to_INI_format()
 {
