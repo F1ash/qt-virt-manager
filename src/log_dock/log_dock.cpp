@@ -1,5 +1,8 @@
 #include "log_dock.h"
 
+#define  DOT    QChar(0x273B)
+#define  DEMARK QString("<br>")
+
 LogDock::LogDock(QWidget *parent) :
     QWidget(parent)
 {
@@ -80,9 +83,10 @@ LogDock::~LogDock()
 /* public slots */
 void LogDock::appendMsgToLog(QString &msg)
 {
-    Log->append(msg);
-    Log->setToolTip(
-                QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
+    Log->append(QString("%1 %2").arg(DOT).arg(msg));
+    Log->append(DEMARK);
+    Log->setToolTip(QString(
+    "Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
                 .arg(currLogSize * ONE_MB)
                 .arg(Log->toPlainText().count()));
     if ( Log->toPlainText().count()>currLogSize * ONE_MB ) {

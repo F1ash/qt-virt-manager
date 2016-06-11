@@ -36,16 +36,16 @@ void ToolBar::initActions()
                 QString("Close Overview"), this);
     _closeOverview->setIcon ( QIcon::fromTheme("overview-stop") );
 
-    addAction(_createAction);
-    addAction(_editAction);
-    addAction(_deleteAction);
-    addSeparator();
     addAction(_openAction);
     addAction(_closeAction);
     addAction(_closeAllAction);
     addSeparator();
     addAction(_showAction);
     addAction(_closeOverview);
+    addSeparator();
+    addAction(_createAction);
+    addAction(_editAction);
+    addAction(_deleteAction);
 }
 
 Qt::ToolBarArea ToolBar::get_ToolBarArea(int i) const

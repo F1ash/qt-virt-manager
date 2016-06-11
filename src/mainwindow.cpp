@@ -209,12 +209,12 @@ void MainWindow::initDomainStateMonitor()
 void MainWindow::initTrayIcon()
 {
     trayIcon = new TrayIcon(this);
-    connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
+    connect(trayIcon,
+            SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this,
+            SLOT(trayIconActivated(QSystemTrayIcon::ActivationReason)));
     connect(trayIcon->hideAction, SIGNAL(triggered()),
             this, SLOT(changeVisibility()));
-    //connect(trayIcon->logUpAction, SIGNAL(triggered()),
-    //        this, SLOT(changeLogViewerVisibility()));
     connect(trayIcon->monitorAction, SIGNAL(triggered()),
             domainsStateMonitor, SLOT(changeVisibility()));
     connect(trayIcon->taskUpAction, SIGNAL(triggered()),
