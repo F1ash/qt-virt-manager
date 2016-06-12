@@ -38,10 +38,10 @@ public slots:
     void                 refreshLocalhostConnection();
     void                 addConnItem(QString&);
     void                 deleteCurrentConnection();
-    void                 openConnection(QModelIndex&);
-    void                 showConnection(QModelIndex&);
-    void                 closeConnection(QModelIndex&);
-    virConnectPtr       *getPtr_connectionPtr(QString&);
+    void                 openConnection(const QModelIndex&);
+    void                 showConnection(const QModelIndex&);
+    void                 closeConnection(const QModelIndex&);
+    virConnectPtr       *getPtr_connectionPtr(const QString&);
     void                 stopProcessing();
 
 private :
@@ -52,14 +52,14 @@ private :
 
 private slots:
     void                 searchLocalhostConnections();
-    void                 connItemClicked(const QPoint&);
+    void                 connContextMenuRequested(const QPoint&);
     void                 connItemDoubleClicked(const QModelIndex&);
     void                 connItemKillAction();
     void                 connItemRunAction();
     void                 connItemShowAction();
     void                 createConnection(QModelIndex&);
     void                 createLocalConnection(QString&);
-    void                 checkConnection(QModelIndex&, bool);
+    void                 checkConnection(const QModelIndex&, bool);
     void                 deleteCancelledCreation();
     void                 deleteCurrentConnection(QModelIndex&);
     void                 showMessage(QString, QString);

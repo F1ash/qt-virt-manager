@@ -26,7 +26,10 @@ LogDock::LogDock(QWidget *parent) :
     logSize->setValue(currLogSize);
     autoSaveLog = new QCheckBox(this);
     autoSaveLog->setToolTip("AutoSave");
-    saveLog = new QPushButton(QIcon::fromTheme("document-save"), "", this);
+    saveLog = new QPushButton(
+                QIcon::fromTheme("document-save"),
+                "",
+                this);
     saveLog->setToolTip("Save Log to File");
     //saveLog->setMaximumSize(QSize(_size, _size));
     titleLayout = new QHBoxLayout();
@@ -41,13 +44,14 @@ LogDock::LogDock(QWidget *parent) :
     title->setContentsMargins(0, 0, 10, 0);
 
     Log = new QTextBrowser(this);
-    Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
+    Log->setToolTip(QString(
+    "Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
                     .arg(currLogSize * ONE_MB)
                     .arg(Log->toPlainText().count()));
     Log->setReadOnly(true);
     Log->setOpenLinks(false);
     Log->setOpenExternalLinks(true);
-    Log->setContextMenuPolicy(Qt::DefaultContextMenu);   //Qt::CustomContextMenu);
+    Log->setContextMenuPolicy(Qt::DefaultContextMenu);
     connect(Log, SIGNAL(anchorClicked(QUrl)),
             this, SLOT(openLink(QUrl)));
 
@@ -165,7 +169,8 @@ QString LogDock::getTemplateFilename() const
 void LogDock::changeLogSize(int i)
 {
     currLogSize = i;
-    Log->setToolTip(QString("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
+    Log->setToolTip(QString(
+    "Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
                     .arg(currLogSize * ONE_MB)
                     .arg(Log->toPlainText().count()));
 }

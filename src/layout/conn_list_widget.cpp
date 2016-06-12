@@ -17,7 +17,7 @@ ConnectionList::ConnectionList(QWidget *parent)
     this->setItemDelegate(connListDlg);
     connections = new CONN_LIST();
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
-            this, SLOT(connItemClicked(const QPoint &)));
+            this, SLOT(connContextMenuRequested(const QPoint &)));
     connect(this, SIGNAL(doubleClicked(const QModelIndex&)),
             this, SLOT(connItemDoubleClicked(const QModelIndex&)));
     searchThread = new SearchThread(this);
@@ -99,11 +99,11 @@ void ConnectionList::deleteCurrentConnection()
     QModelIndex _item = currentIndex();
     deleteCurrentConnection(_item);
 }
-void ConnectionList::openConnection(QModelIndex &_item)
+void ConnectionList::openConnection(const QModelIndex &_item)
 {
     checkConnection(_item, TO_RUN);
 }
-void ConnectionList::showConnection(QModelIndex &_item)
+void ConnectionList::showConnection(const QModelIndex &_item)
 {
     if ( !_item.isValid() ) return;
     for (int i=0; i<connections->count(); i++) {
@@ -138,11 +138,11 @@ void ConnectionList::showConnection(QModelIndex &_item)
     };
     clearSelection();
 }
-void ConnectionList::closeConnection(QModelIndex &_item)
+void ConnectionList::closeConnection(const QModelIndex &_item)
 {
     checkConnection(_item, TO_STOP);
 }
-virConnectPtr* ConnectionList::getPtr_connectionPtr(QString &name)
+virConnectPtr* ConnectionList::getPtr_connectionPtr(const QString &name)
 {
     //qDebug()<<name<<connections->contains(name);
     virConnectPtr *_res = nullptr;
@@ -179,7 +179,7 @@ void ConnectionList::searchLocalhostConnections()
     clearSelection();
     if ( !searchThread->isRunning() ) searchThread->start();
 }
-void ConnectionList::connItemClicked(const QPoint &pos)
+void ConnectionList::connContextMenuRequested(const QPoint &pos)
 {
     QModelIndex _item = indexAt(pos);
     if ( !_item.isValid() ) {
@@ -191,7 +191,8 @@ void ConnectionList::connItemClicked(const QPoint &pos)
     DATA conn_Status;
     ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
     conn_Status = idx->getData();
-    if ( !conn_Status.value("availability", NOT_AVAILABLE).toBool() ) return;
+    if ( !conn_Status.value("availability", NOT_AVAILABLE).toBool() )
+        return;
     bool to_run = TO_RUN;
     ConnectMenu *connectMenu = new ConnectMenu(this);
     if ( conn_Status.value("isRunning", CLOSED).toInt()==RUNNING ) {
@@ -240,13 +241,14 @@ void ConnectionList::connItemClicked(const QPoint &pos)
 }
 void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
 {
-    clearSelection();
+    //clearSelection();
     ConnItemIndex *idx = connItemModel->connItemDataList.at(_item.row());
     QString _name = idx->getName();
     DATA conn_Status;
     conn_Status = idx->getData();
     QString key = conn_Status.value(QString("initName")).toString();
-    ConnElement *conn = static_cast<ConnElement*>(connections->value(key));
+    ConnElement *conn =
+            static_cast<ConnElement*>(connections->value(key));
     if ( nullptr==conn ) return;
     if ( key != _name ) {
         conn_Status.insert(QString("initName"), QVariant(_name));
@@ -257,7 +259,8 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
     //qDebug()<<key<<" Connection doubleClicked"<<conn;
     int conn_state;
     conn_state = conn_Status.value(QString("isRunning"), FAILED).toInt();
-    if ( !conn_Status.value(QString("availability"), NOT_AVAILABLE).toBool() ) {
+    if ( !conn_Status.value(
+             QString("availability"), NOT_AVAILABLE).toBool() ) {
         showMessage("Info", "Connection is busy.");
     } else if ( conn_state!=RUNNING ) {
         conn->openConnection();
@@ -368,7 +371,7 @@ void ConnectionList::refreshLocalhostConnection()
     localConn = 0;
     if ( !waitLocalConn->isRunning() ) waitLocalConn->start();
 }
-void ConnectionList::checkConnection(QModelIndex &_item, bool to_run = TO_RUN)
+void ConnectionList::checkConnection(const QModelIndex &_item, bool to_run = TO_RUN)
 {
     if ( !_item.isValid() ) return;
     int conn_state;
