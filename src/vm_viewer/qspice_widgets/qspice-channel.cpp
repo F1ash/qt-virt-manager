@@ -27,8 +27,8 @@ void QSpiceHelper::channel_event(
     QSpiceChannel *_channel =
             static_cast<QSpiceChannel*>(user_data);
     if ( nullptr==_channel ) return;
-    int state = static_cast<int>(event);
-    emit _channel->stateChanged(state);
+    int ev = static_cast<int>(event);
+    emit _channel->channelEvent(ev);
 }
 
 QSpiceChannel::QSpiceChannel(void *channel) :

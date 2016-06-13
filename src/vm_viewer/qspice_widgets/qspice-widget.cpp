@@ -141,6 +141,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_main)
     {
         main = _main;
+        connect(main, SIGNAL(channelEvent(int)),
+                this, SLOT(channelEvent(int)));
         connect(main, SIGNAL(agentUpdated()),
                 SLOT(mainAgentUpdate()));
         connect(main, SIGNAL(clipboardSelection(uint,void*,uint)),
@@ -171,6 +173,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     {
         display = _display;
         display->setParentWidget((void*)this);
+        connect(display, SIGNAL(channelEvent(int)),
+                this, SLOT(channelEvent(int)));
         connect(display,
                 SIGNAL(displayPrimaryCreated(int,int,int,int,int,void*)),
                 SLOT(displayPrimaryCreate(int,int,int,int,int,void*)));
@@ -193,6 +197,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_inputs)
     {
         inputs = _inputs;
+        connect(inputs, SIGNAL(channelEvent(int)),
+                this, SLOT(channelEvent(int)));
         connect(inputs, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
                 this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = inputs->connectToChannel();
@@ -205,6 +211,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_cursor)
     {
         cursor = _cursor;
+        connect(cursor, SIGNAL(channelEvent(int)),
+                this, SLOT(channelEvent(int)));
         connect(cursor, SIGNAL(cursorData(int,int,int,int,void*)),
                 SLOT(setClientCursor(int,int,int,int,void*)));
         connect(cursor, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
@@ -219,6 +227,10 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_smartcard)
     {
         smartcard = _smartcard;
+        connect(smartcard, SIGNAL(channelEvent(int)),
+                this, SLOT(channelEvent(int)));
+        connect(smartcard, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = false;
 #if WITH_LIBCACARD
         online = smartcard->connectToChannel();
@@ -237,8 +249,6 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
                         this, SLOT(readerAdded(QString&)));
                 connect(smartcardManager, SIGNAL(readerRemoved(QString&)),
                         this, SLOT(readerRemoved(QString&)));
-                connect(smartcard, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
-                        this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
             };
         };
         emit smartcardChannelChanged(online);
@@ -250,6 +260,10 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_usbredir)
     {
         usbredir = _usbredir;
+        connect(usbredir, SIGNAL(channelEvent(int)),
+                this, SLOT(channelEvent(int)));
+        connect(usbredir, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
+                this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = usbredir->connectToChannel();
         if ( online ) {
             usbDevManager = new QSpiceUsbDeviceManager(this, spiceSession);
@@ -262,8 +276,6 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
                         this, SLOT(usbDevError(QString&,QString&)));
                 connect(usbDevManager, SIGNAL(deviceRemoved(QString&)),
                         this, SLOT(usbDevRemoved(QString&)));
-                connect(usbredir, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
-                        this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
             };
         };
         emit usbredirChannelChanged(online);
@@ -275,6 +287,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_webdav)
     {
         webdav = _webdav;
+        connect(webdav, SIGNAL(channelEvent(int)),
+                this, SLOT(channelEvent(int)));
         connect(webdav, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
                 this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = webdav->connectToChannel();
@@ -287,6 +301,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_playback)
     {
         playback = _playback;
+        connect(main, SIGNAL(channelEvent(int)),
+                this, SLOT(channelEvent(int)));
         connect(playback, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
                 this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = false;
@@ -314,6 +330,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
     if (_record)
     {
         record = _record;
+        connect(main, SIGNAL(channelEvent(int)),
+                this, SLOT(channelEvent(int)));
         connect(record, SIGNAL(channelMsg(SPICE_CHANNEL_MSG&)),
                 this, SLOT(formatMsg(SPICE_CHANNEL_MSG&)));
         bool online = false;
@@ -939,6 +957,80 @@ void QSpiceWidget::formatMsg(SPICE_CHANNEL_MSG &_msg)
             .arg(_msg.channel)
             .arg(_msg.context)
             .arg(_msg.msg);
+    emit errMsg(msg);
+}
+
+void QSpiceWidget::channelEvent(int _ev)
+{
+    SpiceChannelEvent ev =
+            static_cast<SpiceChannelEvent>(_ev);
+    QString eventDescription, chanName, msg;
+    switch (ev) {
+    case SPICE_CHANNEL_NONE:
+        eventDescription
+                .append("no event, or ignored event");
+        break;
+    case SPICE_CHANNEL_OPENED:
+        eventDescription
+                .append("connection is authentified and ready");
+        break;
+    case SPICE_CHANNEL_SWITCHING:
+        eventDescription
+                .append("disconnecting from the current host \
+and connecting to the target host");
+        break;
+    case SPICE_CHANNEL_CLOSED:
+        eventDescription
+                .append("connection is closed normally \
+(sent if channel was ready)");
+        break;
+    case SPICE_CHANNEL_ERROR_CONNECT:
+        eventDescription
+                .append("connection error");
+        break;
+    case SPICE_CHANNEL_ERROR_TLS:
+        eventDescription
+                .append("SSL error");
+        break;
+    case SPICE_CHANNEL_ERROR_LINK:
+        eventDescription
+                .append("error during link process");
+        break;
+    case SPICE_CHANNEL_ERROR_AUTH:
+        eventDescription
+                .append("authentication error");
+        break;
+    case SPICE_CHANNEL_ERROR_IO:
+        eventDescription
+                .append("IO error");
+        break;
+    default:
+        break;
+    };
+    if        ( sender()==main ) {
+        chanName.append("Main");
+    } else if ( sender()==display ) {
+        chanName.append("Display");
+    } else if ( sender()==inputs ) {
+        chanName.append("Inputs");
+    } else if ( sender()==cursor ) {
+        chanName.append("Cursor");
+    } else if ( sender()==usbredir ) {
+        chanName.append("UsbRedir");
+    } else if ( sender()==smartcard ) {
+        chanName.append("Smartcard");
+    } else if ( sender()==webdav ) {
+        chanName.append("WebDav");
+    } else if ( sender()==playback ) {
+        chanName.append("Playback");
+    } else if ( sender()==record ) {
+        chanName.append("Record");
+    };
+    msg = QString(
+                "Domain: %1<br>Channel: %2<br>Event: %3")
+            .arg(guestName)
+            .arg(chanName)
+            .arg(eventDescription);
     emit errMsg(msg);
 }
 

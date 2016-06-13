@@ -243,6 +243,7 @@ private slots:
     void resizeDone();
     void setDownloadProgress(int, int);
     void formatMsg(SPICE_CHANNEL_MSG&);
+    void channelEvent(int);
 
 public slots:
     /*

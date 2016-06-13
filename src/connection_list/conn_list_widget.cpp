@@ -1,4 +1,4 @@
-#include "layout/conn_list_widget.h"
+#include "connection_list/conn_list_widget.h"
 
 ConnectionList::ConnectionList(QWidget *parent)
     : QTreeView(parent)

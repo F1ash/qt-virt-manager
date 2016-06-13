@@ -6,7 +6,7 @@
 #include <QTimerEvent>
 #include "conn_alive_thread.h"
 #include "settings/conn_settings.h"
-#include "layout/conn_item_model.h"
+#include "connection_list/conn_item_model.h"
 #include <QDebug>
 
 #define AVAILABLE     true

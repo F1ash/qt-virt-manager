@@ -15,8 +15,7 @@
 #include "virt_objects/virt_secret/secret_control.h"
 #include "virt_objects/virt_interface/virt_interface_control.h"
 #include "tray/traywidget.h"
-#include "layout/conn_list_widget.h"
-#include "toolbar/toolbar.h"
+#include "connection_list/connections.h"
 #include "wait_thread/wait_thread.h"
 #include "vm_viewer/lxc/lxc_viewer.h"
 #include "vm_viewer/spice/spice_viewer.h"
@@ -43,10 +42,9 @@ public slots:
 
 private :
     QSettings                    settings;
-    ConnectionList              *connListWidget;
+    Connections                 *connListWidget;
     TrayIcon                    *trayIcon;
     MenuBar                     *menuBar;
-    ToolBar                     *toolBar;
     Wait                        *wait_thread = nullptr;
     DockWidget                  *logDock;
     LogDock                     *logDockContent;
@@ -93,9 +91,8 @@ private slots:
     void initDomainStateMonitor();
     void initTrayIcon();
     void trayIconActivated(QSystemTrayIcon::ActivationReason);
-    void initConnListWidget();
     void initMenuBar();
-    void initToolBar();
+    void initConnListWidget();
     void initDockWidgets();
     void initVirEventloop();
     void virtEventLoopFinished();

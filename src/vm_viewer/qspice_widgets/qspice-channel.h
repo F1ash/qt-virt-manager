@@ -43,7 +43,7 @@ public:
     int getId() {return getPropInt("channel-id");}
 
 signals:
-    void stateChanged(int);
+    void channelEvent(int);
     void channelMsg(SPICE_CHANNEL_MSG&);
     // unused, conserved
     void channelDestroyed();

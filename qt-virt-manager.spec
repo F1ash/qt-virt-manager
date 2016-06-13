@@ -25,18 +25,21 @@ Requires:       qt5-qtmultimedia
 # for use qemu-kvm (more useful)
 Requires:       qemu-kvm
 Requires:       libvirt-daemon-driver-qemu
+
 # for use SPICE viewer
 # spice-server exist in libvirt-daemon-driver-qemu Requires in Fedora
 #Requires:      spice-server
 Requires:       spice-vdagent
-# for scrubbing (optional)
-Requires:       scrub
-# for ssh-transported remote connections (optional)
-Requires:       nc6
+
 # for use VNC viewer
 Requires:       libvncserver
+
+# for scrubbing (optional)
+Suggests:       scrub
+# netcat for ssh-transported remote connections (optional)
+Suggests:       nc
 # for use VNC client with tls (optional)
-Requires:       gnutls
+Suggests:       gnutls
 
 %if %with qt4
 BuildRequires:  qt4-devel
@@ -62,30 +65,30 @@ BuildRequires:  libcacard-devel
 
 %description
 Qt Virtual Machine Manager provides a graphical tool for administering virtual
-machines for QEMU/KVM, Xen, and LXC and other Virtual Entities.
+machines for QEMU/KVM, Xen, OpenVZ, VBox, VMWare and LXC and other Virtual Entities.
 Start, stop, add or remove virtual devices, connect to a graphical or serial console,
 and see resource usage statistics for existing VMs on local or remote machines.
-Uses libvirt as the back-end management API.
+Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
 
 %package -n qt4-virt-manager
 Summary:        Qt4 Virtual Machine Manager
 
 %description -n qt4-virt-manager
 Qt4 Virtual Machine Manager provides a graphical tool for administering virtual
-machines for QEMU/KVM, Xen, and LXC and other Virtual Entities.
+machines for QEMU/KVM, Xen, OpenVZ, VBox, VMWare and LXC and other Virtual Entities.
 Start, stop, add or remove virtual devices, connect to a graphical or serial console,
 and see resource usage statistics for existing VMs on local or remote machines.
-Uses libvirt as the back-end management API.
+Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
 
 %package -n qt5-virt-manager
 Summary:        Qt5 Virtual Machine Manager
 
 %description -n qt5-virt-manager
 Qt5 Virtual Machine Manager provides a graphical tool for administering virtual
-machines for QEMU/KVM, Xen, and LXC and other Virtual Entities.
+machines for QEMU/KVM, Xen, OpenVZ, VBox, VMWare and LXC and other Virtual Entities.
 Start, stop, add or remove virtual devices, connect to a graphical or serial console,
 and see resource usage statistics for existing VMs on local or remote machines.
-Uses libvirt as the back-end management API.
+Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
 
 %prep
 %setup -q

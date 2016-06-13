@@ -217,6 +217,7 @@ void Spice_Viewer::fullScreenVirtDomain()
 void Spice_Viewer::initSpiceWidget()
 {
     spiceWdg = new QSpiceWidget(this);
+    spiceWdg->setAttribute(Qt::WA_OpaquePaintEvent, true);
     scrolled = new QScrollArea(this);
     scrolled->setWidgetResizable(true);
     scrolled->setAlignment(Qt::AlignCenter);

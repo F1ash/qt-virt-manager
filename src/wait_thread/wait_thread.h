@@ -2,7 +2,7 @@
 #define WAIT_THREAD_H
 
 #include <QThread>
-#include "layout/conn_list_widget.h"
+#include "connection_list/conn_list_widget.h"
 
 class Wait : public QThread
 {

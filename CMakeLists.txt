@@ -76,7 +76,6 @@ set (HEADERS
   src/mainwindow.h
   src/log_dock/log_dock.h
   src/tray/traywidget.h
-  src/toolbar/toolbar.h
   src/settings/conn_settings.h
   src/wait_thread/wait_thread.h
   src/menubar/menu_bar.h
@@ -84,14 +83,16 @@ set (HEADERS
   src/menubar/dock_menu.h
   src/menubar/help_menu.h
   src/menubar/donate_dialog.h
-  
-  src/layout/conn_list_widget.h
-  src/layout/conn_menu.h
-  src/layout/conn_item_index.h
-  src/layout/conn_item_model.h
-  src/layout/conn_list_delegate.h
-  src/layout/search_thread.h
-  src/layout/wait_local_conn.h
+
+  src/connection_list/connections.h
+  src/connection_list/toolbar.h
+  src/connection_list/conn_list_widget.h
+  src/connection_list/conn_menu.h
+  src/connection_list/conn_item_index.h
+  src/connection_list/conn_item_model.h
+  src/connection_list/conn_list_delegate.h
+  src/connection_list/search_thread.h
+  src/connection_list/wait_local_conn.h
 
   src/dock_head_widgets/dock_head_widget.h
   src/dock_head_widgets/bar_name.h
@@ -425,7 +426,6 @@ set (SOURCES
   src/mainwindow.cpp
   src/log_dock/log_dock.cpp
   src/tray/traywidget.cpp
-  src/toolbar/toolbar.cpp
   src/settings/conn_settings.cpp
   src/wait_thread/wait_thread.cpp
   src/menubar/menu_bar.cpp
@@ -434,13 +434,15 @@ set (SOURCES
   src/menubar/help_menu.cpp
   src/menubar/donate_dialog.cpp
   
-  src/layout/conn_list_widget.cpp
-  src/layout/conn_menu.cpp
-  src/layout/conn_item_index.cpp
-  src/layout/conn_item_model.cpp
-  src/layout/conn_list_delegate.cpp
-  src/layout/search_thread.cpp
-  src/layout/wait_local_conn.cpp
+  src/connection_list/connections.cpp
+  src/connection_list/toolbar.cpp
+  src/connection_list/conn_list_widget.cpp
+  src/connection_list/conn_menu.cpp
+  src/connection_list/conn_item_index.cpp
+  src/connection_list/conn_item_model.cpp
+  src/connection_list/conn_list_delegate.cpp
+  src/connection_list/search_thread.cpp
+  src/connection_list/wait_local_conn.cpp
 
   src/dock_head_widgets/dock_head_widget.cpp
   src/dock_head_widgets/bar_name.cpp

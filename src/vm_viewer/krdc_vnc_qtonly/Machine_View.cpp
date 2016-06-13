@@ -34,6 +34,7 @@
 MachineView::MachineView( QWidget *parent ) : QScrollArea( parent )
 {
     View = new VncView( this );
+    View->setAttribute(Qt::WA_OpaquePaintEvent, true);
     splashShown = true;
     fullscreenEnabled = false;
     showSplash( true );
