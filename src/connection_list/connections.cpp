@@ -6,8 +6,8 @@ Connections::Connections(QWidget *parent) :
     toolBar = new ToolBar(this);
     toolBar->setObjectName("toolBar");
     list = new ConnectionList(this);
+    list->setEnabled(false);
     setCentralWidget(list);
-    show();
 }
 void Connections::setToolBarArea(int area_int)
 {

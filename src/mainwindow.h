@@ -6,6 +6,7 @@
 #include <QTimerEvent>
 #include <QSettings>
 #include <QCloseEvent>
+#include <QHBoxLayout>
 #include "log_dock/log_dock.h"
 #include "virt_objects/virt_event_loop.h"
 #include "virt_objects/virt_network/virtnet_control.h"
@@ -25,6 +26,7 @@
 #include "dock_head_widgets/dock_widget.h"
 #include "dock_head_widgets/dock_head_widget.h"
 #include "menubar/menu_bar.h"
+#include "proxy_widget/proxy_widget.h"
 
 typedef QMap<QString, VM_Viewer*> ViewerMap;
 typedef QMap<QString, VirtStorageVolControl*> OverviwedStorageMap;
@@ -42,6 +44,8 @@ public slots:
 
 private :
     QSettings                    settings;
+    ProxyWidget                 *proxyWdg;
+    QHBoxLayout                 *proxyLayout;
     Connections                 *connListWidget;
     TrayIcon                    *trayIcon;
     MenuBar                     *menuBar;
@@ -73,6 +77,7 @@ private :
     int                          counter = 0;
     int                          waitAtClose;
     bool                         reloadFlag = false;
+    VIEW_MODE                    viewMode;
 
     ViewerMap                    VM_Displayed_Map;
     OverviwedStorageMap          Overviewed_StPool_Map;
@@ -125,6 +130,9 @@ private slots:
     void invokeDomainEditor(TASK);
     void deleteDomainEditor(QString&);
     void migrate_settings_to_INI_format();
+
+    void free_and_hide_all_stuff();
+    void all_stuff_to_original();
 };
 
 #endif // MAINWINDOW_H

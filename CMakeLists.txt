@@ -78,8 +78,12 @@ set (HEADERS
   src/tray/traywidget.h
   src/settings/conn_settings.h
   src/wait_thread/wait_thread.h
+
+  src/proxy_widget/proxy_widget.h
+
   src/menubar/menu_bar.h
   src/menubar/file_menu.h
+  src/menubar/view_menu.h
   src/menubar/dock_menu.h
   src/menubar/help_menu.h
   src/menubar/donate_dialog.h
@@ -157,7 +161,7 @@ set (HEADERS
   src/virt_objects/virt_interface/virt_interface_index.h
   src/virt_objects/virt_interface/virt_interface_control_menu.h
   src/virt_objects/virt_interface/interface_list_delegate.h
-  
+
   src/create_widgets/domain/domain_widgets.h
   src/create_widgets/domain/_qwidget.h
   src/create_widgets/domain/_qwidget_threaded.h
@@ -428,8 +432,12 @@ set (SOURCES
   src/tray/traywidget.cpp
   src/settings/conn_settings.cpp
   src/wait_thread/wait_thread.cpp
+
+  src/proxy_widget/proxy_widget.cpp
+
   src/menubar/menu_bar.cpp
   src/menubar/file_menu.cpp
+  src/menubar/view_menu.cpp
   src/menubar/dock_menu.cpp
   src/menubar/help_menu.cpp
   src/menubar/donate_dialog.cpp

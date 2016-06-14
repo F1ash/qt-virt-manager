@@ -3,6 +3,7 @@
 
 #include <QMenuBar>
 #include "file_menu.h"
+#include "view_menu.h"
 #include "dock_menu.h"
 #include "help_menu.h"
 
@@ -12,9 +13,11 @@ class MenuBar : public QMenuBar
 public:
     explicit MenuBar(QWidget *parent = nullptr);
     FileMenu       *fileMenu;
+    ViewMenu       *viewMenu;
     DockMenu       *dockMenu;
     HelpMenu       *helpMenu;
     QAction        *fileAct;
+    QAction        *viewAct;
     QAction        *dockAct;
     QAction        *helpAct;
 };

@@ -17,7 +17,13 @@ MainWindow::MainWindow(QWidget *parent)
                 QMainWindow::AnimatedDocks |
                 QMainWindow::ForceTabbedDocks);
     migrate_settings_to_INI_format();
+    int _viewMode = settings.value("ViewMode", 0).toInt();
+    viewMode = static_cast<VIEW_MODE>(_viewMode);
     restoreGeometry(settings.value("Geometry").toByteArray());
+    proxyWdg = new ProxyWidget(nullptr);
+    proxyWdg->setUsedViewMode(viewMode);
+    proxyLayout = new QHBoxLayout();
+    proxyWdg->setLayout(proxyLayout);
     initTaskWareHouse();
     initDomainStateMonitor();
     initTrayIcon();
@@ -41,6 +47,7 @@ void MainWindow::saveSettings()
 {
     taskWrHouse->saveCurrentState();
     domainsStateMonitor->saveCurrentState();
+    settings.setValue("ViewMode", static_cast<int>(viewMode));
     settings.setValue("Geometry", saveGeometry());
     settings.setValue("State", saveState());
     settings.setValue("ToolBarArea", toolBarArea(connListWidget->toolBar));
@@ -279,6 +286,15 @@ void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
 void MainWindow::initMenuBar()
 {
     menuBar = new MenuBar(this);
+    switch (viewMode) {
+    case GALLANT_SOFT:
+        menuBar->viewMenu->gallantSoft->setChecked(true);
+        break;
+    case HARD_CLASSIC:
+    default:
+        menuBar->viewMenu->hardClassic->setChecked(true);
+        break;
+    };
     connect(menuBar->fileMenu->newConn, SIGNAL(triggered()),
             this, SLOT(createNewConnection()));
     connect(menuBar->fileMenu->hideToTray, SIGNAL(triggered()),
@@ -287,13 +303,25 @@ void MainWindow::initMenuBar()
             this, SLOT(restartApplication()));
     connect(menuBar->fileMenu->exitApp, SIGNAL(triggered()),
             this, SLOT(close()));
+    connect(menuBar->viewMenu->hardClassic, SIGNAL(triggered()),
+            this, SLOT(all_stuff_to_original()));
+    connect(menuBar->viewMenu->gallantSoft, SIGNAL(triggered()),
+            this, SLOT(free_and_hide_all_stuff()));
     setMenuBar(menuBar);
 }
 void MainWindow::initConnListWidget()
 {
     connListWidget = new Connections(nullptr);
-    connListWidget->list->setEnabled(false);
-    setCentralWidget(connListWidget);
+    switch (viewMode) {
+    case GALLANT_SOFT:
+        //proxyLayout->addWidget(connListWidget);
+        break;
+    case HARD_CLASSIC:
+    default:
+        proxyLayout->addWidget(connListWidget);
+        break;
+    };
+    setCentralWidget(proxyWdg);
     settings.beginGroup("ConnectListColumns");
     connListWidget->list->setColumnWidth(
                 0, settings.value("column0", 132).toInt());
@@ -339,8 +367,6 @@ void MainWindow::initConnListWidget()
 }
 void MainWindow::initDockWidgets()
 {
-    bool visible;
-    Qt::DockWidgetArea area;
     logDock = new DockWidget(this);
     logDock->setObjectName("logDock");
     logDock->setWindowTitle("Log");
@@ -358,25 +384,12 @@ void MainWindow::initDockWidgets()
             logHeadWdg, SLOT(floatStateChanged(bool)));
     logDockContent = new LogDock(this);
     logDock->setWidget( logDockContent );
-    settings.beginGroup("LogDock");
-    logDock->setFloating(settings.value("Floating", false).toBool());
-    logDock->restoreGeometry(settings.value("Geometry").toByteArray());
-    visible = settings.value("Visible", true).toBool();
-    logDock->setVisible(visible);
     connect(menuBar->dockMenu->logAct, SIGNAL(toggled(bool)),
             logDock, SLOT(setVisible(bool)));
     connect(logDockContent, SIGNAL(overflow(bool)),
             logDock, SLOT(changeWarningState(bool)));
     connect(logDockContent, SIGNAL(overflow(bool)),
             trayIcon, SLOT(changeWarningState(bool)));
-    area = getDockArea(
-                settings.value(
-                    "DockArea",
-                    Qt::BottomDockWidgetArea)
-                .toInt());
-    settings.endGroup();
-    addDockWidget(area, logDock);
-    menuBar->dockMenu->logAct->setChecked(visible);
 
     domainDock = new DockWidget(this);
     domainDock->setObjectName("domainDock");
@@ -396,20 +409,6 @@ void MainWindow::initDockWidgets()
             domHeadWdg, SLOT(floatStateChanged(bool)));
     domainDockContent = new VirtDomainControl(this);
     domainDock->setWidget( domainDockContent );
-    settings.beginGroup("DomainDock");
-    domainDock->setFloating(settings.value("Floating", false).toBool());
-    domainDock->restoreGeometry(
-                settings.value("Geometry").toByteArray());
-    visible = settings.value("Visible", true).toBool();
-    domainDock->setVisible(visible);
-    area = getDockArea(
-                settings.value(
-                    "DockArea",
-                    Qt::BottomDockWidgetArea)
-                .toInt());
-    settings.endGroup();
-    addDockWidget(area, domainDock);
-    tabifyDockWidget(logDock, domainDock);
     connect(menuBar->dockMenu->domainAct, SIGNAL(toggled(bool)),
             domainDock, SLOT(setVisible(bool)));
     connect(domainDockContent, SIGNAL(entityMsg(QString&)),
@@ -430,7 +429,6 @@ void MainWindow::initDockWidgets()
             domainDockContent, SLOT(resultReceiver(Result)));
     connect(domainDockContent, SIGNAL(domainToEditor(TASK)),
             this, SLOT(invokeDomainEditor(TASK)));
-    menuBar->dockMenu->domainAct->setChecked(visible);
 
     networkDock = new DockWidget(this);
     networkDock->setObjectName("networkDock");
@@ -450,20 +448,6 @@ void MainWindow::initDockWidgets()
             netHeadWdg, SLOT(floatStateChanged(bool)));
     networkDockContent = new VirtNetControl(this);
     networkDock->setWidget( networkDockContent );
-    settings.beginGroup("NetworkDock");
-    networkDock->setFloating(settings.value("Floating", false).toBool());
-    networkDock->restoreGeometry(
-                settings.value("Geometry").toByteArray());
-    visible = settings.value("Visible", false).toBool();
-    networkDock->setVisible(visible);
-    area = getDockArea(
-                settings.value(
-                    "DockArea",
-                    Qt::BottomDockWidgetArea)
-                .toInt());
-    settings.endGroup();
-    addDockWidget(area, networkDock);
-    tabifyDockWidget(domainDock, networkDock);
     connect(menuBar->dockMenu->networkAct, SIGNAL(toggled(bool)),
             networkDock, SLOT(setVisible(bool)));
     connect(networkDockContent, SIGNAL(entityMsg(QString&)),
@@ -474,7 +458,6 @@ void MainWindow::initDockWidgets()
             networkDockContent, SLOT(resultReceiver(Result)));
     connect(connListWidget->list, SIGNAL(netResult(Result)),
             networkDockContent, SLOT(resultReceiver(Result)));
-    menuBar->dockMenu->networkAct->setChecked(visible);
 
     storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
@@ -493,21 +476,6 @@ void MainWindow::initDockWidgets()
             poolHeadWdg, SLOT(floatStateChanged(bool)));
     storagePoolDockContent = new VirtStoragePoolControl(this);
     storagePoolDock->setWidget( storagePoolDockContent );
-    settings.beginGroup("StoragePoolDock");
-    storagePoolDock->setFloating(
-                settings.value("Floating", false).toBool());
-    storagePoolDock->restoreGeometry(
-                settings.value("Geometry").toByteArray());
-    visible = settings.value("Visible", false).toBool();
-    storagePoolDock->setVisible(visible);
-    area = getDockArea(
-                settings.value(
-                    "DockArea",
-                    Qt::BottomDockWidgetArea)
-                .toInt());
-    settings.endGroup();
-    addDockWidget(area, storagePoolDock);
-    tabifyDockWidget(networkDock, storagePoolDock);
     connect(menuBar->dockMenu->storageAct, SIGNAL(toggled(bool)),
             storagePoolDock, SLOT(setVisible(bool)));
     connect(storagePoolDockContent, SIGNAL(entityMsg(QString&)),
@@ -520,7 +488,6 @@ void MainWindow::initDockWidgets()
             SIGNAL(overviewStPool(virConnectPtr*,QString&,QString&)),
             this,
             SLOT(overviewStoragePool(virConnectPtr*,QString&,QString&)));
-    menuBar->dockMenu->storageAct->setChecked(visible);
 
     secretDock = new DockWidget(this);
     secretDock->setObjectName("secretDock");
@@ -539,21 +506,6 @@ void MainWindow::initDockWidgets()
             scrtHeadWdg, SLOT(floatStateChanged(bool)));
     secretDockContent = new VirtSecretControl(this);
     secretDock->setWidget( secretDockContent );
-    settings.beginGroup("SecretDock");
-    secretDock->setFloating(
-                settings.value("Floating", false).toBool());
-    secretDock->restoreGeometry(
-                settings.value("Geometry").toByteArray());
-    visible = settings.value("Visible", false).toBool();
-    secretDock->setVisible(visible);
-    area = getDockArea(
-                settings.value(
-                    "DockArea",
-                    Qt::BottomDockWidgetArea)
-                .toInt());
-    settings.endGroup();
-    addDockWidget(area, secretDock);
-    tabifyDockWidget(storagePoolDock, secretDock);
     connect(menuBar->dockMenu->secretAct, SIGNAL(toggled(bool)),
             secretDock, SLOT(setVisible(bool)));
     connect(secretDockContent, SIGNAL(entityMsg(QString&)),
@@ -562,7 +514,6 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(secResult(Result)),
             secretDockContent, SLOT(resultReceiver(Result)));
-    menuBar->dockMenu->secretAct->setChecked(visible);
 
     ifaceDock = new DockWidget(this);
     ifaceDock->setObjectName("ifaceDock");
@@ -581,19 +532,6 @@ void MainWindow::initDockWidgets()
             ifaceHeadWdg, SLOT(floatStateChanged(bool)));
     ifaceDockContent = new VirtInterfaceControl(this);
     ifaceDock->setWidget( ifaceDockContent );
-    settings.beginGroup("IfaceDock");
-    ifaceDock->setFloating(settings.value("Floating", false).toBool());
-    ifaceDock->restoreGeometry(settings.value("Geometry").toByteArray());
-    visible = settings.value("Visible", false).toBool();
-    ifaceDock->setVisible(visible);
-    area = getDockArea(
-                settings.value(
-                    "DockArea",
-                    Qt::BottomDockWidgetArea)
-                .toInt());
-    settings.endGroup();
-    addDockWidget(area, ifaceDock);
-    tabifyDockWidget(secretDock, ifaceDock);
     connect(menuBar->dockMenu->ifaceAct, SIGNAL(toggled(bool)),
             ifaceDock, SLOT(setVisible(bool)));
     connect(ifaceDockContent, SIGNAL(entityMsg(QString&)),
@@ -602,13 +540,22 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(ifaceResult(Result)),
             ifaceDockContent, SLOT(resultReceiver(Result)));
-    menuBar->dockMenu->ifaceAct->setChecked(visible);
 
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);
     storagePoolDockContent->setEnabled(false);
     secretDockContent->setEnabled(false);
     ifaceDockContent->setEnabled(false);
+
+    switch (viewMode) {
+    case GALLANT_SOFT:
+        free_and_hide_all_stuff();
+        break;
+    case HARD_CLASSIC:
+    default:
+        all_stuff_to_original();
+        break;
+    };
 }
 void MainWindow::initVirEventloop()
 {
@@ -1046,4 +993,125 @@ void MainWindow::migrate_settings_to_INI_format()
                     qApp->applicationName(),
                     "Migration the settings to INI-format done successfully.");
     };
+}
+
+void MainWindow::free_and_hide_all_stuff()
+{
+    proxyLayout->removeWidget(connListWidget);
+    connListWidget->hide();
+    removeDockWidget(logDock);
+    removeDockWidget(domainDock);
+    removeDockWidget(networkDock);
+    removeDockWidget(storagePoolDock);
+    removeDockWidget(secretDock);
+    removeDockWidget(ifaceDock);
+    viewMode = GALLANT_SOFT;
+    proxyWdg->setUsedViewMode(viewMode);
+    proxyWdg->repaint();
+}
+void MainWindow::all_stuff_to_original()
+{
+    Qt::DockWidgetArea area;
+    bool visible;
+    proxyLayout->addWidget(connListWidget);
+    connListWidget->show();
+    settings.beginGroup("LogDock");
+    logDock->setFloating(settings.value("Floating", false).toBool());
+    logDock->restoreGeometry(settings.value("Geometry").toByteArray());
+    visible = settings.value("Visible", true).toBool();
+    logDock->setVisible(visible);
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
+    settings.endGroup();
+    addDockWidget(area, logDock);
+    menuBar->dockMenu->logAct->setChecked(visible);
+
+    settings.beginGroup("DomainDock");
+    domainDock->setFloating(settings.value("Floating", false).toBool());
+    domainDock->restoreGeometry(
+                settings.value("Geometry").toByteArray());
+    visible = settings.value("Visible", true).toBool();
+    domainDock->setVisible(visible);
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
+    settings.endGroup();
+    addDockWidget(area, domainDock);
+    tabifyDockWidget(logDock, domainDock);
+    menuBar->dockMenu->domainAct->setChecked(visible);
+
+    settings.beginGroup("NetworkDock");
+    networkDock->setFloating(settings.value("Floating", false).toBool());
+    networkDock->restoreGeometry(
+                settings.value("Geometry").toByteArray());
+    visible = settings.value("Visible", false).toBool();
+    networkDock->setVisible(visible);
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
+    settings.endGroup();
+    addDockWidget(area, networkDock);
+    tabifyDockWidget(domainDock, networkDock);
+    menuBar->dockMenu->networkAct->setChecked(visible);
+
+    settings.beginGroup("StoragePoolDock");
+    storagePoolDock->setFloating(
+                settings.value("Floating", false).toBool());
+    storagePoolDock->restoreGeometry(
+                settings.value("Geometry").toByteArray());
+    visible = settings.value("Visible", false).toBool();
+    storagePoolDock->setVisible(visible);
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
+    settings.endGroup();
+    addDockWidget(area, storagePoolDock);
+    tabifyDockWidget(networkDock, storagePoolDock);
+    menuBar->dockMenu->storageAct->setChecked(visible);
+
+    settings.beginGroup("SecretDock");
+    secretDock->setFloating(
+                settings.value("Floating", false).toBool());
+    secretDock->restoreGeometry(
+                settings.value("Geometry").toByteArray());
+    visible = settings.value("Visible", false).toBool();
+    secretDock->setVisible(visible);
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
+    settings.endGroup();
+    addDockWidget(area, secretDock);
+    tabifyDockWidget(storagePoolDock, secretDock);
+    menuBar->dockMenu->secretAct->setChecked(visible);
+
+    settings.beginGroup("IfaceDock");
+    ifaceDock->setFloating(settings.value("Floating", false).toBool());
+    ifaceDock->restoreGeometry(settings.value("Geometry").toByteArray());
+    visible = settings.value("Visible", false).toBool();
+    ifaceDock->setVisible(visible);
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
+    settings.endGroup();
+    addDockWidget(area, ifaceDock);
+    tabifyDockWidget(secretDock, ifaceDock);
+    menuBar->dockMenu->ifaceAct->setChecked(visible);
+
+    restoreState(settings.value("State").toByteArray());
+    viewMode = HARD_CLASSIC;
+    proxyWdg->setUsedViewMode(viewMode);
+    proxyWdg->repaint();
 }
