@@ -50,7 +50,10 @@ void MainWindow::saveSettings()
     settings.setValue("ViewMode", static_cast<int>(viewMode));
     settings.setValue("Geometry", saveGeometry());
     settings.setValue("State", saveState());
-    settings.setValue("ToolBarArea", toolBarArea(connListWidget->toolBar));
+    settings.setValue(
+                "ToolBarArea",
+                 connListWidget->toolBarArea(
+                          connListWidget->toolBar));
     settings.setValue("Visible", this->isVisible());
     settings.setValue("WaitAtClose", waitAtClose);
     settings.beginGroup("LogDock");
@@ -287,8 +290,8 @@ void MainWindow::initMenuBar()
 {
     menuBar = new MenuBar(this);
     switch (viewMode) {
-    case GALLANT_SOFT:
-        menuBar->viewMenu->gallantSoft->setChecked(true);
+    case SOFT_TOUCHED:
+        menuBar->viewMenu->softTouched->setChecked(true);
         break;
     case HARD_CLASSIC:
     default:
@@ -305,7 +308,7 @@ void MainWindow::initMenuBar()
             this, SLOT(close()));
     connect(menuBar->viewMenu->hardClassic, SIGNAL(triggered()),
             this, SLOT(all_stuff_to_original()));
-    connect(menuBar->viewMenu->gallantSoft, SIGNAL(triggered()),
+    connect(menuBar->viewMenu->softTouched, SIGNAL(triggered()),
             this, SLOT(free_and_hide_all_stuff()));
     setMenuBar(menuBar);
 }
@@ -313,7 +316,7 @@ void MainWindow::initConnListWidget()
 {
     connListWidget = new Connections(nullptr);
     switch (viewMode) {
-    case GALLANT_SOFT:
+    case SOFT_TOUCHED:
         //proxyLayout->addWidget(connListWidget);
         break;
     case HARD_CLASSIC:
@@ -548,7 +551,7 @@ void MainWindow::initDockWidgets()
     ifaceDockContent->setEnabled(false);
 
     switch (viewMode) {
-    case GALLANT_SOFT:
+    case SOFT_TOUCHED:
         free_and_hide_all_stuff();
         break;
     case HARD_CLASSIC:
@@ -1005,7 +1008,7 @@ void MainWindow::free_and_hide_all_stuff()
     removeDockWidget(storagePoolDock);
     removeDockWidget(secretDock);
     removeDockWidget(ifaceDock);
-    viewMode = GALLANT_SOFT;
+    viewMode = SOFT_TOUCHED;
     proxyWdg->setUsedViewMode(viewMode);
     proxyWdg->repaint();
 }

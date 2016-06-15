@@ -10,7 +10,7 @@
 
 enum VIEW_MODE {
     HARD_CLASSIC = 0,
-    GALLANT_SOFT
+    SOFT_TOUCHED
 };
 
 class ProxyWidget : public QWidget
@@ -35,18 +35,19 @@ private:
     QRect       r1, r2, r3, r4,
                 r5, r6, r7, r8,
                 r9, commonRect, currRect;
-    int         widthPart, heightPart;
     QSize       part;
     QAction    *connAct, *domainsAct,
                *networksAct, *storagesAct,
                *secretsAct, *ifacesAct,
                *logAct;
+    int         widthPart, heightPart, side;
 
 public slots:
 
 private slots:
     void        actionTriggered();
     void        resizeEvent(QResizeEvent*);
+    void        mouseReleaseEvent(QMouseEvent*);
     void        mouseMoveEvent(QMouseEvent*);
     void        paintEvent(QPaintEvent*);
 };

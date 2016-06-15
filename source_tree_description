@@ -15,6 +15,7 @@
     ├── log_dock            (LogDock widget)
     ├── menubar             (MenuBar widgets)
     ├── misc                (miscellanious files)
+    ├── proxy_widget        (Proxy widget)
     ├── settings            (Connection settings widget)
     ├── state_monitor       (StateMonitor widget)
     ├── task_warehouse      (TaskWarehouse widget)

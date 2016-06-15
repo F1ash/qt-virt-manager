@@ -652,6 +652,13 @@
         <file alias="64x64/apps/utilities-monitor.png">icons/64x64/apps/utilities-monitor.png</file>
         <file alias="64x64/apps/utilities-terminal.png">icons/64x64/apps/utilities-terminal.png</file>
         <file alias="64x64/apps/utilities-log-viewer.png">icons/64x64/apps/utilities-log-viewer.png</file>
+        <file alias="256x256/emblems/interfaces.png">icons/256x256/emblems/interfaces.png</file>
+        <file alias="256x256/emblems/connections.png">icons/256x256/emblems/connections.png</file>
+        <file alias="256x256/emblems/vm-machines.png">icons/256x256/emblems/vm-machines.png</file>
+        <file alias="256x256/emblems/storages.png">icons/256x256/emblems/storages.png</file>
+        <file alias="256x256/emblems/security.png">icons/256x256/emblems/security.png</file>
+        <file alias="256x256/emblems/networks.png">icons/256x256/emblems/networks.png</file>
+        <file alias="256x256/emblems/utilities-log-viewer.png">icons/256x256/emblems/utilities-log-viewer.png</file>
         <file alias="256x256/apps/virtual-engineering.png">icons/256x256/apps/virtual-engineering.png</file>
         <file alias="128x128/actions/qt_icon.png">icons/128x128/actions/qt_icon.png</file>
         <file alias="128x128/actions/yandex_money.png">icons/128x128/actions/yandex_money.png</file>

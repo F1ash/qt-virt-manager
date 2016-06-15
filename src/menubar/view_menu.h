@@ -9,7 +9,7 @@ class ViewMenu : public QMenu
 public:
     explicit ViewMenu(QWidget *parent = nullptr);
     QAction         *hardClassic;
-    QAction         *gallantSoft;
+    QAction         *softTouched;
 
 private:
     QActionGroup    *actGroup;

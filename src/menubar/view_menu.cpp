@@ -10,9 +10,9 @@ ViewMenu::ViewMenu(QWidget *parent) :
     hardClassic->setActionGroup(actGroup);
     hardClassic->setShortcut(
                 QKeySequence(tr("Ctrl+Shift+H")));
-    gallantSoft = addAction("&Gallant Soft");
-    gallantSoft->setCheckable(true);
-    gallantSoft->setActionGroup(actGroup);
-    gallantSoft->setShortcut(
+    softTouched = addAction("So&ft Touched");
+    softTouched->setCheckable(true);
+    softTouched->setActionGroup(actGroup);
+    softTouched->setShortcut(
                 QKeySequence(tr("Ctrl+Shift+F")));
 }
