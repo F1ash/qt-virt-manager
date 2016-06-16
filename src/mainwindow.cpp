@@ -30,7 +30,6 @@ MainWindow::MainWindow(QWidget *parent)
     initMenuBar();
     initConnListWidget();
     initDockWidgets();
-    restoreState(settings.value("State").toByteArray());
     this->setVisible(!settings.value("Visible", false).toBool());
     changeVisibility();
     waitAtClose = settings.value("WaitAtClose", 180).toInt();
@@ -1000,6 +999,7 @@ void MainWindow::migrate_settings_to_INI_format()
 
 void MainWindow::free_and_hide_all_stuff()
 {
+    menuBar->dockMenu->setDisabled(true);
     proxyLayout->removeWidget(connListWidget);
     connListWidget->hide();
     removeDockWidget(logDock);
@@ -1010,7 +1010,7 @@ void MainWindow::free_and_hide_all_stuff()
     removeDockWidget(ifaceDock);
     viewMode = SOFT_TOUCHED;
     proxyWdg->setUsedViewMode(viewMode);
-    proxyWdg->repaint();
+    proxyWdg->update();
 }
 void MainWindow::all_stuff_to_original()
 {
@@ -1116,5 +1116,6 @@ void MainWindow::all_stuff_to_original()
     restoreState(settings.value("State").toByteArray());
     viewMode = HARD_CLASSIC;
     proxyWdg->setUsedViewMode(viewMode);
-    proxyWdg->repaint();
+    proxyWdg->update();
+    menuBar->dockMenu->setEnabled(true);
 }

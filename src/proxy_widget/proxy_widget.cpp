@@ -68,6 +68,7 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
             this, SLOT(actionTriggered()));
     connect(logAct, SIGNAL(triggered(bool)),
             this, SLOT(actionTriggered()));
+    setContentsMargins(0, 0, 0, 0);
 }
 
 void ProxyWidget::setUsedViewMode(VIEW_MODE _mode)
@@ -201,7 +202,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
     if ( usedViewMode==SOFT_TOUCHED ) {
         QPainter painter(this);
         if ( commonRect.intersects(ev->rect()) ) {
-            painter.setOpacity(0.10);
+            painter.setOpacity(0.20);
             painter.drawPixmap(
                         commonRect.adjusted(
                             (commonRect.width()-4*side)/2,
@@ -215,24 +216,25 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
 
             painter.setOpacity(1);
             QRect rF;
+            QPoint dR1, dR3, dR5, dR6, dR7, dR8, dR9;
             if ( r1.intersects(currRect) ) {
-                rF = r1;
+                rF = r1; dR1 = QPoint(5, 5);
             } else if ( r3.intersects(currRect) ) {
-                rF = r3;
+                rF = r3; dR3 = QPoint(5, 5);
             } else if ( r5.intersects(currRect) ) {
-                rF = r5;
+                rF = r5; dR5 = QPoint(5, 5);
             } else if ( r6.intersects(currRect) ) {
-                rF = r6;
+                rF = r6; dR6 = QPoint(5, 5);
             } else if ( r7.intersects(currRect) ) {
-                rF = r7;
+                rF = r7; dR7 = QPoint(5, 5);
             } else if ( r8.intersects(currRect) ) {
-                rF = r8;
+                rF = r8; dR8 = QPoint(5, 5);
             } else if ( r9.intersects(currRect) ) {
-                rF = r9;
+                rF = r9; dR9 = QPoint(5, 5);
             };
             QRadialGradient gradient(
-                        rF.topLeft().x(),
-                        rF.topLeft().y(),
+                        rF.center().x(),
+                        rF.center().y()+side/3,
                         side/2);
             gradient.setColorAt(
                         1,
@@ -241,75 +243,81 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                         0,
                         QColor::fromRgb(255, 215, 0, 255)); // gold
             QBrush b(gradient);
-            painter.fillRect(rF, b);
+            painter.setBrush(b);
+            painter.setPen(QPen(QBrush(), 0));
+            QPoint p = QPoint(
+                        rF.center().x(),
+                        rF.center().y()+side/4);
+            rF.moveCenter(p);
+            painter.drawEllipse(rF);
 
             painter.setOpacity(1);
             painter.drawPixmap(
                         r1.adjusted(
-                            (r1.width()-side)/2,
-                            (r1.height()-side)/2,
-                            -(r1.width()-side)/2,
-                            -(r1.height()-side)/2),
+                            (r1.width()-side)/2+dR1.x(),
+                            (r1.height()-side)/2+dR1.y(),
+                            -(r1.width()-side)/2+dR1.x(),
+                            -(r1.height()-side)/2+dR1.y()),
                         connections.scaled(
                             part,
                             Qt::KeepAspectRatio,
                             Qt::SmoothTransformation));
             painter.drawPixmap(
                         r3.adjusted(
-                            (r3.width()-side)/2,
-                            (r3.height()-side)/2,
-                            -(r3.width()-side)/2,
-                            -(r3.height()-side)/2),
+                            (r3.width()-side)/2+dR3.x(),
+                            (r3.height()-side)/2+dR3.y(),
+                            -(r3.width()-side)/2+dR3.x(),
+                            -(r3.height()-side)/2+dR3.y()),
                         domains.scaled(
                             part,
                             Qt::KeepAspectRatio,
                             Qt::SmoothTransformation));
             painter.drawPixmap(
                         r5.adjusted(
-                            (r5.width()-side)/2,
-                            (r5.height()-side)/2,
-                            -(r5.width()-side)/2,
-                            -(r5.height()-side)/2),
+                            (r5.width()-side)/2+dR5.x(),
+                            (r5.height()-side)/2+dR5.y(),
+                            -(r5.width()-side)/2+dR5.x(),
+                            -(r5.height()-side)/2+dR5.y()),
                         networks.scaled(
                             part,
                             Qt::KeepAspectRatio,
                             Qt::SmoothTransformation));
             painter.drawPixmap(
                         r6.adjusted(
-                            (r6.width()-side)/2,
-                            (r6.height()-side)/2,
-                            -(r6.width()-side)/2,
-                            -(r6.height()-side)/2),
+                            (r6.width()-side)/2+dR6.x(),
+                            (r6.height()-side)/2+dR6.y(),
+                            -(r6.width()-side)/2+dR6.x(),
+                            -(r6.height()-side)/2+dR6.y()),
                         storages.scaled(
                             part,
                             Qt::KeepAspectRatio,
                             Qt::SmoothTransformation));
             painter.drawPixmap(
                         r7.adjusted(
-                            (r7.width()-side)/2,
-                            (r7.height()-side)/2,
-                            -(r7.width()-side)/2,
-                            -(r7.height()-side)/2),
+                            (r7.width()-side)/2+dR7.x(),
+                            (r7.height()-side)/2+dR7.y(),
+                            -(r7.width()-side)/2+dR7.x(),
+                            -(r7.height()-side)/2+dR7.y()),
                         secrets.scaled(
                             part,
                             Qt::KeepAspectRatio,
                             Qt::SmoothTransformation));
             painter.drawPixmap(
                         r8.adjusted(
-                            (r8.width()-side)/2,
-                            (r8.height()-side)/2,
-                            -(r8.width()-side)/2,
-                            -(r8.height()-side)/2),
+                            (r8.width()-side)/2+dR8.x(),
+                            (r8.height()-side)/2+dR8.y(),
+                            -(r8.width()-side)/2+dR8.x(),
+                            -(r8.height()-side)/2+dR8.y()),
                         ifaces.scaled(
                             part,
                             Qt::KeepAspectRatio,
                             Qt::SmoothTransformation));
             painter.drawPixmap(
                         r9.adjusted(
-                            (r9.width()-side)/2,
-                            (r9.height()-side)/2,
-                            -(r9.width()-side)/2,
-                            -(r9.height()-side)/2),
+                            (r9.width()-side)/2+dR9.x(),
+                            (r9.height()-side)/2+dR9.y(),
+                            -(r9.width()-side)/2+dR9.x(),
+                            -(r9.height()-side)/2+dR9.y()),
                         log.scaled(
                             part,
                             Qt::KeepAspectRatio,
@@ -322,7 +330,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
         _font.setPointSize(18);
         painter.setFont(_font);
         //painter.setOpacity(0.50);
-        painter.setPen(Qt::yellow);
+        painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite
         if ( !r1.intersects(currRect) ) {
             painter.drawText(
                         r1.adjusted(0, heightPart*2/3, 0, 0),
