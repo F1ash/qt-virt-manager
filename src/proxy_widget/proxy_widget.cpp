@@ -9,6 +9,7 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
     QWidget(parent)
 {
     usedViewMode = HARD_CLASSIC;
+    isTriggered = false;
     emblem = QIcon::fromTheme("virtual-engineering")
             .pixmap(ICON_NATIVE_SIZE);
     connections = QIcon::fromTheme("connections")
@@ -33,6 +34,8 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
     secretsAct = new QAction(this);
     ifacesAct = new QAction(this);
     logAct = new QAction(this);
+    next = new QAction(this);
+    prev = new QAction(this);
     addAction(connAct);
     addAction(domainsAct);
     addAction(networksAct);
@@ -40,6 +43,8 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
     addAction(secretsAct);
     addAction(ifacesAct);
     addAction(logAct);
+    addAction(next);
+    addAction(prev);
     connAct->setShortcut(
                 QKeySequence(tr("Ctrl+Alt+C", "Show Connections")));
     domainsAct->setShortcut(
@@ -49,11 +54,15 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
     storagesAct->setShortcut(
                 QKeySequence(tr("Ctrl+Alt+S", "Show Storages")));
     secretsAct->setShortcut(
-                QKeySequence(tr("Ctrl+Alt+R", "Show Secrets")));
+                QKeySequence(tr("Ctrl+Alt+E", "Show Secrets")));
     ifacesAct->setShortcut(
                 QKeySequence(tr("Ctrl+Alt+I", "Show Interfaces")));
     logAct->setShortcut(
-                QKeySequence(tr("Ctrl+Alt+L", "Show Log")));
+                QKeySequence(tr("Ctrl+Alt+G", "Show Log")));
+    next->setShortcut(
+                QKeySequence(tr("Ctrl+Alt+Right", "Next Dock")));
+    prev->setShortcut(
+                QKeySequence(tr("Ctrl+Alt+Left", "Prev Dock")));
     connect(connAct, SIGNAL(triggered(bool)),
             this, SLOT(actionTriggered()));
     connect(domainsAct, SIGNAL(triggered(bool)),
@@ -68,12 +77,17 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
             this, SLOT(actionTriggered()));
     connect(logAct, SIGNAL(triggered(bool)),
             this, SLOT(actionTriggered()));
+    connect(next, SIGNAL(triggered(bool)),
+            this, SLOT(actionTriggered()));
+    connect(prev, SIGNAL(triggered(bool)),
+            this, SLOT(actionTriggered()));
     setContentsMargins(0, 0, 0, 0);
 }
 
 void ProxyWidget::setUsedViewMode(VIEW_MODE _mode)
 {
     usedViewMode = _mode;
+    isTriggered = false;
 }
 
 /* public slots */
@@ -81,8 +95,35 @@ void ProxyWidget::setUsedViewMode(VIEW_MODE _mode)
 /* private slots */
 void ProxyWidget::actionTriggered()
 {
-    qDebug()<<"actionTriggered";
+    if ( sender()==next ) {
+        if ( isTriggered ) emit viewNextDock();
+        return;
+    } else if ( sender()==prev ) {
+        if ( isTriggered ) emit viewPrevDock();
+        return;
+    };
+    isTriggered = true;
     if ( usedViewMode!=SOFT_TOUCHED ) return;
+    // see for:
+    // MainWindow::initConnListWidget() &
+    // MainWindow::initDockWidgets()
+    // sets the object names for docks.
+    if        ( sender()==connAct ) {
+        emit viewDock("connListDock");
+    } else if ( sender()==domainsAct ) {
+        emit viewDock("domainDock");
+    } else if ( sender()==networksAct ) {
+        emit viewDock("networkDock");
+    } else if ( sender()==storagesAct ) {
+        emit viewDock("storagePoolDock");
+    } else if ( sender()==ifacesAct ) {
+        emit viewDock("ifaceDock");
+    } else if ( sender()==secretsAct ) {
+        emit viewDock("secretDock");
+    } else if ( sender()==logAct ) {
+        emit viewDock("logDock");
+    };
+    update();
 }
 void ProxyWidget::resizeEvent(QResizeEvent *ev)
 {
@@ -112,26 +153,34 @@ void ProxyWidget::mouseReleaseEvent(QMouseEvent *ev)
 {
     ev->accept();
     if ( usedViewMode!=SOFT_TOUCHED ) return;
+    if ( isTriggered ) return;
     if ( ev->type()==QMouseEvent::MouseButtonRelease ) {
         qDebug()<<"mouseReleaseEvent";
         if        ( r1.contains(ev->pos(), true) ) {
             qDebug()<<"in R1";
+            connAct->trigger();
         } else if ( r2.contains(ev->pos(), true) ) {
             qDebug()<<"in R2";
         } else if ( r3.contains(ev->pos(), true) ) {
             qDebug()<<"in R3";
+            domainsAct->trigger();
         } else if ( r4.contains(ev->pos(), true) ) {
             qDebug()<<"in R4";
         } else if ( r5.contains(ev->pos(), true) ) {
             qDebug()<<"in R5";
+            networksAct->trigger();
         } else if ( r6.contains(ev->pos(), true) ) {
             qDebug()<<"in R6";
+            storagesAct->trigger();
         } else if ( r7.contains(ev->pos(), true) ) {
             qDebug()<<"in R7";
+            secretsAct->trigger();
         } else if ( r8.contains(ev->pos(), true) ) {
             qDebug()<<"in R8";
+            ifacesAct->trigger();
         } else if ( r9.contains(ev->pos(), true) ) {
             qDebug()<<"in R9";
+            logAct->trigger();
         };
     };
 }
@@ -139,6 +188,7 @@ void ProxyWidget::mouseMoveEvent(QMouseEvent *ev)
 {
     ev->accept();
     if ( usedViewMode!=SOFT_TOUCHED ) return;
+    if ( isTriggered ) return;
     if        ( r1.contains(ev->pos(), true) ) {
         if ( !currRect.intersects(r1) ) {
             currRect = r1;
@@ -198,6 +248,11 @@ void ProxyWidget::mouseMoveEvent(QMouseEvent *ev)
 void ProxyWidget::paintEvent(QPaintEvent *ev)
 {
     ev->accept();
+    if ( isTriggered ) {
+        QPainter painter(this);
+        painter.eraseRect(commonRect);
+        return;
+    };
 
     if ( usedViewMode==SOFT_TOUCHED ) {
         QPainter painter(this);
@@ -363,7 +418,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
             painter.drawText(
                         r7.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
-                        "Secrets\nCtrl+Alt+R");
+                        "Secrets\nCtrl+Alt+E");
             qDebug()<<"r7!=ev->rect()"<<r7;
         };
         if ( !r8.intersects(currRect) ) {
@@ -377,7 +432,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
             painter.drawText(
                         r9.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
-                        "Log\nCtrl+Alt+L");
+                        "Log\nCtrl+Alt+G");
             qDebug()<<"r9!=ev->rect()"<<r9;
         };
     };

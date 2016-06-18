@@ -27,6 +27,7 @@
 #include "dock_head_widgets/dock_head_widget.h"
 #include "menubar/menu_bar.h"
 #include "proxy_widget/proxy_widget.h"
+#include "soft_touched/st_stacked_widget.h"
 
 typedef QMap<QString, VM_Viewer*> ViewerMap;
 typedef QMap<QString, VirtStorageVolControl*> OverviwedStorageMap;
@@ -46,6 +47,7 @@ private :
     QSettings                    settings;
     ProxyWidget                 *proxyWdg;
     QHBoxLayout                 *proxyLayout;
+    ST_StackedWidget            *SoftTouchedWdg;
     Connections                 *connListWidget;
     TrayIcon                    *trayIcon;
     MenuBar                     *menuBar;
@@ -133,6 +135,8 @@ private slots:
 
     void free_and_hide_all_stuff();
     void all_stuff_to_original();
+    void setDockFloatible(bool);
+    void setDockHeaderWheelEventsEnabled(bool);
 };
 
 #endif // MAINWINDOW_H

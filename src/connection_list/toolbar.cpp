@@ -3,6 +3,7 @@
 ToolBar::ToolBar (QWidget *parent) :
     QToolBar(parent)
 {
+    wheelEventState = false;
     setAllowedAreas(Qt::AllToolBarAreas);
     setMovable(true);
     setFloatable(true);
@@ -47,6 +48,15 @@ void ToolBar::initActions()
     addAction(_editAction);
     addAction(_deleteAction);
 }
+void ToolBar::wheelEventEnabled(bool state)
+{
+    wheelEventState = state;
+    QString t;
+    if ( state ) {
+        t.append("Wheel for change dock\nor\nuse Ctrl+Alt+Right/Left");
+    };
+    setToolTip(t);
+}
 
 Qt::ToolBarArea ToolBar::get_ToolBarArea(int i) const
 {
@@ -69,4 +79,18 @@ Qt::ToolBarArea ToolBar::get_ToolBarArea(int i) const
         break;
     };
     return result;
+}
+
+/* private slots */
+void ToolBar::wheelEvent(QWheelEvent *ev)
+{
+    ev->ignore();
+    if ( !wheelEventState ) return;
+    if ( ev->type()==QEvent::Wheel ) {
+        if ( ev->delta()>0 ) {
+            emit viewNextDock();
+        } else if ( ev->delta()<0 ) {
+            emit viewPrevDock();
+        };
+    };
 }

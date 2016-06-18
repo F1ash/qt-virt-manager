@@ -20,6 +20,18 @@ DockHeadWidget::DockHeadWidget(
             this, SIGNAL(floatChanged(bool)));
 }
 
+void DockHeadWidget::setFloatible(bool state)
+{
+    floatIt->setEnabled(state);
+    QString t;
+    if ( state ) {
+        t.append("DoubleClick for floatible");
+    } else {
+        t.append("Wheel for change dock\nor\nuse Ctrl+Alt+Right/Left");
+    };
+    setToolTip(t);
+}
+
 /* public slots */
 void DockHeadWidget::setTabBarName(const QString &_name)
 {
@@ -45,4 +57,19 @@ void DockHeadWidget::floatStateChanged(bool _floated)
     floatIt->setToolTip(_toolTip);
     floatIt->setChecked(_floated);
     nameWdg->setColor((_floated)? 0x008000:0x000080);
+}
+
+/* private slots */
+void DockHeadWidget::wheelEvent(QWheelEvent *ev)
+{
+    ev->ignore();
+    if ( floatIt->isEnabled() ) return;
+    if ( ev->type()==QEvent::Wheel ) {
+        if ( ev->delta()>0 ) {
+            emit viewNextDock();
+        } else if ( ev->delta()<0 ) {
+            emit viewPrevDock();
+        };
+        qDebug()<<ev->delta();
+    };
 }

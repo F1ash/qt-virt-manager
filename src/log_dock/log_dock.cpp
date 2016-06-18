@@ -1,4 +1,5 @@
 #include "log_dock.h"
+#include <QPainter>
 
 #define  DOT    QChar(0x273B)
 #define  DEMARK QString("<br>")

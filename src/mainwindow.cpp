@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     proxyWdg->setUsedViewMode(viewMode);
     proxyLayout = new QHBoxLayout();
     proxyWdg->setLayout(proxyLayout);
+    SoftTouchedWdg = nullptr;
     initTaskWareHouse();
     initDomainStateMonitor();
     initTrayIcon();
@@ -47,14 +48,22 @@ void MainWindow::saveSettings()
     taskWrHouse->saveCurrentState();
     domainsStateMonitor->saveCurrentState();
     settings.setValue("ViewMode", static_cast<int>(viewMode));
+    settings.setValue("Visible", this->isVisible());
+    settings.setValue("WaitAtClose", waitAtClose);
+    switch (viewMode) {
+    case SOFT_TOUCHED:
+        settings.beginGroup("SOFT_TOUCHED_MODE");
+        break;
+    case HARD_CLASSIC:
+    default:
+        break;
+    };
     settings.setValue("Geometry", saveGeometry());
     settings.setValue("State", saveState());
     settings.setValue(
                 "ToolBarArea",
                  connListWidget->toolBarArea(
                           connListWidget->toolBar));
-    settings.setValue("Visible", this->isVisible());
-    settings.setValue("WaitAtClose", waitAtClose);
     settings.beginGroup("LogDock");
     settings.setValue("DockArea", dockWidgetArea(logDock));
     settings.setValue("Visible", logDock->isVisible());
@@ -96,6 +105,14 @@ void MainWindow::saveSettings()
     settings.setValue("column1", connListWidget->list->columnWidth(1));
     settings.setValue("column2", connListWidget->list->columnWidth(2));
     settings.endGroup();
+    switch (viewMode) {
+    case SOFT_TOUCHED:
+        settings.endGroup();
+        break;
+    case HARD_CLASSIC:
+    default:
+        break;
+    };
     settings.sync();
 }
 void MainWindow::closeEvent(QCloseEvent *ev)
@@ -313,10 +330,11 @@ void MainWindow::initMenuBar()
 }
 void MainWindow::initConnListWidget()
 {
-    connListWidget = new Connections(nullptr);
+    connListWidget = new Connections(this);
+    connListWidget->setObjectName("connListDock");
     switch (viewMode) {
     case SOFT_TOUCHED:
-        //proxyLayout->addWidget(connListWidget);
+        settings.beginGroup("SOFT_TOUCHED_MODE");
         break;
     case HARD_CLASSIC:
     default:
@@ -324,6 +342,7 @@ void MainWindow::initConnListWidget()
         break;
     };
     setCentralWidget(proxyWdg);
+    int area_int = settings.value("ToolBarArea", 4).toInt();
     settings.beginGroup("ConnectListColumns");
     connListWidget->list->setColumnWidth(
                 0, settings.value("column0", 132).toInt());
@@ -332,6 +351,14 @@ void MainWindow::initConnListWidget()
     connListWidget->list->setColumnWidth(
                 2, settings.value("column2", 32).toInt());
     settings.endGroup();
+    switch (viewMode) {
+    case SOFT_TOUCHED:
+        settings.endGroup();
+        break;
+    case HARD_CLASSIC:
+    default:
+        break;
+    };
     connect(connListWidget->list, SIGNAL(removeConnection(QString&)),
             this, SLOT(removeConnItem(QString&)));
     connect(connListWidget->list, SIGNAL(messageShowed()),
@@ -364,7 +391,6 @@ void MainWindow::initConnListWidget()
             connListWidget->list, SLOT(stopProcessing()));
     connect(connListWidget->toolBar->_closeOverview, SIGNAL(triggered()),
             this, SLOT(stopProcessing()));
-    int area_int = settings.value("ToolBarArea", 4).toInt();
     connListWidget->setToolBarArea(area_int);
 }
 void MainWindow::initDockWidgets()
@@ -372,11 +398,6 @@ void MainWindow::initDockWidgets()
     logDock = new DockWidget(this);
     logDock->setObjectName("logDock");
     logDock->setWindowTitle("Log");
-    logDock->setFeatures(
-        QDockWidget::DockWidgetMovable   |
-        QDockWidget::DockWidgetFloatable |
-        QDockWidget::DockWidgetVerticalTitleBar
-    );
     logHeadWdg = new DockHeadWidget(this, "Events & Errors");
     logHeadWdg->setTabBarName("utilities-log-viewer");
     logDock->setTitleBarWidget(logHeadWdg);
@@ -397,11 +418,6 @@ void MainWindow::initDockWidgets()
     domainDock->setObjectName("domainDock");
     domainDock->setWindowTitle("Domain");
     domainDock->setWindowIcon(QIcon::fromTheme("domain"));
-    domainDock->setFeatures(
-        QDockWidget::DockWidgetMovable   |
-        QDockWidget::DockWidgetFloatable |
-        QDockWidget::DockWidgetVerticalTitleBar
-    );
     domHeadWdg = new DockHeadWidget(this, "Virtual Machines");
     domHeadWdg->setTabBarName("domain");
     domainDock->setTitleBarWidget(domHeadWdg);
@@ -436,11 +452,6 @@ void MainWindow::initDockWidgets()
     networkDock->setObjectName("networkDock");
     networkDock->setWindowTitle("Network");
     networkDock->setWindowIcon(QIcon::fromTheme("network"));
-    networkDock->setFeatures(
-        QDockWidget::DockWidgetMovable   |
-        QDockWidget::DockWidgetFloatable |
-        QDockWidget::DockWidgetVerticalTitleBar
-    );
     netHeadWdg = new DockHeadWidget(this, "Virtual Networks");
     netHeadWdg->setTabBarName("network");
     networkDock->setTitleBarWidget(netHeadWdg);
@@ -464,11 +475,6 @@ void MainWindow::initDockWidgets()
     storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
     storagePoolDock->setWindowTitle("StoragePool");
-    storagePoolDock->setFeatures(
-        QDockWidget::DockWidgetMovable   |
-        QDockWidget::DockWidgetFloatable |
-        QDockWidget::DockWidgetVerticalTitleBar
-    );
     poolHeadWdg = new DockHeadWidget(this, "Storage Pools");
     poolHeadWdg->setTabBarName("storage");
     storagePoolDock->setTitleBarWidget(poolHeadWdg);
@@ -494,11 +500,6 @@ void MainWindow::initDockWidgets()
     secretDock = new DockWidget(this);
     secretDock->setObjectName("secretDock");
     secretDock->setWindowTitle("Secret");
-    secretDock->setFeatures(
-        QDockWidget::DockWidgetMovable   |
-        QDockWidget::DockWidgetFloatable |
-        QDockWidget::DockWidgetVerticalTitleBar
-    );
     scrtHeadWdg = new DockHeadWidget(this, "Secrets");
     scrtHeadWdg->setTabBarName("security");
     secretDock->setTitleBarWidget(scrtHeadWdg);
@@ -520,11 +521,6 @@ void MainWindow::initDockWidgets()
     ifaceDock = new DockWidget(this);
     ifaceDock->setObjectName("ifaceDock");
     ifaceDock->setWindowTitle("Interface");
-    ifaceDock->setFeatures(
-        QDockWidget::DockWidgetMovable   |
-        QDockWidget::DockWidgetFloatable |
-        QDockWidget::DockWidgetVerticalTitleBar
-    );
     ifaceHeadWdg = new DockHeadWidget(this, "Interfaces");
     ifaceHeadWdg->setTabBarName("network-wired");
     ifaceDock->setTitleBarWidget(ifaceHeadWdg);
@@ -551,7 +547,9 @@ void MainWindow::initDockWidgets()
 
     switch (viewMode) {
     case SOFT_TOUCHED:
+        settings.beginGroup("SOFT_TOUCHED_MODE");
         free_and_hide_all_stuff();
+        settings.endGroup();
         break;
     case HARD_CLASSIC:
     default:
@@ -1008,16 +1006,57 @@ void MainWindow::free_and_hide_all_stuff()
     removeDockWidget(storagePoolDock);
     removeDockWidget(secretDock);
     removeDockWidget(ifaceDock);
+    setDockFloatible(false);
+    SoftTouchedWdg = new ST_StackedWidget(this);
+    SoftTouchedWdg->addNewWidget(connListWidget);
+    SoftTouchedWdg->addNewWidget(logDock);
+    SoftTouchedWdg->addNewWidget(domainDock);
+    SoftTouchedWdg->addNewWidget(networkDock);
+    SoftTouchedWdg->addNewWidget(storagePoolDock);
+    SoftTouchedWdg->addNewWidget(secretDock);
+    SoftTouchedWdg->addNewWidget(ifaceDock);
+    SoftTouchedWdg->hide();
+    connect(proxyWdg, SIGNAL(viewDock(const QString&)),
+            SoftTouchedWdg, SLOT(showDock(const QString&)));
+    connect(proxyWdg, SIGNAL(viewNextDock()),
+            SoftTouchedWdg, SLOT(showNextDock()));
+    connect(proxyWdg, SIGNAL(viewPrevDock()),
+            SoftTouchedWdg, SLOT(showPrevDock()));
+    setDockHeaderWheelEventsEnabled(true);
     viewMode = SOFT_TOUCHED;
     proxyWdg->setUsedViewMode(viewMode);
     proxyWdg->update();
+    proxyLayout->addWidget(SoftTouchedWdg);
 }
 void MainWindow::all_stuff_to_original()
 {
     Qt::DockWidgetArea area;
     bool visible;
+    if ( SoftTouchedWdg!=nullptr ) {
+        disconnect(proxyWdg, SIGNAL(viewDock(const QString&)),
+                   SoftTouchedWdg, SLOT(showDock(const QString&)));
+        disconnect(proxyWdg, SIGNAL(viewNextDock()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(proxyWdg, SIGNAL(viewPrevDock()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        setDockHeaderWheelEventsEnabled(false);
+        proxyLayout->removeWidget(SoftTouchedWdg);
+        SoftTouchedWdg->removeAllWidgets();
+        //delete SoftTouchedWdg;
+        //SoftTouchedWdg = nullptr;
+        SoftTouchedWdg->deleteLater();
+    };
+    /*
+     * Note: Parent object and parent widget of widget
+     * will remain the QStackedWidget. If the application
+     * wants to reuse the removed widget, then
+     * it is recommended to re-parent it.
+     */
+    restoreGeometry(settings.value("Geometry").toByteArray());
+    connListWidget->setParent(this);
     proxyLayout->addWidget(connListWidget);
     connListWidget->show();
+    logDock->setParent(this);
     settings.beginGroup("LogDock");
     logDock->setFloating(settings.value("Floating", false).toBool());
     logDock->restoreGeometry(settings.value("Geometry").toByteArray());
@@ -1032,6 +1071,7 @@ void MainWindow::all_stuff_to_original()
     addDockWidget(area, logDock);
     menuBar->dockMenu->logAct->setChecked(visible);
 
+    domainDock->setParent(this);
     settings.beginGroup("DomainDock");
     domainDock->setFloating(settings.value("Floating", false).toBool());
     domainDock->restoreGeometry(
@@ -1048,6 +1088,7 @@ void MainWindow::all_stuff_to_original()
     tabifyDockWidget(logDock, domainDock);
     menuBar->dockMenu->domainAct->setChecked(visible);
 
+    networkDock->setParent(this);
     settings.beginGroup("NetworkDock");
     networkDock->setFloating(settings.value("Floating", false).toBool());
     networkDock->restoreGeometry(
@@ -1064,6 +1105,7 @@ void MainWindow::all_stuff_to_original()
     tabifyDockWidget(domainDock, networkDock);
     menuBar->dockMenu->networkAct->setChecked(visible);
 
+    storagePoolDock->setParent(this);
     settings.beginGroup("StoragePoolDock");
     storagePoolDock->setFloating(
                 settings.value("Floating", false).toBool());
@@ -1081,6 +1123,7 @@ void MainWindow::all_stuff_to_original()
     tabifyDockWidget(networkDock, storagePoolDock);
     menuBar->dockMenu->storageAct->setChecked(visible);
 
+    secretDock->setParent(this);
     settings.beginGroup("SecretDock");
     secretDock->setFloating(
                 settings.value("Floating", false).toBool());
@@ -1098,6 +1141,7 @@ void MainWindow::all_stuff_to_original()
     tabifyDockWidget(storagePoolDock, secretDock);
     menuBar->dockMenu->secretAct->setChecked(visible);
 
+    ifaceDock->setParent(this);
     settings.beginGroup("IfaceDock");
     ifaceDock->setFloating(settings.value("Floating", false).toBool());
     ifaceDock->restoreGeometry(settings.value("Geometry").toByteArray());
@@ -1113,9 +1157,140 @@ void MainWindow::all_stuff_to_original()
     tabifyDockWidget(secretDock, ifaceDock);
     menuBar->dockMenu->ifaceAct->setChecked(visible);
 
-    restoreState(settings.value("State").toByteArray());
     viewMode = HARD_CLASSIC;
     proxyWdg->setUsedViewMode(viewMode);
     proxyWdg->update();
     menuBar->dockMenu->setEnabled(true);
+    restoreState(settings.value("State").toByteArray());
+    setDockFloatible(true);
+}
+void MainWindow::setDockFloatible(bool state)
+{
+    if ( state ) {
+        logDock->setFeatures(
+            QDockWidget::DockWidgetMovable   |
+            QDockWidget::DockWidgetFloatable |
+            QDockWidget::DockWidgetVerticalTitleBar
+        );
+        domainDock->setFeatures(
+            QDockWidget::DockWidgetMovable   |
+            QDockWidget::DockWidgetFloatable |
+            QDockWidget::DockWidgetVerticalTitleBar
+        );
+        networkDock->setFeatures(
+            QDockWidget::DockWidgetMovable   |
+            QDockWidget::DockWidgetFloatable |
+            QDockWidget::DockWidgetVerticalTitleBar
+        );
+        storagePoolDock->setFeatures(
+            QDockWidget::DockWidgetMovable   |
+            QDockWidget::DockWidgetFloatable |
+            QDockWidget::DockWidgetVerticalTitleBar
+        );
+        secretDock->setFeatures(
+            QDockWidget::DockWidgetMovable   |
+            QDockWidget::DockWidgetFloatable |
+            QDockWidget::DockWidgetVerticalTitleBar
+        );
+        ifaceDock->setFeatures(
+            QDockWidget::DockWidgetMovable   |
+            QDockWidget::DockWidgetFloatable |
+            QDockWidget::DockWidgetVerticalTitleBar
+        );
+    } else {
+        logDock->setFeatures(
+            QDockWidget::NoDockWidgetFeatures |
+                    QDockWidget::DockWidgetVerticalTitleBar
+        );
+        domainDock->setFeatures(
+                    QDockWidget::NoDockWidgetFeatures |
+                    QDockWidget::DockWidgetVerticalTitleBar
+        );
+        networkDock->setFeatures(
+                    QDockWidget::NoDockWidgetFeatures |
+                    QDockWidget::DockWidgetVerticalTitleBar
+        );
+        storagePoolDock->setFeatures(
+                    QDockWidget::NoDockWidgetFeatures |
+                    QDockWidget::DockWidgetVerticalTitleBar
+        );
+        secretDock->setFeatures(
+                    QDockWidget::NoDockWidgetFeatures |
+                    QDockWidget::DockWidgetVerticalTitleBar
+        );
+        ifaceDock->setFeatures(
+                    QDockWidget::NoDockWidgetFeatures |
+                    QDockWidget::DockWidgetVerticalTitleBar
+        );
+    };
+    logHeadWdg->setFloatible(state);
+    domHeadWdg->setFloatible(state);
+    netHeadWdg->setFloatible(state);
+    poolHeadWdg->setFloatible(state);
+    scrtHeadWdg->setFloatible(state);
+    ifaceHeadWdg->setFloatible(state);
+    connListWidget->toolBar->wheelEventEnabled(!state);
+}
+void MainWindow::setDockHeaderWheelEventsEnabled(bool state)
+{
+    if ( SoftTouchedWdg==nullptr ) return;
+    if ( state ) {
+        connect(logHeadWdg, SIGNAL(viewNextDock()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(logHeadWdg, SIGNAL(viewPrevDock()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(domHeadWdg, SIGNAL(viewNextDock()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(domHeadWdg, SIGNAL(viewPrevDock()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(netHeadWdg, SIGNAL(viewNextDock()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(netHeadWdg, SIGNAL(viewPrevDock()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(poolHeadWdg, SIGNAL(viewNextDock()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(poolHeadWdg, SIGNAL(viewPrevDock()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(scrtHeadWdg, SIGNAL(viewNextDock()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(scrtHeadWdg, SIGNAL(viewPrevDock()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(ifaceHeadWdg, SIGNAL(viewNextDock()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(ifaceHeadWdg, SIGNAL(viewPrevDock()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(connListWidget->toolBar, SIGNAL(viewNextDock()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(connListWidget->toolBar, SIGNAL(viewPrevDock()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+    } else {
+        disconnect(logHeadWdg, SIGNAL(viewNextDock()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(logHeadWdg, SIGNAL(viewPrevDock()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(domHeadWdg, SIGNAL(viewNextDock()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(domHeadWdg, SIGNAL(viewPrevDock()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(netHeadWdg, SIGNAL(viewNextDock()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(netHeadWdg, SIGNAL(viewPrevDock()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(poolHeadWdg, SIGNAL(viewNextDock()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(poolHeadWdg, SIGNAL(viewPrevDock()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(scrtHeadWdg, SIGNAL(viewNextDock()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(scrtHeadWdg, SIGNAL(viewPrevDock()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(ifaceHeadWdg, SIGNAL(viewNextDock()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(ifaceHeadWdg, SIGNAL(viewPrevDock()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(connListWidget->toolBar, SIGNAL(viewNextDock()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(connListWidget->toolBar, SIGNAL(viewPrevDock()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+    }
 }

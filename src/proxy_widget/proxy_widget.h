@@ -21,9 +21,13 @@ public:
     void        setUsedViewMode(VIEW_MODE);
 
 signals:
+    void        viewDock(const QString&);
+    void        viewNextDock();
+    void        viewPrevDock();
 
 private:
     VIEW_MODE   usedViewMode;
+    bool        isTriggered;
     QPixmap     emblem;
     QPixmap     connections;
     QPixmap     log;
@@ -39,7 +43,7 @@ private:
     QAction    *connAct, *domainsAct,
                *networksAct, *storagesAct,
                *secretsAct, *ifacesAct,
-               *logAct;
+               *logAct, *next, *prev;
     int         widthPart, heightPart, side;
 
 public slots:

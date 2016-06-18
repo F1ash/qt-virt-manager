@@ -80,6 +80,7 @@ set (HEADERS
   src/wait_thread/wait_thread.h
 
   src/proxy_widget/proxy_widget.h
+  src/soft_touched/st_stacked_widget.h
 
   src/menubar/menu_bar.h
   src/menubar/file_menu.h
@@ -434,6 +435,7 @@ set (SOURCES
   src/wait_thread/wait_thread.cpp
 
   src/proxy_widget/proxy_widget.cpp
+  src/soft_touched/st_stacked_widget.cpp
 
   src/menubar/menu_bar.cpp
   src/menubar/file_menu.cpp
