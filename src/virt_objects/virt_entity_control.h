@@ -2,7 +2,7 @@
 #define VIRT_ENTITY_CONTROL_H
 
 #include <QMainWindow>
-#include <QTreeView>
+#include "tree_view.h"
 #include <QSettings>
 #include <QTime>
 #include <QUrl>
@@ -18,9 +18,12 @@ public:
     virtual ~VirtEntityControl()               = 0;
     QString                  currConnName;
     QSettings                settings;
-    QTreeView               *entityList;
+    TreeView                *entityList;
     virConnectPtr           *ptr_ConnPtr = nullptr;
 
+    virtual void             stopProcessing();
+    virtual bool             setCurrentWorkConnect(virConnectPtr*);
+    virtual void             setListHeader(QString&);
     virtual void             reloadState();
     virtual void             changeDockVisibility();
     virtual void             entityClicked(const QPoint&);
@@ -29,6 +32,8 @@ public:
     virtual void             newVirtEntityFromXML(const QStringList&);
     virtual void             doneEntityCreationDialog();
 
+    void                     setUsageInSoftTouched(bool);
+
 signals:
     void                     entityMsg(QString&);
     void                     addNewTask(TASK);
@@ -36,9 +41,6 @@ signals:
 
 public slots:
     void                     msgRepeater(QString&);
-    virtual void             stopProcessing();
-    virtual bool             setCurrentWorkConnect(virConnectPtr*);
-    virtual void             setListHeader(QString&);
     virtual void             resultReceiver(Result);
 };
 

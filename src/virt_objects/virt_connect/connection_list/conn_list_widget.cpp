@@ -1,7 +1,7 @@
-#include "connection_list/conn_list_widget.h"
+#include "conn_list_widget.h"
 
 ConnectionList::ConnectionList(QWidget *parent)
-    : QTreeView(parent)
+    : TreeView(parent)
 {
     this->setEnabled(false);
     this->setContextMenuPolicy ( Qt::CustomContextMenu );
@@ -34,6 +34,12 @@ ConnectionList::ConnectionList(QWidget *parent)
             this, SLOT(searchLocalhostConnComplete()));
 }
 
+void ConnectionList::setUsageInSoftTouched(bool state)
+{
+    prevL->setUsageStatus(state);
+    nextL->setUsageStatus(state);
+}
+
 /* public slots */
 int  ConnectionList::connItemEditAction()
 {
@@ -52,7 +58,8 @@ int  ConnectionList::connItemEditAction()
     disconnect(sDialog, SIGNAL(creationConnCancelled()),
                this, SLOT(deleteCancelledCreation()));
     sDialog->deleteLater();
-    if ( exitCode==QDialog::Accepted && !idx->getData().value("isRunning").toBool() ) {
+    if ( exitCode==QDialog::Accepted
+         && !idx->getData().value("isRunning").toBool() ) {
         QString key = idx->getName();
         ConnElement *conn = static_cast<ConnElement*>(
                     connections->value(key));

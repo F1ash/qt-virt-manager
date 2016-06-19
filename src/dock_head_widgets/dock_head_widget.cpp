@@ -70,6 +70,5 @@ void DockHeadWidget::wheelEvent(QWheelEvent *ev)
         } else if ( ev->delta()<0 ) {
             emit viewPrevDock();
         };
-        qDebug()<<ev->delta();
     };
 }

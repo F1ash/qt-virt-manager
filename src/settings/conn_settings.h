@@ -14,7 +14,7 @@
 #include <QSettings>
 #include <QCloseEvent>
 #include <QMessageBox>
-#include "connection_list/conn_item_model.h"
+#include "virt_objects/virt_connect/connection_list/conn_item_model.h"
 #include <QDebug>
 
 class ConnSettings : public QDialog

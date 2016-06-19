@@ -9,6 +9,7 @@
 #include <QHBoxLayout>
 #include "log_dock/log_dock.h"
 #include "virt_objects/virt_event_loop.h"
+#include "virt_objects/virt_connect/connection_list/connections.h"
 #include "virt_objects/virt_network/virtnet_control.h"
 #include "virt_objects/virt_domain/domain_control.h"
 #include "virt_objects/virt_storage_vol/storage_vol_control.h"
@@ -16,7 +17,6 @@
 #include "virt_objects/virt_secret/secret_control.h"
 #include "virt_objects/virt_interface/virt_interface_control.h"
 #include "tray/traywidget.h"
-#include "connection_list/connections.h"
 #include "wait_thread/wait_thread.h"
 #include "vm_viewer/lxc/lxc_viewer.h"
 #include "vm_viewer/spice/spice_viewer.h"
@@ -137,6 +137,7 @@ private slots:
     void all_stuff_to_original();
     void setDockFloatible(bool);
     void setDockHeaderWheelEventsEnabled(bool);
+    void setDockUsedInSoftTouched(bool);
 };
 
 #endif // MAINWINDOW_H

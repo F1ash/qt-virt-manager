@@ -1,7 +1,7 @@
 #ifndef CONN_LIST_WIDGET_H
 #define CONN_LIST_WIDGET_H
 
-#include <QTreeView>
+#include "virt_objects/tree_view.h"
 #include <QMessageBox>
 #include <QInputDialog>
 #include "conn_menu.h"
@@ -13,13 +13,15 @@
 #define TO_RUN true
 #define TO_STOP false
 
-class ConnectionList : public QTreeView
+class ConnectionList : public TreeView
 {
     Q_OBJECT
 public:
     explicit ConnectionList(QWidget *parent = nullptr);
     CONN_LIST           *connections;
     ConnItemModel       *connItemModel;
+
+    void                 setUsageInSoftTouched(bool);
 
 signals:
     void                 clickedItem(QString);

@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QIcon>
 #include <QLabel>
 #include <QTextBrowser>
 #include <QTime>
@@ -17,6 +16,7 @@
 #include <QSettings>
 #include <QCheckBox>
 #include <QSpinBox>
+#include "text_browser.h"
 #include <QDebug>
 
 #define ONE_MB 1048576
@@ -27,6 +27,8 @@ class LogDock : public QWidget
 public:
     explicit LogDock(QWidget *parent = nullptr);
     ~LogDock();
+    TextBrowser      *Log;
+    void              setUsageInSoftTouched(bool);
 
 private:
     bool              lastProbe;
@@ -40,7 +42,6 @@ private:
     QPushButton      *saveLog;
     QHBoxLayout      *titleLayout;
     QWidget          *title;
-    QTextBrowser     *Log;
 
 signals:
     void              overflow(bool);

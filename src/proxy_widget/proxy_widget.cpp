@@ -155,7 +155,6 @@ void ProxyWidget::mouseReleaseEvent(QMouseEvent *ev)
     if ( usedViewMode!=SOFT_TOUCHED ) return;
     if ( isTriggered ) return;
     if ( ev->type()==QMouseEvent::MouseButtonRelease ) {
-        qDebug()<<"mouseReleaseEvent";
         if        ( r1.contains(ev->pos(), true) ) {
             qDebug()<<"in R1";
             connAct->trigger();

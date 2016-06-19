@@ -75,6 +75,7 @@ set (VERSION_MINOR   50)
 set (HEADERS
   src/mainwindow.h
   src/log_dock/log_dock.h
+  src/log_dock/text_browser.h
   src/tray/traywidget.h
   src/settings/conn_settings.h
   src/wait_thread/wait_thread.h
@@ -89,16 +90,6 @@ set (HEADERS
   src/menubar/help_menu.h
   src/menubar/donate_dialog.h
 
-  src/connection_list/connections.h
-  src/connection_list/toolbar.h
-  src/connection_list/conn_list_widget.h
-  src/connection_list/conn_menu.h
-  src/connection_list/conn_item_index.h
-  src/connection_list/conn_item_model.h
-  src/connection_list/conn_list_delegate.h
-  src/connection_list/search_thread.h
-  src/connection_list/wait_local_conn.h
-
   src/dock_head_widgets/dock_head_widget.h
   src/dock_head_widgets/bar_name.h
   src/dock_head_widgets/dock_widget.h
@@ -111,9 +102,20 @@ set (HEADERS
   src/virt_objects/virt_entity_config.h
   src/virt_objects/_virt_thread.h
   src/virt_objects/virt_event_loop.h
+  src/virt_objects/tree_view.h
+  src/virt_objects/h_navigation_label.h
   
   src/virt_objects/virt_connect/conn_element.h
   src/virt_objects/virt_connect/conn_alive_thread.h
+  src/virt_objects/virt_connect/connection_list/connections.h
+  src/virt_objects/virt_connect/connection_list/toolbar.h
+  src/virt_objects/virt_connect/connection_list/conn_list_widget.h
+  src/virt_objects/virt_connect/connection_list/conn_menu.h
+  src/virt_objects/virt_connect/connection_list/conn_item_index.h
+  src/virt_objects/virt_connect/connection_list/conn_item_model.h
+  src/virt_objects/virt_connect/connection_list/conn_list_delegate.h
+  src/virt_objects/virt_connect/connection_list/search_thread.h
+  src/virt_objects/virt_connect/connection_list/wait_local_conn.h
   
   src/virt_objects/virt_domain/domain_control.h
   src/virt_objects/virt_domain/domain_model.h
@@ -430,6 +432,7 @@ set (SOURCES
   src/main.cpp
   src/mainwindow.cpp
   src/log_dock/log_dock.cpp
+  src/log_dock/text_browser.cpp
   src/tray/traywidget.cpp
   src/settings/conn_settings.cpp
   src/wait_thread/wait_thread.cpp
@@ -443,16 +446,6 @@ set (SOURCES
   src/menubar/dock_menu.cpp
   src/menubar/help_menu.cpp
   src/menubar/donate_dialog.cpp
-  
-  src/connection_list/connections.cpp
-  src/connection_list/toolbar.cpp
-  src/connection_list/conn_list_widget.cpp
-  src/connection_list/conn_menu.cpp
-  src/connection_list/conn_item_index.cpp
-  src/connection_list/conn_item_model.cpp
-  src/connection_list/conn_list_delegate.cpp
-  src/connection_list/search_thread.cpp
-  src/connection_list/wait_local_conn.cpp
 
   src/dock_head_widgets/dock_head_widget.cpp
   src/dock_head_widgets/bar_name.cpp
@@ -465,9 +458,20 @@ set (SOURCES
   src/virt_objects/virt_entity_control.cpp
   src/virt_objects/_virt_thread.cpp
   src/virt_objects/virt_event_loop.cpp
+  src/virt_objects/tree_view.cpp
+  src/virt_objects/h_navigation_label.cpp
   
   src/virt_objects/virt_connect/conn_element.cpp
   src/virt_objects/virt_connect/conn_alive_thread.cpp
+  src/virt_objects/virt_connect/connection_list/connections.cpp
+  src/virt_objects/virt_connect/connection_list/toolbar.cpp
+  src/virt_objects/virt_connect/connection_list/conn_list_widget.cpp
+  src/virt_objects/virt_connect/connection_list/conn_menu.cpp
+  src/virt_objects/virt_connect/connection_list/conn_item_index.cpp
+  src/virt_objects/virt_connect/connection_list/conn_item_model.cpp
+  src/virt_objects/virt_connect/connection_list/conn_list_delegate.cpp
+  src/virt_objects/virt_connect/connection_list/search_thread.cpp
+  src/virt_objects/virt_connect/connection_list/wait_local_conn.cpp
   
   src/virt_objects/virt_domain/domain_control.cpp
   src/virt_objects/virt_domain/domain_model.cpp
@@ -735,7 +739,7 @@ set (SOURCES
   src/vm_viewer/lxc/lxc_viewer_thread.cpp
   src/vm_viewer/spice/spice_viewer.cpp
   src/vm_viewer/vnc/vnc_viewer.cpp
-  
+
   src/vm_viewer/qterminal/properties.cpp
   src/vm_viewer/qterminal/bookmarkswidget.cpp
   src/vm_viewer/qterminal/tabwidget.cpp

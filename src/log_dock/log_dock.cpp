@@ -1,5 +1,4 @@
 #include "log_dock.h"
-#include <QPainter>
 
 #define  DOT    QChar(0x273B)
 #define  DEMARK QString("<br>")
@@ -44,15 +43,11 @@ LogDock::LogDock(QWidget *parent) :
     titleLayout->setMargin(0);
     title->setContentsMargins(0, 0, 10, 0);
 
-    Log = new QTextBrowser(this);
+    Log = new TextBrowser(this);
     Log->setToolTip(QString(
     "Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
                     .arg(currLogSize * ONE_MB)
                     .arg(Log->toPlainText().count()));
-    Log->setReadOnly(true);
-    Log->setOpenLinks(false);
-    Log->setOpenExternalLinks(true);
-    Log->setContextMenuPolicy(Qt::DefaultContextMenu);
     connect(Log, SIGNAL(anchorClicked(QUrl)),
             this, SLOT(openLink(QUrl)));
 
@@ -83,6 +78,12 @@ LogDock::~LogDock()
     settings.endGroup();
     settings.sync();
     if ( autoSaveLog->isChecked() ) saveLogToFile();
+}
+
+void LogDock::setUsageInSoftTouched(bool state)
+{
+    Log->prevL->setUsageStatus(state);
+    Log->nextL->setUsageStatus(state);
 }
 
 /* public slots */
@@ -147,14 +148,17 @@ void LogDock::saveLogToFile()
         if ( written==text.size() ) {
             Log->clear();
             emit overflow(false);
-            msg.append(QString("Save Log to %1 done.").arg(_fileName));
+            msg.append(QString("Save Log to %1 done.")
+                       .arg(_fileName));
             lastProbe = true;
         } else {
-            msg.append(QString("Save Log to %1 failed.").arg(_fileName));
+            msg.append(QString("Save Log to %1 failed.")
+                       .arg(_fileName));
             lastProbe = false;
         };
         QString time = QTime::currentTime().toString();
-        QString currMsg = QString("<b>%1:</b><br><font color='green'><b>ACTION</b></font>: %3")
+        QString currMsg = QString(
+        "<b>%1:</b><br><font color='green'><b>ACTION</b></font>: %3")
                 .arg(time).arg(msg);
         appendMsgToLog(currMsg);
     };

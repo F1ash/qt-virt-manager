@@ -660,7 +660,9 @@
         <file alias="256x256/emblems/networks.png">icons/256x256/emblems/networks.png</file>
         <file alias="256x256/emblems/utilities-log-viewer.png">icons/256x256/emblems/utilities-log-viewer.png</file>
         <file alias="256x256/apps/virtual-engineering.png">icons/256x256/apps/virtual-engineering.png</file>
+        <file alias="128x128/actions/previous.png">icons/128x128/actions/previous.png</file>
         <file alias="128x128/actions/qt_icon.png">icons/128x128/actions/qt_icon.png</file>
+        <file alias="128x128/actions/next.png">icons/128x128/actions/next.png</file>
         <file alias="128x128/actions/yandex_money.png">icons/128x128/actions/yandex_money.png</file>
     </qresource>
     <qresource prefix="/misc">

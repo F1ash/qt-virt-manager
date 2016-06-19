@@ -1023,6 +1023,7 @@ void MainWindow::free_and_hide_all_stuff()
     connect(proxyWdg, SIGNAL(viewPrevDock()),
             SoftTouchedWdg, SLOT(showPrevDock()));
     setDockHeaderWheelEventsEnabled(true);
+    setDockUsedInSoftTouched(true);
     viewMode = SOFT_TOUCHED;
     proxyWdg->setUsedViewMode(viewMode);
     proxyWdg->update();
@@ -1040,6 +1041,7 @@ void MainWindow::all_stuff_to_original()
         disconnect(proxyWdg, SIGNAL(viewPrevDock()),
                    SoftTouchedWdg, SLOT(showPrevDock()));
         setDockHeaderWheelEventsEnabled(false);
+        setDockUsedInSoftTouched(false);
         proxyLayout->removeWidget(SoftTouchedWdg);
         SoftTouchedWdg->removeAllWidgets();
         //delete SoftTouchedWdg;
@@ -1230,6 +1232,13 @@ void MainWindow::setDockFloatible(bool state)
     scrtHeadWdg->setFloatible(state);
     ifaceHeadWdg->setFloatible(state);
     connListWidget->toolBar->wheelEventEnabled(!state);
+    connListWidget->list->setUsageInSoftTouched(!state);
+    domainDockContent->setUsageInSoftTouched(!state);
+    networkDockContent->setUsageInSoftTouched(!state);
+    storagePoolDockContent->setUsageInSoftTouched(!state);
+    secretDockContent->setUsageInSoftTouched(!state);
+    ifaceDockContent->setUsageInSoftTouched(!state);
+    logDockContent->setUsageInSoftTouched(!state);
 }
 void MainWindow::setDockHeaderWheelEventsEnabled(bool state)
 {
@@ -1291,6 +1300,97 @@ void MainWindow::setDockHeaderWheelEventsEnabled(bool state)
         disconnect(connListWidget->toolBar, SIGNAL(viewNextDock()),
                    SoftTouchedWdg, SLOT(showNextDock()));
         disconnect(connListWidget->toolBar, SIGNAL(viewPrevDock()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+    }
+}
+void MainWindow::setDockUsedInSoftTouched(bool state)
+{
+    if ( SoftTouchedWdg==nullptr ) return;
+    if ( state ) {
+        connect(logDockContent->Log->nextL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(logDockContent->Log->prevL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(domainDockContent->entityList->nextL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(domainDockContent->entityList->prevL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(networkDockContent->entityList->nextL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(networkDockContent->entityList->prevL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(storagePoolDockContent->entityList->nextL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(storagePoolDockContent->entityList->prevL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(secretDockContent->entityList->nextL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(secretDockContent->entityList->prevL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(ifaceDockContent->entityList->nextL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(ifaceDockContent->entityList->prevL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(connListWidget->list->nextL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(connListWidget->list->prevL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
+    } else {
+        disconnect(logDockContent->Log->nextL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(logDockContent->Log->prevL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(domainDockContent->entityList->nextL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(domainDockContent->entityList->prevL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(networkDockContent->entityList->nextL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(networkDockContent->entityList->prevL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(storagePoolDockContent->entityList->nextL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(storagePoolDockContent->entityList->prevL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(secretDockContent->entityList->nextL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(secretDockContent->entityList->prevL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(ifaceDockContent->entityList->nextL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(ifaceDockContent->entityList->prevL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(connListWidget->list->nextL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(connListWidget->list->prevL,
+                   SIGNAL(released()),
                    SoftTouchedWdg, SLOT(showPrevDock()));
     }
 }

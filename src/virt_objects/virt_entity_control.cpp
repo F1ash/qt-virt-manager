@@ -4,7 +4,7 @@ VirtEntityControl::VirtEntityControl(QWidget *parent) :
     QMainWindow(parent)
 {
     qRegisterMetaType<QString>("QString&");
-    entityList = new QTreeView(this);
+    entityList = new TreeView(this);
     entityList->setSizePolicy(
                   QSizePolicy(
                       QSizePolicy::MinimumExpanding,
@@ -36,10 +36,6 @@ void VirtEntityControl::reloadState()
 {
     return;
 }
-void VirtEntityControl::resultReceiver(Result data)
-{
-    Q_UNUSED(data);
-}
 void VirtEntityControl::changeDockVisibility()
 {
     //toolBar->setEnabled( !toolBar->isEnabled() );
@@ -66,12 +62,23 @@ void VirtEntityControl::doneEntityCreationDialog()
 
 }
 
+void VirtEntityControl::setUsageInSoftTouched(bool state)
+{
+    entityList->prevL->setUsageStatus(state);
+    entityList->nextL->setUsageStatus(state);
+}
+
 /* public slots */
 void VirtEntityControl::msgRepeater(QString &msg)
 {
     QString time = QTime::currentTime().toString();
     QString title = QString("Connection '%1'").arg(currConnName);
-    QString currMsg = QString("<b>%1 %2:</b><br><font color='green'><b>ACTION</b></font>: %3")
+    QString currMsg = QString(
+    "<b>%1 %2:</b><br><font color='green'><b>ACTION</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     emit entityMsg(currMsg);
+}
+void VirtEntityControl::resultReceiver(Result data)
+{
+    Q_UNUSED(data);
 }
