@@ -547,9 +547,7 @@ void MainWindow::initDockWidgets()
 
     switch (viewMode) {
     case SOFT_TOUCHED:
-        settings.beginGroup("SOFT_TOUCHED_MODE");
         free_and_hide_all_stuff();
-        settings.endGroup();
         break;
     case HARD_CLASSIC:
     default:
@@ -1007,7 +1005,9 @@ void MainWindow::free_and_hide_all_stuff()
     removeDockWidget(secretDock);
     removeDockWidget(ifaceDock);
     setDockFloatible(false);
+    settings.beginGroup("SOFT_TOUCHED_MODE");
     SoftTouchedWdg = new ST_StackedWidget(this);
+    restoreGeometry(settings.value("Geometry").toByteArray());
     SoftTouchedWdg->addNewWidget(connListWidget);
     SoftTouchedWdg->addNewWidget(logDock);
     SoftTouchedWdg->addNewWidget(domainDock);
@@ -1022,6 +1022,8 @@ void MainWindow::free_and_hide_all_stuff()
             SoftTouchedWdg, SLOT(showNextDock()));
     connect(proxyWdg, SIGNAL(viewPrevDock()),
             SoftTouchedWdg, SLOT(showPrevDock()));
+    restoreState(settings.value("State").toByteArray());
+    settings.endGroup();
     setDockHeaderWheelEventsEnabled(true);
     setDockUsedInSoftTouched(true);
     viewMode = SOFT_TOUCHED;
