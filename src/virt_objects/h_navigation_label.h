@@ -18,7 +18,6 @@ signals:
 
 private:
     bool        inUsage;
-    QPixmap     pix;
     qreal       opacity;
 
 private slots:

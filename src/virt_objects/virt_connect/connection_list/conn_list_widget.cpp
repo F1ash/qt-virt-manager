@@ -37,6 +37,7 @@ ConnectionList::ConnectionList(QWidget *parent)
 void ConnectionList::setUsageInSoftTouched(bool state)
 {
     prevL->setUsageStatus(state);
+    homeL->setUsageStatus(state);
     nextL->setUsageStatus(state);
 }
 

@@ -19,6 +19,7 @@ class ProxyWidget : public QWidget
 public:
     explicit ProxyWidget(QWidget *parent = nullptr);
     void        setUsedViewMode(VIEW_MODE);
+    void        returnToUntriggered();
 
 signals:
     void        viewDock(const QString&);
@@ -45,8 +46,6 @@ private:
                *secretsAct, *ifacesAct,
                *logAct, *next, *prev;
     int         widthPart, heightPart, side;
-
-public slots:
 
 private slots:
     void        actionTriggered();

@@ -83,6 +83,7 @@ LogDock::~LogDock()
 void LogDock::setUsageInSoftTouched(bool state)
 {
     Log->prevL->setUsageStatus(state);
+    Log->homeL->setUsageStatus(state);
     Log->nextL->setUsageStatus(state);
 }
 

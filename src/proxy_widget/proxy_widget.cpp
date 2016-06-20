@@ -89,8 +89,11 @@ void ProxyWidget::setUsedViewMode(VIEW_MODE _mode)
     usedViewMode = _mode;
     isTriggered = false;
 }
-
-/* public slots */
+void ProxyWidget::returnToUntriggered()
+{
+    isTriggered = false;
+    update();
+}
 
 /* private slots */
 void ProxyWidget::actionTriggered()

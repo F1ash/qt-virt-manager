@@ -65,6 +65,7 @@ void VirtEntityControl::doneEntityCreationDialog()
 void VirtEntityControl::setUsageInSoftTouched(bool state)
 {
     entityList->prevL->setUsageStatus(state);
+    entityList->homeL->setUsageStatus(state);
     entityList->nextL->setUsageStatus(state);
 }
 

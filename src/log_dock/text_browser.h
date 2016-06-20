@@ -1,5 +1,5 @@
-#ifndef TEXTB_ROWSER_H
-#define TEXTB_ROWSER_H
+#ifndef TEXT_BROWSER_H
+#define TEXT_BROWSER_H
 
 #include <QTextBrowser>
 #include <QPixmap>
@@ -12,10 +12,10 @@ class TextBrowser : public QTextBrowser
     Q_OBJECT
 public:
     explicit TextBrowser(QWidget *parent = nullptr);
-    HNavigationLabel *prevL, *nextL;
+    HNavigationLabel     *prevL, *nextL, *homeL;
 
 private:
-    QPixmap           next, prev;
+    QPixmap               next, prev, home;
 
 private slots:
     void              resizeEvent(QResizeEvent*);

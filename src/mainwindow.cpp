@@ -1349,6 +1349,27 @@ void MainWindow::setDockUsedInSoftTouched(bool state)
         connect(connListWidget->list->prevL,
                 SIGNAL(released()),
                 SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(connListWidget->list->homeL,
+                SIGNAL(released()),
+                this, SLOT(turnSoftTouchedToUntriggered()));
+        connect(logDockContent->Log->homeL,
+                SIGNAL(released()),
+                this, SLOT(turnSoftTouchedToUntriggered()));
+        connect(domainDockContent->entityList->homeL,
+                SIGNAL(released()),
+                this, SLOT(turnSoftTouchedToUntriggered()));
+        connect(networkDockContent->entityList->homeL,
+                SIGNAL(released()),
+                this, SLOT(turnSoftTouchedToUntriggered()));
+        connect(storagePoolDockContent->entityList->homeL,
+                SIGNAL(released()),
+                this, SLOT(turnSoftTouchedToUntriggered()));
+        connect(secretDockContent->entityList->homeL,
+                SIGNAL(released()),
+                this, SLOT(turnSoftTouchedToUntriggered()));
+        connect(ifaceDockContent->entityList->homeL,
+                SIGNAL(released()),
+                this, SLOT(turnSoftTouchedToUntriggered()));
     } else {
         disconnect(logDockContent->Log->nextL,
                    SIGNAL(released()),
@@ -1389,8 +1410,34 @@ void MainWindow::setDockUsedInSoftTouched(bool state)
         disconnect(connListWidget->list->nextL,
                    SIGNAL(released()),
                    SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(connListWidget->list->homeL,
+                   SIGNAL(released()),
+                   this, SLOT(turnSoftTouchedToUntriggered()));
         disconnect(connListWidget->list->prevL,
                    SIGNAL(released()),
                    SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(logDockContent->Log->homeL,
+                   SIGNAL(released()),
+                   this, SLOT(turnSoftTouchedToUntriggered()));
+        disconnect(domainDockContent->entityList->homeL,
+                   SIGNAL(released()),
+                   this, SLOT(turnSoftTouchedToUntriggered()));
+        disconnect(networkDockContent->entityList->homeL,
+                   SIGNAL(released()),
+                   this, SLOT(turnSoftTouchedToUntriggered()));
+        disconnect(storagePoolDockContent->entityList->homeL,
+                   SIGNAL(released()),
+                   this, SLOT(turnSoftTouchedToUntriggered()));
+        disconnect(secretDockContent->entityList->homeL,
+                   SIGNAL(released()),
+                   this, SLOT(turnSoftTouchedToUntriggered()));
+        disconnect(ifaceDockContent->entityList->homeL,
+                   SIGNAL(released()),
+                   this, SLOT(turnSoftTouchedToUntriggered()));
     }
+}
+void MainWindow::turnSoftTouchedToUntriggered()
+{
+    SoftTouchedWdg->hide();
+    proxyWdg->returnToUntriggered();
 }
