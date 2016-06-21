@@ -384,7 +384,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
         QFont _font;
         _font.setBold(true);
         _font.setFamily("Monospace");
-        _font.setPointSize(18);
+        _font.setPixelSize(heightPart/8);
         painter.setFont(_font);
         //painter.setOpacity(0.50);
         painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite

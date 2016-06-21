@@ -53,7 +53,7 @@ void ToolBar::wheelEventEnabled(bool state)
     wheelEventState = state;
     QString t;
     if ( state ) {
-        t.append("Wheel for change dock\nor\nuse Ctrl+Alt+Right/Left");
+        t.append("Wheel for change dock\n( Ctrl+Alt+Right/Left )");
     };
     setToolTip(t);
 }

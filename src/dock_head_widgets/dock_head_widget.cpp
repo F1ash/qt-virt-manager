@@ -27,7 +27,7 @@ void DockHeadWidget::setFloatible(bool state)
     if ( state ) {
         t.append("DoubleClick for floatible");
     } else {
-        t.append("Wheel for change dock\nor\nuse Ctrl+Alt+Right/Left");
+        t.append("Wheel for change dock\n( Ctrl+Alt+Right/Left )");
     };
     setToolTip(t);
 }
