@@ -5,7 +5,6 @@
 #include <QPixmap>
 #include <QIcon>
 #include <QResizeEvent>
-#include <QPaintEvent>
 #include "virt_objects/h_navigation_label.h"
 
 class TextBrowser : public QTextBrowser
@@ -20,7 +19,6 @@ private:
 
 private slots:
     void                resizeEvent(QResizeEvent*);
-    //void                paintEvent(QPaintEvent*);
 };
 
 #endif // TEXT_BROWSER_H

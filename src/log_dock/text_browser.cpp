@@ -42,9 +42,5 @@ void TextBrowser::resizeEvent(QResizeEvent *ev)
     nextL->move(
                 ev->size().width()-HNAVY_SIZE,
                 ev->size().height()-HNAVY_SIZE);
+    QTextBrowser::resizeEvent(ev);
 }
-//void TextBrowser::paintEvent(QPaintEvent *ev)
-//{
-//    ev->accept();
-//    QTextBrowser::paintEvent(ev);
-//}
