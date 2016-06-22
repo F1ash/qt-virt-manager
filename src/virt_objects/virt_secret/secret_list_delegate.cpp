@@ -19,10 +19,10 @@ void SecretListDelegate::paint(
                     index, Qt::DisplayRole).toString();
         QStyledItemDelegate::paint(painter, _option, index);
 
-        QIcon icon = qvariant_cast<QIcon>(
-                    index.model()->data(
-                        index, Qt::DecorationRole));
-        icon.paint(painter, option.rect, Qt::AlignLeft);
+        //QIcon icon = qvariant_cast<QIcon>(
+        //            index.model()->data(
+        //                index, Qt::DecorationRole));
+        //icon.paint(painter, option.rect, Qt::AlignLeft);
 #else
         QStyledItemDelegate::paint(painter, option, index);
 #endif
