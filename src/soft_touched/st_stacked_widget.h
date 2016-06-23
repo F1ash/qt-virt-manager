@@ -2,6 +2,7 @@
 #define ST_STACKED_WIDGET_H
 
 #include <QStackedWidget>
+#include <QPropertyAnimation>
 
 class ST_StackedWidget : public QStackedWidget
 {
@@ -13,11 +14,17 @@ public:
 
 private:
     int         wdgCount;
+    QPropertyAnimation
+               *showAnimation;
 
 public slots:
     void        showDock(const QString&);
     void        showNextDock();
     void        showPrevDock();
+
+private slots:
+    void        animatedDockShow(int);
+    void        animatedDockShowComlete();
 };
 
 #endif // ST_STACKED_WIDGET_H
