@@ -70,7 +70,7 @@ Devices::Devices(
         QWidget *parent, virConnectPtr *connPtrPtr, QString _xmlDesc) :
     _QWidget(parent, connPtrPtr), xmlDesc(_xmlDesc)
 {
-    setObjectName("Computer:Device");
+    setObjectName("Devices");
     usedDeviceList = new QListWidget(this);
     usedDeviceList->setSelectionMode(QAbstractItemView::SingleSelection);
     usedDeviceList->setContextMenuPolicy(Qt::CustomContextMenu);

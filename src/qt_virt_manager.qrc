@@ -70,6 +70,7 @@
         <file alias="22x22/emblems/booting.png">icons/22x22/emblems/booting.png</file>
         <file alias="22x22/emblems/vbox.png">icons/22x22/emblems/vbox.png</file>
         <file alias="22x22/emblems/display.png">icons/22x22/emblems/display.png</file>
+        <file alias="22x22/emblems/devices.png">icons/22x22/emblems/devices.png</file>
         <file alias="22x22/emblems/lxc.png">icons/22x22/emblems/lxc.png</file>
         <file alias="22x22/actions/destroy.png">icons/22x22/actions/destroy.png</file>
         <file alias="22x22/actions/migrate.png">icons/22x22/actions/migrate.png</file>
@@ -198,6 +199,7 @@
         <file alias="32x32/emblems/booting.png">icons/32x32/emblems/booting.png</file>
         <file alias="32x32/emblems/vbox.png">icons/32x32/emblems/vbox.png</file>
         <file alias="32x32/emblems/display.png">icons/32x32/emblems/display.png</file>
+        <file alias="32x32/emblems/devices.png">icons/32x32/emblems/devices.png</file>
         <file alias="32x32/emblems/lxc.png">icons/32x32/emblems/lxc.png</file>
         <file alias="32x32/actions/destroy.png">icons/32x32/actions/destroy.png</file>
         <file alias="32x32/actions/migrate.png">icons/32x32/actions/migrate.png</file>
@@ -328,6 +330,7 @@
         <file alias="48x48/emblems/booting.png">icons/48x48/emblems/booting.png</file>
         <file alias="48x48/emblems/vbox.png">icons/48x48/emblems/vbox.png</file>
         <file alias="48x48/emblems/display.png">icons/48x48/emblems/display.png</file>
+        <file alias="48x48/emblems/devices.png">icons/48x48/emblems/devices.png</file>
         <file alias="48x48/emblems/lxc.png">icons/48x48/emblems/lxc.png</file>
         <file alias="48x48/actions/destroy.png">icons/48x48/actions/destroy.png</file>
         <file alias="48x48/actions/migrate.png">icons/48x48/actions/migrate.png</file>
@@ -458,6 +461,7 @@
         <file alias="24x24/emblems/booting.png">icons/24x24/emblems/booting.png</file>
         <file alias="24x24/emblems/vbox.png">icons/24x24/emblems/vbox.png</file>
         <file alias="24x24/emblems/display.png">icons/24x24/emblems/display.png</file>
+        <file alias="24x24/emblems/devices.png">icons/24x24/emblems/devices.png</file>
         <file alias="24x24/emblems/lxc.png">icons/24x24/emblems/lxc.png</file>
         <file alias="24x24/actions/destroy.png">icons/24x24/actions/destroy.png</file>
         <file alias="24x24/actions/migrate.png">icons/24x24/actions/migrate.png</file>
@@ -588,6 +592,7 @@
         <file alias="64x64/emblems/booting.png">icons/64x64/emblems/booting.png</file>
         <file alias="64x64/emblems/vbox.png">icons/64x64/emblems/vbox.png</file>
         <file alias="64x64/emblems/display.png">icons/64x64/emblems/display.png</file>
+        <file alias="64x64/emblems/devices.png">icons/64x64/emblems/devices.png</file>
         <file alias="64x64/emblems/lxc.png">icons/64x64/emblems/lxc.png</file>
         <file alias="64x64/actions/destroy.png">icons/64x64/actions/destroy.png</file>
         <file alias="64x64/actions/migrate.png">icons/64x64/actions/migrate.png</file>

@@ -256,7 +256,7 @@ bool CreateVirtDomain::buildXMLDescription()
         if ( nullptr==Wdg ) continue;
         tabWidget->setCurrentWidget(Wdg);
         QDomNodeList list;
-        if ( key=="Computer" ) {
+        if ( key=="Devices" ) {
             _el = Wdg->getDataDocument().firstChildElement("devices");
             setBootOrder(&_el);
             if ( !_el.isNull() ) list = _el.childNodes();
@@ -329,7 +329,7 @@ void CreateVirtDomain::create_specified_widgets()
                     "CPU",
                     new CPU(this, helperThread->capabilities, xmlDesc, helperThread->cores));
         wdgList.insert(
-                    "Computer",
+                    "Devices",
                     new Devices(this, ptr_ConnPtr, xmlDesc));
         wdgList.insert(
                     "SecurityLabel",
@@ -337,8 +337,8 @@ void CreateVirtDomain::create_specified_widgets()
         connect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
                 wdgList.value("General"), SLOT(changeArch(QString&)));
         connect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
-                wdgList.value("Computer"), SLOT(setEmulator(QString&)));
-        connect(wdgList.value("Computer"), SIGNAL(devicesChanged(QDomDocument&)),
+                wdgList.value("Devices"), SLOT(setEmulator(QString&)));
+        connect(wdgList.value("Devices"), SIGNAL(devicesChanged(QDomDocument&)),
                 wdgList.value("OS_Booting"), SLOT(searchBootableDevices(QDomDocument&)));
         connect(wdgList.value("OS_Booting"), SIGNAL(maxVCPU(QString&)),
                 wdgList.value("CPU"), SLOT(setMaxVCPU(QString&)));
@@ -375,7 +375,7 @@ void CreateVirtDomain::set_specified_Tabs()
             key = "Memory";
             break;
         case 5:
-            key = "Computer";
+            key = "Devices";
             break;
         case 6:
             key = "SecurityLabel";
@@ -399,10 +399,8 @@ void CreateVirtDomain::set_specified_Tabs()
             tabWidget->insertTab(
                         idx,
                         Wdg,
-                        QIcon::fromTheme(Wdg->objectName()
-                                         .toLower()
-                                         .split(":")
-                                         .first()),
+                        QIcon::fromTheme(
+                            Wdg->objectName().toLower()),
                         key);
         };
     };
@@ -415,7 +413,7 @@ void CreateVirtDomain::restoreParameters()
     //disconnect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
     //           wdgList.value("General"), SLOT(changeArch(QString&)));
     //disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
-    //           wdgList.value("Computer"), SLOT(setEmulator(QString&)));
+    //           wdgList.value("Devices"), SLOT(setEmulator(QString&)));
     foreach (QString key, wdgList.keys()) {
         _QWidget *Wdg = static_cast<_QWidget*>(
                     wdgList.value(key));
