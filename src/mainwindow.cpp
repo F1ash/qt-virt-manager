@@ -341,7 +341,6 @@ void MainWindow::initConnListWidget()
         proxyLayout->addWidget(connListWidget);
         break;
     };
-    setCentralWidget(proxyWdg);
     int area_int = settings.value("ToolBarArea", 4).toInt();
     settings.beginGroup("ConnectListColumns");
     connListWidget->list->setColumnWidth(
@@ -359,6 +358,8 @@ void MainWindow::initConnListWidget()
     default:
         break;
     };
+    connListWidget->setToolBarArea(area_int);
+    setCentralWidget(proxyWdg);
     connect(connListWidget->list, SIGNAL(removeConnection(QString&)),
             this, SLOT(removeConnItem(QString&)));
     connect(connListWidget->list, SIGNAL(messageShowed()),
@@ -391,7 +392,8 @@ void MainWindow::initConnListWidget()
             connListWidget->list, SLOT(stopProcessing()));
     connect(connListWidget->toolBar->_closeOverview, SIGNAL(triggered()),
             this, SLOT(stopProcessing()));
-    connListWidget->setToolBarArea(area_int);
+    connect(connListWidget->list, SIGNAL(searchComplete()),
+            this, SLOT(enableSoftTouchedDocks()));
 }
 void MainWindow::initDockWidgets()
 {
@@ -584,7 +586,8 @@ void MainWindow::restartApplication()
     QString msg("Reload Application.");
     QString time = QTime::currentTime().toString();
     QString title("Libvirt EventLoop");
-    QString currMsg = QString("<b>%1 %2:</b><br><font color='green'><b>ACTION</b></font>: %3")
+    QString currMsg = QString(
+    "<b>%1 %2:</b><br><font color='green'><b>ACTION</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     logDockContent->appendMsgToLog(currMsg);
     reloadFlag = true;
@@ -690,19 +693,19 @@ void MainWindow::closeConnGenerations(QString &_connName)
     foreach (QString key, VM_Displayed_Map.keys()) {
         if ( key.startsWith(_connName) ) {
             VM_Displayed_Map.value(key)->close();
-            VM_Displayed_Map.remove(key);
+            //VM_Displayed_Map.remove(key);
         };
     };
     foreach (QString key, Overviewed_StPool_Map.keys()) {
         if ( key.startsWith(_connName) ) {
             Overviewed_StPool_Map.value(key)->close();
-            Overviewed_StPool_Map.remove(key);
+            //Overviewed_StPool_Map.remove(key);
         };
     };
     foreach (QString key, DomainEditor_Map.keys()) {
         if ( key.startsWith(_connName) ) {
             DomainEditor_Map.value(key)->close();
-            DomainEditor_Map.remove(key);
+            //DomainEditor_Map.remove(key);
         };
     };
 }
@@ -1442,4 +1445,10 @@ void MainWindow::turnSoftTouchedToUntriggered()
 {
     SoftTouchedWdg->hide();
     proxyWdg->returnToUntriggered();
+}
+void MainWindow::enableSoftTouchedDocks()
+{
+    if ( viewMode==SOFT_TOUCHED ) {
+        setDockFloatible(false);
+    }
 }

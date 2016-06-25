@@ -492,4 +492,5 @@ void ConnectionList::getAuthCredentials(QString &crd)
 void ConnectionList::searchLocalhostConnComplete()
 {
     this->setEnabled(true);
+    emit searchComplete();
 }

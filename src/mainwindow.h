@@ -139,6 +139,7 @@ private slots:
     void setDockHeaderWheelEventsEnabled(bool);
     void setDockUsedInSoftTouched(bool);
     void turnSoftTouchedToUntriggered();
+    void enableSoftTouchedDocks();
 };
 
 #endif // MAINWINDOW_H

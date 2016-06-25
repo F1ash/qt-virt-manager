@@ -34,6 +34,7 @@ signals:
     void                 domResult(Result);
     void                 netResult(Result);
     void                 domainEnd(QString&);
+    void                 searchComplete();
 
 public slots:
     int                  connItemEditAction();
