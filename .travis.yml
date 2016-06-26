@@ -7,7 +7,7 @@ os:
   - osx
 
 before_install:
-  - brew update
+#  - brew update
   - brew tap jeffreywildman/homebrew-virt-manager
   - brew tap F1ash/homebrew-qt-virt-manager
   - brew install qt5 glib x11vnc libvirt libvirt-glib usbredir spice-protocol qtermwidget
