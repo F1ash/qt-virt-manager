@@ -4,7 +4,7 @@ compiler:
   - cmake
 
 os:
-  - osx_image: xcode6.4
+  - osx
 
 before_install:
   - brew update
