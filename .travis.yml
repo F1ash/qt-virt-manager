@@ -1,0 +1,23 @@
+language: cpp
+
+compiler:
+  - cmake
+
+os:
+  - osx
+
+# uncomment and edit the following line if your project needs to run something other than `rake`:
+# script: bundle exec rspec spec
+
+branches:
+  only:
+  - master
+  
+env:
+  global:
+  - LANG="en_US.UTF-8"
+  - DBUILD_QT_VERSION=5
+  - DWITH_LIBCACARD=1
+  - DBUILD_TYPE=Debug
+  - DUSE_SPICE_AUDIO=1
+
