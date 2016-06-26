@@ -1,5 +1,5 @@
 
-
+find_package(PkgConfig)
 if (WIN32)
     find_package (Qt4 COMPONENTS QtMain QtCore QtGui QtXml QtSvg QtMultimedia QtNetwork REQUIRED)
 else (WIN32)
