@@ -6,7 +6,7 @@ compiler:
 os:
   - osx
 
-script: cmake && make all
+script: cmake . && make all
 
 
 branches:
