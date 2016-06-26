@@ -12,7 +12,7 @@ os:
 before_install:
   - brew update
   - brew tap F1ash/homebrew-qt-virt-manager
-  - brew install qt5 qtermwidget x11vnc
+  - brew install qt5 qtermwidget x11vnc pkg-config
   - brew tap jeffreywildman/homebrew-virt-manager
   - brew install libvirt-glib usbredir spice-protocol
  
