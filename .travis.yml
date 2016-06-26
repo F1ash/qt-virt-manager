@@ -6,8 +6,13 @@ compiler:
 os:
   - osx
 
-script: cmake . && make all
+before_install:
+  - brew update && brew install qt5 libvirt qtermwidget5 spice-vdagent \
+    libvncserver glibc-headers spice-protocol spice-glib
 
+script:
+  - cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=0 -DBUILD_TYPE=Debug -DUSE_SPICE_AUDIO=1 . \
+    && make all
 
 branches:
   only:
@@ -16,8 +21,4 @@ branches:
 env:
   global:
   - LANG="en_US.UTF-8"
-  - DBUILD_QT_VERSION=5
-  - DWITH_LIBCACARD=1
-  - DBUILD_TYPE=Debug
-  - DUSE_SPICE_AUDIO=1
 
