@@ -4,12 +4,12 @@ compiler:
   - cmake
 
 os:
-  - osx
+  - osx_image: beta-xcode6.3
 
 before_install:
   - brew update
   - brew tap F1ash/homebrew-qt-virt-manager
-  - brew install libvirt libvirt-glib
+  - brew install libvirt-glib
   - brew tap jeffreywildman/homebrew-virt-manager
   - brew install usbredir spice-protocol
   - brew install qt5 glib qtermwidget x11vnc
