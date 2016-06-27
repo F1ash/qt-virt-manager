@@ -8,6 +8,10 @@
 
 INCLUDE(CheckPointerMember)
 
+find_package(PkgConfig)
+pkg_check_modules(PC_LIBVNCSERVER QUIET libvncserver)
+set(LIBVNCSERVER_DEFINITIONS ${PC_LIBVNCSERVER_CFLAGS_OTHER})
+
 IF (LIBVNCSERVER_INCLUDE_DIR AND LIBVNCSERVER_LIBRARIES)
     # Already in cache, be silent
     SET(LIBVNCSERVER_FIND_QUIETLY TRUE)

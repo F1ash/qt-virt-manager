@@ -787,7 +787,13 @@ set (DESKTOP_FILE qt-virt-manager.desktop)
 project (${PROJECT_NAME})
 include_directories (
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${SOURCES_DIRS})
+    ${SOURCES_DIRS}
+    # added for brew build in Travis,
+    # because don't have default path
+    # for new installed bundles in OS_X
+    ${QT5_LIB_PATH}
+    ${VNC_LIB_PATH}
+    ${SPICE_LIB_PATH})
 configure_file (
     ${CMAKE_SOURCE_DIR}/src/version.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/version.h
