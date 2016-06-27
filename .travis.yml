@@ -17,7 +17,8 @@ before_install:
  
 
 script:
-  - cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=0 -DBUILD_TYPE=Debug -DUSE_SPICE_AUDIO=1 . && make all
+  - cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=0 -DBUILD_TYPE=Debug \
+    -DUSE_SPICE_AUDIO=1 -DCMAKE_PREFIX_PATH=$(brew --prefix qt5) . && make all
 
 branches:
   only:
