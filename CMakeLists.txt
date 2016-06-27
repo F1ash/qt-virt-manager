@@ -7,7 +7,14 @@ endif ()
 if (NOT SHARE_INSTALL_PREFIX)
     set (SHARE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/share")
 endif ()
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH
+    "${CMAKE_SOURCE_DIR}/cmake"
+    # added for brew build in Travis,
+    # because don't have default path
+    # for new installed bundles in OS_X
+    ${QT5_LIB_PATH}
+    ${VNC_LIB_PATH}
+    ${SPICE_LIB_PATH})
 
 cmake_minimum_required (VERSION 2.8.3)
 include(CheckFunctionExists)
@@ -787,13 +794,7 @@ set (DESKTOP_FILE qt-virt-manager.desktop)
 project (${PROJECT_NAME})
 include_directories (
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${SOURCES_DIRS}
-    # added for brew build in Travis,
-    # because don't have default path
-    # for new installed bundles in OS_X
-    ${QT5_LIB_PATH}
-    ${VNC_LIB_PATH}
-    ${SPICE_LIB_PATH})
+    ${SOURCES_DIRS})
 configure_file (
     ${CMAKE_SOURCE_DIR}/src/version.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/version.h
