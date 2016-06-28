@@ -19,13 +19,13 @@ ENDIF (LIBVNCSERVER_INCLUDE_DIR AND LIBVNCSERVER_LIBRARIES)
 
 FIND_PATH(LIBVNCSERVER_INCLUDE_DIR rfb/rfb.h)
 
-FIND_LIBRARY(LIBVNCSERVER_LIBRARIES NAMES vncserver libvncserver x11vnc x11vncserver libvnc) 
+FIND_LIBRARY(LIBVNCSERVER_LIBRARIES NAMES vncserver libvncserver x11vnc) 
 
 # libvncserver and libvncclient are in the same package, so it does
 # not make sense to add a new cmake script for finding libvncclient.
 # instead just find the libvncclient also in this file.
 FIND_PATH(LIBVNCCLIENT_INCLUDE_DIR rfb/rfbclient.h)
-FIND_LIBRARY(LIBVNCCLIENT_LIBRARIES NAMES vncclient libvncclient x11vncclient)
+FIND_LIBRARY(LIBVNCCLIENT_LIBRARIES NAMES vncclient libvncclient x11vnc)
 
 IF (LIBVNCSERVER_INCLUDE_DIR AND LIBVNCSERVER_LIBRARIES)
    SET(CMAKE_REQUIRED_INCLUDES "${LIBVNCSERVER_INCLUDE_DIR}" "${CMAKE_REQUIRED_INCLUDES}")
