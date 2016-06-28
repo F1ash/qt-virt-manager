@@ -9,7 +9,7 @@ class TrayIcon : public QSystemTrayIcon
 {
     Q_OBJECT
 public :
-  explicit TrayIcon(QWidget *parent);
+  explicit TrayIcon(QWidget *parent = nullptr);
 
     QAction   *hideAction;
     //QAction   *logUpAction;
