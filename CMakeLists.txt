@@ -7,8 +7,10 @@ endif ()
 if (NOT SHARE_INSTALL_PREFIX)
     set (SHARE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/share")
 endif ()
-list(APPEND CMAKE_MODULE_PATH
-    "${CMAKE_SOURCE_DIR}/cmake"
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+    
+list(APPEND CMAKE_PREFIX_PATH
     # added for brew build in Travis,
     # because don't have default path
     # for new installed bundles in OS_X
