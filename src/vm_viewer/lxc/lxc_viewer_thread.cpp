@@ -61,7 +61,7 @@ void LXC_ViewerThread::run()
         };
         if ( ret<0 ) {
             keep_alive = false;
-        } else if ( streamRegistered = registerStreamEvents() != 0 ) {
+        } else if ( (streamRegistered = registerStreamEvents() != 0) ) {
             keep_alive = false;
         };
     };
