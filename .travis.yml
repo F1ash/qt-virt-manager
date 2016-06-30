@@ -13,13 +13,17 @@ before_install:
   - brew update
   - brew tap jeffreywildman/homebrew-virt-manager
   - brew tap F1ash/homebrew-qt-virt-manager
-  - brew install qt-virt-manager
  
 
-install: true
+install:
+  - brew install spice-client-glib2 qtermwidget libvnc libvirt-glib
 
 script:
-  - echo "Done."
+  - cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=0
+    -DBUILD_TYPE=Debug -DUSE_SPICE_AUDIO=1
+    -DQT5_LIB_PATH=$(brew --prefix qt5)
+    -DVNC_LIB_PATH=$(brew --prefix libvnc)
+    -DSPICE_LIB_PATH=$(brew --prefix spice-protocol) . && make install
 
 branches:
   only:
