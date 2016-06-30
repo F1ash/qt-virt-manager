@@ -16,7 +16,10 @@ before_install:
   - brew install qt-virt-manager
  
 
-script: true
+install: true
+
+script:
+  - echo "Done."
 
 branches:
   only:
