@@ -11,6 +11,7 @@
 #include "network_widgets/domain_widget.h"
 #include "network_widgets/forward_widget.h"
 #include "network_widgets/addressing_widget.h"
+#include "network_widgets/qos_widget.h"
 #include "virt_objects/virt_entity_config.h"
 #include <QDebug>
 
@@ -41,6 +42,7 @@ private:
     Addressing_Widget
                     *addressingWdg;
     Forward_Widget  *forwardWdg;
+    QoS_Widget      *QoSWdg;
 
     //QCheckBox       *showDescription;
     QLabel          *about;

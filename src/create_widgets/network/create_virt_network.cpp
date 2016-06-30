@@ -35,18 +35,24 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent, Actions _act) :
     domainWdg = new Domain_Widget(this);
     addressingWdg = new Addressing_Widget(this);
     forwardWdg = new Forward_Widget(this);
+    QoSWdg = new QoS_Widget(this);
 
-    //showDescription = new QCheckBox("Show XML Description\nat close", this);
+    //showDescription = new QCheckBox(
+    //"Show XML Description\nat close", this);
     //showDescription->setChecked(showDesc);
-    about = new QLabel("<a href='http://libvirt.org/formatnetwork.html'>About</a>", this);
+    about = new QLabel(
+    "<a href='http://libvirt.org/formatnetwork.html'>About</a>",
+                this);
     about->setOpenExternalLinks(true);
     about->setToolTip("http://libvirt.org/formatnetwork.html");
     ok = new QPushButton("Ok", this);
     ok->setAutoDefault(true);
-    connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
+    connect(ok, SIGNAL(clicked()),
+            this, SLOT(set_Result()));
     cancel = new QPushButton("Cancel", this);
     cancel->setAutoDefault(true);
-    connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
+    connect(cancel, SIGNAL(clicked()),
+            this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(about);
     //buttonLayout->addWidget(showDescription);
@@ -60,7 +66,8 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent, Actions _act) :
     scrollLayout->addWidget(domainWdg);
     scrollLayout->addWidget(addressingWdg);
     scrollLayout->addWidget(forwardWdg);
-    scrollLayout->setContentsMargins(3, 0, 3, 0);
+    scrollLayout->addWidget(QoSWdg);
+    scrollLayout->setContentsMargins(4, 0, 4, 0);
     scrollLayout->addStretch(-1);
     scrolled = new QWidget(this);
     scrolled->setLayout(scrollLayout);
@@ -83,6 +90,8 @@ CreateVirtNetwork::CreateVirtNetwork(QWidget *parent, Actions _act) :
             bridgeWdg, SLOT(setUsage(bool)));
     connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
             domainWdg, SLOT(setUsage(bool)));
+    connect(forwardWdg, SIGNAL(QoSAvailable(bool)),
+            QoSWdg, SLOT(setUsage(bool)));
     connect(forwardWdg, SIGNAL(toggled(bool)),
             this, SLOT(networkTypeChanged(bool)));
     connect(ipv6, SIGNAL(toggled(bool)),

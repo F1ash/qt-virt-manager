@@ -24,6 +24,7 @@ public:
 
 signals:
     void             optionalsNeed(bool);
+    void             QoSAvailable(bool);
 
 private:
     QLabel          *modeLabel;

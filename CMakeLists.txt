@@ -358,6 +358,7 @@ set (HEADERS
   src/create_widgets/network/network_widgets/forward_mode_widgets/vepa_mode_widget.h
   src/create_widgets/network/network_widgets/forward_mode_widgets/passthrough_mode_widget.h
   src/create_widgets/network/network_widgets/forward_mode_widgets/hostdev_mode_widget.h
+  src/create_widgets/network/network_widgets/qos_widget.h
 
   src/create_widgets/snapshot/create_snapshot_dialog.h
   src/create_widgets/snapshot/create_snapshot_flags.h
@@ -713,6 +714,7 @@ set (SOURCES
   src/create_widgets/network/network_widgets/forward_mode_widgets/vepa_mode_widget.cpp
   src/create_widgets/network/network_widgets/forward_mode_widgets/passthrough_mode_widget.cpp
   src/create_widgets/network/network_widgets/forward_mode_widgets/hostdev_mode_widget.cpp
+  src/create_widgets/network/network_widgets/qos_widget.cpp
 
   src/create_widgets/snapshot/create_snapshot_dialog.cpp
   src/create_widgets/snapshot/create_snapshot_flags.cpp
