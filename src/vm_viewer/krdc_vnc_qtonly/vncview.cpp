@@ -598,7 +598,7 @@ void VncView::keyEventHandler(QKeyEvent *e)
         return;
 
     // check control key sequence
-    if ( e->modifiers()==Qt::ControlModifier|Qt::AltModifier ) {
+    if ( e->modifiers()==(Qt::ControlModifier|Qt::AltModifier) ) {
         vncThread.controlKeySequence(e->key());
         return;
     };

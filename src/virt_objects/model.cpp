@@ -41,6 +41,7 @@ int Model::columnCount(const QModelIndex &parent) const
 }
 bool Model::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
+    bool _res = true;
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::EditRole ) {
             switch (section) {
@@ -57,11 +58,13 @@ bool Model::setHeaderData(int section, Qt::Orientation orientation, const QVaria
                 column3 = value.toString();
                 break;
             default:
+                _res = false;
                 break;
             }
         };
         headerDataChanged(Qt::Horizontal, 0, 3);
     };
+    return _res;
 }
 QVariant Model::headerData(int section, Qt::Orientation orientation, int role) const
 {

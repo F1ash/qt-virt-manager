@@ -249,6 +249,8 @@ public:
                 m_map.clear();
                 return;
                 break;
+            default:
+                break;
             } // switch
         } // while
     } // constructor

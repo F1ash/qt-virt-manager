@@ -73,7 +73,7 @@ void _Storage_Auth::setSecret()
     int result = findSecDialog->exec();
     FSD_Result res = findSecDialog->getResult();
     findSecDialog->deleteLater();
-    if ( NOT_VOLUME!=secType.toUpper() && res.type.toLower()!=secType.toLower()
+    if ( (NOT_VOLUME!=secType.toUpper() && res.type.toLower()!=secType.toLower())
          || res.type.toLower()=="volume" ) {
         QString msg = QString("Type of secret should be is a %1")
                 .arg(secType);

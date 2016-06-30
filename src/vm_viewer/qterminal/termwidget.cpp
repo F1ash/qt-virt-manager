@@ -191,5 +191,5 @@ void TermWidget::paintEvent (QPaintEvent *)
 
 int TermWidget::getPtySlaveFd() const
 {
-    m_term->getPtySlaveFd();
+    return m_term->getPtySlaveFd();
 }

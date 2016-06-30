@@ -44,9 +44,10 @@ void LXC_ViewerThread::run()
         sendConnErrors();
         keep_alive = false;
     } else {
-        int ret = -1;
+        int ret = virDomainOpenConsole(
+                    domainPtr, nullptr, stream, 0 );
         QString msg;
-        if ( ret=virDomainOpenConsole( domainPtr, nullptr, stream, 0 )+1 ) {
+        if ( ret+1 ) {
             msg = QString(
                         "In '<b>%1</b>': Console opened in ZERO-mode...")
                     .arg(domain);
@@ -60,7 +61,7 @@ void LXC_ViewerThread::run()
         };
         if ( ret<0 ) {
             keep_alive = false;
-        } else if ( !(streamRegistered = registerStreamEvents()==0) ) {
+        } else if ( streamRegistered = registerStreamEvents() != 0 ) {
             keep_alive = false;
         };
     };
