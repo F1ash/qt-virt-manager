@@ -131,7 +131,7 @@ void CreateVirtNetwork::buildXMLDescription()
     QDomDocument doc;
     //qDebug()<<doc.toString();
     QDomElement _xmlDesc, _name, _uuid, _bridge,
-            _domain, _forward;
+            _domain, _forward, _bandwidth;
     QDomText data;
 
     _xmlDesc = doc.createElement("network");
@@ -192,6 +192,57 @@ void CreateVirtNetwork::buildXMLDescription()
         _forward.appendChild(
                     forwardWdg->getDataDocument());
         _xmlDesc.appendChild(_forward);
+    };
+    if ( QoSWdg->isUsed() ) {
+        _bandwidth = doc.createElement("bandwidth");
+        QDomElement _inbound = doc.createElement("inbound");
+        if ( QoSWdg->inbound->averageL->isChecked() ) {
+            _inbound.setAttribute(
+                        "average",
+                        QoSWdg->inbound->average->text());
+        };
+        if ( QoSWdg->inbound->peakL->isChecked() ) {
+            _inbound.setAttribute(
+                        "peak",
+                        QoSWdg->inbound->peak->text());
+        };
+        if ( QoSWdg->inbound->burstL->isChecked() ) {
+            _inbound.setAttribute(
+                        "burst",
+                        QoSWdg->inbound->burst->text());
+        };
+        if ( QoSWdg->inbound->floorL->isChecked() ) {
+            _inbound.setAttribute(
+                        "floor",
+                        QoSWdg->inbound->floor->text());
+        };
+        if ( !_inbound.isNull() )
+            _bandwidth.appendChild(_inbound);
+        QDomElement _outbound = doc.createElement("inbound");
+        if ( QoSWdg->outbound->averageL->isChecked() ) {
+            _outbound.setAttribute(
+                        "average",
+                        QoSWdg->outbound->average->text());
+        };
+        if ( QoSWdg->outbound->peakL->isChecked() ) {
+            _outbound.setAttribute(
+                        "peak",
+                        QoSWdg->outbound->peak->text());
+        };
+        if ( QoSWdg->outbound->burstL->isChecked() ) {
+            _outbound.setAttribute(
+                        "burst",
+                        QoSWdg->outbound->burst->text());
+        };
+        if ( QoSWdg->outbound->floorL->isChecked() ) {
+            _outbound.setAttribute(
+                        "floor",
+                        QoSWdg->outbound->floor->text());
+        };
+        if ( !_outbound.isNull() )
+            _bandwidth.appendChild(_outbound);
+
+        _xmlDesc.appendChild(_bandwidth);
     };
     doc.appendChild(_xmlDesc);
 

@@ -67,6 +67,7 @@ void Forward_Widget::modeChanged(const QString &_mode)
 {
     bool state = ( _mode=="nat" || _mode=="route" );
     emit optionalsNeed(state);
+    emit QoSAvailable(state);
     devWdg->setEnabled(state);
     if ( !state ) {
         devLabel->setChecked(false);
