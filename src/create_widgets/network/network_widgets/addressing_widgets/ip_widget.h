@@ -3,6 +3,7 @@
 
 #include "create_widgets/network/network_widgets/_checked_widget.h"
 #include <QTabWidget>
+#include <QPushButton>
 #include "ip_widgets/_ip_widget.h"
 #include "ip_widgets/addtab.h"
 
@@ -17,8 +18,10 @@ public:
 private:
     /* A network can have more than one of each family of address defined,
      * but only a single IPv4 address can have a dhcp or tftp element.
-     * Similar to IPv4, one IPv6 address per network can also have a dhcp definition.
+     * Similar to IPv4, one IPv6 address per network can also have
+     * a dhcp definition.
      */
+    QPushButton     *addIPSet;
     QTabWidget      *ipSet;
     QWidget         *ipWdg;
     bool             IPv4HasDHCP = false;

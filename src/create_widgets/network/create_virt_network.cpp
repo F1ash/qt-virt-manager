@@ -216,7 +216,7 @@ void CreateVirtNetwork::buildXMLDescription()
                         "floor",
                         QoSWdg->inbound->floor->text());
         };
-        if ( !_inbound.isNull() )
+        if ( _inbound.hasAttributes() )
             _bandwidth.appendChild(_inbound);
         QDomElement _outbound = doc.createElement("inbound");
         if ( QoSWdg->outbound->averageL->isChecked() ) {
@@ -239,7 +239,7 @@ void CreateVirtNetwork::buildXMLDescription()
                         "floor",
                         QoSWdg->outbound->floor->text());
         };
-        if ( !_outbound.isNull() )
+        if ( _outbound.hasAttributes() )
             _bandwidth.appendChild(_outbound);
 
         _xmlDesc.appendChild(_bandwidth);

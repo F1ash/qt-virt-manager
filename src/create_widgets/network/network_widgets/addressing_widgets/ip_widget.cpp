@@ -3,10 +3,19 @@
 IP_Widget::IP_Widget(QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
+    addIPSet = new QPushButton(this);
+    addIPSet->setText("Add IP Element");
+    addIPSet->setIcon(QIcon::fromTheme("list-add"));
+    addIPSet->setIconSize(QSize(
+                this->fontInfo().pixelSize(),
+                this->fontInfo().pixelSize()));
     ipSet = new QTabWidget(this);
     ipSet->setTabsClosable(true);
     ipSet->setContextMenuPolicy(Qt::CustomContextMenu);
+    baseLayout->addWidget(addIPSet);
     baseLayout->addWidget(ipSet);
+    connect(addIPSet, SIGNAL(released()),
+            this, SLOT(addTab()));
     connect(ipSet, SIGNAL(tabCloseRequested(int)),
             this, SLOT(closeTab(int)));
     connect(ipSet, SIGNAL(customContextMenuRequested(QPoint)),
@@ -52,7 +61,12 @@ void IP_Widget::showCustomMenu(QPoint pos)
 }
 void IP_Widget::addTab()
 {
-    int i = ipSet->addTab(new _IP_Widget(this, &IPv4HasDHCP, &IPv6HasDHCP), "IP Element");
+    int i = ipSet->addTab(
+                new _IP_Widget(
+                    this,
+                    &IPv4HasDHCP,
+                    &IPv6HasDHCP),
+                "IP Element");
     _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
     if ( nullptr!=wdg ) {
         connect(wdg, SIGNAL(dhcpUsageChanged()),
