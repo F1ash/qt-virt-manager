@@ -38,6 +38,7 @@ public slots:
 private slots:
     void             ipv6StateChanged(bool);
     void             dhcpUsageChanged(uint, bool);
+    void             staticRouteChanged(bool);
 };
 
 #endif // _IP_WIDGET_H

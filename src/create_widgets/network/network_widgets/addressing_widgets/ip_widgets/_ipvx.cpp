@@ -55,7 +55,7 @@ void _IPvX::setStaticRouteMode(bool state)
 void _IPvX::setGatewayEnabled(bool state)
 {
     gatewayWidget->setEnabled(state);
-    updateDHCPUsage(true);
+    updateDHCPUsage(state);
 }
 void _IPvX::updateDHCPUsage(bool state)
 {

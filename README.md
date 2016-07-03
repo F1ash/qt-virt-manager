@@ -70,3 +70,7 @@ Build requires:
     libvncclient.so
     libvirt.so
 
+Experimental `HomeBrew` for OS X
+
+  * [README](https://github.com/F1ash/homebrew-qt-virt-manager)
+

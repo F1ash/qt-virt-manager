@@ -26,7 +26,7 @@ _IP_Widget::_IP_Widget(
         _IPvX *wdg = static_cast<_IPvX*>(sets->widget(i));
         if ( nullptr==wdg ) continue;
         connect(staticRoute, SIGNAL(toggled(bool)),
-                wdg, SLOT(setStaticRouteMode(bool)));
+                this, SLOT(staticRouteChanged(bool)));
         connect(wdg, SIGNAL(dhcpUsageChanged(uint, bool)),
                 this, SLOT(dhcpUsageChanged(uint, bool)));
     };
@@ -128,4 +128,12 @@ void _IP_Widget::dhcpUsageChanged(uint ver, bool state)
 {
     if ( -1<tabIdx )
         emit dhcpUsageChanged(ver, tabIdx, state);
+}
+void _IP_Widget::staticRouteChanged(bool state)
+{
+    _IPvX *wdg = static_cast<_IPvX*>(
+                    sets->currentWidget());
+    if ( nullptr!=wdg ) {
+        wdg->setStaticRouteMode(state);
+    };
 }
