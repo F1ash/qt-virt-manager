@@ -68,8 +68,8 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     connect(_autoReload, SIGNAL(toggled(bool)),
             this, SLOT(changeAutoReloadState(bool)));
 
-    connect(create_Menu, SIGNAL(fileForMethod(QStringList&)),
-            this, SLOT(repeatParameters(QStringList&)));
+    connect(create_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
     connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)),
             this, SIGNAL(execMethod(const QStringList&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
@@ -132,10 +132,6 @@ void StorageVolToolBar::timerEvent(QTimerEvent *event)
         parameters << "reloadVirtStorageVol";
         emit execMethod(parameters);
     };
-}
-void StorageVolToolBar::repeatParameters(QStringList &p)
-{
-    emit fileForMethod(p);
 }
 void StorageVolToolBar::showMenu()
 {

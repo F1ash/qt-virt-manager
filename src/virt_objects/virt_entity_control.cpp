@@ -57,10 +57,6 @@ void VirtEntityControl::newVirtEntityFromXML(const QStringList &_args)
 {
     Q_UNUSED(_args);
 }
-void VirtEntityControl::doneEntityCreationDialog()
-{
-
-}
 
 void VirtEntityControl::setUsageInSoftTouched(bool state)
 {

@@ -14,6 +14,7 @@ public:
             QString  _xmlDesc = QString());
 
 signals:
+    void             newName(QString);
 
 private:
     const QString    xmlDesc;

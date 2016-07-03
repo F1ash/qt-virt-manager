@@ -16,6 +16,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // MAC_WIDGET_H

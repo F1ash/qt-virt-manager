@@ -1,7 +1,7 @@
 #include "_ipvx.h"
 
-_IPvX::_IPvX(QWidget *parent, bool *hasDHCP) :
-    _QWidget(parent), HasDHCP(hasDHCP)
+_IPvX::_IPvX(QWidget *parent, bool hasDHCP, uint _ver) :
+    _QWidget(parent), ver(_ver)
 {
     addressL = new QLabel("IP:", this);
     address = new QLineEdit(this);
@@ -29,7 +29,10 @@ _IPvX::_IPvX(QWidget *parent, bool *hasDHCP) :
     gatewayWidget->setLayout(gatewayLayout);
     gatewayWidget->setEnabled(false);
     useDHCP = new DHCP_Widget(this, "Use DHCP");
-    useDHCP->setDisabled(*HasDHCP);
+    useDHCP->setToolTip(
+    "WARNING: allows one (each IPv4 and IPv6)\n\
+definition a DHCP server on the network");
+    updateDHCPUsage(hasDHCP);
     //qDebug()<<(*HasDHCP);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWidget);
@@ -40,6 +43,10 @@ _IPvX::_IPvX(QWidget *parent, bool *hasDHCP) :
     connect(useDHCP, SIGNAL(toggled(bool)),
             this, SLOT(dhcpStateChanged(bool)));
 }
+bool _IPvX::getDHCPState() const
+{
+    return useDHCP->isUsed();
+}
 
 /* public slots */
 void _IPvX::setStaticRouteMode(bool state)
@@ -48,29 +55,16 @@ void _IPvX::setStaticRouteMode(bool state)
 void _IPvX::setGatewayEnabled(bool state)
 {
     gatewayWidget->setEnabled(state);
+    updateDHCPUsage(true);
 }
-void _IPvX::setDHCPState(bool state)
+void _IPvX::updateDHCPUsage(bool state)
 {
-    useDHCP->setUsage(state);
-}
-void _IPvX::setDHCPEnabled(bool state)
-{
+    useDHCP->setFreez(state);
     useDHCP->setCheckState( Qt::Unchecked );
-    if ( !(*HasDHCP) ) useDHCP->setFreez(!state);
-}
-void _IPvX::updateDHCPUsage()
-{
-    if ( *HasDHCP ) {
-        useDHCP->setFreez(!useDHCP->isUsed());
-    } else {
-        useDHCP->setFreez(false);
-    };
 }
 
 /* private slots */
 void _IPvX::dhcpStateChanged(bool state)
 {
-    *HasDHCP = state;
-    //qDebug()<<(*HasDHCP)<<objectName();
-    emit dhcpUsageChanged();
+    emit dhcpUsageChanged(ver, state);
 }

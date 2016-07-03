@@ -42,3 +42,57 @@ Bridge_Widget::Bridge_Widget(QWidget *parent, QString tag) :
     connect(this, SIGNAL(toggled(bool)),
             macTabWdg, SLOT(setEnabled(bool)));
 }
+
+/* public slots */
+QDomDocument Bridge_Widget::getDataDocument() const
+{
+    QDomDocument doc;
+    QDomElement _bridge =
+            doc.createElement("bridge");
+    _bridge.setAttribute(
+                "name",
+                bridgeName->text());
+    _bridge.setAttribute(
+                "stp",
+                (stp->isChecked())? "on":"off");
+    _bridge.setAttribute(
+                "delay",
+                delay->value());
+    _bridge.setAttribute(
+                "macTableManager",
+                macTableManager->currentText());
+    doc.appendChild(_bridge);
+    return doc;
+}
+void Bridge_Widget::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _bridge;
+    _network = doc.firstChildElement("network");
+    if ( !_network.isNull() ) {
+        _bridge = _network.firstChildElement("bridge");
+        if ( !_bridge.isNull() ) {
+            setUsage(true);
+            QString n, s, d, m;
+            n = _bridge.attribute("name");
+            s = _bridge.attribute("stp");
+            d = _bridge.attribute("delay");
+            m = _bridge.attribute("macTableManager");
+            if ( !n.isEmpty() )
+                bridgeName->setText(n);
+            if ( !s.isEmpty() )
+                stp->setChecked(
+                            (s=="on")?
+                                Qt::Checked : Qt::Unchecked);
+            if ( !d.isEmpty() )
+                delay->setValue(d.toInt());
+            if ( !m.isEmpty() ) {
+                int idx = macTableManager->findText(m);
+                if ( idx<0 ) idx = 0;
+                // "kernel" is default
+                macTableManager->setCurrentIndex(idx);
+            };
+        };
+    };
+}

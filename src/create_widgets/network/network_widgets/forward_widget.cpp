@@ -19,6 +19,7 @@ Forward_Widget::Forward_Widget(
     devLabel = new QCheckBox("Dev name:", this);
     dev = new QLineEdit(this);
     dev->setPlaceholderText("eth0 | enp2s0 | wlp3s0");
+    dev->setEnabled(false);
     devLayout = new QHBoxLayout();
     devLayout->addWidget(devLabel);
     devLayout->addWidget(dev);
@@ -42,6 +43,7 @@ Forward_Widget::Forward_Widget(
     frwdModeSet->setEnabled(false);
     baseLayout->addWidget(forwards);
     baseLayout->addWidget(frwdModeSet);
+    baseLayout->addStretch(-1);
     connect(this, SIGNAL(toggled(bool)),
             forwards, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(toggled(bool)),
@@ -50,16 +52,62 @@ Forward_Widget::Forward_Widget(
             frwdModeSet, SLOT(setCurrentIndex(int)));
     connect(mode, SIGNAL(currentIndexChanged(const QString&)),
             this, SLOT(modeChanged(const QString&)));
+    connect(devLabel, SIGNAL(toggled(bool)),
+            dev, SLOT(setEnabled(bool)));
+}
+
+QString Forward_Widget::getCurrentMode() const
+{
+    return mode->currentText();
 }
 
 /* public slots */
 QDomDocument Forward_Widget::getDataDocument() const
 {
-    QDomDocument doc;
+    QDomDocument doc, _doc;
     _QWidget *wdg = static_cast<_QWidget*>(
                 frwdModeSet->currentWidget());
-    if( nullptr!=wdg ) doc = wdg->getDataDocument();
+    if( nullptr!=wdg ) _doc = wdg->getDataDocument();
+    QDomElement _forward =
+            doc.createElement("forward");
+    _forward.setAttribute(
+                "mode",
+                mode->currentText());
+    if ( devLabel->isChecked() ) {
+        _forward.setAttribute(
+                    "dev",
+                    dev->text());
+    };
+    if ( _doc.hasAttributes() || _doc.hasChildNodes() )
+        _forward.appendChild(_doc);
+    doc.appendChild(_forward);
     return doc;
+}
+void Forward_Widget::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _forward;
+    _network = doc.firstChildElement("network");
+    if ( !_network.isNull() ) {
+        _forward = _network.firstChildElement("forward");
+        if ( !_forward.isNull() ) {
+            setUsage(true);
+            QString m, d;
+            m = _forward.attribute("mode");
+            d = _forward.attribute("dev");
+            int idx = mode->findText(m);
+            if ( idx<0 ) idx = 0;
+            mode->setCurrentIndex(idx);
+            if ( !d.isEmpty() ) {
+                devLabel->setChecked(true);
+                dev->setText(d);
+            };
+            _QWidget *wdg = static_cast<_QWidget*>(
+                        frwdModeSet->currentWidget());
+            if( nullptr!=wdg ) wdg->setDataDescription(_xmlDesc);
+        };
+    };
 }
 
 /* private slots */

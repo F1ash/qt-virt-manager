@@ -17,6 +17,7 @@ public:
 
 signals:
     void                       overviewStPool(virConnectPtr*, QString&, QString&);
+    void                       poolToEditor(TASK);
 
 private:
     StoragePoolModel          *storagePoolModel;
@@ -36,8 +37,7 @@ private slots:
     void                       entityClicked(const QPoint&);
     void                       entityDoubleClicked(const QModelIndex&);
     void                       execAction(const QStringList&);
-    void                       newVirtEntityFromXML(const QStringList&);
-    void                       doneEntityCreationDialog();
+    void                       newVirtEntityFromXML(const OFILE_TASK&);
 };
 
 #endif // STORAGE_POOL_CONTROL_H

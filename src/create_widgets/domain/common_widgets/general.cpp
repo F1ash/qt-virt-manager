@@ -1,6 +1,7 @@
 #include "general.h"
 
-General::General(QWidget *parent, QString _caps, QString _xmlDesc) :
+General::General(
+        QWidget *parent, QString _caps, QString _xmlDesc) :
     _Tab(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("Domain");
@@ -39,6 +40,8 @@ General::General(QWidget *parent, QString _caps, QString _xmlDesc) :
     // dataChanged connections
     connect(name, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
+    connect(name, SIGNAL(textEdited(QString)),
+            this, SIGNAL(newName(QString)));
     connect(uuid, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
     connect(title, SIGNAL(textEdited(QString)),

@@ -9,7 +9,8 @@ class _IPv6 : public _IPvX
 public:
     explicit _IPv6(
             QWidget *parent  = nullptr,
-            bool    *hasDHCP = nullptr);
+            bool     hasDHCP = false,
+            uint     _ver    = 0);
 
 private:
 

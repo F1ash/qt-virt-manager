@@ -25,6 +25,12 @@ QDomDocument Addressing_Widget::getDataDocument() const
         doc.appendChild(mac->getDataDocument());
     return doc;
 }
+void Addressing_Widget::setDataDescription(QString &_xmlDesc)
+{
+    dns->setDataDescription(_xmlDesc);
+    ip->setDataDescription(_xmlDesc);
+    mac->setDataDescription(_xmlDesc);
+}
 void Addressing_Widget::ipv6Changed(bool state)
 {
     this->setUsage(state);

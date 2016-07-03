@@ -1,19 +1,56 @@
 #include "create_volume.h"
 
+pooHelperThread::pooHelperThread(
+        QObject *parent,
+        virConnectPtr *connPtrPtr,
+        QString _name) :
+    _VirtThread(parent, connPtrPtr), name(_name)
+{
+
+}
+void pooHelperThread::run()
+{
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+        emit ptrIsNull();
+        return;
+    };
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
+    // something data reading
+    pool = virStoragePoolLookupByName(
+            *ptr_ConnPtr, name.toUtf8().data());
+    QDomDocument doc;
+    doc.setContent(
+                QString(
+                    virStoragePoolGetXMLDesc(
+                        pool,
+                        VIR_STORAGE_XML_INACTIVE))
+                );
+    type = doc.firstChildElement("pool").attribute("type");
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
+}
+
 /*
  * http://libvirt.org/formatstorage.html
  */
 
-CreateVolume::CreateVolume(QWidget *parent, QString _type) :
-    _CreateStorage(parent), currPoolType(_type)
+CreateVolume::CreateVolume(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          _poolName) :
+    _CreateStorage(parent)
 {
     setUrl("http://libvirt.org/formatstorage.html");
     settingName.append("CreateStorageVolume");
     settings.beginGroup(settingName);
-    restoreGeometry(settings.value("Geometry").toByteArray());
-    showAtClose->setChecked( settings.value("ShowAtClose").toBool() );
+    restoreGeometry(
+                settings.value("Geometry").toByteArray());
+    showAtClose->setChecked(
+                settings.value("ShowAtClose").toBool() );
     settings.endGroup();
-    type->addItem(currPoolType);
     suff->setVisible(true);
     allocLabel = new QComboBox(this);
     allocLabel->addItem("Allocation (KiB):", "KiB");
@@ -39,27 +76,13 @@ CreateVolume::CreateVolume(QWidget *parent, QString _type) :
     sizeWdg = new QWidget(this);
     sizeWdg->setLayout(sizeLayout);
 
-    //source = new _Storage_Source(this);
-    target = new _Storage_Target(this, currPoolType);
-    target->formatWdg->setVisible(true);
-    target->encrypt->setVisible(true);
-
-    infoStuffLayout = new QVBoxLayout();
-    //infoStuffLayout->addWidget(source);
-    infoStuffLayout->addWidget(target);
-    infoStuffLayout->addStretch(-1);
-    infoStuff = new QWidget(this);
-    infoStuff->setLayout(infoStuffLayout);
-    info->addWidget(infoStuff);
-
-    commonLayout->insertWidget(commonLayout->count()-1, sizeWdg);
-    commonLayout->insertWidget(commonLayout->count()-1, infoWidget, -1);
-    connect(allocLabel, SIGNAL(currentIndexChanged(int)),
-            capLabel, SLOT(setCurrentIndex(int)));
-    connect(capLabel, SIGNAL(currentIndexChanged(int)),
-            allocLabel, SLOT(setCurrentIndex(int)));
-    allocLabel->setCurrentIndex(1);
-    //capLabel->setCurrentIndex(1);
+    helperThread = new pooHelperThread(
+                this, connPtrPtr, _poolName);
+    connect(helperThread, SIGNAL(finished()),
+            this, SLOT(initData()));
+    connect(helperThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
+    helperThread->start();
 }
 
 /* public slots */
@@ -73,7 +96,8 @@ QString CreateVolume::getXMLDescFileName() const
             _group, _mode, _label, _encrypt;
     _volume = doc.createElement("volume");
     _name = doc.createElement("name");
-    _text = doc.createTextNode(QString("%1.img").arg(stName->text()));
+    _text = doc.createTextNode(
+                QString("%1.img").arg(stName->text()));
     _name.appendChild(_text);
     _volume.appendChild(_name);
     _allocation = doc.createElement("allocation");
@@ -140,4 +164,34 @@ QString CreateVolume::getXMLDescFileName() const
     if (read) xml->write(doc.toByteArray(4).data());
     xml->close();
     return xml->fileName();
+}
+
+/* private slots */
+void CreateVolume::initData()
+{
+    type->addItem(helperThread->type);
+
+    //source = new _Storage_Source(this);
+    target = new _Storage_Target(this, helperThread->type);
+    target->formatWdg->setVisible(true);
+    target->encrypt->setVisible(true);
+
+    infoStuffLayout = new QVBoxLayout();
+    //infoStuffLayout->addWidget(source);
+    infoStuffLayout->addWidget(target);
+    infoStuffLayout->addStretch(-1);
+    infoStuff = new QWidget(this);
+    infoStuff->setLayout(infoStuffLayout);
+    info->addWidget(infoStuff);
+
+    commonLayout->insertWidget(
+                commonLayout->count()-1, sizeWdg);
+    commonLayout->insertWidget(
+                commonLayout->count()-1, infoWidget, -1);
+    connect(allocLabel, SIGNAL(currentIndexChanged(int)),
+            capLabel, SLOT(setCurrentIndex(int)));
+    connect(capLabel, SIGNAL(currentIndexChanged(int)),
+            allocLabel, SLOT(setCurrentIndex(int)));
+    allocLabel->setCurrentIndex(1);
+    //capLabel->setCurrentIndex(1);
 }

@@ -17,28 +17,29 @@ public:
     ~VirtStorageVolControl();
 
 signals:
-    void                       finished(QString&);
+    void                finished(QString&);
+    void                volumeToEditor(TASK);
 
 private:
-    QString                    currPoolName;
-    StorageVolModel           *storageVolModel;
-    StorageVolToolBar         *toolBar;
+    QString             currPoolName;
+    StorageVolModel    *storageVolModel;
+    StorageVolToolBar  *toolBar;
 
 public slots:
-    void                       stopProcessing();
-    bool                       setCurrentStoragePool(virConnectPtr*, QString&, QString&);
-    QString                    getCurrentVolumeName() const;
-    QString                    getCurrentVolumePath() const;
-    void                       resultReceiver(Result);
-    void                       closeEvent(QCloseEvent*);
+    void                stopProcessing();
+    bool                setCurrentStoragePool(virConnectPtr*, QString&, QString&);
+    QString             getCurrentVolumeName() const;
+    QString             getCurrentVolumePath() const;
+    void                resultReceiver(Result);
+    void                closeEvent(QCloseEvent*);
 
 private slots:
-    void                       reloadState();
-    void                       changeDockVisibility();
-    void                       entityClicked(const QPoint&);
-    void                       entityDoubleClicked(const QModelIndex&);
-    void                       execAction(const QStringList&);
-    void                       newVirtEntityFromXML(const QStringList&);
+    void                reloadState();
+    void                changeDockVisibility();
+    void                entityClicked(const QPoint&);
+    void                entityDoubleClicked(const QModelIndex&);
+    void                execAction(const QStringList&);
+    void                newVirtEntityFromXML(const OFILE_TASK&);
 
 };
 

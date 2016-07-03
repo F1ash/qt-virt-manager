@@ -1,7 +1,12 @@
 #include "virtnet_control_menu.h"
 
-VirtNetControlMenu::VirtNetControlMenu(QWidget *parent, QStringList params, bool state) :
-    QMenu(parent), parameters(params), autoReloadState(state)
+VirtNetControlMenu::VirtNetControlMenu(
+        QWidget *parent,
+        QStringList params,
+        bool state) :
+    QMenu(parent),
+    parameters(params),
+    autoReloadState(state)
 {
     if ( !parameters.isEmpty() ) {
         start = new QAction("Start", this);
@@ -16,6 +21,9 @@ VirtNetControlMenu::VirtNetControlMenu(QWidget *parent, QStringList params, bool
         autoStart = new QAction("change AutoStart", this);
         autoStart->setIcon(QIcon::fromTheme("autostart"));
         autoStart->setEnabled(parameters.last()=="yes");
+        edit = new QAction("Edit", this);
+        edit->setIcon(QIcon::fromTheme("configure"));
+        edit->setVisible(true);
         getXMLDesc = new QAction("get XML Description", this);
         getXMLDesc->setIcon(QIcon::fromTheme("application-xml"));
         getXMLDesc->setEnabled(true);
@@ -25,6 +33,8 @@ VirtNetControlMenu::VirtNetControlMenu(QWidget *parent, QStringList params, bool
         addAction(undefine);
         addAction(autoStart);
         addSeparator();
+        addAction(edit);
+        addSeparator();
         addAction(getXMLDesc);
         addSeparator();
     };
@@ -33,7 +43,8 @@ VirtNetControlMenu::VirtNetControlMenu(QWidget *parent, QStringList params, bool
     reload->setEnabled(!autoReloadState);
 
     addAction(reload);
-    connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
+    connect(this, SIGNAL(triggered(QAction*)),
+            this, SLOT(emitExecMethod(QAction*)));
 }
 
 void VirtNetControlMenu::emitExecMethod(QAction *action)
@@ -49,6 +60,8 @@ void VirtNetControlMenu::emitExecMethod(QAction *action)
         } else if ( action == autoStart ) {
             paramList.append("setAutostartVirtNetwork");
             paramList.append(QString((parameters[2]=="yes")? "0" : "1"));
+        } else if ( action == edit ) {
+            paramList.append("editVirtNetwork");
         } else if ( action == getXMLDesc ) {
             paramList.append("getVirtNetworkXMLDesc");
         } else if ( action == reload ) {

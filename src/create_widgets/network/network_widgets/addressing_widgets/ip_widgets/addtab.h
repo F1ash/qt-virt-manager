@@ -1,5 +1,5 @@
-#ifndef ADDTAB_H
-#define ADDTAB_H
+#ifndef ADD_TAB_H
+#define ADD_TAB_H
 
 #include <QMenu>
 
@@ -11,4 +11,4 @@ public:
     QAction     *addTabAction;
 };
 
-#endif // ADDTAB_H
+#endif // ADD_TAB_H

@@ -74,6 +74,7 @@ private slots:
     void             set_specified_Tabs();
     void             restoreParameters();
     void             setBootOrder(QDomElement*);
+    void             setNewWindowTitle(QString);
     void             sendMsg(QString&);
 };
 

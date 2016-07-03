@@ -23,8 +23,8 @@ VirtDomainControl::VirtDomainControl(QWidget *parent) :
     settings.endGroup();
     toolBar = new DomainToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
-    connect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-            this, SLOT(newVirtEntityFromXML(const QStringList&)));
+    connect(toolBar, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SLOT(newVirtEntityFromXML(const OFILE_TASK&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
 }
@@ -386,39 +386,27 @@ void VirtDomainControl::execAction(const QStringList &l)
         reloadState();
     };
 }
-void VirtDomainControl::newVirtEntityFromXML(const QStringList &_args)
+void VirtDomainControl::newVirtEntityFromXML(const OFILE_TASK &args)
 {
-    QStringList args = _args;
-    if ( !args.isEmpty() ) {
-        TASK task;
-        task.type = "domain";
-        Actions act;
-        QString actName;
-        if ( args.first().startsWith("create") ) {
-            act = CREATE_ENTITY;
-            actName = "createVirtDomain";
-        } else {
-            act = DEFINE_ENTITY;
-            actName = "defineVirtDomain";
-        };
-        args.removeFirst();
-        if ( !args.isEmpty() ) {
-            if ( args.first()=="manually" ) {
-                // show SRC Creator widget
-                task.srcConnPtr = ptr_ConnPtr;
-                task.srcConName = currConnName;
-                task.object     = QTime::currentTime().toString();
-                task.method     = actName;
-                task.action     = act;
-                emit domainToEditor(task);
-            } else {
-                task.args.path  = args.first();
-                task.srcConnPtr = ptr_ConnPtr;
-                task.srcConName = currConnName;
-                task.method     = actName;
-                task.action     = act;
-                emit addNewTask(task);
-            };
-        };
+    TASK task;
+    task.type = "domain";
+    Actions act;
+    QString actName;
+    if ( args.method.startsWith("create") ) {
+        act = CREATE_ENTITY;
+        actName = "createVirtDomain";
+    } else {
+        act = DEFINE_ENTITY;
+        actName = "defineVirtDomain";
+    };
+    task.srcConnPtr = ptr_ConnPtr;
+    task.srcConName = currConnName;
+    task.method     = actName;
+    task.action     = act;
+    task.args.path  = args.path;
+    if ( args.context=="AsIs" ) {
+        emit addNewTask(task);
+    } else {
+        emit domainToEditor(task);
     };
 }

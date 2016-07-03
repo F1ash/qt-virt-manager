@@ -1,280 +1,152 @@
 #include "create_virt_network.h"
 
-CreateVirtNetwork::CreateVirtNetwork(QWidget *parent, Actions _act) :
-    QDialog(parent), action(_act)
+NetHelperThread::NetHelperThread(QObject *parent, virConnectPtr *connPtrPtr) :
+    _VirtThread(parent, connPtrPtr)
 {
-    setModal(false);
-    setWindowTitle("Network Settings");
+
+}
+void NetHelperThread::run()
+{
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+        emit ptrIsNull();
+        return;
+    };
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
+    // something data reading
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
+}
+
+CreateVirtNetwork::CreateVirtNetwork(
+        QWidget *parent, TASK _task) :
+    QMainWindow(parent), task(_task)
+{
+    setAttribute(Qt::WA_DeleteOnClose);
+    xmlFileName = task.args.path;
+    ptr_ConnPtr = task.srcConnPtr;
+    setWindowTitle("Network Editor");
+    setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     settings.beginGroup("VirtNetControl");
     restoreGeometry(settings.value("NetCreateGeometry").toByteArray());
-    bool showDesc = settings.value("NetCreateShowDesc").toBool();
     settings.endGroup();
-
-    netNameLabel = new QLabel("Name:", this);
-    networkName = new QLineEdit(this);
-    networkName->setPlaceholderText("Enter Network Name");
-    uuidLabel = new QLabel("UUID:");
-    uuid = new QLineEdit(this);
-    uuid->setPlaceholderText("if omitted, then auto generated");
-    /*
-     * http://libvirt.org/formatnetwork.html#examplesNoGateway
-     */
-    ipv6 = new QCheckBox("For guest-to-guest IPv6", this);
-    trustGuestRxFilters = new QCheckBox("trustGuestRxFilters", this);
-    baseLayout = new QGridLayout();
-    baseLayout->addWidget(netNameLabel, 0, 0);
-    baseLayout->addWidget(networkName, 0, 1);
-    baseLayout->addWidget(uuidLabel, 1, 0);
-    baseLayout->addWidget(uuid, 1, 1);
-    baseLayout->addWidget(ipv6, 2, 0);
-    baseLayout->addWidget(trustGuestRxFilters, 2, 1);
-    baseWdg = new QWidget(this);
-    baseWdg->setLayout(baseLayout);
-
-    bridgeWdg = new Bridge_Widget(this);
-    domainWdg = new Domain_Widget(this);
-    addressingWdg = new Addressing_Widget(this);
-    forwardWdg = new Forward_Widget(this);
-    QoSWdg = new QoS_Widget(this);
-
-    //showDescription = new QCheckBox(
-    //"Show XML Description\nat close", this);
-    //showDescription->setChecked(showDesc);
-    about = new QLabel(
-    "<a href='http://libvirt.org/formatnetwork.html'>About</a>",
-                this);
-    about->setOpenExternalLinks(true);
-    about->setToolTip("http://libvirt.org/formatnetwork.html");
-    ok = new QPushButton("Ok", this);
-    ok->setAutoDefault(true);
-    connect(ok, SIGNAL(clicked()),
-            this, SLOT(set_Result()));
-    cancel = new QPushButton("Cancel", this);
-    cancel->setAutoDefault(true);
-    connect(cancel, SIGNAL(clicked()),
-            this, SLOT(set_Result()));
-    buttonLayout = new QHBoxLayout();
-    buttonLayout->addWidget(about);
-    //buttonLayout->addWidget(showDescription);
-    buttonLayout->addWidget(ok);
-    buttonLayout->addWidget(cancel);
-    buttons = new QWidget(this);
-    buttons->setLayout(buttonLayout);
-
-    scrollLayout = new QVBoxLayout(this);
-    scrollLayout->addWidget(bridgeWdg);
-    scrollLayout->addWidget(domainWdg);
-    scrollLayout->addWidget(addressingWdg);
-    scrollLayout->addWidget(forwardWdg);
-    scrollLayout->addWidget(QoSWdg);
-    scrollLayout->setContentsMargins(4, 0, 4, 0);
-    scrollLayout->addStretch(-1);
-    scrolled = new QWidget(this);
-    scrolled->setLayout(scrollLayout);
-    scroll = new QScrollArea(this);
-    scroll->setWidgetResizable(true);
-    scroll->setWidget(scrolled);
-    netDescLayout = new QVBoxLayout(this);
-    netDescLayout->addWidget(baseWdg);
-    netDescLayout->addWidget(scroll);
-    netDescLayout->addWidget(buttons);
-    setLayout(netDescLayout);
-
     xml = new QTemporaryFile(this);
     xml->setAutoRemove(false);
     xml->setFileTemplate(
                 QString("%1%2XML_Desc-XXXXXX.xml")
                 .arg(QDir::tempPath())
                 .arg(QDir::separator()));
-    connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
-            bridgeWdg, SLOT(setUsage(bool)));
-    connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
-            domainWdg, SLOT(setUsage(bool)));
-    connect(forwardWdg, SIGNAL(QoSAvailable(bool)),
-            QoSWdg, SLOT(setUsage(bool)));
-    connect(forwardWdg, SIGNAL(toggled(bool)),
-            this, SLOT(networkTypeChanged(bool)));
-    connect(ipv6, SIGNAL(toggled(bool)),
-            this, SLOT(ipv6Changed(bool)));
+    setEnabled(false);
+    helperThread = new NetHelperThread(this, ptr_ConnPtr);
+    connect(helperThread, SIGNAL(finished()),
+            this, SLOT(readCapabilities()));
+    connect(helperThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
+    helperThread->start();
+
 }
 CreateVirtNetwork::~CreateVirtNetwork()
 {
     settings.beginGroup("VirtNetControl");
     settings.setValue("NetCreateGeometry", saveGeometry());
-    //settings.setValue("NetCreateShowDesc", showDescription->isChecked());
+    if ( ready ) {
+        //settings.setValue("NetCreateShowDesc", showDescription->isChecked());
+    };
     settings.endGroup();
 }
 
 /* public slots */
-int CreateVirtNetwork::getResult() const
+void CreateVirtNetwork::closeEvent(QCloseEvent *ev)
 {
-    return result();
+    if ( ev->type()==QEvent::Close ) {
+        QString key = objectName();
+        QString msg = QString("'<b>%1</b>' network editor closed.")
+                .arg(task.object);
+        sendMsg(msg);
+        emit finished(key);
+    };
 }
-Actions CreateVirtNetwork::getAction() const
+void CreateVirtNetwork::readCapabilities()
 {
-    return action;
+    ready = true;
+    if ( xmlFileName.isEmpty() ) {
+        // create/define new VM
+        qDebug()<<"new network";
+    } else {
+        // read for edit exist VM parameters
+        QFile *_xml =
+                new QFile(this);
+        _xml->setFileName(xmlFileName);
+        //_xml->setAutoRemove(true);
+        _xml->open(QIODevice::ReadOnly);
+        xmlDesc.append(_xml->readAll().constData());
+        _xml->close();
+        _xml->deleteLater();
+        advancedWdg = new CreateVirtNetwork_Adv(
+                    this,
+                    task.action);
+        advancedWdg->readXmlDescData(xmlDesc);
+        setCentralWidget(advancedWdg);
+        setEnabled(true);
+    };
+    readDataLists();
 }
-QString CreateVirtNetwork::getXMLDescFileName() const
+void CreateVirtNetwork::readDataLists()
 {
-    return xml->fileName();
+    if ( ready ) {
+    } else {
+        QString msg = QString("Read Data in %1 failed.")
+                .arg(objectName());
+        sendMsg( msg );
+        // to done()
+        set_Result();
+    };
 }
-bool CreateVirtNetwork::getShowing() const
-{
-    //return showDescription->isChecked();
-    return false;
-}
-
-/* private slots */
-void CreateVirtNetwork::buildXMLDescription()
+bool CreateVirtNetwork::buildXMLDescription()
 {
     this->setEnabled(false);
     QDomDocument doc;
-    //qDebug()<<doc.toString();
-    QDomElement _xmlDesc, _name, _uuid, _bridge,
-            _domain, _forward, _bandwidth;
-    QDomText data;
-
-    _xmlDesc = doc.createElement("network");
-    if ( ipv6->isChecked() ) {
-        _xmlDesc.setAttribute("ipv6", "yes");
-    };
-    _xmlDesc.setAttribute(
-                "trustGuestRxFilters",
-                (trustGuestRxFilters->isChecked())? "yes":"no");
-    _name = doc.createElement("name");
-    data = doc.createTextNode(networkName->text());
-    _name.appendChild(data);
-    _uuid = doc.createElement("uuid");
-    data = doc.createTextNode(uuid->text());
-    _uuid.appendChild(data);
-    _xmlDesc.appendChild(_name);
-    _xmlDesc.appendChild(_uuid);
-
-    if ( bridgeWdg->isUsed() ) {
-        _bridge = doc.createElement("bridge");
-        _bridge.setAttribute(
-                    "name",
-                    bridgeWdg->bridgeName->text());
-        _bridge.setAttribute(
-                    "stp",
-                    (bridgeWdg->stp->isChecked())? "on":"off");
-        _bridge.setAttribute(
-                    "delay",
-                    bridgeWdg->delay->value());
-        _bridge.setAttribute(
-                    "macTableManager",
-                    bridgeWdg->macTableManager->currentText());
-        _xmlDesc.appendChild(_bridge);
-    };
-    if ( domainWdg->isUsed() ) {
-        if ( !domainWdg->domain->text().isEmpty() ) {
-            _domain = doc.createElement("domain");
-            _domain.setAttribute(
-                        "name",
-                        domainWdg->domain->text());
-            _xmlDesc.appendChild(_domain);
-        };
-    };
-    if ( addressingWdg->isUsed() ) {
-        _xmlDesc.appendChild(
-                    addressingWdg->getDataDocument());
-    };
-    if ( forwardWdg->isUsed() ) {
-        _forward = doc.createElement("forward");
-        _forward.setAttribute(
-                    "mode",
-                    forwardWdg->mode->currentText());
-        if ( forwardWdg->devLabel->isChecked() ) {
-            _forward.setAttribute(
-                        "dev",
-                        forwardWdg->dev->text());
-        };
-        _forward.appendChild(
-                    forwardWdg->getDataDocument());
-        _xmlDesc.appendChild(_forward);
-    };
-    if ( QoSWdg->isUsed() ) {
-        _bandwidth = doc.createElement("bandwidth");
-        QDomElement _inbound = doc.createElement("inbound");
-        if ( QoSWdg->inbound->averageL->isChecked() ) {
-            _inbound.setAttribute(
-                        "average",
-                        QoSWdg->inbound->average->text());
-        };
-        if ( QoSWdg->inbound->peakL->isChecked() ) {
-            _inbound.setAttribute(
-                        "peak",
-                        QoSWdg->inbound->peak->text());
-        };
-        if ( QoSWdg->inbound->burstL->isChecked() ) {
-            _inbound.setAttribute(
-                        "burst",
-                        QoSWdg->inbound->burst->text());
-        };
-        if ( QoSWdg->inbound->floorL->isChecked() ) {
-            _inbound.setAttribute(
-                        "floor",
-                        QoSWdg->inbound->floor->text());
-        };
-        if ( _inbound.hasAttributes() )
-            _bandwidth.appendChild(_inbound);
-        QDomElement _outbound = doc.createElement("inbound");
-        if ( QoSWdg->outbound->averageL->isChecked() ) {
-            _outbound.setAttribute(
-                        "average",
-                        QoSWdg->outbound->average->text());
-        };
-        if ( QoSWdg->outbound->peakL->isChecked() ) {
-            _outbound.setAttribute(
-                        "peak",
-                        QoSWdg->outbound->peak->text());
-        };
-        if ( QoSWdg->outbound->burstL->isChecked() ) {
-            _outbound.setAttribute(
-                        "burst",
-                        QoSWdg->outbound->burst->text());
-        };
-        if ( QoSWdg->outbound->floorL->isChecked() ) {
-            _outbound.setAttribute(
-                        "floor",
-                        QoSWdg->outbound->floor->text());
-        };
-        if ( _outbound.hasAttributes() )
-            _bandwidth.appendChild(_outbound);
-
-        _xmlDesc.appendChild(_bandwidth);
-    };
-    doc.appendChild(_xmlDesc);
 
     bool read = xml->open();
     if (read) xml->write(doc.toByteArray(4).data());
     xml->close();
+    return true;
 }
 void CreateVirtNetwork::set_Result()
 {
-    if ( sender()==ok ) {
-        setResult(QDialog::Accepted);
-        buildXMLDescription();
-    } else {
-        setResult(QDialog::Rejected);
+    if ( ready ) { //sender()==ok ) {
+        if ( !buildXMLDescription() ) {
+            this->setEnabled(true);
+            return;
+        };
+        QString _xml = xml->fileName();
+        QStringList data;
+        data.append("New Network XML'ed");
+        data.append(QString("to <a href='%1'>%1</a>").arg(_xml));
+        QString msg = data.join(" ");
+        sendMsg(msg);
+        // if ( showDescription->isChecked() )
+        //     QDesktopServices::openUrl(QUrl(_xml));
+        task.args.path = _xml;
+        emit addNewTask(task);
     };
-    done(result());
+    close();
 }
-void CreateVirtNetwork::networkTypeChanged(bool state)
+void CreateVirtNetwork::setNewWindowTitle(QString _name)
 {
-    bool _state =
-            forwardWdg->mode->currentText()=="nat" ||
-            forwardWdg->mode->currentText()=="route";
-    bridgeWdg->setUsage(!state || _state);
-    domainWdg->setUsage(!state || _state);
+    QString connName = task.srcConName;
+    setWindowTitle(
+                QString("Network Editor / <%1> in [%2]")
+                .arg(_name).arg(connName));
 }
-void CreateVirtNetwork::ipv6Changed(bool state)
+void CreateVirtNetwork::sendMsg(QString &msg)
 {
-    bridgeWdg->setUsage(state);
-    bridgeWdg->setFreez(state);
-    domainWdg->setUsage(false);
-    forwardWdg->setUsage(false);
-    domainWdg->setDisabled(state);
-    forwardWdg->setDisabled(state);
-    addressingWdg->ipv6Changed(state);
+    QString time = QTime::currentTime().toString();
+    QString title = QString("Connection '%1'").arg(task.srcConName);
+    QString currMsg = QString(
+    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
+    emit errorMsg(currMsg);
 }

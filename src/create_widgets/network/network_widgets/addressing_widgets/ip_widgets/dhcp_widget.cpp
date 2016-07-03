@@ -25,16 +25,7 @@ QDomDocument DHCP_Widget::getDataDocument() const
     doc.appendChild(_dhcp);
     return doc;
 }
-void DHCP_Widget::setIPvXSettings(int _ver)
+void DHCP_Widget::setDataDescription(QString &_xmlDesc)
 {
-    switch (_ver) {
-    case 4:
-        host->setFreezMAC(false);
-        break;
-    case 6:
-        host->setFreezMAC(true);
-        break;
-    default:
-        break;
-    };
+
 }

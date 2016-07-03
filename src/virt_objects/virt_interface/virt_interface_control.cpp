@@ -23,8 +23,8 @@ VirtInterfaceControl::VirtInterfaceControl(QWidget *parent) :
     settings.endGroup();
     toolBar = new InterfaceToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
-    connect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-            this, SLOT(newVirtEntityFromXML(const QStringList&)));
+    connect(toolBar, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SLOT(newVirtEntityFromXML(const OFILE_TASK&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
 }
@@ -209,7 +209,7 @@ void VirtInterfaceControl::execAction(const QStringList &l)
             task.action = DESTROY_ENTITY;
             emit addNewTask(task);
         } else if ( l.first()=="defineVirtInterface" ) {
-            newVirtEntityFromXML(l);
+            //newVirtEntityFromXML(l);
         } else if ( l.first()=="undefineVirtInterface" ) {
             task.method = l.first();
             task.action = UNDEFINE_ENTITY;
@@ -236,50 +236,42 @@ void VirtInterfaceControl::execAction(const QStringList &l)
     } else if ( l.first()=="reloadVirtInterface" ) {
         reloadState();
     } else if ( l.first()=="defineVirtInterface" ) {
-        newVirtEntityFromXML(l);
+        //newVirtEntityFromXML(l);
     };
 }
-void VirtInterfaceControl::newVirtEntityFromXML(const QStringList &_args)
+void VirtInterfaceControl::newVirtEntityFromXML(const OFILE_TASK &args)
 {
-    QStringList args = _args;
-    if ( !args.isEmpty() ) {
-        TASK task;
-        task.type = "iface";
-        Actions act;
-        QString actName;
-        act = DEFINE_ENTITY;
-        actName = "defineVirtInterface";
-        args.removeFirst();
-        if ( !args.isEmpty() ) {
-            if ( args.first()=="manually" ) {
-                QString xml;
-                bool show = false;
-                // show SRC Creator widget
-                CreateInterface *createIface = new CreateInterface(this);
-                int result = createIface->exec();
-                if ( createIface!=nullptr && result==QDialog::Accepted ) {
-                    xml = createIface->getXMLDescFileName();
-                    show = createIface->getShowing();
-                    QStringList data;
-                    data.append("New Interface XML'ed");
-                    data.append(QString("to <a href='%1'>%1</a>").arg(xml));
-                    QString msg = data.join(" ");
-                    msgRepeater(msg);
-                    if ( show ) QDesktopServices::openUrl(QUrl(xml));
-                };
-                createIface->deleteLater();
-                if ( result==QDialog::Rejected ) return;
-                //qDebug()<<xml<<"path"<<result;
-                task.args.path = xml;
-            } else {
-                QString xml = args.first();
-                task.args.path = xml;
-            };
-            task.srcConnPtr = ptr_ConnPtr;
-            task.srcConName = currConnName;
-            task.method     = actName;
-            task.action     = act;
-            emit addNewTask(task);
+    TASK task;
+    task.type = "iface";
+    task.srcConnPtr = ptr_ConnPtr;
+    task.srcConName = currConnName;
+    task.method     = "defineVirtInterface";
+    task.action     = DEFINE_ENTITY;
+    if ( args.context=="AsIs" ) {
+        task.args.path  = args.path;
+        emit addNewTask(task);
+    } else if ( args.context=="Edit" ) {
+        emit ifaceToEditor(task);
+    } else{
+        QString xml;
+        bool show = false;
+        // show SRC Creator widget
+        CreateInterface *createIface = new CreateInterface(this);
+        int result = createIface->exec();
+        if ( createIface!=nullptr && result==QDialog::Accepted ) {
+            xml = createIface->getXMLDescFileName();
+            show = createIface->getShowing();
+            QStringList data;
+            data.append("New Interface XML'ed");
+            data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+            QString msg = data.join(" ");
+            msgRepeater(msg);
+            if ( show ) QDesktopServices::openUrl(QUrl(xml));
         };
+        createIface->deleteLater();
+        if ( result==QDialog::Rejected ) return;
+        //qDebug()<<xml<<"path"<<result;
+        task.args.path = xml;
+        emit addNewTask(task);
     };
 }

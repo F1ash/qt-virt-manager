@@ -18,15 +18,16 @@ public:
     explicit Forward_Widget(
             QWidget *parent = nullptr,
             QString  tag = "Forwards");
-    QComboBox       *mode;
-    QCheckBox       *devLabel;
-    QLineEdit       *dev;
+    QString          getCurrentMode() const;
 
 signals:
     void             optionalsNeed(bool);
     void             QoSAvailable(bool);
 
 private:
+    QComboBox       *mode;
+    QCheckBox       *devLabel;
+    QLineEdit       *dev;
     QLabel          *modeLabel;
     QHBoxLayout     *devLayout;
     QWidget         *devWdg;
@@ -36,6 +37,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
     void             modeChanged(const QString&);

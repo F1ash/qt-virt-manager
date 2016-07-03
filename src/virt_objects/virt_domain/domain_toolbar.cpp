@@ -88,10 +88,10 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
 
     connect(_autoReload, SIGNAL(toggled(bool)),
             this, SLOT(changeAutoReloadState(bool)));
-    connect(create_Menu, SIGNAL(fileForMethod(QStringList&)),
-            this, SLOT(repeatParameters(QStringList&)));
-    connect(define_Menu, SIGNAL(fileForMethod(QStringList&)),
-            this, SLOT(repeatParameters(QStringList&)));
+    connect(create_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
+    connect(define_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
 }
@@ -152,10 +152,6 @@ void DomainToolBar::timerEvent(QTimerEvent *event)
         parameters << "reloadVirtDomain";
         emit execMethod(parameters);
     };
-}
-void DomainToolBar::repeatParameters(QStringList &p)
-{
-    emit fileForMethod(p);
 }
 void DomainToolBar::showHoveredMenu()
 {

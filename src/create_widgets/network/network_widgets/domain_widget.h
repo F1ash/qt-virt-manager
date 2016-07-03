@@ -10,7 +10,14 @@ public:
     explicit Domain_Widget(
             QWidget *parent = nullptr,
             QString  tag = "DNS Domain");
+
+private:
     QLineEdit       *domain;
+    QCheckBox       *localOnly;
+
+public slots:
+    QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // DOMAIN_WIDGET_H

@@ -43,3 +43,25 @@ QDomDocument DNS_Widget::getDataDocument() const
     doc.appendChild(_dns);
     return doc;
 }
+void DNS_Widget::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _dns;
+    _network = doc.firstChildElement("network");
+    if ( !_network.isNull() ) {
+        _dns = _network.firstChildElement("dns");
+        if ( !_dns.isNull() ) {
+            setUsage(true);
+            QString f = _dns.attribute("forwardPlainNames");
+            if ( !f.isEmpty() ) {
+                forwardPlainNames->setChecked(
+                            (f=="yes")? Qt::Checked:Qt::Unchecked);
+            };
+            forwarder->setDataDescription(_xmlDesc);
+            hosts->setDataDescription(_xmlDesc);
+            txts->setDataDescription(_xmlDesc);
+            srvs->setDataDescription(_xmlDesc);
+        };
+    };
+}

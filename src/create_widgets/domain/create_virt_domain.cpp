@@ -111,7 +111,8 @@ void HelperThread::run()
 
 */
 
-CreateVirtDomain::CreateVirtDomain(QWidget *parent, TASK _task) :
+CreateVirtDomain::CreateVirtDomain(
+        QWidget *parent, TASK _task) :
     QMainWindow(parent), task(_task)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -183,16 +184,16 @@ void CreateVirtDomain::readCapabilities()
         }
     } else {
         // read for edit exist VM parameters
-        QTemporaryFile *_xml =
-                new QTemporaryFile(this);
+        QFile *_xml =
+                new QFile(this);
         _xml->setFileName(xmlFileName);
-        _xml->setAutoRemove(true);
-        _xml->open();
+        //_xml->setAutoRemove(true);
+        _xml->open(QIODevice::ReadOnly);
         xmlDesc.append(_xml->readAll().constData());
         _xml->close();
         _xml->deleteLater();
     };
-    //qDebug()<<xmlDesc<<"desc"<<type;
+    //qDebug()<<xmlDesc<<"desc"<<type<<xmlFileName;
     readDataLists();
 }
 void CreateVirtDomain::readDataLists()
@@ -200,7 +201,9 @@ void CreateVirtDomain::readDataLists()
     if ( ready ) {
         create_specified_widgets();
         set_specified_Tabs();
-        about = new QLabel("<a href='http://libvirt.org/formatdomain.html'>About</a>", this);
+        about = new QLabel(
+        "<a href='http://libvirt.org/formatdomain.html'>About</a>",
+                    this);
         about->setToolTip("http://libvirt.org/formatdomain.html");
         about->setOpenExternalLinks(true);
         //showDescription = new QCheckBox("Show XML Description\nat close", this);
@@ -208,12 +211,20 @@ void CreateVirtDomain::readDataLists()
         ok = new QPushButton(QIcon::fromTheme("dialog-ok"), "Ok", this);
         ok->setAutoDefault(true);
         connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
-        restore = new QPushButton(QIcon::fromTheme("go-first"), "Restore all", this);
+        restore = new QPushButton(
+                    QIcon::fromTheme("go-first"),
+                    "Restore all",
+                    this);
         restore->setToolTip("Restore all pages to first state");
-        connect(restore, SIGNAL(clicked()), this, SLOT(restoreParameters()));
-        cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
+        connect(restore, SIGNAL(clicked()),
+                this, SLOT(restoreParameters()));
+        cancel = new QPushButton(
+                    QIcon::fromTheme("dialog-cancel"),
+                    "Cancel",
+                    this);
         cancel->setAutoDefault(true);
-        connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
+        connect(cancel, SIGNAL(clicked()),
+                this, SLOT(set_Result()));
         buttonLayout = new QHBoxLayout();
         buttonLayout->addWidget(about);
         //buttonLayout->addWidget(showDescription);
@@ -278,7 +289,8 @@ bool CreateVirtDomain::buildXMLDescription()
         uint count = list.length();
         for (int i=0; i<count; i++) {
             //qDebug()<<list.item(j).nodeName()<<i;
-            if (!list.item(j).isNull()) _element.appendChild(list.item(j));
+            if (!list.item(j).isNull())
+                _element.appendChild(list.item(j));
             else ++j;
         };
     };
@@ -334,6 +346,8 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.insert(
                     "SecurityLabel",
                     new SecurityLabel(this, xmlDesc));
+        connect(wdgList.value("General"), SIGNAL(newName(QString)),
+                this, SLOT(setNewWindowTitle(QString)));
         connect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
                 wdgList.value("General"), SLOT(changeArch(QString&)));
         connect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
@@ -479,11 +493,19 @@ void CreateVirtDomain::setBootOrder(QDomElement *_devices)
         };
     };
 }
+void CreateVirtDomain::setNewWindowTitle(QString _name)
+{
+    QString connName = task.srcConName;
+    setWindowTitle(
+                QString("VM Settings / <%1> in [%2]")
+                .arg(_name).arg(connName));
+}
 void CreateVirtDomain::sendMsg(QString &msg)
 {
     QString time = QTime::currentTime().toString();
     QString title = QString("Connection '%1'").arg(task.srcConName);
-    QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+    QString currMsg = QString(
+    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     emit errorMsg(currMsg);
 }

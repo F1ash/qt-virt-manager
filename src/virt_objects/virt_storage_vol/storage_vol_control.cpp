@@ -13,6 +13,7 @@ VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
     //        this, SLOT(entityDoubleClicked(const QModelIndex&)));
     connect(entityList, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(entityClicked(const QPoint&)));
+    setUsageInSoftTouched(false);
     settings.beginGroup("VirtStorageVolControl");
     entityList->setColumnWidth(0, settings.value("column0", 132).toInt());
     entityList->setColumnWidth(1, settings.value("column1", 32).toInt());
@@ -23,8 +24,8 @@ VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
     settings.endGroup();
     toolBar = new StorageVolToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
-    connect(toolBar, SIGNAL(fileForMethod(const QStringList&)),
-            this, SLOT(newVirtEntityFromXML(const QStringList&)));
+    connect(toolBar, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SLOT(newVirtEntityFromXML(const OFILE_TASK&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
 }
@@ -219,7 +220,8 @@ void VirtStorageVolControl::execAction(const QStringList &l)
 {
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && storageVolModel->DataList.count()>idx.row() ) {
-        QString storageVolName = storageVolModel->DataList.at(idx.row())->getName();
+        QString storageVolName =
+                storageVolModel->DataList.at(idx.row())->getName();
         TASK task;
         task.type = "volume";
         task.srcConnPtr = ptr_ConnPtr;
@@ -233,7 +235,9 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             task.method     = l.first();
             emit addNewTask(task);
         } else if ( l.first()=="downloadVirtStorageVol" ) {
-            QString path = QFileDialog::getSaveFileName(this, "Save to", "~");
+            QString path =
+                    QFileDialog::getSaveFileName(
+                        this, "Save to", "~");
             if ( !path.isEmpty() ) {
                 task.action     = DOWNLOAD_ENTITY;
                 task.method     = l.first();
@@ -260,7 +264,9 @@ void VirtStorageVolControl::execAction(const QStringList &l)
             task.method     = l.first();
             emit addNewTask(task);
         } else if ( l.first()=="uploadVirtStorageVol" ) {
-            QString path = QFileDialog::getOpenFileName(this, "Read from", "~");
+            QString path =
+                    QFileDialog::getOpenFileName(
+                        this, "Read from", "~");
             if ( !path.isEmpty() ) {
                 task.action     = UPLOAD_ENTITY;
                 task.method     = l.first();
@@ -281,60 +287,46 @@ void VirtStorageVolControl::execAction(const QStringList &l)
         reloadState();
     };
 }
-void VirtStorageVolControl::newVirtEntityFromXML(const QStringList &_args)
+void VirtStorageVolControl::newVirtEntityFromXML(const OFILE_TASK &args)
 {
-    QStringList args = _args;
-    if ( !args.isEmpty() ) {
-        Actions act;
-        QString actName;
-        if ( args.first().startsWith("create") ) {
-            act = CREATE_ENTITY;
-            actName = "createVirtStorageVol";
-        } else {
-            act = _EMPTY_ACTION;
-            actName = "reloadVirtStorageVol";
+    TASK task;
+    task.type = "volume";
+    Actions act;
+    QString actName;
+    if ( args.method.startsWith("create") ) {
+        act = CREATE_ENTITY;
+        actName = "createVirtStorageVol";
+    } else {
+        act = DEFINE_ENTITY;
+        actName = "defineVirtStorageVol";
+    };
+    task.srcConnPtr = ptr_ConnPtr;
+    task.srcConName = currConnName;
+    task.method     = actName;
+    task.action     = act;
+    if ( args.context=="AsIs" ) {
+        task.args.path  = args.path;
+        emit addNewTask(task);
+    } else if ( args.context=="Edit" ) {
+        emit volumeToEditor(task);
+    } else {
+        QString path;
+        bool show = false;
+        // show SRC Creator widget
+        // get path for method
+        CreateVolume *createVolumeDialog =
+                new CreateVolume(this, ptr_ConnPtr, currPoolName);
+        connect(createVolumeDialog, SIGNAL(errorMsg(QString)),
+                this, SLOT(msgRepeater(QString&)));
+        int result = createVolumeDialog->exec();
+        if ( result==QDialog::Accepted ) {
+            path = createVolumeDialog->getXMLDescFileName();
+            show = createVolumeDialog->showXMLDescription();
         };
-        TASK task;
-        task.type = "volume";
-        args.removeFirst();
-        if ( !_args.isEmpty() ) {
-            if ( args.first()=="manually" ) {
-                QString path, _poolType;
-                bool show = false;
-                // show SRC Creator widget
-                // get path for method
-                if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
-                    virStoragePoolPtr _pool = virStoragePoolLookupByName(
-                            *ptr_ConnPtr, currPoolName.toUtf8().data());
-                    QDomDocument doc;
-                    doc.setContent(
-                                QString(
-                                    virStoragePoolGetXMLDesc(_pool, VIR_STORAGE_XML_INACTIVE))
-                                );
-                    _poolType = doc.firstChildElement("pool").attribute("type");
-                    CreateVolume *createVolumeDialog =
-                            new CreateVolume(this, _poolType);
-                    int result = createVolumeDialog->exec();
-                    if ( result==QDialog::Accepted ) {
-                        path = createVolumeDialog->getXMLDescFileName();
-                        show = createVolumeDialog->showXMLDescription();
-                    };
-                    createVolumeDialog->deleteLater();
-                    if ( result==QDialog::Rejected ) return;
-                    task.args.path = path;
-                    if ( show ) QDesktopServices::openUrl(QUrl(path));
-                } else
-                    emit ptrIsNull();
-            } else {
-                QString path   = args.first();
-                task.args.path = path;
-            };
-            task.srcConnPtr = ptr_ConnPtr;
-            task.srcConName = currConnName;
-            task.action     = act;
-            task.method     = actName;
-            task.args.object= currPoolName;
-            emit addNewTask(task);
-        };
+        createVolumeDialog->deleteLater();
+        if ( result==QDialog::Rejected ) return;
+        task.args.path = path;
+        if ( show ) QDesktopServices::openUrl(QUrl(path));
+        emit addNewTask(task);
     };
 }

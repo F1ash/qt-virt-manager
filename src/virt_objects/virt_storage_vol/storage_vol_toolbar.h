@@ -19,7 +19,7 @@ public:
     ~StorageVolToolBar();
 
 signals:
-    void             fileForMethod(const QStringList&);
+    void             fileForMethod(const OFILE_TASK&);
     void             execMethod(const QStringList&);
 
 private:
@@ -41,7 +41,6 @@ private:
 
 private slots:
     void             timerEvent(QTimerEvent*);
-    void             repeatParameters(QStringList&);
     void             showMenu();
     void             detectTriggerredAction(QAction*);
     void             changeAutoReloadState(bool);

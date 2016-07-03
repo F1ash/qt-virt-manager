@@ -70,7 +70,7 @@ void ST_StackedWidget::animatedDockShow(int i)
         };
         d->setWindowFlags(
                     Qt::Popup | Qt::FramelessWindowHint);
-        d->setWindowOpacity(0.667);
+        //d->setWindowOpacity(0.667);
         showAnimation = new QPropertyAnimation(
                     d, "pos");
         showAnimation->setDuration(333);
@@ -96,7 +96,7 @@ void ST_StackedWidget::animatedDockShowComlete()
             disconnect(showAnimation, SIGNAL(finished()),
                        this, SLOT(animatedDockShowComlete()));
             d->show();
-            d->setWindowOpacity(1.0);
+            //d->setWindowOpacity(1.0);
         };
     };
 }

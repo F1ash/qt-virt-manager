@@ -3,7 +3,6 @@
 
 #include "create_widgets/network/network_widgets/_checked_widget.h"
 #include <QTabWidget>
-#include <QPushButton>
 #include "ip_widgets/_ip_widget.h"
 #include "ip_widgets/addtab.h"
 
@@ -21,7 +20,7 @@ private:
      * Similar to IPv4, one IPv6 address per network can also have
      * a dhcp definition.
      */
-    QPushButton     *addIPSet;
+    AddTab          *addIP;
     QTabWidget      *ipSet;
     QWidget         *ipWdg;
     bool             IPv4HasDHCP = false;
@@ -29,9 +28,10 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 
 private slots:
-    void             updateDHCPUsage();
+    void             updateDHCPUsage(uint, uint, bool);
     void             showCustomMenu(QPoint);
     void             addTab();
     void             closeTab(int);

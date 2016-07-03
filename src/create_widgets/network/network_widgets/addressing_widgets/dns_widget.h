@@ -23,6 +23,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // DNS_WIDGET_H

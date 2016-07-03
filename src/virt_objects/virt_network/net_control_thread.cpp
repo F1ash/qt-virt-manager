@@ -46,6 +46,9 @@ void NetControlThread::run()
     case DEFINE_ENTITY :
         result = defineNetwork();
         break;
+    case EDIT_ENTITY :
+        result = getVirtNetXMLDesc();
+        break;
     case START_ENTITY :
         result = startNetwork();
         break;

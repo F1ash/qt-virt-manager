@@ -28,6 +28,19 @@ QDomDocument TXT_DNS::getDataDocument() const
     };
     return doc;
 }
+void TXT_DNS::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _txt;
+    _network = doc.firstChildElement("network");
+    if ( !_network.isNull() ) {
+        _txt = _network.firstChildElement("txt");
+        if ( !_txt.isNull() ) {
+            setUsage(true);
+        };
+    };
+}
 void TXT_DNS::addItem()
 {
     QString _text = hostName->text();

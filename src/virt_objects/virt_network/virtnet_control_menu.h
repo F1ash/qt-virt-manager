@@ -17,7 +17,7 @@ public:
             bool         state  = false);
 
 signals:
-    void execMethod(const QStringList&);
+    void            execMethod(const QStringList&);
 
 private:
     bool            autoReloadState;
@@ -25,6 +25,7 @@ private:
     QAction        *destroy = nullptr;
     QAction        *undefine = nullptr;
     QAction        *autoStart = nullptr;
+    QAction        *edit = nullptr;
     QAction        *getXMLDesc = nullptr;
     QAction        *reload = nullptr;
     QStringList     parameters;

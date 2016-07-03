@@ -3,18 +3,13 @@
 IP_Widget::IP_Widget(QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
-    addIPSet = new QPushButton(this);
-    addIPSet->setText("Add IP Element");
-    addIPSet->setIcon(QIcon::fromTheme("list-add"));
-    addIPSet->setIconSize(QSize(
-                this->fontInfo().pixelSize(),
-                this->fontInfo().pixelSize()));
+    addIP = new AddTab(this);
     ipSet = new QTabWidget(this);
     ipSet->setTabsClosable(true);
+    ipSet->setCornerWidget(addIP);
     ipSet->setContextMenuPolicy(Qt::CustomContextMenu);
-    baseLayout->addWidget(addIPSet);
     baseLayout->addWidget(ipSet);
-    connect(addIPSet, SIGNAL(released()),
+    connect(addIP->addTabAction, SIGNAL(triggered(bool)),
             this, SLOT(addTab()));
     connect(ipSet, SIGNAL(tabCloseRequested(int)),
             this, SLOT(closeTab(int)));
@@ -29,23 +24,64 @@ QDomDocument IP_Widget::getDataDocument() const
     QDomDocument doc;
     doc.setContent(QString());
     for (int i=0; i<ipSet->count(); i++) {
-        _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
+        _IP_Widget *wdg =
+                static_cast<_IP_Widget*>(ipSet->widget(i));
         if ( nullptr==wdg ) continue;
         doc.appendChild(wdg->getDataDocument());
     };
     return doc;
 }
+void IP_Widget::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _ip;
+    _network = doc.firstChildElement("network");
+    if ( !_network.isNull() ) {
+        _ip = _network.firstChildElement("ip");
+        if ( !_ip.isNull() ) {
+            setUsage(true);
+            int i = 0;
+            while ( !_ip.isNull() ) {
+                if ( i>0 ) addTab();
+                QString a, n, p;
+                a = _ip.attribute("address");
+                n = _ip.attribute("netmask");
+                p = _ip.attribute("prefix");
+                _IP_Widget *wdg =
+                        static_cast<_IP_Widget*>(ipSet->widget(i));
+                if ( nullptr!=wdg ) {
+                    wdg->setDataDescription(_xmlDesc);
+                };
+                _ip = _ip.nextSiblingElement("ip");
+                ++i;
+            };
+        };
+    };
+}
 
 /* private slots */
-void IP_Widget::updateDHCPUsage()
+void IP_Widget::updateDHCPUsage(uint ver, uint idx, bool state)
 {
+    switch (ver) {
+    case 4:
+        IPv4HasDHCP = state;
+        break;
+    case 6:
+        IPv6HasDHCP = state;
+        break;
+    default:
+        break;
+    };
     //qDebug()<<"IPv4:"<<IPv4HasDHCP;
     //qDebug()<<"IPv6:"<<IPv6HasDHCP;
 
     for (int i=0; i<ipSet->count(); i++) {
-        _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
+        if ( i==idx ) continue;
+        _IP_Widget *wdg =
+                static_cast<_IP_Widget*>(ipSet->widget(i));
         if ( nullptr==wdg ) continue;
-        wdg->updateDHCPUsage();
+        wdg->updateDHCPUsage(ver, state);
     };
 }
 void IP_Widget::showCustomMenu(QPoint pos)
@@ -64,25 +100,32 @@ void IP_Widget::addTab()
     int i = ipSet->addTab(
                 new _IP_Widget(
                     this,
-                    &IPv4HasDHCP,
-                    &IPv6HasDHCP),
+                    IPv4HasDHCP,
+                    IPv6HasDHCP),
                 "IP Element");
-    _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
+    _IP_Widget *wdg =
+            static_cast<_IP_Widget*>(ipSet->widget(i));
     if ( nullptr!=wdg ) {
-        connect(wdg, SIGNAL(dhcpUsageChanged()),
-                this, SLOT(updateDHCPUsage()));
+        wdg->setTabIdx(i);
+        connect(wdg, SIGNAL(dhcpUsageChanged(uint, uint, bool)),
+                this, SLOT(updateDHCPUsage(uint, uint, bool)));
     };
 }
 void IP_Widget::closeTab(int i)
 {
     if ( ipSet->count()<2 ) return;
-    _IP_Widget *wdg = static_cast<_IP_Widget*>(ipSet->widget(i));
+    _IP_Widget *wdg =
+            static_cast<_IP_Widget*>(ipSet->widget(i));
     if ( nullptr!=wdg ) {
-        wdg->ipv6->click();
-        wdg->updateDHCPUsage();
-        disconnect(wdg, SIGNAL(dhcpUsageChanged()),
-                   this, SLOT(updateDHCPUsage()));
+        wdg->tabToClose();
         ipSet->removeTab(i);
         wdg->deleteLater();
+        for (int i=0; i<ipSet->count(); i++) {
+            _IP_Widget *wdg =
+                    static_cast<_IP_Widget*>(ipSet->widget(i));
+            if ( nullptr==wdg ) continue;
+            // set new tab idx;
+            wdg->setTabIdx(i);
+        };
     };
 }

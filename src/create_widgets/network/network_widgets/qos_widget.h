@@ -12,15 +12,16 @@ public:
     explicit QoS_Widget(
             QWidget *parent = nullptr,
             QString  tag = "QoS");
-    Bound_Widget    *inbound, *outbound;
 
 signals:
 
 private:
+    Bound_Widget    *inbound, *outbound;
     QTabWidget      *bandWidth;
 
 public slots:
     QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
 };
 
 #endif // QOS_WIDGET_H

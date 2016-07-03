@@ -166,6 +166,19 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         };
         Overviewed_StPool_Map.clear();
         //qDebug()<<"StorageVolControls cleared";
+        // close NetworkEditors
+        keys = NetworkEditor_Map.keys();
+        foreach ( QString key, keys ) {
+            if ( NetworkEditor_Map.value(key, nullptr)!=nullptr ) {
+                CreateVirtNetwork *value = nullptr;
+                value = static_cast<CreateVirtNetwork*>(
+                                NetworkEditor_Map.value(key, nullptr));
+                if ( nullptr!=value ) value->close();
+                //qDebug()<<key<<"removed into Close";
+            };
+        };
+        NetworkEditor_Map.clear();
+        //qDebug()<<"NetworkEditors cleared";
         // close DomainEditors
         keys = DomainEditor_Map.keys();
         foreach ( QString key, keys ) {
@@ -473,6 +486,8 @@ void MainWindow::initDockWidgets()
             networkDockContent, SLOT(resultReceiver(Result)));
     connect(connListWidget->list, SIGNAL(netResult(Result)),
             networkDockContent, SLOT(resultReceiver(Result)));
+    connect(networkDockContent, SIGNAL(networkToEditor(TASK)),
+            this, SLOT(invokeNetworkEditor(TASK)));
 
     storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
@@ -708,6 +723,12 @@ void MainWindow::closeConnGenerations(QString &_connName)
             //DomainEditor_Map.remove(key);
         };
     };
+    foreach (QString key, NetworkEditor_Map.keys()) {
+        if ( key.startsWith(_connName) ) {
+            NetworkEditor_Map.value(key)->close();
+            //DomainEditor_Map.remove(key);
+        };
+    };
 }
 bool MainWindow::runningConnExist()
 {
@@ -939,7 +960,9 @@ void MainWindow::invokeDomainEditor(TASK _task)
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( !DomainEditor_Map.contains(key) ) {
-        DomainEditor_Map.insert(key, new CreateVirtDomain(nullptr, _task));
+        DomainEditor_Map.insert(
+                    key,
+                    new CreateVirtDomain(nullptr, _task));
         DomainEditor_Map.value(key)->setObjectName(key);
         DomainEditor_Map.value(key)->setWindowTitle(
                     QString("VM Settings / <%1> in [%2]")
@@ -993,6 +1016,42 @@ void MainWindow::migrate_settings_to_INI_format()
                     this,
                     qApp->applicationName(),
                     "Migration the settings to INI-format done successfully.");
+    };
+}
+void MainWindow::invokeNetworkEditor(TASK _task)
+{
+    QString connName = _task.srcConName;
+    QString networkName = _task.object;
+    // WARNING: key must starts with connection name
+    // see for: MainWindow::closeConnGenerations(QString &_connName)
+    QString key = QString("%1_%2").arg(connName).arg(networkName);
+    if ( !NetworkEditor_Map.contains(key) ) {
+        NetworkEditor_Map.insert(
+                    key,
+                    new CreateVirtNetwork(nullptr, _task));
+        NetworkEditor_Map.value(key)->setObjectName(key);
+        NetworkEditor_Map.value(key)->setWindowTitle(
+                    QString("Network Editor / <%1> in [%2]")
+                    .arg(networkName).arg(connName));
+        connect(NetworkEditor_Map.value(key), SIGNAL(errorMsg(QString&)),
+                this, SLOT(writeToErrorLog(QString&)));
+        connect(NetworkEditor_Map.value(key), SIGNAL(finished(QString&)),
+                this, SLOT(deleteNetworkEditor(QString&)));
+        connect(NetworkEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
+                taskWrHouse, SLOT(addNewTask(TASK)));
+    };
+    if ( NetworkEditor_Map.value(key)!=nullptr ) {
+        NetworkEditor_Map.value(key)->show();
+        NetworkEditor_Map.value(key)->setFocus();
+    } else
+        NetworkEditor_Map.remove(key);
+}
+void MainWindow::deleteNetworkEditor(QString &key)
+{
+    if ( NetworkEditor_Map.contains(key) ) {
+        // set attribute(Qt::WA_DeleteOnClose) in widget;
+        // not need to delete a CreateVirtNetwork
+        NetworkEditor_Map.remove(key);
     };
 }
 

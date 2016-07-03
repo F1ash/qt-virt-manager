@@ -19,3 +19,19 @@ QDomDocument MAC_Widget::getDataDocument() const
     doc.appendChild(_mac);
     return doc;
 }
+void MAC_Widget::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _mac;
+    _network = doc.firstChildElement("network");
+    if ( !_network.isNull() ) {
+        _mac = _network.firstChildElement("mac");
+        if ( !_mac.isNull() ) {
+            setUsage(true);
+            QString a = _mac.attribute("address");
+            if ( !a.isEmpty() )
+                mac->setText(a);
+        };
+    };
+}

@@ -22,6 +22,19 @@ QDomDocument Forwarder::getDataDocument() const
     };
     return doc;
 }
+void Forwarder::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _fwd;
+    _network = doc.firstChildElement("network");
+    if ( !_network.isNull() ) {
+        _fwd = _network.firstChildElement("forwarder");
+        if ( !_fwd.isNull() ) {
+            setUsage(true);
+        };
+    };
+}
 void Forwarder::addItem()
 {
     QString _text = frwds->text();

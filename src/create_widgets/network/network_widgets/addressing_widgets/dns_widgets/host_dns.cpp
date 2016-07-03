@@ -36,6 +36,19 @@ QDomDocument Host_DNS::getDataDocument() const
     doc.appendChild(_host);
     return doc;
 }
+void Host_DNS::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _host;
+    _network = doc.firstChildElement("network");
+    if ( !_network.isNull() ) {
+        _host = _network.firstChildElement("host");
+        if ( !_host.isNull() ) {
+            setUsage(true);
+        };
+    };
+}
 void Host_DNS::addItem()
 {
     QString _text = hostName->text();

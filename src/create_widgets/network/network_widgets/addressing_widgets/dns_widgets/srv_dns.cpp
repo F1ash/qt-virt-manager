@@ -70,6 +70,19 @@ QDomDocument SRV_DNS::getDataDocument() const
     };
     return doc;
 }
+void SRV_DNS::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _srv;
+    _network = doc.firstChildElement("network");
+    if ( !_network.isNull() ) {
+        _srv = _network.firstChildElement("srv");
+        if ( !_srv.isNull() ) {
+            setUsage(true);
+        };
+    };
+}
 void SRV_DNS::addItem()
 {
     QString _text = service->text();

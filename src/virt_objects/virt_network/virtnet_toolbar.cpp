@@ -14,13 +14,15 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     create_Action->setToolTip("Create for once usage");
     create_Menu = new OpenFileMenu(this, "create", "network");
     create_Action->setMenu(create_Menu);
-    connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+    connect(create_Action, SIGNAL(triggered()),
+            this, SLOT(showMenu()));
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
     define_Menu = new OpenFileMenu(this, "define", "network");
     define_Action->setMenu(define_Menu);
-    connect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+    connect(define_Action, SIGNAL(triggered()),
+            this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
     undefine_Action->setToolTip("Undefine");
@@ -54,18 +56,29 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     _autoReload->setChecked(settings.value("AutoReload", false).toBool());
     settings.endGroup();
 
-    //connect(start_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(destroy_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(create_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(define_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(undefine_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(setAutostart_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    //connect(getXMLDesc_Action, SIGNAL(hovered()), this, SLOT(showHoveredMenu()));
-    connect(_autoReload, SIGNAL(toggled(bool)), this, SLOT(changeAutoReloadState(bool)));
+    //connect(start_Action, SIGNAL(hovered()),
+    // this, SLOT(showHoveredMenu()));
+    //connect(destroy_Action, SIGNAL(hovered()),
+    // this, SLOT(showHoveredMenu()));
+    //connect(create_Action, SIGNAL(hovered()),
+    // this, SLOT(showHoveredMenu()));
+    //connect(define_Action, SIGNAL(hovered()),
+    // this, SLOT(showHoveredMenu()));
+    //connect(undefine_Action, SIGNAL(hovered()),
+    // this, SLOT(showHoveredMenu()));
+    //connect(setAutostart_Action, SIGNAL(hovered()),
+    // this, SLOT(showHoveredMenu()));
+    //connect(getXMLDesc_Action, SIGNAL(hovered()),
+    // this, SLOT(showHoveredMenu()));
+    connect(_autoReload, SIGNAL(toggled(bool)),
+            this, SLOT(changeAutoReloadState(bool)));
 
-    connect(create_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    connect(define_Menu, SIGNAL(fileForMethod(QStringList&)), this, SLOT(repeatParameters(QStringList&)));
-    connect(this, SIGNAL(actionTriggered(QAction*)), this, SLOT(detectTriggerredAction(QAction*)));
+    connect(create_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
+    connect(define_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
+    connect(this, SIGNAL(actionTriggered(QAction*)),
+            this, SLOT(detectTriggerredAction(QAction*)));
 }
 VirtNetToolBar::~VirtNetToolBar()
 {
@@ -78,29 +91,30 @@ VirtNetToolBar::~VirtNetToolBar()
 /* public slots */
 Qt::ToolBarArea VirtNetToolBar::get_ToolBarArea(int i) const
 {
-  Qt::ToolBarArea result;
-  switch (i) {
-  case 1:
-    result = Qt::LeftToolBarArea;
-    break;
-  case 2:
-    result = Qt::RightToolBarArea;
-    break;
-  case 4:
-    result = Qt::TopToolBarArea;
-    break;
-  case 8:
-    result = Qt::BottomToolBarArea;
-    break;
-  default:
-    result = Qt::TopToolBarArea;
-    break;
-  };
-  return result;
+    Qt::ToolBarArea result;
+    switch (i) {
+    case 1:
+        result = Qt::LeftToolBarArea;
+        break;
+    case 2:
+        result = Qt::RightToolBarArea;
+        break;
+    case 4:
+        result = Qt::TopToolBarArea;
+        break;
+    case 8:
+        result = Qt::BottomToolBarArea;
+        break;
+    default:
+        result = Qt::TopToolBarArea;
+        break;
+    };
+    return result;
 }
 void VirtNetToolBar::enableAutoReload()
 {
-    if ( _autoReload->isChecked() ) timerId = startTimer(interval*1000);
+    if ( _autoReload->isChecked() )
+        timerId = startTimer(interval*1000);
 }
 void VirtNetToolBar::stopProcessing()
 {
@@ -124,10 +138,6 @@ void VirtNetToolBar::timerEvent(QTimerEvent *event)
         parameters << "reloadVirtNetwork";
         emit execMethod(parameters);
     };
-}
-void VirtNetToolBar::repeatParameters(QStringList &p)
-{
-    emit fileForMethod(p);
 }
 void VirtNetToolBar::showHoveredMenu()
 {

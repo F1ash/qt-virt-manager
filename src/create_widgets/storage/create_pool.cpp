@@ -17,16 +17,20 @@
     <<"mpath"<<"rbd"<<"sheepdog"\
     <<"gluster"<<"zfs"
 
-CreatePool::CreatePool(QWidget *parent, virConnectPtr *_connPtr, Actions _act) :
-    _CreateStorage(parent), action(_act)
+CreatePool::CreatePool(
+        QWidget         *parent,
+        virConnectPtr   *_connPtr) :
+    _CreateStorage(parent)
 {
-    setModal(false);
+    //setModal(false);
     setWindowTitle("StoragePool Settings");
     setUrl("http://libvirt.org/formatstorage.html");
     settingName.append("CreateStoragePool");
     settings.beginGroup(settingName);
-    restoreGeometry(settings.value("Geometry").toByteArray());
-    showAtClose->setChecked( settings.value("ShowAtClose").toBool() );
+    restoreGeometry(
+                settings.value("Geometry").toByteArray());
+    showAtClose->setChecked(
+                settings.value("ShowAtClose").toBool() );
     settings.endGroup();
     info->addWidget(new Dir_Pool_Stuff(this));
     info->addWidget(new Fs_Pool_Stuff(this));
@@ -49,15 +53,18 @@ CreatePool::CreatePool(QWidget *parent, virConnectPtr *_connPtr, Actions _act) :
     };
     uuidLabel = new QLabel("UUID:", this);
     uuid = new QLineEdit(this);
-    uuid->setPlaceholderText("a UUID will be generated if omitted");
+    uuid->setPlaceholderText(
+                "a UUID will be generated if omitted");
     uuidLayout = new QHBoxLayout();
     uuidLayout->addWidget(uuidLabel);
     uuidLayout->addWidget(uuid);
     uuidWdg = new QWidget(this);
     uuidWdg->setLayout(uuidLayout);
 
-    commonLayout->insertWidget(commonLayout->count()-1, uuidWdg, -1);
-    commonLayout->insertWidget(commonLayout->count()-1, infoWidget, -1);
+    commonLayout->insertWidget(
+                commonLayout->count()-1, uuidWdg, -1);
+    commonLayout->insertWidget(
+                commonLayout->count()-1, infoWidget, -1);
 }
 
 /* public slots */
@@ -65,17 +72,16 @@ int CreatePool::getResult() const
 {
     return result();
 }
-Actions CreatePool::getAction() const
-{
-    return action;
-}
 QString CreatePool::getXMLDescFileName() const
 {
     QDomDocument doc, _stuff;
     QDomElement _pool, _name, _uuid;
     QDomText _text;
     _pool = doc.createElement("pool");
-    QString _type = type->itemData(type->currentIndex(), Qt::UserRole).toString();
+    QString _type = type->itemData(
+                type->currentIndex(),
+                Qt::UserRole)
+            .toString();
     _pool.setAttribute("type", _type);
     doc.appendChild(_pool);
     _name = doc.createElement("name");
@@ -89,9 +95,11 @@ QString CreatePool::getXMLDescFileName() const
         _pool.appendChild(_uuid);
     };
 
-    _Pool_Stuff *wdg = static_cast<_Pool_Stuff*>(info->currentWidget());
+    _Pool_Stuff *wdg =
+            static_cast<_Pool_Stuff*>(info->currentWidget());
     _stuff = wdg->getStorageXMLDesc();
-    QDomNodeList list = _stuff.firstChildElement("stuff").childNodes();
+    QDomNodeList list =
+            _stuff.firstChildElement("stuff").childNodes();
     /*
      * current DomNode is removed to root-element
      * but NULL-elemens not removed
@@ -101,7 +109,8 @@ QString CreatePool::getXMLDescFileName() const
     uint count = list.length();
     for (int i=0; i<count;i++) {
         //qDebug()<<list.item(j).nodeName()<<i;
-        if (!list.item(j).isNull()) _pool.appendChild(list.item(j));
+        if (!list.item(j).isNull())
+            _pool.appendChild(list.item(j));
         else ++j;
     };
 

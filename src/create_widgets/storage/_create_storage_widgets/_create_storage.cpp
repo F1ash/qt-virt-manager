@@ -21,11 +21,20 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
 
     about = new QLabel(this);
     about->setOpenExternalLinks(true);
-    showAtClose = new QCheckBox("Show XML Description\nat close", this);
-    chooseStorage = new QPushButton(QIcon::fromTheme("dialog-ok"), "Choose Storage", this);
-    cancel = new QPushButton(QIcon::fromTheme("dialog-cancel"), "Cancel", this);
-    connect(chooseStorage, SIGNAL(clicked()), this, SLOT(set_Result()));
-    connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
+    showAtClose = new QCheckBox(
+                "Show XML Description\nat close", this);
+    chooseStorage = new QPushButton(
+                QIcon::fromTheme("dialog-ok"),
+                "Choose Storage",
+                this);
+    cancel = new QPushButton(
+                QIcon::fromTheme("dialog-cancel"),
+                "Cancel",
+                this);
+    connect(chooseStorage, SIGNAL(clicked()),
+            this, SLOT(set_Result()));
+    connect(cancel, SIGNAL(clicked()),
+            this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout(this);
     buttonLayout->addWidget(about);
     buttonLayout->addWidget(showAtClose);
@@ -50,9 +59,10 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
 
     xml = new QTemporaryFile(this);
     xml->setAutoRemove(false);
-    xml->setFileTemplate(QString("%1%2XML_Desc-XXXXXX.xml")
-                         .arg(QDir::tempPath())
-                         .arg(QDir::separator()));
+    xml->setFileTemplate(
+                QString("%1%2XML_Desc-XXXXXX.xml")
+                .arg(QDir::tempPath())
+                .arg(QDir::separator()));
 
     connect(type, SIGNAL(currentIndexChanged(int)),
             info, SLOT(setCurrentIndex(int)));
@@ -85,8 +95,12 @@ void _CreateStorage::set_Result()
     //qDebug()<<"done";
     if ( !settingName.isEmpty() ) {
         settings.beginGroup(settingName);
-        settings.setValue("Geometry", saveGeometry());
-        settings.setValue("ShowAtClose", showAtClose->isChecked());
+        settings.setValue(
+                    "Geometry",
+                    saveGeometry());
+        settings.setValue(
+                    "ShowAtClose",
+                    showAtClose->isChecked());
         settings.endGroup();
     };
 }

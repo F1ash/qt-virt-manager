@@ -1,6 +1,7 @@
 #include "domain_control_menu.h"
 
-DomainControlMenu::DomainControlMenu(QWidget *parent, QStringList params, bool state) :
+DomainControlMenu::DomainControlMenu(
+        QWidget *parent, QStringList params, bool state) :
     QMenu(parent), parameters(params), autoReloadState(state)
 {
     if ( !parameters.isEmpty() ) {

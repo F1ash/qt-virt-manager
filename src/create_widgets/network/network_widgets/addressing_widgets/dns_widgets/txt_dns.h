@@ -17,6 +17,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
     void             addItem();
 };
 

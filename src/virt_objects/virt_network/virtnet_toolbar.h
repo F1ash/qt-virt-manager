@@ -18,8 +18,8 @@ public:
     ~VirtNetToolBar();
 
 signals:
-    void fileForMethod(const QStringList&);
-    void execMethod(const QStringList&);
+    void             fileForMethod(const OFILE_TASK&);
+    void             execMethod(const QStringList&);
 
 private:
     QAction         *start_Action;
@@ -39,18 +39,17 @@ private:
     int              timerId;
 
 private slots:
-    void timerEvent(QTimerEvent*);
-    void repeatParameters(QStringList&);
-    void showHoveredMenu();
-    void showMenu();
-    void detectTriggerredAction(QAction*);
-    void changeAutoReloadState(bool);
+    void             timerEvent(QTimerEvent*);
+    void             showHoveredMenu();
+    void             showMenu();
+    void             detectTriggerredAction(QAction*);
+    void             changeAutoReloadState(bool);
 
 public slots:
-    Qt::ToolBarArea get_ToolBarArea(int) const;
-    void enableAutoReload();
-    void stopProcessing();
-    bool getAutoReloadState() const;
+    Qt::ToolBarArea  get_ToolBarArea(int) const;
+    void             enableAutoReload();
+    void             stopProcessing();
+    bool             getAutoReloadState() const;
 
 };
 

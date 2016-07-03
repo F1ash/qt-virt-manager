@@ -68,10 +68,10 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
     connect(_autoReload, SIGNAL(toggled(bool)),
             this, SLOT(changeAutoReloadState(bool)));
 
-    connect(create_Menu, SIGNAL(fileForMethod(QStringList&)),
-            this, SLOT(repeatParameters(QStringList&)));
-    connect(define_Menu, SIGNAL(fileForMethod(QStringList&)),
-            this, SLOT(repeatParameters(QStringList&)));
+    connect(create_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
+    connect(define_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
     //connect(delete_Menu, SIGNAL(execMethod(const QStringList&)),
     //        this, SIGNAL(execMethod(const QStringList&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
@@ -134,10 +134,6 @@ void StoragePoolToolBar::timerEvent(QTimerEvent *event)
         parameters << "reloadVirtStoragePool";
         emit execMethod(parameters);
     };
-}
-void StoragePoolToolBar::repeatParameters(QStringList &p)
-{
-    emit fileForMethod(p);
 }
 void StoragePoolToolBar::showHoveredMenu()
 {

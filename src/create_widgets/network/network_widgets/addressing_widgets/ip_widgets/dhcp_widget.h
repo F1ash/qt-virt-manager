@@ -18,7 +18,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
-    void             setIPvXSettings(int);
+    void             setDataDescription(QString&);
 };
 
 #endif // DHCP_WIDGET_H

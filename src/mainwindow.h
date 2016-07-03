@@ -32,6 +32,7 @@
 typedef QMap<QString, VM_Viewer*> ViewerMap;
 typedef QMap<QString, VirtStorageVolControl*> OverviwedStorageMap;
 typedef QMap<QString, CreateVirtDomain*> DomainEditorMap;
+typedef QMap<QString, CreateVirtNetwork*> NetworkEditorMap;
 
 class MainWindow : public QMainWindow
 {
@@ -84,6 +85,7 @@ private :
     ViewerMap                    VM_Displayed_Map;
     OverviwedStorageMap          Overviewed_StPool_Map;
     DomainEditorMap              DomainEditor_Map;
+    NetworkEditorMap             NetworkEditor_Map;
 
     VirtEventLoop               *virtEventLoop;
 
@@ -132,6 +134,8 @@ private slots:
     void invokeDomainEditor(TASK);
     void deleteDomainEditor(QString&);
     void migrate_settings_to_INI_format();
+    void invokeNetworkEditor(TASK);
+    void deleteNetworkEditor(QString&);
 
     void free_and_hide_all_stuff();
     void all_stuff_to_original();

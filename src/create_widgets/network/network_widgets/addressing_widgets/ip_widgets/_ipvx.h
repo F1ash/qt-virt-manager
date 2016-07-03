@@ -10,17 +10,19 @@ class _IPvX : public _QWidget
 public:
     explicit _IPvX(
             QWidget *parent  = nullptr,
-            bool    *hasDHCP = nullptr);
+            bool     hasDHCP = false,
+            uint     _ver    = 0);
     QLineEdit       *address, *gateway;
     QSpinBox        *prefix, *metric;
     DHCP_Widget     *useDHCP;
     QVBoxLayout     *commonLayout;
+    bool             getDHCPState() const;
+    const uint       ver;
 
 signals:
-    void             dhcpUsageChanged();
+    void             dhcpUsageChanged(uint, bool);
 
 private:
-    bool            *HasDHCP;
     QLabel          *addressL, *prefixL,
                     *gatewayL, *metricL;
     QGridLayout     *baselayout, *gatewayLayout;
@@ -29,12 +31,10 @@ private:
 public slots:
     virtual void     setStaticRouteMode(bool);
     void             setGatewayEnabled(bool);
-    void             setDHCPState(bool);
-    void             setDHCPEnabled(bool);
-    void             updateDHCPUsage();
+    void             updateDHCPUsage(bool);
 
 private slots:
-    void             dhcpStateChanged(bool);
+    virtual void     dhcpStateChanged(bool);
 };
 
 #endif // _IPVX_H

@@ -60,8 +60,8 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
 
-    connect(define_Menu, SIGNAL(fileForMethod(QStringList&)),
-            this, SLOT(repeatParameters(QStringList&)));
+    connect(define_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
 }
 InterfaceToolBar::~InterfaceToolBar()
 {
@@ -120,10 +120,6 @@ void InterfaceToolBar::timerEvent(QTimerEvent *event)
         parameters << "reloadVirtInterface";
         emit execMethod(parameters);
     };
-}
-void InterfaceToolBar::repeatParameters(QStringList &p)
-{
-    emit fileForMethod(p);
 }
 void InterfaceToolBar::showMenu()
 {

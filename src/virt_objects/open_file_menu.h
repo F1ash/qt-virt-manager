@@ -6,8 +6,11 @@
 #include <QFileDialog>
 #include <QIcon>
 
-// TODO: make a cross-platform
-#define EXAMPLES QString("/usr/share/qt-virt-manager/misc")
+struct OFILE_TASK {
+    QString method;
+    QString context;
+    QString path;
+};
 
 class OpenFileMenu : public QMenu
 {
@@ -15,25 +18,22 @@ class OpenFileMenu : public QMenu
 public:
     explicit OpenFileMenu(
             QWidget *parent = nullptr,
-            QString str = "create",
-            QString src = "Network");
+            QString  str = "create",
+            QString  src = "Network");
 
 signals:
-    void        fileForMethod(QStringList&);
+    void        fileForMethod(const OFILE_TASK&);
 
 private:
-    QString     method;
-    QString     source;
-    QString     fullMethodName;
     QIcon       icon;
-    QAction    *examples;
-    QAction    *custom;
+    QAction    *applyAsIs;
+    QAction    *editTemplate;
     QAction    *manual;
+    OFILE_TASK  task;
 
 private slots:
-    void        exampleChoised();
-    void        customChoised();
-    void        manualChoised();
+    void        chooseExample();
+    void        chooseManual();
     void        emitParameters(const QString&, const QString&);
 
 };

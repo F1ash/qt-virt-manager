@@ -14,7 +14,7 @@ class Addressing_Widget : public _Checked_Widget
 public:
     explicit Addressing_Widget(
             QWidget *parent = nullptr,
-            QString tag = "Addressing");
+            QString  tag = "Addressing");
 
 private:
     DNS_Widget      *dns;
@@ -23,6 +23,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
+    void             setDataDescription(QString&);
     void             ipv6Changed(bool);
 };
 

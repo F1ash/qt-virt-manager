@@ -15,6 +15,9 @@ public:
     explicit VirtInterfaceControl(QWidget *parent = nullptr);
     ~VirtInterfaceControl();
 
+signals:
+    void                 ifaceToEditor(TASK);
+
 private:
     VirtIfaceModel      *virtIfaceModel;
     InterfaceToolBar    *toolBar;
@@ -32,7 +35,7 @@ private slots:
     void                 entityClicked(const QPoint&);
     void                 entityDoubleClicked(const QModelIndex&);
     void                 execAction(const QStringList&);
-    void                 newVirtEntityFromXML(const QStringList&);
+    void                 newVirtEntityFromXML(const OFILE_TASK&);
 };
 
 #endif // VIRT_INTERFACE_CONTROL_H
