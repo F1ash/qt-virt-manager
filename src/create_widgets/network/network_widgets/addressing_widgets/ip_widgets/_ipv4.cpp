@@ -5,7 +5,6 @@ _IPv4::_IPv4(QWidget *parent, bool hasDHCP, uint _ver) :
 {
     setObjectName("IPv4");
     address->setPlaceholderText("192.168.152.1");
-    prefix->setValue(24);
     gateway->setPlaceholderText("192.168.122.2");
 }
 

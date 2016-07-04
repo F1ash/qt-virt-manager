@@ -30,6 +30,19 @@ QDomDocument DHCP_Host::getDataDocument() const
     };
     return doc;
 }
+void DHCP_Host::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _host = doc.documentElement();
+    if ( !_host.isNull() ) {
+        setUsage(true);
+        name->setText(_host.attribute("name"));
+        ip->setText(_host.attribute("ip"));
+        mac->setText(_host.attribute("mac"));
+        addItem();
+    };
+}
 void DHCP_Host::addItem()
 {
     if ( name->text().isEmpty() ) return;

@@ -20,12 +20,16 @@ _Checked_Widget::_Checked_Widget(
     connect(usage, SIGNAL(toggled(bool)),
             this, SIGNAL(toggled(bool)));
 }
-
-/* public slots */
 bool _Checked_Widget::isUsed() const
 {
     return usage->isChecked();
 }
+bool _Checked_Widget::isFreezed() const
+{
+    return ( !usage->isChecked() && !isEnabled() );
+}
+
+/* public slots */
 void _Checked_Widget::setUsage(bool state)
 {
     usage->setChecked(state);
@@ -37,6 +41,7 @@ void _Checked_Widget::setCheckState(Qt::CheckState _state)
 void _Checked_Widget::setFreez(bool state)
 {
     usage->setDisabled(state);
+    usage->setCheckState( Qt::Unchecked );
 }
 QDomDocument _Checked_Widget::getDataDocument() const
 {

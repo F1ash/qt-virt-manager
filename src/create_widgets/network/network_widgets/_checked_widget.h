@@ -12,6 +12,8 @@ public:
             QString  _tag   = QString());
     const QString        tag;
     QVBoxLayout         *baseLayout;
+    bool                 isUsed() const;
+    bool                 isFreezed() const;
 
 signals:
     void                 toggled(bool);
@@ -22,7 +24,6 @@ private:
     QVBoxLayout         *commonLayout;
 
 public slots:
-    bool                 isUsed() const;
     void                 setUsage(bool);
     void                 setCheckState( Qt::CheckState );
     void                 setFreez(bool);

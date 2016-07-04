@@ -1,5 +1,10 @@
 #include "ip_widget.h"
 
+/*
+ * IP_Widget is set of IP_Elements,
+ * which is a IP or stata route addressing.
+ */
+
 IP_Widget::IP_Widget(QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
@@ -35,26 +40,30 @@ void IP_Widget::setDataDescription(QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);
-    QDomElement _network, _ip;
-    _network = doc.firstChildElement("network");
+    QDomElement _network = doc.documentElement();
     if ( !_network.isNull() ) {
-        _ip = _network.firstChildElement("ip");
-        if ( !_ip.isNull() ) {
-            setUsage(true);
+        QDomNode n = _network.firstChild();
+        if ( !n.isNull() ) {
             int i = 0;
-            while ( !_ip.isNull() ) {
-                if ( i>0 ) addTab();
-                QString a, n, p;
-                a = _ip.attribute("address");
-                n = _ip.attribute("netmask");
-                p = _ip.attribute("prefix");
-                _IP_Widget *wdg =
-                        static_cast<_IP_Widget*>(ipSet->widget(i));
-                if ( nullptr!=wdg ) {
-                    wdg->setDataDescription(_xmlDesc);
+            while ( !n.isNull() ) {
+                QDomElement e = n.toElement();
+                if(!e.isNull()) {
+                    if ( e.tagName()=="ip" || e.tagName()=="route" ) {
+                        setUsage(true);
+                        if ( i>0 ) addTab();
+                        _IP_Widget *wdg =
+                                static_cast<_IP_Widget*>(ipSet->widget(i));
+                        if ( nullptr!=wdg ) {
+                            QDomDocument _doc;
+                            _doc.setContent(QString());
+                            _doc.appendChild(e.cloneNode());
+                            QString _xml = _doc.toString();
+                            wdg->setDataDescription(_xml);
+                            ++i;
+                        };
+                    };
                 };
-                _ip = _ip.nextSiblingElement("ip");
-                ++i;
+                n = n.nextSibling();
             };
         };
     };
@@ -73,8 +82,8 @@ void IP_Widget::updateDHCPUsage(uint ver, uint idx, bool state)
     default:
         break;
     };
-    //qDebug()<<"IPv4:"<<IPv4HasDHCP;
-    //qDebug()<<"IPv6:"<<IPv6HasDHCP;
+    qDebug()<<"IPv4:"<<IPv4HasDHCP;
+    qDebug()<<"IPv6:"<<IPv6HasDHCP;
 
     for (int i=0; i<ipSet->count(); i++) {
         if ( i==idx ) continue;

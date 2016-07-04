@@ -27,6 +27,18 @@ QDomDocument DHCP_Range::getDataDocument() const
     };
     return doc;
 }
+void DHCP_Range::setDataDescription(QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _range = doc.documentElement();
+    if ( !_range.isNull() ) {
+        setUsage(true);
+        start->setText(_range.attribute("start"));
+        end->setText(_range.attribute("end"));
+        addItem();
+    };
+}
 void DHCP_Range::addItem()
 {
     if ( start->text().isEmpty() ) return;

@@ -27,9 +27,27 @@ QDomDocument Addressing_Widget::getDataDocument() const
 }
 void Addressing_Widget::setDataDescription(QString &_xmlDesc)
 {
-    dns->setDataDescription(_xmlDesc);
-    ip->setDataDescription(_xmlDesc);
-    mac->setDataDescription(_xmlDesc);
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _dns, _ip, _mac;
+    _network = doc.firstChildElement("network");
+    _dns = _network.firstChildElement("dns");
+    _ip = _network.firstChildElement("ip");
+    _mac = _network.firstChildElement("mac");
+    if ( !_network.isNull() ) {
+        if ( !_dns.isNull() ) {
+            setUsage(true);
+            dns->setDataDescription(_xmlDesc);
+        };
+        if ( !_ip.isNull() ) {
+            setUsage(true);
+            ip->setDataDescription(_xmlDesc);
+        };
+        if ( !_mac.isNull() ) {
+            setUsage(true);
+            mac->setDataDescription(_xmlDesc);
+        };
+    };
 }
 void Addressing_Widget::ipv6Changed(bool state)
 {

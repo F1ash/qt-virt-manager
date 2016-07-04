@@ -3,6 +3,7 @@
 _IPvX::_IPvX(QWidget *parent, bool hasDHCP, uint _ver) :
     _QWidget(parent), ver(_ver)
 {
+    dhcpExistInNetwork = hasDHCP;
     addressL = new QLabel("IP:", this);
     address = new QLineEdit(this);
     significantBitsL = new QComboBox(this);
@@ -45,7 +46,7 @@ definition a DHCP server on the network");
     connect(significantBitsL, SIGNAL(currentIndexChanged(int)),
             this, SLOT(significantBitsChanged(int)));
 }
-bool _IPvX::getDHCPState() const
+bool _IPvX::getDHCPUsageState() const
 {
     return useDHCP->isUsed();
 }
