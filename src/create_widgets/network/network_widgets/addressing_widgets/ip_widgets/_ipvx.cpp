@@ -3,6 +3,7 @@
 _IPvX::_IPvX(QWidget *parent, bool hasDHCP, uint _ver) :
     _QWidget(parent), ver(_ver)
 {
+    networkHasDHCP = hasDHCP;
     addressL = new QLabel("IP:", this);
     address = new QLineEdit(this);
     significantBitsL = new QComboBox(this);
@@ -33,7 +34,7 @@ _IPvX::_IPvX(QWidget *parent, bool hasDHCP, uint _ver) :
     useDHCP->setToolTip(
     "WARNING: allows one (each IPv4 and IPv6)\n\
 definition a DHCP server on the network");
-    updateDHCPUsage(hasDHCP);
+    updateDHCPUsage(networkHasDHCP);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWidget);
     commonLayout->addWidget(gatewayWidget);
@@ -45,7 +46,7 @@ definition a DHCP server on the network");
     connect(significantBitsL, SIGNAL(currentIndexChanged(int)),
             this, SLOT(significantBitsChanged(int)));
 }
-bool _IPvX::getDHCPState() const
+bool _IPvX::getDHCPUsageState() const
 {
     return useDHCP->isUsed();
 }

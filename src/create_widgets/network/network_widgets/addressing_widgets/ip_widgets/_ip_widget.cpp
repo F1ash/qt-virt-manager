@@ -41,7 +41,7 @@ void _IP_Widget::tabToClose()
         // uncheck DHCP if was checked
         _IPvX *wdg = static_cast<_IPvX*>(
                         sets->currentWidget());
-        if ( nullptr!=wdg && wdg->getDHCPState() ) {
+        if ( nullptr!=wdg && wdg->getDHCPUsageState() ) {
             emit dhcpUsageChanged(wdg->ver, tabIdx, false);
         };
     };
@@ -161,7 +161,7 @@ void _IP_Widget::ipv6StateChanged(bool state)
     // uncheck DHCP if was checked
     _IPvX *wdg = static_cast<_IPvX*>(
                     sets->widget( (state)? 0:1 ));
-    if ( nullptr!=wdg && wdg->getDHCPState() ) {
+    if ( nullptr!=wdg && wdg->getDHCPUsageState() ) {
         wdg->updateDHCPUsage(false);
         emit dhcpUsageChanged(wdg->ver, tabIdx, false);
     };

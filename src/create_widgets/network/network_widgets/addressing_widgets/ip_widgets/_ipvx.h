@@ -18,8 +18,9 @@ public:
     QSpinBox        *metric;
     DHCP_Widget     *useDHCP;
     QVBoxLayout     *commonLayout;
-    bool             getDHCPState() const;
+    bool             getDHCPUsageState() const;
     const uint       ver;
+    bool             networkHasDHCP;
 
 signals:
     void             dhcpUsageChanged(uint, bool);
