@@ -33,7 +33,7 @@ QDomDocument Desktop_Graphics::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Desktop_Graphics::setDataDescription(QString &_xmlDesc)
+void Desktop_Graphics::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     QDomElement _device;

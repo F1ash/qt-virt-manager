@@ -66,7 +66,7 @@ QDomDocument UdpWidget::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void UdpWidget::setDataDescription(QString &xmlDesc)
+void UdpWidget::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

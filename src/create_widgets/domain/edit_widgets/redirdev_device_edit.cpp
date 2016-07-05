@@ -16,7 +16,7 @@ RedirDevDevice_Edit::RedirDevDevice_Edit(QWidget *parent, virConnectPtr *connPtr
 }
 
 /* public slots */
-void RedirDevDevice_Edit::setDataDescription(QString &xmlDesc)
+void RedirDevDevice_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

@@ -92,7 +92,7 @@ QDomDocument File_Disk::getDataDocument() const
     //qDebug()<<doc.toByteArray(4).data()<<"file_disk";
     return doc;
 }
-void File_Disk::setDataDescription(QString &xmlDesc)
+void File_Disk::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

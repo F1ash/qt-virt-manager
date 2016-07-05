@@ -91,6 +91,8 @@ void CreateVirtNetwork::readCapabilities()
         setCentralWidget(advancedWdg);
         setEnabled(true);
     };
+    connect(centralWidget(), SIGNAL(newName(const QString&)),
+            this, SLOT(setNewWindowTitle(const QString&)));
     readDataLists();
 }
 void CreateVirtNetwork::readDataLists()
@@ -134,7 +136,7 @@ void CreateVirtNetwork::set_Result()
     };
     close();
 }
-void CreateVirtNetwork::setNewWindowTitle(QString _name)
+void CreateVirtNetwork::setNewWindowTitle(const QString &_name)
 {
     QString connName = task.srcConName;
     setWindowTitle(

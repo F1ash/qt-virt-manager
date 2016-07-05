@@ -13,7 +13,7 @@ public:
 signals:
 
 public slots:
-    void setDataDescription(QString&);
+    void setDataDescription(const QString&);
 };
 
 #endif // EMULATOR_EDIT_H

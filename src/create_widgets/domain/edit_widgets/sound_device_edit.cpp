@@ -16,7 +16,7 @@ SoundDevice_Edit::SoundDevice_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void SoundDevice_Edit::setDataDescription(QString &xmlDesc)
+void SoundDevice_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

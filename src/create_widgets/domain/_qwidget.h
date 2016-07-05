@@ -34,7 +34,7 @@ signals:
 
 public slots:
     virtual QDomDocument     getDataDocument() const;
-    virtual void             setDataDescription(QString&);
+    virtual void             setDataDescription(const QString&);
     virtual bool             closeDataEdit();
     virtual void             setInitState();
 };

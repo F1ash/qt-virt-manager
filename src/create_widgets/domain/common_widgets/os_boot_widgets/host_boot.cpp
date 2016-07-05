@@ -44,7 +44,7 @@ QDomDocument Host_Boot::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void Host_Boot::setDataDescription(QString &_xmlDesc)
+void Host_Boot::setDataDescription(const QString &_xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

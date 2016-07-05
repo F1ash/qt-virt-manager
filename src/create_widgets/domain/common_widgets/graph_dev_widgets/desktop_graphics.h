@@ -17,7 +17,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
-    void             setDataDescription(QString&);
+    void             setDataDescription(const QString&);
 };
 
 #endif // DESKTOP_GRAPHICS_H

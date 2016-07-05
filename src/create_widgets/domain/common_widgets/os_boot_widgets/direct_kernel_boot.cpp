@@ -86,7 +86,7 @@ QDomDocument Direct_Kernel_Boot::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void Direct_Kernel_Boot::setDataDescription(QString &_xmlDesc)
+void Direct_Kernel_Boot::setDataDescription(const QString &_xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

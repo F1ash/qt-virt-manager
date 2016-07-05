@@ -44,7 +44,7 @@ QDomDocument RAMFsType::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void RAMFsType::setDataDescription(QString &xmlDesc)
+void RAMFsType::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

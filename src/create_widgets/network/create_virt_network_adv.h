@@ -26,6 +26,7 @@ public:
 
 signals:
     void             errorMsg(QString&);
+    void             newName(const QString&);
 
 private:
     QSettings        settings;

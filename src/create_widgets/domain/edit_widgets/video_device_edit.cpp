@@ -16,7 +16,7 @@ VideoDevice_Edit::VideoDevice_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void VideoDevice_Edit::setDataDescription(QString &xmlDesc)
+void VideoDevice_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

@@ -12,7 +12,7 @@ SmartCardDevice_Edit::SmartCardDevice_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void SmartCardDevice_Edit::setDataDescription(QString &xmlDesc)
+void SmartCardDevice_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc, channelDoc;

@@ -2,7 +2,7 @@
 
 /*
  * IP_Widget is set of IP_Elements,
- * which is a IP or stata route addressing.
+ * which is a IP or state route addressing.
  */
 
 IP_Widget::IP_Widget(QWidget *parent, QString tag) :
@@ -36,7 +36,7 @@ QDomDocument IP_Widget::getDataDocument() const
     };
     return doc;
 }
-void IP_Widget::setDataDescription(QString &_xmlDesc)
+void IP_Widget::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);
@@ -82,8 +82,8 @@ void IP_Widget::updateDHCPUsage(uint ver, uint idx, bool state)
     default:
         break;
     };
-    qDebug()<<"IPv4:"<<IPv4HasDHCP;
-    qDebug()<<"IPv6:"<<IPv6HasDHCP;
+    //qDebug()<<"IPv4:"<<IPv4HasDHCP;
+    //qDebug()<<"IPv6:"<<IPv6HasDHCP;
 
     for (int i=0; i<ipSet->count(); i++) {
         if ( i==idx ) continue;

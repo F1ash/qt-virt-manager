@@ -12,7 +12,7 @@ public:
 signals:
 
 public slots:
-    void     setDataDescription(QString&);
+    void     setDataDescription(const QString&);
 };
 
 #endif // BCH_HOST_DEVICE_EDIT_H

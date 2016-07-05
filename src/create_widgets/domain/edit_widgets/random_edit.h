@@ -12,7 +12,7 @@ public:
 signals:
 
 public slots:
-    void setDataDescription(QString&);
+    void setDataDescription(const QString&);
 };
 
 #endif // RANDOM_EDIT_H

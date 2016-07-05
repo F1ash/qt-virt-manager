@@ -114,7 +114,7 @@ QDomDocument BIOS_Boot::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void BIOS_Boot::setDataDescription(QString &xmlDesc)
+void BIOS_Boot::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

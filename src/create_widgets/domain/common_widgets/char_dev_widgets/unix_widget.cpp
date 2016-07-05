@@ -50,7 +50,7 @@ void UnixWidget::setPath(QString text)
 {
     path->setText(text);
 }
-void UnixWidget::setDataDescription(QString &xmlDesc)
+void UnixWidget::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

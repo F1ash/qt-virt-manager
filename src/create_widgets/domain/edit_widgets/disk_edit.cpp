@@ -12,7 +12,7 @@ Disk_Edit::Disk_Edit(QWidget *parent, virConnectPtr *connPtrPtr) :
 }
 
 /* public slots */
-void Disk_Edit::setDataDescription(QString &xmlDesc)
+void Disk_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

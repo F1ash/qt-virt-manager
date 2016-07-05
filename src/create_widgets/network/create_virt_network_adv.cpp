@@ -96,6 +96,8 @@ CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
             this, SLOT(networkTypeChanged(bool)));
     connect(ipv6, SIGNAL(toggled(bool)),
             this, SLOT(ipv6Changed(bool)));
+    connect(networkName, SIGNAL(textChanged(QString)),
+            this, SIGNAL(newName(QString)));
 }
 CreateVirtNetwork_Adv::~CreateVirtNetwork_Adv()
 {

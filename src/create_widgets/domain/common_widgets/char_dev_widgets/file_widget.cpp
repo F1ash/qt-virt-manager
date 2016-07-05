@@ -35,7 +35,7 @@ QDomDocument FileWidget::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void FileWidget::setDataDescription(QString &xmlDesc)
+void FileWidget::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

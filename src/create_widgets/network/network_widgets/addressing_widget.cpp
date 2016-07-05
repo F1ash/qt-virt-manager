@@ -25,7 +25,7 @@ QDomDocument Addressing_Widget::getDataDocument() const
         doc.appendChild(mac->getDataDocument());
     return doc;
 }
-void Addressing_Widget::setDataDescription(QString &_xmlDesc)
+void Addressing_Widget::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

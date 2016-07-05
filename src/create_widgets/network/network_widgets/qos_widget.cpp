@@ -73,7 +73,7 @@ QDomDocument QoS_Widget::getDataDocument() const
     doc.appendChild(_bandwidth);
     return doc;
 }
-void QoS_Widget::setDataDescription(QString &_xmlDesc)
+void QoS_Widget::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

@@ -66,7 +66,7 @@ QDomDocument Userspace_SLIRP::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Userspace_SLIRP::setDataDescription(QString &xmlDesc)
+void Userspace_SLIRP::setDataDescription(const QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);

@@ -6,7 +6,7 @@ Emulator_Edit::Emulator_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void Emulator_Edit::setDataDescription(QString &xmlDesc)
+void Emulator_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

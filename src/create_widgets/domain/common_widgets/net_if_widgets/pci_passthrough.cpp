@@ -105,7 +105,7 @@ QDomDocument PCI_Passthrough::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void PCI_Passthrough::setDataDescription(QString &xmlDesc)
+void PCI_Passthrough::setDataDescription(const QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);

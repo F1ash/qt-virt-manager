@@ -41,7 +41,7 @@ QDomDocument SecurityLabel::getDataDocument() const
 {
     return secLabels->getDataDocument();
 }
-void SecurityLabel::setDataDescription(QString &_xmlDesc)
+void SecurityLabel::setDataDescription(const QString &_xmlDesc)
 {
     currentDeviceXMLDesc = _xmlDesc;
     readXMLDesciption(currentDeviceXMLDesc);

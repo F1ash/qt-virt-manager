@@ -14,7 +14,7 @@ CharDevice_Edit::CharDevice_Edit(
 }
 
 /* public slots */
-void CharDevice_Edit::setDataDescription(QString &xmlDesc)
+void CharDevice_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

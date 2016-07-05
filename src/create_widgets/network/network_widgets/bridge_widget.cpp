@@ -64,7 +64,7 @@ QDomDocument Bridge_Widget::getDataDocument() const
     doc.appendChild(_bridge);
     return doc;
 }
-void Bridge_Widget::setDataDescription(QString &_xmlDesc)
+void Bridge_Widget::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

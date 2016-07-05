@@ -24,7 +24,7 @@ Random_Edit::Random_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void Random_Edit::setDataDescription(QString &xmlDesc)
+void Random_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

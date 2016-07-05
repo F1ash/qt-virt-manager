@@ -83,7 +83,7 @@ QDomDocument Forward_Widget::getDataDocument() const
     doc.appendChild(_forward);
     return doc;
 }
-void Forward_Widget::setDataDescription(QString &_xmlDesc)
+void Forward_Widget::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

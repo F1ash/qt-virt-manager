@@ -22,7 +22,7 @@ private:
 
 public slots:
     QDomDocument         getDataDocument() const;
-    void                 setDataDescription(QString&);
+    void                 setDataDescription(const QString&);
 };
 
 #endif // USB_HOST_DEVICE_EDIT_H

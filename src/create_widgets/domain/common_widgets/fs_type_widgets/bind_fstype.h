@@ -13,7 +13,7 @@ public:
 
 public slots:
     QDomDocument     getDataDocument() const;
-    void             setDataDescription(QString&);
+    void             setDataDescription(const QString&);
 };
 
 #endif // BIND_FSTYPE_H

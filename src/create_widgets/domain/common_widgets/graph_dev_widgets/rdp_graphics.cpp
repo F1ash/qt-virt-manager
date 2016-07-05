@@ -47,7 +47,7 @@ QDomDocument RDP_Graphics::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void RDP_Graphics::setDataDescription(QString &_xmlDesc)
+void RDP_Graphics::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     QDomElement _device;

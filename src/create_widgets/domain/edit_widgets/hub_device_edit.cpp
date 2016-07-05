@@ -8,7 +8,7 @@ HubDevice_Edit::HubDevice_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void HubDevice_Edit::setDataDescription(QString &xmlDesc)
+void HubDevice_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

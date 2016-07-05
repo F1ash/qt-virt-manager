@@ -91,7 +91,7 @@ QDomDocument _IP_Widget::getDataDocument() const
     doc.appendChild(_addrElement);
     return doc;
 }
-void _IP_Widget::setDataDescription(QString &_xmlDesc)
+void _IP_Widget::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);
@@ -115,7 +115,7 @@ void _IP_Widget::setDataDescription(QString &_xmlDesc)
         if        ( _el.tagName()=="ip" ) {
             // if dhcp used then set it
             QDomElement _dhcp = _el.firstChildElement("dhcp");
-            if ( !_dhcp.isNull() ) {
+            if ( !_dhcp.isNull() && !wdg->isNetworkHasDHCP() ) {
                 QDomDocument _doc;
                 _doc.setContent(QString());
                 _doc.appendChild(_dhcp.cloneNode());
@@ -155,10 +155,12 @@ void _IP_Widget::updateDHCPUsage(uint ver, bool state)
 /* private slots */
 void _IP_Widget::ipv6StateChanged(bool state)
 {
-    // uncheck StateRoute
-    //staticRoute->setChecked(false);
+    // uncheck StateRoute if was checked
+    // because IP_Element is unused
+    staticRoute->setChecked(false);
     sets->setCurrentIndex( (state)? 1:0 );
     // uncheck DHCP if was checked
+    // because IP_Element is unused
     _IPvX *wdg = static_cast<_IPvX*>(
                     sets->widget( (state)? 0:1 ));
     if ( nullptr!=wdg && wdg->getDHCPUsageState() ) {

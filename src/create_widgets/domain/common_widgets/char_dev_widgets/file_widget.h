@@ -17,7 +17,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
-    void             setDataDescription(QString&);
+    void             setDataDescription(const QString&);
 };
 
 #endif // FILE_WIDGET_H

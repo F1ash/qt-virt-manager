@@ -134,7 +134,7 @@ QDomDocument SCSI_Host_Device_Edit::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void SCSI_Host_Device_Edit::setDataDescription(QString &xmlDesc)
+void SCSI_Host_Device_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

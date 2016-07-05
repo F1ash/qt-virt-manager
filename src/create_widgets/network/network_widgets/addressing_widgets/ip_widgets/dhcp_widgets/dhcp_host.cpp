@@ -30,7 +30,7 @@ QDomDocument DHCP_Host::getDataDocument() const
     };
     return doc;
 }
-void DHCP_Host::setDataDescription(QString &_xmlDesc)
+void DHCP_Host::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

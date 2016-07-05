@@ -33,7 +33,7 @@ QDomDocument Domain_Widget::getDataDocument() const
     };
     return doc;
 }
-void Domain_Widget::setDataDescription(QString &_xmlDesc)
+void Domain_Widget::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

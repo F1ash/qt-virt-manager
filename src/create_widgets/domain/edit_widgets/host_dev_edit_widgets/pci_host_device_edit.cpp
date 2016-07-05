@@ -43,7 +43,7 @@ QDomDocument PCI_Host_Device_Edit::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void PCI_Host_Device_Edit::setDataDescription(QString &xmlDesc)
+void PCI_Host_Device_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

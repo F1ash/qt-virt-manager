@@ -19,7 +19,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
-    void             setDataDescription(QString&);
+    void             setDataDescription(const QString&);
 
 private slots:
     void             setDirPath();

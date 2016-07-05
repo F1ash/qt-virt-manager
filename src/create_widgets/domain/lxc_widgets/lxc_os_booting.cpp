@@ -127,7 +127,7 @@ QDomDocument LXC_OSBooting::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void LXC_OSBooting::setDataDescription(QString &xmlDesc)
+void LXC_OSBooting::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

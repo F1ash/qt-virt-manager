@@ -32,7 +32,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
-    void             setDataDescription(QString&);
+    void             setDataDescription(const QString&);
     void             updateDHCPUsage(uint, bool);
 
 private slots:

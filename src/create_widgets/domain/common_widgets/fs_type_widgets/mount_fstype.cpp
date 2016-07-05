@@ -64,7 +64,7 @@ QDomDocument MountFsType::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void MountFsType::setDataDescription(QString &xmlDesc)
+void MountFsType::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

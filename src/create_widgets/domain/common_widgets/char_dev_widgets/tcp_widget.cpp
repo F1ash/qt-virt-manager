@@ -75,7 +75,7 @@ QDomDocument TcpWidget::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void TcpWidget::setDataDescription(QString &xmlDesc)
+void TcpWidget::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

@@ -8,7 +8,7 @@ ConsoleDevice_Edit::ConsoleDevice_Edit(QWidget *parent, virConnectPtr *connPtrPt
 }
 
 /* public slots */
-void ConsoleDevice_Edit::setDataDescription(QString &xmlDesc)
+void ConsoleDevice_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

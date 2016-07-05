@@ -13,7 +13,7 @@ NetInterfaces_Edit::NetInterfaces_Edit(
 }
 
 /* public slots */
-void NetInterfaces_Edit::setDataDescription(QString &xmlDesc)
+void NetInterfaces_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QString _string;

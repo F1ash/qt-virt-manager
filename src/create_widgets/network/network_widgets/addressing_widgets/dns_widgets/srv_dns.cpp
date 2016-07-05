@@ -70,7 +70,7 @@ QDomDocument SRV_DNS::getDataDocument() const
     };
     return doc;
 }
-void SRV_DNS::setDataDescription(QString &_xmlDesc)
+void SRV_DNS::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

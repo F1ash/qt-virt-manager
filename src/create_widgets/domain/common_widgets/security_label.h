@@ -21,7 +21,7 @@ public slots:
     bool             isUsed() const;
     void             setUsage(bool);
     QDomDocument     getDataDocument() const;
-    void             setDataDescription(QString&);
+    void             setDataDescription(const QString&);
 
 private slots:
     void             readXMLDesciption();

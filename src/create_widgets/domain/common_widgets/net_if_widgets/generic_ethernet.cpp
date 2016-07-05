@@ -72,7 +72,7 @@ QDomDocument Generic_Ethernet::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Generic_Ethernet::setDataDescription(QString &xmlDesc)
+void Generic_Ethernet::setDataDescription(const QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);

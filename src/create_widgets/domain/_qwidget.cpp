@@ -10,7 +10,7 @@ QDomDocument _QWidget::getDataDocument() const
 {
     return QDomDocument();
 }
-void _QWidget::setDataDescription(QString &xmlDesc)
+void _QWidget::setDataDescription(const QString &xmlDesc)
 {
 
 }

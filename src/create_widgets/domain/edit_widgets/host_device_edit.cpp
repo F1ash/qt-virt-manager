@@ -18,7 +18,7 @@ QDomDocument HostDevice_Edit::getDataDocument() const
     if ( nullptr!=wdg ) doc = wdg->getDataDocument();
     return doc;
 }
-void HostDevice_Edit::setDataDescription(QString &xmlDesc)
+void HostDevice_Edit::setDataDescription(const QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);

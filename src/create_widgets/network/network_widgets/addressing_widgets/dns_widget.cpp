@@ -43,7 +43,7 @@ QDomDocument DNS_Widget::getDataDocument() const
     doc.appendChild(_dns);
     return doc;
 }
-void DNS_Widget::setDataDescription(QString &_xmlDesc)
+void DNS_Widget::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

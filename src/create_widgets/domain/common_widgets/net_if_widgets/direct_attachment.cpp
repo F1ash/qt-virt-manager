@@ -91,7 +91,7 @@ QDomDocument DirectAttachment::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void DirectAttachment::setDataDescription(QString &xmlDesc)
+void DirectAttachment::setDataDescription(const QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);

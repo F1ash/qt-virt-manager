@@ -50,6 +50,10 @@ bool _IPvX::getDHCPUsageState() const
 {
     return useDHCP->isUsed();
 }
+bool _IPvX::isNetworkHasDHCP() const
+{
+    return networkHasDHCP;
+}
 
 /* public slots */
 void _IPvX::setStaticRouteMode(bool state)
@@ -58,10 +62,14 @@ void _IPvX::setStaticRouteMode(bool state)
 void _IPvX::setGatewayEnabled(bool state)
 {
     gatewayWidget->setEnabled(state);
+    if ( !state && networkHasDHCP ) {
+        return;
+    };
     useDHCP->setFreez(state);
 }
 void _IPvX::updateDHCPUsage(bool state)
 {
+    networkHasDHCP = state;
     useDHCP->setFreez(state);
 }
 

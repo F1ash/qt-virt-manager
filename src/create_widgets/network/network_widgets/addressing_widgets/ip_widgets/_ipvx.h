@@ -19,13 +19,14 @@ public:
     DHCP_Widget     *useDHCP;
     QVBoxLayout     *commonLayout;
     bool             getDHCPUsageState() const;
+    bool             isNetworkHasDHCP() const;
     const uint       ver;
-    bool             networkHasDHCP;
 
 signals:
     void             dhcpUsageChanged(uint, bool);
 
 private:
+    bool             networkHasDHCP;
     QLabel          *addressL,
                     *gatewayL, *metricL;
     QGridLayout     *baselayout, *gatewayLayout;

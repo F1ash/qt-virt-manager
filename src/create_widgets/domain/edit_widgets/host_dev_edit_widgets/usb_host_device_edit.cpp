@@ -74,7 +74,7 @@ QDomDocument USB_Host_Device_Edit::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void USB_Host_Device_Edit::setDataDescription(QString &xmlDesc)
+void USB_Host_Device_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

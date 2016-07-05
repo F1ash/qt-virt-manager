@@ -14,7 +14,7 @@ public:
 signals:
 
 public slots:
-    void         setDataDescription(QString&);
+    void         setDataDescription(const QString&);
 };
 
 #endif // NET_INTERFACES_EDIT_H

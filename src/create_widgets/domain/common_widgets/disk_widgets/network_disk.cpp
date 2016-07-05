@@ -132,7 +132,7 @@ QDomDocument Network_Disk::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Network_Disk::setDataDescription(QString &xmlDesc)
+void Network_Disk::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

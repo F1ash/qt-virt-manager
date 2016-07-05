@@ -80,7 +80,7 @@ QDomDocument TCP_Tunnel::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void TCP_Tunnel::setDataDescription(QString &xmlDesc)
+void TCP_Tunnel::setDataDescription(const QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);

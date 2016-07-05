@@ -20,7 +20,7 @@ QDomDocument PtyWidget::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void PtyWidget::setDataDescription(QString &xmlDesc)
+void PtyWidget::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

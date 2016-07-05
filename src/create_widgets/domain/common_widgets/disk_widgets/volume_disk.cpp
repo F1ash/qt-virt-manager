@@ -125,7 +125,7 @@ QDomDocument Volume_Disk::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Volume_Disk::setDataDescription(QString &xmlDesc)
+void Volume_Disk::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

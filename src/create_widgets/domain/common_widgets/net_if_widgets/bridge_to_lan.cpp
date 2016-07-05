@@ -99,7 +99,7 @@ QDomDocument Bridge_to_LAN::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Bridge_to_LAN::setDataDescription(QString &xmlDesc)
+void Bridge_to_LAN::setDataDescription(const QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);

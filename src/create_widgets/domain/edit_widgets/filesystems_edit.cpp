@@ -13,7 +13,7 @@ FileSystems_Edit::FileSystems_Edit(
 }
 
 /* public slots */
-void FileSystems_Edit::setDataDescription(QString &xmlDesc)
+void FileSystems_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

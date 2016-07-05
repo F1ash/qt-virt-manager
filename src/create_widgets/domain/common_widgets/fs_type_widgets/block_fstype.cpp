@@ -65,7 +65,7 @@ QDomDocument BlockFsType::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void BlockFsType::setDataDescription(QString &xmlDesc)
+void BlockFsType::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

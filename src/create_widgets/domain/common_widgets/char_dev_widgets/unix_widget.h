@@ -20,7 +20,7 @@ private:
 public slots:
     QDomDocument     getDataDocument() const;
     void             setPath(QString);
-    void             setDataDescription(QString&);
+    void             setDataDescription(const QString&);
 };
 
 #endif // UNIX_WIDGET_H

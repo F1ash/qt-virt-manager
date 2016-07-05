@@ -12,7 +12,7 @@ GraphicsDevice_Edit::GraphicsDevice_Edit(
 }
 
 /* public slots */
-void GraphicsDevice_Edit::setDataDescription(QString &xmlDesc)
+void GraphicsDevice_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

@@ -22,7 +22,7 @@ QDomDocument Forwarder::getDataDocument() const
     };
     return doc;
 }
-void Forwarder::setDataDescription(QString &_xmlDesc)
+void Forwarder::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

@@ -46,7 +46,7 @@ QDomDocument SDL_Graphics::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void SDL_Graphics::setDataDescription(QString &_xmlDesc)
+void SDL_Graphics::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     QDomElement _device;

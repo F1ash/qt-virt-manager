@@ -36,7 +36,7 @@ QDomDocument Host_DNS::getDataDocument() const
     doc.appendChild(_host);
     return doc;
 }
-void Host_DNS::setDataDescription(QString &_xmlDesc)
+void Host_DNS::setDataDescription(const QString &_xmlDesc)
 {
 }
 void Host_DNS::addItem()

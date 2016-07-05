@@ -59,7 +59,7 @@ public slots:
     void             readDataLists();
     bool             buildXMLDescription();
     void             set_Result();
-    void             setNewWindowTitle(QString);
+    void             setNewWindowTitle(const QString&);
     void             sendMsg(QString&);
 };
 

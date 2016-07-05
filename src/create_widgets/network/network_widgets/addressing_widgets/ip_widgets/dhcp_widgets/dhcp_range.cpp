@@ -27,7 +27,7 @@ QDomDocument DHCP_Range::getDataDocument() const
     };
     return doc;
 }
-void DHCP_Range::setDataDescription(QString &_xmlDesc)
+void DHCP_Range::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

@@ -555,7 +555,7 @@ QDomDocument Spice_Graphics::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Spice_Graphics::setDataDescription(QString &_xmlDesc)
+void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
 {
     //qDebug()<<_xmlDesc;
     QDomDocument doc;

@@ -60,7 +60,7 @@ QDomDocument ChannelDevice::getDataDocument() const
     //qDebug()<<doc.toByteArray(4).data();
     return doc;
 }
-void ChannelDevice::setDataDescription(QString &xmlDesc)
+void ChannelDevice::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

@@ -14,7 +14,7 @@ public:
 signals:
 
 public slots:
-    void setDataDescription(QString&);
+    void setDataDescription(const QString&);
 };
 
 #endif // CONSOLED_EVICE_EDIT_H

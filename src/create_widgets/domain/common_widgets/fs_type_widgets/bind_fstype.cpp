@@ -45,7 +45,7 @@ QDomDocument BindFsType::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void BindFsType::setDataDescription(QString &xmlDesc)
+void BindFsType::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

@@ -73,7 +73,7 @@ QDomDocument MultiCast_Tunnel::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void MultiCast_Tunnel::setDataDescription(QString &xmlDesc)
+void MultiCast_Tunnel::setDataDescription(const QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);

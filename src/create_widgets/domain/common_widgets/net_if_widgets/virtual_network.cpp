@@ -115,7 +115,7 @@ QDomDocument Virtual_Network::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Virtual_Network::setDataDescription(QString &xmlDesc)
+void Virtual_Network::setDataDescription(const QString &xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(xmlDesc);

@@ -19,7 +19,7 @@ QDomDocument MAC_Widget::getDataDocument() const
     doc.appendChild(_mac);
     return doc;
 }
-void MAC_Widget::setDataDescription(QString &_xmlDesc)
+void MAC_Widget::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);

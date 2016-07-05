@@ -74,7 +74,7 @@ QDomDocument Dir_Disk::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Dir_Disk::setDataDescription(QString &xmlDesc)
+void Dir_Disk::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

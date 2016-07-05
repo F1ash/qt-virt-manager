@@ -15,7 +15,7 @@ MemBalloon_Edit::MemBalloon_Edit(
 }
 
 /* public slots */
-void MemBalloon_Edit::setDataDescription(QString &xmlDesc)
+void MemBalloon_Edit::setDataDescription(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;
