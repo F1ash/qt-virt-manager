@@ -14,6 +14,7 @@ public:
     QVBoxLayout         *baseLayout;
     bool                 isUsed() const;
     bool                 isFreezed() const;
+    void                 setUsageToolTip(const QString&);
 
 signals:
     void                 toggled(bool);

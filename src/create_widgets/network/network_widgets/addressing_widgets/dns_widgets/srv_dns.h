@@ -13,13 +13,13 @@ public:
 
 private:
     QLabel          *serviceL, *domainL, *targetL,
-                    *portL, *priorityL, *weightL,
-                    *protocolL;
+                    *portL, *priorityL, *weightL;
     QLineEdit       *service, *domain, *target;
     QSpinBox        *port, *priority, *weight;
     QComboBox       *protocol;
-    QGridLayout     *setsLayout;
-    QWidget         *sets;
+    QHBoxLayout     *mandatoryLayout;
+    QGridLayout     *lettersLayout, *numbersLayout;
+    QWidget         *mandatory, *letters, *numbers;
 
 public slots:
     QDomDocument     getDataDocument() const;

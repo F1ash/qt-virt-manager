@@ -28,6 +28,10 @@ bool _Checked_Widget::isFreezed() const
 {
     return ( !usage->isChecked() && !isEnabled() );
 }
+void _Checked_Widget::setUsageToolTip(const QString &toolTip)
+{
+    usage->setToolTip(toolTip);
+}
 
 /* public slots */
 void _Checked_Widget::setUsage(bool state)

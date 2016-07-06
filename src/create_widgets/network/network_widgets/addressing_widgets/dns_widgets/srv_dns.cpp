@@ -6,7 +6,6 @@ SRV_DNS::SRV_DNS(QWidget *parent, QString tag) :
     serviceL = new QLabel("Service", this);
     domainL = new QLabel("Domain", this);
     targetL = new QLabel("Target", this);
-    protocolL = new QLabel("Protocol", this);
     portL = new QLabel("Port", this);
     priorityL = new QLabel("Priority", this);
     weightL = new QLabel("Weight", this);
@@ -24,24 +23,31 @@ SRV_DNS::SRV_DNS(QWidget *parent, QString tag) :
     priority->setRange(0, 1000);
     weight = new QSpinBox(this);
     weight->setRange(0, 1000);
-    setsLayout = new QGridLayout();
-    setsLayout->addWidget(serviceL, 0, 0);
-    setsLayout->addWidget(service, 0, 1);
-    setsLayout->addWidget(protocolL, 1, 0);
-    setsLayout->addWidget(protocol, 1, 1);
-    setsLayout->addWidget(domainL, 2, 0);
-    setsLayout->addWidget(domain, 2, 1);
-    setsLayout->addWidget(targetL, 3, 0);
-    setsLayout->addWidget(target, 3, 1);
-    setsLayout->addWidget(portL, 4, 0);
-    setsLayout->addWidget(port, 4, 1);
-    setsLayout->addWidget(priorityL, 5, 0);
-    setsLayout->addWidget(priority, 5, 1);
-    setsLayout->addWidget(weightL, 6, 0);
-    setsLayout->addWidget(weight, 6, 1);
-    sets = new QWidget(this);
-    sets->setLayout(setsLayout);
-    baseLayout->insertWidget(1, sets);
+    mandatoryLayout = new QHBoxLayout();
+    mandatoryLayout->addWidget(serviceL);
+    mandatoryLayout->addWidget(service);
+    mandatoryLayout->addWidget(protocol);
+    mandatory = new QWidget(this);
+    mandatory->setLayout(mandatoryLayout);
+    lettersLayout = new QGridLayout();
+    lettersLayout->addWidget(domainL, 0, 0);
+    lettersLayout->addWidget(targetL, 0, 1);
+    lettersLayout->addWidget(domain, 1, 0);
+    lettersLayout->addWidget(target, 1, 1);
+    numbersLayout = new QGridLayout();
+    numbersLayout->addWidget(portL, 0, 0);
+    numbersLayout->addWidget(priorityL, 0, 1);
+    numbersLayout->addWidget(weightL, 0, 2);
+    numbersLayout->addWidget(port, 1, 0);
+    numbersLayout->addWidget(priority, 1, 1);
+    numbersLayout->addWidget(weight, 1, 2);
+    letters = new QWidget(this);
+    letters->setLayout(lettersLayout);
+    numbers = new QWidget(this);
+    numbers->setLayout(numbersLayout);
+    baseLayout->insertWidget(1, mandatory);
+    baseLayout->insertWidget(2, letters);
+    panelLayout->insertWidget(1, numbers);
 }
 
 /* public slots */
@@ -74,13 +80,36 @@ void SRV_DNS::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);
-    QDomElement _network, _srv;
-    _network = doc.firstChildElement("network");
-    if ( !_network.isNull() ) {
-        _srv = _network.firstChildElement("srv");
-        if ( !_srv.isNull() ) {
-            setUsage(true);
+    QDomElement _network, _dns, _el;
+    _network = doc.documentElement();
+    _dns = _network.firstChildElement("dns");
+    QDomNode _n = _dns.firstChild();
+    while ( !_n.isNull() ) {
+        setUsage(true);
+        _el = _n.toElement();
+        if ( !_el.isNull() ) {
+            if ( _el.tagName()=="srv" ) {
+                service->setText(
+                            _el.attribute("service"));
+                domain->setText(
+                            _el.attribute("domain"));
+                target->setText(
+                            _el.attribute("target"));
+                QString _prot, _port, _prior, _w;
+                _prot = _el.attribute("protocol");
+                _port = _el.attribute("port");
+                _prior = _el.attribute("priority");
+                _w = _el.attribute("weight");
+                int idx = protocol->findText(_prot);
+                if ( idx<0 ) idx = 0;
+                protocol->setCurrentIndex(idx);
+                port->setValue(_port.toInt());
+                priority->setValue(_prior.toInt());
+                weight->setValue(_w.toInt());
+                addItem();
+            };
         };
+        _n = _n.nextSibling();
     };
 }
 void SRV_DNS::addItem()
@@ -110,5 +139,8 @@ void SRV_DNS::addItem()
         service->clear();
         domain->clear();
         target->clear();
+        port->clear();
+        priority->clear();
+        weight->clear();
     };
 }

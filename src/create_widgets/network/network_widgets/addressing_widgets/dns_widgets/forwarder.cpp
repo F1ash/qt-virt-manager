@@ -26,13 +26,21 @@ void Forwarder::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);
-    QDomElement _network, _fwd;
-    _network = doc.firstChildElement("network");
-    if ( !_network.isNull() ) {
-        _fwd = _network.firstChildElement("forwarder");
-        if ( !_fwd.isNull() ) {
-            setUsage(true);
+    QDomElement _network, _dns, _el;
+    _network = doc.documentElement();
+    _dns = _network.firstChildElement("dns");
+    QDomNode _n = _dns.firstChild();
+    while ( !_n.isNull() ) {
+        setUsage(true);
+        _el = _n.toElement();
+        if ( !_el.isNull() ) {
+            if ( _el.tagName()=="forwarder" ) {
+                frwds->setText(
+                            _el.attribute("addr"));
+                addItem();
+            };
         };
+        _n = _n.nextSibling();
     };
 }
 void Forwarder::addItem()

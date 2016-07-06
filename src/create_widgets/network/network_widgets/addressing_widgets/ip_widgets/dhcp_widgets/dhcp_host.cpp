@@ -10,8 +10,8 @@ DHCP_Host::DHCP_Host(QWidget *parent, QString tag) :
     mac = new QLineEdit(this);
     mac->setPlaceholderText("MAC");
     baseLayout->insertWidget(1, name);
-    baseLayout->insertWidget(2, ip);
-    baseLayout->insertWidget(3, mac);
+    panelLayout->insertWidget(1, ip);
+    panelLayout->insertWidget(2, mac);
 }
 
 /* public slots */

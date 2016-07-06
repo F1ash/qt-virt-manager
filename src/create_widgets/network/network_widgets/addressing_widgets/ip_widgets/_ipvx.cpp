@@ -31,7 +31,7 @@ _IPvX::_IPvX(QWidget *parent, bool hasDHCP, uint _ver) :
     gatewayWidget->setLayout(gatewayLayout);
     gatewayWidget->setEnabled(false);
     useDHCP = new DHCP_Widget(this, "Use DHCP");
-    useDHCP->setToolTip(
+    useDHCP->setUsageToolTip(
     "WARNING: allows one (each IPv4 and IPv6)\n\
 definition a DHCP server on the network");
     updateDHCPUsage(networkHasDHCP);

@@ -7,8 +7,8 @@ DHCP_Range::DHCP_Range(QWidget *parent, QString tag) :
     start->setPlaceholderText("start IP");
     end = new QLineEdit(this);
     end->setPlaceholderText("end IP");
-    baseLayout->insertWidget(1, start);
-    baseLayout->insertWidget(2, end);
+    panelLayout->insertWidget(1, start);
+    panelLayout->insertWidget(2, end);
 }
 
 /* public slots */

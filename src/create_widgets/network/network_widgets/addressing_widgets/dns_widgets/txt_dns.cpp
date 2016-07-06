@@ -32,13 +32,23 @@ void TXT_DNS::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);
-    QDomElement _network, _txt;
-    _network = doc.firstChildElement("network");
-    if ( !_network.isNull() ) {
-        _txt = _network.firstChildElement("txt");
-        if ( !_txt.isNull() ) {
-            setUsage(true);
+    QDomElement _network, _dns, _el;
+    _network = doc.documentElement();
+    _dns = _network.firstChildElement("dns");
+    QDomNode _n = _dns.firstChild();
+    while ( !_n.isNull() ) {
+        setUsage(true);
+        _el = _n.toElement();
+        if ( !_el.isNull() ) {
+            if ( _el.tagName()=="txt" ) {
+                hostName->setText(
+                            _el.attribute("name"));
+                hostValue->setText(
+                            _el.attribute("value"));
+                addItem();
+            };
         };
+        _n = _n.nextSibling();
     };
 }
 void TXT_DNS::addItem()

@@ -38,6 +38,28 @@ QDomDocument Host_DNS::getDataDocument() const
 }
 void Host_DNS::setDataDescription(const QString &_xmlDesc)
 {
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _network, _dns, _host, _el;
+    _network = doc.documentElement();
+    _dns = _network.firstChildElement("dns");
+    _host = _dns.firstChildElement("host");
+    if ( !_host.isNull() ) {
+        setUsage(true);
+        hostIP->setText(_host.attribute("ip"));
+        QDomNode _n = _host.firstChild();
+        while ( !_n.isNull() ) {
+            _el = _n.toElement();
+            if ( !_el.isNull() ) {
+                if ( _el.tagName()=="hostname" ) {
+                    hostName->setText(
+                                _el.text());
+                    addItem();
+                };
+            };
+            _n = _n.nextSibling();
+        };
+    };
 }
 void Host_DNS::addItem()
 {
