@@ -23,10 +23,12 @@ public:
             QWidget *parent = nullptr,
             Actions  _act   = _EMPTY_ACTION);
     ~CreateVirtNetwork_Adv();
+    void             readXmlDescData(const QString&);
 
 signals:
     void             errorMsg(QString&);
     void             newName(const QString&);
+    void             accepted(bool);
 
 private:
     QSettings        settings;
@@ -57,9 +59,6 @@ private:
     Actions          action;
 
 public slots:
-    int              getResult() const;
-    Actions          getAction() const;
-    void             readXmlDescData(QString&);
     QString          getXMLDescFileName() const;
     bool             getShowing() const;
 

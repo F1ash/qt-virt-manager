@@ -7,6 +7,7 @@ NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
     ipStart = new QLineEdit(this);
     ipEnd = new QLineEdit(this);
     addrLayout = new QHBoxLayout();
+    addrLayout->addWidget(addrRange);
     addrLayout->addWidget(ipStart);
     addrLayout->addWidget(ipEnd);
     portRange = new QCheckBox("Use Port Range", this);
@@ -15,6 +16,7 @@ NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
     portEnd = new QSpinBox(this);
     portEnd->setRange(0, 65535);
     portLayout = new QHBoxLayout();
+    portLayout->addWidget(portRange);
     portLayout->addWidget(portStart);
     portLayout->addWidget(portEnd);
     addrWdg = new QWidget(this);
@@ -24,9 +26,7 @@ NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
     portWdg->setLayout(portLayout);
     portWdg->setEnabled(false);
     commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(addrRange);
     commonLayout->addWidget(addrWdg);
-    commonLayout->addWidget(portRange);
     commonLayout->addWidget(portWdg);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
@@ -65,6 +65,32 @@ QDomDocument NAT_Mode_widget::getDataDocument() const
     if ( _xmlDesc.hasAttributes() || _xmlDesc.hasChildNodes() )
         doc.appendChild(_xmlDesc);
     return doc;
+}
+void NAT_Mode_widget::setDataDescription(const QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _forward, _nat, _addr, _port;
+    _forward = doc.documentElement();
+    _nat = _forward.firstChildElement("nat");
+    if ( !_nat.isNull() ) {
+        _addr = _nat.firstChildElement("address");
+        if ( !_addr.isNull() ) {
+            addrRange->setChecked(true);
+            ipStart->setText(
+                        _addr.attribute("start"));
+            ipEnd->setText(
+                        _addr.attribute("end"));
+        };
+        _port = _nat.firstChildElement("port");
+        if ( !_port.isNull() ) {
+            portRange->setChecked(true);
+            portStart->setValue(
+                        _port.attribute("start").toInt());
+            portEnd->setValue(
+                        _port.attribute("end").toInt());
+        };
+    };
 }
 
 /* private slots */

@@ -13,6 +13,7 @@
 #include <virt_objects/virt_entity_config.h>
 #include <virt_objects/_virt_thread.h>
 #include "create_virt_network_adv.h"
+#include "create_virt_network_ass.h"
 #include <QDebug>
 
 class NetHelperThread : public _VirtThread
@@ -46,19 +47,19 @@ private:
     virErrorPtr      virtErrors;
 
     QTemporaryFile  *xml = nullptr;
-    bool             ready = false;
+    bool             newbe = false;
     TASK             task;
 
     NetHelperThread *helperThread;
     CreateVirtNetwork_Adv
                     *advancedWdg = nullptr;
+    CreateVirtNetwork_Ass
+                    *assistantWdg = nullptr;
 
 public slots:
     void             closeEvent(QCloseEvent*);
     void             readCapabilities();
-    void             readDataLists();
-    bool             buildXMLDescription();
-    void             set_Result();
+    void             set_Result(bool);
     void             setNewWindowTitle(const QString&);
     void             sendMsg(QString&);
 };

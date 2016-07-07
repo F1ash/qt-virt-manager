@@ -29,9 +29,8 @@ private:
     QCheckBox       *devLabel;
     QLineEdit       *dev;
     QLabel          *modeLabel;
-    QHBoxLayout     *devLayout;
+    QHBoxLayout     *devLayout, *frwdLayout;
     QWidget         *devWdg;
-    QGridLayout     *frwdLayout;
     QWidget         *forwards;
     QStackedWidget  *frwdModeSet;
 

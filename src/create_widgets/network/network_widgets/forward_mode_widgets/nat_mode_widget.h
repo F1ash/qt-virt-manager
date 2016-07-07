@@ -22,6 +22,7 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
+    void             setDataDescription(const QString&);
 
 private slots:
     void             portStartChanged(int);

@@ -17,18 +17,20 @@ Forward_Widget::Forward_Widget(
     mode = new QComboBox(this);
     mode->addItems(FORWARD_MODE);
     devLabel = new QCheckBox("Dev name:", this);
+    devLabel->setToolTip(
+    "if enabled, firewall rules will restrict forwarding to the named device only");
     dev = new QLineEdit(this);
     dev->setPlaceholderText("eth0 | enp2s0 | wlp3s0");
     dev->setEnabled(false);
     devLayout = new QHBoxLayout();
-    devLayout->addWidget(devLabel);
-    devLayout->addWidget(dev);
     devWdg = new QWidget(this);
     devWdg->setLayout(devLayout);
-    frwdLayout = new QGridLayout();
-    frwdLayout->addWidget(modeLabel, 0, 0);
-    frwdLayout->addWidget(mode, 0, 1);
-    frwdLayout->addWidget(devWdg, 1, 0, 2, 2);
+    frwdLayout = new QHBoxLayout();
+    frwdLayout->addWidget(modeLabel);
+    frwdLayout->addWidget(mode);
+    devLayout->addWidget(devLabel);
+    devLayout->addWidget(dev);
+    frwdLayout->addWidget(devWdg);
     forwards = new QWidget(this);
     forwards->setLayout(frwdLayout);
     forwards->setEnabled(false);
@@ -93,19 +95,22 @@ void Forward_Widget::setDataDescription(const QString &_xmlDesc)
         _forward = _network.firstChildElement("forward");
         if ( !_forward.isNull() ) {
             setUsage(true);
-            QString m, d;
-            m = _forward.attribute("mode");
-            d = _forward.attribute("dev");
+            if ( _forward.hasAttribute("dev") ) {
+                devLabel->setChecked(true);
+                dev->setText(_forward.attribute("dev"));
+            };
+            QString m = _forward.attribute("mode");
             int idx = mode->findText(m);
+            // if mode is not specified, mode='nat' is assumed
             if ( idx<0 ) idx = 0;
             mode->setCurrentIndex(idx);
-            if ( !d.isEmpty() ) {
-                devLabel->setChecked(true);
-                dev->setText(d);
-            };
+            QDomDocument _doc;
+            _doc.setContent(QString());
+            _doc.appendChild(_forward);
+            QString _xml = _doc.toString();
             _QWidget *wdg = static_cast<_QWidget*>(
                         frwdModeSet->currentWidget());
-            if( nullptr!=wdg ) wdg->setDataDescription(_xmlDesc);
+            if( nullptr!=wdg ) wdg->setDataDescription(_xml);
         };
     };
 }

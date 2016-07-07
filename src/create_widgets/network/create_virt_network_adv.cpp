@@ -86,10 +86,10 @@ CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
                 QString("%1%2XML_Desc-XXXXXX.xml")
                 .arg(QDir::tempPath())
                 .arg(QDir::separator()));
-    connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
-            bridgeWdg, SLOT(setUsage(bool)));
-    connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
-            domainWdg, SLOT(setUsage(bool)));
+    //connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
+    //        bridgeWdg, SLOT(setUsage(bool)));
+    //connect(forwardWdg, SIGNAL(optionalsNeed(bool)),
+    //        domainWdg, SLOT(setUsage(bool)));
     connect(forwardWdg, SIGNAL(QoSAvailable(bool)),
             QoSWdg, SLOT(setUsage(bool)));
     connect(forwardWdg, SIGNAL(toggled(bool)),
@@ -106,17 +106,7 @@ CreateVirtNetwork_Adv::~CreateVirtNetwork_Adv()
     //settings.setValue("NetCreateShowDesc", showDescription->isChecked());
     settings.endGroup();
 }
-
-/* public slots */
-int CreateVirtNetwork_Adv::getResult() const
-{
-    return 1; //result();
-}
-Actions CreateVirtNetwork_Adv::getAction() const
-{
-    return action;
-}
-void CreateVirtNetwork_Adv::readXmlDescData(QString &_xmlDesc)
+void CreateVirtNetwork_Adv::readXmlDescData(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);
@@ -142,6 +132,8 @@ void CreateVirtNetwork_Adv::readXmlDescData(QString &_xmlDesc)
         QoSWdg->setDataDescription(_xmlDesc);
     };
 }
+
+/* public slots */
 QString CreateVirtNetwork_Adv::getXMLDescFileName() const
 {
     return xml->fileName();
@@ -155,7 +147,6 @@ bool CreateVirtNetwork_Adv::getShowing() const
 /* private slots */
 void CreateVirtNetwork_Adv::buildXMLDescription()
 {
-    this->setEnabled(false);
     QDomDocument doc;
     //qDebug()<<doc.toString();
     QDomElement _xmlDesc, _name, _uuid;
@@ -205,21 +196,21 @@ void CreateVirtNetwork_Adv::buildXMLDescription()
 }
 void CreateVirtNetwork_Adv::set_Result()
 {
+    this->setEnabled(false);
     if ( sender()==ok ) {
-        //setResult(QDialog::Accepted);
         buildXMLDescription();
+        emit accepted(true);
     } else {
-        //setResult(QDialog::Rejected);
+        emit accepted(false);
     };
-    //done(result());
 }
 void CreateVirtNetwork_Adv::networkTypeChanged(bool state)
 {
-    bool _state =
-            forwardWdg->getCurrentMode()=="nat" ||
-            forwardWdg->getCurrentMode()=="route";
-    bridgeWdg->setUsage(!state || _state);
-    domainWdg->setUsage(!state || _state);
+    //bool _state =
+    //        forwardWdg->getCurrentMode()=="nat" ||
+    //        forwardWdg->getCurrentMode()=="route";
+    //bridgeWdg->setUsage(!state || _state);
+    //domainWdg->setUsage(!state || _state);
 }
 void CreateVirtNetwork_Adv::ipv6Changed(bool state)
 {
