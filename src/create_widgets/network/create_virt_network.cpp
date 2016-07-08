@@ -81,13 +81,14 @@ void CreateVirtNetwork::readCapabilities()
                     .arg(task.srcConName));
         connect(assistantWdg, SIGNAL(rejected()),
                 this, SLOT(close()));
+        connect(assistantWdg, SIGNAL(accepted()),
+                this, SLOT(close()));
     } else {
         // read for edit exist VM parameters
         newbe = false;
         QFile *_xml =
                 new QFile(this);
         _xml->setFileName(xmlFileName);
-        //_xml->setAutoRemove(true);
         _xml->open(QIODevice::ReadOnly);
         xmlDesc.append(_xml->readAll().constData());
         _xml->close();

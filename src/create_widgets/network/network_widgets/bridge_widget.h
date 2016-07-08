@@ -17,8 +17,8 @@ private:
     QSpinBox        *delay;
     QComboBox       *macTableManager;
     QLabel          *delayLabel,* macTabLabel;
-    QHBoxLayout     *bridgeLt, *stpLt, *macTabLt;
-    QWidget         *bridgeWdg, *stpWdg, *macTabWdg;
+    QHBoxLayout     *bridgeLt, *macTabLt;
+    QWidget         *bridgeWdg, *macTabWdg;
 
 public slots:
     QDomDocument     getDataDocument() const;

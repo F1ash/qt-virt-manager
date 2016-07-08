@@ -330,8 +330,9 @@ set (HEADERS
   src/create_widgets/domain/lxc_widgets/lxc_os_booting.h
   
   src/create_widgets/network/create_virt_network.h
-  src/create_widgets/network/create_virt_network_adv.h
   src/create_widgets/network/create_virt_network_ass.h
+  src/create_widgets/network/network_widgets/assistant_widgets/introduce_page.h
+  src/create_widgets/network/create_virt_network_adv.h
   src/create_widgets/network/network_widgets/_checked_widget.h
   src/create_widgets/network/network_widgets/_list_widget.h
   src/create_widgets/network/network_widgets/bridge_widget.h
@@ -689,8 +690,9 @@ set (SOURCES
   src/create_widgets/domain/lxc_widgets/lxc_os_booting.cpp
   
   src/create_widgets/network/create_virt_network.cpp
-  src/create_widgets/network/create_virt_network_adv.cpp
   src/create_widgets/network/create_virt_network_ass.cpp
+  src/create_widgets/network/network_widgets/assistant_widgets/introduce_page.cpp
+  src/create_widgets/network/create_virt_network_adv.cpp
   src/create_widgets/network/network_widgets/_checked_widget.cpp
   src/create_widgets/network/network_widgets/_list_widget.cpp
   src/create_widgets/network/network_widgets/bridge_widget.cpp
