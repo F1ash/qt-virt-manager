@@ -29,9 +29,6 @@ CreateVirtNetwork::CreateVirtNetwork(
     ptr_ConnPtr = task.srcConnPtr;
     setWindowTitle("Network Editor");
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
-    settings.beginGroup("VirtNetControl");
-    restoreGeometry(settings.value("NetCreateGeometry").toByteArray());
-    settings.endGroup();
     xml = new QTemporaryFile(this);
     xml->setAutoRemove(false);
     xml->setFileTemplate(
@@ -50,7 +47,11 @@ CreateVirtNetwork::CreateVirtNetwork(
 CreateVirtNetwork::~CreateVirtNetwork()
 {
     settings.beginGroup("VirtNetControl");
-    settings.setValue("NetCreateGeometry", saveGeometry());
+    if ( nullptr!=advancedWdg ) {
+        settings.setValue("AdvancedNetworkEditor", saveGeometry());
+    } else if ( nullptr!=assistantWdg ) {
+        settings.setValue("NetworkEditorAssistant", saveGeometry());
+    };
     if ( true ) {
         //settings.setValue("NetCreateShowDesc", showDescription->isChecked());
     };
@@ -83,6 +84,9 @@ void CreateVirtNetwork::readCapabilities()
                 this, SLOT(close()));
         connect(assistantWdg, SIGNAL(accepted()),
                 this, SLOT(close()));
+        settings.beginGroup("VirtNetControl");
+        restoreGeometry(settings.value("NetworkEditorAssistant").toByteArray());
+        settings.endGroup();
     } else {
         // read for edit exist VM parameters
         newbe = false;
@@ -102,6 +106,9 @@ void CreateVirtNetwork::readCapabilities()
                 this, SLOT(setNewWindowTitle(const QString&)));
         connect(advancedWdg, SIGNAL(accepted(bool)),
                 this, SLOT(set_Result(bool)));
+        settings.beginGroup("VirtNetControl");
+        restoreGeometry(settings.value("AdvancedNetworkEditor").toByteArray());
+        settings.endGroup();
     };
     setEnabled(true);
 
