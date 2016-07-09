@@ -7,6 +7,7 @@
 #include "addressing_widgets/mac_widget.h"
 #include <QLineEdit>
 #include <QSpinBox>
+#include <QScrollArea>
 
 class Addressing_Widget : public _Checked_Widget
 {
@@ -20,6 +21,9 @@ private:
     DNS_Widget      *dns;
     IP_Widget       *ip;
     MAC_Widget      *mac;
+    QScrollArea     *scroll;
+    QWidget         *scrolled;
+    QVBoxLayout     *scrollLayout;
 
 public slots:
     QDomDocument     getDataDocument() const;

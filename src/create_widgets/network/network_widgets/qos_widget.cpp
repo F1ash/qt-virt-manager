@@ -15,6 +15,7 @@ QoS_Widget::QoS_Widget(
     bandWidth->addTab(inbound, "Inbound");
     bandWidth->addTab(outbound, "Outbound");
     baseLayout->addWidget(bandWidth);
+    baseLayout->addStretch(-1);
 }
 
 /* public slots */

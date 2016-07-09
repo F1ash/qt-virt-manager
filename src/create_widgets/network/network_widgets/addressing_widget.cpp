@@ -6,10 +6,19 @@ Addressing_Widget::Addressing_Widget(QWidget *parent, QString tag) :
     dns = new DNS_Widget(this);
     ip = new IP_Widget(this);
     mac = new MAC_Widget(this);
-    baseLayout->addWidget(dns);
-    baseLayout->addWidget(ip);
-    baseLayout->addWidget(mac);
+    scrollLayout = new QVBoxLayout(this);
+    scrollLayout->addWidget(dns);
+    scrollLayout->addWidget(ip);
+    scrollLayout->addWidget(mac);
+    scrollLayout->addStretch(-1);
+    scrolled = new QWidget(this);
+    scrolled->setLayout(scrollLayout);
+    scroll = new QScrollArea(this);
+    scroll->setWidgetResizable(true);
+    baseLayout->addWidget(scroll);
     baseLayout->addStretch(-1);
+    // set scroll widget after filling all widgets
+    // for correct displaying
 }
 
 /* public slots */
@@ -48,6 +57,8 @@ void Addressing_Widget::setDataDescription(const QString &_xmlDesc)
             mac->setDataDescription(_xmlDesc);
         };
     };
+    // set scroll widget for correct displaying
+    scroll->setWidget(scrolled);
 }
 void Addressing_Widget::ipv6Changed(bool state)
 {

@@ -12,6 +12,7 @@ Domain_Widget::Domain_Widget(QWidget *parent, QString tag) :
 by the virtual network's own DNS server");
     baseLayout->addWidget(domain);
     baseLayout->addWidget(localOnly);
+    baseLayout->addStretch(-1);
     connect(this, SIGNAL(toggled(bool)),
             domain, SLOT(setEnabled(bool)));
 }

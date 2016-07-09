@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QCheckBox>
 #include <QSpinBox>
+#include <QVBoxLayout>
 #include <QGridLayout>
 
 class Bound_Widget : public QWidget
@@ -18,7 +19,9 @@ public:
     void            setFloorUsage(bool);
 
 private:
-    QGridLayout    *commonLayout;
+    QVBoxLayout    *commonLayout;
+    QGridLayout    *lt;
+    QWidget        *ltWdg;
 };
 
 #endif // BOUND_WIDGET_H

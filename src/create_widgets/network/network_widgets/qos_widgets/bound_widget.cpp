@@ -32,15 +32,20 @@ Bound_Widget::Bound_Widget(QWidget *parent) :
     floor->setRange(0, 10000);
     floor->setEnabled(false);
     floor->setAlignment(Qt::AlignRight);
-    commonLayout = new QGridLayout(this);
-    commonLayout->addWidget(averageL, 0, 0);
-    commonLayout->addWidget(average, 0, 1, Qt::AlignRight);
-    commonLayout->addWidget(peakL, 1, 0);
-    commonLayout->addWidget(peak, 1, 1, Qt::AlignRight);
-    commonLayout->addWidget(burstL, 2, 0);
-    commonLayout->addWidget(burst, 2, 1, Qt::AlignRight);
-    commonLayout->addWidget(floorL, 3, 0);
-    commonLayout->addWidget(floor, 3, 1, Qt::AlignRight);
+    lt = new QGridLayout(this);
+    lt->addWidget(averageL, 0, 0);
+    lt->addWidget(average, 0, 1, Qt::AlignRight);
+    lt->addWidget(peakL, 1, 0);
+    lt->addWidget(peak, 1, 1, Qt::AlignRight);
+    lt->addWidget(burstL, 2, 0);
+    lt->addWidget(burst, 2, 1, Qt::AlignRight);
+    lt->addWidget(floorL, 3, 0);
+    lt->addWidget(floor, 3, 1, Qt::AlignRight);
+    ltWdg = new QWidget(this);
+    ltWdg->setLayout(lt);
+    commonLayout = new QVBoxLayout();
+    commonLayout->addWidget(ltWdg);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
 
     connect(averageL, SIGNAL(toggled(bool)),

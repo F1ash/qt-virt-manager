@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QSettings>
-#include <QScrollArea>
 #include <QPushButton>
 #include <QDir>
 #include <QTemporaryFile>
@@ -32,9 +31,6 @@ signals:
 
 private:
     QSettings        settings;
-    QScrollArea     *scroll;
-    QWidget         *scrolled;
-    QVBoxLayout     *scrollLayout;
     QWidget         *baseWdg;
     QLabel          *netNameLabel, *uuidLabel;
     QLineEdit       *networkName, *uuid;
@@ -46,6 +42,7 @@ private:
                     *addressingWdg;
     Forward_Widget  *forwardWdg;
     QoS_Widget      *QoSWdg;
+    QTabWidget      *tabs;
 
     //QCheckBox       *showDescription;
     QLabel          *about;

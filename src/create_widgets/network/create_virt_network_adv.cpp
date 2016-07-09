@@ -36,6 +36,13 @@ CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
     addressingWdg = new Addressing_Widget(this);
     forwardWdg = new Forward_Widget(this);
     QoSWdg = new QoS_Widget(this);
+    tabs = new QTabWidget(this);
+    tabs->setTabPosition(QTabWidget::West);
+    tabs->addTab(bridgeWdg, "Bridge");
+    tabs->addTab(domainWdg, "DNS Domain");
+    tabs->addTab(addressingWdg, "IP");
+    tabs->addTab(forwardWdg, "Forward");
+    tabs->addTab(QoSWdg, "QoS");
 
     //showDescription = new QCheckBox(
     //"Show XML Description\nat close", this);
@@ -61,22 +68,9 @@ CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
     buttons = new QWidget(this);
     buttons->setLayout(buttonLayout);
 
-    scrollLayout = new QVBoxLayout(this);
-    scrollLayout->addWidget(bridgeWdg);
-    scrollLayout->addWidget(domainWdg);
-    scrollLayout->addWidget(addressingWdg);
-    scrollLayout->addWidget(forwardWdg);
-    scrollLayout->addWidget(QoSWdg);
-    scrollLayout->setContentsMargins(4, 0, 4, 0);
-    scrollLayout->addStretch(-1);
-    scrolled = new QWidget(this);
-    scrolled->setLayout(scrollLayout);
-    scroll = new QScrollArea(this);
-    scroll->setWidgetResizable(true);
-    scroll->setWidget(scrolled);
     netDescLayout = new QVBoxLayout(this);
     netDescLayout->addWidget(baseWdg);
-    netDescLayout->addWidget(scroll);
+    netDescLayout->addWidget(tabs);
     netDescLayout->addWidget(buttons);
     setLayout(netDescLayout);
 

@@ -30,6 +30,7 @@ Bridge_Widget::Bridge_Widget(QWidget *parent, QString tag) :
     macTabWdg->setEnabled(false);
     baseLayout->addWidget(bridgeWdg);
     baseLayout->addWidget(macTabWdg);
+    baseLayout->addStretch(-1);
     connect(this, SIGNAL(toggled(bool)),
             bridgeWdg, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(toggled(bool)),
