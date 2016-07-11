@@ -11,7 +11,6 @@
 #include "network_widgets/forward_widget.h"
 #include "network_widgets/addressing_widget.h"
 #include "network_widgets/qos_widget.h"
-#include "virt_objects/virt_entity_config.h"
 #include <QDebug>
 
 class CreateVirtNetwork_Adv : public QWidget
@@ -19,8 +18,7 @@ class CreateVirtNetwork_Adv : public QWidget
     Q_OBJECT
 public:
     explicit CreateVirtNetwork_Adv(
-            QWidget *parent = nullptr,
-            Actions  _act   = _EMPTY_ACTION);
+            QWidget *parent = nullptr);
     ~CreateVirtNetwork_Adv();
     void             readXmlDescData(const QString&);
 
@@ -53,7 +51,6 @@ private:
     QVBoxLayout     *netDescLayout;
 
     QTemporaryFile  *xml;
-    Actions          action;
 
 public slots:
     QString          getXMLDescFileName() const;

@@ -62,6 +62,13 @@ QString Forward_Widget::getCurrentMode() const
 {
     return mode->currentText();
 }
+void Forward_Widget::setCurrentMode(const QString &_mode)
+{
+    int idx = mode->findText(_mode);
+    // if mode is not specified, mode='nat' is assumed
+    if ( idx<0 ) idx = 0;
+    mode->setCurrentIndex(idx);
+}
 
 /* public slots */
 QDomDocument Forward_Widget::getDataDocument() const

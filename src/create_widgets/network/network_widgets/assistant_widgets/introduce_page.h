@@ -2,18 +2,23 @@
 #define INTRODUCE_PAGE_H
 
 #include <QWizardPage>
+#include <QLineEdit>
 #include <QRadioButton>
 #include <QVBoxLayout>
+#include "create_widgets/network/create_virt_network_ass.h"
 
 class IntroducePage : public QWizardPage
 {
     Q_OBJECT
 public:
     explicit IntroducePage(QWidget *parent = nullptr);
+    int             nextId() const;
+    bool            isComplete() const;
 
 private:
+    QLineEdit      *networkName;
     QRadioButton   *natNet, *bridgeNet,
-                   *routeNet, *isolatedNet;
+                   *routedNet, *isolatedNet;
     QVBoxLayout    *lt;
 };
 

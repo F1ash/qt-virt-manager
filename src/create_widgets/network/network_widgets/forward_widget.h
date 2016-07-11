@@ -17,8 +17,9 @@ class Forward_Widget : public _Checked_Widget
 public:
     explicit Forward_Widget(
             QWidget *parent = nullptr,
-            QString  tag = "Forwards");
+            QString  tag    = "Forward");
     QString          getCurrentMode() const;
+    void             setCurrentMode(const QString&);
 
 signals:
     void             optionalsNeed(bool);

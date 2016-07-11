@@ -10,6 +10,9 @@ public:
     explicit Bridge_Widget(
             QWidget *parent = nullptr,
             QString  tag = "Bridge");
+    // for Network Assistant
+    void             disableOptionalAttr(bool);
+    bool             bridgeNameIsEmpty() const;
 
 private:
     QLineEdit       *bridgeName;

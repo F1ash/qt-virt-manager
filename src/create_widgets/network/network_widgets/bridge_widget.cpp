@@ -4,7 +4,7 @@ Bridge_Widget::Bridge_Widget(QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
     bridgeName = new QLineEdit(this);
-    bridgeName->setPlaceholderText("Enter bridge name (Ex.: virbr1)");
+    bridgeName->setPlaceholderText("Enter bridge name (Ex.: br0)");
     stp = new QCheckBox("Spanning Tree Protocol", this);
     stp->setChecked(true); // default state
     bridgeLt = new QHBoxLayout();
@@ -35,6 +35,17 @@ Bridge_Widget::Bridge_Widget(QWidget *parent, QString tag) :
             bridgeWdg, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(toggled(bool)),
             macTabWdg, SLOT(setEnabled(bool)));
+    connect(bridgeName, SIGNAL(textChanged(QString)),
+            this, SIGNAL(dataChanged()));
+}
+void Bridge_Widget::disableOptionalAttr(bool state)
+{
+    stp->setDisabled(state);
+    macTabWdg->setDisabled(state);
+}
+bool Bridge_Widget::bridgeNameIsEmpty() const
+{
+    return bridgeName->text().isEmpty();
 }
 
 /* public slots */

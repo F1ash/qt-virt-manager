@@ -72,7 +72,7 @@ void CreateVirtNetwork::closeEvent(QCloseEvent *ev)
 void CreateVirtNetwork::readCapabilities()
 {
     if ( xmlFileName.isEmpty() ) {
-        // create/define new VM
+        // create/define new VirtNetwork
         newbe = true;
         qDebug()<<"new network";
         assistantWdg = new CreateVirtNetwork_Ass(this);
@@ -80,15 +80,13 @@ void CreateVirtNetwork::readCapabilities()
         setWindowTitle(
                     QString("Network Assistant in [%1]")
                     .arg(task.srcConName));
-        connect(assistantWdg, SIGNAL(rejected()),
-                this, SLOT(close()));
-        connect(assistantWdg, SIGNAL(accepted()),
-                this, SLOT(close()));
+        connect(assistantWdg, SIGNAL(accepted(bool)),
+                this, SLOT(set_Result(bool)));
         settings.beginGroup("VirtNetControl");
         restoreGeometry(settings.value("NetworkEditorAssistant").toByteArray());
         settings.endGroup();
     } else {
-        // read for edit exist VM parameters
+        // read for edit existing VirtNetwork
         newbe = false;
         QFile *_xml =
                 new QFile(this);
@@ -97,9 +95,7 @@ void CreateVirtNetwork::readCapabilities()
         xmlDesc.append(_xml->readAll().constData());
         _xml->close();
         _xml->deleteLater();
-        advancedWdg = new CreateVirtNetwork_Adv(
-                    this,
-                    task.action);
+        advancedWdg = new CreateVirtNetwork_Adv(this);
         advancedWdg->readXmlDescData(xmlDesc);
         setCentralWidget(advancedWdg);
         connect(advancedWdg, SIGNAL(newName(const QString&)),
@@ -112,21 +108,26 @@ void CreateVirtNetwork::readCapabilities()
     };
     setEnabled(true);
 
-    if ( true ) {
-    } else {
-        QString msg = QString("Read Data in %1 failed.")
-                .arg(objectName());
-        sendMsg( msg );
-        // to done()
-        set_Result(false);
-    };
+    //if ( true ) {
+    //} else {
+    //    QString msg = QString("Read Data in %1 failed.")
+    //            .arg(objectName());
+    //    sendMsg( msg );
+    //    // to done()
+    //    set_Result(false);
+    //};
 }
 void CreateVirtNetwork::set_Result(bool state)
 {
-    if ( state ) { //sender()==ok
+    if ( state ) {
         QString _xml;
         if ( newbe ) {
-
+            CreateVirtNetwork_Ass *a =
+                    static_cast<CreateVirtNetwork_Ass*>(
+                        centralWidget());
+            if ( nullptr!=a ) {
+                _xml = a->getXMLDescFileName();
+            };
         } else {
             CreateVirtNetwork_Adv *a =
                     static_cast<CreateVirtNetwork_Adv*>(

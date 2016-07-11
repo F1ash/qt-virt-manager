@@ -1,13 +1,13 @@
 #include "create_virt_network_adv.h"
 
 CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
-        QWidget *parent, Actions _act) :
-    QWidget(parent), action(_act)
+        QWidget *parent) :
+    QWidget(parent)
 {
     setWindowTitle("Network Settings");
     settings.beginGroup("VirtNetControl");
     restoreGeometry(settings.value("NetCreateGeometry").toByteArray());
-    bool showDesc = settings.value("NetCreateShowDesc").toBool();
+    //bool showDesc = settings.value("NetCreateShowDesc").toBool();
     settings.endGroup();
 
     netNameLabel = new QLabel("Name:", this);
