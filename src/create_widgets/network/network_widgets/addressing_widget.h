@@ -28,7 +28,7 @@ private:
 public slots:
     QDomDocument     getDataDocument() const;
     void             setDataDescription(const QString&);
-    void             ipv6Changed(bool);
+    void             noGatewayChanged(bool);
 };
 
 #endif // ADDRESSING_WIDGET_H

@@ -19,14 +19,20 @@ CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
     /*
      * http://libvirt.org/formatnetwork.html#examplesNoGateway
      */
-    ipv6 = new QCheckBox("For guest-to-guest IPv6", this);
+    noGW = new QCheckBox("Guest-to-guest", this);
+    ipv6 = new QCheckBox("IPv6", this);
+    noGWLayout = new QHBoxLayout(this);
+    noGWLayout->addWidget(noGW);
+    noGWLayout->addWidget(ipv6);
+    noGWWdg = new QWidget(this);
+    noGWWdg->setLayout(noGWLayout);
     trustGuestRxFilters = new QCheckBox("trustGuestRxFilters", this);
     baseLayout = new QGridLayout();
     baseLayout->addWidget(netNameLabel, 0, 0);
     baseLayout->addWidget(networkName, 0, 1);
     baseLayout->addWidget(uuidLabel, 1, 0);
     baseLayout->addWidget(uuid, 1, 1);
-    baseLayout->addWidget(ipv6, 2, 0);
+    baseLayout->addWidget(noGWWdg, 2, 0);
     baseLayout->addWidget(trustGuestRxFilters, 2, 1);
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
@@ -88,8 +94,8 @@ CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
             QoSWdg, SLOT(setUsage(bool)));
     connect(forwardWdg, SIGNAL(toggled(bool)),
             this, SLOT(networkTypeChanged(bool)));
-    connect(ipv6, SIGNAL(toggled(bool)),
-            this, SLOT(ipv6Changed(bool)));
+    connect(noGW, SIGNAL(toggled(bool)),
+            this, SLOT(noGatewayChanged(bool)));
     connect(networkName, SIGNAL(textChanged(QString)),
             this, SIGNAL(newName(QString)));
 }
@@ -104,9 +110,12 @@ void CreateVirtNetwork_Adv::readXmlDescData(const QString &_xmlDesc)
 {
     QDomDocument doc;
     doc.setContent(_xmlDesc);
-    QDomElement _network, _name, _uuid;
+    QDomElement _network, _name, _uuid, _ip, _route, _forward;
     _network = doc.firstChildElement("network");
     if ( !_network.isNull() ) {
+        _ip = _network.firstChildElement("ip");
+        _route = _network.firstChildElement("route");
+        _forward = _network.firstChildElement("forward");
         if ( _network.hasAttribute("ipv6") )
             ipv6->setChecked(
                         (_network.attribute("ipv6")=="yes")?
@@ -124,6 +133,8 @@ void CreateVirtNetwork_Adv::readXmlDescData(const QString &_xmlDesc)
         addressingWdg->setDataDescription(_xmlDesc);
         forwardWdg->setDataDescription(_xmlDesc);
         QoSWdg->setDataDescription(_xmlDesc);
+        noGW->setChecked(
+                    _ip.isNull() && _route.isNull() && _forward.isNull() );
     };
 }
 
@@ -206,13 +217,11 @@ void CreateVirtNetwork_Adv::networkTypeChanged(bool state)
     //bridgeWdg->setUsage(!state || _state);
     //domainWdg->setUsage(!state || _state);
 }
-void CreateVirtNetwork_Adv::ipv6Changed(bool state)
+void CreateVirtNetwork_Adv::noGatewayChanged(bool state)
 {
-    bridgeWdg->setUsage(state);
     bridgeWdg->setFreez(state);
-    domainWdg->setUsage(false);
-    forwardWdg->setUsage(false);
-    domainWdg->setDisabled(state);
-    forwardWdg->setDisabled(state);
-    addressingWdg->ipv6Changed(state);
+    bridgeWdg->setUsage(state);
+    domainWdg->setFreez(state);
+    forwardWdg->setFreez(state);
+    addressingWdg->noGatewayChanged(state);
 }

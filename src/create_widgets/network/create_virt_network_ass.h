@@ -19,7 +19,8 @@ public:
         Page_Conclusion,
         // next is additional page enumerates
         Page_Forward,
-        Page_IP
+        Page_IP,
+        Page_NoGateway
     };
     QString         getXMLDescFileName() const;
 

@@ -5,6 +5,7 @@
 #include "network_widgets/assistant_widgets/routed_page.h"
 #include "network_widgets/assistant_widgets/isolated_page.h"
 #include "network_widgets/assistant_widgets/forward_page.h"
+#include "network_widgets/assistant_widgets/no_gateway_page.h"
 #include "network_widgets/assistant_widgets/conclusion_page.h"
 #include <QDomDocument>
 
@@ -34,6 +35,7 @@ CreateVirtNetwork_Ass::CreateVirtNetwork_Ass(
     setPage(Page_Routed, new RoutedPage(this));
     setPage(Page_Isolated, new IsolatedPage(this));
     setPage(Page_Forward, new ForwardPage(this));
+    setPage(Page_NoGateway, new NoGatewayPage(this));
     setPage(Page_Conclusion, new ConclusionPage(this));
 
     xml = new QTemporaryFile(this);
@@ -60,6 +62,7 @@ int CreateVirtNetwork_Ass::nextId() const
     case Page_Routed:
     case Page_Isolated:
     case Page_Forward:
+    case Page_NoGateway:
         return currentPage()->nextId();
     default:
         return -1;
@@ -73,14 +76,9 @@ void CreateVirtNetwork_Ass::buildXMLDescription()
     QDomText data;
 
     _xmlDesc = doc.createElement("network");
-    /*
-    if ( ipv6->isChecked() ) {
+    if ( field("NoGatewayIPv6").toBool() ) {
         _xmlDesc.setAttribute("ipv6", "yes");
     };
-    _xmlDesc.setAttribute(
-                "trustGuestRxFilters",
-                (trustGuestRxFilters->isChecked())? "yes":"no");
-     */
     _name = doc.createElement("name");
     data = doc.createTextNode(
                 field("NetworkName").toString());
@@ -93,28 +91,18 @@ void CreateVirtNetwork_Ass::buildXMLDescription()
         _xmlDesc.appendChild(
                     b->getDataDocument());
     };
-    /*
-    if ( domainWdg->isUsed() ) {
-        _xmlDesc.appendChild(
-                    domainWdg->getDataDocument());
-    };
-    if ( addressingWdg->isUsed() ) {
-        _xmlDesc.appendChild(
-                    addressingWdg->getDataDocument());
-    };
-    */
     ForwardPage *f = static_cast<ForwardPage*>(
                 page(Page_Forward));
     if ( nullptr!=f  && f->fr->isUsed() ) {
         _xmlDesc.appendChild(
                     f->getDataDocument());
     };
-    /*
-    if ( QoSWdg->isUsed() ) {
+    IsolatedPage *i = static_cast<IsolatedPage*>(
+                page(Page_Isolated));
+    if ( nullptr!=i && i->isUsed() ) {
         _xmlDesc.appendChild(
-                    QoSWdg->getDataDocument());
+                    i->getDataDocument());
     };
-    */
     doc.appendChild(_xmlDesc);
 
     bool read = xml->open();

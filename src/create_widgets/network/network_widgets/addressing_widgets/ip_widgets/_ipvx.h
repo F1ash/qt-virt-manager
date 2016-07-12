@@ -20,6 +20,8 @@ public:
     QVBoxLayout     *commonLayout;
     bool             getDHCPUsageState() const;
     bool             isNetworkHasDHCP() const;
+    void             withoutGateway(bool);
+    bool             IP_data_isEmpty() const;
     const uint       ver;
 
 signals:

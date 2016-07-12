@@ -15,7 +15,8 @@ void ConclusionPage::initializePage()
 {
     QString netName = wizard()->field("NetworkName").toString();
     QString msg = QString(
-    "Build up the data for < %1 > network done.")
+    "Build up the data for < %1 > network done.\n\
+Other parameters of network you can change later in Network Editor.")
             .arg(netName);
     info->setText(msg);
 }

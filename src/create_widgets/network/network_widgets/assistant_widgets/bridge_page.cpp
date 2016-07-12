@@ -5,10 +5,6 @@
 BridgePage::BridgePage(QWidget *parent) :
     QWizardPage(parent)
 {
-    setTitle("Bridge Network");
-    setSubTitle(
-    "The guests will be directly connected to the physical network.");
-
     br = new Bridge_Widget(this);
     lt = new QVBoxLayout(this);
     lt->addWidget(br);
@@ -18,8 +14,25 @@ BridgePage::BridgePage(QWidget *parent) :
     connect(br, SIGNAL(dataChanged()),
             this, SIGNAL(completeChanged()));
 }
+void BridgePage::initializePage()
+{
+    QString t, s;
+    if        ( wizard()->field("BridgeType").toBool() ) {
+        t = "Bridge Network";
+        s =
+    "The guests will be directly connected to the physical network.";
+    } else if ( wizard()->field("IsolatedType").toBool() ) {
+        t = "Isolated Network";
+        s =
+    "The guests will be directly connected to the virtual network.";
+    };
+    setTitle(t);
+    setSubTitle(s);
+}
 int BridgePage::nextId() const
 {
+    if ( wizard()->field("IsolatedType").toBool() )
+        return CreateVirtNetwork_Ass::Page_Isolated;
     ForwardPage *f = static_cast<ForwardPage*>(
                 wizard()->page(CreateVirtNetwork_Ass::Page_Forward));
     if ( nullptr!=f ) {
@@ -30,7 +43,11 @@ int BridgePage::nextId() const
 }
 bool BridgePage::isComplete() const
 {
-    br->disableOptionalAttr(true);
+    if ( wizard()->field("IsolatedType").toBool() ) {
+        br->disableOptionalAttr(false);
+    } else {
+        br->disableOptionalAttr(true);
+    };
     return ( br->isUsed() && !br->bridgeNameIsEmpty() );
 }
 QDomDocument BridgePage::getDataDocument() const

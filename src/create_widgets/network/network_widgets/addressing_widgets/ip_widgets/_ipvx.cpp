@@ -45,6 +45,10 @@ definition a DHCP server on the network");
             this, SLOT(dhcpStateChanged(bool)));
     connect(significantBitsL, SIGNAL(currentIndexChanged(int)),
             this, SLOT(significantBitsChanged(int)));
+    connect(address, SIGNAL(textChanged(QString)),
+            this, SIGNAL(dataChanged()));
+    connect(significantBits, SIGNAL(textChanged(QString)),
+            this, SIGNAL(dataChanged()));
 }
 bool _IPvX::getDHCPUsageState() const
 {
@@ -53,6 +57,15 @@ bool _IPvX::getDHCPUsageState() const
 bool _IPvX::isNetworkHasDHCP() const
 {
     return networkHasDHCP;
+}
+void _IPvX::withoutGateway(bool state)
+{
+    gatewayWidget->setVisible(!state);
+}
+bool _IPvX::IP_data_isEmpty() const
+{
+    return ( address->text().isEmpty() ||
+             significantBits->text().isEmpty() );
 }
 
 /* public slots */
@@ -100,5 +113,6 @@ void _IPvX::significantBitsChanged(int idx)
         p.append("error");
         break;
     };
+    significantBits->clear();
     significantBits->setPlaceholderText(p);
 }

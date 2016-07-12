@@ -50,7 +50,7 @@ int IntroducePage::nextId() const
     } else if ( routedNet->isChecked() ) {
         return CreateVirtNetwork_Ass::Page_Routed;
     } else if ( isolatedNet->isChecked() ) {
-        return CreateVirtNetwork_Ass::Page_Isolated;
+        return CreateVirtNetwork_Ass::Page_Bridge;
     }
 }
 bool IntroducePage::isComplete() const

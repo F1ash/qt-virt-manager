@@ -60,13 +60,13 @@ void Addressing_Widget::setDataDescription(const QString &_xmlDesc)
     // set scroll widget for correct displaying
     scroll->setWidget(scrolled);
 }
-void Addressing_Widget::ipv6Changed(bool state)
+void Addressing_Widget::noGatewayChanged(bool state)
 {
-    this->setUsage(state);
     this->setFreez(state);
+    this->setUsage(true);
     dns->setUsage(false);
     ip->setUsage(false);
     mac->setUsage(state);
-    dns->setDisabled(state);
-    ip->setDisabled(state);
+    dns->setFreez(state);
+    ip->setFreez(state);
 }

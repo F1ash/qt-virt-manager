@@ -29,10 +29,10 @@ signals:
 
 private:
     QSettings        settings;
-    QWidget         *baseWdg;
+    QWidget         *baseWdg, *noGWWdg;
     QLabel          *netNameLabel, *uuidLabel;
     QLineEdit       *networkName, *uuid;
-    QCheckBox       *ipv6, *trustGuestRxFilters;
+    QCheckBox       *noGW, *ipv6, *trustGuestRxFilters;
     QGridLayout     *baseLayout;
     Bridge_Widget   *bridgeWdg;
     Domain_Widget   *domainWdg;
@@ -46,7 +46,7 @@ private:
     QLabel          *about;
     QPushButton     *ok;
     QPushButton     *cancel;
-    QHBoxLayout     *buttonLayout;
+    QHBoxLayout     *buttonLayout, *noGWLayout;
     QWidget         *buttons;
     QVBoxLayout     *netDescLayout;
 
@@ -60,7 +60,7 @@ private slots:
     void             buildXMLDescription();
     void             set_Result();
     void             networkTypeChanged(bool);
-    void             ipv6Changed(bool);
+    void             noGatewayChanged(bool);
 };
 
 #endif // CREATE_VIRT_NETWORK_ADV_H
