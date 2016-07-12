@@ -21,6 +21,7 @@ CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
      */
     noGW = new QCheckBox("Guest-to-guest", this);
     ipv6 = new QCheckBox("IPv6", this);
+    ipv6->setEnabled(false);
     noGWLayout = new QHBoxLayout(this);
     noGWLayout->addWidget(noGW);
     noGWLayout->addWidget(ipv6);
@@ -219,6 +220,8 @@ void CreateVirtNetwork_Adv::networkTypeChanged(bool state)
 }
 void CreateVirtNetwork_Adv::noGatewayChanged(bool state)
 {
+    ipv6->setEnabled(state);
+    if ( !state ) ipv6->setChecked(state);
     bridgeWdg->setFreez(state);
     bridgeWdg->setUsage(state);
     domainWdg->setFreez(state);
