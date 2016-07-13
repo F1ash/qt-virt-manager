@@ -64,10 +64,14 @@ QString Forward_Widget::getCurrentMode() const
 }
 void Forward_Widget::setCurrentMode(const QString &_mode)
 {
+    // used only in Network Assistant
+    // for 'bridge', 'nat', 'route' mode
     int idx = mode->findText(_mode);
     // if mode is not specified, mode='nat' is assumed
     if ( idx<0 ) idx = 0;
     mode->setCurrentIndex(idx);
+    mode->setEnabled(false);
+    frwdModeSet->setEnabled(true);
 }
 
 /* public slots */

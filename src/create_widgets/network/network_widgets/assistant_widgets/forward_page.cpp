@@ -3,9 +3,6 @@
 ForwardPage::ForwardPage(QWidget *parent) :
     QWizardPage(parent)
 {
-    setSubTitle(
-    ".");
-
     fr = new Forward_Widget(this);
     lt = new QVBoxLayout(this);
     lt->addWidget(fr);
@@ -15,9 +12,26 @@ ForwardPage::ForwardPage(QWidget *parent) :
     connect(fr, SIGNAL(dataChanged()),
             this, SIGNAL(completeChanged()));
 }
+void ForwardPage::initializePage()
+{
+    QString t, s;
+    if ( wizard()->field("NATedType").toBool() ) {
+        fr->setCurrentMode("nat");
+        t = "NAT based network";
+        s =
+    "The guests will be directly connected to the virtual network.";
+    } else if ( wizard()->field("RoutedType").toBool() ) {
+        fr->setCurrentMode("route");
+        t = "Routed Network";
+        s =
+    "The guests will be directly connected to the virtual network.";
+    };
+    setTitle(t);
+    setSubTitle(s);
+}
 int ForwardPage::nextId() const
 {
-    return CreateVirtNetwork_Ass::Page_Conclusion;
+    return CreateVirtNetwork_Ass::Page_IP;
 }
 bool ForwardPage::isComplete() const
 {

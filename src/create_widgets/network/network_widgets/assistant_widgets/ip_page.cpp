@@ -1,14 +1,10 @@
-#include "isolated_page.h"
+#include "ip_page.h"
+#include "forward_page.h"
 #include <QVariant>
 
-IsolatedPage::IsolatedPage(QWidget *parent) :
+IP_Page::IP_Page(QWidget *parent) :
     QWizardPage(parent)
 {
-    setTitle("Isolated network");
-    setSubTitle(
-    "The guests can talk to each other (and the host OS\
- if IP&DHCP used), but can't reach any other machines on the LAN");
-
     ipv4 = new _IPv4(this, false, 4);
     ipv4->withoutGateway(true);
     ipv6 = new _IPv6(this, false, 6);
@@ -27,25 +23,46 @@ IsolatedPage::IsolatedPage(QWidget *parent) :
     connect(ipv6, SIGNAL(dataChanged()),
             this, SIGNAL(completeChanged()));
 }
-int IsolatedPage::nextId() const
+void IP_Page::initializePage()
+{
+    QString t, s;
+    if ( wizard()->field("IsolatedType").toBool() ) {
+        t = "Isolated Network";
+        s =
+    "The guests can talk to each other (and the host OS\
+ if IP&DHCP used), but can't reach any other machines on the LAN";
+    } else if ( wizard()->field("NATedType").toBool() ) {
+        t = "NAT based network";
+        s =
+    "The guests will be directly connected to the virtual network.";
+    } else if ( wizard()->field("RoutedType").toBool() ) {
+        t = "Routed Network";
+        s =
+    "The guests will be directly connected to the virtual network.";
+    };
+    setTitle(t);
+    setSubTitle(s);
+}
+int IP_Page::nextId() const
 {
     if ( ipv4->IP_data_isEmpty() &&
          ipv6->IP_data_isEmpty() ) {
-        // no gayeway
+        // no gateway
         return CreateVirtNetwork_Ass::Page_NoGateway;
     };
+    // usual isolated
     return CreateVirtNetwork_Ass::Page_Conclusion;
 }
-bool IsolatedPage::isComplete() const
+bool IP_Page::isComplete() const
 {
     return true;
 }
-bool IsolatedPage::isUsed() const
+bool IP_Page::isUsed() const
 {
     return ( !ipv4->IP_data_isEmpty() ||
              !ipv6->IP_data_isEmpty() );
 }
-QDomDocument IsolatedPage::getDataDocument() const
+QDomDocument IP_Page::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _ip4, _ip6;

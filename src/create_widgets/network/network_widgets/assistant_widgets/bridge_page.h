@@ -13,7 +13,6 @@ class BridgePage : public QWizardPage
 public:
     explicit BridgePage(QWidget *parent = nullptr);
     Bridge_Widget  *br;
-    void            initializePage();
     int             nextId() const;
     bool            isComplete() const;
     QDomDocument    getDataDocument() const;

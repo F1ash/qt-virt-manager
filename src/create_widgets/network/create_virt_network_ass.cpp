@@ -1,10 +1,8 @@
 #include "create_virt_network_ass.h"
 #include "network_widgets/assistant_widgets/introduce_page.h"
 #include "network_widgets/assistant_widgets/bridge_page.h"
-#include "network_widgets/assistant_widgets/nated_page.h"
-#include "network_widgets/assistant_widgets/routed_page.h"
-#include "network_widgets/assistant_widgets/isolated_page.h"
 #include "network_widgets/assistant_widgets/forward_page.h"
+#include "network_widgets/assistant_widgets/ip_page.h"
 #include "network_widgets/assistant_widgets/no_gateway_page.h"
 #include "network_widgets/assistant_widgets/conclusion_page.h"
 #include <QDomDocument>
@@ -31,10 +29,8 @@ CreateVirtNetwork_Ass::CreateVirtNetwork_Ass(
                 .pixmap(480));
     setPage(Page_Intro, new IntroducePage(this));
     setPage(Page_Bridge, new BridgePage(this));
-    setPage(Page_NATed, new NATedPage(this));
-    setPage(Page_Routed, new RoutedPage(this));
-    setPage(Page_Isolated, new IsolatedPage(this));
     setPage(Page_Forward, new ForwardPage(this));
+    setPage(Page_IP, new IP_Page(this));
     setPage(Page_NoGateway, new NoGatewayPage(this));
     setPage(Page_Conclusion, new ConclusionPage(this));
 
@@ -58,10 +54,8 @@ int CreateVirtNetwork_Ass::nextId() const
     switch (currentId()) {
     case Page_Intro:
     case Page_Bridge:
-    case Page_NATed:
-    case Page_Routed:
-    case Page_Isolated:
     case Page_Forward:
+    case Page_IP:
     case Page_NoGateway:
         return currentPage()->nextId();
     default:
@@ -97,8 +91,8 @@ void CreateVirtNetwork_Ass::buildXMLDescription()
         _xmlDesc.appendChild(
                     f->getDataDocument());
     };
-    IsolatedPage *i = static_cast<IsolatedPage*>(
-                page(Page_Isolated));
+    IP_Page *i = static_cast<IP_Page*>(
+                page(Page_IP));
     if ( nullptr!=i && i->isUsed() ) {
         _xmlDesc.appendChild(
                     i->getDataDocument());

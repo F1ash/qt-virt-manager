@@ -333,10 +333,8 @@ set (HEADERS
   src/create_widgets/network/create_virt_network_ass.h
   src/create_widgets/network/network_widgets/assistant_widgets/introduce_page.h
   src/create_widgets/network/network_widgets/assistant_widgets/bridge_page.h
-  src/create_widgets/network/network_widgets/assistant_widgets/nated_page.h
-  src/create_widgets/network/network_widgets/assistant_widgets/routed_page.h
-  src/create_widgets/network/network_widgets/assistant_widgets/isolated_page.h
   src/create_widgets/network/network_widgets/assistant_widgets/forward_page.h
+  src/create_widgets/network/network_widgets/assistant_widgets/ip_page.h
   src/create_widgets/network/network_widgets/assistant_widgets/no_gateway_page.h
   src/create_widgets/network/network_widgets/assistant_widgets/conclusion_page.h
   src/create_widgets/network/create_virt_network_adv.h
@@ -700,10 +698,8 @@ set (SOURCES
   src/create_widgets/network/create_virt_network_ass.cpp
   src/create_widgets/network/network_widgets/assistant_widgets/introduce_page.cpp
   src/create_widgets/network/network_widgets/assistant_widgets/bridge_page.cpp
-  src/create_widgets/network/network_widgets/assistant_widgets/nated_page.cpp
-  src/create_widgets/network/network_widgets/assistant_widgets/routed_page.cpp
-  src/create_widgets/network/network_widgets/assistant_widgets/isolated_page.cpp
   src/create_widgets/network/network_widgets/assistant_widgets/forward_page.cpp
+  src/create_widgets/network/network_widgets/assistant_widgets/ip_page.cpp
   src/create_widgets/network/network_widgets/assistant_widgets/no_gateway_page.cpp
   src/create_widgets/network/network_widgets/assistant_widgets/conclusion_page.cpp
   src/create_widgets/network/create_virt_network_adv.cpp

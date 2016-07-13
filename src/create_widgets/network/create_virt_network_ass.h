@@ -13,14 +13,10 @@ public:
     enum {
         Page_Intro,
         Page_Bridge,
-        Page_NATed,
-        Page_Routed,
-        Page_Isolated,
-        Page_Conclusion,
-        // next is additional page enumerates
         Page_Forward,
         Page_IP,
-        Page_NoGateway
+        Page_NoGateway,
+        Page_Conclusion
     };
     QString         getXMLDescFileName() const;
 

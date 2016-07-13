@@ -46,11 +46,11 @@ int IntroducePage::nextId() const
     if ( bridgeNet->isChecked() ) {
         return CreateVirtNetwork_Ass::Page_Bridge;
     } else if ( natNet->isChecked() ) {
-        return CreateVirtNetwork_Ass::Page_NATed;
+        return CreateVirtNetwork_Ass::Page_Forward;
     } else if ( routedNet->isChecked() ) {
-        return CreateVirtNetwork_Ass::Page_Routed;
+        return CreateVirtNetwork_Ass::Page_Forward;
     } else if ( isolatedNet->isChecked() ) {
-        return CreateVirtNetwork_Ass::Page_Bridge;
+        return CreateVirtNetwork_Ass::Page_IP;
     }
 }
 bool IntroducePage::isComplete() const

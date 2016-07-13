@@ -1,5 +1,5 @@
-#ifndef ISOLATED_PAGE_H
-#define ISOLATED_PAGE_H
+#ifndef IP_PAGE_H
+#define IP_PAGE_H
 
 #include <QWizardPage>
 #include <QTabWidget>
@@ -9,11 +9,12 @@
 #include "create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipv4.h"
 #include "create_widgets/network/network_widgets/addressing_widgets/ip_widgets/_ipv6.h"
 
-class IsolatedPage : public QWizardPage
+class IP_Page : public QWizardPage
 {
     Q_OBJECT
 public:
-    explicit IsolatedPage(QWidget *parent = nullptr);
+    explicit IP_Page(QWidget *parent = nullptr);
+    void            initializePage();
     int             nextId() const;
     bool            isComplete() const;
     bool            isUsed() const;
@@ -27,4 +28,4 @@ private:
     QVBoxLayout    *lt;
 };
 
-#endif // ISOLATED_PAGE_H
+#endif // IP_PAGE_H

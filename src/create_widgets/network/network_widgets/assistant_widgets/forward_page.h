@@ -13,6 +13,7 @@ class ForwardPage : public QWizardPage
 public:
     explicit ForwardPage(QWidget *parent = nullptr);
     Forward_Widget *fr;
+    void            initializePage();
     int             nextId() const;
     bool            isComplete() const;
     QDomDocument    getDataDocument() const;
