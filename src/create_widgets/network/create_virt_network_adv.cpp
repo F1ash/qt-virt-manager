@@ -40,15 +40,15 @@ CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
 
     bridgeWdg = new Bridge_Widget(this);
     domainWdg = new Domain_Widget(this);
-    addressingWdg = new Addressing_Widget(this);
     forwardWdg = new Forward_Widget(this);
+    addressingWdg = new Addressing_Widget(this);
     QoSWdg = new QoS_Widget(this);
     tabs = new QTabWidget(this);
     tabs->setTabPosition(QTabWidget::West);
     tabs->addTab(bridgeWdg, "Bridge");
     tabs->addTab(domainWdg, "DNS Domain");
-    tabs->addTab(addressingWdg, "IP");
     tabs->addTab(forwardWdg, "Forward");
+    tabs->addTab(addressingWdg, "IP");
     tabs->addTab(QoSWdg, "QoS");
 
     //showDescription = new QCheckBox(
@@ -131,8 +131,8 @@ void CreateVirtNetwork_Adv::readXmlDescData(const QString &_xmlDesc)
         uuid->setText(_uuid.text());
         bridgeWdg->setDataDescription(_xmlDesc);
         domainWdg->setDataDescription(_xmlDesc);
-        addressingWdg->setDataDescription(_xmlDesc);
         forwardWdg->setDataDescription(_xmlDesc);
+        addressingWdg->setDataDescription(_xmlDesc);
         QoSWdg->setDataDescription(_xmlDesc);
         noGW->setChecked(
                     _ip.isNull() && _route.isNull() && _forward.isNull() );
@@ -182,13 +182,13 @@ void CreateVirtNetwork_Adv::buildXMLDescription()
         _xmlDesc.appendChild(
                     domainWdg->getDataDocument());
     };
-    if ( addressingWdg->isUsed() ) {
-        _xmlDesc.appendChild(
-                    addressingWdg->getDataDocument());
-    };
     if ( forwardWdg->isUsed() ) {
         _xmlDesc.appendChild(
                     forwardWdg->getDataDocument());
+    };
+    if ( addressingWdg->isUsed() ) {
+        _xmlDesc.appendChild(
+                    addressingWdg->getDataDocument());
     };
     if ( QoSWdg->isUsed() ) {
         _xmlDesc.appendChild(

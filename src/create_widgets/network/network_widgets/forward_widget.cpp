@@ -71,7 +71,6 @@ void Forward_Widget::setCurrentMode(const QString &_mode)
     if ( idx<0 ) idx = 0;
     mode->setCurrentIndex(idx);
     mode->setEnabled(false);
-    frwdModeSet->setEnabled(true);
 }
 
 /* public slots */

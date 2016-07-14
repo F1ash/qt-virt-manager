@@ -6,6 +6,8 @@ NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
     addrRange = new QCheckBox("Use Address Range", this);
     ipStart = new QLineEdit(this);
     ipEnd = new QLineEdit(this);
+    ipStart->setEnabled(false);
+    ipEnd->setEnabled(false);
     addrLayout = new QHBoxLayout();
     addrLayout->addWidget(addrRange);
     addrLayout->addWidget(ipStart);
@@ -15,25 +17,29 @@ NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
     portStart->setRange(0, 65535);
     portEnd = new QSpinBox(this);
     portEnd->setRange(0, 65535);
+    portStart->setEnabled(false);
+    portEnd->setEnabled(false);
     portLayout = new QHBoxLayout();
     portLayout->addWidget(portRange);
     portLayout->addWidget(portStart);
     portLayout->addWidget(portEnd);
     addrWdg = new QWidget(this);
     addrWdg->setLayout(addrLayout);
-    addrWdg->setEnabled(false);
     portWdg = new QWidget(this);
     portWdg->setLayout(portLayout);
-    portWdg->setEnabled(false);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(addrWdg);
     commonLayout->addWidget(portWdg);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(addrRange, SIGNAL(toggled(bool)),
-            addrWdg, SLOT(setEnabled(bool)));
+            ipStart, SLOT(setEnabled(bool)));
+    connect(addrRange, SIGNAL(toggled(bool)),
+            ipEnd, SLOT(setEnabled(bool)));
     connect(portRange, SIGNAL(toggled(bool)),
-            portWdg, SLOT(setEnabled(bool)));
+            portStart, SLOT(setEnabled(bool)));
+    connect(portRange, SIGNAL(toggled(bool)),
+            portEnd, SLOT(setEnabled(bool)));
     connect(portStart, SIGNAL(valueChanged(int)),
             this, SLOT(portStartChanged(int)));
     connect(portEnd, SIGNAL(valueChanged(int)),

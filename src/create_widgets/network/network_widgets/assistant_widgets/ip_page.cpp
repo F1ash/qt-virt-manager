@@ -45,17 +45,27 @@ void IP_Page::initializePage()
 }
 int IP_Page::nextId() const
 {
-    if ( ipv4->IP_data_isEmpty() &&
-         ipv6->IP_data_isEmpty() ) {
-        // no gateway
-        return CreateVirtNetwork_Ass::Page_NoGateway;
+    if ( wizard()->field("IsolatedType").toBool() ) {
+        if ( ipv4->IP_data_isEmpty() &&
+             ipv6->IP_data_isEmpty() ) {
+            // no gateway
+            return CreateVirtNetwork_Ass::Page_NoGateway;
+        };
+        // usual isolated
+        return CreateVirtNetwork_Ass::Page_Conclusion;
     };
-    // usual isolated
+    // 'nat', 'routed'
     return CreateVirtNetwork_Ass::Page_Conclusion;
 }
 bool IP_Page::isComplete() const
 {
-    return true;
+    if ( wizard()->field("IsolatedType").toBool() ) {
+        return true;
+    };
+    if ( wizard()->field("NATedType").toBool() ||
+         wizard()->field("RoutedType").toBool() ) {
+        return isUsed();
+    };
 }
 bool IP_Page::isUsed() const
 {
