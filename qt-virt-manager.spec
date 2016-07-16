@@ -4,7 +4,7 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.27.50
+Version:        0.34.50
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -169,6 +169,9 @@ fi
 %endif
 
 %changelog
+* Sat Jul 16 2016 Fl@sh <kaperang07@gmail.com> - 0.34.50-1
+- version updated;
+
 * Wed May 11 2016 Fl@sh <kaperang07@gmail.com> - 0.27.50-1
 - version updated;
 - clear %%changelog;
