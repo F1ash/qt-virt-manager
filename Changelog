@@ -125,3 +125,14 @@ fixed crash in LXC terminal at close;
 enhanced CreateDomain in Devices;
 added About;
 some fixes and enhancements;
+
+0.34.50 :
+implemented VNC VM Viewer;
+implemented fullscreen for VM Viewers;
+changed default Settings format to ini-format;
+implemented Soft Touched view mode;
+implemented building for OS X;
+re-implemented Create Network to
+    Advanced Network Editor and
+    Network Assistant;
+some fixes and enhancements;
