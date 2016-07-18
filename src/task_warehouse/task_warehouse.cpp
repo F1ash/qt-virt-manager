@@ -116,6 +116,10 @@ void TaskWareHouse::addNewTask(TASK task)
         threadPool->insert(
                     _number,
                     new InterfaceControlThread(this));
+    } else if ( task.type == "nwfilter" ) {
+        threadPool->insert(
+                    _number,
+                    new NWFilterControlThread(this));
     } else return;
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));
@@ -138,13 +142,14 @@ void TaskWareHouse::msgRepeater(QString &msg, uint _number)
     QString time = QTime::currentTime().toString();
     QString number = QString("").sprintf("%08d", _number);
     QString title = QString("in TASK #%1").arg(number);
-    QString currMsg = QString("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+    QString currMsg = QString(
+    "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     emit taskMsg(currMsg);
 }
 void TaskWareHouse::taskResultReceiver(Result data)
 {
-    if ( data.type=="domain" ) {
+    if        ( data.type=="domain" ) {
         emit domResult(data);
     } else if ( data.type=="network" ) {
         emit netResult(data);
@@ -156,6 +161,8 @@ void TaskWareHouse::taskResultReceiver(Result data)
         emit secResult(data);
     } else if ( data.type=="iface" ) {
         emit ifaceResult(data);
+    } else if ( data.type=="nwfilter" ) {
+        emit nwfilterResult(data);
     } else return;
     QString _number = QString("").sprintf("%08d", data.number);
     ControlThread *cThread = static_cast<ControlThread*>(

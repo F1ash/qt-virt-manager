@@ -15,6 +15,7 @@
 #include "virt_objects/virt_storage_vol/storage_vol_control_thread.h"
 #include "virt_objects/virt_secret/secret_control_thread.h"
 #include "virt_objects/virt_interface/virt_interface_control_thread.h"
+#include "virt_objects/virt_nwfilter/nwfilter_control_thread.h"
 
 typedef QMap<QString, ControlThread*> THREAD_POOL;
 
@@ -33,6 +34,7 @@ signals:
     void             volResult(Result);
     void             secResult(Result);
     void             ifaceResult(Result);
+    void             nwfilterResult(Result);
 
 private:
     uint             counter = 0;

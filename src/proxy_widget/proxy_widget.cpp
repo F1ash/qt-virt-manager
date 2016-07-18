@@ -26,6 +26,8 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
             .pixmap(ICON_NATIVE_SIZE);
     ifaces = QIcon::fromTheme("interfaces")
             .pixmap(ICON_NATIVE_SIZE);
+    nwfilters = QIcon::fromTheme("nwfilter")
+            .pixmap(ICON_NATIVE_SIZE);
     setMouseTracking(true);
     connAct = new QAction(this);
     domainsAct = new QAction(this);
@@ -33,6 +35,7 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
     storagesAct = new QAction(this);
     secretsAct = new QAction(this);
     ifacesAct = new QAction(this);
+    nfAct = new QAction(this);
     logAct = new QAction(this);
     next = new QAction(this);
     prev = new QAction(this);
@@ -42,6 +45,7 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
     addAction(storagesAct);
     addAction(secretsAct);
     addAction(ifacesAct);
+    addAction(nfAct);
     addAction(logAct);
     addAction(next);
     addAction(prev);
@@ -57,6 +61,8 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
                 QKeySequence(tr("Ctrl+Alt+E", "Show Secrets")));
     ifacesAct->setShortcut(
                 QKeySequence(tr("Ctrl+Alt+I", "Show Interfaces")));
+    nfAct->setShortcut(
+                QKeySequence(tr("Ctrl+Alt+F", "Show Network Filters")));
     logAct->setShortcut(
                 QKeySequence(tr("Ctrl+Alt+G", "Show Log")));
     next->setShortcut(
@@ -74,6 +80,8 @@ ProxyWidget::ProxyWidget(QWidget *parent) :
     connect(secretsAct, SIGNAL(triggered(bool)),
             this, SLOT(actionTriggered()));
     connect(ifacesAct, SIGNAL(triggered(bool)),
+            this, SLOT(actionTriggered()));
+    connect(nfAct, SIGNAL(triggered(bool)),
             this, SLOT(actionTriggered()));
     connect(logAct, SIGNAL(triggered(bool)),
             this, SLOT(actionTriggered()));
@@ -123,6 +131,8 @@ void ProxyWidget::actionTriggered()
         emit viewDock("ifaceDock");
     } else if ( sender()==secretsAct ) {
         emit viewDock("secretDock");
+    } else if ( sender()==nfAct ) {
+        emit viewDock("nwfilterDock");
     } else if ( sender()==logAct ) {
         emit viewDock("logDock");
     };
@@ -168,6 +178,7 @@ void ProxyWidget::mouseReleaseEvent(QMouseEvent *ev)
             domainsAct->trigger();
         } else if ( r4.contains(ev->pos(), true) ) {
             qDebug()<<"in R4";
+            nfAct->trigger();
         } else if ( r5.contains(ev->pos(), true) ) {
             qDebug()<<"in R5";
             networksAct->trigger();
@@ -273,11 +284,13 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
 
             painter.setOpacity(1);
             QRect rF;
-            QPoint dR1, dR3, dR5, dR6, dR7, dR8, dR9;
+            QPoint dR1, dR3, dR4, dR5, dR6, dR7, dR8, dR9;
             if ( r1.intersects(currRect) ) {
                 rF = r1; dR1 = QPoint(5, 5);
             } else if ( r3.intersects(currRect) ) {
                 rF = r3; dR3 = QPoint(5, 5);
+            } else if ( r4.intersects(currRect) ) {
+                rF = r4; dR4 = QPoint(5, 5);
             } else if ( r5.intersects(currRect) ) {
                 rF = r5; dR5 = QPoint(5, 5);
             } else if ( r6.intersects(currRect) ) {
@@ -326,6 +339,16 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                             -(r3.width()-side)/2+dR3.x(),
                             -(r3.height()-side)/2+dR3.y()),
                         domains.scaled(
+                            part,
+                            Qt::KeepAspectRatio,
+                            Qt::SmoothTransformation));
+            painter.drawPixmap(
+                        r4.adjusted(
+                            (r4.width()-side)/2+dR4.x(),
+                            (r4.height()-side)/2+dR4.y(),
+                            -(r4.width()-side)/2+dR4.x(),
+                            -(r4.height()-side)/2+dR4.y()),
+                        nwfilters.scaled(
                             part,
                             Qt::KeepAspectRatio,
                             Qt::SmoothTransformation));
@@ -401,6 +424,13 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                         Qt::AlignCenter,
                         "Virtual\nmachines\nCtrl+Alt+D");
             qDebug()<<"r3!=ev->rect()"<<r3;
+        };
+        if ( !r4.intersects(currRect) ) {
+            painter.drawText(
+                        r4.adjusted(0, heightPart/2, 0, 0),
+                        Qt::AlignCenter,
+                        "Network\nfilters\nCtrl+Alt+F");
+            qDebug()<<"r4!=ev->rect()"<<r4;
         };
         if ( !r5.intersects(currRect) ) {
             painter.drawText(

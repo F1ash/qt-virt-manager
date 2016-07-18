@@ -14,6 +14,7 @@ public:
     QAction         *ifaceAct;
     QAction         *secretAct;
     QAction         *storageAct;
+    QAction         *nwfilterAct;
 };
 
 #endif // DOCK_MENU_H

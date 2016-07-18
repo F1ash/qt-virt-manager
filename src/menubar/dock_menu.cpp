@@ -16,4 +16,6 @@ DockMenu::DockMenu(QWidget *parent) :
     ifaceAct->setCheckable(true);
     secretAct = addAction(QIcon::fromTheme("security"), "Sec&rets");
     secretAct->setCheckable(true);
+    nwfilterAct = addAction(QIcon::fromTheme("nwfilter"), "Network &Filters");
+    nwfilterAct->setCheckable(true);
 }

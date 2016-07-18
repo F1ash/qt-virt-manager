@@ -37,13 +37,14 @@ private:
     QPixmap     storages;
     QPixmap     secrets;
     QPixmap     ifaces;
+    QPixmap     nwfilters;
     QRect       r1, r2, r3, r4,
                 r5, r6, r7, r8,
                 r9, commonRect, currRect;
     QSize       part;
     QAction    *connAct, *domainsAct,
                *networksAct, *storagesAct,
-               *secretsAct, *ifacesAct,
+               *secretsAct, *ifacesAct, *nfAct,
                *logAct, *next, *prev;
     int         widthPart, heightPart, side;
 

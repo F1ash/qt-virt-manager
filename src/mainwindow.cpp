@@ -100,6 +100,12 @@ void MainWindow::saveSettings()
     settings.setValue("Floating", secretDock->isFloating());
     settings.setValue("Geometry", secretDock->saveGeometry());
     settings.endGroup();
+    settings.beginGroup("NWFilterDock");
+    settings.setValue("DockArea", dockWidgetArea(secretDock));
+    settings.setValue("Visible", secretDock->isVisible());
+    settings.setValue("Floating", secretDock->isFloating());
+    settings.setValue("Geometry", secretDock->saveGeometry());
+    settings.endGroup();
     settings.beginGroup("ConnectListColumns");
     settings.setValue("column0", connListWidget->list->columnWidth(0));
     settings.setValue("column1", connListWidget->list->columnWidth(1));
@@ -127,6 +133,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         storagePoolDock->setEnabled(false);
         secretDock->setEnabled(false);
         ifaceDock->setEnabled(false);
+        nwfilterDock->setEnabled(false);
         domainsStateMonitor->stopMonitoring();
         taskWrHouse->stopTaskComputing();
         saveSettings();
@@ -286,7 +293,8 @@ void MainWindow::changeVisibility()
         if ( networkDock->isFloating() ) networkDock->hide();
         if ( storagePoolDock->isFloating() ) storagePoolDock->hide();
         if ( secretDock->isFloating() ) secretDock->hide();
-        if ( ifaceDock->isFloating() ) secretDock->hide();
+        if ( ifaceDock->isFloating() ) ifaceDock->hide();
+        if ( nwfilterDock->isFloating() ) nwfilterDock->hide();
     } else {
         this->show();
         trayIcon->hideAction->setText (QString("Down"));
@@ -309,6 +317,9 @@ void MainWindow::changeVisibility()
         if ( ifaceDock->isFloating()
              && menuBar->dockMenu->ifaceAct->isChecked() )
             ifaceDock->show();
+        if ( nwfilterDock->isFloating()
+             && menuBar->dockMenu->nwfilterAct->isChecked() )
+            nwfilterDock->show();
     };
 }
 void MainWindow::trayIconActivated(QSystemTrayIcon::ActivationReason r)
@@ -556,11 +567,33 @@ void MainWindow::initDockWidgets()
     connect(taskWrHouse, SIGNAL(ifaceResult(Result)),
             ifaceDockContent, SLOT(resultReceiver(Result)));
 
+    nwfilterDock = new DockWidget(this);
+    nwfilterDock->setObjectName("nwfilterDock");
+    nwfilterDock->setWindowTitle("NWFilter");
+    nwfilterHeadWdg = new DockHeadWidget(this, "NWFilters");
+    nwfilterHeadWdg->setTabBarName("nwfilter");
+    nwfilterDock->setTitleBarWidget(nwfilterHeadWdg);
+    connect(nwfilterHeadWdg, SIGNAL(floatChanged(bool)),
+            nwfilterDock, SLOT(_setFloating(bool)));
+    connect(nwfilterDock, SIGNAL(topLevelChanged(bool)),
+            nwfilterHeadWdg, SLOT(floatStateChanged(bool)));
+    nwfilterDockContent = new VirtNWFilterControl(this);
+    nwfilterDock->setWidget( nwfilterDockContent );
+    connect(menuBar->dockMenu->nwfilterAct, SIGNAL(toggled(bool)),
+            nwfilterDock, SLOT(setVisible(bool)));
+    connect(nwfilterDockContent, SIGNAL(entityMsg(QString&)),
+            this, SLOT(writeToErrorLog(QString&)));
+    connect(nwfilterDockContent, SIGNAL(addNewTask(TASK)),
+            taskWrHouse, SLOT(addNewTask(TASK)));
+    connect(taskWrHouse, SIGNAL(nwfilterResult(Result)),
+            nwfilterDockContent, SLOT(resultReceiver(Result)));
+
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);
     storagePoolDockContent->setEnabled(false);
     secretDockContent->setEnabled(false);
     ifaceDockContent->setEnabled(false);
+    nwfilterDockContent->setEnabled(false);
 
     switch (viewMode) {
     case SOFT_TOUCHED:
@@ -760,7 +793,8 @@ void MainWindow::writeToErrorLog(QString &msg, uint _number)
     Q_UNUSED(_number);
     QString time = QTime::currentTime().toString();
     QString title("Libvirt EventLoop");
-    QString currMsg = QString("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+    QString currMsg = QString(
+    "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     logDockContent->appendMsgToLog(currMsg);
 }
@@ -800,6 +834,8 @@ void MainWindow::receiveConnPtrPtr(virConnectPtr *_connPtrPtr, QString &name)
         secretDockContent->setListHeader(name);
     if ( ifaceDockContent->setCurrentWorkConnect(_connPtrPtr) )
         ifaceDockContent->setListHeader(name);
+    if ( nwfilterDockContent->setCurrentWorkConnect(_connPtrPtr) )
+        nwfilterDockContent->setListHeader(name);
 }
 void MainWindow::stopConnProcessing(bool onView, QString &_connName)
 {
@@ -818,6 +854,7 @@ void MainWindow::stopProcessing()
     storagePoolDockContent->stopProcessing();
     secretDockContent->stopProcessing();
     ifaceDockContent->stopProcessing();
+    nwfilterDockContent->stopProcessing();
 }
 void MainWindow::invokeVMDisplay(TASK _task)
 {
@@ -1066,6 +1103,7 @@ void MainWindow::free_and_hide_all_stuff()
     removeDockWidget(storagePoolDock);
     removeDockWidget(secretDock);
     removeDockWidget(ifaceDock);
+    removeDockWidget(nwfilterDock);
     setDockFloatible(false);
     settings.beginGroup("SOFT_TOUCHED_MODE");
     SoftTouchedWdg = new ST_StackedWidget(this);
@@ -1077,6 +1115,7 @@ void MainWindow::free_and_hide_all_stuff()
     SoftTouchedWdg->addNewWidget(storagePoolDock);
     SoftTouchedWdg->addNewWidget(secretDock);
     SoftTouchedWdg->addNewWidget(ifaceDock);
+    SoftTouchedWdg->addNewWidget(nwfilterDock);
     SoftTouchedWdg->hide();
     connect(proxyWdg, SIGNAL(viewDock(const QString&)),
             SoftTouchedWdg, SLOT(showDock(const QString&)));
@@ -1223,6 +1262,22 @@ void MainWindow::all_stuff_to_original()
     tabifyDockWidget(secretDock, ifaceDock);
     menuBar->dockMenu->ifaceAct->setChecked(visible);
 
+    nwfilterDock->setParent(this);
+    settings.beginGroup("NWFilterDock");
+    nwfilterDock->setFloating(settings.value("Floating", false).toBool());
+    nwfilterDock->restoreGeometry(settings.value("Geometry").toByteArray());
+    visible = settings.value("Visible", false).toBool();
+    nwfilterDock->setVisible(visible);
+    area = getDockArea(
+                settings.value(
+                    "DockArea",
+                    Qt::BottomDockWidgetArea)
+                .toInt());
+    settings.endGroup();
+    addDockWidget(area, nwfilterDock);
+    tabifyDockWidget(ifaceDock, nwfilterDock);
+    menuBar->dockMenu->nwfilterAct->setChecked(visible);
+
     viewMode = HARD_CLASSIC;
     proxyWdg->setUsedViewMode(viewMode);
     proxyWdg->update();
@@ -1263,6 +1318,11 @@ void MainWindow::setDockFloatible(bool state)
             QDockWidget::DockWidgetFloatable |
             QDockWidget::DockWidgetVerticalTitleBar
         );
+        nwfilterDock->setFeatures(
+            QDockWidget::DockWidgetMovable   |
+            QDockWidget::DockWidgetFloatable |
+            QDockWidget::DockWidgetVerticalTitleBar
+        );
     } else {
         logDock->setFeatures(
             QDockWidget::NoDockWidgetFeatures |
@@ -1288,6 +1348,10 @@ void MainWindow::setDockFloatible(bool state)
                     QDockWidget::NoDockWidgetFeatures |
                     QDockWidget::DockWidgetVerticalTitleBar
         );
+        nwfilterDock->setFeatures(
+                    QDockWidget::NoDockWidgetFeatures |
+                    QDockWidget::DockWidgetVerticalTitleBar
+        );
     };
     logHeadWdg->setFloatible(state);
     domHeadWdg->setFloatible(state);
@@ -1295,6 +1359,7 @@ void MainWindow::setDockFloatible(bool state)
     poolHeadWdg->setFloatible(state);
     scrtHeadWdg->setFloatible(state);
     ifaceHeadWdg->setFloatible(state);
+    nwfilterHeadWdg->setFloatible(state);
     connListWidget->toolBar->wheelEventEnabled(!state);
     connListWidget->list->setUsageInSoftTouched(!state);
     domainDockContent->setUsageInSoftTouched(!state);
@@ -1302,6 +1367,7 @@ void MainWindow::setDockFloatible(bool state)
     storagePoolDockContent->setUsageInSoftTouched(!state);
     secretDockContent->setUsageInSoftTouched(!state);
     ifaceDockContent->setUsageInSoftTouched(!state);
+    nwfilterDockContent->setUsageInSoftTouched(!state);
     logDockContent->setUsageInSoftTouched(!state);
 }
 void MainWindow::setDockHeaderWheelEventsEnabled(bool state)
@@ -1332,6 +1398,10 @@ void MainWindow::setDockHeaderWheelEventsEnabled(bool state)
                 SoftTouchedWdg, SLOT(showNextDock()));
         connect(ifaceHeadWdg, SIGNAL(viewPrevDock()),
                 SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(nwfilterHeadWdg, SIGNAL(viewNextDock()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(nwfilterHeadWdg, SIGNAL(viewPrevDock()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
         connect(connListWidget->toolBar, SIGNAL(viewNextDock()),
                 SoftTouchedWdg, SLOT(showNextDock()));
         connect(connListWidget->toolBar, SIGNAL(viewPrevDock()),
@@ -1360,6 +1430,10 @@ void MainWindow::setDockHeaderWheelEventsEnabled(bool state)
         disconnect(ifaceHeadWdg, SIGNAL(viewNextDock()),
                    SoftTouchedWdg, SLOT(showNextDock()));
         disconnect(ifaceHeadWdg, SIGNAL(viewPrevDock()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(nwfilterHeadWdg, SIGNAL(viewNextDock()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(nwfilterHeadWdg, SIGNAL(viewPrevDock()),
                    SoftTouchedWdg, SLOT(showPrevDock()));
         disconnect(connListWidget->toolBar, SIGNAL(viewNextDock()),
                    SoftTouchedWdg, SLOT(showNextDock()));
@@ -1407,6 +1481,12 @@ void MainWindow::setDockUsedInSoftTouched(bool state)
         connect(ifaceDockContent->entityList->prevL,
                 SIGNAL(released()),
                 SoftTouchedWdg, SLOT(showPrevDock()));
+        connect(nwfilterDockContent->entityList->nextL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showNextDock()));
+        connect(nwfilterDockContent->entityList->prevL,
+                SIGNAL(released()),
+                SoftTouchedWdg, SLOT(showPrevDock()));
         connect(connListWidget->list->nextL,
                 SIGNAL(released()),
                 SoftTouchedWdg, SLOT(showNextDock()));
@@ -1432,6 +1512,9 @@ void MainWindow::setDockUsedInSoftTouched(bool state)
                 SIGNAL(released()),
                 this, SLOT(turnSoftTouchedToUntriggered()));
         connect(ifaceDockContent->entityList->homeL,
+                SIGNAL(released()),
+                this, SLOT(turnSoftTouchedToUntriggered()));
+        connect(nwfilterDockContent->entityList->homeL,
                 SIGNAL(released()),
                 this, SLOT(turnSoftTouchedToUntriggered()));
     } else {
@@ -1471,6 +1554,12 @@ void MainWindow::setDockUsedInSoftTouched(bool state)
         disconnect(ifaceDockContent->entityList->prevL,
                    SIGNAL(released()),
                    SoftTouchedWdg, SLOT(showPrevDock()));
+        disconnect(nwfilterDockContent->entityList->nextL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showNextDock()));
+        disconnect(nwfilterDockContent->entityList->prevL,
+                   SIGNAL(released()),
+                   SoftTouchedWdg, SLOT(showPrevDock()));
         disconnect(connListWidget->list->nextL,
                    SIGNAL(released()),
                    SoftTouchedWdg, SLOT(showNextDock()));
@@ -1496,6 +1585,9 @@ void MainWindow::setDockUsedInSoftTouched(bool state)
                    SIGNAL(released()),
                    this, SLOT(turnSoftTouchedToUntriggered()));
         disconnect(ifaceDockContent->entityList->homeL,
+                   SIGNAL(released()),
+                   this, SLOT(turnSoftTouchedToUntriggered()));
+        disconnect(nwfilterDockContent->entityList->homeL,
                    SIGNAL(released()),
                    this, SLOT(turnSoftTouchedToUntriggered()));
     }

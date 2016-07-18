@@ -44,6 +44,7 @@
         <file alias="22x22/devices/device-tpm.png">icons/22x22/devices/device-tpm.png</file>
         <file alias="22x22/devices/device-disk.png">icons/22x22/devices/device-disk.png</file>
         <file alias="22x22/devices/input-keyboard.png">icons/22x22/devices/input-keyboard.png</file>
+        <file alias="22x22/categories/nwfilter.png">icons/22x22/categories/nwfilter.png</file>
         <file alias="22x22/categories/preferences-other.png">icons/22x22/categories/preferences-other.png</file>
         <file alias="22x22/categories/preferences-system-network.png">icons/22x22/categories/preferences-system-network.png</file>
         <file alias="22x22/categories/preferences-desktop.png">icons/22x22/categories/preferences-desktop.png</file>
@@ -175,6 +176,7 @@
         <file alias="32x32/devices/device-tpm.png">icons/32x32/devices/device-tpm.png</file>
         <file alias="32x32/devices/device-disk.png">icons/32x32/devices/device-disk.png</file>
         <file alias="32x32/devices/input-keyboard.png">icons/32x32/devices/input-keyboard.png</file>
+        <file alias="32x32/categories/nwfilter.png">icons/32x32/categories/nwfilter.png</file>
         <file alias="32x32/categories/preferences-other.png">icons/32x32/categories/preferences-other.png</file>
         <file alias="32x32/categories/network.png">icons/32x32/categories/network.png</file>
         <file alias="32x32/categories/preferences-desktop.png">icons/32x32/categories/preferences-desktop.png</file>
@@ -306,6 +308,7 @@
         <file alias="48x48/devices/device-tpm.png">icons/48x48/devices/device-tpm.png</file>
         <file alias="48x48/devices/device-disk.png">icons/48x48/devices/device-disk.png</file>
         <file alias="48x48/devices/input-keyboard.png">icons/48x48/devices/input-keyboard.png</file>
+        <file alias="48x48/categories/nwfilter.png">icons/48x48/categories/nwfilter.png</file>
         <file alias="48x48/categories/preferences-other.png">icons/48x48/categories/preferences-other.png</file>
         <file alias="48x48/categories/network.png">icons/48x48/categories/network.png</file>
         <file alias="48x48/categories/preferences-desktop.png">icons/48x48/categories/preferences-desktop.png</file>
@@ -437,6 +440,7 @@
         <file alias="24x24/devices/device-tpm.png">icons/24x24/devices/device-tpm.png</file>
         <file alias="24x24/devices/device-disk.png">icons/24x24/devices/device-disk.png</file>
         <file alias="24x24/devices/input-keyboard.png">icons/24x24/devices/input-keyboard.png</file>
+        <file alias="24x24/categories/nwfilter.png">icons/24x24/categories/nwfilter.png</file>
         <file alias="24x24/categories/preferences-other.png">icons/24x24/categories/preferences-other.png</file>
         <file alias="24x24/categories/network.png">icons/24x24/categories/network.png</file>
         <file alias="24x24/categories/preferences-desktop.png">icons/24x24/categories/preferences-desktop.png</file>
@@ -567,6 +571,7 @@
         <file alias="64x64/devices/device-tpm.png">icons/64x64/devices/device-tpm.png</file>
         <file alias="64x64/devices/device-disk.png">icons/64x64/devices/device-disk.png</file>
         <file alias="64x64/devices/input-keyboard.png">icons/64x64/devices/input-keyboard.png</file>
+        <file alias="64x64/categories/nwfilter.png">icons/64x64/categories/nwfilter.png</file>
         <file alias="64x64/categories/storagePool.png">icons/64x64/categories/storagePool.png</file>
         <file alias="64x64/categories/preferences-other.png">icons/64x64/categories/preferences-other.png</file>
         <file alias="64x64/categories/network.png">icons/64x64/categories/network.png</file>
@@ -660,6 +665,7 @@
         <file alias="256x256/emblems/interfaces.png">icons/256x256/emblems/interfaces.png</file>
         <file alias="256x256/emblems/connections.png">icons/256x256/emblems/connections.png</file>
         <file alias="256x256/emblems/vm-machines.png">icons/256x256/emblems/vm-machines.png</file>
+        <file alias="256x256/emblems/nwfilter.png">icons/256x256/emblems/nwfilter.png</file>
         <file alias="256x256/emblems/storages.png">icons/256x256/emblems/storages.png</file>
         <file alias="256x256/emblems/security.png">icons/256x256/emblems/security.png</file>
         <file alias="256x256/emblems/networks.png">icons/256x256/emblems/networks.png</file>

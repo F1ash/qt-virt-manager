@@ -174,6 +174,14 @@ set (HEADERS
   src/virt_objects/virt_interface/virt_interface_control_menu.h
   src/virt_objects/virt_interface/interface_list_delegate.h
 
+  src/virt_objects/virt_nwfilter/nwfilter_control.h
+  src/virt_objects/virt_nwfilter/nwfilter_control_thread.h
+  src/virt_objects/virt_nwfilter/nwfilter_control_menu.h
+  src/virt_objects/virt_nwfilter/nwfilter_toolbar.h
+  src/virt_objects/virt_nwfilter/nwfilter_model.h
+  src/virt_objects/virt_nwfilter/nwfilter_index.h
+  src/virt_objects/virt_nwfilter/nwfilter_list_delegate.h
+
   src/create_widgets/domain/domain_widgets.h
   src/create_widgets/domain/_qwidget.h
   src/create_widgets/domain/_qwidget_threaded.h
@@ -539,6 +547,14 @@ set (SOURCES
   src/virt_objects/virt_interface/virt_interface_index.cpp
   src/virt_objects/virt_interface/virt_interface_control_menu.cpp
   src/virt_objects/virt_interface/interface_list_delegate.cpp
+
+  src/virt_objects/virt_nwfilter/nwfilter_control.cpp
+  src/virt_objects/virt_nwfilter/nwfilter_control_thread.cpp
+  src/virt_objects/virt_nwfilter/nwfilter_control_menu.cpp
+  src/virt_objects/virt_nwfilter/nwfilter_toolbar.cpp
+  src/virt_objects/virt_nwfilter/nwfilter_model.cpp
+  src/virt_objects/virt_nwfilter/nwfilter_index.cpp
+  src/virt_objects/virt_nwfilter/nwfilter_list_delegate.cpp
   
   src/create_widgets/domain/create_virt_domain.cpp
   src/create_widgets/domain/_qwidget.cpp
