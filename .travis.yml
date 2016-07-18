@@ -15,10 +15,10 @@ before_install:
   - brew tap F1ash/homebrew-qt-virt-manager
  
 
-install::
+install:
   - brew install spice-client-glib2 qtermwidget libvnc libvirt-glib
 
-script
+script:
   - cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=0
     -DBUILD_TYPE=Debug -DUSE_SPICE_AUDIO=1
     -DQT5_LIB_PATH=$(brew --prefix qt5)
