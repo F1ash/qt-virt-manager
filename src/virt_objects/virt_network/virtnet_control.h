@@ -6,7 +6,6 @@
 #include "virtnet_toolbar.h"
 #include "virtnet_control_menu.h"
 #include "net_list_delegate.h"
-#include "create_widgets/network/create_virt_network_adv.h"
 
 class VirtNetControl : public VirtEntityControl
 {

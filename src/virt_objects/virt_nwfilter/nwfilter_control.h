@@ -15,6 +15,9 @@ public:
     explicit VirtNWFilterControl(QWidget *parent = nullptr);
     ~VirtNWFilterControl();
 
+signals:
+    void                 nwfilterToEditor(TASK);
+
 private:
     VirtNWFilterModel     *virtNWFilterModel;
     VirtNWFilterToolBar   *toolBar;
@@ -34,6 +37,7 @@ private slots:
     void                 entityClicked(const QPoint&);
     void                 entityDoubleClicked(const QModelIndex&);
     void                 execAction(const QStringList&);
+    void                 newVirtEntityFromXML(const OFILE_TASK&);
 };
 
 #endif // VIRT_NWFILTER_CONTROL_H

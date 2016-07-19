@@ -6,6 +6,10 @@ VirtNWFilterToolBar::VirtNWFilterToolBar(QWidget *parent) :
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
+    define_Menu = new OpenFileMenu(this, "define", "nwfilter");
+    define_Action->setMenu(define_Menu);
+    connect(define_Action, SIGNAL(triggered()),
+            this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
     undefine_Action->setToolTip("Undefine");
@@ -33,6 +37,8 @@ VirtNWFilterToolBar::VirtNWFilterToolBar(QWidget *parent) :
     connect(_autoReload, SIGNAL(toggled(bool)),
             this, SLOT(changeAutoReloadState(bool)));
 
+    connect(define_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
 }
@@ -92,6 +98,15 @@ void VirtNWFilterToolBar::timerEvent(QTimerEvent *event)
         QStringList parameters;
         parameters << "reloadVirtNWFilter";
         emit execMethod(parameters);
+    };
+}
+void VirtNWFilterToolBar::showMenu()
+{
+    QAction *act = static_cast<QAction*>(sender());
+    if ( act->menu()->isVisible() ) act->menu()->hide();
+    else {
+        act->menu()->show();
+        act->menu()->move(QCursor::pos());
     };
 }
 void VirtNWFilterToolBar::detectTriggerredAction(QAction *action)

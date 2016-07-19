@@ -401,6 +401,8 @@ set (HEADERS
 
   src/create_widgets/interface/create_interface.h
 
+  src/create_widgets/nwfilter/create_virt_nwfilter.h
+
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/viewer_toolbar.h
   src/vm_viewer/vm_state_widget.h
@@ -773,6 +775,8 @@ set (SOURCES
   src/create_widgets/secret/secret_widgets/_sec_type.cpp
 
   src/create_widgets/interface/create_interface.cpp
+
+  src/create_widgets/nwfilter/create_virt_nwfilter.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/viewer_toolbar.cpp

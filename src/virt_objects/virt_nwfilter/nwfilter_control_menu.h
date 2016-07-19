@@ -21,7 +21,7 @@ signals:
 
 private:
     bool            autoReloadState;
-    QAction        *undefine = nullptr;
+    QAction        *edit = nullptr;
     QAction        *getXMLDesc = nullptr;
     QAction        *reload = nullptr;
     QStringList     parameters;

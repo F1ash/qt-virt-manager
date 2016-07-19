@@ -51,7 +51,8 @@ int IntroducePage::nextId() const
         return CreateVirtNetwork_Ass::Page_Forward;
     } else if ( isolatedNet->isChecked() ) {
         return CreateVirtNetwork_Ass::Page_IP;
-    }
+    };
+    return CreateVirtNetwork_Ass::Page_Conclusion;
 }
 bool IntroducePage::isComplete() const
 {

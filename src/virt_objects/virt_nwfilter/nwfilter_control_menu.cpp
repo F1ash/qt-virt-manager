@@ -4,8 +4,8 @@ VirtNWFilterControlMenu::VirtNWFilterControlMenu(
         QWidget *parent, QStringList params, bool state) :
     QMenu(parent), parameters(params), autoReloadState(state)
 {
-    undefine = new QAction("Undefine", this);
-    undefine->setIcon(QIcon::fromTheme("undefine"));
+    edit = new QAction("Edit", this);
+    edit->setIcon(QIcon::fromTheme("configure"));
     getXMLDesc = new QAction("get XML Description", this);
     getXMLDesc->setIcon(QIcon::fromTheme("application-xml"));
     getXMLDesc->setEnabled(true);
@@ -13,7 +13,7 @@ VirtNWFilterControlMenu::VirtNWFilterControlMenu(
     reload->setIcon(QIcon::fromTheme("view-refresh"));
     reload->setEnabled(!autoReloadState);
 
-    addAction(undefine);
+    addAction(edit);
     addSeparator();
     addAction(getXMLDesc);
     addSeparator();
@@ -27,8 +27,8 @@ void VirtNWFilterControlMenu::emitExecMethod(QAction *action)
 {
     QStringList paramList;
     if ( !parameters.isEmpty() ) {
-        if        ( action == undefine ) {
-            paramList.append("undefineVirtNWFilter");
+        if        ( action == edit ) {
+            paramList.append("editVirtNWFilter");
         } else if ( action == getXMLDesc ) {
             paramList.append("getVirtNWFilterXMLDesc");
         } else if ( action == reload ) {

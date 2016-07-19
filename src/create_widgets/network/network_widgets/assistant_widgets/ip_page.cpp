@@ -66,6 +66,7 @@ bool IP_Page::isComplete() const
          wizard()->field("RoutedType").toBool() ) {
         return isUsed();
     };
+    return false;
 }
 bool IP_Page::isUsed() const
 {

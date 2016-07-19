@@ -1,5 +1,5 @@
-#ifndef CREATE_VIRT_NETWORK_H
-#define CREATE_VIRT_NETWORK_H
+#ifndef CREATE_VIRT_NWFILTER_H
+#define CREATE_VIRT_NWFILTER_H
 
 #include <QMainWindow>
 #include <QSettings>
@@ -10,28 +10,26 @@
 #include <QTime>
 #include <virt_objects/virt_entity_config.h>
 #include <virt_objects/_virt_thread.h>
-#include "create_virt_network_adv.h"
-#include "create_virt_network_ass.h"
 #include <QDebug>
 
-class NetHelperThread : public _VirtThread
+class NetFilterHelperThread : public _VirtThread
 {
     Q_OBJECT
 public:
-    explicit NetHelperThread(
+    explicit NetFilterHelperThread(
             QObject        *parent      = nullptr,
             virConnectPtr  *connPtrPtr  = nullptr);
     void             run();
 };
 
-class CreateVirtNetwork : public QMainWindow
+class CreateVirtNWFilter : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit CreateVirtNetwork(
+    explicit CreateVirtNWFilter(
             QWidget *parent = nullptr,
             TASK     _task  = TASK());
-    ~CreateVirtNetwork();
+    ~CreateVirtNWFilter();
 
 signals:
     void             errorMsg(QString&);
@@ -45,14 +43,10 @@ private:
     virErrorPtr      virtErrors;
 
     QTemporaryFile  *xml = nullptr;
-    bool             newbe = false;
     TASK             task;
 
-    NetHelperThread *helperThread;
-    CreateVirtNetwork_Adv
-                    *advancedWdg = nullptr;
-    CreateVirtNetwork_Ass
-                    *assistantWdg = nullptr;
+    NetFilterHelperThread
+                    *helperThread;
 
 public slots:
     void             closeEvent(QCloseEvent*);
@@ -62,4 +56,4 @@ public slots:
     void             sendMsg(QString&);
 };
 
-#endif // CREATE_VIRT_NETWORK_H
+#endif // CREATE_VIRT_NWFILTER_H

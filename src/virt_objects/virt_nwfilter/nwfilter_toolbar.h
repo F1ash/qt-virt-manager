@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QTimerEvent>
 #include <QSettings>
+#include "virt_objects/open_file_menu.h"
 #include <QDebug>
 
 class VirtNWFilterToolBar : public QToolBar
@@ -17,9 +18,11 @@ public:
     ~VirtNWFilterToolBar();
 
 signals:
+    void             fileForMethod(const OFILE_TASK&);
     void             execMethod(const QStringList&);
 
 private:
+    OpenFileMenu    *define_Menu;
     QAction         *define_Action;
     QAction         *undefine_Action;
     //QAction         *getXMLDesc_Action;
@@ -32,6 +35,7 @@ private:
 
 private slots:
     void             timerEvent(QTimerEvent*);
+    void             showMenu();
     void             detectTriggerredAction(QAction*);
     void             changeAutoReloadState(bool);
 

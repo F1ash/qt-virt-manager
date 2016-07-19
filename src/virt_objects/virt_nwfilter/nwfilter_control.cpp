@@ -21,6 +21,8 @@ VirtNWFilterControl::VirtNWFilterControl(QWidget *parent) :
     settings.endGroup();
     toolBar = new VirtNWFilterToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
+    connect(toolBar, SIGNAL(fileForMethod(const OFILE_TASK&)),
+            this, SLOT(newVirtEntityFromXML(const OFILE_TASK&)));
     connect(toolBar, SIGNAL(execMethod(const QStringList&)),
             this, SLOT(execAction(const QStringList&)));
 }
@@ -189,29 +191,9 @@ void VirtNWFilterControl::execAction(const QStringList &l)
         QString uuid = virtNWFilterModel->DataList.at(idx.row())->getUUID();
         task.object = uuid;
         if        ( l.first()=="defineVirtNWFilter" ) {
-            QString xml;
-            bool show = false;
-            // show NWFilter Creator widget
-            CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, ptr_ConnPtr);
-            int result = createVirtSec->exec();
-            if ( createVirtSec!=nullptr && result==QDialog::Accepted ) {
-                xml = createVirtSec->getXMLDescFileName();
-                show = createVirtSec->getShowing();
-                QStringList data;
-                data.append("New NWFilter XML'ed");
-                data.append(QString("to <a href='%1'>%1</a>").arg(xml));
-                QString msg = data.join(" ");
-                msgRepeater(msg);
-                if ( show ) QDesktopServices::openUrl(QUrl(xml));
-                task.action     = DEFINE_ENTITY;
-                task.method     = l.first();
-                task.args.path  = xml;
-                task.secret->setSecretValue(
-                            createVirtSec->getSecretValue());
-                emit addNewTask(task);
-            };
-            createVirtSec->deleteLater();
-            //qDebug()<<xml<<"path"<<result;
+            task.method     = l.first();
+            task.action     = DEFINE_ENTITY;
+            emit nwfilterToEditor(task);
         } else if ( l.first()=="undefineVirtNWFilter" ) {
             task.action     = UNDEFINE_ENTITY;
             task.method     = l.first();
@@ -225,29 +207,22 @@ void VirtNWFilterControl::execAction(const QStringList &l)
         };
     } else if ( l.first()=="reloadVirtNWFilter" ) {
         reloadState();
-    } else if ( l.first()=="defineVirtNWFilter" ) {
-        QString xml;
-        bool show = false;
-        // show NWFilter Creator widget
-        CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, ptr_ConnPtr);
-        int result = createVirtSec->exec();
-        if ( createVirtSec!=nullptr && result==QDialog::Accepted ) {
-            xml = createVirtSec->getXMLDescFileName();
-            show = createVirtSec->getShowing();
-            QStringList data;
-            data.append("New NWFilter XML'ed");
-            data.append(QString("to <a href='%1'>%1</a>").arg(xml));
-            QString msg = data.join(" ");
-            msgRepeater(msg);
-            if ( show ) QDesktopServices::openUrl(QUrl(xml));
-            task.action     = DEFINE_ENTITY;
-            task.method     = l.first();
-            task.args.path  = xml;
-            task.secret->setSecretValue(
-                        createVirtSec->getSecretValue());
-            emit addNewTask(task);
-        };
-        createVirtSec->deleteLater();
-        //qDebug()<<xml<<"path"<<result;
+    };
+}
+void VirtNWFilterControl::newVirtEntityFromXML(const OFILE_TASK &args)
+{
+    TASK task;
+    task.type = "nwfilter";
+    Actions act = DEFINE_ENTITY;
+    QString actName = "defineVirtNWFilter";
+    task.srcConnPtr = ptr_ConnPtr;
+    task.srcConName = currConnName;
+    task.method     = actName;
+    task.action     = act;
+    task.args.path  = args.path;
+    if ( args.context=="AsIs" ) {
+        emit addNewTask(task);
+    } else {
+        emit nwfilterToEditor(task);
     };
 }

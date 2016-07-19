@@ -29,11 +29,14 @@
 #include "menubar/menu_bar.h"
 #include "proxy_widget/proxy_widget.h"
 #include "soft_touched/st_stacked_widget.h"
+#include "create_widgets/network/create_virt_network.h"
+#include "create_widgets/nwfilter/create_virt_nwfilter.h"
 
 typedef QMap<QString, VM_Viewer*> ViewerMap;
 typedef QMap<QString, VirtStorageVolControl*> OverviwedStorageMap;
 typedef QMap<QString, CreateVirtDomain*> DomainEditorMap;
 typedef QMap<QString, CreateVirtNetwork*> NetworkEditorMap;
+typedef QMap<QString, CreateVirtNWFilter*> NWFilterEditorMap;
 
 class MainWindow : public QMainWindow
 {
@@ -90,6 +93,7 @@ private :
     OverviwedStorageMap          Overviewed_StPool_Map;
     DomainEditorMap              DomainEditor_Map;
     NetworkEditorMap             NetworkEditor_Map;
+    NWFilterEditorMap            NWFilterEditor_Map;
 
     VirtEventLoop               *virtEventLoop;
 
@@ -140,6 +144,8 @@ private slots:
     void migrate_settings_to_INI_format();
     void invokeNetworkEditor(TASK);
     void deleteNetworkEditor(QString&);
+    void invokeNWFilterEditor(TASK);
+    void deleteNWFilterEditor(QString&);
 
     void free_and_hide_all_stuff();
     void all_stuff_to_original();

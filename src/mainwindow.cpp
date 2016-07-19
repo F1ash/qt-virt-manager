@@ -186,6 +186,19 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         };
         NetworkEditor_Map.clear();
         //qDebug()<<"NetworkEditors cleared";
+        // close NWFilterEditors
+        keys = NWFilterEditor_Map.keys();
+        foreach ( QString key, keys ) {
+            if ( NWFilterEditor_Map.value(key, nullptr)!=nullptr ) {
+                CreateVirtNWFilter *value = nullptr;
+                value = static_cast<CreateVirtNWFilter*>(
+                                NWFilterEditor_Map.value(key, nullptr));
+                if ( nullptr!=value ) value->close();
+                //qDebug()<<key<<"removed into Close";
+            };
+        };
+        NWFilterEditor_Map.clear();
+        //qDebug()<<"NWFilterEditors cleared";
         // close DomainEditors
         keys = DomainEditor_Map.keys();
         foreach ( QString key, keys ) {
@@ -587,6 +600,8 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(nwfilterResult(Result)),
             nwfilterDockContent, SLOT(resultReceiver(Result)));
+    connect(nwfilterDockContent, SIGNAL(nwfilterToEditor(TASK)),
+            this, SLOT(invokeNWFilterEditor(TASK)));
 
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);
@@ -759,7 +774,13 @@ void MainWindow::closeConnGenerations(QString &_connName)
     foreach (QString key, NetworkEditor_Map.keys()) {
         if ( key.startsWith(_connName) ) {
             NetworkEditor_Map.value(key)->close();
-            //DomainEditor_Map.remove(key);
+            //NetworkEditor_Map.remove(key);
+        };
+    };
+    foreach (QString key, NWFilterEditor_Map.keys()) {
+        if ( key.startsWith(_connName) ) {
+            NWFilterEditor_Map.value(key)->close();
+            //NWFilterEditor_Map.remove(key);
         };
     };
 }
@@ -1089,6 +1110,42 @@ void MainWindow::deleteNetworkEditor(QString &key)
         // set attribute(Qt::WA_DeleteOnClose) in widget;
         // not need to delete a CreateVirtNetwork
         NetworkEditor_Map.remove(key);
+    };
+}
+void MainWindow::invokeNWFilterEditor(TASK _task)
+{
+    QString connName = _task.srcConName;
+    QString nwfilterName = _task.object;
+    // WARNING: key must starts with connection name
+    // see for: MainWindow::closeConnGenerations(QString &_connName)
+    QString key = QString("%1_%2").arg(connName).arg(nwfilterName);
+    if ( !NWFilterEditor_Map.contains(key) ) {
+        NWFilterEditor_Map.insert(
+                    key,
+                    new CreateVirtNWFilter(nullptr, _task));
+        NWFilterEditor_Map.value(key)->setObjectName(key);
+        NWFilterEditor_Map.value(key)->setWindowTitle(
+                    QString("NWFilter Editor / <%1> in [%2]")
+                    .arg(nwfilterName).arg(connName));
+        connect(NWFilterEditor_Map.value(key), SIGNAL(errorMsg(QString&)),
+                this, SLOT(writeToErrorLog(QString&)));
+        connect(NWFilterEditor_Map.value(key), SIGNAL(finished(QString&)),
+                this, SLOT(deleteNWFilterEditor(QString&)));
+        connect(NWFilterEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
+                taskWrHouse, SLOT(addNewTask(TASK)));
+    };
+    if ( NWFilterEditor_Map.value(key)!=nullptr ) {
+        NWFilterEditor_Map.value(key)->show();
+        NWFilterEditor_Map.value(key)->setFocus();
+    } else
+        NWFilterEditor_Map.remove(key);
+}
+void MainWindow::deleteNWFilterEditor(QString &key)
+{
+    if ( NWFilterEditor_Map.contains(key) ) {
+        // set attribute(Qt::WA_DeleteOnClose) in widget;
+        // not need to delete a CreateVirtNWFilter
+        NWFilterEditor_Map.remove(key);
     };
 }
 
