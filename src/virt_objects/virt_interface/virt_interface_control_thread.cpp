@@ -84,19 +84,22 @@ Result InterfaceControlThread::getAllIfaceList()
         unsigned int flags =
                 VIR_CONNECT_LIST_INTERFACES_INACTIVE |
                 VIR_CONNECT_LIST_INTERFACES_ACTIVE;
-        int ret = virConnectListAllInterfaces(*task.srcConnPtr, &ifaces, flags);
+        int ret = virConnectListAllInterfaces(
+                    *task.srcConnPtr, &ifaces, flags);
         if ( ret<0 ) {
             result.err = sendConnErrors();
             return result;
         };
 
-        // therefore correctly to use for() command, because ifaces[0] can not exist.
+        // therefore correctly to use for() command,
+        // because ifaces[0] can not exist.
         for (int i = 0; i < ret; i++) {
             QStringList currentAttr;
             const char* name = virInterfaceGetName(ifaces[i]);
             const char* MAC = virInterfaceGetMACString(ifaces[i]);
 
-            QString state = virInterfaceIsActive(ifaces[i]) ? "active" : "inactive";
+            QString state = virInterfaceIsActive(
+                        ifaces[i]) ? "active" : "inactive";
             currentAttr<<QString::fromUtf8(name)\
                        <<QString::fromUtf8(MAC)\
                        <<state\

@@ -11,12 +11,14 @@ void SearchThread::run()
 {
     //qDebug()<<URIs;
     foreach (QString uri, URIs) {
-        virConnect *connPtr = virConnectOpenReadOnly(uri.toUtf8().data());
+        virConnect *connPtr =
+                virConnectOpenReadOnly(uri.toUtf8().data());
         if ( nullptr!=connPtr ) {
             // don't work for VBox
             // int num = virConnectNumOfDefinedDomains(connPtr);
             virDomainPtr *domains;
-            int ret = virConnectListAllDomains(connPtr, &domains, 0);
+            int ret = virConnectListAllDomains(
+                        connPtr, &domains, 0);
             if ( ret+1 ) {
                 for (int i = 0; i < ret; i++) {
                      if ( virDomainFree(domains[i]) <0 )

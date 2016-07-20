@@ -80,15 +80,18 @@ Result NetControlThread::getAllNetworkList()
     QStringList virtNetList;
     if ( task.srcConnPtr!=nullptr && keep_alive ) {
         virNetworkPtr *networks = nullptr;
-        unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                             VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-        int ret = virConnectListAllNetworks(*task.srcConnPtr, &networks, flags);
+        unsigned int flags =
+                VIR_CONNECT_LIST_NETWORKS_ACTIVE |
+                VIR_CONNECT_LIST_NETWORKS_INACTIVE;
+        int ret = virConnectListAllNetworks(
+                    *task.srcConnPtr, &networks, flags);
         if ( ret<0 ) {
             result.err = sendConnErrors();
             return result;
         };
 
-        // therefore correctly to use for() command, because networks[0] can not exist.
+        // therefore correctly to use for() command,
+        // because networks[0] can not exist.
         for (int i = 0; i < ret; i++) {
             QStringList currentAttr;
             QString autostartStr;
@@ -97,9 +100,11 @@ Result NetControlThread::getAllNetworkList()
                 autostartStr.append("no autostart");
             } else autostartStr.append( is_autostart ? "yes" : "no" );
             currentAttr<< QString::fromUtf8( virNetworkGetName(networks[i]) )
-                       << QString( virNetworkIsActive(networks[i]) ? "active" : "inactive" )
+                       << QString( virNetworkIsActive(
+                                       networks[i]) ? "active" : "inactive" )
                        << autostartStr
-                       << QString( virNetworkIsPersistent(networks[i]) ? "yes" : "no" );
+                       << QString( virNetworkIsPersistent(
+                                       networks[i]) ? "yes" : "no" );
             virtNetList.append(currentAttr.join(DFR));
             //qDebug()<<currentAttr;
             virNetworkFree(networks[i]);

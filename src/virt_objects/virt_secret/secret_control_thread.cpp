@@ -68,13 +68,15 @@ Result SecretControlThread::getAllSecretList()
         virSecretPtr *secrets = nullptr;
         //extra flags; not used yet, so callers should always pass 0
         unsigned int flags = 0;
-        int ret = virConnectListAllSecrets(*task.srcConnPtr, &secrets, flags);
+        int ret = virConnectListAllSecrets(
+                    *task.srcConnPtr, &secrets, flags);
         if ( ret<0 ) {
             result.err = sendConnErrors();
             return result;
         };
 
-        // therefore correctly to use for() command, because secrets[0] can not exist.
+        // therefore correctly to use for() command,
+        // because secrets[0] can not exist.
         for (int i = 0; i < ret; i++) {
             QStringList currentAttr;
             char uuid[100];

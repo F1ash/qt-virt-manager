@@ -1,5 +1,61 @@
 #include "direct_attachment.h"
 
+dirAttach_HlpThread::dirAttach_HlpThread(
+        QObject *parent,
+        virConnectPtr* connPtrPtr) :
+    _VirtThread(parent, connPtrPtr)
+{
+    qRegisterMetaType<QStringList>("QStringList&");
+}
+void dirAttach_HlpThread::run()
+{
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+        emit ptrIsNull();
+        return;
+    };
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
+    QStringList       devices;
+    virNodeDevicePtr *nodeDevices;
+    unsigned int flags =
+            VIR_CONNECT_LIST_NODE_DEVICES_CAP_NET;
+    int ret = virConnectListAllNodeDevices(
+                *ptr_ConnPtr, &nodeDevices, flags);
+    if ( ret<0 ) {
+        sendConnErrors();
+    } else {
+        // therefore correctly to use for() command,
+        // because networks[0] can not exist.
+        int i = 0;
+        while ( nodeDevices[i] != nullptr ) {
+            QDomDocument doc;
+            QString _dev, _interface;
+            // flags: extra flags; not used yet,
+            // so callers should always pass 0
+            _dev = QString(virNodeDeviceGetXMLDesc(
+                               nodeDevices[i], 0));
+            //qDebug()<<_dev;
+            doc.setContent(_dev);
+            _interface = doc.
+                    firstChildElement("device").
+                    firstChildElement("capability").
+                    firstChildElement("interface").
+                    firstChild().toText().data();
+            if ( _interface!="lo" )
+                devices.append(_interface);
+            virNodeDeviceFree(nodeDevices[i]);
+            i++;
+        };
+        if (nodeDevices) free(nodeDevices);
+    };
+    //int devs = virNodeNumOfDevices(ptr_ConnPtr, nullptr, 0);
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
+    emit result(devices);
+}
+
 DirectAttachment::DirectAttachment(
         QWidget *parent, virConnectPtr *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
@@ -33,8 +89,14 @@ DirectAttachment::DirectAttachment(
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    setAvailableSources();
-    virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
+    hlpThread = new dirAttach_HlpThread(this, connPtrPtr);
+    connect(hlpThread, SIGNAL(result(QStringList&)),
+            this, SLOT(setAvailableSources(QStringList&)));
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(finished()),
+            this, SLOT(emitCompleteSignal()));
+    hlpThread->start();
     // dataChanged connections
     connect(netSource, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));
@@ -163,40 +225,21 @@ void DirectAttachment::setDataDescription(const QString &xmlDesc)
 }
 
 /* private slots */
-void DirectAttachment::setAvailableSources()
+void DirectAttachment::setAvailableSources(QStringList &_devs)
 {
-    virNodeDevice  **nodeDevices = nullptr;
-    if ( ptr_ConnPtr!=nullptr ) {
-        unsigned int flags =
-                VIR_CONNECT_LIST_NODE_DEVICES_CAP_NET;
-        int ret = virConnectListAllNodeDevices(*ptr_ConnPtr, &nodeDevices, flags);
-        if ( ret<0 ) {
-            netSource->insertItem(0, "NetSource detect failed", "");
-        } else {
-            int i = 0;
-            while ( nodeDevices[i] != nullptr ) {
-                QDomDocument doc;
-                QString _dev, _interface;
-                // flags: extra flags; not used yet,
-                // so callers should always pass 0
-                _dev = QString(virNodeDeviceGetXMLDesc(nodeDevices[i], 0));
-                //qDebug()<<_dev;
-                doc.setContent(_dev);
-                _interface = doc.
-                        firstChildElement("device").
-                        firstChildElement("capability").
-                        firstChildElement("interface").
-                        firstChild().toText().data();
-                if ( _interface!="lo" )
-                    netSource->insertItem(
-                            0,
-                            QString("Host Device '%1' : macvtap")
-                            .arg(_interface),
-                            _interface);
-                virNodeDeviceFree(nodeDevices[i]);
-                i++;
-            };
-        };
-        free(nodeDevices);
+    foreach (QString _interface, _devs) {
+        netSource->insertItem(
+                0,
+                QString("Host Device '%1' : macvtap")
+                .arg(_interface),
+                _interface);
     };
+    virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
+}
+void DirectAttachment::emitCompleteSignal()
+{
+    if ( sender()==hlpThread ) {
+        setEnabled(true);
+        emit complete();
+    }
 }

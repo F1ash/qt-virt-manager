@@ -1,6 +1,7 @@
 #include "vnc_graphics.h"
 
-vnc_graphHlpThread::vnc_graphHlpThread(QObject *parent, virConnectPtr* connPtrPtr) :
+vnc_graphHlpThread::vnc_graphHlpThread(
+        QObject *parent, virConnectPtr* connPtrPtr) :
     _VirtThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
@@ -17,13 +18,16 @@ void vnc_graphHlpThread::run()
     };
     QStringList nets;
     virNetworkPtr *networks = nullptr;
-    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = virConnectListAllNetworks(*ptr_ConnPtr, &networks, flags);
+    unsigned int flags =
+            VIR_CONNECT_LIST_NETWORKS_ACTIVE |
+            VIR_CONNECT_LIST_NETWORKS_INACTIVE;
+    int ret = virConnectListAllNetworks(
+                *ptr_ConnPtr, &networks, flags);
     if ( ret<0 ) {
         sendConnErrors();
     } else {
-        // therefore correctly to use for() command, because networks[0] can not exist.
+        // therefore correctly to use for() command,
+        // because networks[0] can not exist.
         for (int i = 0; i < ret; i++) {
             nets.append( virNetworkGetName(networks[i]) );
             virNetworkFree(networks[i]);

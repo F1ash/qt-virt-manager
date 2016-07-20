@@ -1,5 +1,47 @@
 #include "virtual_network.h"
 
+virtNet_HlpThread::virtNet_HlpThread(
+        QObject *parent,
+        virConnectPtr* connPtrPtr) :
+    _VirtThread(parent, connPtrPtr)
+{
+    qRegisterMetaType<QStringList>("QStringList&");
+}
+void virtNet_HlpThread::run()
+{
+    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+        emit ptrIsNull();
+        return;
+    };
+    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
+        sendConnErrors();
+        return;
+    };
+    QStringList       nets;
+    virNetworkPtr    *networks = nullptr;
+    unsigned int flags =
+            VIR_CONNECT_LIST_NETWORKS_ACTIVE |
+            VIR_CONNECT_LIST_NETWORKS_INACTIVE;
+    int ret = virConnectListAllNetworks(
+                *ptr_ConnPtr, &networks, flags);
+    if ( ret<0 ) {
+        sendConnErrors();
+    } else {
+        // therefore correctly to use for() command,
+        // because networks[0] can not exist.
+        for (int i = 0; i < ret; i++) {
+            QString _network =
+                    QString( virNetworkGetName(networks[i]) );
+            nets.append(_network);
+            virNetworkFree(networks[i]);
+        };
+        if (networks) free(networks);
+    };
+    if ( virConnectClose(*ptr_ConnPtr)<0 )
+        sendConnErrors();
+    emit result(nets);
+}
+
 Virtual_Network::Virtual_Network(
         QWidget *parent, virConnectPtr *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
@@ -37,8 +79,16 @@ Virtual_Network::Virtual_Network(
     connect(network, SIGNAL(currentIndexChanged(int)),
             this, SLOT(networkChanged(int)));
     // set empty type for the general case
-    //virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
-    setAvailableVirtNetworks();
+    //virtPort->type->setCurrentIndex(
+    //          virtPort->type->findText("802.1Qbh") );
+    hlpThread = new virtNet_HlpThread(this, connPtrPtr);
+    connect(hlpThread, SIGNAL(result(QStringList&)),
+            this, SLOT(setAvailableVirtNetworks(QStringList&)));
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
+            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(finished()),
+            this, SLOT(emitCompleteSignal()));
+    hlpThread->start();
     // dataChanged connections
     connect(network, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));
@@ -210,31 +260,21 @@ void Virtual_Network::networkChanged(int i)
     };
     network->clearEditText();
 }
-void Virtual_Network::setAvailableVirtNetworks()
+void Virtual_Network::setAvailableVirtNetworks(QStringList &_nets)
 {
-    virNetworkPtr *networks = nullptr;
-    unsigned int flags = VIR_CONNECT_LIST_NETWORKS_ACTIVE |
-                         VIR_CONNECT_LIST_NETWORKS_INACTIVE;
-    int ret = -1;
-    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
-        ret = virConnectListAllNetworks(*ptr_ConnPtr, &networks, flags);
-    } else
-        emit ptrIsNull();
-    if ( ret<0 ) {
-        // if failed, then set to default virtual network
-        network->addItem("VirtNetwork detect failed", "default");
-    } else {
-        // therefore correctly to use for() command, because networks[0] can not exist.
-        for (int i = 0; i < ret; i++) {
-            QString _network = QString( virNetworkGetName(networks[i]) );
-            network->addItem(
-                        QString("Virtual network '%1'")
-                        .arg(_network),
-                        _network);
-            virNetworkFree(networks[i]);
-        };
-        free(networks);
+    foreach (QString _network, _nets) {
+        network->addItem(
+                    QString("Virtual network '%1'")
+                    .arg(_network),
+                     _network);
     };
     network->insertSeparator(network->count());
     network->addItem("Set exist Virtual Network manually", "");
+}
+void Virtual_Network::emitCompleteSignal()
+{
+    if ( sender()==hlpThread ) {
+        setEnabled(true);
+        emit complete();
+    }
 }

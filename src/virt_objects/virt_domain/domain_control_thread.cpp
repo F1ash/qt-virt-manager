@@ -114,9 +114,11 @@ Result DomControlThread::getAllDomainList()
     QStringList domainList;
     if ( task.srcConnPtr!=nullptr && keep_alive ) {
         virDomainPtr *domains = nullptr;
-        unsigned int flags = VIR_CONNECT_LIST_DOMAINS_ACTIVE |
-                             VIR_CONNECT_LIST_DOMAINS_INACTIVE;
-        // the number of domains found or -1 and sets domains to NULL in case of error.
+        unsigned int flags =
+                VIR_CONNECT_LIST_DOMAINS_ACTIVE |
+                VIR_CONNECT_LIST_DOMAINS_INACTIVE;
+        // the number of domains found or -1 and sets domains
+        // to NULL in case of error.
         int ret = virConnectListAllDomains(
                     *task.srcConnPtr, &domains, flags);
         if ( ret<0 ) {
@@ -126,7 +128,8 @@ Result DomControlThread::getAllDomainList()
             return result;
         };
 
-        // therefore correctly to use for() command, because domains[0] can not exist.
+        // therefore correctly to use for() command,
+        // because domains[0] can not exist.
         for (int i = 0; i < ret; i++) {
             QStringList currentAttr;
             QString autostartStr;
@@ -171,10 +174,12 @@ Result DomControlThread::getAllDomainList()
             } else domainState.append("ERROR");
             currentAttr<< QString::fromUtf8( virDomainGetName(domains[i]) )
                        << QString("%1:%2")
-                          .arg( virDomainIsActive(domains[i]) ? "active" : "inactive" )
+                          .arg( virDomainIsActive(
+                                    domains[i]) ? "active" : "inactive" )
                           .arg(domainState)
                        << autostartStr
-                       << QString( virDomainIsPersistent(domains[i]) ? "yes" : "no" );
+                       << QString( virDomainIsPersistent(
+                                       domains[i]) ? "yes" : "no" );
             domainList.append(currentAttr.join(DFR));
             //qDebug()<<currentAttr;
             /*

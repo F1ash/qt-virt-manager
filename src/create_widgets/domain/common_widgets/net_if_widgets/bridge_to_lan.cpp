@@ -33,7 +33,8 @@ Bridge_to_LAN::Bridge_to_LAN(
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    virtPort->type->setCurrentIndex( virtPort->type->findText("Open vSwitch") );
+    virtPort->type->setCurrentIndex(
+                virtPort->type->findText("Open vSwitch") );
     // dataChanged connections
     connect(bridge, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));

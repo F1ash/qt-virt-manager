@@ -6,6 +6,19 @@
 #include "mac_address.h"
 #include "virtual_port.h"
 #include "create_widgets/domain/common_widgets/device_address.h"
+#include "virt_objects/_virt_thread.h"
+
+class virtNet_HlpThread : public _VirtThread
+{
+    Q_OBJECT
+public:
+    explicit virtNet_HlpThread(
+            QObject        *parent      = nullptr,
+            virConnectPtr*  connPtrPtr  = nullptr);
+    void             run();
+signals:
+    void             result(QStringList&);
+};
 
 class Virtual_Network : public _QWidget
 {
@@ -27,13 +40,17 @@ private:
     DeviceAddress   *addr;
     QVBoxLayout     *commonLayout;
 
+    virtNet_HlpThread
+                    *hlpThread;
+
 public slots:
     QDomDocument     getDataDocument() const;
     void             setDataDescription(const QString&);
 
 private slots:
     void             networkChanged(int);
-    void             setAvailableVirtNetworks();
+    void             setAvailableVirtNetworks(QStringList&);
+    void             emitCompleteSignal();
 };
 
 #endif // VIRTUAL_NETWORK_H
