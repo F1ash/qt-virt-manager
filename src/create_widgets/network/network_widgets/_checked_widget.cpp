@@ -19,6 +19,8 @@ _Checked_Widget::_Checked_Widget(
             baseWdg, SLOT(setVisible(bool)));
     connect(usage, SIGNAL(toggled(bool)),
             this, SIGNAL(toggled(bool)));
+    connect(usage, SIGNAL(toggled(bool)),
+            this, SIGNAL(dataChanged()));
 }
 bool _Checked_Widget::isUsed() const
 {

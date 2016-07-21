@@ -82,9 +82,9 @@ void VirtualPort::setUsage(bool state)
 {
     useVirtPort->setChecked(state);
 }
-ParameterList VirtualPort::getParameterList() const
+VirtPortParamList VirtualPort::getParameterList() const
 {
-    ParameterList _ret;
+    VirtPortParamList _ret;
     QString _type = type->itemData(type->currentIndex(), Qt::UserRole).toString();
     if ( _type.isEmpty() ) _type = type->currentText();
     if ( useVirtPort->isChecked() ) {
@@ -112,7 +112,7 @@ ParameterList VirtualPort::getParameterList() const
     };
     return _ret;
 }
-void VirtualPort::setParameterList(ParameterList &_list)
+void VirtualPort::setParameterList(VirtPortParamList &_list)
 {
     if ( _list.keys().contains("type") ) {
         int idx = type->findData(

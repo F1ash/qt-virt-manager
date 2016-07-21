@@ -12,7 +12,7 @@
 #include <QVBoxLayout>
 #include "create_widgets/domain/_changed.h"
 
-typedef QMap<QString, QString> ParameterList;
+typedef QMap<QString, QString> VirtPortParamList;
 
 class VirtualPort : public _Changed
 {
@@ -23,9 +23,6 @@ public:
     QLineEdit           *managerId, *typeId,
                         *typeIdVer, *instanceId,
                         *interfaceId, *profileId;
-
-signals:
-    //void                 dataChanged();
 
 private:
     QCheckBox           *useVirtPort;
@@ -40,8 +37,8 @@ private:
 public slots:
     bool                 isUsed() const;
     void                 setUsage(bool);
-    ParameterList        getParameterList() const;
-    void                 setParameterList(ParameterList&);
+    VirtPortParamList    getParameterList() const;
+    void                 setParameterList(VirtPortParamList&);
 
 private slots:
     void                 useingChanged(bool);

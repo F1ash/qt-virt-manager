@@ -12,7 +12,7 @@ class _List_Widget : public _Checked_Widget
 public:
     explicit _List_Widget(
             QWidget *parent = nullptr,
-            QString tag = "");
+            QString  tag    = "");
     QListWidget     *list;
     QHBoxLayout     *panelLayout;
 

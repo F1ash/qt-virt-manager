@@ -69,7 +69,7 @@ QDomDocument PCI_Passthrough::getDataDocument() const
 
     _devDesc.appendChild(_source);
 
-    ParameterList p = virtPort->getParameterList();
+    VirtPortParamList p = virtPort->getParameterList();
     if ( !p.isEmpty() ) {
         _virtualport = doc.createElement("virtualport");
         _parameters = doc.createElement("parameters");
@@ -132,7 +132,7 @@ void PCI_Passthrough::setDataDescription(const QString &xmlDesc)
     };
     virtPort->setUsage( !_virtport.isNull() );
     if ( !_virtport.isNull() ) {
-        ParameterList _list;
+        VirtPortParamList _list;
         _list.insert("type", _virtport.attribute("type"));
         QDomElement _params = _virtport.firstChildElement("parameters");
         if ( _params.hasAttribute("managerid") ) {

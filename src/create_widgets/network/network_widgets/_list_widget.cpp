@@ -4,8 +4,11 @@ _List_Widget::_List_Widget(QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
     list = new QListWidget(this);
-    add = new QPushButton(QIcon::fromTheme("list-add"), "", this);
-    del = new QPushButton(QIcon::fromTheme("list-remove"), "", this);
+    list->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    add = new QPushButton(
+                QIcon::fromTheme("list-add"), "", this);
+    del = new QPushButton(
+                QIcon::fromTheme("list-remove"), "", this);
     panelLayout = new QHBoxLayout();
     panelLayout->addWidget(add);
     panelLayout->addWidget(del);
@@ -17,6 +20,11 @@ _List_Widget::_List_Widget(QWidget *parent, QString tag) :
             this, SLOT(addItem()));
     connect(del, SIGNAL(clicked()),
             this, SLOT(delItem()));
+    // dataChanged connections
+    connect(add, SIGNAL(clicked()),
+            this, SIGNAL(dataChanged()));
+    connect(del, SIGNAL(clicked()),
+            this, SIGNAL(dataChanged()));
 }
 
 /* public slots */

@@ -3,7 +3,7 @@
 virtNet_HlpThread::virtNet_HlpThread(
         QObject *parent,
         virConnectPtr* connPtrPtr) :
-    _VirtThread(parent, connPtrPtr)
+    qwdHelpThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
 }
@@ -17,6 +17,9 @@ void virtNet_HlpThread::run()
         sendConnErrors();
         return;
     };
+    connType = QString::fromUtf8(
+                virConnectGetType(*ptr_ConnPtr))
+            .toLower();
     QStringList       nets;
     virNetworkPtr    *networks = nullptr;
     unsigned int flags =
@@ -37,6 +40,23 @@ void virtNet_HlpThread::run()
         };
         if (networks) free(networks);
     };
+
+    virNWFilterPtr *filters = nullptr;
+    //extra flags; not used yet, so callers should always pass 0
+    flags = 0;
+    ret = virConnectListAllNWFilters(
+                *ptr_ConnPtr, &filters, flags);
+    if ( ret<0 ) {
+        sendConnErrors();
+    } else {
+        // therefore correctly to use for() command,
+        // because filters[0] can not exist.
+        for (int i = 0; i < ret; i++) {
+            nwFilters.append( virNWFilterGetName(filters[i]) );
+            virNWFilterFree(filters[i]);
+        };
+        if (filters) free(filters);
+    };
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();
     emit result(nets);
@@ -44,7 +64,7 @@ void virtNet_HlpThread::run()
 
 Virtual_Network::Virtual_Network(
         QWidget *parent, virConnectPtr *connPtrPtr) :
-    _QWidget(parent, connPtrPtr)
+    _QWidget_Threaded(parent, connPtrPtr)
 {
     networkLabel = new QLabel("Network:", this);
     network = new QComboBox(this);
@@ -68,12 +88,16 @@ Virtual_Network::Virtual_Network(
                 Qt::MatchContains);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     addr->type->setEnabled(false);
+    nwFilterParams = new NWFilter_Params(
+                this,
+                "Network Filter on Interface");
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(mac);
     commonLayout->addWidget(nicModel);
     commonLayout->addWidget(virtPort);
     commonLayout->addWidget(addr);
+    commonLayout->addWidget(nwFilterParams);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     connect(network, SIGNAL(currentIndexChanged(int)),
@@ -103,6 +127,8 @@ Virtual_Network::Virtual_Network(
     connect(virtPort, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(addr, SIGNAL(dataChanged()),
+            this, SLOT(stateChanged()));
+    connect(nwFilterParams, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
 }
 
@@ -136,7 +162,7 @@ QDomDocument Virtual_Network::getDataDocument() const
         _devDesc.appendChild(_model);
     };
 
-    ParameterList p = virtPort->getParameterList();
+    VirtPortParamList p = virtPort->getParameterList();
     if ( !p.isEmpty() ) {
         _virtualport = doc.createElement("virtualport");
         _parameters = doc.createElement("parameters");
@@ -160,6 +186,10 @@ QDomDocument Virtual_Network::getDataDocument() const
         };
         _devDesc.appendChild(_address);
     };
+    if ( nwFilterParams->isUsed() ) {
+        _devDesc.appendChild(
+                    nwFilterParams->getDataDocument());
+    };
     _devDesc.setAttribute("type", "network");
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
@@ -170,7 +200,7 @@ void Virtual_Network::setDataDescription(const QString &xmlDesc)
     QDomDocument doc;
     doc.setContent(xmlDesc);
     QDomElement _device, _source, _target, _model,
-            _mac, _virtport, _addr;
+            _mac, _virtport, _addr, _filterref;
     _device = doc.firstChildElement("device")
             .firstChildElement("interface");
     _source = _device.firstChildElement("source");
@@ -203,7 +233,7 @@ void Virtual_Network::setDataDescription(const QString &xmlDesc)
     };
     virtPort->setUsage( !_virtport.isNull() );
     if ( !_virtport.isNull() ) {
-        ParameterList _list;
+        VirtPortParamList _list;
         _list.insert("type", _virtport.attribute("type"));
         QDomElement _params = _virtport.firstChildElement("parameters");
         if ( _params.hasAttribute("managerid") ) {
@@ -247,6 +277,14 @@ void Virtual_Network::setDataDescription(const QString &xmlDesc)
                         _addr.attribute("multifunction")=="on" );
         };
     };
+    _filterref = _device.firstChildElement("filterref");
+    if ( !_filterref.isNull() ) {
+        QDomDocument _doc;
+        _doc.setContent(QString());
+        _doc.appendChild(_filterref.cloneNode());
+        QString _xml = _doc.toString();
+        nwFilterParams->setDataDescription(_xml);
+    };
 }
 
 /* private slots */
@@ -273,8 +311,14 @@ void Virtual_Network::setAvailableVirtNetworks(QStringList &_nets)
 }
 void Virtual_Network::emitCompleteSignal()
 {
+    bool state = ( hlpThread->connType=="qemu" );
+    nwFilterParams->setVisible(state);
+    if ( state ) {
+        nwFilterParams->setNWFiltersList(
+                    hlpThread->nwFilters);
+    };
     if ( sender()==hlpThread ) {
         setEnabled(true);
         emit complete();
-    }
+    };
 }

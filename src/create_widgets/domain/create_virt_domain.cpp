@@ -267,6 +267,9 @@ bool CreateVirtDomain::buildXMLDescription()
         tabWidget->setCurrentWidget(Wdg);
         QDomNodeList list;
         if ( key=="Devices" ) {
+            tabWidget->setCurrentWidget(Wdg);
+            bool ret = Wdg->closeDataEdit();
+            if ( !ret ) return false;
             _el = Wdg->getDataDocument().firstChildElement("devices");
             setBootOrder(&_el);
             if ( !_el.isNull() ) list = _el.childNodes();
