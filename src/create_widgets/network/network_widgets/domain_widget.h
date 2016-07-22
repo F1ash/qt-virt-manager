@@ -1,7 +1,7 @@
 #ifndef DOMAIN_WIDGET_H
 #define DOMAIN_WIDGET_H
 
-#include "_checked_widget.h"
+#include "create_widgets/common/_checked_widget.h"
 
 class Domain_Widget : public _Checked_Widget
 {

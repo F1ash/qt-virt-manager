@@ -9,7 +9,7 @@
 #include <QDomDocument>
 #include "CPU_Models.h"
 #include <QDebug>
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/common/_changed.h"
 
 class CPU_Model : public _Changed
 {

@@ -6,7 +6,7 @@
 #include "host_dev_widgets/pci_host_device.h"
 #include "host_dev_widgets/scsi_host_device.h"
 #include "host_dev_widgets/bch_host_device.h"
-#include "create_widgets/domain/_qwidget_threaded.h"
+#include "create_widgets/common/_qwidget_threaded.h"
 
 #define QEMU_DEV_LIST QStringList()\
     <<"USB"<<"PCI"<<"SCSI"

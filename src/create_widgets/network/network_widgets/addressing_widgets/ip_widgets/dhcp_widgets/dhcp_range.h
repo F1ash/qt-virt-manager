@@ -1,7 +1,7 @@
 #ifndef DHCP_RANGE_H
 #define DHCP_RANGE_H
 
-#include "create_widgets/network/network_widgets/_list_widget.h"
+#include "create_widgets/common/_list_widget.h"
 
 class DHCP_Range : public _List_Widget
 {

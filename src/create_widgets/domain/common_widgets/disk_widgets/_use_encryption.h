@@ -9,7 +9,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include "create_widgets/storage/_create_storage_widgets/find_secret_dialog.h"
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/common/_changed.h"
 
 class _UseEncryption : public _Changed
 {

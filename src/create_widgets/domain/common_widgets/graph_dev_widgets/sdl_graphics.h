@@ -1,7 +1,7 @@
 #ifndef SDL_GRAPHICS_H
 #define SDL_GRAPHICS_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include <QPushButton>
 #include <QFileDialog>
 

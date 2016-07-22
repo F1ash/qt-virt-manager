@@ -7,7 +7,7 @@
 #include "fs_type_widgets/block_fstype.h"
 #include "fs_type_widgets/ram_fstype.h"
 #include "fs_type_widgets/bind_fstype.h"
-#include "create_widgets/domain/_qwidget_threaded.h"
+#include "create_widgets/common/_qwidget_threaded.h"
 
 class FileSystems : public _QWidget_Threaded
 {

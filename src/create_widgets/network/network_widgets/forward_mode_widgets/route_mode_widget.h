@@ -1,7 +1,7 @@
 #ifndef ROUTE_MODE_WIDGET_H
 #define ROUTE_MODE_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class ROUTE_Mode_widget : public _QWidget
 {

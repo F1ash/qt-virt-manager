@@ -1,7 +1,7 @@
 #ifndef IP_WIDGET_H
 #define IP_WIDGET_H
 
-#include "create_widgets/network/network_widgets/_checked_widget.h"
+#include "create_widgets/common/_checked_widget.h"
 #include <QTabWidget>
 #include "ip_widgets/_ip_widget.h"
 #include "ip_widgets/addtab.h"

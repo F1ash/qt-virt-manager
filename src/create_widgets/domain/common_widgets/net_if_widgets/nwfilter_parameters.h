@@ -1,8 +1,7 @@
 #ifndef NWFILTER_PARAMETERS_H
 #define NWFILTER_PARAMETERS_H
 
-#include <QComboBox>
-#include "create_widgets/network/network_widgets/_list_widget.h"
+#include "create_widgets/common/_list_widget.h"
 
 class NWFilter_Params : public _List_Widget
 {

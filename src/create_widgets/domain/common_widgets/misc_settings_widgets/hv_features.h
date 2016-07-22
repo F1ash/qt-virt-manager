@@ -5,7 +5,7 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 #include <QDomDocument>
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/common/_changed.h"
 
 class HV_Features : public _Changed
 {

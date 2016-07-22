@@ -8,7 +8,7 @@
 #include <QWidget>
 #include <QCheckBox>
 #include <QHBoxLayout>
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/common/_changed.h"
 
 class Power : public _Changed
 {

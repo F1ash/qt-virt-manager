@@ -1,7 +1,7 @@
 #ifndef REDIRDEV_DEVICE_H
 #define REDIRDEV_DEVICE_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "device_address.h"
 #include "redir_filter.h"
 

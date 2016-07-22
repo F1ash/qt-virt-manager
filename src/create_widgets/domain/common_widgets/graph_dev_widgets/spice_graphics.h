@@ -1,7 +1,7 @@
 #ifndef SPICE_GRAPHICS_H
 #define SPICE_GRAPHICS_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "virt_objects/_virt_thread.h"
 
 class spice_graphHlpThread : public _VirtThread

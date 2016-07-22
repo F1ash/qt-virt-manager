@@ -1,7 +1,7 @@
 #ifndef PASSTHROUGH_MODE_WIDGET_H
 #define PASSTHROUGH_MODE_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class PASSTHROUGH_Mode_widget : public _QWidget
 {

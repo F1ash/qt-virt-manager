@@ -1,7 +1,7 @@
 #ifndef HOST_DNS_H
 #define HOST_DNS_H
 
-#include "create_widgets/network/network_widgets/_list_widget.h"
+#include "create_widgets/common/_list_widget.h"
 
 class Host_DNS : public _List_Widget
 {

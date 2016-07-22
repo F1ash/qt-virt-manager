@@ -1,7 +1,7 @@
 #ifndef BCH_HOST_DEVICE_H
 #define BCH_HOST_DEVICE_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class BCh_Host_Device : public _QWidget
 {

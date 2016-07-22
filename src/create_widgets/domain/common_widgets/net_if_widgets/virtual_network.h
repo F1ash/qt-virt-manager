@@ -1,7 +1,7 @@
 #ifndef VIRTUAL_NETWORK_H
 #define VIRTUAL_NETWORK_H
 
-#include "create_widgets/domain/_qwidget_threaded.h"
+#include "create_widgets/common/_qwidget_threaded.h"
 #include "nic_model.h"
 #include "mac_address.h"
 #include "virtual_port.h"

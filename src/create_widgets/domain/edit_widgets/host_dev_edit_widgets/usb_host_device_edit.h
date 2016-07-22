@@ -1,7 +1,7 @@
 #ifndef USB_HOST_DEVICE_EDIT_H
 #define USB_HOST_DEVICE_EDIT_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "create_widgets/domain/common_widgets/device_address.h"
 #include "create_widgets/domain/common_widgets/disk_widgets/_startup_policy.h"
 

@@ -1,7 +1,7 @@
 #ifndef BRIDGE_TO_LAN_H
 #define BRIDGE_TO_LAN_H
 
-#include "create_widgets/domain/_qwidget_threaded.h"
+#include "create_widgets/common/_qwidget_threaded.h"
 #include "mac_address.h"
 #include "virtual_port.h"
 #include "nwfilter_parameters.h"

@@ -4,7 +4,7 @@
 #include <QPushButton>
 #include <QFileDialog>
 #include <QStringList>
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 #define LXC_DRIVER_TYPES QStringList()<<"default"<<"loop"<<"nbd"
 #define QEMU_DRIVER_TYPES QStringList()<<"default"<<"path"<<"handle"

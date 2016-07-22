@@ -1,7 +1,7 @@
 #ifndef QOS_WIDGET_H
 #define QOS_WIDGET_H
 
-#include "_checked_widget.h"
+#include "create_widgets/common/_checked_widget.h"
 #include "qos_widgets/bound_widget.h"
 #include <QTabWidget>
 

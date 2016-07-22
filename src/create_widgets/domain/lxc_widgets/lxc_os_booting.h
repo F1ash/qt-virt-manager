@@ -1,7 +1,7 @@
 #ifndef LXC_OS_BOOTING_H
 #define LXC_OS_BOOTING_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "create_widgets/domain/common_widgets/os_boot_widgets/_arch.h"
 
 class LXC_OSBooting : public _QWidget

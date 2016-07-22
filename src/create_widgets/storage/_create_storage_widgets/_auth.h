@@ -9,7 +9,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include "find_secret_dialog.h"
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 #define NOT_VOLUME QString("NOT_VOLUME")
 

@@ -4,7 +4,6 @@
 #include "_checked_widget.h"
 #include <QListWidget>
 #include <QPushButton>
-#include <QHBoxLayout>
 
 class _List_Widget : public _Checked_Widget
 {

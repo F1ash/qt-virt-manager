@@ -5,7 +5,7 @@
 #include <QListWidget>
 #include <QPushButton>
 #include <QMessageBox>
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class SecLabels : public _QWidget
 {

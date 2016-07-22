@@ -1,7 +1,7 @@
 #ifndef HOST_BOOT_H
 #define HOST_BOOT_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "path_to_file.h"
 
 class Host_Boot : public _QWidget

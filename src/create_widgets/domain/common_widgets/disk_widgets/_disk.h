@@ -1,7 +1,7 @@
 #ifndef _DISK_H
 #define _DISK_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "_hosts.h"
 #include "_target.h"
 #include "_device.h"

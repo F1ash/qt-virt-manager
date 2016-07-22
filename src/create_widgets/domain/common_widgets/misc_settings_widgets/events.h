@@ -5,7 +5,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/common/_changed.h"
 
 class Events : public _Changed
 {

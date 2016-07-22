@@ -1,7 +1,7 @@
 #ifndef GENERIC_ETHERNET_H
 #define GENERIC_ETHERNET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "create_widgets/domain/common_widgets/device_address.h"
 
 class Generic_Ethernet : public _QWidget

@@ -1,7 +1,7 @@
 #ifndef BRIDGE_WIDGET_H
 #define BRIDGE_WIDGET_H
 
-#include "_checked_widget.h"
+#include "create_widgets/common/_checked_widget.h"
 
 class Bridge_Widget : public _Checked_Widget
 {

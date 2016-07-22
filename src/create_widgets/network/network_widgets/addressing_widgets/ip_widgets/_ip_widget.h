@@ -1,7 +1,7 @@
 #ifndef _IP_WIDGET_H
 #define _IP_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include <QStackedWidget>
 #include "_ipv4.h"
 #include "_ipv6.h"

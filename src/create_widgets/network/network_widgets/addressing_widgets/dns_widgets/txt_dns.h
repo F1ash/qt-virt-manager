@@ -1,7 +1,7 @@
 #ifndef TXT_DNS_H
 #define TXT_DNS_H
 
-#include "create_widgets/network/network_widgets/_list_widget.h"
+#include "create_widgets/common/_list_widget.h"
 
 class TXT_DNS : public _List_Widget
 {

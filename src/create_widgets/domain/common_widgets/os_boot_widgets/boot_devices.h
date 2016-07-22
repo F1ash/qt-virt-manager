@@ -7,7 +7,7 @@
 #include <QGridLayout>
 #include <QDomDocument>
 #include <QDebug>
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/common/_changed.h"
 
 class Boot_Devices : public _Changed
 {

@@ -1,7 +1,7 @@
 #ifndef FORWARDER_H
 #define FORWARDER_H
 
-#include "create_widgets/network/network_widgets/_list_widget.h"
+#include "create_widgets/common/_list_widget.h"
 
 class Forwarder : public _List_Widget
 {

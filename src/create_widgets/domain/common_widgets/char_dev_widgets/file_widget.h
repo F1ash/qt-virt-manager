@@ -1,7 +1,7 @@
 #ifndef FILE_WIDGET_H
 #define FILE_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class FileWidget : public _QWidget
 {

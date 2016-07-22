@@ -1,7 +1,7 @@
 #ifndef EMULATOR_H
 #define EMULATOR_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class Emulator : public _QWidget
 {

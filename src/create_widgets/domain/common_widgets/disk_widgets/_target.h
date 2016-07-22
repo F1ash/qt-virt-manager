@@ -9,7 +9,7 @@
 #include <QGridLayout>
 #include <QMap>
 #include <QString>
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/common/_changed.h"
 
 typedef QMap<QString, QString> TargetAttrs;
 

@@ -1,7 +1,7 @@
 #ifndef PCI_HOST_DEVICE_EDIT_H
 #define PCI_HOST_DEVICE_EDIT_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "create_widgets/domain/common_widgets/device_address.h"
 
 class PCI_Host_Device_Edit : public _QWidget

@@ -10,7 +10,7 @@
 #include <QGridLayout>
 #include <QDomDocument>
 #include <QDebug>
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/common/_changed.h"
 
 class CPU_Allocation : public _Changed
 {

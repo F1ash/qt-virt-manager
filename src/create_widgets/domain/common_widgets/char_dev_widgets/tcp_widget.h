@@ -1,7 +1,7 @@
 #ifndef TCP_WIDGET_H
 #define TCP_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class TcpWidget : public _QWidget
 {

@@ -1,7 +1,7 @@
 #ifndef FORWARD_WIDGET_H
 #define FORWARD_WIDGET_H
 
-#include "_checked_widget.h"
+#include "create_widgets/common/_checked_widget.h"
 #include "forward_mode_widgets/nat_mode_widget.h"
 #include "forward_mode_widgets/route_mode_widget.h"
 #include "forward_mode_widgets/bridge_mode_widget.h"

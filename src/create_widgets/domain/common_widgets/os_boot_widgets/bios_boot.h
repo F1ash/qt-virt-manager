@@ -1,7 +1,7 @@
 #ifndef BIOS_BOOT_H
 #define BIOS_BOOT_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "_arch.h"
 #include "path_to_file.h"
 #include "boot_menu.h"

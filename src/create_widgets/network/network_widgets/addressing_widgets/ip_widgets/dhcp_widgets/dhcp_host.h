@@ -1,7 +1,7 @@
 #ifndef DHCP_HOST_H
 #define DHCP_HOST_H
 
-#include "create_widgets/network/network_widgets/_list_widget.h"
+#include "create_widgets/common/_list_widget.h"
 
 class DHCP_Host : public _List_Widget
 {

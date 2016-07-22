@@ -1,7 +1,7 @@
 #ifndef DESKTOP_GRAPHICS_H
 #define DESKTOP_GRAPHICS_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class Desktop_Graphics : public _QWidget
 {

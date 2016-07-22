@@ -1,7 +1,7 @@
 #ifndef DIRECT_KERNEL_BOOT_H
 #define DIRECT_KERNEL_BOOT_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "path_to_file.h"
 
 class Direct_Kernel_Boot : public _QWidget

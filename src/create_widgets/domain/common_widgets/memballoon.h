@@ -1,7 +1,7 @@
 #ifndef MEMBALLOON_H
 #define MEMBALLOON_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "device_address.h"
 
 class MemBalloon : public _QWidget

@@ -5,7 +5,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QHBoxLayout>
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/common/_changed.h"
 
 class _StartupPolicy : public _Changed
 {

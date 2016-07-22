@@ -1,7 +1,7 @@
 #ifndef UNIX_WIDGET_H
 #define UNIX_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class UnixWidget : public _QWidget
 {

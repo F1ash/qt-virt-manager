@@ -1,7 +1,7 @@
 #ifndef SCSI_HOST_DEVICE_H
 #define SCSI_HOST_DEVICE_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include <QListWidget>
 #include "virt_objects/_virt_thread.h"
 

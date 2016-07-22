@@ -1,7 +1,7 @@
 #ifndef HOSTDEV_MODE_WIDGET_H
 #define HOSTDEV_MODE_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class HOSTDEV_Mode_widget : public _QWidget
 {

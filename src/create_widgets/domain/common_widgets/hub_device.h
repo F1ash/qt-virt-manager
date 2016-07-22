@@ -1,7 +1,7 @@
 #ifndef HUB_DEVICE_H
 #define HUB_DEVICE_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "device_address.h"
 
 class HubDevice : public _QWidget

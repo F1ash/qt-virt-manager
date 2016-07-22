@@ -182,10 +182,12 @@ set (HEADERS
   src/virt_objects/virt_nwfilter/nwfilter_index.h
   src/virt_objects/virt_nwfilter/nwfilter_list_delegate.h
 
+  src/create_widgets/common/_qwidget.h
+  src/create_widgets/common/_qwidget_threaded.h
+  src/create_widgets/common/_changed.h
+  src/create_widgets/common/_checked_widget.h
+  src/create_widgets/common/_list_widget.h
   src/create_widgets/domain/domain_widgets.h
-  src/create_widgets/domain/_qwidget.h
-  src/create_widgets/domain/_qwidget_threaded.h
-  src/create_widgets/domain/_changed.h
   src/create_widgets/domain/restore_panel.h
   src/create_widgets/domain/create_virt_domain.h
   src/create_widgets/domain/_tab.h
@@ -347,8 +349,6 @@ set (HEADERS
   src/create_widgets/network/network_widgets/assistant_widgets/no_gateway_page.h
   src/create_widgets/network/network_widgets/assistant_widgets/conclusion_page.h
   src/create_widgets/network/create_virt_network_adv.h
-  src/create_widgets/network/network_widgets/_checked_widget.h
-  src/create_widgets/network/network_widgets/_list_widget.h
   src/create_widgets/network/network_widgets/bridge_widget.h
   src/create_widgets/network/network_widgets/domain_widget.h
   src/create_widgets/network/network_widgets/addressing_widget.h
@@ -558,11 +558,13 @@ set (SOURCES
   src/virt_objects/virt_nwfilter/nwfilter_model.cpp
   src/virt_objects/virt_nwfilter/nwfilter_index.cpp
   src/virt_objects/virt_nwfilter/nwfilter_list_delegate.cpp
-  
+
+  src/create_widgets/common/_qwidget.cpp
+  src/create_widgets/common/_qwidget_threaded.cpp
+  src/create_widgets/common/_changed.cpp
+  src/create_widgets/common/_checked_widget.cpp
+  src/create_widgets/common/_list_widget.cpp
   src/create_widgets/domain/create_virt_domain.cpp
-  src/create_widgets/domain/_qwidget.cpp
-  src/create_widgets/domain/_qwidget_threaded.cpp
-  src/create_widgets/domain/_changed.cpp
   src/create_widgets/domain/restore_panel.cpp
   src/create_widgets/domain/_tab.cpp
   src/create_widgets/domain/common_widgets/os_booting.cpp
@@ -723,8 +725,6 @@ set (SOURCES
   src/create_widgets/network/network_widgets/assistant_widgets/no_gateway_page.cpp
   src/create_widgets/network/network_widgets/assistant_widgets/conclusion_page.cpp
   src/create_widgets/network/create_virt_network_adv.cpp
-  src/create_widgets/network/network_widgets/_checked_widget.cpp
-  src/create_widgets/network/network_widgets/_list_widget.cpp
   src/create_widgets/network/network_widgets/bridge_widget.cpp
   src/create_widgets/network/network_widgets/domain_widget.cpp
   src/create_widgets/network/network_widgets/addressing_widget.cpp

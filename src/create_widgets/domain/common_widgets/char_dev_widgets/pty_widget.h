@@ -1,7 +1,7 @@
 #ifndef PTY_WIDGET_H
 #define PTY_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include <QLabel>
 #include <QComboBox>
 #include <QGridLayout>

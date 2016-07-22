@@ -1,8 +1,6 @@
 #ifndef _QWIDGET_H
 #define _QWIDGET_H
 
-#include <QWidget>
-
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>

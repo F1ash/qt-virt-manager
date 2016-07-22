@@ -5,6 +5,8 @@ VirtEntityControl::VirtEntityControl(QWidget *parent) :
 {
     qRegisterMetaType<QString>("QString&");
     entityList = new TreeView(this);
+    entityList->setVerticalScrollBarPolicy(
+                Qt::ScrollBarAlwaysOn);
     entityList->setSizePolicy(
                   QSizePolicy(
                       QSizePolicy::MinimumExpanding,

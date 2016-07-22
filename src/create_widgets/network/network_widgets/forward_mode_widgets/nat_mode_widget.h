@@ -1,7 +1,7 @@
 #ifndef NAT_MODE_WIDGET_H
 #define NAT_MODE_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QSpinBox>

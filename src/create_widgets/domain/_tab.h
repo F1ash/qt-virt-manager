@@ -2,7 +2,7 @@
 #define _TAB_H
 
 #include <QMessageBox>
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "create_widgets/domain/restore_panel.h"
 
 class _Tab : public _QWidget

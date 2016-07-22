@@ -1,7 +1,7 @@
 #ifndef _CHECKED_WIDGET_H
 #define _CHECKED_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "_qwidget.h"
 
 class _Checked_Widget : public _QWidget
 {

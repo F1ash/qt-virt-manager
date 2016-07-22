@@ -1,7 +1,7 @@
 #ifndef PCI_PASSTHROUGH_H
 #define PCI_PASSTHROUGH_H
 
-#include "create_widgets/domain/_qwidget_threaded.h"
+#include "create_widgets/common/_qwidget_threaded.h"
 #include "create_widgets/domain/common_widgets/address_widgets/pci_addr.h"
 #include "virtual_port.h"
 #include "create_widgets/domain/common_widgets/device_address.h"

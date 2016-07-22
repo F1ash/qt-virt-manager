@@ -1,7 +1,7 @@
 #ifndef UDP_WIDGET_H
 #define UDP_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 
 class UdpWidget : public _QWidget
 {

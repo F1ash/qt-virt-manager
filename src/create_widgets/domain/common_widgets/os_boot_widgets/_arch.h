@@ -1,7 +1,7 @@
 #ifndef _ARCH_H
 #define _ARCH_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include <QLabel>
 #include <QComboBox>
 #include <QGridLayout>

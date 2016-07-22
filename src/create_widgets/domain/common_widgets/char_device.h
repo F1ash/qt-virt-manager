@@ -8,7 +8,7 @@
 #include "char_dev_widgets/tcp_widget.h"
 #include "char_dev_widgets/udp_widget.h"
 #include "char_dev_widgets/unix_widget.h"
-#include "create_widgets/domain/_qwidget_threaded.h"
+#include "create_widgets/common/_qwidget_threaded.h"
 
 class CharDevice : public _QWidget_Threaded
 {

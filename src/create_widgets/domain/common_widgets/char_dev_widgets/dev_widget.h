@@ -1,7 +1,7 @@
 #ifndef DEV_WIDGET_H
 #define DEV_WIDGET_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include <QLabel>
 #include <QLineEdit>
 #include <QGridLayout>

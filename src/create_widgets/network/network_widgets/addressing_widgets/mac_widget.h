@@ -1,7 +1,7 @@
 #ifndef MAC_WIDGET_H
 #define MAC_WIDGET_H
 
-#include "create_widgets/network/network_widgets/_checked_widget.h"
+#include "create_widgets/common/_checked_widget.h"
 
 class MAC_Widget : public _Checked_Widget
 {

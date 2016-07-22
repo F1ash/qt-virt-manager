@@ -1,7 +1,7 @@
 #ifndef TCP_TUNNEL_H
 #define TCP_TUNNEL_H
 
-#include "create_widgets/domain/_qwidget.h"
+#include "create_widgets/common/_qwidget.h"
 #include "mac_address.h"
 #include "create_widgets/domain/common_widgets/device_address.h"
 

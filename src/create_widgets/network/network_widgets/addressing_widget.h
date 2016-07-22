@@ -1,7 +1,7 @@
 #ifndef ADDRESSING_WIDGET_H
 #define ADDRESSING_WIDGET_H
 
-#include "_checked_widget.h"
+#include "create_widgets/common/_checked_widget.h"
 #include "addressing_widgets/dns_widget.h"
 #include "addressing_widgets/ip_widget.h"
 #include "addressing_widgets/mac_widget.h"

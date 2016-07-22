@@ -5,7 +5,7 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QGridLayout>
-#include "create_widgets/domain/_changed.h"
+#include "create_widgets/common/_changed.h"
 
 class MAC_Address : public _Changed
 {

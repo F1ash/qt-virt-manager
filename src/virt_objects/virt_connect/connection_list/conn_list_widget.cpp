@@ -5,6 +5,7 @@ ConnectionList::ConnectionList(QWidget *parent)
 {
     this->setEnabled(false);
     this->setContextMenuPolicy ( Qt::CustomContextMenu );
+    this->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     setContentsMargins (1, 1, 1, 1);
     setDefaultDropAction ( Qt::IgnoreAction );
     setCursor(Qt::ArrowCursor);
