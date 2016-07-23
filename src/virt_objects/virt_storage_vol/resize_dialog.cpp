@@ -58,10 +58,10 @@ ResizeDialog::ResizeDialog(
     QDialog(parent)
 {
     setEnabled(false);
-    helperThread = new resizeHelperThread(
+    hlpThread = new resizeHelperThread(
                 this, connPtrPtr,
                 _poolName, _volName);
-    connect(helperThread, SIGNAL(finished()),
+    connect(hlpThread, SIGNAL(finished()),
             this, SLOT(setCurrentSize()));
     sizeLabel = new QLabel("Size:", this);
     size = new QSpinBox(this);
@@ -84,7 +84,7 @@ ResizeDialog::ResizeDialog(
     commonlayout->addWidget(buttons);
     setLayout(commonlayout);
     setResult(0);
-    helperThread->start();
+    hlpThread->start();
 }
 
 /* private slots */
@@ -134,11 +134,11 @@ void ResizeDialog::changeRangeLong(unsigned long long i)
 }
 void ResizeDialog::setCurrentSize()
 {
-    if ( !helperThread->result ) return;
+    if ( !hlpThread->result ) return;
     setEnabled(true);
     size->setRange(0, KiB);
     currentRange = bytes;
-    changeRangeLong(helperThread->_size);
+    changeRangeLong(hlpThread->_size);
 }
 
 /* public slots */

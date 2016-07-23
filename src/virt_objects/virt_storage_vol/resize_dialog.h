@@ -51,7 +51,7 @@ private:
     QWidget             *buttons;
     QVBoxLayout         *commonlayout;
 
-    resizeHelperThread  *helperThread;
+    resizeHelperThread  *hlpThread;
 
 private slots:
     void okClicked();

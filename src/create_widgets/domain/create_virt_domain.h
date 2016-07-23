@@ -8,8 +8,9 @@
 #include <QTemporaryFile>
 #include <QTabWidget>
 #include <QPushButton>
-#include "domain_widgets.h"
-#include "common_widgets/devices.h"
+#include <QCloseEvent>
+#include "virt_objects/virt_entity_config.h"
+#include "create_widgets/common/_qwidget_threaded.h"
 #include <QDebug>
 
 class HelperThread : public _VirtThread
@@ -61,7 +62,7 @@ private:
     bool             ready = false;
     TASK             task;
 
-    HelperThread    *helperThread;
+    HelperThread    *hlpThread;
     QWidget         *baseWdg = nullptr;
 
 private slots:

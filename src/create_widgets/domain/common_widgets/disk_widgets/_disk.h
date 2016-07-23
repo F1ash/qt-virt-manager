@@ -9,7 +9,7 @@
 #include "_startup_policy.h"
 #include "_use_encryption.h"
 #include "create_widgets/domain/common_widgets/sec_label_widgets/sec_labels.h"
-#include "create_widgets/domain/common_widgets/device_address.h"
+#include "create_widgets/domain/device_address.h"
 
 class _Disk : public _QWidget
 {

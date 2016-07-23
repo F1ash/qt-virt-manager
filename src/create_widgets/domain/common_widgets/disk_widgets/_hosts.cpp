@@ -1,54 +1,19 @@
 #include "_hosts.h"
 
-_Hosts::_Hosts(QWidget *parent) :
-    QWidget(parent)
+_Hosts::_Hosts(QWidget *parent, QString tag) :
+    _List_Widget(parent, tag)
 {
-    hosts = new QListWidget(this);
-    add = new QPushButton(QIcon::fromTheme("list-add"), "", this);
-    del = new QPushButton(QIcon::fromTheme("list-remove"), "", this);
     name = new QLineEdit(this);
     name->setPlaceholderText("Host name");
     port = new QLineEdit(this);
     port->setPlaceholderText("Port");
-    colon = new QLabel(":", this);
-    panelLayout = new QHBoxLayout(this);
-    panel = new QWidget(this);
-    panelLayout->addWidget(add, 2);
-    panelLayout->addWidget(name, 40);
-    panelLayout->addWidget(colon, 1);
-    panelLayout->addWidget(port, 8);
-    panelLayout->addWidget(del, 2);
-    panel->setLayout(panelLayout);
-    baseLayout = new QVBoxLayout(this);
-    baseLayout->addWidget(hosts);
-    baseLayout->addWidget(panel);
-    baseWdg = new QWidget(this);
-    baseWdg->setLayout(baseLayout);
-    baseWdg->setVisible(false);
-    useHosts = new QCheckBox("Use Hosts", this);
-    commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(useHosts);
-    commonLayout->addWidget(baseWdg);
-    setLayout(commonLayout);
-    connect(useHosts, SIGNAL(toggled(bool)),
-            baseWdg, SLOT(setVisible(bool)));
-    connect(add, SIGNAL(clicked()),
-            this, SLOT(addHost()));
-    connect(del, SIGNAL(clicked()),
-            this, SLOT(delHost()));
+    panelLayout->insertWidget(1, name, 32);
+    panelLayout->insertWidget(2, port, 8);
     setFullHostMode(true);
     setOneHostMode(false);
 }
 
 /* public slots */
-bool _Hosts::isUsed() const
-{
-    return useHosts->isChecked();
-}
-void _Hosts::setUsage(bool state)
-{
-    useHosts->setChecked(state);
-}
 void _Hosts::setFullHostMode(bool state)
 {
     hostMode = state;
@@ -56,8 +21,8 @@ void _Hosts::setFullHostMode(bool state)
 QStringList _Hosts::getHostsList() const
 {
     QStringList _list;
-    for(int i = 0; i<hosts->count(); i++) {
-        _list.append(hosts->item(i)->text());
+    for(int i = 0; i<list->count(); i++) {
+        _list.append(list->item(i)->text());
     };
     return _list;
 }
@@ -67,11 +32,11 @@ void _Hosts::setOneHostMode(bool state)
 }
 void _Hosts::setHostItem(QString &_item)
 {
-    hosts->addItem(_item);
+    list->addItem(_item);
 }
 void _Hosts::clearHostList()
 {
-    hosts->clear();
+    list->clear();
 }
 void _Hosts::setHostPlaceholderText(const QString &s)
 {
@@ -83,7 +48,7 @@ void _Hosts::setPortPlaceholderText(const QString &s)
 }
 
 /* private slots */
-void _Hosts::addHost()
+void _Hosts::addItem()
 {
     if ( !name->text().isEmpty() &&
          ( !hostMode || !port->text().isEmpty() ) ) {
@@ -92,21 +57,21 @@ void _Hosts::addHost()
             _host.append(":");
             _host.append(port->text());
         };
-        if ( hosts->findItems(_host, Qt::MatchExactly).isEmpty() ) {
-            if ( oneHostMode ) hosts->clear();
-            hosts->addItem(_host);
+        if ( list->findItems(_host, Qt::MatchExactly).isEmpty() ) {
+            if ( oneHostMode ) list->clear();
+            list->addItem(_host);
         };
         name->clear();
         port->clear();
         emit dataChanged();
     };
 }
-void _Hosts::delHost()
+void _Hosts::delItem()
 {
-    QList<QListWidgetItem*> l = hosts->selectedItems();
+    QList<QListWidgetItem*> l = list->selectedItems();
     if ( !l.isEmpty() ) {
-        hosts->takeItem(hosts->row(l.at(0)));
+        list->takeItem(list->row(l.at(0)));
         emit dataChanged();
     };
-    hosts->clearSelection();
+    list->clearSelection();
 }

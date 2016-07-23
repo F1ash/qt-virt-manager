@@ -1,14 +1,19 @@
 #include "device_existance_menu.h"
 
-DeviceExistanceMenu::DeviceExistanceMenu(QWidget *parent, bool valid) :
+DeviceExistanceMenu::DeviceExistanceMenu(
+        QWidget *parent, bool valid) :
     QMenu(parent), validItem(valid)
 {
     qRegisterMetaType<Device_Action>("Device_Action");
-    addNewDevice = addAction(QIcon::fromTheme("list-add"), "Add Device");
-    connect(addNewDevice, SIGNAL(triggered()), this, SLOT(emitJobSignal()));
+    addNewDevice = addAction(
+                QIcon::fromTheme("list-add"), "Add Device");
+    connect(addNewDevice, SIGNAL(triggered()),
+            this, SLOT(emitJobSignal()));
     if (validItem) {
-        delSelDevice = addAction(QIcon::fromTheme("list-remove"), "Del Device");
-        connect(delSelDevice, SIGNAL(triggered()), this, SLOT(emitJobSignal()));
+        delSelDevice = addAction(
+                    QIcon::fromTheme("list-remove"), "Del Device");
+        connect(delSelDevice, SIGNAL(triggered()),
+                this, SLOT(emitJobSignal()));
     };
 }
 

@@ -187,10 +187,21 @@ set (HEADERS
   src/create_widgets/common/_changed.h
   src/create_widgets/common/_checked_widget.h
   src/create_widgets/common/_list_widget.h
-  src/create_widgets/domain/domain_widgets.h
+  src/create_widgets/common/click_label.h
+
   src/create_widgets/domain/restore_panel.h
   src/create_widgets/domain/create_virt_domain.h
   src/create_widgets/domain/_tab.h
+  src/create_widgets/domain/device_address.h
+  src/create_widgets/domain/address_widgets/_addr.h
+  src/create_widgets/domain/address_widgets/ccid_addr.h
+  src/create_widgets/domain/address_widgets/ccw_addr.h
+  src/create_widgets/domain/address_widgets/drive_addr.h
+  src/create_widgets/domain/address_widgets/isa_addr.h
+  src/create_widgets/domain/address_widgets/pci_addr.h
+  src/create_widgets/domain/address_widgets/spaprvio_addr.h
+  src/create_widgets/domain/address_widgets/usb_addr.h
+  src/create_widgets/domain/address_widgets/virtioserial_addr.h
   src/create_widgets/domain/common_widgets/os_booting.h
   src/create_widgets/domain/common_widgets/os_boot_widgets/_arch.h
   src/create_widgets/domain/common_widgets/os_boot_widgets/boot_menu.h
@@ -224,16 +235,6 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/console_device.h
   src/create_widgets/domain/common_widgets/smartcard_device.h
   src/create_widgets/domain/common_widgets/input_device.h
-  src/create_widgets/domain/common_widgets/device_address.h
-  src/create_widgets/domain/common_widgets/address_widgets/_addr.h
-  src/create_widgets/domain/common_widgets/address_widgets/ccid_addr.h
-  src/create_widgets/domain/common_widgets/address_widgets/ccw_addr.h
-  src/create_widgets/domain/common_widgets/address_widgets/drive_addr.h
-  src/create_widgets/domain/common_widgets/address_widgets/isa_addr.h
-  src/create_widgets/domain/common_widgets/address_widgets/pci_addr.h
-  src/create_widgets/domain/common_widgets/address_widgets/spaprvio_addr.h
-  src/create_widgets/domain/common_widgets/address_widgets/usb_addr.h
-  src/create_widgets/domain/common_widgets/address_widgets/virtioserial_addr.h
   src/create_widgets/domain/common_widgets/hub_device.h
   src/create_widgets/domain/common_widgets/video_device.h
   src/create_widgets/domain/common_widgets/sound_device.h
@@ -294,6 +295,7 @@ set (HEADERS
   src/create_widgets/domain/common_widgets/misc_settings_widgets/events.h
   src/create_widgets/domain/common_widgets/misc_settings_widgets/power.h
   src/create_widgets/domain/common_widgets/misc_settings_widgets/hv_features.h
+
   src/create_widgets/storage/_create_storage_widgets/_create_storage.h
   src/create_widgets/storage/_create_storage_widgets/_storage_source.h
   src/create_widgets/storage/_create_storage_widgets/_adapter.h
@@ -316,6 +318,7 @@ set (HEADERS
   src/create_widgets/storage/_create_storage_widgets/zfs_pool_stuff.h
   src/create_widgets/storage/create_pool.h
   src/create_widgets/storage/create_volume.h
+
   src/create_widgets/domain/edit_widgets/emulator_edit.h
   src/create_widgets/domain/edit_widgets/hub_device_edit.h
   src/create_widgets/domain/edit_widgets/smartcard_device_edit.h
@@ -413,7 +416,6 @@ set (HEADERS
   src/vm_viewer/lxc/lxc_viewer_thread.h
   src/vm_viewer/spice/spice_viewer.h
   src/vm_viewer/vnc/vnc_viewer.h
-  src/vm_viewer/click_label.h
   
   src/vm_viewer/qterminal/tabwidget.h
   src/vm_viewer/qterminal/termwidgetholder.h
@@ -564,9 +566,21 @@ set (SOURCES
   src/create_widgets/common/_changed.cpp
   src/create_widgets/common/_checked_widget.cpp
   src/create_widgets/common/_list_widget.cpp
+  src/create_widgets/common/click_label.cpp
+
   src/create_widgets/domain/create_virt_domain.cpp
   src/create_widgets/domain/restore_panel.cpp
   src/create_widgets/domain/_tab.cpp
+  src/create_widgets/domain/device_address.cpp
+  src/create_widgets/domain/address_widgets/_addr.cpp
+  src/create_widgets/domain/address_widgets/ccid_addr.cpp
+  src/create_widgets/domain/address_widgets/ccw_addr.cpp
+  src/create_widgets/domain/address_widgets/drive_addr.cpp
+  src/create_widgets/domain/address_widgets/isa_addr.cpp
+  src/create_widgets/domain/address_widgets/pci_addr.cpp
+  src/create_widgets/domain/address_widgets/spaprvio_addr.cpp
+  src/create_widgets/domain/address_widgets/usb_addr.cpp
+  src/create_widgets/domain/address_widgets/virtioserial_addr.cpp
   src/create_widgets/domain/common_widgets/os_booting.cpp
   src/create_widgets/domain/common_widgets/os_boot_widgets/_arch.cpp
   src/create_widgets/domain/common_widgets/os_boot_widgets/boot_menu.cpp
@@ -600,16 +614,6 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/console_device.cpp
   src/create_widgets/domain/common_widgets/smartcard_device.cpp
   src/create_widgets/domain/common_widgets/input_device.cpp
-  src/create_widgets/domain/common_widgets/device_address.cpp
-  src/create_widgets/domain/common_widgets/address_widgets/_addr.cpp
-  src/create_widgets/domain/common_widgets/address_widgets/ccid_addr.cpp
-  src/create_widgets/domain/common_widgets/address_widgets/ccw_addr.cpp
-  src/create_widgets/domain/common_widgets/address_widgets/drive_addr.cpp
-  src/create_widgets/domain/common_widgets/address_widgets/isa_addr.cpp
-  src/create_widgets/domain/common_widgets/address_widgets/pci_addr.cpp
-  src/create_widgets/domain/common_widgets/address_widgets/spaprvio_addr.cpp
-  src/create_widgets/domain/common_widgets/address_widgets/usb_addr.cpp
-  src/create_widgets/domain/common_widgets/address_widgets/virtioserial_addr.cpp
   src/create_widgets/domain/common_widgets/hub_device.cpp
   src/create_widgets/domain/common_widgets/video_device.cpp
   src/create_widgets/domain/common_widgets/sound_device.cpp
@@ -670,6 +674,7 @@ set (SOURCES
   src/create_widgets/domain/common_widgets/misc_settings_widgets/events.cpp
   src/create_widgets/domain/common_widgets/misc_settings_widgets/power.cpp
   src/create_widgets/domain/common_widgets/misc_settings_widgets/hv_features.cpp
+
   src/create_widgets/storage/_create_storage_widgets/_create_storage.cpp
   src/create_widgets/storage/_create_storage_widgets/_storage_source.cpp
   src/create_widgets/storage/_create_storage_widgets/_adapter.cpp
@@ -692,6 +697,7 @@ set (SOURCES
   src/create_widgets/storage/_create_storage_widgets/zfs_pool_stuff.cpp
   src/create_widgets/storage/create_pool.cpp
   src/create_widgets/storage/create_volume.cpp
+
   src/create_widgets/domain/edit_widgets/emulator_edit.cpp
   src/create_widgets/domain/edit_widgets/hub_device_edit.cpp
   src/create_widgets/domain/edit_widgets/smartcard_device_edit.cpp
@@ -784,7 +790,6 @@ set (SOURCES
   src/vm_viewer/viewer_toolbar.cpp
   src/vm_viewer/vm_state_widget.cpp
   src/vm_viewer/transformation_mode_menu.cpp
-  src/vm_viewer/click_label.cpp
 
   src/vm_viewer/lxc/lxc_viewer.cpp
   src/vm_viewer/lxc/lxc_viewer_thread.cpp

@@ -41,7 +41,7 @@ private:
 
     QVBoxLayout     *infoStuffLayout;
     QWidget         *infoStuff;
-    pooHelperThread *helperThread;
+    pooHelperThread *hlpThread;
 
 public slots:
     QString          getXMLDescFileName() const;

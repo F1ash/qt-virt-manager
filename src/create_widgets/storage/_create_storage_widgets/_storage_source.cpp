@@ -20,9 +20,9 @@ _Storage_Source::_Storage_Source(QWidget *parent, virConnectPtr *connPtrPtr) :
     named = new QLineEdit(this);
     named->setPlaceholderText("a named element");
     named->setVisible(false);
-    host = new _Hosts(this);
+    host = new _Hosts(this, "Use Hosts");
     host->setVisible(false);
-    device = new _BlockDevices(this);
+    device = new _BlockDevices(this, "Block devices");
     device->setVisible(false);
     dir = new QLineEdit(this);
     dir->setVisible(false);

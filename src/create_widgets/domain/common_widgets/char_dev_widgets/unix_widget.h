@@ -7,7 +7,9 @@ class UnixWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit UnixWidget(QWidget *parent = nullptr, QString _tag = "");
+    explicit UnixWidget(
+            QWidget *parent = nullptr,
+            QString  _tag   = "");
 
 private:
     QLabel          *pathLabel;

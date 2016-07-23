@@ -7,7 +7,9 @@ class TcpWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit TcpWidget(QWidget *parent = nullptr, QString _tag = "");
+    explicit TcpWidget(
+            QWidget *parent = nullptr,
+            QString  _tag   = "");
 
 private:
     QLabel          *modeLabel;

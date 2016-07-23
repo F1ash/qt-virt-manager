@@ -7,8 +7,8 @@
 #include <QStringList>
 #include <QScrollArea>
 #include <QMessageBox>
-#include "create_widgets/domain/domain_widgets.h"
 #include "device_restore_menu.h"
+#include "create_widgets/common/_qwidget.h"
 
 class DeviceData : public QWidget
 {

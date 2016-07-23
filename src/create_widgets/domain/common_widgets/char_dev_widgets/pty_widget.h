@@ -10,7 +10,9 @@ class PtyWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit PtyWidget(QWidget *parent=0, QString _tag = "");
+    explicit PtyWidget(
+            QWidget *parent = 0,
+            QString  _tag   = "");
 
 private:
     QGridLayout     *ptyLayout;

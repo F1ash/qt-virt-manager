@@ -2,7 +2,7 @@
 #define USB_HOST_DEVICE_EDIT_H
 
 #include "create_widgets/common/_qwidget.h"
-#include "create_widgets/domain/common_widgets/device_address.h"
+#include "create_widgets/domain/device_address.h"
 #include "create_widgets/domain/common_widgets/disk_widgets/_startup_policy.h"
 
 class USB_Host_Device_Edit : public _QWidget

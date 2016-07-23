@@ -46,8 +46,8 @@ void RedirDevDevice_Edit::setDataDescription(const QString &xmlDesc)
     };
     _filter = doc.firstChildElement("device")
             .firstChildElement("redirfilter");
-    filter->filtered->setChecked(!_filter.isNull());
-    filter->filter->clear();
+    filter->setUsage(!_filter.isNull());
+    filter->clearList();
     if ( !_filter.isNull() ) {
         QDomNodeList _list = _filter.childNodes();
         uint j = 0;

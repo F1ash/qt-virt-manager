@@ -37,12 +37,12 @@ CreateVirtNWFilter::CreateVirtNWFilter(
                 .arg(QDir::tempPath())
                 .arg(QDir::separator()));
     setEnabled(false);
-    helperThread = new NetFilterHelperThread(this, ptr_ConnPtr);
-    connect(helperThread, SIGNAL(finished()),
+    hlpThread = new NetFilterHelperThread(this, ptr_ConnPtr);
+    connect(hlpThread, SIGNAL(finished()),
             this, SLOT(readCapabilities()));
-    connect(helperThread, SIGNAL(errorMsg(QString&,uint)),
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
             this, SIGNAL(errorMsg(QString&)));
-    helperThread->start();
+    hlpThread->start();
 
 }
 CreateVirtNWFilter::~CreateVirtNWFilter()

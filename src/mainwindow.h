@@ -29,6 +29,7 @@
 #include "menubar/menu_bar.h"
 #include "proxy_widget/proxy_widget.h"
 #include "soft_touched/st_stacked_widget.h"
+#include "create_widgets/domain/create_virt_domain.h"
 #include "create_widgets/network/create_virt_network.h"
 #include "create_widgets/nwfilter/create_virt_nwfilter.h"
 

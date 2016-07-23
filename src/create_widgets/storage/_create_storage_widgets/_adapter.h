@@ -7,7 +7,7 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QGridLayout>
-#include "create_widgets/domain/common_widgets/address_widgets/pci_addr.h"
+#include "create_widgets/domain/address_widgets/pci_addr.h"
 
 class _Adapter : public QWidget
 {

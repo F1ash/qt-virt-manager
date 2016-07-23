@@ -1,30 +1,15 @@
 #include "_block_devices.h"
 
-_BlockDevices::_BlockDevices(QWidget *parent) :
-    QWidget(parent)
+_BlockDevices::_BlockDevices(QWidget *parent, QString tag) :
+    _List_Widget(parent, tag)
 {
-    devices = new QListWidget(this);
-    add = new QPushButton(QIcon::fromTheme("list-add"), "", this);
-    browse = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
-    del = new QPushButton(QIcon::fromTheme("list-remove"), "", this);
+    setUsage(true);
+    browse = new QPushButton(
+                QIcon::fromTheme("edit-find"), "", this);
     name = new QLineEdit(this);
     name->setPlaceholderText("Block device name");
-    panelLayout = new QHBoxLayout(this);
-    panel = new QWidget(this);
-    panelLayout->addWidget(add, 1);
-    panelLayout->addWidget(browse, 1);
-    panelLayout->addWidget(name, 20);
-    panelLayout->addWidget(del, 1);
-    panel->setLayout(panelLayout);
-    commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(devices);
-    commonLayout->addWidget(panel);
-    commonLayout->addStretch(-1);
-    setLayout(commonLayout);
-    connect(add, SIGNAL(clicked()),
-            this, SLOT(addDevice()));
-    connect(del, SIGNAL(clicked()),
-            this, SLOT(delDevice()));
+    panelLayout->insertWidget(1, browse, 1);
+    panelLayout->insertWidget(2, name, 20);
     connect(browse, SIGNAL(clicked()),
             this, SLOT(setBlockDevPath()));
     setOneDeviceMode(false);
@@ -34,8 +19,8 @@ _BlockDevices::_BlockDevices(QWidget *parent) :
 QStringList _BlockDevices::getDevicesList() const
 {
     QStringList _list;
-    for(int i = 0; i<devices->count(); i++) {
-        _list.append(devices->item(i)->text());
+    for(int i = 0; i<list->count(); i++) {
+        _list.append(list->item(i)->text());
     };
     return _list;
 }
@@ -45,24 +30,24 @@ void _BlockDevices::setOneDeviceMode(bool state)
 }
 
 /* private slots */
-void _BlockDevices::addDevice()
+void _BlockDevices::addItem()
 {
     if ( !name->text().isEmpty() ) {
         QString _dev = name->text();
-        if ( devices->findItems(_dev, Qt::MatchExactly).isEmpty() ) {
-            if ( oneDeviceMode ) devices->clear();
-            devices->addItem(_dev);
+        if ( list->findItems(_dev, Qt::MatchExactly).isEmpty() ) {
+            if ( oneDeviceMode ) list->clear();
+            list->addItem(_dev);
         };
         name->clear();
     };
 }
-void _BlockDevices::delDevice()
+void _BlockDevices::delItem()
 {
-    QList<QListWidgetItem*> l = devices->selectedItems();
+    QList<QListWidgetItem*> l = list->selectedItems();
     if ( !l.isEmpty() ) {
-        devices->takeItem(devices->row(l.at(0)));
+        list->takeItem(list->row(l.at(0)));
     };
-    devices->clearSelection();
+    list->clearSelection();
 }
 void _BlockDevices::setBlockDevPath()
 {

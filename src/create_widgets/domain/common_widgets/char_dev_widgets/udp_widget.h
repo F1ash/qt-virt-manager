@@ -7,7 +7,9 @@ class UdpWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit UdpWidget(QWidget *parent = nullptr, QString _tag = "");
+    explicit UdpWidget(
+            QWidget *parent = nullptr,
+            QString  _tag   = "");
 
 private:
     QLabel          *hostLabel;

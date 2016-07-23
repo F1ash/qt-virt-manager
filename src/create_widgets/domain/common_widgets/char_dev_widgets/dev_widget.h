@@ -10,7 +10,9 @@ class DevWidget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit DevWidget(QWidget *parent = nullptr, QString _tag = "");
+    explicit DevWidget(
+            QWidget *parent = nullptr,
+            QString  _tag   = "");
 
 signals:
 

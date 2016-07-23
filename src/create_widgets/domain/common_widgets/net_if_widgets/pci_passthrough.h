@@ -2,9 +2,9 @@
 #define PCI_PASSTHROUGH_H
 
 #include "create_widgets/common/_qwidget_threaded.h"
-#include "create_widgets/domain/common_widgets/address_widgets/pci_addr.h"
+#include "create_widgets/domain/address_widgets/pci_addr.h"
+#include "create_widgets/domain/device_address.h"
 #include "virtual_port.h"
-#include "create_widgets/domain/common_widgets/device_address.h"
 
 class PCI_Passthrough : public _QWidget_Threaded
 {

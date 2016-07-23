@@ -16,7 +16,7 @@ class CharDevice : public _QWidget_Threaded
 public:
     explicit CharDevice(
             QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr,
+            virConnectPtr  *connPtrPtr  = nullptr,
             virDomainPtr    domain      = nullptr,
             QString         _tag        = QString());
 

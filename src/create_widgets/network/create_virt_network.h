@@ -48,7 +48,7 @@ private:
     bool             newbe = false;
     TASK             task;
 
-    NetHelperThread *helperThread;
+    NetHelperThread *hlpThread;
     CreateVirtNetwork_Adv
                     *advancedWdg = nullptr;
     CreateVirtNetwork_Ass

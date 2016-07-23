@@ -35,7 +35,7 @@ RedirDevDevice::RedirDevDevice(
     address->type->setEnabled(false);
     address->setCurrentAddrWidget(idx);
 
-    filter = new RedirFilter(this);
+    filter = new RedirFilter(this, "Use filter");
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(type);
@@ -82,7 +82,7 @@ QDomDocument RedirDevDevice::getDataDocument() const
     _devDesc.setAttribute("bus", "usb");
     _device.appendChild(_devDesc);
     QStringList _filters = filter->getFiltersList();
-    if ( filter->isFiltered() && !_filters.isEmpty() ) {
+    if ( filter->isUsed() && !_filters.isEmpty() ) {
         foreach (QString _f, _filters) {
             if ( !_f.isEmpty() ) {
                 QString _class, _vendor, _product, _version, _allow;

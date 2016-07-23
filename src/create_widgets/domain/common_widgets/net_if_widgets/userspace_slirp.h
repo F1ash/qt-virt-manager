@@ -3,7 +3,7 @@
 
 #include "create_widgets/common/_qwidget.h"
 #include "mac_address.h"
-#include "create_widgets/domain/common_widgets/device_address.h"
+#include "create_widgets/domain/device_address.h"
 
 class Userspace_SLIRP : public _QWidget
 {

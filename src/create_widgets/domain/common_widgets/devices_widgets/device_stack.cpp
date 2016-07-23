@@ -1,4 +1,22 @@
 #include "device_stack.h"
+#include "create_widgets/domain/common_widgets/char_device.h"
+#include "create_widgets/domain/common_widgets/channel_device.h"
+#include "create_widgets/domain/common_widgets/console_device.h"
+#include "create_widgets/domain/common_widgets/smartcard_device.h"
+#include "create_widgets/domain/common_widgets/input_device.h"
+#include "create_widgets/domain/common_widgets/hub_device.h"
+#include "create_widgets/domain/common_widgets/video_device.h"
+#include "create_widgets/domain/common_widgets/sound_device.h"
+#include "create_widgets/domain/common_widgets/host_device.h"
+#include "create_widgets/domain/common_widgets/graphics_device.h"
+#include "create_widgets/domain/common_widgets/redirdev_device.h"
+#include "create_widgets/domain/common_widgets/filesystems.h"
+#include "create_widgets/domain/common_widgets/net_interfaces.h"
+#include "create_widgets/domain/common_widgets/disk.h"
+#include "create_widgets/domain/common_widgets/encryption.h"
+#include "create_widgets/domain/common_widgets/emulator.h"
+#include "create_widgets/domain/common_widgets/random.h"
+#include "create_widgets/domain/common_widgets/memballoon.h"
 
 devstackHelpThread::devstackHelpThread(
         QObject         *parent,

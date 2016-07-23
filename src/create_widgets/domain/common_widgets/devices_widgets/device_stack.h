@@ -7,7 +7,7 @@
 #include <QPushButton>
 #include <QStringList>
 #include <QScrollArea>
-#include "create_widgets/domain/domain_widgets.h"
+#include "create_widgets/common/_qwidget.h"
 #include "virt_objects/_virt_thread.h"
 
 class devstackHelpThread : public _VirtThread

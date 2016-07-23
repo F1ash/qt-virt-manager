@@ -22,7 +22,7 @@ private:
 
 public slots:
     virtual void     addItem();
-    void             delItem();
+    virtual void     delItem();
 };
 
 #endif // _LIST_WIDGET_H

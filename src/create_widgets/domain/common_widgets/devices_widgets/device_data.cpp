@@ -1,4 +1,20 @@
 #include "device_data.h"
+#include "create_widgets/domain/edit_widgets/emulator_edit.h"
+#include "create_widgets/domain/edit_widgets/hub_device_edit.h"
+#include "create_widgets/domain/edit_widgets/smartcard_device_edit.h"
+#include "create_widgets/domain/edit_widgets/char_device_edit.h"
+#include "create_widgets/domain/edit_widgets/sound_device_edit.h"
+#include "create_widgets/domain/edit_widgets/console_device_edit.h"
+#include "create_widgets/domain/edit_widgets/input_device_edit.h"
+#include "create_widgets/domain/edit_widgets/memballoon_edit.h"
+#include "create_widgets/domain/edit_widgets/redirdev_device_edit.h"
+#include "create_widgets/domain/edit_widgets/video_device_edit.h"
+#include "create_widgets/domain/edit_widgets/random_edit.h"
+#include "create_widgets/domain/edit_widgets/host_device_edit.h"
+#include "create_widgets/domain/edit_widgets/graphics_device_edit.h"
+#include "create_widgets/domain/edit_widgets/net_interfaces_edit.h"
+#include "create_widgets/domain/edit_widgets/filesystems_edit.h"
+#include "create_widgets/domain/edit_widgets/disk_edit.h"
 
 DeviceData::DeviceData(
         QWidget *parent, virConnectPtr *conn ) :

@@ -5,14 +5,14 @@
 #include <QCheckBox>
 #include <QHBoxLayout>
 #include <QGridLayout>
-#include "vm_viewer/click_label.h"
+#include "create_widgets/common/click_label.h"
 
 class Donate_Dialog : public QDialog
 {
     Q_OBJECT
 public:
     Donate_Dialog(QWidget *parent = nullptr);
-    bool showAgain() const;
+    bool             showAgain() const;
 
 private:
     Click_Label     *donate1;
@@ -22,7 +22,7 @@ private:
     QVBoxLayout     *commonLayout;
 
 private slots:
-    void donation1Clicked();
+    void             donation1Clicked();
 };
 
 #endif // DONATE_DIALOG_H

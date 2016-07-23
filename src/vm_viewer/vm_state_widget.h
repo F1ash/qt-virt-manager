@@ -6,7 +6,7 @@
 #include <QIcon>
 #include <QHBoxLayout>
 #include "transformation_mode_menu.h"
-#include "click_label.h"
+#include "create_widgets/common/click_label.h"
 
 #define TIMEOUT     60*1000
 

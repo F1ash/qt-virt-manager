@@ -1,8 +1,7 @@
 #ifndef _POOL_STUFF_H
 #define _POOL_STUFF_H
 
-#include <QWidget>
-#include <QtXml/QDomDocument>
+#include <QDomDocument>
 #include "_storage_source.h"
 #include "_storage_target.h"
 

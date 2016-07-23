@@ -36,12 +36,12 @@ CreateVirtNetwork::CreateVirtNetwork(
                 .arg(QDir::tempPath())
                 .arg(QDir::separator()));
     setEnabled(false);
-    helperThread = new NetHelperThread(this, ptr_ConnPtr);
-    connect(helperThread, SIGNAL(finished()),
+    hlpThread = new NetHelperThread(this, ptr_ConnPtr);
+    connect(hlpThread, SIGNAL(finished()),
             this, SLOT(readCapabilities()));
-    connect(helperThread, SIGNAL(errorMsg(QString&,uint)),
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
             this, SIGNAL(errorMsg(QString&)));
-    helperThread->start();
+    hlpThread->start();
 
 }
 CreateVirtNetwork::~CreateVirtNetwork()

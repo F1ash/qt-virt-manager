@@ -2,7 +2,7 @@
 #define REDIRDEV_DEVICE_H
 
 #include "create_widgets/common/_qwidget.h"
-#include "device_address.h"
+#include "create_widgets/domain/device_address.h"
 #include "redir_filter.h"
 
 class RedirDevDevice : public _QWidget

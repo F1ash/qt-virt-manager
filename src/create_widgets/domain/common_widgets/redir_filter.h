@@ -1,24 +1,16 @@
 #ifndef REDIR_FILTER_H
 #define REDIR_FILTER_H
 
-#include <QWidget>
-#include <QListWidget>
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include "create_widgets/common/_list_widget.h"
 
-class RedirFilter : public QWidget
+class RedirFilter : public _List_Widget
 {
     Q_OBJECT
 public:
-    explicit RedirFilter(QWidget *parent = nullptr);
-    QListWidget     *filter;
-    QCheckBox       *filtered;
-
-signals:
-    void             dataChanged();
+    explicit RedirFilter(
+            QWidget *parent = nullptr,
+            QString  tag    = "");
+    void             clearList();
 
 private:
     QLineEdit       *_class, *_product,
@@ -32,13 +24,12 @@ private:
     QVBoxLayout     *commonLayout;
 
 public slots:
-    bool             isFiltered() const;
     QStringList      getFiltersList() const;
     void             setFiltersList(QString&, bool);
 
 private slots:
-    void             addFilter();
-    void             delFilter();
+    void             addItem();
+    void             delItem();
 };
 
 #endif // REDIR_FILTER_H

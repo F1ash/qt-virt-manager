@@ -1,12 +1,8 @@
 #include "redir_filter.h"
 
-RedirFilter::RedirFilter(QWidget *parent) :
-    QWidget(parent)
+RedirFilter::RedirFilter(QWidget *parent, QString tag) :
+    _List_Widget(parent, tag)
 {
-    filtered = new QCheckBox("Use filter:", this);
-    filter = new QListWidget(this);
-    add = new QPushButton(QIcon::fromTheme("list-add"), "", this);
-    del = new QPushButton(QIcon::fromTheme("list-remove"), "", this);
     _class = new QLineEdit(this);
     _class->setPlaceholderText("Class");
     _vendor = new QLineEdit(this);
@@ -16,43 +12,22 @@ RedirFilter::RedirFilter(QWidget *parent) :
     _version = new QLineEdit(this);
     _version->setPlaceholderText("Version");
 
-    panelLayout = new QHBoxLayout(this);
-    panelLayout->addWidget(add, 1);
-    panelLayout->addWidget(_class, 10);
-    panelLayout->addWidget(_vendor, 10);
-    panelLayout->addWidget(_product, 10);
-    panelLayout->addWidget(_version, 10);
-    panelLayout->addWidget(del, 1);
-    panel = new QWidget(this);
-    panel->setLayout(panelLayout);
-    baseLayout = new QVBoxLayout(this);
-    baseLayout->addWidget(filter);
-    baseLayout->addWidget(panel);
-    baseWdg = new QWidget(this);
-    baseWdg->setLayout(baseLayout);
-    baseWdg->setVisible(false);
-    commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(filtered);
-    commonLayout->addWidget(baseWdg);
-    setLayout(commonLayout);
-    connect(filtered, SIGNAL(toggled(bool)),
-            baseWdg, SLOT(setVisible(bool)));
-    connect(add, SIGNAL(clicked()),
-            this, SLOT(addFilter()));
-    connect(del, SIGNAL(clicked()),
-            this, SLOT(delFilter()));
+    panelLayout->insertWidget(1, _class, 10);
+    panelLayout->insertWidget(2, _vendor, 10);
+    panelLayout->insertWidget(3, _product, 10);
+    panelLayout->insertWidget(4, _version, 10);
+}
+void RedirFilter::clearList()
+{
+    list->clear();
 }
 
 /* public slots */
-bool RedirFilter::isFiltered() const
-{
-    return filtered->isChecked();
-}
 QStringList RedirFilter::getFiltersList() const
 {
     QStringList _list;
-    for(int i = 0; i<filter->count(); i++) {
-        QListWidgetItem *_filterItem = filter->item(i);
+    for(int i = 0; i<list->count(); i++) {
+        QListWidgetItem *_filterItem = list->item(i);
         QString _filter = _filterItem->text();
         _filter.append(":");
         Qt::CheckState _state = _filterItem->checkState();
@@ -66,24 +41,24 @@ void RedirFilter::setFiltersList(QString &_filter, bool _allow)
     QListWidgetItem *_item = new QListWidgetItem();
     _item->setText(_filter);
     _item->setCheckState( (_allow)? Qt::Checked : Qt::Unchecked );
-    filter->insertItem(0, _item);
+    list->insertItem(0, _item);
 }
 
 /* private slots */
-void RedirFilter::addFilter()
+void RedirFilter::addItem()
 {
     QString _c, _v, _p, _ver, _filter;
     _c = (_class->text().isEmpty())? "-1" : _class->text();
     _v = (_vendor->text().isEmpty())? "-1" : _vendor->text();;
     _p = (_product->text().isEmpty())? "-1" : _product->text();;
     _ver = (_version->text().isEmpty())? "-1" : _version->text();;
-    // filter format : <class:vendor:product:version>
+    // list format : <class:vendor:product:version>
     _filter = QString("%1:%2:%3:%4").arg(_c).arg(_v).arg(_p).arg(_ver);
-    if ( filter->findItems(_filter, Qt::MatchExactly).isEmpty() ) {
-        QListWidgetItem *_filterItem = new QListWidgetItem(filter);
+    if ( list->findItems(_filter, Qt::MatchExactly).isEmpty() ) {
+        QListWidgetItem *_filterItem = new QListWidgetItem(list);
         _filterItem->setText(_filter);
         _filterItem->setCheckState(Qt::Unchecked);
-        filter->insertItem(filter->count(), _filterItem);
+        list->insertItem(list->count(), _filterItem);
         emit dataChanged();
     };
     _class->clear();
@@ -91,12 +66,12 @@ void RedirFilter::addFilter()
     _product->clear();
     _version->clear();
 }
-void RedirFilter::delFilter()
+void RedirFilter::delItem()
 {
-    QList<QListWidgetItem*> l = filter->selectedItems();
+    QList<QListWidgetItem*> l = list->selectedItems();
     if ( !l.isEmpty() ) {
-        filter->takeItem(filter->row(l.at(0)));
+        list->takeItem(list->row(l.at(0)));
         emit dataChanged();
     };
-    filter->clearSelection();
+    list->clearSelection();
 }

@@ -46,7 +46,7 @@ private:
     TASK             task;
 
     NetFilterHelperThread
-                    *helperThread;
+                    *hlpThread;
 
 public slots:
     void             closeEvent(QCloseEvent*);

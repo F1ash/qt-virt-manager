@@ -6,7 +6,7 @@
 #include "mac_address.h"
 #include "virtual_port.h"
 #include "nwfilter_parameters.h"
-#include "create_widgets/domain/common_widgets/device_address.h"
+#include "create_widgets/domain/device_address.h"
 
 class virtNet_HlpThread : public qwdHelpThread
 {

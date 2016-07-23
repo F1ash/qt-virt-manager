@@ -76,13 +76,13 @@ CreateVolume::CreateVolume(
     sizeWdg = new QWidget(this);
     sizeWdg->setLayout(sizeLayout);
 
-    helperThread = new pooHelperThread(
+    hlpThread = new pooHelperThread(
                 this, connPtrPtr, _poolName);
-    connect(helperThread, SIGNAL(finished()),
+    connect(hlpThread, SIGNAL(finished()),
             this, SLOT(initData()));
-    connect(helperThread, SIGNAL(errorMsg(QString&,uint)),
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
             this, SIGNAL(errorMsg(QString&)));
-    helperThread->start();
+    hlpThread->start();
 }
 
 /* public slots */
@@ -169,10 +169,10 @@ QString CreateVolume::getXMLDescFileName() const
 /* private slots */
 void CreateVolume::initData()
 {
-    type->addItem(helperThread->type);
+    type->addItem(hlpThread->type);
 
     //source = new _Storage_Source(this);
-    target = new _Storage_Target(this, helperThread->type);
+    target = new _Storage_Target(this, hlpThread->type);
     target->formatWdg->setVisible(true);
     target->encrypt->setVisible(true);
 

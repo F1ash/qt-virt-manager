@@ -1,43 +1,23 @@
 #ifndef _HOSTS_H
 #define _HOSTS_H
 
-#include <QWidget>
-#include <QCheckBox>
-#include <QPushButton>
-#include <QListWidget>
-#include <QLabel>
-#include <QLineEdit>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+#include "create_widgets/common/_list_widget.h"
 
-class _Hosts : public QWidget
+class _Hosts : public _List_Widget
 {
     Q_OBJECT
 public:
-    explicit _Hosts(QWidget *parent = nullptr);
-
-signals:
-    void             dataChanged();
+    explicit _Hosts(
+            QWidget *parent = nullptr,
+            QString  tag    = "");
 
 private:
-    QCheckBox       *useHosts;
-    QListWidget     *hosts;
-    QPushButton     *add;
-    QPushButton     *del;
     QLineEdit       *name, *port;
-    QLabel          *colon;
-    QHBoxLayout     *panelLayout;
-    QWidget         *panel;
-    QVBoxLayout     *baseLayout;
-    QWidget         *baseWdg;
-    QVBoxLayout     *commonLayout;
 
     bool             hostMode = false;
     bool             oneHostMode = false;
 
 public slots:
-    bool             isUsed() const;
-    void             setUsage(bool);
     void             setFullHostMode(bool);
     QStringList      getHostsList() const;
     void             setOneHostMode(bool);
@@ -47,8 +27,8 @@ public slots:
     void             setPortPlaceholderText(const QString&);
 
 private slots:
-    void             addHost();
-    void             delHost();
+    void             addItem();
+    void             delItem();
 };
 
 #endif // _HOSTS_H

@@ -1,4 +1,12 @@
 #include "create_virt_domain.h"
+#include "common_widgets/general.h"
+#include "common_widgets/os_booting.h"
+#include "common_widgets/memory.h"
+#include "common_widgets/cpu.h"
+#include "common_widgets/security_label.h"
+#include "common_widgets/misc_settings.h"
+#include "common_widgets/devices.h"
+#include <QTime>
 
 HelperThread::HelperThread(QObject *parent, virConnectPtr *connPtrPtr) :
     _VirtThread(parent, connPtrPtr)
@@ -128,12 +136,12 @@ CreateVirtDomain::CreateVirtDomain(
                 .arg(QDir::tempPath())
                 .arg(QDir::separator()));
     setEnabled(false);
-    helperThread = new HelperThread(this, ptr_ConnPtr);
-    connect(helperThread, SIGNAL(finished()),
+    hlpThread = new HelperThread(this, ptr_ConnPtr);
+    connect(hlpThread, SIGNAL(finished()),
             this, SLOT(readCapabilities()));
-    connect(helperThread, SIGNAL(errorMsg(QString&,uint)),
+    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
             this, SIGNAL(errorMsg(QString&)));
-    helperThread->start();
+    hlpThread->start();
 }
 CreateVirtDomain::~CreateVirtDomain()
 {
@@ -156,9 +164,9 @@ void CreateVirtDomain::closeEvent(QCloseEvent *ev)
 }
 void CreateVirtDomain::readCapabilities()
 {
-    //qDebug()<<helperThread->capabilities;
+    //qDebug()<<hlpThread->capabilities;
     QDomDocument doc;
-    doc.setContent(helperThread->capabilities);
+    doc.setContent(hlpThread->capabilities);
     QDomElement _domain = doc.
             firstChildElement("capabilities").
             firstChildElement("guest").
@@ -329,19 +337,19 @@ void CreateVirtDomain::create_specified_widgets()
     if ( !type.isEmpty() ) {
         wdgList.insert(
                     "General",
-                    new General(this, helperThread->capabilities, xmlDesc));
+                    new General(this, hlpThread->capabilities, xmlDesc));
         wdgList.insert(
                     "Misc.",
-                    new Misc_Settings(this, helperThread->capabilities, xmlDesc));
+                    new Misc_Settings(this, hlpThread->capabilities, xmlDesc));
         wdgList.insert(
                     "OS_Booting",
-                    new OS_Booting(this, helperThread->capabilities, xmlDesc));
+                    new OS_Booting(this, hlpThread->capabilities, xmlDesc));
         wdgList.insert(
                     "Memory",
-                    new Memory(this, helperThread->capabilities, xmlDesc));
+                    new Memory(this, hlpThread->capabilities, xmlDesc));
         wdgList.insert(
                     "CPU",
-                    new CPU(this, helperThread->capabilities, xmlDesc, helperThread->cores));
+                    new CPU(this, hlpThread->capabilities, xmlDesc, hlpThread->cores));
         wdgList.insert(
                     "Devices",
                     new Devices(this, ptr_ConnPtr, xmlDesc));
