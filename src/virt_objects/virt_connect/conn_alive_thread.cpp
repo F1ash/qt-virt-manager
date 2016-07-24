@@ -312,7 +312,7 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
             free(domains);
         };
         //result.name   = ;
-        result.type   = "domain";
+        result.type   = VIRT_DOMAIN;
         //result.number = number;
         result.action = GET_ALL_ENTITY_STATE;
         result.result = true;
@@ -371,7 +371,7 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
             free(networks);
         };
         //result.name   = ;
-        result.type   = "network";
+        result.type   = VIRT_NETWORK;
         //result.number = number;
         result.action = GET_ALL_ENTITY_STATE;
         result.result = true;

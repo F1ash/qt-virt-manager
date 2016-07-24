@@ -23,10 +23,10 @@ VirtStoragePoolControl::VirtStoragePoolControl(QWidget *parent) :
     settings.endGroup();
     toolBar = new StoragePoolToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
-    connect(toolBar, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SLOT(newVirtEntityFromXML(const OFILE_TASK&)));
-    connect(toolBar, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    connect(toolBar, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SLOT(newVirtEntityFromXML(const Act_Param&)));
+    connect(toolBar, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
 }
 VirtStoragePoolControl::~VirtStoragePoolControl()
 {
@@ -50,7 +50,11 @@ void VirtStoragePoolControl::stopProcessing()
     while ( storagePoolModel->DataList.count() ) {
         storagePoolModel->removeRow(0);
     };
-    storagePoolModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
+    storagePoolModel->setHeaderData(
+                0,
+                Qt::Horizontal,
+                QString("Name"),
+                Qt::EditRole);
 
 }
 bool VirtStoragePoolControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
@@ -158,11 +162,11 @@ void VirtStoragePoolControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type = "pool";
+    task.type       = VIRT_STORAGE_POOL;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = "reloadVirtStoragePool";
+    task.method     = reloadEntity;
     emit addNewTask(task);
 }
 void VirtStoragePoolControl::changeDockVisibility()
@@ -187,12 +191,12 @@ void VirtStoragePoolControl::entityClicked(const QPoint &p)
     bool state = toolBar->getAutoReloadState();
     StoragePoolControlMenu *storagePoolControlMenu =
             new StoragePoolControlMenu(this, params, state);
-    connect(storagePoolControlMenu, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    connect(storagePoolControlMenu, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
     storagePoolControlMenu->move(QCursor::pos());
     storagePoolControlMenu->exec();
-    disconnect(storagePoolControlMenu, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
+    disconnect(storagePoolControlMenu, SIGNAL(execMethod(const Act_Param&)),
+               this, SLOT(execAction(const Act_Param&)));
     storagePoolControlMenu->deleteLater();
 }
 void VirtStoragePoolControl::entityDoubleClicked(const QModelIndex &index)
@@ -203,82 +207,74 @@ void VirtStoragePoolControl::entityDoubleClicked(const QModelIndex &index)
         emit overviewStPool(ptr_ConnPtr, currConnName, storagePoolName);
     }
 }
-void VirtStoragePoolControl::execAction(const QStringList &l)
+void VirtStoragePoolControl::execAction(const Act_Param &param)
 {
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && storagePoolModel->DataList.count()>idx.row() ) {
         QString storagePoolName =
                 storagePoolModel->DataList.at(idx.row())->getName();
         TASK task;
-        task.type = "pool";
+        task.type       = VIRT_STORAGE_POOL;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = storagePoolName;
-        if        ( l.first()=="startVirtStoragePool" ) {
+        task.method     = param.method;
+        if        ( param.method==startEntity ) {
             task.action     = START_ENTITY;
-            task.method     = l.first();
             emit addNewTask(task);
-        } else if ( l.first()=="destroyVirtStoragePool" ) {
+        } else if ( param.method==destroyEntity ) {
             task.action     = DESTROY_ENTITY;
-            task.method     = l.first();
             emit addNewTask(task);
-        } else if ( l.first()=="undefineVirtStoragePool" ) {
+        } else if ( param.method==undefineEntity ) {
             task.action     = UNDEFINE_ENTITY;
-            task.method     = l.first();
             emit addNewTask(task);
-        } else if ( l.first()=="setAutostartVirtStoragePool" ) {
+        } else if ( param.method==setAutostartEntity ) {
             /* set the opposite value */
             uint autostartState =
                 (storagePoolModel->DataList.at(idx.row())->getAutostart()=="yes")
                  ? 0 : 1;
             task.action     = CHANGE_ENTITY_AUTOSTART;
-            task.method     = l.first();
             task.args.sign  = autostartState;
             emit addNewTask(task);
-        } else if ( l.first()=="deleteVirtStoragePool" ) {
+        } else if ( param.method==deleteEntity ) {
             task.action     = DELETE_ENTITY;
-            task.method     = l.first();
-            task.args.sign  = ( l.count()>1 )? l.at(1).toUInt(): 0;
+            task.args.sign  = param.path.toUInt();
             emit addNewTask(task);
-        } else if ( l.first()=="getVirtStoragePoolXMLDesc" ) {
+        } else if ( param.method==getEntityXMLDesc ) {
             task.action     = GET_XML_DESCRIPTION;
-            task.method     = l.first();
             emit addNewTask(task);
-        } else if ( l.first()=="overviewVirtStoragePool" ) {
+        } else if ( param.method==overviewEntity ) {
             // don't set onView state, because it can be multiplicate
             //uint row = idx.row();
             //for ( int i=0; i<storagePoolModel->DataList.count(); i++ ) {
             //    storagePoolModel->DataList.at(i)->setOnView(i==row);
             //};
             emit overviewStPool(ptr_ConnPtr, currConnName, storagePoolName);
-        } else if ( l.first()=="reloadVirtStoragePool" ) {
+        } else if ( param.method==reloadEntity ) {
             reloadState();
         };
-    } else if ( l.first()=="reloadVirtStoragePool" ) {
+    } else if ( param.method==reloadEntity ) {
         reloadState();
     };
 }
-void VirtStoragePoolControl::newVirtEntityFromXML(const OFILE_TASK &args)
+void VirtStoragePoolControl::newVirtEntityFromXML(const Act_Param &args)
 {
     TASK task;
-    task.type = "pool";
-    Actions act;
-    QString actName;
-    if ( args.method.startsWith("create") ) {
-        act = CREATE_ENTITY;
-        actName = "createVirtStoragePool";
+    task.type = VIRT_STORAGE_POOL;
+    Methods method;
+    if ( args.act==CREATE_ENTITY ) {
+        method = createEntity;
     } else {
-        act = DEFINE_ENTITY;
-        actName = "defineVirtStoragePool";
+        method = defineEntity;
     };
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.method     = actName;
-    task.action     = act;
-    if ( args.context=="AsIs" ) {
+    task.method     = method;
+    task.action     = args.act;
+    if ( args.context==DO_AsIs ) {
         task.args.path  = args.path;
         emit addNewTask(task);
-    } else if ( args.context=="Edit" ) {
+    } else if ( args.context==DO_Edit ) {
         emit poolToEditor(task);
     } else {
         QString path;

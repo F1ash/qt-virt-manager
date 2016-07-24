@@ -33,8 +33,8 @@ private slots:
     void                 changeDockVisibility();
     void                 entityClicked(const QPoint&);
     void                 entityDoubleClicked(const QModelIndex&);
-    void                 execAction(const QStringList&);
-    void                 newVirtEntityFromXML(const OFILE_TASK&);
+    void                 execAction(const Act_Param&);
+    void                 newVirtEntityFromXML(const Act_Param&);
 };
 
 #endif // VIRTNET_CONTROL_H

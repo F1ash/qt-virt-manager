@@ -20,8 +20,8 @@ VM_Viewer::VM_Viewer(
     viewerToolBar = new ViewerToolBar(this);
     viewerToolBar->hide();
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
-    connect(viewerToolBar, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(resendExecMethod(const QStringList&)));
+    connect(viewerToolBar, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(resendExecMethod(const Act_Param&)));
 
     toolBarPoint = QPoint(0,0);
     animatedShowToolBar = new QPropertyAnimation(
@@ -77,7 +77,7 @@ void VM_Viewer::sendErrMsg(QString &msg, uint _number)
     QString time = QTime::currentTime().toString();
     QString title = QString("Connection '%1'").arg(connName);
     QString errMsg = QString(
-                "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     emit errorMsg(errMsg);
 }
@@ -104,52 +104,48 @@ void VM_Viewer::sendGlobalErrors()
     };
     virResetLastError();
 }
-void VM_Viewer::resendExecMethod(const QStringList &method)
+void VM_Viewer::resendExecMethod(const Act_Param &params)
 {
     QStringList args;
     args.append(domain);
     TASK task;
-    task.type = "domain";
+    task.type       = VIRT_DOMAIN;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = connName;
     task.object     = domain;
-    if        ( method.first()=="startVirtDomain" ) {
-        task.method     = method.first();
+    task.method     = params.method;
+    if        ( params.method==startEntity ) {
         task.action     = START_ENTITY;
         emit addNewTask(task);
-    } else if ( method.first()=="pauseVirtDomain" ) {
-        task.method     = method.first();
+    } else if ( params.method==pauseEntity ) {
         task.action     = PAUSE_ENTITY;
         emit addNewTask(task);
-    } else if ( method.first()=="destroyVirtDomain" ) {
-        task.method     = method.first();
+    } else if ( params.method==destroyEntity ) {
         task.action     = DESTROY_ENTITY;
         emit addNewTask(task);
-    } else if ( method.first()=="resetVirtDomain" ) {
-        task.method     = method.first();
+    } else if ( params.method==resetVirtDomain ) {
         task.action     = RESET_ENTITY;
         emit addNewTask(task);
-    } else if ( method.first()=="shutdownVirtDomain" ) {
-        task.method     = method.first();
+    } else if ( params.method==shutdownVirtDomain ) {
         task.action     = SHUTDOWN_ENTITY;
         emit addNewTask(task);
-    } else if ( method.first()=="saveVirtDomain" ) {
+    } else if ( params.method==saveVirtDomain ) {
         QString to = QFileDialog::getSaveFileName(this, "Save to", "~");
         if ( !to.isEmpty() ) {
-            task.method     = method.first();
             task.action     = SAVE_ENTITY;
             task.args.path  = to;
             emit addNewTask(task);
         };
-    } else if ( method.first()=="restoreVirtDomain" ) {
-        QString from = QFileDialog::getOpenFileName(this, "Restore from", "~");
+    } else if ( params.method==restoreVirtDomain ) {
+        QString from =
+                QFileDialog::getOpenFileName(
+                    this, "Restore from", "~");
         if ( !from.isEmpty() ) {
-            task.method     = method.first();
             task.action     = RESTORE_ENTITY;
             task.args.path  = from;
             emit addNewTask(task);
         };
-    } else if ( method.first()=="createVirtDomainSnapshot" ) {
+    } else if ( params.method==createVirtDomainSnapshot ) {
         //qDebug()<<"createVirtDomainSnapshot";
         CreateSnapshotDialog *_dialog =
                 new CreateSnapshotDialog(
@@ -162,43 +158,48 @@ void VM_Viewer::resendExecMethod(const QStringList &method)
         _dialog->deleteLater();
         if ( exitCode ) {
             task.action      = CREATE_DOMAIN_SNAPSHOT;
-            task.method      = "createVirtDomainSnapshot";
             task.args.object = _dialog->getSnapshotXMLDesc();
             task.args.sign   = _dialog->getSnapshotFlags();
             emit addNewTask(task);
         };
-    } else if ( method.first()=="moreSnapshotActions" ) {
+    } else if ( params.method==moreSnapshotActions ) {
         //qDebug()<<"moreSnapshotActions";
         SnapshotActionDialog *_dialog =
-               new SnapshotActionDialog(this, ptr_ConnPtr, domain, connName);
+               new SnapshotActionDialog(
+                    this, ptr_ConnPtr, domain, connName);
         int exitCode = _dialog->exec();
         _dialog->deleteLater();
         if ( exitCode ) {
-            QStringList params = _dialog->getParameters();
-            task.action      = static_cast<Actions>(exitCode);
-            task.method      = params.first();
-            params.removeFirst();
-            task.args.object = params.first();
+            Act_Param params = _dialog->getParameters();
+            task.action      = params.act;
+            Methods method;
+            if ( params.act==REVERT_TO_DOMAIN_SNAPSHOT ) {
+                method = revertVirtDomainSnapshot;
+            } else if ( params.act==DELETE_DOMAIN_SNAPSHOT ) {
+                method = deleteVirtDomainSnapshot;
+            };
+            task.method      = method;
+            task.args.object = params.path;
             task.args.sign   = _dialog->getSnapshotFlags();
             emit addNewTask(task);
         };
-    } else if ( method.first()=="reconnectToVirtDomain" ) {
+    } else if ( params.method==reconnectToVirtDomainMethod ) {
         reconnectToVirtDomain();
-    } else if ( method.first()=="sendKeySeqToVirtDomain" ) {
-        sendKeySeqToVirtDomain((Qt::Key)method.last().toInt());
-    } else if ( method.first()=="getScreenshotFromVirtDomain" ) {
+    } else if ( params.method==sendKeySeqToVirtDomainMethod ) {
+        sendKeySeqToVirtDomain((Qt::Key)params.path.toInt());
+    } else if ( params.method==getScreenshotFromVirtDomainMethod ) {
         getScreenshotFromVirtDomain();
-    } else if ( method.first()=="copyFilesToVirtDomain" ) {
+    } else if ( params.method==copyFilesToVirtDomainMethod ) {
         copyFilesToVirtDomain();
-    } else if ( method.first()=="cancelCopyFilesToVirtDomain" ) {
+    } else if ( params.method==cancelCopyFilesToVirtDomainMethod ) {
         cancelCopyFilesToVirtDomain();
-    } else if ( method.first()=="copyToClipboardFromVirtDomain" ) {
+    } else if ( params.method==copyToClipboardFromVirtDomainMethod ) {
         copyToClipboardFromVirtDomain();
-    } else if ( method.first()=="pasteClipboardToVirtDomain" ) {
+    } else if ( params.method==pasteClipboardToVirtDomainMethod ) {
         pasteClipboardToVirtDomain();
-    } else if ( method.first()=="fullScreenVirtDomain" ) {
+    } else if ( params.method==fullScreenVirtDomainMethod ) {
         fullScreenVirtDomain();
-    } else if ( method.first()=="scaledScreenVirtDomain" ) {
+    } else if ( params.method==scaledScreenVirtDomainMethod ) {
         scaledScreenVirtDomain();
     };
 

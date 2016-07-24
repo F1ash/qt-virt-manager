@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QTimerEvent>
 #include <QSettings>
+#include "virt_objects/virt_entity_enums.h"
 #include <QDebug>
 
 class VirtSecretToolBar : public QToolBar
@@ -17,7 +18,7 @@ public:
     ~VirtSecretToolBar();
 
 signals:
-    void             execMethod(const QStringList&);
+    void             execMethod(const Act_Param&);
 
 private:
     QAction         *define_Action;

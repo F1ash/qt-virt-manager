@@ -12,15 +12,19 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
     create_Action = new QAction(this);
     create_Action->setIcon(QIcon::fromTheme("create"));
     create_Action->setToolTip("Create for once usage");
-    create_Menu = new OpenFileMenu(this, "create", "storagePool");
+    create_Menu = new OpenFileMenu(
+                this, CREATE_ENTITY, VIRT_STORAGE_POOL);
     create_Action->setMenu(create_Menu);
-    connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+    connect(create_Action, SIGNAL(triggered()),
+            this, SLOT(showMenu()));
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
-    define_Menu = new OpenFileMenu(this, "define", "storagePool");
+    define_Menu = new OpenFileMenu(
+                this, DEFINE_ENTITY, VIRT_STORAGE_POOL);
     define_Action->setMenu(define_Menu);
-    connect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+    connect(define_Action, SIGNAL(triggered()),
+            this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
     undefine_Action->setToolTip("Undefine");
@@ -62,18 +66,20 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
 
     settings.beginGroup("VirtStoragePoolControl");
     interval = settings.value("UpdateTime", 3).toInt();
-    _autoReload->setChecked(settings.value("AutoReload", false).toBool());
+    _autoReload->setChecked(
+                settings.value("AutoReload", false)
+                .toBool());
     settings.endGroup();
 
     connect(_autoReload, SIGNAL(toggled(bool)),
             this, SLOT(changeAutoReloadState(bool)));
 
-    connect(create_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
-    connect(define_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
-    //connect(delete_Menu, SIGNAL(execMethod(const QStringList&)),
-    //        this, SIGNAL(execMethod(const QStringList&)));
+    connect(create_Menu, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SIGNAL(fileForMethod(const Act_Param&)));
+    connect(define_Menu, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SIGNAL(fileForMethod(const Act_Param&)));
+    //connect(delete_Menu, SIGNAL(execMethod(const Act_Param&)),
+    //        this, SIGNAL(execMethod(const Act_Param&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
 }
@@ -88,29 +94,30 @@ StoragePoolToolBar::~StoragePoolToolBar()
 /* public slots */
 Qt::ToolBarArea StoragePoolToolBar::get_ToolBarArea(int i) const
 {
-  Qt::ToolBarArea result;
-  switch (i) {
-  case 1:
-    result = Qt::LeftToolBarArea;
-    break;
-  case 2:
-    result = Qt::RightToolBarArea;
-    break;
-  case 4:
-    result = Qt::TopToolBarArea;
-    break;
-  case 8:
-    result = Qt::BottomToolBarArea;
-    break;
-  default:
-    result = Qt::TopToolBarArea;
-    break;
-  };
-  return result;
+    Qt::ToolBarArea result;
+    switch (i) {
+    case 1:
+        result = Qt::LeftToolBarArea;
+        break;
+    case 2:
+        result = Qt::RightToolBarArea;
+        break;
+    case 4:
+        result = Qt::TopToolBarArea;
+        break;
+    case 8:
+        result = Qt::BottomToolBarArea;
+        break;
+    default:
+        result = Qt::TopToolBarArea;
+        break;
+    };
+    return result;
 }
 void StoragePoolToolBar::enableAutoReload()
 {
-    if ( _autoReload->isChecked() ) timerId = startTimer(interval*1000);
+    if ( _autoReload->isChecked() )
+        timerId = startTimer(interval*1000);
 }
 void StoragePoolToolBar::stopProcessing()
 {
@@ -130,8 +137,8 @@ void StoragePoolToolBar::timerEvent(QTimerEvent *event)
     int _timerId = event->timerId();
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
-        QStringList parameters;
-        parameters << "reloadVirtStoragePool";
+        Act_Param parameters;
+        parameters.method = reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -166,19 +173,19 @@ void StoragePoolToolBar::showMenu()
 }
 void StoragePoolToolBar::detectTriggerredAction(QAction *action)
 {
-    QStringList parameters;
+    Act_Param parameters;
     if ( action == start_Action) {
-        parameters << "startVirtStoragePool";
+        parameters.method = startEntity;
     } else if ( action == destroy_Action ) {
-        parameters << "destroyVirtStoragePool";
+        parameters.method = destroyEntity;
     } else if ( action == undefine_Action ) {
-        parameters << "undefineVirtStoragePool";
+        parameters.method = undefineEntity;
     //} else if ( action == setAutostart_Action ) {
     //    parameters << "setAutostartVirtStoragePool";
     //} else if ( action == getXMLDesc_Action ) {
     //    parameters << "getVirtStoragePoolXMLDesc";
     } else if ( action == overview_Action ) {
-        parameters << "overviewVirtStoragePool";
+        parameters.method = overviewEntity;
     } else return;
     emit execMethod(parameters);
 }

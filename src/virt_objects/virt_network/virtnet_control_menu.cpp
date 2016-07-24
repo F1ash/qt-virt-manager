@@ -49,28 +49,23 @@ VirtNetControlMenu::VirtNetControlMenu(
 
 void VirtNetControlMenu::emitExecMethod(QAction *action)
 {
-    QStringList paramList;
-    if ( !parameters.isEmpty() ) {
-        if ( action == start) {
-            paramList.append("startVirtNetwork");
-        } else if ( action == destroy ) {
-            paramList.append("destroyVirtNetwork");
-        } else if ( action == undefine ) {
-            paramList.append("undefineVirtNetwork");
-        } else if ( action == autoStart ) {
-            paramList.append("setAutostartVirtNetwork");
-            paramList.append(QString((parameters[2]=="yes")? "0" : "1"));
-        } else if ( action == edit ) {
-            paramList.append("editVirtNetwork");
-        } else if ( action == getXMLDesc ) {
-            paramList.append("getVirtNetworkXMLDesc");
-        } else if ( action == reload ) {
-            paramList.append("reloadVirtNetwork");
-        } else return;
-        if ( action != reload ) paramList.append(parameters.first());
+    Act_Param paramList;
+    if ( action == start) {
+        paramList.method = startEntity;
+    } else if ( action == destroy ) {
+        paramList.method = destroyEntity;
+    } else if ( action == undefine ) {
+        paramList.method = undefineEntity;
+    } else if ( action == autoStart ) {
+        paramList.method = setAutostartEntity;
+        paramList.path =
+              (QString((parameters[2]=="yes")? "0" : "1"));
+    } else if ( action == edit ) {
+        paramList.method = editEntity;
+    } else if ( action == getXMLDesc ) {
+        paramList.method = getEntityXMLDesc;
     } else if ( action == reload ) {
-        paramList.append("reloadVirtNetwork");
+        paramList.method = reloadEntity;
     } else return;
-    //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);
 }

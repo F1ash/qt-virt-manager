@@ -8,6 +8,7 @@
 #include <QTimerEvent>
 #include <QMoveEvent>
 #include "vm_state_widget.h"
+#include "virt_objects/virt_entity_enums.h"
 #include <QDebug>
 
 class ViewerToolBar : public QToolBar
@@ -52,7 +53,7 @@ public:
     QAction         *stateWdg_Action;
 
 signals:
-    void             execMethod(const QStringList&);
+    void             execMethod(const Act_Param&);
     void             positionChanged(const QPoint&);
 
 private:

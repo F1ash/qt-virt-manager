@@ -25,9 +25,9 @@ void InterfaceControlThread::execAction(uint _num, TASK _task)
         start();
     } else {
         Result result;
-        result.type   = "iface";
+        result.type   = VIRT_INTERFACE;
         result.number = number;
-        result.action = _EMPTY_ACTION;
+        result.action = _NONE_ACTION;
         emit resultData(result);
     };
 }
@@ -69,7 +69,7 @@ void InterfaceControlThread::run()
     };
     // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
-    result.type   = "iface";
+    result.type   = VIRT_INTERFACE;
     result.number = number;
     result.action = task.action;
     emit resultData(result);

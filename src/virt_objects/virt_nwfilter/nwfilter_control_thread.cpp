@@ -26,9 +26,9 @@ void NWFilterControlThread::execAction(uint _num, TASK _task)
         start();
     } else {
         Result result;
-        result.type   = "nwfilter";
+        result.type   = VIRT_NETWORK_FILTER;
         result.number = number;
-        result.action = _EMPTY_ACTION;
+        result.action = _NONE_ACTION;
         emit resultData(result);
     };
 }
@@ -55,7 +55,7 @@ void NWFilterControlThread::run()
     };
     // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
-    result.type   = "nwfilter";
+    result.type   = VIRT_NETWORK_FILTER;
     result.number = number;
     result.action = task.action;
     emit resultData(result);

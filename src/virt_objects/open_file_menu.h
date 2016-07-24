@@ -5,31 +5,26 @@
 #include <QAction>
 #include <QFileDialog>
 #include <QIcon>
-
-struct OFILE_TASK {
-    QString method;
-    QString context;
-    QString path;
-};
+#include "virt_entity_enums.h"
 
 class OpenFileMenu : public QMenu
 {
     Q_OBJECT
 public:
     explicit OpenFileMenu(
-            QWidget *parent = nullptr,
-            QString  str = "create",
-            QString  src = "Network");
+            QWidget     *parent = nullptr,
+            Actions      act    = _NONE_ACTION,
+            VIRT_ENTITY  _e     = _NONE_ENTITY);
 
 signals:
-    void        fileForMethod(const OFILE_TASK&);
+    void        fileForMethod(const Act_Param&);
 
 private:
     QIcon       icon;
     QAction    *applyAsIs;
     QAction    *editTemplate;
     QAction    *manual;
-    OFILE_TASK  task;
+    Act_Param   task;
 
 private slots:
     void        chooseExample();

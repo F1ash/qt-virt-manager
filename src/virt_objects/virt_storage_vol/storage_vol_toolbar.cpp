@@ -19,9 +19,11 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     create_Action = new QAction(this);
     create_Action->setIcon(QIcon::fromTheme("define"));
     create_Action->setToolTip("New volume");
-    create_Menu = new OpenFileMenu(this, "define", "storageVol");
+    create_Menu = new OpenFileMenu(
+                this, DEFINE_ENTITY, VIRT_STORAGE_VOLUME);
     create_Action->setMenu(create_Menu);
-    connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+    connect(create_Action, SIGNAL(triggered()),
+            this, SLOT(showMenu()));
     delete_Action = new QAction(this);
     delete_Action->setIcon(QIcon::fromTheme("delete"));
     delete_Action->setToolTip("Delete");
@@ -62,16 +64,18 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
 
     settings.beginGroup("VirtStorageVolControl");
     interval = settings.value("UpdateTime", 3).toInt();
-    _autoReload->setChecked(settings.value("AutoReload", false).toBool());
+    _autoReload->setChecked(
+                settings.value("AutoReload", false)
+                .toBool());
     settings.endGroup();
 
     connect(_autoReload, SIGNAL(toggled(bool)),
             this, SLOT(changeAutoReloadState(bool)));
 
-    connect(create_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
-    connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)),
-            this, SIGNAL(execMethod(const QStringList&)));
+    connect(create_Menu, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SIGNAL(fileForMethod(const Act_Param&)));
+    connect(wipe_Menu, SIGNAL(execMethod(const Act_Param&)),
+            this, SIGNAL(execMethod(const Act_Param&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
 }
@@ -86,29 +90,30 @@ StorageVolToolBar::~StorageVolToolBar()
 /* public slots */
 Qt::ToolBarArea StorageVolToolBar::get_ToolBarArea(int i) const
 {
-  Qt::ToolBarArea result;
-  switch (i) {
-  case 1:
-    result = Qt::LeftToolBarArea;
-    break;
-  case 2:
-    result = Qt::RightToolBarArea;
-    break;
-  case 4:
-    result = Qt::TopToolBarArea;
-    break;
-  case 8:
-    result = Qt::BottomToolBarArea;
-    break;
-  default:
-    result = Qt::TopToolBarArea;
-    break;
-  };
-  return result;
+    Qt::ToolBarArea result;
+    switch (i) {
+    case 1:
+        result = Qt::LeftToolBarArea;
+        break;
+    case 2:
+        result = Qt::RightToolBarArea;
+        break;
+    case 4:
+        result = Qt::TopToolBarArea;
+        break;
+    case 8:
+        result = Qt::BottomToolBarArea;
+        break;
+    default:
+        result = Qt::TopToolBarArea;
+        break;
+    };
+    return result;
 }
 void StorageVolToolBar::enableAutoReload()
 {
-    if ( _autoReload->isChecked() ) timerId = startTimer(interval*1000);
+    if ( _autoReload->isChecked() )
+        timerId = startTimer(interval*1000);
 }
 void StorageVolToolBar::stopProcessing()
 {
@@ -128,8 +133,8 @@ void StorageVolToolBar::timerEvent(QTimerEvent *event)
     int _timerId = event->timerId();
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
-        QStringList parameters;
-        parameters << "reloadVirtStorageVol";
+        Act_Param parameters;
+        parameters.method = reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -144,17 +149,18 @@ void StorageVolToolBar::showMenu()
 }
 void StorageVolToolBar::detectTriggerredAction(QAction *action)
 {
-    QStringList parameters;
+    Act_Param parameters;
     if ( action == upload_Action) {
-        parameters << "uploadVirtStorageVol";
+        parameters.method = uploadVirtStorageVol;
     } else if ( action == delete_Action ) {
-        parameters << "deleteVirtStorageVol";
+        parameters.method = deleteEntity;
     } else if ( action == download_Action ) {
-        parameters << "downloadVirtStorageVol";
+        parameters.method = downloadVirtStorageVol;
     } else if ( action == resize_Action ) {
-        parameters << "resizeVirtStorageVol";
+        parameters.method = resizeVirtStorageVol;
     } else if ( action == wipe_Action ) {
-        parameters << "wipeVirtStorageVol" << "0";
+        parameters.method = wipeVirtStorageVol;
+        parameters.path = "0";
     //} else if ( action == getXMLDesc_Action ) {
     //    parameters << "getVirtStorageVolXMLDesc";
     } else return;

@@ -60,7 +60,7 @@ void FindSecretDialog::showMsg(QString &msg)
 void FindSecretDialog::setSecretList()
 {
     TASK _task;
-    _task.type          = "secret";
+    _task.type          = VIRT_SECRET;
     _task.srcConnPtr    = ptr_ConnPtr;
     _task.action        = GET_ALL_ENTITY_STATE;
     hlpThread->execAction(0, _task);

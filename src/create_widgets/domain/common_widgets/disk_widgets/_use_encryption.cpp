@@ -74,7 +74,7 @@ void _UseEncryption::emitSecretList()
     // can be used from different place spontaneously
     if ( hlpThread->isRunning() ) return;
     TASK _task;
-    _task.type          = "secret";
+    _task.type          = VIRT_SECRET;
     _task.srcConnPtr    = ptr_ConnPtr;
     _task.action        = GET_ALL_ENTITY_STATE;
     hlpThread->execAction(0, _task);

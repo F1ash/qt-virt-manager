@@ -1,6 +1,7 @@
 #include "storage_pool_control_menu.h"
 
-StoragePoolControlMenu::StoragePoolControlMenu(QWidget *parent, QStringList params, bool state) :
+StoragePoolControlMenu::StoragePoolControlMenu(
+        QWidget *parent, QStringList params, bool state) :
     QMenu(parent), parameters(params), autoReloadState(state)
 {
     if ( !parameters.isEmpty() ) {
@@ -20,8 +21,8 @@ StoragePoolControlMenu::StoragePoolControlMenu(QWidget *parent, QStringList para
         delete_Action = new QAction("Delete", this);
         delete_Action->setIcon(QIcon::fromTheme("delete"));
         delete_Action->setMenu(delete_Menu);
-        connect(delete_Menu, SIGNAL(execMethod(const QStringList&)),
-                this, SIGNAL(execMethod(const QStringList&)));
+        connect(delete_Menu, SIGNAL(execMethod(const Act_Param&)),
+                this, SIGNAL(execMethod(const Act_Param&)));
         getXMLDesc = new QAction("get XML Description", this);
         getXMLDesc->setIcon(QIcon::fromTheme("application-xml"));
         getXMLDesc->setEnabled(true);
@@ -45,33 +46,29 @@ StoragePoolControlMenu::StoragePoolControlMenu(QWidget *parent, QStringList para
     reload->setEnabled(!autoReloadState);
 
     addAction(reload);
-    connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
+    connect(this, SIGNAL(triggered(QAction*)),
+            this, SLOT(emitExecMethod(QAction*)));
 }
 
 void StoragePoolControlMenu::emitExecMethod(QAction *action)
 {
-    QStringList paramList;
-    if ( !parameters.isEmpty() ) {
-        if ( action == start) {
-            paramList.append("startVirtStoragePool");
-        } else if ( action == destroy ) {
-            paramList.append("destroyVirtStoragePool");
-        } else if ( action == undefine ) {
-            paramList.append("undefineVirtStoragePool");
-        } else if ( action == autoStart ) {
-            paramList.append("setAutostartVirtStoragePool");
-            paramList.append(QString((parameters[2]=="yes")? "0" : "1"));
-        } else if ( action == getXMLDesc ) {
-            paramList.append("getVirtStoragePoolXMLDesc");
-        } else if ( action == overview ) {
-            paramList.append("overviewVirtStoragePool");
-        } else if ( action == reload ) {
-            paramList.append("reloadVirtStoragePool");
-        } else return;
-        if ( action != reload ) paramList.append(parameters.first());
+    Act_Param paramList;
+    if ( action == start) {
+        paramList.method = startEntity;
+    } else if ( action == destroy ) {
+        paramList.method = destroyEntity;
+    } else if ( action == undefine ) {
+        paramList.method = undefineEntity;
+    } else if ( action == autoStart ) {
+        paramList.method = setAutostartEntity;
+        paramList.path =
+               (QString((parameters[2]=="yes")? "0" : "1"));
+    } else if ( action == getXMLDesc ) {
+        paramList.method = getEntityXMLDesc;
+    } else if ( action == overview ) {
+        paramList.method = overviewEntity;
     } else if ( action == reload ) {
-        paramList.append("reloadVirtStoragePool");
+        paramList.method = reloadEntity;
     } else return;
-    //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);
 }

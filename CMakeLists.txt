@@ -108,6 +108,7 @@ set (HEADERS
   src/virt_objects/model.h
   src/virt_objects/control_thread.h
   src/virt_objects/virt_entity_control.h
+  src/virt_objects/virt_entity_enums.h
   src/virt_objects/virt_entity_config.h
   src/virt_objects/_virt_thread.h
   src/virt_objects/virt_event_loop.h

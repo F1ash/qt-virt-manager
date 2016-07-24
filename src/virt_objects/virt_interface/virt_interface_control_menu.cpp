@@ -1,6 +1,7 @@
 #include "virt_interface_control_menu.h"
 
-IfaceControlMenu::IfaceControlMenu(QWidget *parent, QStringList params, bool state) :
+IfaceControlMenu::IfaceControlMenu(
+        QWidget *parent, QStringList params, bool state) :
     QMenu(parent), parameters(params), autoReloadState(state)
 {
     if ( !parameters.isEmpty() ) {
@@ -46,29 +47,23 @@ IfaceControlMenu::IfaceControlMenu(QWidget *parent, QStringList params, bool sta
 
 void IfaceControlMenu::emitExecMethod(QAction *action)
 {
-    QStringList paramList;
-    if ( !parameters.isEmpty() ) {
-        if ( action == start) {
-            paramList.append("startVirtInterface");
-        } else if ( action == destroy ) {
-            paramList.append("destroyVirtInterface");
-        } else if ( action == undefine ) {
-            paramList.append("undefineVirtInterface");
-        } else if ( action == changeBegin ) {
-            paramList.append("changeBeginVirtInterface");
-        } else if ( action == changeCommit ) {
-            paramList.append("changeCommitVirtInterface");
-        } else if ( action == changeRollback ) {
-            paramList.append("changeRollbackVirtInterface");
-        } else if ( action == getXMLDesc ) {
-            paramList.append("getVirtInterfaceXMLDesc");
-        } else if ( action == reload ) {
-            paramList.append("reloadVirtInterface");
-        } else return;
-        if ( action != reload ) paramList.append(parameters.first());
+    Act_Param paramList;
+    if ( action == start) {
+        paramList.method = startEntity;
+    } else if ( action == destroy ) {
+        paramList.method = destroyEntity;
+    } else if ( action == undefine ) {
+        paramList.method = undefineEntity;
+    } else if ( action == changeBegin ) {
+        paramList.method = changeBeginVirtInterface;
+    } else if ( action == changeCommit ) {
+        paramList.method = changeCommitVirtInterface;
+    } else if ( action == changeRollback ) {
+        paramList.method = changeRollbackVirtInterface;
+    } else if ( action == getXMLDesc ) {
+        paramList.method = getEntityXMLDesc;
     } else if ( action == reload ) {
-        paramList.append("reloadVirtInterface");
+        paramList.method = reloadEntity;
     } else return;
-    //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);
 }

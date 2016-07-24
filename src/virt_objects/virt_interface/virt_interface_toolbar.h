@@ -18,8 +18,8 @@ public:
     ~InterfaceToolBar();
 
 signals:
-    void             fileForMethod(const OFILE_TASK&);
-    void             execMethod(const QStringList&);
+    void             fileForMethod(const Act_Param&);
+    void             execMethod(const Act_Param&);
 
 private:
     QAction         *start_Action;

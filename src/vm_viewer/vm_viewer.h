@@ -76,7 +76,7 @@ public slots:
     void             sendErrMsg(QString&, uint);
     void             sendConnErrors();
     void             sendGlobalErrors();
-    void             resendExecMethod(const QStringList&);
+    void             resendExecMethod(const Act_Param&);
     void             startCloseProcess();
     virtual void     reconnectToVirtDomain();
     virtual void     sendKeySeqToVirtDomain(Qt::Key);

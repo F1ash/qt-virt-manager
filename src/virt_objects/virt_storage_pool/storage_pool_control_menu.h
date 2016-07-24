@@ -17,7 +17,7 @@ public:
             bool         state  = false);
 
 signals:
-    void            execMethod(const QStringList&);
+    void            execMethod(const Act_Param&);
 
 private:
     bool            autoReloadState;

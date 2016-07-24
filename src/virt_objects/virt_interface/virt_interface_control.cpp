@@ -23,10 +23,10 @@ VirtInterfaceControl::VirtInterfaceControl(QWidget *parent) :
     settings.endGroup();
     toolBar = new InterfaceToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
-    connect(toolBar, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SLOT(newVirtEntityFromXML(const OFILE_TASK&)));
-    connect(toolBar, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    connect(toolBar, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SLOT(newVirtEntityFromXML(const Act_Param&)));
+    connect(toolBar, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
 }
 VirtInterfaceControl::~VirtInterfaceControl()
 {
@@ -148,11 +148,11 @@ void VirtInterfaceControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type = "iface";
+    task.type       = VIRT_INTERFACE;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = "reloadVirtInterface";
+    task.method     = reloadEntity;
     emit addNewTask(task);
 }
 void VirtInterfaceControl::changeDockVisibility()
@@ -175,13 +175,14 @@ void VirtInterfaceControl::entityClicked(const QPoint &p)
         entityList->clearSelection();
     };
     bool state = toolBar->getAutoReloadState();
-    IfaceControlMenu *ifaceControlMenu = new IfaceControlMenu(this, params, state);
-    connect(ifaceControlMenu, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    IfaceControlMenu *ifaceControlMenu =
+            new IfaceControlMenu(this, params, state);
+    connect(ifaceControlMenu, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
     ifaceControlMenu->move(QCursor::pos());
     ifaceControlMenu->exec();
-    disconnect(ifaceControlMenu, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
+    disconnect(ifaceControlMenu, SIGNAL(execMethod(const Act_Param&)),
+               this, SLOT(execAction(const Act_Param&)));
     ifaceControlMenu->deleteLater();
 }
 void VirtInterfaceControl::entityDoubleClicked(const QModelIndex &index)
@@ -190,67 +191,61 @@ void VirtInterfaceControl::entityDoubleClicked(const QModelIndex &index)
         qDebug()<<virtIfaceModel->DataList.at(index.row())->getName();
     }
 }
-void VirtInterfaceControl::execAction(const QStringList &l)
+void VirtInterfaceControl::execAction(const Act_Param &param)
 {
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtIfaceModel->DataList.count()>idx.row() ) {
         QString networkName = virtIfaceModel->DataList.at(idx.row())->getName();
         TASK task;
-        task.type = "iface";
+        task.type       = VIRT_INTERFACE;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = networkName;
-        if        ( l.first()=="startVirtInterface" ) {
-            task.method = l.first();
+        task.method     = param.method;
+        if        ( param.method==startEntity ) {
             task.action = START_ENTITY;
             emit addNewTask(task);
-        } else if ( l.first()=="destroyVirtInterface" ) {
-            task.method = l.first();
+        } else if ( param.method==destroyEntity ) {
             task.action = DESTROY_ENTITY;
             emit addNewTask(task);
-        } else if ( l.first()=="defineVirtInterface" ) {
+        } else if ( param.method==defineEntity ) {
             //newVirtEntityFromXML(l);
-        } else if ( l.first()=="undefineVirtInterface" ) {
-            task.method = l.first();
+        } else if ( param.method==undefineEntity ) {
             task.action = UNDEFINE_ENTITY;
             emit addNewTask(task);
-        } else if ( l.first()=="changeBeginVirtInterface" ) {
-            task.method = l.first();
+        } else if ( param.method==changeBeginVirtInterface ) {
             task.action = IFACE_CHANGE_BEGIN;
             emit addNewTask(task);
-        } else if ( l.first()=="changeCommitVirtInterface" ) {
-            task.method = l.first();
+        } else if ( param.method==changeCommitVirtInterface ) {
             task.action = IFACE_CHANGE_COMMIT;
             emit addNewTask(task);
-        } else if ( l.first()=="changeRollbackVirtInterface" ) {
-            task.method = l.first();
+        } else if ( param.method==changeRollbackVirtInterface ) {
             task.action = IFACE_CHANGE_ROLLBACK;
             emit addNewTask(task);
-        } else if ( l.first()=="getVirtInterfaceXMLDesc" ) {
-            task.method = l.first();
+        } else if ( param.method==getEntityXMLDesc ) {
             task.action = GET_XML_DESCRIPTION;
             emit addNewTask(task);
-        } else if ( l.first()=="reloadVirtInterface" ) {
+        } else if ( param.method==reloadEntity ) {
             reloadState();
         };
-    } else if ( l.first()=="reloadVirtInterface" ) {
+    } else if ( param.method==reloadEntity ) {
         reloadState();
-    } else if ( l.first()=="defineVirtInterface" ) {
+    } else if ( param.method==defineEntity ) {
         //newVirtEntityFromXML(l);
     };
 }
-void VirtInterfaceControl::newVirtEntityFromXML(const OFILE_TASK &args)
+void VirtInterfaceControl::newVirtEntityFromXML(const Act_Param &args)
 {
     TASK task;
-    task.type = "iface";
+    task.type       = VIRT_INTERFACE;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.method     = "defineVirtInterface";
+    task.method     = defineEntity;
     task.action     = DEFINE_ENTITY;
-    if ( args.context=="AsIs" ) {
-        task.args.path  = args.path;
+    task.args.path  = args.path;
+    if ( args.context==DO_AsIs ) {
         emit addNewTask(task);
-    } else if ( args.context=="Edit" ) {
+    } else if ( args.context==DO_Edit ) {
         emit ifaceToEditor(task);
     } else{
         QString xml;

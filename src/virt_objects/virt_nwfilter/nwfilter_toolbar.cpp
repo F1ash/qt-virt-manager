@@ -6,7 +6,8 @@ VirtNWFilterToolBar::VirtNWFilterToolBar(QWidget *parent) :
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
-    define_Menu = new OpenFileMenu(this, "define", "nwfilter");
+    define_Menu = new OpenFileMenu(
+                this, DEFINE_ENTITY, VIRT_NETWORK_FILTER);
     define_Action->setMenu(define_Menu);
     connect(define_Action, SIGNAL(triggered()),
             this, SLOT(showMenu()));
@@ -37,8 +38,8 @@ VirtNWFilterToolBar::VirtNWFilterToolBar(QWidget *parent) :
     connect(_autoReload, SIGNAL(toggled(bool)),
             this, SLOT(changeAutoReloadState(bool)));
 
-    connect(define_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
+    connect(define_Menu, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SIGNAL(fileForMethod(const Act_Param&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
 }
@@ -53,29 +54,30 @@ VirtNWFilterToolBar::~VirtNWFilterToolBar()
 /* public slots */
 Qt::ToolBarArea VirtNWFilterToolBar::get_ToolBarArea(int i) const
 {
-  Qt::ToolBarArea result;
-  switch (i) {
-  case 1:
-    result = Qt::LeftToolBarArea;
-    break;
-  case 2:
-    result = Qt::RightToolBarArea;
-    break;
-  case 4:
-    result = Qt::TopToolBarArea;
-    break;
-  case 8:
-    result = Qt::BottomToolBarArea;
-    break;
-  default:
-    result = Qt::TopToolBarArea;
-    break;
-  };
-  return result;
+    Qt::ToolBarArea result;
+    switch (i) {
+    case 1:
+        result = Qt::LeftToolBarArea;
+        break;
+    case 2:
+        result = Qt::RightToolBarArea;
+        break;
+    case 4:
+        result = Qt::TopToolBarArea;
+        break;
+    case 8:
+        result = Qt::BottomToolBarArea;
+        break;
+    default:
+        result = Qt::TopToolBarArea;
+        break;
+    };
+    return result;
 }
 void VirtNWFilterToolBar::enableAutoReload()
 {
-    if ( _autoReload->isChecked() ) timerId = startTimer(interval*1000);
+    if ( _autoReload->isChecked() )
+        timerId = startTimer(interval*1000);
 }
 void VirtNWFilterToolBar::stopProcessing()
 {
@@ -95,8 +97,8 @@ void VirtNWFilterToolBar::timerEvent(QTimerEvent *event)
     int _timerId = event->timerId();
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
-        QStringList parameters;
-        parameters << "reloadVirtNWFilter";
+        Act_Param parameters;
+        parameters.method = reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -111,11 +113,11 @@ void VirtNWFilterToolBar::showMenu()
 }
 void VirtNWFilterToolBar::detectTriggerredAction(QAction *action)
 {
-    QStringList parameters;
+    Act_Param parameters;
     if        ( action == define_Action ) {
-        parameters << "defineVirtNWFilter";
+        parameters.method = defineEntity;
     } else if ( action == undefine_Action ) {
-        parameters << "undefineVirtNWFilter";
+        parameters.method = undefineEntity;
     //} else if ( action == getXMLDesc_Action ) {
     //    parameters << "getVirtNWFilterXMLDesc";
     } else return;

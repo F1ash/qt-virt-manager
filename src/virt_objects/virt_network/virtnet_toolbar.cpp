@@ -12,14 +12,16 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     create_Action = new QAction(this);
     create_Action->setIcon(QIcon::fromTheme("create"));
     create_Action->setToolTip("Create for once usage");
-    create_Menu = new OpenFileMenu(this, "create", "network");
+    create_Menu = new OpenFileMenu(
+                this, CREATE_ENTITY, VIRT_NETWORK);
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()),
             this, SLOT(showMenu()));
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
-    define_Menu = new OpenFileMenu(this, "define", "network");
+    define_Menu = new OpenFileMenu(
+                this, DEFINE_ENTITY, VIRT_NETWORK);
     define_Action->setMenu(define_Menu);
     connect(define_Action, SIGNAL(triggered()),
             this, SLOT(showMenu()));
@@ -53,7 +55,9 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
 
     settings.beginGroup("VirtNetControl");
     interval = settings.value("UpdateTime", 3).toInt();
-    _autoReload->setChecked(settings.value("AutoReload", false).toBool());
+    _autoReload->setChecked(
+                settings.value("AutoReload", false)
+                .toBool());
     settings.endGroup();
 
     //connect(start_Action, SIGNAL(hovered()),
@@ -73,10 +77,10 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     connect(_autoReload, SIGNAL(toggled(bool)),
             this, SLOT(changeAutoReloadState(bool)));
 
-    connect(create_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
-    connect(define_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
+    connect(create_Menu, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SIGNAL(fileForMethod(const Act_Param&)));
+    connect(define_Menu, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SIGNAL(fileForMethod(const Act_Param&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
 }
@@ -134,8 +138,8 @@ void VirtNetToolBar::timerEvent(QTimerEvent *event)
     int _timerId = event->timerId();
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
-        QStringList parameters;
-        parameters << "reloadVirtNetwork";
+        Act_Param parameters;
+        parameters.method = reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -170,13 +174,13 @@ void VirtNetToolBar::showMenu()
 }
 void VirtNetToolBar::detectTriggerredAction(QAction *action)
 {
-    QStringList parameters;
+    Act_Param parameters;
     if ( action == start_Action) {
-        parameters << "startVirtNetwork";
+        parameters.method = startEntity;
     } else if ( action == destroy_Action ) {
-        parameters << "destroyVirtNetwork";
+        parameters.method = destroyEntity;
     } else if ( action == undefine_Action ) {
-        parameters << "undefineVirtNetwork";
+        parameters.method = undefineEntity;
     //} else if ( action == setAutostart_Action ) {
     //    parameters << "setAutostartVirtNetwork";
     //} else if ( action == getXMLDesc_Action ) {

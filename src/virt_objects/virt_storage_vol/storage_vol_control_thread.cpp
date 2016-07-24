@@ -37,9 +37,9 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
         start();
     } else {
         Result result;
-        result.type   = "volume";
+        result.type   = VIRT_STORAGE_VOLUME;
         result.number = number;
-        result.action = _EMPTY_ACTION;
+        result.action = _NONE_ACTION;
         emit resultData(result);
     };
 }
@@ -94,7 +94,7 @@ void StorageVolControlThread::run()
     };
     // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
-    result.type   = "volume";
+    result.type   = VIRT_STORAGE_VOLUME;
     result.number = number;
     result.action = task.action;
     emit resultData(result);

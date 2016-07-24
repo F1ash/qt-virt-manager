@@ -26,19 +26,13 @@ VirtSecretControlMenu::VirtSecretControlMenu(
 
 void VirtSecretControlMenu::emitExecMethod(QAction *action)
 {
-    QStringList paramList;
-    if ( !parameters.isEmpty() ) {
-        if ( action == undefine ) {
-            paramList.append("undefineVirtSecret");
-        } else if ( action == getXMLDesc ) {
-            paramList.append("getVirtSecretXMLDesc");
-        } else if ( action == reload ) {
-            paramList.append("reloadVirtSecret");
-        } else return;
-        if ( action != reload ) paramList.append(parameters.first());
+    Act_Param paramList;
+    if ( action == undefine ) {
+        paramList.method = undefineEntity;
+    } else if ( action == getXMLDesc ) {
+        paramList.method = getEntityXMLDesc;
     } else if ( action == reload ) {
-        paramList.append("reloadVirtSecret");
+        paramList.method = reloadEntity;
     } else return;
-    //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);
 }

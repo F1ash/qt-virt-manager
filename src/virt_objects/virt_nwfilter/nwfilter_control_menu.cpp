@@ -25,19 +25,13 @@ VirtNWFilterControlMenu::VirtNWFilterControlMenu(
 
 void VirtNWFilterControlMenu::emitExecMethod(QAction *action)
 {
-    QStringList paramList;
-    if ( !parameters.isEmpty() ) {
-        if        ( action == edit ) {
-            paramList.append("editVirtNWFilter");
-        } else if ( action == getXMLDesc ) {
-            paramList.append("getVirtNWFilterXMLDesc");
-        } else if ( action == reload ) {
-            paramList.append("reloadVirtNWFilter");
-        } else return;
-        if ( action != reload ) paramList.append(parameters.first());
+    Act_Param paramList;
+    if        ( action == edit ) {
+        paramList.method = editEntity;
+    } else if ( action == getXMLDesc ) {
+        paramList.method = getEntityXMLDesc;
     } else if ( action == reload ) {
-        paramList.append("reloadVirtNWFilter");
+        paramList.method = reloadEntity;
     } else return;
-    //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);
 }

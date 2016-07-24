@@ -24,10 +24,10 @@ VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
     settings.endGroup();
     toolBar = new StorageVolToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
-    connect(toolBar, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SLOT(newVirtEntityFromXML(const OFILE_TASK&)));
-    connect(toolBar, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    connect(toolBar, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SLOT(newVirtEntityFromXML(const Act_Param&)));
+    connect(toolBar, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
 }
 VirtStorageVolControl::~VirtStorageVolControl()
 {
@@ -172,11 +172,11 @@ void VirtStorageVolControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type = "volume";
+    task.type       = VIRT_STORAGE_VOLUME;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = "reloadVirtStorageVol";
+    task.method     = reloadEntity;
     task.args.object= currPoolName;
     emit addNewTask(task);
 }
@@ -201,13 +201,14 @@ void VirtStorageVolControl::entityClicked(const QPoint &p)
         entityList->clearSelection();
     };
     bool state = toolBar->getAutoReloadState();
-    StorageVolControlMenu *storageVolControlMenu = new StorageVolControlMenu(this, params, state);
-    connect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    StorageVolControlMenu *storageVolControlMenu =
+            new StorageVolControlMenu(this, params, state);
+    connect(storageVolControlMenu, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
     storageVolControlMenu->move(QCursor::pos());
     storageVolControlMenu->exec();
-    disconnect(storageVolControlMenu, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
+    disconnect(storageVolControlMenu, SIGNAL(execMethod(const Act_Param&)),
+               this, SLOT(execAction(const Act_Param&)));
     storageVolControlMenu->deleteLater();
 }
 void VirtStorageVolControl::entityDoubleClicked(const QModelIndex &index)
@@ -216,37 +217,36 @@ void VirtStorageVolControl::entityDoubleClicked(const QModelIndex &index)
         qDebug()<<storageVolModel->DataList.at(index.row())->getName();
     }
 }
-void VirtStorageVolControl::execAction(const QStringList &l)
+void VirtStorageVolControl::execAction(const Act_Param &param)
 {
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && storageVolModel->DataList.count()>idx.row() ) {
         QString storageVolName =
                 storageVolModel->DataList.at(idx.row())->getName();
         TASK task;
-        task.type = "volume";
+        task.type = VIRT_STORAGE_VOLUME;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = storageVolName;
         task.args.object= currPoolName;
-        if        ( l.first()=="reloadVirtStorageVol" ) {
+        task.method     = param.method;
+        if        ( param.method==reloadEntity ) {
             reloadState();
-        } else if ( l.first()=="deleteVirtStorageVol" ) {
+        } else if ( param.method==deleteEntity ) {
             task.action     = DELETE_ENTITY;
-            task.method     = l.first();
             emit addNewTask(task);
-        } else if ( l.first()=="downloadVirtStorageVol" ) {
+        } else if ( param.method==downloadVirtStorageVol ) {
             QString path =
                     QFileDialog::getSaveFileName(
                         this, "Save to", "~");
             if ( !path.isEmpty() ) {
                 task.action     = DOWNLOAD_ENTITY;
-                task.method     = l.first();
                 task.args.path  = path;
                 //task.args.size  = storageVolModel->DataList
                 //        .at(idx.row())->getCurrSize().toULongLong();
                 emit addNewTask(task);
             } else return;
-        } else if ( l.first()=="resizeVirtStorageVol" ) {
+        } else if ( param.method==resizeVirtStorageVol ) {
             ResizeDialog *resizeDialog = new ResizeDialog(
                         this,
                         ptr_ConnPtr,
@@ -261,53 +261,46 @@ void VirtStorageVolControl::execAction(const QStringList &l)
                 return;
             };
             task.action     = RESIZE_ENTITY;
-            task.method     = l.first();
             emit addNewTask(task);
-        } else if ( l.first()=="uploadVirtStorageVol" ) {
+        } else if ( param.method==uploadVirtStorageVol ) {
             QString path =
                     QFileDialog::getOpenFileName(
                         this, "Read from", "~");
             if ( !path.isEmpty() ) {
                 task.action     = UPLOAD_ENTITY;
-                task.method     = l.first();
                 task.args.path  = path;
                 emit addNewTask(task);
             } else return;
-        } else if ( l.first()=="wipeVirtStorageVol" ) {
+        } else if ( param.method==wipeVirtStorageVol ) {
             task.action     = WIPE_ENTITY;
-            task.method     = l.first();
-            task.args.sign  = (l.count()>1) ? l.at(1).toUInt() : 0;
+            task.args.sign  = param.path.toUInt();
             emit addNewTask(task);
-        } else if ( l.first()=="getVirtStorageVolXMLDesc" ) {
+        } else if ( param.method==getEntityXMLDesc ) {
             task.action     = GET_XML_DESCRIPTION;
-            task.method     = l.first();
             emit addNewTask(task);
         };
-    } else if ( l.first()=="reloadVirtStorageVol" ) {
+    } else if ( param.method==reloadEntity ) {
         reloadState();
     };
 }
-void VirtStorageVolControl::newVirtEntityFromXML(const OFILE_TASK &args)
+void VirtStorageVolControl::newVirtEntityFromXML(const Act_Param &args)
 {
     TASK task;
-    task.type = "volume";
-    Actions act;
-    QString actName;
-    if ( args.method.startsWith("create") ) {
-        act = CREATE_ENTITY;
-        actName = "createVirtStorageVol";
+    task.type = VIRT_STORAGE_VOLUME;
+    Methods method;
+    if ( args.act==CREATE_ENTITY ) {
+        method = createEntity;
     } else {
-        act = DEFINE_ENTITY;
-        actName = "defineVirtStorageVol";
+        method = defineEntity;
     };
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.method     = actName;
-    task.action     = act;
-    if ( args.context=="AsIs" ) {
-        task.args.path  = args.path;
+    task.method     = method;
+    task.action     = args.act;
+    task.args.path  = args.path;
+    if ( args.context==DO_AsIs ) {
         emit addNewTask(task);
-    } else if ( args.context=="Edit" ) {
+    } else if ( args.context==DO_Edit ) {
         emit volumeToEditor(task);
     } else {
         QString path;

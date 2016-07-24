@@ -12,9 +12,11 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
-    define_Menu = new OpenFileMenu(this, "define", "interface");
+    define_Menu = new OpenFileMenu(
+                this, DEFINE_ENTITY, VIRT_INTERFACE);
     define_Action->setMenu(define_Menu);
-    connect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
+    connect(define_Action, SIGNAL(triggered()),
+            this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
     undefine_Action->setToolTip("Undefine");
@@ -51,7 +53,9 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
 
     settings.beginGroup("VirtIfaceControl");
     interval = settings.value("UpdateTime", 3).toInt();
-    _autoReload->setChecked(settings.value("AutoReload", false).toBool());
+    _autoReload->setChecked(
+                settings.value("AutoReload", false)
+                .toBool());
     settings.endGroup();
 
     connect(_autoReload, SIGNAL(toggled(bool)),
@@ -60,8 +64,8 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
 
-    connect(define_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
+    connect(define_Menu, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SIGNAL(fileForMethod(const Act_Param&)));
 }
 InterfaceToolBar::~InterfaceToolBar()
 {
@@ -74,29 +78,30 @@ InterfaceToolBar::~InterfaceToolBar()
 /* public slots */
 Qt::ToolBarArea InterfaceToolBar::get_ToolBarArea(int i) const
 {
-  Qt::ToolBarArea result;
-  switch (i) {
-  case 1:
-    result = Qt::LeftToolBarArea;
-    break;
-  case 2:
-    result = Qt::RightToolBarArea;
-    break;
-  case 4:
-    result = Qt::TopToolBarArea;
-    break;
-  case 8:
-    result = Qt::BottomToolBarArea;
-    break;
-  default:
-    result = Qt::TopToolBarArea;
-    break;
-  };
-  return result;
+    Qt::ToolBarArea result;
+    switch (i) {
+    case 1:
+        result = Qt::LeftToolBarArea;
+        break;
+    case 2:
+        result = Qt::RightToolBarArea;
+        break;
+    case 4:
+        result = Qt::TopToolBarArea;
+        break;
+    case 8:
+        result = Qt::BottomToolBarArea;
+        break;
+    default:
+        result = Qt::TopToolBarArea;
+        break;
+    };
+    return result;
 }
 void InterfaceToolBar::enableAutoReload()
 {
-    if ( _autoReload->isChecked() ) timerId = startTimer(interval*1000);
+    if ( _autoReload->isChecked() )
+        timerId = startTimer(interval*1000);
 }
 void InterfaceToolBar::stopProcessing()
 {
@@ -116,8 +121,8 @@ void InterfaceToolBar::timerEvent(QTimerEvent *event)
     int _timerId = event->timerId();
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
-        QStringList parameters;
-        parameters << "reloadVirtInterface";
+        Act_Param parameters;
+        parameters.method = reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -132,19 +137,19 @@ void InterfaceToolBar::showMenu()
 }
 void InterfaceToolBar::detectTriggerredAction(QAction *action)
 {
-    QStringList parameters;
+    Act_Param parameters;
     if        ( action == undefine_Action ) {
-        parameters << "undefineVirtInterface";
+        parameters.method = undefineEntity;
     } else if ( action == start_Action ) {
-        parameters << "startVirtInterface";
+        parameters.method = startEntity;
     } else if ( action == destroy_Action ) {
-        parameters << "destroyVirtInterface";
+        parameters.method = destroyEntity;
     } else if ( action == changeBegin_Action ) {
-        parameters << "changeBeginVirtInterface";
+        parameters.method = changeBeginVirtInterface;
     } else if ( action == changeCommit_Action ) {
-        parameters << "changeCommitVirtInterface";
+        parameters.method = changeCommitVirtInterface;
     } else if ( action == changeRollback_Action ) {
-        parameters << "changeRollbackVirtInterface";
+        parameters.method = changeRollbackVirtInterface;
     //} else if ( action == getXMLDesc_Action ) {
     //    parameters << "getVirtInterfaceXMLDesc";
     } else return;

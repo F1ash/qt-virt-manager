@@ -882,8 +882,8 @@ void MainWindow::invokeVMDisplay(TASK _task)
     virConnectPtr *connPtrPtr = _task.srcConnPtr;
     QString connName = _task.srcConName;
     QString domName = _task.object;
-    QString type = _task.type;
-    QString viewerType = _task.method;
+    QString type = _task.args.object;
+    QString viewerType = _task.args.state;
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(domName);

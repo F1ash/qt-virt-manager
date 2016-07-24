@@ -97,7 +97,7 @@ SnapshotActionDialog::~SnapshotActionDialog()
 }
 
 /* public slots */
-QStringList SnapshotActionDialog::getParameters() const
+Act_Param SnapshotActionDialog::getParameters() const
 {
     return params;
 }
@@ -218,7 +218,7 @@ void SnapshotActionDialog::accept()
     if ( nullptr==item ) {
         cancelled();
     } else {
-        params.append(item->data(0).toString());
+        params.path = item->data(0).toString();
         //qDebug()<<params;
         done(result());
     };
@@ -246,14 +246,12 @@ void SnapshotActionDialog::detectTriggeredAction(QAction *act)
 {
     if ( act==revertAction ) {
         changeDialogState(true);
-        params.append("revertVirtDomainSnapshot");
+        params.act = REVERT_TO_DOMAIN_SNAPSHOT;
         flags = revertFlagsMenu->getCompositeFlag();
-        setResult(REVERT_TO_DOMAIN_SNAPSHOT);
     } else if ( act==deleteAction ) {
         changeDialogState(true);
-        params.append("deleteVirtDomainSnapshot");
+        params.act = DELETE_DOMAIN_SNAPSHOT;
         flags = deleteFlagsMenu->getCompositeFlag();
-        setResult(DELETE_DOMAIN_SNAPSHOT);
     } else if ( act==refreshAction ) {
         snapshotTree->setEnabled(false);
         clearSnapshotTree();

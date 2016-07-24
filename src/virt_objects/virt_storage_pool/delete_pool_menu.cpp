@@ -20,17 +20,15 @@ Delete_Pool_Menu::Delete_Pool_Menu(QWidget *parent) :
 /* private slots */
 void Delete_Pool_Menu::emitExecMethod(QAction *action)
 {
-    QStringList parameters;
+    Act_Param parameters;
     if ( action == delete_Normal ) {
-        parameters
-                << "deleteVirtStoragePool"
-                << QString("%1")
-                   .arg(VIR_STORAGE_POOL_DELETE_NORMAL);
+        parameters.method = deleteEntity;
+        parameters.path = QString::number(
+                   VIR_STORAGE_POOL_DELETE_NORMAL);
     } else if ( action == delete_Zeroed ) {
-        parameters
-                << "deleteVirtStoragePool"
-                << QString("%1")
-                   .arg(VIR_STORAGE_POOL_DELETE_ZEROED);
+        parameters.method = deleteEntity;
+        parameters.path = QString::number(
+                   VIR_STORAGE_POOL_DELETE_ZEROED);
     } else return;
     emit execMethod(parameters);
 }

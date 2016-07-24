@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QIcon>
 #include <QStringList>
+#include "virt_objects/virt_entity_enums.h"
 #include <QDebug>
 
 class DomainControlMenu : public QMenu
@@ -17,7 +18,7 @@ public:
             bool         state  = false);
 
 signals:
-    void            execMethod(const QStringList&);
+    void            execMethod(const Act_Param&);
 
 private:
     bool            autoReloadState;

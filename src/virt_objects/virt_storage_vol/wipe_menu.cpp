@@ -31,25 +31,43 @@ WipeMenu::WipeMenu(QWidget *parent) :
 /* private slots */
 void WipeMenu::emitExecMethod(QAction *action)
 {
-    QStringList parameters;
+    Act_Param parameters;
     if ( action == algorithm_ZERO ) {
-        parameters << "wipeVirtStorageVol" << QString("%1").arg(VIR_STORAGE_VOL_WIPE_ALG_ZERO);
+        parameters.method = wipeVirtStorageVol;
+        parameters.path =
+                QString::number(VIR_STORAGE_VOL_WIPE_ALG_ZERO);
     } else if ( action == algorithm_NNSA ) {
-        parameters << "wipeVirtStorageVol" << QString("%1").arg(VIR_STORAGE_VOL_WIPE_ALG_NNSA);
+        parameters.method = wipeVirtStorageVol;
+        parameters.path =
+                QString::number(VIR_STORAGE_VOL_WIPE_ALG_NNSA);
     } else if ( action == algorithm_DOD ) {
-        parameters << "wipeVirtStorageVol" << QString("%1").arg(VIR_STORAGE_VOL_WIPE_ALG_DOD);
+        parameters.method = wipeVirtStorageVol;
+        parameters.path =
+                QString::number(VIR_STORAGE_VOL_WIPE_ALG_DOD);
     } else if ( action == algorithm_BSI ) {
-        parameters << "wipeVirtStorageVol" << QString("%1").arg(VIR_STORAGE_VOL_WIPE_ALG_BSI);
+        parameters.method = wipeVirtStorageVol;
+        parameters.path =
+                QString::number(VIR_STORAGE_VOL_WIPE_ALG_BSI);
     } else if ( action == algorithm_GUTMANN ) {
-        parameters << "wipeVirtStorageVol" << QString("%1").arg(VIR_STORAGE_VOL_WIPE_ALG_GUTMANN);
+        parameters.method = wipeVirtStorageVol;
+        parameters.path =
+                QString::number(VIR_STORAGE_VOL_WIPE_ALG_GUTMANN);
     } else if ( action == algorithm_SCHNEIER ) {
-        parameters << "wipeVirtStorageVol" << QString("%1").arg(VIR_STORAGE_VOL_WIPE_ALG_SCHNEIER);
+        parameters.method = wipeVirtStorageVol;
+        parameters.path =
+                QString::number(VIR_STORAGE_VOL_WIPE_ALG_SCHNEIER);
     } else if ( action == algorithm_PFITZNER7 ) {
-        parameters << "wipeVirtStorageVol" << QString("%1").arg(VIR_STORAGE_VOL_WIPE_ALG_PFITZNER7);
+        parameters.method = wipeVirtStorageVol;
+        parameters.path =
+                QString::number(VIR_STORAGE_VOL_WIPE_ALG_PFITZNER7);
     } else if ( action == algorithm_PFITZNER33 ) {
-        parameters << "wipeVirtStorageVol" << QString("%1").arg(VIR_STORAGE_VOL_WIPE_ALG_PFITZNER33);
+        parameters.method = wipeVirtStorageVol;
+        parameters.path =
+                QString::number(VIR_STORAGE_VOL_WIPE_ALG_PFITZNER33);
     } else if ( action == algorithm_RANDOM ) {
-        parameters << "wipeVirtStorageVol" << QString("%1").arg(VIR_STORAGE_VOL_WIPE_ALG_RANDOM);
+        parameters.method = wipeVirtStorageVol;
+        parameters.path =
+                QString::number(VIR_STORAGE_VOL_WIPE_ALG_RANDOM);
     } else return;
     emit execMethod(parameters);
 }
@@ -63,11 +81,13 @@ void WipeMenu::showActionToolTip(QAction *action)
     } else if ( action == algorithm_DOD ) {
         toolTip = QString("4-pass DoD 5220.22-M section 8-306 procedure");
     } else if ( action == algorithm_BSI ) {
-        toolTip = QString("9-pass method recommended by the German Center\nof Security in Information Technologies");
+        toolTip = QString(
+"9-pass method recommended by the German Center\nof Security in Information Technologies");
     } else if ( action == algorithm_GUTMANN ) {
         toolTip = QString("The canonical 35-pass sequence");
     } else if ( action == algorithm_SCHNEIER ) {
-        toolTip = QString("7-pass method described by Bruce Schneier\nin \"Applied Cryptography\" (1996)");
+        toolTip = QString(
+"7-pass method described by Bruce Schneier\nin \"Applied Cryptography\" (1996)");
     } else if ( action == algorithm_PFITZNER7 ) {
         toolTip = QString("7-pass random");
     } else if ( action == algorithm_PFITZNER33 ) {

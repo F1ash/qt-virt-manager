@@ -7,6 +7,7 @@
 #include <QStringList>
 #include "wipe_menu.h"
 #include "resize_dialog.h"
+#include "virt_objects/virt_entity_enums.h"
 #include <QDebug>
 
 class StorageVolControlMenu : public QMenu
@@ -19,7 +20,7 @@ public:
             bool         state  = false);
 
 signals:
-    void            execMethod(const QStringList&);
+    void            execMethod(const Act_Param&);
 
 private:
     bool            autoReloadState;

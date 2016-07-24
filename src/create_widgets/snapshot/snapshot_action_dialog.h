@@ -40,7 +40,7 @@ private:
     virConnectPtr*       ptr_ConnPtr;
     virDomainPtr         domain = nullptr;
     const QString        domName;
-    QStringList          params;
+    Act_Param            params;
     int                  flags = 0;
     SnapshotTreeModel   *model;
     QAction             *revertAction;
@@ -61,7 +61,7 @@ private:
     QSettings            settings;
 
 public slots:
-    QStringList          getParameters() const;
+    Act_Param            getParameters() const;
     uint                 getSnapshotFlags() const;
 
 private slots:

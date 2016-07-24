@@ -33,13 +33,13 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     create_Action = new QAction(this);
     create_Action->setIcon(QIcon::fromTheme("create"));
     create_Action->setToolTip("Create for once usage");
-    create_Menu = new OpenFileMenu(this, "create", "domain");
+    create_Menu = new OpenFileMenu(this, CREATE_ENTITY, VIRT_DOMAIN);
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
-    define_Menu = new OpenFileMenu(this, "define", "domain");
+    define_Menu = new OpenFileMenu(this, DEFINE_ENTITY, VIRT_DOMAIN);
     define_Action->setMenu(define_Menu);
     connect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
@@ -83,15 +83,17 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
 
     settings.beginGroup("VirtDomainControl");
     interval = settings.value("UpdateTime", 3).toInt();
-    _autoReload->setChecked(settings.value("AutoReload", false).toBool());
+    _autoReload->setChecked(
+                settings.value("AutoReload", false)
+                .toBool());
     settings.endGroup();
 
     connect(_autoReload, SIGNAL(toggled(bool)),
             this, SLOT(changeAutoReloadState(bool)));
-    connect(create_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
-    connect(define_Menu, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SIGNAL(fileForMethod(const OFILE_TASK&)));
+    connect(create_Menu, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SIGNAL(fileForMethod(const Act_Param&)));
+    connect(define_Menu, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SIGNAL(fileForMethod(const Act_Param&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
             this, SLOT(detectTriggerredAction(QAction*)));
 }
@@ -106,29 +108,30 @@ DomainToolBar::~DomainToolBar()
 /* public slots */
 Qt::ToolBarArea DomainToolBar::get_ToolBarArea(int i) const
 {
-  Qt::ToolBarArea result;
-  switch (i) {
-  case 1:
-    result = Qt::LeftToolBarArea;
+    Qt::ToolBarArea result;
+    switch (i) {
+    case 1:
+            result = Qt::LeftToolBarArea;
     break;
-  case 2:
-    result = Qt::RightToolBarArea;
-    break;
-  case 4:
-    result = Qt::TopToolBarArea;
-    break;
-  case 8:
-    result = Qt::BottomToolBarArea;
-    break;
-  default:
-    result = Qt::TopToolBarArea;
-    break;
-  };
-  return result;
+    case 2:
+        result = Qt::RightToolBarArea;
+        break;
+    case 4:
+        result = Qt::TopToolBarArea;
+        break;
+    case 8:
+        result = Qt::BottomToolBarArea;
+        break;
+    default:
+        result = Qt::TopToolBarArea;
+        break;
+    };
+    return result;
 }
 void DomainToolBar::enableAutoReload()
 {
-    if ( _autoReload->isChecked() ) timerId = startTimer(interval*1000);
+    if ( _autoReload->isChecked() )
+        timerId = startTimer(interval*1000);
 }
 void DomainToolBar::stopProcessing()
 {
@@ -148,8 +151,8 @@ void DomainToolBar::timerEvent(QTimerEvent *event)
     int _timerId = event->timerId();
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
-        QStringList parameters;
-        parameters << "reloadVirtDomain";
+        Act_Param parameters;
+        parameters.method = reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -184,25 +187,25 @@ void DomainToolBar::showMenu()
 }
 void DomainToolBar::detectTriggerredAction(QAction *action)
 {
-    QStringList parameters;
+    Act_Param parameters;
     if ( action == start_Action) {
-        parameters << "startVirtDomain";
+        parameters.method = startEntity;
     } else if ( action == pause_Action ) {
-        parameters << "pauseVirtDomain";
+        parameters.method = pauseEntity;
     } else if ( action == destroy_Action ) {
-        parameters << "destroyVirtDomain";
+        parameters.method = destroyEntity;
     } else if ( action == reset_Action ) {
-        parameters << "resetVirtDomain";
+        parameters.method = resetVirtDomain;
     } else if ( action == reboot_Action ) {
-        parameters << "rebootVirtDomain";
+        parameters.method = rebootVirtDomain;
     } else if ( action == shutdown_Action ) {
-        parameters << "shutdownVirtDomain";
+        parameters.method = shutdownVirtDomain;
     } else if ( action == save_Action ) {
-        parameters << "saveVirtDomain";
+        parameters.method = saveVirtDomain;
     } else if ( action == restore_Action ) {
-        parameters << "restoreVirtDomain";
+        parameters.method = restoreVirtDomain;
     } else if ( action == undefine_Action ) {
-        parameters << "undefineVirtDomain";
+        parameters.method = undefineEntity;
     //} else if ( action == setAutostart_Action ) {
     //    parameters << "setAutostartVirtDomain";
     //} else if ( action == getXMLDesc_Action ) {
@@ -210,7 +213,7 @@ void DomainToolBar::detectTriggerredAction(QAction *action)
     //} else if ( action == migrate_Action ) {
     //    parameters << "migrateVirtDomain";
     } else if ( action == createSnapshot ) {
-        parameters << "createVirtDomainSnapshot";
+        parameters.method = createVirtDomainSnapshot;
     } else return;
     emit execMethod(parameters);
 }

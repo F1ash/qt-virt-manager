@@ -3,44 +3,13 @@
 
 #include <libvirt/libvirt.h>
 #include <QStringList>
-
-enum Actions {
-    GET_ALL_ENTITY_STATE,
-    GET_ALL_ENTITY_DATA,
-    CREATE_ENTITY,
-    DEFINE_ENTITY,
-    EDIT_ENTITY,
-    START_ENTITY,
-    PAUSE_ENTITY,
-    DESTROY_ENTITY,
-    RESET_ENTITY,
-    REBOOT_ENTITY,
-    SHUTDOWN_ENTITY,
-    SAVE_ENTITY,
-    RESTORE_ENTITY,
-    UNDEFINE_ENTITY,
-    DELETE_ENTITY,
-    MIGRATE_ENTITY,
-    DOWNLOAD_ENTITY,
-    RESIZE_ENTITY,
-    UPLOAD_ENTITY,
-    WIPE_ENTITY,
-    CHANGE_ENTITY_AUTOSTART,
-    GET_XML_DESCRIPTION,
-    CREATE_DOMAIN_SNAPSHOT,
-    REVERT_TO_DOMAIN_SNAPSHOT,
-    DELETE_DOMAIN_SNAPSHOT,
-    IFACE_CHANGE_BEGIN,
-    IFACE_CHANGE_COMMIT,
-    IFACE_CHANGE_ROLLBACK,
-    _EMPTY_ACTION
-};
+#include "virt_entity_enums.h"
 
 struct Result {
     QString         name        = QString();
     uint            number      = 0;
-    QString         type        = QString();
-    Actions         action      = _EMPTY_ACTION;
+    VIRT_ENTITY     type        = _NONE_ENTITY;
+    Actions         action      = _NONE_ACTION;
     bool            result      = false;
     QStringList     msg         = QStringList();
     QString         err         = QString();
@@ -52,9 +21,9 @@ struct TASK {
     virConnectPtr*      srcConnPtr  = nullptr;
     QString             srcConName  = QString();
     QString             object      = QString();
-    Actions             action      = _EMPTY_ACTION;
-    QString             method      = QString();
-    QString             type        = QString();
+    Actions             action      = _NONE_ACTION;
+    Methods             method      = _NONE_METHOD;
+    VIRT_ENTITY         type        = _NONE_ENTITY;
 
     // details
     struct          DETAILS {

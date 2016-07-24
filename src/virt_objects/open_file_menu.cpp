@@ -1,25 +1,31 @@
 #include "open_file_menu.h"
 
-OpenFileMenu::OpenFileMenu(QWidget *parent, QString str, QString src) :
+OpenFileMenu::OpenFileMenu(
+        QWidget *parent, Actions act, VIRT_ENTITY _e) :
     QMenu(parent)
 {
-    task.method = str;
-    icon = QIcon::fromTheme( QString("%1").arg(task.method) );
+    task.act = act;
+    icon = QIcon::fromTheme(
+                QString("%1").arg(enumToActionString(act)) );
     applyAsIs = new QAction(this);
     applyAsIs->setText(
                 QString(
     "%1 Virtual %2 from example XML description as is")
-                .arg(task.method).arg(src));
+                .arg(enumToActionString(act))
+                .arg(enumToEntityString(_e)));
     applyAsIs->setIcon(icon);
     editTemplate = new QAction(this);
     editTemplate->setText(
                 QString(
     "%1 Virtual %2 by edit example XML description")
-                .arg(task.method).arg(src));
+                .arg(enumToActionString(act))
+                .arg(enumToEntityString(_e)));
     editTemplate->setIcon(icon);
     manual = new QAction(this);
-    manual->setText(QString("%1 Virtual %2 manually")
-                    .arg(task.method).arg(src));
+    manual->setText(
+                QString("%1 Virtual %2 manually")
+                .arg(enumToActionString(act))
+                .arg(enumToEntityString(_e)));
     manual->setIcon(icon);
     connect(applyAsIs, SIGNAL(triggered()),
             this, SLOT(chooseExample()));
@@ -35,12 +41,11 @@ OpenFileMenu::OpenFileMenu(QWidget *parent, QString str, QString src) :
 
 void OpenFileMenu::chooseExample()
 {
-    task.context.clear();
-    task.path.clear();
+    task.clear();
     if ( sender()==applyAsIs ) {
-        task.context.append("AsIs");
+        task.context = DO_AsIs;
     } else if ( sender()==editTemplate ) {
-        task.context.append("Edit");
+        task.context = DO_Edit;
     } else {
         chooseManual();
         return;
@@ -49,9 +54,8 @@ void OpenFileMenu::chooseExample()
 }
 void OpenFileMenu::chooseManual()
 {
-    task.context.clear();
-    task.path.clear();
-    task.context.append("manually");
+    task.clear();
+    task.context = DO_Manually;
     emit fileForMethod(task);
 }
 void OpenFileMenu::emitParameters(const QString &title, const QString &dirPath)

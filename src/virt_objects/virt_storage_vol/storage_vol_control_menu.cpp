@@ -17,8 +17,8 @@ StorageVolControlMenu::StorageVolControlMenu(
         wipe_Action = new QAction("Wipe", this);
         wipe_Action->setIcon(QIcon::fromTheme("wipe"));
         wipe_Action->setMenu(wipe_Menu);
-        connect(wipe_Menu, SIGNAL(execMethod(const QStringList&)),
-                this, SIGNAL(execMethod(const QStringList&)));
+        connect(wipe_Menu, SIGNAL(execMethod(const Act_Param&)),
+                this, SIGNAL(execMethod(const Act_Param&)));
         getXMLDesc_Action = new QAction("get XML Description", this);
         getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
 
@@ -37,32 +37,28 @@ StorageVolControlMenu::StorageVolControlMenu(
     reload->setEnabled(!autoReloadState);
 
     addAction(reload);
-    connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
+    connect(this, SIGNAL(triggered(QAction*)),
+            this, SLOT(emitExecMethod(QAction*)));
 }
 
 void StorageVolControlMenu::emitExecMethod(QAction *action)
 {
-    QStringList paramList;
-    if ( !parameters.isEmpty() ) {
-        if ( action == resize_Action) {
-            paramList.append("resizeVirtStorageVol");
-        } else if ( action == delete_Action ) {
-            paramList.append("deleteVirtStorageVol");
-        } else if ( action == download_Action ) {
-            paramList.append("downloadVirtStorageVol");
-        } else if ( action == upload_Action ) {
-            paramList.append("uploadVirtStorageVol");
-        } else if ( action == wipe_Action ) {
-            paramList.append("wipeVirtStorageVol");
-            paramList.append("0");
-        } else if ( action == getXMLDesc_Action ) {
-            paramList.append("getVirtStorageVolXMLDesc");
-        } else if ( action == reload ) {
-            paramList.append("reloadVirtStorageVol");
-        } else return;
+    Act_Param paramList;
+    if ( action == resize_Action) {
+        paramList.method = resizeVirtStorageVol;
+    } else if ( action == delete_Action ) {
+        paramList.method = deleteEntity;
+    } else if ( action == download_Action ) {
+        paramList.method = downloadVirtStorageVol;
+    } else if ( action == upload_Action ) {
+        paramList.method = uploadVirtStorageVol;
+    } else if ( action == wipe_Action ) {
+        paramList.method = wipeVirtStorageVol;
+        paramList.path = "0";
+    } else if ( action == getXMLDesc_Action ) {
+        paramList.method = getEntityXMLDesc;
     } else if ( action == reload ) {
-        paramList.append("reloadVirtStorageVol");
+        paramList.method = reloadEntity;
     } else return;
-    //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);
 }

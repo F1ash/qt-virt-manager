@@ -3,6 +3,7 @@
 
 #include <QMenu>
 #include <libvirt/libvirt.h>
+#include "virt_objects/virt_entity_enums.h"
 
 class WipeMenu : public QMenu
 {
@@ -11,7 +12,7 @@ public:
     explicit WipeMenu(QWidget *parent = nullptr);
 
 signals:
-    void             execMethod(const QStringList&);
+    void             execMethod(const Act_Param&);
 
 private:
     QAction         *algorithm_ZERO;

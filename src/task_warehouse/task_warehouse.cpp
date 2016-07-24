@@ -64,13 +64,13 @@ void TaskWareHouse::addNewTask(TASK task)
     //
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
-    if ( !task.method.startsWith("reload") &&
-         !task.method.startsWith("edit") ) {
-        QString _name = QString("#%1 %2 <%3> in <%4> connection")
+    if ( task.method!=reloadEntity && task.method!=editEntity ) {
+        QString _name = QString("%5 %1 %2 <%3> in <%4>")
                 .arg(_number)
-                .arg(task.method)
+                .arg( enumToMethodString(task.method) )
                 .arg(task.object)
-                .arg(task.srcConName);
+                .arg(task.srcConName)
+                .arg(QChar(0x273B));
         QListWidgetItem *_item = new QListWidgetItem();
         _item->setText(_name);
         _item->setIcon(QIcon::fromTheme("ledlightgreen"));
@@ -78,7 +78,7 @@ void TaskWareHouse::addNewTask(TASK task)
         QMap<QString, QVariant> itemData;
         itemData.insert("Connection", task.srcConName);
         itemData.insert("Object", task.object);
-        itemData.insert("Action", task.method);
+        itemData.insert("Action", enumToMethodString(task.method));
         itemData.insert("Start", QString("%1:%2:%3:%4")
                         .arg(QString("").sprintf("%02d", _time.hour()))
                         .arg(QString("").sprintf("%02d", _time.minute()))
@@ -92,31 +92,31 @@ void TaskWareHouse::addNewTask(TASK task)
         setNewTooltip(_item);
         taskList->addItem(_item);
     };
-    if        ( task.type == "domain" ) {
+    if        ( task.type == VIRT_DOMAIN ) {
         threadPool->insert(
                     _number,
                     new DomControlThread(this));
-    } else if ( task.type == "network" ) {
+    } else if ( task.type == VIRT_NETWORK ) {
         threadPool->insert(
                     _number,
                     new NetControlThread(this));
-    } else if ( task.type == "pool" ) {
+    } else if ( task.type == VIRT_STORAGE_POOL ) {
         threadPool->insert(
                     _number,
                     new StoragePoolControlThread(this));
-    } else if ( task.type == "volume" ) {
+    } else if ( task.type == VIRT_STORAGE_VOLUME ) {
         threadPool->insert(
                     _number,
                     new StorageVolControlThread(this));
-    } else if ( task.type == "secret" ) {
+    } else if ( task.type == VIRT_SECRET ) {
         threadPool->insert(
                     _number,
                     new SecretControlThread(this));
-    } else if ( task.type == "iface" ) {
+    } else if ( task.type == VIRT_INTERFACE ) {
         threadPool->insert(
                     _number,
                     new InterfaceControlThread(this));
-    } else if ( task.type == "nwfilter" ) {
+    } else if ( task.type == VIRT_NETWORK_FILTER ) {
         threadPool->insert(
                     _number,
                     new NWFilterControlThread(this));
@@ -141,7 +141,8 @@ void TaskWareHouse::msgRepeater(QString &msg, uint _number)
 {
     QString time = QTime::currentTime().toString();
     QString number = QString("").sprintf("%08d", _number);
-    QString title = QString("in TASK #%1").arg(number);
+    QString title = QString("in TASK %1 %2")
+            .arg(number).arg(QChar(0x273B));
     QString currMsg = QString(
     "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
             .arg(time).arg(title).arg(msg);
@@ -149,19 +150,19 @@ void TaskWareHouse::msgRepeater(QString &msg, uint _number)
 }
 void TaskWareHouse::taskResultReceiver(Result data)
 {
-    if        ( data.type=="domain" ) {
+    if        ( data.type==VIRT_DOMAIN ) {
         emit domResult(data);
-    } else if ( data.type=="network" ) {
+    } else if ( data.type==VIRT_NETWORK ) {
         emit netResult(data);
-    } else if ( data.type=="pool" ) {
+    } else if ( data.type==VIRT_STORAGE_POOL ) {
         emit poolResult(data);
-    } else if ( data.type=="volume" ) {
+    } else if ( data.type==VIRT_STORAGE_VOLUME ) {
         emit volResult(data);
-    } else if ( data.type=="secret" ) {
+    } else if ( data.type==VIRT_SECRET ) {
         emit secResult(data);
-    } else if ( data.type=="iface" ) {
+    } else if ( data.type==VIRT_INTERFACE ) {
         emit ifaceResult(data);
-    } else if ( data.type=="nwfilter" ) {
+    } else if ( data.type==VIRT_NETWORK_FILTER ) {
         emit nwfilterResult(data);
     } else return;
     QString _number = QString("").sprintf("%08d", data.number);
@@ -184,8 +185,10 @@ void TaskWareHouse::taskResultReceiver(Result data)
     } else {
         stateIcon.append("ledlightred");
     };
+    _number.prepend(" ");
+    _number.prepend(QChar(0x273B));
     QList<QListWidgetItem*> _list = taskList->findItems(
-                _number.prepend("#"), Qt::MatchStartsWith);
+                _number, Qt::MatchStartsWith);
     if ( _list.count()>0 ) {
         _list.at(0)->setIcon(QIcon::fromTheme(stateIcon));
         // set result data to taskList item
@@ -206,7 +209,8 @@ void TaskWareHouse::taskResultReceiver(Result data)
 }
 void TaskWareHouse::setNewTooltip(QListWidgetItem *_item)
 {
-    QString _toolTip, _table, _conn, _dom, _arg, _task, _time, _res, _msg, _err;
+    QString _toolTip, _table, _conn, _dom, _arg,
+            _task, _time, _res, _msg, _err;
     QVariant data = _item->data(Qt::UserRole);
     _conn.append(QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
                  .arg("<b>Connection</b>")

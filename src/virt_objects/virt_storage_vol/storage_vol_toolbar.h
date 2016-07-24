@@ -19,8 +19,8 @@ public:
     ~StorageVolToolBar();
 
 signals:
-    void             fileForMethod(const OFILE_TASK&);
-    void             execMethod(const QStringList&);
+    void             fileForMethod(const Act_Param&);
+    void             execMethod(const Act_Param&);
 
 private:
     OpenFileMenu    *create_Menu;

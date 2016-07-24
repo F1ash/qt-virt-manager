@@ -23,10 +23,10 @@ VirtNetControl::VirtNetControl(QWidget *parent) :
     settings.endGroup();
     toolBar = new VirtNetToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
-    connect(toolBar, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SLOT(newVirtEntityFromXML(const OFILE_TASK&)));
-    connect(toolBar, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    connect(toolBar, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SLOT(newVirtEntityFromXML(const Act_Param&)));
+    connect(toolBar, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
 }
 VirtNetControl::~VirtNetControl()
 {
@@ -50,7 +50,11 @@ void VirtNetControl::stopProcessing()
     while ( virtNetModel->DataList.count() ) {
         virtNetModel->removeRow(0);
     };
-    virtNetModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
+    virtNetModel->setHeaderData(
+                0,
+                Qt::Horizontal,
+                QString("Name"),
+                Qt::EditRole);
 
 }
 bool VirtNetControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
@@ -116,12 +120,12 @@ void VirtNetControl::resultReceiver(Result data)
         if ( data.result ) {
             // show SRC Creator widget in Edit-mode
             TASK task;
-            task.type = "network";
+            task.type       = VIRT_NETWORK;
             task.srcConnPtr = ptr_ConnPtr;
             task.srcConName = currConnName;
             task.object     = data.name;
             task.args.path  = data.fileName;
-            task.method     = "editVirtNetwork";
+            task.method     = editEntity;
             task.action     = DEFINE_ENTITY;
             emit networkToEditor(task);
         };
@@ -134,7 +138,7 @@ void VirtNetControl::resultReceiver(Result data)
             reloadState();
             // for different action's specified manipulation
             switch (data.action) {
-            case _EMPTY_ACTION:
+            case _NONE_ACTION:
                 // some job;
                 break;
             default:
@@ -150,11 +154,11 @@ void VirtNetControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type = "network";
+    task.type = VIRT_NETWORK;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = "reloadVirtNetwork";
+    task.method     = reloadEntity;
     emit addNewTask(task);
 }
 void VirtNetControl::changeDockVisibility()
@@ -177,13 +181,14 @@ void VirtNetControl::entityClicked(const QPoint &p)
         entityList->clearSelection();
     };
     bool state = toolBar->getAutoReloadState();
-    VirtNetControlMenu *netControlMenu = new VirtNetControlMenu(this, params, state);
-    connect(netControlMenu, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    VirtNetControlMenu *netControlMenu =
+            new VirtNetControlMenu(this, params, state);
+    connect(netControlMenu, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
     netControlMenu->move(QCursor::pos());
     netControlMenu->exec();
-    disconnect(netControlMenu, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
+    disconnect(netControlMenu, SIGNAL(execMethod(const Act_Param&)),
+               this, SLOT(execAction(const Act_Param&)));
     netControlMenu->deleteLater();
 }
 void VirtNetControl::entityDoubleClicked(const QModelIndex &index)
@@ -192,75 +197,66 @@ void VirtNetControl::entityDoubleClicked(const QModelIndex &index)
         qDebug()<<virtNetModel->DataList.at(index.row())->getName();
     }
 }
-void VirtNetControl::execAction(const QStringList &l)
+void VirtNetControl::execAction(const Act_Param &param)
 {
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtNetModel->DataList.count()>idx.row() ) {
         QString networkName = virtNetModel->DataList.at(idx.row())->getName();
         TASK task;
-        task.type = "network";
+        task.type       = VIRT_NETWORK;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = networkName;
-        if        ( l.first()=="startVirtNetwork" ) {
-            task.method = l.first();
+        task.method     = param.method;
+        if        ( param.method==startEntity ) {
             task.action = START_ENTITY;
             emit addNewTask(task);
-        } else if ( l.first()=="destroyVirtNetwork" ) {
-            task.method = l.first();
+        } else if ( param.method==destroyEntity ) {
             task.action = DESTROY_ENTITY;
             emit addNewTask(task);
-        } else if ( l.first()=="defineVirtNetwork" ) {
-            task.method = l.first();
+        } else if ( param.method==defineEntity ) {
             task.action = DEFINE_ENTITY;
             emit addNewTask(task);
-        } else if ( l.first()=="undefineVirtNetwork" ) {
-            task.method = l.first();
+        } else if ( param.method==undefineEntity ) {
             task.action = UNDEFINE_ENTITY;
             emit addNewTask(task);
-        } else if ( l.first()=="setAutostartVirtNetwork" ) {
+        } else if ( param.method==setAutostartEntity ) {
             /* set the opposite value */
             uint autostartState =
                 (virtNetModel->DataList.at(idx.row())->getAutostart()=="yes")
                  ? 0 : 1;
-            task.method = l.first();
             task.action = CHANGE_ENTITY_AUTOSTART;
             task.args.sign = autostartState;
             emit addNewTask(task);
-        } else if ( l.first()=="editVirtNetwork" ) {
-            task.method     = l.first();
+        } else if ( param.method==editEntity ) {
             task.action     = EDIT_ENTITY;
             emit addNewTask(task);
-        } else if ( l.first()=="getVirtNetworkXMLDesc" ) {
-            task.method = l.first();
+        } else if ( param.method==getEntityXMLDesc ) {
             task.action = GET_XML_DESCRIPTION;
             emit addNewTask(task);
-        } else if ( l.first()=="reloadVirtNetwork" ) {
+        } else if ( param.method==reloadEntity ) {
             reloadState();
         };
-    } else if ( l.first()=="reloadVirtNetwork" ) {
+    } else if ( param.method==reloadEntity ) {
         reloadState();
     };
 }
-void VirtNetControl::newVirtEntityFromXML(const OFILE_TASK &args)
+void VirtNetControl::newVirtEntityFromXML(const Act_Param &args)
 {
     TASK task;
-    task.type = "network";
-    Actions act;
-    QString actName;
-    if ( args.method.startsWith("create") ) {
-        act = CREATE_ENTITY;
-        actName = "createVirtNetwork";
+    task.type = VIRT_NETWORK;
+    Methods method;
+    if ( args.act==CREATE_ENTITY ) {
+        method = createEntity;
     } else {
-        act = DEFINE_ENTITY;
-        actName = "defineVirtNetwork";
+        method = defineEntity;
     };
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.method     = actName;
-    task.action     = act;
+    task.method     = method;
+    task.action     = args.act;
     task.args.path  = args.path;
-    if ( args.context=="AsIs" ) {
+    if ( args.context==DO_AsIs ) {
         emit addNewTask(task);
     } else {
         emit networkToEditor(task);

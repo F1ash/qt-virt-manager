@@ -5,7 +5,6 @@ DomainControlMenu::DomainControlMenu(
     QMenu(parent), parameters(params), autoReloadState(state)
 {
     if ( !parameters.isEmpty() ) {
-        if (parameters.isEmpty()) return;
         start = new QAction("Start", this);
         start->setIcon(QIcon::fromTheme("start"));
         start->setVisible(parameters.last()=="yes" && parameters[1]!="active" );
@@ -96,51 +95,46 @@ DomainControlMenu::DomainControlMenu(
 /* private slots */
 void DomainControlMenu::emitExecMethod(QAction *action)
 {
-    QStringList paramList;
-    if ( !parameters.isEmpty() ) {
-        if ( action == start) {
-            paramList.append( "startVirtDomain");
-        } else if ( action == pause ) {
-            paramList.append("pauseVirtDomain");
-        } else if ( action == destroy ) {
-            paramList.append("destroyVirtDomain");
-        } else if ( action == edit ) {
-            paramList.append("editVirtDomain");
-        } else if ( action == reset ) {
-            paramList.append("resetVirtDomain");
-        } else if ( action == reboot ) {
-            paramList.append("rebootVirtDomain");
-        } else if ( action == shutdown ) {
-            paramList.append("shutdownVirtDomain");
-        } else if ( action == save ) {
-            paramList.append("saveVirtDomain");
-        } else if ( action == undefine ) {
-            paramList.append("undefineVirtDomain");
-        } else if ( action == autoStart ) {
-            paramList.append("setAutostartVirtDomain");
-            paramList.append(QString((parameters[2]=="yes")? "0" : "1"));
-        } else if ( action == RunningData ) {
-            paramList.append("getVirtDomainXMLDesc");
-            paramList.append("AS_IS");
-        } else if ( action == InactiveData ) {
-            paramList.append("getVirtDomainXMLDesc");
-            paramList.append("");
-        } else if ( action == display ) {
-            paramList.append("displayVirtDomain");
-        } else if ( action == addToMonitor ) {
-            paramList.append("monitorVirtDomain");
-        } else if ( action == migrate ) {
-            paramList.append("migrateVirtDomain");
-        } else if ( action == reload ) {
-            paramList.append("reloadVirtDomain");
-        } else if ( action == createSnapshot ) {
-            paramList.append( "createVirtDomainSnapshot" );
-        } else if ( action == moreSnapshot_Actions ) {
-            paramList.append( "moreSnapshotActions" );
-        } else return;
-        if ( action != reload ) paramList.append(parameters.first());
+    Act_Param paramList;
+    if ( action == start) {
+        paramList.method = startEntity;
+    } else if ( action == pause ) {
+        paramList.method = pauseEntity;
+    } else if ( action == destroy ) {
+        paramList.method = destroyEntity;
+    } else if ( action == edit ) {
+        paramList.method = editEntity;
+    } else if ( action == reset ) {
+        paramList.method = resetVirtDomain;
+    } else if ( action == reboot ) {
+        paramList.method = rebootVirtDomain;
+    } else if ( action == shutdown ) {
+        paramList.method = shutdownVirtDomain;
+    } else if ( action == save ) {
+        paramList.method = saveVirtDomain;
+    } else if ( action == undefine ) {
+        paramList.method = undefineEntity;
+    } else if ( action == autoStart ) {
+        paramList.method = setAutostartEntity;
+        paramList.path =
+               (QString((parameters[2]=="yes")? "0" : "1"));
+    } else if ( action == RunningData ) {
+        paramList.method = getEntityXMLDesc;
+        paramList.context = DO_AsIs;
+    } else if ( action == InactiveData ) {
+        paramList.method = getEntityXMLDesc;
+    } else if ( action == display ) {
+        paramList.method = displayVirtDomain;
+    } else if ( action == addToMonitor ) {
+        paramList.method = monitorVirtDomain;
+    } else if ( action == migrate ) {
+        paramList.method = migrateVirtDomain;
     } else if ( action == reload ) {
-        paramList.append("reloadVirtDomain");
+        paramList.method = reloadEntity;
+    } else if ( action == createSnapshot ) {
+        paramList.method = createVirtDomainSnapshot;
+    } else if ( action == moreSnapshot_Actions ) {
+        paramList.method = moreSnapshotActions;
     } else return;
     //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);

@@ -21,8 +21,8 @@ VirtSecretControl::VirtSecretControl(QWidget *parent) :
     settings.endGroup();
     toolBar = new VirtSecretToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
-    connect(toolBar, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    connect(toolBar, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
 }
 VirtSecretControl::~VirtSecretControl()
 {
@@ -135,7 +135,7 @@ void VirtSecretControl::resultReceiver(Result data)
             reloadState();
             // for different action's specified manipulation
             switch (data.action) {
-            case _EMPTY_ACTION:
+            case _NONE_ACTION:
                 // some job;
                 break;
             default:
@@ -151,11 +151,11 @@ void VirtSecretControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type = "secret";
+    task.type       = VIRT_SECRET;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = "reloadVirtSecret";
+    task.method     = reloadEntity;
     emit addNewTask(task);
 }
 void VirtSecretControl::changeDockVisibility()
@@ -178,12 +178,12 @@ void VirtSecretControl::entityClicked(const QPoint &p)
     bool state = toolBar->getAutoReloadState();
     VirtSecretControlMenu *secControlMenu =
             new VirtSecretControlMenu(this, params, state);
-    connect(secControlMenu, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    connect(secControlMenu, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
     secControlMenu->move(QCursor::pos());
     secControlMenu->exec();
-    disconnect(secControlMenu, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
+    disconnect(secControlMenu, SIGNAL(execMethod(const Act_Param&)),
+               this, SLOT(execAction(const Act_Param&)));
     secControlMenu->deleteLater();
 }
 void VirtSecretControl::entityDoubleClicked(const QModelIndex &index)
@@ -192,17 +192,18 @@ void VirtSecretControl::entityDoubleClicked(const QModelIndex &index)
         qDebug()<<virtSecretModel->DataList.at(index.row())->getUUID();
     }
 }
-void VirtSecretControl::execAction(const QStringList &l)
+void VirtSecretControl::execAction(const Act_Param &param)
 {
     TASK task;
-    task.type = "secret";
+    task.type       = VIRT_SECRET;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
+    task.method     = param.method;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtSecretModel->DataList.count()>idx.row() ) {
         QString uuid = virtSecretModel->DataList.at(idx.row())->getUUID();
         task.object = uuid;
-        if        ( l.first()=="defineVirtSecret" ) {
+        if        ( param.method==defineEntity ) {
             QString xml;
             bool show = false;
             // show Secret Creator widget
@@ -218,7 +219,6 @@ void VirtSecretControl::execAction(const QStringList &l)
                 msgRepeater(msg);
                 if ( show ) QDesktopServices::openUrl(QUrl(xml));
                 task.action     = DEFINE_ENTITY;
-                task.method     = l.first();
                 task.args.path  = xml;
                 task.secret->setSecretValue(
                             createVirtSec->getSecretValue());
@@ -226,24 +226,23 @@ void VirtSecretControl::execAction(const QStringList &l)
             };
             createVirtSec->deleteLater();
             //qDebug()<<xml<<"path"<<result;
-        } else if ( l.first()=="undefineVirtSecret" ) {
+        } else if ( param.method==undefineEntity ) {
             task.action     = UNDEFINE_ENTITY;
-            task.method     = l.first();
             emit addNewTask(task);
-        } else if ( l.first()=="getVirtSecretXMLDesc" ) {
+        } else if ( param.method==getEntityXMLDesc ) {
             task.action     = GET_XML_DESCRIPTION;
-            task.method     = l.first();
             emit addNewTask(task);
-        } else if ( l.first()=="reloadVirtSecret" ) {
+        } else if ( param.method==reloadEntity ) {
             reloadState();
         };
-    } else if ( l.first()=="reloadVirtSecret" ) {
+    } else if ( param.method==reloadEntity ) {
         reloadState();
-    } else if ( l.first()=="defineVirtSecret" ) {
+    } else if ( param.method==defineEntity ) {
         QString xml;
         bool show = false;
         // show Secret Creator widget
-        CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, ptr_ConnPtr);
+        CreateVirtSecret *createVirtSec =
+                new CreateVirtSecret(this, ptr_ConnPtr);
         int result = createVirtSec->exec();
         if ( createVirtSec!=nullptr && result==QDialog::Accepted ) {
             xml = createVirtSec->getXMLDescFileName();
@@ -255,7 +254,6 @@ void VirtSecretControl::execAction(const QStringList &l)
             msgRepeater(msg);
             if ( show ) QDesktopServices::openUrl(QUrl(xml));
             task.action     = DEFINE_ENTITY;
-            task.method     = l.first();
             task.args.path  = xml;
             task.secret->setSecretValue(
                         createVirtSec->getSecretValue());

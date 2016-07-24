@@ -34,7 +34,7 @@ private slots:
     void                 changeDockVisibility();
     void                 entityClicked(const QPoint&);
     void                 entityDoubleClicked(const QModelIndex&);
-    void                 execAction(const QStringList&);
+    void                 execAction(const Act_Param&);
 };
 
 #endif // VIRT_SECRET_CONTROL_H

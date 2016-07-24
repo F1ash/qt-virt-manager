@@ -18,8 +18,8 @@ public:
     ~VirtNWFilterToolBar();
 
 signals:
-    void             fileForMethod(const OFILE_TASK&);
-    void             execMethod(const QStringList&);
+    void             fileForMethod(const Act_Param&);
+    void             execMethod(const Act_Param&);
 
 private:
     OpenFileMenu    *define_Menu;

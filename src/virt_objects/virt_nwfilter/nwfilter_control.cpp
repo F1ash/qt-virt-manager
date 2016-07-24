@@ -21,10 +21,10 @@ VirtNWFilterControl::VirtNWFilterControl(QWidget *parent) :
     settings.endGroup();
     toolBar = new VirtNWFilterToolBar(this);
     addToolBar(toolBar->get_ToolBarArea(area_int), toolBar);
-    connect(toolBar, SIGNAL(fileForMethod(const OFILE_TASK&)),
-            this, SLOT(newVirtEntityFromXML(const OFILE_TASK&)));
-    connect(toolBar, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    connect(toolBar, SIGNAL(fileForMethod(const Act_Param&)),
+            this, SLOT(newVirtEntityFromXML(const Act_Param&)));
+    connect(toolBar, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
 }
 VirtNWFilterControl::~VirtNWFilterControl()
 {
@@ -123,7 +123,7 @@ void VirtNWFilterControl::resultReceiver(Result data)
             reloadState();
             // for different action's specified manipulation
             switch (data.action) {
-            case _EMPTY_ACTION:
+            case _NONE_ACTION:
                 // some job;
                 break;
             default:
@@ -139,11 +139,11 @@ void VirtNWFilterControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type = "nwfilter";
+    task.type       = VIRT_NETWORK_FILTER;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = "reloadVirtNWFilter";
+    task.method     = reloadEntity;
     emit addNewTask(task);
 }
 void VirtNWFilterControl::changeDockVisibility()
@@ -166,12 +166,12 @@ void VirtNWFilterControl::entityClicked(const QPoint &p)
     bool state = toolBar->getAutoReloadState();
     VirtNWFilterControlMenu *secControlMenu =
             new VirtNWFilterControlMenu(this, params, state);
-    connect(secControlMenu, SIGNAL(execMethod(const QStringList&)),
-            this, SLOT(execAction(const QStringList&)));
+    connect(secControlMenu, SIGNAL(execMethod(const Act_Param&)),
+            this, SLOT(execAction(const Act_Param&)));
     secControlMenu->move(QCursor::pos());
     secControlMenu->exec();
-    disconnect(secControlMenu, SIGNAL(execMethod(const QStringList&)),
-               this, SLOT(execAction(const QStringList&)));
+    disconnect(secControlMenu, SIGNAL(execMethod(const Act_Param&)),
+               this, SLOT(execAction(const Act_Param&)));
     secControlMenu->deleteLater();
 }
 void VirtNWFilterControl::entityDoubleClicked(const QModelIndex &index)
@@ -180,47 +180,43 @@ void VirtNWFilterControl::entityDoubleClicked(const QModelIndex &index)
         qDebug()<<virtNWFilterModel->DataList.at(index.row())->getUUID();
     }
 }
-void VirtNWFilterControl::execAction(const QStringList &l)
+void VirtNWFilterControl::execAction(const Act_Param &param)
 {
     TASK task;
-    task.type = "nwfilter";
+    task.type       = VIRT_NETWORK_FILTER;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
+    task.method     = param.method;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtNWFilterModel->DataList.count()>idx.row() ) {
         QString uuid = virtNWFilterModel->DataList.at(idx.row())->getUUID();
         task.object = uuid;
-        if        ( l.first()=="defineVirtNWFilter" ) {
-            task.method     = l.first();
+        if        ( param.method==defineEntity ) {
             task.action     = DEFINE_ENTITY;
             emit nwfilterToEditor(task);
-        } else if ( l.first()=="undefineVirtNWFilter" ) {
+        } else if ( param.method==undefineEntity ) {
             task.action     = UNDEFINE_ENTITY;
-            task.method     = l.first();
             emit addNewTask(task);
-        } else if ( l.first()=="getVirtNWFilterXMLDesc" ) {
+        } else if ( param.method==getEntityXMLDesc ) {
             task.action     = GET_XML_DESCRIPTION;
-            task.method     = l.first();
             emit addNewTask(task);
-        } else if ( l.first()=="reloadVirtNWFilter" ) {
+        } else if ( param.method==reloadEntity ) {
             reloadState();
         };
-    } else if ( l.first()=="reloadVirtNWFilter" ) {
+    } else if ( param.method==reloadEntity ) {
         reloadState();
     };
 }
-void VirtNWFilterControl::newVirtEntityFromXML(const OFILE_TASK &args)
+void VirtNWFilterControl::newVirtEntityFromXML(const Act_Param &args)
 {
     TASK task;
-    task.type = "nwfilter";
-    Actions act = DEFINE_ENTITY;
-    QString actName = "defineVirtNWFilter";
+    task.type       = VIRT_NETWORK_FILTER;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.method     = actName;
-    task.action     = act;
+    task.method     = defineEntity;
+    task.action     = DEFINE_ENTITY;
     task.args.path  = args.path;
-    if ( args.context=="AsIs" ) {
+    if ( args.context==DO_AsIs ) {
         emit addNewTask(task);
     } else {
         emit nwfilterToEditor(task);
