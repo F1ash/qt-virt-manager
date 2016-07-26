@@ -409,62 +409,117 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
         _font.setPixelSize(heightPart/8);
         painter.setFont(_font);
         //painter.setOpacity(0.50);
-        painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite
         if ( !r1.intersects(currRect) ) {
+            painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite
             painter.drawText(
                         r1.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Connections\nCtrl+Alt+C");
             qDebug()<<"r1!=ev->rect()"<<r1;
+        } else {
+            painter.setPen(Qt::yellow);
+            painter.drawText(
+                        r1.adjusted(0, heightPart*2/3, 0, 0),
+                        Qt::AlignCenter,
+                        "Connections\nCtrl+Alt+C");
         };
         if ( !r3.intersects(currRect) ) {
+            painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite
             painter.drawText(
                         r3.adjusted(0, heightPart/2, 0, 0),
                         Qt::AlignCenter,
                         "Virtual\nmachines\nCtrl+Alt+D");
             qDebug()<<"r3!=ev->rect()"<<r3;
+        } else {
+            painter.setPen(Qt::yellow);
+            painter.drawText(
+                        r3.adjusted(0, heightPart/2, 0, 0),
+                        Qt::AlignCenter,
+                        "Virtual\nmachines\nCtrl+Alt+D");
         };
         if ( !r4.intersects(currRect) ) {
+            painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite
             painter.drawText(
                         r4.adjusted(0, heightPart/2, 0, 0),
                         Qt::AlignCenter,
                         "Network\nfilters\nCtrl+Alt+F");
             qDebug()<<"r4!=ev->rect()"<<r4;
+        } else {
+            painter.setPen(Qt::yellow);
+            painter.drawText(
+                        r4.adjusted(0, heightPart/2, 0, 0),
+                        Qt::AlignCenter,
+                        "Network\nfilters\nCtrl+Alt+F");
         };
         if ( !r5.intersects(currRect) ) {
+            painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite
             painter.drawText(
                         r5.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Networks\nCtrl+Alt+N");
             qDebug()<<"r5!=ev->rect()"<<r5;
+        } else {
+            painter.setPen(Qt::yellow);
+            painter.drawText(
+                        r5.adjusted(0, heightPart*2/3, 0, 0),
+                        Qt::AlignCenter,
+                        "Networks\nCtrl+Alt+N");
         };
         if ( !r6.intersects(currRect) ) {
+            painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite
             painter.drawText(
                         r6.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Storages\nCtrl+Alt+S");
             qDebug()<<"r6!=ev->rect()"<<r6;
+        } else {
+            painter.setPen(Qt::yellow);
+            painter.drawText(
+                        r6.adjusted(0, heightPart*2/3, 0, 0),
+                        Qt::AlignCenter,
+                        "Storages\nCtrl+Alt+S");
         };
         if ( !r7.intersects(currRect) ) {
+            painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite
             painter.drawText(
                         r7.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Secrets\nCtrl+Alt+E");
             qDebug()<<"r7!=ev->rect()"<<r7;
+        } else {
+            painter.setPen(Qt::yellow);
+            painter.drawText(
+                        r7.adjusted(0, heightPart*2/3, 0, 0),
+                        Qt::AlignCenter,
+                        "Secrets\nCtrl+Alt+E");
         };
         if ( !r8.intersects(currRect) ) {
+            painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite
             painter.drawText(
                         r8.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Interfaces\nCtrl+Alt+I");
             qDebug()<<"r8!=ev->rect()"<<r8;
+        } else {
+            painter.setPen(Qt::yellow);
+            painter.drawText(
+                        r8.adjusted(0, heightPart*2/3, 0, 0),
+                        Qt::AlignCenter,
+                        "Interfaces\nCtrl+Alt+I");
         };
         if ( !r9.intersects(currRect) ) {
+            painter.setPen(QColor::fromRgb(248, 248, 255, 255)); // ghostwhite
             painter.drawText(
                         r9.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Log\nCtrl+Alt+G");
             qDebug()<<"r9!=ev->rect()"<<r9;
+        } else {
+            painter.setPen(Qt::yellow);
+            painter.drawText(
+                        r9.adjusted(0, heightPart*2/3, 0, 0),
+                        Qt::AlignCenter,
+                        "Log\nCtrl+Alt+G");
         };
     };
 }
