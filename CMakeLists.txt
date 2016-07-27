@@ -878,6 +878,16 @@ set (QTERM_TS
     src/vm_viewer/qterminal/translations/qterminal_pt.ts
     src/vm_viewer/qterminal/translations/qterminal_ru.ts
 )
+
+set (VIEWER_HEADERS
+    src/vm_viewer/mainwindow.h
+    #${HEADERS_FOR_VIEWER}
+)
+set (VIEWER_SOURCES
+    src/vm_viewer/main.cpp
+    src/vm_viewer/mainwindow.cpp
+    #${SOURCES_FOR_VIEWER}
+)
 set (VIEWER_RCC_SRC
     src/qt_remote_viewer.qrc
 )
@@ -967,15 +977,6 @@ install ( DIRECTORY src/misc
 install ( FILES src/icons/256x256/apps/virtual-engineering.png
     DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
 
-set (VIEWER_HEADERS
-    src/vm_viewer/mainwindow.h
-    #${HEADERS_FOR_VIEWER}
-)
-set (VIEWER_SOURCES
-    src/vm_viewer/main.cpp
-    src/vm_viewer/mainwindow.cpp
-    #${SOURCES_FOR_VIEWER}
-)
 add_executable(qt-remote-viewer ${VIEWER_HEADERS} ${VIEWER_SOURCES}
     ${MOC_VIEWER_SOURCES} ${VIEWER_RCC})
 target_link_libraries (qt-remote-viewer ${BUILD_PROJECT_LIBRARIES})
