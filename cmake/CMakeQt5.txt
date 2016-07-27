@@ -10,10 +10,12 @@ include_directories(
     ${Qt5Multimedia_INCLUDE_DIRS}
     ${Qt5Network_INCLUDE_DIRS})
 qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
-qt5_wrap_ui(UI_SRCS ${QTERM_UI_SRC})
+qt5_wrap_ui  (UI_SRCS ${QTERM_UI_SRC})
+qt5_wrap_cpp (MOC_VIEWER_SOURCES ${VIEWER_HEADERS})
 
 qt5_add_resources(QTERM_RCC ${QTERM_RCC_SRC})
 #qt5_add_translation(QTERM_QM ${QTERM_TS})
+qt5_add_resources(VIEWER_RCC ${VIEWER_RCC_SRC})
 
 if (WIN32)
     set (BUILD_PROJECT_LIBRARIES

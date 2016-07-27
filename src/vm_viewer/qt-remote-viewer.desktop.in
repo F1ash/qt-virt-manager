@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Qt@BUILD_QT_VERSION@ Remote Viewer
+GenericName=Qt@BUILD_QT_VERSION@ Remote Desktop Viewer
+Type=Application
+Categories=Development;System;Qt;
+Icon=remote-desktop-viewer
+Exec=@PROJ_PREFIX@-remote-viewer
+Terminal=false
+StartupNotify=true

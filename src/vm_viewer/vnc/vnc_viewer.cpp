@@ -100,7 +100,8 @@ void VNC_Viewer::init()
             connect(actFullScreen, SIGNAL(activated()),
                     SLOT(fullScreenTriggered()));
         } else {
-            msg = QString("In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")
+            msg = QString(
+            "In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")
                     .arg(domain)
                     .arg((!graph.isNull())?
                              graph.attribute("type"):"???");
@@ -110,7 +111,8 @@ void VNC_Viewer::init()
         };
     } else {
         viewerToolBar->setEnabled(false);
-        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL or inactive")
+        msg = QString(
+        "In '<b>%1</b>':<br> Connection or Domain is NULL or inactive")
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);

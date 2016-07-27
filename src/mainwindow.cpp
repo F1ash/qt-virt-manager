@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Qt VirtManager");
     QIcon::setThemeName("QtVirtManager");
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
-    setMouseTracking(true);
+    //setMouseTracking(true);
     setDockOptions(
                 QMainWindow::AnimatedDocks |
                 QMainWindow::ForceTabbedDocks);

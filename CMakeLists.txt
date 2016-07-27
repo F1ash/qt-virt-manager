@@ -81,6 +81,76 @@ set (PROJECT_VERSION 1.0.0)
 set (VERSION_MAJOR   0)
 set (VERSION_MIDDLE  34)
 set (VERSION_MINOR   50)
+set (HEADERS_FOR_VIEWER
+    src/vm_viewer/vm_viewer.h
+    src/vm_viewer/viewer_toolbar.h
+    src/vm_viewer/vm_state_widget.h
+    src/vm_viewer/transformation_mode_menu.h
+
+    src/vm_viewer/spice/spice_viewer.h
+    src/vm_viewer/vnc/vnc_viewer.h
+
+    src/vm_viewer/qspice_widgets/qspice-channel.h
+    src/vm_viewer/qspice_widgets/qspice-cursor-channel.h
+    src/vm_viewer/qspice_widgets/qspice-display-channel.h
+    src/vm_viewer/qspice_widgets/qspice-helper.h
+    src/vm_viewer/qspice_widgets/qspice-inputs-channel.h
+    src/vm_viewer/qspice_widgets/qspice-main-channel.h
+    src/vm_viewer/qspice_widgets/qspice-object.h
+    src/vm_viewer/qspice_widgets/qspice-session.h
+    src/vm_viewer/qspice_widgets/qspice-widget.h
+    src/vm_viewer/qspice_widgets/qspice-smartcard-channel.h
+    src/vm_viewer/qspice_widgets/qspice-smartcard-manager.h
+    src/vm_viewer/qspice_widgets/qspice-smartcard-widget.h
+    src/vm_viewer/qspice_widgets/qspice-usbredir-channel.h
+    src/vm_viewer/qspice_widgets/qspice-webdav-channel.h
+    src/vm_viewer/qspice_widgets/qspice-port-channel.h
+    src/vm_viewer/qspice_widgets/qspice-usbdevice-manager.h
+    src/vm_viewer/qspice_widgets/qspice-usbdevice-widget.h
+    src/vm_viewer/qspice_widgets/qspice-playback-channel.h
+    src/vm_viewer/qspice_widgets/qspice-record-channel.h
+    src/vm_viewer/qspice_widgets/qspice-audio.h
+
+    src/vm_viewer/krdc_vnc_qtonly/Machine_View.h
+    src/vm_viewer/krdc_vnc_qtonly/remoteview.h
+    src/vm_viewer/krdc_vnc_qtonly/vncclientthread.h
+    src/vm_viewer/krdc_vnc_qtonly/vncview.h
+)
+set (SOURCES_FOR_VIEWER
+    src/vm_viewer/vm_viewer.cpp
+    src/vm_viewer/viewer_toolbar.cpp
+    src/vm_viewer/vm_state_widget.cpp
+    src/vm_viewer/transformation_mode_menu.cpp
+
+    src/vm_viewer/spice/spice_viewer.cpp
+    src/vm_viewer/vnc/vnc_viewer.cpp
+
+    src/vm_viewer/qspice_widgets/qspice-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-cursor-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-display-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-helper.cpp
+    src/vm_viewer/qspice_widgets/qspice-inputs-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-main-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-object.cpp
+    src/vm_viewer/qspice_widgets/qspice-session.cpp
+    src/vm_viewer/qspice_widgets/qspice-widget.cpp
+    src/vm_viewer/qspice_widgets/qspice-smartcard-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-smartcard-manager.cpp
+    src/vm_viewer/qspice_widgets/qspice-smartcard-widget.cpp
+    src/vm_viewer/qspice_widgets/qspice-usbredir-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-port-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-webdav-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-usbdevice-manager.cpp
+    src/vm_viewer/qspice_widgets/qspice-usbdevice-widget.cpp
+    src/vm_viewer/qspice_widgets/qspice-playback-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-record-channel.cpp
+    src/vm_viewer/qspice_widgets/qspice-audio.cpp
+
+    src/vm_viewer/krdc_vnc_qtonly/Machine_View.cpp
+    src/vm_viewer/krdc_vnc_qtonly/remoteview.cpp
+    src/vm_viewer/krdc_vnc_qtonly/vncclientthread.cpp
+    src/vm_viewer/krdc_vnc_qtonly/vncview.cpp
+)
 set (HEADERS
   src/mainwindow.h
   src/log_dock/log_dock.h
@@ -408,15 +478,10 @@ set (HEADERS
 
   src/create_widgets/nwfilter/create_virt_nwfilter.h
 
-  src/vm_viewer/vm_viewer.h
-  src/vm_viewer/viewer_toolbar.h
-  src/vm_viewer/vm_state_widget.h
-  src/vm_viewer/transformation_mode_menu.h
+  ${HEADERS_FOR_VIEWER}
 
   src/vm_viewer/lxc/lxc_viewer.h
   src/vm_viewer/lxc/lxc_viewer_thread.h
-  src/vm_viewer/spice/spice_viewer.h
-  src/vm_viewer/vnc/vnc_viewer.h
   
   src/vm_viewer/qterminal/tabwidget.h
   src/vm_viewer/qterminal/termwidgetholder.h
@@ -427,32 +492,6 @@ set (HEADERS
   src/vm_viewer/qterminal/properties.h
   src/vm_viewer/qterminal/termwidget.h
   src/vm_viewer/qterminal/propertiesdialog.h
-
-  src/vm_viewer/qspice_widgets/qspice-channel.h
-  src/vm_viewer/qspice_widgets/qspice-cursor-channel.h
-  src/vm_viewer/qspice_widgets/qspice-display-channel.h
-  src/vm_viewer/qspice_widgets/qspice-helper.h
-  src/vm_viewer/qspice_widgets/qspice-inputs-channel.h
-  src/vm_viewer/qspice_widgets/qspice-main-channel.h
-  src/vm_viewer/qspice_widgets/qspice-object.h
-  src/vm_viewer/qspice_widgets/qspice-session.h
-  src/vm_viewer/qspice_widgets/qspice-widget.h
-  src/vm_viewer/qspice_widgets/qspice-smartcard-channel.h
-  src/vm_viewer/qspice_widgets/qspice-smartcard-manager.h
-  src/vm_viewer/qspice_widgets/qspice-smartcard-widget.h
-  src/vm_viewer/qspice_widgets/qspice-usbredir-channel.h
-  src/vm_viewer/qspice_widgets/qspice-webdav-channel.h
-  src/vm_viewer/qspice_widgets/qspice-port-channel.h
-  src/vm_viewer/qspice_widgets/qspice-usbdevice-manager.h
-  src/vm_viewer/qspice_widgets/qspice-usbdevice-widget.h
-  src/vm_viewer/qspice_widgets/qspice-playback-channel.h
-  src/vm_viewer/qspice_widgets/qspice-record-channel.h
-  src/vm_viewer/qspice_widgets/qspice-audio.h
-
-  src/vm_viewer/krdc_vnc_qtonly/Machine_View.h
-  src/vm_viewer/krdc_vnc_qtonly/remoteview.h
-  src/vm_viewer/krdc_vnc_qtonly/vncclientthread.h
-  src/vm_viewer/krdc_vnc_qtonly/vncview.h
 
   src/state_monitor/domain_state_monitor.h
   src/state_monitor/domain_monitor_thread.h
@@ -787,15 +826,10 @@ set (SOURCES
 
   src/create_widgets/nwfilter/create_virt_nwfilter.cpp
 
-  src/vm_viewer/vm_viewer.cpp
-  src/vm_viewer/viewer_toolbar.cpp
-  src/vm_viewer/vm_state_widget.cpp
-  src/vm_viewer/transformation_mode_menu.cpp
+  ${SOURCES_FOR_VIEWER}
 
   src/vm_viewer/lxc/lxc_viewer.cpp
   src/vm_viewer/lxc/lxc_viewer_thread.cpp
-  src/vm_viewer/spice/spice_viewer.cpp
-  src/vm_viewer/vnc/vnc_viewer.cpp
 
   src/vm_viewer/qterminal/properties.cpp
   src/vm_viewer/qterminal/bookmarkswidget.cpp
@@ -806,32 +840,6 @@ set (SOURCES
   src/vm_viewer/qterminal/termwidget.cpp
   src/vm_viewer/qterminal/fontdialog.cpp
 
-  src/vm_viewer/qspice_widgets/qspice-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-cursor-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-display-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-helper.cpp
-  src/vm_viewer/qspice_widgets/qspice-inputs-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-main-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-object.cpp
-  src/vm_viewer/qspice_widgets/qspice-session.cpp
-  src/vm_viewer/qspice_widgets/qspice-widget.cpp
-  src/vm_viewer/qspice_widgets/qspice-smartcard-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-smartcard-manager.cpp
-  src/vm_viewer/qspice_widgets/qspice-smartcard-widget.cpp
-  src/vm_viewer/qspice_widgets/qspice-usbredir-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-port-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-webdav-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-usbdevice-manager.cpp
-  src/vm_viewer/qspice_widgets/qspice-usbdevice-widget.cpp
-  src/vm_viewer/qspice_widgets/qspice-playback-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-record-channel.cpp
-  src/vm_viewer/qspice_widgets/qspice-audio.cpp
-
-  src/vm_viewer/krdc_vnc_qtonly/Machine_View.cpp
-  src/vm_viewer/krdc_vnc_qtonly/remoteview.cpp
-  src/vm_viewer/krdc_vnc_qtonly/vncclientthread.cpp
-  src/vm_viewer/krdc_vnc_qtonly/vncview.cpp
-
   src/state_monitor/domain_state_monitor.cpp
   src/state_monitor/domain_monitor_thread.cpp
   src/state_monitor/domain_state_viewer.cpp
@@ -840,6 +848,7 @@ set (SOURCES
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE qt-virt-manager.desktop)
+set (VIEWER_DESKTOP_FILE src/vm_viewer/qt-remote-viewer.desktop)
 
 project (${PROJECT_NAME})
 include_directories (
@@ -850,17 +859,17 @@ configure_file (
     ${CMAKE_CURRENT_BINARY_DIR}/version.h
 )
 
-set(QTERM_UI_SRC
+set (QTERM_UI_SRC
     src/vm_viewer/qterminal/forms/qterminal.ui
     src/vm_viewer/qterminal/forms/propertiesdialog.ui
     src/vm_viewer/qterminal/forms/bookmarkswidget.ui
     src/vm_viewer/qterminal/forms/fontdialog.ui
 )
-set(QTERM_RCC_SRC
+set (QTERM_RCC_SRC
     #src/vm_viewer/qterminal/icons.qrc
     src/qt_virt_manager.qrc
 )
-set(QTERM_TS
+set (QTERM_TS
     src/vm_viewer/qterminal/translations/qterminal_cs.ts
     src/vm_viewer/qterminal/translations/qterminal_de.ts
     src/vm_viewer/qterminal/translations/qterminal_es.ts
@@ -868,6 +877,9 @@ set(QTERM_TS
     src/vm_viewer/qterminal/translations/qterminal_it.ts
     src/vm_viewer/qterminal/translations/qterminal_pt.ts
     src/vm_viewer/qterminal/translations/qterminal_ru.ts
+)
+set (VIEWER_RCC_SRC
+    src/qt_remote_viewer.qrc
 )
 
 ##
@@ -938,7 +950,7 @@ message(STATUS "Build with SPICE_AUDIO: ${USE_SPICE_AUDIO}")
 add_executable (${PROJECT_NAME}
     ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS} ${QTERM_RCC} ${QTERM_QM})
 target_link_libraries (${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
-SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS
+SET_TARGET_PROPERTIES (${PROJECT_NAME} PROPERTIES COMPILE_FLAGS
     "-DWITH_LIBCACARD=${WITH_LIBCACARD} \
      -DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO} \
      -DQSPICE_WIDGET_COMPILATION \
@@ -954,4 +966,32 @@ install ( DIRECTORY src/misc
     DESTINATION ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME} )
 install ( FILES src/icons/256x256/apps/virtual-engineering.png
     DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
+
+set (VIEWER_HEADERS
+    src/vm_viewer/mainwindow.h
+    #${HEADERS_FOR_VIEWER}
+)
+set (VIEWER_SOURCES
+    src/vm_viewer/main.cpp
+    src/vm_viewer/mainwindow.cpp
+    #${SOURCES_FOR_VIEWER}
+)
+add_executable(qt-remote-viewer ${VIEWER_HEADERS} ${VIEWER_SOURCES}
+    ${MOC_VIEWER_SOURCES} ${VIEWER_RCC})
+target_link_libraries (qt-remote-viewer ${BUILD_PROJECT_LIBRARIES})
+SET_TARGET_PROPERTIES (qt-remote-viewer PROPERTIES COMPILE_FLAGS
+    "-DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO} \
+     -DQSPICE_WIDGET_COMPILATION \
+     -DQTONLY")
+
+configure_file ( ${VIEWER_DESKTOP_FILE}.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_DESKTOP_FILE} )
+install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_DESKTOP_FILE}
+    DESTINATION ${SHARE_INSTALL_PREFIX}/applications
+    RENAME qt-remote-viewer.desktop )
+install ( TARGETS qt-remote-viewer
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
+install ( FILES src/icons/256x256/apps/remote-desktop-viewer.png
+    DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
+
 # * end
