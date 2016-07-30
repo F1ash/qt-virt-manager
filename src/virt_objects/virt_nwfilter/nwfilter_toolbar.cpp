@@ -41,7 +41,7 @@ VirtNWFilterToolBar::VirtNWFilterToolBar(QWidget *parent) :
     connect(define_Menu, SIGNAL(fileForMethod(const Act_Param&)),
             this, SIGNAL(fileForMethod(const Act_Param&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
-            this, SLOT(detectTriggerredAction(QAction*)));
+            this, SLOT(detectTriggeredAction(QAction*)));
 }
 VirtNWFilterToolBar::~VirtNWFilterToolBar()
 {
@@ -111,7 +111,7 @@ void VirtNWFilterToolBar::showMenu()
         act->menu()->move(QCursor::pos());
     };
 }
-void VirtNWFilterToolBar::detectTriggerredAction(QAction *action)
+void VirtNWFilterToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if        ( action == define_Action ) {

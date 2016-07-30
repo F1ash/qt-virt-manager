@@ -83,7 +83,7 @@ QSpiceWidget::~QSpiceWidget()
     disconnectFromSpiceSource();
 }
 
-bool QSpiceWidget::connectToSpiceSource(QString &uri)
+bool QSpiceWidget::connectToSpiceSource(const QString &uri)
 {
     spiceSession->setUri(uri);
     return spiceSession->openSession();

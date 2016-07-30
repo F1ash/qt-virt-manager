@@ -77,18 +77,13 @@ IF (NOT LIB_SUFFIX)
 ENDIF (NOT LIB_SUFFIX)
 
 set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
-set (PROJECT_VERSION 1.0.0)
 set (VERSION_MAJOR   0)
 set (VERSION_MIDDLE  34)
 set (VERSION_MINOR   50)
 set (HEADERS_FOR_VIEWER
-    src/vm_viewer/vm_viewer.h
     src/vm_viewer/viewer_toolbar.h
     src/vm_viewer/vm_state_widget.h
     src/vm_viewer/transformation_mode_menu.h
-
-    src/vm_viewer/spice/spice_viewer.h
-    src/vm_viewer/vnc/vnc_viewer.h
 
     src/vm_viewer/qspice_widgets/qspice-channel.h
     src/vm_viewer/qspice_widgets/qspice-cursor-channel.h
@@ -117,13 +112,9 @@ set (HEADERS_FOR_VIEWER
     src/vm_viewer/krdc_vnc_qtonly/vncview.h
 )
 set (SOURCES_FOR_VIEWER
-    src/vm_viewer/vm_viewer.cpp
     src/vm_viewer/viewer_toolbar.cpp
     src/vm_viewer/vm_state_widget.cpp
     src/vm_viewer/transformation_mode_menu.cpp
-
-    src/vm_viewer/spice/spice_viewer.cpp
-    src/vm_viewer/vnc/vnc_viewer.cpp
 
     src/vm_viewer/qspice_widgets/qspice-channel.cpp
     src/vm_viewer/qspice_widgets/qspice-cursor-channel.cpp
@@ -478,6 +469,9 @@ set (HEADERS
 
   src/create_widgets/nwfilter/create_virt_nwfilter.h
 
+  src/vm_viewer/vm_viewer.h
+  src/vm_viewer/spice/spice_viewer.h
+  src/vm_viewer/vnc/vnc_viewer.h
   ${HEADERS_FOR_VIEWER}
 
   src/vm_viewer/lxc/lxc_viewer.h
@@ -826,6 +820,9 @@ set (SOURCES
 
   src/create_widgets/nwfilter/create_virt_nwfilter.cpp
 
+  src/vm_viewer/vm_viewer.cpp
+  src/vm_viewer/spice/spice_viewer.cpp
+  src/vm_viewer/vnc/vnc_viewer.cpp
   ${SOURCES_FOR_VIEWER}
 
   src/vm_viewer/lxc/lxc_viewer.cpp
@@ -850,7 +847,6 @@ set (SOURCES_DIRS src)
 set (DESKTOP_FILE qt-virt-manager.desktop)
 set (VIEWER_DESKTOP_FILE src/vm_viewer/qt-remote-viewer.desktop)
 
-project (${PROJECT_NAME})
 include_directories (
     ${CMAKE_CURRENT_BINARY_DIR}
     ${SOURCES_DIRS})
@@ -881,12 +877,22 @@ set (QTERM_TS
 
 set (VIEWER_HEADERS
     src/vm_viewer/mainwindow.h
-    #${HEADERS_FOR_VIEWER}
+    src/vm_viewer/get_url_dialog.h
+    src/vm_viewer/vm_viewer_only.h
+    src/vm_viewer/spice/spice_viewer_only.h
+    src/vm_viewer/vnc/vnc_viewer_only.h
+    ${HEADERS_FOR_VIEWER}
+    src/create_widgets/common/click_label.h
 )
 set (VIEWER_SOURCES
     src/vm_viewer/main.cpp
     src/vm_viewer/mainwindow.cpp
-    #${SOURCES_FOR_VIEWER}
+    src/vm_viewer/get_url_dialog.cpp
+    src/vm_viewer/vm_viewer_only.cpp
+    src/vm_viewer/spice/spice_viewer_only.cpp
+    src/vm_viewer/vnc/vnc_viewer_only.cpp
+    ${SOURCES_FOR_VIEWER}
+    src/create_widgets/common/click_label.cpp
 )
 set (VIEWER_RCC_SRC
     src/qt_remote_viewer.qrc
@@ -895,9 +901,21 @@ set (VIEWER_RCC_SRC
 ##
 if ( QT4_BUILD )
     include("${CMAKE_MODULE_PATH}/CMakeQt4.txt")
+    qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
+    qt4_wrap_ui  (UI_SRCS ${QTERM_UI_SRC})
+    qt4_add_resources(QTERM_RCC ${QTERM_RCC_SRC})
+    #qt4_add_translation(QTERM_QM ${QTERM_TS})
+    qt4_wrap_cpp (MOC_VIEWER_SOURCES ${VIEWER_HEADERS})
+    qt4_add_resources(VIEWER_RCC ${VIEWER_RCC_SRC})
     set(TERM_WIDGET_LIB qtermwidget4)
 else ( QT4_BUILD )
     include("${CMAKE_MODULE_PATH}/CMakeQt5.txt")
+    qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
+    qt5_wrap_ui  (UI_SRCS ${QTERM_UI_SRC})
+    qt5_add_resources(QTERM_RCC ${QTERM_RCC_SRC})
+    #qt5_add_translation(QTERM_QM ${QTERM_TS})
+    qt5_wrap_cpp (MOC_VIEWER_SOURCES ${VIEWER_HEADERS})
+    qt5_add_resources(VIEWER_RCC ${VIEWER_RCC_SRC})
     set(TERM_WIDGET_LIB qtermwidget5)
 endif( QT4_BUILD )
 ##
@@ -977,10 +995,11 @@ install ( DIRECTORY src/misc
 install ( FILES src/icons/256x256/apps/virtual-engineering.png
     DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
 
-add_executable(qt-remote-viewer ${VIEWER_HEADERS} ${VIEWER_SOURCES}
+set (VIEWER_NAME ${PROJ_PREFIX}-remote-viewer)
+add_executable(${VIEWER_NAME} ${VIEWER_HEADERS} ${VIEWER_SOURCES}
     ${MOC_VIEWER_SOURCES} ${VIEWER_RCC})
-target_link_libraries (qt-remote-viewer ${BUILD_PROJECT_LIBRARIES})
-SET_TARGET_PROPERTIES (qt-remote-viewer PROPERTIES COMPILE_FLAGS
+target_link_libraries (${VIEWER_NAME} ${BUILD_PROJECT_LIBRARIES})
+SET_TARGET_PROPERTIES (${VIEWER_NAME} PROPERTIES COMPILE_FLAGS
     "-DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO} \
      -DQSPICE_WIDGET_COMPILATION \
      -DQTONLY")
@@ -989,8 +1008,8 @@ configure_file ( ${VIEWER_DESKTOP_FILE}.in
     ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_DESKTOP_FILE} )
 install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_DESKTOP_FILE}
     DESTINATION ${SHARE_INSTALL_PREFIX}/applications
-    RENAME qt-remote-viewer.desktop )
-install ( TARGETS qt-remote-viewer
+    RENAME ${VIEWER_NAME}.desktop )
+install ( TARGETS ${VIEWER_NAME}
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
 install ( FILES src/icons/256x256/apps/remote-desktop-viewer.png
     DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )

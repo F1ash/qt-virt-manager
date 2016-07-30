@@ -42,7 +42,7 @@ private:
 private slots:
     void             timerEvent(QTimerEvent*);
     void             showMenu();
-    void             detectTriggerredAction(QAction*);
+    void             detectTriggeredAction(QAction*);
     void             changeAutoReloadState(bool);
 
 public slots:

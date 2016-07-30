@@ -1,122 +1,25 @@
-#include "spice_viewer.h"
+#include "spice_viewer_only.h"
 #include <QApplication>
 #include <QClipboard>
 extern "C" {
 #include <spice/vd_agent.h>
 }
 
-spcHlpThread::spcHlpThread(
-        QObject *parent, virConnectPtr *connPtrPtr, QString _domain) :
-    _VirtThread(parent, connPtrPtr), domain(_domain)
+Spice_Viewer_Only::Spice_Viewer_Only(
+        QWidget        *parent,
+        const QString   url) :
+    VM_Viewer_Only(parent, url)
 {
-
-}
-void spcHlpThread::run()
-{
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
-        emit ptrIsNull();
-        return;
-    };
-    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
-        sendConnErrors();
-        return;
-    };
-    domainPtr =virDomainLookupByName(
-                    *ptr_ConnPtr, domain.toUtf8().data());
-    domainIsActive = (virDomainIsActive(domainPtr)>0);
-    uri.append(virConnectGetURI(*ptr_ConnPtr));
-    // flag=0 for get running domain xml-description
-    runXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
-    if ( virConnectClose(*ptr_ConnPtr)<0 )
-        sendConnErrors();
-}
-
-Spice_Viewer::Spice_Viewer(
-        QWidget *parent, virConnectPtr *connPtrPtr,
-        QString arg1, QString arg2) :
-    VM_Viewer(parent, connPtrPtr, arg1, arg2)
-{
-    TYPE = "SPICE";
-
-    hlpThread = new spcHlpThread(this, ptr_ConnPtr, domain);
-    connect(hlpThread, SIGNAL(finished()),
-            this, SLOT(init()));
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
-    hlpThread->start();
+    viewerToolBar->removeAction(viewerToolBar->pause_Action);
+    viewerToolBar->removeAction(viewerToolBar->destroy_Action);
+    viewerToolBar->removeAction(viewerToolBar->snapshot_Action);
+    viewerToolBar->removeAction(viewerToolBar->sep1);
+    viewerToolBar->removeAction(viewerToolBar->sep2);
+    startId = startTimer(1000);
 }
 
 /* public slots */
-void Spice_Viewer::init()
-{
-    // get address or hostname from URI
-    // driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
-    QString msg;
-    if ( hlpThread->domainPtr!=nullptr && hlpThread->domainIsActive ) {
-        addr = hlpThread->uri.split("://").last();
-        hlpThread->uri = addr;
-        addr = hlpThread->uri.split("/").first();
-        hlpThread->uri = addr;
-        addr = hlpThread->uri.split(":").first();
-        hlpThread->uri = addr;
-        if ( hlpThread->uri.contains("@") ) {
-            addr = hlpThread->uri.split("@").last();
-            hlpThread->uri = addr;
-        };
-        addr.clear();
-        QDomDocument doc;
-        doc.setContent(hlpThread->runXmlDesc);
-        QDomElement graph = doc.firstChildElement("domain")
-           .firstChildElement("devices")
-           .firstChildElement("graphics");
-        //qDebug()<<doc.toByteArray(4);
-        if (graph.hasAttribute("listen")) {
-            // for listen address
-            addr = graph.attribute("listen");
-        } else if ( !graph.firstChildElement("listen").isNull() ) {
-            // for listen address from virt.network
-            addr = graph.firstChildElement("listen")
-                    .attribute("address");
-        } else {
-            if ( hlpThread->uri.isEmpty() ) {
-                addr = "127.0.0.1";
-                hlpThread->uri  = "127.0.0.1";
-            };
-        };
-        if ( addr!=hlpThread->uri && !hlpThread->uri.isEmpty() )
-            addr = hlpThread->uri;
-        port = (graph.hasAttribute("port"))?
-                    graph.attribute("port").toInt() : 5900;
-        //qDebug()<<"address:"<<addr<<port;
-        if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
-            initSpiceWidget();
-            actFullScreen = new QShortcut(
-                        QKeySequence(tr("Shift+F11", "View|Full Screen")),
-                        this);
-            connect(actFullScreen, SIGNAL(activated()),
-                    SLOT(fullScreenTriggered()));
-        } else {
-            msg = QString(
-            "In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")
-                    .arg(domain)
-                    .arg((!graph.isNull())?
-                             graph.attribute("type"):"???");
-            sendErrMsg(msg);
-            showErrorInfo(msg);
-            startCloseProcess();
-        };
-    } else {
-        viewerToolBar->setEnabled(false);
-        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL or inactive")
-                .arg(domain);
-        sendErrMsg(msg);
-        showErrorInfo(msg);
-        startCloseProcess();
-    };
-    sendConnErrors();
-    //qDebug()<<msg<<"viewer inits";
-}
-void Spice_Viewer::reconnectToVirtDomain()
+void Spice_Viewer_Only::reconnectToVirtDomain()
 {
     if ( nullptr!=spiceWdg ) {
         delete spiceWdg;
@@ -133,34 +36,34 @@ void Spice_Viewer::reconnectToVirtDomain()
         };
     };
 }
-void Spice_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
+void Spice_Viewer_Only::sendKeySeqToVirtDomain(Qt::Key key)
 {
     if ( nullptr==spiceWdg ) return;
     spiceWdg->sendKeySequience(key);
 }
-void Spice_Viewer::getScreenshotFromVirtDomain()
+void Spice_Viewer_Only::getScreenshotFromVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
     spiceWdg->getScreenshot();
 }
-void Spice_Viewer::copyFilesToVirtDomain()
+void Spice_Viewer_Only::copyFilesToVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
     QStringList fileNames = QFileDialog::getOpenFileNames(
                 this, "Copy files to Guest", "~");
     spiceWdg->fileCopyAsync(fileNames);
 }
-void Spice_Viewer::cancelCopyFilesToVirtDomain()
+void Spice_Viewer_Only::cancelCopyFilesToVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
     spiceWdg->cancelFileCopyAsync();
 }
-void Spice_Viewer::copyToClipboardFromVirtDomain()
+void Spice_Viewer_Only::copyToClipboardFromVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
     spiceWdg->copyClipboardDataFromGuest();
 }
-void Spice_Viewer::pasteClipboardToVirtDomain()
+void Spice_Viewer_Only::pasteClipboardToVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
     const QString _text =
@@ -210,13 +113,13 @@ void Spice_Viewer::pasteClipboardToVirtDomain()
                     _image.byteCount());
     };
 }
-void Spice_Viewer::fullScreenVirtDomain()
+void Spice_Viewer_Only::fullScreenVirtDomain()
 {
     fullScreenTriggered();
 }
 
 /* private slots */
-void Spice_Viewer::initSpiceWidget()
+void Spice_Viewer_Only::initSpiceWidget()
 {
     spiceWdg = new QSpiceWidget(this);
     spiceWdg->setAttribute(Qt::WA_OpaquePaintEvent, true);
@@ -225,7 +128,6 @@ void Spice_Viewer::initSpiceWidget()
     scrolled->setAlignment(Qt::AlignCenter);
     scrolled->setWidget(spiceWdg);
     setCentralWidget(scrolled);
-    spiceWdg->setGuestAttr(domain, connName);
     spiceWdg->setFullScreen(isFullScreen());
     connect(spiceWdg, SIGNAL(displayResized(const QSize&)),
             SLOT(resizeViewer(const QSize&)));
@@ -269,12 +171,11 @@ void Spice_Viewer::initSpiceWidget()
             this, SLOT(startAnimatedHide()));
 
     QSize around_size = getWidgetSizeAroundDisplay();
-    QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
-    spiceWdg->connectToSpiceSource(_uri);
+    spiceWdg->connectToSpiceSource(url);
     spiceWdg->setNewSize(around_size.width(), around_size.height());
 }
 
-void Spice_Viewer::timerEvent(QTimerEvent *ev)
+void Spice_Viewer_Only::timerEvent(QTimerEvent *ev)
 {
     if ( ev->timerId()==killTimerId ) {
         counter++;
@@ -287,10 +188,14 @@ void Spice_Viewer::timerEvent(QTimerEvent *ev)
         };
     } else if ( ev->timerId()==toolBarTimerId ) {
         startAnimatedHide();
+    } else if ( ev->timerId()==startId ) {
+        killTimer(startId);
+        startId = 0;
+        initSpiceWidget();
     }
 }
 
-void Spice_Viewer::resizeViewer(const QSize &_size)
+void Spice_Viewer_Only::resizeViewer(const QSize &_size)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
     if ( _size+around_size==size() ) {
@@ -299,7 +204,7 @@ void Spice_Viewer::resizeViewer(const QSize &_size)
     resize(_size+around_size);
 }
 
-void Spice_Viewer::fullScreenTriggered()
+void Spice_Viewer_Only::fullScreenTriggered()
 {
     if (isFullScreen()) {
         setWindowState(Qt::WindowNoState);
@@ -323,12 +228,12 @@ void Spice_Viewer::fullScreenTriggered()
     startAnimatedHide();
 }
 
-void Spice_Viewer::scaledScreenVirtDomain()
+void Spice_Viewer_Only::scaledScreenVirtDomain()
 {
     spiceWdg->setScaledScreen(true);
 }
 
-void Spice_Viewer::resizeEvent(QResizeEvent *ev)
+void Spice_Viewer_Only::resizeEvent(QResizeEvent *ev)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
     if ( nullptr!=spiceWdg ) {
@@ -338,7 +243,7 @@ void Spice_Viewer::resizeEvent(QResizeEvent *ev)
     };
 }
 
-QSize Spice_Viewer::getWidgetSizeAroundDisplay()
+QSize Spice_Viewer_Only::getWidgetSizeAroundDisplay()
 {
     int left, top, right, bottom, _width, _height;
     viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);

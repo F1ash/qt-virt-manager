@@ -62,7 +62,7 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
             this, SLOT(changeAutoReloadState(bool)));
 
     connect(this, SIGNAL(actionTriggered(QAction*)),
-            this, SLOT(detectTriggerredAction(QAction*)));
+            this, SLOT(detectTriggeredAction(QAction*)));
 
     connect(define_Menu, SIGNAL(fileForMethod(const Act_Param&)),
             this, SIGNAL(fileForMethod(const Act_Param&)));
@@ -135,7 +135,7 @@ void InterfaceToolBar::showMenu()
         act->menu()->move(QCursor::pos());
     };
 }
-void InterfaceToolBar::detectTriggerredAction(QAction *action)
+void InterfaceToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if        ( action == undefine_Action ) {

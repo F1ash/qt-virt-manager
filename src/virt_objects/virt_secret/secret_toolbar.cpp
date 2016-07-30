@@ -34,7 +34,7 @@ VirtSecretToolBar::VirtSecretToolBar(QWidget *parent) :
             this, SLOT(changeAutoReloadState(bool)));
 
     connect(this, SIGNAL(actionTriggered(QAction*)),
-            this, SLOT(detectTriggerredAction(QAction*)));
+            this, SLOT(detectTriggeredAction(QAction*)));
 }
 VirtSecretToolBar::~VirtSecretToolBar()
 {
@@ -95,7 +95,7 @@ void VirtSecretToolBar::timerEvent(QTimerEvent *event)
         emit execMethod(parameters);
     };
 }
-void VirtSecretToolBar::detectTriggerredAction(QAction *action)
+void VirtSecretToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if        ( action == define_Action ) {

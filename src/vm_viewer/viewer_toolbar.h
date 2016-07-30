@@ -51,6 +51,7 @@ public:
     QAction         *scaled_to;
     VM_State_Widget *vm_stateWdg;
     QAction         *stateWdg_Action;
+    QAction         *sep1, *sep2;
 
 signals:
     void             execMethod(const Act_Param&);
@@ -61,7 +62,7 @@ private:
 
 private slots:
     void             showMenu();
-    void             detectTriggerredAction(QAction*);
+    void             detectTriggeredAction(QAction*);
     void             moveEvent(QMoveEvent*);
 
 public slots:

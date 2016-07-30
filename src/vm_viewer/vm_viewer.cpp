@@ -11,12 +11,11 @@ VM_Viewer::VM_Viewer(
     domain(arg2)
 {
     qRegisterMetaType<QString>("QString&");
-    //setAttribute(Qt::WA_DeleteOnClose);
-    setMinimumSize(100, 100);
-    setContentsMargins(0,0,0,0);
     setWindowTitle(QString("<%1> Virtual Machine in [ %2 ] connection")
                    .arg(domain).arg(connName));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
+    setMinimumSize(100, 100);
+    setContentsMargins(0,0,0,0);
     viewerToolBar = new ViewerToolBar(this);
     viewerToolBar->hide();
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
@@ -56,7 +55,6 @@ void VM_Viewer::init()
 {
 
 }
-
 void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {

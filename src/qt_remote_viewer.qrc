@@ -24,6 +24,12 @@
         <file alias="32x32/actions/dialog-ok.png">icons/32x32/actions/dialog-ok.png</file>
         <file alias="32x32/actions/document-send.png">icons/32x32/actions/document-send.png</file>
         <file alias="32x32/actions/fullscreen.png">icons/32x32/actions/fullscreen.png</file>
+        <file alias="32x32/devices/input-keyboard.png">icons/32x32/devices/input-keyboard.png</file>
+        <file alias="32x32/devices/media-flash-sd-mmc.png">icons/32x32/devices/media-flash-sd-mmc.png</file>
+        <file alias="32x32/devices/input-mouse.png">icons/32x32/devices/input-mouse.png</file>
+        <file alias="32x32/devices/video-display.png">icons/32x32/devices/video-display.png</file>
+        <file alias="32x32/devices/drive-removable-media-usb.png">icons/32x32/devices/drive-removable-media-usb.png</file>
+        <file alias="32x32/devices/audio-card.png">icons/32x32/devices/audio-card.png</file>
         <file alias="48x48/places/folder-remote.png">icons/48x48/places/folder-remote.png</file>
         <file alias="48x48/emblems/face-sad.png">icons/48x48/emblems/face-sad.png</file>
         <file alias="48x48/actions/list-add.png">icons/48x48/actions/list-add.png</file>
@@ -46,6 +52,12 @@
         <file alias="48x48/actions/dialog-ok.png">icons/48x48/actions/dialog-ok.png</file>
         <file alias="48x48/actions/document-send.png">icons/48x48/actions/document-send.png</file>
         <file alias="48x48/actions/fullscreen.png">icons/48x48/actions/fullscreen.png</file>
+        <file alias="48x48/devices/input-keyboard.png">icons/48x48/devices/input-keyboard.png</file>
+        <file alias="48x48/devices/media-flash-sd-mmc.png">icons/48x48/devices/media-flash-sd-mmc.png</file>
+        <file alias="48x48/devices/input-mouse.png">icons/48x48/devices/input-mouse.png</file>
+        <file alias="48x48/devices/video-display.png">icons/48x48/devices/video-display.png</file>
+        <file alias="48x48/devices/drive-removable-media-usb.png">icons/48x48/devices/drive-removable-media-usb.png</file>
+        <file alias="48x48/devices/audio-card.png">icons/48x48/devices/audio-card.png</file>
         <file alias="24x24/places/folder-remote.png">icons/24x24/places/folder-remote.png</file>
         <file alias="24x24/emblems/face-sad.png">icons/24x24/emblems/face-sad.png</file>
         <file alias="24x24/actions/list-add.png">icons/24x24/actions/list-add.png</file>
@@ -67,6 +79,12 @@
         <file alias="24x24/actions/dialog-ok.png">icons/24x24/actions/dialog-ok.png</file>
         <file alias="24x24/actions/document-send.png">icons/24x24/actions/document-send.png</file>
         <file alias="24x24/actions/fullscreen.png">icons/24x24/actions/fullscreen.png</file>
+        <file alias="24x24/devices/input-keyboard.png">icons/24x24/devices/input-keyboard.png</file>
+        <file alias="24x24/devices/input-mouse.png">icons/24x24/devices/input-mouse.png</file>
+        <file alias="24x24/devices/media-flash-sd-mmc.png">icons/24x24/devices/media-flash-sd-mmc.png</file>
+        <file alias="24x24/devices/video-display.png">icons/24x24/devices/video-display.png</file>
+        <file alias="24x24/devices/drive-removable-media-usb.png">icons/24x24/devices/drive-removable-media-usb.png</file>
+        <file alias="24x24/devices/audio-card.png">icons/24x24/devices/audio-card.png</file>
         <file alias="64x64/places/folder-remote.png">icons/64x64/places/folder-remote.png</file>
         <file alias="64x64/emblems/face-sad.png">icons/64x64/emblems/face-sad.png</file>
         <file alias="64x64/actions/list-add.png">icons/64x64/actions/list-add.png</file>
@@ -89,8 +107,14 @@
         <file alias="64x64/actions/dialog-ok.png">icons/64x64/actions/dialog-ok.png</file>
         <file alias="64x64/actions/document-send.png">icons/64x64/actions/document-send.png</file>
         <file alias="64x64/actions/fullscreen.png">icons/64x64/actions/fullscreen.png</file>
+        <file alias="64x64/devices/input-keyboard.png">icons/64x64/devices/input-keyboard.png</file>
+        <file alias="64x64/devices/input-mouse.png">icons/64x64/devices/input-mouse.png</file>
+        <file alias="64x64/devices/media-flash-sd-mmc.png">icons/64x64/devices/media-flash-sd-mmc.png</file>
+        <file alias="64x64/devices/video-display.png">icons/64x64/devices/video-display.png</file>
+        <file alias="64x64/devices/drive-removable-media-usb.png">icons/64x64/devices/drive-removable-media-usb.png</file>
+        <file alias="64x64/devices/audio-card.png">icons/64x64/devices/audio-card.png</file>
         <file alias="128x128/actions/qt_icon.png">icons/128x128/actions/qt_icon.png</file>
         <file alias="128x128/actions/yandex_money.png">icons/128x128/actions/yandex_money.png</file>
-        <file alias="256x256/apps/remote-desktop-viewer.png">icons/256x256/apps/virtual-engineering.png</file>
+        <file alias="256x256/apps/remote-desktop-viewer.png">icons/256x256/apps/remote-desktop-viewer.png</file>
     </qresource>
 </RCC>

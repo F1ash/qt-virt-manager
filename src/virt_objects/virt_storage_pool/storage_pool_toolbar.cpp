@@ -81,7 +81,7 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
     //connect(delete_Menu, SIGNAL(execMethod(const Act_Param&)),
     //        this, SIGNAL(execMethod(const Act_Param&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
-            this, SLOT(detectTriggerredAction(QAction*)));
+            this, SLOT(detectTriggeredAction(QAction*)));
 }
 StoragePoolToolBar::~StoragePoolToolBar()
 {
@@ -171,7 +171,7 @@ void StoragePoolToolBar::showMenu()
         act->menu()->move(QCursor::pos());
     };
 }
-void StoragePoolToolBar::detectTriggerredAction(QAction *action)
+void StoragePoolToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if ( action == start_Action) {

@@ -1,46 +1,27 @@
-#ifndef VNC_VIEWER_H
-#define VNC_VIEWER_H
+#ifndef VNC_VIEWER_ONLY_H
+#define VNC_VIEWER_ONLY_H
 
 #include <QDomDocument>
 #include <QShortcut>
 #include <QTimerEvent>
-#include "vm_viewer/vm_viewer.h"
+#include "vm_viewer/vm_viewer_only.h"
 #include "vm_viewer/krdc_vnc_qtonly/Machine_View.h"
 
-class vncHlpThread : public _VirtThread
+class VNC_Viewer_Only : public VM_Viewer_Only
 {
     Q_OBJECT
 public:
-    explicit vncHlpThread(
-            QObject        *parent     = nullptr,
-            virConnectPtr  *connPtrPtr = nullptr,
-            QString         _domain    = QString());
-    const QString    domain;
-    bool             domainIsActive = false;
-    virDomainPtr     domainPtr = nullptr;
-    QString          uri, runXmlDesc;
-    void             run();
-};
-
-class VNC_Viewer : public VM_Viewer
-{
-    Q_OBJECT
-public:
-    explicit VNC_Viewer(
-            QWidget        *parent     = nullptr,
-            virConnectPtr  *connPtrPtr = nullptr,
-            QString         arg1       = QString(),
-            QString         arg2       = QString());
+    explicit VNC_Viewer_Only(
+            QWidget        *parent  = nullptr,
+            const QString   url     = "");
 
 private:
-    vncHlpThread    *hlpThread;
     QString          addr;
     uint             port = 0;
     MachineView     *vncWdg = nullptr;
     QShortcut       *actFullScreen = nullptr;
 
 public slots:
-    void             init();
     void             reconnectToVirtDomain();
     void             sendKeySeqToVirtDomain(Qt::Key);
     void             getScreenshotFromVirtDomain();
@@ -59,4 +40,4 @@ private slots:
     QSize            getWidgetSizeAroundDisplay();
 };
 
-#endif // VNC_VIEWER_H
+#endif // VNC_VIEWER_ONLY_H

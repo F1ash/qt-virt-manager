@@ -80,9 +80,9 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     //addAction(start_Action);
     addAction(pause_Action);
     addAction(destroy_Action);
-    addSeparator();
+    sep1 = addSeparator();
     addAction(snapshot_Action);
-    addSeparator();
+    sep2 = addSeparator();
     addAction(reconnect_Action);
     addSeparator();
     addAction(keySeq_Action);
@@ -96,7 +96,7 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
     stateWdg_Action = addWidget(vm_stateWdg);
 
     connect(this, SIGNAL(actionTriggered(QAction*)),
-            this, SLOT(detectTriggerredAction(QAction*)));
+            this, SLOT(detectTriggeredAction(QAction*)));
     setContentsMargins(0,0,0,0);
 }
 
@@ -129,7 +129,7 @@ void ViewerToolBar::showMenu()
         act->menu()->move(QCursor::pos());
     };
 }
-void ViewerToolBar::detectTriggerredAction(QAction *action)
+void ViewerToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     //if ( action == start_Action) {

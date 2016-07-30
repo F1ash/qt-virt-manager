@@ -77,7 +77,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     connect(wipe_Menu, SIGNAL(execMethod(const Act_Param&)),
             this, SIGNAL(execMethod(const Act_Param&)));
     connect(this, SIGNAL(actionTriggered(QAction*)),
-            this, SLOT(detectTriggerredAction(QAction*)));
+            this, SLOT(detectTriggeredAction(QAction*)));
 }
 StorageVolToolBar::~StorageVolToolBar()
 {
@@ -147,7 +147,7 @@ void StorageVolToolBar::showMenu()
         act->menu()->move(QCursor::pos());
     };
 }
-void StorageVolToolBar::detectTriggerredAction(QAction *action)
+void StorageVolToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if ( action == upload_Action) {

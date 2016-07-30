@@ -7,13 +7,6 @@ else (WIN32)
 endif (WIN32)
 
 include (${QT_USE_FILE})
-qt4_wrap_cpp (MOC_SOURCES ${HEADERS})
-qt4_wrap_ui  (UI_SRCS ${QTERM_UI_SRC})
-qt4_wrap_cpp (MOC_VIEWER_SOURCES ${VIEWER_HEADERS})
-
-qt4_add_resources(QTERM_RCC ${QTERM_RCC_SRC})
-#qt4_add_translation(QTERM_QM ${QTERM_TS})
-qt4_add_resources(VIEWER_RCC ${VIEWER_RCC_SRC})
 
 set (QT4_BUILD 1)
 set (BUILD_PROJECT_LIBRARIES ${QT_LIBRARIES})
