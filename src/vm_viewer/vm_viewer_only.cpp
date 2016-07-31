@@ -8,7 +8,7 @@ VM_Viewer_Only::VM_Viewer_Only(
     setAttribute(Qt::WA_DeleteOnClose);
     setMinimumSize(100, 100);
     setContentsMargins(0,0,0,0);
-    setWindowTitle(QString("Qt Remote Viewer -- %1").arg(url));
+    setWindowTitle("Qt Remote Viewer");
     QIcon::setThemeName("QtRemoteViewer");
     setWindowIcon(QIcon::fromTheme("remote-desktop-viewer"));
 
@@ -31,6 +31,12 @@ VM_Viewer_Only::VM_Viewer_Only(
             this, SLOT(hideToolBar()));
     connect(viewerToolBar, SIGNAL(positionChanged(const QPoint&)),
             this, SLOT(setNewPosition(const QPoint&)));
+
+    viewerToolBar->removeAction(viewerToolBar->pause_Action);
+    viewerToolBar->removeAction(viewerToolBar->destroy_Action);
+    viewerToolBar->removeAction(viewerToolBar->snapshot_Action);
+    viewerToolBar->removeAction(viewerToolBar->sep1);
+    viewerToolBar->removeAction(viewerToolBar->sep2);
 }
 VM_Viewer_Only::~VM_Viewer_Only()
 {
@@ -115,16 +121,20 @@ void VM_Viewer_Only::scaledScreenVirtDomain()
 {
 
 }
-void VM_Viewer_Only::showErrorInfo(QString &_msg)
+void VM_Viewer_Only::showErrorInfo(const QString &_msg)
 {
     QIcon _icon = QIcon::fromTheme("face-sad");
     icon = new QLabel(this);
     icon->setPixmap(_icon.pixmap(256));
     msg = new QLabel(this);
-    msg->setText(_msg);
+    if ( _msg.isEmpty() ) {
+        msg->setText(QString("Can't connect to host:\n%1").arg(url));
+    } else {
+        msg->setText(_msg);
+    };
     infoLayout = new QVBoxLayout();
     infoLayout->addWidget(icon, 0, Qt::AlignHCenter);
-    infoLayout->addWidget(msg);
+    infoLayout->addWidget(msg, 0, Qt::AlignHCenter);
     infoLayout->addStretch(-1);
     info = new QWidget(this);
     info->setLayout(infoLayout);

@@ -39,6 +39,8 @@ public:
 
     bool connectToChannel();
 
+    bool isConnected() const;
+
     // Properties
     int getId() {return getPropInt("channel-id");}
 
@@ -56,6 +58,8 @@ protected:
     friend class QSpiceHelper;
     virtual void initCallbacks();
 
+private:
+    bool connected;
 };
 
 

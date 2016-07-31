@@ -1,5 +1,4 @@
 #include "get_url_dialog.h"
-#include <QDebug>
 
 URLMenu::URLMenu(QWidget *parent) :
     QMenu(parent)
@@ -32,7 +31,8 @@ GetURLDialog::GetURLDialog(QWidget *parent) :
     push->setIcon(QIcon::fromTheme("disconnect"));
     push->setToolTip("Connect");
     urlEdit = new QLineEdit(this);
-    urlEdit->setPlaceholderText("vnc://host:port | spice://host:port");
+    urlEdit->setPlaceholderText("protocol://host:port");
+    urlEdit->setToolTip("spice://example.com:5900\nvnc://192.168.0.3:5901");
     urlLayout = new QHBoxLayout(this);
     urlLayout->addWidget(urlEdit);
     urlLayout->addWidget(push);

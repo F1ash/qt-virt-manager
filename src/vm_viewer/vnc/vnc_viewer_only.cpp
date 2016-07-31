@@ -7,15 +7,10 @@ VNC_Viewer_Only::VNC_Viewer_Only(
         const QString    url) :
     VM_Viewer_Only(parent, url)
 {
-    viewerToolBar->removeAction(viewerToolBar->pause_Action);
-    viewerToolBar->removeAction(viewerToolBar->destroy_Action);
-    viewerToolBar->removeAction(viewerToolBar->snapshot_Action);
     viewerToolBar->removeAction(viewerToolBar->copyFiles_Action);
     viewerToolBar->removeAction(viewerToolBar->copyToClipboard);
     viewerToolBar->removeAction(viewerToolBar->pasteClipboard);
     viewerToolBar->removeAction(viewerToolBar->stateWdg_Action);
-    viewerToolBar->removeAction(viewerToolBar->sep1);
-    viewerToolBar->removeAction(viewerToolBar->sep2);
     startId = startTimer(1000);
 }
 
@@ -204,17 +199,17 @@ void VNC_Viewer_Only::initVNCWidget()
             this, SLOT(startAnimatedShow()));
     connect(vncWdg, SIGNAL(mouseClickedInto()),
             this, SLOT(startAnimatedHide()));
+    connect(vncWdg, SIGNAL(CantConnect()),
+            this, SLOT(cantConnect()));
 
-    QSize around_size = getWidgetSizeAroundDisplay();
     QString _url = url.split("://").last();
     QStringList _urlParams = _url.split(":");
     addr = _urlParams.first();
     port = _urlParams.last().toInt();
-    qDebug()<<"address:"<<addr<<port;
+    //qDebug()<<"address:"<<addr<<port;
     vncWdg->Set_VNC_URL(addr, port);
     vncWdg->Set_Scaling(true);
     vncWdg->initView();
-    vncWdg->newViewSize(around_size.width(), around_size.height());
 }
 
 void VNC_Viewer_Only::timerEvent(QTimerEvent *ev)
@@ -285,4 +280,16 @@ QSize VNC_Viewer_Only::getWidgetSizeAroundDisplay()
     _height += top +bottom;
     QSize _size(_width, _height);
     return _size;
+}
+
+void VNC_Viewer_Only::connectedToHost()
+{
+    QSize around_size = getWidgetSizeAroundDisplay();
+    vncWdg->newViewSize(around_size.width(), around_size.height());
+    setWindowTitle(QString("Qt Remote Viewer -- %1").arg(url));
+}
+
+void VNC_Viewer_Only::cantConnect()
+{
+    showErrorInfo("");
 }

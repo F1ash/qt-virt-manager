@@ -876,7 +876,6 @@ set (QTERM_TS
 )
 
 set (VIEWER_HEADERS
-    src/vm_viewer/mainwindow.h
     src/vm_viewer/get_url_dialog.h
     src/vm_viewer/vm_viewer_only.h
     src/vm_viewer/spice/spice_viewer_only.h
@@ -886,7 +885,6 @@ set (VIEWER_HEADERS
 )
 set (VIEWER_SOURCES
     src/vm_viewer/main.cpp
-    src/vm_viewer/mainwindow.cpp
     src/vm_viewer/get_url_dialog.cpp
     src/vm_viewer/vm_viewer_only.cpp
     src/vm_viewer/spice/spice_viewer_only.cpp
@@ -933,7 +931,7 @@ if ( WITH_LIBCACARD )
     find_package(CACard           REQUIRED)
 endif()
 message(STATUS "Build with Libcacard: ${WITH_LIBCACARD}")
-find_package(LibVirt REQUIRED)
+find_package(LibVirt              REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
 find_package(LibVNCServer         REQUIRED)
 include_directories(
@@ -947,6 +945,8 @@ include_directories(
     ${QTERMWIDGET_INCLUDE_DIRS}
     ${LIBVNCCLIENT_INCLUDE_DIR}
 )
+set (VIEWER_BUILD_PROJECT_LIBRARIES
+          ${BUILD_PROJECT_LIBRARIES})
 list(APPEND BUILD_PROJECT_LIBRARIES
     ${LibVirt_LIBRARIES}
     ${QTERMWIDGET_LIBRARIES}
@@ -954,6 +954,14 @@ list(APPEND BUILD_PROJECT_LIBRARIES
     ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
     ${CACard_LIBRARIES}
+    ${Spice1_LIBRARIES}
+    ${SPICE_CLIENT_GLIB2_LIBRARIES}
+    ${LIBVNCCLIENT_LIBRARIES}
+)
+list(APPEND VIEWER_BUILD_PROJECT_LIBRARIES
+    ${GLib2_LIBRARIES}
+    ${GOBJECT_LIBRARIES}
+    ${GIO_LIBRARIES}
     ${Spice1_LIBRARIES}
     ${SPICE_CLIENT_GLIB2_LIBRARIES}
     ${LIBVNCCLIENT_LIBRARIES}
@@ -998,7 +1006,7 @@ install ( FILES src/icons/256x256/apps/virtual-engineering.png
 set (VIEWER_NAME ${PROJ_PREFIX}-remote-viewer)
 add_executable(${VIEWER_NAME} ${VIEWER_HEADERS} ${VIEWER_SOURCES}
     ${MOC_VIEWER_SOURCES} ${VIEWER_RCC})
-target_link_libraries (${VIEWER_NAME} ${BUILD_PROJECT_LIBRARIES})
+target_link_libraries (${VIEWER_NAME} ${VIEWER_BUILD_PROJECT_LIBRARIES})
 SET_TARGET_PROPERTIES (${VIEWER_NAME} PROPERTIES COMPILE_FLAGS
     "-DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO} \
      -DQSPICE_WIDGET_COMPILATION \

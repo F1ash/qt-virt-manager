@@ -72,6 +72,7 @@ class MachineView : public QScrollArea
         void fullscreenToggled( bool enabled );
         void Full_Size( int width, int height );
         void Connected();
+        void CantConnect();
 
         /*
          * Emitted, when user touched top boarder.

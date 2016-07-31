@@ -1,7 +1,6 @@
 #ifndef SPICE_VIEWER_ONLY_H
 #define SPICE_VIEWER_ONLY_H
 
-#include <QDomDocument>
 #include <QShortcut>
 #include <QTimerEvent>
 #include <QScrollArea>
@@ -22,6 +21,7 @@ private:
     QScrollArea     *scrolled = nullptr;
     QSpiceWidget    *spiceWdg = nullptr;
     QShortcut       *actFullScreen = nullptr;
+    uint             cycles = 0;
 
 public slots:
     void             reconnectToVirtDomain();
@@ -41,6 +41,7 @@ private slots:
     void             fullScreenTriggered();
     void             resizeEvent(QResizeEvent*);
     QSize            getWidgetSizeAroundDisplay();
+    void             displayChannelState(bool);
 };
 
 #endif // SPICE_VIEWER_ONLY_H

@@ -67,6 +67,11 @@ public:
      */
     bool isScaledScreen() const;
 
+    /*
+     * Get Display channel state
+     */
+    bool isConnectedWithDisplay() const;
+
 signals:
     /*
      * Emitted, when display resize event occurred.

@@ -24,13 +24,13 @@ int main(int argc, char *argv[])
         d->deleteLater();
     };
     if ( url.startsWith("vnc") ) {
-            VNC_Viewer_Only *w =
-                    new VNC_Viewer_Only(nullptr, url);
-            w->show();
+        VNC_Viewer_Only *w =
+                new VNC_Viewer_Only(nullptr, url);
+        w->show();
     } else if ( url.startsWith("spice") ) {
-            Spice_Viewer_Only *w =
-                    new Spice_Viewer_Only(nullptr, url);
-            w->show();
+        Spice_Viewer_Only *w =
+                new Spice_Viewer_Only(nullptr, url);
+        w->show();
     } else
         return -1;
     return a.exec();

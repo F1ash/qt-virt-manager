@@ -34,6 +34,7 @@ void QSpiceHelper::channel_event(
 QSpiceChannel::QSpiceChannel(void *channel) :
     QSpiceObject(channel)
 {
+    connected = false;
     initCallbacks();
 }
 
@@ -52,7 +53,11 @@ bool QSpiceChannel::objectDisposed()
 
 bool QSpiceChannel::connectToChannel()
 {
-    return spice_channel_connect((SpiceChannel *) gobject);
+    connected = spice_channel_connect((SpiceChannel *) gobject);
+    return connected;
 }
 
-
+bool QSpiceChannel::isConnected() const
+{
+    return connected;
+}

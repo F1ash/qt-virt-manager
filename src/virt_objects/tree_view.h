@@ -11,13 +11,13 @@ class TreeView : public QTreeView
     Q_OBJECT
 public:
     explicit TreeView(QWidget *parent = nullptr);
-    HNavigationLabel     *prevL, *nextL, *homeL;
+    HNavigationLabel *prevL, *nextL, *homeL;
 
 private:
-    QPixmap               next, prev, home;
+    QPixmap           next, prev, home;
 
 private slots:
-    void        resizeEvent(QResizeEvent*);
+    void              resizeEvent(QResizeEvent*);
 };
 
 #endif // TREE_VIEW_H

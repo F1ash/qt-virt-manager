@@ -133,6 +133,12 @@ bool QSpiceWidget::isScaledScreen() const
     return scaled;
 }
 
+bool QSpiceWidget::isConnectedWithDisplay() const
+{
+    if ( display==nullptr ) return false;
+    return display->isConnected();
+}
+
 /* private slots */
 void QSpiceWidget::setChannel(QSpiceChannel *channel)
 {
@@ -876,7 +882,7 @@ void QSpiceWidget::resizeEvent ( QResizeEvent * event )
 {
     Q_UNUSED(event)
 
-    if ( main && display )
+    if ( main && display && display->isConnected() )
         resizeTimer.start(500);
 }
 
@@ -976,13 +982,13 @@ void QSpiceWidget::channelEvent(int _ev)
         break;
     case SPICE_CHANNEL_SWITCHING:
         eventDescription
-                .append("disconnecting from the current host \
-and connecting to the target host");
+                .append(
+"disconnecting from the current host and connecting to the target host");
         break;
     case SPICE_CHANNEL_CLOSED:
         eventDescription
-                .append("connection is closed normally \
-(sent if channel was ready)");
+                .append(
+"connection is closed normally (sent if channel was ready)");
         break;
     case SPICE_CHANNEL_ERROR_CONNECT:
         eventDescription

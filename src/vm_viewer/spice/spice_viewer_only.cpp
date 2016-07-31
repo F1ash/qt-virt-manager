@@ -10,11 +10,6 @@ Spice_Viewer_Only::Spice_Viewer_Only(
         const QString   url) :
     VM_Viewer_Only(parent, url)
 {
-    viewerToolBar->removeAction(viewerToolBar->pause_Action);
-    viewerToolBar->removeAction(viewerToolBar->destroy_Action);
-    viewerToolBar->removeAction(viewerToolBar->snapshot_Action);
-    viewerToolBar->removeAction(viewerToolBar->sep1);
-    viewerToolBar->removeAction(viewerToolBar->sep2);
     startId = startTimer(1000);
 }
 
@@ -161,18 +156,17 @@ void Spice_Viewer_Only::initSpiceWidget()
     connect(viewerToolBar->vm_stateWdg,
             SIGNAL(transformationMode(Qt::TransformationMode)),
             spiceWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
-    connect(spiceWdg, SIGNAL(errMsg(QString&)),
-            this, SLOT(sendErrMsg(QString&)));
+    //connect(spiceWdg, SIGNAL(errMsg(QString&)),
+    //        this, SLOT(sendErrMsg(QString&)));
     connect(spiceWdg, SIGNAL(clipboardsReleased(bool)),
             viewerToolBar, SLOT(changeCopypasteState(bool)));
     connect(spiceWdg, SIGNAL(boarderTouched()),
             this, SLOT(startAnimatedShow()));
     connect(spiceWdg, SIGNAL(mouseClickedInto()),
             this, SLOT(startAnimatedHide()));
-
-    QSize around_size = getWidgetSizeAroundDisplay();
+    connect(spiceWdg, SIGNAL(displayChannelChanged(bool)),
+            this, SLOT(displayChannelState(bool)));
     spiceWdg->connectToSpiceSource(url);
-    spiceWdg->setNewSize(around_size.width(), around_size.height());
 }
 
 void Spice_Viewer_Only::timerEvent(QTimerEvent *ev)
@@ -189,9 +183,16 @@ void Spice_Viewer_Only::timerEvent(QTimerEvent *ev)
     } else if ( ev->timerId()==toolBarTimerId ) {
         startAnimatedHide();
     } else if ( ev->timerId()==startId ) {
-        killTimer(startId);
-        startId = 0;
-        initSpiceWidget();
+        if ( cycles==0 ) {
+            initSpiceWidget();
+        } else if ( cycles==9 ) {
+            killTimer(startId);
+            startId = 0;
+            if ( !spiceWdg->isConnectedWithDisplay() ) {
+                showErrorInfo("");
+            };
+        };
+        ++cycles;
     }
 }
 
@@ -235,8 +236,9 @@ void Spice_Viewer_Only::scaledScreenVirtDomain()
 
 void Spice_Viewer_Only::resizeEvent(QResizeEvent *ev)
 {
-    QSize around_size = getWidgetSizeAroundDisplay();
     if ( nullptr!=spiceWdg ) {
+        if ( !spiceWdg->isConnectedWithDisplay() ) return;
+        QSize around_size = getWidgetSizeAroundDisplay();
         spiceWdg->updateSize(
                     ev->size().width()-around_size.width(),
                     ev->size().height()-around_size.height());
@@ -264,4 +266,16 @@ QSize Spice_Viewer_Only::getWidgetSizeAroundDisplay()
     _height += top +bottom;
     QSize _size(_width, _height);
     return _size;
+}
+
+void Spice_Viewer_Only::displayChannelState(bool state)
+{
+    if ( state ) {
+        QSize around_size = getWidgetSizeAroundDisplay();
+        spiceWdg->setNewSize(around_size.width(), around_size.height());
+        killTimer(startId);
+        setWindowTitle(QString("Qt Remote Viewer -- %1").arg(url));
+    } else {
+        showErrorInfo("");
+    };
 }

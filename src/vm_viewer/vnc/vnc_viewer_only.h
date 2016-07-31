@@ -1,7 +1,6 @@
 #ifndef VNC_VIEWER_ONLY_H
 #define VNC_VIEWER_ONLY_H
 
-#include <QDomDocument>
 #include <QShortcut>
 #include <QTimerEvent>
 #include "vm_viewer/vm_viewer_only.h"
@@ -38,6 +37,8 @@ private slots:
     void             fullScreenTriggered();
     void             resizeEvent(QResizeEvent*);
     QSize            getWidgetSizeAroundDisplay();
+    void             connectedToHost();
+    void             cantConnect();
 };
 
 #endif // VNC_VIEWER_ONLY_H

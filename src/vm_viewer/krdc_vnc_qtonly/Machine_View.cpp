@@ -129,10 +129,12 @@ void MachineView::Check_Connection()
 {
     if( ! VNC_Connected )
     {
-        connect( Reinit_Timer, SIGNAL(timeout()),
-                 this, SLOT(initView()) ); // FIXME reinitVNC()
+        //connect( Reinit_Timer, SIGNAL(timeout()),
+        //         this, SLOT(initView()) ); // FIXME reinitVNC()
 
-        Reinit_Timer->start( 1000 );
+        //Reinit_Timer->start( 1000 );
+
+        emit CantConnect();
     }
 }
 
@@ -279,6 +281,7 @@ void MachineView::sendKey( QKeyEvent *event )
 
 void MachineView::newViewSize( int w, int h )
 {
+    if ( !VNC_Connected ) return;
     if( w > 0 && h > 0 )
     {
         VNC_Width = w;
