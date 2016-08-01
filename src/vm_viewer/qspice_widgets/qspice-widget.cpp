@@ -802,7 +802,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
                     //ev->y()*zoom,
                     qRound(position.x()/zoom),
                     qRound(position.y()/zoom),
-                    display->getId(),
+                    display->getChannelID(),
                     QtButtonsMaskToSpice(ev));
         return true;
     }
@@ -880,10 +880,11 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
 
 void QSpiceWidget::resizeEvent ( QResizeEvent * event )
 {
-    Q_UNUSED(event)
+    event->accept();
 
     if ( main && display && display->isConnected() )
         resizeTimer.start(500);
+    return QWidget::resizeEvent(event);
 }
 
 void QSpiceWidget::paintEvent(QPaintEvent *event)
@@ -936,12 +937,12 @@ void QSpiceWidget::resizeDone()
 {
     if ( main && display ) {
         main->setDisplay(
-                    display->getId(),
+                    display->getChannelID(),
                     0,
                     0,
                     _width,
                     _height);
-        //main->setDisplayEnabled(display->getId(), true);
+        //main->setDisplayEnabled(display->getChannelID(), true);
         //qDebug()<<"configured"<<
         main->sendMonitorConfig();
     };
@@ -1061,8 +1062,9 @@ void QSpiceWidget::updateSize(int _w, int _h)
          // update equal TRUE for update after 1 sec
          // without further changes, because it used
          // at parent widget resizes
+        if ( !display->isConnected() ) return;
          main->updateDisplay(
-                     display->getId(),
+                     display->getChannelID(),
                      0,
                      0,
                      _width,

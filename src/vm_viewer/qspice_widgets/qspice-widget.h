@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QPaintEvent>
+#include <QResizeEvent>
 
 #define  QSPICE_WIDGET_H_INSIDE
 

@@ -188,7 +188,11 @@ void Spice_Viewer_Only::timerEvent(QTimerEvent *ev)
         } else if ( cycles==9 ) {
             killTimer(startId);
             startId = 0;
-            if ( !spiceWdg->isConnectedWithDisplay() ) {
+            if ( spiceWdg==nullptr || !spiceWdg->isConnectedWithDisplay() ) {
+                delete spiceWdg;
+                spiceWdg = nullptr;
+                delete scrolled;
+                scrolled = nullptr;
                 showErrorInfo("");
             };
         };
@@ -198,6 +202,8 @@ void Spice_Viewer_Only::timerEvent(QTimerEvent *ev)
 
 void Spice_Viewer_Only::resizeViewer(const QSize &_size)
 {
+    if ( spiceWdg==nullptr ||
+         !spiceWdg->isConnectedWithDisplay() ) return;
     QSize around_size = getWidgetSizeAroundDisplay();
     if ( _size+around_size==size() ) {
         return;
@@ -236,13 +242,16 @@ void Spice_Viewer_Only::scaledScreenVirtDomain()
 
 void Spice_Viewer_Only::resizeEvent(QResizeEvent *ev)
 {
+    ev->accept();
     if ( nullptr!=spiceWdg ) {
         if ( !spiceWdg->isConnectedWithDisplay() ) return;
         QSize around_size = getWidgetSizeAroundDisplay();
         spiceWdg->updateSize(
                     ev->size().width()-around_size.width(),
                     ev->size().height()-around_size.height());
-    };
+    } else
+        return;
+    return QMainWindow::resizeEvent(ev);
 }
 
 QSize Spice_Viewer_Only::getWidgetSizeAroundDisplay()
@@ -276,6 +285,10 @@ void Spice_Viewer_Only::displayChannelState(bool state)
         killTimer(startId);
         setWindowTitle(QString("Qt Remote Viewer -- %1").arg(url));
     } else {
+        delete spiceWdg;
+        spiceWdg = nullptr;
+        delete scrolled;
+        scrolled = nullptr;
         showErrorInfo("");
     };
 }

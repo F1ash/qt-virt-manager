@@ -33,6 +33,7 @@ class QSpiceChannel : public QSpiceObject
 {
     Q_OBJECT
 public:
+    Q_GPROP_INT(ChannelID, "channel-id")
     Q_GPROP_POINTER(SessionPtr, "spice-session")
 
     bool objectDisposed();
@@ -40,9 +41,6 @@ public:
     bool connectToChannel();
 
     bool isConnected() const;
-
-    // Properties
-    int getId() {return getPropInt("channel-id");}
 
 signals:
     void channelEvent(int);
