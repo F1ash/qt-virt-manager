@@ -41,8 +41,11 @@ void DomControlThread::run()
     case GET_ALL_ENTITY_STATE :
         result = getAllDomainList();
         break;
-    case GET_ALL_ENTITY_DATA :
-        result = getAllDomainData();
+    case GET_ALL_ENTITY_DATA0 :
+        result = getDomainData0();
+        break;
+    case GET_ALL_ENTITY_DATA1 :
+        result = getDomainData1();
         break;
     case CREATE_ENTITY :
         result = createDomain();
@@ -200,7 +203,7 @@ Result DomControlThread::getAllDomainList()
     result.msg = domainList;
     return result;
 }
-Result DomControlThread::getAllDomainData()
+Result DomControlThread::getDomainData0()
 {
     Result result;
     QString runXmlDesc, displayType;
@@ -229,8 +232,69 @@ Result DomControlThread::getAllDomainData()
        .firstChildElement("devices")
        .firstChildElement("graphics");
     if ( !graph.isNull() )
-        displayType.append(graph.attribute("type").toLower() );
+        displayType.append( graph.attribute("type").toLower() );
     result.msg.append( displayType );
+    return result;
+}
+Result DomControlThread::getDomainData1()
+{
+    Result result;
+    QString runXmlDesc, url;
+    QString name = task.object;
+    unsigned int flags = 0;
+
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
+    virDomainPtr domainPtr =virDomainLookupByName(
+                *task.srcConnPtr, name.toUtf8().data());
+    // flag=0 for get running domain xml-description
+    runXmlDesc.append( virDomainGetXMLDesc(domainPtr, flags) );
+    QDomDocument doc;
+    doc.setContent(runXmlDesc);
+    QDomElement graph = doc.firstChildElement("domain")
+       .firstChildElement("devices")
+       .firstChildElement("graphics");
+    if ( !graph.isNull() ) {
+        QString uri, type, addr, port;
+        uri.append(virConnectGetURI(*task.srcConnPtr));
+        addr = uri.split("://").last();
+        uri = addr;
+        addr = uri.split("/").first();
+        uri = addr;
+        addr = uri.split(":").first();
+        uri = addr;
+        if ( uri.contains("@") ) {
+            addr = uri.split("@").last();
+            uri = addr;
+        };
+        addr.clear();
+        type.append( graph.attribute("type").toLower() );
+        if (graph.hasAttribute("listen")) {
+            // for listen address
+            addr = graph.attribute("listen");
+        } else if ( !graph.firstChildElement("listen").isNull() ) {
+            // for listen address from virt.network
+            addr = graph.firstChildElement("listen")
+                    .attribute("address");
+        } else {
+            if ( uri.isEmpty() ) {
+                addr = "127.0.0.1";
+                uri  = "127.0.0.1";
+            };
+        };
+        if ( addr!=uri && !uri.isEmpty() )
+            addr = uri;
+        port = (graph.hasAttribute("port"))?
+                    graph.attribute("port") : "5900";
+        url = QString("%1://%2:%3").arg(type).arg(addr).arg(port);
+        result.result = true;
+    } else {
+        result.result = false;
+    };
+    result.msg.append( url );
     return result;
 }
 Result DomControlThread::createDomain()

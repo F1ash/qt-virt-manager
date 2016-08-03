@@ -8,6 +8,7 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QListWidget>
+#include <QSettings>
 #include <QDebug>
 
 class QSpiceUsbDeviceWidget : public QDialog
@@ -15,6 +16,7 @@ class QSpiceUsbDeviceWidget : public QDialog
     Q_OBJECT
 public:
     explicit QSpiceUsbDeviceWidget(QWidget *parent = nullptr);
+    ~QSpiceUsbDeviceWidget();
 
 signals:
     void             connectDevice(QString&);
@@ -22,6 +24,7 @@ signals:
     void             devicesChanged(void*);
 
 private:
+    QSettings        settings;
     QListWidget     *usbDevList;
     QVBoxLayout     *commonLayout;
 

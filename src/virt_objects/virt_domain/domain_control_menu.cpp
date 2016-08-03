@@ -51,6 +51,9 @@ DomainControlMenu::DomainControlMenu(
         display = new QAction("display VM", this);
         display->setIcon(QIcon::fromTheme("display"));
         display->setVisible(parameters[1]=="active");
+        displayInExternal = new QAction("display VM in external Viewer", this);
+        displayInExternal->setIcon(QIcon::fromTheme("display"));
+        displayInExternal->setVisible(parameters[1]=="active");
         addToMonitor = new QAction("add to State Monitor", this);
         addToMonitor->setIcon(QIcon::fromTheme("utilities-monitor"));
         addToMonitor->setVisible(true);
@@ -70,6 +73,7 @@ DomainControlMenu::DomainControlMenu(
         addAction(moreSnapshot_Actions);
         addSeparator();
         addAction(display);
+        addAction(displayInExternal);
         addAction(addToMonitor);
         addSeparator();
         addAction(migrate);
@@ -125,6 +129,8 @@ void DomainControlMenu::emitExecMethod(QAction *action)
         paramList.method = getEntityXMLDesc;
     } else if ( action == display ) {
         paramList.method = displayVirtDomain;
+    } else if ( action == displayInExternal ) {
+        paramList.method = displayVirtDomainInExternalViewer;
     } else if ( action == addToMonitor ) {
         paramList.method = monitorVirtDomain;
     } else if ( action == migrate ) {

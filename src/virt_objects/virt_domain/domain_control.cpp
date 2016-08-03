@@ -138,7 +138,7 @@ void VirtDomainControl::resultReceiver(Result data)
             task.action     = DEFINE_ENTITY;
             emit domainToEditor(task);
         };
-    } else if ( data.action == GET_ALL_ENTITY_DATA ) {
+    } else if ( data.action == GET_ALL_ENTITY_DATA0 ) {
         if ( !data.msg.isEmpty() ) {
             TASK task;
             task.srcConnPtr = ptr_ConnPtr;
@@ -147,6 +147,12 @@ void VirtDomainControl::resultReceiver(Result data)
             task.args.object= data.msg.first();
             task.args.state = data.msg.last();
             emit displayRequest(task);
+        } else
+            msgRepeater(data.err);
+    } else if ( data.action == GET_ALL_ENTITY_DATA1 ) {
+        if ( !data.msg.isEmpty() ) {
+            QUrl url(data.msg.first());
+            QDesktopServices::openUrl(url);
         } else
             msgRepeater(data.err);
     } else if ( data.action < GET_XML_DESCRIPTION ) {
@@ -224,7 +230,7 @@ void VirtDomainControl::entityDoubleClicked(const QModelIndex &index)
         task.srcConName = currConnName;
         task.object     = _domainName;
         task.method     = displayVirtDomain;
-        task.action     = GET_ALL_ENTITY_DATA;
+        task.action     = GET_ALL_ENTITY_DATA0;
         emit addNewTask(task);
     }
 }
@@ -327,10 +333,10 @@ void VirtDomainControl::execAction(const Act_Param &param)
                     ? 0:VIR_DOMAIN_XML_INACTIVE;
             emit addNewTask(task);
         } else if ( param.method==displayVirtDomain ) {
-            // send signal with Connection & Domain Names
-            // to call VM_Viewer into MainWindow widget
-            // emit displayRequest(ptr_ConnPtr, currConnName, domainName);
-            task.action     = GET_ALL_ENTITY_DATA;
+            task.action     = GET_ALL_ENTITY_DATA0;
+            emit addNewTask(task);
+        } else if ( param.method==displayVirtDomainInExternalViewer ) {
+            task.action     = GET_ALL_ENTITY_DATA1;
             emit addNewTask(task);
         } else if ( param.method==monitorVirtDomain ) {
             // send signal with Connection & Domain Names

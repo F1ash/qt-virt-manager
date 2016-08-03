@@ -42,7 +42,7 @@ void StoragePoolControlThread::run()
     case GET_ALL_ENTITY_STATE :
         result = getAllStoragePoolList();
         break;
-    case GET_ALL_ENTITY_DATA :
+    case GET_ALL_ENTITY_DATA0 :
         result = getAllStoragePoolDataList();
         break;
     case CREATE_ENTITY :

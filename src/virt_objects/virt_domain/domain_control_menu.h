@@ -38,6 +38,7 @@ private:
     QMenu          *xmlDescParams = nullptr;
     QAction        *migrate = nullptr;
     QAction        *display = nullptr;
+    QAction        *displayInExternal = nullptr;
     QAction        *addToMonitor = nullptr;
     QAction        *reload = nullptr;
     QAction        *createSnapshot = nullptr;

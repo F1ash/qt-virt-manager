@@ -4,6 +4,9 @@ QSpiceSmartcardWidget::QSpiceSmartcardWidget(QWidget *parent) :
     QDialog(parent)
 {
     setWindowTitle("Smartcards");
+    settings.beginGroup(windowTitle());
+    restoreGeometry(settings.value("Geometry").toByteArray());
+    settings.endGroup();
     smartcardList = new QListWidget(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(smartcardList);
@@ -12,6 +15,12 @@ QSpiceSmartcardWidget::QSpiceSmartcardWidget(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     connect(smartcardList, SIGNAL(itemChanged(QListWidgetItem*)),
             this, SLOT(changeCardState(QListWidgetItem*)));
+}
+QSpiceSmartcardWidget::~QSpiceSmartcardWidget()
+{
+    settings.beginGroup(windowTitle());
+    settings.setValue("Geometry", saveGeometry());
+    settings.endGroup();
 }
 
 /* private slots */

@@ -4,6 +4,9 @@ QSpiceUsbDeviceWidget::QSpiceUsbDeviceWidget(QWidget *parent) :
     QDialog(parent)
 {
     setWindowTitle("USB Redirection");
+    settings.beginGroup(windowTitle());
+    restoreGeometry(settings.value("Geometry").toByteArray());
+    settings.endGroup();
     usbDevList = new QListWidget(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(usbDevList);
@@ -12,6 +15,12 @@ QSpiceUsbDeviceWidget::QSpiceUsbDeviceWidget(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     connect(usbDevList, SIGNAL(itemChanged(QListWidgetItem*)),
             this, SLOT(changeDeviceState(QListWidgetItem*)));
+}
+QSpiceUsbDeviceWidget::~QSpiceUsbDeviceWidget()
+{
+    settings.beginGroup(windowTitle());
+    settings.setValue("Geometry", saveGeometry());
+    settings.endGroup();
 }
 
 /* private slots */

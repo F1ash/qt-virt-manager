@@ -71,7 +71,7 @@ void VirtVolumeDialog::setPoolList()
     TASK _task;
     _task.type          = VIRT_STORAGE_POOL;
     _task.srcConnPtr    = ptr_ConnPtr;
-    _task.action        = GET_ALL_ENTITY_DATA;
+    _task.action        = GET_ALL_ENTITY_DATA0;
     storagePoolThread->execAction(0, _task);
 }
 void VirtVolumeDialog::set_Result()

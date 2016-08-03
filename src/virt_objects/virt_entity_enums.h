@@ -15,7 +15,8 @@ enum VIRT_ENTITY {
 enum Actions {
     _NONE_ACTION,
     GET_ALL_ENTITY_STATE,
-    GET_ALL_ENTITY_DATA,
+    GET_ALL_ENTITY_DATA0,
+    GET_ALL_ENTITY_DATA1,
     CREATE_ENTITY,
     DEFINE_ENTITY,
     EDIT_ENTITY,
@@ -62,6 +63,7 @@ enum Methods {
     monitorVirtDomain,
     getEntityXMLDesc,
     displayVirtDomain,
+    displayVirtDomainInExternalViewer,
     createVirtDomainSnapshot,
     moreSnapshotActions,
     revertVirtDomainSnapshot,

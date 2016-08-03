@@ -8,6 +8,7 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QListWidget>
+#include <QSettings>
 #include <QDebug>
 
 class QSpiceSmartcardWidget : public QDialog
@@ -15,6 +16,7 @@ class QSpiceSmartcardWidget : public QDialog
     Q_OBJECT
 public:
     explicit QSpiceSmartcardWidget(QWidget *parent = nullptr);
+    ~QSpiceSmartcardWidget();
 
 signals:
     void             connectCard(QString&);
@@ -22,6 +24,7 @@ signals:
     void             cardsChanged(void*);
 
 private:
+    QSettings        settings;
     QListWidget     *smartcardList;
     QVBoxLayout     *commonLayout;
 
