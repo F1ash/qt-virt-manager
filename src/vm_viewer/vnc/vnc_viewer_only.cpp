@@ -199,6 +199,8 @@ void VNC_Viewer_Only::initVNCWidget()
             this, SLOT(startAnimatedShow()));
     connect(vncWdg, SIGNAL(mouseClickedInto()),
             this, SLOT(startAnimatedHide()));
+    connect(vncWdg, SIGNAL(Connected()),
+            this, SLOT(connectedToHost()));
     connect(vncWdg, SIGNAL(CantConnect()),
             this, SLOT(cantConnect()));
 
