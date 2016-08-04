@@ -170,6 +170,7 @@ static const char* enumToMethodString(Methods method)
     case getEntityXMLDesc:
         return "get XML";
     case displayVirtDomain:
+    case displayVirtDomainInExternalViewer:
         return "display";
     case createVirtDomainSnapshot:
         return "create snapshot";
