@@ -130,7 +130,8 @@ void ConnElement::openConnection()
 }
 void ConnElement::closeConnection()
 {
-    if ( connAliveThread->isRunning() ) connAliveThread->closeConnection();
+    if ( connAliveThread->isRunning() )
+        connAliveThread->closeConnection();
 }
 void ConnElement::overviewConnection()
 {
@@ -234,7 +235,8 @@ void ConnElement::receiveConnMessage(QString msg)
 void ConnElement::addMsgToLog(QString title, QString msg)
 {
     QString time = QTime::currentTime().toString();
-    QString errorMsg = QString("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+    QString errorMsg = QString(
+    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     sendWarning(errorMsg);
     mainWindowUp();
@@ -248,7 +250,8 @@ void ConnElement::writeErrorToLog(QString &msg, uint _num)
     Q_UNUSED(_num);
     QString time = QTime::currentTime().toString();
     QString title(QString("Connection '%1'").arg(name));
-    QString errorMsg = QString("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+    QString errorMsg = QString(
+    "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     sendWarning(errorMsg);
 }

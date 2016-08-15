@@ -57,7 +57,7 @@ private :
     Connections                 *connListWidget;
     TrayIcon                    *trayIcon;
     MenuBar                     *menuBar;
-    Wait                        *wait_thread = nullptr;
+    Wait                        *wait_thread;
     DockWidget                  *logDock;
     LogDock                     *logDockContent;
     DockWidget                  *domainDock;

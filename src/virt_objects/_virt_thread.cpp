@@ -17,6 +17,7 @@ QString _VirtThread::sendConnErrors()
         msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
         emit errorMsg( msg, number );
+        customErrorNotification(virtErrors->code);
         virResetError(virtErrors);
     } else
         msg = sendGlobalErrors();
@@ -30,9 +31,23 @@ QString _VirtThread::sendGlobalErrors()
         msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
         emit errorMsg( msg, number );
+        customErrorNotification(virtErrors->code);
     };
     virResetLastError();
     return msg;
+}
+void _VirtThread::customErrorNotification(int code)
+{
+    QString msg;
+    switch ( code ) {
+    case 38:
+        msg =
+    "Make sure the required Libvirt service is installed and running";
+        break;
+    default:
+        return;
+    };
+    emit errorMsg( msg, number );
 }
 
 /* public slots */

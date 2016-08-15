@@ -25,14 +25,16 @@ void SearchThread::run()
                          sendConnErrors();
                 };
                 free(domains);
-            } else
+            } else {
                 sendConnErrors();
+            };
             virConnectClose(connPtr);
             if ( ret ) {
                 emit localConnFound(uri);
             };
-        } else
+        } else {
             sendConnErrors();
+        };
     };
 }
 void SearchThread::setURIList()

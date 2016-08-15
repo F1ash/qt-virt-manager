@@ -28,6 +28,8 @@ signals:
     void             ptrIsNull();
 public slots:
     virtual void     stop();
+private:
+    void             customErrorNotification(int);
 };
 
 #endif // _VIRT_THREAD_H

@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
                 "Progress for waiting the connection close");
     statusBar()->addPermanentWidget(closeProgress);
     statusBar()->hide();
+    wait_thread = nullptr;
     initVirEventloop();
 }
 
@@ -124,7 +125,7 @@ void MainWindow::saveSettings()
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
     if ( !this->isVisible() ) changeVisibility();
-    if ( runningConnExist() && wait_thread==nullptr ) {
+    if ( wait_thread==nullptr ) {
         connListWidget->list->setEnabled(false);
         connListWidget->toolBar->setEnabled(false);
         logDock->setEnabled(false);
@@ -136,6 +137,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         nwfilterDock->setEnabled(false);
         domainsStateMonitor->stopMonitoring();
         taskWrHouse->stopTaskComputing();
+        menuBar->fileMenu->setEnabled(false);
         saveSettings();
         // close VM Displays
         QStringList keys(VM_Displayed_Map.keys());
@@ -213,14 +215,18 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         DomainEditor_Map.clear();
         //qDebug()<<"DomainEditors cleared";
         wait_thread = new Wait(this, connListWidget->list);
-        // stop virtEventLoop after closing all connections
+        // stop virtEventLoop after closing all connections;
+        // used 'terminate', because 'virEventRunDefaultImpl'
+        // not occures when libvirt unavailable.
         connect(wait_thread, SIGNAL(finished()),
-                virtEventLoop, SLOT(stop()));
+                virtEventLoop, SLOT(terminate()));
         wait_thread->start();
         ev->ignore();
         startCloseProcess();
     } else if ( virtEventLoop->isRunning() ) {
-        virtEventLoop->stop();
+        // used 'terminate', because 'virEventRunDefaultImpl'
+        // not occures when libvirt unavailable.
+        virtEventLoop->terminate();
         ev->ignore();
     } else if ( !runningConnExist() &&
                 (wait_thread==nullptr || !wait_thread->isRunning()) ) {
@@ -230,7 +236,7 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         ev->accept();
     } else {
         //  ( wait_thread!=nullptr || wait_thread->isRunning() )
-        ev->ignore();
+        ev->accept();
     };
 }
 void MainWindow::startCloseProcess()
@@ -646,7 +652,7 @@ void MainWindow::virtEventLoopFinished()
 void MainWindow::restartApplication()
 {
     //qDebug()<<"restart Application";
-    QString msg("Reload Application.");
+    QString msg("Restart Application.");
     QString time = QTime::currentTime().toString();
     QString title("Libvirt EventLoop");
     QString currMsg = QString(
@@ -656,7 +662,9 @@ void MainWindow::restartApplication()
     reloadFlag = true;
     connListWidget->list->setEnabled(false);
     closeAllConnections();
-    virtEventLoop->stop();
+    // used 'terminate', because 'virEventRunDefaultImpl'
+    // not occures when libvirt unavailable.
+    virtEventLoop->terminate();
 }
 void MainWindow::initConnections(bool started)
 {
@@ -665,11 +673,20 @@ void MainWindow::initConnections(bool started)
     QString time = QTime::currentTime().toString();
     QString title("App initialization");
     QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
+                       <b>EVENT</b></font>: Libvirt service%3%4")
+            .arg(time).arg(title)
+            .arg(!virtEventLoop->isSuccess()?" not ":" ")
+            .arg("exist in system");
+    logDockContent->appendMsgToLog(currMsg);
+    currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
                                <b>EVENT</b></font>: virtEventLoop%3%4")
             .arg(time).arg(title)
-            .arg(!started?" not":"").arg(" started");
-    if ( !started ) return;
+            .arg(!started?" not ":" ").arg("started");
     logDockContent->appendMsgToLog(currMsg);
+    if ( !started || !virtEventLoop->isSuccess() ) {
+        connListWidget->list->setEnabled(true);
+        return;
+    };
     settings.beginGroup("Connects");
     QStringList groups = settings.childGroups();
     settings.endGroup();

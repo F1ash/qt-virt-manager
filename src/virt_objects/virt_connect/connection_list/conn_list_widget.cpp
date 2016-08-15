@@ -462,7 +462,8 @@ void ConnectionList::sendWarning(QString &msg, uint _num)
     Q_UNUSED(_num);
     QString title("Search local connections");
     QString time = QTime::currentTime().toString();
-    QString errorMsg = QString("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+    QString errorMsg = QString(
+    "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
             .arg(time).arg(title).arg(msg);
     emit warning(errorMsg);
 }
