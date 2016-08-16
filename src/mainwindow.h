@@ -116,6 +116,7 @@ private slots:
     void virtEventLoopFinished();
     void restartApplication();
     void initConnections(bool);
+    void initConnectionsComplete();
     void editCurrentConnection();
     void createNewConnection();
     void deleteCurrentConnection();

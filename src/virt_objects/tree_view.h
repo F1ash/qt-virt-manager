@@ -5,6 +5,7 @@
 #include <QPixmap>
 #include <QResizeEvent>
 #include "h_navigation_label.h"
+#include "wait_load_label.h"
 
 class TreeView : public QTreeView
 {
@@ -12,9 +13,10 @@ class TreeView : public QTreeView
 public:
     explicit TreeView(QWidget *parent = nullptr);
     HNavigationLabel *prevL, *nextL, *homeL;
+    WaitLoadLabel    *loadL;
 
 private:
-    QPixmap           next, prev, home;
+    QPixmap           next, prev, home, load;
 
 private slots:
     void              resizeEvent(QResizeEvent*);

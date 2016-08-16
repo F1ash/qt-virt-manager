@@ -436,7 +436,12 @@ void MainWindow::initConnListWidget()
     connect(connListWidget->toolBar->_closeOverview, SIGNAL(triggered()),
             this, SLOT(stopProcessing()));
     connect(connListWidget->list, SIGNAL(searchComplete()),
+            this, SLOT(initConnectionsComplete()));
+    connect(connListWidget->list, SIGNAL(searchComplete()),
             this, SLOT(enableSoftTouchedDocks()));
+    connListWidget->list->setEnabled(false);
+    connListWidget->toolBar->setEnabled(false);
+    connListWidget->list->loadL->start();
 }
 void MainWindow::initDockWidgets()
 {
@@ -661,6 +666,8 @@ void MainWindow::restartApplication()
     logDockContent->appendMsgToLog(currMsg);
     reloadFlag = true;
     connListWidget->list->setEnabled(false);
+    connListWidget->toolBar->setEnabled(false);
+    connListWidget->list->loadL->start();
     closeAllConnections();
     // used 'terminate', because 'virEventRunDefaultImpl'
     // not occures when libvirt unavailable.
@@ -685,6 +692,8 @@ void MainWindow::initConnections(bool started)
     logDockContent->appendMsgToLog(currMsg);
     if ( !started || !virtEventLoop->isSuccess() ) {
         connListWidget->list->setEnabled(true);
+        connListWidget->toolBar->setEnabled(true);
+        connListWidget->list->loadL->stop();
         return;
     };
     settings.beginGroup("Connects");
@@ -696,7 +705,14 @@ void MainWindow::initConnections(bool started)
         connListWidget->list->addConnItem(s);
     };
     connListWidget->list->refreshLocalhostConnection();
-    currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
+}
+void MainWindow::initConnectionsComplete()
+{
+    connListWidget->toolBar->setEnabled(true);
+    connListWidget->list->loadL->stop();
+    QString title("App initialization");
+    QString time = QTime::currentTime().toString();
+    QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
                        <b>EVENT</b></font>: %3")
             .arg(time).arg(title).arg("Connections inited");
     logDockContent->appendMsgToLog(currMsg);

@@ -667,11 +667,13 @@
         <file alias="256x256/emblems/vm-machines.png">icons/256x256/emblems/vm-machines.png</file>
         <file alias="256x256/emblems/nwfilter.png">icons/256x256/emblems/nwfilter.png</file>
         <file alias="256x256/emblems/storages.png">icons/256x256/emblems/storages.png</file>
+        <file alias="256x256/emblems/radar.png">icons/256x256/emblems/radar.png</file>
         <file alias="256x256/emblems/security.png">icons/256x256/emblems/security.png</file>
         <file alias="256x256/emblems/networks.png">icons/256x256/emblems/networks.png</file>
         <file alias="256x256/emblems/watermark.png">icons/256x256/emblems/watermark.png</file>
         <file alias="256x256/emblems/utilities-log-viewer.png">icons/256x256/emblems/utilities-log-viewer.png</file>
         <file alias="256x256/apps/virtual-engineering.png">icons/256x256/apps/virtual-engineering.png</file>
+        <file alias="256x256/apps/remote-desktop-viewer.png">icons/256x256/apps/remote-desktop-viewer.png</file>
         <file alias="128x128/actions/previous.png">icons/128x128/actions/previous.png</file>
         <file alias="128x128/actions/qt_icon.png">icons/128x128/actions/qt_icon.png</file>
         <file alias="128x128/actions/next.png">icons/128x128/actions/next.png</file>

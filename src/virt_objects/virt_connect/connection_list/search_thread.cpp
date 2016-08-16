@@ -35,6 +35,7 @@ void SearchThread::run()
         } else {
             sendConnErrors();
         };
+        //msleep(333);
     };
 }
 void SearchThread::setURIList()
