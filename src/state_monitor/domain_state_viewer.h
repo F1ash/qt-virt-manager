@@ -24,7 +24,7 @@ public:
 
 signals:
     void                 viewerClosed();
-    void                 errorMsg(QString&);
+    void                 errorMsg(const QString&);
 
 private:
     virConnectPtr*       ptr_ConnPtr;

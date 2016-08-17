@@ -81,8 +81,8 @@ Bridge_to_LAN::Bridge_to_LAN(
     virtPort->type->setCurrentIndex(
                 virtPort->type->findText("Open vSwitch") );
     hlpThread = new bridge_HlpThread(this, connPtrPtr);
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errorMsg(const QString&)));
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(emitCompleteSignal()));
     hlpThread->start();

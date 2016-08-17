@@ -322,8 +322,8 @@ Spice_Graphics::Spice_Graphics(
     hlpThread = new spice_graphHlpThread(this, connPtrPtr);
     connect(hlpThread, SIGNAL(result(QStringList&)),
             this, SLOT(readNetworkList(QStringList&)));
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errorMsg(const QString&)));
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(emitCompleteSignal()));
     hlpThread->start();

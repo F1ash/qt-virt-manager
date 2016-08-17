@@ -30,8 +30,8 @@ FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtrPtr) :
     commonLayout->addWidget(listWidget);
     commonLayout->addWidget(buttons);
     setLayout(commonLayout);
-    connect(secrets, SIGNAL(entityMsg(QString&)),
-            this, SLOT(showMsg(QString&)));
+    connect(secrets, SIGNAL(entityMsg(const QString&)),
+            this, SLOT(showMsg(const QString&)));
     connect(secrets, SIGNAL(addNewTask(TASK)),
             this, SLOT(execAction(TASK)));
 
@@ -47,7 +47,7 @@ FSD_Result FindSecretDialog::getResult() const
     res.type  = secrets->getCurrentSecType();
     return res;
 }
-void FindSecretDialog::showMsg(QString &msg)
+void FindSecretDialog::showMsg(const QString &msg)
 {
     QMessageBox::information(
                 this,

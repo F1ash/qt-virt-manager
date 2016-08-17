@@ -29,7 +29,7 @@ public:
     void                     setParameters(virConnectPtr*, QString&);
 
 signals:
-    void                     errMsg(QString&);
+    void                     errMsg(const QString&);
 
 private slots:
     void                     setDiskItem(QDomElement&);

@@ -19,8 +19,8 @@ public:
             virConnectPtr*  conn    = nullptr);
 
 signals:
-    void             errorMsg(QString&);
-    void             saveDeviceXMLDesc(int, QString&);
+    void             errorMsg(const QString&);
+    void             saveDeviceXMLDesc(const int, const QString&);
     void             dataProcessed(bool);
 
 private:
@@ -51,7 +51,7 @@ private:
 
 public slots:
     QDomDocument     getResult() const;
-    void             showDevice(int, QString&, QString&);
+    void             showDevice(const int, const QString&, const QString&);
     void             closeDataEdit();
     void             clearDataEdit();
 

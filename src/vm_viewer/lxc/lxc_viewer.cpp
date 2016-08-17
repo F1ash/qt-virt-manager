@@ -35,8 +35,8 @@ LXC_Viewer::LXC_Viewer(
     hlpThread = new lxcHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errorMsg(const QString&)));
     hlpThread->start();
 }
 LXC_Viewer::~LXC_Viewer()
@@ -126,8 +126,8 @@ void LXC_Viewer::setTerminalParameters()
     if ( nullptr!=t ) {
         connect(t->impl(), SIGNAL(sendData(const char*,int)),
                 viewerThread, SLOT(sendDataToVMachine(const char*,int)));
-        connect(viewerThread, SIGNAL(errorMsg(QString&, uint)),
-                this, SLOT(sendErrMsg(QString&, uint)));
+        connect(viewerThread, SIGNAL(errorMsg(const QString&, const uint)),
+                this, SLOT(sendErrMsg(const QString&, const uint)));
         viewerThread->start();
         if ( viewerThread->keep_alive ) {
             QString msg = QString(

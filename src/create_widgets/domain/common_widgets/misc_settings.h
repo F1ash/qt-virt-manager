@@ -38,7 +38,7 @@ public slots:
 private slots:
     void             readCapabilities();
     void             readXMLDesciption();
-    void             readXMLDesciption(QString&);
+    void             readXMLDesciption(const QString&);
 };
 
 #endif // MISC_SETTINGS_H

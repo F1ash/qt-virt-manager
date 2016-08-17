@@ -156,8 +156,8 @@ void Spice_Viewer_Only::initSpiceWidget()
     connect(viewerToolBar->vm_stateWdg,
             SIGNAL(transformationMode(Qt::TransformationMode)),
             spiceWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
-    //connect(spiceWdg, SIGNAL(errMsg(QString&)),
-    //        this, SLOT(sendErrMsg(QString&)));
+    //connect(spiceWdg, SIGNAL(errMsg(const QString&)),
+    //        this, SLOT(sendErrMsg(const QString&)));
     connect(spiceWdg, SIGNAL(clipboardsReleased(bool)),
             viewerToolBar, SLOT(changeCopypasteState(bool)));
     connect(spiceWdg, SIGNAL(boarderTouched()),

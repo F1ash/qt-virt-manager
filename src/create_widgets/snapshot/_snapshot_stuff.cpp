@@ -30,14 +30,14 @@ void _SnapshotStuff::setParameters(virConnectPtr* connPtrPtr, QString &_domName)
     setThread->setCurrentWorkConnect(connPtrPtr, 0, _domName);
     connect(setThread, SIGNAL(diskData(QDomElement&)),
             this, SLOT(setDiskItem(QDomElement&)));
-    connect(setThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errMsg(QString&)));
+    connect(setThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errMsg(const QString&)));
     setThread->start();
     setThread->wait();
     disconnect(setThread, SIGNAL(diskData(QDomElement&)),
                this, SLOT(setDiskItem(QDomElement&)));
-    disconnect(setThread, SIGNAL(errorMsg(QString&,uint)),
-               this, SIGNAL(errMsg(QString&)));
+    disconnect(setThread, SIGNAL(errorMsg(const QString&, const uint)),
+               this, SIGNAL(errMsg(const QString&)));
     setThread->deleteLater();
     disks->addStretch();
 }

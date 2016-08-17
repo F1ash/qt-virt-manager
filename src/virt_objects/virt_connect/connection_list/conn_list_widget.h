@@ -18,40 +18,55 @@ class ConnectionList : public TreeView
     Q_OBJECT
 public:
     explicit ConnectionList(QWidget *parent = nullptr);
-    CONN_LIST           *connections;
-    ConnItemModel       *connItemModel;
 
     void                 setUsageInSoftTouched(bool);
+    int                  getListItemCount() const;
+    QModelIndex          getCustomIndex(int) const;
+    ConnItemIndex*       getConnItemDataListIndex(int) const;
+    int                  getConnItemDataListCount() const;
+    int                  getConnItemDataListIndexOf(ConnItemIndex*) const;
+    bool                 removeListItem(int) const;
+    bool                 removeConnItemDataList(ConnItemIndex*) const;
+    ConnElement*         getConnElementByName(QString) const;
+    int                  removeConnectionItembyName(QString) const;
+    void                 addConnItem(const QString&);
+    void                 openConnection(const QModelIndex&);
+    void                 overviewOfConnection(const QModelIndex&);
+    void                 closeConnection(const QModelIndex&);
+    virConnectPtr*       getPtr_connectionPtr(const QString&);
 
 signals:
-    void                 clickedItem(QString);
-    void                 removeConnection(QString&);
+    void                 clickedItem(const QString&);
+    void                 removeConnection(const QString&);
     void                 messageShowed();
-    void                 warning(QString&);
-    void                 connPtrPtr(virConnectPtr*, QString&);
-    void                 connToClose(int);
-    void                 connClosed(bool, QString&);
+    void                 warning(const QString&);
+    void                 connToOverview(virConnectPtr*, const QString&);
+    void                 connClosed(bool, const QString&);
     void                 domResult(Result);
     void                 netResult(Result);
-    void                 domainEnd(QString&);
-    void                 searchComplete();
+    void                 domainEnd(const QString&);
+    void                 searchStarted();
+    void                 searchFinished();
 
 public slots:
-    int                  connItemEditAction();
     void                 refreshLocalhostConnection();
-    void                 addConnItem(QString&);
+    int                  connItemEditAction();
     void                 deleteCurrentConnection();
-    void                 openConnection(const QModelIndex&);
-    void                 showConnection(const QModelIndex&);
-    void                 closeConnection(const QModelIndex&);
-    virConnectPtr       *getPtr_connectionPtr(const QString&);
     void                 stopProcessing();
 
 private :
+    CONN_LIST           *connections;
+    ConnItemModel       *connItemModel;
     ConnListDelegate    *connListDlg;
     SearchThread        *searchThread;
     WaitLocalConn       *waitLocalConn;
     int                  localConn = 0;
+
+    void                 createConnection(const QModelIndex&);
+    void                 checkConnection(const QModelIndex&, const bool);
+    void                 deleteCurrentConnection(const QModelIndex&);
+    void                 showMessage(const QString&, const QString&);
+    bool                 onViewExist() const;
 
 private slots:
     void                 searchLocalhostConnections();
@@ -60,18 +75,14 @@ private slots:
     void                 connItemKillAction();
     void                 connItemRunAction();
     void                 connItemShowAction();
-    void                 createConnection(QModelIndex&);
-    void                 createLocalConnection(QString&);
-    void                 checkConnection(const QModelIndex&, bool);
+    void                 createLocalConnection(const QString&);
     void                 deleteCancelledCreation();
-    void                 deleteCurrentConnection(QModelIndex&);
-    void                 showMessage(QString, QString);
-    void                 sendWarning(QString&);
-    void                 sendWarning(QString&, uint);
+    void                 sendWarning(const QString&);
+    void                 sendWarning(const QString&, const uint);
     void                 mainWindowUp();
-    void                 sendConnPtrPtr(virConnectPtr*, QString&);
-    void                 getAuthCredentials(QString&);
+    void                 getAuthCredentials(const QString&);
     void                 searchLocalhostConnComplete();
+    void                 setOnViewAvailableConnection(const QString&);
 };
 
 #endif   // CONN_LIST_WIDGET_H

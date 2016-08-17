@@ -115,16 +115,16 @@ Devices::Devices(
     detectAttachedDevicesFromXMLDesc();
     connect(usedDeviceList, SIGNAL(itemSelectionChanged()),
             this, SLOT(showDevice()));
-    connect(infoWidget, SIGNAL(saveDeviceXMLDesc(int, QString&)),
-            this, SLOT(saveDeviceXMLDescription(int, QString&)));
-    connect(infoWidget, SIGNAL(errorMsg(QString&)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(infoWidget, SIGNAL(saveDeviceXMLDesc(const int, const QString&)),
+            this, SLOT(saveDeviceXMLDescription(const int, const QString&)));
+    connect(infoWidget, SIGNAL(errorMsg(const QString&)),
+            this, SIGNAL(errorMsg(const QString&)));
     connect(infoWidget, SIGNAL(dataProcessed(bool)),
             listWidget, SLOT(setEnabled(bool)));
     connect(deviceStack, SIGNAL(finished(int)),
             this, SLOT(addDevice()));
-    connect(deviceStack, SIGNAL(errorMsg(QString&)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(deviceStack, SIGNAL(errorMsg(const QString&)),
+            this, SIGNAL(errorMsg(const QString&)));
 }
 
 /* public slots */
@@ -156,7 +156,7 @@ QDomDocument Devices::getDataDocument() const
     //qDebug()<<doc.toString()<<"Device result";
     return doc;
 }
-void Devices::setEmulator(QString &_emulator)
+void Devices::setEmulator(const QString &_emulator)
 {
     QList<QListWidgetItem*> _family =
             usedDeviceList->findItems(
@@ -202,7 +202,7 @@ void Devices::addDevice()
     deviceStack->clearDevice();
     stackWdg->setCurrentWidget(baseWdg);
 }
-void Devices::addDeviceToUsedDevList(QDomDocument &doc, bool flag)
+void Devices::addDeviceToUsedDevList(QDomDocument &doc, const bool flag)
 {
     QDomElement _el = doc.firstChildElement("device");
     if ( _el.isNull() ) return;
@@ -446,7 +446,7 @@ void Devices::detectAttachedDevicesFromXMLDesc()
         };
     }
 }
-void Devices::saveDeviceXMLDescription(int idx, QString &xmlDesc)
+void Devices::saveDeviceXMLDescription(const int idx, const QString &xmlDesc)
 {
     /* block/unblock usedDeviceList signals to avoid looping */
     usedDeviceList->blockSignals(true);

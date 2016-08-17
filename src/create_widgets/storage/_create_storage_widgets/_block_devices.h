@@ -15,7 +15,6 @@ public:
 
 private:
     QPushButton     *browse;
-
     bool             oneDeviceMode = false;
 
 public slots:

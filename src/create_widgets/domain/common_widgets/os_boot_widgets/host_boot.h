@@ -13,9 +13,9 @@ public:
     QLineEdit       *args;
 
 signals:
-    void             domainType(QString&);
-    void             osType(QString&);
-    void             emulatorType(QString&);
+    void             domainType(const QString&);
+    void             osType(const QString&);
+    void             emulatorType(const QString&);
 
 private:
     QLabel          *loaderLabel, *argsLabel;

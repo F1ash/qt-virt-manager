@@ -33,7 +33,7 @@ public:
             virConnectPtr*  connPtrPtr  = nullptr);
     ~CreateSnapshotDialog();
 signals:
-    void             errMsg(QString&);
+    void             errMsg(const QString&);
 
 private:
     QHBoxLayout     *titleLayout;

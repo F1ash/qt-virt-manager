@@ -34,7 +34,7 @@ public slots:
     bool             isUsed() const;
     void             setUsage(bool);
     QDomDocument     getDataDocument() const;
-    void             readXMLDesciption(QString&);
+    void             readXMLDesciption(const QString&);
 
 private slots:
     void             addSecLabel();

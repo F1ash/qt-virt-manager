@@ -70,7 +70,8 @@ QDomDocument DeviceData::getResult() const
     };
     return doc;
 }
-void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
+void DeviceData::showDevice(
+        const int idx, const QString &deviceName, const QString &xmlDesc)
 {
     if ( device!=nullptr ) closeDataEdit();
     emit dataProcessed(false);
@@ -91,8 +92,6 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
         device = new Disk_Edit(
                     this,
                     ptr_ConnPtr);
-        connect(device, SIGNAL(errorMsg(QString&)),
-                this, SIGNAL(errorMsg(QString&)));
     } else if ( deviceType == "interface" ) {
         device = new NetInterfaces_Edit(
                     this,
@@ -152,6 +151,8 @@ void DeviceData::showDevice(int idx, QString &deviceName, QString &xmlDesc)
     } else {
         device = new _QWidget(this);
     };
+    connect(device, SIGNAL(errorMsg(const QString&)),
+            this, SIGNAL(errorMsg(const QString&)));
     connect(device, SIGNAL(complete()),
             this, SLOT(deviceDataProcessed()));
     infoLayout->insertWidget(0, devIcon, -1, Qt::AlignHCenter);

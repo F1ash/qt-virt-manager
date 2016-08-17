@@ -65,11 +65,11 @@ void VM_Viewer::closeEvent(QCloseEvent *ev)
         emit finished(key);
     }
 }
-void VM_Viewer::sendErrMsg(QString &msg)
+void VM_Viewer::sendErrMsg(const QString &msg)
 {
     sendErrMsg(msg, 0);
 }
-void VM_Viewer::sendErrMsg(QString &msg, uint _number)
+void VM_Viewer::sendErrMsg(const QString &msg, const uint _number)
 {
     Q_UNUSED(_number);
     QString time = QTime::currentTime().toString();
@@ -148,11 +148,11 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
         CreateSnapshotDialog *_dialog =
                 new CreateSnapshotDialog(
                     this, domain, connName, true, ptr_ConnPtr);
-        connect(_dialog, SIGNAL(errMsg(QString&)),
-                this, SLOT(sendErrMsg(QString&)));
+        connect(_dialog, SIGNAL(errMsg(const QString&)),
+                this, SLOT(sendErrMsg(const QString&)));
         int exitCode = _dialog->exec();
-        disconnect(_dialog, SIGNAL(errMsg(QString&)),
-                   this, SLOT(sendErrMsg(QString&)));
+        disconnect(_dialog, SIGNAL(errMsg(const QString&)),
+                   this, SLOT(sendErrMsg(const QString&)));
         _dialog->deleteLater();
         if ( exitCode ) {
             task.action      = CREATE_DOMAIN_SNAPSHOT;
@@ -247,7 +247,7 @@ void VM_Viewer::scaledScreenVirtDomain()
 {
 
 }
-void VM_Viewer::showErrorInfo(QString &_msg)
+void VM_Viewer::showErrorInfo(const QString &_msg)
 {
     QIcon _icon = QIcon::fromTheme("face-sad");
     icon = new QLabel(this);

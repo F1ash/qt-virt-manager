@@ -35,7 +35,7 @@ public:
     QCheckBox           *showAtClose;
 
 signals:
-    void                 errorMsg(QString);
+    void                 errorMsg(const QString&);
 
 private:
     QLabel              *typeLabel, *stNameLabel;

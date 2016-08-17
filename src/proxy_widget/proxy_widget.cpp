@@ -168,30 +168,30 @@ void ProxyWidget::mouseReleaseEvent(QMouseEvent *ev)
     if ( isTriggered ) return;
     if ( ev->type()==QMouseEvent::MouseButtonRelease ) {
         if        ( r1.contains(ev->pos(), true) ) {
-            qDebug()<<"in R1";
+            //qDebug()<<"in R1";
             connAct->trigger();
         } else if ( r2.contains(ev->pos(), true) ) {
-            qDebug()<<"in R2";
+            //qDebug()<<"in R2";
         } else if ( r3.contains(ev->pos(), true) ) {
-            qDebug()<<"in R3";
+            //qDebug()<<"in R3";
             domainsAct->trigger();
         } else if ( r4.contains(ev->pos(), true) ) {
-            qDebug()<<"in R4";
+            //qDebug()<<"in R4";
             nfAct->trigger();
         } else if ( r5.contains(ev->pos(), true) ) {
-            qDebug()<<"in R5";
+            //qDebug()<<"in R5";
             networksAct->trigger();
         } else if ( r6.contains(ev->pos(), true) ) {
-            qDebug()<<"in R6";
+            //qDebug()<<"in R6";
             storagesAct->trigger();
         } else if ( r7.contains(ev->pos(), true) ) {
-            qDebug()<<"in R7";
+            //qDebug()<<"in R7";
             secretsAct->trigger();
         } else if ( r8.contains(ev->pos(), true) ) {
-            qDebug()<<"in R8";
+            //qDebug()<<"in R8";
             ifacesAct->trigger();
         } else if ( r9.contains(ev->pos(), true) ) {
-            qDebug()<<"in R9";
+            //qDebug()<<"in R9";
             logAct->trigger();
         };
     };
@@ -205,55 +205,55 @@ void ProxyWidget::mouseMoveEvent(QMouseEvent *ev)
         if ( !currRect.intersects(r1) ) {
             currRect = r1;
             update();
-            qDebug()<<"R1";
+            //qDebug()<<"R1";
         };
     } else if ( r2.contains(ev->pos(), true) ) {
         if ( !currRect.intersects(r2) ) {
             currRect = r2;
             update();
-            qDebug()<<"R2";
+            //qDebug()<<"R2";
         };
     } else if ( r3.contains(ev->pos(), true) ) {
         if ( !currRect.intersects(r3) ) {
             currRect = r3;
             update();
-            qDebug()<<"R3";
+            //qDebug()<<"R3";
         };
     } else if ( r4.contains(ev->pos(), true) ) {
         if ( !currRect.intersects(r4) ) {
             currRect = r4;
             update();
-            qDebug()<<"R4";
+            //qDebug()<<"R4";
         };
     } else if ( r5.contains(ev->pos(), true) ) {
         if ( !currRect.intersects(r5) ) {
             currRect = r5;
             update();
-            qDebug()<<"R5";
+            //qDebug()<<"R5";
         };
     } else if ( r6.contains(ev->pos(), true) ) {
         if ( !currRect.intersects(r6) ) {
             currRect = r6;
             update();
-            qDebug()<<"R6";
+            //qDebug()<<"R6";
         };
     } else if ( r7.contains(ev->pos(), true) ) {
         if ( !currRect.intersects(r7) ) {
             currRect = r7;
             update();
-            qDebug()<<"R7";
+            //qDebug()<<"R7";
         };
     } else if ( r8.contains(ev->pos(), true) ) {
         if ( !currRect.intersects(r8) ) {
             currRect = r8;
             update();
-            qDebug()<<"R8";
+            //qDebug()<<"R8";
         };
     } else if ( r9.contains(ev->pos(), true) ) {
         if ( !currRect.intersects(r9) ) {
             currRect = r9;
             update();
-            qDebug()<<"R9";
+            //qDebug()<<"R9";
         };
     };
 }
@@ -415,7 +415,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                         r1.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Connections\nCtrl+Alt+C");
-            qDebug()<<"r1!=ev->rect()"<<r1;
+            //qDebug()<<"r1!=ev->rect()"<<r1;
         } else {
             painter.setPen(Qt::yellow);
             painter.drawText(
@@ -429,7 +429,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                         r3.adjusted(0, heightPart/2, 0, 0),
                         Qt::AlignCenter,
                         "Virtual\nmachines\nCtrl+Alt+D");
-            qDebug()<<"r3!=ev->rect()"<<r3;
+            //qDebug()<<"r3!=ev->rect()"<<r3;
         } else {
             painter.setPen(Qt::yellow);
             painter.drawText(
@@ -443,7 +443,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                         r4.adjusted(0, heightPart/2, 0, 0),
                         Qt::AlignCenter,
                         "Network\nfilters\nCtrl+Alt+F");
-            qDebug()<<"r4!=ev->rect()"<<r4;
+            //qDebug()<<"r4!=ev->rect()"<<r4;
         } else {
             painter.setPen(Qt::yellow);
             painter.drawText(
@@ -457,7 +457,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                         r5.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Networks\nCtrl+Alt+N");
-            qDebug()<<"r5!=ev->rect()"<<r5;
+            //qDebug()<<"r5!=ev->rect()"<<r5;
         } else {
             painter.setPen(Qt::yellow);
             painter.drawText(
@@ -471,7 +471,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                         r6.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Storages\nCtrl+Alt+S");
-            qDebug()<<"r6!=ev->rect()"<<r6;
+            //qDebug()<<"r6!=ev->rect()"<<r6;
         } else {
             painter.setPen(Qt::yellow);
             painter.drawText(
@@ -485,7 +485,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                         r7.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Secrets\nCtrl+Alt+E");
-            qDebug()<<"r7!=ev->rect()"<<r7;
+            //qDebug()<<"r7!=ev->rect()"<<r7;
         } else {
             painter.setPen(Qt::yellow);
             painter.drawText(
@@ -499,7 +499,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                         r8.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Interfaces\nCtrl+Alt+I");
-            qDebug()<<"r8!=ev->rect()"<<r8;
+            //qDebug()<<"r8!=ev->rect()"<<r8;
         } else {
             painter.setPen(Qt::yellow);
             painter.drawText(
@@ -513,7 +513,7 @@ void ProxyWidget::paintEvent(QPaintEvent *ev)
                         r9.adjusted(0, heightPart*2/3, 0, 0),
                         Qt::AlignCenter,
                         "Log\nCtrl+Alt+G");
-            qDebug()<<"r9!=ev->rect()"<<r9;
+            //qDebug()<<"r9!=ev->rect()"<<r9;
         } else {
             painter.setPen(Qt::yellow);
             painter.drawText(

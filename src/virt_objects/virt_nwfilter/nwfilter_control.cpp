@@ -57,7 +57,7 @@ bool VirtNWFilterControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
     toolBar->enableAutoReload();
     return true;
 }
-void VirtNWFilterControl::setListHeader(QString &connName)
+void VirtNWFilterControl::setListHeader(const QString &connName)
 {
     virtNWFilterModel->setHeaderData(
                 0, Qt::Horizontal,

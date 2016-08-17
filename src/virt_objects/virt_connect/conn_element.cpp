@@ -9,27 +9,27 @@ ConnElement::ConnElement(QObject *parent) :
 {
     waitTimerId = 0;
     connAliveThread = new ConnAliveThread(this);
-    connect(connAliveThread, SIGNAL(connMsg(QString)),
-            this, SLOT(receiveConnMessage(QString)));
+    connect(connAliveThread, SIGNAL(connMsg(const QString&)),
+            this, SLOT(receiveConnMessage(const QString&)));
     connect(connAliveThread, SIGNAL(changeConnState(CONN_STATE)),
             this, SLOT(setConnectionState(CONN_STATE)));
-    connect(connAliveThread, SIGNAL(authRequested(QString&)),
-            this, SLOT(getAuthCredentials(QString&)));
+    connect(connAliveThread, SIGNAL(authRequested(const QString&)),
+            this, SLOT(getAuthCredentials(const QString&)));
     connect(connAliveThread, SIGNAL(domStateChanged(Result)),
             this, SIGNAL(domStateChanged(Result)));
     connect(connAliveThread, SIGNAL(netStateChanged(Result)),
             this, SIGNAL(netStateChanged(Result)));
     connect(connAliveThread, SIGNAL(connClosed(bool)),
             this, SLOT(forwardConnClosedSignal(bool)));
-    connect(connAliveThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SLOT(writeErrorToLog(QString&,uint)));
+    connect(connAliveThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SLOT(writeErrorToLog(const QString&, const uint)));
     // change element state in the thread's state changed case only
     connect(connAliveThread, SIGNAL(started()),
             this, SLOT(connAliveThreadStarted()));
     connect(connAliveThread, SIGNAL(finished()),
             this, SLOT(connAliveThreadFinished()));
-    connect(connAliveThread, SIGNAL(domainEnd(QString&)),
-            this, SLOT(emitDomainKeyToCloseViewer(QString&)));
+    connect(connAliveThread, SIGNAL(domainEnd(const QString&)),
+            this, SLOT(emitDomainKeyToCloseViewer(const QString&)));
 }
 void ConnElement::buildURI()
 {
@@ -84,8 +84,30 @@ void ConnElement::buildURI()
     URI = _uri.join("");
     own_index->setURI(URI);
 }
-
-/* public slots */
+bool ConnElement::getOnViewState() const
+{
+    //return own_index->getData().value("onView").toBool();
+    return connAliveThread->getOnViewState();
+}
+void ConnElement::overviewOfConnection()
+{
+    connAliveThread->setOnViewState( true );
+    virConnectPtr *_connPtrPtr = connAliveThread->getPtr_connectionPtr();
+    int row = own_model->connItemDataList.indexOf(own_index);
+    own_model->setData(own_model->index(row, 0), true, Qt::DecorationRole);
+    //qDebug()<<"overviewOfConnection"<<(*_connPtrPtr);
+    emit connToOverview(_connPtrPtr, name);
+}
+void ConnElement::disableOverviewOfConnection()
+{
+    connAliveThread->setOnViewState( false );
+    int row = own_model->connItemDataList.indexOf(own_index);
+    own_model->setData(own_model->index(row, 0), false, Qt::DecorationRole);
+}
+virConnectPtr* ConnElement::getPtr_connectionPtr() const
+{
+    return connAliveThread->getPtr_connectionPtr();
+}
 void ConnElement::setItemReference(ConnItemModel *model, ConnItemIndex *idx)
 {
     own_model = model;
@@ -111,6 +133,7 @@ void ConnElement::setItemReferenceForLocal(ConnItemModel *model, ConnItemIndex *
     conn_Status.insert("availability", QVariant(AVAILABLE));
     conn_Status.insert("isRunning", QVariant(CLOSED));
     conn_Status.insert("initName", QVariant(name));
+    conn_Status.insert("onView", QVariant(false));
     idx->setData(conn_Status);
     openConnection();
 }
@@ -133,19 +156,7 @@ void ConnElement::closeConnection()
     if ( connAliveThread->isRunning() )
         connAliveThread->closeConnection();
 }
-void ConnElement::overviewConnection()
-{
-    virConnectPtr *_connPtrPtr = connAliveThread->getPtr_connectionPtr();
-    //qDebug()<<"overviewConnection"<<(*_connPtrPtr);
-    emit connPtrPtr(_connPtrPtr, name);
-    int row = own_model->connItemDataList.indexOf(own_index);
-    own_model->setData(own_model->index(row, 0), true, Qt::DecorationRole);
-}
-virConnectPtr* ConnElement::getPtr_connectionPtr() const
-{
-    return connAliveThread->getPtr_connectionPtr();
-}
-void ConnElement::setAuthCredentials(QString &crd, QString &text)
+void ConnElement::setAuthCredentials(const QString &crd, const QString &text)
 {
     if ( connAliveThread!=nullptr ) {
         connAliveThread->setAuthCredentials(crd, text);
@@ -159,23 +170,38 @@ QString ConnElement::getURI() const
 {
     return URI;
 }
-void ConnElement::setName(QString &_name)
+void ConnElement::setName(const QString &_name)
 {
     name = _name;
 }
-void ConnElement::setURI(QString &_uri)
+void ConnElement::setURI(const QString &_uri)
 {
     URI = _uri;
 }
-void ConnElement::setOnViewConnAliveThread(bool state)
+
+/* private */
+void ConnElement::addMsgToLog(const QString title, const QString msg)
 {
-    connAliveThread->onView = state;
+    QString time = QTime::currentTime().toString();
+    QString errorMsg = QString(
+    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
+    sendWarning(errorMsg);
+    mainWindowUp();
+}
+void ConnElement::sendWarning(const QString &msg)
+{
+    emit warning(msg);
+}
+void ConnElement::mainWindowUp()
+{
+    emit warningShowed();
 }
 
 /* private slots */
 void ConnElement::setConnectionState(CONN_STATE status)
 {
-    //qDebug()<<"setConnectionState0"<<status;
+    //qDebug()<<"setConnectionState0"<<status<<name;
     if (waitTimerId) {
         killTimer(waitTimerId);
         waitTimerId = 0;
@@ -186,7 +212,7 @@ void ConnElement::setConnectionState(CONN_STATE status)
     own_index->setData(conn_Status);
     int row = own_model->connItemDataList.indexOf(own_index);
     for (int i=0; i<own_model->columnCount(); i++) {
-        QString data{"?"};
+        QString data;
         switch (i) {
         case 0:
             data = name;
@@ -204,6 +230,7 @@ void ConnElement::setConnectionState(CONN_STATE status)
                 break;
             case RUNNING:
                 data = "OPENED";
+                emit newOpenedConnection(name);
                 break;
             default:
                 break;
@@ -228,24 +255,11 @@ void ConnElement::timerEvent(QTimerEvent *event)
         _diff++;
     };
 }
-void ConnElement::receiveConnMessage(QString msg)
+void ConnElement::receiveConnMessage(const QString &msg)
 {
     addMsgToLog( QString("Connection '%1'").arg(name), msg );
 }
-void ConnElement::addMsgToLog(QString title, QString msg)
-{
-    QString time = QTime::currentTime().toString();
-    QString errorMsg = QString(
-    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
-            .arg(time).arg(title).arg(msg);
-    sendWarning(errorMsg);
-    mainWindowUp();
-}
-void ConnElement::sendWarning(QString &msg)
-{
-    emit warning(msg);
-}
-void ConnElement::writeErrorToLog(QString &msg, uint _num)
+void ConnElement::writeErrorToLog(const QString &msg, const uint _num)
 {
     Q_UNUSED(_num);
     QString time = QTime::currentTime().toString();
@@ -255,16 +269,13 @@ void ConnElement::writeErrorToLog(QString &msg, uint _num)
             .arg(time).arg(title).arg(msg);
     sendWarning(errorMsg);
 }
-void ConnElement::mainWindowUp()
-{
-    emit warningShowed();
-}
-void ConnElement::getAuthCredentials(QString &crd)
+void ConnElement::getAuthCredentials(const QString &crd)
 {
     emit authRequested(crd);
 }
 void ConnElement::forwardConnClosedSignal(bool onView)
 {
+    disableOverviewOfConnection();
     emit connClosed(onView, name);
 }
 void ConnElement::connAliveThreadStarted()
@@ -275,7 +286,7 @@ void ConnElement::connAliveThreadFinished()
 {
     setConnectionState(CLOSED);
 }
-void ConnElement::emitDomainKeyToCloseViewer(QString &_domName)
+void ConnElement::emitDomainKeyToCloseViewer(const QString &_domName)
 {
     QString key;
     key = QString("%1_%2").arg(name).arg(_domName);

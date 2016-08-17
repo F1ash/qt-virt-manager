@@ -12,7 +12,7 @@ public:
     explicit SearchThread(QObject *parent = nullptr);
 
 signals:
-    void        localConnFound(QString&);
+    void        localConnFound(const QString&);
 
 private:
     QStringList URIs;
@@ -20,7 +20,7 @@ private:
 public slots:
     void        run();
     void        setURIList();
-    void        compareURI(QString&);
+    void        compareURI(const QString&);
 };
 
 #endif // SEARCH_THREAD_H

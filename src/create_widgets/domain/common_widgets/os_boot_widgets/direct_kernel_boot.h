@@ -13,9 +13,9 @@ public:
     Path_To_File    *loader, *kernel, *initrd, *dtb;
 
 signals:
-    void             domainType(QString&);
-    void             osType(QString&);
-    void             emulatorType(QString&);
+    void             domainType(const QString&);
+    void             osType(const QString&);
+    void             emulatorType(const QString&);
 
 private:
     QLabel          *loaderLabel, *kernelLabel,

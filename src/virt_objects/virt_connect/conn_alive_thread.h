@@ -5,8 +5,6 @@
 #include "virt_objects/_virt_thread.h"
 #include <QTime>
 
-#define WAIT_AUTH 300    // dev 10 (sec.)
-
 enum CONN_STATE {
     FAILED  = -1,
     CLOSED,
@@ -42,18 +40,24 @@ class ConnAliveThread : public _VirtThread
 public:
     explicit ConnAliveThread(QObject *parent = nullptr);
     ~ConnAliveThread();
-    bool            onView;
+    void            setOnViewState(bool);
+    bool            getOnViewState() const;
+    virConnectPtr*  getPtr_connectionPtr() const;
+    void            setData(const QString&);
+    void            closeConnection();
+    void            setAuthCredentials(const QString&, const QString&);
 
 signals:
     void            connMsg(const QString&);
     void            changeConnState(CONN_STATE);
-    void            authRequested(QString&);
+    void            authRequested(const QString&);
     void            domStateChanged(Result);
     void            netStateChanged(Result);
     void            connClosed(bool);
-    void            domainEnd(QString&);
+    void            domainEnd(const QString&);
 
 private:
+    bool            onView;
     int             domainsLifeCycleCallback;
     int             networkLifeCycleCallback;
     bool            authWaitKey;
@@ -62,13 +66,6 @@ private:
     bool            closeCallbackRegistered;
     virConnectPtr   _connPtr;
 
-public slots:
-    void            setData(QString&);
-    void            closeConnection();
-    virConnectPtr*  getPtr_connectionPtr();
-    void            setAuthCredentials(QString&, QString&);
-
-private slots:
     void            run();
     void            openConnection();
     void            registerConnEvents();
@@ -85,7 +82,7 @@ private slots:
     const char*     netEventToString(int event);
     const char*     netEventDetailToString(int event, int detail);
     void            closeConnection(int);
-    void            getAuthCredentials(QString&);
+    void            getAuthCredentials(const QString&);
 };
 
 #endif // CONN_ALIVE_THREAD_H

@@ -80,8 +80,8 @@ CreateVolume::CreateVolume(
                 this, connPtrPtr, _poolName);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(initData()));
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errorMsg(const QString&)));
     hlpThread->start();
 }
 

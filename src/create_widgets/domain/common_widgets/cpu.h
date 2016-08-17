@@ -34,12 +34,12 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
-    void             setMaxVCPU(QString&);
-    void             changeArch(QString&);
+    void             setMaxVCPU(const QString&);
+    void             changeArch(const QString&);
 
 private slots:
     void             readXMLDesciption();
-    void             readXMLDesciption(QString&);
+    void             readXMLDesciption(const QString&);
 };
 
 #endif // CPU_H

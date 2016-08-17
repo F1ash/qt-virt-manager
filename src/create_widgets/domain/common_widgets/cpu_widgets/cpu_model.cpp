@@ -66,7 +66,7 @@ void CPU_Model::setUsage(bool state)
 {
     useModel->setChecked(state);
 }
-void CPU_Model::archChanged(QString &_arch)
+void CPU_Model::archChanged(const QString &_arch)
 {
     //qDebug()<<_arch;
     model->clear();

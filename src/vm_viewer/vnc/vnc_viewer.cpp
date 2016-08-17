@@ -45,8 +45,8 @@ VNC_Viewer::VNC_Viewer(
     hlpThread = new vncHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errorMsg(const QString&)));
     hlpThread->start();
 }
 
@@ -301,8 +301,8 @@ void VNC_Viewer::initVNCWidget()
     setCentralWidget(vncWdg);
     connect(vncWdg, SIGNAL(Full_Size(int,int)),
             SLOT(resizeViewer(const int, const int)));
-    //connect(vncWdg, SIGNAL(errMsg(QString&)),
-    //        this, SLOT(sendErrMsg(QString&)));
+    //connect(vncWdg, SIGNAL(errMsg(const QString&)),
+    //        this, SLOT(sendErrMsg(const QString&)));
     //connect(vncWdg, SIGNAL(clipboardsReleased(bool)),
     //        viewerToolBar, SLOT(changeCopypasteState(bool)));
     connect(vncWdg, SIGNAL(boarderTouched()),

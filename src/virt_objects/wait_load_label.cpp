@@ -7,10 +7,12 @@ WaitLoadLabel::WaitLoadLabel(QWidget *parent) :
     angle = 0;
     opacity = 0;
     timerId = 0;
+    setAttribute(Qt::WA_TransparentForMouseEvents, true);
 }
 void WaitLoadLabel::start()
 {
     if ( timerId == 0 ) {
+        setAttribute(Qt::WA_TransparentForMouseEvents, false);
         opacity = 1;
         timerId = startTimer(10);
     };
@@ -23,6 +25,7 @@ void WaitLoadLabel::stop()
         opacity = 0;
         timerId = 0;
         update();
+        setAttribute(Qt::WA_TransparentForMouseEvents, true);
     };
 }
 
@@ -40,7 +43,10 @@ void WaitLoadLabel::paintEvent(QPaintEvent *ev)
     ev->accept();
     QPainter painter(this);
     painter.setOpacity(opacity);
-    if (timerId) painter.translate(frameRect().width()/2, frameRect().height()/2);
+    if (timerId)
+        painter.translate(
+                    frameRect().width()/2,
+                    frameRect().height()/2);
     painter.rotate(angle);
     painter.drawPixmap(
                 frameRect(),

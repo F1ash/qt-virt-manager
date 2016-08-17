@@ -175,6 +175,7 @@ set (HEADERS
   src/virt_objects/virt_event_loop.h
   src/virt_objects/tree_view.h
   src/virt_objects/h_navigation_label.h
+  src/virt_objects/wait_load_label.h
   
   src/virt_objects/virt_connect/conn_element.h
   src/virt_objects/virt_connect/conn_alive_thread.h
@@ -526,6 +527,7 @@ set (SOURCES
   src/virt_objects/virt_event_loop.cpp
   src/virt_objects/tree_view.cpp
   src/virt_objects/h_navigation_label.cpp
+  src/virt_objects/wait_load_label.cpp
   
   src/virt_objects/virt_connect/conn_element.cpp
   src/virt_objects/virt_connect/conn_alive_thread.cpp
@@ -895,6 +897,9 @@ set (VIEWER_SOURCES
 set (VIEWER_RCC_SRC
     src/qt_remote_viewer.qrc
 )
+set (VIEWER_TS
+    src/vm_viewer/translations/remote_viewer_ru.ts
+)
 
 ##
 if ( QT4_BUILD )
@@ -905,6 +910,7 @@ if ( QT4_BUILD )
     #qt4_add_translation(QTERM_QM ${QTERM_TS})
     qt4_wrap_cpp (MOC_VIEWER_SOURCES ${VIEWER_HEADERS})
     qt4_add_resources(VIEWER_RCC ${VIEWER_RCC_SRC})
+    #qt4_add_translation(VIEWER_QM ${VIEWER_TS})
     set(TERM_WIDGET_LIB qtermwidget4)
 else ( QT4_BUILD )
     include("${CMAKE_MODULE_PATH}/CMakeQt5.txt")
@@ -914,6 +920,7 @@ else ( QT4_BUILD )
     #qt5_add_translation(QTERM_QM ${QTERM_TS})
     qt5_wrap_cpp (MOC_VIEWER_SOURCES ${VIEWER_HEADERS})
     qt5_add_resources(VIEWER_RCC ${VIEWER_RCC_SRC})
+    #qt5_add_translation(VIEWER_QM ${VIEWER_TS})
     set(TERM_WIDGET_LIB qtermwidget5)
 endif( QT4_BUILD )
 ##
@@ -1005,7 +1012,7 @@ install ( FILES src/icons/256x256/apps/virtual-engineering.png
 
 set (VIEWER_NAME ${PROJ_PREFIX}-remote-viewer)
 add_executable(${VIEWER_NAME} ${VIEWER_HEADERS} ${VIEWER_SOURCES}
-    ${MOC_VIEWER_SOURCES} ${VIEWER_RCC})
+    ${MOC_VIEWER_SOURCES} ${VIEWER_RCC} ${VIEWER_QM})
 target_link_libraries (${VIEWER_NAME} ${VIEWER_BUILD_PROJECT_LIBRARIES})
 SET_TARGET_PROPERTIES (${VIEWER_NAME} PROPERTIES COMPILE_FLAGS
     "-DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO} \

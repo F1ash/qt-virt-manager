@@ -29,7 +29,7 @@ public:
             virConnectPtr*  conn    = nullptr);
 
 signals:
-    void             errorMsg(QString&);
+    void             errorMsg(const QString&);
     void             ptrIsNull();
 
 private:

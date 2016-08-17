@@ -25,7 +25,7 @@ public slots:
 
 private slots:
     void             readXMLDesciption();
-    void             readXMLDesciption(QString&);
+    void             readXMLDesciption(const QString&);
 };
 
 #endif // SECURITY_LABEL_H

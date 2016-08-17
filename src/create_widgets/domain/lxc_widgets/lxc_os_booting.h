@@ -14,9 +14,9 @@ public:
     _Arch           *architecture;
 
 signals:
-    void             domainType(QString&);
-    void             osType(QString&);
-    void             emulatorType(QString&);
+    void             domainType(const QString&);
+    void             osType(const QString&);
+    void             emulatorType(const QString&);
 
 private:
     QString          capabilities;
@@ -47,7 +47,7 @@ public slots:
     void             setInitState();
 
 private slots:
-    void             changeArch(QString&);
+    void             changeArch(const QString&);
 };
 
 #endif // LXC_OS_BOOTING_H

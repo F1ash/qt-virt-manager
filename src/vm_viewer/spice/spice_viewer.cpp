@@ -41,8 +41,8 @@ Spice_Viewer::Spice_Viewer(
     hlpThread = new spcHlpThread(this, ptr_ConnPtr, domain);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(init()));
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errorMsg(const QString&)));
     hlpThread->start();
 }
 
@@ -259,8 +259,8 @@ void Spice_Viewer::initSpiceWidget()
     connect(viewerToolBar->vm_stateWdg,
             SIGNAL(transformationMode(Qt::TransformationMode)),
             spiceWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
-    connect(spiceWdg, SIGNAL(errMsg(QString&)),
-            this, SLOT(sendErrMsg(QString&)));
+    connect(spiceWdg, SIGNAL(errMsg(const QString&)),
+            this, SLOT(sendErrMsg(const QString&)));
     connect(spiceWdg, SIGNAL(clipboardsReleased(bool)),
             viewerToolBar, SLOT(changeCopypasteState(bool)));
     connect(spiceWdg, SIGNAL(boarderTouched()),

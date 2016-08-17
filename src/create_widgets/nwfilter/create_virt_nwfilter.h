@@ -32,8 +32,8 @@ public:
     ~CreateVirtNWFilter();
 
 signals:
-    void             errorMsg(QString&);
-    void             finished(QString&);
+    void             errorMsg(const QString&);
+    void             finished(const QString&);
     void             addNewTask(TASK);
 
 private:

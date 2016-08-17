@@ -16,7 +16,7 @@ public:
     ~VirtStoragePoolControl();
 
 signals:
-    void                       overviewStPool(virConnectPtr*, QString&, QString&);
+    void                       overviewStPool(virConnectPtr*, const QString&, const QString&);
     void                       poolToEditor(TASK);
 
 private:
@@ -27,7 +27,7 @@ private:
 public slots:
     void                       stopProcessing();
     bool                       setCurrentWorkConnect(virConnectPtr*);
-    void                       setListHeader(QString&);
+    void                       setListHeader(const QString&);
     void                       resultReceiver(Result);
     void                       stopOverView();
 

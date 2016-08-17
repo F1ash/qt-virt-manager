@@ -22,7 +22,7 @@ public:
     void             run();
 
 signals:
-    void             uriToCompare(QString&);
+    void             uriToCompare(const QString&);
 private:
     bool             localConnsClosed;
 };

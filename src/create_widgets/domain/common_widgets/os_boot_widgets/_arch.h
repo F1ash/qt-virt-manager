@@ -15,11 +15,11 @@ public:
                    QString  _caps  = "");
 
 signals:
-    void             domainType(QString&);
-    void             archType(QString&);
-    void             osType(QString&);
-    void             emulatorType(QString&);
-    void             maxVCPU(QString&);
+    void             domainType(const QString&);
+    void             archType(const QString&);
+    void             osType(const QString&);
+    void             emulatorType(const QString&);
+    void             maxVCPU(const QString&);
 
 private:
     QString          capabilities;

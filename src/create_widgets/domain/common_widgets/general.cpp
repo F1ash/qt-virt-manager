@@ -41,7 +41,7 @@ General::General(
     connect(name, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
     connect(name, SIGNAL(textEdited(QString)),
-            this, SIGNAL(newName(QString)));
+            this, SIGNAL(newName(const QString&)));
     connect(uuid, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
     connect(title, SIGNAL(textEdited(QString)),
@@ -90,7 +90,7 @@ QDomDocument General::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void General::changeArch(QString &_arch)
+void General::changeArch(const QString &_arch)
 {
     type = _arch;
     typeLabel->setText(QString("VM Type: %1").arg(type.toUpper()));
@@ -124,7 +124,7 @@ void General::readXMLDesciption()
     currentDeviceXMLDesc = xmlDesc;
     readXMLDesciption(currentDeviceXMLDesc);
 }
-void General::readXMLDesciption(QString &_xmlDesc)
+void General::readXMLDesciption(const QString &_xmlDesc)
 {
     //if ( _xmlDesc.isEmpty() ) return;
     QDomDocument doc;

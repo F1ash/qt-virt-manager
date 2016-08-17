@@ -30,9 +30,9 @@ public:
     Path_To_File    *nvramTemplate;
 
 signals:
-    void             domainType(QString&);
-    void             osType(QString&);
-    void             emulatorType(QString&);
+    void             domainType(const QString&);
+    void             osType(const QString&);
+    void             emulatorType(const QString&);
 
 private:
     QString          arch;
@@ -55,7 +55,7 @@ public slots:
     BootOrderList    getBootOrderData() const;
 
 private slots:
-    void             changeArch(QString&);
+    void             changeArch(const QString&);
 };
 
 #endif // BIOS_BOOT_H

@@ -51,20 +51,20 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
     connect(restorePanel, SIGNAL(saveData()),
             this, SLOT(saveData()));
     for (int i=0; i<bootSet->count(); i++) {
-        connect(bootSet->widget(i), SIGNAL(domainType(QString&)),
-                this, SIGNAL(domainType(QString&)));
-        connect(bootSet->widget(i), SIGNAL(osType(QString&)),
-                this, SLOT(changeOSType(QString&)));
-        connect(bootSet->widget(i), SIGNAL(emulatorType(QString&)),
-                this, SIGNAL(emulatorType(QString&)));
+        connect(bootSet->widget(i), SIGNAL(domainType(const QString&)),
+                this, SIGNAL(domainType(const QString&)));
+        connect(bootSet->widget(i), SIGNAL(osType(const QString&)),
+                this, SLOT(changeOSType(const QString&)));
+        connect(bootSet->widget(i), SIGNAL(emulatorType(const QString&)),
+                this, SIGNAL(emulatorType(const QString&)));
         connect(bootSet->widget(i), SIGNAL(dataChanged()),
                 this, SLOT(stateChanged()));
     };
     BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
-    connect(wdg->architecture, SIGNAL(maxVCPU(QString&)),
-            this, SIGNAL(maxVCPU(QString&)));
-    connect(wdg->architecture, SIGNAL(archType(QString&)),
-            this, SIGNAL(archChanged(QString&)));
+    connect(wdg->architecture, SIGNAL(maxVCPU(const QString&)),
+            this, SIGNAL(maxVCPU(const QString&)));
+    connect(wdg->architecture, SIGNAL(archType(const QString&)),
+            this, SIGNAL(archChanged(const QString&)));
 }
 
 /* public slots */
@@ -161,7 +161,7 @@ void OS_Booting::readXMLDesciption()
     currentDeviceXMLDesc = xmlDesc;
     readXMLDesciption(currentDeviceXMLDesc);
 }
-void OS_Booting::readXMLDesciption(QString &xmlDesc)
+void OS_Booting::readXMLDesciption(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;
@@ -192,7 +192,7 @@ void OS_Booting::readXMLDesciption(QString &xmlDesc)
     bootType->bootType->setCurrentIndex( (idx<0)? 0:idx );
     static_cast<_QWidget*>(bootSet->currentWidget())->setDataDescription(xmlDesc);
 }
-void OS_Booting::changeOSType(QString &_type)
+void OS_Booting::changeOSType(const QString &_type)
 {
     os_type = _type;
     //qDebug()<<os_type;

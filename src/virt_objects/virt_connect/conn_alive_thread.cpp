@@ -1,5 +1,6 @@
 #include "conn_alive_thread.h"
-#define MINUTE 60000
+
+#define WAIT_AUTH 300    // dev 10 (sec.)
 
 ConnAliveThread::ConnAliveThread(QObject *parent) :
     _VirtThread(parent)
@@ -17,9 +18,19 @@ ConnAliveThread::~ConnAliveThread()
 {
     keep_alive = false;
 }
-
-/* public slots */
-void ConnAliveThread::setData(QString &uri) { URI = uri; }
+void ConnAliveThread::setOnViewState(bool state)
+{
+    onView = state;
+}
+bool ConnAliveThread::getOnViewState() const
+{
+    return onView;
+}
+virConnectPtr *ConnAliveThread::getPtr_connectionPtr() const
+{
+    return ptr_ConnPtr;
+}
+void ConnAliveThread::setData(const QString &uri) { URI = uri; }
 void ConnAliveThread::closeConnection()
 {
     //qDebug()<<"closeConnection0"<<*ptr_ConnPtr<<URI;
@@ -52,11 +63,7 @@ void ConnAliveThread::closeConnection()
     };
     emit changeConnState(state);
 }
-virConnectPtr *ConnAliveThread::getPtr_connectionPtr()
-{
-    return ptr_ConnPtr;
-}
-void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
+void ConnAliveThread::setAuthCredentials(const QString &crd, const QString &text)
 {
     if ( crd.toLower()=="username" )
         authData.username = text.toUtf8().data();
@@ -65,7 +72,7 @@ void ConnAliveThread::setAuthCredentials(QString &crd, QString &text)
     authWaitKey = false;
 }
 
-/* private slots */
+/* private */
 void ConnAliveThread::run()
 {
     openConnection();
@@ -636,7 +643,7 @@ void ConnAliveThread::closeConnection(int reason)
     // and closeConnection() will not be called
     emit connClosed(onView);
 }
-void ConnAliveThread::getAuthCredentials(QString &crd)
+void ConnAliveThread::getAuthCredentials(const QString &crd)
 {
     /*
      * Get credentials for authData;

@@ -20,10 +20,10 @@ public:
             QString  _xmlDesc = QString());
 
 signals:
-    void             archChanged(QString&);
-    void             domainType(QString&);
-    void             emulatorType(QString&);
-    void             maxVCPU(QString&);
+    void             archChanged(const QString&);
+    void             domainType(const QString&);
+    void             emulatorType(const QString&);
+    void             maxVCPU(const QString&);
 
 private:
     const QString    xmlDesc;
@@ -47,8 +47,8 @@ public slots:
 private slots:
     void             readCapabilities();
     void             readXMLDesciption();
-    void             readXMLDesciption(QString&);
-    void             changeOSType(QString&);
+    void             readXMLDesciption(const QString&);
+    void             changeOSType(const QString&);
     void             changeBootType();
 };
 

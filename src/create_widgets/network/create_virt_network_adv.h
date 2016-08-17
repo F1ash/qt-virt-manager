@@ -23,7 +23,7 @@ public:
     void             readXmlDescData(const QString&);
 
 signals:
-    void             errorMsg(QString&);
+    void             errorMsg(const QString&);
     void             newName(const QString&);
     void             accepted(bool);
 

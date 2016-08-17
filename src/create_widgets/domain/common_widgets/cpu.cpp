@@ -121,13 +121,13 @@ QDomDocument CPU::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void CPU::setMaxVCPU(QString &_vcpu)
+void CPU::setMaxVCPU(const QString &_vcpu)
 {
     //qDebug()<<_vcpu;
     cpuAlloc->vcpu->setRange(1, _vcpu.toInt());
     cpuTopology->setMaxVCPU(_vcpu.toInt());
 }
-void CPU::changeArch(QString &_arch)
+void CPU::changeArch(const QString &_arch)
 {
     cpuModel->archChanged(_arch);
 }
@@ -138,7 +138,7 @@ void CPU::readXMLDesciption()
     currentDeviceXMLDesc = xmlDesc;
     readXMLDesciption(currentDeviceXMLDesc);
 }
-void CPU::readXMLDesciption(QString &_xmlDesc)
+void CPU::readXMLDesciption(const QString &_xmlDesc)
 {
     //qDebug()<<_xmlDesc;
     QDomDocument doc;

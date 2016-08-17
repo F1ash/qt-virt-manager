@@ -57,7 +57,7 @@ private slots:
     void             setPoolList();
     void             set_Result();
     void             showVolumes(QListWidgetItem*);
-    void             showMsg(QString&);
+    void             showMsg(const QString&);
     void             execAction(TASK);
     void             poolThreadResult(Result);
     void             addPoolItem(QStringList&);

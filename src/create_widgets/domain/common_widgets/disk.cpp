@@ -34,8 +34,8 @@ Disk::Disk(QWidget *parent, virConnectPtr *connPtrPtr) :
     for(int i=0; i<info->count(); i++) {
         _Disk *_d = static_cast<_Disk*>(info->widget(i));
         if ( nullptr==_d ) continue;
-        connect(_d, SIGNAL(errorMsg(QString&)),
-                this, SIGNAL(errorMsg(QString&)));
+        connect(_d, SIGNAL(errorMsg(const QString&)),
+                this, SIGNAL(errorMsg(const QString&)));
     };
 
     commonLayout = new QVBoxLayout(this);

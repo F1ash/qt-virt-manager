@@ -53,8 +53,8 @@ DomainStateViewer::DomainStateViewer(
                     this, ptr_ConnPtr, domainName);
         connect(domainMonitorThread, SIGNAL(dataChanged(int, int, int, int)),
                 this, SLOT(setData(int, int, int, int)));
-        connect(domainMonitorThread, SIGNAL(errorMsg(QString&,uint)),
-                this, SIGNAL(errorMsg(QString&)));
+        connect(domainMonitorThread, SIGNAL(errorMsg(const QString&, const uint)),
+                this, SIGNAL(errorMsg(const QString&)));
         timerId = startTimer(PERIOD*1000);
     } else {
         monitorName->setText("State:<br><b>Connection Error</b></br>");

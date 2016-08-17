@@ -37,7 +37,7 @@ private:
 
 public slots:
     FSD_Result           getResult() const;
-    void                 showMsg(QString&);
+    void                 showMsg(const QString &);
 
 private slots:
     void                 setSecretList();

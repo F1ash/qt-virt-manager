@@ -54,14 +54,14 @@ LXC_OSBooting::LXC_OSBooting(QWidget *parent, QString _caps) :
     setLayout(commonLayout);
     connect(nameSpaceEnable, SIGNAL(toggled(bool)),
             nameSpaceWidget, SLOT(setEnabled(bool)));
-    connect(architecture, SIGNAL(domainType(QString&)),
-            this, SIGNAL(domainType(QString&)));
-    connect(architecture, SIGNAL(osType(QString&)),
-            this, SIGNAL(osType(QString&)));
-    connect(architecture, SIGNAL(archType(QString&)),
-            this, SLOT(changeArch(QString&)));
-    connect(architecture, SIGNAL(emulatorType(QString&)),
-            this, SIGNAL(emulatorType(QString&)));
+    connect(architecture, SIGNAL(domainType(const QString&)),
+            this, SIGNAL(domainType(const QString&)));
+    connect(architecture, SIGNAL(osType(const QString&)),
+            this, SIGNAL(osType(const QString&)));
+    connect(architecture, SIGNAL(archType(const QString&)),
+            this, SLOT(changeArch(const QString&)));
+    connect(architecture, SIGNAL(emulatorType(const QString&)),
+            this, SIGNAL(emulatorType(const QString&)));
     architecture->setItems();
     // dataChanged connectins
     connect(architecture, SIGNAL(dataChanged()),
@@ -183,7 +183,7 @@ void LXC_OSBooting::setInitState()
 }
 
 /* private slots */
-void LXC_OSBooting::changeArch(QString &_arch)
+void LXC_OSBooting::changeArch(const QString &_arch)
 {
     arch = _arch;
 }

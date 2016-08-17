@@ -27,7 +27,7 @@ public:
     virDomain               *currDomain;
 
 signals:
-    void                     errorMsg(QString&);
+    void                     errorMsg(const QString&);
     void                     ptrIsNull();
 
 public slots:

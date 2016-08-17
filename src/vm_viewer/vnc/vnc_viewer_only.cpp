@@ -191,8 +191,8 @@ void VNC_Viewer_Only::initVNCWidget()
     setCentralWidget(vncWdg);
     connect(vncWdg, SIGNAL(Full_Size(int,int)),
             SLOT(resizeViewer(const int, const int)));
-    //connect(vncWdg, SIGNAL(errMsg(QString&)),
-    //        this, SLOT(sendErrMsg(QString&)));
+    //connect(vncWdg, SIGNAL(errMsg(const QString&)),
+    //        this, SLOT(sendErrMsg(const QString&)));
     //connect(vncWdg, SIGNAL(clipboardsReleased(bool)),
     //        viewerToolBar, SLOT(changeCopypasteState(bool)));
     connect(vncWdg, SIGNAL(boarderTouched()),

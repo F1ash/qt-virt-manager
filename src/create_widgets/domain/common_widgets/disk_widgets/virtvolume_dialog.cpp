@@ -38,8 +38,8 @@ VirtVolumeDialog::VirtVolumeDialog(
     commonLayout->addWidget(listWidget);
     commonLayout->addWidget(buttons);
     setLayout(commonLayout);
-    connect(volumes, SIGNAL(entityMsg(QString&)),
-            this, SLOT(showMsg(QString&)));
+    connect(volumes, SIGNAL(entityMsg(const QString&)),
+            this, SLOT(showMsg(const QString&)));
     connect(volumes, SIGNAL(addNewTask(TASK)),
             this, SLOT(execAction(TASK)));
     setPoolList();
@@ -94,7 +94,7 @@ void VirtVolumeDialog::showVolumes(QListWidgetItem *_item)
     volumes->setCurrentStoragePool(
                 ptr_ConnPtr, currConnName, _poolName);
 }
-void VirtVolumeDialog::showMsg(QString &msg)
+void VirtVolumeDialog::showMsg(const QString &msg)
 {
     QMessageBox::information(
                 this,

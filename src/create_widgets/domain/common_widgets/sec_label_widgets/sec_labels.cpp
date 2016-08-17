@@ -190,7 +190,7 @@ QDomDocument SecLabels::readData()
     doc.appendChild(_secLabel);
     return doc;
 }
-void SecLabels::readXMLDesciption(QString &_xmlDesc)
+void SecLabels::readXMLDesciption(const QString &_xmlDesc)
 {
     //if ( _xmlDesc.isEmpty() ) return;
     //qDebug()<<_xmlDesc;

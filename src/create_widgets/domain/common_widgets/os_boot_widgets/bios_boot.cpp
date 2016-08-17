@@ -38,14 +38,14 @@ BIOS_Boot::BIOS_Boot(QWidget *parent, QString _caps) :
     scrolledLayout->addWidget(commonWdg);
     scrolledLayout->addStretch(-1);
     setLayout(scrolledLayout);
-    connect(architecture, SIGNAL(domainType(QString&)),
-            this, SIGNAL(domainType(QString&)));
-    connect(architecture, SIGNAL(osType(QString&)),
-            this, SIGNAL(osType(QString&)));
-    connect(architecture, SIGNAL(emulatorType(QString&)),
-            this, SIGNAL(emulatorType(QString&)));
-    connect(architecture, SIGNAL(archType(QString&)),
-            this, SLOT(changeArch(QString&)));
+    connect(architecture, SIGNAL(domainType(const QString&)),
+            this, SIGNAL(domainType(const QString&)));
+    connect(architecture, SIGNAL(osType(const QString&)),
+            this, SIGNAL(osType(const QString&)));
+    connect(architecture, SIGNAL(emulatorType(const QString&)),
+            this, SIGNAL(emulatorType(const QString&)));
+    connect(architecture, SIGNAL(archType(const QString&)),
+            this, SLOT(changeArch(const QString&)));
     architecture->setItems();
     // dataChanged connectins
     connect(architecture, SIGNAL(dataChanged()),
@@ -274,7 +274,7 @@ BootOrderList BIOS_Boot::getBootOrderData() const
 }
 
 /* private slots */
-void BIOS_Boot::changeArch(QString &_arch)
+void BIOS_Boot::changeArch(const QString &_arch)
 {
     arch = _arch;
 }

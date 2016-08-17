@@ -139,8 +139,8 @@ CreateVirtDomain::CreateVirtDomain(
     hlpThread = new HelperThread(this, ptr_ConnPtr);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(readCapabilities()));
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errorMsg(const QString&)));
     hlpThread->start();
 }
 CreateVirtDomain::~CreateVirtDomain()
@@ -356,18 +356,18 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.insert(
                     "SecurityLabel",
                     new SecurityLabel(this, xmlDesc));
-        connect(wdgList.value("General"), SIGNAL(newName(QString)),
-                this, SLOT(setNewWindowTitle(QString)));
-        connect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
-                wdgList.value("General"), SLOT(changeArch(QString&)));
-        connect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
-                wdgList.value("Devices"), SLOT(setEmulator(QString&)));
+        connect(wdgList.value("General"), SIGNAL(newName(const QString&)),
+                this, SLOT(setNewWindowTitle(const QString&)));
+        connect(wdgList.value("OS_Booting"), SIGNAL(domainType(const QString&)),
+                wdgList.value("General"), SLOT(changeArch(const QString&)));
+        connect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(const QString&)),
+                wdgList.value("Devices"), SLOT(setEmulator(const QString&)));
         connect(wdgList.value("Devices"), SIGNAL(devicesChanged(QDomDocument&)),
                 wdgList.value("OS_Booting"), SLOT(searchBootableDevices(QDomDocument&)));
-        connect(wdgList.value("OS_Booting"), SIGNAL(maxVCPU(QString&)),
-                wdgList.value("CPU"), SLOT(setMaxVCPU(QString&)));
-        connect(wdgList.value("OS_Booting"), SIGNAL(archChanged(QString&)),
-                wdgList.value("CPU"), SLOT(changeArch(QString&)));
+        connect(wdgList.value("OS_Booting"), SIGNAL(maxVCPU(const QString&)),
+                wdgList.value("CPU"), SLOT(setMaxVCPU(const QString&)));
+        connect(wdgList.value("OS_Booting"), SIGNAL(archChanged(const QString&)),
+                wdgList.value("CPU"), SLOT(changeArch(const QString&)));
     } else {
         wdgList.clear();
         QMessageBox::information(
@@ -415,8 +415,8 @@ void CreateVirtDomain::set_specified_Tabs()
             } else if ( idx == 5 ) {
                 Devices *wdg = static_cast<Devices*>(Wdg);
                 if ( nullptr!=wdg ) {
-                    connect(wdg, SIGNAL(errorMsg(QString&)),
-                            this, SIGNAL(errorMsg(QString&)));
+                    connect(wdg, SIGNAL(errorMsg(const QString&)),
+                            this, SIGNAL(errorMsg(const QString&)));
                     wdg->initBootDevices();
                 };
             };
@@ -434,9 +434,9 @@ void CreateVirtDomain::restoreParameters()
 {
     setEnabled(false);
     tabWidget->clear();
-    //disconnect(wdgList.value("OS_Booting"), SIGNAL(domainType(QString&)),
-    //           wdgList.value("General"), SLOT(changeArch(QString&)));
-    //disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(QString&)),
+    //disconnect(wdgList.value("OS_Booting"), SIGNAL(domainType(const QString&)),
+    //           wdgList.value("General"), SLOT(changeArch(const QString&)));
+    //disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(const QString&)),
     //           wdgList.value("Devices"), SLOT(setEmulator(QString&)));
     foreach (QString key, wdgList.keys()) {
         _QWidget *Wdg = static_cast<_QWidget*>(
@@ -503,14 +503,14 @@ void CreateVirtDomain::setBootOrder(QDomElement *_devices)
         };
     };
 }
-void CreateVirtDomain::setNewWindowTitle(QString _name)
+void CreateVirtDomain::setNewWindowTitle(const QString &_name)
 {
     QString connName = task.srcConName;
     setWindowTitle(
                 QString("VM Settings / <%1> in [%2]")
                 .arg(_name).arg(connName));
 }
-void CreateVirtDomain::sendMsg(QString &msg)
+void CreateVirtDomain::sendMsg(const QString &msg)
 {
     QString time = QTime::currentTime().toString();
     QString title = QString("Connection '%1'").arg(task.srcConName);

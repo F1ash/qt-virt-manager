@@ -106,7 +106,7 @@ QString CreatePool::getXMLDescFileName() const
      * therefore keep to seek on not-NULL next element
      */
     uint j = 0;
-    uint count = list.length();
+    const uint count = list.length();
     for (int i=0; i<count;i++) {
         //qDebug()<<list.item(j).nodeName()<<i;
         if (!list.item(j).isNull())

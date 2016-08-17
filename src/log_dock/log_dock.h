@@ -47,7 +47,7 @@ signals:
     void              overflow(bool);
 
 public slots:
-    void              appendMsgToLog(QString&);
+    void              appendMsgToLog(const QString&);
 
 private slots:
     void              timerEvent(QTimerEvent*);

@@ -18,16 +18,30 @@ class ConnElement : public QObject
 public:
     explicit ConnElement(QObject *parent = nullptr);
     void              buildURI();
+    bool              getOnViewState() const;
+    void              overviewOfConnection();
+    void              disableOverviewOfConnection();
+    virConnectPtr*    getPtr_connectionPtr() const;
+    void              setItemReference(ConnItemModel*, ConnItemIndex*);
+    void              setItemReferenceForLocal(ConnItemModel*, ConnItemIndex*);
+    void              openConnection();
+    void              closeConnection();
+    void              setAuthCredentials(const QString&, const QString&);
+    QString           getName() const;
+    QString           getURI() const;
+    void              setName(const QString&);
+    void              setURI(const QString&);
 
 signals:
     void              warningShowed();
-    void              warning(QString&);
-    void              connPtrPtr(virConnectPtr*, QString&);
-    void              authRequested(QString&);
+    void              warning(const QString&);
+    void              connToOverview(virConnectPtr*, const QString&);
+    void              authRequested(const QString&);
     void              domStateChanged(Result);
     void              netStateChanged(Result);
-    void              connClosed(bool, QString&);
-    void              domainEnd(QString&);
+    void              connClosed(bool, const QString&);
+    void              domainEnd(const QString&);
+    void              newOpenedConnection(const QString&);
 
 private:
     ConnItemModel    *own_model;
@@ -45,33 +59,20 @@ private:
 
     ConnAliveThread  *connAliveThread;
 
-public slots:
-    void              setItemReference(ConnItemModel*, ConnItemIndex*);
-    void              setItemReferenceForLocal(ConnItemModel*, ConnItemIndex*);
-    void              openConnection();
-    void              closeConnection();
-    void              overviewConnection();
-    virConnectPtr*    getPtr_connectionPtr() const;
-    void              setAuthCredentials(QString&, QString&);
-    QString           getName() const;
-    QString           getURI() const;
-    void              setName(QString&);
-    void              setURI(QString&);
-    void              setOnViewConnAliveThread(bool);
+    void              addMsgToLog(const QString, const QString);
+    void              sendWarning(const QString&);
+    void              mainWindowUp();
 
 private slots:
     void              setConnectionState(CONN_STATE);
     void              timerEvent(QTimerEvent*);
-    void              receiveConnMessage(QString);
-    void              addMsgToLog(QString, QString);
-    void              sendWarning(QString&);
-    void              writeErrorToLog(QString&, uint);
-    void              mainWindowUp();
-    void              getAuthCredentials(QString&);
+    void              receiveConnMessage(const QString&);
+    void              writeErrorToLog(const QString&, const uint);
+    void              getAuthCredentials(const QString&);
     void              forwardConnClosedSignal(bool);
     void              connAliveThreadStarted();
     void              connAliveThreadFinished();
-    void              emitDomainKeyToCloseViewer(QString&);
+    void              emitDomainKeyToCloseViewer(const QString&);
 };
 
 #endif   // CONN_ELEMENT_H

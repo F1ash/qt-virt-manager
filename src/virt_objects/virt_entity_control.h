@@ -23,7 +23,7 @@ public:
 
     virtual void             stopProcessing();
     virtual bool             setCurrentWorkConnect(virConnectPtr*);
-    virtual void             setListHeader(QString&);
+    virtual void             setListHeader(const QString&);
     virtual void             reloadState();
     virtual void             changeDockVisibility();
     virtual void             entityClicked(const QPoint&);
@@ -34,12 +34,12 @@ public:
     void                     setUsageInSoftTouched(bool);
 
 signals:
-    void                     entityMsg(QString&);
+    void                     entityMsg(const QString&);
     void                     addNewTask(TASK);
     void                     ptrIsNull();
 
 public slots:
-    void                     msgRepeater(QString&);
+    void                     msgRepeater(const QString&);
     virtual void             resultReceiver(Result);
 };
 

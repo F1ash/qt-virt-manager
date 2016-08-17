@@ -31,7 +31,7 @@ void ToolBar::initActions()
                 QString("Close all Connections"), this);
     _closeAllAction->setIcon ( QIcon::fromTheme("disconnect") );
     _showAction = new QAction(
-                QString("Overview Connection"), this);
+                QString("Overview of Connection"), this);
     _showAction->setIcon ( QIcon::fromTheme("overview") );
     _closeOverview = new QAction(
                 QString("Close Overview"), this);

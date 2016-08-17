@@ -30,7 +30,7 @@ public:
     ~CreateVirtSecret();
 
 signals:
-    void             errorMsg(QString);
+    void             errorMsg(const QString&);
 
 private:
     QSettings        settings;

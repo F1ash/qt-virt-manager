@@ -43,6 +43,18 @@ VirtStorageVolControl::~VirtStorageVolControl()
 
     stopProcessing();
 }
+QString VirtStorageVolControl::getCurrentVolumeName() const
+{
+    QModelIndex index = entityList->currentIndex();
+    if ( !index.isValid() ) return QString();
+    return storageVolModel->DataList.at(index.row())->getName();
+}
+QString VirtStorageVolControl::getCurrentVolumePath() const
+{
+    QModelIndex index = entityList->currentIndex();
+    if ( !index.isValid() ) return QString();
+    return storageVolModel->DataList.at(index.row())->getPath();
+}
 
 /* public slots */
 void VirtStorageVolControl::stopProcessing()
@@ -57,7 +69,7 @@ void VirtStorageVolControl::stopProcessing()
     storageVolModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
 }
 bool VirtStorageVolControl::setCurrentStoragePool(
-        virConnectPtr *connPtrPtr, QString &connName, QString &poolName)
+        virConnectPtr *connPtrPtr, const QString &connName, const QString &poolName)
 {
     stopProcessing();
     ptr_ConnPtr = connPtrPtr;
@@ -73,18 +85,6 @@ bool VirtStorageVolControl::setCurrentStoragePool(
     // for initiation content
     reloadState();
     return true;
-}
-QString VirtStorageVolControl::getCurrentVolumeName() const
-{
-    QModelIndex index = entityList->currentIndex();
-    if ( !index.isValid() ) return QString();
-    return storageVolModel->DataList.at(index.row())->getName();
-}
-QString VirtStorageVolControl::getCurrentVolumePath() const
-{
-    QModelIndex index = entityList->currentIndex();
-    if ( !index.isValid() ) return QString();
-    return storageVolModel->DataList.at(index.row())->getPath();
 }
 void VirtStorageVolControl::resultReceiver(Result data)
 {
@@ -309,8 +309,8 @@ void VirtStorageVolControl::newVirtEntityFromXML(const Act_Param &args)
         // get path for method
         CreateVolume *createVolumeDialog =
                 new CreateVolume(this, ptr_ConnPtr, currPoolName);
-        connect(createVolumeDialog, SIGNAL(errorMsg(QString)),
-                this, SLOT(msgRepeater(QString&)));
+        connect(createVolumeDialog, SIGNAL(errorMsg(const QString)),
+                this, SLOT(msgRepeater(const QString&)));
         int result = createVolumeDialog->exec();
         if ( result==QDialog::Accepted ) {
             path = createVolumeDialog->getXMLDescFileName();

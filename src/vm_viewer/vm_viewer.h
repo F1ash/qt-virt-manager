@@ -47,8 +47,8 @@ public:
     QWidget         *info = nullptr;
 
 signals:
-    void             finished(QString&);
-    void             errorMsg(QString&);
+    void             finished(const QString&);
+    void             errorMsg(const QString&);
     void             addNewTask(TASK);
 
     /*
@@ -72,8 +72,8 @@ private:
 public slots:
     virtual void     init();
     virtual void     closeEvent(QCloseEvent *ev);
-    void             sendErrMsg(QString&);
-    void             sendErrMsg(QString&, uint);
+    void             sendErrMsg(const QString&);
+    void             sendErrMsg(const QString&, const uint);
     void             sendConnErrors();
     void             sendGlobalErrors();
     void             resendExecMethod(const Act_Param&);
@@ -87,7 +87,7 @@ public slots:
     virtual void     pasteClipboardToVirtDomain();
     virtual void     fullScreenVirtDomain();
     virtual void     scaledScreenVirtDomain();
-    void             showErrorInfo(QString&);
+    void             showErrorInfo(const QString&);
     void             startAnimatedShow();
     void             startAnimatedHide();
 

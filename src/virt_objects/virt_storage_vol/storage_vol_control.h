@@ -15,9 +15,11 @@ class VirtStorageVolControl : public VirtEntityControl
 public:
     explicit VirtStorageVolControl(QWidget *parent = nullptr);
     ~VirtStorageVolControl();
+    QString             getCurrentVolumeName() const;
+    QString             getCurrentVolumePath() const;
 
 signals:
-    void                finished(QString&);
+    void                finished(const QString&);
     void                volumeToEditor(TASK);
 
 private:
@@ -27,9 +29,7 @@ private:
 
 public slots:
     void                stopProcessing();
-    bool                setCurrentStoragePool(virConnectPtr*, QString&, QString&);
-    QString             getCurrentVolumeName() const;
-    QString             getCurrentVolumePath() const;
+    bool                setCurrentStoragePool(virConnectPtr*, const QString&, const QString&);
     void                resultReceiver(Result);
     void                closeEvent(QCloseEvent*);
 

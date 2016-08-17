@@ -37,7 +37,7 @@ void _Tab::readXMLDesciption()
 {
 
 }
-void _Tab::readXMLDesciption(QString &_xmlDesc)
+void _Tab::readXMLDesciption(const QString &_xmlDesc)
 {
 
 }

@@ -36,7 +36,7 @@ private:
 public slots:
     bool             isUsed() const;
     void             setUsage(bool);
-    void             archChanged(QString&);
+    void             archChanged(const QString&);
     QString          getModel() const;
     QString          getMode() const;
     QString          getMatch() const;

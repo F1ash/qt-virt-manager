@@ -20,7 +20,7 @@ public:
             virConnectPtr*  connPtrPtr  = nullptr);
 
 signals:
-    void                 errorMsg(QString&);
+    void                 errorMsg(const QString&);
 
 private:
     QString              currVolumePath;

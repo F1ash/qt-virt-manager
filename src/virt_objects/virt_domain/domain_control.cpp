@@ -59,7 +59,7 @@ bool VirtDomainControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
     toolBar->enableAutoReload();
     return true;
 }
-void VirtDomainControl::setListHeader(QString &connName)
+void VirtDomainControl::setListHeader(const QString &connName)
 {
     domainModel->setHeaderData(
                 0,
@@ -351,11 +351,11 @@ void VirtDomainControl::execAction(const Act_Param &param)
             CreateSnapshotDialog *_dialog =
                     new CreateSnapshotDialog(
                         this, domainName, currConnName, state, ptr_ConnPtr);
-            connect(_dialog, SIGNAL(errMsg(QString&)),
-                    this, SLOT(msgRepeater(QString&)));
+            connect(_dialog, SIGNAL(errMsg(const QString&)),
+                    this, SLOT(msgRepeater(const QString&)));
             int exitCode = _dialog->exec();
-            disconnect(_dialog, SIGNAL(errMsg(QString&)),
-                       this, SLOT(msgRepeater(QString&)));
+            disconnect(_dialog, SIGNAL(errMsg(const QString&)),
+                       this, SLOT(msgRepeater(const QString&)));
             _dialog->deleteLater();
             if ( exitCode ) {
                 task.action      = CREATE_DOMAIN_SNAPSHOT;

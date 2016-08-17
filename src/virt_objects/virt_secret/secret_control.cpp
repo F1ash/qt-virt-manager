@@ -55,7 +55,7 @@ bool VirtSecretControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
     toolBar->enableAutoReload();
     return true;
 }
-void VirtSecretControl::setListHeader(QString &connName)
+void VirtSecretControl::setListHeader(const QString &connName)
 {
     virtSecretModel->setHeaderData(
                 0, Qt::Horizontal,

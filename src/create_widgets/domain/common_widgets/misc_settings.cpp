@@ -142,7 +142,7 @@ void Misc_Settings::readXMLDesciption()
     currentDeviceXMLDesc = xmlDesc;
     readXMLDesciption(currentDeviceXMLDesc);
 }
-void Misc_Settings::readXMLDesciption(QString &xmlDesc)
+void Misc_Settings::readXMLDesciption(const QString &xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;

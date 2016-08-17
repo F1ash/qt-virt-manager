@@ -265,7 +265,7 @@ void Memory::readXMLDesciption()
     currentDeviceXMLDesc = xmlDesc;
     readXMLDesciption(currentDeviceXMLDesc);
 }
-void Memory::readXMLDesciption(QString &_xmlDesc)
+void Memory::readXMLDesciption(const QString &_xmlDesc)
 {
     quint64 _value;
     QString _unit;

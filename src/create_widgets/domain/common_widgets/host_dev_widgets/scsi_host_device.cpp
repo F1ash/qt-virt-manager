@@ -57,8 +57,8 @@ SCSI_Host_Device::SCSI_Host_Device(
     hlpThread = new iscsi_hostHlpThread(this, connPtrPtr);
     connect(hlpThread, SIGNAL(result(QStringList&)),
             this, SLOT(setAvailabledSCSIDevices(QStringList&)));
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errorMsg(const QString&)));
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(emitCompleteSignal()));
     hlpThread->start();

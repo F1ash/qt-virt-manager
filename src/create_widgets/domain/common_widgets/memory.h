@@ -61,7 +61,7 @@ private slots:
     void             changeCurrentMemValue(int);
     void             changeMaximumMemValue(int);
     void             readXMLDesciption();
-    void             readXMLDesciption(QString&);
+    void             readXMLDesciption(const QString&);
     quint64          convertNiBtoMBytes(quint64, QString&);
 };
 

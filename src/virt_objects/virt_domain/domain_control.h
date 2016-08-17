@@ -20,7 +20,7 @@ public:
 
 signals:
     void                     displayRequest(TASK);
-    void                     addToStateMonitor(virConnectPtr*, QString&, QString&);
+    void                     addToStateMonitor(virConnectPtr*, const QString&, const QString&);
     void                     migrateToConnect(TASK);
     void                     domainToEditor(TASK);
 
@@ -32,7 +32,7 @@ private:
 public slots:
     void                     stopProcessing();
     bool                     setCurrentWorkConnect(virConnectPtr*);
-    void                     setListHeader(QString&);
+    void                     setListHeader(const QString&);
     virConnectPtr*           getPtr_connectionPtr();
     void                     execMigrateAction(virConnectPtr*, TASK);
     void                     resultReceiver(Result);

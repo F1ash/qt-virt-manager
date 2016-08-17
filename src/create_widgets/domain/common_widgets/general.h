@@ -14,7 +14,7 @@ public:
             QString  _xmlDesc = QString());
 
 signals:
-    void             newName(QString);
+    void             newName(const QString&);
 
 private:
     const QString    xmlDesc;
@@ -35,12 +35,12 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
-    void             changeArch(QString&);
+    void             changeArch(const QString&);
 
 private slots:
     void             readCapabilities();
     void             readXMLDesciption();
-    void             readXMLDesciption(QString&);
+    void             readXMLDesciption(const QString&);
 };
 
 #endif // GENERAL_H

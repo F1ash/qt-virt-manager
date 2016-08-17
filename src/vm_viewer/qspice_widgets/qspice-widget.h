@@ -135,7 +135,7 @@ signals:
     /*
      * Emitted, when error occured.
      */
-    void errMsg(QString&);
+    void errMsg(const QString&);
 
     /*
      * In develop.

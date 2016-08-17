@@ -64,7 +64,7 @@ bool VirtNetControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
     toolBar->enableAutoReload();
     return true;
 }
-void VirtNetControl::setListHeader(QString &connName)
+void VirtNetControl::setListHeader(const QString &connName)
 {
     virtNetModel->setHeaderData(
                 0,

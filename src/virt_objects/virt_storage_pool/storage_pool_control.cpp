@@ -64,7 +64,7 @@ bool VirtStoragePoolControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
     toolBar->enableAutoReload();
     return true;
 }
-void VirtStoragePoolControl::setListHeader(QString &connName)
+void VirtStoragePoolControl::setListHeader(const QString &connName)
 {
     storagePoolModel->setHeaderData(
                 0, Qt::Horizontal,

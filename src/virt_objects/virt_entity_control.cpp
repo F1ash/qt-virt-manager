@@ -30,7 +30,7 @@ bool VirtEntityControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
     //toolBar->enableAutoReload();
     return true;
 }
-void VirtEntityControl::setListHeader(QString &_name)
+void VirtEntityControl::setListHeader(const QString &_name)
 {
     Q_UNUSED(_name);
 }
@@ -65,11 +65,10 @@ void VirtEntityControl::setUsageInSoftTouched(bool state)
     entityList->prevL->setUsageStatus(state);
     entityList->homeL->setUsageStatus(state);
     entityList->nextL->setUsageStatus(state);
-    setEnabled(true);
 }
 
 /* public slots */
-void VirtEntityControl::msgRepeater(QString &msg)
+void VirtEntityControl::msgRepeater(const QString &msg)
 {
     QString time = QTime::currentTime().toString();
     QString title = QString("Connection '%1'").arg(currConnName);

@@ -53,7 +53,7 @@ void SecurityLabel::readXMLDesciption()
     currentDeviceXMLDesc = xmlDesc;
     readXMLDesciption(currentDeviceXMLDesc);
 }
-void SecurityLabel::readXMLDesciption(QString &_xmlDesc)
+void SecurityLabel::readXMLDesciption(const QString &_xmlDesc)
 {
     //qDebug()<<_xmlDesc;
     secLabels->readXMLDesciption(_xmlDesc);

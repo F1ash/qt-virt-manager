@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     proxyLayout = new QHBoxLayout();
     proxyWdg->setLayout(proxyLayout);
     SoftTouchedWdg = nullptr;
+    reloadFlag = true; // for first initiation of connections
     initTaskWareHouse();
     initDomainStateMonitor();
     initTrayIcon();
@@ -263,8 +264,8 @@ void MainWindow::timerEvent(QTimerEvent *ev)
 void MainWindow::initTaskWareHouse()
 {
     taskWrHouse = new TaskWareHouse();
-    connect(taskWrHouse, SIGNAL(taskMsg(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
+    connect(taskWrHouse, SIGNAL(taskMsg(const QString&)),
+            this, SLOT(writeToErrorLog(const QString&)));
 }
 void MainWindow::initDomainStateMonitor()
 {
@@ -403,20 +404,18 @@ void MainWindow::initConnListWidget()
     };
     connListWidget->setToolBarArea(area_int);
     setCentralWidget(proxyWdg);
-    connect(connListWidget->list, SIGNAL(removeConnection(QString&)),
-            this, SLOT(removeConnItem(QString&)));
+    connect(connListWidget->list, SIGNAL(removeConnection(const QString&)),
+            this, SLOT(removeConnItem(const QString&)));
     connect(connListWidget->list, SIGNAL(messageShowed()),
             this, SLOT(mainWindowUp()));
-    connect(connListWidget->list, SIGNAL(warning(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
-    connect(connListWidget->list, SIGNAL(connPtrPtr(virConnectPtr*, QString&)),
-            this, SLOT(receiveConnPtrPtr(virConnectPtr*, QString&)));
-    connect(connListWidget->list, SIGNAL(connClosed(bool, QString&)),
-            this, SLOT(stopConnProcessing(bool, QString&)));
-    connect(connListWidget->list, SIGNAL(connToClose(int)),
-            this, SLOT(closeConnGenerations(int)));
-    connect(connListWidget->list, SIGNAL(domainEnd(QString&)),
-            this, SLOT(deleteVMDisplay(QString&)));
+    connect(connListWidget->list, SIGNAL(warning(const QString&)),
+            this, SLOT(writeToErrorLog(const QString&)));
+    connect(connListWidget->list, SIGNAL(connToOverview(virConnectPtr*, const QString&)),
+            this, SLOT(receiveConnPtrPtr(virConnectPtr*, const QString&)));
+    connect(connListWidget->list, SIGNAL(connClosed(bool, const QString&)),
+            this, SLOT(stopConnProcessing(bool, const QString&)));
+    connect(connListWidget->list, SIGNAL(domainEnd(const QString&)),
+            this, SLOT(deleteVMDisplay(const QString&)));
     connect(connListWidget->toolBar->_createAction, SIGNAL(triggered()),
             this, SLOT(createNewConnection()));
     connect(connListWidget->toolBar->_editAction, SIGNAL(triggered()),
@@ -426,7 +425,7 @@ void MainWindow::initConnListWidget()
     connect(connListWidget->toolBar->_openAction, SIGNAL(triggered()),
             this, SLOT(openCurrentConnection()));
     connect(connListWidget->toolBar->_showAction, SIGNAL(triggered()),
-            this, SLOT(showCurrentConnection()));
+            this, SLOT(currentConnectionToOverview()));
     connect(connListWidget->toolBar->_closeAction, SIGNAL(triggered()),
             this, SLOT(closeCurrentConnection()));
     connect(connListWidget->toolBar->_closeAllAction, SIGNAL(triggered()),
@@ -435,13 +434,12 @@ void MainWindow::initConnListWidget()
             connListWidget->list, SLOT(stopProcessing()));
     connect(connListWidget->toolBar->_closeOverview, SIGNAL(triggered()),
             this, SLOT(stopProcessing()));
-    connect(connListWidget->list, SIGNAL(searchComplete()),
-            this, SLOT(initConnectionsComplete()));
-    connect(connListWidget->list, SIGNAL(searchComplete()),
+    connect(connListWidget->list, SIGNAL(searchStarted()),
+            this, SLOT(startRadarAnimation()));
+    connect(connListWidget->list, SIGNAL(searchFinished()),
+            this, SLOT(finishRadarAnimation()));
+    connect(connListWidget->list, SIGNAL(searchFinished()),
             this, SLOT(enableSoftTouchedDocks()));
-    connListWidget->list->setEnabled(false);
-    connListWidget->toolBar->setEnabled(false);
-    connListWidget->list->loadL->start();
 }
 void MainWindow::initDockWidgets()
 {
@@ -479,14 +477,14 @@ void MainWindow::initDockWidgets()
     domainDock->setWidget( domainDockContent );
     connect(menuBar->dockMenu->domainAct, SIGNAL(toggled(bool)),
             domainDock, SLOT(setVisible(bool)));
-    connect(domainDockContent, SIGNAL(entityMsg(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
+    connect(domainDockContent, SIGNAL(entityMsg(const QString&)),
+            this, SLOT(writeToErrorLog(const QString&)));
     connect(domainDockContent, SIGNAL(displayRequest(TASK)),
             this, SLOT(invokeVMDisplay(TASK)));
     connect(domainDockContent,
-            SIGNAL(addToStateMonitor(virConnectPtr*,QString&,QString&)),
+            SIGNAL(addToStateMonitor(virConnectPtr*, const QString&, const QString&)),
             domainsStateMonitor,
-            SLOT(setNewMonitoredDomain(virConnectPtr*,QString&,QString&)));
+            SLOT(setNewMonitoredDomain(virConnectPtr*, const QString&, const QString&)));
     connect(domainDockContent, SIGNAL(migrateToConnect(TASK)),
             this, SLOT(buildMigrateArgs(TASK)));
     connect(domainDockContent, SIGNAL(addNewTask(TASK)),
@@ -513,8 +511,8 @@ void MainWindow::initDockWidgets()
     networkDock->setWidget( networkDockContent );
     connect(menuBar->dockMenu->networkAct, SIGNAL(toggled(bool)),
             networkDock, SLOT(setVisible(bool)));
-    connect(networkDockContent, SIGNAL(entityMsg(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
+    connect(networkDockContent, SIGNAL(entityMsg(const QString&)),
+            this, SLOT(writeToErrorLog(const QString&)));
     connect(networkDockContent, SIGNAL(addNewTask(TASK)),
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(netResult(Result)),
@@ -538,16 +536,16 @@ void MainWindow::initDockWidgets()
     storagePoolDock->setWidget( storagePoolDockContent );
     connect(menuBar->dockMenu->storageAct, SIGNAL(toggled(bool)),
             storagePoolDock, SLOT(setVisible(bool)));
-    connect(storagePoolDockContent, SIGNAL(entityMsg(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
+    connect(storagePoolDockContent, SIGNAL(entityMsg(const QString&)),
+            this, SLOT(writeToErrorLog(const QString&)));
     connect(storagePoolDockContent, SIGNAL(addNewTask(TASK)),
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(poolResult(Result)),
             storagePoolDockContent, SLOT(resultReceiver(Result)));
     connect(storagePoolDockContent,
-            SIGNAL(overviewStPool(virConnectPtr*,QString&,QString&)),
+            SIGNAL(overviewStPool(virConnectPtr*, const QString&, const QString&)),
             this,
-            SLOT(overviewStoragePool(virConnectPtr*,QString&,QString&)));
+            SLOT(overviewStoragePool(virConnectPtr*, const QString&, const QString&)));
 
     secretDock = new DockWidget(this);
     secretDock->setObjectName("secretDock");
@@ -563,8 +561,8 @@ void MainWindow::initDockWidgets()
     secretDock->setWidget( secretDockContent );
     connect(menuBar->dockMenu->secretAct, SIGNAL(toggled(bool)),
             secretDock, SLOT(setVisible(bool)));
-    connect(secretDockContent, SIGNAL(entityMsg(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
+    connect(secretDockContent, SIGNAL(entityMsg(const QString&)),
+            this, SLOT(writeToErrorLog(const QString&)));
     connect(secretDockContent, SIGNAL(addNewTask(TASK)),
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(secResult(Result)),
@@ -584,8 +582,8 @@ void MainWindow::initDockWidgets()
     ifaceDock->setWidget( ifaceDockContent );
     connect(menuBar->dockMenu->ifaceAct, SIGNAL(toggled(bool)),
             ifaceDock, SLOT(setVisible(bool)));
-    connect(ifaceDockContent, SIGNAL(entityMsg(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
+    connect(ifaceDockContent, SIGNAL(entityMsg(const QString&)),
+            this, SLOT(writeToErrorLog(const QString&)));
     connect(ifaceDockContent, SIGNAL(addNewTask(TASK)),
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(ifaceResult(Result)),
@@ -605,8 +603,8 @@ void MainWindow::initDockWidgets()
     nwfilterDock->setWidget( nwfilterDockContent );
     connect(menuBar->dockMenu->nwfilterAct, SIGNAL(toggled(bool)),
             nwfilterDock, SLOT(setVisible(bool)));
-    connect(nwfilterDockContent, SIGNAL(entityMsg(QString&)),
-            this, SLOT(writeToErrorLog(QString&)));
+    connect(nwfilterDockContent, SIGNAL(entityMsg(const QString&)),
+            this, SLOT(writeToErrorLog(const QString&)));
     connect(nwfilterDockContent, SIGNAL(addNewTask(TASK)),
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(nwfilterResult(Result)),
@@ -637,8 +635,8 @@ void MainWindow::initVirEventloop()
     // close application after closing virtEventLoop
     connect(virtEventLoop, SIGNAL(finished()),
             this, SLOT(virtEventLoopFinished()));
-    connect(virtEventLoop, SIGNAL(errorMsg(QString&,uint)),
-            this, SLOT(writeToErrorLog(QString&,uint)));
+    connect(virtEventLoop, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SLOT(writeToErrorLog(const QString&, const uint)));
     connect(virtEventLoop, SIGNAL(result(bool)),
              this, SLOT(initConnections(bool)));
     virtEventLoop->start();
@@ -646,6 +644,8 @@ void MainWindow::initVirEventloop()
 void MainWindow::virtEventLoopFinished()
 {
     if ( reloadFlag ) {
+        delete wait_thread;
+        wait_thread = nullptr;
         delete virtEventLoop;
         virtEventLoop = nullptr;
         initVirEventloop();
@@ -656,6 +656,7 @@ void MainWindow::virtEventLoopFinished()
 }
 void MainWindow::restartApplication()
 {
+    startRadarAnimation();
     //qDebug()<<"restart Application";
     QString msg("Restart Application.");
     QString time = QTime::currentTime().toString();
@@ -665,13 +666,17 @@ void MainWindow::restartApplication()
             .arg(time).arg(title).arg(msg);
     logDockContent->appendMsgToLog(currMsg);
     reloadFlag = true;
-    connListWidget->list->setEnabled(false);
-    connListWidget->toolBar->setEnabled(false);
-    connListWidget->list->loadL->start();
     closeAllConnections();
+    wait_thread = new Wait(this, connListWidget->list);
+    // stop virtEventLoop after closing all connections;
     // used 'terminate', because 'virEventRunDefaultImpl'
     // not occures when libvirt unavailable.
-    virtEventLoop->terminate();
+    connect(wait_thread, SIGNAL(finished()),
+            virtEventLoop, SLOT(terminate()));
+    wait_thread->start();
+    // used 'terminate', because 'virEventRunDefaultImpl'
+    // not occures when libvirt unavailable.
+    //virtEventLoop->terminate();
 }
 void MainWindow::initConnections(bool started)
 {
@@ -691,9 +696,6 @@ void MainWindow::initConnections(bool started)
             .arg(!started?" not ":" ").arg("started");
     logDockContent->appendMsgToLog(currMsg);
     if ( !started || !virtEventLoop->isSuccess() ) {
-        connListWidget->list->setEnabled(true);
-        connListWidget->toolBar->setEnabled(true);
-        connListWidget->list->loadL->stop();
         return;
     };
     settings.beginGroup("Connects");
@@ -706,10 +708,24 @@ void MainWindow::initConnections(bool started)
     };
     connListWidget->list->refreshLocalhostConnection();
 }
-void MainWindow::initConnectionsComplete()
+void MainWindow::startRadarAnimation()
 {
+    menuBar->fileMenu->setEnabled(false);
+    connListWidget->list->setEnabled(false);
+    connListWidget->toolBar->setEnabled(false);
+    connListWidget->list->loadL->start();
+}
+void MainWindow::finishRadarAnimation()
+{
+    menuBar->fileMenu->setEnabled(true);
+    connListWidget->list->setEnabled(true);
     connListWidget->toolBar->setEnabled(true);
     connListWidget->list->loadL->stop();
+    if ( reloadFlag )
+        initConnectionsCompleted();
+}
+void MainWindow::initConnectionsCompleted()
+{
     QString title("App initialization");
     QString time = QTime::currentTime().toString();
     QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
@@ -731,7 +747,7 @@ void MainWindow::deleteCurrentConnection()
 {
     connListWidget->list->deleteCurrentConnection();
 }
-void MainWindow::removeConnItem(QString &connect)
+void MainWindow::removeConnItem(const QString &connect)
 {
     settings.beginGroup("Connects");
     settings.remove(connect);
@@ -745,11 +761,11 @@ void MainWindow::openCurrentConnection()
         connListWidget->list->openConnection(_item);
     };
 }
-void MainWindow::showCurrentConnection()
+void MainWindow::currentConnectionToOverview()
 {
     QModelIndex _item = connListWidget->list->currentIndex();
     if (_item.isValid()) {
-        connListWidget->list->showConnection(_item);
+        connListWidget->list->overviewOfConnection(_item);
     };
 }
 void MainWindow::closeCurrentConnection()
@@ -761,28 +777,18 @@ void MainWindow::closeCurrentConnection()
 }
 void MainWindow::closeAllConnections()
 {
-    int count = connListWidget->list->connItemModel->rowCount();
+    const int count = connListWidget->list->getListItemCount();
     for (int i = 0; i< count; i++) closeConnection(i);
 }
 void MainWindow::closeConnection(int i)
 {
     //qDebug()<<i<<" item to stop";
-    QModelIndex _item = connListWidget->list->connItemModel->index(i, 0);
+    const QModelIndex _item = connListWidget->list->getCustomIndex(i);
     if (_item.isValid()) {
         connListWidget->list->closeConnection(_item);
     };
 }
-void MainWindow::closeConnGenerations(int i)
-{
-    ConnItemIndex *idx = static_cast<ConnItemIndex*>(
-                connListWidget->list->connItemModel->
-                connItemDataList.at(i));
-    if ( idx!=nullptr ) {
-        QString conn_to_close = idx->getName();
-        closeConnGenerations(conn_to_close);
-    };
-}
-void MainWindow::closeConnGenerations(QString &_connName)
+void MainWindow::closeConnGenerations(const QString &_connName)
 {
     // WARNING: the policy for close a Viewers, Editors :
     // close the connection -- close all of its generation
@@ -820,10 +826,10 @@ void MainWindow::closeConnGenerations(QString &_connName)
 bool MainWindow::runningConnExist()
 {
     bool result = false;
-    int count = connListWidget->list->connItemModel->rowCount();
+    const int count = connListWidget->list->getListItemCount();
     for (int i=0; i<count; i++) {
-        ConnItemIndex *item =
-                connListWidget->list->connItemModel->connItemDataList.at(i);
+        const ConnItemIndex *item =
+                connListWidget->list->getConnItemDataListIndex(i);
         //qDebug()<<connListWidget->list->item(i)->text()
         //<< connListWidget->list->item(i)->data(Qt::UserRole)
         //.toMap().value("isRunning").toInt();
@@ -838,11 +844,11 @@ void MainWindow::autoHide()
 {
     if (this->isVisible()) changeVisibility();
 }
-void MainWindow::writeToErrorLog(QString &msg)
+void MainWindow::writeToErrorLog(const QString &msg)
 {
     logDockContent->appendMsgToLog(msg);
 }
-void MainWindow::writeToErrorLog(QString &msg, uint _number)
+void MainWindow::writeToErrorLog(const QString &msg, const uint _number)
 {
     Q_UNUSED(_number);
     QString time = QTime::currentTime().toString();
@@ -874,7 +880,7 @@ Qt::DockWidgetArea MainWindow::getDockArea(int i) const
     };
     return result;
 }
-void MainWindow::receiveConnPtrPtr(virConnectPtr *_connPtrPtr, QString &name)
+void MainWindow::receiveConnPtrPtr(virConnectPtr *_connPtrPtr, const QString &name)
 {
     //qDebug()<<"receiveConnPtrPtr:"<<(*_connPtrPtr);
     // send connect ptr to all related virtual resources for operating
@@ -891,7 +897,7 @@ void MainWindow::receiveConnPtrPtr(virConnectPtr *_connPtrPtr, QString &name)
     if ( nwfilterDockContent->setCurrentWorkConnect(_connPtrPtr) )
         nwfilterDockContent->setListHeader(name);
 }
-void MainWindow::stopConnProcessing(bool onView, QString &_connName)
+void MainWindow::stopConnProcessing(bool onView, const QString &_connName)
 {
     // clear Overview Docks if closed connect is on View
     if ( onView ) {
@@ -955,10 +961,10 @@ void MainWindow::invokeVMDisplay(TASK _task)
             return;
         };
         VM_Displayed_Map.value(key)->setObjectName(key);
-        connect(VM_Displayed_Map.value(key), SIGNAL(finished(QString&)),
-                this, SLOT(deleteVMDisplay(QString&)));
-        connect(VM_Displayed_Map.value(key), SIGNAL(errorMsg(QString&)),
-                logDockContent, SLOT(appendMsgToLog(QString&)));
+        connect(VM_Displayed_Map.value(key), SIGNAL(finished(const QString&)),
+                this, SLOT(deleteVMDisplay(const QString&)));
+        connect(VM_Displayed_Map.value(key), SIGNAL(errorMsg(const QString&)),
+                logDockContent, SLOT(appendMsgToLog(const QString&)));
         connect(VM_Displayed_Map.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
         VM_Displayed_Map.value(key)->show();
@@ -969,7 +975,7 @@ void MainWindow::invokeVMDisplay(TASK _task)
         else VM_Displayed_Map.remove(key);
     };
 }
-void MainWindow::deleteVMDisplay(QString &key)
+void MainWindow::deleteVMDisplay(const QString &key)
 {
     if ( VM_Displayed_Map.contains(key) ) {
         VM_Viewer *value = nullptr;
@@ -1006,7 +1012,8 @@ void MainWindow::buildMigrateArgs(TASK _task)
     }
 }
 
-void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connName, QString &poolName)
+void MainWindow::overviewStoragePool(
+        virConnectPtr *connPtrPtr, const QString &connName, const QString &poolName)
 {
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
@@ -1016,10 +1023,10 @@ void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connNam
         Overviewed_StPool_Map.value(key)->setObjectName(key);
         Overviewed_StPool_Map.value(key)
                 ->setWindowTitle(QString("%1 Pool").arg(key));
-        connect(Overviewed_StPool_Map.value(key), SIGNAL(entityMsg(QString&)),
-                this, SLOT(writeToErrorLog(QString&)));
-        connect(Overviewed_StPool_Map.value(key), SIGNAL(finished(QString&)),
-                this, SLOT(deleteStPoolOverview(QString&)));
+        connect(Overviewed_StPool_Map.value(key), SIGNAL(entityMsg(const QString&)),
+                this, SLOT(writeToErrorLog(const QString&)));
+        connect(Overviewed_StPool_Map.value(key), SIGNAL(finished(const QString&)),
+                this, SLOT(deleteStPoolOverview(const QString&)));
         connect(Overviewed_StPool_Map.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
         connect(taskWrHouse, SIGNAL(volResult(Result)),
@@ -1035,7 +1042,7 @@ void MainWindow::overviewStoragePool(virConnectPtr *connPtrPtr, QString &connNam
     } else
         Overviewed_StPool_Map.value(key);
 }
-void MainWindow::deleteStPoolOverview(QString &key)
+void MainWindow::deleteStPoolOverview(const QString &key)
 {
     if ( Overviewed_StPool_Map.contains(key) ) {
         // set attribute(Qt::WA_DeleteOnClose) in widget;
@@ -1058,10 +1065,10 @@ void MainWindow::invokeDomainEditor(TASK _task)
         DomainEditor_Map.value(key)->setWindowTitle(
                     QString("VM Settings / <%1> in [%2]")
                     .arg(domName).arg(connName));
-        connect(DomainEditor_Map.value(key), SIGNAL(errorMsg(QString&)),
-                this, SLOT(writeToErrorLog(QString&)));
-        connect(DomainEditor_Map.value(key), SIGNAL(finished(QString&)),
-                this, SLOT(deleteDomainEditor(QString&)));
+        connect(DomainEditor_Map.value(key), SIGNAL(errorMsg(const QString&)),
+                this, SLOT(writeToErrorLog(const QString&)));
+        connect(DomainEditor_Map.value(key), SIGNAL(finished(const QString&)),
+                this, SLOT(deleteDomainEditor(const QString&)));
         connect(DomainEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
     };
@@ -1071,7 +1078,7 @@ void MainWindow::invokeDomainEditor(TASK _task)
     } else
         DomainEditor_Map.remove(key);
 }
-void MainWindow::deleteDomainEditor(QString &key)
+void MainWindow::deleteDomainEditor(const QString &key)
 {
     if ( DomainEditor_Map.contains(key) ) {
         // set attribute(Qt::WA_DeleteOnClose) in widget;
@@ -1124,10 +1131,10 @@ void MainWindow::invokeNetworkEditor(TASK _task)
         NetworkEditor_Map.value(key)->setWindowTitle(
                     QString("Network Editor / <%1> in [%2]")
                     .arg(networkName).arg(connName));
-        connect(NetworkEditor_Map.value(key), SIGNAL(errorMsg(QString&)),
-                this, SLOT(writeToErrorLog(QString&)));
-        connect(NetworkEditor_Map.value(key), SIGNAL(finished(QString&)),
-                this, SLOT(deleteNetworkEditor(QString&)));
+        connect(NetworkEditor_Map.value(key), SIGNAL(errorMsg(const QString&)),
+                this, SLOT(writeToErrorLog(const QString&)));
+        connect(NetworkEditor_Map.value(key), SIGNAL(finished(const QString&)),
+                this, SLOT(deleteNetworkEditor(const QString&)));
         connect(NetworkEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
     };
@@ -1137,7 +1144,7 @@ void MainWindow::invokeNetworkEditor(TASK _task)
     } else
         NetworkEditor_Map.remove(key);
 }
-void MainWindow::deleteNetworkEditor(QString &key)
+void MainWindow::deleteNetworkEditor(const QString &key)
 {
     if ( NetworkEditor_Map.contains(key) ) {
         // set attribute(Qt::WA_DeleteOnClose) in widget;
@@ -1160,10 +1167,10 @@ void MainWindow::invokeNWFilterEditor(TASK _task)
         NWFilterEditor_Map.value(key)->setWindowTitle(
                     QString("NWFilter Editor / <%1> in [%2]")
                     .arg(nwfilterName).arg(connName));
-        connect(NWFilterEditor_Map.value(key), SIGNAL(errorMsg(QString&)),
-                this, SLOT(writeToErrorLog(QString&)));
-        connect(NWFilterEditor_Map.value(key), SIGNAL(finished(QString&)),
-                this, SLOT(deleteNWFilterEditor(QString&)));
+        connect(NWFilterEditor_Map.value(key), SIGNAL(errorMsg(const QString&)),
+                this, SLOT(writeToErrorLog(const QString&)));
+        connect(NWFilterEditor_Map.value(key), SIGNAL(finished(const QString&)),
+                this, SLOT(deleteNWFilterEditor(const QString&)));
         connect(NWFilterEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
                 taskWrHouse, SLOT(addNewTask(TASK)));
     };
@@ -1173,7 +1180,7 @@ void MainWindow::invokeNWFilterEditor(TASK _task)
     } else
         NWFilterEditor_Map.remove(key);
 }
-void MainWindow::deleteNWFilterEditor(QString &key)
+void MainWindow::deleteNWFilterEditor(const QString &key)
 {
     if ( NWFilterEditor_Map.contains(key) ) {
         // set attribute(Qt::WA_DeleteOnClose) in widget;
@@ -1224,8 +1231,8 @@ void MainWindow::free_and_hide_all_stuff()
 }
 void MainWindow::all_stuff_to_original()
 {
-    Qt::DockWidgetArea area;
-    bool visible;
+    setDockHeaderWheelEventsEnabled(false);
+    setDockUsedInSoftTouched(false);
     if ( SoftTouchedWdg!=nullptr ) {
         disconnect(proxyWdg, SIGNAL(viewDock(const QString&)),
                    SoftTouchedWdg, SLOT(showDock(const QString&)));
@@ -1233,8 +1240,6 @@ void MainWindow::all_stuff_to_original()
                    SoftTouchedWdg, SLOT(showNextDock()));
         disconnect(proxyWdg, SIGNAL(viewPrevDock()),
                    SoftTouchedWdg, SLOT(showPrevDock()));
-        setDockHeaderWheelEventsEnabled(false);
-        setDockUsedInSoftTouched(false);
         proxyLayout->removeWidget(SoftTouchedWdg);
         SoftTouchedWdg->removeAllWidgets();
         //delete SoftTouchedWdg;
@@ -1247,6 +1252,8 @@ void MainWindow::all_stuff_to_original()
      * wants to reuse the removed widget, then
      * it is recommended to re-parent it.
      */
+    Qt::DockWidgetArea area;
+    bool visible;
     restoreGeometry(settings.value("Geometry").toByteArray());
     connListWidget->setParent(this);
     proxyLayout->addWidget(connListWidget);
@@ -1450,237 +1457,239 @@ void MainWindow::setDockFloatible(bool state)
     scrtHeadWdg->setFloatible(state);
     ifaceHeadWdg->setFloatible(state);
     nwfilterHeadWdg->setFloatible(state);
-    connListWidget->toolBar->wheelEventEnabled(!state);
-    connListWidget->list->setUsageInSoftTouched(!state);
-    domainDockContent->setUsageInSoftTouched(!state);
-    networkDockContent->setUsageInSoftTouched(!state);
-    storagePoolDockContent->setUsageInSoftTouched(!state);
-    secretDockContent->setUsageInSoftTouched(!state);
-    ifaceDockContent->setUsageInSoftTouched(!state);
-    nwfilterDockContent->setUsageInSoftTouched(!state);
-    logDockContent->setUsageInSoftTouched(!state);
 }
 void MainWindow::setDockHeaderWheelEventsEnabled(bool state)
 {
-    if ( SoftTouchedWdg==nullptr ) return;
-    if ( state ) {
-        connect(logHeadWdg, SIGNAL(viewNextDock()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(logHeadWdg, SIGNAL(viewPrevDock()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(domHeadWdg, SIGNAL(viewNextDock()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(domHeadWdg, SIGNAL(viewPrevDock()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(netHeadWdg, SIGNAL(viewNextDock()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(netHeadWdg, SIGNAL(viewPrevDock()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(poolHeadWdg, SIGNAL(viewNextDock()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(poolHeadWdg, SIGNAL(viewPrevDock()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(scrtHeadWdg, SIGNAL(viewNextDock()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(scrtHeadWdg, SIGNAL(viewPrevDock()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(ifaceHeadWdg, SIGNAL(viewNextDock()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(ifaceHeadWdg, SIGNAL(viewPrevDock()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(nwfilterHeadWdg, SIGNAL(viewNextDock()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(nwfilterHeadWdg, SIGNAL(viewPrevDock()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(connListWidget->toolBar, SIGNAL(viewNextDock()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(connListWidget->toolBar, SIGNAL(viewPrevDock()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-    } else {
-        disconnect(logHeadWdg, SIGNAL(viewNextDock()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(logHeadWdg, SIGNAL(viewPrevDock()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(domHeadWdg, SIGNAL(viewNextDock()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(domHeadWdg, SIGNAL(viewPrevDock()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(netHeadWdg, SIGNAL(viewNextDock()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(netHeadWdg, SIGNAL(viewPrevDock()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(poolHeadWdg, SIGNAL(viewNextDock()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(poolHeadWdg, SIGNAL(viewPrevDock()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(scrtHeadWdg, SIGNAL(viewNextDock()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(scrtHeadWdg, SIGNAL(viewPrevDock()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(ifaceHeadWdg, SIGNAL(viewNextDock()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(ifaceHeadWdg, SIGNAL(viewPrevDock()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(nwfilterHeadWdg, SIGNAL(viewNextDock()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(nwfilterHeadWdg, SIGNAL(viewPrevDock()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(connListWidget->toolBar, SIGNAL(viewNextDock()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(connListWidget->toolBar, SIGNAL(viewPrevDock()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-    }
+    if ( SoftTouchedWdg!=nullptr ) {
+        if ( state ) {
+            connect(logHeadWdg, SIGNAL(viewNextDock()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(logHeadWdg, SIGNAL(viewPrevDock()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(domHeadWdg, SIGNAL(viewNextDock()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(domHeadWdg, SIGNAL(viewPrevDock()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(netHeadWdg, SIGNAL(viewNextDock()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(netHeadWdg, SIGNAL(viewPrevDock()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(poolHeadWdg, SIGNAL(viewNextDock()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(poolHeadWdg, SIGNAL(viewPrevDock()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(scrtHeadWdg, SIGNAL(viewNextDock()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(scrtHeadWdg, SIGNAL(viewPrevDock()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(ifaceHeadWdg, SIGNAL(viewNextDock()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(ifaceHeadWdg, SIGNAL(viewPrevDock()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(nwfilterHeadWdg, SIGNAL(viewNextDock()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(nwfilterHeadWdg, SIGNAL(viewPrevDock()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(connListWidget->toolBar, SIGNAL(viewNextDock()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(connListWidget->toolBar, SIGNAL(viewPrevDock()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+        } else {
+            disconnect(logHeadWdg, SIGNAL(viewNextDock()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(logHeadWdg, SIGNAL(viewPrevDock()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(domHeadWdg, SIGNAL(viewNextDock()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(domHeadWdg, SIGNAL(viewPrevDock()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(netHeadWdg, SIGNAL(viewNextDock()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(netHeadWdg, SIGNAL(viewPrevDock()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(poolHeadWdg, SIGNAL(viewNextDock()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(poolHeadWdg, SIGNAL(viewPrevDock()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(scrtHeadWdg, SIGNAL(viewNextDock()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(scrtHeadWdg, SIGNAL(viewPrevDock()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(ifaceHeadWdg, SIGNAL(viewNextDock()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(ifaceHeadWdg, SIGNAL(viewPrevDock()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(nwfilterHeadWdg, SIGNAL(viewNextDock()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(nwfilterHeadWdg, SIGNAL(viewPrevDock()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(connListWidget->toolBar, SIGNAL(viewNextDock()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(connListWidget->toolBar, SIGNAL(viewPrevDock()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+        };
+    };
 }
 void MainWindow::setDockUsedInSoftTouched(bool state)
 {
-    if ( SoftTouchedWdg==nullptr ) return;
-    if ( state ) {
-        connect(logDockContent->Log->nextL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(logDockContent->Log->prevL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(domainDockContent->entityList->nextL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(domainDockContent->entityList->prevL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(networkDockContent->entityList->nextL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(networkDockContent->entityList->prevL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(storagePoolDockContent->entityList->nextL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(storagePoolDockContent->entityList->prevL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(secretDockContent->entityList->nextL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(secretDockContent->entityList->prevL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(ifaceDockContent->entityList->nextL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(ifaceDockContent->entityList->prevL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(nwfilterDockContent->entityList->nextL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(nwfilterDockContent->entityList->prevL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(connListWidget->list->nextL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showNextDock()));
-        connect(connListWidget->list->prevL,
-                SIGNAL(released()),
-                SoftTouchedWdg, SLOT(showPrevDock()));
-        connect(connListWidget->list->homeL,
-                SIGNAL(released()),
-                this, SLOT(turnSoftTouchedToUntriggered()));
-        connect(logDockContent->Log->homeL,
-                SIGNAL(released()),
-                this, SLOT(turnSoftTouchedToUntriggered()));
-        connect(domainDockContent->entityList->homeL,
-                SIGNAL(released()),
-                this, SLOT(turnSoftTouchedToUntriggered()));
-        connect(networkDockContent->entityList->homeL,
-                SIGNAL(released()),
-                this, SLOT(turnSoftTouchedToUntriggered()));
-        connect(storagePoolDockContent->entityList->homeL,
-                SIGNAL(released()),
-                this, SLOT(turnSoftTouchedToUntriggered()));
-        connect(secretDockContent->entityList->homeL,
-                SIGNAL(released()),
-                this, SLOT(turnSoftTouchedToUntriggered()));
-        connect(ifaceDockContent->entityList->homeL,
-                SIGNAL(released()),
-                this, SLOT(turnSoftTouchedToUntriggered()));
-        connect(nwfilterDockContent->entityList->homeL,
-                SIGNAL(released()),
-                this, SLOT(turnSoftTouchedToUntriggered()));
-    } else {
-        disconnect(logDockContent->Log->nextL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(logDockContent->Log->prevL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(domainDockContent->entityList->nextL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(domainDockContent->entityList->prevL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(networkDockContent->entityList->nextL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(networkDockContent->entityList->prevL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(storagePoolDockContent->entityList->nextL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(storagePoolDockContent->entityList->prevL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(secretDockContent->entityList->nextL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(secretDockContent->entityList->prevL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(ifaceDockContent->entityList->nextL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(ifaceDockContent->entityList->prevL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(nwfilterDockContent->entityList->nextL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(nwfilterDockContent->entityList->prevL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(connListWidget->list->nextL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showNextDock()));
-        disconnect(connListWidget->list->homeL,
-                   SIGNAL(released()),
-                   this, SLOT(turnSoftTouchedToUntriggered()));
-        disconnect(connListWidget->list->prevL,
-                   SIGNAL(released()),
-                   SoftTouchedWdg, SLOT(showPrevDock()));
-        disconnect(logDockContent->Log->homeL,
-                   SIGNAL(released()),
-                   this, SLOT(turnSoftTouchedToUntriggered()));
-        disconnect(domainDockContent->entityList->homeL,
-                   SIGNAL(released()),
-                   this, SLOT(turnSoftTouchedToUntriggered()));
-        disconnect(networkDockContent->entityList->homeL,
-                   SIGNAL(released()),
-                   this, SLOT(turnSoftTouchedToUntriggered()));
-        disconnect(storagePoolDockContent->entityList->homeL,
-                   SIGNAL(released()),
-                   this, SLOT(turnSoftTouchedToUntriggered()));
-        disconnect(secretDockContent->entityList->homeL,
-                   SIGNAL(released()),
-                   this, SLOT(turnSoftTouchedToUntriggered()));
-        disconnect(ifaceDockContent->entityList->homeL,
-                   SIGNAL(released()),
-                   this, SLOT(turnSoftTouchedToUntriggered()));
-        disconnect(nwfilterDockContent->entityList->homeL,
-                   SIGNAL(released()),
-                   this, SLOT(turnSoftTouchedToUntriggered()));
-    }
+    if ( SoftTouchedWdg!=nullptr ) {
+        if ( state ) {
+            connect(logDockContent->Log->nextL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(logDockContent->Log->prevL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(domainDockContent->entityList->nextL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(domainDockContent->entityList->prevL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(networkDockContent->entityList->nextL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(networkDockContent->entityList->prevL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(storagePoolDockContent->entityList->nextL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(storagePoolDockContent->entityList->prevL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(secretDockContent->entityList->nextL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(secretDockContent->entityList->prevL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(ifaceDockContent->entityList->nextL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(ifaceDockContent->entityList->prevL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(nwfilterDockContent->entityList->nextL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(nwfilterDockContent->entityList->prevL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(connListWidget->list->nextL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showNextDock()));
+            connect(connListWidget->list->prevL,
+                    SIGNAL(released()),
+                    SoftTouchedWdg, SLOT(showPrevDock()));
+            connect(connListWidget->list->homeL,
+                    SIGNAL(released()),
+                    this, SLOT(turnSoftTouchedToUntriggered()));
+            connect(logDockContent->Log->homeL,
+                    SIGNAL(released()),
+                    this, SLOT(turnSoftTouchedToUntriggered()));
+            connect(domainDockContent->entityList->homeL,
+                    SIGNAL(released()),
+                    this, SLOT(turnSoftTouchedToUntriggered()));
+            connect(networkDockContent->entityList->homeL,
+                    SIGNAL(released()),
+                    this, SLOT(turnSoftTouchedToUntriggered()));
+            connect(storagePoolDockContent->entityList->homeL,
+                    SIGNAL(released()),
+                    this, SLOT(turnSoftTouchedToUntriggered()));
+            connect(secretDockContent->entityList->homeL,
+                    SIGNAL(released()),
+                    this, SLOT(turnSoftTouchedToUntriggered()));
+            connect(ifaceDockContent->entityList->homeL,
+                    SIGNAL(released()),
+                    this, SLOT(turnSoftTouchedToUntriggered()));
+            connect(nwfilterDockContent->entityList->homeL,
+                    SIGNAL(released()),
+                    this, SLOT(turnSoftTouchedToUntriggered()));
+        } else {
+            disconnect(logDockContent->Log->nextL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(logDockContent->Log->prevL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(domainDockContent->entityList->nextL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(domainDockContent->entityList->prevL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(networkDockContent->entityList->nextL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(networkDockContent->entityList->prevL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(storagePoolDockContent->entityList->nextL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(storagePoolDockContent->entityList->prevL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(secretDockContent->entityList->nextL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(secretDockContent->entityList->prevL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(ifaceDockContent->entityList->nextL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(ifaceDockContent->entityList->prevL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(nwfilterDockContent->entityList->nextL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(nwfilterDockContent->entityList->prevL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(connListWidget->list->nextL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showNextDock()));
+            disconnect(connListWidget->list->homeL,
+                       SIGNAL(released()),
+                       this, SLOT(turnSoftTouchedToUntriggered()));
+            disconnect(connListWidget->list->prevL,
+                       SIGNAL(released()),
+                       SoftTouchedWdg, SLOT(showPrevDock()));
+            disconnect(logDockContent->Log->homeL,
+                       SIGNAL(released()),
+                       this, SLOT(turnSoftTouchedToUntriggered()));
+            disconnect(domainDockContent->entityList->homeL,
+                       SIGNAL(released()),
+                       this, SLOT(turnSoftTouchedToUntriggered()));
+            disconnect(networkDockContent->entityList->homeL,
+                       SIGNAL(released()),
+                       this, SLOT(turnSoftTouchedToUntriggered()));
+            disconnect(storagePoolDockContent->entityList->homeL,
+                       SIGNAL(released()),
+                       this, SLOT(turnSoftTouchedToUntriggered()));
+            disconnect(secretDockContent->entityList->homeL,
+                       SIGNAL(released()),
+                       this, SLOT(turnSoftTouchedToUntriggered()));
+            disconnect(ifaceDockContent->entityList->homeL,
+                       SIGNAL(released()),
+                       this, SLOT(turnSoftTouchedToUntriggered()));
+            disconnect(nwfilterDockContent->entityList->homeL,
+                       SIGNAL(released()),
+                       this, SLOT(turnSoftTouchedToUntriggered()));
+        };
+    };
+    connListWidget->toolBar->wheelEventEnabled(state);
+    connListWidget->list->setUsageInSoftTouched(state);
+    domainDockContent->setUsageInSoftTouched(state);
+    networkDockContent->setUsageInSoftTouched(state);
+    storagePoolDockContent->setUsageInSoftTouched(state);
+    secretDockContent->setUsageInSoftTouched(state);
+    ifaceDockContent->setUsageInSoftTouched(state);
+    nwfilterDockContent->setUsageInSoftTouched(state);
+    logDockContent->setUsageInSoftTouched(state);
 }
 void MainWindow::turnSoftTouchedToUntriggered()
 {

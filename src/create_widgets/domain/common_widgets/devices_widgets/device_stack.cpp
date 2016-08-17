@@ -236,8 +236,6 @@ void DeviceStack::showDevice(QListWidgetItem *item)
         device = new Disk(
                     this,
                     ptr_ConnPtr);
-        connect(device, SIGNAL(errorMsg(QString&)),
-                this, SIGNAL(errorMsg(QString&)));
     } else if ( deviceType == "interface" ) {
         device = new NetInterfaces(
                     this,
@@ -300,6 +298,8 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     } else {
         device = new _QWidget(this);
     };
+    connect(device, SIGNAL(errorMsg(const QString&)),
+            this, SIGNAL(errorMsg(const QString&)));
     connect(device, SIGNAL(complete()),
             this, SLOT(deviceDataProcessed()));
     infoLayout->insertWidget(0, devIcon, -1, Qt::AlignHCenter);

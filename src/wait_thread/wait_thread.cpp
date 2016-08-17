@@ -10,15 +10,15 @@ Wait::Wait(QObject *parent, ConnectionList *wdgList) :
 void Wait::run()
 {
     // close connections
-    while (wdg->connItemModel->connItemDataList.count()) {
-        int count = wdg->connItemModel->connItemDataList.count();
+    while (wdg->getConnItemDataListCount()) {
+        const int count = wdg->getConnItemDataListCount();
         QStringList to_Delete;
         for (int i=0; i<count; i++) {
-            ConnItemIndex *idx = wdg->connItemModel->connItemDataList.at(i);
+            const ConnItemIndex *idx = wdg->getConnItemDataListIndex(i);
             if ( nullptr==idx ) continue;
             DATA _data = idx->getData();
             ConnElement *el = static_cast<ConnElement*>(
-                        wdg->connections->value(idx->getName()));
+                        wdg->getConnElementByName(idx->getName()));
             switch (_data.value("isRunning").toInt()) {
             case FAILED:
                 to_Delete.append(idx->getName());
@@ -30,7 +30,7 @@ void Wait::run()
                 if ( nullptr!=el ) el->closeConnection();
                 break;
             case CONNECT:
-                // undefined, still waiting to close the opening of connection
+                if ( nullptr!=el ) el->closeConnection();
                 break;
             default:
                 break;
@@ -38,22 +38,21 @@ void Wait::run()
         };
         foreach (QString key, to_Delete) {
             ConnElement *el = static_cast<ConnElement*>(
-                        wdg->connections->value(key));
+                        wdg->getConnElementByName(key));
             if ( nullptr!=el ) {
                 QString _name = el->getName();
-                int count = wdg->connItemModel->rowCount();
-                ConnItemIndex *idx = nullptr;
+                const int count = wdg->getListItemCount();
                 for (int i=0; i<count; i++) {
-                    idx = wdg->connItemModel->connItemDataList.at(i);
+                    ConnItemIndex *idx = wdg->getConnItemDataListIndex(i);
                     if ( idx->getName()==_name ) {
-                        int row = wdg->connItemModel->connItemDataList.indexOf(idx);
-                        wdg->connItemModel->removeRow(row);
-                        wdg->connItemModel->connItemDataList.removeOne(idx);
+                        const int row = wdg->getConnItemDataListIndexOf(idx);
+                        wdg->removeListItem(row);
+                        wdg->removeConnItemDataList(idx);
                         break;
                     };
                 };
             };
-            wdg->connections->remove(key);
+            wdg->removeConnectionItembyName(key);
         };
         msleep(PERIOD);
     };

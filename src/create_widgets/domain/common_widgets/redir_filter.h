@@ -15,17 +15,10 @@ public:
 private:
     QLineEdit       *_class, *_product,
                     *_vendor, *_version;
-    QPushButton     *add;
-    QPushButton     *del;
-    QHBoxLayout     *panelLayout;
-    QWidget         *panel;
-    QVBoxLayout     *baseLayout;
-    QWidget         *baseWdg;
-    QVBoxLayout     *commonLayout;
 
 public slots:
     QStringList      getFiltersList() const;
-    void             setFiltersList(QString&, bool);
+    void             setFiltersList(const QString&, const bool);
 
 private slots:
     void             addItem();

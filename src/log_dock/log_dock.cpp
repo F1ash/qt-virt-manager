@@ -88,7 +88,7 @@ void LogDock::setUsageInSoftTouched(bool state)
 }
 
 /* public slots */
-void LogDock::appendMsgToLog(QString &msg)
+void LogDock::appendMsgToLog(const QString &msg)
 {
     Log->append(QString("%1 %2").arg(DOT).arg(msg));
     Log->append(DEMARK);

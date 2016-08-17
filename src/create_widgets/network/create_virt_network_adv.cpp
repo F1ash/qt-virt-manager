@@ -98,7 +98,7 @@ CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
     connect(noGW, SIGNAL(toggled(bool)),
             this, SLOT(noGatewayChanged(bool)));
     connect(networkName, SIGNAL(textChanged(QString)),
-            this, SIGNAL(newName(QString)));
+            this, SIGNAL(newName(const QString&)));
 }
 CreateVirtNetwork_Adv::~CreateVirtNetwork_Adv()
 {

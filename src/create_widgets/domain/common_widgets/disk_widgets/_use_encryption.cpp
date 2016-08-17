@@ -34,8 +34,8 @@ _UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
     hlpThread = new SecretControlThread(this);
     connect(hlpThread, SIGNAL(resultData(Result)),
             this, SLOT(resultReceiver(Result)));
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errorMsg(const QString&)));
     connect(secUsage, SIGNAL(textChanged(QString)),
             this, SLOT(emitSecretList()));
     connect(hlpThread, SIGNAL(finished()),

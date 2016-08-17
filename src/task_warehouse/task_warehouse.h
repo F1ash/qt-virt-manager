@@ -27,7 +27,7 @@ public:
 
 signals:
     void             visibilityChanged(bool);
-    void             taskMsg(QString&);
+    void             taskMsg(const QString&);
     void             domResult(Result);
     void             netResult(Result);
     void             poolResult(Result);
@@ -50,7 +50,7 @@ public slots:
 
 private slots:
     void             closeEvent(QCloseEvent*);
-    void             msgRepeater(QString&, uint);
+    void             msgRepeater(const QString &, const uint);
     void             taskResultReceiver(Result);
     void             setNewTooltip(QListWidgetItem*);
 };

@@ -60,7 +60,7 @@ bool VirtInterfaceControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
     toolBar->enableAutoReload();
     return true;
 }
-void VirtInterfaceControl::setListHeader(QString &connName)
+void VirtInterfaceControl::setListHeader(const QString &connName)
 {
     virtIfaceModel->setHeaderData(
                 0, Qt::Horizontal,

@@ -19,7 +19,7 @@ public slots:
     bool             closeDataEdit();
     void             stateChanged();
     virtual void     readXMLDesciption();
-    virtual void     readXMLDesciption(QString&);
+    virtual void     readXMLDesciption(const QString&);
     void             resetData();
     void             revertData();
     void             saveData();

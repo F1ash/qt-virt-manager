@@ -52,21 +52,20 @@ private:
 
 public slots:
     QDomDocument     getDataDocument() const;
-    void             setEmulator(QString&);
+    void             setEmulator(const QString&);
     void             initBootDevices();
 
 private slots:
     void             showDeviceStack();
     void             addDevice();
-    void             addDeviceToUsedDevList(
-                                QDomDocument &doc, bool flag = true);
+    void             addDeviceToUsedDevList(QDomDocument &doc, const bool flag = true);
     void             delDevice();
     void             showDevice();
     void             showDevice(QListWidgetItem*,QListWidgetItem*);
     void             showContextMenu(const QPoint&);
     void             execDevExistanceMenuResult(Device_Action);
     void             detectAttachedDevicesFromXMLDesc();
-    void             saveDeviceXMLDescription(int, QString&);
+    void             saveDeviceXMLDescription(const int, const QString&);
 
 };
 

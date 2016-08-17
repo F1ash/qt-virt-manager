@@ -12,10 +12,10 @@ RedirFilter::RedirFilter(QWidget *parent, QString tag) :
     _version = new QLineEdit(this);
     _version->setPlaceholderText("Version");
 
-    panelLayout->insertWidget(1, _class, 10);
-    panelLayout->insertWidget(2, _vendor, 10);
-    panelLayout->insertWidget(3, _product, 10);
-    panelLayout->insertWidget(4, _version, 10);
+    panelLayout->insertWidget(1, _class);
+    panelLayout->insertWidget(2, _vendor);
+    panelLayout->insertWidget(3, _product);
+    panelLayout->insertWidget(4, _version);
 }
 void RedirFilter::clearList()
 {
@@ -36,7 +36,7 @@ QStringList RedirFilter::getFiltersList() const
     };
     return _list;
 }
-void RedirFilter::setFiltersList(QString &_filter, bool _allow)
+void RedirFilter::setFiltersList(const QString &_filter, const bool _allow)
 {
     QListWidgetItem *_item = new QListWidgetItem();
     _item->setText(_filter);

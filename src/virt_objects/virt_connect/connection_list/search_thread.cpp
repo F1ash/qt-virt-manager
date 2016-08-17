@@ -41,9 +41,9 @@ void SearchThread::run()
 void SearchThread::setURIList()
 {
     URIs.clear();
-    URIs<<"lxc:///"\
-        <<"qemu:///system"\
+    URIs<<"qemu:///system"\
         <<"qemu:///session"\
+        <<"lxc:///"\
         <<"xen:///"\
         <<"vbox:///session"\
         <<"vmwareplayer:///session"\
@@ -54,7 +54,7 @@ void SearchThread::setURIList()
         <<"vpx:///"\
         <<"openvz:///system";
 }
-void SearchThread::compareURI(QString &uri)
+void SearchThread::compareURI(const QString &uri)
 {
     //qDebug()<<uri;
     URIs.removeAll(uri);

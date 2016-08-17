@@ -39,8 +39,8 @@ CreateVirtNetwork::CreateVirtNetwork(
     hlpThread = new NetHelperThread(this, ptr_ConnPtr);
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(readCapabilities()));
-    connect(hlpThread, SIGNAL(errorMsg(QString&,uint)),
-            this, SIGNAL(errorMsg(QString&)));
+    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
+            this, SIGNAL(errorMsg(const QString&)));
     hlpThread->start();
 
 }

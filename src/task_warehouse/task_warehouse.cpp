@@ -124,8 +124,8 @@ void TaskWareHouse::addNewTask(TASK task)
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));
     if ( nullptr!=cThread ) {
-        connect(cThread, SIGNAL(errorMsg(QString&,uint)),
-                this, SLOT(msgRepeater(QString&, uint)));
+        connect(cThread, SIGNAL(errorMsg(const QString&, const uint)),
+                this, SLOT(msgRepeater(const QString&, const uint)));
         connect(cThread, SIGNAL(resultData(Result)),
                 this, SLOT(taskResultReceiver(Result)));
         cThread->execAction(counter, task);
@@ -137,7 +137,7 @@ void TaskWareHouse::closeEvent(QCloseEvent *ev)
 {
     ev->ignore();
 }
-void TaskWareHouse::msgRepeater(QString &msg, uint _number)
+void TaskWareHouse::msgRepeater(const QString &msg, const uint _number)
 {
     QString time = QTime::currentTime().toString();
     QString number = QString("").sprintf("%08d", _number);
@@ -170,8 +170,8 @@ void TaskWareHouse::taskResultReceiver(Result data)
                 threadPool->value(_number));
     if ( nullptr!=cThread ) {
         //qDebug()<<_number<<"delete";
-        disconnect(cThread, SIGNAL(errorMsg(QString&, uint)),
-                   this, SLOT(msgRepeater(QString&, uint)));
+        disconnect(cThread, SIGNAL(errorMsg(const QString&, const uint)),
+                   this, SLOT(msgRepeater(const QString&, const uint)));
         disconnect(cThread, SIGNAL(resultData(Result)),
                    this, SLOT(taskResultReceiver(Result)));
         threadPool->value(_number)->quit();

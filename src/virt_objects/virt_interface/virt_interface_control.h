@@ -26,7 +26,7 @@ private:
 public slots:
     void                 stopProcessing();
     bool                 setCurrentWorkConnect(virConnectPtr*);
-    void                 setListHeader(QString&);
+    void                 setListHeader(const QString&);
     void                 resultReceiver(Result);
 
 private slots:
