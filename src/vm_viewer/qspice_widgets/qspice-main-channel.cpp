@@ -385,7 +385,10 @@ void QSpiceMainChannel::guestClipboardSelectionRequest()
 
 void QSpiceMainChannel::fileCopyAsync(QStringList &fileNames)
 {
-    if ( fileNames.isEmpty() ) return;
+    if ( fileNames.isEmpty() ) {
+        emit downloadCompleted();
+        return;
+    };
     uint count = fileNames.count();
     //qDebug()<<fileNames<<count;
     GFile* sources[count];
