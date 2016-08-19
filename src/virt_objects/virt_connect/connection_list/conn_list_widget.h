@@ -66,7 +66,7 @@ private :
     void                 checkConnection(const QModelIndex&, const bool);
     void                 deleteCurrentConnection(const QModelIndex&);
     void                 showMessage(const QString&, const QString&);
-    bool                 onViewExist() const;
+    bool                 onViewExist;
 
 private slots:
     void                 searchLocalhostConnections();
@@ -83,6 +83,7 @@ private slots:
     void                 getAuthCredentials(const QString&);
     void                 searchLocalhostConnComplete();
     void                 setOnViewAvailableConnection(const QString&);
+    void                 newItemClosed(bool);
 };
 
 #endif   // CONN_LIST_WIDGET_H

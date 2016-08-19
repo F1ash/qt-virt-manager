@@ -188,7 +188,7 @@ void get_device_idx(gpointer item, void *res)
     ++_res->size;
 }
 
-void QSpiceUsbDeviceManager::spiceUsbDeviceManager_finish_callback
+void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_finish_callback
                                                 (void *self, void *res, void *err)
 {
     GError **errors = (GError**) err;
@@ -215,6 +215,32 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_finish_callback
     };
 }
 
+void QSpiceUsbDeviceManager::spiceUsbDeviceManager_disconnect_finish_callback
+                                                (void *self, void *res, void *err)
+{
+    GError **errors = (GError**) err;
+    GAsyncResult *result = (GAsyncResult*) res;
+    bool _res = spice_usb_device_manager_disconnect_device_finish(
+                (SpiceUsbDeviceManager*) self, result, errors);
+    if ( !_res ) {
+        QSpiceUsbDeviceManager *obj =
+                static_cast<QSpiceUsbDeviceManager*>(
+                    g_async_result_get_user_data(result));
+        if ( obj==nullptr ) return;
+        QString err;
+        size_t count = sizeof(errors)/sizeof(*errors);
+        for ( uint i = 0; i<count; i++ ) {
+            if ( nullptr==errors[i] ) continue;
+            GError *error = errors[i];
+            err.append(error->code);
+            err.append(error->message);
+            err.append('\n');
+            g_error_free(error);
+        };
+        QString dev("???");
+        emit obj->deviceInfo(dev, err);
+    };
+}
 
 /* public slots */
 void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
@@ -252,9 +278,9 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
                             (SpiceUsbDeviceManager*) gobject,
                             _dev,
                             nullptr,
-                            (GAsyncReadyCallback)spiceUsbDeviceManager_finish_callback,
+                            (GAsyncReadyCallback)spiceUsbDeviceManager_connect_finish_callback,
                             this);
-                _msg.append("connected to guest.");
+                _msg.append("connect to guest.");
             } else {
                 _msg.append("connected to guest already.");
             };
@@ -278,9 +304,13 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_disconnect_device(QString &_i
                     (SpiceUsbDeviceManager*) gobject, _dev);
         QString _msg;
         if ( connected ) {
-            spice_usb_device_manager_disconnect_device(
-                        (SpiceUsbDeviceManager*) gobject, _dev);
-            _msg.append("disconnected from guest.");
+            spice_usb_device_manager_disconnect_device_async(
+                        (SpiceUsbDeviceManager*) gobject,
+                        _dev,
+                        nullptr,
+                        (GAsyncReadyCallback)spiceUsbDeviceManager_disconnect_finish_callback,
+                        this);
+            _msg.append("disconnect from guest.");
         } else {
             _msg.append("disconnected from guest already.");
         };

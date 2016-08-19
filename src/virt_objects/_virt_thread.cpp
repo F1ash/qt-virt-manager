@@ -16,8 +16,8 @@ QString _VirtThread::sendConnErrors()
     if ( virtErrors!=nullptr && virtErrors->code>0 ) {
         msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
-        emit errorMsg( msg, number );
-        customErrorNotification(virtErrors->code);
+        //emit errorMsg( msg, number );
+        customErrorNotification( msg, virtErrors->code );
         virResetError(virtErrors);
     } else
         msg = sendGlobalErrors();
@@ -30,21 +30,24 @@ QString _VirtThread::sendGlobalErrors()
     if ( virtErrors!=nullptr && virtErrors->code>0 ) {
         msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString().fromUtf8(virtErrors->message));
-        emit errorMsg( msg, number );
-        customErrorNotification(virtErrors->code);
+        //emit errorMsg( msg, number );
+        customErrorNotification( msg, virtErrors->code );
     };
     virResetLastError();
     return msg;
 }
-void _VirtThread::customErrorNotification(int code)
+void _VirtThread::customErrorNotification(const QString &_msg, const uint code)
 {
     QString msg;
     switch ( code ) {
     case 38:
-        msg =
-    "Make sure the required Libvirt service is installed and running";
+        msg = QString("%1 : [ <font color='red'>WARNING:</font> %2 ]")
+                .arg(_msg)
+                .arg(
+    "Make sure the required Libvirt or another service is installed and running");
         break;
     default:
+        msg = _msg;
         return;
     };
     emit errorMsg( msg, number );

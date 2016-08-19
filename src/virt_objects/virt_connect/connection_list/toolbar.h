@@ -15,7 +15,7 @@ public:
     QAction    *_editAction;
     QAction    *_deleteAction;
     QAction    *_openAction;
-    QAction    *_showAction;
+    QAction    *_overwiewAction;
     QAction    *_closeAction;
     QAction    *_closeAllAction;
     QAction    *_closeOverview;

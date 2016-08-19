@@ -29,7 +29,7 @@ signals:
 public slots:
     virtual void     stop();
 private:
-    void             customErrorNotification(int);
+    void             customErrorNotification(const QString&, const uint);
 };
 
 #endif // _VIRT_THREAD_H

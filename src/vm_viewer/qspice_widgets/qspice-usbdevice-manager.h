@@ -20,7 +20,9 @@ public:
                                                     (QString&);
     bool        spiceUsbDeviceManager_is_device_connected
                                                     (QString&);
-    static void spiceUsbDeviceManager_finish_callback
+    static void spiceUsbDeviceManager_connect_finish_callback
+                                                    (void*, void*, void*);
+    static void spiceUsbDeviceManager_disconnect_finish_callback
                                                     (void*, void*, void*);
 
 signals:

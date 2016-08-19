@@ -424,7 +424,7 @@ void MainWindow::initConnListWidget()
             this, SLOT(deleteCurrentConnection()));
     connect(connListWidget->toolBar->_openAction, SIGNAL(triggered()),
             this, SLOT(openCurrentConnection()));
-    connect(connListWidget->toolBar->_showAction, SIGNAL(triggered()),
+    connect(connListWidget->toolBar->_overwiewAction, SIGNAL(triggered()),
             this, SLOT(currentConnectionToOverview()));
     connect(connListWidget->toolBar->_closeAction, SIGNAL(triggered()),
             this, SLOT(closeCurrentConnection()));

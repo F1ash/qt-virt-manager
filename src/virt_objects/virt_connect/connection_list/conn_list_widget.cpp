@@ -16,6 +16,7 @@ ConnectionList::ConnectionList(QWidget *parent)
     this->setModel(connItemModel);
     connListDlg = new ConnListDelegate();
     this->setItemDelegate(connListDlg);
+    onViewExist = false;
     connections = new CONN_LIST();
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(connContextMenuRequested(const QPoint &)));
@@ -142,6 +143,8 @@ void ConnectionList::overviewOfConnection(const QModelIndex &_item)
                     .toBool();
             if ( conn_state==RUNNING && conn_availability ) {
                 conn->overviewOfConnection();
+                // set flag to TRUE
+                onViewExist = true;
             };
         } else {
             conn->disableOverviewOfConnection();
@@ -224,6 +227,8 @@ void ConnectionList::stopProcessing()
         if ( nullptr==conn ) continue;
         conn->disableOverviewOfConnection();
     };
+    // set flag to FALSE
+    onViewExist = false;
 }
 
 /* private */
@@ -251,6 +256,8 @@ void ConnectionList::createConnection(const QModelIndex &_item)
             this, SIGNAL(netResult(Result)));
     connect(conn, SIGNAL(connClosed(bool, const QString&)),
             this, SIGNAL(connClosed(bool, const QString&)));
+    connect(conn, SIGNAL(connClosed(bool, const QString&)),
+            this, SLOT(newItemClosed(bool)));
     connect(conn, SIGNAL(domainEnd(const QString&)),
             this, SIGNAL(domainEnd(const QString&)));
     connect(conn, SIGNAL(newOpenedConnection(const QString&)),
@@ -316,6 +323,8 @@ void ConnectionList::deleteCurrentConnection(const QModelIndex &_item)
                            this, SIGNAL(netResult(Result)));
                 disconnect(conn, SIGNAL(connClosed(bool, const QString&)),
                            this, SIGNAL(connClosed(bool, const QString&)));
+                disconnect(conn, SIGNAL(connClosed(bool, const QString&)),
+                           this, SLOT(newItemClosed(bool)));
                 disconnect(conn, SIGNAL(domainEnd(const QString&)),
                            this, SIGNAL(domainEnd(const QString&)));
                 disconnect(conn, SIGNAL(newOpenedConnection(const QString&)),
@@ -333,27 +342,6 @@ void ConnectionList::showMessage(const QString &title, const QString &msg)
 {
     QMessageBox::information(this, title, msg);
     mainWindowUp();
-}
-bool ConnectionList::onViewExist() const
-{
-    bool res = false;
-    QList<ConnItemIndex*>::const_iterator i;
-    for (i=connItemModel->connItemDataList.constBegin();
-         i!=connItemModel->connItemDataList.constEnd();
-         ++i) {
-        ConnItemIndex *idx = (*i);
-        if ( idx==nullptr ) continue;
-        const QString _name = idx->getName();
-        ConnElement *conn = static_cast<ConnElement*>(
-                    connections->value(_name));
-        if ( nullptr==conn ) continue;
-        if ( conn->getOnViewState() ) {
-            //qDebug()<<_name<<"onView";
-            res = true;
-            break;
-        };
-    };
-    return res;
 }
 
 /* private slots */
@@ -510,6 +498,8 @@ void ConnectionList::createLocalConnection(const QString &uri)
             this, SIGNAL(netResult(Result)));
     connect(conn, SIGNAL(connClosed(bool, const QString&)),
             this, SIGNAL(connClosed(bool, const QString&)));
+    connect(conn, SIGNAL(connClosed(bool, const QString&)),
+            this, SLOT(newItemClosed(bool)));
     connect(conn, SIGNAL(domainEnd(const QString&)),
             this, SIGNAL(domainEnd(const QString&)));
     connect(conn, SIGNAL(newOpenedConnection(const QString&)),
@@ -563,8 +553,9 @@ void ConnectionList::searchLocalhostConnComplete()
 }
 void ConnectionList::setOnViewAvailableConnection(const QString &_newName)
 {
+    if ( waitLocalConn->isRunning() ) return;
     if ( searchThread->isRunning() ) return;
-    if ( onViewExist() || connections->count()==0 ) return;
+    if ( onViewExist || connections->count()==0 ) return;
     QList<ConnItemIndex*>::const_iterator i;
     for (i=connItemModel->connItemDataList.constBegin();
          i!=connItemModel->connItemDataList.constEnd();
@@ -577,6 +568,13 @@ void ConnectionList::setOnViewAvailableConnection(const QString &_newName)
                     connections->value(_name));
         if ( nullptr==conn ) continue;
         conn->overviewOfConnection();
+        // set flag to TRUE
+        onViewExist = true;
         break;
     };
+}
+void ConnectionList::newItemClosed(bool onView)
+{
+    // if closed connection was onView, then set flag to FALSE
+    if ( onView ) onViewExist = false;
 }
