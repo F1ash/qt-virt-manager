@@ -2,11 +2,9 @@
 #define JOB_ITEM_INDEX_H
 
 #include <QObject>
-#include <QMap>
-#include <QString>
-#include <QVariant>
+#include <QVariantMap>
 
-typedef QMap<QString, QVariant> DATA;
+typedef QVariantMap DATA;
 
 class ConnItemIndex : public QObject
 {

@@ -71,6 +71,7 @@ private :
 private slots:
     void                 searchLocalhostConnections();
     void                 connContextMenuRequested(const QPoint&);
+    void                 connItemClicked(const QModelIndex&);
     void                 connItemDoubleClicked(const QModelIndex&);
     void                 connItemKillAction();
     void                 connItemRunAction();

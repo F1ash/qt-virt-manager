@@ -628,7 +628,6 @@
         <file alias="64x64/actions/info.png">icons/64x64/actions/info.png</file>
         <file alias="64x64/actions/document-open.png">icons/64x64/actions/document-open.png</file>
         <file alias="64x64/actions/dialog-warning.png">icons/64x64/actions/dialog-warning.png</file>
-        <file alias="64x64/actions/view-refresh.png">icons/64x64/actions/view-refresh.png</file>
         <file alias="64x64/actions/vm-domain.png">icons/64x64/actions/vm-domain.png</file>
         <file alias="64x64/actions/exit.png">icons/64x64/actions/exit.png</file>
         <file alias="64x64/actions/reboot.png">icons/64x64/actions/reboot.png</file>

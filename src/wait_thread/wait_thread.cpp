@@ -44,7 +44,7 @@ void Wait::run()
                 const int count = wdg->getListItemCount();
                 for (int i=0; i<count; i++) {
                     ConnItemIndex *idx = wdg->getConnItemDataListIndex(i);
-                    if ( idx->getName()==_name ) {
+                    if ( idx!=nullptr && idx->getName()==_name ) {
                         const int row = wdg->getConnItemDataListIndexOf(idx);
                         wdg->removeListItem(row);
                         wdg->removeConnItemDataList(idx);

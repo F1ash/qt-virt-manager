@@ -828,12 +828,13 @@ bool MainWindow::runningConnExist()
     bool result = false;
     const int count = connListWidget->list->getListItemCount();
     for (int i=0; i<count; i++) {
-        const ConnItemIndex *item =
+        const ConnItemIndex *idx =
                 connListWidget->list->getConnItemDataListIndex(i);
         //qDebug()<<connListWidget->list->item(i)->text()
         //<< connListWidget->list->item(i)->data(Qt::UserRole)
         //.toMap().value("isRunning").toInt();
-        if ( item->getData().value("isRunning").toInt()==RUNNING ) {
+        if ( idx!=nullptr &&
+             idx->getData().value("isRunning").toInt()==RUNNING ) {
             result = true;
             break;
         };
@@ -1088,13 +1089,13 @@ void MainWindow::deleteDomainEditor(const QString &key)
 }
 void MainWindow::migrate_settings_to_INI_format()
 {
-    if ( settings.allKeys().isEmpty() ) {
-        //qDebug()<<"migrate_settings_to_INI_format";
-        QSettings oldSettings(
-                    QSettings::NativeFormat,
-                    QSettings::UserScope,
-                    qApp->organizationName(),
-                    qApp->applicationName());
+    //qDebug()<<"migrate_settings_to_INI_format";
+    QSettings oldSettings(
+                QSettings::NativeFormat,
+                QSettings::UserScope,
+                qApp->organizationName(),
+                qApp->applicationName());
+    if ( settings.allKeys().isEmpty() && !oldSettings.allKeys().isEmpty() ) {
         foreach (QString group, oldSettings.childGroups()) {
             oldSettings.beginGroup(group);
             settings.beginGroup(group);

@@ -26,8 +26,10 @@ void WaitLocalConn::run()
                     exist = true;
                     const int count = connItemModel->rowCount();
                     for (int i=0; i<count; i++) {
-                        ConnItemIndex *idx =
-                                connItemModel->connItemDataList.at(i);
+                        ConnItemIndex *idx = nullptr;
+                        if ( 0<= i < connItemModel->connItemDataList.count() ) {
+                            idx = connItemModel->connItemDataList.at(i);
+                        };
                         if ( nullptr==idx ) continue;
                         if ( idx->getName()==_name ) {
                             DATA _data = idx->getData();
@@ -68,6 +70,6 @@ void WaitLocalConn::run()
             };
             connections->remove(key);
         };
-        msleep(333);
+        //msleep(333);
     };
 }
