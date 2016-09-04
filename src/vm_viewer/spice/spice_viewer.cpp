@@ -1,6 +1,5 @@
 #include "spice_viewer.h"
 #include <QApplication>
-#include <QClipboard>
 extern "C" {
 #include <spice/vd_agent.h>
 }
@@ -157,58 +156,13 @@ void Spice_Viewer::cancelCopyFilesToVirtDomain()
 }
 void Spice_Viewer::copyToClipboardFromVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
-    spiceWdg->copyClipboardDataFromGuest();
+    if ( nullptr!=spiceWdg )
+        spiceWdg->copyClipboardDataFromGuest();
 }
 void Spice_Viewer::pasteClipboardToVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
-    const QString _text =
-            QApplication::clipboard()->text(
-                QClipboard::Clipboard);
-    const QImage _image =
-            QApplication::clipboard()->image(
-                QClipboard::Clipboard);
-    qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
-    if ( !_text.isEmpty() ) {
-        spiceWdg->sendClipboardDataToGuest(
-                    VD_AGENT_CLIPBOARD_UTF8_TEXT,
-                    (const uchar*)_text.toUtf8().data(),
-                    _text.size());
-    };
-    if ( !_image.isNull() ) {
-        /*
-        QString _format = _text.split(".").last();
-        qint32 _frmt;
-        if ( _format.isEmpty() ) {
-            QMessageBox::information(
-                        this,
-                        "INFO",
-                        QString("Unknown image format:\n'%1'")
-                        .arg(_text));
-            return;
-        } else if ( _format.toLower()=="png" ) {
-            qDebug()<<"png";
-            _frmt = VD_AGENT_CLIPBOARD_IMAGE_PNG;
-        } else if ( _format.toLower()=="bmp" ) {
-            _frmt = VD_AGENT_CLIPBOARD_IMAGE_BMP;
-        } else if ( _format.toLower()=="jpg" ) {
-            _frmt = VD_AGENT_CLIPBOARD_IMAGE_JPG;
-        } else if ( _format.toLower()=="tiff" ) {
-            _frmt = VD_AGENT_CLIPBOARD_IMAGE_TIFF;
-        } else {
-            QMessageBox::information(
-                        this,
-                        "INFO",
-                        "Unknown image format.");
-            return;
-        };
-        */
-        spiceWdg->sendClipboardDataToGuest(
-                    VD_AGENT_CLIPBOARD_IMAGE_PNG,
-                    _image.constBits(),
-                    _image.byteCount());
-    };
+    if ( nullptr!=spiceWdg )
+        spiceWdg->pasteClipboardDataToGuest();
 }
 void Spice_Viewer::fullScreenVirtDomain()
 {

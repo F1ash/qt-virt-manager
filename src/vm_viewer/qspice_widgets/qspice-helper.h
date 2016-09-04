@@ -103,7 +103,7 @@ public:
             gpointer             user_data);
 
     static void main_clipboard_selection(
-            SpiceMainChannel    *main,
+            SpiceMainChannel    *mainchannel,
             guint                selection,
             guint                type,
             gpointer             data,
@@ -111,19 +111,19 @@ public:
             gpointer             user_data);
 
     static bool main_clipboard_selection_grab(
-            SpiceMainChannel    *main,
+            SpiceMainChannel    *mainchannel,
             guint                selection,
             gpointer             types,
             guint                ntypes,
             gpointer             user_data);
 
     static void main_clipboard_selection_release(
-            SpiceMainChannel    *main,
+            SpiceMainChannel    *mainchannel,
             guint                selection,
             gpointer             user_data);
 
     static bool main_clipboard_selection_request(
-            SpiceMainChannel    *main,
+            SpiceMainChannel    *mainchannel,
             guint                selection,
             guint                types,
             gpointer             user_data);
@@ -133,13 +133,18 @@ public:
             gpointer             user_data);
 
     static void migration_started(
-            SpiceMainChannel    *main,
+            SpiceMainChannel    *mainchannel,
             GObject             *session,
             gpointer             user_data);
 
     static void operation_cancelled(
             GCancellable        *cancellable,
             gpointer             user_data);
+
+    static void new_file_transfer(
+            SpiceMainChannel      *mainchannel,
+            SpiceFileTransferTask *task,
+            gpointer               user_data);
 
     // USB Device Manager
     static void auto_connect_failed(

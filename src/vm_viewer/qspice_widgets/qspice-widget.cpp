@@ -106,26 +106,32 @@ void QSpiceWidget::sendKeySequience(Qt::Key key)
 
 void QSpiceWidget::fileCopyAsync(QStringList &fileNames)
 {
-    main->fileCopyAsync(fileNames);
+    if ( nullptr!=main )
+        main->fileCopyAsync(fileNames);
 }
 
 void QSpiceWidget::cancelFileCopyAsync()
 {
-    main->cancelFileCopyAsync();
+    if ( nullptr!=main )
+        main->cancelFileCopyAsync();
 }
 
 void QSpiceWidget::copyClipboardDataFromGuest()
 {
-    emit clipboardsReleased(false);
-    main->guestClipboardSelectionRequest();
-    emit clipboardsReleased(true);
+    if ( nullptr!=main )
+        main->guestClipboardSelectionRequest();
+}
+
+void QSpiceWidget::pasteClipboardDataToGuest()
+{
+    if ( nullptr!=main )
+        main->initClipboardSelectionrequest();
 }
 
 void QSpiceWidget::sendClipboardDataToGuest(quint32 type, const uchar *_data, size_t _size)
 {
-    emit clipboardsReleased(false);
-    main->clipboardSelectionNotify(type, _data, _size);
-    emit clipboardsReleased(true);
+    if ( nullptr!=main )
+        main->clipboardSelectionNotify(type, _data, _size);
 }
 
 bool QSpiceWidget::isScaledScreen() const
@@ -156,9 +162,9 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
         connect(main, SIGNAL(clipboardSelectionGrabbed(uint,void*,uint)),
                 SLOT(clipboardSelectionGrab()));
         connect(main, SIGNAL(clipboardSelectionReleased(uint)),
-                SLOT(guestClipboardSelectionRelease(uint)));
+                SLOT(guestClipboardSelectionReleased(uint)));
         connect(main, SIGNAL(clipboardSelectionRequested(uint,uint)),
-                SLOT(clientClipboardSelectionRequest(uint,uint)));
+                SLOT(clientClipboardSelectionRequested(uint,uint)));
         connect(main, SIGNAL(mouseUpdated()),
                 SLOT(mainMouseUpdate()));
         connect(main, SIGNAL(downloaded(int,int)),
@@ -485,7 +491,7 @@ void QSpiceWidget::clipboardSelectionGrab()
     qDebug()<<"main: ClipboardSelectionGrabbed";
 }
 
-void QSpiceWidget::guestClipboardSelectionRelease(uint selection)
+void QSpiceWidget::guestClipboardSelectionReleased(uint selection)
 {
     switch (selection) {
     case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
@@ -503,8 +509,9 @@ void QSpiceWidget::guestClipboardSelectionRelease(uint selection)
     emit clipboardsReleased(true);
 }
 
-void QSpiceWidget::clientClipboardSelectionRequest(uint selection, uint type)
+void QSpiceWidget::clientClipboardSelectionRequested(uint selection, uint type)
 {
+    QClipboard::Mode mode;
     QString dataRequested;
     switch (type) {
     case VD_AGENT_CLIPBOARD_NONE:
@@ -530,14 +537,17 @@ void QSpiceWidget::clientClipboardSelectionRequest(uint selection, uint type)
     };
     switch (selection) {
     case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
+        mode = QClipboard::Clipboard;
         dataRequested
                 .append("clientClipboard_CLIPBOARDSelectionRequested");
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_PRIMARY:
+        mode = QClipboard::Selection;
         dataRequested
                 .append("clientClipboard_PRIMARYSelectionRequested");
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_SECONDARY:
+        mode = QClipboard::FindBuffer;
         dataRequested
                 .append("clientClipboard_SECONDARYSelectionRequested");
         break;
@@ -545,6 +555,50 @@ void QSpiceWidget::clientClipboardSelectionRequest(uint selection, uint type)
         break;
     };
     qDebug()<<dataRequested;
+    const QString _text =
+            QApplication::clipboard()->text(mode);
+    const QImage _image =
+            QApplication::clipboard()->image(mode);
+    qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
+    if ( !_text.isEmpty() ) {
+        sendClipboardDataToGuest(
+                    VD_AGENT_CLIPBOARD_UTF8_TEXT,
+                    (const uchar*)_text.toUtf8().data(),
+                    _text.size());
+    };
+    if ( !_image.isNull() ) {
+        /*
+        QString _format = _text.split(".").last();
+        qint32 _frmt;
+        if ( _format.isEmpty() ) {
+            QMessageBox::information(
+                        this,
+                        "INFO",
+                        QString("Unknown image format:\n'%1'")
+                        .arg(_text));
+            return;
+        } else if ( _format.toLower()=="png" ) {
+            qDebug()<<"png";
+            _frmt = VD_AGENT_CLIPBOARD_IMAGE_PNG;
+        } else if ( _format.toLower()=="bmp" ) {
+            _frmt = VD_AGENT_CLIPBOARD_IMAGE_BMP;
+        } else if ( _format.toLower()=="jpg" ) {
+            _frmt = VD_AGENT_CLIPBOARD_IMAGE_JPG;
+        } else if ( _format.toLower()=="tiff" ) {
+            _frmt = VD_AGENT_CLIPBOARD_IMAGE_TIFF;
+        } else {
+            QMessageBox::information(
+                        this,
+                        "INFO",
+                        "Unknown image format.");
+            return;
+        };
+        */
+        sendClipboardDataToGuest(
+                    VD_AGENT_CLIPBOARD_IMAGE_PNG,
+                    _image.constBits(),
+                    _image.byteCount());
+    };
 }
 
 void QSpiceWidget::mainMouseUpdate()

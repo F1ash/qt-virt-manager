@@ -59,6 +59,11 @@ public:
     void copyClipboardDataFromGuest();
 
     /*
+     * Initiation paste client Clipboard data to guest Clipboard.
+     */
+    void pasteClipboardDataToGuest();
+
+    /*
      * Send client Clipboard data to guest Clipboard.
      */
     void sendClipboardDataToGuest(quint32, const uchar*, size_t);
@@ -201,8 +206,8 @@ private slots:
     void mainAgentUpdate();
     void mainClipboardSelection(uint, void*, uint);
     void clipboardSelectionGrab();
-    void guestClipboardSelectionRelease(uint);
-    void clientClipboardSelectionRequest(uint, uint);
+    void guestClipboardSelectionReleased(uint);
+    void clientClipboardSelectionRequested(uint, uint);
     void mainMouseUpdate();
 
     void usbDevAutoConnectFailed(QString&, QString&);

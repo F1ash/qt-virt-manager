@@ -132,9 +132,11 @@ popd
 %check
 %if %with qt4
 desktop-file-validate %{buildroot}/%{_datadir}/applications/qt4-virt-manager.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/applications/qt4-remote-viewer.desktop
 %endif
 %if %with qt5
 desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-remote-viewer.desktop
 %endif
 
 %post
@@ -157,6 +159,9 @@ fi
 %{_datadir}/applications/qt4-virt-manager.desktop
 %{_datadir}/qt4-virt-manager
 %{_datadir}/icons/hicolor/256x256/apps/virtual-engineering.png
+%{_bindir}/qt4-remote-viewer
+%{_datadir}/applications/qt4-remote-viewer.desktop
+%{_datadir}/icons/hicolor/256x256/apps/remote-desktop-viewer.png
 %endif
 %if %with qt5
 %files -n qt5-virt-manager
@@ -166,6 +171,9 @@ fi
 %{_datadir}/applications/qt5-virt-manager.desktop
 %{_datadir}/qt5-virt-manager
 %{_datadir}/icons/hicolor/256x256/apps/virtual-engineering.png
+%{_bindir}/qt5-remote-viewer
+%{_datadir}/applications/qt5-remote-viewer.desktop
+%{_datadir}/icons/hicolor/256x256/apps/remote-desktop-viewer.png
 %endif
 
 %changelog

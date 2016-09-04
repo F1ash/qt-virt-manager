@@ -39,6 +39,7 @@ public:
 
     void clipboardSelectionGrab(uint, quint32*, int);
     void clipboardSelectionRelease();
+    void initClipboardSelectionrequest();
     void clipboardSelectionNotify(quint32, const uchar*, size_t);
     void guestClipboardSelectionRequest();
 
@@ -55,6 +56,7 @@ signals:
     void clipboardSelectionRequested(uint, uint);
     void mouseUpdated();
     void migrationStarted();
+    void newFileTransfer(const QString&);
     void downloaded(int, int);
     void cancelled();
     void downloadCompleted();

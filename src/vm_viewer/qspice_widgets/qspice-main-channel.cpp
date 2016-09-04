@@ -105,62 +105,62 @@ static char* spice_convert_newlines(const gchar *str, gssize len,
 }
 //  ^^spice-util.c
 
-void QSpiceHelper::main_agent_update(SpiceMainChannel *spicemainchannel,
+void QSpiceHelper::main_agent_update(SpiceMainChannel *mainchannel,
                                      gpointer user_data)
 {
-    Q_UNUSED(spicemainchannel)
+    Q_UNUSED(mainchannel);
 
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->agentUpdated();
 }
-void QSpiceHelper::main_clipboard_selection(SpiceMainChannel *spicemainchannel,
+void QSpiceHelper::main_clipboard_selection(SpiceMainChannel *mainchannel,
                                             guint selection,
                                             guint type,
                                             gpointer data,
                                             guint size,
                                             gpointer user_data)
 {
-    Q_UNUSED(spicemainchannel)
-    Q_UNUSED(selection)
+    Q_UNUSED(mainchannel);
+    Q_UNUSED(selection);
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->clipboardSelection(type, (void*)data, size);
 }
-bool QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *spicemainchannel,
+bool QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *mainchannel,
                                                  guint selection,
                                                  gpointer types,
                                                  guint ntypes,
                                                  gpointer user_data)
 {
-    Q_UNUSED(spicemainchannel)
+    Q_UNUSED(mainchannel);
     //qDebug()<<"main_clipboard_selection_grub";
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return false;
-    emit _mainchannel->clipboardSelectionGrabbed(
-                selection, (void*)types, ntypes);
+    //emit _mainchannel->clipboardSelectionGrabbed(
+    //            selection, (void*)types, ntypes);
     return true;
 }
-void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *spicemainchannel,
+void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *mainchannel,
                                                     guint selection,
                                                     gpointer user_data)
 {
-    Q_UNUSED(spicemainchannel)
+    Q_UNUSED(mainchannel)
     //qDebug()<<"main_clipboard_selection_release";
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->clipboardSelectionReleased(selection);
 }
-bool QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainchannel,
+bool QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *mainchannel,
                                                     guint selection,
                                                     guint types,
                                                     gpointer user_data)
 {
-    Q_UNUSED(spicemainchannel)
+    Q_UNUSED(mainchannel);
     qDebug()<<"main_clipboard_selection_request";
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
@@ -168,10 +168,10 @@ bool QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *spicemainc
     emit _mainchannel->clipboardSelectionRequested(selection, types);
     return true;
 }
-void QSpiceHelper::main_mouse_update(SpiceMainChannel *spicemainchannel,
+void QSpiceHelper::main_mouse_update(SpiceMainChannel *mainchannel,
                                      gpointer user_data)
 {
-    Q_UNUSED(spicemainchannel)
+    Q_UNUSED(mainchannel)
 
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
@@ -200,6 +200,21 @@ void QSpiceHelper::operation_cancelled(GCancellable *cancellable,
             static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->cancelled();
+}
+void QSpiceHelper::new_file_transfer(SpiceMainChannel *mainchannel,
+                                     SpiceFileTransferTask *task,
+                                     gpointer user_data)
+{
+    Q_UNUSED(mainchannel)
+
+    QSpiceMainChannel *_mainchannel =
+            static_cast<QSpiceMainChannel*>(user_data);
+    if ( nullptr==_mainchannel ) return;
+    QString _fileName = QString::fromUtf8(
+            spice_file_transfer_task_get_filename( task ));
+    emit _mainchannel->newFileTransfer(_fileName);
+    // TODO: implement for each task displaying progress and cancel
+    //qDebug()<<"new file transfer:"<<_fileName;
 }
 
 void QSpiceMainChannel::initCallbacks()
@@ -240,6 +255,10 @@ void QSpiceMainChannel::initCallbacks()
     g_signal_connect(
                 cancellable, "cancelled",
                 (GCallback) QSpiceHelper::operation_cancelled,
+                this);
+    g_signal_connect(
+                gobject, "new-file-transfer",
+                (GCallback) QSpiceHelper::new_file_transfer,
                 this);
 }
 
@@ -309,6 +328,40 @@ void QSpiceMainChannel::clipboardSelectionRelease()
     spice_main_clipboard_selection_release(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD);
+}
+
+void QSpiceMainChannel::initClipboardSelectionrequest()
+{
+    g_signal_emit_by_name(
+                (SpiceMainChannel *) gobject,
+                "main-clipboard-selection-request",
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_UTF8_TEXT,
+                this);
+    g_signal_emit_by_name(
+                (SpiceMainChannel *) gobject,
+                "main-clipboard-selection-request",
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_PNG,
+                this);
+    g_signal_emit_by_name(
+                (SpiceMainChannel *) gobject,
+                "main-clipboard-selection-request",
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_JPG,
+                this);
+    g_signal_emit_by_name(
+                (SpiceMainChannel *) gobject,
+                "main-clipboard-selection-request",
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_BMP,
+                this);
+    g_signal_emit_by_name(
+                (SpiceMainChannel *) gobject,
+                "main-clipboard-selection-request",
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_TIFF,
+                this);
 }
 
 void QSpiceMainChannel::clipboardSelectionNotify(quint32 type, const uchar *data, size_t size)
@@ -395,7 +448,7 @@ void QSpiceMainChannel::fileCopyAsync(QStringList &fileNames)
     uint i = 0;
     foreach (QString _path, fileNames) {
         sources[i] = g_file_new_for_path(_path.toUtf8().constData());
-        i++;
+        ++i;
     };
     sources[i] = nullptr;
     //qDebug()<<"SpiceMainChannel"<<this->gobject;
