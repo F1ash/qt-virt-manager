@@ -141,10 +141,12 @@ public:
             GCancellable        *cancellable,
             gpointer             user_data);
 
+#if SPICE_GTK_MAJOR_VERSION==0 && SPICE_GTK_MINOR_VERSION>=31
     static void new_file_transfer(
             SpiceMainChannel      *mainchannel,
             SpiceFileTransferTask *task,
             gpointer               user_data);
+#endif
 
     // USB Device Manager
     static void auto_connect_failed(

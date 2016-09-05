@@ -201,12 +201,13 @@ void QSpiceHelper::operation_cancelled(GCancellable *cancellable,
     if ( nullptr==_mainchannel ) return;
     emit _mainchannel->cancelled();
 }
+
+#if SPICE_GTK_MAJOR_VERSION==0 && SPICE_GTK_MINOR_VERSION>=31
 void QSpiceHelper::new_file_transfer(SpiceMainChannel *mainchannel,
                                      SpiceFileTransferTask *task,
                                      gpointer user_data)
 {
     Q_UNUSED(mainchannel)
-
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
@@ -216,6 +217,7 @@ void QSpiceHelper::new_file_transfer(SpiceMainChannel *mainchannel,
     // TODO: implement for each task displaying progress and cancel
     //qDebug()<<"new file transfer:"<<_fileName;
 }
+#endif
 
 void QSpiceMainChannel::initCallbacks()
 {
@@ -256,10 +258,12 @@ void QSpiceMainChannel::initCallbacks()
                 cancellable, "cancelled",
                 (GCallback) QSpiceHelper::operation_cancelled,
                 this);
+#if SPICE_GTK_MAJOR_VERSION==0 && SPICE_GTK_MINOR_VERSION>=31
     g_signal_connect(
                 gobject, "new-file-transfer",
                 (GCallback) QSpiceHelper::new_file_transfer,
                 this);
+#endif
 }
 
 void QSpiceMainChannel::setDisplay(int id, int x, int y, int width, int height)

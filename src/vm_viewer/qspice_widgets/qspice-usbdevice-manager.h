@@ -22,8 +22,10 @@ public:
                                                     (QString&);
     static void spiceUsbDeviceManager_connect_finish_callback
                                                     (void*, void*, void*);
+#if SPICE_GTK_MAJOR_VERSION==0 && SPICE_GTK_MINOR_VERSION>=32
     static void spiceUsbDeviceManager_disconnect_finish_callback
                                                     (void*, void*, void*);
+#endif
 
 signals:
     void        autoConnectFailed(QString&, QString&);
