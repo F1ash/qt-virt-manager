@@ -157,15 +157,15 @@ void QSpiceHelper::main_clipboard_selection_release(SpiceMainChannel *mainchanne
 }
 bool QSpiceHelper::main_clipboard_selection_request(SpiceMainChannel *mainchannel,
                                                     guint selection,
-                                                    guint types,
+                                                    guint type,
                                                     gpointer user_data)
 {
     Q_UNUSED(mainchannel);
-    qDebug()<<"main_clipboard_selection_request";
+    //qDebug()<<"main_clipboard_selection_request";
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return false;
-    emit _mainchannel->clipboardSelectionRequested(selection, types);
+    emit _mainchannel->clipboardSelectionRequested(selection, type);
     return true;
 }
 void QSpiceHelper::main_mouse_update(SpiceMainChannel *mainchannel,
@@ -334,38 +334,19 @@ void QSpiceMainChannel::clipboardSelectionRelease()
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD);
 }
 
-void QSpiceMainChannel::initClipboardSelectionrequest()
+void QSpiceMainChannel::initGuestClipboardSelectionRequest()
 {
-    g_signal_emit_by_name(
+    guint32 types[5] = {
+            VD_AGENT_CLIPBOARD_UTF8_TEXT,
+            VD_AGENT_CLIPBOARD_IMAGE_BMP,
+            VD_AGENT_CLIPBOARD_IMAGE_JPG,
+            VD_AGENT_CLIPBOARD_IMAGE_PNG,
+            VD_AGENT_CLIPBOARD_IMAGE_TIFF};
+    spice_main_clipboard_selection_grab (
                 (SpiceMainChannel *) gobject,
-                "main-clipboard-selection-request",
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
-                VD_AGENT_CLIPBOARD_UTF8_TEXT,
-                this);
-    g_signal_emit_by_name(
-                (SpiceMainChannel *) gobject,
-                "main-clipboard-selection-request",
-                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
-                VD_AGENT_CLIPBOARD_IMAGE_PNG,
-                this);
-    g_signal_emit_by_name(
-                (SpiceMainChannel *) gobject,
-                "main-clipboard-selection-request",
-                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
-                VD_AGENT_CLIPBOARD_IMAGE_JPG,
-                this);
-    g_signal_emit_by_name(
-                (SpiceMainChannel *) gobject,
-                "main-clipboard-selection-request",
-                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
-                VD_AGENT_CLIPBOARD_IMAGE_BMP,
-                this);
-    g_signal_emit_by_name(
-                (SpiceMainChannel *) gobject,
-                "main-clipboard-selection-request",
-                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
-                VD_AGENT_CLIPBOARD_IMAGE_TIFF,
-                this);
+                types,
+                5);
 }
 
 void QSpiceMainChannel::clipboardSelectionNotify(quint32 type, const uchar *data, size_t size)

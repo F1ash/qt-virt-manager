@@ -125,7 +125,7 @@ public:
     static bool main_clipboard_selection_request(
             SpiceMainChannel    *mainchannel,
             guint                selection,
-            guint                types,
+            guint                type,
             gpointer             user_data);
 
     static void main_mouse_update(

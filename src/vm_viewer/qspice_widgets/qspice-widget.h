@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QPaintEvent>
 #include <QResizeEvent>
+#include <QClipboard>
 
 #define  QSPICE_WIDGET_H_INSIDE
 
@@ -208,6 +209,8 @@ private slots:
     void clipboardSelectionGrab();
     void guestClipboardSelectionReleased(uint);
     void clientClipboardSelectionRequested(uint, uint);
+    void sendTextClipboardDataToGuest(QClipboard::Mode);
+    void sendImageClipboardDataToGuest(QClipboard::Mode);
     void mainMouseUpdate();
 
     void usbDevAutoConnectFailed(QString&, QString&);

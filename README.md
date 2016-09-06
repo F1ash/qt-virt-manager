@@ -18,10 +18,6 @@ Known issues:
 
     3. In Spice client viewer:
 
-        * the paste from client system clipboard
-
-          to guests clipboard is not work;
-
         * the Smartcard manager is not implemented yet.
 
 Building parameters:

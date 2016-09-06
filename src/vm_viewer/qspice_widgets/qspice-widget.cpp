@@ -27,7 +27,6 @@ extern "C" {
 
 #include <QApplication>
 #include <QMouseEvent>
-#include <QClipboard>
 #include <QTime>
 #include <QDate>
 #include <QFileDialog>
@@ -125,7 +124,7 @@ void QSpiceWidget::copyClipboardDataFromGuest()
 void QSpiceWidget::pasteClipboardDataToGuest()
 {
     if ( nullptr!=main )
-        main->initClipboardSelectionrequest();
+        main->initGuestClipboardSelectionRequest();
 }
 
 void QSpiceWidget::sendClipboardDataToGuest(quint32 type, const uchar *_data, size_t _size)
@@ -511,89 +510,53 @@ void QSpiceWidget::guestClipboardSelectionReleased(uint selection)
 
 void QSpiceWidget::clientClipboardSelectionRequested(uint selection, uint type)
 {
-    QClipboard::Mode mode;
-    QString dataRequested;
-    switch (type) {
-    case VD_AGENT_CLIPBOARD_NONE:
-        dataRequested.append("None");
-        break;
-    case VD_AGENT_CLIPBOARD_UTF8_TEXT:
-        dataRequested.append("UTF8_TEXT");
-        break;
-    case VD_AGENT_CLIPBOARD_IMAGE_PNG:
-        dataRequested.append("IMAGE_PNG");
-        break;
-    case VD_AGENT_CLIPBOARD_IMAGE_BMP:
-        dataRequested.append("IMAGE_BMP");
-        break;
-    case VD_AGENT_CLIPBOARD_IMAGE_JPG:
-        dataRequested.append("IMAGE_JPG");
-        break;
-    case VD_AGENT_CLIPBOARD_IMAGE_TIFF:
-        dataRequested.append("IMAGE_TIFF");
-        break;
-    default:
-        break;
-    };
+    QClipboard::Mode mode = QClipboard::Clipboard;
     switch (selection) {
     case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
         mode = QClipboard::Clipboard;
-        dataRequested
-                .append("clientClipboard_CLIPBOARDSelectionRequested");
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_PRIMARY:
         mode = QClipboard::Selection;
-        dataRequested
-                .append("clientClipboard_PRIMARYSelectionRequested");
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_SECONDARY:
         mode = QClipboard::FindBuffer;
-        dataRequested
-                .append("clientClipboard_SECONDARYSelectionRequested");
         break;
     default:
         break;
     };
-    qDebug()<<dataRequested;
+    switch (type) {
+    case VD_AGENT_CLIPBOARD_UTF8_TEXT:
+        sendTextClipboardDataToGuest(mode);
+        break;
+    case VD_AGENT_CLIPBOARD_IMAGE_PNG:
+    case VD_AGENT_CLIPBOARD_IMAGE_BMP:
+    case VD_AGENT_CLIPBOARD_IMAGE_JPG:
+    case VD_AGENT_CLIPBOARD_IMAGE_TIFF:
+        sendImageClipboardDataToGuest(mode);
+        break;
+    case VD_AGENT_CLIPBOARD_NONE:
+    default:
+        break;
+    };
+}
+
+void QSpiceWidget::sendTextClipboardDataToGuest(QClipboard::Mode mode)
+{
     const QString _text =
             QApplication::clipboard()->text(mode);
-    const QImage _image =
-            QApplication::clipboard()->image(mode);
-    qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
     if ( !_text.isEmpty() ) {
         sendClipboardDataToGuest(
                     VD_AGENT_CLIPBOARD_UTF8_TEXT,
                     (const uchar*)_text.toUtf8().data(),
                     _text.size());
     };
+}
+
+void QSpiceWidget::sendImageClipboardDataToGuest(QClipboard::Mode mode)
+{
+    const QImage _image =
+            QApplication::clipboard()->image(mode);
     if ( !_image.isNull() ) {
-        /*
-        QString _format = _text.split(".").last();
-        qint32 _frmt;
-        if ( _format.isEmpty() ) {
-            QMessageBox::information(
-                        this,
-                        "INFO",
-                        QString("Unknown image format:\n'%1'")
-                        .arg(_text));
-            return;
-        } else if ( _format.toLower()=="png" ) {
-            qDebug()<<"png";
-            _frmt = VD_AGENT_CLIPBOARD_IMAGE_PNG;
-        } else if ( _format.toLower()=="bmp" ) {
-            _frmt = VD_AGENT_CLIPBOARD_IMAGE_BMP;
-        } else if ( _format.toLower()=="jpg" ) {
-            _frmt = VD_AGENT_CLIPBOARD_IMAGE_JPG;
-        } else if ( _format.toLower()=="tiff" ) {
-            _frmt = VD_AGENT_CLIPBOARD_IMAGE_TIFF;
-        } else {
-            QMessageBox::information(
-                        this,
-                        "INFO",
-                        "Unknown image format.");
-            return;
-        };
-        */
         sendClipboardDataToGuest(
                     VD_AGENT_CLIPBOARD_IMAGE_PNG,
                     _image.constBits(),
