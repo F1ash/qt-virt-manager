@@ -304,7 +304,7 @@ void VNC_Viewer::initVNCWidget()
     //connect(vncWdg, SIGNAL(errMsg(const QString&)),
     //        this, SLOT(sendErrMsg(const QString&)));
     //connect(vncWdg, SIGNAL(clipboardsReleased(bool)),
-    //        viewerToolBar, SLOT(changeCopypasteState(bool)));
+    //        viewerToolBar, SLOT(setCopyPasteState(bool)));
     connect(vncWdg, SIGNAL(boarderTouched()),
             this, SLOT(startAnimatedShow()));
     connect(vncWdg, SIGNAL(mouseClickedInto()),

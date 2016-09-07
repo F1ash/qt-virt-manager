@@ -40,7 +40,7 @@ public:
     void clipboardSelectionGrab(uint, quint32*, int);
     void clipboardSelectionRelease();
     void initGuestClipboardSelectionRequest();
-    void clipboardSelectionNotify(quint32, const uchar*, size_t);
+    void clipboardSelectionNotify(uint, quint32, const uchar*, size_t);
     void guestClipboardSelectionRequest();
 
     void fileCopyAsync(QStringList&);

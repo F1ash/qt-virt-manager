@@ -101,7 +101,7 @@ ViewerToolBar::ViewerToolBar(QWidget *parent) :
 }
 
 /* public slots */
-void ViewerToolBar::changeCopypasteState(bool state)
+void ViewerToolBar::setCopyPasteState(bool state)
 {
     copyToClipboard->setEnabled(state);
     pasteClipboard->setEnabled(state);

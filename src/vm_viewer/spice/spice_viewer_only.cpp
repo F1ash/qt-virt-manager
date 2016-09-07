@@ -113,7 +113,7 @@ void Spice_Viewer_Only::initSpiceWidget()
     //connect(spiceWdg, SIGNAL(errMsg(const QString&)),
     //        this, SLOT(sendErrMsg(const QString&)));
     connect(spiceWdg, SIGNAL(clipboardsReleased(bool)),
-            viewerToolBar, SLOT(changeCopypasteState(bool)));
+            viewerToolBar, SLOT(setCopyPasteState(bool)));
     connect(spiceWdg, SIGNAL(boarderTouched()),
             this, SLOT(startAnimatedShow()));
     connect(spiceWdg, SIGNAL(mouseClickedInto()),

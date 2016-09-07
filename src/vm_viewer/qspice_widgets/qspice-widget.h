@@ -67,7 +67,7 @@ public:
     /*
      * Send client Clipboard data to guest Clipboard.
      */
-    void sendClipboardDataToGuest(quint32, const uchar*, size_t);
+    void sendClipboardDataToGuest(uint, quint32, const uchar*, size_t);
 
     /*
      * Get isScaled state
@@ -145,7 +145,7 @@ signals:
 
     /*
      * In develop.
-     * Emitted, when guest/client clipboards released.
+     * Emitted, when guest/client clipboards transfer start/done.
      */
     void clipboardsReleased(bool);
 
@@ -208,6 +208,8 @@ private slots:
     void mainClipboardSelection(uint, void*, uint);
     void clipboardSelectionGrab();
     void guestClipboardSelectionReleased(uint);
+    QClipboard::Mode selectionToClipboardMode(uint);
+    uint clipbordModeToSelection(QClipboard::Mode);
     void clientClipboardSelectionRequested(uint, uint);
     void sendTextClipboardDataToGuest(QClipboard::Mode);
     void sendImageClipboardDataToGuest(QClipboard::Mode);

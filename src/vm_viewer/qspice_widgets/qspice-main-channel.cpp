@@ -349,51 +349,49 @@ void QSpiceMainChannel::initGuestClipboardSelectionRequest()
                 5);
 }
 
-void QSpiceMainChannel::clipboardSelectionNotify(quint32 type, const uchar *data, size_t size)
+void QSpiceMainChannel::clipboardSelectionNotify(uint selection, quint32 type, const uchar *data, size_t size)
 {
     //qDebug()<<"clipboardSelectionNotify";
 
     gpointer conv = nullptr;
     gint len = 0;
-    /* gtk+ internal utf8 newline is always LF, even on windows */
-    if (spice_main_agent_test_capability(
-                (SpiceMainChannel *) gobject,
-                VD_AGENT_CAP_GUEST_LINEEND_CRLF)) {
-        GError *err = nullptr;
-
-        conv = spice_convert_newlines(
-                    (char*)data,
-                    size,
-                    NEWLINE_TYPE_LF,
-                    NEWLINE_TYPE_CR_LF,
-                    &err);
-        if (err) {
-            qWarning("Failed to convert text line ending: %s", err->message);
-            g_clear_error(&err);
-            return;
-        }
-
-        len = strlen((char*)conv);
-    } else {
-
-        /* On Windows, with some versions of gtk+, GtkSelectionData::length
-         * will include the final '\0'. When a string with this trailing '\0'
-         * is pasted in some linux applications, it will be pasted as <NIL> or
-         * as an invisible character, which is unwanted. Ensure the length we
-         * send to the agent does not include any trailing '\0'
-         * This is gtk+ bug https://bugzilla.gnome.org/show_bug.cgi?id=734670
-         */
-
-        len = strlen((const char *)data);
+    if ( type==VD_AGENT_CLIPBOARD_UTF8_TEXT ) {
+        /* gtk+ internal utf8 newline is always LF, even on windows */
+        if (spice_main_agent_test_capability(
+                    (SpiceMainChannel *) gobject,
+                    VD_AGENT_CAP_GUEST_LINEEND_CRLF)) {
+            GError *err = nullptr;
+            conv = spice_convert_newlines(
+                        (char*)data,
+                        size,
+                        NEWLINE_TYPE_LF,
+                        NEWLINE_TYPE_CR_LF,
+                        &err);
+            if (err) {
+                qWarning("Failed to convert text line ending: %s", err->message);
+                g_clear_error(&err);
+                return;
+            };
+            len = strlen((char*)conv);
+        } else {
+            /* On Windows, with some versions of gtk+, GtkSelectionData::length
+             * will include the final '\0'. When a string with this trailing '\0'
+             * is pasted in some linux applications, it will be pasted as <NIL> or
+             * as an invisible character, which is unwanted. Ensure the length we
+             * send to the agent does not include any trailing '\0'
+             * This is gtk+ bug https://bugzilla.gnome.org/show_bug.cgi?id=734670
+             */
+            len = strlen((const char *)data);
+        };
     };
 
     //qDebug()<<data<<conv<<len;
     spice_main_clipboard_selection_notify(
                 (SpiceMainChannel *) gobject,
-                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
-                VD_AGENT_CLIPBOARD_UTF8_TEXT,
-                (const guchar*)(conv ? conv: data),
-                len);
+                selection,
+                type,
+                (const guchar*)(conv ? conv : data),
+                (len)? len : size);
     g_free(conv);
 }
 

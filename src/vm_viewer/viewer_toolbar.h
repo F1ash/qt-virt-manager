@@ -66,7 +66,7 @@ private slots:
     void             moveEvent(QMoveEvent*);
 
 public slots:
-    void             changeCopypasteState(bool);
+    void             setCopyPasteState(bool);
     void             downloadCancelled();
     void             downloadCompleted();
 };
