@@ -469,6 +469,9 @@ set (HEADERS
   src/create_widgets/interface/create_interface.h
 
   src/create_widgets/nwfilter/create_virt_nwfilter.h
+  src/create_widgets/nwfilter/chain_widget/chain_rules.h
+  src/create_widgets/nwfilter/chain_widget/rule_instance.h
+  src/create_widgets/nwfilter/filterref_widget/filterref_widget.h
 
   src/vm_viewer/vm_viewer.h
   src/vm_viewer/spice/spice_viewer.h
@@ -821,6 +824,9 @@ set (SOURCES
   src/create_widgets/interface/create_interface.cpp
 
   src/create_widgets/nwfilter/create_virt_nwfilter.cpp
+  src/create_widgets/nwfilter/chain_widget/chain_rules.cpp
+  src/create_widgets/nwfilter/chain_widget/rule_instance.cpp
+  src/create_widgets/nwfilter/filterref_widget/filterref_widget.cpp
 
   src/vm_viewer/vm_viewer.cpp
   src/vm_viewer/spice/spice_viewer.cpp

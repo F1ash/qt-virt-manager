@@ -155,7 +155,7 @@ void CreateVirtNetwork::setNewWindowTitle(const QString &_name)
                 QString("Network Editor / <%1> in [%2]")
                 .arg(_name).arg(connName));
 }
-void CreateVirtNetwork::sendMsg(QString &msg)
+void CreateVirtNetwork::sendMsg(const QString &msg)
 {
     QString time = QTime::currentTime().toString();
     QString title = QString("Connection '%1'").arg(task.srcConName);

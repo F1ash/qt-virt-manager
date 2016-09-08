@@ -2,14 +2,17 @@
 #define CREATE_VIRT_NWFILTER_H
 
 #include <QMainWindow>
+#include <QLineEdit>
+#include <QTableWidget>
 #include <QSettings>
 #include <QDir>
 #include <QTemporaryFile>
-#include <QPushButton>
 #include <QCloseEvent>
 #include <QTime>
 #include <virt_objects/virt_entity_config.h>
 #include <virt_objects/_virt_thread.h>
+#include "filterref_widget/filterref_widget.h"
+#include "chain_widget/chain_rules.h"
 #include <QDebug>
 
 class NetFilterHelperThread : public _VirtThread
@@ -19,6 +22,7 @@ public:
     explicit NetFilterHelperThread(
             QObject        *parent      = nullptr,
             virConnectPtr  *connPtrPtr  = nullptr);
+    QStringList      filterList;
     void             run();
 };
 
@@ -48,12 +52,26 @@ private:
     NetFilterHelperThread
                     *hlpThread;
 
+    QLineEdit       *name;
+    QTabWidget      *tabs;
+    QLabel          *about;
+    QPushButton     *ok;
+    QPushButton     *cancel;
+    QHBoxLayout     *buttonLayout;
+    QWidget         *buttons;
+    FilterrefWidget *filterRefs;
+    ChainRules      *chainRules;
+    QVBoxLayout     *commonLayout;
+    QWidget         *commonWdg;
+
+    void             buildXMLDescription();
+
 public slots:
     void             closeEvent(QCloseEvent*);
     void             readCapabilities();
-    void             set_Result(bool);
+    void             set_Result();
     void             setNewWindowTitle(const QString&);
-    void             sendMsg(QString&);
+    void             sendMsg(const QString&);
 };
 
 #endif // CREATE_VIRT_NWFILTER_H

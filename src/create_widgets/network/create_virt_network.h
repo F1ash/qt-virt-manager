@@ -59,7 +59,7 @@ public slots:
     void             readCapabilities();
     void             set_Result(bool);
     void             setNewWindowTitle(const QString&);
-    void             sendMsg(QString&);
+    void             sendMsg(const QString&);
 };
 
 #endif // CREATE_VIRT_NETWORK_H

@@ -59,11 +59,17 @@ CreateVirtNetwork_Adv::CreateVirtNetwork_Adv(
                 this);
     about->setOpenExternalLinks(true);
     about->setToolTip("http://libvirt.org/formatnetwork.html");
-    ok = new QPushButton("Ok", this);
+    ok = new QPushButton(
+                QIcon::fromTheme("dialog-ok"),
+                "Ok",
+                this);
     ok->setAutoDefault(true);
     connect(ok, SIGNAL(clicked()),
             this, SLOT(set_Result()));
-    cancel = new QPushButton("Cancel", this);
+    cancel = new QPushButton(
+                QIcon::fromTheme("dialog-cancel"),
+                "Cancel",
+                this);
     cancel->setAutoDefault(true);
     connect(cancel, SIGNAL(clicked()),
             this, SLOT(set_Result()));

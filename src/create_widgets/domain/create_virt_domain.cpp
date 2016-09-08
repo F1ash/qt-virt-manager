@@ -215,7 +215,10 @@ void CreateVirtDomain::readDataLists()
         about->setOpenExternalLinks(true);
         //showDescription = new QCheckBox("Show XML Description\nat close", this);
         //showDescription->setChecked(settings.value("DomCreateShowDesc").toBool());
-        ok = new QPushButton(QIcon::fromTheme("dialog-ok"), "Ok", this);
+        ok = new QPushButton(
+                    QIcon::fromTheme("dialog-ok"),
+                    "Ok",
+                    this);
         ok->setAutoDefault(true);
         connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
         restore = new QPushButton(
