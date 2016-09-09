@@ -1,12 +1,16 @@
 #include "rule_instance.h"
+#include "attributes_widget/stp_attributes.h"
+#include "attributes_widget/mac_attributes.h"
+#include "attributes_widget/vlan_attributes.h"
+#include "attributes_widget/ipv4_attributes.h"
+#include "attributes_widget/ipv6_attributes.h"
+#include "attributes_widget/arp_attributes.h"
+#include "attributes_widget/rarp_attributes.h"
+#include "attributes_widget/mixed_attributes.h"
 
 RuleInstance::RuleInstance(QWidget *parent) :
     _QWidget(parent)
 {
-    setStyleSheet("QWidget {\
-                  border-width: 0px;\
-                  border-style: solid;\
-                  border-radius: 8px;};");
     action = new QComboBox(this);
     action->setToolTip("Action");
     action->addItems(QStringList()
@@ -33,6 +37,24 @@ RuleInstance::RuleInstance(QWidget *parent) :
     ruleWdg->setLayout(ruleLayout);
 
     attributes = new QStackedWidget(this);
+    /* need to according with order
+    chainProtocol->addItem("STP");
+    chainProtocol->addItem("MAC");
+    chainProtocol->addItem("VLAN");
+    chainProtocol->addItem("IPv4");
+    chainProtocol->addItem("IPv6");
+    chainProtocol->addItem("ARP");
+    chainProtocol->addItem("RARP");
+    chainProtocol->addItem("MIXED");
+    */
+    attributes->addWidget(new STP_Attributes(this));
+    attributes->addWidget(new MAC_Attributes(this));
+    attributes->addWidget(new VLAN_Attributes(this));
+    attributes->addWidget(new IPv4_Attributes(this));
+    attributes->addWidget(new IPv6_Attributes(this));
+    attributes->addWidget(new ARP_Attributes(this));
+    attributes->addWidget(new RARP_Attributes(this));
+    attributes->addWidget(new MIXED_Attributes(this));
 
     addRule  = new QPushButton(
                 QIcon::fromTheme("dialog-ok"),
@@ -40,7 +62,7 @@ RuleInstance::RuleInstance(QWidget *parent) :
                 this);
     addRule->setToolTip("Rule to chain");
     clearRule = new QPushButton(
-                QIcon::fromTheme("wipe"),
+                QIcon::fromTheme("edit-clear"),
                 "",
                 this);
     clearRule->setToolTip("Clear attributes");
@@ -66,6 +88,7 @@ RuleInstance::RuleInstance(QWidget *parent) :
     commonLayout->addWidget(ruleWdg);
     commonLayout->addWidget(attributes);
     commonLayout->addWidget(buttons);
+    commonLayout->addStretch(-1);
     setLayout(commonLayout);
 }
 void RuleInstance::editRule(const QString &rule, int row)

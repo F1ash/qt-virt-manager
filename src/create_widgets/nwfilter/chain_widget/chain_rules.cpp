@@ -67,6 +67,7 @@ ChainRules::ChainRules(QWidget *parent) :
     commonLayout->addWidget(commonWdg);
     setLayout(commonLayout);
 
+    // order is template for attributes widgets
     chainProtocol->addItem("STP");
     chainProtocol->addItem("MAC");
     chainProtocol->addItem("VLAN");
@@ -74,7 +75,7 @@ ChainRules::ChainRules(QWidget *parent) :
     chainProtocol->addItem("IPv6");
     chainProtocol->addItem("ARP");
     chainProtocol->addItem("RARP");
-    chainProtocol->addItem("NONE");
+    chainProtocol->addItem("MIXED");
 }
 
 /* private slots */
@@ -141,4 +142,15 @@ void ChainRules::turnToChainWdg()
 }
 void ChainRules::insertRuleToList(const QString &_rule, int row)
 {
+    QListWidgetItem *item;
+    if ( row<ruleList->count()-1 ) {
+        item = ruleList->takeItem(row);
+        delete item;
+        item = nullptr;
+    };
+    item = new QListWidgetItem(ruleList);
+    // item set text, data
+    ruleList->insertItem(row, item);
+    commonWdg->setCurrentWidget(chainWdg);
+    // check priority, move to correct place
 }

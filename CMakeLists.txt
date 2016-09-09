@@ -471,6 +471,45 @@ set (HEADERS
   src/create_widgets/nwfilter/create_virt_nwfilter.h
   src/create_widgets/nwfilter/chain_widget/chain_rules.h
   src/create_widgets/nwfilter/chain_widget/rule_instance.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/stp_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/mac_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/vlan_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/ipv4_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/ipv6_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/arp_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/rarp_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/mixed_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/tcp_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/udp_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/sctp_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/icmp_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/igmp_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/esp_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/ah_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/udplite_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/all_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/tcp6_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/udp6_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/sctp6_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/icmp6_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/esp6_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/ah6_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/udplite6_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/all6_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/untyped_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/uint8_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/uint16_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/uint32_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/mac_addr_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/mac_mask_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/ip_addr_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/ip_mask_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/ipv6_addr_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/ipv6_mask_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/string_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/boolean_data.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/ipsetflags_data.h
   src/create_widgets/nwfilter/filterref_widget/filterref_widget.h
 
   src/vm_viewer/vm_viewer.h
@@ -826,6 +865,45 @@ set (SOURCES
   src/create_widgets/nwfilter/create_virt_nwfilter.cpp
   src/create_widgets/nwfilter/chain_widget/chain_rules.cpp
   src/create_widgets/nwfilter/chain_widget/rule_instance.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/stp_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/mac_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/vlan_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/ipv4_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/ipv6_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/arp_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/rarp_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/mixed_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/tcp_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/udp_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/sctp_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/icmp_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/igmp_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/esp_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/ah_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/udplite_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/all_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/tcp6_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/udp6_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/sctp6_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/icmp6_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/esp6_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/ah6_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/udplite6_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/all6_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/untyped_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/uint8_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/uint16_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/uint32_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/mac_addr_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/mac_mask_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/ip_addr_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/ip_mask_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/ipv6_addr_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/ipv6_mask_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/string_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/boolean_data.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/data_types_widget/ipsetflags_data.cpp
   src/create_widgets/nwfilter/filterref_widget/filterref_widget.cpp
 
   src/vm_viewer/vm_viewer.cpp

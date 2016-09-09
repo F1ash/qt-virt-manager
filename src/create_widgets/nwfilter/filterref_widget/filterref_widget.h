@@ -16,9 +16,12 @@ signals:
 
 private:
     QComboBox       *filters;
+    QPushButton     *up, *down;
 
 public slots:
     void             addItem();
+    void             itemUp();
+    void             itemDown();
 };
 
 #endif // FILTERREF_WIDGET_H
