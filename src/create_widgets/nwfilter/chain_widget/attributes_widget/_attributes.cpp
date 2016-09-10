@@ -20,3 +20,12 @@ _Attributes::_Attributes(QWidget *parent, QString tag) :
     connect(attrName, SIGNAL(currentIndexChanged(int)),
             attrEditor, SLOT(setCurrentIndex(int)));
 }
+void _Attributes::clearAllAttributeData()
+{
+    for (uint i=0; i<attrEditor->count(); i++) {
+        UntypedData *d = static_cast<UntypedData*>(
+                    attrEditor->widget(i));
+        if ( d==nullptr ) continue;
+        d->clearData();
+    };
+}

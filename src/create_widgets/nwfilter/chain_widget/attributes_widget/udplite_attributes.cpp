@@ -38,4 +38,12 @@ UDPLITE_Attributes::UDPLITE_Attributes(QWidget *parent) :
     attrEditor->addWidget(new STRING_Data(this, "ipset"));
     attrName->addItem("ipsetflags");
     attrEditor->addWidget(new IPSETFLAGS_Data(this, "ipsetflags"));
+
+    for (uint i=0; i<attrEditor->count(); i++) {
+        UntypedData *d = static_cast<UntypedData*>(
+                    attrEditor->widget(i));
+        if ( d==nullptr ) continue;
+        connect(d, SIGNAL(dataChanged()),
+                this, SIGNAL(dataChanged()));
+    };
 }

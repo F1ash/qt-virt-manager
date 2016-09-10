@@ -47,6 +47,7 @@ void NWFilterControlThread::run()
     case UNDEFINE_ENTITY :
         result = undefineNWFilter();
         break;
+    case EDIT_ENTITY:
     case GET_XML_DESCRIPTION :
         result = getVirtNWFilterXMLDesc();
         break;
@@ -120,9 +121,8 @@ Result NWFilterControlThread::defineNWFilter()
         result.err = sendConnErrors();
         return result;
     };
-    char uuid[100];
-    virNWFilterGetUUIDString(filter, uuid);
-    result.name = QString::fromUtf8(uuid);
+    const char *name = virNWFilterGetName(filter);
+    result.name = QString::fromUtf8(name);
     result.result = true;
     result.msg.append(
                 QString("'<b>%1</b>' NWFilter from\n\"%2\"\nis defined.")
@@ -133,15 +133,15 @@ Result NWFilterControlThread::defineNWFilter()
 Result NWFilterControlThread::undefineNWFilter()
 {
     Result result;
-    QString uuid = task.object;
+    QString name = task.object;
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
         result.err = "Connection pointer is NULL.";
         return result;
     };
-    virNWFilterPtr filter = virNWFilterLookupByUUIDString(
-                *task.srcConnPtr, uuid.toUtf8().data());
+    virNWFilterPtr filter = virNWFilterLookupByName(
+                *task.srcConnPtr, name.toUtf8().data());
     if ( filter!=nullptr ) {
         deleted = (virNWFilterUndefine(filter)+1) ? true : false;
         if (!deleted)
@@ -149,17 +149,17 @@ Result NWFilterControlThread::undefineNWFilter()
         virNWFilterFree(filter);
     } else
         result.err = sendConnErrors();
-    result.name = uuid;
+    result.name = name;
     result.result = deleted;
     result.msg.append(QString("'<b>%1</b>' NWFilter %2 Undefined.")
-                      .arg(uuid).arg((deleted)?"":"don't"));
+                      .arg(name).arg((deleted)?"":"don't"));
     return result;
 }
 Result NWFilterControlThread::getVirtNWFilterXMLDesc()
 {
     Result result;
-    QString uuid = task.object;
-    result.name = uuid;
+    QString name = task.object;
+    result.name = name;
     bool read = false;
     char *Returns = nullptr;
     if ( task.srcConnPtr==nullptr ) {
@@ -167,8 +167,8 @@ Result NWFilterControlThread::getVirtNWFilterXMLDesc()
         result.err = "Connection pointer is NULL.";
         return result;
     };
-    virNWFilterPtr filter = virNWFilterLookupByUUIDString(
-                *task.srcConnPtr, uuid.toUtf8().data());
+    virNWFilterPtr filter = virNWFilterLookupByName(
+                *task.srcConnPtr, name.toUtf8().data());
     if ( filter!=nullptr ) {
         //extra flags; not used yet, so callers should always pass 0
         int flags = 0;
@@ -192,6 +192,6 @@ Result NWFilterControlThread::getVirtNWFilterXMLDesc()
     if ( Returns!=nullptr ) free(Returns);
     result.result = read;
     result.msg.append(QString("'<b>%1</b>' NWFilter %2 XML'ed")
-                      .arg(uuid).arg((read)?"":"don't"));
+                      .arg(name).arg((read)?"":"don't"));
     return result;
 }

@@ -2,6 +2,7 @@
 #define IP_MASK_DATA_H
 
 #include "untyped_data.h"
+#include <QLineEdit>
 
 class IP_MASK_Data : public UntypedData
 {
@@ -11,10 +12,14 @@ public:
             QWidget *parent     = nullptr,
             QString  tag        = "",
             QString  topValue   = "");
+    QString          getAttrValue() const;
+    void             setAttrValue(const QString&);
 
-signals:
+private:
+    QLineEdit       *data;
 
 public slots:
+    void             clearData();
 };
 
 #endif // IP_MASK_DATA_H

@@ -77,6 +77,10 @@ ChainRules::ChainRules(QWidget *parent) :
     chainProtocol->addItem("RARP");
     chainProtocol->addItem("MIXED");
 }
+void ChainRules::readXmlDescData(const QString &_xmlDesc)
+{
+
+}
 
 /* private slots */
 void ChainRules::changePriorityDefault(int i)

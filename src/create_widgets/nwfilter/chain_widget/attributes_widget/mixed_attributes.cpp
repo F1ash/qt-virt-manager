@@ -56,4 +56,28 @@ MIXED_Attributes::MIXED_Attributes(QWidget *parent, QString tag) :
     attrEditor->addWidget(new UDPLITE6_Attributes(this));
     attrName->addItem("ALL6");
     attrEditor->addWidget(new ALL6_Attributes(this));
+
+    for (uint i=0; i<attrEditor->count(); i++) {
+        _Attributes *a = static_cast<_Attributes*>(
+                    attrEditor->widget(i));
+        if ( a==nullptr ) continue;
+        connect(a, SIGNAL(dataChanged()),
+                this, SLOT(dataEdited()));
+    };
+}
+void MIXED_Attributes::clearAllAttributeData()
+{
+    for (uint i=0; i<attrEditor->count(); i++) {
+        _Attributes *a = static_cast<_Attributes*>(
+                    attrEditor->widget(i));
+        if ( a==nullptr ) continue;
+        a->clearAllAttributeData();
+    };
+    attrName->setEnabled(true);
+    emit released(false);
+}
+void MIXED_Attributes::dataEdited()
+{
+    attrName->setEnabled(false);
+    emit released(true);
 }

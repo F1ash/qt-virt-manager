@@ -11,6 +11,7 @@ public:
             QWidget *parent = nullptr,
             QString  tag    = "");
     void             setFilters(const QStringList&);
+    void             readXmlDescData(const QString&);
 
 signals:
 

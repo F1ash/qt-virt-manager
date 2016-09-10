@@ -52,7 +52,7 @@ private:
     NetFilterHelperThread
                     *hlpThread;
 
-    QLineEdit       *name;
+    QLineEdit       *name, *uuid;
     QTabWidget      *tabs;
     QLabel          *about;
     QPushButton     *ok;
@@ -64,14 +64,15 @@ private:
     QVBoxLayout     *commonLayout;
     QWidget         *commonWdg;
 
+    void             readXmlDescData(const QString&);
     void             buildXMLDescription();
+    void             sendMsg(const QString&);
 
-public slots:
+private slots:
     void             closeEvent(QCloseEvent*);
     void             readCapabilities();
     void             set_Result();
     void             setNewWindowTitle(const QString&);
-    void             sendMsg(const QString&);
 };
 
 #endif // CREATE_VIRT_NWFILTER_H

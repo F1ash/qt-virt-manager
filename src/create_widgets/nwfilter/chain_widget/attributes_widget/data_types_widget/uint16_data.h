@@ -2,6 +2,7 @@
 #define UINT16_DATA_H
 
 #include "untyped_data.h"
+#include <QSpinBox>
 
 class UINT16_Data : public UntypedData
 {
@@ -11,10 +12,14 @@ public:
             QWidget *parent     = nullptr,
             QString  tag        = "",
             QString  topValue   = "65535");
+    QString          getAttrValue() const;
+    void             setAttrValue(const QString&);
 
-signals:
+private:
+    QSpinBox        *data;
 
 public slots:
+    void             clearData();
 };
 
 #endif // UINT16_DATA_H

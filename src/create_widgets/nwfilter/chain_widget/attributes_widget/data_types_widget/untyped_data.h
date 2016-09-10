@@ -14,12 +14,17 @@ public:
     explicit UntypedData(
             QWidget *parent = nullptr,
             QString  tag    = "");
-    bool            isMatch() const;
-    QString         getAttrName() const;
-    virtual QString getAttrValue() const;
-    void            addDataWidget(QWidget*);
+    void             setMatchUnusable();
+    bool             isMatchUnusable() const;
+    bool             isMatch() const;
+    void             matchToDefault();
+    QString          getAttrName() const;
+    virtual QString  getAttrValue() const;
+    virtual void     setAttrValue(const QString&);
+    void             addDataWidget(QWidget*);
 
 signals:
+    void             dataChanged();
 
 private:
     QLabel          *name;
@@ -28,7 +33,7 @@ private:
     QHBoxLayout     *commonLayout;
 
 public slots:
-    virtual void    clearData();
+    virtual void     clearData();
 };
 
 #endif // UNTYPED_DATA_H

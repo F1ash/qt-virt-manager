@@ -9,6 +9,7 @@ class ChainRules : public _QWidget
     Q_OBJECT
 public:
     explicit ChainRules(QWidget *parent = nullptr);
+    void             readXmlDescData(const QString&);
 
 signals:
 

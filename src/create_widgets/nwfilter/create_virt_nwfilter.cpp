@@ -51,6 +51,8 @@ CreateVirtNWFilter::CreateVirtNWFilter(
 
     name = new QLineEdit(this);
     name->setPlaceholderText("set filter name");
+    uuid = new QLineEdit(this);
+    uuid->setPlaceholderText("UUID will set automatically if occured");
 
     tabs = new QTabWidget(this);
     tabs->setTabPosition(QTabWidget::West);
@@ -88,6 +90,7 @@ CreateVirtNWFilter::CreateVirtNWFilter(
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(name);
+    commonLayout->addWidget(uuid);
     commonLayout->addWidget(tabs);
     commonLayout->addWidget(buttons);
     //commonLayout->addStretch(-1);
@@ -120,7 +123,46 @@ CreateVirtNWFilter::~CreateVirtNWFilter()
     settings.endGroup();
 }
 
-/* public slots */
+void CreateVirtNWFilter::readXmlDescData(const QString &_xmlDesc)
+{
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _filter;
+    _filter = doc.firstChildElement("filter");
+    if ( !_filter.isNull() ) {
+        QDomElement _uuid;
+        QString _name = _filter.attribute("name");
+        name->setText(_name);
+        _uuid = _filter.firstChildElement("uuid");
+        if ( !_uuid.isNull() )
+            uuid->setText(_uuid.text());
+        filterRefs->readXmlDescData(_xmlDesc);
+        chainRules->readXmlDescData(_xmlDesc);
+    };
+}
+void CreateVirtNWFilter::buildXMLDescription()
+{
+    QString _xml;
+    QStringList data;
+    data.append("New NWFilter XML'ed");
+    data.append(QString("to <a href='%1'>%1</a>").arg(_xml));
+    QString msg = data.join(" ");
+    sendMsg(msg);
+    // if ( showDescription->isChecked() )
+    //     QDesktopServices::openUrl(QUrl(_xml));
+    task.args.path = _xml;
+}
+void CreateVirtNWFilter::sendMsg(const QString &msg)
+{
+    QString time = QTime::currentTime().toString();
+    QString title = QString("Connection '%1'").arg(task.srcConName);
+    QString currMsg = QString(
+    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+            .arg(time).arg(title).arg(msg);
+    emit errorMsg(currMsg);
+}
+
+/* private slots */
 void CreateVirtNWFilter::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
@@ -144,55 +186,11 @@ void CreateVirtNWFilter::readCapabilities()
         _xml->close();
         _xml->deleteLater();
     };
-    //advancedWdg = new CreateVirtNetwork_Adv(this);
-    //advancedWdg->readXmlDescData(xmlDesc);
-    //setCentralWidget(advancedWdg);
-    //connect(advancedWdg, SIGNAL(newName(const QString&)),
-    //        this, SLOT(setNewWindowTitle(const QString&)));
-    //connect(advancedWdg, SIGNAL(accepted(bool)),
-    //        this, SLOT(set_Result(bool)));
+    readXmlDescData(xmlDesc);
     settings.beginGroup("VirtNWFilterControl");
     restoreGeometry(settings.value("NWFilterEditor").toByteArray());
     settings.endGroup();
     setEnabled(true);
-
-    //if ( true ) {
-    //} else {
-    //    QString msg = QString("Read Data in %1 failed.")
-    //            .arg(objectName());
-    //    sendMsg( msg );
-    //    // to done()
-    //    set_Result(false);
-    //};
-}
-void CreateVirtNWFilter::buildXMLDescription()
-{
-    QString _xml;
-    /*
-    if ( newbe ) {
-        CreateVirtNetwork_Ass *a =
-                static_cast<CreateVirtNetwork_Ass*>(
-                    centralWidget());
-        if ( nullptr!=a ) {
-            _xml = a->getXMLDescFileName();
-        };
-    } else {
-        CreateVirtNetwork_Adv *a =
-                static_cast<CreateVirtNetwork_Adv*>(
-                    centralWidget());
-        if ( nullptr!=a ) {
-            _xml = a->getXMLDescFileName();
-        };
-    };
-    */
-    QStringList data;
-    data.append("New NWFilter XML'ed");
-    data.append(QString("to <a href='%1'>%1</a>").arg(_xml));
-    QString msg = data.join(" ");
-    sendMsg(msg);
-    // if ( showDescription->isChecked() )
-    //     QDesktopServices::openUrl(QUrl(_xml));
-    task.args.path = _xml;
 }
 void CreateVirtNWFilter::set_Result()
 {
@@ -209,13 +207,4 @@ void CreateVirtNWFilter::setNewWindowTitle(const QString &_name)
     setWindowTitle(
                 QString("NWFilter Editor / <%1> in [%2]")
                 .arg(_name).arg(connName));
-}
-void CreateVirtNWFilter::sendMsg(const QString &msg)
-{
-    QString time = QTime::currentTime().toString();
-    QString title = QString("Connection '%1'").arg(task.srcConName);
-    QString currMsg = QString(
-    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
-            .arg(time).arg(title).arg(msg);
-    emit errorMsg(currMsg);
 }

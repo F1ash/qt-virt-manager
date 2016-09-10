@@ -114,6 +114,23 @@ void VirtNWFilterControl::resultReceiver(Result data)
         msgRepeater(msg);
         if ( data.result )
             QDesktopServices::openUrl(QUrl(xml));
+    } else if ( data.action == EDIT_ENTITY ) {
+        if ( !data.msg.isEmpty() ) {
+            QString msg = data.msg.join(" ");
+            msgRepeater(msg);
+        };
+        if ( data.result ) {
+            // show SRC Creator widget in Edit-mode
+            TASK task;
+            task.type       = VIRT_NETWORK_FILTER;
+            task.srcConnPtr = ptr_ConnPtr;
+            task.srcConName = currConnName;
+            task.object     = data.name;
+            task.args.path  = data.fileName;
+            task.method     = editEntity;
+            task.action     = DEFINE_ENTITY;
+            emit nwfilterToEditor(task);
+        };
     } else if ( data.action < GET_XML_DESCRIPTION ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");
@@ -164,15 +181,15 @@ void VirtNWFilterControl::entityClicked(const QPoint &p)
         entityList->clearSelection();
     };
     bool state = toolBar->getAutoReloadState();
-    VirtNWFilterControlMenu *secControlMenu =
+    VirtNWFilterControlMenu *nwfilterControlMenu =
             new VirtNWFilterControlMenu(this, params, state);
-    connect(secControlMenu, SIGNAL(execMethod(const Act_Param&)),
+    connect(nwfilterControlMenu, SIGNAL(execMethod(const Act_Param&)),
             this, SLOT(execAction(const Act_Param&)));
-    secControlMenu->move(QCursor::pos());
-    secControlMenu->exec();
-    disconnect(secControlMenu, SIGNAL(execMethod(const Act_Param&)),
+    nwfilterControlMenu->move(QCursor::pos());
+    nwfilterControlMenu->exec();
+    disconnect(nwfilterControlMenu, SIGNAL(execMethod(const Act_Param&)),
                this, SLOT(execAction(const Act_Param&)));
-    secControlMenu->deleteLater();
+    nwfilterControlMenu->deleteLater();
 }
 void VirtNWFilterControl::entityDoubleClicked(const QModelIndex &index)
 {
@@ -189,13 +206,16 @@ void VirtNWFilterControl::execAction(const Act_Param &param)
     task.method     = param.method;
     QModelIndex idx = entityList->currentIndex();
     if ( idx.isValid() && virtNWFilterModel->DataList.count()>idx.row() ) {
-        QString uuid = virtNWFilterModel->DataList.at(idx.row())->getUUID();
-        task.object = uuid;
+        QString _name = virtNWFilterModel->DataList.at(idx.row())->getName();
+        task.object = _name;
         if        ( param.method==defineEntity ) {
             task.action     = DEFINE_ENTITY;
             emit nwfilterToEditor(task);
         } else if ( param.method==undefineEntity ) {
             task.action     = UNDEFINE_ENTITY;
+            emit addNewTask(task);
+        } else if ( param.method==editEntity ) {
+            task.action     = EDIT_ENTITY;
             emit addNewTask(task);
         } else if ( param.method==getEntityXMLDesc ) {
             task.action     = GET_XML_DESCRIPTION;

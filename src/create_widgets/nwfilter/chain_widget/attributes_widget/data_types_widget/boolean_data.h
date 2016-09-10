@@ -10,11 +10,15 @@ public:
     explicit BOOLEAN_Data(
             QWidget *parent     = nullptr,
             QString  tag        = "",
-            QString  topValue   = "yes");
+            QString  topValue   = "no");
+    QString          getAttrValue() const;
+    void             setAttrValue(const QString&);
 
-signals:
+private:
+    QCheckBox       *data;
 
 public slots:
+    void             clearData();
 };
 
 #endif // BOOLEAN_DATA_H

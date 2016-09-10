@@ -65,7 +65,7 @@ RuleInstance::RuleInstance(QWidget *parent) :
                 QIcon::fromTheme("edit-clear"),
                 "",
                 this);
-    clearRule->setToolTip("Clear attributes");
+    clearRule->setToolTip("Clear all attributes data");
     cancel  = new QPushButton(
                 QIcon::fromTheme("dialog-cancel"),
                 "",
@@ -77,6 +77,11 @@ RuleInstance::RuleInstance(QWidget *parent) :
             this, SLOT(clearRuleAttrbutes()));
     connect(cancel, SIGNAL(clicked(bool)),
             this, SLOT(cancelEditRule()));
+    connect(attributes->widget(attributes->count()-1),
+            SIGNAL(released(bool)),
+            clearRule, SLOT(setEnabled(bool)));
+    connect(attributes, SIGNAL(currentChanged(int)),
+            this, SLOT(attributesTypeChanged(int)));
     buttonLayout = new QHBoxLayout(this);
     buttonLayout->addWidget(addRule);
     buttonLayout->addWidget(clearRule);
@@ -108,9 +113,16 @@ void RuleInstance::addRuleToList()
 void RuleInstance::clearRuleAttrbutes()
 {
     // clear attributes
+    _Attributes *a = static_cast<_Attributes*>(
+                attributes->currentWidget());
+    if ( a!=nullptr ) a->clearAllAttributeData();
 }
 void RuleInstance::cancelEditRule()
 {
     clearRuleAttrbutes();
     emit ruleCancelled();
+}
+void RuleInstance::attributesTypeChanged(int i)
+{
+    clearRule->setDisabled(i==attributes->count()-1);
 }

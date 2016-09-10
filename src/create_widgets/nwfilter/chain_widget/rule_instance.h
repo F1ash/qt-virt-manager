@@ -32,6 +32,7 @@ private slots:
     void             addRuleToList();
     void             clearRuleAttrbutes();
     void             cancelEditRule();
+    void             attributesTypeChanged(int);
 
 public slots:
 };

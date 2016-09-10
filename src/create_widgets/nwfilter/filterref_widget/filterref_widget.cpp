@@ -20,6 +20,10 @@ FilterrefWidget::FilterrefWidget(QWidget *parent, QString tag) :
     connect(down, SIGNAL(clicked(bool)),
             this, SLOT(itemDown()));
 }
+void FilterrefWidget::readXmlDescData(const QString &_xmlDesc)
+{
+
+}
 void FilterrefWidget::setFilters(const QStringList &l)
 {
     filters->addItems(l);

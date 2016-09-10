@@ -24,6 +24,7 @@ public:
             QString  tag    = "Attribute:");
     QComboBox       *attrName;
     QStackedWidget  *attrEditor;
+    virtual void     clearAllAttributeData();
 
 private:
     QLabel          *attrLabel;
