@@ -136,8 +136,8 @@ void CreateVirtNWFilter::readXmlDescData(const QString &_xmlDesc)
         _uuid = _filter.firstChildElement("uuid");
         if ( !_uuid.isNull() )
             uuid->setText(_uuid.text());
-        filterRefs->readXmlDescData(_xmlDesc);
-        chainRules->readXmlDescData(_xmlDesc);
+        filterRefs->setDataDescription(_xmlDesc);
+        chainRules->setDataDescription(_xmlDesc);
     };
 }
 void CreateVirtNWFilter::buildXMLDescription()

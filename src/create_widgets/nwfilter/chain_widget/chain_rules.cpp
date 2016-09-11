@@ -68,18 +68,46 @@ ChainRules::ChainRules(QWidget *parent) :
     setLayout(commonLayout);
 
     // order is template for attributes widgets
-    chainProtocol->addItem("STP");
-    chainProtocol->addItem("MAC");
-    chainProtocol->addItem("VLAN");
-    chainProtocol->addItem("IPv4");
-    chainProtocol->addItem("IPv6");
-    chainProtocol->addItem("ARP");
-    chainProtocol->addItem("RARP");
-    chainProtocol->addItem("MIXED");
+    chainProtocol->addItem("STP", "stp");
+    chainProtocol->addItem("MAC", "mac");
+    chainProtocol->addItem("VLAN", "vlan");
+    chainProtocol->addItem("IPv4", "ipv4");
+    chainProtocol->addItem("IPv6", "ipv6");
+    chainProtocol->addItem("ARP", "arp");
+    chainProtocol->addItem("RARP", "rarp");
+    chainProtocol->addItem("MIXED", "mixed");
 }
-void ChainRules::readXmlDescData(const QString &_xmlDesc)
+void ChainRules::setDataDescription(const QString &_xmlDesc)
 {
-
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _filter;
+    _filter = doc.firstChildElement("filter");
+    if ( !_filter.isNull() ) {
+        QString _chain = _filter.attribute("chain");
+        int idx = chainProtocol->findData(_chain);
+        if ( idx<0 ) idx = chainProtocol->count()-1;
+        chainProtocol->setCurrentIndex(idx);
+        QString _prior = _filter.attribute("priority");
+        priority->setValue(_prior.toInt());
+        QDomNode _n = _filter.firstChild();
+        while ( !_n.isNull() ) {
+            QDomElement _el = _n.toElement();
+            if ( !_el.isNull() ) {
+                if ( _el.tagName()=="rule" ) {
+                    QString _act, _direction, _priority;
+                    _act = _el.attribute("action");
+                    _direction = _el.attribute("direction");
+                    _priority = _el.attribute("priority");
+                    ruleList->addItem(QString("%1\t%2\t%3")
+                                      .arg(_act)
+                                      .arg(_direction)
+                                      .arg(_priority));
+                };
+            };
+            _n = _n.nextSibling();
+        };
+    };
 }
 
 /* private slots */

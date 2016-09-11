@@ -20,9 +20,27 @@ FilterrefWidget::FilterrefWidget(QWidget *parent, QString tag) :
     connect(down, SIGNAL(clicked(bool)),
             this, SLOT(itemDown()));
 }
-void FilterrefWidget::readXmlDescData(const QString &_xmlDesc)
+void FilterrefWidget::setDataDescription(const QString &_xmlDesc)
 {
-
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _filter;
+    _filter = doc.firstChildElement("filter");
+    if ( !_filter.isNull() ) {
+        QDomNode _n = _filter.firstChild();
+        while ( !_n.isNull() ) {
+            setUsage(true);
+            QDomElement _el = _n.toElement();
+            if ( !_el.isNull() ) {
+                if ( _el.tagName()=="filterref" ) {
+                    QString _filterName =
+                            _el.attribute("filter");
+                    list->addItem(_filterName);
+                };
+            };
+            _n = _n.nextSibling();
+        };
+    };
 }
 void FilterrefWidget::setFilters(const QStringList &l)
 {
