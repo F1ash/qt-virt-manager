@@ -75,7 +75,7 @@ ChainRules::ChainRules(QWidget *parent) :
     chainProtocol->addItem("IPv6", "ipv6");
     chainProtocol->addItem("ARP", "arp");
     chainProtocol->addItem("RARP", "rarp");
-    chainProtocol->addItem("MIXED", "mixed");
+    chainProtocol->addItem("MIXED", "root");
 }
 void ChainRules::setDataDescription(const QString &_xmlDesc)
 {
@@ -95,14 +95,15 @@ void ChainRules::setDataDescription(const QString &_xmlDesc)
             QDomElement _el = _n.toElement();
             if ( !_el.isNull() ) {
                 if ( _el.tagName()=="rule" ) {
-                    QString _act, _direction, _priority;
+                    QString _act, _direction, _priority, _statematch;
                     _act = _el.attribute("action");
                     _direction = _el.attribute("direction");
                     _priority = _el.attribute("priority");
-                    ruleList->addItem(QString("%1\t%2\t%3")
-                                      .arg(_act)
-                                      .arg(_direction)
-                                      .arg(_priority));
+                    _statematch = _el.attribute("statematch", "true");
+                    ruleList->addItem(
+                    QString(" %1\t%2\t%3\t%4 ")
+                                .arg(_act).arg(_direction)
+                                .arg(_priority).arg(_statematch));
                 };
             };
             _n = _n.nextSibling();
