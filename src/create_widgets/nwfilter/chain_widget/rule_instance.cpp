@@ -11,6 +11,7 @@
 RuleInstance::RuleInstance(QWidget *parent) :
     _QWidget(parent)
 {
+    editedRow = -1;
     action = new QComboBox(this);
     action->setToolTip("Action");
     action->addItems(QStringList()
@@ -98,7 +99,9 @@ RuleInstance::RuleInstance(QWidget *parent) :
 }
 void RuleInstance::editRule(const QString &rule, int row)
 {
-
+    editedRow = row;
+    QDomDocument doc;
+    doc.setContent(rule);
 }
 void RuleInstance::setAttributesMapByProtocol(int i)
 {
@@ -108,7 +111,9 @@ void RuleInstance::setAttributesMapByProtocol(int i)
 /* private slots */
 void RuleInstance::addRuleToList()
 {
-    emit insertRule("", 0);
+    QDomDocument doc;
+    doc.setContent(QString());
+    emit insertRule(doc.toByteArray(4).constData(), editedRow);
 }
 void RuleInstance::clearRuleAttrbutes()
 {

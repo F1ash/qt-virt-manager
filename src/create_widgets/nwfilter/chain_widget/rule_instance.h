@@ -18,6 +18,7 @@ signals:
     void             ruleCancelled();
 
 private:
+    int              editedRow;
     QComboBox       *action, *direction;
     QSpinBox        *priority;
     QCheckBox       *stateMatch;

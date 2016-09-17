@@ -1,4 +1,5 @@
 #include "chain_rules.h"
+#include <QTextStream>
 
 ChainRules::ChainRules(QWidget *parent) :
     _QWidget(parent)
@@ -85,9 +86,11 @@ void ChainRules::setDataDescription(const QString &_xmlDesc)
     _filter = doc.firstChildElement("filter");
     if ( !_filter.isNull() ) {
         QString _chain = _filter.attribute("chain");
-        int idx = chainProtocol->findData(_chain);
+        int idx = chainProtocol->findData(
+                    _chain, Qt::UserRole, Qt::MatchStartsWith);
         if ( idx<0 ) idx = chainProtocol->count()-1;
         chainProtocol->setCurrentIndex(idx);
+        chainProtocol->setEnabled(false);
         QString _prior = _filter.attribute("priority");
         priority->setValue(_prior.toInt());
         QDomNode _n = _filter.firstChild();
@@ -95,15 +98,13 @@ void ChainRules::setDataDescription(const QString &_xmlDesc)
             QDomElement _el = _n.toElement();
             if ( !_el.isNull() ) {
                 if ( _el.tagName()=="rule" ) {
-                    QString _act, _direction, _priority, _statematch;
-                    _act = _el.attribute("action");
-                    _direction = _el.attribute("direction");
-                    _priority = _el.attribute("priority");
-                    _statematch = _el.attribute("statematch", "true");
-                    ruleList->addItem(
-                    QString(" %1\t%2\t%3\t%4 ")
-                                .arg(_act).arg(_direction)
-                                .arg(_priority).arg(_statematch));
+                    QListWidgetItem *item = new QListWidgetItem;
+                    QString str;
+                    QTextStream stream(&str);
+                    _n.save(stream, QDomNode::CDATASectionNode);
+                    item->setText(str);
+                    item->setToolTip(str);
+                    ruleList->addItem(item);
                 };
             };
             _n = _n.nextSibling();
@@ -156,7 +157,7 @@ void ChainRules::editRuleInList()
     if ( l.isEmpty() || l.at(0)==nullptr ) return;
     QListWidgetItem *item = l.at(0);
     int row = ruleList->row(item);
-    ruleWdg->editRule(item->data(Qt::UserRole).toString(), row);
+    ruleWdg->editRule(item->text(), row);
     commonWdg->setCurrentWidget(ruleWdg);
 }
 void ChainRules::delRuleFromList()
