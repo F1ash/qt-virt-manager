@@ -102,6 +102,23 @@ void RuleInstance::editRule(const QString &rule, int row)
     editedRow = row;
     QDomDocument doc;
     doc.setContent(rule);
+    // parse rule for attributes and protocol parameters
+    QDomElement _rule = doc.documentElement();
+    int idx = action->findText(_rule.attribute("action"));
+    if ( idx<0 ) idx = 0;
+    action->setCurrentIndex(idx);
+    idx = direction->findText(_rule.attribute("direction"));
+    if ( idx<0 ) idx = 0;
+    direction->setCurrentIndex(idx);
+    priority->setValue(_rule.attribute("priority").toInt());
+    stateMatch->setChecked(_rule.attribute("statematch", "true")=="true");
+    QDomNode _n = _rule.firstChild();
+    while ( !_n.isNull() ) {
+        QDomElement _el = _n.toElement();
+        if ( !_el.isNull() ) {
+        };
+        _n = _n.nextSibling();
+    };
 }
 void RuleInstance::setAttributesMapByProtocol(int i)
 {

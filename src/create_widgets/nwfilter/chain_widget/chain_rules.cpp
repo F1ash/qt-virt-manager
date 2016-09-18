@@ -86,11 +86,7 @@ void ChainRules::setDataDescription(const QString &_xmlDesc)
     _filter = doc.firstChildElement("filter");
     if ( !_filter.isNull() ) {
         QString _chain = _filter.attribute("chain");
-        int idx = chainProtocol->findData(
-                    _chain, Qt::UserRole, Qt::MatchStartsWith);
-        if ( idx<0 ) idx = chainProtocol->count()-1;
-        chainProtocol->setCurrentIndex(idx);
-        chainProtocol->setEnabled(false);
+        setChainIdx(_chain);
         QString _prior = _filter.attribute("priority");
         priority->setValue(_prior.toInt());
         QDomNode _n = _filter.firstChild();
@@ -110,6 +106,19 @@ void ChainRules::setDataDescription(const QString &_xmlDesc)
             _n = _n.nextSibling();
         };
     };
+}
+void ChainRules::setChainIdx(const QString &c)
+{
+    int idx = chainProtocol->count()-1;
+    for (uint i=0; i<chainProtocol->count(); i++) {
+        QString s = chainProtocol->itemData(i).toString();
+        if ( c.startsWith(s) ) {
+            idx = i;
+            break;
+        };
+    };
+    chainProtocol->setCurrentIndex(idx);
+    chainProtocol->setEnabled(false);
 }
 
 /* private slots */

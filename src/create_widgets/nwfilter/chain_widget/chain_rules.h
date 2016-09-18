@@ -24,6 +24,7 @@ private:
     RuleInstance    *ruleWdg;
     QStackedWidget  *commonWdg;
     QVBoxLayout     *chainLayout, *commonLayout;
+    void             setChainIdx(const QString&);
 
 private slots:
     void             changePriorityDefault(int);
