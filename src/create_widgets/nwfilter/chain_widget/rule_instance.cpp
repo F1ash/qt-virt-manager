@@ -116,6 +116,24 @@ void RuleInstance::editRule(const QString &rule, int row)
     while ( !_n.isNull() ) {
         QDomElement _el = _n.toElement();
         if ( !_el.isNull() ) {
+            QString tag = _el.tagName();
+            QString match = _el.attribute("match", "yes");
+            QDomNamedNodeMap m = _el.attributes();
+            for (int i=0; i<m.count(); i++) {
+                QDomAttr a = m.item(i).toAttr();
+                //QTextStream s(stdout);
+                //s<<match<<" "<<a.name()<<" "<<a.value()<<endl;
+                _Attributes *_a = static_cast<_Attributes*>(
+                            attributes->currentWidget());
+                if ( _a!=nullptr ) {
+                    QVariantMap _m;
+                    _m.insert("tag", tag);
+                    _m.insert("match", match);
+                    _m.insert("name", a.name());
+                    _m.insert("value", a.value());
+                    _a->setAttrValue(_m);
+                };
+            };
         };
         _n = _n.nextSibling();
     };
@@ -130,6 +148,31 @@ void RuleInstance::addRuleToList()
 {
     QDomDocument doc;
     doc.setContent(QString());
+    QDomElement _rule = doc.createElement("rule");
+    _rule.setAttribute("action", action->currentText());
+    _rule.setAttribute("direction", direction->currentText());
+    _rule.setAttribute("priority", priority->text());
+    if ( !stateMatch->isChecked() )
+        _rule.setAttribute("statematch", "false");
+    _Attributes *_a = static_cast<_Attributes*>(
+                attributes->currentWidget());
+    if ( _a!=nullptr ) {
+        foreach (QString _attr, _a->getAttrList()) {
+            QVariantMap _m = _a->getAttrValue(_attr);
+            QDomElement _prot = doc.createElement(
+                        _m.value("tag").toString());
+            _prot.setAttribute(
+                        _m.value("name").toString(),
+                        _m.value("value").toString());
+            if ( _m.contains("match") ) {
+                _prot.setAttribute(
+                            "match",
+                            _m.value("match").toString());
+            };
+            _rule.appendChild(_prot);
+        };
+    };
+    doc.appendChild(_rule);
     emit insertRule(doc.toByteArray(4).constData(), editedRow);
 }
 void RuleInstance::clearRuleAttrbutes()

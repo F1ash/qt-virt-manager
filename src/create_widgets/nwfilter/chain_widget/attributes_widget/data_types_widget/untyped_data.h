@@ -18,6 +18,7 @@ public:
     bool             isMatchUnusable() const;
     bool             isMatch() const;
     void             matchToDefault();
+    void             setMatchState(bool);
     QString          getAttrName() const;
     virtual QString  getAttrValue() const;
     virtual void     setAttrValue(const QString&);

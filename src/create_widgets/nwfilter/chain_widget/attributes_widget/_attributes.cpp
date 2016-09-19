@@ -20,6 +20,7 @@ _Attributes::_Attributes(QWidget *parent, QString tag) :
     connect(attrName, SIGNAL(currentIndexChanged(int)),
             attrEditor, SLOT(setCurrentIndex(int)));
 }
+_Attributes::~_Attributes() {}
 void _Attributes::clearAllAttributeData()
 {
     for (uint i=0; i<attrEditor->count(); i++) {
@@ -28,4 +29,52 @@ void _Attributes::clearAllAttributeData()
         if ( d==nullptr ) continue;
         d->clearData();
     };
+}
+void _Attributes::setAttrValue(const QVariantMap &_map)
+{
+    int idx = attrName->findText(_map.value("name").toString());
+    if ( idx>=0 ) {
+        attrName->setCurrentIndex(idx);
+        UntypedData *u = static_cast<UntypedData*>(
+                    attrEditor->currentWidget());
+        if ( u!=nullptr ) {
+            tag = _map.value("tag").toString();
+            u->setAttrValue(_map.value("value").toString());
+            if ( !u->isMatchUnusable() ) {
+                QString match = _map.value("match").toString();
+                bool state = (
+                            match=="true" ||
+                            match=="yes" ||
+                            match=="1");
+                u->setMatchState(state);
+            };
+        };
+    };
+}
+QVariantMap _Attributes::getAttrValue(QString &attr) const
+{
+    QVariantMap ret;
+    int idx = attrName->findText(attr);
+    if ( idx>=0 ) {
+        attrName->setCurrentIndex(idx);
+        UntypedData *u = static_cast<UntypedData*>(
+                    attrEditor->currentWidget());
+        if ( u!=nullptr && !u->getAttrValue().isEmpty() ) {
+            if ( !u->isMatchUnusable() && !u->isMatch() ) {
+                ret.insert("match", "false");
+            };
+            ret.insert("name", u->getAttrName());
+            ret.insert("value", u->getAttrValue());
+            ret.insert("tag", tag);
+        };
+    };
+    return ret;
+}
+QStringList _Attributes::getAttrList() const
+{
+    QStringList l;
+    for(int i=0; i<attrName->count(); i++ ) {
+        l.append(attrName->itemText(i));
+    };
+    return l;
 }

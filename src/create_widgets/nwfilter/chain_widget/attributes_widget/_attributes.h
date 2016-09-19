@@ -22,15 +22,20 @@ public:
     explicit _Attributes(
             QWidget *parent = nullptr,
             QString  tag    = "Attribute:");
-    QComboBox       *attrName;
-    QStackedWidget  *attrEditor;
-    virtual void     clearAllAttributeData();
+    virtual ~_Attributes()  = 0;
+    QComboBox          *attrName;
+    QStackedWidget     *attrEditor;
+    virtual void        clearAllAttributeData();
+    virtual void        setAttrValue(const QVariantMap&);
+    virtual QVariantMap getAttrValue(QString&) const;
+    QStringList         getAttrList() const;
 
 private:
-    QLabel          *attrLabel;
-    QHBoxLayout     *attrLayout;
-    QWidget         *attrWdg;
-    QVBoxLayout     *commonLayout;
+    QString             tag;
+    QLabel             *attrLabel;
+    QHBoxLayout        *attrLayout;
+    QWidget            *attrWdg;
+    QVBoxLayout        *commonLayout;
 };
 
 #endif // _ATTRIBUTES_H

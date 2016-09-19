@@ -15,7 +15,11 @@ public:
     void             setAttrValue(const QString&);
 
 private:
+    bool             changed;
     QCheckBox       *data;
+
+private slots:
+    void             dataWasChanged();
 
 public slots:
     void             clearData();

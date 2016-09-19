@@ -191,8 +191,10 @@ void ChainRules::insertRuleToList(const QString &_rule, int row)
         delete item;
         item = nullptr;
     };
-    item = new QListWidgetItem(ruleList);
+    item = new QListWidgetItem;
     // item set text, data
+    item->setText(_rule);
+    item->setToolTip(_rule);
     ruleList->insertItem(row, item);
     commonWdg->setCurrentWidget(chainWdg);
     // check priority, move to correct place

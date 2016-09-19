@@ -41,6 +41,10 @@ void UntypedData::matchToDefault()
 {
     match->setChecked(true);    // default
 }
+void UntypedData::setMatchState(bool state)
+{
+    match->setChecked(state);
+}
 QString UntypedData::getAttrName() const
 {
     return name->text();
