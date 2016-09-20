@@ -3,6 +3,7 @@
 IGMP_Attributes::IGMP_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "igmp";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcmacmask");

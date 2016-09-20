@@ -19,6 +19,8 @@ _Attributes::_Attributes(QWidget *parent, QString tag) :
 
     connect(attrName, SIGNAL(currentIndexChanged(int)),
             attrEditor, SLOT(setCurrentIndex(int)));
+    connect(this, SIGNAL(dataChanged()),
+            this, SLOT(dataEdited()));
 }
 _Attributes::~_Attributes() {}
 void _Attributes::clearAllAttributeData()
@@ -29,6 +31,7 @@ void _Attributes::clearAllAttributeData()
         if ( d==nullptr ) continue;
         d->clearData();
     };
+    emit released(false);
 }
 void _Attributes::setAttrValue(const QVariantMap &_map)
 {
@@ -38,7 +41,8 @@ void _Attributes::setAttrValue(const QVariantMap &_map)
         UntypedData *u = static_cast<UntypedData*>(
                     attrEditor->currentWidget());
         if ( u!=nullptr ) {
-            tag = _map.value("tag").toString();
+            // unused here
+            //protocolID = _map.value("protocolID").toString();
             u->setAttrValue(_map.value("value").toString());
             if ( !u->isMatchUnusable() ) {
                 QString match = _map.value("match").toString();
@@ -65,10 +69,14 @@ QVariantMap _Attributes::getAttrValue(QString &attr) const
             };
             ret.insert("name", u->getAttrName());
             ret.insert("value", u->getAttrValue());
-            ret.insert("tag", tag);
+            ret.insert("protocolID", protocolID);
         };
     };
     return ret;
+}
+QString _Attributes::getProtocolID() const
+{
+    return protocolID;
 }
 QStringList _Attributes::getAttrList() const
 {
@@ -77,4 +85,10 @@ QStringList _Attributes::getAttrList() const
         l.append(attrName->itemText(i));
     };
     return l;
+}
+
+/* private slots */
+void _Attributes::dataEdited()
+{
+    emit released(true);
 }

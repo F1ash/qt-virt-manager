@@ -12,6 +12,7 @@ public:
             QString  tag    = "");
     void             setFilters(const QStringList&);
     void             setDataDescription(const QString&);
+    QDomDocument     getDataDocument() const;
 
 signals:
 

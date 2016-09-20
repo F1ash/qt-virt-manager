@@ -3,6 +3,7 @@
 ESP6_Attributes::ESP6_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "esp-ipv6";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcipaddr");

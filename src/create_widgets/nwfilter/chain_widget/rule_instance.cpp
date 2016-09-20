@@ -1,4 +1,6 @@
 #include "rule_instance.h"
+// Rules of this type should either go
+// into the root or same named chain.
 #include "attributes_widget/stp_attributes.h"
 #include "attributes_widget/mac_attributes.h"
 #include "attributes_widget/vlan_attributes.h"
@@ -6,7 +8,7 @@
 #include "attributes_widget/ipv6_attributes.h"
 #include "attributes_widget/arp_attributes.h"
 #include "attributes_widget/rarp_attributes.h"
-#include "attributes_widget/mixed_attributes.h"
+#include "attributes_widget/root_attributes.h"
 
 RuleInstance::RuleInstance(QWidget *parent) :
     _QWidget(parent)
@@ -38,7 +40,7 @@ RuleInstance::RuleInstance(QWidget *parent) :
     ruleWdg->setLayout(ruleLayout);
 
     attributes = new QStackedWidget(this);
-    /* need to according with order
+    /* need to according with order in ChainRules:
     chainProtocol->addItem("STP");
     chainProtocol->addItem("MAC");
     chainProtocol->addItem("VLAN");
@@ -46,7 +48,7 @@ RuleInstance::RuleInstance(QWidget *parent) :
     chainProtocol->addItem("IPv6");
     chainProtocol->addItem("ARP");
     chainProtocol->addItem("RARP");
-    chainProtocol->addItem("MIXED");
+    chainProtocol->addItem("ROOT");
     */
     attributes->addWidget(new STP_Attributes(this));
     attributes->addWidget(new MAC_Attributes(this));
@@ -55,7 +57,7 @@ RuleInstance::RuleInstance(QWidget *parent) :
     attributes->addWidget(new IPv6_Attributes(this));
     attributes->addWidget(new ARP_Attributes(this));
     attributes->addWidget(new RARP_Attributes(this));
-    attributes->addWidget(new MIXED_Attributes(this));
+    attributes->addWidget(new ROOT_Attributes(this));
 
     addRule  = new QPushButton(
                 QIcon::fromTheme("dialog-ok"),
@@ -78,11 +80,12 @@ RuleInstance::RuleInstance(QWidget *parent) :
             this, SLOT(clearRuleAttrbutes()));
     connect(cancel, SIGNAL(clicked(bool)),
             this, SLOT(cancelEditRule()));
-    connect(attributes->widget(attributes->count()-1),
-            SIGNAL(released(bool)),
-            clearRule, SLOT(setEnabled(bool)));
     connect(attributes, SIGNAL(currentChanged(int)),
             this, SLOT(attributesTypeChanged(int)));
+    for (uint i=0; i<attributes->count(); i++) {
+        connect(attributes->widget(i), SIGNAL(released(bool)),
+                clearRule, SLOT(setEnabled(bool)));
+    };
     buttonLayout = new QHBoxLayout(this);
     buttonLayout->addWidget(addRule);
     buttonLayout->addWidget(clearRule);
@@ -116,7 +119,7 @@ void RuleInstance::editRule(const QString &rule, int row)
     while ( !_n.isNull() ) {
         QDomElement _el = _n.toElement();
         if ( !_el.isNull() ) {
-            QString tag = _el.tagName();
+            QString protocolID = _el.tagName();
             QString match = _el.attribute("match", "yes");
             QDomNamedNodeMap m = _el.attributes();
             for (int i=0; i<m.count(); i++) {
@@ -127,7 +130,7 @@ void RuleInstance::editRule(const QString &rule, int row)
                             attributes->currentWidget());
                 if ( _a!=nullptr ) {
                     QVariantMap _m;
-                    _m.insert("tag", tag);
+                    _m.insert("protocolID", protocolID);
                     _m.insert("match", match);
                     _m.insert("name", a.name());
                     _m.insert("value", a.value());
@@ -137,10 +140,6 @@ void RuleInstance::editRule(const QString &rule, int row)
         };
         _n = _n.nextSibling();
     };
-}
-void RuleInstance::setAttributesMapByProtocol(int i)
-{
-    attributes->setCurrentIndex(i);
 }
 
 /* private slots */
@@ -159,21 +158,22 @@ void RuleInstance::addRuleToList()
     if ( _a!=nullptr ) {
         foreach (QString _attr, _a->getAttrList()) {
             QVariantMap _m = _a->getAttrValue(_attr);
-            QDomElement _prot = doc.createElement(
-                        _m.value("tag").toString());
-            _prot.setAttribute(
+            QDomElement _protocolID = doc.createElement(
+                        _m.value("protocolID").toString());
+            _protocolID.setAttribute(
                         _m.value("name").toString(),
                         _m.value("value").toString());
             if ( _m.contains("match") ) {
-                _prot.setAttribute(
+                _protocolID.setAttribute(
                             "match",
                             _m.value("match").toString());
             };
-            _rule.appendChild(_prot);
+            _rule.appendChild(_protocolID);
         };
     };
     doc.appendChild(_rule);
     emit insertRule(doc.toByteArray(4).constData(), editedRow);
+    clearRuleAttrbutes();
 }
 void RuleInstance::clearRuleAttrbutes()
 {
@@ -190,4 +190,10 @@ void RuleInstance::cancelEditRule()
 void RuleInstance::attributesTypeChanged(int i)
 {
     clearRule->setDisabled(i==attributes->count()-1);
+}
+
+/* public slots */
+void RuleInstance::setAttributesMapByProtocol(int i)
+{
+    attributes->setCurrentIndex(i);
 }

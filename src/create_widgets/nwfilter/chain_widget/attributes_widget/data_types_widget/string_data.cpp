@@ -5,6 +5,7 @@ STRING_Data::STRING_Data(
     UntypedData(parent, tag)
 {
     data = new QLineEdit(this);
+    data->setMaxLength(256);
     data->setPlaceholderText("some string");
     data->setToolTip("TYPE: STRING (usual not more than 256 letters)");
     addDataWidget(data);

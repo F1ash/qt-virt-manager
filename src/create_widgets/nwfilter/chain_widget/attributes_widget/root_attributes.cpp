@@ -1,4 +1,17 @@
-#include "mixed_attributes.h"
+#include "root_attributes.h"
+
+// Rules of this type should either go
+// into the root or same named chain.
+#include "mac_attributes.h"
+#include "vlan_attributes.h"
+#include "stp_attributes.h"
+#include "arp_attributes.h"
+#include "rarp_attributes.h"
+#include "ipv4_attributes.h"
+#include "ipv6_attributes.h"
+
+// The chain parameter is ignored for this type of traffic
+// and should either be omitted or set to root.
 #include "tcp_attributes.h"
 #include "udp_attributes.h"
 #include "sctp_attributes.h"
@@ -17,9 +30,25 @@
 #include "udplite6_attributes.h"
 #include "all6_attributes.h"
 
-MIXED_Attributes::MIXED_Attributes(QWidget *parent, QString tag) :
+ROOT_Attributes::ROOT_Attributes(QWidget *parent, QString tag) :
     _Attributes(parent, tag)
 {
+    protocolID = "root";
+    attrName->addItem("MAC");
+    attrEditor->addWidget(new MAC_Attributes(this));
+    attrName->addItem("VLAN");
+    attrEditor->addWidget(new VLAN_Attributes(this));
+    attrName->addItem("STP");
+    attrEditor->addWidget(new STP_Attributes(this));
+    attrName->addItem("ARP");
+    attrEditor->addWidget(new ARP_Attributes(this));
+    attrName->addItem("RARP");
+    attrEditor->addWidget(new RARP_Attributes(this));
+    attrName->addItem("IPv4");
+    attrEditor->addWidget(new IPv4_Attributes(this));
+    attrName->addItem("IPv6");
+    attrEditor->addWidget(new IPv6_Attributes(this));
+
     attrName->addItem("TCP");
     attrEditor->addWidget(new TCP_Attributes(this));
     attrName->addItem("UDP");
@@ -63,9 +92,11 @@ MIXED_Attributes::MIXED_Attributes(QWidget *parent, QString tag) :
         if ( a==nullptr ) continue;
         connect(a, SIGNAL(dataChanged()),
                 this, SLOT(dataEdited()));
+        connect(a, SIGNAL(dataChanged()),
+                this, SIGNAL(dataChanged()));
     };
 }
-void MIXED_Attributes::clearAllAttributeData()
+void ROOT_Attributes::clearAllAttributeData()
 {
     for (uint i=0; i<attrEditor->count(); i++) {
         _Attributes *a = static_cast<_Attributes*>(
@@ -76,7 +107,48 @@ void MIXED_Attributes::clearAllAttributeData()
     attrName->setEnabled(true);
     emit released(false);
 }
-void MIXED_Attributes::dataEdited()
+void ROOT_Attributes::setAttrValue(const QVariantMap &_map)
+{
+    int idx = -1;
+    QString _protID = _map.value("protocolID").toString();
+    for (int i=0; i<attrEditor->count(); i++) {
+        _Attributes *e = static_cast<_Attributes*>(
+                    attrEditor->widget(i));
+        if ( e==nullptr ) continue;
+        if ( e->getProtocolID()==_protID ) {
+            idx = i;
+            break;
+        };
+    };
+    if ( -1<idx ) {
+        attrName->setCurrentIndex(idx);
+        attrName->setDisabled(true);
+        _Attributes *a = static_cast<_Attributes*>(
+                    attrEditor->currentWidget());
+        if ( a!=nullptr ) a->setAttrValue(_map);
+    };
+}
+QVariantMap ROOT_Attributes::getAttrValue(QString &attr) const
+{
+    QVariantMap ret;
+    _Attributes *e = static_cast<_Attributes*>(
+                attrEditor->currentWidget());
+    if ( e!=nullptr ) {
+        ret = e->getAttrValue(attr);
+    };
+    return ret;
+}
+QStringList ROOT_Attributes::getAttrList() const
+{
+    QStringList l;
+    _Attributes *e = static_cast<_Attributes*>(
+                attrEditor->currentWidget());
+    if ( e!=nullptr ) {
+        l = e->getAttrList();
+    };
+    return l;
+}
+void ROOT_Attributes::dataEdited()
 {
     attrName->setEnabled(false);
     emit released(true);

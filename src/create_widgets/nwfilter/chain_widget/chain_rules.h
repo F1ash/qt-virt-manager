@@ -10,6 +10,9 @@ class ChainRules : public _QWidget
 public:
     explicit ChainRules(QWidget *parent = nullptr);
     void             setDataDescription(const QString&);
+    QDomDocument     getDataDocument() const;
+    QString          getChainProtocol() const;
+    QString          getPriority() const;
 
 signals:
 

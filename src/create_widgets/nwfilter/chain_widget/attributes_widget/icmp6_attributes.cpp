@@ -3,6 +3,7 @@
 ICMP6_Attributes::ICMP6_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "icmpv6";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcipaddr");

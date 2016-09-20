@@ -3,6 +3,7 @@
 RARP_Attributes::RARP_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "rarp";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcmacmask");
@@ -33,4 +34,12 @@ RARP_Attributes::RARP_Attributes(QWidget *parent) :
     attrEditor->addWidget(new STRING_Data(this, "comment"));
     attrName->addItem("gratuitous");
     attrEditor->addWidget(new BOOLEAN_Data(this, "gratuitous"));
+
+    for (uint i=0; i<attrEditor->count(); i++) {
+        UntypedData *d = static_cast<UntypedData*>(
+                    attrEditor->widget(i));
+        if ( d==nullptr ) continue;
+        connect(d, SIGNAL(dataChanged()),
+                this, SIGNAL(dataChanged()));
+    };
 }

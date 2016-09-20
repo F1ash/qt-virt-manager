@@ -18,24 +18,32 @@
 
 class _Attributes : public _QWidget
 {
+    Q_OBJECT
 public:
     explicit _Attributes(
             QWidget *parent = nullptr,
             QString  tag    = "Attribute:");
     virtual ~_Attributes()  = 0;
+    QString             protocolID;
     QComboBox          *attrName;
     QStackedWidget     *attrEditor;
     virtual void        clearAllAttributeData();
     virtual void        setAttrValue(const QVariantMap&);
     virtual QVariantMap getAttrValue(QString&) const;
-    QStringList         getAttrList() const;
+    virtual QString     getProtocolID() const;
+    virtual QStringList getAttrList() const;
+
+signals:
+    void                released(bool);
 
 private:
-    QString             tag;
     QLabel             *attrLabel;
     QHBoxLayout        *attrLayout;
     QWidget            *attrWdg;
     QVBoxLayout        *commonLayout;
+
+private slots:
+    virtual void        dataEdited();
 };
 
 #endif // _ATTRIBUTES_H

@@ -59,6 +59,8 @@ ChainRules::ChainRules(QWidget *parent) :
             this, SLOT(turnToChainWdg()));
     connect(ruleWdg, SIGNAL(insertRule(const QString&, int)),
             this, SLOT(insertRuleToList(const QString&, int)));
+    connect(chainProtocol, SIGNAL(currentIndexChanged(int)),
+            ruleWdg, SLOT(setAttributesMapByProtocol(int)));
 
     commonWdg = new QStackedWidget(this);
     commonWdg->addWidget(chainWdg);
@@ -76,7 +78,7 @@ ChainRules::ChainRules(QWidget *parent) :
     chainProtocol->addItem("IPv6", "ipv6");
     chainProtocol->addItem("ARP", "arp");
     chainProtocol->addItem("RARP", "rarp");
-    chainProtocol->addItem("MIXED", "root");
+    chainProtocol->addItem("ROOT", "root");
 }
 void ChainRules::setDataDescription(const QString &_xmlDesc)
 {
@@ -106,6 +108,35 @@ void ChainRules::setDataDescription(const QString &_xmlDesc)
             _n = _n.nextSibling();
         };
     };
+}
+QDomDocument ChainRules::getDataDocument() const
+{
+    QDomDocument doc;
+    for (uint i=0; i<ruleList->count(); i++) {
+        QListWidgetItem *item = ruleList->item(i);
+        if ( item!=nullptr ) {
+            QString r = item->text();
+            QDomDocument _r;
+            _r.setContent(r);
+            QDomElement _rule = doc.createElement("rule");
+            _rule = _r.documentElement();
+            doc.appendChild(_rule);
+        };
+    };
+    return doc;
+}
+QString ChainRules::getChainProtocol() const
+{
+#if QT_VERSION>=0x050200
+    return chainProtocol->currentData().toString();
+#else
+    return chainProtocol->itemData(
+                chainProtocol->currentIndex()).toString();
+#endif
+}
+QString ChainRules::getPriority() const
+{
+    return priority->text();
 }
 void ChainRules::setChainIdx(const QString &c)
 {
@@ -153,11 +184,10 @@ void ChainRules::changePriorityDefault(int i)
     };
     priority->setValue(value);
     ruleList->clear();
-    ruleWdg->setAttributesMapByProtocol(i);
 }
 void ChainRules::addRuleToList()
 {
-    ruleWdg->editRule("", -1);
+    ruleWdg->editRule("", ruleList->count());
     commonWdg->setCurrentWidget(ruleWdg);
 }
 void ChainRules::editRuleInList()
@@ -186,7 +216,7 @@ void ChainRules::turnToChainWdg()
 void ChainRules::insertRuleToList(const QString &_rule, int row)
 {
     QListWidgetItem *item;
-    if ( row<ruleList->count()-1 ) {
+    if ( row<ruleList->count() ) {
         item = ruleList->takeItem(row);
         delete item;
         item = nullptr;

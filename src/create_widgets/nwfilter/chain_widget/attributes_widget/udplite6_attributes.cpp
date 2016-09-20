@@ -3,6 +3,7 @@
 UDPLITE6_Attributes::UDPLITE6_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "udplite-ipv6";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcipaddr");

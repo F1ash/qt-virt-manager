@@ -479,7 +479,7 @@ set (HEADERS
   src/create_widgets/nwfilter/chain_widget/attributes_widget/ipv6_attributes.h
   src/create_widgets/nwfilter/chain_widget/attributes_widget/arp_attributes.h
   src/create_widgets/nwfilter/chain_widget/attributes_widget/rarp_attributes.h
-  src/create_widgets/nwfilter/chain_widget/attributes_widget/mixed_attributes.h
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/root_attributes.h
   src/create_widgets/nwfilter/chain_widget/attributes_widget/tcp_attributes.h
   src/create_widgets/nwfilter/chain_widget/attributes_widget/udp_attributes.h
   src/create_widgets/nwfilter/chain_widget/attributes_widget/sctp_attributes.h
@@ -873,7 +873,7 @@ set (SOURCES
   src/create_widgets/nwfilter/chain_widget/attributes_widget/ipv6_attributes.cpp
   src/create_widgets/nwfilter/chain_widget/attributes_widget/arp_attributes.cpp
   src/create_widgets/nwfilter/chain_widget/attributes_widget/rarp_attributes.cpp
-  src/create_widgets/nwfilter/chain_widget/attributes_widget/mixed_attributes.cpp
+  src/create_widgets/nwfilter/chain_widget/attributes_widget/root_attributes.cpp
   src/create_widgets/nwfilter/chain_widget/attributes_widget/tcp_attributes.cpp
   src/create_widgets/nwfilter/chain_widget/attributes_widget/udp_attributes.cpp
   src/create_widgets/nwfilter/chain_widget/attributes_widget/sctp_attributes.cpp

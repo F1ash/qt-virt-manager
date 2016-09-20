@@ -3,6 +3,7 @@
 UDP_Attributes::UDP_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "udp";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcipaddr");

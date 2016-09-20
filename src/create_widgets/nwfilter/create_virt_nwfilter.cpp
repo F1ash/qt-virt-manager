@@ -142,7 +142,31 @@ void CreateVirtNWFilter::readXmlDescData(const QString &_xmlDesc)
 }
 void CreateVirtNWFilter::buildXMLDescription()
 {
-    QString _xml;
+    QDomDocument doc;
+    //qDebug()<<doc.toString();
+    QDomElement _xmlDesc, _uuid;
+    QDomText _data;
+
+    _xmlDesc = doc.createElement("filter");
+    _xmlDesc.setAttribute("name", name->text());
+    _xmlDesc.setAttribute("chain", chainRules->getChainProtocol());
+    _xmlDesc.setAttribute("priority", chainRules->getPriority());
+    _uuid = doc.createElement("uuid");
+    _data = doc.createTextNode(uuid->text());
+    _uuid.appendChild(_data);
+    _xmlDesc.appendChild(_uuid);
+    if ( filterRefs->isUsed() ) {
+        _xmlDesc.appendChild(
+                    filterRefs->getDataDocument());
+    };
+    _xmlDesc.appendChild(
+                chainRules->getDataDocument());
+    doc.appendChild(_xmlDesc);
+
+    bool read = xml->open();
+    if (read) xml->write(doc.toByteArray(4).data());
+    QString _xml = xml->fileName();
+    xml->close();
     QStringList data;
     data.append("New NWFilter XML'ed");
     data.append(QString("to <a href='%1'>%1</a>").arg(_xml));
@@ -151,6 +175,8 @@ void CreateVirtNWFilter::buildXMLDescription()
     // if ( showDescription->isChecked() )
     //     QDesktopServices::openUrl(QUrl(_xml));
     task.args.path = _xml;
+    task.method = defineEntity;
+    task.object = name->text();
 }
 void CreateVirtNWFilter::sendMsg(const QString &msg)
 {

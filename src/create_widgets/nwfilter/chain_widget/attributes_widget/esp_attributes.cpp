@@ -3,6 +3,7 @@
 ESP_Attributes::ESP_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "esp";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcmacmask");

@@ -3,6 +3,7 @@
 ALL_Attributes::ALL_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "all";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcmacmask");

@@ -11,7 +11,6 @@ class RuleInstance : public _QWidget
 public:
     explicit RuleInstance(QWidget *parent = nullptr);
     void             editRule(const QString&, int);
-    void             setAttributesMapByProtocol(int);
 
 signals:
     void             insertRule(const QString&, int);
@@ -36,6 +35,7 @@ private slots:
     void             attributesTypeChanged(int);
 
 public slots:
+    void             setAttributesMapByProtocol(int);
 };
 
 #endif // RULE_INSTANCE_H

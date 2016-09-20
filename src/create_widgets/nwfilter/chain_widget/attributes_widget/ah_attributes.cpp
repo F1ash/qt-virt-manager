@@ -3,6 +3,7 @@
 AH_Attributes::AH_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "ah";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcmacmask");

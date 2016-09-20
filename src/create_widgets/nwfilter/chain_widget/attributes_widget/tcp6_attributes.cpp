@@ -3,6 +3,7 @@
 TCP6_Attributes::TCP6_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "tcp-ipv6";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcipaddr");

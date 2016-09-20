@@ -3,6 +3,7 @@
 SCTP_Attributes::SCTP_Attributes(QWidget *parent) :
     _Attributes(parent)
 {
+    protocolID = "sctp";
     attrName->addItem("srcmacaddr");
     attrEditor->addWidget(new MAC_ADDR_Data(this, "srcmacaddr"));
     attrName->addItem("srcipaddr");

@@ -42,6 +42,20 @@ void FilterrefWidget::setDataDescription(const QString &_xmlDesc)
         };
     };
 }
+QDomDocument FilterrefWidget::getDataDocument() const
+{
+    QDomDocument doc;
+    for (uint i=0; i<list->count(); i++) {
+        QListWidgetItem *item = list->item(i);
+        if ( item!=nullptr ) {
+            QString _filterName = item->text();
+            QDomElement _filterref = doc.createElement("filterref");
+            _filterref.setAttribute("filter", _filterName);
+            doc.appendChild(_filterref);
+        };
+    };
+    return doc;
+}
 void FilterrefWidget::setFilters(const QStringList &l)
 {
     filters->addItems(l);
