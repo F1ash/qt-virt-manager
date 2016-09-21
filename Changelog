@@ -136,3 +136,10 @@ re-implemented Create Network to
     Advanced Network Editor and
     Network Assistant;
 some fixes and enhancements;
+
+0.36.55 :
+implemented Network Filter Control and Editor;
+implemented (external) Remote Desktop Viewer;
+fixed paste client clipboard to guest clipboard in VM_Viewer;
+structure refactoring;
+fixes for stability and enhancement;

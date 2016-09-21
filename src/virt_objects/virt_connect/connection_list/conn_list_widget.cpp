@@ -1,4 +1,5 @@
 #include "conn_list_widget.h"
+#include <QMutexLocker>
 
 ConnectionList::ConnectionList(QWidget *parent)
     : TreeView(parent)
@@ -592,6 +593,7 @@ void ConnectionList::searchLocalhostConnComplete()
 }
 void ConnectionList::setOnViewAvailableConnection(const QString &_newName)
 {
+    QMutexLocker locker(&mutex);
     if ( waitLocalConn->isRunning() ) return;
     if ( searchThread->isRunning() ) return;
     if ( onViewExist || connections->count()==0 ) return;
