@@ -13,6 +13,9 @@ public:
 
 private:
     QActionGroup    *actGroup;
+
+private slots:
+    void             viewModeChanged();
 };
 
 #endif // VIEW_MENU_H

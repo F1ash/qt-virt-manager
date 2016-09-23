@@ -15,4 +15,21 @@ ViewMenu::ViewMenu(QWidget *parent) :
     softTouched->setActionGroup(actGroup);
     softTouched->setShortcut(
                 QKeySequence(tr("Ctrl+Shift+F")));
+    connect(hardClassic, SIGNAL(toggled(bool)),
+            this, SLOT(viewModeChanged()));
+    connect(softTouched, SIGNAL(toggled(bool)),
+            this, SLOT(viewModeChanged()));
+}
+void ViewMenu::viewModeChanged()
+{
+    if        ( sender()==hardClassic ) {
+        hardClassic->setEnabled(false);
+        softTouched->setEnabled(true);
+    } else if ( sender()==softTouched ) {
+        hardClassic->setEnabled(true);
+        softTouched->setEnabled(false);
+    } else {
+        hardClassic->setEnabled(true);
+        softTouched->setEnabled(true);
+    };
 }

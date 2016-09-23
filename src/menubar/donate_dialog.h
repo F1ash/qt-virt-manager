@@ -15,14 +15,14 @@ public:
     bool             showAgain() const;
 
 private:
-    Click_Label     *donate1;
+    Click_Label     *donate1, *donate2;
     QGridLayout     *donateLayout;
     QWidget         *donateWdg;
     QCheckBox       *again;
     QVBoxLayout     *commonLayout;
 
 private slots:
-    void             donation1Clicked();
+    void             donationClicked();
 };
 
 #endif // DONATE_DIALOG_H

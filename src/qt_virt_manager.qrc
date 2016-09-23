@@ -679,6 +679,7 @@
         <file alias="256x256/emblems/utilities-log-viewer.png">icons/256x256/emblems/utilities-log-viewer.png</file>
         <file alias="256x256/apps/virtual-engineering.png">icons/256x256/apps/virtual-engineering.png</file>
         <file alias="256x256/apps/remote-desktop-viewer.png">icons/256x256/apps/remote-desktop-viewer.png</file>
+        <file alias="128x128/actions/qiwi_wallet_visa.png">icons/128x128/actions/qiwi_wallet_visa.png</file>
         <file alias="128x128/actions/previous.png">icons/128x128/actions/previous.png</file>
         <file alias="128x128/actions/qt_icon.png">icons/128x128/actions/qt_icon.png</file>
         <file alias="128x128/actions/next.png">icons/128x128/actions/next.png</file>
