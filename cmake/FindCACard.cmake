@@ -24,16 +24,16 @@ IF (NOT WIN32)
    SET(CACard_DEFINITIONS  ${PC_CACard_CFLAGS} ${PC_CACard_CFLAGS_OTHER})
 ENDIF (NOT WIN32)
 
-FIND_PATH(CACard_INCLUDE_DIR libcacard.h
-   HINTS ${PC_CACard_INCLUDES} ${PC_CACard_INCLUDE_DIRS}
-   PATH_SUFFIXES cacard/
-   )
+FIND_PATH(
+    CACard_INCLUDE_DIR libcacard.h
+    HINTS ${PC_CACard_INCLUDES} ${PC_CACard_INCLUDE_DIRS}
+    PATH_SUFFIXES cacard
+)
 
-FIND_LIBRARY(_CACardLibs NAMES cacard libcacard
-   PATHS
-   ${PC_CACard_LIBDIR}
-   ${PC_CACard_LIBRARY_DIRS}
-   )
+FIND_LIBRARY(
+    _CACardLibs NAMES cacard libcacard
+    PATHS ${PC_CACard_LIBDIR} ${PC_CACard_LIBRARY_DIRS}
+)
 
 list(APPEND CACard_LIBRARIES ${_CACardLibs} )
 list(APPEND CACard_INCLUDE_DIRS ${CACard_INCLUDE_DIR} )

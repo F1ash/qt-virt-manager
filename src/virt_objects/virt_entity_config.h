@@ -1,7 +1,7 @@
 #ifndef VIRT_ENTITY_CONFIG
 #define VIRT_ENTITY_CONFIG
 
-#include <libvirt/libvirt.h>
+#include <libvirt.h>
 #include <QStringList>
 #include "virt_entity_enums.h"
 

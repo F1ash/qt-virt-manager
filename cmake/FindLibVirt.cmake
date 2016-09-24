@@ -9,20 +9,19 @@ find_package(PkgConfig)
 pkg_check_modules(PC_LibVirt QUIET libvirt)
 set(LibVirt_DEFINITIONS ${PC_LibVirt_CFLAGS_OTHER})
 
-find_path(LibVirt_INCLUDE_DIR
-          NAMES libvirt/libvirt.h libvirt/virterror.h
-          HINTS ${PC_LibVirt_INCLUDEDIR} ${PC_LibVirt_INCLUDE_DIRS}
-          PATH_SUFFIXES libvirt)
+find_path(
+    LibVirt_INCLUDE_DIRS
+    NAMES libvirt.h virterror.h
+    HINTS ${PC_LibVirt_INCLUDEDIR} ${PC_LibVirt_INCLUDE_DIRS}
+    PATH_SUFFIXES libvirt)
 
-find_library(LibVirt_LIBRARY
-             NAMES virt libvirt
-             HINTS ${PC_LibVirt_LIBDIR} ${PC_LibVirt_LIBRARY_DIRS})
-
-set(LibVirt_LIBRARIES ${LibVirt_LIBRARY})
-set(LibVirt_INCLUDE_DIRS ${LibVirt_INCLUDE_DIR})
+find_library(
+    LibVirt_LIBRARIES
+    NAMES virt libvirt
+    HINTS ${PC_LibVirt_LIBDIR} ${PC_LibVirt_LIBRARY_DIRS})
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(LibVirt DEFAULT_MSG
-                                  LibVirt_LIBRARY LibVirt_INCLUDE_DIR)
+find_package_handle_standard_args(
+    LibVirt DEFAULT_MSG LibVirt_LIBRARIES LibVirt_INCLUDE_DIRS)
 
-mark_as_advanced(LibVirt_INCLUDE_DIR LibVirt_LIBRARY)
+mark_as_advanced(LibVirt_INCLUDE_DIRS LibVirt_LIBRARIES)

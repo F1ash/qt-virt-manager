@@ -110,7 +110,10 @@ void VirtStorageVolControl::resultReceiver(Result data)
         };
         for (int i = 0; i<chains; i++) {
             for (int j = 0; j<chain; j++) {
-                storageVolModel->setData(storageVolModel->index(i,j), data.msg.at(i*chain+j), Qt::EditRole);
+                storageVolModel->setData(
+                            storageVolModel->index(i,j),
+                            data.msg.at(i*chain+j),
+                            Qt::EditRole);
             };
         };
     } else if ( data.action == CREATE_ENTITY ) {

@@ -10,8 +10,8 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QDomDocument>
-#include <libvirt/libvirt.h>
-#include <libvirt/virterror.h>
+#include <libvirt.h>
+#include <virterror.h>
 #include "_changed.h"
 
 class _QWidget : public _Changed

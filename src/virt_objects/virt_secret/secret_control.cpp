@@ -107,16 +107,41 @@ void VirtSecretControl::resultReceiver(Result data)
         foreach (QString _data, data.msg) {
             QStringList chain = _data.split(DFR);
             if (chain.isEmpty()) continue;
-            /*
             int count = chain.size();
             for (int j=0; j<count; j++) {
-                virtSecretModel->setData(virtSecretModel->index(i,j), chain.at(j), Qt::EditRole);
+                Qt::ItemDataRole _role = Qt::EditRole;
+                int _row = 0;
+                switch (j) {
+                case 0:
+                    _role = Qt::EditRole;
+                    _row = 0;
+                    break;
+                case 1:
+                    _role = Qt::EditRole;
+                    _row = 1;
+                    break;
+                case 2:
+                    _role = Qt::ToolTipRole;
+                    _row = 0;
+                    break;
+                case 3:
+                    _role = Qt::ToolTipRole;
+                    _row = 1;
+                    break;
+                default:
+                    continue;
+                };
+                virtSecretModel->setData(
+                            virtSecretModel->index(i,_row),
+                            chain.at(j),
+                            _role);
             };
-            */
+            /*
             virtSecretModel->DataList.at(i)->setUUID(chain.at(0));
             virtSecretModel->DataList.at(i)->setUsageID(chain.at(1));
             virtSecretModel->DataList.at(i)->setType(chain.at(2));
             virtSecretModel->DataList.at(i)->setDescription(chain.at(3));
+            */
             i++;
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {

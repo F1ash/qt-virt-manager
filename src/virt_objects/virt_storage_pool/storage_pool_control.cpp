@@ -100,7 +100,10 @@ void VirtStoragePoolControl::resultReceiver(Result data)
             if (chain.isEmpty()) continue;
             int count = chain.size();
             for (int j=0; j<count; j++) {
-                storagePoolModel->setData(storagePoolModel->index(i,j), chain.at(j), Qt::EditRole);
+                storagePoolModel->setData(
+                            storagePoolModel->index(i,j),
+                            chain.at(j),
+                            Qt::EditRole);
             };
             i++;
         };

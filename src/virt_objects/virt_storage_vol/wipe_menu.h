@@ -2,7 +2,6 @@
 #define WIPE_MENU_H
 
 #include <QMenu>
-#include <libvirt/libvirt.h>
 #include "virt_objects/virt_entity_enums.h"
 
 class WipeMenu : public QMenu

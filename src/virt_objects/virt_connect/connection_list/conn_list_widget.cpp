@@ -593,9 +593,9 @@ void ConnectionList::searchLocalhostConnComplete()
 }
 void ConnectionList::setOnViewAvailableConnection(const QString &_newName)
 {
-    QMutexLocker locker(&mutex);
     if ( waitLocalConn->isRunning() ) return;
     if ( searchThread->isRunning() ) return;
+    QMutexLocker locker(&mutex);
     if ( onViewExist || connections->count()==0 ) return;
     QList<ConnItemIndex*>::const_iterator i;
     for (i=connItemModel->connItemDataList.constBegin();

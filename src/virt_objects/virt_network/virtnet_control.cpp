@@ -101,7 +101,10 @@ void VirtNetControl::resultReceiver(Result data)
             if (chain.isEmpty()) continue;
             int count = chain.size();
             for (int j=0; j<count; j++) {
-                virtNetModel->setData(virtNetModel->index(i,j), chain.at(j), Qt::EditRole);
+                virtNetModel->setData(
+                            virtNetModel->index(i,j),
+                            chain.at(j),
+                            Qt::EditRole);
             };
             i++;
         };

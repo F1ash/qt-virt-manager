@@ -120,13 +120,25 @@ bool VirtSecretModel::setData( const QModelIndex &index, const QVariant &value, 
         return false;
     };
 
-    if ( role == Qt::EditRole ) {
+    if ( role==Qt::EditRole ) {
         switch( index.column() ) {
         case 0:
             DataList.at(index.row())->setUUID( value.toString() );
             break;
         case 1:
             DataList.at(index.row())->setUsageID( value.toString() );
+            break;
+        default:
+            break;
+        };
+    };
+    if ( role==Qt::ToolTipRole ) {
+        switch (index.column()) {
+        case 0:
+            DataList.at(index.row())->setDescription( value.toString() );
+            break;
+        case 1:
+            DataList.at(index.row())->setType( value.toString() );
             break;
         default:
             break;

@@ -18,8 +18,10 @@ FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtrPtr) :
                 QIcon::fromTheme("dialog-ok"), "Choose Secret", this);
     cancel = new QPushButton(
                 QIcon::fromTheme("dialog-cancel"), "Cancel", this);
-    connect(chooseSecret, SIGNAL(clicked()), this, SLOT(set_Result()));
-    connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
+    connect(chooseSecret, SIGNAL(clicked()),
+            this, SLOT(set_Result()));
+    connect(cancel, SIGNAL(clicked()),
+            this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout(this);
     buttonLayout->addWidget(chooseSecret);
     buttonLayout->addWidget(cancel);

@@ -24,7 +24,7 @@ void SearchThread::run()
                      if ( virDomainFree(domains[i]) <0 )
                          sendConnErrors();
                 };
-                free(domains);
+                if (domains) free(domains);
             } else {
                 sendConnErrors();
             };

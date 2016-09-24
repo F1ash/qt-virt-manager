@@ -150,6 +150,7 @@ void TaskWareHouse::msgRepeater(const QString &msg, const uint _number)
 }
 void TaskWareHouse::taskResultReceiver(Result data)
 {
+    bool correctly = true;
     if        ( data.type==VIRT_DOMAIN ) {
         emit domResult(data);
     } else if ( data.type==VIRT_NETWORK ) {
@@ -164,7 +165,9 @@ void TaskWareHouse::taskResultReceiver(Result data)
         emit ifaceResult(data);
     } else if ( data.type==VIRT_NETWORK_FILTER ) {
         emit nwfilterResult(data);
-    } else return;
+    } else {
+        correctly = false;
+    };
     QString _number = QString("").sprintf("%08d", data.number);
     ControlThread *cThread = static_cast<ControlThread*>(
                 threadPool->value(_number));
@@ -175,10 +178,13 @@ void TaskWareHouse::taskResultReceiver(Result data)
         disconnect(cThread, SIGNAL(resultData(Result)),
                    this, SLOT(taskResultReceiver(Result)));
         threadPool->value(_number)->quit();
-        cThread->deleteLater();
+        //cThread->deleteLater();
+        delete cThread;
+        cThread = nullptr;
         int deleted = threadPool->remove(_number);
         //qDebug()<<_number<<"deleted:"<<deleted;
     };
+    if ( !correctly ) return;
     QString stateIcon;
     if ( data.result ) {
         stateIcon.append("leddarkblue");

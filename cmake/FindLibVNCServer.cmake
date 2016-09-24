@@ -24,7 +24,10 @@ FIND_LIBRARY(LIBVNCSERVER_LIBRARIES NAMES vncserver libvncserver libvnc)
 # libvncserver and libvncclient are in the same package, so it does
 # not make sense to add a new cmake script for finding libvncclient.
 # instead just find the libvncclient also in this file.
-FIND_PATH(LIBVNCCLIENT_INCLUDE_DIR rfb/rfbclient.h)
+FIND_PATH(
+    LIBVNCCLIENT_INCLUDE_DIRS rfbclient.h
+    HINTS ${PC_LIBVNCSERVER_INCLUDES} ${PC_LIBVNCSERVER_INCLUDE_DIRS}
+    PATH_SUFFIXES rfb)
 FIND_LIBRARY(LIBVNCCLIENT_LIBRARIES NAMES vncclient libvncclient libvnc)
 
 IF (LIBVNCSERVER_INCLUDE_DIR AND LIBVNCSERVER_LIBRARIES)

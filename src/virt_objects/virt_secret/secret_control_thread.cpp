@@ -111,9 +111,9 @@ Result SecretControlThread::getAllSecretList()
             //size_t value_size;
             //unsigned char *value = virSecretGetValue(secrets[i], &value_size, 0);
             currentAttr<< uuid\
-                       <<QString::fromUtf8(usageID)\
-                       <<type\
-                       <<desc;
+                       << QString::fromUtf8(usageID)\
+                       << desc\
+                       << type;
             virtSecretList.append(currentAttr.join(DFR));
             //qDebug() << currentAttr << value_size;
             //for (int k=0; k< value_size; k++) {

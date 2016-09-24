@@ -103,8 +103,17 @@ void VirtNWFilterControl::resultReceiver(Result data)
         foreach (QString _data, data.msg) {
             QStringList chain = _data.split(DFR);
             if (chain.isEmpty()) continue;
+            int count = chain.size();
+            for (int j=0; j<count; j++) {
+                virtNWFilterModel->setData(
+                            virtNWFilterModel->index(i,j),
+                            chain.at(j),
+                            Qt::EditRole);
+            };
+            /*
             virtNWFilterModel->DataList.at(i)->setName(chain.at(0));
             virtNWFilterModel->DataList.at(i)->setUUID(chain.at(1));
+            */
             i++;
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {

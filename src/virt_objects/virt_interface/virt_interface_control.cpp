@@ -96,7 +96,10 @@ void VirtInterfaceControl::resultReceiver(Result data)
             if (chain.isEmpty()) continue;
             int count = chain.size();
             for (int j=0; j<count; j++) {
-                virtIfaceModel->setData(virtIfaceModel->index(i,j), chain.at(j), Qt::EditRole);
+                virtIfaceModel->setData(
+                            virtIfaceModel->index(i,j),
+                            chain.at(j),
+                            Qt::EditRole);
             };
             i++;
         };

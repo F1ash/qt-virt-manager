@@ -3,8 +3,8 @@
 
 #include <QThread>
 #include <QString>
-#include <libvirt/libvirt.h>
-#include <libvirt/virterror.h>
+#include <libvirt.h>
+#include <virterror.h>
 #include <QDebug>
 
 class _VirtThread : public QThread

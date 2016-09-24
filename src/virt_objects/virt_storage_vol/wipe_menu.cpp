@@ -1,4 +1,5 @@
 #include "wipe_menu.h"
+#include <libvirt.h>
 
 WipeMenu::WipeMenu(QWidget *parent) :
     QMenu(parent)
@@ -24,8 +25,10 @@ WipeMenu::WipeMenu(QWidget *parent) :
     addAction(algorithm_PFITZNER33);
     addAction(algorithm_RANDOM);
 
-    connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
-    connect(this, SIGNAL(hovered(QAction*)), this, SLOT(showActionToolTip(QAction*)));
+    connect(this, SIGNAL(triggered(QAction*)),
+            this, SLOT(emitExecMethod(QAction*)));
+    connect(this, SIGNAL(hovered(QAction*)),
+            this, SLOT(showActionToolTip(QAction*)));
 }
 
 /* private slots */
