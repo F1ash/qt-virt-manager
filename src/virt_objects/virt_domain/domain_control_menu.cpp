@@ -1,40 +1,43 @@
 #include "domain_control_menu.h"
 
 DomainControlMenu::DomainControlMenu(
-        QWidget *parent, QStringList params, bool state) :
-    QMenu(parent), parameters(params), autoReloadState(state)
+        QWidget *parent, QVariantMap params, bool state) :
+    QMenu(parent), autoReloadState(state)
 {
-    if ( !parameters.isEmpty() ) {
+    if ( !params.isEmpty() ) {
+        active = params.value("active", false).toBool();
+        autostart = params.value("auto", false).toBool();
+        persistent = params.value("persistent", false).toBool();
         start = new QAction("Start", this);
         start->setIcon(QIcon::fromTheme("start"));
-        start->setVisible(parameters.last()=="yes" && parameters[1]!="active" );
+        start->setVisible(persistent && !active );
         pause = new QAction("Pause", this);
         pause->setIcon(QIcon::fromTheme("pause"));
-        pause->setVisible(parameters[1]=="active");
+        pause->setVisible(active);
         destroy = new QAction("Destroy", this);
         destroy->setIcon(QIcon::fromTheme("destroy"));
-        destroy->setVisible(parameters[1]=="active");
+        destroy->setVisible(active);
         edit = new QAction("Edit", this);
         edit->setIcon(QIcon::fromTheme("configure"));
         edit->setVisible(true);
         reset = new QAction("Reset", this);
         reset->setIcon(QIcon::fromTheme("reset"));
-        reset->setVisible(parameters[1]=="active");
+        reset->setVisible(active);
         reboot = new QAction("Reboot", this);
         reboot->setIcon(QIcon::fromTheme("reboot"));
-        reboot->setVisible(parameters[1]=="active");
+        reboot->setVisible(active);
         shutdown = new QAction("Shutdown", this);
         shutdown->setIcon(QIcon::fromTheme("shutdown"));
-        shutdown->setVisible(parameters[1]=="active");
+        shutdown->setVisible(active);
         save = new QAction("Save", this);
         save->setIcon(QIcon::fromTheme("save"));
-        save->setVisible(parameters[1]=="active");
+        save->setVisible(active);
         undefine = new QAction("Undefine", this);
         undefine->setIcon(QIcon::fromTheme("undefine"));
-        undefine->setVisible(parameters.last()=="yes");
+        undefine->setVisible(persistent);
         autoStart = new QAction("change AutoStart", this);
         autoStart->setIcon(QIcon::fromTheme("autostart"));
-        autoStart->setVisible(parameters.last()=="yes");
+        autoStart->setVisible(persistent);
         createSnapshot = new QAction("Snapshot now!", this);
         createSnapshot->setIcon(QIcon::fromTheme("camera-photo"));
         moreSnapshot_Actions = new QAction("more Snapshot actions", this);
@@ -50,16 +53,16 @@ DomainControlMenu::DomainControlMenu(
         getXMLDesc->setMenu(xmlDescParams);
         display = new QAction("display VM", this);
         display->setIcon(QIcon::fromTheme("display"));
-        display->setVisible(parameters[1]=="active");
+        display->setVisible(active);
         displayInExternal = new QAction("display VM in external Viewer", this);
         displayInExternal->setIcon(QIcon::fromTheme("display"));
-        displayInExternal->setVisible(parameters[1]=="active");
+        displayInExternal->setVisible(active);
         addToMonitor = new QAction("add to State Monitor", this);
         addToMonitor->setIcon(QIcon::fromTheme("utilities-monitor"));
         addToMonitor->setVisible(true);
         migrate = new QAction("Migrate", this);
         migrate->setIcon(QIcon::fromTheme("migrate"));
-        migrate->setVisible(parameters[1]=="active");
+        migrate->setVisible(active);
 
         addAction(start);
         addAction(pause);
@@ -120,8 +123,7 @@ void DomainControlMenu::emitExecMethod(QAction *action)
         paramList.method = undefineEntity;
     } else if ( action == autoStart ) {
         paramList.method = setAutostartEntity;
-        paramList.path =
-               (QString((parameters[2]=="yes")? "0" : "1"));
+        paramList.path = (autostart)? "0" : "1";
     } else if ( action == RunningData ) {
         paramList.method = getEntityXMLDesc;
         paramList.context = DO_AsIs;

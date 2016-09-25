@@ -114,7 +114,7 @@ void DomControlThread::run()
 Result DomControlThread::getAllDomainList()
 {
     Result result;
-    QStringList domainList;
+    ACT_RESULT domainList;
     if ( task.srcConnPtr!=nullptr && keep_alive ) {
         virDomainPtr *domains = nullptr;
         unsigned int flags =
@@ -127,19 +127,16 @@ Result DomControlThread::getAllDomainList()
         if ( ret<0 ) {
             result.err = sendConnErrors();
             result.result = false;
-            result.msg = domainList;
+            result.data = domainList;
             return result;
         };
 
         // therefore correctly to use for() command,
         // because domains[0] can not exist.
         for (int i = 0; i < ret; i++) {
-            QStringList currentAttr;
-            QString autostartStr;
+            QVariantMap currentAttr;
             int is_autostart = 0;
-            if (virDomainGetAutostart(domains[i], &is_autostart) < 0) {
-                autostartStr.append("no autostart");
-            } else autostartStr.append( is_autostart ? "yes" : "no" );
+            virDomainGetAutostart(domains[i], &is_autostart);
             int state;
             int reason;
             // flags : extra flags; not used yet, so callers should always pass 0
@@ -175,15 +172,20 @@ Result DomControlThread::getAllDomainList()
                     break;
                 }
             } else domainState.append("ERROR");
-            currentAttr<< QString::fromUtf8( virDomainGetName(domains[i]) )
-                       << QString("%1:%2")
-                          .arg( virDomainIsActive(
-                                    domains[i]) ? "active" : "inactive" )
-                          .arg(domainState)
-                       << autostartStr
-                       << QString( virDomainIsPersistent(
-                                       domains[i]) ? "yes" : "no" );
-            domainList.append(currentAttr.join(DFR));
+            currentAttr.insert(
+                        "name",
+                        QString::fromUtf8( virDomainGetName(domains[i]) ));
+            currentAttr.insert(
+                        "active",
+                        (virDomainIsActive(domains[i]))? true : false );
+            currentAttr.insert(
+                        "state", domainState);
+            currentAttr.insert(
+                        "auto", (is_autostart) ? true : false);
+            currentAttr.insert(
+                        "persistent",
+                        (virDomainIsPersistent(domains[i]))? true : false );
+            domainList.append(currentAttr);
             //qDebug()<<currentAttr;
             /*
             virDomainInfo info;
@@ -200,13 +202,14 @@ Result DomControlThread::getAllDomainList()
         if (domains) free(domains);
     };
     result.result = true;
-    result.msg = domainList;
+    result.data   = domainList;
     return result;
 }
 Result DomControlThread::getDomainData0()
 {
     Result result;
-    QString runXmlDesc, displayType;
+    QString activeDomainXmlDesc, displayType;
+    QVariantMap domainDesc;
     QString name = task.object;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
@@ -215,7 +218,6 @@ Result DomControlThread::getDomainData0()
     };
     const char *_type = virConnectGetType(*task.srcConnPtr);
     result.name   = name;
-    result.msg.append( _type );
     if ( _type==nullptr ) {
         result.result = false;
         result.err = "Error in getting the connection type.";
@@ -225,21 +227,23 @@ Result DomControlThread::getDomainData0()
     virDomainPtr domainPtr =virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     // flag=0 for get running domain xml-description
-    runXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
+    activeDomainXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
     QDomDocument doc;
-    doc.setContent(runXmlDesc);
+    doc.setContent(activeDomainXmlDesc);
     QDomElement graph = doc.firstChildElement("domain")
        .firstChildElement("devices")
        .firstChildElement("graphics");
     if ( !graph.isNull() )
         displayType.append( graph.attribute("type").toLower() );
-    result.msg.append( displayType );
+    domainDesc.insert("DomainType", _type);
+    domainDesc.insert("DisplayType", displayType);
+    result.data.append(domainDesc);
     return result;
 }
 Result DomControlThread::getDomainData1()
 {
     Result result;
-    QString runXmlDesc, url;
+    QString activeDomainXmlDesc, url;
     QString name = task.object;
     unsigned int flags = 0;
 
@@ -251,9 +255,9 @@ Result DomControlThread::getDomainData1()
     virDomainPtr domainPtr =virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     // flag=0 for get running domain xml-description
-    runXmlDesc.append( virDomainGetXMLDesc(domainPtr, flags) );
+    activeDomainXmlDesc.append( virDomainGetXMLDesc(domainPtr, flags) );
     QDomDocument doc;
-    doc.setContent(runXmlDesc);
+    doc.setContent(activeDomainXmlDesc);
     QDomElement graph = doc.firstChildElement("domain")
        .firstChildElement("devices")
        .firstChildElement("graphics");
@@ -294,7 +298,9 @@ Result DomControlThread::getDomainData1()
     } else {
         result.result = false;
     };
-    result.msg.append( url );
+    QVariantMap _url;
+    _url.insert("URL", url);
+    result.data.append( _url );
     return result;
 }
 Result DomControlThread::createDomain()

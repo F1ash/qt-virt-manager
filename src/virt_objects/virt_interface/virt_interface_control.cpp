@@ -76,31 +76,39 @@ void VirtInterfaceControl::resultReceiver(Result data)
     //qDebug()<<data.action<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);
-        if ( data.msg.count() > virtIfaceModel->DataList.count() ) {
-            int _diff = data.msg.count() - virtIfaceModel->DataList.count();
+        if ( data.data.count() > virtIfaceModel->DataList.count() ) {
+            int _diff = data.data.count() - virtIfaceModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtIfaceModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( virtIfaceModel->DataList.count() > data.msg.count() ) {
-            int _diff = virtIfaceModel->DataList.count() - data.msg.count();
+        if ( virtIfaceModel->DataList.count() > data.data.count() ) {
+            int _diff = virtIfaceModel->DataList.count() - data.data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtIfaceModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QString _data, data.msg) {
-            QStringList chain = _data.split(DFR);
-            if (chain.isEmpty()) continue;
-            int count = chain.size();
-            for (int j=0; j<count; j++) {
-                virtIfaceModel->setData(
-                            virtIfaceModel->index(i,j),
-                            chain.at(j),
+        foreach (QVariantMap _data, data.data) {
+            if (_data.isEmpty()) continue;
+            virtIfaceModel->setData(
+                            virtIfaceModel->index(i, 0),
+                            _data.value("name", ""),
                             Qt::EditRole);
-            };
+            virtIfaceModel->setData(
+                            virtIfaceModel->index(i, 1),
+                            _data.value("MAC", ""),
+                            Qt::EditRole);
+            virtIfaceModel->setData(
+                            virtIfaceModel->index(i, 2),
+                            _data.value("state", false),
+                            Qt::EditRole);
+            virtIfaceModel->setData(
+                            virtIfaceModel->index(i, 3),
+                            _data.value("changing", false),
+                            Qt::EditRole);
             i++;
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {
@@ -123,23 +131,24 @@ void VirtInterfaceControl::resultReceiver(Result data)
                     break;
                 };
             };
-            // for different action's specified manipulation
+            // for different action's specified manipulation;
+            // set manually, because next reload not change 'changing'
             switch (data.action) {
             case IFACE_CHANGE_BEGIN:
                 if (row+1>0)
-                    virtIfaceModel->DataList.at(row)->setChanging("yes");
+                    virtIfaceModel->DataList.at(row)->setChanging(true);
                 break;
             case IFACE_CHANGE_COMMIT:
                 if (row+1>0)
-                    virtIfaceModel->DataList.at(row)->setChanging("");
+                    virtIfaceModel->DataList.at(row)->setChanging(false);
                 break;
             case IFACE_CHANGE_ROLLBACK:
                 if (row+1>0)
-                    virtIfaceModel->DataList.at(row)->setChanging("");
+                    virtIfaceModel->DataList.at(row)->setChanging(false);
                 break;
             default:
                 break;
-            }
+            };
         };
         reloadState();
     };
@@ -167,13 +176,21 @@ void VirtInterfaceControl::entityClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
     QModelIndex idx = entityList->indexAt(p);
-    QStringList params;
+    QVariantMap params;
     if ( idx.isValid() && virtIfaceModel->DataList.count()>idx.row() ) {
         //qDebug()<<virtIfaceModel->DataList.at(idx.row())->getName();
-        params<<virtIfaceModel->DataList.at(idx.row())->getName();
-        params<<virtIfaceModel->DataList.at(idx.row())->getMAC();
-        params<<virtIfaceModel->DataList.at(idx.row())->getState();
-        params<<virtIfaceModel->DataList.at(idx.row())->getChanging();
+        params.insert(
+                    "name",
+                    virtIfaceModel->DataList.at(idx.row())->getName());
+        params.insert(
+                    "MAC",
+                    virtIfaceModel->DataList.at(idx.row())->getMAC());
+        params.insert(
+                    "state",
+                    virtIfaceModel->DataList.at(idx.row())->getState());
+        params.insert(
+                    "changing",
+                    virtIfaceModel->DataList.at(idx.row())->getChanging());
     } else {
         entityList->clearSelection();
     };

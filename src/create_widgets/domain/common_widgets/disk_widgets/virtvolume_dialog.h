@@ -60,7 +60,7 @@ private slots:
     void             showMsg(const QString&);
     void             execAction(TASK);
     void             poolThreadResult(Result);
-    void             addPoolItem(QStringList&);
+    void             addPoolItem(QVariantMap&);
 };
 
 #endif // VIRTVOLUME_DIALOG_H

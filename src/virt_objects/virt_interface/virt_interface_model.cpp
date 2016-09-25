@@ -111,12 +111,12 @@ QVariant VirtIfaceModel::data(const QModelIndex &index, int role) const
             res = defined;
             break;
         case 2:
-            if ( DataList.at(index.row())->getState()=="active" ) {
+            if ( DataList.at(index.row())->getState() ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
         case 3:
-            if ( DataList.at(index.row())->getChanging()=="yes" ) {
+            if ( DataList.at(index.row())->getChanging() ) {
                 res = changing;
             };
             break;
@@ -136,8 +136,9 @@ QVariant VirtIfaceModel::data(const QModelIndex &index, int role) const
             res = QString("State: %1").arg(DataList.at(index.row())->getState());
             break;
         case 3:
-            if ( DataList.at(index.row())->getChanging()=="yes" )
+            if ( DataList.at(index.row())->getChanging() ) {
                 res = QString("Changing Began");
+            };
             break;
         default:
             break;
@@ -154,20 +155,19 @@ bool VirtIfaceModel::setData( const QModelIndex &index, const QVariant &value, i
     };
 
     if ( role == Qt::EditRole ) {
-        QString _value = value.toString();
         switch( index.column() ) {
         case 0:
-            DataList.at(index.row())->setName( _value );
+            DataList.at(index.row())->setName( value.toString() );
             break;
         case 1:
-            DataList.at(index.row())->setMAC( _value );
+            DataList.at(index.row())->setMAC( value.toString() );
             break;
         case 2:
-            DataList.at(index.row())->setState( _value );
+            DataList.at(index.row())->setState( value.toBool() );
             break;
         case 3:
-            if ( !_value.isEmpty() )
-                DataList.at(index.row())->setChanging( _value );
+            if ( value.toBool() )
+                DataList.at(index.row())->setChanging( value.toBool() );
             break;
         default:
             break;

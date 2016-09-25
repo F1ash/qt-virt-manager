@@ -4,7 +4,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QIcon>
-#include <QStringList>
+#include <QVariantMap>
 #include "delete_pool_menu.h"
 
 class StoragePoolControlMenu : public QMenu
@@ -13,7 +13,7 @@ class StoragePoolControlMenu : public QMenu
 public:
     explicit StoragePoolControlMenu(
             QWidget     *parent = nullptr,
-            QStringList  params = QStringList(),
+            QVariantMap  params = QVariantMap(),
             bool         state  = false);
 
 signals:
@@ -21,6 +21,7 @@ signals:
 
 private:
     bool            autoReloadState;
+    bool            active, autostart, persistent;
     QAction        *start = nullptr;
     QAction        *destroy = nullptr;
     QAction        *undefine = nullptr;
@@ -31,7 +32,6 @@ private:
     QAction        *getXMLDesc = nullptr;
     QAction        *overview = nullptr;
     QAction        *reload = nullptr;
-    QStringList     parameters;
 
 private slots:
     void            emitExecMethod(QAction*);

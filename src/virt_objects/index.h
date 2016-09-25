@@ -13,21 +13,24 @@ signals:
 
 private:
     QString Name;
-    QString State;
-    QString Autostart;
-    QString Persistent;
+    bool    State;
+    QString State_EXT;
+    bool    Autostart;
+    bool    Persistent;
     bool    onView;
 
 public slots:
     void    setName(const QString&);
-    void    setState(const QString&);
-    void    setAutostart(const QString&);
-    void    setPersistent(const QString&);
+    void    setState(const bool);
+    void    setState_EXT(const QString&);
+    void    setAutostart(const bool);
+    void    setPersistent(const bool);
     void    setOnView(const bool);
     QString getName() const;
-    QString getState() const;
-    QString getAutostart() const;
-    QString getPersistent() const;
+    bool    getState() const;
+    QString getState_EXT() const;
+    bool    getAutostart() const;
+    bool    getPersistent() const;
     bool    getOnView() const;
 
 };

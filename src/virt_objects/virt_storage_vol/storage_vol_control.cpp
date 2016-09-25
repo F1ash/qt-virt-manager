@@ -92,8 +92,7 @@ void VirtStorageVolControl::resultReceiver(Result data)
     //qDebug()<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);
-        int chain  = storageVolModel->columnCount();
-        int chains = data.msg.count()/chain;
+        int chains = data.data.count();
         if ( chains > storageVolModel->DataList.count() ) {
             int _diff = chains - storageVolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -108,13 +107,30 @@ void VirtStorageVolControl::resultReceiver(Result data)
                 //qDebug()<<i<<"remove";
             };
         };
-        for (int i = 0; i<chains; i++) {
-            for (int j = 0; j<chain; j++) {
-                storageVolModel->setData(
-                            storageVolModel->index(i,j),
-                            data.msg.at(i*chain+j),
-                            Qt::EditRole);
-            };
+        int i = 0;
+        foreach (QVariantMap _data, data.data) {
+            if (_data.isEmpty()) continue;
+            storageVolModel->setData(
+                        storageVolModel->index(i, 0),
+                        _data.value("name", ""),
+                        Qt::EditRole);
+            storageVolModel->setData(
+                        storageVolModel->index(i, 1),
+                        _data.value("path", ""),
+                        Qt::EditRole);
+            storageVolModel->setData(
+                        storageVolModel->index(i, 2),
+                        _data.value("type", ""),
+                        Qt::EditRole);
+            storageVolModel->setData(
+                        storageVolModel->index(i, 3),
+                        _data.value("allocation", ""),
+                        Qt::EditRole);
+            storageVolModel->setData(
+                        storageVolModel->index(i, 4),
+                        _data.value("capacity", ""),
+                        Qt::EditRole);
+            i++;
         };
     } else if ( data.action == CREATE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {

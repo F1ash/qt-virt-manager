@@ -4,7 +4,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QIcon>
-#include <QStringList>
+#include <QVariantMap>
 #include "virt_objects/virt_entity_enums.h"
 #include <QDebug>
 
@@ -14,7 +14,7 @@ class DomainControlMenu : public QMenu
 public:
     explicit DomainControlMenu(
             QWidget     *parent = nullptr,
-            QStringList  params = QStringList(),
+            QVariantMap  params = QVariantMap(),
             bool         state  = false);
 
 signals:
@@ -22,6 +22,7 @@ signals:
 
 private:
     bool            autoReloadState;
+    bool            active, autostart, persistent;
     QAction        *start = nullptr;
     QAction        *pause = nullptr;
     QAction        *destroy = nullptr;
@@ -43,7 +44,6 @@ private:
     QAction        *reload = nullptr;
     QAction        *createSnapshot = nullptr;
     QAction        *moreSnapshot_Actions = nullptr;
-    QStringList     parameters;
 
 private slots:
     void            emitExecMethod(QAction*);

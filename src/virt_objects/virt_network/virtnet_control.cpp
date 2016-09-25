@@ -81,31 +81,39 @@ void VirtNetControl::resultReceiver(Result data)
     //qDebug()<<data.action<<data.name<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);
-        if ( data.msg.count() > virtNetModel->DataList.count() ) {
-            int _diff = data.msg.count() - virtNetModel->DataList.count();
+        if ( data.data.count() > virtNetModel->DataList.count() ) {
+            int _diff = data.data.count() - virtNetModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtNetModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( virtNetModel->DataList.count() > data.msg.count() ) {
-            int _diff = virtNetModel->DataList.count() - data.msg.count();
+        if ( virtNetModel->DataList.count() > data.data.count() ) {
+            int _diff = virtNetModel->DataList.count() - data.data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtNetModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QString _data, data.msg) {
-            QStringList chain = _data.split(DFR);
-            if (chain.isEmpty()) continue;
-            int count = chain.size();
-            for (int j=0; j<count; j++) {
-                virtNetModel->setData(
-                            virtNetModel->index(i,j),
-                            chain.at(j),
+        foreach (QVariantMap _data, data.data) {
+            if (_data.isEmpty()) continue;
+            virtNetModel->setData(
+                            virtNetModel->index(i, 0),
+                            _data.value("name", ""),
                             Qt::EditRole);
-            };
+            virtNetModel->setData(
+                            virtNetModel->index(i, 1),
+                            _data.value("active", false),
+                            Qt::EditRole);
+            virtNetModel->setData(
+                            virtNetModel->index(i, 2),
+                            _data.value("auto", false),
+                            Qt::EditRole);
+            virtNetModel->setData(
+                            virtNetModel->index(i, 3),
+                            _data.value("persistent", false),
+                            Qt::EditRole);
             i++;
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {
@@ -173,13 +181,21 @@ void VirtNetControl::entityClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
     QModelIndex idx = entityList->indexAt(p);
-    QStringList params;
+    QVariantMap params;
     if ( idx.isValid() && virtNetModel->DataList.count()>idx.row() ) {
         //qDebug()<<virtNetModel->DataList.at(idx.row())->getName();
-        params<<virtNetModel->DataList.at(idx.row())->getName();
-        params<<virtNetModel->DataList.at(idx.row())->getState();
-        params<<virtNetModel->DataList.at(idx.row())->getAutostart();
-        params<<virtNetModel->DataList.at(idx.row())->getPersistent();
+        params.insert(
+                    "name",
+                    virtNetModel->DataList.at(idx.row())->getName());
+        params.insert(
+                    "active",
+                    virtNetModel->DataList.at(idx.row())->getState());
+        params.insert(
+                    "auto",
+                    virtNetModel->DataList.at(idx.row())->getAutostart());
+        params.insert(
+                    "persistent",
+                    virtNetModel->DataList.at(idx.row())->getPersistent());
     } else {
         entityList->clearSelection();
     };
@@ -226,7 +242,7 @@ void VirtNetControl::execAction(const Act_Param &param)
         } else if ( param.method==setAutostartEntity ) {
             /* set the opposite value */
             uint autostartState =
-                (virtNetModel->DataList.at(idx.row())->getAutostart()=="yes")
+                (virtNetModel->DataList.at(idx.row())->getAutostart())
                  ? 0 : 1;
             task.action = CHANGE_ENTITY_AUTOSTART;
             task.args.sign = autostartState;

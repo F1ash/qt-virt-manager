@@ -4,26 +4,31 @@ Index::Index(QObject *parent) :
     QObject(parent)
 {
     Name = "";
-    State = "";
-    Autostart = "";
-    Persistent = "";
+    State = false;
+    State_EXT = "";
+    Autostart = false;
+    Persistent = false;
     onView = false;
 }
 void Index::setName(const QString &s)
 {
     Name = s;
 }
-void Index::setState(const QString &s)
+void Index::setState(const bool state)
 {
-    State = s;
+    State = state;
 }
-void Index::setAutostart(const QString &s)
+void Index::setState_EXT(const QString &s)
 {
-    Autostart = s;
+    State_EXT = s;
 }
-void Index::setPersistent(const QString &s)
+void Index::setAutostart(const bool state)
 {
-    Persistent = s;
+    Autostart = state;
+}
+void Index::setPersistent(const bool state)
+{
+    Persistent = state;
 }
 void Index::setOnView(const bool state)
 {
@@ -33,15 +38,19 @@ QString Index::getName() const
 {
     return Name;
 }
-QString Index::getState() const
+bool Index::getState() const
 {
     return State;
 }
-QString Index::getAutostart() const
+QString Index::getState_EXT() const
+{
+    return State_EXT;
+}
+bool Index::getAutostart() const
 {
     return Autostart;
 }
-QString Index::getPersistent() const
+bool Index::getPersistent() const
 {
     return Persistent;
 }

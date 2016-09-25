@@ -85,33 +85,45 @@ void VirtDomainControl::resultReceiver(Result data)
     //qDebug()<<data.number<<data.action<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);
-        if ( data.msg.count() > domainModel->DataList.count() ) {
-            int _diff = data.msg.count()
+        if ( data.data.count() > domainModel->DataList.count() ) {
+            int _diff = data.data.count()
                     - domainModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 domainModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( domainModel->DataList.count() > data.msg.count() ) {
+        if ( domainModel->DataList.count() > data.data.count() ) {
             int _diff = domainModel->DataList.count()
-                    - data.msg.count();
+                    - data.data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 domainModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QString _data, data.msg) {
-            QStringList chain = _data.split(DFR);
-            if (chain.isEmpty()) continue;
-            int count = chain.size();
-            for (int j=0; j<count; j++) {
-                domainModel->setData(
-                            domainModel->index(i,j),
-                            chain.at(j),
+        foreach (QVariantMap _data, data.data) {
+            if (_data.isEmpty()) continue;
+            domainModel->setData(
+                            domainModel->index(i, 0),
+                            _data.value("name", ""),
                             Qt::EditRole);
-            };
+            domainModel->setData(
+                            domainModel->index(i, 1),
+                            _data.value("active", false),
+                            Qt::EditRole);
+            domainModel->setData(
+                            domainModel->index(i, 1),
+                            _data.value("state", ""),
+                            Qt::DisplayRole);
+            domainModel->setData(
+                            domainModel->index(i, 2),
+                            _data.value("auto", false),
+                            Qt::EditRole);
+            domainModel->setData(
+                            domainModel->index(i, 3),
+                            _data.value("persistent", false),
+                            Qt::EditRole);
             i++;
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {
@@ -139,19 +151,19 @@ void VirtDomainControl::resultReceiver(Result data)
             emit domainToEditor(task);
         };
     } else if ( data.action == GET_ALL_ENTITY_DATA0 ) {
-        if ( !data.msg.isEmpty() ) {
+        if ( !data.data.isEmpty() ) {
             TASK task;
             task.srcConnPtr = ptr_ConnPtr;
             task.srcConName = currConnName;
             task.object     = data.name;
-            task.args.object= data.msg.first();
-            task.args.state = data.msg.last();
+            task.args.object= data.data.first().value("DomainType").toString();
+            task.args.state = data.data.first().value("DisplayType").toString();
             emit displayRequest(task);
         } else
             msgRepeater(data.err);
     } else if ( data.action == GET_ALL_ENTITY_DATA1 ) {
-        if ( !data.msg.isEmpty() ) {
-            QUrl url(data.msg.first());
+        if ( !data.data.isEmpty() ) {
+            QUrl url(data.data.first().value("URL", "EMPTY_URL").toString());
             QDesktopServices::openUrl(url);
         } else
             msgRepeater(data.err);
@@ -197,13 +209,21 @@ void VirtDomainControl::entityClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
     QModelIndex idx = entityList->indexAt(p);
-    QStringList params;
+    QVariantMap params;
     if ( idx.isValid() && domainModel->DataList.count()>idx.row() ) {
         //qDebug()<<domainModel->DataList.at(idx.row())->getName();
-        params<<domainModel->DataList.at(idx.row())->getName();
-        params<<domainModel->DataList.at(idx.row())->getState().split(":").first();
-        params<<domainModel->DataList.at(idx.row())->getAutostart();
-        params<<domainModel->DataList.at(idx.row())->getPersistent();
+        params.insert(
+                    "name",
+                    domainModel->DataList.at(idx.row())->getName());
+        params.insert(
+                    "active",
+                    domainModel->DataList.at(idx.row())->getState());
+        params.insert(
+                    "auto",
+                    domainModel->DataList.at(idx.row())->getAutostart());
+        params.insert(
+                    "persistent",
+                    domainModel->DataList.at(idx.row())->getPersistent());
     } else {
         entityList->clearSelection();
     };
@@ -251,7 +271,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
         } else if ( param.method==pauseEntity ) {
             task.action     = PAUSE_ENTITY;
             task.args.state = domainModel->DataList
-                    .at(idx.row())->getState().split(":").last();
+                    .at(idx.row())->getState_EXT();
             emit addNewTask(task);
         } else if ( param.method==destroyEntity ) {
             task.action     = DESTROY_ENTITY;
@@ -276,7 +296,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
                 task.action     = SAVE_ENTITY;
                 task.args.path  = to;
                 task.args.state = domainModel->DataList
-                        .at(idx.row())->getState().split(":").last();
+                        .at(idx.row())->getState_EXT();
                 emit addNewTask(task);
             };
         } else if ( param.method==restoreVirtDomain ) {
@@ -294,7 +314,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
         } else if ( param.method==setAutostartEntity ) {
             /* set the opposite value */
             uint autostartState =
-                (domainModel->DataList.at(idx.row())->getAutostart()=="yes")
+                (domainModel->DataList.at(idx.row())->getAutostart())
                  ? 0 : 1;
             task.action     = CHANGE_ENTITY_AUTOSTART;
             task.args.sign  = autostartState;
@@ -347,7 +367,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
         } else if ( param.method==createVirtDomainSnapshot ) {
             //qDebug()<<"createVirtDomainSnapshot";
             bool state = domainModel->DataList
-                    .at(idx.row())->getState().startsWith("active");
+                    .at(idx.row())->getState();
             CreateSnapshotDialog *_dialog =
                     new CreateSnapshotDialog(
                         this, domainName, currConnName, state, ptr_ConnPtr);

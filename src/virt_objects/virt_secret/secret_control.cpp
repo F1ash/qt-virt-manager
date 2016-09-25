@@ -89,59 +89,39 @@ void VirtSecretControl::resultReceiver(Result data)
     //qDebug()<<data.action<<data.name<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);
-        if ( data.msg.count() > virtSecretModel->DataList.count() ) {
-            int _diff = data.msg.count() - virtSecretModel->DataList.count();
+        if ( data.data.count() > virtSecretModel->DataList.count() ) {
+            int _diff = data.data.count() - virtSecretModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtSecretModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( virtSecretModel->DataList.count() > data.msg.count() ) {
-            int _diff = virtSecretModel->DataList.count() - data.msg.count();
+        if ( virtSecretModel->DataList.count() > data.data.count() ) {
+            int _diff = virtSecretModel->DataList.count() - data.data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtSecretModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QString _data, data.msg) {
-            QStringList chain = _data.split(DFR);
-            if (chain.isEmpty()) continue;
-            int count = chain.size();
-            for (int j=0; j<count; j++) {
-                Qt::ItemDataRole _role = Qt::EditRole;
-                int _row = 0;
-                switch (j) {
-                case 0:
-                    _role = Qt::EditRole;
-                    _row = 0;
-                    break;
-                case 1:
-                    _role = Qt::EditRole;
-                    _row = 1;
-                    break;
-                case 2:
-                    _role = Qt::ToolTipRole;
-                    _row = 0;
-                    break;
-                case 3:
-                    _role = Qt::ToolTipRole;
-                    _row = 1;
-                    break;
-                default:
-                    continue;
-                };
-                virtSecretModel->setData(
-                            virtSecretModel->index(i,_row),
-                            chain.at(j),
-                            _role);
-            };
-            /*
-            virtSecretModel->DataList.at(i)->setUUID(chain.at(0));
-            virtSecretModel->DataList.at(i)->setUsageID(chain.at(1));
-            virtSecretModel->DataList.at(i)->setType(chain.at(2));
-            virtSecretModel->DataList.at(i)->setDescription(chain.at(3));
-            */
+        foreach (QVariantMap _data, data.data) {
+            if (_data.isEmpty()) continue;
+            virtSecretModel->setData(
+                            virtSecretModel->index(i, 0),
+                            _data.value("UUID", ""),
+                            Qt::EditRole);
+            virtSecretModel->setData(
+                            virtSecretModel->index(i, 1),
+                            _data.value("UsageID", ""),
+                            Qt::EditRole);
+            virtSecretModel->setData(
+                            virtSecretModel->index(i, 0),
+                            _data.value("desc", ""),
+                            Qt::ToolTipRole);
+            virtSecretModel->setData(
+                            virtSecretModel->index(i, 1),
+                            _data.value("type", ""),
+                            Qt::ToolTipRole);
             i++;
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {

@@ -9,6 +9,7 @@ class DomainModel : public Model
 public:
     explicit DomainModel(QObject *parent = nullptr);
     QVariant data(const QModelIndex&, int) const;
+    bool     setData(const QModelIndex &index, const QVariant &value, int role);
 };
 
 #endif // DOMAIN_MODEL_H

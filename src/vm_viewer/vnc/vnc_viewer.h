@@ -18,7 +18,7 @@ public:
     const QString    domain;
     bool             domainIsActive = false;
     virDomainPtr     domainPtr = nullptr;
-    QString          uri, runXmlDesc;
+    QString          uri, activeDomainXmlDesc;
     void             run();
 };
 

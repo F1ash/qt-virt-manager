@@ -25,7 +25,7 @@ void vncHlpThread::run()
     domainIsActive = (virDomainIsActive(domainPtr)>0);
     uri.append(virConnectGetURI(*ptr_ConnPtr));
     // flag=0 for get running domain xml-description
-    runXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
+    activeDomainXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();
 }
@@ -69,7 +69,7 @@ void VNC_Viewer::init()
         };
         addr.clear();
         QDomDocument doc;
-        doc.setContent(hlpThread->runXmlDesc);
+        doc.setContent(hlpThread->activeDomainXmlDesc);
         QDomElement graph = doc.firstChildElement("domain")
            .firstChildElement("devices")
            .firstChildElement("graphics");

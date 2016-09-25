@@ -103,7 +103,7 @@ Result StorageVolControlThread::getAllStorageVolList()
 {
     Result result;
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
-    QStringList storageVolList;
+    ACT_RESULT storageVolList;
     if (currStoragePool!=nullptr) {
         virStoragePoolFree(currStoragePool);
         currStoragePool = nullptr;
@@ -124,7 +124,6 @@ Result StorageVolControlThread::getAllStorageVolList()
         if ( ret<0 ) {
             result.err = sendConnErrors();
             result.result = false;
-            result.msg = storageVolList;
             return result;
         };
 
@@ -159,12 +158,19 @@ Result StorageVolControlThread::getAllStorageVolList()
                 allocation.append("-");
                 capacity.append("-");
             };
-            QStringList currentAttr;
-            currentAttr<< QString::fromUtf8( virStorageVolGetName(storageVol[i]) )
-                       << QString::fromUtf8( virStorageVolGetPath(storageVol[i]) )
-                       << QString( type )
-                       << QString( allocation )
-                       << QString( capacity );;
+            QVariantMap currentAttr;
+            currentAttr.insert(
+                        "name",
+                        QString::fromUtf8( virStorageVolGetName(storageVol[i]) ));
+            currentAttr.insert(
+                        "path",
+                        QString::fromUtf8( virStorageVolGetPath(storageVol[i]) ));
+            currentAttr.insert(
+                        "type", type);
+            currentAttr.insert(
+                        "allocation", allocation );
+            currentAttr.insert(
+                        "capacity", capacity );
             storageVolList.append(currentAttr);
             //qDebug()<<currentAttr<<"Volume";
             virStorageVolFree(storageVol[i]);
@@ -173,7 +179,7 @@ Result StorageVolControlThread::getAllStorageVolList()
     } else
         result.err = sendConnErrors();
     result.result = true;
-    result.msg = storageVolList;
+    result.data   = storageVolList;
     return result;
 }
 Result StorageVolControlThread::createStorageVol()

@@ -77,7 +77,7 @@ void NetControlThread::run()
 Result NetControlThread::getAllNetworkList()
 {
     Result result;
-    QStringList virtNetList;
+    ACT_RESULT virtNetList;
     if ( task.srcConnPtr!=nullptr && keep_alive ) {
         virNetworkPtr *networks = nullptr;
         unsigned int flags =
@@ -93,26 +93,30 @@ Result NetControlThread::getAllNetworkList()
         // therefore correctly to use for() command,
         // because networks[0] can not exist.
         for (int i = 0; i < ret; i++) {
-            QStringList currentAttr;
-            QString autostartStr;
+            QVariantMap currentAttr;
             int is_autostart = 0;
-            if (virNetworkGetAutostart(networks[i], &is_autostart) < 0) {
-                autostartStr.append("no autostart");
-            } else autostartStr.append( is_autostart ? "yes" : "no" );
-            currentAttr<< QString::fromUtf8( virNetworkGetName(networks[i]) )
-                       << QString( virNetworkIsActive(
-                                       networks[i]) ? "active" : "inactive" )
-                       << autostartStr
-                       << QString( virNetworkIsPersistent(
-                                       networks[i]) ? "yes" : "no" );
-            virtNetList.append(currentAttr.join(DFR));
+            virNetworkGetAutostart(networks[i], &is_autostart);
+            currentAttr.insert(
+                        "name",
+                        QString::fromUtf8( virNetworkGetName(networks[i]) ));
+            currentAttr.insert(
+                        "active",
+                        (virNetworkIsActive(networks[i]))
+                        ? true : false );
+            currentAttr.insert(
+                        "auto", (is_autostart)? true : false);
+            currentAttr.insert(
+                        "persistent",
+                        (virNetworkIsPersistent(networks[i]))
+                        ? true : false );
+            virtNetList.append(currentAttr);
             //qDebug()<<currentAttr;
             virNetworkFree(networks[i]);
         };
         if (networks) free(networks);
     };
     result.result = true;
-    result.msg = virtNetList;
+    result.data   = virtNetList;
     return result;
 }
 Result NetControlThread::createNetwork()

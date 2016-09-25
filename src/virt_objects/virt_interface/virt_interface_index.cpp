@@ -5,8 +5,8 @@ Interface_Index::Interface_Index(QObject *parent) :
 {
     Name = "";
     MAC  = "";
-    State = "";
-    Changing = "";
+    State = false;
+    Changing = false;
     onView = false;
 }
 void Interface_Index::setName(const QString &s)
@@ -17,13 +17,13 @@ void Interface_Index::setMAC(const QString &s)
 {
     MAC = s;
 }
-void Interface_Index::setState(const QString &s)
+void Interface_Index::setState(const bool state)
 {
-    State = s;
+    State = state;
 }
-void Interface_Index::setChanging(const QString &s)
+void Interface_Index::setChanging(const bool state)
 {
-    Changing = s;
+    Changing = state;
 }
 void Interface_Index::setOnView(const bool state)
 {
@@ -37,15 +37,15 @@ QString Interface_Index::getMAC() const
 {
     return MAC;
 }
-QString Interface_Index::getState() const
+bool Interface_Index::getState() const
 {
     return State;
 }
-QString Interface_Index::getChanging() const
+bool Interface_Index::getChanging() const
 {
     return Changing;
 }
-bool    Interface_Index::getOnView() const
+bool Interface_Index::getOnView() const
 {
     return onView;
 }

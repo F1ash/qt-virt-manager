@@ -3,7 +3,10 @@
 
 #include <libvirt.h>
 #include <QStringList>
+#include <QVariantMap>
 #include "virt_entity_enums.h"
+
+typedef QList<QVariantMap> ACT_RESULT;
 
 struct Result {
     QString         name        = QString();
@@ -12,6 +15,7 @@ struct Result {
     Actions         action      = _NONE_ACTION;
     bool            result      = false;
     QStringList     msg         = QStringList();
+    ACT_RESULT      data        = ACT_RESULT();
     QString         err         = QString();
     QString         fileName    = QString();
 };
@@ -39,8 +43,7 @@ struct TASK {
                 .arg(offset).arg(size).arg(sign)
                 .arg(path).arg(state).arg(object);
         }
-    };
-    DETAILS             args;
+    }                   args;
 
     // secret (clear before deletion)
     class           SECRET {

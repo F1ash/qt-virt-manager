@@ -1,27 +1,29 @@
 #include "virt_interface_control_menu.h"
 
 IfaceControlMenu::IfaceControlMenu(
-        QWidget *parent, QStringList params, bool state) :
-    QMenu(parent), parameters(params), autoReloadState(state)
+        QWidget *parent, QVariantMap params, bool state) :
+    QMenu(parent), autoReloadState(state)
 {
-    if ( !parameters.isEmpty() ) {
+    if ( !params.isEmpty() ) {
+        state = params.value("state", false).toBool();
+        changing = params.value("changing", false).toBool();
         start = new QAction("Start", this);
         start->setIcon(QIcon::fromTheme("start"));
-        start->setVisible(parameters[2]=="inactive" );
+        start->setVisible(!state );
         destroy = new QAction("Destroy", this);
         destroy->setIcon(QIcon::fromTheme("destroy"));
-        destroy->setVisible(parameters[2]=="active");
+        destroy->setVisible(state);
         undefine = new QAction("Undefine", this);
         undefine->setIcon(QIcon::fromTheme("undefine"));
         changeBegin = new QAction("Change Begin", this);
         changeBegin->setIcon(QIcon::fromTheme("document-open"));
-        changeBegin->setVisible(parameters[3]!="yes");
+        changeBegin->setVisible(changing);
         changeCommit = new QAction("Change Commit", this);
         changeCommit->setIcon(QIcon::fromTheme("document-save"));
-        changeCommit->setVisible(parameters[3]=="yes");
+        changeCommit->setVisible(changing);
         changeRollback = new QAction("Change Rollback", this);
         changeRollback->setIcon(QIcon::fromTheme("document-revert"));
-        changeRollback->setVisible(parameters[3]=="yes");
+        changeRollback->setVisible(changing);
         getXMLDesc = new QAction("get XML Description", this);
         getXMLDesc->setIcon(QIcon::fromTheme("application-xml"));
         getXMLDesc->setEnabled(true);
@@ -42,7 +44,8 @@ IfaceControlMenu::IfaceControlMenu(
     reload->setEnabled(!autoReloadState);
 
     addAction(reload);
-    connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
+    connect(this, SIGNAL(triggered(QAction*)),
+            this, SLOT(emitExecMethod(QAction*)));
 }
 
 void IfaceControlMenu::emitExecMethod(QAction *action)

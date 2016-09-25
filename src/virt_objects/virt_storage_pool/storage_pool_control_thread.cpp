@@ -82,7 +82,7 @@ void StoragePoolControlThread::run()
 Result StoragePoolControlThread::getAllStoragePoolList()
 {
     Result result;
-    QStringList storagePoolList;
+    ACT_RESULT storagePoolList;
     if ( task.srcConnPtr!=nullptr && keep_alive ) {
         virStoragePoolPtr *storagePool = nullptr;
         unsigned int flags =
@@ -93,27 +93,30 @@ Result StoragePoolControlThread::getAllStoragePoolList()
         if ( ret<0 ) {
             result.err = sendConnErrors();
             result.result = false;
-            result.msg = storagePoolList;
             return result;
         };
 
         // therefore correctly to use for() command,
         // because storagePool[0] can not exist.
         for (int i = 0; i < ret; i++) {
-            QStringList currentAttr;
-            QString autostartStr;
+            QVariantMap currentAttr;
             int is_autostart = 0;
-            if (virStoragePoolGetAutostart(storagePool[i], &is_autostart) < 0) {
-                autostartStr.append("no autostart");
-            } else autostartStr.append( is_autostart ? "yes" : "no" );
-            currentAttr<< QString::fromUtf8( virStoragePoolGetName(
-                                                 storagePool[i]) )
-                       << QString( virStoragePoolIsActive(
-                                       storagePool[i]) ? "active" : "inactive" )
-                       << autostartStr
-                       << QString( virStoragePoolIsPersistent(
-                                       storagePool[i]) ? "yes" : "no" );
-            storagePoolList.append(currentAttr.join(DFR));
+            virStoragePoolGetAutostart(storagePool[i], &is_autostart);
+            currentAttr.insert(
+                        "name",
+                        QString::fromUtf8(
+                            virStoragePoolGetName(storagePool[i])));
+            currentAttr.insert(
+                        "active",
+                        (virStoragePoolIsActive(storagePool[i]))
+                        ? "active" : "inactive" );
+            currentAttr.insert(
+                        "auto", (is_autostart)? true : false);
+            currentAttr.insert(
+                        "persistent",
+                        (virStoragePoolIsPersistent(storagePool[i]))
+                        ? true : false );
+            storagePoolList.append(currentAttr);
             //qDebug()<<currentAttr;
             virStoragePoolFree(storagePool[i]);
         };
@@ -122,13 +125,13 @@ Result StoragePoolControlThread::getAllStoragePoolList()
     } else {
         result.result = false;
     };
-    result.msg = storagePoolList;
+    result.data       = storagePoolList;
     return result;
 }
 Result StoragePoolControlThread::getAllStoragePoolDataList()
 {
     Result result;
-    QStringList storagePoolDataList;
+    ACT_RESULT storagePoolDataList;
     if ( task.srcConnPtr!=nullptr && keep_alive ) {
         virStoragePoolPtr *storagePool = nullptr;
         unsigned int flags =
@@ -139,14 +142,13 @@ Result StoragePoolControlThread::getAllStoragePoolDataList()
         if ( ret<0 ) {
             result.err = sendConnErrors();
             result.result = false;
-            result.msg = storagePoolDataList;
             return result;
         };
 
         // therefore correctly to use for() command,
         // because storagePool[0] can not exist.
         for (int i = 0; i < ret; i++) {
-            QStringList currentAttr;
+            QVariantMap currentAttr;
             QString type, source, target;
             char *Returns = virStoragePoolGetXMLDesc(
                         storagePool[i], VIR_STORAGE_XML_INACTIVE);
@@ -167,10 +169,17 @@ Result StoragePoolControlThread::getAllStoragePoolDataList()
                 target = str.readAll();
                 free(Returns);
             };
-            currentAttr<< QString::fromUtf8(
-                              virStoragePoolGetName(storagePool[i]) )
-                       << type << source << target;
-            storagePoolDataList.append(currentAttr.join(DFR));
+            currentAttr.insert(
+                        "name",
+                        QString::fromUtf8(
+                              virStoragePoolGetName(storagePool[i])));
+            currentAttr.insert(
+                        "type", type);
+            currentAttr.insert(
+                        "source", source);
+            currentAttr.insert(
+                        "target", target);
+            storagePoolDataList.append(currentAttr);
             //qDebug()<<currentAttr;
             virStoragePoolFree(storagePool[i]);
         };
@@ -179,7 +188,7 @@ Result StoragePoolControlThread::getAllStoragePoolDataList()
     } else {
         result.result = false;
     };
-    result.msg = storagePoolDataList;
+    result.data = storagePoolDataList;
     return result;
 }
 Result StoragePoolControlThread::createStoragePool()

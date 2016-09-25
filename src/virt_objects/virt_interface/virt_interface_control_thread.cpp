@@ -77,7 +77,7 @@ void InterfaceControlThread::run()
 Result InterfaceControlThread::getAllIfaceList()
 {
     Result result;
-    QStringList virtIfaceList;
+    ACT_RESULT virtIfaceList;
     if ( task.srcConnPtr!=nullptr && keep_alive ) {
         virInterfacePtr *ifaces = nullptr;
         //get all ifaces
@@ -94,24 +94,28 @@ Result InterfaceControlThread::getAllIfaceList()
         // therefore correctly to use for() command,
         // because ifaces[0] can not exist.
         for (int i = 0; i < ret; i++) {
-            QStringList currentAttr;
+            QVariantMap currentAttr;
             const char* name = virInterfaceGetName(ifaces[i]);
             const char* MAC = virInterfaceGetMACString(ifaces[i]);
 
-            QString state = virInterfaceIsActive(
-                        ifaces[i]) ? "active" : "inactive";
-            currentAttr<<QString::fromUtf8(name)\
-                       <<QString::fromUtf8(MAC)\
-                       <<state\
-                       <<"";
+            currentAttr.insert(
+                        "name", QString::fromUtf8(name));
+            currentAttr.insert(
+                        "MAC", QString::fromUtf8(MAC));
+            currentAttr.insert(
+                        "state",
+                        virInterfaceIsActive(ifaces[i])
+                        ? true : false);
+            currentAttr.insert(
+                        "changing", false);
             //qDebug()<<currentAttr;
-            virtIfaceList.append(currentAttr.join(DFR));
+            virtIfaceList.append(currentAttr);
             virInterfaceFree(ifaces[i]);
         };
         if (ifaces) free(ifaces);
     };
     result.result = true;
-    result.msg = virtIfaceList;
+    result.data   = virtIfaceList;
     return result;
 }
 Result InterfaceControlThread::startIface()

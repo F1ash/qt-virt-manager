@@ -23,11 +23,17 @@ VirtVolumeDialog::VirtVolumeDialog(
     listWidget->setLayout(listLayout);
 
     chooseVolume = new QPushButton(
-                QIcon::fromTheme("dialog-ok"), "Choose Volume", this);
+                QIcon::fromTheme("dialog-ok"),
+                "Choose Volume",
+                this);
     cancel = new QPushButton(
-                QIcon::fromTheme("dialog-cancel"), "Cancel", this);
-    connect(chooseVolume, SIGNAL(clicked()), this, SLOT(set_Result()));
-    connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
+                QIcon::fromTheme("dialog-cancel"),
+                "Cancel",
+                this);
+    connect(chooseVolume, SIGNAL(clicked()),
+            this, SLOT(set_Result()));
+    connect(cancel, SIGNAL(clicked()),
+            this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout(this);
     buttonLayout->addWidget(chooseVolume);
     buttonLayout->addWidget(cancel);
@@ -52,12 +58,10 @@ VVD_Result VirtVolumeDialog::getResult() const
     QList<QListWidgetItem*> _list = poolList->selectedItems();
     if ( !_list.isEmpty() ) {
         _ret.pool = _list.at(0)->text();
-        QStringList _data = _list.at(0)->data(Qt::UserRole).toStringList();
-        if ( _data.count()>2 ) {
-            _ret.type   = _data.at(0);
-            _ret.source = _data.at(1);
-            _ret.target = _data.at(2);
-        };
+        QVariantMap _data = _list.at(0)->data(Qt::UserRole).toMap();
+        _ret.type   = _data.value("name", "EMPTY_STR").toString();
+        _ret.source = _data.value("source", "EMPTY_STR").toString();
+        _ret.target = _data.value("target", "EMPTY_STR").toString();
         _ret.name = volumes->getCurrentVolumeName();
         _ret.path = volumes->getCurrentVolumePath();
     };
@@ -108,12 +112,11 @@ void VirtVolumeDialog::execAction(TASK _task)
 }
 void VirtVolumeDialog::poolThreadResult(Result data)
 {
-    if ( data.msg.isEmpty() ) {
+    if ( data.data.isEmpty() ) {
         poolList->addItem("Not found");
     } else {
-        foreach ( QString chain, data.msg ) {
-            QStringList _data = chain.split(DFR);
-            QString _type = _data.at(1);
+        foreach ( QVariantMap _data, data.data ) {
+            QString _type = _data.value("type", "EMPTY_STR").toString();
             //qDebug()<<_data;
             if        ( type.isEmpty() ) {
                 addPoolItem(_data);
@@ -124,11 +127,10 @@ void VirtVolumeDialog::poolThreadResult(Result data)
     };
     setEnabled(true);
 }
-void VirtVolumeDialog::addPoolItem(QStringList &_data)
+void VirtVolumeDialog::addPoolItem(QVariantMap &_data)
 {
     QListWidgetItem *item = new QListWidgetItem();
-    item->setText( _data.first() );
-    _data.removeFirst();
+    item->setText( _data.value("name", "EMPTY_STR").toString() );
     item->setData( Qt::UserRole, _data );
     poolList->addItem(item);
 }

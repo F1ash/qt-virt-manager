@@ -100,17 +100,17 @@ QVariant Model::data(const QModelIndex &index, int role) const
             res = defined;
             break;
         case 1:
-            if ( DataList.at(index.row())->getState()=="active" ) {
+            if ( DataList.at(index.row())->getState() ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
         case 2:
-            if ( DataList.at(index.row())->getAutostart()=="yes" ) {
+            if ( DataList.at(index.row())->getAutostart() ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
         case 3:
-            if ( DataList.at(index.row())->getPersistent()=="yes" ) {
+            if ( DataList.at(index.row())->getPersistent() ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
@@ -152,13 +152,13 @@ bool Model::setData( const QModelIndex &index, const QVariant &value, int role =
             DataList.at(index.row())->setName ( value.toString() );
             break;
         case 1:
-            DataList.at(index.row())->setState ( value.toString() );
+            DataList.at(index.row())->setState ( value.toBool() );
             break;
         case 2:
-            DataList.at(index.row())->setAutostart ( value.toString() );
+            DataList.at(index.row())->setAutostart ( value.toBool() );
             break;
         case 3:
-            DataList.at(index.row())->setPersistent ( value.toString() );
+            DataList.at(index.row())->setPersistent ( value.toBool() );
             break;
         default:
             break;

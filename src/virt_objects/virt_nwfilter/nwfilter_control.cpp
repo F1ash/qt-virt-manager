@@ -85,35 +85,31 @@ void VirtNWFilterControl::resultReceiver(Result data)
     //qDebug()<<data.action<<data.name<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);
-        if ( data.msg.count() > virtNWFilterModel->DataList.count() ) {
-            int _diff = data.msg.count() - virtNWFilterModel->DataList.count();
+        if ( data.data.count() > virtNWFilterModel->DataList.count() ) {
+            int _diff = data.data.count() - virtNWFilterModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtNWFilterModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( virtNWFilterModel->DataList.count() > data.msg.count() ) {
-            int _diff = virtNWFilterModel->DataList.count() - data.msg.count();
+        if ( virtNWFilterModel->DataList.count() > data.data.count() ) {
+            int _diff = virtNWFilterModel->DataList.count() - data.data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtNWFilterModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QString _data, data.msg) {
-            QStringList chain = _data.split(DFR);
-            if (chain.isEmpty()) continue;
-            int count = chain.size();
-            for (int j=0; j<count; j++) {
-                virtNWFilterModel->setData(
-                            virtNWFilterModel->index(i,j),
-                            chain.at(j),
+        foreach (QVariantMap _data, data.data) {
+            if (_data.isEmpty()) continue;
+            virtNWFilterModel->setData(
+                            virtNWFilterModel->index(i, 0),
+                            _data.value("name", ""),
                             Qt::EditRole);
-            };
-            /*
-            virtNWFilterModel->DataList.at(i)->setName(chain.at(0));
-            virtNWFilterModel->DataList.at(i)->setUUID(chain.at(1));
-            */
+            virtNWFilterModel->setData(
+                            virtNWFilterModel->index(i, 1),
+                            _data.value("UUID", ""),
+                            Qt::EditRole);
             i++;
         };
     } else if ( data.action == GET_XML_DESCRIPTION ) {

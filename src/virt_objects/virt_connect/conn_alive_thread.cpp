@@ -245,7 +245,7 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
     emit obj->connMsg(msg);
     if ( obj->onView ) {
         Result result;
-        QStringList domainList;
+        ACT_RESULT domainList;
         if ( _conn!=nullptr && obj->keep_alive ) {
             virDomainPtr *domains = nullptr;
             unsigned int flags =
@@ -262,7 +262,7 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
             // therefore correctly to use for() command,
             // because domains[0] can not exist.
             for (int i = 0; i < ret; i++) {
-                QStringList currentAttr;
+                QVariantMap currentAttr;
                 QString autostartStr;
                 int is_autostart = 0;
                 if (virDomainGetAutostart(domains[i], &is_autostart) < 0) {
@@ -305,25 +305,32 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
                         break;
                     }
                 } else domainState.append("ERROR");
-                currentAttr<< QString().fromUtf8( virDomainGetName(domains[i]) )
-                           << QString("%1:%2")
-                              .arg( virDomainIsActive(
-                                    domains[i]) ? "active" : "inactive" )
-                              .arg(domainState)
-                           << autostartStr
-                           << QString( virDomainIsPersistent(
-                                           domains[i]) ? "yes" : "no" );
-                domainList.append(currentAttr.join(DFR));
+                currentAttr.insert(
+                            "name",
+                            QString::fromUtf8( virDomainGetName(domains[i]) ));
+                currentAttr.insert(
+                            "active",
+                            QString(virDomainIsActive(
+                                        domains[i]) ? "active" : "inactive" ));
+                currentAttr.insert(
+                            "state", domainState);
+                currentAttr.insert(
+                            "auto", autostartStr);
+                currentAttr.insert(
+                            "persistent",
+                            QString( virDomainIsPersistent(
+                                     domains[i]) ? "yes" : "no" ));
+                domainList.append(currentAttr);
                 virDomainFree(domains[i]);
             };
-            free(domains);
+            if (domains) free(domains);
         };
         //result.name   = ;
         result.type   = VIRT_DOMAIN;
         //result.number = number;
         result.action = GET_ALL_ENTITY_STATE;
         result.result = true;
-        result.msg = domainList;
+        result.data = domainList;
         emit obj->domStateChanged(result);
     };
     return 0;
@@ -341,7 +348,7 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
     emit obj->connMsg(msg);
     if ( obj->onView ) {
         Result result;
-        QStringList virtNetList;
+        ACT_RESULT virtNetList;
         if ( _conn!=nullptr && obj->keep_alive ) {
             virNetworkPtr *networks = nullptr;
             unsigned int flags =
@@ -358,31 +365,38 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
             // therefore correctly to use for() command,
             // because networks[0] can not exist.
             for (int i = 0; i < ret; i++) {
-                QStringList currentAttr;
+                QVariantMap currentAttr;
                 QString autostartStr;
                 int is_autostart = 0;
                 if (virNetworkGetAutostart(networks[i], &is_autostart) < 0) {
                     autostartStr.append("no autostart");
                 } else autostartStr.append( is_autostart ? "yes" : "no" );
-                currentAttr<< QString().fromUtf8(
-                                  virNetworkGetName(networks[i]) )
-                           << QString( virNetworkIsActive(
-                                           networks[i]) ? "active" : "inactive" )
-                           << autostartStr
-                           << QString( virNetworkIsPersistent(
-                                           networks[i]) ? "yes" : "no" );
-                virtNetList.append(currentAttr.join(DFR));
+                currentAttr.insert(
+                            "name",
+                            QString::fromUtf8(
+                                  virNetworkGetName(networks[i]) ));
+                currentAttr.insert(
+                            "active",
+                            QString(virNetworkIsActive(
+                                        networks[i]) ? "active" : "inactive" ));
+                currentAttr.insert(
+                            "auto", autostartStr);
+                currentAttr.insert(
+                            "persistent",
+                            QString(virNetworkIsPersistent(
+                                         networks[i]) ? "yes" : "no" ));
+                virtNetList.append(currentAttr);
                 //qDebug()<<currentAttr;
                 virNetworkFree(networks[i]);
             };
-            free(networks);
+            if (networks) free(networks);
         };
         //result.name   = ;
         result.type   = VIRT_NETWORK;
         //result.number = number;
         result.action = GET_ALL_ENTITY_STATE;
         result.result = true;
-        result.msg = virtNetList;
+        result.data = virtNetList;
         emit obj->netStateChanged(result);
     };
     return 0;

@@ -63,7 +63,7 @@ void SecretControlThread::run()
 Result SecretControlThread::getAllSecretList()
 {
     Result result;
-    QStringList virtSecretList;
+    ACT_RESULT virtSecretList;
     if ( task.srcConnPtr!=nullptr && keep_alive ) {
         virSecretPtr *secrets = nullptr;
         //extra flags; not used yet, so callers should always pass 0
@@ -78,7 +78,7 @@ Result SecretControlThread::getAllSecretList()
         // therefore correctly to use for() command,
         // because secrets[0] can not exist.
         for (int i = 0; i < ret; i++) {
-            QStringList currentAttr;
+            QVariantMap currentAttr;
             char uuid[100];
             if ( 0>virSecretGetUUIDString(secrets[i], uuid) )
                 uuid[0] = '?';
@@ -110,11 +110,15 @@ Result SecretControlThread::getAllSecretList()
                     .firstChildElement("description").text();
             //size_t value_size;
             //unsigned char *value = virSecretGetValue(secrets[i], &value_size, 0);
-            currentAttr<< uuid\
-                       << QString::fromUtf8(usageID)\
-                       << desc\
-                       << type;
-            virtSecretList.append(currentAttr.join(DFR));
+            currentAttr.insert(
+                        "UUID", QString::fromUtf8(uuid));
+            currentAttr.insert(
+                        "UsageID", QString::fromUtf8(usageID));
+            currentAttr.insert(
+                        "desc", desc);
+            currentAttr.insert(
+                        "type", type);
+            virtSecretList.append(currentAttr);
             //qDebug() << currentAttr << value_size;
             //for (int k=0; k< value_size; k++) {
             //    if (value[k]=='\0') break;
@@ -126,7 +130,7 @@ Result SecretControlThread::getAllSecretList()
         if (secrets) free(secrets);
     };
     result.result = true;
-    result.msg = virtSecretList;
+    result.data   = virtSecretList;
     return result;
 }
 Result SecretControlThread::defineSecret()

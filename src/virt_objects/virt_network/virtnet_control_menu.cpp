@@ -1,26 +1,25 @@
 #include "virtnet_control_menu.h"
 
 VirtNetControlMenu::VirtNetControlMenu(
-        QWidget *parent,
-        QStringList params,
-        bool state) :
-    QMenu(parent),
-    parameters(params),
-    autoReloadState(state)
+        QWidget *parent, QVariantMap params, bool state) :
+    QMenu(parent), autoReloadState(state)
 {
-    if ( !parameters.isEmpty() ) {
+    if ( !params.isEmpty() ) {
+        active = params.value("active", false).toBool();
+        autostart = params.value("auto", false).toBool();
+        persistent = params.value("persistent", false).toBool();
         start = new QAction("Start", this);
         start->setIcon(QIcon::fromTheme("start"));
-        start->setEnabled(parameters.last()=="yes" && parameters[1]!="active" );
+        start->setEnabled( persistent && !active );
         destroy = new QAction("Destroy", this);
         destroy->setIcon(QIcon::fromTheme("destroy"));
-        destroy->setEnabled(parameters[1]=="active");
+        destroy->setEnabled(active);
         undefine = new QAction("Undefine", this);
         undefine->setIcon(QIcon::fromTheme("undefine"));
-        undefine->setEnabled(parameters.last()=="yes");
+        undefine->setEnabled(persistent);
         autoStart = new QAction("change AutoStart", this);
         autoStart->setIcon(QIcon::fromTheme("autostart"));
-        autoStart->setEnabled(parameters.last()=="yes");
+        autoStart->setEnabled(persistent);
         edit = new QAction("Edit", this);
         edit->setIcon(QIcon::fromTheme("configure"));
         edit->setVisible(true);
@@ -58,8 +57,7 @@ void VirtNetControlMenu::emitExecMethod(QAction *action)
         paramList.method = undefineEntity;
     } else if ( action == autoStart ) {
         paramList.method = setAutostartEntity;
-        paramList.path =
-              (QString((parameters[2]=="yes")? "0" : "1"));
+        paramList.path = (autostart)? "0" : "1";
     } else if ( action == edit ) {
         paramList.method = editEntity;
     } else if ( action == getXMLDesc ) {

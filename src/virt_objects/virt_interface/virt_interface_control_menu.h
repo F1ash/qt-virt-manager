@@ -4,7 +4,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QIcon>
-#include <QStringList>
+#include <QVariantMap>
 #include "virt_objects/virt_entity_enums.h"
 #include <QDebug>
 
@@ -14,7 +14,7 @@ class IfaceControlMenu : public QMenu
 public:
     explicit IfaceControlMenu(
             QWidget *parent    = nullptr,
-            QStringList params = QStringList(),
+            QVariantMap params = QVariantMap(),
             bool state         = false);
 
 signals:
@@ -22,6 +22,7 @@ signals:
 
 private:
     bool            autoReloadState;
+    bool            state, changing;
     QAction        *start = nullptr;
     QAction        *destroy = nullptr;
     QAction        *undefine = nullptr;
@@ -30,7 +31,6 @@ private:
     QAction        *changeRollback = nullptr;
     QAction        *getXMLDesc = nullptr;
     QAction        *reload = nullptr;
-    QStringList     parameters;
 
 private slots:
     void            emitExecMethod(QAction*);

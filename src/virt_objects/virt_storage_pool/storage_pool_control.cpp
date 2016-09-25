@@ -80,31 +80,39 @@ void VirtStoragePoolControl::resultReceiver(Result data)
     //qDebug()<<data.action<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);
-        if ( data.msg.count() > storagePoolModel->DataList.count() ) {
-            int _diff = data.msg.count() - storagePoolModel->DataList.count();
+        if ( data.data.count() > storagePoolModel->DataList.count() ) {
+            int _diff = data.data.count() - storagePoolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 storagePoolModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( storagePoolModel->DataList.count() > data.msg.count() ) {
-            int _diff = storagePoolModel->DataList.count() - data.msg.count();
+        if ( storagePoolModel->DataList.count() > data.data.count() ) {
+            int _diff = storagePoolModel->DataList.count() - data.data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 storagePoolModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QString _data, data.msg) {
-            QStringList chain = _data.split(DFR);
-            if (chain.isEmpty()) continue;
-            int count = chain.size();
-            for (int j=0; j<count; j++) {
-                storagePoolModel->setData(
-                            storagePoolModel->index(i,j),
-                            chain.at(j),
+        foreach (QVariantMap _data, data.data) {
+            if (_data.isEmpty()) continue;
+            storagePoolModel->setData(
+                            storagePoolModel->index(i, 0),
+                            _data.value("name", ""),
                             Qt::EditRole);
-            };
+            storagePoolModel->setData(
+                            storagePoolModel->index(i, 1),
+                            _data.value("active", false),
+                            Qt::EditRole);
+            storagePoolModel->setData(
+                            storagePoolModel->index(i, 2),
+                            _data.value("auto", false),
+                            Qt::EditRole);
+            storagePoolModel->setData(
+                            storagePoolModel->index(i, 3),
+                            _data.value("persistent", false),
+                            Qt::EditRole);
             i++;
         };
     } else if ( data.action == CREATE_ENTITY ) {
@@ -181,13 +189,21 @@ void VirtStoragePoolControl::entityClicked(const QPoint &p)
 {
     //qDebug()<<"custom Menu request";
     QModelIndex idx = entityList->indexAt(p);
-    QStringList params;
+    QVariantMap params;
     if ( idx.isValid() && storagePoolModel->DataList.count()>idx.row() ) {
         //qDebug()<<storagePoolModel->DataList.at(idx.row())->getName();
-        params<<storagePoolModel->DataList.at(idx.row())->getName();
-        params<<storagePoolModel->DataList.at(idx.row())->getState();
-        params<<storagePoolModel->DataList.at(idx.row())->getAutostart();
-        params<<storagePoolModel->DataList.at(idx.row())->getPersistent();
+        params.insert(
+                    "name",
+                    storagePoolModel->DataList.at(idx.row())->getName());
+        params.insert(
+                    "active",
+                    storagePoolModel->DataList.at(idx.row())->getState());
+        params.insert(
+                    "auto",
+                    storagePoolModel->DataList.at(idx.row())->getAutostart());
+        params.insert(
+                    "persistent",
+                    storagePoolModel->DataList.at(idx.row())->getPersistent());
     } else {
         entityList->clearSelection();
     };
@@ -234,7 +250,7 @@ void VirtStoragePoolControl::execAction(const Act_Param &param)
         } else if ( param.method==setAutostartEntity ) {
             /* set the opposite value */
             uint autostartState =
-                (storagePoolModel->DataList.at(idx.row())->getAutostart()=="yes")
+                (storagePoolModel->DataList.at(idx.row())->getAutostart())
                  ? 0 : 1;
             task.action     = CHANGE_ENTITY_AUTOSTART;
             task.args.sign  = autostartState;

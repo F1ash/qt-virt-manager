@@ -26,17 +26,17 @@ QVariant StoragePoolModel::data(const QModelIndex &index, int role) const
             res = defined;
             break;
         case 1:
-            if ( DataList.at(index.row())->getState()=="active" ) {
+            if ( DataList.at(index.row())->getState() ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
         case 2:
-            if ( DataList.at(index.row())->getAutostart()=="yes" ) {
+            if ( DataList.at(index.row())->getAutostart() ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;
         case 3:
-            if ( DataList.at(index.row())->getPersistent()=="yes" ) {
+            if ( DataList.at(index.row())->getPersistent() ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;

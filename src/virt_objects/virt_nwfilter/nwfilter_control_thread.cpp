@@ -64,7 +64,7 @@ void NWFilterControlThread::run()
 Result NWFilterControlThread::getAllNWFilterList()
 {
     Result result;
-    QStringList virtNWFilterList;
+    ACT_RESULT virtNWFilterList;
     if ( task.srcConnPtr!=nullptr && keep_alive ) {
         virNWFilterPtr *filters = nullptr;
         //extra flags; not used yet, so callers should always pass 0
@@ -79,20 +79,23 @@ Result NWFilterControlThread::getAllNWFilterList()
         // therefore correctly to use for() command,
         // because filters[0] can not exist.
         for (int i = 0; i < ret; i++) {
-            QStringList currentAttr;
+            QVariantMap currentAttr;
             char uuid[100];
             if ( 0>virNWFilterGetUUIDString(filters[i], uuid) )
                 uuid[0] = '?';
             const char* name = virNWFilterGetName(filters[i]);
 
-            currentAttr <<QString::fromUtf8(name) << uuid;
-            virtNWFilterList.append(currentAttr.join(DFR));
+            currentAttr.insert(
+                        "name", QString::fromUtf8(name));
+            currentAttr.insert(
+                        "UUID", uuid);
+            virtNWFilterList.append(currentAttr);
             virNWFilterFree(filters[i]);
         };
         if (filters) free(filters);
     };
     result.result = true;
-    result.msg = virtNWFilterList;
+    result.data   = virtNWFilterList;
     return result;
 }
 Result NWFilterControlThread::defineNWFilter()
