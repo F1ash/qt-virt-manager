@@ -263,11 +263,8 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
             // because domains[0] can not exist.
             for (int i = 0; i < ret; i++) {
                 QVariantMap currentAttr;
-                QString autostartStr;
                 int is_autostart = 0;
-                if (virDomainGetAutostart(domains[i], &is_autostart) < 0) {
-                    autostartStr.append("no autostart");
-                } else autostartStr.append( is_autostart ? "yes" : "no" );
+                virDomainGetAutostart(domains[i], &is_autostart);
                 int state;
                 int reason;
                 // flags : extra flags; not used yet,
@@ -310,16 +307,14 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
                             QString::fromUtf8( virDomainGetName(domains[i]) ));
                 currentAttr.insert(
                             "active",
-                            QString(virDomainIsActive(
-                                        domains[i]) ? "active" : "inactive" ));
+                            (virDomainIsActive(domains[i]))? true : false );
                 currentAttr.insert(
                             "state", domainState);
                 currentAttr.insert(
-                            "auto", autostartStr);
+                            "auto", (is_autostart) ? true : false);
                 currentAttr.insert(
                             "persistent",
-                            QString( virDomainIsPersistent(
-                                     domains[i]) ? "yes" : "no" ));
+                            (virDomainIsPersistent(domains[i]))? true : false );
                 domainList.append(currentAttr);
                 virDomainFree(domains[i]);
             };
@@ -366,25 +361,21 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
             // because networks[0] can not exist.
             for (int i = 0; i < ret; i++) {
                 QVariantMap currentAttr;
-                QString autostartStr;
                 int is_autostart = 0;
-                if (virNetworkGetAutostart(networks[i], &is_autostart) < 0) {
-                    autostartStr.append("no autostart");
-                } else autostartStr.append( is_autostart ? "yes" : "no" );
+                virNetworkGetAutostart(networks[i], &is_autostart);
                 currentAttr.insert(
                             "name",
-                            QString::fromUtf8(
-                                  virNetworkGetName(networks[i]) ));
+                            QString::fromUtf8( virNetworkGetName(networks[i]) ));
                 currentAttr.insert(
                             "active",
-                            QString(virNetworkIsActive(
-                                        networks[i]) ? "active" : "inactive" ));
+                            (virNetworkIsActive(networks[i]))
+                            ? true : false );
                 currentAttr.insert(
-                            "auto", autostartStr);
+                            "auto", (is_autostart)? true : false);
                 currentAttr.insert(
                             "persistent",
-                            QString(virNetworkIsPersistent(
-                                         networks[i]) ? "yes" : "no" ));
+                            (virNetworkIsPersistent(networks[i]))
+                            ? true : false );
                 virtNetList.append(currentAttr);
                 //qDebug()<<currentAttr;
                 virNetworkFree(networks[i]);
