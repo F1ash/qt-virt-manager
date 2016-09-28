@@ -14,7 +14,6 @@ signals:
 private:
 
 public slots:
-    void                  stop();
     void                  execAction(uint, TASK);
 
 private slots:

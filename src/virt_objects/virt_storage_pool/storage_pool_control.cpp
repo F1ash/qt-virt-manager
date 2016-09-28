@@ -79,7 +79,6 @@ void VirtStoragePoolControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
-        entityList->setEnabled(true);
         if ( data.data.count() > storagePoolModel->DataList.count() ) {
             int _diff = data.data.count() - storagePoolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -115,6 +114,8 @@ void VirtStoragePoolControl::resultReceiver(Result data)
                             Qt::EditRole);
             i++;
         };
+        entityList->setEnabled(true);
+        emit entityListUpdated();
     } else if ( data.action == CREATE_ENTITY ) {
         if ( !data.msg.isEmpty() ) {
             QString msg = data.msg.join(" ");

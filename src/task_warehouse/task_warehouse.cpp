@@ -129,6 +129,8 @@ void TaskWareHouse::addNewTask(TASK task)
         connect(cThread, SIGNAL(resultData(Result)),
                 this, SLOT(taskResultReceiver(Result)));
         cThread->execAction(counter, task);
+    } else {
+        threadPool->remove(_number);
     };
 }
 
@@ -181,9 +183,9 @@ void TaskWareHouse::taskResultReceiver(Result data)
         //cThread->deleteLater();
         delete cThread;
         cThread = nullptr;
-        int deleted = threadPool->remove(_number);
-        //qDebug()<<_number<<"deleted:"<<deleted;
     };
+    int deleted = threadPool->remove(_number);
+    //qDebug()<<_number<<"deleted:"<<deleted;
     if ( !correctly ) return;
     QString stateIcon;
     if ( data.result ) {
@@ -198,7 +200,7 @@ void TaskWareHouse::taskResultReceiver(Result data)
     if ( _list.count()>0 ) {
         _list.at(0)->setIcon(QIcon::fromTheme(stateIcon));
         // set result data to taskList item
-        QMap<QString, QVariant> _data = _list.at(0)->data(Qt::UserRole).toMap();
+        QVariantMap _data = _list.at(0)->data(Qt::UserRole).toMap();
         QTime _time = QTime::currentTime();
         _data.insert("End", QString("%1:%2:%3:%4")
                      .arg(QString("").sprintf("%02d", _time.hour()))

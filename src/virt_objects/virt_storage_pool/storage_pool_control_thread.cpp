@@ -7,7 +7,6 @@ StoragePoolControlThread::StoragePoolControlThread(QObject *parent) :
 }
 
 /* public slots */
-void StoragePoolControlThread::stop() { keep_alive = false; }
 void StoragePoolControlThread::execAction(uint _num, TASK _task)
 {
     number = _num;

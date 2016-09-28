@@ -50,7 +50,11 @@ void VirtInterfaceControl::stopProcessing()
     while ( virtIfaceModel->DataList.count() ) {
         virtIfaceModel->removeRow(0);
     };
-    virtIfaceModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
+    virtIfaceModel->setHeaderData(
+                0,
+                Qt::Horizontal,
+                QString("Name"),
+                Qt::EditRole);
 
 }
 bool VirtInterfaceControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
@@ -75,7 +79,6 @@ void VirtInterfaceControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.msg<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
-        entityList->setEnabled(true);
         if ( data.data.count() > virtIfaceModel->DataList.count() ) {
             int _diff = data.data.count() - virtIfaceModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -111,6 +114,8 @@ void VirtInterfaceControl::resultReceiver(Result data)
                             Qt::EditRole);
             i++;
         };
+        entityList->setEnabled(true);
+        emit entityListUpdated();
     } else if ( data.action == GET_XML_DESCRIPTION ) {
         QString xml = data.fileName;
         data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));

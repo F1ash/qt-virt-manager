@@ -45,7 +45,10 @@ void VirtSecretControl::stopProcessing()
         virtSecretModel->removeRow(0);
     };
     virtSecretModel->setHeaderData(
-                0, Qt::Horizontal, QString("UUID"), Qt::EditRole);
+                0,
+                Qt::Horizontal,
+                QString("UUID"),
+                Qt::EditRole);
 
 }
 bool VirtSecretControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
@@ -88,7 +91,6 @@ void VirtSecretControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.name<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
-        entityList->setEnabled(true);
         if ( data.data.count() > virtSecretModel->DataList.count() ) {
             int _diff = data.data.count() - virtSecretModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -124,6 +126,8 @@ void VirtSecretControl::resultReceiver(Result data)
                             Qt::ToolTipRole);
             i++;
         };
+        entityList->setEnabled(true);
+        emit entityListUpdated();
     } else if ( data.action == GET_XML_DESCRIPTION ) {
         QString xml = data.fileName;
         data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));

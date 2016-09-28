@@ -2,7 +2,6 @@
 #define LXC_VIEWER_THREAD_H
 
 #include "virt_objects/control_thread.h"
-#include <unistd.h>
 
 class LXC_ViewerThread : public ControlThread
 {

@@ -66,7 +66,11 @@ void VirtStorageVolControl::stopProcessing()
     while ( storageVolModel->DataList.count() ) {
         storageVolModel->removeRow(0);
     };
-    storageVolModel->setHeaderData(0, Qt::Horizontal, QString("Name"), Qt::EditRole);
+    storageVolModel->setHeaderData(
+                0,
+                Qt::Horizontal,
+                QString("Name"),
+                Qt::EditRole);
 }
 bool VirtStorageVolControl::setCurrentStoragePool(
         virConnectPtr *connPtrPtr, const QString &connName, const QString &poolName)

@@ -462,6 +462,7 @@ void MainWindow::initDockWidgets()
     connect(logDockContent, SIGNAL(overflow(bool)),
             trayIcon, SLOT(changeWarningState(bool)));
 
+    // Control #1
     domainDock = new DockWidget(this);
     domainDock->setObjectName("domainDock");
     domainDock->setWindowTitle("Domain");
@@ -495,7 +496,10 @@ void MainWindow::initDockWidgets()
             domainDockContent, SLOT(resultReceiver(Result)));
     connect(domainDockContent, SIGNAL(domainToEditor(TASK)),
             this, SLOT(invokeDomainEditor(TASK)));
+    connect(domainDockContent, SIGNAL(entityListUpdated()),
+            this, SLOT(entityControlUpdated()));
 
+    // Control #2
     networkDock = new DockWidget(this);
     networkDock->setObjectName("networkDock");
     networkDock->setWindowTitle("Network");
@@ -521,7 +525,10 @@ void MainWindow::initDockWidgets()
             networkDockContent, SLOT(resultReceiver(Result)));
     connect(networkDockContent, SIGNAL(networkToEditor(TASK)),
             this, SLOT(invokeNetworkEditor(TASK)));
+    connect(networkDockContent, SIGNAL(entityListUpdated()),
+            this, SLOT(entityControlUpdated()));
 
+    // Control #3
     storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
     storagePoolDock->setWindowTitle("StoragePool");
@@ -546,7 +553,10 @@ void MainWindow::initDockWidgets()
             SIGNAL(overviewStPool(virConnectPtr*, const QString&, const QString&)),
             this,
             SLOT(overviewStoragePool(virConnectPtr*, const QString&, const QString&)));
+    connect(storagePoolDockContent, SIGNAL(entityListUpdated()),
+            this, SLOT(entityControlUpdated()));
 
+    // Control #4
     secretDock = new DockWidget(this);
     secretDock->setObjectName("secretDock");
     secretDock->setWindowTitle("Secret");
@@ -567,7 +577,10 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(secResult(Result)),
             secretDockContent, SLOT(resultReceiver(Result)));
+    connect(secretDockContent, SIGNAL(entityListUpdated()),
+            this, SLOT(entityControlUpdated()));
 
+    // Control #5
     ifaceDock = new DockWidget(this);
     ifaceDock->setObjectName("ifaceDock");
     ifaceDock->setWindowTitle("Interface");
@@ -588,7 +601,10 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK)));
     connect(taskWrHouse, SIGNAL(ifaceResult(Result)),
             ifaceDockContent, SLOT(resultReceiver(Result)));
+    connect(ifaceDockContent, SIGNAL(entityListUpdated()),
+            this, SLOT(entityControlUpdated()));
 
+    // Control #6
     nwfilterDock = new DockWidget(this);
     nwfilterDock->setObjectName("nwfilterDock");
     nwfilterDock->setWindowTitle("NWFilter");
@@ -611,6 +627,8 @@ void MainWindow::initDockWidgets()
             nwfilterDockContent, SLOT(resultReceiver(Result)));
     connect(nwfilterDockContent, SIGNAL(nwfilterToEditor(TASK)),
             this, SLOT(invokeNWFilterEditor(TASK)));
+    connect(nwfilterDockContent, SIGNAL(entityListUpdated()),
+            this, SLOT(entityControlUpdated()));
 
     domainDockContent->setEnabled(false);
     networkDockContent->setEnabled(false);
@@ -883,6 +901,9 @@ Qt::DockWidgetArea MainWindow::getDockArea(int i) const
 }
 void MainWindow::receiveConnPtrPtr(virConnectPtr *_connPtrPtr, const QString &name)
 {
+    // begin update entities list in Controls;
+    entityControlIsUpdated = 0;
+    connListWidget->setEnabled(false);
     //qDebug()<<"receiveConnPtrPtr:"<<(*_connPtrPtr);
     // send connect ptr to all related virtual resources for operating
     if ( domainDockContent->setCurrentWorkConnect(_connPtrPtr) )
@@ -897,6 +918,33 @@ void MainWindow::receiveConnPtrPtr(virConnectPtr *_connPtrPtr, const QString &na
         ifaceDockContent->setListHeader(name);
     if ( nwfilterDockContent->setCurrentWorkConnect(_connPtrPtr) )
         nwfilterDockContent->setListHeader(name);
+}
+void MainWindow::entityControlUpdated()
+{
+    //QTextStream s(stdout);
+    if        ( sender()==domainDockContent ) {
+        entityControlIsUpdated |= 1;
+        //s<<"domainDockContent "<<entityControlIsUpdated<<endl;
+    } else if ( sender()==networkDockContent ) {
+        entityControlIsUpdated |= 2;
+        //s<<"networkDockContent "<<entityControlIsUpdated<<endl;
+    } else if ( sender()==storagePoolDockContent ) {
+        entityControlIsUpdated |= 4;
+        //s<<"storagePoolDockContent "<<entityControlIsUpdated<<endl;
+    } else if ( sender()==secretDockContent ) {
+        entityControlIsUpdated |= 8;
+        //s<<"secretDockContent "<<entityControlIsUpdated<<endl;
+    } else if ( sender()==ifaceDockContent ) {
+        entityControlIsUpdated |= 16;
+        //s<<"ifaceDockContent "<<entityControlIsUpdated<<endl;
+    } else if ( sender()==nwfilterDockContent ) {
+        entityControlIsUpdated |= 32;
+        //s<<"nwfilterDockContent "<<entityControlIsUpdated<<endl;
+    };
+    // if all Controls updated, then enable connection list widget
+    // 63(10)=111111(2) -- we have six control widgets
+    if ( entityControlIsUpdated==63 )
+        connListWidget->setEnabled(true);
 }
 void MainWindow::stopConnProcessing(bool onView, const QString &_connName)
 {

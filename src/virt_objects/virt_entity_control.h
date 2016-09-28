@@ -37,6 +37,7 @@ signals:
     void                     entityMsg(const QString&);
     void                     addNewTask(TASK);
     void                     ptrIsNull();
+    void                     entityListUpdated();
 
 public slots:
     void                     msgRepeater(const QString&);

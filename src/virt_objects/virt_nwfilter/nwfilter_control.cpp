@@ -47,7 +47,10 @@ void VirtNWFilterControl::stopProcessing()
         virtNWFilterModel->removeRow(0);
     };
     virtNWFilterModel->setHeaderData(
-                0, Qt::Horizontal, QString("Name"), Qt::EditRole);
+                0,
+                Qt::Horizontal,
+                QString("Name"),
+                Qt::EditRole);
 
 }
 bool VirtNWFilterControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
@@ -84,7 +87,6 @@ void VirtNWFilterControl::resultReceiver(Result data)
 {
     //qDebug()<<data.action<<data.name<<"result";
     if ( data.action == GET_ALL_ENTITY_STATE ) {
-        entityList->setEnabled(true);
         if ( data.data.count() > virtNWFilterModel->DataList.count() ) {
             int _diff = data.data.count() - virtNWFilterModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -112,6 +114,8 @@ void VirtNWFilterControl::resultReceiver(Result data)
                             Qt::EditRole);
             i++;
         };
+        entityList->setEnabled(true);
+        emit entityListUpdated();
     } else if ( data.action == GET_XML_DESCRIPTION ) {
         QString xml = data.fileName;
         data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));

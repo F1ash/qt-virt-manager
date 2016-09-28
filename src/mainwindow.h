@@ -97,6 +97,7 @@ private :
     NWFilterEditorMap            NWFilterEditor_Map;
 
     VirtEventLoop               *virtEventLoop;
+    uint                         entityControlIsUpdated = 0;
 
 private slots:
     void saveSettings();
@@ -135,6 +136,7 @@ private slots:
     void writeToErrorLog(const QString&, const uint);
     Qt::DockWidgetArea getDockArea(int) const;
     void receiveConnPtrPtr(virConnectPtr*, const QString&);
+    void entityControlUpdated();
     void stopConnProcessing(bool, const QString&);
     void stopProcessing();
     void invokeVMDisplay(TASK);
