@@ -143,3 +143,8 @@ implemented (external) Remote Desktop Viewer;
 fixed paste client clipboard to guest clipboard in VM_Viewer;
 structure refactoring;
 fixes for stability and enhancement;
+
+0.37.56 :
+fised LXC display;
+some improvements for actions atomization
+    and stability;
