@@ -94,6 +94,9 @@ QVariant StorageVolModel::headerData(int section, Qt::Orientation orientation, i
 QVariant StorageVolModel::data(const QModelIndex &index, int role) const
 {
     QVariant res;
+    if ( DataList.count()<=index.row() ) {
+        return res;
+    };
     if ( role==Qt::DisplayRole ) {
         switch (index.column()) {
         case 0:
@@ -159,23 +162,27 @@ bool StorageVolModel::setData( const QModelIndex &index, const QVariant &value, 
         //qDebug()<<"index not valid";
         return false;
     };
+    int editedRow = index.row();
+    if ( DataList.count()<=editedRow ) {
+        return false;
+    };
 
     if ( role == Qt::EditRole ) {
         switch( index.column() ) {
         case 0:
-            DataList.at(index.row())->setName ( value.toString() );
+            DataList.at(editedRow)->setName ( value.toString() );
             break;
         case 1:
-            DataList.at(index.row())->setPath ( value.toString() );
+            DataList.at(editedRow)->setPath ( value.toString() );
             break;
         case 2:
-            DataList.at(index.row())->setType ( value.toString() );
+            DataList.at(editedRow)->setType ( value.toString() );
             break;
         case 3:
-            DataList.at(index.row())->setCurrSize ( value.toString() );
+            DataList.at(editedRow)->setCurrSize ( value.toString() );
             break;
         case 4:
-            DataList.at(index.row())->setLogicSize ( value.toString() );
+            DataList.at(editedRow)->setLogicSize ( value.toString() );
             break;
         default:
             break;

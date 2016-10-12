@@ -10,6 +10,9 @@ StoragePoolModel::StoragePoolModel(QObject *parent) :
 QVariant StoragePoolModel::data(const QModelIndex &index, int role) const
 {
     QVariant res;
+    if ( DataList.count()<=index.row() ) {
+        return res;
+    };
     if ( role==Qt::DisplayRole && index.column()==0 ) {
         return DataList.at(index.row())->getName();
     };

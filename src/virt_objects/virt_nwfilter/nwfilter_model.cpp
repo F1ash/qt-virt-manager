@@ -76,6 +76,9 @@ QVariant VirtNWFilterModel::headerData(int section, Qt::Orientation orientation,
 QVariant VirtNWFilterModel::data(const QModelIndex &index, int role) const
 {
     QVariant res;
+    if ( DataList.count()<=index.row() ) {
+        return res;
+    };
     if ( !index.isValid() ) return res;
     if ( role==Qt::DisplayRole ) {
         switch (index.column()) {
@@ -113,14 +116,18 @@ bool VirtNWFilterModel::setData( const QModelIndex &index, const QVariant &value
         //qDebug()<<"index not valid";
         return false;
     };
+    int editedRow = index.row();
+    if ( DataList.count()<=editedRow ) {
+        return false;
+    };
 
     if ( role == Qt::EditRole ) {
         switch( index.column() ) {
         case 0:
-            DataList.at(index.row())->setName( value.toString() );
+            DataList.at(editedRow)->setName( value.toString() );
             break;
         case 1:
-            DataList.at(index.row())->setUUID( value.toString() );
+            DataList.at(editedRow)->setUUID( value.toString() );
             break;
         default:
             break;

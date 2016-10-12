@@ -93,6 +93,9 @@ QVariant VirtIfaceModel::headerData(int section, Qt::Orientation orientation, in
 QVariant VirtIfaceModel::data(const QModelIndex &index, int role) const
 {
     QVariant res;
+    if ( DataList.count()<=index.row() ) {
+        return res;
+    };
     if ( role==Qt::DisplayRole ) {
         switch (index.column()) {
         case 0:
@@ -153,21 +156,25 @@ bool VirtIfaceModel::setData( const QModelIndex &index, const QVariant &value, i
         //qDebug()<<"index not valid";
         return false;
     };
+    int editedRow = index.row();
+    if ( DataList.count()<=editedRow ) {
+        return false;
+    };
 
     if ( role == Qt::EditRole ) {
         switch( index.column() ) {
         case 0:
-            DataList.at(index.row())->setName( value.toString() );
+            DataList.at(editedRow)->setName( value.toString() );
             break;
         case 1:
-            DataList.at(index.row())->setMAC( value.toString() );
+            DataList.at(editedRow)->setMAC( value.toString() );
             break;
         case 2:
-            DataList.at(index.row())->setState( value.toBool() );
+            DataList.at(editedRow)->setState( value.toBool() );
             break;
         case 3:
             if ( value.toBool() )
-                DataList.at(index.row())->setChanging( value.toBool() );
+                DataList.at(editedRow)->setChanging( value.toBool() );
             break;
         default:
             break;

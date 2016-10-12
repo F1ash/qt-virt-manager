@@ -91,6 +91,9 @@ QVariant Model::headerData(int section, Qt::Orientation orientation, int role) c
 QVariant Model::data(const QModelIndex &index, int role) const
 {
     QVariant res;
+    if ( DataList.count()<=index.row() ) {
+        return res;
+    };
     if ( role==Qt::DisplayRole && index.column()==0 ) {
         return DataList.at(index.row())->getName();
     };
@@ -145,20 +148,24 @@ bool Model::setData( const QModelIndex &index, const QVariant &value, int role =
         //qDebug()<<"index not valid";
         return false;
     };
+    int editedRow = index.row();
+    if ( DataList.count()<=editedRow ) {
+        return false;
+    };
 
     if ( role == Qt::EditRole ) {
         switch( index.column() ) {
         case 0:
-            DataList.at(index.row())->setName ( value.toString() );
+            DataList.at(editedRow)->setName ( value.toString() );
             break;
         case 1:
-            DataList.at(index.row())->setState ( value.toBool() );
+            DataList.at(editedRow)->setState ( value.toBool() );
             break;
         case 2:
-            DataList.at(index.row())->setAutostart ( value.toBool() );
+            DataList.at(editedRow)->setAutostart ( value.toBool() );
             break;
         case 3:
-            DataList.at(index.row())->setPersistent ( value.toBool() );
+            DataList.at(editedRow)->setPersistent ( value.toBool() );
             break;
         default:
             break;

@@ -76,6 +76,9 @@ QVariant VirtSecretModel::headerData(int section, Qt::Orientation orientation, i
 QVariant VirtSecretModel::data(const QModelIndex &index, int role) const
 {
     QVariant res;
+    if ( DataList.count()<=index.row() ) {
+        return res;
+    };
     if ( !index.isValid() ) return res;
     if ( role==Qt::DisplayRole ) {
         switch (index.column()) {
@@ -119,14 +122,18 @@ bool VirtSecretModel::setData( const QModelIndex &index, const QVariant &value, 
         //qDebug()<<"index not valid";
         return false;
     };
+    int editedRow = index.row();
+    if ( DataList.count()<=editedRow ) {
+        return false;
+    };
 
     if ( role==Qt::EditRole ) {
         switch( index.column() ) {
         case 0:
-            DataList.at(index.row())->setUUID( value.toString() );
+            DataList.at(editedRow)->setUUID( value.toString() );
             break;
         case 1:
-            DataList.at(index.row())->setUsageID( value.toString() );
+            DataList.at(editedRow)->setUsageID( value.toString() );
             break;
         default:
             break;
@@ -135,10 +142,10 @@ bool VirtSecretModel::setData( const QModelIndex &index, const QVariant &value, 
     if ( role==Qt::ToolTipRole ) {
         switch (index.column()) {
         case 0:
-            DataList.at(index.row())->setDescription( value.toString() );
+            DataList.at(editedRow)->setDescription( value.toString() );
             break;
         case 1:
-            DataList.at(index.row())->setType( value.toString() );
+            DataList.at(editedRow)->setType( value.toString() );
             break;
         default:
             break;

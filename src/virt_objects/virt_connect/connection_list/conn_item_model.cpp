@@ -77,6 +77,9 @@ QVariant ConnItemModel::headerData(int section, Qt::Orientation orientation, int
 QVariant ConnItemModel::data(const QModelIndex &index, int role) const
 {
     QVariant res;
+    if ( connItemDataList.count()<=index.row() ) {
+        return res;
+    };
     QString _name  = connItemDataList.at(index.row())->getName();
     QString _uri   = connItemDataList.at(index.row())->getURI();
     QString _state = connItemDataList.at(index.row())->getState();
@@ -181,8 +184,11 @@ bool ConnItemModel::setData( const QModelIndex &index, const QVariant &value, in
         //qDebug()<<"index not valid";
         return false;
     };
-
     int editedRow = index.row();
+    if ( connItemDataList.count()<=editedRow ) {
+        return false;
+    };
+
     if ( role == Qt::EditRole ) {
         QString val = value.toString();
         switch( index.column() ) {
