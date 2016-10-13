@@ -223,7 +223,7 @@ void CreateVirtNWFilter::set_Result()
     this->setEnabled(false);
     if ( sender()==ok ) {
         buildXMLDescription();
-        emit addNewTask(task);
+        emit addNewTask(&task);
     };
     close();
 }

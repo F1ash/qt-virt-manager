@@ -114,25 +114,25 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
     task.method     = params.method;
     if        ( params.method==startEntity ) {
         task.action     = START_ENTITY;
-        emit addNewTask(task);
+        emit addNewTask(&task);
     } else if ( params.method==pauseEntity ) {
         task.action     = PAUSE_ENTITY;
-        emit addNewTask(task);
+        emit addNewTask(&task);
     } else if ( params.method==destroyEntity ) {
         task.action     = DESTROY_ENTITY;
-        emit addNewTask(task);
+        emit addNewTask(&task);
     } else if ( params.method==resetVirtDomain ) {
         task.action     = RESET_ENTITY;
-        emit addNewTask(task);
+        emit addNewTask(&task);
     } else if ( params.method==shutdownVirtDomain ) {
         task.action     = SHUTDOWN_ENTITY;
-        emit addNewTask(task);
+        emit addNewTask(&task);
     } else if ( params.method==saveVirtDomain ) {
         QString to = QFileDialog::getSaveFileName(this, "Save to", "~");
         if ( !to.isEmpty() ) {
             task.action     = SAVE_ENTITY;
             task.args.path  = to;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         };
     } else if ( params.method==restoreVirtDomain ) {
         QString from =
@@ -141,7 +141,7 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
         if ( !from.isEmpty() ) {
             task.action     = RESTORE_ENTITY;
             task.args.path  = from;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         };
     } else if ( params.method==createVirtDomainSnapshot ) {
         //qDebug()<<"createVirtDomainSnapshot";
@@ -158,7 +158,7 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
             task.action      = CREATE_DOMAIN_SNAPSHOT;
             task.args.object = _dialog->getSnapshotXMLDesc();
             task.args.sign   = _dialog->getSnapshotFlags();
-            emit addNewTask(task);
+            emit addNewTask(&task);
         };
     } else if ( params.method==moreSnapshotActions ) {
         //qDebug()<<"moreSnapshotActions";
@@ -179,7 +179,7 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
             task.method      = method;
             task.args.object = params.path;
             task.args.sign   = _dialog->getSnapshotFlags();
-            emit addNewTask(task);
+            emit addNewTask(&task);
         };
     } else if ( params.method==reconnectToVirtDomainMethod ) {
         reconnectToVirtDomain();

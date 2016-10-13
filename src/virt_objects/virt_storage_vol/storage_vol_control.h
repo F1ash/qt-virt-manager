@@ -20,7 +20,7 @@ public:
 
 signals:
     void                finished(const QString&);
-    void                volumeToEditor(TASK);
+    void                volumeToEditor(TASK*);
 
 private:
     QString             currPoolName;
@@ -30,7 +30,7 @@ private:
 public slots:
     void                stopProcessing();
     bool                setCurrentStoragePool(virConnectPtr*, const QString&, const QString&);
-    void                resultReceiver(Result);
+    void                resultReceiver(Result*);
     void                closeEvent(QCloseEvent*);
 
 private slots:

@@ -90,13 +90,13 @@ bool VirtStorageVolControl::setCurrentStoragePool(
     reloadState();
     return true;
 }
-void VirtStorageVolControl::resultReceiver(Result data)
+void VirtStorageVolControl::resultReceiver(Result *data)
 {
-    if ( data.name!=objectName() ) return;
+    if ( data->name!=objectName() ) return;
     //qDebug()<<data.msg<<"result";
-    if ( data.action == GET_ALL_ENTITY_STATE ) {
+    if ( data->action == GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);
-        int chains = data.data.count();
+        int chains = data->data.count();
         if ( chains > storageVolModel->DataList.count() ) {
             int _diff = chains - storageVolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -112,7 +112,7 @@ void VirtStorageVolControl::resultReceiver(Result data)
             };
         };
         int i = 0;
-        foreach (QVariantMap _data, data.data) {
+        foreach (QVariantMap _data, data->data) {
             if (_data.isEmpty()) continue;
             storageVolModel->setData(
                         storageVolModel->index(i, 0),
@@ -136,45 +136,45 @@ void VirtStorageVolControl::resultReceiver(Result data)
                         Qt::EditRole);
             i++;
         };
-    } else if ( data.action == CREATE_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == CREATE_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data.action == DELETE_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == DELETE_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data.action == DOWNLOAD_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == DOWNLOAD_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
         };
-    } else if ( data.action == UPLOAD_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == UPLOAD_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
         };
-    } else if ( data.action == RESIZE_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == RESIZE_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data.action == WIPE_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == WIPE_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
         };
-    } else if ( data.action == GET_XML_DESCRIPTION ) {
-        QString xml = data.fileName;
-        data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
-        QString msg = data.msg.join(" ");
+    } else if ( data->action == GET_XML_DESCRIPTION ) {
+        QString xml = data->fileName;
+        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        QString msg = data->msg.join(" ");
         msgRepeater(msg);
-        if ( data.result )
+        if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
     };
 }
@@ -201,7 +201,7 @@ void VirtStorageVolControl::reloadState()
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = reloadEntity;
     task.args.object= currPoolName;
-    emit addNewTask(task);
+    emit addNewTask(&task);
 }
 void VirtStorageVolControl::changeDockVisibility()
 {
@@ -257,7 +257,7 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
             reloadState();
         } else if ( param.method==deleteEntity ) {
             task.action     = DELETE_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==downloadVirtStorageVol ) {
             QString path =
                     QFileDialog::getSaveFileName(
@@ -267,7 +267,7 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
                 task.args.path  = path;
                 //task.args.size  = storageVolModel->DataList
                 //        .at(idx.row())->getCurrSize().toULongLong();
-                emit addNewTask(task);
+                emit addNewTask(&task);
             } else return;
         } else if ( param.method==resizeVirtStorageVol ) {
             ResizeDialog *resizeDialog = new ResizeDialog(
@@ -284,7 +284,7 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
                 return;
             };
             task.action     = RESIZE_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==uploadVirtStorageVol ) {
             QString path =
                     QFileDialog::getOpenFileName(
@@ -292,15 +292,15 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
             if ( !path.isEmpty() ) {
                 task.action     = UPLOAD_ENTITY;
                 task.args.path  = path;
-                emit addNewTask(task);
+                emit addNewTask(&task);
             } else return;
         } else if ( param.method==wipeVirtStorageVol ) {
             task.action     = WIPE_ENTITY;
             task.args.sign  = param.path.toUInt();
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==getEntityXMLDesc ) {
             task.action     = GET_XML_DESCRIPTION;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         };
     } else if ( param.method==reloadEntity ) {
         reloadState();
@@ -322,9 +322,9 @@ void VirtStorageVolControl::newVirtEntityFromXML(const Act_Param &args)
     task.action     = args.act;
     task.args.path  = args.path;
     if ( args.context==DO_AsIs ) {
-        emit addNewTask(task);
+        emit addNewTask(&task);
     } else if ( args.context==DO_Edit ) {
-        emit volumeToEditor(task);
+        emit volumeToEditor(&task);
     } else {
         QString path;
         bool show = false;
@@ -343,6 +343,6 @@ void VirtStorageVolControl::newVirtEntityFromXML(const Act_Param &args)
         if ( result==QDialog::Rejected ) return;
         task.args.path = path;
         if ( show ) QDesktopServices::openUrl(QUrl(path));
-        emit addNewTask(task);
+        emit addNewTask(&task);
     };
 }

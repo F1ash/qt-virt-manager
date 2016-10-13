@@ -331,7 +331,7 @@ void CreateVirtDomain::set_Result()
         // if ( showDescription->isChecked() )
         //     QDesktopServices::openUrl(QUrl(_xml));
         task.args.path = _xml;
-        emit addNewTask(task);
+        emit addNewTask(&task);
     };
     close();
 }

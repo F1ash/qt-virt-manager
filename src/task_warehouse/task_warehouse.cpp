@@ -56,67 +56,67 @@ void TaskWareHouse::stopTaskComputing()
 {
     blockSignals(true);
 }
-void TaskWareHouse::addNewTask(TASK task)
+void TaskWareHouse::addNewTask(TASK *task)
 {
-    //qDebug()<<task.srcConnPtr<<task.srcConName<<task.action
-    //      <<task.method<<task.object<<task.args.list()
-    //      <<task.args.destConnPtr<<task.type<<"addNewTask_TASK";
+    //qDebug()<<task->srcConnPtr<<task->srcConName<<task->action
+    //      <<task->method<<task->object<<task->args.list()
+    //      <<task->args.destConnPtr<<task->type<<"addNewTask_TASK";
     //
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
-    if ( task.method!=reloadEntity && task.method!=editEntity ) {
+    if ( task->method!=reloadEntity && task->method!=editEntity ) {
         QString _name = QString("%5 %1 %2 <%3> in <%4>")
                 .arg(_number)
-                .arg( enumToMethodString(task.method) )
-                .arg(task.object)
-                .arg(task.srcConName)
+                .arg( enumToMethodString(task->method) )
+                .arg(task->object)
+                .arg(task->srcConName)
                 .arg(QChar(0x273B));
         QListWidgetItem *_item = new QListWidgetItem();
         _item->setText(_name);
         _item->setIcon(QIcon::fromTheme("ledlightgreen"));
         QTime _time = QTime::currentTime();
         QMap<QString, QVariant> itemData;
-        itemData.insert("Connection", task.srcConName);
-        itemData.insert("Object", task.object);
-        itemData.insert("Action", enumToMethodString(task.method));
+        itemData.insert("Connection", task->srcConName);
+        itemData.insert("Object", task->object);
+        itemData.insert("Action", enumToMethodString(task->method));
         itemData.insert("Start", QString("%1:%2:%3:%4")
                         .arg(QString("").sprintf("%02d", _time.hour()))
                         .arg(QString("").sprintf("%02d", _time.minute()))
                         .arg(QString("").sprintf("%02d", _time.second()))
                         .arg(QString("").sprintf("%03d", _time.msec())));
         itemData.insert("End", "-");
-        itemData.insert("Arguments", task.args.list());
+        itemData.insert("Arguments", task->args.list());
         itemData.insert("Result", "Processing");
         itemData.insert("Message", "-");
         _item->setData(Qt::UserRole, itemData);
         setNewTooltip(_item);
         taskList->addItem(_item);
     };
-    if        ( task.type == VIRT_DOMAIN ) {
+    if        ( task->type == VIRT_DOMAIN ) {
         threadPool->insert(
                     _number,
                     new DomControlThread(this));
-    } else if ( task.type == VIRT_NETWORK ) {
+    } else if ( task->type == VIRT_NETWORK ) {
         threadPool->insert(
                     _number,
                     new NetControlThread(this));
-    } else if ( task.type == VIRT_STORAGE_POOL ) {
+    } else if ( task->type == VIRT_STORAGE_POOL ) {
         threadPool->insert(
                     _number,
                     new StoragePoolControlThread(this));
-    } else if ( task.type == VIRT_STORAGE_VOLUME ) {
+    } else if ( task->type == VIRT_STORAGE_VOLUME ) {
         threadPool->insert(
                     _number,
                     new StorageVolControlThread(this));
-    } else if ( task.type == VIRT_SECRET ) {
+    } else if ( task->type == VIRT_SECRET ) {
         threadPool->insert(
                     _number,
                     new SecretControlThread(this));
-    } else if ( task.type == VIRT_INTERFACE ) {
+    } else if ( task->type == VIRT_INTERFACE ) {
         threadPool->insert(
                     _number,
                     new InterfaceControlThread(this));
-    } else if ( task.type == VIRT_NETWORK_FILTER ) {
+    } else if ( task->type == VIRT_NETWORK_FILTER ) {
         threadPool->insert(
                     _number,
                     new NWFilterControlThread(this));
@@ -128,7 +128,7 @@ void TaskWareHouse::addNewTask(TASK task)
                 this, SLOT(msgRepeater(const QString&, const uint)));
         connect(cThread, SIGNAL(resultData(Result)),
                 this, SLOT(taskResultReceiver(Result)));
-        cThread->execAction(counter, task);
+        cThread->execAction(counter, *task);
     } else {
         threadPool->remove(_number);
     };
@@ -154,19 +154,19 @@ void TaskWareHouse::taskResultReceiver(Result data)
 {
     bool correctly = true;
     if        ( data.type==VIRT_DOMAIN ) {
-        emit domResult(data);
+        emit domResult(&data);
     } else if ( data.type==VIRT_NETWORK ) {
-        emit netResult(data);
+        emit netResult(&data);
     } else if ( data.type==VIRT_STORAGE_POOL ) {
-        emit poolResult(data);
+        emit poolResult(&data);
     } else if ( data.type==VIRT_STORAGE_VOLUME ) {
-        emit volResult(data);
+        emit volResult(&data);
     } else if ( data.type==VIRT_SECRET ) {
-        emit secResult(data);
+        emit secResult(&data);
     } else if ( data.type==VIRT_INTERFACE ) {
-        emit ifaceResult(data);
+        emit ifaceResult(&data);
     } else if ( data.type==VIRT_NETWORK_FILTER ) {
-        emit nwfilterResult(data);
+        emit nwfilterResult(&data);
     } else {
         correctly = false;
     };

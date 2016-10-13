@@ -75,26 +75,26 @@ void VirtInterfaceControl::setListHeader(const QString &connName)
     // for initiation content
     reloadState();
 }
-void VirtInterfaceControl::resultReceiver(Result data)
+void VirtInterfaceControl::resultReceiver(Result *data)
 {
-    //qDebug()<<data.action<<data.msg<<"result";
-    if ( data.action == GET_ALL_ENTITY_STATE ) {
-        if ( data.data.count() > virtIfaceModel->DataList.count() ) {
-            int _diff = data.data.count() - virtIfaceModel->DataList.count();
+    //qDebug()<<data->action<<data->msg<<"result";
+    if ( data->action == GET_ALL_ENTITY_STATE ) {
+        if ( data->data.count() > virtIfaceModel->DataList.count() ) {
+            int _diff = data->data.count() - virtIfaceModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtIfaceModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( virtIfaceModel->DataList.count() > data.data.count() ) {
-            int _diff = virtIfaceModel->DataList.count() - data.data.count();
+        if ( virtIfaceModel->DataList.count() > data->data.count() ) {
+            int _diff = virtIfaceModel->DataList.count() - data->data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtIfaceModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QVariantMap _data, data.data) {
+        foreach (QVariantMap _data, data->data) {
             if (_data.isEmpty()) continue;
             virtIfaceModel->setData(
                             virtIfaceModel->index(i, 0),
@@ -116,29 +116,29 @@ void VirtInterfaceControl::resultReceiver(Result data)
         };
         entityList->setEnabled(true);
         emit entityListUpdated();
-    } else if ( data.action == GET_XML_DESCRIPTION ) {
-        QString xml = data.fileName;
-        data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
-        QString msg = data.msg.join(" ");
+    } else if ( data->action == GET_XML_DESCRIPTION ) {
+        QString xml = data->fileName;
+        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        QString msg = data->msg.join(" ");
         msgRepeater(msg);
-        if ( data.result )
+        if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
-    } else if ( data.action != GET_XML_DESCRIPTION ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action != GET_XML_DESCRIPTION ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
         };
-        if ( data.result ) {
+        if ( data->result ) {
             int row = -1;
             for ( int i=0; i<virtIfaceModel->DataList.count(); i++ ) {
-                if ( virtIfaceModel->DataList.at(i)->getName()==data.name ) {
+                if ( virtIfaceModel->DataList.at(i)->getName()==data->name ) {
                     row = i;
                     break;
                 };
             };
             // for different action's specified manipulation;
             // set manually, because next reload not change 'changing'
-            switch (data.action) {
+            switch (data->action) {
             case IFACE_CHANGE_BEGIN:
                 if (row+1>0)
                     virtIfaceModel->DataList.at(row)->setChanging(true);
@@ -170,7 +170,7 @@ void VirtInterfaceControl::reloadState()
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = reloadEntity;
-    emit addNewTask(task);
+    emit addNewTask(&task);
 }
 void VirtInterfaceControl::changeDockVisibility()
 {
@@ -229,27 +229,27 @@ void VirtInterfaceControl::execAction(const Act_Param &param)
         task.method     = param.method;
         if        ( param.method==startEntity ) {
             task.action = START_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==destroyEntity ) {
             task.action = DESTROY_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==defineEntity ) {
             //newVirtEntityFromXML(l);
         } else if ( param.method==undefineEntity ) {
             task.action = UNDEFINE_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==changeBeginVirtInterface ) {
             task.action = IFACE_CHANGE_BEGIN;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==changeCommitVirtInterface ) {
             task.action = IFACE_CHANGE_COMMIT;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==changeRollbackVirtInterface ) {
             task.action = IFACE_CHANGE_ROLLBACK;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==getEntityXMLDesc ) {
             task.action = GET_XML_DESCRIPTION;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==reloadEntity ) {
             reloadState();
         };
@@ -269,9 +269,9 @@ void VirtInterfaceControl::newVirtEntityFromXML(const Act_Param &args)
     task.action     = DEFINE_ENTITY;
     task.args.path  = args.path;
     if ( args.context==DO_AsIs ) {
-        emit addNewTask(task);
+        emit addNewTask(&task);
     } else if ( args.context==DO_Edit ) {
-        emit ifaceToEditor(task);
+        emit ifaceToEditor(&task);
     } else{
         QString xml;
         bool show = false;
@@ -292,6 +292,6 @@ void VirtInterfaceControl::newVirtEntityFromXML(const Act_Param &args)
         if ( result==QDialog::Rejected ) return;
         //qDebug()<<xml<<"path"<<result;
         task.args.path = xml;
-        emit addNewTask(task);
+        emit addNewTask(&task);
     };
 }

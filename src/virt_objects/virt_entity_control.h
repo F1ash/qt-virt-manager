@@ -35,7 +35,7 @@ public:
 
 signals:
     void                     entityMsg(const QString&);
-    void                     addNewTask(TASK);
+    void                     addNewTask(TASK*);
     void                     ptrIsNull();
     void                     entityListUpdated();
 

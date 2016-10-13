@@ -16,7 +16,7 @@ public:
     ~VirtInterfaceControl();
 
 signals:
-    void                 ifaceToEditor(TASK);
+    void                 ifaceToEditor(TASK*);
 
 private:
     VirtIfaceModel      *virtIfaceModel;
@@ -27,7 +27,7 @@ public slots:
     void                 stopProcessing();
     bool                 setCurrentWorkConnect(virConnectPtr*);
     void                 setListHeader(const QString&);
-    void                 resultReceiver(Result);
+    void                 resultReceiver(Result*);
 
 private slots:
     void                 reloadState();

@@ -480,22 +480,22 @@ void MainWindow::initDockWidgets()
             domainDock, SLOT(setVisible(bool)));
     connect(domainDockContent, SIGNAL(entityMsg(const QString&)),
             this, SLOT(writeToErrorLog(const QString&)));
-    connect(domainDockContent, SIGNAL(displayRequest(TASK)),
-            this, SLOT(invokeVMDisplay(TASK)));
+    connect(domainDockContent, SIGNAL(displayRequest(TASK*)),
+            this, SLOT(invokeVMDisplay(TASK*)));
     connect(domainDockContent,
             SIGNAL(addToStateMonitor(virConnectPtr*, const QString&, const QString&)),
             domainsStateMonitor,
             SLOT(setNewMonitoredDomain(virConnectPtr*, const QString&, const QString&)));
-    connect(domainDockContent, SIGNAL(migrateToConnect(TASK)),
-            this, SLOT(buildMigrateArgs(TASK)));
-    connect(domainDockContent, SIGNAL(addNewTask(TASK)),
-            taskWrHouse, SLOT(addNewTask(TASK)));
-    connect(taskWrHouse, SIGNAL(domResult(Result)),
-            domainDockContent, SLOT(resultReceiver(Result)));
-    connect(connListWidget->list, SIGNAL(domResult(Result)),
-            domainDockContent, SLOT(resultReceiver(Result)));
-    connect(domainDockContent, SIGNAL(domainToEditor(TASK)),
-            this, SLOT(invokeDomainEditor(TASK)));
+    connect(domainDockContent, SIGNAL(migrateToConnect(TASK*)),
+            this, SLOT(buildMigrateArgs(TASK*)));
+    connect(domainDockContent, SIGNAL(addNewTask(TASK*)),
+            taskWrHouse, SLOT(addNewTask(TASK*)));
+    connect(taskWrHouse, SIGNAL(domResult(Result*)),
+            domainDockContent, SLOT(resultReceiver(Result*)));
+    connect(connListWidget->list, SIGNAL(domResult(Result*)),
+            domainDockContent, SLOT(resultReceiver(Result*)));
+    connect(domainDockContent, SIGNAL(domainToEditor(TASK*)),
+            this, SLOT(invokeDomainEditor(TASK*)));
     connect(domainDockContent, SIGNAL(entityListUpdated()),
             this, SLOT(entityControlUpdated()));
 
@@ -517,14 +517,14 @@ void MainWindow::initDockWidgets()
             networkDock, SLOT(setVisible(bool)));
     connect(networkDockContent, SIGNAL(entityMsg(const QString&)),
             this, SLOT(writeToErrorLog(const QString&)));
-    connect(networkDockContent, SIGNAL(addNewTask(TASK)),
-            taskWrHouse, SLOT(addNewTask(TASK)));
-    connect(taskWrHouse, SIGNAL(netResult(Result)),
-            networkDockContent, SLOT(resultReceiver(Result)));
-    connect(connListWidget->list, SIGNAL(netResult(Result)),
-            networkDockContent, SLOT(resultReceiver(Result)));
-    connect(networkDockContent, SIGNAL(networkToEditor(TASK)),
-            this, SLOT(invokeNetworkEditor(TASK)));
+    connect(networkDockContent, SIGNAL(addNewTask(TASK*)),
+            taskWrHouse, SLOT(addNewTask(TASK*)));
+    connect(taskWrHouse, SIGNAL(netResult(Result*)),
+            networkDockContent, SLOT(resultReceiver(Result*)));
+    connect(connListWidget->list, SIGNAL(netResult(Result*)),
+            networkDockContent, SLOT(resultReceiver(Result*)));
+    connect(networkDockContent, SIGNAL(networkToEditor(TASK*)),
+            this, SLOT(invokeNetworkEditor(TASK*)));
     connect(networkDockContent, SIGNAL(entityListUpdated()),
             this, SLOT(entityControlUpdated()));
 
@@ -545,10 +545,10 @@ void MainWindow::initDockWidgets()
             storagePoolDock, SLOT(setVisible(bool)));
     connect(storagePoolDockContent, SIGNAL(entityMsg(const QString&)),
             this, SLOT(writeToErrorLog(const QString&)));
-    connect(storagePoolDockContent, SIGNAL(addNewTask(TASK)),
-            taskWrHouse, SLOT(addNewTask(TASK)));
-    connect(taskWrHouse, SIGNAL(poolResult(Result)),
-            storagePoolDockContent, SLOT(resultReceiver(Result)));
+    connect(storagePoolDockContent, SIGNAL(addNewTask(TASK*)),
+            taskWrHouse, SLOT(addNewTask(TASK*)));
+    connect(taskWrHouse, SIGNAL(poolResult(Result*)),
+            storagePoolDockContent, SLOT(resultReceiver(Result*)));
     connect(storagePoolDockContent,
             SIGNAL(overviewStPool(virConnectPtr*, const QString&, const QString&)),
             this,
@@ -573,10 +573,10 @@ void MainWindow::initDockWidgets()
             secretDock, SLOT(setVisible(bool)));
     connect(secretDockContent, SIGNAL(entityMsg(const QString&)),
             this, SLOT(writeToErrorLog(const QString&)));
-    connect(secretDockContent, SIGNAL(addNewTask(TASK)),
-            taskWrHouse, SLOT(addNewTask(TASK)));
-    connect(taskWrHouse, SIGNAL(secResult(Result)),
-            secretDockContent, SLOT(resultReceiver(Result)));
+    connect(secretDockContent, SIGNAL(addNewTask(TASK*)),
+            taskWrHouse, SLOT(addNewTask(TASK*)));
+    connect(taskWrHouse, SIGNAL(secResult(Result*)),
+            secretDockContent, SLOT(resultReceiver(Result*)));
     connect(secretDockContent, SIGNAL(entityListUpdated()),
             this, SLOT(entityControlUpdated()));
 
@@ -597,10 +597,10 @@ void MainWindow::initDockWidgets()
             ifaceDock, SLOT(setVisible(bool)));
     connect(ifaceDockContent, SIGNAL(entityMsg(const QString&)),
             this, SLOT(writeToErrorLog(const QString&)));
-    connect(ifaceDockContent, SIGNAL(addNewTask(TASK)),
-            taskWrHouse, SLOT(addNewTask(TASK)));
-    connect(taskWrHouse, SIGNAL(ifaceResult(Result)),
-            ifaceDockContent, SLOT(resultReceiver(Result)));
+    connect(ifaceDockContent, SIGNAL(addNewTask(TASK*)),
+            taskWrHouse, SLOT(addNewTask(TASK*)));
+    connect(taskWrHouse, SIGNAL(ifaceResult(Result*)),
+            ifaceDockContent, SLOT(resultReceiver(Result*)));
     connect(ifaceDockContent, SIGNAL(entityListUpdated()),
             this, SLOT(entityControlUpdated()));
 
@@ -621,12 +621,12 @@ void MainWindow::initDockWidgets()
             nwfilterDock, SLOT(setVisible(bool)));
     connect(nwfilterDockContent, SIGNAL(entityMsg(const QString&)),
             this, SLOT(writeToErrorLog(const QString&)));
-    connect(nwfilterDockContent, SIGNAL(addNewTask(TASK)),
-            taskWrHouse, SLOT(addNewTask(TASK)));
-    connect(taskWrHouse, SIGNAL(nwfilterResult(Result)),
-            nwfilterDockContent, SLOT(resultReceiver(Result)));
-    connect(nwfilterDockContent, SIGNAL(nwfilterToEditor(TASK)),
-            this, SLOT(invokeNWFilterEditor(TASK)));
+    connect(nwfilterDockContent, SIGNAL(addNewTask(TASK*)),
+            taskWrHouse, SLOT(addNewTask(TASK*)));
+    connect(taskWrHouse, SIGNAL(nwfilterResult(Result*)),
+            nwfilterDockContent, SLOT(resultReceiver(Result*)));
+    connect(nwfilterDockContent, SIGNAL(nwfilterToEditor(TASK*)),
+            this, SLOT(invokeNWFilterEditor(TASK*)));
     connect(nwfilterDockContent, SIGNAL(entityListUpdated()),
             this, SLOT(entityControlUpdated()));
 
@@ -965,13 +965,13 @@ void MainWindow::stopProcessing()
     ifaceDockContent->stopProcessing();
     nwfilterDockContent->stopProcessing();
 }
-void MainWindow::invokeVMDisplay(TASK _task)
+void MainWindow::invokeVMDisplay(TASK *_task)
 {
-    virConnectPtr *connPtrPtr = _task.srcConnPtr;
-    QString connName = _task.srcConName;
-    QString domName = _task.object;
-    QString type = _task.args.object;
-    QString viewerType = _task.args.state;
+    virConnectPtr *connPtrPtr = _task->srcConnPtr;
+    QString connName = _task->srcConName;
+    QString domName = _task->object;
+    QString type = _task->args.object;
+    QString viewerType = _task->args.state;
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(domName);
@@ -1014,8 +1014,8 @@ void MainWindow::invokeVMDisplay(TASK _task)
                 this, SLOT(deleteVMDisplay(const QString&)));
         connect(VM_Displayed_Map.value(key), SIGNAL(errorMsg(const QString&)),
                 logDockContent, SLOT(appendMsgToLog(const QString&)));
-        connect(VM_Displayed_Map.value(key), SIGNAL(addNewTask(TASK)),
-                taskWrHouse, SLOT(addNewTask(TASK)));
+        connect(VM_Displayed_Map.value(key), SIGNAL(addNewTask(TASK*)),
+                taskWrHouse, SLOT(addNewTask(TASK*)));
         VM_Displayed_Map.value(key)->show();
     } else {
         //qDebug()<<key<<"vm invoked"<<"exist";
@@ -1041,17 +1041,17 @@ void MainWindow::deleteVMDisplay(const QString &key)
         VM_Displayed_Map.remove(key);
     }
 }
-void MainWindow::buildMigrateArgs(TASK _task)
+void MainWindow::buildMigrateArgs(TASK *_task)
 {
     virConnectPtr *namedConnect =
-            connListWidget->list->getPtr_connectionPtr(_task.args.path);
+            connListWidget->list->getPtr_connectionPtr(_task->args.path);
     if ( nullptr!=namedConnect ) {
         domainDockContent->execMigrateAction(namedConnect, _task);
     } else {
         QString time = QTime::currentTime().toString();
         QString title =
                 QString("Domain Migration '%1'")
-                .arg(_task.object);
+                .arg(_task->object);
         QString msg =
                 QString("Migation not possible to NULL connection.");
         QString currMsg = QString(
@@ -1076,11 +1076,11 @@ void MainWindow::overviewStoragePool(
                 this, SLOT(writeToErrorLog(const QString&)));
         connect(Overviewed_StPool_Map.value(key), SIGNAL(finished(const QString&)),
                 this, SLOT(deleteStPoolOverview(const QString&)));
-        connect(Overviewed_StPool_Map.value(key), SIGNAL(addNewTask(TASK)),
-                taskWrHouse, SLOT(addNewTask(TASK)));
-        connect(taskWrHouse, SIGNAL(volResult(Result)),
+        connect(Overviewed_StPool_Map.value(key), SIGNAL(addNewTask(TASK*)),
+                taskWrHouse, SLOT(addNewTask(TASK*)));
+        connect(taskWrHouse, SIGNAL(volResult(Result*)),
                 Overviewed_StPool_Map.value(key),
-                SLOT(resultReceiver(Result)));
+                SLOT(resultReceiver(Result*)));
         Overviewed_StPool_Map.value(key)
                 ->setCurrentStoragePool(
                     connPtrPtr, connName, poolName);
@@ -1099,17 +1099,17 @@ void MainWindow::deleteStPoolOverview(const QString &key)
         Overviewed_StPool_Map.remove(key);
     };
 }
-void MainWindow::invokeDomainEditor(TASK _task)
+void MainWindow::invokeDomainEditor(TASK *_task)
 {
-    QString connName = _task.srcConName;
-    QString domName = _task.object;
+    QString connName = _task->srcConName;
+    QString domName = _task->object;
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( !DomainEditor_Map.contains(key) ) {
         DomainEditor_Map.insert(
                     key,
-                    new CreateVirtDomain(nullptr, _task));
+                    new CreateVirtDomain(nullptr, *_task));
         DomainEditor_Map.value(key)->setObjectName(key);
         DomainEditor_Map.value(key)->setWindowTitle(
                     QString("VM Settings / <%1> in [%2]")
@@ -1118,8 +1118,8 @@ void MainWindow::invokeDomainEditor(TASK _task)
                 this, SLOT(writeToErrorLog(const QString&)));
         connect(DomainEditor_Map.value(key), SIGNAL(finished(const QString&)),
                 this, SLOT(deleteDomainEditor(const QString&)));
-        connect(DomainEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
-                taskWrHouse, SLOT(addNewTask(TASK)));
+        connect(DomainEditor_Map.value(key), SIGNAL(addNewTask(TASK*)),
+                taskWrHouse, SLOT(addNewTask(TASK*)));
     };
     if ( DomainEditor_Map.value(key)!=nullptr ) {
         DomainEditor_Map.value(key)->show();
@@ -1165,17 +1165,17 @@ void MainWindow::migrate_settings_to_INI_format()
                     "Migration the settings to INI-format done successfully.");
     };
 }
-void MainWindow::invokeNetworkEditor(TASK _task)
+void MainWindow::invokeNetworkEditor(TASK *_task)
 {
-    QString connName = _task.srcConName;
-    QString networkName = _task.object;
+    QString connName = _task->srcConName;
+    QString networkName = _task->object;
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(networkName);
     if ( !NetworkEditor_Map.contains(key) ) {
         NetworkEditor_Map.insert(
                     key,
-                    new CreateVirtNetwork(nullptr, _task));
+                    new CreateVirtNetwork(nullptr, *_task));
         NetworkEditor_Map.value(key)->setObjectName(key);
         NetworkEditor_Map.value(key)->setWindowTitle(
                     QString("Network Editor / <%1> in [%2]")
@@ -1184,8 +1184,8 @@ void MainWindow::invokeNetworkEditor(TASK _task)
                 this, SLOT(writeToErrorLog(const QString&)));
         connect(NetworkEditor_Map.value(key), SIGNAL(finished(const QString&)),
                 this, SLOT(deleteNetworkEditor(const QString&)));
-        connect(NetworkEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
-                taskWrHouse, SLOT(addNewTask(TASK)));
+        connect(NetworkEditor_Map.value(key), SIGNAL(addNewTask(TASK*)),
+                taskWrHouse, SLOT(addNewTask(TASK*)));
     };
     if ( NetworkEditor_Map.value(key)!=nullptr ) {
         NetworkEditor_Map.value(key)->show();
@@ -1201,17 +1201,17 @@ void MainWindow::deleteNetworkEditor(const QString &key)
         NetworkEditor_Map.remove(key);
     };
 }
-void MainWindow::invokeNWFilterEditor(TASK _task)
+void MainWindow::invokeNWFilterEditor(TASK *_task)
 {
-    QString connName = _task.srcConName;
-    QString nwfilterName = _task.object;
+    QString connName = _task->srcConName;
+    QString nwfilterName = _task->object;
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(nwfilterName);
     if ( !NWFilterEditor_Map.contains(key) ) {
         NWFilterEditor_Map.insert(
                     key,
-                    new CreateVirtNWFilter(nullptr, _task));
+                    new CreateVirtNWFilter(nullptr, *_task));
         NWFilterEditor_Map.value(key)->setObjectName(key);
         NWFilterEditor_Map.value(key)->setWindowTitle(
                     QString("NWFilter Editor / <%1> in [%2]")
@@ -1220,8 +1220,8 @@ void MainWindow::invokeNWFilterEditor(TASK _task)
                 this, SLOT(writeToErrorLog(const QString&)));
         connect(NWFilterEditor_Map.value(key), SIGNAL(finished(const QString&)),
                 this, SLOT(deleteNWFilterEditor(const QString&)));
-        connect(NWFilterEditor_Map.value(key), SIGNAL(addNewTask(TASK)),
-                taskWrHouse, SLOT(addNewTask(TASK)));
+        connect(NWFilterEditor_Map.value(key), SIGNAL(addNewTask(TASK*)),
+                taskWrHouse, SLOT(addNewTask(TASK*)));
     };
     if ( NWFilterEditor_Map.value(key)!=nullptr ) {
         NWFilterEditor_Map.value(key)->show();

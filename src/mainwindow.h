@@ -139,17 +139,17 @@ private slots:
     void entityControlUpdated();
     void stopConnProcessing(bool, const QString&);
     void stopProcessing();
-    void invokeVMDisplay(TASK);
+    void invokeVMDisplay(TASK*);
     void deleteVMDisplay(const QString&);
-    void buildMigrateArgs(TASK);
+    void buildMigrateArgs(TASK*);
     void overviewStoragePool(virConnectPtr*, const QString&, const QString&);
     void deleteStPoolOverview(const QString&);
-    void invokeDomainEditor(TASK);
+    void invokeDomainEditor(TASK*);
     void deleteDomainEditor(const QString&);
     void migrate_settings_to_INI_format();
-    void invokeNetworkEditor(TASK);
+    void invokeNetworkEditor(TASK*);
     void deleteNetworkEditor(const QString&);
-    void invokeNWFilterEditor(TASK);
+    void invokeNWFilterEditor(TASK *);
     void deleteNWFilterEditor(const QString &);
 
     void free_and_hide_all_stuff();

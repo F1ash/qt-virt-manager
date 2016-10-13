@@ -144,7 +144,7 @@ void CreateVirtNetwork::set_Result(bool state)
         // if ( showDescription->isChecked() )
         //     QDesktopServices::openUrl(QUrl(_xml));
         task.args.path = _xml;
-        emit addNewTask(task);
+        emit addNewTask(&task);
     };
     close();
 }

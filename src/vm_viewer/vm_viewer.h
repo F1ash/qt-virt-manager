@@ -49,7 +49,7 @@ public:
 signals:
     void             finished(const QString&);
     void             errorMsg(const QString&);
-    void             addNewTask(TASK);
+    void             addNewTask(TASK*);
 
     /*
      * Emitted, when user touched top boarder.

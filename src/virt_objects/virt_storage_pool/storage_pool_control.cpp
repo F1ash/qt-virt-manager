@@ -75,26 +75,26 @@ void VirtStoragePoolControl::setListHeader(const QString &connName)
     // for initiation content
     reloadState();
 }
-void VirtStoragePoolControl::resultReceiver(Result data)
+void VirtStoragePoolControl::resultReceiver(Result *data)
 {
-    //qDebug()<<data.action<<data.msg<<"result";
-    if ( data.action == GET_ALL_ENTITY_STATE ) {
-        if ( data.data.count() > storagePoolModel->DataList.count() ) {
-            int _diff = data.data.count() - storagePoolModel->DataList.count();
+    //qDebug()<<data->action<<data->msg<<"result";
+    if ( data->action == GET_ALL_ENTITY_STATE ) {
+        if ( data->data.count() > storagePoolModel->DataList.count() ) {
+            int _diff = data->data.count() - storagePoolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 storagePoolModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( storagePoolModel->DataList.count() > data.data.count() ) {
-            int _diff = storagePoolModel->DataList.count() - data.data.count();
+        if ( storagePoolModel->DataList.count() > data->data.count() ) {
+            int _diff = storagePoolModel->DataList.count() - data->data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 storagePoolModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QVariantMap _data, data.data) {
+        foreach (QVariantMap _data, data->data) {
             if (_data.isEmpty()) continue;
             storagePoolModel->setData(
                             storagePoolModel->index(i, 0),
@@ -116,48 +116,48 @@ void VirtStoragePoolControl::resultReceiver(Result data)
         };
         entityList->setEnabled(true);
         emit entityListUpdated();
-    } else if ( data.action == CREATE_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == CREATE_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data.action == DEFINE_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == DEFINE_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data.action == START_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == START_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data.action == DESTROY_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == DESTROY_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data.action == UNDEFINE_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == UNDEFINE_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data.action == CHANGE_ENTITY_AUTOSTART ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == CHANGE_ENTITY_AUTOSTART ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data.action == GET_XML_DESCRIPTION ) {
-        QString xml = data.fileName;
-        data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
-        QString msg = data.msg.join(" ");
+    } else if ( data->action == GET_XML_DESCRIPTION ) {
+        QString xml = data->fileName;
+        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        QString msg = data->msg.join(" ");
         msgRepeater(msg);
-        if ( data.result )
+        if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
     };
 }
@@ -179,7 +179,7 @@ void VirtStoragePoolControl::reloadState()
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = reloadEntity;
-    emit addNewTask(task);
+    emit addNewTask(&task);
 }
 void VirtStoragePoolControl::changeDockVisibility()
 {
@@ -241,13 +241,13 @@ void VirtStoragePoolControl::execAction(const Act_Param &param)
         task.method     = param.method;
         if        ( param.method==startEntity ) {
             task.action     = START_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==destroyEntity ) {
             task.action     = DESTROY_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==undefineEntity ) {
             task.action     = UNDEFINE_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==setAutostartEntity ) {
             /* set the opposite value */
             uint autostartState =
@@ -255,14 +255,14 @@ void VirtStoragePoolControl::execAction(const Act_Param &param)
                  ? 0 : 1;
             task.action     = CHANGE_ENTITY_AUTOSTART;
             task.args.sign  = autostartState;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==deleteEntity ) {
             task.action     = DELETE_ENTITY;
             task.args.sign  = param.path.toUInt();
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==getEntityXMLDesc ) {
             task.action     = GET_XML_DESCRIPTION;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==overviewEntity ) {
             // don't set onView state, because it can be multiplicate
             //uint row = idx.row();
@@ -293,9 +293,9 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const Act_Param &args)
     task.action     = args.act;
     if ( args.context==DO_AsIs ) {
         task.args.path  = args.path;
-        emit addNewTask(task);
+        emit addNewTask(&task);
     } else if ( args.context==DO_Edit ) {
-        emit poolToEditor(task);
+        emit poolToEditor(&task);
     } else {
         QString path;
         bool show = false;
@@ -312,6 +312,6 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const Act_Param &args)
         if ( result==QDialog::Rejected ) return;
         task.args.path = path;
         if ( show ) QDesktopServices::openUrl(QUrl(path));
-        emit addNewTask(task);
+        emit addNewTask(&task);
     };
 }

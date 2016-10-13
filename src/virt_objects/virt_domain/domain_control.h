@@ -19,10 +19,10 @@ public:
     ~VirtDomainControl();
 
 signals:
-    void                     displayRequest(TASK);
+    void                     displayRequest(TASK*);
     void                     addToStateMonitor(virConnectPtr*, const QString&, const QString&);
-    void                     migrateToConnect(TASK);
-    void                     domainToEditor(TASK);
+    void                     migrateToConnect(TASK*);
+    void                     domainToEditor(TASK*);
 
 private:
     DomainModel             *domainModel;
@@ -34,8 +34,8 @@ public slots:
     bool                     setCurrentWorkConnect(virConnectPtr*);
     void                     setListHeader(const QString&);
     virConnectPtr*           getPtr_connectionPtr();
-    void                     execMigrateAction(virConnectPtr*, TASK);
-    void                     resultReceiver(Result);
+    void                     execMigrateAction(virConnectPtr*, TASK*);
+    void                     resultReceiver(Result*);
 
 private slots:
     void                     reloadState();

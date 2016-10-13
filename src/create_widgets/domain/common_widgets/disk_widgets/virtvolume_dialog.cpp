@@ -9,7 +9,7 @@ VirtVolumeDialog::VirtVolumeDialog(
     volumes = new VirtStorageVolControl(this);
     storageVolThread = new StorageVolControlThread(this);
     connect(storageVolThread, SIGNAL(resultData(Result)),
-            volumes, SLOT(resultReceiver(Result)));
+            this, SLOT(volThraedResult(Result)));
     storagePoolThread = new StoragePoolControlThread(this);
     connect(storagePoolThread, SIGNAL(resultData(Result)),
             this, SLOT(poolThreadResult(Result)));
@@ -46,8 +46,8 @@ VirtVolumeDialog::VirtVolumeDialog(
     setLayout(commonLayout);
     connect(volumes, SIGNAL(entityMsg(const QString&)),
             this, SLOT(showMsg(const QString&)));
-    connect(volumes, SIGNAL(addNewTask(TASK)),
-            this, SLOT(execAction(TASK)));
+    connect(volumes, SIGNAL(addNewTask(TASK*)),
+            this, SLOT(execAction(TASK*)));
     setPoolList();
 }
 
@@ -106,9 +106,9 @@ void VirtVolumeDialog::showMsg(const QString &msg)
                 msg,
                 QMessageBox::Ok);
 }
-void VirtVolumeDialog::execAction(TASK _task)
+void VirtVolumeDialog::execAction(TASK *_task)
 {
-    storageVolThread->execAction(0, _task);
+    storageVolThread->execAction(0, *_task);
 }
 void VirtVolumeDialog::poolThreadResult(Result data)
 {
@@ -133,4 +133,8 @@ void VirtVolumeDialog::addPoolItem(QVariantMap &_data)
     item->setText( _data.value("name", "EMPTY_STR").toString() );
     item->setData( Qt::UserRole, _data );
     poolList->addItem(item);
+}
+void VirtVolumeDialog::volThraedResult(Result data)
+{
+    volumes->resultReceiver(&data);
 }

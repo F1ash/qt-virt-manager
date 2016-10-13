@@ -15,7 +15,7 @@ public:
     ~VirtNetControl();
 
 signals:
-    void                 networkToEditor(TASK);
+    void                 networkToEditor(TASK*);
 
 private:
     VirtNetModel        *virtNetModel;
@@ -26,7 +26,7 @@ public slots:
     void                 stopProcessing();
     bool                 setCurrentWorkConnect(virConnectPtr*);
     void                 setListHeader(const QString&);
-    void                 resultReceiver(Result);
+    void                 resultReceiver(Result*);
 
 private slots:
     void                 reloadState();

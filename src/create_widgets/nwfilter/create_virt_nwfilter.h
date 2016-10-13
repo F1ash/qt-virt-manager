@@ -38,7 +38,7 @@ public:
 signals:
     void             errorMsg(const QString&);
     void             finished(const QString&);
-    void             addNewTask(TASK);
+    void             addNewTask(TASK*);
 
 private:
     QSettings        settings;

@@ -16,7 +16,7 @@ public:
     ~VirtNWFilterControl();
 
 signals:
-    void                 nwfilterToEditor(TASK);
+    void                 nwfilterToEditor(TASK*);
 
 private:
     VirtNWFilterModel     *virtNWFilterModel;
@@ -29,7 +29,7 @@ public slots:
     void                 setListHeader(const QString&);
     QString              getCurrentNFName() const;
     QString              getCurrentNFUUID() const;
-    void                 resultReceiver(Result);
+    void                 resultReceiver(Result*);
 
 private slots:
     void                 reloadState();

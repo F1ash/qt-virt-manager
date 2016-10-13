@@ -28,13 +28,13 @@ public:
 signals:
     void             visibilityChanged(bool);
     void             taskMsg(const QString&);
-    void             domResult(Result);
-    void             netResult(Result);
-    void             poolResult(Result);
-    void             volResult(Result);
-    void             secResult(Result);
-    void             ifaceResult(Result);
-    void             nwfilterResult(Result);
+    void             domResult(Result*);
+    void             netResult(Result*);
+    void             poolResult(Result*);
+    void             volResult(Result*);
+    void             secResult(Result*);
+    void             ifaceResult(Result*);
+    void             nwfilterResult(Result*);
 
 private:
     uint             counter = 0;
@@ -46,7 +46,7 @@ public slots:
     void             changeVisibility();
     void             saveCurrentState();
     void             stopTaskComputing();
-    void             addNewTask(TASK);
+    void             addNewTask(TASK*);
 
 private slots:
     void             closeEvent(QCloseEvent*);

@@ -34,7 +34,7 @@ FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtrPtr) :
     setLayout(commonLayout);
     connect(secrets, SIGNAL(entityMsg(const QString&)),
             this, SLOT(showMsg(const QString&)));
-    connect(secrets, SIGNAL(addNewTask(TASK)),
+    connect(secrets, SIGNAL(addNewTask(TASK*)),
             this, SLOT(execAction(TASK)));
 
     setSecretList();

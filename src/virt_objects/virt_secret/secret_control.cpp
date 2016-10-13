@@ -87,26 +87,26 @@ QString VirtSecretControl::getCurrentSecType() const
     if ( !index.isValid() ) return QString();
     return virtSecretModel->DataList.at(index.row())->getType();
 }
-void VirtSecretControl::resultReceiver(Result data)
+void VirtSecretControl::resultReceiver(Result *data)
 {
-    //qDebug()<<data.action<<data.name<<"result";
-    if ( data.action == GET_ALL_ENTITY_STATE ) {
-        if ( data.data.count() > virtSecretModel->DataList.count() ) {
-            int _diff = data.data.count() - virtSecretModel->DataList.count();
+    //qDebug()<<data->action<<data->name<<"result";
+    if ( data->action == GET_ALL_ENTITY_STATE ) {
+        if ( data->data.count() > virtSecretModel->DataList.count() ) {
+            int _diff = data->data.count() - virtSecretModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtSecretModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( virtSecretModel->DataList.count() > data.data.count() ) {
-            int _diff = virtSecretModel->DataList.count() - data.data.count();
+        if ( virtSecretModel->DataList.count() > data->data.count() ) {
+            int _diff = virtSecretModel->DataList.count() - data->data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtSecretModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QVariantMap _data, data.data) {
+        foreach (QVariantMap _data, data->data) {
             if (_data.isEmpty()) continue;
             virtSecretModel->setData(
                             virtSecretModel->index(i, 0),
@@ -128,22 +128,22 @@ void VirtSecretControl::resultReceiver(Result data)
         };
         entityList->setEnabled(true);
         emit entityListUpdated();
-    } else if ( data.action == GET_XML_DESCRIPTION ) {
-        QString xml = data.fileName;
-        data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
-        QString msg = data.msg.join(" ");
+    } else if ( data->action == GET_XML_DESCRIPTION ) {
+        QString xml = data->fileName;
+        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        QString msg = data->msg.join(" ");
         msgRepeater(msg);
-        if ( data.result )
+        if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
-    } else if ( data.action < GET_XML_DESCRIPTION ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action < GET_XML_DESCRIPTION ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
         };
-        if ( data.result ) {
+        if ( data->result ) {
             reloadState();
             // for different action's specified manipulation
-            switch (data.action) {
+            switch (data->action) {
             case _NONE_ACTION:
                 // some job;
                 break;
@@ -165,7 +165,7 @@ void VirtSecretControl::reloadState()
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = reloadEntity;
-    emit addNewTask(task);
+    emit addNewTask(&task);
 }
 void VirtSecretControl::changeDockVisibility()
 {
@@ -231,16 +231,16 @@ void VirtSecretControl::execAction(const Act_Param &param)
                 task.args.path  = xml;
                 task.secret->setSecretValue(
                             createVirtSec->getSecretValue());
-                emit addNewTask(task);
+                emit addNewTask(&task);
             };
             createVirtSec->deleteLater();
             //qDebug()<<xml<<"path"<<result;
         } else if ( param.method==undefineEntity ) {
             task.action     = UNDEFINE_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==getEntityXMLDesc ) {
             task.action     = GET_XML_DESCRIPTION;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==reloadEntity ) {
             reloadState();
         };
@@ -266,7 +266,7 @@ void VirtSecretControl::execAction(const Act_Param &param)
             task.args.path  = xml;
             task.secret->setSecretValue(
                         createVirtSec->getSecretValue());
-            emit addNewTask(task);
+            emit addNewTask(&task);
         };
         createVirtSec->deleteLater();
         //qDebug()<<xml<<"path"<<result;

@@ -27,7 +27,7 @@ public slots:
     QString              getCurrentSecUsage() const;
     QString              getCurrentSecUUID() const;
     QString              getCurrentSecType() const;
-    void                 resultReceiver(Result);
+    void                 resultReceiver(Result*);
 
 private slots:
     void                 reloadState();

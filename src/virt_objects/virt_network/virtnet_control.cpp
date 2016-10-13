@@ -76,26 +76,26 @@ void VirtNetControl::setListHeader(const QString &connName)
     // for initiation content
     reloadState();
 }
-void VirtNetControl::resultReceiver(Result data)
+void VirtNetControl::resultReceiver(Result *data)
 {
-    //qDebug()<<data.action<<data.name<<"result";
-    if ( data.action == GET_ALL_ENTITY_STATE ) {
-        if ( data.data.count() > virtNetModel->DataList.count() ) {
-            int _diff = data.data.count() - virtNetModel->DataList.count();
+    //qDebug()<<data->action<<data->name<<"result";
+    if ( data->action == GET_ALL_ENTITY_STATE ) {
+        if ( data->data.count() > virtNetModel->DataList.count() ) {
+            int _diff = data->data.count() - virtNetModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtNetModel->insertRow(1);
                 //qDebug()<<i<<"insert";
             };
         };
-        if ( virtNetModel->DataList.count() > data.data.count() ) {
-            int _diff = virtNetModel->DataList.count() - data.data.count();
+        if ( virtNetModel->DataList.count() > data->data.count() ) {
+            int _diff = virtNetModel->DataList.count() - data->data.count();
             for ( int i = 0; i<_diff; i++ ) {
                 virtNetModel->removeRow(0);
                 //qDebug()<<i<<"remove";
             };
         };
         int i = 0;
-        foreach (QVariantMap _data, data.data) {
+        foreach (QVariantMap _data, data->data) {
             if (_data.isEmpty()) continue;
             virtNetModel->setData(
                             virtNetModel->index(i, 0),
@@ -117,39 +117,39 @@ void VirtNetControl::resultReceiver(Result data)
         };
         entityList->setEnabled(true);
         emit entityListUpdated();
-    } else if ( data.action == GET_XML_DESCRIPTION ) {
-        QString xml = data.fileName;
-        data.msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
-        QString msg = data.msg.join(" ");
+    } else if ( data->action == GET_XML_DESCRIPTION ) {
+        QString xml = data->fileName;
+        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        QString msg = data->msg.join(" ");
         msgRepeater(msg);
-        if ( data.result )
+        if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
-    } else if ( data.action == EDIT_ENTITY ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action == EDIT_ENTITY ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
         };
-        if ( data.result ) {
+        if ( data->result ) {
             // show SRC Creator widget in Edit-mode
             TASK task;
             task.type       = VIRT_NETWORK;
             task.srcConnPtr = ptr_ConnPtr;
             task.srcConName = currConnName;
-            task.object     = data.name;
-            task.args.path  = data.fileName;
+            task.object     = data->name;
+            task.args.path  = data->fileName;
             task.method     = editEntity;
             task.action     = DEFINE_ENTITY;
-            emit networkToEditor(task);
+            emit networkToEditor(&task);
         };
-    } else if ( data.action < GET_XML_DESCRIPTION ) {
-        if ( !data.msg.isEmpty() ) {
-            QString msg = data.msg.join(" ");
+    } else if ( data->action < GET_XML_DESCRIPTION ) {
+        if ( !data->msg.isEmpty() ) {
+            QString msg = data->msg.join(" ");
             msgRepeater(msg);
         };
-        if ( data.result ) {
+        if ( data->result ) {
             reloadState();
             // for different action's specified manipulation
-            switch (data.action) {
+            switch (data->action) {
             case _NONE_ACTION:
                 // some job;
                 break;
@@ -171,7 +171,7 @@ void VirtNetControl::reloadState()
     task.srcConName = currConnName;
     task.action     = GET_ALL_ENTITY_STATE;
     task.method     = reloadEntity;
-    emit addNewTask(task);
+    emit addNewTask(&task);
 }
 void VirtNetControl::changeDockVisibility()
 {
@@ -230,16 +230,16 @@ void VirtNetControl::execAction(const Act_Param &param)
         task.method     = param.method;
         if        ( param.method==startEntity ) {
             task.action = START_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==destroyEntity ) {
             task.action = DESTROY_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==defineEntity ) {
             task.action = DEFINE_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==undefineEntity ) {
             task.action = UNDEFINE_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==setAutostartEntity ) {
             /* set the opposite value */
             uint autostartState =
@@ -247,13 +247,13 @@ void VirtNetControl::execAction(const Act_Param &param)
                  ? 0 : 1;
             task.action = CHANGE_ENTITY_AUTOSTART;
             task.args.sign = autostartState;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==editEntity ) {
             task.action     = EDIT_ENTITY;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==getEntityXMLDesc ) {
             task.action = GET_XML_DESCRIPTION;
-            emit addNewTask(task);
+            emit addNewTask(&task);
         } else if ( param.method==reloadEntity ) {
             reloadState();
         };
@@ -277,8 +277,8 @@ void VirtNetControl::newVirtEntityFromXML(const Act_Param &args)
     task.action     = args.act;
     task.args.path  = args.path;
     if ( args.context==DO_AsIs ) {
-        emit addNewTask(task);
+        emit addNewTask(&task);
     } else {
-        emit networkToEditor(task);
+        emit networkToEditor(&task);
     };
 }

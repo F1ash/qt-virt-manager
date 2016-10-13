@@ -17,7 +17,7 @@ public:
 
 signals:
     void                       overviewStPool(virConnectPtr*, const QString&, const QString&);
-    void                       poolToEditor(TASK);
+    void                       poolToEditor(TASK*);
 
 private:
     StoragePoolModel          *storagePoolModel;
@@ -28,7 +28,7 @@ public slots:
     void                       stopProcessing();
     bool                       setCurrentWorkConnect(virConnectPtr*);
     void                       setListHeader(const QString&);
-    void                       resultReceiver(Result);
+    void                       resultReceiver(Result*);
     void                       stopOverView();
 
 private slots:
