@@ -60,7 +60,7 @@ void TaskWareHouse::addNewTask(TASK *task)
 {
     //qDebug()<<task->srcConnPtr<<task->srcConName<<task->action
     //      <<task->method<<task->object<<task->args.list()
-    //      <<task->args.destConnPtr<<task->type<<"addNewTask_TASK";
+    //      <<task->args.dstConnPtr<<task->type<<"addNewTask_TASK";
     //
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);

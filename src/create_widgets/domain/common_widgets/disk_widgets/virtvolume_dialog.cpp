@@ -9,7 +9,7 @@ VirtVolumeDialog::VirtVolumeDialog(
     volumes = new VirtStorageVolControl(this);
     storageVolThread = new StorageVolControlThread(this);
     connect(storageVolThread, SIGNAL(resultData(Result)),
-            this, SLOT(volThraedResult(Result)));
+            this, SLOT(volThreadResult(Result)));
     storagePoolThread = new StoragePoolControlThread(this);
     connect(storagePoolThread, SIGNAL(resultData(Result)),
             this, SLOT(poolThreadResult(Result)));
@@ -134,7 +134,7 @@ void VirtVolumeDialog::addPoolItem(QVariantMap &_data)
     item->setData( Qt::UserRole, _data );
     poolList->addItem(item);
 }
-void VirtVolumeDialog::volThraedResult(Result data)
+void VirtVolumeDialog::volThreadResult(Result data)
 {
     volumes->resultReceiver(&data);
 }

@@ -8,7 +8,7 @@ FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtrPtr) :
     secrets = new VirtSecretControl(this);
     hlpThread = new SecretControlThread(this);
     connect(hlpThread, SIGNAL(resultData(Result)),
-            secrets, SLOT(resultReceiver(Result)));
+            this, SLOT(hlpThreadResult(Result)));
     listLayout = new QHBoxLayout(this);
     listLayout->addWidget(secrets);
     listWidget = new QWidget(this);
@@ -35,7 +35,7 @@ FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtrPtr) :
     connect(secrets, SIGNAL(entityMsg(const QString&)),
             this, SLOT(showMsg(const QString&)));
     connect(secrets, SIGNAL(addNewTask(TASK*)),
-            this, SLOT(execAction(TASK)));
+            this, SLOT(execAction(TASK*)));
 
     setSecretList();
 }
@@ -74,7 +74,11 @@ void FindSecretDialog::set_Result()
               QDialog::Rejected);
     //qDebug()<<"done";
 }
-void FindSecretDialog::execAction(TASK _task)
+void FindSecretDialog::execAction(TASK *_task)
 {
-    hlpThread->execAction(0, _task);
+    hlpThread->execAction(0, *_task);
+}
+void FindSecretDialog::hlpThreadResult(Result data)
+{
+    secrets->resultReceiver(&data);
 }

@@ -80,7 +80,7 @@ virConnectPtr* VirtDomainControl::getPtr_connectionPtr()
 }
 void VirtDomainControl::execMigrateAction(virConnectPtr *conn, TASK *_task)
 {
-    _task->args.destConnPtr = conn;
+    _task->args.dstConnPtr = conn;
     _task->args.path.clear();
     emit addNewTask(_task);
 }

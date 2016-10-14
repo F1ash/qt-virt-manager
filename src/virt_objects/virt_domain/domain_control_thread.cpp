@@ -763,11 +763,11 @@ Result DomControlThread::migrateDomain()
         // virDomainMigrateSetMaxDowntime
         // flags: extra flags; not used yet, so callers should always pass 0
         virDomainMigrateSetMaxDowntime(domain, maxDownTime, 0);
-        if ( nullptr!=task.args.destConnPtr ) {
+        if ( nullptr!=task.args.dstConnPtr ) {
             qDebug()<<"migrate to exist connect";
             virDomainPtr newDomain =
             virDomainMigrate(domain,
-                             *task.args.destConnPtr,
+                             *task.args.dstConnPtr,
                              flags,
                              task.args.object.toUtf8().data(),
                              task.args.path.toUtf8().data(),
@@ -793,7 +793,7 @@ Result DomControlThread::migrateDomain()
     result.msg.append(
                 QString("'<b>%1</b>' Domain %2 Migrated.")
                 .arg(result.name).arg((migrated)?"":"don't"));
-    //if ( task.args.destConnPtr ) task.args.destConnPtr = nullptr;
+    //if ( task.args.dstConnPtr ) task.args.dstConnPtr = nullptr;
     return result;
 }
 Result DomControlThread::createSnapshoteDomain()

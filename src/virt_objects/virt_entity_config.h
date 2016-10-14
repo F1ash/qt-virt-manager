@@ -31,7 +31,7 @@ struct TASK {
 
     // details
     struct          DETAILS {
-        virConnectPtr*  destConnPtr = nullptr;
+        virConnectPtr*  dstConnPtr  = nullptr;
         qulonglong      offset      = 0;
         qulonglong      size        = 0;
         uint            sign        = 0;

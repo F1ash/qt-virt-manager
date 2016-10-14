@@ -37,12 +37,13 @@ private:
 
 public slots:
     FSD_Result           getResult() const;
-    void                 showMsg(const QString &);
+    void                 showMsg(const QString&);
 
 private slots:
     void                 setSecretList();
     void                 set_Result();
-    void                 execAction(TASK);
+    void                 execAction(TASK*);
+    void                 hlpThreadResult(Result);
 };
 
 #endif // FIND_SECRET_DIALOG_H

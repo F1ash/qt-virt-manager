@@ -149,8 +149,8 @@ private slots:
     void migrate_settings_to_INI_format();
     void invokeNetworkEditor(TASK*);
     void deleteNetworkEditor(const QString&);
-    void invokeNWFilterEditor(TASK *);
-    void deleteNWFilterEditor(const QString &);
+    void invokeNWFilterEditor(TASK*);
+    void deleteNWFilterEditor(const QString&);
 
     void free_and_hide_all_stuff();
     void all_stuff_to_original();
