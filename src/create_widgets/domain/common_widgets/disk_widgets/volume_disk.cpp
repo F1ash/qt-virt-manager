@@ -8,7 +8,7 @@ Volume_Disk::Volume_Disk(
     pool = new QLabel(this);
     volumeLabel = new QPushButton("Volume:", this);
     volume = new QLineEdit(this);
-    //volume->setReadOnly(true);
+    volume->setReadOnly(true);
     modeLabel = new QLabel("Source Mode:", this);
     modeLabel->setEnabled(false);
     mode = new QComboBox(this);
@@ -30,8 +30,6 @@ Volume_Disk::Volume_Disk(
 
     connect(volumeLabel, SIGNAL(clicked()),
             this, SLOT(getVolumeNames()));
-    connect(volume, SIGNAL(textChanged(QString)),
-            encrypt, SLOT(setCurrVolumePath(const QString&)));
     // dataChanged connections
     connect(volume, SIGNAL(textChanged(QString)),
             this, SLOT(stateChanged()));
@@ -262,6 +260,7 @@ void Volume_Disk::getVolumeNames()
         _ret = volumeDialog->getResult();
         pool->setText(_ret.pool);
         volume->setText(_ret.name);
+        encrypt->setCurrVolumePath(_ret.path);
         if ( _ret.type=="iscsi" ) {
             auth->setVisible(true);
             auth->setSecretType("ISCSI");

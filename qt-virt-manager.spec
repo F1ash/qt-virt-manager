@@ -4,7 +4,7 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.37.56
+Version:        0.37.57
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -16,9 +16,11 @@ Requires:       libvirt
 Requires:       hicolor-icon-theme
 %if %with qt4
 Requires:       qtermwidget >= 0.6.0-2
+Requires:       qt4-remote-viewer
 %endif
 %if %with qt5
 Requires:       qtermwidget-qt5 >= 0.6.0-2
+Requires:       qt5-remote-viewer
 # for SPICE audio channels
 Requires:       qt5-qtmultimedia
 %endif
@@ -90,6 +92,18 @@ Start, stop, add or remove virtual devices, connect to a graphical or serial con
 and see resource usage statistics for existing VMs on local or remote machines.
 Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
 
+%package -n qt4-remote-viewer
+Summary:        Qt4 Remote Viewer
+
+%description -n qt4-virt-manager
+Qt4 viewer for remote access to Spice/VNC desktops.
+
+%package -n qt5-remote-viewer
+Summary:        Qt5 Remote Viewer
+
+%description -n qt5-virt-manager
+Qt5 viewer for remote access to Spice/VNC desktops.
+
 %prep
 %setup -q
 
@@ -159,10 +173,14 @@ fi
 %{_datadir}/applications/qt4-virt-manager.desktop
 %{_datadir}/qt4-virt-manager
 %{_datadir}/icons/hicolor/256x256/apps/virtual-engineering.png
+
+%files -n qt4-remote-viewer
+%license LICENSE
 %{_bindir}/qt4-remote-viewer
 %{_datadir}/applications/qt4-remote-viewer.desktop
 %{_datadir}/icons/hicolor/256x256/apps/remote-desktop-viewer.png
 %endif
+
 %if %with qt5
 %files -n qt5-virt-manager
 %license LICENSE
@@ -171,12 +189,19 @@ fi
 %{_datadir}/applications/qt5-virt-manager.desktop
 %{_datadir}/qt5-virt-manager
 %{_datadir}/icons/hicolor/256x256/apps/virtual-engineering.png
+
+%files -n qt5-remote-viewer
+%license LICENSE
 %{_bindir}/qt5-remote-viewer
 %{_datadir}/applications/qt5-remote-viewer.desktop
 %{_datadir}/icons/hicolor/256x256/apps/remote-desktop-viewer.png
 %endif
 
 %changelog
+* Tue Oct 18 2016 Fl@sh <kaperang07@gmail.com> - 0.37.57-1
+- version updated;
+- added changes for qt-remote-viewer subpackages;
+
 * Wed Oct  5 2016 Fl@sh <kaperang07@gmail.com> - 0.37.56-1
 - version updated;
 

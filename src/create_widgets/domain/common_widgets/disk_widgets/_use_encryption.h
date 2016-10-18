@@ -43,7 +43,7 @@ public slots:
     void                 setSecretUUID(const QString&);
 
 private slots:
-    void                 emitSecretList();
+    void                 searchInSecretList();
     void                 resultReceiver(Result);
     void                 setVolumeSecret();
     void                 emitCompleteSignal();

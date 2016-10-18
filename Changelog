@@ -148,3 +148,7 @@ fixes for stability and enhancement;
 fixed LXC display;
 some improvements for actions atomization
     and stability;
+
+0.37.57 :
+fixed and enhanced FindSecretDialog and SecretControl;
+fixes for stability;

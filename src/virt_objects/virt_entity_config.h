@@ -64,7 +64,5 @@ struct TASK {
     SECRET *secret = new SECRET();
 };
 
-#define DFR QString("<||>")
-
 #endif // VIRT_ENTITY_CONFIG
 

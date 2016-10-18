@@ -17,8 +17,8 @@ _UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
     info = new QLabel(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(usage);
-    commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(info);
+    commonLayout->addWidget(baseWdg);
     commonLayout->setAlignment(Qt::AlignLeft);
     setLayout(commonLayout);
     connect(usage, SIGNAL(toggled(bool)),
@@ -37,7 +37,7 @@ _UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
     connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
             this, SIGNAL(errorMsg(const QString&)));
     connect(secUsage, SIGNAL(textChanged(QString)),
-            this, SLOT(emitSecretList()));
+            this, SLOT(searchInSecretList()));
     connect(hlpThread, SIGNAL(finished()),
             this, SLOT(emitCompleteSignal()));
 }
@@ -55,7 +55,7 @@ void _UseEncryption::setCurrVolumePath(const QString &s)
 {
     // is only used when changing the current volume path
     currVolumePath = s;
-    emitSecretList();
+    searchInSecretList();
 }
 QString _UseEncryption::getSecretUUID() const
 {
@@ -68,7 +68,7 @@ void _UseEncryption::setSecretUUID(const QString &s)
 }
 
 /* private slots */
-void _UseEncryption::emitSecretList()
+void _UseEncryption::searchInSecretList()
 {
     // start only if thread not running, because this thread
     // can be used from different place spontaneously
@@ -88,18 +88,19 @@ void _UseEncryption::resultReceiver(Result data)
      */
     QString _text;
     QStringList _secUUIDs, _secUsages;
-    foreach (QString _sec, data.msg) {
-        QStringList _data = _sec.split(DFR);
-        _secUUIDs.append(_data.at(0));
-        _secUsages.append(_data.at(1));
+    foreach (QVariantMap _sec, data.data) {
+        _secUUIDs.append(_sec.value("UUID").toString());
+        _secUsages.append(_sec.value("UsageID").toString());
     };
     // block the signals for dropping indefinite loop,
     // because textChanged() signal emitted,
     // when text set programmatically
     secUsage->blockSignals(true);
+    bool secExist = false;
     if ( currVolumePath.isEmpty() ) {
         if ( _secUUIDs.contains(secUsage->text()) ) {
             _text = "Secret is exist";
+            secExist = true;
         } else {
             _text = "Secret isn't exist";
         }
@@ -108,11 +109,15 @@ void _UseEncryption::resultReceiver(Result data)
             _text = "Secret is exist for current volume";
             int i = _secUsages.indexOf(currVolumePath);
             secUsage->setText(_secUUIDs.at(i));
+            secExist = true;
         } else {
             _text = "Secret isn't exist for current volume";
             secUsage->clear();
         };
     };
+    secUsage->setStyleSheet(
+                QString("QLineEdit {background-color : %1;}")
+                .arg((secExist)? "green" : "red"));
     // unblock signals
     secUsage->blockSignals(false);
     info->setText(_text);
