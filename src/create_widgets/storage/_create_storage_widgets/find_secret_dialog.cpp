@@ -6,6 +6,7 @@ FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtrPtr) :
     setModal(true);
     setWindowTitle("FindSecretDialog");
     secrets = new VirtSecretControl(this);
+    secrets->setUsageInSoftTouched(false);
     hlpThread = new SecretControlThread(this);
     connect(hlpThread, SIGNAL(resultData(Result)),
             this, SLOT(hlpThreadResult(Result)));
