@@ -53,8 +53,9 @@ struct TASK {
     private:
         QByteArray secretValue;
     public:
-        void setSecretValue(QByteArray value) {
-            secretValue = value;
+        void setSecretValue(QByteArray *value) {
+            secretValue = *value;
+            value->clear();
         }
         QByteArray getSecretValue() const {
             return secretValue;

@@ -229,11 +229,12 @@ void VirtSecretControl::execAction(const Act_Param &param)
                 if ( show ) QDesktopServices::openUrl(QUrl(xml));
                 task.action     = DEFINE_ENTITY;
                 task.args.path  = xml;
-                task.secret->setSecretValue(
-                            createVirtSec->getSecretValue());
+                QByteArray secVal = createVirtSec->getSecretValue();
+                task.secret->setSecretValue(&secVal);
                 emit addNewTask(&task);
             };
-            createVirtSec->deleteLater();
+            delete createVirtSec;
+            createVirtSec = nullptr;
             //qDebug()<<xml<<"path"<<result;
         } else if ( param.method==undefineEntity ) {
             task.action     = UNDEFINE_ENTITY;
@@ -264,11 +265,12 @@ void VirtSecretControl::execAction(const Act_Param &param)
             if ( show ) QDesktopServices::openUrl(QUrl(xml));
             task.action     = DEFINE_ENTITY;
             task.args.path  = xml;
-            task.secret->setSecretValue(
-                        createVirtSec->getSecretValue());
+            QByteArray secVal = createVirtSec->getSecretValue();
+            task.secret->setSecretValue(&secVal);
             emit addNewTask(&task);
         };
-        createVirtSec->deleteLater();
+        delete createVirtSec;
+        createVirtSec = nullptr;
         //qDebug()<<xml<<"path"<<result;
     };
 }
