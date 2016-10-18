@@ -95,13 +95,13 @@ Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
 %package -n qt4-remote-viewer
 Summary:        Qt4 Remote Viewer
 
-%description -n qt4-virt-manager
+%description -n qt4-remote-viewer
 Qt4 viewer for remote access to Spice/VNC desktops.
 
 %package -n qt5-remote-viewer
 Summary:        Qt5 Remote Viewer
 
-%description -n qt5-virt-manager
+%description -n qt5-remote-viewer
 Qt5 viewer for remote access to Spice/VNC desktops.
 
 %prep
