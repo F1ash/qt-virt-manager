@@ -26,15 +26,9 @@ Requires:       qt5-qtmultimedia
 %endif
 # for use qemu-kvm (more useful)
 Requires:       qemu-kvm
-Requires:       libvirt-daemon-driver-qemu
 
 # for use SPICE viewer
-# spice-server exist in libvirt-daemon-driver-qemu Requires in Fedora
-#Requires:      spice-server
 Requires:       spice-vdagent
-
-# for use VNC viewer
-Requires:       libvncserver
 
 # for scrubbing (optional)
 Suggests:       scrub
