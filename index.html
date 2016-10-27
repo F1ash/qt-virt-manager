@@ -86,9 +86,11 @@ to guest domains (VMs).</p>
 <p>Application is present as package</p>
 
 <ul>
-<li><p>in repo: <code>dnf install qt-virt-manager</code> (Qt5 only)</p></li>
+<li><p>in repo (Qt5 only): <code>dnf install qt-virt-manager</code> or only
+<code>dnf install qt-remote-viewer</code></p></li>
 <li><p>in <a href="https://copr.fedorainfracloud.org/coprs/f1ash/QtVirtManager/">Fedora Copr</a>:
-<code>dnf install qt4-virt-manager</code> or  <code>dnf install qt5-virt-manager</code></p></li>
+<code>dnf install qt4-virt-manager</code> or  <code>dnf install qt5-virt-manager</code> or only
+<code>dnf install qt4-remote-viewer</code> or  <code>dnf install qt5-remote-viewer</code></p></li>
 <li><p>in <a href="https://f1ash.fedorapeople.org/qt-virt-manager/">FedoraPeople</a></p></li>
 </ul>
 
@@ -119,7 +121,7 @@ to guest domains (VMs).</p>
 <a id="virtual-machines-viewer" class="anchor" href="#virtual-machines-viewer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Virtual machines viewer</h3>
 
 <p>The SPICE/VNC <code>VM Viewer</code> for graphical control a VMs with support graphic channel.
-Note, that there is implemented same external <code>VM Viewer</code>.  Therefore at too long usage of manager is recommended to use this external viewer.</p>
+Note, that there is implemented same external <code>VM Viewer</code> (aka <code>Qt Remote Viewer</code>).  Therefore at too long usage of manager is recommended to use this external viewer. The external viewer (unlike internal) can't control VM, create snapshots, etc.</p>
 
 <p><img src="https://raw.githubusercontent.com/F1ash/qt-virt-manager/master/Pictures/snapshot14.png" alt="VM Spice Display"></p>
 
@@ -130,7 +132,7 @@ Note, that there is implemented same external <code>VM Viewer</code>.  Therefore
 <h3>
 <a id="task-warehouse" class="anchor" href="#task-warehouse" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Task Warehouse</h3>
 
-<p>The <code>Task Warehouse</code> window for viewing states of current tasks.</p>
+<p>The <code>Task Warehouse</code> window for viewing parameters and states of current tasks.</p>
 
 <p><img src="https://raw.githubusercontent.com/F1ash/qt-virt-manager/master/Pictures/snapshot24.png" alt="Boot in Spice Display"></p>
 
