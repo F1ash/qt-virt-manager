@@ -1,6 +1,6 @@
 qt-virt-manager
 =================
-![Main widget]( https://github.com/F1ash/qt-virt-manager/blob/master/Pictures/snapshot12.png )
+![Main widget]( https://github.com/F1ash/qt-virt-manager/blob/gh-pages/images/snapshot12.png )
 [![Build Status](https://travis-ci.org/F1ash/qt-virt-manager.svg?branch=master)](https://travis-ci.org/F1ash/qt-virt-manager)
 
 A GUI application for managing virtual machines.
