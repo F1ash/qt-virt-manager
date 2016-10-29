@@ -33,14 +33,12 @@ void HelpMenu::showAboutQt()
 void HelpMenu::showAboutSelf()
 {
     QString message = QString(
-                "Qt Virtual machine manager,\
-                \nversion %1.\
-                \nBased on Qt %2.\
-                \nUsed libvirt (%3) API.\
-                \nImplemented graphical consoles for\
-                \nVirtual Machine displays\
-                \n(by SPICE/VNC client)\
-                \nand LXC terminals.")
+                "<a href='http://f1ash.github.io/qt-virt-manager'>\
+                 Qt Virtual machines manager</a>, version %1.\
+                 <br>Based on Qt %2. Used libvirt (%3) API.\
+                 <br>Implemented graphical consoles\
+                 <br>for Virtual Machine displays\
+                 <br>(by SPICE/VNC client) and LXC terminals.")
                 .arg(QString("%1.%2.%3")
                      .arg(VERSION_MAJOR)
                      .arg(VERSION_MIDDLE)

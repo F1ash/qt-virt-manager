@@ -138,41 +138,55 @@ void VirtStorageVolControl::resultReceiver(Result *data)
         };
     } else if ( data->action == CREATE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
-            QString msg = data->msg.join(" ");
+            QString msg = QString("%1<br>%2")
+                    .arg(data->msg.join(" "))
+                    .arg(data->err);
             msgRepeater(msg);
             reloadState();
         };
     } else if ( data->action == DELETE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
-            QString msg = data->msg.join(" ");
+            QString msg = QString("%1<br>%2")
+                    .arg(data->msg.join(" "))
+                    .arg(data->err);
             msgRepeater(msg);
             reloadState();
         };
     } else if ( data->action == DOWNLOAD_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
-            QString msg = data->msg.join(" ");
+            QString msg = QString("%1<br>%2")
+                    .arg(data->msg.join(" "))
+                    .arg(data->err);
             msgRepeater(msg);
         };
     } else if ( data->action == UPLOAD_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
-            QString msg = data->msg.join(" ");
+            QString msg = QString("%1<br>%2")
+                    .arg(data->msg.join(" "))
+                    .arg(data->err);
             msgRepeater(msg);
         };
     } else if ( data->action == RESIZE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
-            QString msg = data->msg.join(" ");
+            QString msg = QString("%1<br>%2")
+                    .arg(data->msg.join(" "))
+                    .arg(data->err);
             msgRepeater(msg);
             reloadState();
         };
     } else if ( data->action == WIPE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
-            QString msg = data->msg.join(" ");
+            QString msg = QString("%1<br>%2")
+                    .arg(data->msg.join(" "))
+                    .arg(data->err);
             msgRepeater(msg);
         };
     } else if ( data->action == GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
         data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
-        QString msg = data->msg.join(" ");
+        QString msg = QString("%1<br>%2")
+                .arg(data->msg.join(" "))
+                .arg(data->err);
         msgRepeater(msg);
         if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
