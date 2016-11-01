@@ -6,32 +6,38 @@
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(qt_remote_viewer);
-    QApplication a(argc, argv);
     QString name("qt-remote-viewer");
-    a.setOrganizationName(name);
-    a.setApplicationName(name);
     QSettings::setDefaultFormat(QSettings::IniFormat);
-    bool getURL = true;
     QString url;
-    if ( argc>1 ) {
-        getURL = false;
-        url = argv[1];
-    } else {
-        GetURLDialog *d =
-                new GetURLDialog();
-        d->exec();
-        url = d->getURL();
-        d->deleteLater();
+    bool inLoop = false;
+    int _ret = 0;
+    while ( _ret!=255 ) {
+        QApplication a(argc, argv);
+        a.setOrganizationName(name);
+        a.setApplicationName(name);
+        if ( argc>1 && !inLoop ) {
+            url = argv[1];
+        } else {
+            GetURLDialog *d =
+                    new GetURLDialog();
+            _ret = d->exec();
+            url = d->getURL();
+            delete d;
+            d = nullptr;
+        };
+        if ( _ret!=255 ) {
+            inLoop = true;
+            VM_Viewer_Only *w = nullptr;
+            if ( url.startsWith("vnc") ) {
+                w = new VNC_Viewer_Only(nullptr, url);
+            } else if ( url.startsWith("spice") ) {
+                w = new Spice_Viewer_Only(nullptr, url);
+            };
+            if ( w!=nullptr ) {
+                w->show();
+                a.exec();
+            };
+        };
     };
-    if ( url.startsWith("vnc") ) {
-        VNC_Viewer_Only *w =
-                new VNC_Viewer_Only(nullptr, url);
-        w->show();
-    } else if ( url.startsWith("spice") ) {
-        Spice_Viewer_Only *w =
-                new Spice_Viewer_Only(nullptr, url);
-        w->show();
-    } else
-        return -1;
-    return a.exec();
+    return 0;
 }

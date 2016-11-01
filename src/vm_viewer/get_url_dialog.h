@@ -9,6 +9,7 @@
 #include <QSettings>
 #include <QPoint>
 #include <QMenu>
+#include <QCloseEvent>
 
 class URLMenu : public QMenu
 {
@@ -44,7 +45,8 @@ private:
     bool             isUnique(const QString&) const;
 
 private slots:
-    void             closeDialog();
+    void             closeEvent(QCloseEvent*);
+    void             saveUniqueURL();
     void             urlMenuRequested(const QPoint&);
     void             urlActivated(QListWidgetItem*);
 };

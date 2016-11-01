@@ -45,9 +45,9 @@ GetURLDialog::GetURLDialog(QWidget *parent) :
     commonLayout->addWidget(urlList);
     setLayout(commonLayout);
     connect(push, SIGNAL(released()),
-            this, SLOT(closeDialog()));
+            this, SLOT(saveUniqueURL()));
     connect(urlEdit, SIGNAL(returnPressed()),
-            this, SLOT(closeDialog()));
+            this, SLOT(saveUniqueURL()));
     connect(urlList, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(urlMenuRequested(const QPoint&)));
     connect(urlList, SIGNAL(itemActivated(QListWidgetItem*)),
@@ -94,7 +94,12 @@ bool GetURLDialog::isUnique(const QString &) const
 }
 
 /* private slots */
-void GetURLDialog::closeDialog()
+void GetURLDialog::closeEvent(QCloseEvent *ev)
+{
+    ev->accept();
+    done(255);
+}
+void GetURLDialog::saveUniqueURL()
 {
     url = urlEdit->text();
     if ( isUnique(url) )
