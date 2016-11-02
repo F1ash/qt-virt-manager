@@ -102,7 +102,7 @@ void GetURLDialog::closeEvent(QCloseEvent *ev)
 void GetURLDialog::saveUniqueURL()
 {
     url = urlEdit->text();
-    if ( isUnique(url) )
+    if ( !url.isEmpty() && isUnique(url) )
         urlList->insertItem(0, url);
     done(0);
 }

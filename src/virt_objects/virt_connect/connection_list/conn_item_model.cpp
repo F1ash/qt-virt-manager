@@ -17,8 +17,9 @@ ConnItemModel::ConnItemModel(QObject *parent) :
     uri_logo.insert("vbox", QIcon::fromTheme("vbox"));
     uri_logo.insert("openvz", QIcon::fromTheme("openvz"));
     state_logo.insert("opened", QIcon::fromTheme("approved"));
-    state_logo.insert("?", QIcon::fromTheme("unknown"));
+    state_logo.insert("in_process", QIcon::fromTheme("unknown"));
     state_logo.insert("closed", QIcon::fromTheme("delete"));
+    state_logo.insert("failed", QIcon::fromTheme("dialog-cancel"));
     state_logo.insert("-", QIcon::fromTheme("untouched"));
     rootIdx = QModelIndex();
 }
@@ -154,7 +155,7 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
             if ( _data.value("onView").toBool() ) {
                 res = onViewIcon;
             } else {
-                res = QIcon::fromTheme("");
+                //res = QIcon::fromTheme("");
             };
             break;
         default:

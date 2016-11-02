@@ -232,6 +232,9 @@ void ConnElement::setConnectionState(CONN_STATE status)
                 data = "OPENED";
                 emit newOpenedConnection(name);
                 break;
+            case CONNECT:
+                data = "in_Process";
+                break;
             default:
                 break;
             };
