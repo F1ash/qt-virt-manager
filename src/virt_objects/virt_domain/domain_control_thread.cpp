@@ -243,17 +243,15 @@ Result DomControlThread::getDomainData0()
 Result DomControlThread::getDomainData1()
 {
     Result result;
-    QString activeDomainXmlDesc, url;
-    QString name = task.object;
-    unsigned int flags = 0;
-
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
         result.err = "Connection pointer is NULL.";
         return result;
     };
+    QString activeDomainXmlDesc, url, uri, type, addr, port;
+    unsigned int flags = 0;
     virDomainPtr domainPtr =virDomainLookupByName(
-                *task.srcConnPtr, name.toUtf8().data());
+                *task.srcConnPtr, task.object.toUtf8().data());
     // flag=0 for get running domain xml-description
     activeDomainXmlDesc.append( virDomainGetXMLDesc(domainPtr, flags) );
     QDomDocument doc;
@@ -261,20 +259,19 @@ Result DomControlThread::getDomainData1()
     QDomElement graph = doc.firstChildElement("domain")
        .firstChildElement("devices")
        .firstChildElement("graphics");
+    uri.append(virConnectGetURI(*task.srcConnPtr));
+    addr = uri.split("://").last();
+    uri  = addr;
+    addr = uri.split("/").first();
+    uri  = addr;
+    addr = uri.split(":").first();
+    uri  = addr;
+    if ( uri.contains("@") ) {
+        addr = uri.split("@").last();
+        uri  = addr;
+    };
+    addr.clear();
     if ( !graph.isNull() ) {
-        QString uri, type, addr, port;
-        uri.append(virConnectGetURI(*task.srcConnPtr));
-        addr = uri.split("://").last();
-        uri = addr;
-        addr = uri.split("/").first();
-        uri = addr;
-        addr = uri.split(":").first();
-        uri = addr;
-        if ( uri.contains("@") ) {
-            addr = uri.split("@").last();
-            uri = addr;
-        };
-        addr.clear();
         type.append( graph.attribute("type").toLower() );
         if (graph.hasAttribute("listen")) {
             // for listen address
@@ -284,23 +281,26 @@ Result DomControlThread::getDomainData1()
             addr = graph.firstChildElement("listen")
                     .attribute("address");
         } else {
+            // if uri is empty then connection is local
             if ( uri.isEmpty() ) {
                 addr = "127.0.0.1";
                 uri  = "127.0.0.1";
             };
         };
-        if ( addr!=uri && !uri.isEmpty() )
-            addr = uri;
         port = (graph.hasAttribute("port"))?
                     graph.attribute("port") : "5900";
-        url = QString("%1://%2:%3").arg(type).arg(addr).arg(port);
-        result.result = true;
     } else {
-        result.result = false;
+        type = "???";
+        addr = "???";
+        port = "???";
     };
+    // if connection not local then use address from uri
+    if ( addr!=uri && !uri.isEmpty() ) addr = uri;
+    url = QString("%1://%2:%3").arg(type).arg(addr).arg(port);
     QVariantMap _url;
     _url.insert("URL", url);
     result.data.append( _url );
+    result.result = true;
     return result;
 }
 Result DomControlThread::createDomain()
