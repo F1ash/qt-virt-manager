@@ -7,6 +7,7 @@
 Donate_Dialog::Donate_Dialog(QWidget *parent) :
     QDialog(parent)
 {
+    setWindowTitle("Donate");
     donate1 = new Click_Label(this);
     donate1->setToolTip("Donate by Yandex.Money");
     donate1->setOpenExternalLinks(true);

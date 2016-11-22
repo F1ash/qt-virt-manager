@@ -43,6 +43,7 @@ CreateVolume::CreateVolume(
         QString          _poolName) :
     _CreateStorage(parent)
 {
+    setWindowTitle("StorageVolume Settings");
     setUrl("http://libvirt.org/formatstorage.html");
     settingName.append("CreateStorageVolume");
     settings.beginGroup(settingName);
