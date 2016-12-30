@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
      * for work askpass need to run
      * application as daemon
      */
-    ///*
+    /*
     pid_t pid, sid;
 
     //Fork the Parent Process
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     close(STDIN_FILENO);
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
-    //*/
+    */
 
     // init GUI
     Q_INIT_RESOURCE(qt_virt_manager);
