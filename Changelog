@@ -152,3 +152,11 @@ some improvements for actions atomization
 0.37.57 :
 fixed and enhanced FindSecretDialog and SecretControl;
 fixes for stability;
+
+0.39.60 :
+fixed Control widgets for send action's errors to Log;
+implemented qt-remote-viewer
+    for using GetURL widget in loop;
+fixed display icon for 'in process' state
+    for processed connection;
+some fixes and enhancements;

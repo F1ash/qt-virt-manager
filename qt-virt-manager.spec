@@ -4,7 +4,7 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.37.57
+Version:        0.39.60
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -192,6 +192,10 @@ fi
 %endif
 
 %changelog
+* Mon Jan 30 2017 Fl@sh <kaperang07@gmail.com> - 0.39.60-1
+- removed libvirt-daemon-driver-qemu, libvncserver R;
+- version updated;
+
 * Tue Oct 18 2016 Fl@sh <kaperang07@gmail.com> - 0.37.57-1
 - version updated;
 - added changes for qt-remote-viewer subpackages;
