@@ -9,7 +9,7 @@
 // http://libvirt.org/drivers.html#hypervisor
 #define HV_DRIVERS QStringList()<<"TEST"<<"LXC"<<"XEN"<<"QEMU/KVM"<<"QEMU/KVM user session"\
 <<"VBox"<<"VMware Player"<<"VMware Workstation"<<"VMware Fusion"\
-<<"VMware ESX"<<"VMware GSX"<<"VMware VPX"<<"OpenVZ"//<<"UML"
+<<"VMware ESX"<<"VMware GSX"<<"VMware VPX"<<"OpenVZ"<<"HyperV"<<"IBM PowerVM"//<<"UML"
 
 // http://libvirt.org/remote.html#Remote_transports
 #define TRANSPORTS QStringList()<<" -- "<<"TLS"<<"SSH"<<"UNIX"<<"TCP"<<"LibSSH2"
@@ -294,9 +294,12 @@ void ConnSettings::changeURI()
 void ConnSettings::changeDriver(QString s)
 {
     QString _name = getIconName(s);
+    Host->setPlaceholderText("[username@][hostname][:port]");
     Transports->setEnabled(true);
     Path->setPlaceholderText("[path]");
     Path->setEnabled(true);
+    Extra->setPlaceholderText("[?extraparameters]");
+    Extra->setEnabled(true);
     if ( _name=="qemu" ) {
         Path->setText( (s.endsWith("session"))?"session":"system" );
         Path->setEnabled(false);
@@ -319,6 +322,19 @@ void ConnSettings::changeDriver(QString s)
     } else if ( _name=="openvz" ) {
         Path->setText( "system" );
         Path->setEnabled(false);
+    } else if ( _name=="hyperv" ) {
+        Transports->setCurrentIndex(0);
+        Transports->setEnabled(false);
+        Path->clear();
+        Path->setEnabled(false);
+    } else if ( _name=="phyp" ) {
+        Host->setPlaceholderText("[username@]{hmc|ivm}");
+        Transports->setCurrentIndex(0);
+        Transports->setEnabled(false);
+        Path->setText( "system" );
+        Path->setEnabled(false);
+        Extra->clear();
+        Extra->setEnabled(false);
     } else if ( getDriverName(s)=="test" ) {
         Path->setText( "default" );
     } else Path->clear();
@@ -327,14 +343,19 @@ void ConnSettings::changeDriver(QString s)
 QString ConnSettings::getIconName(QString &_text) const
 {
     QString ret(_text.split("/").first().split(" ").first().toLower());
-    if ( ret=="test" ) ret = "user-trash";
+    if        ( ret=="test" ) {
+        ret = "user-trash";
+    } else if ( ret=="ibm" ) {
+        ret = "phyp";
+    };
     return ret;
 }
 QString ConnSettings::getDriverName(QString &_text) const
 {
+    // relayted parts: ConnElement::buildURI, ConnItemModel::ConnItemModel;
     QString ret;
     QString _drv_row = _text.toLower().split("/").first();
-    if ( _drv_row.startsWith("vmware") ) {
+    if        ( _drv_row.startsWith("vmware") ) {
         if ( _drv_row.endsWith("player") ) {
             ret.append("vmwareplayer");
         } else if ( _drv_row.endsWith("workstation") ) {
@@ -348,6 +369,8 @@ QString ConnSettings::getDriverName(QString &_text) const
         } else if ( _drv_row.endsWith("vpx") ) {
             ret.append("vpx");
         };
+    } else if ( _drv_row.startsWith("ibm") ) {
+        ret = "phyp";
     } else
         ret = _drv_row;
     return ret;

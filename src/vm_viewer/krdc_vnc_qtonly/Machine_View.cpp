@@ -29,6 +29,7 @@
 #include <QAction>
 #include <QTimer>
 #include <QKeySequence>
+#include <QAbstractScrollArea>
 #include "Machine_View.h"
 
 MachineView::MachineView( QWidget *parent ) : QScrollArea( parent )
@@ -61,7 +62,7 @@ void MachineView::Set_Scaling( bool s )
         newViewSize( maximumViewportSize().width(),
                      maximumViewportSize().height() );
     else
-        newViewSize( -1, -1 );
+        newViewSize( 200, 150 );
 }
 
 void MachineView::Set_Fullscreen( bool on )
@@ -304,7 +305,7 @@ bool MachineView::event( QEvent *event )
 
         if( propEvent->propertyName() == "scaleEmbeddedDisplay" )
         {
-            newViewSize( -1, -1 );
+            newViewSize( 200, 150 );
         }
 
         return false;

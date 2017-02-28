@@ -342,6 +342,7 @@ void VNC_Viewer::resizeViewer(const int h, const int w)
 
 void VNC_Viewer::fullScreenTriggered()
 {
+    if ( nullptr==vncWdg ) return;
     if (isFullScreen()) {
         setWindowState(Qt::WindowNoState);
         vncWdg->Set_Fullscreen(false);
@@ -358,6 +359,7 @@ void VNC_Viewer::fullScreenTriggered()
 
 void VNC_Viewer::scaledScreenVirtDomain()
 {
+    if ( nullptr==vncWdg ) return;
     vncWdg->Set_Scaling(true);
 }
 

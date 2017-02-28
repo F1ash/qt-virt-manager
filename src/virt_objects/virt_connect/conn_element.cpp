@@ -48,7 +48,7 @@ void ConnElement::buildURI()
     QStringList _uri;
     QString _driver, _drv_row;
     _drv_row = Driver.toLower().split("/").first();
-    if ( _drv_row.startsWith("vmware") ) {
+    if        ( _drv_row.startsWith("vmware") ) {
         if ( _drv_row.endsWith("player") ) {
             _driver.append("vmwareplayer");
         } else if ( _drv_row.endsWith("workstation") ) {
@@ -62,6 +62,8 @@ void ConnElement::buildURI()
         } else if ( _drv_row.endsWith("vpx") ) {
             _driver.append("vpx");
         };
+    } else if ( _drv_row.startsWith("ibm") ) {
+        _driver = "phyp";
     } else
         _driver = _drv_row;
     _uri.append(_driver);

@@ -16,6 +16,8 @@ ConnItemModel::ConnItemModel(QObject *parent) :
     uri_logo.insert("vpx", QIcon::fromTheme("vmware"));
     uri_logo.insert("vbox", QIcon::fromTheme("vbox"));
     uri_logo.insert("openvz", QIcon::fromTheme("openvz"));
+    uri_logo.insert("hyperv", QIcon::fromTheme("hyperv"));
+    uri_logo.insert("phyp", QIcon::fromTheme("phyp"));
     state_logo.insert("opened", QIcon::fromTheme("approved"));
     state_logo.insert("in_process", QIcon::fromTheme("unknown"));
     state_logo.insert("closed", QIcon::fromTheme("delete"));
