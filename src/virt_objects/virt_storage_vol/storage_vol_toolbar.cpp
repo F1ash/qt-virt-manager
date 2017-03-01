@@ -20,7 +20,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     create_Action->setIcon(QIcon::fromTheme("define"));
     create_Action->setToolTip("New volume");
     create_Menu = new OpenFileMenu(
-                this, DEFINE_ENTITY, VIRT_STORAGE_VOLUME);
+                this, CREATE_ENTITY, VIRT_STORAGE_VOLUME);
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()),
             this, SLOT(showMenu()));

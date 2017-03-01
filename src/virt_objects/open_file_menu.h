@@ -13,7 +13,7 @@ class OpenFileMenu : public QMenu
 public:
     explicit OpenFileMenu(
             QWidget     *parent = nullptr,
-            Actions      act    = _NONE_ACTION,
+            Actions      _act   = _NONE_ACTION,
             VIRT_ENTITY  _e     = _NONE_ENTITY);
 
 signals:
@@ -25,6 +25,7 @@ private:
     QAction    *editTemplate;
     QAction    *manual;
     Act_Param   task;
+    Actions     act;
 
 private slots:
     void        chooseExample();

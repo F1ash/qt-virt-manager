@@ -309,6 +309,7 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const Act_Param &args)
         task.args.path  = args.path;
         emit addNewTask(&task);
     } else if ( args.context==DO_Edit ) {
+        // TODO: implement edit pool
         emit poolToEditor(&task);
     } else {
         QString path;

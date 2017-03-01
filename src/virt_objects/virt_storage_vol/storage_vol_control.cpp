@@ -332,12 +332,14 @@ void VirtStorageVolControl::newVirtEntityFromXML(const Act_Param &args)
     };
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
+    task.args.object= currPoolName;
     task.method     = method;
     task.action     = args.act;
     task.args.path  = args.path;
     if ( args.context==DO_AsIs ) {
         emit addNewTask(&task);
     } else if ( args.context==DO_Edit ) {
+        // TODO: implement edit volume
         emit volumeToEditor(&task);
     } else {
         QString path;

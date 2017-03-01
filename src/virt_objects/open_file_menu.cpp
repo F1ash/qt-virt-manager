@@ -1,30 +1,30 @@
 #include "open_file_menu.h"
 
 OpenFileMenu::OpenFileMenu(
-        QWidget *parent, Actions act, VIRT_ENTITY _e) :
+        QWidget *parent, Actions _act, VIRT_ENTITY _e) :
     QMenu(parent)
 {
-    task.act = act;
+    act = _act;
     icon = QIcon::fromTheme(
-                QString("%1").arg(enumToActionString(act)) );
+                QString("%1").arg(enumToActionString(_act)) );
     applyAsIs = new QAction(this);
     applyAsIs->setText(
                 QString(
     "%1 Virtual %2 from example XML description as is")
-                .arg(enumToActionString(act))
+                .arg(enumToActionString(_act))
                 .arg(enumToEntityString(_e)));
     applyAsIs->setIcon(icon);
     editTemplate = new QAction(this);
     editTemplate->setText(
                 QString(
     "%1 Virtual %2 by edit example XML description")
-                .arg(enumToActionString(act))
+                .arg(enumToActionString(_act))
                 .arg(enumToEntityString(_e)));
     editTemplate->setIcon(icon);
     manual = new QAction(this);
     manual->setText(
                 QString("%1 Virtual %2 manually")
-                .arg(enumToActionString(act))
+                .arg(enumToActionString(_act))
                 .arg(enumToEntityString(_e)));
     manual->setIcon(icon);
     connect(applyAsIs, SIGNAL(triggered()),
@@ -55,6 +55,7 @@ void OpenFileMenu::chooseExample()
 void OpenFileMenu::chooseManual()
 {
     task.clear();
+    task.act = act;
     task.context = DO_Manually;
     emit fileForMethod(task);
 }
@@ -63,6 +64,7 @@ void OpenFileMenu::emitParameters(const QString &title, const QString &dirPath)
     QString path;
     path = QFileDialog::getOpenFileName(this, title, dirPath);
     if ( !path.isEmpty() ) {
+        task.act = act;
         task.path.append( path );
         emit fileForMethod(task);
     };
