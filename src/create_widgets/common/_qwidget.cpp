@@ -10,9 +10,9 @@ QDomDocument _QWidget::getDataDocument() const
 {
     return QDomDocument();
 }
-void _QWidget::setDataDescription(const QString &xmlDesc)
+void _QWidget::setDataDescription(const QString &_xmlDesc)
 {
-
+    Q_UNUSED(_xmlDesc);
 }
 bool _QWidget::closeDataEdit()
 {

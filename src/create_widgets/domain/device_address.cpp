@@ -50,7 +50,7 @@ AttrList DeviceAddress::getAttrList() const
     if ( use->isChecked() && info!=nullptr ) {
         // get attribute list from current address type
         _Addr *wdg = static_cast<_Addr*>(info->currentWidget());
-        _ret = wdg->getAttrList();
+        if ( wdg!=nullptr ) _ret = wdg->getAttrList();
         /*
          * Every address has a mandatory attribute type
          * that describes which bus the device is on.

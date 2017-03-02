@@ -836,6 +836,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     if (event->type() == QEvent::MouseMove )
     {
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
+        if ( ev==nullptr ) return false;
         //qDebug()<<ev->x()<<ev->y()<<":"
         //<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
         //if ( is_FullScreen ) {
@@ -863,6 +864,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     else if (event->type() == QEvent::MouseButtonPress)
     {
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
+        if ( ev==nullptr ) return false;
         inputs->inputsButtonPress(
                     QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
         return true;
@@ -871,6 +873,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     {
         emit mouseClickedInto();
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
+        if ( ev==nullptr ) return false;
         inputs->inputsButtonRelease(
                     QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
         return true;
@@ -878,12 +881,14 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     else if (event->type() == QEvent::KeyPress)
     {
         QKeyEvent *ev = static_cast<QKeyEvent*>(event);
+        if ( ev==nullptr ) return false;
         inputs->inputsQKeyPress(ev->key());
         return true;
     }
     else if (event->type() == QEvent::KeyRelease)
     {
         QKeyEvent *ev = static_cast<QKeyEvent*>(event);
+        if ( ev==nullptr ) return false;
         inputs->inputsQKeyRelease(ev->key());
         return true;
     }
@@ -900,6 +905,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     else if (event->type() == QEvent::Wheel)
     {
         QWheelEvent *ev = static_cast<QWheelEvent*>(event);
+        if ( ev==nullptr ) return false;
         if (ev->delta() > 0)
         {
             inputs->inputsButtonPress(

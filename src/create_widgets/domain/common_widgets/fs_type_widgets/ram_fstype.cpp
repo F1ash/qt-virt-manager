@@ -44,11 +44,11 @@ QDomDocument RAMFsType::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void RAMFsType::setDataDescription(const QString &xmlDesc)
+void RAMFsType::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _source, _target, _device;
     _device = doc.firstChildElement("device")
             .firstChildElement("filesystem");

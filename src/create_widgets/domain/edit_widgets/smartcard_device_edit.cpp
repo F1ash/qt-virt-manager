@@ -12,11 +12,11 @@ SmartCardDevice_Edit::SmartCardDevice_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void SmartCardDevice_Edit::setDataDescription(const QString &xmlDesc)
+void SmartCardDevice_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc, channelDoc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _addr, _channel, _channelDev;
     _device = doc.firstChildElement("device")
             .firstChildElement("smartcard");
@@ -47,7 +47,9 @@ void SmartCardDevice_Edit::setDataDescription(const QString &xmlDesc)
     addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
         CCIDAddr *wdg = static_cast<CCIDAddr*>( addr->getCurrentAddrWidget() );
-        wdg->bus->setText( _addr.attribute("bus") );
-        wdg->slot->setText( _addr.attribute("slot") );
+        if ( wdg!=nullptr ) {
+            wdg->bus->setText( _addr.attribute("bus") );
+            wdg->slot->setText( _addr.attribute("slot") );
+        };
     };
 }

@@ -158,9 +158,12 @@ uint CreateSnapshotDialog::getSnapshotFlags() const
 void CreateSnapshotDialog::accept()
 {
     _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(baseWdg->currentWidget());
-    QDomElement _node = wdg->getElements()
+    QDomElement _node;
+    if ( wdg!=nullptr ) {
+        _node = wdg->getElements()
             .firstChildElement("disks")
             .firstChildElement("disk");
+    };
     if ( _node.childNodes().count() ) {
         // count of disk subset not can be equal zero
         QMessageBox::warning(

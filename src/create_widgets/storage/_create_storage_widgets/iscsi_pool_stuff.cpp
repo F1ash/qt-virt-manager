@@ -24,7 +24,7 @@ iSCSI_Pool_Stuff::iSCSI_Pool_Stuff(QWidget *parent, virConnectPtr *connPtrPtr) :
 }
 
 /* public slots */
-QDomDocument iSCSI_Pool_Stuff::getStorageXMLDesc() const
+QDomDocument iSCSI_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _source, _device, _host, _auth, _secret,

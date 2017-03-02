@@ -157,10 +157,10 @@ QDomDocument Bridge_to_LAN::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Bridge_to_LAN::setDataDescription(const QString &xmlDesc)
+void Bridge_to_LAN::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _source, _target, _mac,
             _virtport, _addr, _filterref;
     _device = doc.firstChildElement("device")
@@ -214,15 +214,17 @@ void Bridge_to_LAN::setDataDescription(const QString &xmlDesc)
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
         addr->type->setEnabled(false);
         PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
-        wdg->domain->setText( _addr.attribute("domain") );
-        wdg->bus->setText( _addr.attribute("bus") );
-        wdg->slot->setText( _addr.attribute("slot") );
-        wdg->function->setValue( _addr.attribute("function")
-                                 .split("x").last().toInt() );
-        if ( _addr.hasAttribute("multifunction") ) {
-            wdg->multifunction->setEnabled(true);
-            wdg->multifunction->setChecked(
-                        _addr.attribute("multifunction")=="on" );
+        if ( wdg!=nullptr ) {
+            wdg->domain->setText( _addr.attribute("domain") );
+            wdg->bus->setText( _addr.attribute("bus") );
+            wdg->slot->setText( _addr.attribute("slot") );
+            wdg->function->setValue( _addr.attribute("function")
+                                     .split("x").last().toInt() );
+            if ( _addr.hasAttribute("multifunction") ) {
+                wdg->multifunction->setEnabled(true);
+                wdg->multifunction->setChecked(
+                            _addr.attribute("multifunction")=="on" );
+            };
         };
     };
     _filterref = _device.firstChildElement("filterref");

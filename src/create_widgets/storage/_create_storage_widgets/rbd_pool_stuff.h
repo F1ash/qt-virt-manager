@@ -14,7 +14,7 @@ public:
 signals:
 
 public slots:
-    QDomDocument getStorageXMLDesc() const;
+    QDomDocument getDataDocument() const;
 };
 
 #endif // RBD_POOL_STUFF_H

@@ -134,11 +134,11 @@ QDomDocument SCSI_Host_Device_Edit::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void SCSI_Host_Device_Edit::setDataDescription(const QString &xmlDesc)
+void SCSI_Host_Device_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _source, _addr;
     _device = doc.firstChildElement("device")
             .firstChildElement("hostdev");
@@ -207,10 +207,12 @@ void SCSI_Host_Device_Edit::setDataDescription(const QString &xmlDesc)
     addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
         DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
-        wdg->controller->setText( _addr.attribute("controller") );
-        wdg->bus->setText( _addr.attribute("bus") );
-        wdg->target->setText( _addr.attribute("target") );
-        wdg->unit->setText( _addr.attribute("unit") );
+        if ( wdg!=nullptr ) {
+            wdg->controller->setText( _addr.attribute("controller") );
+            wdg->bus->setText( _addr.attribute("bus") );
+            wdg->target->setText( _addr.attribute("target") );
+            wdg->unit->setText( _addr.attribute("unit") );
+        };
     };
 }
 

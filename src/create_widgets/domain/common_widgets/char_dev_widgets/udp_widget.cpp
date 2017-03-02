@@ -66,11 +66,11 @@ QDomDocument UdpWidget::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void UdpWidget::setDataDescription(const QString &xmlDesc)
+void UdpWidget::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _source1, _source2;
     _device = doc
             .firstChildElement("device")

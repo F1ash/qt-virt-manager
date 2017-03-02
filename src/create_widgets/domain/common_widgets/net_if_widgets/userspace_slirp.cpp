@@ -66,10 +66,10 @@ QDomDocument Userspace_SLIRP::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Userspace_SLIRP::setDataDescription(const QString &xmlDesc)
+void Userspace_SLIRP::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _mac, _addr;
     _device = doc.firstChildElement("device")
             .firstChildElement("interface");
@@ -90,15 +90,17 @@ void Userspace_SLIRP::setDataDescription(const QString &xmlDesc)
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
         addr->type->setEnabled(false);
         PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
-        wdg->domain->setText( _addr.attribute("domain") );
-        wdg->bus->setText( _addr.attribute("bus") );
-        wdg->slot->setText( _addr.attribute("slot") );
-        wdg->function->setValue( _addr.attribute("function")
-                                 .split("x").last().toInt() );
-        if ( _addr.hasAttribute("multifunction") ) {
-            wdg->multifunction->setEnabled(true);
-            wdg->multifunction->setChecked(
-                        _addr.attribute("multifunction")=="on" );
+        if ( wdg!=nullptr ) {
+            wdg->domain->setText( _addr.attribute("domain") );
+            wdg->bus->setText( _addr.attribute("bus") );
+            wdg->slot->setText( _addr.attribute("slot") );
+            wdg->function->setValue( _addr.attribute("function")
+                                     .split("x").last().toInt() );
+            if ( _addr.hasAttribute("multifunction") ) {
+                wdg->multifunction->setEnabled(true);
+                wdg->multifunction->setChecked(
+                            _addr.attribute("multifunction")=="on" );
+            };
         };
     };
 }

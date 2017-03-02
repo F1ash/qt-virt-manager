@@ -16,7 +16,7 @@ RedirDevDevice::RedirDevDevice(
     portLabel = new QLabel("Port", this);
     host = new QLineEdit(this);
     port = new QSpinBox(this);
-    port->setRange(10, 65535);
+    port->setRange(1000, 65535);
     port->setValue(4000);
     sourceLayout = new QHBoxLayout(this);
     sourceLayout->addWidget(hostLabel);

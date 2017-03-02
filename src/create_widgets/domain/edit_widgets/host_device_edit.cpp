@@ -18,10 +18,10 @@ QDomDocument HostDevice_Edit::getDataDocument() const
     if ( nullptr!=wdg ) doc = wdg->getDataDocument();
     return doc;
 }
-void HostDevice_Edit::setDataDescription(const QString &xmlDesc)
+void HostDevice_Edit::setDataDescription(const QString &_xmlDesc)
 {
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device;
     _device = doc.firstChildElement("device")
             .firstChildElement("hostdev");
@@ -30,7 +30,7 @@ void HostDevice_Edit::setDataDescription(const QString &xmlDesc)
     type->setCurrentIndex( (idx<0)? type->count()-1:idx );
     type->setEnabled(false);
     _QWidget *wdg = static_cast<_QWidget*>(infoEdit->currentWidget());
-    if ( nullptr!=wdg ) wdg->setDataDescription(xmlDesc);
+    if ( nullptr!=wdg ) wdg->setDataDescription(_xmlDesc);
 }
 
 /* private slots */
@@ -49,8 +49,7 @@ void HostDevice_Edit::init_wdg()
     connect(type, SIGNAL(currentIndexChanged(int)),
             infoEdit, SLOT(setCurrentIndex(int)));
     for (uint i=0; i<infoEdit->count(); i++) {
-        _QWidget *wdg = static_cast<_QWidget*>(
-                    infoEdit->widget(i));
+        _QWidget *wdg = static_cast<_QWidget*>(infoEdit->widget(i));
         if ( wdg!=nullptr ) {
             connect(wdg, SIGNAL(dataChanged()),
                     this, SLOT(stateChanged()));

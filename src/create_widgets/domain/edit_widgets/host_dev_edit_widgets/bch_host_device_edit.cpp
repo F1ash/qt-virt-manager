@@ -10,11 +10,11 @@ BCh_Host_Device_Edit::BCh_Host_Device_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void BCh_Host_Device_Edit::setDataDescription(const QString &xmlDesc)
+void BCh_Host_Device_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _source, _el;
     _device = doc.firstChildElement("device")
             .firstChildElement("hostdev");

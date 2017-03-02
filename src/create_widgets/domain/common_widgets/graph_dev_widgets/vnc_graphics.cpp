@@ -59,7 +59,7 @@ VNC_Graphics::VNC_Graphics(
     networks->setVisible(false);
     autoPort = new QCheckBox("AutoPort", this);
     port = new QSpinBox(this);
-    port->setRange(10, 65535);
+    port->setRange(1000, 65535);
     port->setValue(5900);
     port->setEnabled(false);
     usePassw = new QCheckBox("Password", this);
@@ -138,6 +138,7 @@ QDomDocument VNC_Graphics::getDataDocument() const
         _devDesc.setAttribute("sharePolicy", _sharePolicy);
     if ( autoPort->isChecked() ) {
         _devDesc.setAttribute("autoport", "yes");
+        _devDesc.setAttribute("port", "-1");
     } else {
         _devDesc.setAttribute("port", port->text());
     };

@@ -21,7 +21,7 @@ RBD_Pool_Stuff::RBD_Pool_Stuff(QWidget *parent, virConnectPtr *connPtrPtr) :
 }
 
 /* public slots */
-QDomDocument RBD_Pool_Stuff::getStorageXMLDesc() const
+QDomDocument RBD_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _source, _name, _host, _auth, _secret;

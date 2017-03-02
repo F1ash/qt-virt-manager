@@ -74,11 +74,11 @@ QDomDocument USB_Host_Device_Edit::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void USB_Host_Device_Edit::setDataDescription(const QString &xmlDesc)
+void USB_Host_Device_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _source, _vendor, _product, _addr;
     _device = doc.firstChildElement("device")
             .firstChildElement("hostdev");
@@ -95,7 +95,9 @@ void USB_Host_Device_Edit::setDataDescription(const QString &xmlDesc)
     addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
         USBAddr *wdg = static_cast<USBAddr*>( addr->getCurrentAddrWidget() );
-        wdg->bus->setText( _addr.attribute("bus") );
-        wdg->port->setText( _addr.attribute("port") );
+        if ( wdg!=nullptr ) {
+            wdg->bus->setText( _addr.attribute("bus") );
+            wdg->port->setText( _addr.attribute("port") );
+        };
     };
 }

@@ -15,10 +15,12 @@ QModelIndex SnapshotTreeModel::index(int row, int column, const QModelIndex &par
 
     TreeItem *parentItem;
 
-    if (!parent.isValid())
+    if (!parent.isValid()) {
         parentItem = rootItem;
-    else
+    } else {
         parentItem = static_cast<TreeItem*>(parent.internalPointer());
+        if ( parentItem==nullptr ) parentItem = rootItem;
+    };
 
     TreeItem *childItem = parentItem->child(row);
     if (childItem)
@@ -32,6 +34,7 @@ QModelIndex SnapshotTreeModel::parent(const QModelIndex &index) const
         return QModelIndex();
 
     TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
+    if ( childItem==nullptr ) childItem = rootItem;
     TreeItem *parentItem = childItem->parent();
 
     if (parentItem == rootItem)
@@ -49,10 +52,12 @@ int SnapshotTreeModel::rowCount(const QModelIndex &parent) const
     if (parent.column() > 0)
         return 0;
 
-    if (!parent.isValid())
+    if (!parent.isValid()) {
         parentItem = rootItem;
-    else
+    } else {
         parentItem = static_cast<TreeItem*>(parent.internalPointer());
+        if ( parentItem==nullptr ) parentItem = rootItem;
+    };
 
     return parentItem->childCount();
 }
@@ -72,6 +77,7 @@ QVariant SnapshotTreeModel::data(const QModelIndex &index, int role) const
     if (!index.isValid()) return res;
 
     TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+    if ( item==nullptr ) item = rootItem;
 
     if ( role==Qt::DisplayRole ) {
         return item->data(index.column());
@@ -89,6 +95,7 @@ bool SnapshotTreeModel::setData( const QModelIndex &index, const QVariant &value
     if (!index.isValid())
         return false;
     TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+    if ( item==nullptr ) item = rootItem;
 
     if ( role == Qt::DisplayRole && index.column()==0 ) {
         QString data = value.toString();
@@ -115,10 +122,13 @@ bool SnapshotTreeModel::insertRow(int row, const QModelIndex &parent)
 {
     if ( row<0 ) return false;
     TreeItem *parentItem;
-    if (!parent.isValid())
+
+    if (!parent.isValid()) {
         parentItem = rootItem;
-    else
+    } else {
         parentItem = static_cast<TreeItem*>(parent.internalPointer());
+        if ( parentItem==nullptr ) parentItem = rootItem;
+    };
     beginInsertRows(parent, row, row);
     parentItem->appendChild(new TreeItem(QString(), parentItem));
     endInsertRows();
@@ -129,10 +139,13 @@ bool SnapshotTreeModel::removeRow(int row, const QModelIndex &parent)
 {
     if ( row<0 ) return false;
     TreeItem *parentItem;
-    if (!parent.isValid())
+
+    if (!parent.isValid()) {
         parentItem = rootItem;
-    else
+    } else {
         parentItem = static_cast<TreeItem*>(parent.internalPointer());
+        if ( parentItem==nullptr ) parentItem = rootItem;
+    };
     beginRemoveRows(parent, row, row);
     parentItem->removeChild( parentItem->child(row) );
     endRemoveRows();

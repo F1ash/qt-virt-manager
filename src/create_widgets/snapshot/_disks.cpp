@@ -23,14 +23,16 @@ void _Disks::setDisksData(QDomElement &_disk, bool external)
         disksLayout->addWidget(new _DiskItem(this));
         _DiskItem *wdg = static_cast<_DiskItem*>(
                     disksLayout->itemAt(disksLayout->count()-1)->widget());
-        wdg->setDiskName(_name);
-        _type = QString(external? "external" : "internal");
-        wdg->setSnapshotType(_type);
-        if ( !_disk.firstChildElement("driver").isNull() ) {
-            _driver = _disk.firstChildElement("driver").attribute("type");
-        };
-        if ( !_driver.isEmpty() ) {
-            wdg->setDriverType(_driver);
+        if ( wdg!=nullptr ) {
+            wdg->setDiskName(_name);
+            _type = QString(external? "external" : "internal");
+            wdg->setSnapshotType(_type);
+            if ( !_disk.firstChildElement("driver").isNull() ) {
+                _driver = _disk.firstChildElement("driver").attribute("type");
+            };
+            if ( !_driver.isEmpty() ) {
+                wdg->setDriverType(_driver);
+            };
         };
     };
 }

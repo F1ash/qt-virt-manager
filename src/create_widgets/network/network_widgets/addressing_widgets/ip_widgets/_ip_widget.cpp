@@ -98,8 +98,7 @@ void _IP_Widget::setDataDescription(const QString &_xmlDesc)
     QDomElement _el = doc.documentElement();
     QString _ver = _el.attribute("family");
     ipv6->setChecked( _ver=="ipv6" );
-    _IPvX *wdg = static_cast<_IPvX*>(
-                    sets->currentWidget());
+    _IPvX *wdg = static_cast<_IPvX*>(sets->currentWidget());
     if ( nullptr!=wdg ) {
         wdg->address->setText(
                     _el.attribute("address"));

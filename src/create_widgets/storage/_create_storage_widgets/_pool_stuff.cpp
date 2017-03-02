@@ -12,9 +12,13 @@ _Pool_Stuff::_Pool_Stuff(QWidget *parent, virConnectPtr* connPtrPtr) :
     setLayout(commonLayout);
     target->pathWdg->setVisible(true);
 }
+void _Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+    Q_UNUSED(_xmlDesc);
+}
 
 /* public slots */
-QDomDocument _Pool_Stuff::getStorageXMLDesc() const
+QDomDocument _Pool_Stuff::getDataDocument() const
 {
     return QDomDocument();
     /*

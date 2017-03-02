@@ -60,11 +60,11 @@ QDomDocument ChannelDevice::getDataDocument() const
     //qDebug()<<doc.toByteArray(4).data();
     return doc;
 }
-void ChannelDevice::setDataDescription(const QString &xmlDesc)
+void ChannelDevice::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _source, _target, _device;
     _device = doc.firstChildElement("device")
             .firstChildElement("channel");
@@ -91,7 +91,8 @@ void ChannelDevice::setDataDescription(const QString &xmlDesc)
                 Qt::UserRole,
                 Qt::MatchContains);
     devType->setCurrentIndex( (idx<0)? 0:idx );
-    static_cast<_QWidget*>(charDevWdg->currentWidget())->setDataDescription(xmlDesc);
+    _QWidget *wdg = static_cast<_QWidget*>(charDevWdg->currentWidget());
+    if ( wdg!=nullptr ) wdg->setDataDescription(_xmlDesc);
 }
 
 /* private slots */
@@ -108,7 +109,9 @@ void ChannelDevice::chanNameChanged(const QString &text)
     } else {
         devType->setCurrentIndex(5);
         UnixWidget *wdg = static_cast<UnixWidget*>(charDevWdg->currentWidget());
-        wdg->setPath(QString("/var/lib/libvirt/qemu/channel/target/%1")
+        if ( wdg!=nullptr ) {
+            wdg->setPath(QString("/var/lib/libvirt/qemu/channel/target/%1")
                      .arg(chanType->currentText()));
+        };
     }
 }

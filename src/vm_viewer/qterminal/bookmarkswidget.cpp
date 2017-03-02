@@ -304,7 +304,8 @@ QVariant BookmarksModel::data(const QModelIndex &index, int role) const
     case Qt::FontRole:
     {
         QFont f;
-        if (static_cast<AbstractBookmarkItem*>(index.internalPointer())->type() == AbstractBookmarkItem::Group)
+        AbstractBookmarkItem *item = static_cast<AbstractBookmarkItem*>(index.internalPointer());
+        if ( item && (item->type() == AbstractBookmarkItem::Group) )
         {
             f.setBold(true);
         }

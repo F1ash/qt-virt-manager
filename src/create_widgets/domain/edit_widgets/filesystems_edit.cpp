@@ -13,11 +13,11 @@ FileSystems_Edit::FileSystems_Edit(
 }
 
 /* public slots */
-void FileSystems_Edit::setDataDescription(const QString &xmlDesc)
+void FileSystems_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device;
     _device = doc.firstChildElement("device")
             .firstChildElement("filesystem");
@@ -26,5 +26,5 @@ void FileSystems_Edit::setDataDescription(const QString &xmlDesc)
     type->setCurrentIndex( (idx<0)? 0:idx );
     type->setEnabled(false);
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    if ( nullptr!=wdg ) wdg->setDataDescription(xmlDesc);
+    if ( nullptr!=wdg ) wdg->setDataDescription(_xmlDesc);
 }

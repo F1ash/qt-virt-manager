@@ -64,12 +64,12 @@ QDomDocument MountFsType::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void MountFsType::setDataDescription(const QString &xmlDesc)
+void MountFsType::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
     int idx;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _source, _target, _driver,
             _readOnly, _device;
     _device = doc.firstChildElement("device")

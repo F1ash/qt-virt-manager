@@ -12,7 +12,7 @@ Dir_Pool_Stuff::Dir_Pool_Stuff(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument Dir_Pool_Stuff::getStorageXMLDesc() const
+QDomDocument Dir_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _target,

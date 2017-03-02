@@ -27,7 +27,7 @@ Disk_Pool_Stuff::Disk_Pool_Stuff(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument Disk_Pool_Stuff::getStorageXMLDesc() const
+QDomDocument Disk_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _source, _device, _format,

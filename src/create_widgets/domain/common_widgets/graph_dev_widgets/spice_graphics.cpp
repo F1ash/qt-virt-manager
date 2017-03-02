@@ -60,7 +60,7 @@ Spice_Graphics::Spice_Graphics(
     networks->setVisible(false);
     autoPort = new QCheckBox("AutoPort", this);
     port = new QSpinBox(this);
-    port->setRange(10, 65535);
+    port->setRange(1000, 65535);
     port->setValue(5900);
     port->setEnabled(false);
     tlsPortLabel = new QCheckBox("Use TLS", this);
@@ -431,6 +431,7 @@ QDomDocument Spice_Graphics::getDataDocument() const
     _devDesc.setAttribute("defaultPolicy", defaultPolicy->currentText());
     if ( autoPort->isChecked() ) {
         _devDesc.setAttribute("autoport", "yes");
+        _devDesc.setAttribute("port", "-1");
     } else {
         _devDesc.setAttribute("port", port->text());
     };

@@ -33,6 +33,7 @@ public:
     QSettings            settings;
     QString              settingName;
     QCheckBox           *showAtClose;
+    virtual void         setDataDescription(const QString&);
 
 signals:
     void                 errorMsg(const QString&);

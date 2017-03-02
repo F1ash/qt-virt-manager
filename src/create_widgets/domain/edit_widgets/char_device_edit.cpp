@@ -14,11 +14,11 @@ CharDevice_Edit::CharDevice_Edit(
 }
 
 /* public slots */
-void CharDevice_Edit::setDataDescription(const QString &xmlDesc)
+void CharDevice_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device;
     _device = doc.firstChildElement("device")
             .firstChildElement(tag);
@@ -28,5 +28,6 @@ void CharDevice_Edit::setDataDescription(const QString &xmlDesc)
                 Qt::UserRole,
                 Qt::MatchContains);
     devType->setCurrentIndex( (idx<0)? 0:idx );
-    static_cast<_QWidget*>(charDevWdg->currentWidget())->setDataDescription(xmlDesc);
+    _QWidget *wdg = static_cast<_QWidget*>(charDevWdg->currentWidget());
+    if ( wdg!=nullptr ) wdg->setDataDescription(_xmlDesc);
 }

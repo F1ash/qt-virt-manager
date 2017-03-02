@@ -67,6 +67,10 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
     connect(type, SIGNAL(currentIndexChanged(int)),
             info, SLOT(setCurrentIndex(int)));
 }
+void _CreateStorage::setDataDescription(const QString &_xmlDesc)
+{
+    Q_UNUSED(_xmlDesc);
+}
 
 /* public slots */
 QString _CreateStorage::getXMLDescFileName() const

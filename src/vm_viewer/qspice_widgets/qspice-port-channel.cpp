@@ -56,8 +56,8 @@ void QSpicePortChannel::writeFinishToPort(void *_port, void *_res, void *_errs)
                 (SpicePortChannel*)_port,
                 result,
                 errors);
-    QSpicePortChannel *obj = static_cast<QSpicePortChannel*>(
-                g_async_result_get_user_data(result));
+    //QSpicePortChannel *obj = static_cast<QSpicePortChannel*>(
+    //            g_async_result_get_user_data(result));
     size_t count = sizeof(errors)/sizeof(*errors);
     for ( uint i = 0; i<count; i++ ) {
         if ( nullptr==errors[i] ) continue;

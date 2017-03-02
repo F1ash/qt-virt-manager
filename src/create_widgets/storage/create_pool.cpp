@@ -97,21 +97,23 @@ QString CreatePool::getXMLDescFileName() const
 
     _Pool_Stuff *wdg =
             static_cast<_Pool_Stuff*>(info->currentWidget());
-    _stuff = wdg->getStorageXMLDesc();
-    QDomNodeList list =
-            _stuff.firstChildElement("stuff").childNodes();
-    /*
-     * current DomNode is removed to root-element
-     * but NULL-elemens not removed
-     * therefore keep to seek on not-NULL next element
-     */
-    uint j = 0;
-    const uint count = list.length();
-    for (int i=0; i<count;i++) {
-        //qDebug()<<list.item(j).nodeName()<<i;
-        if (!list.item(j).isNull())
-            _pool.appendChild(list.item(j));
-        else ++j;
+    if ( wdg!=nullptr ) {
+        _stuff = wdg->getDataDocument();
+        QDomNodeList list =
+                _stuff.firstChildElement("stuff").childNodes();
+        /*
+         * current DomNode is removed to root-element
+         * but NULL-elemens not removed
+         * therefore keep to seek on not-NULL next element
+         */
+        uint j = 0;
+        const uint count = list.length();
+        for (int i=0; i<count;i++) {
+            //qDebug()<<list.item(j).nodeName()<<i;
+            if (!list.item(j).isNull())
+                _pool.appendChild(list.item(j));
+            else ++j;
+        };
     };
 
     bool read = xml->open();

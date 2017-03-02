@@ -50,11 +50,11 @@ void UnixWidget::setPath(QString text)
 {
     path->setText(text);
 }
-void UnixWidget::setDataDescription(const QString &xmlDesc)
+void UnixWidget::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _source, _target;
     _device = doc
             .firstChildElement("device")

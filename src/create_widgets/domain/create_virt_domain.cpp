@@ -272,8 +272,7 @@ bool CreateVirtDomain::buildXMLDescription()
     doc.appendChild(root);
     devices = doc.createElement("devices");
     foreach (QString key, wdgList.keys()) {
-        _QWidget *Wdg = static_cast<_QWidget*>(
-                    wdgList.value(key));
+        _QWidget *Wdg = static_cast<_QWidget*>(wdgList.value(key));
         if ( nullptr==Wdg ) continue;
         tabWidget->setCurrentWidget(Wdg);
         QDomNodeList list;
@@ -442,8 +441,7 @@ void CreateVirtDomain::restoreParameters()
     //disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(const QString&)),
     //           wdgList.value("Devices"), SLOT(setEmulator(QString&)));
     foreach (QString key, wdgList.keys()) {
-        _QWidget *Wdg = static_cast<_QWidget*>(
-                    wdgList.value(key));
+        _QWidget *Wdg = static_cast<_QWidget*>(wdgList.value(key));
         if ( nullptr!=Wdg ) {
             Wdg->deleteLater();
         };
@@ -455,8 +453,7 @@ void CreateVirtDomain::restoreParameters()
 }
 void CreateVirtDomain::setBootOrder(QDomElement *_devices)
 {
-    OS_Booting *Wdg = static_cast<OS_Booting*>(
-                wdgList.value("OS_Booting"));
+    OS_Booting *Wdg = static_cast<OS_Booting*>(wdgList.value("OS_Booting"));
     if ( nullptr!=Wdg ) {
         BootOrderList list = Wdg->getBootOrder();
         QDomDocument _bootDevDoc;

@@ -75,11 +75,11 @@ QDomDocument TcpWidget::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void TcpWidget::setDataDescription(const QString &xmlDesc)
+void TcpWidget::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _source, _protocol, _target;
     _device = doc
             .firstChildElement("device")

@@ -24,11 +24,11 @@ Random_Edit::Random_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void Random_Edit::setDataDescription(const QString &xmlDesc)
+void Random_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _backend, _rate;
     _device = doc.firstChildElement("device")
             .firstChildElement("rng");
@@ -73,15 +73,15 @@ void Random_Edit::setDataDescription(const QString &xmlDesc)
             } else
                 ++j;
         };
-        QString _xmlDesc = _charDoc.toString();
-        //qDebug()<<_xmlDesc;
+        QString _xml = _charDoc.toString();
+        //qDebug()<<_xml;
         int idx = bkEGD->devType->findData(
                     _type,
                     Qt::UserRole,
                     Qt::MatchContains);
         bkEGD->devType->setCurrentIndex( (idx<0)? 0:idx );
-        static_cast<_QWidget*>(
-                    bkEGD->charDevWdg->currentWidget()
-                    )->setDataDescription(_xmlDesc);
+        _QWidget *wdg = static_cast<_QWidget*>(
+                    bkEGD->charDevWdg->currentWidget() );
+        if ( wdg!=nullptr ) wdg->setDataDescription(_xml);
     };
 }

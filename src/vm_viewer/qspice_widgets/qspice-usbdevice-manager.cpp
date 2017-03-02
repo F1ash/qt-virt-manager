@@ -184,8 +184,8 @@ void get_device_idx(gpointer item, void *res)
     if ( dev_desc ) g_free(dev_desc);
     if ( _res!=nullptr && dev.contains(_res->id) ) {
         _res->idx = _res->size;
+        ++_res->size;
     };
-    ++_res->size;
 }
 
 void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_finish_callback

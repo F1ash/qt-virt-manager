@@ -28,7 +28,7 @@ NetFs_Pool_Stuff::NetFs_Pool_Stuff(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument NetFs_Pool_Stuff::getStorageXMLDesc() const
+QDomDocument NetFs_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _source, _host, _dir, _format,

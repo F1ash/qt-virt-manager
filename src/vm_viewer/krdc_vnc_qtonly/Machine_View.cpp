@@ -302,6 +302,7 @@ bool MachineView::event( QEvent *event )
         //any property changes dealt with in here
         QDynamicPropertyChangeEvent *propEvent =
                 static_cast<QDynamicPropertyChangeEvent*>( event );
+        if ( propEvent==nullptr ) return false;
 
         if( propEvent->propertyName() == "scaleEmbeddedDisplay" )
         {
@@ -327,6 +328,7 @@ bool MachineView::event( QEvent *event )
     else if( event->type() == QEvent::KeyPress )
     {
         QKeyEvent *ke = static_cast<QKeyEvent*>( event );
+        if ( ke==nullptr ) return QScrollArea::event( event );
 
         if( ke->key() == Qt::Key_Return
             && ke->modifiers() == Qt::ControlModifier + Qt::AltModifier )

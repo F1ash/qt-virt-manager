@@ -21,7 +21,7 @@ Gluster_Pool_Stuff::Gluster_Pool_Stuff(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument Gluster_Pool_Stuff::getStorageXMLDesc() const
+QDomDocument Gluster_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _source, _name, _host, _dir;

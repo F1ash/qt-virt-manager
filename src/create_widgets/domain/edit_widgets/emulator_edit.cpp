@@ -6,11 +6,11 @@ Emulator_Edit::Emulator_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void Emulator_Edit::setDataDescription(const QString &xmlDesc)
+void Emulator_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device;
     _device = doc.firstChildElement("device")
             .firstChildElement("emulator");

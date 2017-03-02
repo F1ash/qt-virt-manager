@@ -250,6 +250,7 @@ void ConnectionList::createConnection(const QModelIndex &_item)
     connections->insert(key, new ConnElement(this));
     ConnElement *conn = static_cast<ConnElement*>(
                 connections->value(key));
+    if ( conn==nullptr ) return;
     conn->setItemReference(connItemModel, idx);
     clearSelection();
     connect(conn, SIGNAL(warningShowed()),
@@ -431,8 +432,8 @@ void ConnectionList::connItemClicked(const QModelIndex &_item)
     QString _name = idx->getName();
     DATA conn_Status = idx->getData();
     QString key = conn_Status.value(QString("initName")).toString();
-    ConnElement *conn =
-            static_cast<ConnElement*>(connections->value(key));
+    ConnElement *conn = static_cast<ConnElement*>(
+                connections->value(key));
     if ( nullptr==conn ) return;
     if ( key != _name ) {
         conn_Status.insert(QString("initName"), QVariant(_name));
@@ -457,8 +458,8 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
     DATA conn_Status;
     conn_Status = idx->getData();
     QString key = conn_Status.value(QString("initName")).toString();
-    ConnElement *conn =
-            static_cast<ConnElement*>(connections->value(key));
+    ConnElement *conn = static_cast<ConnElement*>(
+                connections->value(key));
     if ( nullptr==conn ) return;
     if ( key != _name ) {
         conn_Status.insert(QString("initName"), QVariant(_name));

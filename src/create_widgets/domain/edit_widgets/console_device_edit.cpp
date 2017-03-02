@@ -8,11 +8,11 @@ ConsoleDevice_Edit::ConsoleDevice_Edit(QWidget *parent, virConnectPtr *connPtrPt
 }
 
 /* public slots */
-void ConsoleDevice_Edit::setDataDescription(const QString &xmlDesc)
+void ConsoleDevice_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _target;
     _device = doc.firstChildElement("device")
             .firstChildElement("console");

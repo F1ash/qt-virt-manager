@@ -145,8 +145,10 @@ void CreateVirtSecret::buildXMLDescription()
     _uuid = doc.createElement("uuid");
     _secret.appendChild(_description);
     _secret.appendChild(_uuid);
-    _usageDoc = wdg->getSecStuff();
-    _usage = _usageDoc.firstChildElement("usage");
+    if ( wdg!=nullptr ) {
+        _usageDoc = wdg->getSecStuff();
+        _usage = _usageDoc.firstChildElement("usage");
+    };
     _secret.appendChild(_usage);
     _secret.setAttribute(
                 "ephemeral",

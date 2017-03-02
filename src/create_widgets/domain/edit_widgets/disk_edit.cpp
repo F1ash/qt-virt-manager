@@ -12,11 +12,11 @@ Disk_Edit::Disk_Edit(QWidget *parent, virConnectPtr *connPtrPtr) :
 }
 
 /* public slots */
-void Disk_Edit::setDataDescription(const QString &xmlDesc)
+void Disk_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device;
     _device = doc.firstChildElement("device")
             .firstChildElement("disk");
@@ -28,5 +28,5 @@ void Disk_Edit::setDataDescription(const QString &xmlDesc)
     source->setCurrentIndex( (idx<0)? 0:idx );
     source->setEnabled(false);
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    if ( nullptr!=wdg ) wdg->setDataDescription(xmlDesc);
+    if ( nullptr!=wdg ) wdg->setDataDescription(_xmlDesc);
 }

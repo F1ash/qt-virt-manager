@@ -159,6 +159,7 @@ void DomainToolBar::timerEvent(QTimerEvent *event)
 void DomainToolBar::showHoveredMenu()
 {
     QAction *act = static_cast<QAction*>(sender());
+    if ( act==nullptr ) return;
     if ( act==create_Action ) {
         if ( define_Action->menu()->isVisible() )
             define_Action->menu()->hide();
@@ -179,6 +180,7 @@ void DomainToolBar::showHoveredMenu()
 void DomainToolBar::showMenu()
 {
     QAction *act = static_cast<QAction*>(sender());
+    if ( act==nullptr ) return;
     if ( act->menu()->isVisible() ) act->menu()->hide();
     else {
         act->menu()->show();

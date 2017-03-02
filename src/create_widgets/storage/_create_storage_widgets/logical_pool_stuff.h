@@ -12,7 +12,7 @@ public:
 signals:
 
 public slots:
-    QDomDocument getStorageXMLDesc() const;
+    QDomDocument getDataDocument() const;
 };
 
 #endif // LOGICAL_POOL_STUFF_H

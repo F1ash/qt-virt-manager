@@ -114,11 +114,11 @@ QDomDocument BIOS_Boot::getDataDocument() const
     //qDebug()<<doc.toString();
     return doc;
 }
-void BIOS_Boot::setDataDescription(const QString &xmlDesc)
+void BIOS_Boot::setDataDescription(const QString &_xmlDesc)
 {
     //qDebug()<<xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _os, _type, _loader,
             _boot, _bootMenu, _nvram;
     _os = doc

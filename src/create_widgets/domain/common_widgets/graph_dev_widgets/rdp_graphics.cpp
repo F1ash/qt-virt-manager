@@ -5,7 +5,7 @@ RDP_Graphics::RDP_Graphics(QWidget *parent) :
 {
     autoPort = new QCheckBox("AutoPort", this);
     port = new QSpinBox(this);
-    port->setRange(10, 65535);
+    port->setRange(1000, 65535);
     replaceUser = new QCheckBox("Replace\nUser", this);
     multiUser = new QCheckBox("MultiUser", this);
     commonLayout = new QGridLayout();
@@ -38,6 +38,7 @@ QDomDocument RDP_Graphics::getDataDocument() const
     _devDesc.setAttribute("type", "rdp");
     if ( autoPort->isChecked() ) {
         _devDesc.setAttribute("autoport", "yes");
+        _devDesc.setAttribute("port", "-1");
     } else {
         _devDesc.setAttribute("port", port->text());
     };

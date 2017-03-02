@@ -31,7 +31,7 @@ Fs_Pool_Stuff::Fs_Pool_Stuff(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument Fs_Pool_Stuff::getStorageXMLDesc() const
+QDomDocument Fs_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _source, _device, _format,

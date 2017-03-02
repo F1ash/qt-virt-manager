@@ -16,11 +16,11 @@ VideoDevice_Edit::VideoDevice_Edit(QWidget *parent) :
 }
 
 /* public slots */
-void VideoDevice_Edit::setDataDescription(const QString &xmlDesc)
+void VideoDevice_Edit::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _model, _accel, _addr;
     _device = doc.firstChildElement("device")
             .firstChildElement("video");
@@ -43,15 +43,17 @@ void VideoDevice_Edit::setDataDescription(const QString &xmlDesc)
     addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
         PciAddr *wdg = static_cast<PciAddr*>( addr->getCurrentAddrWidget() );
-        wdg->domain->setText( _addr.attribute("domain") );
-        wdg->bus->setText( _addr.attribute("bus") );
-        wdg->slot->setText( _addr.attribute("slot") );
-        wdg->function->setValue( _addr.attribute("function")
-                                 .split("x").last().toInt() );
-        if ( _addr.hasAttribute("multifunction") ) {
-            wdg->multifunction->setEnabled(true);
-            wdg->multifunction->setChecked(
-                        _addr.attribute("multifunction")=="on" );
+        if ( wdg!=nullptr ) {
+            wdg->domain->setText( _addr.attribute("domain") );
+            wdg->bus->setText( _addr.attribute("bus") );
+            wdg->slot->setText( _addr.attribute("slot") );
+            wdg->function->setValue( _addr.attribute("function")
+                                     .split("x").last().toInt() );
+            if ( _addr.hasAttribute("multifunction") ) {
+                wdg->multifunction->setEnabled(true);
+                wdg->multifunction->setChecked(
+                            _addr.attribute("multifunction")=="on" );
+            };
         };
     };
 }

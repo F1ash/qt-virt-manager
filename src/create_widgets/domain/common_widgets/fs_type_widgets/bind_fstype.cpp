@@ -45,11 +45,11 @@ QDomDocument BindFsType::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void BindFsType::setDataDescription(const QString &xmlDesc)
+void BindFsType::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _source, _target, _readOnly, _device;
     _device = doc.firstChildElement("device")
             .firstChildElement("filesystem");

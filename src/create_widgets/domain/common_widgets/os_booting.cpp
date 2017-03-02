@@ -161,12 +161,12 @@ void OS_Booting::readXMLDesciption()
     currentDeviceXMLDesc = xmlDesc;
     readXMLDesciption(currentDeviceXMLDesc);
 }
-void OS_Booting::readXMLDesciption(const QString &xmlDesc)
+void OS_Booting::readXMLDesciption(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
     QDomElement _domain, _os, _type;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     _domain = doc.firstChildElement("domain");
     _os = _domain.firstChildElement("os");
     _type = _os.firstChildElement("type");
@@ -190,7 +190,8 @@ void OS_Booting::readXMLDesciption(const QString &xmlDesc)
                 Qt::UserRole,
                 Qt::MatchContains);
     bootType->bootType->setCurrentIndex( (idx<0)? 0:idx );
-    static_cast<_QWidget*>(bootSet->currentWidget())->setDataDescription(xmlDesc);
+    _QWidget *wdg = static_cast<_QWidget*>(bootSet->currentWidget());
+    if ( wdg!=nullptr ) wdg->setDataDescription(_xmlDesc);
 }
 void OS_Booting::changeOSType(const QString &_type)
 {
@@ -203,7 +204,8 @@ void OS_Booting::changeBootType()
     QString _empty, _type;
     emit emulatorType(_empty);
     emit domainType(_empty);
-    static_cast<_QWidget*>(bootSet->currentWidget())->setInitState();
+    _QWidget *wdg = static_cast<_QWidget*>(bootSet->currentWidget());
+    if ( wdg!=nullptr ) wdg->setInitState();
     _type = bootType->bootType->itemData(
                 bootType->bootType->currentIndex(), Qt::UserRole)
             .toString();

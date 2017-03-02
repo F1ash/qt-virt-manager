@@ -74,11 +74,11 @@ QDomDocument Dir_Disk::getDataDocument() const
     doc.appendChild(_device);
     return doc;
 }
-void Dir_Disk::setDataDescription(const QString &xmlDesc)
+void Dir_Disk::setDataDescription(const QString &_xmlDesc)
 {
-    //qDebug()<<xmlDesc;
+    //qDebug()<<_xmlDesc;
     QDomDocument doc;
-    doc.setContent(xmlDesc);
+    doc.setContent(_xmlDesc);
     QDomElement _device, _source, _target, _encrypt,
             _secret, _readOnly, _secLabel, _addr, _driver;
     _device = doc.firstChildElement("device")
@@ -137,22 +137,26 @@ void Dir_Disk::setDataDescription(const QString &xmlDesc)
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
         if ( _attr=="pci" ) {
             PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
-            wdg->domain->setText( _addr.attribute("domain") );
-            wdg->bus->setText( _addr.attribute("bus") );
-            wdg->slot->setText( _addr.attribute("slot") );
-            wdg->function->setValue( _addr.attribute("function")
-                                     .split("x").last().toInt() );
-            if ( _addr.hasAttribute("multifunction") ) {
-                wdg->multifunction->setEnabled(true);
-                wdg->multifunction->setChecked(
-                            _addr.attribute("multifunction")=="on" );
+            if ( wdg!=nullptr ) {
+                wdg->domain->setText( _addr.attribute("domain") );
+                wdg->bus->setText( _addr.attribute("bus") );
+                wdg->slot->setText( _addr.attribute("slot") );
+                wdg->function->setValue( _addr.attribute("function")
+                                         .split("x").last().toInt() );
+                if ( _addr.hasAttribute("multifunction") ) {
+                    wdg->multifunction->setEnabled(true);
+                    wdg->multifunction->setChecked(
+                                _addr.attribute("multifunction")=="on" );
+                };
             };
         } else if ( _attr=="drive" ) {
             DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
-            wdg->controller->setText( _addr.attribute("controller") );
-            wdg->bus->setText( _addr.attribute("bus") );
-            wdg->target->setText( _addr.attribute("target") );
-            wdg->unit->setText( _addr.attribute("unit") );
+            if ( wdg!=nullptr ) {
+                wdg->controller->setText( _addr.attribute("controller") );
+                wdg->bus->setText( _addr.attribute("bus") );
+                wdg->target->setText( _addr.attribute("target") );
+                wdg->unit->setText( _addr.attribute("unit") );
+            };
         };
     };
 }

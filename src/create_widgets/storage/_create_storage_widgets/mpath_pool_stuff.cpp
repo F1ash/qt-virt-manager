@@ -12,7 +12,7 @@ MPath_Pool_Stuff::MPath_Pool_Stuff(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument MPath_Pool_Stuff::getStorageXMLDesc() const
+QDomDocument MPath_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _target, _path, _perm, _encrypt;

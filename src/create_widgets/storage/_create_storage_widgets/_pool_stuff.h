@@ -14,12 +14,13 @@ public:
             virConnectPtr*  connPtrPtr = nullptr);
     _Storage_Source        *source;
     _Storage_Target        *target;
+    virtual void            setDataDescription(const QString&);
 
 private:
     QVBoxLayout            *commonLayout;
 
 public slots:
-    virtual QDomDocument    getStorageXMLDesc() const;
+    virtual QDomDocument    getDataDocument() const;
 };
 
 #endif // _POOL_STUFF_H

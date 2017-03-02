@@ -19,7 +19,7 @@ SheepDog_Pool_Stuff::SheepDog_Pool_Stuff(QWidget *parent) :
 }
 
 /* public slots */
-QDomDocument SheepDog_Pool_Stuff::getStorageXMLDesc() const
+QDomDocument SheepDog_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _source, _name, _host;
