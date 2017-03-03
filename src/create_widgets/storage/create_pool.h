@@ -21,7 +21,9 @@ class CreatePool : public _CreateStorage
 public:
     explicit CreatePool(
             QWidget         *parent     = nullptr,
-            virConnectPtr   *_connPtr   = nullptr);
+            virConnectPtr   *_connPtr   = nullptr,
+            QString          _xmlFile   = QString());
+    void             setDataDescription(const QString&);
 
 signals:
 

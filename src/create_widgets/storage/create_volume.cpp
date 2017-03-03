@@ -40,8 +40,9 @@ void pooHelperThread::run()
 CreateVolume::CreateVolume(
         QWidget         *parent,
         virConnectPtr   *connPtrPtr,
-        QString          _poolName) :
-    _CreateStorage(parent)
+        QString          _poolName,
+        QString          _xmlFile) :
+    _CreateStorage(parent, _xmlFile)
 {
     setWindowTitle("StorageVolume Settings");
     setUrl("http://libvirt.org/formatstorage.html");
@@ -84,6 +85,11 @@ CreateVolume::CreateVolume(
     connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
             this, SIGNAL(errorMsg(const QString&)));
     hlpThread->start();
+}
+
+void CreateVolume::setDataDescription(const QString &_xmlDesc)
+{
+
 }
 
 /* public slots */
@@ -195,4 +201,6 @@ void CreateVolume::initData()
             allocLabel, SLOT(setCurrentIndex(int)));
     allocLabel->setCurrentIndex(1);
     //capLabel->setCurrentIndex(1);
+
+    readXMLDataDescription();
 }

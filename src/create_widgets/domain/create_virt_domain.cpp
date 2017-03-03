@@ -192,8 +192,7 @@ void CreateVirtDomain::readCapabilities()
         }
     } else {
         // read for edit exist VM parameters
-        QFile *_xml =
-                new QFile(this);
+        QFile *_xml = new QFile(this);
         _xml->setFileName(xmlFileName);
         _xml->open(QIODevice::ReadOnly);
         xmlDesc.append(_xml->readAll().constData());

@@ -21,7 +21,9 @@ class _CreateStorage : public QDialog
 {
     Q_OBJECT
 public:
-    explicit _CreateStorage(QWidget *parent = nullptr);
+    explicit _CreateStorage(
+            QWidget *parent     = nullptr,
+            QString  _xmlFile   = QString());
     QComboBox           *type;
     QLineEdit           *stName;
     QLabel              *suff;
@@ -33,12 +35,14 @@ public:
     QSettings            settings;
     QString              settingName;
     QCheckBox           *showAtClose;
+    void                 readXMLDataDescription();
     virtual void         setDataDescription(const QString&);
 
 signals:
     void                 errorMsg(const QString&);
 
 private:
+    const QString        xmlFileName;
     QLabel              *typeLabel, *stNameLabel;
     QLabel              *about;
     QPushButton         *chooseStorage;
@@ -54,8 +58,8 @@ private:
 
 public slots:
     virtual QString      getXMLDescFileName() const;
-            bool         showXMLDescription() const;
-            void         setUrl(QString);
+    bool                 showXMLDescription() const;
+    void                 setUrl(QString);
 
 private slots:
     void                 set_Result();

@@ -27,7 +27,9 @@ public:
     explicit CreateVolume(
             QWidget         *parent      = nullptr,
             virConnectPtr   *connPtrPtr  = nullptr,
-            QString          _poolName   = QString());
+            QString          _poolName   = QString(),
+            QString          _xmlFile    = QString());
+    void             setDataDescription(const QString&);
 
 signals:
 

@@ -19,8 +19,9 @@
 
 CreatePool::CreatePool(
         QWidget         *parent,
-        virConnectPtr   *_connPtr) :
-    _CreateStorage(parent)
+        virConnectPtr   *_connPtr,
+        QString          _xmlFile) :
+    _CreateStorage(parent, _xmlFile)
 {
     //setModal(false);
     setWindowTitle("StoragePool Settings");
@@ -65,6 +66,13 @@ CreatePool::CreatePool(
                 commonLayout->count()-1, uuidWdg, -1);
     commonLayout->insertWidget(
                 commonLayout->count()-1, infoWidget, -1);
+
+    readXMLDataDescription();
+}
+
+void CreatePool::setDataDescription(const QString &_xmlDesc)
+{
+
 }
 
 /* public slots */

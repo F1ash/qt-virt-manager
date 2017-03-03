@@ -1,7 +1,8 @@
 #include "_create_storage.h"
 
-_CreateStorage::_CreateStorage(QWidget *parent) :
-    QDialog(parent)
+_CreateStorage::_CreateStorage(
+        QWidget *parent, QString _xmlFile) :
+    QDialog(parent), xmlFileName(_xmlFile)
 {
     setModal(false);
     typeLabel = new QLabel("Pool Type:", this);
@@ -66,6 +67,22 @@ _CreateStorage::_CreateStorage(QWidget *parent) :
 
     connect(type, SIGNAL(currentIndexChanged(int)),
             info, SLOT(setCurrentIndex(int)));
+}
+void _CreateStorage::readXMLDataDescription()
+{
+    if ( xmlFileName.isEmpty() ) {
+        // create/define new Storage entity
+    } else {
+        // read for edit exist Storage entity
+        QString xmlDesc;
+        QFile *_xml = new QFile(this);
+        _xml->setFileName(xmlFileName);
+        bool opened = _xml->open(QIODevice::ReadOnly);
+        if ( opened ) xmlDesc.append(_xml->readAll().constData());
+        _xml->close();
+        _xml->deleteLater();
+        if ( opened ) setDataDescription(xmlDesc);
+    };
 }
 void _CreateStorage::setDataDescription(const QString &_xmlDesc)
 {

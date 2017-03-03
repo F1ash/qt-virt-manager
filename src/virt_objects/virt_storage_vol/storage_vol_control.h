@@ -20,7 +20,6 @@ public:
 
 signals:
     void                finished(const QString&);
-    void                volumeToEditor(TASK*);
 
 private:
     QString             currPoolName;

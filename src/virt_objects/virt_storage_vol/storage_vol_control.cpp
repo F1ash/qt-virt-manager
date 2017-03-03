@@ -335,19 +335,14 @@ void VirtStorageVolControl::newVirtEntityFromXML(const Act_Param &args)
     task.args.object= currPoolName;
     task.method     = method;
     task.action     = args.act;
-    task.args.path  = args.path;
     if ( args.context==DO_AsIs ) {
+        task.args.path  = args.path;
         emit addNewTask(&task);
-    } else if ( args.context==DO_Edit ) {
-        // TODO: implement edit volume
-        emit volumeToEditor(&task);
     } else {
         QString path;
         bool show = false;
-        // show SRC Creator widget
-        // get path for method
         CreateVolume *createVolumeDialog =
-                new CreateVolume(this, ptr_ConnPtr, currPoolName);
+                new CreateVolume(this, ptr_ConnPtr, currPoolName, args.path);
         connect(createVolumeDialog, SIGNAL(errorMsg(const QString)),
                 this, SLOT(msgRepeater(const QString&)));
         int result = createVolumeDialog->exec();

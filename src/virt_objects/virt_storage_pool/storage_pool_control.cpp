@@ -308,16 +308,11 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const Act_Param &args)
     if ( args.context==DO_AsIs ) {
         task.args.path  = args.path;
         emit addNewTask(&task);
-    } else if ( args.context==DO_Edit ) {
-        // TODO: implement edit pool
-        emit poolToEditor(&task);
     } else {
         QString path;
         bool show = false;
-        // show SRC Creator widget
-        // get path for method
         CreatePool *createPoolDialog =
-                new CreatePool(this, ptr_ConnPtr);
+                new CreatePool(this, ptr_ConnPtr, args.path);
         int result = createPoolDialog->exec();
         if ( result==QDialog::Accepted ) {
             path = createPoolDialog->getXMLDescFileName();

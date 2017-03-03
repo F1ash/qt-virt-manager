@@ -17,7 +17,6 @@ public:
 
 signals:
     void                       overviewStPool(virConnectPtr*, const QString&, const QString&);
-    void                       poolToEditor(TASK*);
 
 private:
     StoragePoolModel          *storagePoolModel;
