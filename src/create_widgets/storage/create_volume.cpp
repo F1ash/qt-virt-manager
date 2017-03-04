@@ -67,9 +67,9 @@ CreateVolume::CreateVolume(
     capLabel->addItem("Capacity (TiB):", "TiB");
     capLabel->addItem("Capacity (EiB):", "EiB");
     allocation = new QSpinBox(this);
-    allocation->setRange(0, 1024);
+    allocation->setRange(0, 1024000000); // 1024Mib
     capacity = new QSpinBox(this);
-    capacity->setRange(0, 1024);
+    capacity->setRange(0, 1024000000); // 1024Mib
     sizeLayout = new QGridLayout();
     sizeLayout->addWidget(allocLabel, 0, 0);
     sizeLayout->addWidget(allocation, 0, 1);
@@ -89,7 +89,40 @@ CreateVolume::CreateVolume(
 
 void CreateVolume::setDataDescription(const QString &_xmlDesc)
 {
-
+    QTextStream s(stdout);
+    s << _xmlDesc << "---" << endl;
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _vol;
+    _vol = doc.firstChildElement("volume");
+    if ( !_vol.isNull() ) {
+        QString _type = _vol.attribute("type");
+        // type set in initData() method
+        QDomNode _n = _vol.firstChild();
+        while ( !_n.isNull() ) {
+            QDomElement _el = _n.toElement();
+            if ( !_el.isNull() ) {
+                if ( _el.tagName()=="name" ) {
+                    stName->setText(_el.text());
+                } else if ( _el.tagName()=="allocation" ) {
+                    QString _unit = _el.attribute("unit", "bytes");
+                    allocation->setValue(
+                                convertNiBtoMBytes(_el.text().toULongLong(), _unit));
+                    int idx = allocLabel->findData("MiB", Qt::UserRole);
+                    if (idx <0 ) idx = 0;
+                    allocLabel->setCurrentIndex(idx);
+                } else if ( _el.tagName()=="capacity" ) {
+                    QString _unit = _el.attribute("unit", "bytes");
+                    capacity->setValue(
+                                convertNiBtoMBytes(_el.text().toULongLong(), _unit));
+                    int idx = capLabel->findData("MiB", Qt::UserRole);
+                    if (idx <0 ) idx = 0;
+                    capLabel->setCurrentIndex(idx);
+                };
+            };
+            _n = _n.nextSibling();
+        };
+    };
 }
 
 /* public slots */
@@ -176,6 +209,7 @@ QString CreateVolume::getXMLDescFileName() const
 /* private slots */
 void CreateVolume::initData()
 {
+    // set pool type, but need volume type
     type->addItem(hlpThread->type);
 
     //source = new _Storage_Source(this);

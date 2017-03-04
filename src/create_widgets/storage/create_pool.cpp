@@ -72,7 +72,24 @@ CreatePool::CreatePool(
 
 void CreatePool::setDataDescription(const QString &_xmlDesc)
 {
-
+    QTextStream s(stdout);
+    s << _xmlDesc << "---" << endl;
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _pool;
+    _pool = doc.firstChildElement("pool");
+    if ( !_pool.isNull() ) {
+        QDomNode _n = _pool.firstChild();
+        while ( !_n.isNull() ) {
+            QDomElement _el = _n.toElement();
+            if ( !_el.isNull() ) {
+                if ( _el.tagName()=="name" ) {
+                    stName->setText(_el.text());
+                };
+            };
+            _n = _n.nextSibling();
+        };
+    };
 }
 
 /* public slots */

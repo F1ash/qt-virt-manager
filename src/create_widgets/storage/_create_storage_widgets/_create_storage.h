@@ -37,6 +37,7 @@ public:
     QCheckBox           *showAtClose;
     void                 readXMLDataDescription();
     virtual void         setDataDescription(const QString&);
+    quint64              convertNiBtoMBytes(quint64, const QString&);
 
 signals:
     void                 errorMsg(const QString&);

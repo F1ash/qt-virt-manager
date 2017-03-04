@@ -372,7 +372,7 @@ void Memory::readXMLDesciption(const QString &_xmlDesc)
         };
     };
 }
-quint64 Memory::convertNiBtoMBytes(quint64 _NiB, QString &_unit)
+quint64 Memory::convertNiBtoMBytes(quint64 _NiB, const QString &_unit)
 {
     QString bytes = QString("b");
     if ( _unit=="b" || _unit=="bytes" ) {

@@ -30,10 +30,8 @@ private:
 public slots:
 
 private slots:
-    void typeAdapterChanged(QString);
-
-private slots:
-    void usingPrntAddrChanged(bool);
+    void                 typeAdapterChanged(QString);
+    void                 usingPrntAddrChanged(bool);
 };
 
 #endif // _ADAPTER_H
