@@ -1,8 +1,15 @@
 #include "create_virt_secret.h"
+#include "secret_widgets/ceph_sec_type.h"
+#include "secret_widgets/iscsi_sec_type.h"
+#include "secret_widgets/volume_sec_type.h"
+#include "secret_widgets/tls_sec_type.h"
 
 /*
  * http://libvirt.org/formatsecret.html
  */
+
+#define SECRET_TYPES QStringList()\
+<<"VOLUME"<<"CEPH"<<"iSCSI"<<"TLS"
 
 CreateVirtSecret::CreateVirtSecret(
         QWidget         *parent,
@@ -10,7 +17,7 @@ CreateVirtSecret::CreateVirtSecret(
     QDialog(parent), ptr_ConnPtr(connPtrPtr)
 {
     setModal(true);
-    setWindowTitle("Secret Settings");
+    setWindowTitle("Create Secret");
     settings.beginGroup("VirtSecretControl");
     restoreGeometry(settings.value("SecretCreateGeometry").toByteArray());
     bool showDesc = settings.value("SecCreateShowDesc").toBool();
@@ -47,7 +54,7 @@ CreateVirtSecret::CreateVirtSecret(
     secDesc->setPlaceholderText(
 "A human-readable description of the purpose of the secret");
     secType = new QComboBox(this);
-    secType->addItems(QStringList()<<"VOLUME"<<"CEPH"<<"iSCSI");
+    secType->addItems(SECRET_TYPES);
     secType->setToolTip("Type");
     ephemeralAttr = new QCheckBox("Ephemeral", this);
     ephemeralAttr->setToolTip(
@@ -69,6 +76,7 @@ nor to any other node");
     stuffWdg->addWidget(new VolumeSecType(this, ptr_ConnPtr));
     stuffWdg->addWidget(new CephSecType(this, ptr_ConnPtr));
     stuffWdg->addWidget(new iSCSISecType(this, ptr_ConnPtr));
+    stuffWdg->addWidget(new tlsSecType(this, ptr_ConnPtr));
 
     baseLayout->addWidget(uuid);
     baseLayout->addWidget(secDesc);

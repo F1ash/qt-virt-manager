@@ -26,6 +26,7 @@ public:
     QLineEdit       *owner, *group, *mode, *label;
     QWidget         *pathWdg, *formatWdg, *permissions;
     Encryption      *encrypt;
+    void             setVolumeFormat(const QString&);
 
 private:
     QPushButton     *pathLabel;

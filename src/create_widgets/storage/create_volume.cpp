@@ -44,7 +44,10 @@ CreateVolume::CreateVolume(
         QString          _xmlFile) :
     _CreateStorage(parent, _xmlFile)
 {
-    setWindowTitle("StorageVolume Settings");
+    QString _title =
+            QString("Create Volume in [%1] Pool")
+            .arg(_poolName);
+    setWindowTitle(_title);
     setUrl("http://libvirt.org/formatstorage.html");
     settingName.append("CreateStorageVolume");
     settings.beginGroup(settingName);
@@ -89,8 +92,8 @@ CreateVolume::CreateVolume(
 
 void CreateVolume::setDataDescription(const QString &_xmlDesc)
 {
-    QTextStream s(stdout);
-    s << _xmlDesc << "---" << endl;
+    //QTextStream s(stdout);
+    //s << _xmlDesc << "---" << endl;
     QDomDocument doc;
     doc.setContent(_xmlDesc);
     QDomElement _vol;
@@ -118,6 +121,43 @@ void CreateVolume::setDataDescription(const QString &_xmlDesc)
                     int idx = capLabel->findData("MiB", Qt::UserRole);
                     if (idx <0 ) idx = 0;
                     capLabel->setCurrentIndex(idx);
+                } else if ( _el.tagName()=="target" ) {
+                    QDomNode _n1 = _el.firstChild();
+                    while ( !_n1.isNull() ) {
+                        QDomElement _el1 = _n1.toElement();
+                        if ( !_el1.isNull() ) {
+                            if ( _el1.tagName()=="path" ) {
+                                target->path->setText(_el1.text());
+                            } else if ( _el1.tagName()=="format" ) {
+                                target->setVolumeFormat(
+                                            _el1.attribute("type", "default"));
+                            } else if ( _el1.tagName()=="permissions" ) {
+                                target->usePerm->setChecked(true);
+                                QDomNode _n2 = _el1.firstChild();
+                                while ( !_n2.isNull() ) {
+                                    QDomElement _el2 = _n2.toElement();
+                                    if ( !_el2.isNull() ) {
+                                        if ( _el2.tagName()=="owner" ) {
+                                            target->owner->setText(_el2.text());
+                                        } else if ( _el2.tagName()=="group" ) {
+                                            target->group->setText(_el2.text());
+                                        } else if ( _el2.tagName()=="mode" ) {
+                                            target->mode->setText(_el2.text());
+                                        } else if ( _el2.tagName()=="label" ) {
+                                            target->label->setText(_el2.text());
+                                        };
+                                    };
+                                    _n2 = _n2.nextSibling();
+                                };
+                            } else if ( _el1.tagName()=="encryption" ) {
+                                target->encrypt->setUsage(true);
+                                target->encrypt->setFormat(
+                                            _el1.attribute("format", "default"));
+                                // TODO: implement tag 'secret'
+                            };
+                        };
+                        _n1 = _n1.nextSibling();
+                    };
                 };
             };
             _n = _n.nextSibling();
@@ -195,6 +235,7 @@ QString CreateVolume::getXMLDescFileName() const
         _encrypt.setAttribute(
                     "format",
                     target->encrypt->getFormat());
+        // TODO: implement tag 'secret'
     };
     if ( !_target.isNull() ) _volume.appendChild(_target);
     doc.appendChild(_volume);
@@ -216,6 +257,7 @@ void CreateVolume::initData()
     target = new _Storage_Target(this, hlpThread->type);
     target->formatWdg->setVisible(true);
     target->encrypt->setVisible(true);
+    target->pathWdg->setVisible(true);
 
     infoStuffLayout = new QVBoxLayout();
     //infoStuffLayout->addWidget(source);

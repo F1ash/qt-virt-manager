@@ -12,6 +12,10 @@ class Encryption : public QWidget
     Q_OBJECT
 public:
     explicit Encryption(QWidget *parent = nullptr);
+    bool                 isUsed() const;
+    void                 setUsage(const bool);
+    QString              getFormat() const;
+    void                 setFormat(const QString&);
 
 private:
     QCheckBox           *useEncryption;
@@ -20,10 +24,6 @@ private:
     QGridLayout         *baseLayout;
     QWidget             *baseWdg;
     QVBoxLayout         *commonLayout;
-
-public slots:
-    bool                 isUsed() const;
-    QString              getFormat() const;
 };
 
 #endif // ENCRYPTION_H

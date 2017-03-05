@@ -98,6 +98,9 @@ Result SecretControlThread::getAllSecretList()
             case VIR_SECRET_USAGE_TYPE_ISCSI:
                 type.append("ISCSI");
                 break;
+            case VIR_SECRET_USAGE_TYPE_TLS:
+                type.append("TLS");
+                break;
             default:
                 type.append("NONE");
                 break;

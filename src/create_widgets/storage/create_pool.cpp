@@ -24,7 +24,7 @@ CreatePool::CreatePool(
     _CreateStorage(parent, _xmlFile)
 {
     //setModal(false);
-    setWindowTitle("StoragePool Settings");
+    setWindowTitle("Create StoragePool");
     setUrl("http://libvirt.org/formatstorage.html");
     settingName.append("CreateStoragePool");
     settings.beginGroup(settingName);
@@ -72,8 +72,8 @@ CreatePool::CreatePool(
 
 void CreatePool::setDataDescription(const QString &_xmlDesc)
 {
-    QTextStream s(stdout);
-    s << _xmlDesc << "---" << endl;
+    //QTextStream s(stdout);
+    //s << _xmlDesc << "---" << endl;
     QDomDocument doc;
     doc.setContent(_xmlDesc);
     QDomElement _pool;

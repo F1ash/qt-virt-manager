@@ -15,9 +15,6 @@
 #include <QDomDocument>
 #include <QStackedWidget>
 #include "virt_objects/virt_entity_config.h"
-#include "secret_widgets/ceph_sec_type.h"
-#include "secret_widgets/iscsi_sec_type.h"
-#include "secret_widgets/volume_sec_type.h"
 #include <QDebug>
 
 class CreateVirtSecret : public QDialog

@@ -89,6 +89,13 @@ _Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
             this, SLOT(setTargetDirectory()));
 }
 
+void _Storage_Target::setVolumeFormat(const QString &_fmt)
+{
+    int idx = format->findText(_fmt);
+    if ( idx<0 ) idx = 0;
+    format->setCurrentIndex(idx);
+}
+
 /* private slots */
 void _Storage_Target::formatTypeChanged(int i)
 {
