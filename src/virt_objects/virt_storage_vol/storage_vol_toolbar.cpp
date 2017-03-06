@@ -41,6 +41,9 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     wipe_Action->setIcon(QIcon::fromTheme("wipe"));
     wipe_Action->setToolTip("Wipe");
     wipe_Action->setMenu(wipe_Menu);
+    refresh_Action = new QAction(this);
+    refresh_Action->setIcon(QIcon::fromTheme("frame-refresh"));
+    refresh_Action->setToolTip("Refresh list");
     //getXMLDesc_Action = new QAction(this);
     //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
     //getXMLDesc_Action->setToolTip("Get XML Description");
@@ -56,6 +59,8 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     addAction(resize_Action);
     addAction(upload_Action);
     addAction(wipe_Action);
+    addSeparator();
+    addAction(refresh_Action);
     //addSeparator();
     //addAction(getXMLDesc_Action);
     addSeparator();
@@ -164,6 +169,8 @@ void StorageVolToolBar::detectTriggeredAction(QAction *action)
         parameters.path = "0";
     //} else if ( action == getXMLDesc_Action ) {
     //    parameters << "getVirtStorageVolXMLDesc";
+    } else if ( action == refresh_Action ) {
+        parameters.method = refreshVirtStorageVolList;
     } else return;
     emit execMethod(parameters);
 }

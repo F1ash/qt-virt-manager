@@ -22,6 +22,7 @@ public:
     explicit CreatePool(
             QWidget         *parent     = nullptr,
             virConnectPtr   *_connPtr   = nullptr,
+            QString          _connName  = QString(),
             QString          _xmlFile   = QString());
     void             setDataDescription(const QString&);
 

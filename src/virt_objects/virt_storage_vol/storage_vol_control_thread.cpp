@@ -86,6 +86,9 @@ void StorageVolControlThread::run()
     case WIPE_ENTITY :
         result = wipeStorageVol();
         break;
+    case REFRESH_ENTITY :
+        result = refreshStorageVolList();
+        break;
     case GET_XML_DESCRIPTION :
         result = getStorageVolXMLDesc();
         break;
@@ -145,6 +148,12 @@ Result StorageVolControlThread::getAllStorageVolList()
                     break;
                 case VIR_STORAGE_VOL_NETWORK:
                     type.append("net");
+                    break;
+                case VIR_STORAGE_VOL_NETDIR:
+                    type.append("netdir");
+                    break;
+                case VIR_STORAGE_VOL_PLOOP:
+                    type.append("ploop");
                     break;
                 default:
                     type.append("-");
@@ -517,6 +526,36 @@ Result StorageVolControlThread::wipeStorageVol()
                 QString("'<b>%1</b>' StorageVol %2 Wiped with %3 algorithm.")
                 .arg(name).arg((wiped)?"":"don't").arg(algorithm));
     result.result = wiped;
+    return result;
+}
+Result StorageVolControlThread::refreshStorageVolList()
+{
+    Result result;
+    result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
+    if (currStoragePool!=nullptr) {
+        virStoragePoolFree(currStoragePool);
+        currStoragePool = nullptr;
+    };
+    if ( task.srcConnPtr==nullptr ) {
+        result.result = false;
+        result.err = "Connection pointer is NULL.";
+        return result;
+    };
+    currStoragePool = virStoragePoolLookupByName(
+                *task.srcConnPtr, currPoolName.toUtf8().data());
+
+    bool done = false;
+    // flags: extra flags; not used yet, so callers should always pass 0
+    unsigned int flags = 0;
+    if ( virStoragePoolRefresh(currStoragePool, flags)+1 ) {
+        done = true;
+    } else {
+        result.err = sendConnErrors();
+    };
+    result.msg.append(
+                QString("StoragePool %1 refreshed.")
+                .arg((done)?"":"don't"));
+    result.result = done;
     return result;
 }
 Result StorageVolControlThread::getStorageVolXMLDesc()

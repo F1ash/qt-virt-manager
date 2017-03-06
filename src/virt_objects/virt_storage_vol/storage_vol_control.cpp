@@ -261,7 +261,7 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
         QString storageVolName =
                 storageVolModel->DataList.at(idx.row())->getName();
         TASK task;
-        task.type = VIRT_STORAGE_VOLUME;
+        task.type       = VIRT_STORAGE_VOLUME;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = storageVolName;
@@ -318,6 +318,16 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
         };
     } else if ( param.method==reloadEntity ) {
         reloadState();
+    } else if ( param.method==refreshVirtStorageVolList ) {
+        TASK task;
+        task.type       = VIRT_STORAGE_VOLUME;
+        task.srcConnPtr = ptr_ConnPtr;
+        task.srcConName = currConnName;
+        task.action     = REFRESH_ENTITY;
+        task.method     = refreshVirtStorageVolList;
+        task.object     = currPoolName;
+        task.args.object= currPoolName;
+        emit addNewTask(&task);
     };
 }
 void VirtStorageVolControl::newVirtEntityFromXML(const Act_Param &args)

@@ -20,11 +20,15 @@
 CreatePool::CreatePool(
         QWidget         *parent,
         virConnectPtr   *_connPtr,
+        QString          _connName,
         QString          _xmlFile) :
     _CreateStorage(parent, _xmlFile)
 {
     //setModal(false);
-    setWindowTitle("Create StoragePool");
+    QString _title =
+            QString("Create Pool in [%1]")
+            .arg(_connName);
+    setWindowTitle(_title);
     setUrl("http://libvirt.org/formatstorage.html");
     settingName.append("CreateStoragePool");
     settings.beginGroup(settingName);

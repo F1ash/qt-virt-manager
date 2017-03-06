@@ -312,7 +312,7 @@ void VirtStoragePoolControl::newVirtEntityFromXML(const Act_Param &args)
         QString path;
         bool show = false;
         CreatePool *createPoolDialog =
-                new CreatePool(this, ptr_ConnPtr, args.path);
+                new CreatePool(this, ptr_ConnPtr, currConnName, args.path);
         int result = createPoolDialog->exec();
         if ( result==QDialog::Accepted ) {
             path = createPoolDialog->getXMLDescFileName();

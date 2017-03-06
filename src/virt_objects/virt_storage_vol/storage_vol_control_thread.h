@@ -37,6 +37,7 @@ private slots:
     Result                uploadStorageVol();
     Result                resizeStorageVol();
     Result                wipeStorageVol();
+    Result                refreshStorageVolList();
     Result                getStorageVolXMLDesc();
 };
 

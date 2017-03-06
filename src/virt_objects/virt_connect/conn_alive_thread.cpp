@@ -655,7 +655,7 @@ void ConnAliveThread::getAuthCredentials(const QString &crd)
      * invoke Input Credentials graphic widget &
      * wait a credentials from him
      */
-    qDebug()<<crd<<"keep auth";
+    //qDebug()<<crd<<"keep auth";
     authWaitKey = true;
     emit authRequested(crd);
     int i = 0;

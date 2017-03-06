@@ -694,6 +694,11 @@
         <file alias="32x32/emblems/phyp.png">icons/32x32/emblems/phyp.png</file>
         <file alias="24x24/emblems/phyp.png">icons/24x24/emblems/phyp.png</file>
         <file alias="22x22/emblems/phyp.png">icons/22x22/emblems/phyp.png</file>
+        <file alias="64x64/actions/frame-refresh.png">icons/64x64/actions/frame-refresh.png</file>
+        <file alias="48x48/actions/frame-refresh.png">icons/48x48/actions/frame-refresh.png</file>
+        <file alias="32x32/actions/frame-refresh.png">icons/32x32/actions/frame-refresh.png</file>
+        <file alias="24x24/actions/frame-refresh.png">icons/24x24/actions/frame-refresh.png</file>
+        <file alias="22x22/actions/frame-refresh.png">icons/22x22/actions/frame-refresh.png</file>
     </qresource>
     <qresource prefix="/misc">
         <file alias="domain/lxc_example1.xml">misc/domain/lxc_example1.xml</file>

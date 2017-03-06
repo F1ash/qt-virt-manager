@@ -31,6 +31,7 @@ private:
     QAction         *upload_Action;
     QAction         *wipe_Action;
     WipeMenu        *wipe_Menu;
+    QAction         *refresh_Action;
     //QAction         *getXMLDesc_Action;
     QPushButton     *_autoReload;
     QAction         *autoReload;

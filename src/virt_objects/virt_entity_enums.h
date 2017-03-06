@@ -35,6 +35,7 @@ enum Actions {
     RESIZE_ENTITY,
     UPLOAD_ENTITY,
     WIPE_ENTITY,
+    REFRESH_ENTITY,
     CHANGE_ENTITY_AUTOSTART,
     GET_XML_DESCRIPTION,
     CREATE_DOMAIN_SNAPSHOT,
@@ -77,6 +78,7 @@ enum Methods {
     resizeVirtStorageVol,
     uploadVirtStorageVol,
     wipeVirtStorageVol,
+    refreshVirtStorageVolList,
     changeBeginVirtInterface,
     changeCommitVirtInterface,
     changeRollbackVirtInterface,
@@ -198,6 +200,8 @@ static const char* enumToMethodString(Methods method)
         return "upload";
     case wipeVirtStorageVol:
         return "wipe";
+    case refreshVirtStorageVolList:
+        return "refresh Pool";
     case changeBeginVirtInterface:
     case changeCommitVirtInterface:
     case changeRollbackVirtInterface:
