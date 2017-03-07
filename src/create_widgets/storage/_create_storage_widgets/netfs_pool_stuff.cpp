@@ -10,8 +10,9 @@
     <<"glusterfs"\
     <<"cifs"
 
-NetFs_Pool_Stuff::NetFs_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+NetFs_Pool_Stuff::NetFs_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Pool_Stuff(parent, connPtrPtr)
 {
     source->hostLabel->setVisible(true);
     source->host->setVisible(true);
@@ -27,7 +28,10 @@ NetFs_Pool_Stuff::NetFs_Pool_Stuff(QWidget *parent) :
     target->path->setPlaceholderText("/var/lib/virt/images");
 }
 
-/* public slots */
+void NetFs_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument NetFs_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

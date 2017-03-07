@@ -15,6 +15,7 @@
 #include <QDir>
 #include <QTemporaryFile>
 #include <QSettings>
+#include <libvirt.h>
 #include <QDebug>
 
 class _CreateStorage : public QDialog
@@ -22,8 +23,9 @@ class _CreateStorage : public QDialog
     Q_OBJECT
 public:
     explicit _CreateStorage(
-            QWidget *parent     = nullptr,
-            QString  _xmlFile   = QString());
+            QWidget         *parent     = nullptr,
+            virConnectPtr   *connPtrPtr = nullptr,
+            QString          _xmlFile   = QString());
     QComboBox           *type;
     QLineEdit           *stName;
     QLabel              *suff;
@@ -38,6 +40,8 @@ public:
     void                 readXMLDataDescription();
     virtual void         setDataDescription(const QString&);
     quint64              convertNiBtoMBytes(quint64, const QString&);
+
+    virConnectPtr       *ptr_ConnPtr;
 
 signals:
     void                 errorMsg(const QString&);

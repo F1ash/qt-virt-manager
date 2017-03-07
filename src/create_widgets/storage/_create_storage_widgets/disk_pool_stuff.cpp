@@ -14,8 +14,9 @@
     <<"sun"\
     <<"lvm2"
 
-Disk_Pool_Stuff::Disk_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+Disk_Pool_Stuff::Disk_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Pool_Stuff(parent, connPtrPtr)
 {
     source->deviceLabel->setVisible(true);
     source->formatLabel->setVisible(true);
@@ -26,7 +27,10 @@ Disk_Pool_Stuff::Disk_Pool_Stuff(QWidget *parent) :
     target->path->setPlaceholderText("/dev");
 }
 
-/* public slots */
+void Disk_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument Disk_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

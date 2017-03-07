@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
         } else {
             GetURLDialog *d =
                     new GetURLDialog();
+            d->saveToHistory(url);
             _ret = d->exec();
             url = d->getURL();
             delete d;

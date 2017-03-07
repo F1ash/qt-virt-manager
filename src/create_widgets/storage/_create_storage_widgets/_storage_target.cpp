@@ -13,9 +13,13 @@
 #define CUSTOMIZABLE_POOL_TYPES QStringList()\
     <<"dir"<<"fs"<<"netfs"<<"gluster"<<"disk"
 
-_Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
+_Storage_Target::_Storage_Target(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          _type) :
     QWidget(parent), currPoolType(_type)
 {
+    setAutoFillBackground(true);
     pathLabel = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
     path = new QLineEdit(this);
     pathLayout = new QHBoxLayout(this);
@@ -68,7 +72,7 @@ _Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
     permissions->setLayout(permLayout);
     permissions->setVisible(false);
 
-    encrypt = new Encryption(this);
+    encrypt = new Encryption(this, connPtrPtr);
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(new QLabel("<b>Target</b>"));
@@ -78,7 +82,6 @@ _Storage_Target::_Storage_Target(QWidget *parent, QString _type) :
     commonLayout->addWidget(permissions);
     commonLayout->addWidget(encrypt);
     setLayout(commonLayout);
-    setAutoFillBackground(true);
     pathWdg->setVisible(false);
     formatWdg->setVisible(false);
     connect(format, SIGNAL(currentIndexChanged(int)),

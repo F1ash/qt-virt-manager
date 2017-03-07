@@ -7,12 +7,11 @@ class MPath_Pool_Stuff : public _Pool_Stuff
 {
     Q_OBJECT
 public:
-    explicit MPath_Pool_Stuff(QWidget *parent = nullptr);
-
-signals:
-
-public slots:
-    QDomDocument getDataDocument() const;
+    explicit MPath_Pool_Stuff(
+            QWidget         *parent     = nullptr,
+            virConnectPtr   *connPtrPtr = nullptr);
+    void                setDataDescription(const QString&);
+    QDomDocument        getDataDocument() const;
 };
 
 #endif // MPATH_POOL_STUFF_H

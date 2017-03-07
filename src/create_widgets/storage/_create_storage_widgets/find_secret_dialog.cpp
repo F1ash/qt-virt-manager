@@ -5,6 +5,10 @@ FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtrPtr) :
 {
     setModal(true);
     setWindowTitle("FindSecretDialog");
+    settings.beginGroup("FindSecretDialog");
+    restoreGeometry(
+                settings.value("Geometry").toByteArray());
+    settings.endGroup();
     secrets = new VirtSecretControl(this);
     secrets->setUsageInSoftTouched(false);
     secrets->setCurrentWorkConnect(ptr_ConnPtr);
@@ -71,6 +75,9 @@ void FindSecretDialog::setSecretList()
 }
 void FindSecretDialog::set_Result()
 {
+    settings.beginGroup("FindSecretDialog");
+    settings.setValue( "Geometry", saveGeometry());
+    settings.endGroup();
     done( (sender()==chooseSecret)?
               QDialog::Accepted :
               QDialog::Rejected);

@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QSettings>
 #include "virt_objects/virt_secret/secret_control.h"
 #include "virt_objects/virt_secret/secret_control_thread.h"
 
@@ -23,6 +24,7 @@ public:
             virConnectPtr*  connPtrPtr = nullptr);
 
 private:
+    QSettings            settings;
     VirtSecretControl   *secrets;
     QHBoxLayout         *listLayout;
     QWidget             *listWidget;

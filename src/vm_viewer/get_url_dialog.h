@@ -31,6 +31,7 @@ public:
     explicit GetURLDialog(QWidget *parent = nullptr);
     ~GetURLDialog();
     QString          getURL() const;
+    void             saveToHistory(const QString&);
 
 private:
     QString          url;

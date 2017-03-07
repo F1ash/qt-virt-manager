@@ -4,8 +4,9 @@
  * http://libvirt.org/storage.html#StorageBackendZFS
  */
 
-ZFS_Pool_Stuff::ZFS_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+ZFS_Pool_Stuff::ZFS_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Pool_Stuff(parent, connPtrPtr)
 {
     source->namedLabel->setVisible(true);
     source->named->setVisible(true);
@@ -15,7 +16,10 @@ ZFS_Pool_Stuff::ZFS_Pool_Stuff(QWidget *parent) :
     target->setVisible(false);
 }
 
-/* public slots */
+void ZFS_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument ZFS_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

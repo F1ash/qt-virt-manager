@@ -1,8 +1,10 @@
 #include "_create_storage.h"
 
 _CreateStorage::_CreateStorage(
-        QWidget *parent, QString _xmlFile) :
-    QDialog(parent), xmlFileName(_xmlFile)
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          _xmlFile) :
+    QDialog(parent), ptr_ConnPtr(connPtrPtr), xmlFileName(_xmlFile)
 {
     setModal(false);
     typeLabel = new QLabel("Pool Type:", this);

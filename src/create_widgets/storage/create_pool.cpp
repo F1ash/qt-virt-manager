@@ -1,4 +1,16 @@
 #include "create_pool.h"
+#include "_create_storage_widgets/dir_pool_stuff.h"
+#include "_create_storage_widgets/fs_pool_stuff.h"
+#include "_create_storage_widgets/netfs_pool_stuff.h"
+#include "_create_storage_widgets/logical_pool_stuff.h"
+#include "_create_storage_widgets/disk_pool_stuff.h"
+#include "_create_storage_widgets/iscsi_pool_stuff.h"
+#include "_create_storage_widgets/scsi_pool_stuff.h"
+#include "_create_storage_widgets/mpath_pool_stuff.h"
+#include "_create_storage_widgets/rbd_pool_stuff.h"
+#include "_create_storage_widgets/sheepdog_pool_stuff.h"
+#include "_create_storage_widgets/gluster_pool_stuff.h"
+#include "_create_storage_widgets/zfs_pool_stuff.h"
 
 /*
  * http://libvirt.org/formatstorage.html
@@ -19,10 +31,10 @@
 
 CreatePool::CreatePool(
         QWidget         *parent,
-        virConnectPtr   *_connPtr,
+        virConnectPtr   *connPtrPtr,
         QString          _connName,
         QString          _xmlFile) :
-    _CreateStorage(parent, _xmlFile)
+    _CreateStorage(parent, connPtrPtr, _xmlFile)
 {
     //setModal(false);
     QString _title =
@@ -37,18 +49,18 @@ CreatePool::CreatePool(
     showAtClose->setChecked(
                 settings.value("ShowAtClose").toBool() );
     settings.endGroup();
-    info->addWidget(new Dir_Pool_Stuff(this));
-    info->addWidget(new Fs_Pool_Stuff(this));
-    info->addWidget(new NetFs_Pool_Stuff(this));
-    info->addWidget(new Logical_Pool_Stuff(this));
-    info->addWidget(new Disk_Pool_Stuff(this));
-    info->addWidget(new iSCSI_Pool_Stuff(this, _connPtr));
-    info->addWidget(new SCSI_Pool_Stuff(this));
-    info->addWidget(new MPath_Pool_Stuff(this));
-    info->addWidget(new RBD_Pool_Stuff(this, _connPtr));
-    info->addWidget(new SheepDog_Pool_Stuff(this));
-    info->addWidget(new Gluster_Pool_Stuff(this));
-    info->addWidget(new ZFS_Pool_Stuff(this));
+    info->addWidget(new Dir_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new Fs_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new NetFs_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new Logical_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new Disk_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new iSCSI_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new SCSI_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new MPath_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new RBD_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new SheepDog_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new Gluster_Pool_Stuff(this, connPtrPtr));
+    info->addWidget(new ZFS_Pool_Stuff(this, connPtrPtr));
 
     QStringList _text, _data;
     _text = POOL_TYPE_DESC;
@@ -83,15 +95,26 @@ void CreatePool::setDataDescription(const QString &_xmlDesc)
     QDomElement _pool;
     _pool = doc.firstChildElement("pool");
     if ( !_pool.isNull() ) {
+        QString _type = _pool.attribute("type");
+        int idx = type->findData(_type, Qt::UserRole);
+        if ( idx<0 ) idx = 0;
+        type->setCurrentIndex(idx);
         QDomNode _n = _pool.firstChild();
         while ( !_n.isNull() ) {
             QDomElement _el = _n.toElement();
             if ( !_el.isNull() ) {
                 if ( _el.tagName()=="name" ) {
                     stName->setText(_el.text());
+                } else if ( _el.tagName()=="uuid" ) {
+                        uuid->setText(_el.text());
                 };
             };
             _n = _n.nextSibling();
+        };
+        _Pool_Stuff *wdg =
+                static_cast<_Pool_Stuff*>(info->currentWidget());
+        if ( wdg!=nullptr ) {
+            wdg->setDataDescription(_xmlDesc);
         };
     };
 }

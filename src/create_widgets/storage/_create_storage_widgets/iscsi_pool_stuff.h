@@ -10,11 +10,8 @@ public:
     explicit iSCSI_Pool_Stuff(
             QWidget        *parent     = nullptr,
             virConnectPtr*  connPtrPtr = nullptr);
-
-signals:
-
-public slots:
-    QDomDocument getDataDocument() const;
+    void                setDataDescription(const QString&);
+    QDomDocument        getDataDocument() const;
 };
 
 #endif // ISCSI_POOL_STUFF_H

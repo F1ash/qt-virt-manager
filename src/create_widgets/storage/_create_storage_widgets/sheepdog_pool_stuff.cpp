@@ -4,8 +4,9 @@
  * http://libvirt.org/storage.html#StorageBackendSheepdog
  */
 
-SheepDog_Pool_Stuff::SheepDog_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+SheepDog_Pool_Stuff::SheepDog_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Pool_Stuff(parent, connPtrPtr)
 {
     source->namedLabel->setVisible(true);
     source->named->setVisible(true);
@@ -18,7 +19,10 @@ SheepDog_Pool_Stuff::SheepDog_Pool_Stuff(QWidget *parent) :
     target->setVisible(false);
 }
 
-/* public slots */
+void SheepDog_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument SheepDog_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

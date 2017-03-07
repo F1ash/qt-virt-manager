@@ -4,7 +4,8 @@
  * http://libvirt.org/storage.html#StorageBackendISCSI
  */
 
-iSCSI_Pool_Stuff::iSCSI_Pool_Stuff(QWidget *parent, virConnectPtr *connPtrPtr) :
+iSCSI_Pool_Stuff::iSCSI_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
     _Pool_Stuff(parent, connPtrPtr)
 {
     source->deviceLabel->setVisible(true);
@@ -23,7 +24,10 @@ iSCSI_Pool_Stuff::iSCSI_Pool_Stuff(QWidget *parent, virConnectPtr *connPtrPtr) :
     target->path->setPlaceholderText("/dev/disk/{by-path, by-id}");
 }
 
-/* public slots */
+void iSCSI_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument iSCSI_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

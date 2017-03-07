@@ -4,7 +4,8 @@
  * http://libvirt.org/storage.html#StorageBackendRBD
  */
 
-RBD_Pool_Stuff::RBD_Pool_Stuff(QWidget *parent, virConnectPtr *connPtrPtr) :
+RBD_Pool_Stuff::RBD_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
     _Pool_Stuff(parent, connPtrPtr)
 {
     source->namedLabel->setVisible(true);
@@ -20,7 +21,10 @@ RBD_Pool_Stuff::RBD_Pool_Stuff(QWidget *parent, virConnectPtr *connPtrPtr) :
     target->setVisible(false);
 }
 
-/* public slots */
+void RBD_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument RBD_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

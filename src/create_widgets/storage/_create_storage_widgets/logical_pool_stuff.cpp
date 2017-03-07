@@ -8,8 +8,9 @@
     <<"auto"\
     <<"lvm2"
 
-Logical_Pool_Stuff::Logical_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+Logical_Pool_Stuff::Logical_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Pool_Stuff(parent, connPtrPtr)
 {
     source->deviceLabel->setVisible(true);
     source->formatLabel->setVisible(true);
@@ -22,7 +23,10 @@ Logical_Pool_Stuff::Logical_Pool_Stuff(QWidget *parent) :
     target->path->setPlaceholderText("/dev/<LVM volume group name>");
 }
 
-/* public slots */
+void Logical_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument Logical_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

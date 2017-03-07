@@ -4,8 +4,9 @@
  * http://libvirt.org/storage.html#StorageBackendSCSI
  */
 
-SCSI_Pool_Stuff::SCSI_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+SCSI_Pool_Stuff::SCSI_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Pool_Stuff(parent, connPtrPtr)
 {
     source->adapter->setVisible(true);
     source->vendorLabel->setVisible(true);
@@ -15,7 +16,10 @@ SCSI_Pool_Stuff::SCSI_Pool_Stuff(QWidget *parent) :
     target->path->setPlaceholderText("/dev/disk/{by-path, by-id}");
 }
 
-/* public slots */
+void SCSI_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument SCSI_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

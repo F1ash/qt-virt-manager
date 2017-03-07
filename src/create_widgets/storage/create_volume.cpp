@@ -42,7 +42,7 @@ CreateVolume::CreateVolume(
         virConnectPtr   *connPtrPtr,
         QString          _poolName,
         QString          _xmlFile) :
-    _CreateStorage(parent, _xmlFile)
+    _CreateStorage(parent, connPtrPtr, _xmlFile)
 {
     QString _title =
             QString("Create Volume in [%1] Pool")
@@ -153,7 +153,12 @@ void CreateVolume::setDataDescription(const QString &_xmlDesc)
                                 target->encrypt->setUsage(true);
                                 target->encrypt->setFormat(
                                             _el1.attribute("format", "default"));
-                                // TODO: implement tag 'secret'
+                                QDomElement _secret = _el1.firstChildElement("secret");
+                                if ( !_secret.isNull() ) {
+                                    target->encrypt->setAutoSecretUsage(true);
+                                    target->encrypt->setSecretUUID(
+                                                _secret.attribute("uuid"));
+                                };
                             };
                         };
                         _n1 = _n1.nextSibling();
@@ -173,7 +178,7 @@ QString CreateVolume::getXMLDescFileName() const
     QDomElement _volume, _name, _target,
             _source, _allocation, _capacity,
             _format, _permissions, _owner,
-            _group, _mode, _label, _encrypt;
+            _group, _mode, _label, _encrypt, _secret;
     _volume = doc.createElement("volume");
     _name = doc.createElement("name");
     _text = doc.createTextNode(
@@ -231,11 +236,16 @@ QString CreateVolume::getXMLDescFileName() const
     };
     if ( target->encrypt->isUsed() ) {
         _encrypt = doc.createElement("encryption");
-        _target.appendChild(_encrypt);
         _encrypt.setAttribute(
                     "format",
                     target->encrypt->getFormat());
-        // TODO: implement tag 'secret'
+        if ( !target->encrypt->AutoSecretIsUsed() ) {
+            _secret = doc.createElement("secret");
+            _secret.setAttribute("type", "passphrase");
+            _secret.setAttribute("uuid", target->encrypt->getSecretUUID());
+            _encrypt.appendChild(_secret);
+        };
+        _target.appendChild(_encrypt);
     };
     if ( !_target.isNull() ) _volume.appendChild(_target);
     doc.appendChild(_volume);
@@ -254,7 +264,7 @@ void CreateVolume::initData()
     type->addItem(hlpThread->type);
 
     //source = new _Storage_Source(this);
-    target = new _Storage_Target(this, hlpThread->type);
+    target = new _Storage_Target(this, ptr_ConnPtr, hlpThread->type);
     target->formatWdg->setVisible(true);
     target->encrypt->setVisible(true);
     target->pathWdg->setVisible(true);

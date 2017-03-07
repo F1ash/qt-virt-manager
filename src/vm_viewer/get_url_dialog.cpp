@@ -79,14 +79,20 @@ QString GetURLDialog::getURL() const
 {
     return url;
 }
-bool GetURLDialog::isUnique(const QString &) const
+void GetURLDialog::saveToHistory(const QString &_url)
+{
+    if ( !_url.isEmpty() && isUnique(_url) )
+        urlList->insertItem(0, _url);
+}
+
+bool GetURLDialog::isUnique(const QString &_url) const
 {
     bool exist = true;
     for (uint i=0; i<urlList->count(); i++) {
         QListWidgetItem *item =
                 urlList->item(i);
         if ( item==nullptr ) continue;
-        if ( item->text()==url ) {
+        if ( item->text()==_url ) {
             exist = false;
         };
     };
@@ -102,8 +108,7 @@ void GetURLDialog::closeEvent(QCloseEvent *ev)
 void GetURLDialog::saveUniqueURL()
 {
     url = urlEdit->text();
-    if ( !url.isEmpty() && isUnique(url) )
-        urlList->insertItem(0, url);
+    saveToHistory(url);
     done(0);
 }
 void GetURLDialog::urlMenuRequested(const QPoint &pos)

@@ -4,14 +4,18 @@
  * http://libvirt.org/storage.html#StorageBackendMultipath
  */
 
-MPath_Pool_Stuff::MPath_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+MPath_Pool_Stuff::MPath_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Pool_Stuff(parent, connPtrPtr)
 {
     source->setVisible(false);
     target->path->setPlaceholderText("/dev/mapper");
 }
 
-/* public slots */
+void MPath_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument MPath_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

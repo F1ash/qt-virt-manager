@@ -4,8 +4,9 @@
  * http://libvirt.org/storage.html#StorageBackendGluster
  */
 
-Gluster_Pool_Stuff::Gluster_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+Gluster_Pool_Stuff::Gluster_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Pool_Stuff(parent, connPtrPtr)
 {
     source->namedLabel->setVisible(true);
     source->named->setVisible(true);
@@ -20,7 +21,10 @@ Gluster_Pool_Stuff::Gluster_Pool_Stuff(QWidget *parent) :
     target->setVisible(false);
 }
 
-/* public slots */
+void Gluster_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument Gluster_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

@@ -19,8 +19,9 @@
     <<"xfs"\
     <<"ocfs2"
 
-Fs_Pool_Stuff::Fs_Pool_Stuff(QWidget *parent) :
-    _Pool_Stuff(parent)
+Fs_Pool_Stuff::Fs_Pool_Stuff(
+        QWidget *parent, virConnectPtr *connPtrPtr) :
+    _Pool_Stuff(parent, connPtrPtr)
 {
     source->deviceLabel->setVisible(true);
     source->formatLabel->setVisible(true);
@@ -30,7 +31,10 @@ Fs_Pool_Stuff::Fs_Pool_Stuff(QWidget *parent) :
     target->path->setPlaceholderText("/var/lib/virt/images");
 }
 
-/* public slots */
+void Fs_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
+{
+
+}
 QDomDocument Fs_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;

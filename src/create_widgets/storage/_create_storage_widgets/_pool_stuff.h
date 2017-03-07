@@ -15,12 +15,10 @@ public:
     _Storage_Source        *source;
     _Storage_Target        *target;
     virtual void            setDataDescription(const QString&);
+    virtual QDomDocument    getDataDocument() const;
 
 private:
     QVBoxLayout            *commonLayout;
-
-public slots:
-    virtual QDomDocument    getDataDocument() const;
 };
 
 #endif // _POOL_STUFF_H
