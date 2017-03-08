@@ -10,7 +10,10 @@ _Pool_Stuff::_Pool_Stuff(QWidget *parent, virConnectPtr* connPtrPtr) :
     commonLayout->addWidget(target);
     commonLayout->insertStretch(2, -1);
     setLayout(commonLayout);
+    source->formatLabel->setVisible(false);
+    source->format->setVisible(false);
     target->pathWdg->setVisible(true);
+    target->encrypt->setVisible(false);
 }
 void _Pool_Stuff::setDataDescription(const QString &_xmlDesc)
 {

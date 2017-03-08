@@ -19,7 +19,7 @@ void MPath_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
 QDomDocument MPath_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
-    QDomElement _stuff, _target, _path, _perm, _encrypt;
+    QDomElement _stuff, _target, _path, _perm;
     QDomText _text;
     _stuff = doc.createElement("stuff");
     doc.appendChild(_stuff);
@@ -50,13 +50,6 @@ QDomDocument MPath_Pool_Stuff::getDataDocument() const
         _text = doc.createTextNode(target->label->text());
         _label.appendChild(_text);
         _perm.appendChild(_label);
-    };
-    if ( target->encrypt->isUsed() ) {
-        _encrypt = doc.createElement("encryption");
-        _target.appendChild(_encrypt);
-        _encrypt.setAttribute(
-                    "format",
-                    target->encrypt->getFormat());
     };
     return doc;
 }

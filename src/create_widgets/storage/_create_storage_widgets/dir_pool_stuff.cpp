@@ -48,16 +48,6 @@ void Dir_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
                                     };
                                     _n2 = _n2.nextSibling();
                                 };
-                            } else if ( _el1.tagName()=="encryption" ) {
-                                target->encrypt->setUsage(true);
-                                target->encrypt->setFormat(
-                                            _el1.attribute("format", "default"));
-                                QDomElement _secret = _el1.firstChildElement("secret");
-                                if ( !_secret.isNull() ) {
-                                    target->encrypt->setAutoSecretUsage(true);
-                                    target->encrypt->setSecretUUID(
-                                                _secret.attribute("uuid"));
-                                };
                             };
                         };
                         _n1 = _n1.nextSibling();
@@ -71,8 +61,7 @@ void Dir_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
 QDomDocument Dir_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
-    QDomElement _stuff, _target, _path, _perm,
-            _encrypt, _secret;
+    QDomElement _stuff, _target, _path, _perm;
     QDomText _text;
     _stuff = doc.createElement("stuff");
     doc.appendChild(_stuff);
@@ -102,19 +91,6 @@ QDomDocument Dir_Pool_Stuff::getDataDocument() const
         _text = doc.createTextNode(target->label->text());
         _label.appendChild(_text);
         _perm.appendChild(_label);
-    };
-    if ( target->encrypt->isUsed() ) {
-        _encrypt = doc.createElement("encryption");
-        _encrypt.setAttribute(
-                    "format",
-                    target->encrypt->getFormat());
-        if ( !target->encrypt->AutoSecretIsUsed() ) {
-            _secret = doc.createElement("secret");
-            _secret.setAttribute("type", "passphrase");
-            _secret.setAttribute("uuid", target->encrypt->getSecretUUID());
-            _encrypt.appendChild(_secret);
-        };
-        _target.appendChild(_encrypt);
     };
     return doc;
 }

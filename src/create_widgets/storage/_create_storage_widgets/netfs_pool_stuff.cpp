@@ -36,7 +36,7 @@ QDomDocument NetFs_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _source, _host, _dir, _format,
-            _target, _perm, _encrypt, _path;
+            _target, _perm, _path;
     QDomText _text;
     _stuff = doc.createElement("stuff");
     doc.appendChild(_stuff);
@@ -89,13 +89,6 @@ QDomDocument NetFs_Pool_Stuff::getDataDocument() const
         _text = doc.createTextNode(target->label->text());
         _label.appendChild(_text);
         _perm.appendChild(_label);
-    };
-    if ( target->encrypt->isUsed() ) {
-        _encrypt = doc.createElement("encryption");
-        _target.appendChild(_encrypt);
-        _encrypt.setAttribute(
-                    "format",
-                    target->encrypt->getFormat());
     };
     return doc;
 }

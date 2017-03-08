@@ -19,9 +19,9 @@ Disk_Pool_Stuff::Disk_Pool_Stuff(
     _Pool_Stuff(parent, connPtrPtr)
 {
     source->deviceLabel->setVisible(true);
-    source->formatLabel->setVisible(true);
+    //source->formatLabel->setVisible(true);
     source->device->setVisible(true);
-    source->format->setVisible(true);
+    //source->format->setVisible(true);
     source->format->addItems(DISK_POOL_FORMAT_TYPES);
     source->device->setOneDeviceMode(true);
     target->path->setPlaceholderText("/dev");
@@ -35,7 +35,7 @@ QDomDocument Disk_Pool_Stuff::getDataDocument() const
 {
     QDomDocument doc;
     QDomElement _stuff, _source, _device, _format,
-            _target, _perm, _encrypt, _path;
+            _target, _perm, _path;
     QDomText _text;
     _stuff = doc.createElement("stuff");
     doc.appendChild(_stuff);
@@ -48,11 +48,11 @@ QDomDocument Disk_Pool_Stuff::getDataDocument() const
         _device.setAttribute("path", _dir);
         _source.appendChild(_device);
     };
-    _format = doc.createElement("format");
-    _format.setAttribute(
-                "type",
-                source->format->currentText().toLower());
-    _source.appendChild(_format);
+    //_format = doc.createElement("format");
+    //_format.setAttribute(
+    //            "type",
+    //            source->format->currentText().toLower());
+    //_source.appendChild(_format);
 
     _target = doc.createElement("target");
     _stuff.appendChild(_target);
@@ -80,13 +80,6 @@ QDomDocument Disk_Pool_Stuff::getDataDocument() const
         _text = doc.createTextNode(target->label->text());
         _label.appendChild(_text);
         _perm.appendChild(_label);
-    };
-    if ( target->encrypt->isUsed() ) {
-        _encrypt = doc.createElement("encryption");
-        _target.appendChild(_encrypt);
-        _encrypt.setAttribute(
-                    "format",
-                    target->encrypt->getFormat());
     };
     return doc;
 }
