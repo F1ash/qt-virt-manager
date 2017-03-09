@@ -12,13 +12,13 @@ Memory::Memory(
     maxMemLabel = new QLabel("Maximum Memory:", this);
     maxMemValue = new QSpinBox(this);
     maxMemValue->setRange(0, memValue.toULongLong());
-    maxMemValue->setSuffix(" (MB)");
+    maxMemValue->setSuffix(" (MiB)");
     connect(maxMemValue, SIGNAL(valueChanged(int)),
             this, SLOT(changeCurrentMemValue(int)));
     currMemLabel = new QLabel("Current Memory:", this);
     currMemValue = new QSpinBox(this);
     currMemValue->setRange(0, memValue.toULongLong());
-    currMemValue->setSuffix(" (MB)");
+    currMemValue->setSuffix(" (MiB)");
     connect(currMemValue, SIGNAL(valueChanged(int)),
             this, SLOT(changeMaximumMemValue(int)));
     memLayout = new QGridLayout();
@@ -46,19 +46,19 @@ Memory::Memory(
     hardLabel = new QLabel("Hard limit", this);
     hard_limit = new QSpinBox(this);
     hard_limit->setRange(0, memValue.toULongLong());
-    hard_limit->setSuffix(" (MB)");
+    hard_limit->setSuffix(" (MiB)");
     softLabel = new QLabel("Soft limit", this);
     soft_limit = new QSpinBox(this);
     soft_limit->setRange(0, memValue.toULongLong());
-    soft_limit->setSuffix(" (MB)");
+    soft_limit->setSuffix(" (MiB)");
     swapLabel = new QLabel("Swap hard limit", this);
     swap_hard_limit = new QSpinBox(this);
     swap_hard_limit->setRange(0, memValue.toULongLong());
-    swap_hard_limit->setSuffix(" (MB)");
+    swap_hard_limit->setSuffix(" (MiB)");
     guaranteeLabel = new QLabel("Min guarantee", this);
     min_guarantee = new QSpinBox(this);
     min_guarantee->setRange(0, memValue.toULongLong());
-    min_guarantee->setSuffix(" (MB)");
+    min_guarantee->setSuffix(" (MiB)");
     memTuneLayout = new QGridLayout();
     memTuneLayout->addWidget(hardLabel, 0, 0);
     memTuneLayout->addWidget(hard_limit, 0, 2);
@@ -144,13 +144,13 @@ QDomDocument Memory::getDataDocument() const
     data = doc.createTextNode(
                 QString("%1").arg(maxMemValue->value()));
     _memory.appendChild(data);
-    _memory.setAttribute("unit", "MB");
+    _memory.setAttribute("unit", "MiB");
     _data.appendChild(_memory);
     _currMemory = doc.createElement("currentMemory");
     data = doc.createTextNode(
                 QString("%1").arg(currMemValue->value()));
     _currMemory.appendChild(data);
-    _currMemory.setAttribute("unit", "MB");
+    _currMemory.setAttribute("unit", "MiB");
     _data.appendChild(_currMemory);
 
     if ( enableMemBacking->isChecked() ) {
@@ -197,7 +197,7 @@ QDomDocument Memory::getDataDocument() const
             data = doc.createTextNode(
                         QString("%1").arg(soft_limit->value()));
             _el.appendChild(data);
-            _el.setAttribute("unit", "MB");
+            _el.setAttribute("unit", "MiB");
             _memTune.appendChild(_el);
         };
         if ( swap_hard_limit->value() ) {
@@ -206,7 +206,7 @@ QDomDocument Memory::getDataDocument() const
                         QString("%1")
                         .arg(swap_hard_limit->value()));
             _el.appendChild(data);
-            _el.setAttribute("unit", "MB");
+            _el.setAttribute("unit", "MiB");
             _memTune.appendChild(_el);
         };
         if ( min_guarantee->value() ) {
@@ -215,7 +215,7 @@ QDomDocument Memory::getDataDocument() const
                         QString("%1")
                         .arg(min_guarantee->value()));
             _el.appendChild(data);
-            _el.setAttribute("unit", "MB");
+            _el.setAttribute("unit", "MiB");
             _memTune.appendChild(_el);
         };
     };
@@ -245,10 +245,10 @@ void Memory::readCapabilities()
                firstChildElement("cell").
                firstChildElement("memory").
                attribute("unit", "???");
-    memUnit.append("MB");
+    memUnit.append("MiB");
     memValue.append(
                 QString::number(
-                    convertNiBtoMBytes(
+                    convertNiBtoMiB(
                         _memValue.toULongLong(),
                         _memUnit)));
 }
@@ -280,7 +280,7 @@ void Memory::readXMLDesciption(const QString &_xmlDesc)
             .firstChildElement("memory")
             .attribute("unit");
     maxMemValue->setValue(
-                convertNiBtoMBytes(_value, _unit));
+                convertNiBtoMiB(_value, _unit));
     _value = _domain
             .firstChildElement("currentMemory")
             .firstChild().toText().data()
@@ -289,7 +289,7 @@ void Memory::readXMLDesciption(const QString &_xmlDesc)
             .firstChildElement("currentMemory")
             .attribute("unit");
     currMemValue->setValue(
-                convertNiBtoMBytes(_value, _unit));
+                convertNiBtoMiB(_value, _unit));
     QDomElement _memoryBacking = _domain
             .firstChildElement("memoryBacking");
     enableMemBacking->setChecked( !_memoryBacking.isNull() );
@@ -332,7 +332,7 @@ void Memory::readXMLDesciption(const QString &_xmlDesc)
                     .firstChildElement("hard_limit")
                     .attribute("unit");
             hard_limit->setValue(
-                        convertNiBtoMBytes(_value, _unit));
+                        convertNiBtoMiB(_value, _unit));
         };
         if ( !_memTune
              .firstChildElement("soft_limit").isNull() ) {
@@ -344,7 +344,7 @@ void Memory::readXMLDesciption(const QString &_xmlDesc)
                     .firstChildElement("soft_limit")
                     .attribute("unit");
             soft_limit->setValue(
-                        convertNiBtoMBytes(_value, _unit));
+                        convertNiBtoMiB(_value, _unit));
         };
         if ( !_memTune
              .firstChildElement("swap_hard_limit").isNull() ) {
@@ -356,7 +356,7 @@ void Memory::readXMLDesciption(const QString &_xmlDesc)
                     .firstChildElement("swap_hard_limit")
                     .attribute("unit");
             swap_hard_limit->setValue(
-                        convertNiBtoMBytes(_value, _unit));
+                        convertNiBtoMiB(_value, _unit));
         };
         if ( !_memTune
              .firstChildElement("min_guarantee").isNull() ) {
@@ -368,35 +368,34 @@ void Memory::readXMLDesciption(const QString &_xmlDesc)
                     .firstChildElement("min_guarantee")
                     .attribute("unit");
             min_guarantee->setValue(
-                        convertNiBtoMBytes(_value, _unit));
+                        convertNiBtoMiB(_value, _unit));
         };
     };
 }
-quint64 Memory::convertNiBtoMBytes(quint64 _NiB, const QString &_unit)
+quint64 Memory::convertNiBtoMiB(quint64 _NiB, const QString &_unit)
 {
-    QString bytes = QString("b");
     if ( _unit=="b" || _unit=="bytes" ) {
         quint64 _res = _NiB / 1048576;
         return (_res==0)? 1 : _res;
     } else if ( _unit=="K" || _unit=="KiB" ) {
         return _NiB / 1024;
     } else if ( _unit=="KB" ) {
-        return convertNiBtoMBytes(_NiB*1024, bytes);
+        return convertNiBtoMiB(_NiB*1000, "b");
     } else if ( _unit=="M" || _unit=="MiB" ) {
-        return _NiB*1000 / 1024;
-    } else if ( _unit=="MB" ) {
         return _NiB;
+    } else if ( _unit=="MB" ) {
+        return _NiB*1000 / 1024;
     } else if ( _unit=="G" || _unit=="GiB" ) {
-        return _NiB*1000000/1024;
-    } else if ( _unit=="GB" ) {
         return _NiB*1024;
+    } else if ( _unit=="GB" ) {
+        return _NiB*1000000/1024;
     } else if ( _unit=="T" || _unit=="TiB" ) {
-        return _NiB*1000000000/1024;
-    } else if ( _unit=="TB" ) {
         return _NiB*1048576;
+    } else if ( _unit=="TB" ) {
+        return _NiB*1000000000/1024;
     } else if ( _unit=="E" || _unit=="EiB" ) {
-        return _NiB*1000000000000/1024;
-    } else if ( _unit=="EB" ) {
         return _NiB*1073741824;
+    } else if ( _unit=="EB" ) {
+        return _NiB*1000000000000/1024;
     } else return 0;
 }

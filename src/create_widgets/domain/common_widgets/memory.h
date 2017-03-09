@@ -62,7 +62,7 @@ private slots:
     void             changeMaximumMemValue(int);
     void             readXMLDesciption();
     void             readXMLDesciption(const QString&);
-    quint64          convertNiBtoMBytes(quint64, const QString&);
+    quint64          convertNiBtoMiB(quint64, const QString&);
 };
 
 #endif // MEMORY_H

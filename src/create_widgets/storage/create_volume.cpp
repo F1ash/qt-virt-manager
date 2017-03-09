@@ -110,14 +110,14 @@ void CreateVolume::setDataDescription(const QString &_xmlDesc)
                 } else if ( _el.tagName()=="allocation" ) {
                     QString _unit = _el.attribute("unit", "bytes");
                     allocation->setValue(
-                                convertNiBtoMBytes(_el.text().toULongLong(), _unit));
+                                convertNiBtoMiB(_el.text().toULongLong(), _unit));
                     int idx = allocLabel->findData("MiB", Qt::UserRole);
                     if (idx <0 ) idx = 0;
                     allocLabel->setCurrentIndex(idx);
                 } else if ( _el.tagName()=="capacity" ) {
                     QString _unit = _el.attribute("unit", "bytes");
                     capacity->setValue(
-                                convertNiBtoMBytes(_el.text().toULongLong(), _unit));
+                                convertNiBtoMiB(_el.text().toULongLong(), _unit));
                     int idx = capLabel->findData("MiB", Qt::UserRole);
                     if (idx <0 ) idx = 0;
                     capLabel->setCurrentIndex(idx);
