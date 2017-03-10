@@ -15,6 +15,12 @@ _BlockDevices::_BlockDevices(QWidget *parent, QString tag) :
     setOneDeviceMode(false);
 }
 
+void _BlockDevices::addNewDevicePath(const QString &_devPath)
+{
+    name->setText(_devPath);
+    addItem();
+}
+
 /* public slots */
 QStringList _BlockDevices::getDevicesList() const
 {

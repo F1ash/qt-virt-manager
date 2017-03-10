@@ -12,6 +12,7 @@ public:
             QWidget *parent = nullptr,
             QString  tag    = "");
     QLineEdit       *name;
+    void             addNewDevicePath(const QString&);
 
 private:
     QPushButton     *browse;
