@@ -21,7 +21,7 @@ public slots:
     void             setFullHostMode(bool);
     QStringList      getHostsList() const;
     void             setOneHostMode(bool);
-    void             setHostItem(QString&);
+    void             setHostItem(const QString&);
     void             clearHostList();
     void             setHostPlaceholderText(const QString&);
     void             setPortPlaceholderText(const QString&);

@@ -30,7 +30,7 @@ void _Hosts::setOneHostMode(bool state)
 {
     oneHostMode = state;
 }
-void _Hosts::setHostItem(QString &_item)
+void _Hosts::setHostItem(const QString &_item)
 {
     list->addItem(_item);
 }
