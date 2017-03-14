@@ -11,8 +11,8 @@ typedef QList<QVariantMap> ACT_RESULT;
 struct Result {
     QString         name        = QString();
     uint            number      = 0;
-    VIRT_ENTITY     type        = _NONE_ENTITY;
-    Actions         action      = _NONE_ACTION;
+    VIRT_ENTITY     type        = VIRT_ENTITY::_NONE_ENTITY;
+    Actions         action      = Actions::_NONE_ACTION;
     bool            result      = false;
     QStringList     msg         = QStringList();
     ACT_RESULT      data        = ACT_RESULT();
@@ -25,9 +25,9 @@ struct TASK {
     virConnectPtr*      srcConnPtr  = nullptr;
     QString             srcConName  = QString();
     QString             object      = QString();
-    Actions             action      = _NONE_ACTION;
-    Methods             method      = _NONE_METHOD;
-    VIRT_ENTITY         type        = _NONE_ENTITY;
+    Actions             action      = Actions::_NONE_ACTION;
+    Methods             method      = Methods::_NONE_METHOD;
+    VIRT_ENTITY         type        = VIRT_ENTITY::_NONE_ENTITY;
 
     // details
     struct          DETAILS {

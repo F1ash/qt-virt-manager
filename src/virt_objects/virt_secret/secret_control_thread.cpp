@@ -26,9 +26,9 @@ void SecretControlThread::execAction(uint _num, TASK _task)
         start();
     } else {
         Result result;
-        result.type   = VIRT_SECRET;
+        result.type   = VIRT_ENTITY::VIRT_SECRET;
         result.number = number;
-        result.action = _NONE_ACTION;
+        result.action = Actions::_NONE_ACTION;
         emit resultData(result);
     };
 }
@@ -38,16 +38,16 @@ void SecretControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY_STATE :
+    case Actions::GET_ALL_ENTITY_STATE :
         result = getAllSecretList();
         break;
-    case DEFINE_ENTITY :
+    case Actions::DEFINE_ENTITY :
         result = defineSecret();
         break;
-    case UNDEFINE_ENTITY :
+    case Actions::UNDEFINE_ENTITY :
         result = undefineSecret();
         break;
-    case GET_XML_DESCRIPTION :
+    case Actions::GET_XML_DESCRIPTION :
         result = getVirtSecretXMLDesc();
         break;
     default:
@@ -55,7 +55,7 @@ void SecretControlThread::run()
     };
     // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
-    result.type   = VIRT_SECRET;
+    result.type   = VIRT_ENTITY::VIRT_SECRET;
     result.number = number;
     result.action = task.action;
     emit resultData(result);

@@ -57,20 +57,20 @@ void StoragePoolControlMenu::emitExecMethod(QAction *action)
 {
     Act_Param paramList;
     if ( action == start) {
-        paramList.method = startEntity;
+        paramList.method = Methods::startEntity;
     } else if ( action == destroy ) {
-        paramList.method = destroyEntity;
+        paramList.method = Methods::destroyEntity;
     } else if ( action == undefine ) {
-        paramList.method = undefineEntity;
+        paramList.method = Methods::undefineEntity;
     } else if ( action == autoStart ) {
-        paramList.method = setAutostartEntity;
+        paramList.method = Methods::setAutostartEntity;
         paramList.path = (autostart)? "0" : "1";
     } else if ( action == getXMLDesc ) {
-        paramList.method = getEntityXMLDesc;
+        paramList.method = Methods::getEntityXMLDesc;
     } else if ( action == overview ) {
-        paramList.method = overviewEntity;
+        paramList.method = Methods::overviewEntity;
     } else if ( action == reload ) {
-        paramList.method = reloadEntity;
+        paramList.method = Methods::reloadEntity;
     } else return;
     emit execMethod(paramList);
 }

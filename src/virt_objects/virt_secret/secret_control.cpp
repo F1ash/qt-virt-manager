@@ -90,7 +90,7 @@ QString VirtSecretControl::getCurrentSecType() const
 void VirtSecretControl::resultReceiver(Result *data)
 {
     //qDebug()<<data->action<<data->name<<"result";
-    if ( data->action == GET_ALL_ENTITY_STATE ) {
+    if ( data->action == Actions::GET_ALL_ENTITY_STATE ) {
         if ( data->data.count() > virtSecretModel->DataList.count() ) {
             int _diff = data->data.count() - virtSecretModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -128,7 +128,7 @@ void VirtSecretControl::resultReceiver(Result *data)
         };
         entityList->setEnabled(true);
         emit entityListUpdated();
-    } else if ( data->action == GET_XML_DESCRIPTION ) {
+    } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
         data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
         QString msg = QString("%1<br>%2")
@@ -137,7 +137,7 @@ void VirtSecretControl::resultReceiver(Result *data)
         msgRepeater(msg);
         if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
-    } else if ( data->action != _NONE_ACTION ) {
+    } else if ( data->action != Actions::_NONE_ACTION ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -148,7 +148,7 @@ void VirtSecretControl::resultReceiver(Result *data)
             reloadState();
             // for different action's specified manipulation
             switch (data->action) {
-            case _NONE_ACTION:
+            case Actions::_NONE_ACTION:
                 // some job;
                 break;
             default:
@@ -164,11 +164,11 @@ void VirtSecretControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type       = VIRT_SECRET;
+    task.type       = VIRT_ENTITY::VIRT_SECRET;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = reloadEntity;
+    task.action     = Actions::GET_ALL_ENTITY_STATE;
+    task.method     = Methods::reloadEntity;
     emit addNewTask(&task);
 }
 void VirtSecretControl::changeDockVisibility()
@@ -208,7 +208,7 @@ void VirtSecretControl::entityDoubleClicked(const QModelIndex &index)
 void VirtSecretControl::execAction(const Act_Param &param)
 {
     TASK task;
-    task.type       = VIRT_SECRET;
+    task.type       = VIRT_ENTITY::VIRT_SECRET;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.method     = param.method;
@@ -216,7 +216,7 @@ void VirtSecretControl::execAction(const Act_Param &param)
     if ( idx.isValid() && virtSecretModel->DataList.count()>idx.row() ) {
         QString uuid = virtSecretModel->DataList.at(idx.row())->getUUID();
         task.object = uuid;
-        if        ( param.method==defineEntity ) {
+        if        ( param.method==Methods::defineEntity ) {
             QString xml;
             bool show = false;
             // show Secret Creator widget
@@ -231,7 +231,7 @@ void VirtSecretControl::execAction(const Act_Param &param)
                 QString msg = data.join(" ");
                 msgRepeater(msg);
                 if ( show ) QDesktopServices::openUrl(QUrl(xml));
-                task.action     = DEFINE_ENTITY;
+                task.action     = Actions::DEFINE_ENTITY;
                 task.args.path  = xml;
                 QByteArray secVal = createVirtSec->getSecretValue();
                 task.secret->setSecretValue(&secVal);
@@ -240,18 +240,18 @@ void VirtSecretControl::execAction(const Act_Param &param)
             delete createVirtSec;
             createVirtSec = nullptr;
             //qDebug()<<xml<<"path"<<result;
-        } else if ( param.method==undefineEntity ) {
-            task.action     = UNDEFINE_ENTITY;
+        } else if ( param.method==Methods::undefineEntity ) {
+            task.action     = Actions::UNDEFINE_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==getEntityXMLDesc ) {
-            task.action     = GET_XML_DESCRIPTION;
+        } else if ( param.method==Methods::getEntityXMLDesc ) {
+            task.action     = Actions::GET_XML_DESCRIPTION;
             emit addNewTask(&task);
-        } else if ( param.method==reloadEntity ) {
+        } else if ( param.method==Methods::reloadEntity ) {
             reloadState();
         };
-    } else if ( param.method==reloadEntity ) {
+    } else if ( param.method==Methods::reloadEntity ) {
         reloadState();
-    } else if ( param.method==defineEntity ) {
+    } else if ( param.method==Methods::defineEntity ) {
         QString xml;
         bool show = false;
         // show Secret Creator widget
@@ -267,7 +267,7 @@ void VirtSecretControl::execAction(const Act_Param &param)
             QString msg = data.join(" ");
             msgRepeater(msg);
             if ( show ) QDesktopServices::openUrl(QUrl(xml));
-            task.action     = DEFINE_ENTITY;
+            task.action     = Actions::DEFINE_ENTITY;
             task.args.path  = xml;
             QByteArray secVal = createVirtSec->getSecretValue();
             task.secret->setSecretValue(&secVal);

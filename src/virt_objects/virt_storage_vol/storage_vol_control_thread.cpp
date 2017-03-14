@@ -37,9 +37,9 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
         start();
     } else {
         Result result;
-        result.type   = VIRT_STORAGE_VOLUME;
+        result.type   = VIRT_ENTITY::VIRT_STORAGE_VOLUME;
         result.number = number;
-        result.action = _NONE_ACTION;
+        result.action = Actions::_NONE_ACTION;
         emit resultData(result);
     };
 }
@@ -65,31 +65,31 @@ void StorageVolControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY_STATE :
+    case Actions::GET_ALL_ENTITY_STATE :
         result = getAllStorageVolList();
         break;
-    case CREATE_ENTITY:
+    case Actions::CREATE_ENTITY:
         result = createStorageVol();
         break;
-    case DELETE_ENTITY :
+    case Actions::DELETE_ENTITY :
         result = deleteStorageVol();
         break;
-    case DOWNLOAD_ENTITY :
+    case Actions::DOWNLOAD_ENTITY :
         result = downloadStorageVol();
         break;
-    case UPLOAD_ENTITY :
+    case Actions::UPLOAD_ENTITY :
         result = uploadStorageVol();
         break;
-    case RESIZE_ENTITY :
+    case Actions::RESIZE_ENTITY :
         result = resizeStorageVol();
         break;
-    case WIPE_ENTITY :
+    case Actions::WIPE_ENTITY :
         result = wipeStorageVol();
         break;
-    case REFRESH_ENTITY :
+    case Actions::REFRESH_ENTITY :
         result = refreshStorageVolList();
         break;
-    case GET_XML_DESCRIPTION :
+    case Actions::GET_XML_DESCRIPTION :
         result = getStorageVolXMLDesc();
         break;
     default:
@@ -97,7 +97,7 @@ void StorageVolControlThread::run()
     };
     // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
-    result.type   = VIRT_STORAGE_VOLUME;
+    result.type   = VIRT_ENTITY::VIRT_STORAGE_VOLUME;
     result.number = number;
     result.action = task.action;
     emit resultData(result);

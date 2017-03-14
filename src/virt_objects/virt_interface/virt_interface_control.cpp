@@ -78,7 +78,7 @@ void VirtInterfaceControl::setListHeader(const QString &connName)
 void VirtInterfaceControl::resultReceiver(Result *data)
 {
     //qDebug()<<data->action<<data->msg<<"result";
-    if ( data->action == GET_ALL_ENTITY_STATE ) {
+    if ( data->action == Actions::GET_ALL_ENTITY_STATE ) {
         if ( data->data.count() > virtIfaceModel->DataList.count() ) {
             int _diff = data->data.count() - virtIfaceModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -116,7 +116,7 @@ void VirtInterfaceControl::resultReceiver(Result *data)
         };
         entityList->setEnabled(true);
         emit entityListUpdated();
-    } else if ( data->action == GET_XML_DESCRIPTION ) {
+    } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
         data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
         QString msg = QString("%1<br>%2")
@@ -125,7 +125,7 @@ void VirtInterfaceControl::resultReceiver(Result *data)
         msgRepeater(msg);
         if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
-    } else if ( data->action != _NONE_ACTION ) {
+    } else if ( data->action != Actions::_NONE_ACTION ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -143,15 +143,15 @@ void VirtInterfaceControl::resultReceiver(Result *data)
             // for different action's specified manipulation;
             // set manually, because next reload not change 'changing'
             switch (data->action) {
-            case IFACE_CHANGE_BEGIN:
+            case Actions::IFACE_CHANGE_BEGIN:
                 if (row+1>0)
                     virtIfaceModel->DataList.at(row)->setChanging(true);
                 break;
-            case IFACE_CHANGE_COMMIT:
+            case Actions::IFACE_CHANGE_COMMIT:
                 if (row+1>0)
                     virtIfaceModel->DataList.at(row)->setChanging(false);
                 break;
-            case IFACE_CHANGE_ROLLBACK:
+            case Actions::IFACE_CHANGE_ROLLBACK:
                 if (row+1>0)
                     virtIfaceModel->DataList.at(row)->setChanging(false);
                 break;
@@ -169,11 +169,11 @@ void VirtInterfaceControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type       = VIRT_INTERFACE;
+    task.type       = VIRT_ENTITY::VIRT_INTERFACE;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = reloadEntity;
+    task.action     = Actions::GET_ALL_ENTITY_STATE;
+    task.method     = Methods::reloadEntity;
     emit addNewTask(&task);
 }
 void VirtInterfaceControl::changeDockVisibility()
@@ -226,55 +226,55 @@ void VirtInterfaceControl::execAction(const Act_Param &param)
     if ( idx.isValid() && virtIfaceModel->DataList.count()>idx.row() ) {
         QString networkName = virtIfaceModel->DataList.at(idx.row())->getName();
         TASK task;
-        task.type       = VIRT_INTERFACE;
+        task.type       = VIRT_ENTITY::VIRT_INTERFACE;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = networkName;
         task.method     = param.method;
-        if        ( param.method==startEntity ) {
-            task.action = START_ENTITY;
+        if        ( param.method==Methods::startEntity ) {
+            task.action = Actions::START_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==destroyEntity ) {
-            task.action = DESTROY_ENTITY;
+        } else if ( param.method==Methods::destroyEntity ) {
+            task.action = Actions::DESTROY_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==defineEntity ) {
+        } else if ( param.method==Methods::defineEntity ) {
             //newVirtEntityFromXML(l);
-        } else if ( param.method==undefineEntity ) {
-            task.action = UNDEFINE_ENTITY;
+        } else if ( param.method==Methods::undefineEntity ) {
+            task.action = Actions::UNDEFINE_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==changeBeginVirtInterface ) {
-            task.action = IFACE_CHANGE_BEGIN;
+        } else if ( param.method==Methods::changeBeginVirtInterface ) {
+            task.action = Actions::IFACE_CHANGE_BEGIN;
             emit addNewTask(&task);
-        } else if ( param.method==changeCommitVirtInterface ) {
-            task.action = IFACE_CHANGE_COMMIT;
+        } else if ( param.method==Methods::changeCommitVirtInterface ) {
+            task.action = Actions::IFACE_CHANGE_COMMIT;
             emit addNewTask(&task);
-        } else if ( param.method==changeRollbackVirtInterface ) {
-            task.action = IFACE_CHANGE_ROLLBACK;
+        } else if ( param.method==Methods::changeRollbackVirtInterface ) {
+            task.action = Actions::IFACE_CHANGE_ROLLBACK;
             emit addNewTask(&task);
-        } else if ( param.method==getEntityXMLDesc ) {
-            task.action = GET_XML_DESCRIPTION;
+        } else if ( param.method==Methods::getEntityXMLDesc ) {
+            task.action = Actions::GET_XML_DESCRIPTION;
             emit addNewTask(&task);
-        } else if ( param.method==reloadEntity ) {
+        } else if ( param.method==Methods::reloadEntity ) {
             reloadState();
         };
-    } else if ( param.method==reloadEntity ) {
+    } else if ( param.method==Methods::reloadEntity ) {
         reloadState();
-    } else if ( param.method==defineEntity ) {
+    } else if ( param.method==Methods::defineEntity ) {
         //newVirtEntityFromXML(l);
     };
 }
 void VirtInterfaceControl::newVirtEntityFromXML(const Act_Param &args)
 {
     TASK task;
-    task.type       = VIRT_INTERFACE;
+    task.type       = VIRT_ENTITY::VIRT_INTERFACE;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.method     = defineEntity;
-    task.action     = DEFINE_ENTITY;
+    task.method     = Methods::defineEntity;
+    task.action     = Actions::DEFINE_ENTITY;
     task.args.path  = args.path;
-    if ( args.context==DO_AsIs ) {
+    if ( args.context==HOW_TO_DO::DO_AsIs ) {
         emit addNewTask(&task);
-    } else if ( args.context==DO_Edit ) {
+    } else if ( args.context==HOW_TO_DO::DO_Edit ) {
         emit ifaceToEditor(&task);
     } else{
         QString xml;

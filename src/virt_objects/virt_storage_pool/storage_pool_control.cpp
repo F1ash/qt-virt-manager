@@ -78,7 +78,7 @@ void VirtStoragePoolControl::setListHeader(const QString &connName)
 void VirtStoragePoolControl::resultReceiver(Result *data)
 {
     //qDebug()<<data->action<<data->msg<<"result";
-    if ( data->action == GET_ALL_ENTITY_STATE ) {
+    if ( data->action == Actions::GET_ALL_ENTITY_STATE ) {
         if ( data->data.count() > storagePoolModel->DataList.count() ) {
             int _diff = data->data.count() - storagePoolModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -116,7 +116,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
         };
         entityList->setEnabled(true);
         emit entityListUpdated();
-    } else if ( data->action == CREATE_ENTITY ) {
+    } else if ( data->action == Actions::CREATE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -124,7 +124,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data->action == DEFINE_ENTITY ) {
+    } else if ( data->action == Actions::DEFINE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -132,7 +132,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data->action == START_ENTITY ) {
+    } else if ( data->action == Actions::START_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -140,7 +140,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data->action == DESTROY_ENTITY ) {
+    } else if ( data->action == Actions::DESTROY_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -148,7 +148,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data->action == UNDEFINE_ENTITY ) {
+    } else if ( data->action == Actions::UNDEFINE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -156,7 +156,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data->action == CHANGE_ENTITY_AUTOSTART ) {
+    } else if ( data->action == Actions::CHANGE_ENTITY_AUTOSTART ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -164,7 +164,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data->action == GET_XML_DESCRIPTION ) {
+    } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
         data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
         QString msg = QString("%1<br>%2")
@@ -188,11 +188,11 @@ void VirtStoragePoolControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type       = VIRT_STORAGE_POOL;
+    task.type       = VIRT_ENTITY::VIRT_STORAGE_POOL;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = reloadEntity;
+    task.action     = Actions::GET_ALL_ENTITY_STATE;
+    task.method     = Methods::reloadEntity;
     emit addNewTask(&task);
 }
 void VirtStoragePoolControl::changeDockVisibility()
@@ -248,64 +248,64 @@ void VirtStoragePoolControl::execAction(const Act_Param &param)
         QString storagePoolName =
                 storagePoolModel->DataList.at(idx.row())->getName();
         TASK task;
-        task.type       = VIRT_STORAGE_POOL;
+        task.type       = VIRT_ENTITY::VIRT_STORAGE_POOL;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = storagePoolName;
         task.method     = param.method;
-        if        ( param.method==startEntity ) {
-            task.action     = START_ENTITY;
+        if        ( param.method==Methods::startEntity ) {
+            task.action     = Actions::START_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==destroyEntity ) {
-            task.action     = DESTROY_ENTITY;
+        } else if ( param.method==Methods::destroyEntity ) {
+            task.action     = Actions::DESTROY_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==undefineEntity ) {
-            task.action     = UNDEFINE_ENTITY;
+        } else if ( param.method==Methods::undefineEntity ) {
+            task.action     = Actions::UNDEFINE_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==setAutostartEntity ) {
+        } else if ( param.method==Methods::setAutostartEntity ) {
             /* set the opposite value */
             uint autostartState =
                 (storagePoolModel->DataList.at(idx.row())->getAutostart())
                  ? 0 : 1;
-            task.action     = CHANGE_ENTITY_AUTOSTART;
+            task.action     = Actions::CHANGE_ENTITY_AUTOSTART;
             task.args.sign  = autostartState;
             emit addNewTask(&task);
-        } else if ( param.method==deleteEntity ) {
-            task.action     = DELETE_ENTITY;
+        } else if ( param.method==Methods::deleteEntity ) {
+            task.action     = Actions::DELETE_ENTITY;
             task.args.sign  = param.path.toUInt();
             emit addNewTask(&task);
-        } else if ( param.method==getEntityXMLDesc ) {
-            task.action     = GET_XML_DESCRIPTION;
+        } else if ( param.method==Methods::getEntityXMLDesc ) {
+            task.action     = Actions::GET_XML_DESCRIPTION;
             emit addNewTask(&task);
-        } else if ( param.method==overviewEntity ) {
+        } else if ( param.method==Methods::overviewEntity ) {
             // don't set onView state, because it can be multiplicate
             //uint row = idx.row();
             //for ( int i=0; i<storagePoolModel->DataList.count(); i++ ) {
             //    storagePoolModel->DataList.at(i)->setOnView(i==row);
             //};
             emit overviewStPool(ptr_ConnPtr, currConnName, storagePoolName);
-        } else if ( param.method==reloadEntity ) {
+        } else if ( param.method==Methods::reloadEntity ) {
             reloadState();
         };
-    } else if ( param.method==reloadEntity ) {
+    } else if ( param.method==Methods::reloadEntity ) {
         reloadState();
     };
 }
 void VirtStoragePoolControl::newVirtEntityFromXML(const Act_Param &args)
 {
     TASK task;
-    task.type = VIRT_STORAGE_POOL;
+    task.type = VIRT_ENTITY::VIRT_STORAGE_POOL;
     Methods method;
-    if ( args.act==CREATE_ENTITY ) {
-        method = createEntity;
+    if ( args.act==Actions::CREATE_ENTITY ) {
+        method = Methods::createEntity;
     } else {
-        method = defineEntity;
+        method = Methods::defineEntity;
     };
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.method     = method;
     task.action     = args.act;
-    if ( args.context==DO_AsIs ) {
+    if ( args.context==HOW_TO_DO::DO_AsIs ) {
         task.args.path  = args.path;
         emit addNewTask(&task);
     } else {

@@ -52,21 +52,21 @@ void IfaceControlMenu::emitExecMethod(QAction *action)
 {
     Act_Param paramList;
     if ( action == start) {
-        paramList.method = startEntity;
+        paramList.method = Methods::startEntity;
     } else if ( action == destroy ) {
-        paramList.method = destroyEntity;
+        paramList.method = Methods::destroyEntity;
     } else if ( action == undefine ) {
-        paramList.method = undefineEntity;
+        paramList.method = Methods::undefineEntity;
     } else if ( action == changeBegin ) {
-        paramList.method = changeBeginVirtInterface;
+        paramList.method = Methods::changeBeginVirtInterface;
     } else if ( action == changeCommit ) {
-        paramList.method = changeCommitVirtInterface;
+        paramList.method = Methods::changeCommitVirtInterface;
     } else if ( action == changeRollback ) {
-        paramList.method = changeRollbackVirtInterface;
+        paramList.method = Methods::changeRollbackVirtInterface;
     } else if ( action == getXMLDesc ) {
-        paramList.method = getEntityXMLDesc;
+        paramList.method = Methods::getEntityXMLDesc;
     } else if ( action == reload ) {
-        paramList.method = reloadEntity;
+        paramList.method = Methods::reloadEntity;
     } else return;
     emit execMethod(paramList);
 }

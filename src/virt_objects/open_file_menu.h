@@ -13,8 +13,8 @@ class OpenFileMenu : public QMenu
 public:
     explicit OpenFileMenu(
             QWidget     *parent = nullptr,
-            Actions      _act   = _NONE_ACTION,
-            VIRT_ENTITY  _e     = _NONE_ENTITY);
+            Actions      _act   = Actions::_NONE_ACTION,
+            VIRT_ENTITY  _e     = VIRT_ENTITY::_NONE_ENTITY);
 
 signals:
     void        fileForMethod(const Act_Param&);

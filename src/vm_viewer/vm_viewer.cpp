@@ -107,44 +107,44 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
     QStringList args;
     args.append(domain);
     TASK task;
-    task.type       = VIRT_DOMAIN;
+    task.type       = VIRT_ENTITY::VIRT_DOMAIN;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = connName;
     task.object     = domain;
     task.method     = params.method;
-    if        ( params.method==startEntity ) {
-        task.action     = START_ENTITY;
+    if        ( params.method==Methods::startEntity ) {
+        task.action     = Actions::START_ENTITY;
         emit addNewTask(&task);
-    } else if ( params.method==pauseEntity ) {
-        task.action     = PAUSE_ENTITY;
+    } else if ( params.method==Methods::pauseEntity ) {
+        task.action     = Actions::PAUSE_ENTITY;
         emit addNewTask(&task);
-    } else if ( params.method==destroyEntity ) {
-        task.action     = DESTROY_ENTITY;
+    } else if ( params.method==Methods::destroyEntity ) {
+        task.action     = Actions::DESTROY_ENTITY;
         emit addNewTask(&task);
-    } else if ( params.method==resetVirtDomain ) {
-        task.action     = RESET_ENTITY;
+    } else if ( params.method==Methods::resetVirtDomain ) {
+        task.action     = Actions::RESET_ENTITY;
         emit addNewTask(&task);
-    } else if ( params.method==shutdownVirtDomain ) {
-        task.action     = SHUTDOWN_ENTITY;
+    } else if ( params.method==Methods::shutdownVirtDomain ) {
+        task.action     = Actions::SHUTDOWN_ENTITY;
         emit addNewTask(&task);
-    } else if ( params.method==saveVirtDomain ) {
+    } else if ( params.method==Methods::saveVirtDomain ) {
         QString to = QFileDialog::getSaveFileName(this, "Save to", "~");
         if ( !to.isEmpty() ) {
-            task.action     = SAVE_ENTITY;
+            task.action     = Actions::SAVE_ENTITY;
             task.args.path  = to;
             emit addNewTask(&task);
         };
-    } else if ( params.method==restoreVirtDomain ) {
+    } else if ( params.method==Methods::restoreVirtDomain ) {
         QString from =
                 QFileDialog::getOpenFileName(
                     this, "Restore from", "~");
         if ( !from.isEmpty() ) {
-            task.action     = RESTORE_ENTITY;
+            task.action     = Actions::RESTORE_ENTITY;
             task.args.path  = from;
             emit addNewTask(&task);
         };
-    } else if ( params.method==createVirtDomainSnapshot ) {
-        //qDebug()<<"createVirtDomainSnapshot";
+    } else if ( params.method==Methods::createVirtDomainSnapshot ) {
+        //qDebug()<<"Methods::createVirtDomainSnapshot";
         CreateSnapshotDialog *_dialog =
                 new CreateSnapshotDialog(
                     this, domain, connName, true, ptr_ConnPtr);
@@ -155,13 +155,13 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
                    this, SLOT(sendErrMsg(const QString&)));
         _dialog->deleteLater();
         if ( exitCode ) {
-            task.action      = CREATE_DOMAIN_SNAPSHOT;
+            task.action      = Actions::CREATE_DOMAIN_SNAPSHOT;
             task.args.object = _dialog->getSnapshotXMLDesc();
             task.args.sign   = _dialog->getSnapshotFlags();
             emit addNewTask(&task);
         };
-    } else if ( params.method==moreSnapshotActions ) {
-        //qDebug()<<"moreSnapshotActions";
+    } else if ( params.method==Methods::moreSnapshotActions ) {
+        //qDebug()<<"Methods::moreSnapshotActions";
         SnapshotActionDialog *_dialog =
                new SnapshotActionDialog(
                     this, ptr_ConnPtr, domain, connName);
@@ -171,34 +171,34 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
             Act_Param params = _dialog->getParameters();
             task.action      = params.act;
             Methods method;
-            if ( params.act==REVERT_TO_DOMAIN_SNAPSHOT ) {
-                method = revertVirtDomainSnapshot;
-            } else if ( params.act==DELETE_DOMAIN_SNAPSHOT ) {
-                method = deleteVirtDomainSnapshot;
+            if ( params.act==Actions::REVERT_TO_DOMAIN_SNAPSHOT ) {
+                method = Methods::revertVirtDomainSnapshot;
+            } else if ( params.act==Actions::DELETE_DOMAIN_SNAPSHOT ) {
+                method = Methods::deleteVirtDomainSnapshot;
             };
             task.method      = method;
             task.args.object = params.path;
             task.args.sign   = _dialog->getSnapshotFlags();
             emit addNewTask(&task);
         };
-    } else if ( params.method==reconnectToVirtDomainMethod ) {
+    } else if ( params.method==Methods::reconnectToVirtDomain ) {
         reconnectToVirtDomain();
-    } else if ( params.method==sendKeySeqToVirtDomainMethod ) {
+    } else if ( params.method==Methods::sendKeySeqToVirtDomain ) {
         sendKeySeqToVirtDomain((Qt::Key)params.path.toInt());
-    } else if ( params.method==getScreenshotFromVirtDomainMethod ) {
+    } else if ( params.method==Methods::getScreenshotFromVirtDomain ) {
         getScreenshotFromVirtDomain();
-    } else if ( params.method==copyFilesToVirtDomainMethod ) {
+    } else if ( params.method==Methods::copyFilesToVirtDomain ) {
         copyFilesToVirtDomain();
-    } else if ( params.method==cancelCopyFilesToVirtDomainMethod ) {
+    } else if ( params.method==Methods::cancelCopyFilesToVirtDomain ) {
         cancelCopyFilesToVirtDomain();
-    } else if ( params.method==copyToClipboardFromVirtDomainMethod ) {
+    } else if ( params.method==Methods::copyToClipboardFromVirtDomain ) {
         copyToClipboardFromVirtDomain();
-    } else if ( params.method==pasteClipboardToVirtDomainMethod ) {
+    } else if ( params.method==Methods::pasteClipboardToVirtDomain ) {
         pasteClipboardToVirtDomain();
-    } else if ( params.method==fullScreenVirtDomainMethod ) {
+    } else if ( params.method==Methods::fullScreenVirtDomain ) {
         fullScreenVirtDomain();
-    } else if ( params.method==scaledScreenVirtDomainMethod ) {
-        scaledScreenVirtDomain();
+    } else if ( params.method==Methods::scaleScreenVirtDomain ) {
+        scaleScreenVirtDomain();
     };
 
 }
@@ -243,7 +243,7 @@ void VM_Viewer::fullScreenVirtDomain()
 {
 
 }
-void VM_Viewer::scaledScreenVirtDomain()
+void VM_Viewer::scaleScreenVirtDomain()
 {
 
 }

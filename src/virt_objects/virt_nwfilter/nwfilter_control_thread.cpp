@@ -26,9 +26,9 @@ void NWFilterControlThread::execAction(uint _num, TASK _task)
         start();
     } else {
         Result result;
-        result.type   = VIRT_NETWORK_FILTER;
+        result.type   = VIRT_ENTITY::VIRT_NETWORK_FILTER;
         result.number = number;
-        result.action = _NONE_ACTION;
+        result.action = Actions::_NONE_ACTION;
         emit resultData(result);
     };
 }
@@ -38,17 +38,17 @@ void NWFilterControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY_STATE :
+    case Actions::GET_ALL_ENTITY_STATE :
         result = getAllNWFilterList();
         break;
-    case DEFINE_ENTITY :
+    case Actions::DEFINE_ENTITY :
         result = defineNWFilter();
         break;
-    case UNDEFINE_ENTITY :
+    case Actions::UNDEFINE_ENTITY :
         result = undefineNWFilter();
         break;
-    case EDIT_ENTITY:
-    case GET_XML_DESCRIPTION :
+    case Actions::EDIT_ENTITY:
+    case Actions::GET_XML_DESCRIPTION :
         result = getVirtNWFilterXMLDesc();
         break;
     default:
@@ -56,7 +56,7 @@ void NWFilterControlThread::run()
     };
     // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
-    result.type   = VIRT_NETWORK_FILTER;
+    result.type   = VIRT_ENTITY::VIRT_NETWORK_FILTER;
     result.number = number;
     result.action = task.action;
     emit resultData(result);

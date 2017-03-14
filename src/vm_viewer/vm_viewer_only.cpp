@@ -55,24 +55,24 @@ VM_Viewer_Only::~VM_Viewer_Only()
 /* public slots */
 void VM_Viewer_Only::resendExecMethod(const Act_Param &params)
 {
-    if ( params.method==reconnectToVirtDomainMethod ) {
+    if ( params.method==Methods::reconnectToVirtDomain ) {
         reconnectToVirtDomain();
-    } else if ( params.method==sendKeySeqToVirtDomainMethod ) {
+    } else if ( params.method==Methods::sendKeySeqToVirtDomain ) {
         sendKeySeqToVirtDomain((Qt::Key)params.path.toInt());
-    } else if ( params.method==getScreenshotFromVirtDomainMethod ) {
+    } else if ( params.method==Methods::getScreenshotFromVirtDomain ) {
         getScreenshotFromVirtDomain();
-    } else if ( params.method==copyFilesToVirtDomainMethod ) {
+    } else if ( params.method==Methods::copyFilesToVirtDomain ) {
         copyFilesToVirtDomain();
-    } else if ( params.method==cancelCopyFilesToVirtDomainMethod ) {
+    } else if ( params.method==Methods::cancelCopyFilesToVirtDomain ) {
         cancelCopyFilesToVirtDomain();
-    } else if ( params.method==copyToClipboardFromVirtDomainMethod ) {
+    } else if ( params.method==Methods::copyToClipboardFromVirtDomain ) {
         copyToClipboardFromVirtDomain();
-    } else if ( params.method==pasteClipboardToVirtDomainMethod ) {
+    } else if ( params.method==Methods::pasteClipboardToVirtDomain ) {
         pasteClipboardToVirtDomain();
-    } else if ( params.method==fullScreenVirtDomainMethod ) {
+    } else if ( params.method==Methods::fullScreenVirtDomain ) {
         fullScreenVirtDomain();
-    } else if ( params.method==scaledScreenVirtDomainMethod ) {
-        scaledScreenVirtDomain();
+    } else if ( params.method==Methods::scaleScreenVirtDomain ) {
+        scaleScreenVirtDomain();
     };
 
 }
@@ -117,7 +117,7 @@ void VM_Viewer_Only::fullScreenVirtDomain()
 {
 
 }
-void VM_Viewer_Only::scaledScreenVirtDomain()
+void VM_Viewer_Only::scaleScreenVirtDomain()
 {
 
 }

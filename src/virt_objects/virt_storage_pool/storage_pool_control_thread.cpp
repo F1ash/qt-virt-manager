@@ -26,9 +26,9 @@ void StoragePoolControlThread::execAction(uint _num, TASK _task)
         start();
     } else {
         Result result;
-        result.type   = VIRT_STORAGE_POOL;
+        result.type   = VIRT_ENTITY::VIRT_STORAGE_POOL;
         result.number = number;
-        result.action = _NONE_ACTION;
+        result.action = Actions::_NONE_ACTION;
         emit resultData(result);
     };
 }
@@ -38,34 +38,34 @@ void StoragePoolControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY_STATE :
+    case Actions::GET_ALL_ENTITY_STATE :
         result = getAllStoragePoolList();
         break;
-    case GET_ALL_ENTITY_DATA0 :
+    case Actions::GET_ALL_ENTITY_DATA0 :
         result = getAllStoragePoolDataList();
         break;
-    case CREATE_ENTITY :
+    case Actions::CREATE_ENTITY :
         result = createStoragePool();
         break;
-    case DEFINE_ENTITY :
+    case Actions::DEFINE_ENTITY :
         result = defineStoragePool();
         break;
-    case START_ENTITY :
+    case Actions::START_ENTITY :
         result = startStoragePool();
         break;
-    case DESTROY_ENTITY :
+    case Actions::DESTROY_ENTITY :
         result = destroyStoragePool();
         break;
-    case UNDEFINE_ENTITY :
+    case Actions::UNDEFINE_ENTITY :
         result = undefineStoragePool();
         break;
-    case CHANGE_ENTITY_AUTOSTART :
+    case Actions::CHANGE_ENTITY_AUTOSTART :
         result = changeAutoStartStoragePool();
         break;
-    case DELETE_ENTITY :
+    case Actions::DELETE_ENTITY :
         result = deleteStoragePool();
         break;
-    case GET_XML_DESCRIPTION :
+    case Actions::GET_XML_DESCRIPTION :
         result = getStoragePoolXMLDesc();
         break;
     default:
@@ -73,7 +73,7 @@ void StoragePoolControlThread::run()
     };
     // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
-    result.type   = VIRT_STORAGE_POOL;
+    result.type   = VIRT_ENTITY::VIRT_STORAGE_POOL;
     result.number = number;
     result.action = task.action;
     emit resultData(result);

@@ -26,9 +26,9 @@ void DomControlThread::execAction(uint _num, TASK _task)
         start();
     } else {
         Result result;
-        result.type   = VIRT_DOMAIN;
+        result.type   = VIRT_ENTITY::VIRT_DOMAIN;
         result.number = number;
-        result.action = _NONE_ACTION;
+        result.action = Actions::_NONE_ACTION;
         emit resultData(result);
     };
 }
@@ -38,67 +38,67 @@ void DomControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY_STATE :
+    case Actions::GET_ALL_ENTITY_STATE :
         result = getAllDomainList();
         break;
-    case GET_ALL_ENTITY_DATA0 :
+    case Actions::GET_ALL_ENTITY_DATA0 :
         result = getDomainData0();
         break;
-    case GET_ALL_ENTITY_DATA1 :
+    case Actions::GET_ALL_ENTITY_DATA1 :
         result = getDomainData1();
         break;
-    case CREATE_ENTITY :
+    case Actions::CREATE_ENTITY :
         result = createDomain();
         break;
-    case DEFINE_ENTITY :
+    case Actions::DEFINE_ENTITY :
         result = defineDomain();
         break;
-    case EDIT_ENTITY :
+    case Actions::EDIT_ENTITY :
         result = getDomainXMLDesc();
         break;
-    case START_ENTITY :
+    case Actions::START_ENTITY :
         result = startDomain();
         break;
-    case PAUSE_ENTITY :
+    case Actions::PAUSE_ENTITY :
         result = pauseDomain();
         break;
-    case DESTROY_ENTITY :
+    case Actions::DESTROY_ENTITY :
         result = destroyDomain();
         break;
-    case RESET_ENTITY :
+    case Actions::RESET_ENTITY :
         result = resetDomain();
         break;
-    case REBOOT_ENTITY :
+    case Actions::REBOOT_ENTITY :
         result = rebootDomain();
         break;
-    case SHUTDOWN_ENTITY :
+    case Actions::SHUTDOWN_ENTITY :
         result = shutdownDomain();
         break;
-    case SAVE_ENTITY :
+    case Actions::SAVE_ENTITY :
         result = saveDomain();
         break;
-    case RESTORE_ENTITY :
+    case Actions::RESTORE_ENTITY :
         result = restoreDomain();
         break;
-    case UNDEFINE_ENTITY :
+    case Actions::UNDEFINE_ENTITY :
         result = undefineDomain();
         break;
-    case CHANGE_ENTITY_AUTOSTART :
+    case Actions::CHANGE_ENTITY_AUTOSTART :
         result = changeAutoStartDomain();
         break;
-    case GET_XML_DESCRIPTION :
+    case Actions::GET_XML_DESCRIPTION :
         result = getDomainXMLDesc();
         break;
-    case MIGRATE_ENTITY :
+    case Actions::MIGRATE_ENTITY :
         result = migrateDomain();
         break;
-    case CREATE_DOMAIN_SNAPSHOT :
+    case Actions::CREATE_DOMAIN_SNAPSHOT :
         result = createSnapshoteDomain();
         break;
-    case REVERT_TO_DOMAIN_SNAPSHOT :
+    case Actions::REVERT_TO_DOMAIN_SNAPSHOT :
         result = revertSnapshoteDomain();
         break;
-    case DELETE_DOMAIN_SNAPSHOT :
+    case Actions::DELETE_DOMAIN_SNAPSHOT :
         result = deleteSnapshoteDomain();
         break;
     default:
@@ -106,7 +106,7 @@ void DomControlThread::run()
     };
     // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
-    result.type   = VIRT_DOMAIN;
+    result.type   = VIRT_ENTITY::VIRT_DOMAIN;
     result.number = number;
     result.action = task.action;
     emit resultData(result);

@@ -1,7 +1,7 @@
 #ifndef VIRT_ENTITY_ENUMS_H
 #define VIRT_ENTITY_ENUMS_H
 
-enum VIRT_ENTITY {
+enum class VIRT_ENTITY {
     _NONE_ENTITY,
     VIRT_DOMAIN,
     VIRT_NETWORK,
@@ -12,7 +12,7 @@ enum VIRT_ENTITY {
     VIRT_NETWORK_FILTER
 };
 
-enum Actions {
+enum class Actions {
     _NONE_ACTION,
     GET_ALL_ENTITY_STATE,
     GET_ALL_ENTITY_DATA0,
@@ -46,7 +46,7 @@ enum Actions {
     IFACE_CHANGE_ROLLBACK
 };
 
-enum Methods {
+enum class Methods {
     _NONE_METHOD,
     createEntity,
     defineEntity,
@@ -69,7 +69,7 @@ enum Methods {
     moreSnapshotActions,
     revertVirtDomainSnapshot,
     deleteVirtDomainSnapshot,
-    reconnectToVirtDomainMethod,
+    reconnectToVirtDomain,
     editEntity,
     reloadEntity,
     deleteEntity,
@@ -82,34 +82,34 @@ enum Methods {
     changeBeginVirtInterface,
     changeCommitVirtInterface,
     changeRollbackVirtInterface,
-    sendKeySeqToVirtDomainMethod,
-    getScreenshotFromVirtDomainMethod,
-    copyFilesToVirtDomainMethod,
-    cancelCopyFilesToVirtDomainMethod,
-    copyToClipboardFromVirtDomainMethod,
-    pasteClipboardToVirtDomainMethod,
-    fullScreenVirtDomainMethod,
-    scaledScreenVirtDomainMethod
+    sendKeySeqToVirtDomain,
+    getScreenshotFromVirtDomain,
+    copyFilesToVirtDomain,
+    cancelCopyFilesToVirtDomain,
+    copyToClipboardFromVirtDomain,
+    pasteClipboardToVirtDomain,
+    fullScreenVirtDomain,
+    scaleScreenVirtDomain
 };
 
 static const char* enumToEntityString(VIRT_ENTITY entity)
 {
     switch (entity) {
-    case VIRT_DOMAIN:
+    case VIRT_ENTITY::VIRT_DOMAIN:
         return "domain";
-    case VIRT_NETWORK:
+    case VIRT_ENTITY::VIRT_NETWORK:
         return "network";
-    case VIRT_STORAGE_POOL:
+    case VIRT_ENTITY::VIRT_STORAGE_POOL:
         return "pool";
-    case VIRT_STORAGE_VOLUME:
+    case VIRT_ENTITY::VIRT_STORAGE_VOLUME:
         return "volume";
-    case VIRT_INTERFACE:
+    case VIRT_ENTITY::VIRT_INTERFACE:
         return "interface";
-    case VIRT_SECRET:
+    case VIRT_ENTITY::VIRT_SECRET:
         return "secret";
-    case VIRT_NETWORK_FILTER:
+    case VIRT_ENTITY::VIRT_NETWORK_FILTER:
         return "network filter";
-    case _NONE_ENTITY:
+    case VIRT_ENTITY::_NONE_ENTITY:
     default:
         break;
     };
@@ -119,19 +119,19 @@ static const char* enumToEntityString(VIRT_ENTITY entity)
 static const char* enumToActionString(Actions act)
 {
     switch (act) {
-    case CREATE_ENTITY:
+    case Actions::CREATE_ENTITY:
         return "create";
-    case DEFINE_ENTITY:
+    case Actions::DEFINE_ENTITY:
         return "define";
-    case UNDEFINE_ENTITY:
+    case Actions::UNDEFINE_ENTITY:
         return "undefine";
-    case DESTROY_ENTITY:
+    case Actions::DESTROY_ENTITY:
         return "destroy";
-    case EDIT_ENTITY:
+    case Actions::EDIT_ENTITY:
         return "edit";
-    case MIGRATE_ENTITY:
+    case Actions::MIGRATE_ENTITY:
         return "migrate";
-    case _NONE_ACTION:
+    case Actions::_NONE_ACTION:
     default:
         break;
     };
@@ -141,101 +141,101 @@ static const char* enumToActionString(Actions act)
 static const char* enumToMethodString(Methods method)
 {
     switch (method) {
-    case createEntity:
+    case Methods::createEntity:
         return "create";
-    case defineEntity:
+    case Methods::defineEntity:
         return "define";
-    case undefineEntity:
+    case Methods::undefineEntity:
         return "undefine";
-    case startEntity:
+    case Methods::startEntity:
         return "start";
-    case pauseEntity:
+    case Methods::pauseEntity:
         return "pause";
-    case destroyEntity:
+    case Methods::destroyEntity:
         return "destroy";
-    case resetVirtDomain:
+    case Methods::resetVirtDomain:
         return "reset";
-    case rebootVirtDomain:
+    case Methods::rebootVirtDomain:
         return "reboot";
-    case shutdownVirtDomain:
+    case Methods::shutdownVirtDomain:
         return "shutdown";
-    case saveVirtDomain:
+    case Methods::saveVirtDomain:
         return "save";
-    case restoreVirtDomain:
+    case Methods::restoreVirtDomain:
         return "restore";
-    case setAutostartEntity:
+    case Methods::setAutostartEntity:
         return "set autostart";
-    case migrateVirtDomain:
+    case Methods::migrateVirtDomain:
         return "migrate";
-    case monitorVirtDomain:
+    case Methods::monitorVirtDomain:
         return "to monitor";
-    case getEntityXMLDesc:
+    case Methods::getEntityXMLDesc:
         return "get XML";
-    case displayVirtDomain:
-    case displayVirtDomainInExternalViewer:
+    case Methods::displayVirtDomain:
+    case Methods::displayVirtDomainInExternalViewer:
         return "display";
-    case createVirtDomainSnapshot:
+    case Methods::createVirtDomainSnapshot:
         return "create snapshot";
-    //case moreSnapshotActions:
+    //case Methods::moreSnapshotActions:
     //    return "display";
-    case revertVirtDomainSnapshot:
+    case Methods::revertVirtDomainSnapshot:
         return "revert to snapshot";
-    case deleteVirtDomainSnapshot:
+    case Methods::deleteVirtDomainSnapshot:
         return "delete snapshot";
-    case reconnectToVirtDomainMethod:
+    case Methods::reconnectToVirtDomain:
         return "reconnect";
-    case editEntity:
+    case Methods::editEntity:
         return "edit";
-    case reloadEntity:
+    case Methods::reloadEntity:
         return "reload";
-    case deleteEntity:
+    case Methods::deleteEntity:
         return "delete";
-    case overviewEntity:
+    case Methods::overviewEntity:
         return "overview";
-    case downloadVirtStorageVol:
+    case Methods::downloadVirtStorageVol:
         return "download";
-    case resizeVirtStorageVol:
+    case Methods::resizeVirtStorageVol:
         return "resize";
-    case uploadVirtStorageVol:
+    case Methods::uploadVirtStorageVol:
         return "upload";
-    case wipeVirtStorageVol:
+    case Methods::wipeVirtStorageVol:
         return "wipe";
-    case refreshVirtStorageVolList:
+    case Methods::refreshVirtStorageVolList:
         return "refresh Pool";
-    case changeBeginVirtInterface:
-    case changeCommitVirtInterface:
-    case changeRollbackVirtInterface:
-    case sendKeySeqToVirtDomainMethod:
-    case getScreenshotFromVirtDomainMethod:
-    case copyFilesToVirtDomainMethod:
-    case cancelCopyFilesToVirtDomainMethod:
-    case copyToClipboardFromVirtDomainMethod:
-    case pasteClipboardToVirtDomainMethod:
-    case fullScreenVirtDomainMethod:
-    case scaledScreenVirtDomainMethod:
-    case _NONE_METHOD:
+    case Methods::changeBeginVirtInterface:
+    case Methods::changeCommitVirtInterface:
+    case Methods::changeRollbackVirtInterface:
+    case Methods::sendKeySeqToVirtDomain:
+    case Methods::getScreenshotFromVirtDomain:
+    case Methods::copyFilesToVirtDomain:
+    case Methods::cancelCopyFilesToVirtDomain:
+    case Methods::copyToClipboardFromVirtDomain:
+    case Methods::pasteClipboardToVirtDomain:
+    case Methods::fullScreenVirtDomain:
+    case Methods::scaleScreenVirtDomain:
+    case Methods::_NONE_METHOD:
     default:
         break;
     };
     return "";
 }
 
-#include <QString>
-enum HOW_TO_DO {
+enum class HOW_TO_DO {
     _NONE_DO,
     DO_AsIs,
     DO_Edit,
     DO_Manually
 };
 
+#include <QString>
 struct Act_Param {
     Actions     act;
     Methods     method;
     HOW_TO_DO   context;
     QString     path;
     void clear() {
-        act     = _NONE_ACTION;
-        context = _NONE_DO;
+        act     = Actions::_NONE_ACTION;
+        context = HOW_TO_DO::_NONE_DO;
         path.clear();
     }
 };

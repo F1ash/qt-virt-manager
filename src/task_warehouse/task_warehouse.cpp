@@ -64,7 +64,7 @@ void TaskWareHouse::addNewTask(TASK *task)
     //
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
-    if ( task->method!=reloadEntity && task->method!=editEntity ) {
+    if ( task->method!=Methods::reloadEntity && task->method!=Methods::editEntity ) {
         QString _name = QString("%5 %1 %2 <%3> in <%4>")
                 .arg(_number)
                 .arg( enumToMethodString(task->method) )
@@ -92,31 +92,31 @@ void TaskWareHouse::addNewTask(TASK *task)
         setNewTooltip(_item);
         taskList->addItem(_item);
     };
-    if        ( task->type == VIRT_DOMAIN ) {
+    if        ( task->type == VIRT_ENTITY::VIRT_DOMAIN ) {
         threadPool->insert(
                     _number,
                     new DomControlThread(this));
-    } else if ( task->type == VIRT_NETWORK ) {
+    } else if ( task->type == VIRT_ENTITY::VIRT_NETWORK ) {
         threadPool->insert(
                     _number,
                     new NetControlThread(this));
-    } else if ( task->type == VIRT_STORAGE_POOL ) {
+    } else if ( task->type == VIRT_ENTITY::VIRT_STORAGE_POOL ) {
         threadPool->insert(
                     _number,
                     new StoragePoolControlThread(this));
-    } else if ( task->type == VIRT_STORAGE_VOLUME ) {
+    } else if ( task->type == VIRT_ENTITY::VIRT_STORAGE_VOLUME ) {
         threadPool->insert(
                     _number,
                     new StorageVolControlThread(this));
-    } else if ( task->type == VIRT_SECRET ) {
+    } else if ( task->type == VIRT_ENTITY::VIRT_SECRET ) {
         threadPool->insert(
                     _number,
                     new SecretControlThread(this));
-    } else if ( task->type == VIRT_INTERFACE ) {
+    } else if ( task->type == VIRT_ENTITY::VIRT_INTERFACE ) {
         threadPool->insert(
                     _number,
                     new InterfaceControlThread(this));
-    } else if ( task->type == VIRT_NETWORK_FILTER ) {
+    } else if ( task->type == VIRT_ENTITY::VIRT_NETWORK_FILTER ) {
         threadPool->insert(
                     _number,
                     new NWFilterControlThread(this));
@@ -153,19 +153,19 @@ void TaskWareHouse::msgRepeater(const QString &msg, const uint _number)
 void TaskWareHouse::taskResultReceiver(Result data)
 {
     bool correctly = true;
-    if        ( data.type==VIRT_DOMAIN ) {
+    if        ( data.type==VIRT_ENTITY::VIRT_DOMAIN ) {
         emit domResult(&data);
-    } else if ( data.type==VIRT_NETWORK ) {
+    } else if ( data.type==VIRT_ENTITY::VIRT_NETWORK ) {
         emit netResult(&data);
-    } else if ( data.type==VIRT_STORAGE_POOL ) {
+    } else if ( data.type==VIRT_ENTITY::VIRT_STORAGE_POOL ) {
         emit poolResult(&data);
-    } else if ( data.type==VIRT_STORAGE_VOLUME ) {
+    } else if ( data.type==VIRT_ENTITY::VIRT_STORAGE_VOLUME ) {
         emit volResult(&data);
-    } else if ( data.type==VIRT_SECRET ) {
+    } else if ( data.type==VIRT_ENTITY::VIRT_SECRET ) {
         emit secResult(&data);
-    } else if ( data.type==VIRT_INTERFACE ) {
+    } else if ( data.type==VIRT_ENTITY::VIRT_INTERFACE ) {
         emit ifaceResult(&data);
-    } else if ( data.type==VIRT_NETWORK_FILTER ) {
+    } else if ( data.type==VIRT_ENTITY::VIRT_NETWORK_FILTER ) {
         emit nwfilterResult(&data);
     } else {
         correctly = false;

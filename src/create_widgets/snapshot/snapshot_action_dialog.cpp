@@ -246,11 +246,11 @@ void SnapshotActionDialog::detectTriggeredAction(QAction *act)
 {
     if ( act==revertAction ) {
         changeDialogState(true);
-        params.act = REVERT_TO_DOMAIN_SNAPSHOT;
+        params.act = Actions::REVERT_TO_DOMAIN_SNAPSHOT;
         flags = revertFlagsMenu->getCompositeFlag();
     } else if ( act==deleteAction ) {
         changeDialogState(true);
-        params.act = DELETE_DOMAIN_SNAPSHOT;
+        params.act = Actions::DELETE_DOMAIN_SNAPSHOT;
         flags = deleteFlagsMenu->getCompositeFlag();
     } else if ( act==refreshAction ) {
         snapshotTree->setEnabled(false);

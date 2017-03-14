@@ -25,9 +25,9 @@ void InterfaceControlThread::execAction(uint _num, TASK _task)
         start();
     } else {
         Result result;
-        result.type   = VIRT_INTERFACE;
+        result.type   = VIRT_ENTITY::VIRT_INTERFACE;
         result.number = number;
-        result.action = _NONE_ACTION;
+        result.action = Actions::_NONE_ACTION;
         emit resultData(result);
     };
 }
@@ -37,31 +37,31 @@ void InterfaceControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY_STATE :
+    case Actions::GET_ALL_ENTITY_STATE :
         result = getAllIfaceList();
         break;
-    case START_ENTITY :
+    case Actions::START_ENTITY :
         result = startIface();
         break;
-    case DESTROY_ENTITY :
+    case Actions::DESTROY_ENTITY :
         result = destroyIface();
         break;
-    case DEFINE_ENTITY :
+    case Actions::DEFINE_ENTITY :
         result = defineIface();
         break;
-    case UNDEFINE_ENTITY :
+    case Actions::UNDEFINE_ENTITY :
         result = undefineIface();
         break;
-    case IFACE_CHANGE_BEGIN :
+    case Actions::IFACE_CHANGE_BEGIN :
         result = ifaceChangeBegin();
         break;
-    case IFACE_CHANGE_COMMIT :
+    case Actions::IFACE_CHANGE_COMMIT :
         result = ifaceChangeCommit();
         break;
-    case IFACE_CHANGE_ROLLBACK :
+    case Actions::IFACE_CHANGE_ROLLBACK :
         result = ifaceChangeRollback();
         break;
-    case GET_XML_DESCRIPTION :
+    case Actions::GET_XML_DESCRIPTION :
         result = getVirtIfaceXMLDesc();
         break;
     default:
@@ -69,7 +69,7 @@ void InterfaceControlThread::run()
     };
     // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
-    result.type   = VIRT_INTERFACE;
+    result.type   = VIRT_ENTITY::VIRT_INTERFACE;
     result.number = number;
     result.action = task.action;
     emit resultData(result);

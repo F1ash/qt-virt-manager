@@ -30,7 +30,49 @@ NetFs_Pool_Stuff::NetFs_Pool_Stuff(
 
 void NetFs_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
 {
-
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _pool;
+    _pool = doc.firstChildElement("pool");
+    if ( !_pool.isNull() ) {
+        QDomNode _n = _pool.firstChild();
+        while ( !_n.isNull() ) {
+            QDomElement _el = _n.toElement();
+            if ( !_el.isNull() ) {
+                if ( _el.tagName()=="source" ) {
+                    QDomNode _n1 = _el.firstChild();
+                    while ( !_n1.isNull() ) {
+                        QDomElement _el1 = _n1.toElement();
+                        if ( !_el1.isNull() ) {
+                            if ( _el1.tagName()=="host" ) {
+                                source->host->setHostItem(_el1.attribute("name"));
+                            } else if ( _el1.tagName()=="dir" ) {
+                                source->dir->setText(_el1.attribute("path", ""));
+                            } else if ( _el1.tagName()=="format" ) {
+                                QString _fmt = _el1.attribute("type", "auto");
+                                int idx = source->format->findText(_fmt);
+                                if ( idx<0 ) idx = 0;
+                                source->format->setCurrentIndex(idx);
+                            };
+                        };
+                        _n1 = _n1.nextSibling();
+                    };
+                } else if ( _el.tagName()=="target" ) {
+                    QDomNode _n1 = _el.firstChild();
+                    while ( !_n1.isNull() ) {
+                        QDomElement _el1 = _n1.toElement();
+                        if ( !_el1.isNull() ) {
+                            if ( _el1.tagName()=="path" ) {
+                                target->path->setText(_el1.text());
+                            };
+                        };
+                        _n1 = _n1.nextSibling();
+                    };
+                };
+            };
+            _n = _n.nextSibling();
+        };
+    };
 }
 QDomDocument NetFs_Pool_Stuff::getDataDocument() const
 {

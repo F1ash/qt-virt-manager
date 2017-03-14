@@ -94,7 +94,7 @@ void VirtStorageVolControl::resultReceiver(Result *data)
 {
     if ( data->name!=objectName() ) return;
     //qDebug()<<data.msg<<"result";
-    if ( data->action == GET_ALL_ENTITY_STATE ) {
+    if ( data->action == Actions::GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);
         int chains = data->data.count();
         if ( chains > storageVolModel->DataList.count() ) {
@@ -136,7 +136,7 @@ void VirtStorageVolControl::resultReceiver(Result *data)
                         Qt::EditRole);
             i++;
         };
-    } else if ( data->action == CREATE_ENTITY ) {
+    } else if ( data->action == Actions::CREATE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -144,7 +144,7 @@ void VirtStorageVolControl::resultReceiver(Result *data)
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data->action == DELETE_ENTITY ) {
+    } else if ( data->action == Actions::DELETE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -152,21 +152,21 @@ void VirtStorageVolControl::resultReceiver(Result *data)
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data->action == DOWNLOAD_ENTITY ) {
+    } else if ( data->action == Actions::DOWNLOAD_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
             msgRepeater(msg);
         };
-    } else if ( data->action == UPLOAD_ENTITY ) {
+    } else if ( data->action == Actions::UPLOAD_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
             msgRepeater(msg);
         };
-    } else if ( data->action == RESIZE_ENTITY ) {
+    } else if ( data->action == Actions::RESIZE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -174,14 +174,14 @@ void VirtStorageVolControl::resultReceiver(Result *data)
             msgRepeater(msg);
             reloadState();
         };
-    } else if ( data->action == WIPE_ENTITY ) {
+    } else if ( data->action == Actions::WIPE_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
             msgRepeater(msg);
         };
-    } else if ( data->action == GET_XML_DESCRIPTION ) {
+    } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
         data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
         QString msg = QString("%1<br>%2")
@@ -209,11 +209,11 @@ void VirtStorageVolControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type       = VIRT_STORAGE_VOLUME;
+    task.type       = VIRT_ENTITY::VIRT_STORAGE_VOLUME;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = reloadEntity;
+    task.action     = Actions::GET_ALL_ENTITY_STATE;
+    task.method     = Methods::reloadEntity;
     task.args.object= currPoolName;
     emit addNewTask(&task);
 }
@@ -261,29 +261,29 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
         QString storageVolName =
                 storageVolModel->DataList.at(idx.row())->getName();
         TASK task;
-        task.type       = VIRT_STORAGE_VOLUME;
+        task.type       = VIRT_ENTITY::VIRT_STORAGE_VOLUME;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = storageVolName;
         task.args.object= currPoolName;
         task.method     = param.method;
-        if        ( param.method==reloadEntity ) {
+        if        ( param.method==Methods::reloadEntity ) {
             reloadState();
-        } else if ( param.method==deleteEntity ) {
-            task.action     = DELETE_ENTITY;
+        } else if ( param.method==Methods::deleteEntity ) {
+            task.action     = Actions::DELETE_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==downloadVirtStorageVol ) {
+        } else if ( param.method==Methods::downloadVirtStorageVol ) {
             QString path =
                     QFileDialog::getSaveFileName(
                         this, "Save to", "~");
             if ( !path.isEmpty() ) {
-                task.action     = DOWNLOAD_ENTITY;
+                task.action     = Actions::DOWNLOAD_ENTITY;
                 task.args.path  = path;
                 //task.args.size  = storageVolModel->DataList
                 //        .at(idx.row())->getCurrSize().toULongLong();
                 emit addNewTask(&task);
             } else return;
-        } else if ( param.method==resizeVirtStorageVol ) {
+        } else if ( param.method==Methods::resizeVirtStorageVol ) {
             ResizeDialog *resizeDialog = new ResizeDialog(
                         this,
                         ptr_ConnPtr,
@@ -297,34 +297,34 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
             } else {
                 return;
             };
-            task.action     = RESIZE_ENTITY;
+            task.action     = Actions::RESIZE_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==uploadVirtStorageVol ) {
+        } else if ( param.method==Methods::uploadVirtStorageVol ) {
             QString path =
                     QFileDialog::getOpenFileName(
                         this, "Read from", "~");
             if ( !path.isEmpty() ) {
-                task.action     = UPLOAD_ENTITY;
+                task.action     = Actions::UPLOAD_ENTITY;
                 task.args.path  = path;
                 emit addNewTask(&task);
             } else return;
-        } else if ( param.method==wipeVirtStorageVol ) {
-            task.action     = WIPE_ENTITY;
+        } else if ( param.method==Methods::wipeVirtStorageVol ) {
+            task.action     = Actions::WIPE_ENTITY;
             task.args.sign  = param.path.toUInt();
             emit addNewTask(&task);
-        } else if ( param.method==getEntityXMLDesc ) {
-            task.action     = GET_XML_DESCRIPTION;
+        } else if ( param.method==Methods::getEntityXMLDesc ) {
+            task.action     = Actions::GET_XML_DESCRIPTION;
             emit addNewTask(&task);
         };
-    } else if ( param.method==reloadEntity ) {
+    } else if ( param.method==Methods::reloadEntity ) {
         reloadState();
-    } else if ( param.method==refreshVirtStorageVolList ) {
+    } else if ( param.method==Methods::refreshVirtStorageVolList ) {
         TASK task;
-        task.type       = VIRT_STORAGE_VOLUME;
+        task.type       = VIRT_ENTITY::VIRT_STORAGE_VOLUME;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
-        task.action     = REFRESH_ENTITY;
-        task.method     = refreshVirtStorageVolList;
+        task.action     = Actions::REFRESH_ENTITY;
+        task.method     = Methods::refreshVirtStorageVolList;
         task.object     = currPoolName;
         task.args.object= currPoolName;
         emit addNewTask(&task);
@@ -333,19 +333,19 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
 void VirtStorageVolControl::newVirtEntityFromXML(const Act_Param &args)
 {
     TASK task;
-    task.type = VIRT_STORAGE_VOLUME;
+    task.type = VIRT_ENTITY::VIRT_STORAGE_VOLUME;
     Methods method;
-    if ( args.act==CREATE_ENTITY ) {
-        method = createEntity;
+    if ( args.act==Actions::CREATE_ENTITY ) {
+        method = Methods::createEntity;
     } else {
-        method = defineEntity;
+        method = Methods::defineEntity;
     };
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.args.object= currPoolName;
     task.method     = method;
     task.action     = args.act;
-    if ( args.context==DO_AsIs ) {
+    if ( args.context==HOW_TO_DO::DO_AsIs ) {
         task.args.path  = args.path;
         emit addNewTask(&task);
     } else {

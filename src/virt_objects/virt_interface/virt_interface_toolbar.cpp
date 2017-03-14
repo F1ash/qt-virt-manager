@@ -13,7 +13,7 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
     define_Menu = new OpenFileMenu(
-                this, DEFINE_ENTITY, VIRT_INTERFACE);
+                this, Actions::DEFINE_ENTITY, VIRT_ENTITY::VIRT_INTERFACE);
     define_Action->setMenu(define_Menu);
     connect(define_Action, SIGNAL(triggered()),
             this, SLOT(showMenu()));
@@ -122,7 +122,7 @@ void InterfaceToolBar::timerEvent(QTimerEvent *event)
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
         Act_Param parameters;
-        parameters.method = reloadEntity;
+        parameters.method = Methods::reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -140,17 +140,17 @@ void InterfaceToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if        ( action == undefine_Action ) {
-        parameters.method = undefineEntity;
+        parameters.method = Methods::undefineEntity;
     } else if ( action == start_Action ) {
-        parameters.method = startEntity;
+        parameters.method = Methods::startEntity;
     } else if ( action == destroy_Action ) {
-        parameters.method = destroyEntity;
+        parameters.method = Methods::destroyEntity;
     } else if ( action == changeBegin_Action ) {
-        parameters.method = changeBeginVirtInterface;
+        parameters.method = Methods::changeBeginVirtInterface;
     } else if ( action == changeCommit_Action ) {
-        parameters.method = changeCommitVirtInterface;
+        parameters.method = Methods::changeCommitVirtInterface;
     } else if ( action == changeRollback_Action ) {
-        parameters.method = changeRollbackVirtInterface;
+        parameters.method = Methods::changeRollbackVirtInterface;
     //} else if ( action == getXMLDesc_Action ) {
     //    parameters << "getVirtInterfaceXMLDesc";
     } else return;

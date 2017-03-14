@@ -256,7 +256,7 @@ void VNC_Viewer_Only::fullScreenTriggered()
     startAnimatedHide();
 }
 
-void VNC_Viewer_Only::scaledScreenVirtDomain()
+void VNC_Viewer_Only::scaleScreenVirtDomain()
 {
     vncWdg->Set_Scaling(true);
 }

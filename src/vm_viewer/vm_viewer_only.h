@@ -68,7 +68,7 @@ public slots:
     virtual void     copyToClipboardFromVirtDomain();
     virtual void     pasteClipboardToVirtDomain();
     virtual void     fullScreenVirtDomain();
-    virtual void     scaledScreenVirtDomain();
+    virtual void     scaleScreenVirtDomain();
     void             showErrorInfo(const QString&);
     void             startAnimatedShow();
     void             startAnimatedHide();

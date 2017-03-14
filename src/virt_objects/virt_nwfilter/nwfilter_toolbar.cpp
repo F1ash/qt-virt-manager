@@ -7,7 +7,7 @@ VirtNWFilterToolBar::VirtNWFilterToolBar(QWidget *parent) :
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
     define_Menu = new OpenFileMenu(
-                this, DEFINE_ENTITY, VIRT_NETWORK_FILTER);
+                this, Actions::DEFINE_ENTITY, VIRT_ENTITY::VIRT_NETWORK_FILTER);
     define_Action->setMenu(define_Menu);
     connect(define_Action, SIGNAL(triggered()),
             this, SLOT(showMenu()));
@@ -98,7 +98,7 @@ void VirtNWFilterToolBar::timerEvent(QTimerEvent *event)
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
         Act_Param parameters;
-        parameters.method = reloadEntity;
+        parameters.method = Methods::reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -116,9 +116,9 @@ void VirtNWFilterToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if        ( action == define_Action ) {
-        parameters.method = defineEntity;
+        parameters.method = Methods::defineEntity;
     } else if ( action == undefine_Action ) {
-        parameters.method = undefineEntity;
+        parameters.method = Methods::undefineEntity;
     //} else if ( action == getXMLDesc_Action ) {
     //    parameters << "getVirtNWFilterXMLDesc";
     } else return;

@@ -51,7 +51,7 @@ public slots:
     void             copyToClipboardFromVirtDomain();
     void             pasteClipboardToVirtDomain();
     void             fullScreenVirtDomain();
-    void             scaledScreenVirtDomain();
+    void             scaleScreenVirtDomain();
 
 private slots:
     void             initSpiceWidget();

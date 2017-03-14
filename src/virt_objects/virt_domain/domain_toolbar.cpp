@@ -33,13 +33,13 @@ DomainToolBar::DomainToolBar(QWidget *parent) :
     create_Action = new QAction(this);
     create_Action->setIcon(QIcon::fromTheme("create"));
     create_Action->setToolTip("Create for once usage");
-    create_Menu = new OpenFileMenu(this, CREATE_ENTITY, VIRT_DOMAIN);
+    create_Menu = new OpenFileMenu(this, Actions::CREATE_ENTITY, VIRT_ENTITY::VIRT_DOMAIN);
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
-    define_Menu = new OpenFileMenu(this, DEFINE_ENTITY, VIRT_DOMAIN);
+    define_Menu = new OpenFileMenu(this, Actions::DEFINE_ENTITY, VIRT_ENTITY::VIRT_DOMAIN);
     define_Action->setMenu(define_Menu);
     connect(define_Action, SIGNAL(triggered()), this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
@@ -152,7 +152,7 @@ void DomainToolBar::timerEvent(QTimerEvent *event)
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
         Act_Param parameters;
-        parameters.method = reloadEntity;
+        parameters.method = Methods::reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -191,31 +191,31 @@ void DomainToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if ( action == start_Action) {
-        parameters.method = startEntity;
+        parameters.method = Methods::startEntity;
     } else if ( action == pause_Action ) {
-        parameters.method = pauseEntity;
+        parameters.method = Methods::pauseEntity;
     } else if ( action == destroy_Action ) {
-        parameters.method = destroyEntity;
+        parameters.method = Methods::destroyEntity;
     } else if ( action == reset_Action ) {
-        parameters.method = resetVirtDomain;
+        parameters.method = Methods::resetVirtDomain;
     } else if ( action == reboot_Action ) {
-        parameters.method = rebootVirtDomain;
+        parameters.method = Methods::rebootVirtDomain;
     } else if ( action == shutdown_Action ) {
-        parameters.method = shutdownVirtDomain;
+        parameters.method = Methods::shutdownVirtDomain;
     } else if ( action == save_Action ) {
-        parameters.method = saveVirtDomain;
+        parameters.method = Methods::saveVirtDomain;
     } else if ( action == restore_Action ) {
-        parameters.method = restoreVirtDomain;
+        parameters.method = Methods::restoreVirtDomain;
     } else if ( action == undefine_Action ) {
-        parameters.method = undefineEntity;
+        parameters.method = Methods::undefineEntity;
     //} else if ( action == setAutostart_Action ) {
     //    parameters << "setAutostartVirtDomain";
     //} else if ( action == getXMLDesc_Action ) {
     //    parameters << "getVirtDomainXMLDesc" << "";
     //} else if ( action == migrate_Action ) {
-    //    parameters << "migrateVirtDomain";
+    //    parameters << "Methods::migrateVirtDomain";
     } else if ( action == createSnapshot ) {
-        parameters.method = createVirtDomainSnapshot;
+        parameters.method = Methods::createVirtDomainSnapshot;
     } else return;
     emit execMethod(parameters);
 }

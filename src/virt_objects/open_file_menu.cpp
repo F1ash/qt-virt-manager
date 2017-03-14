@@ -43,9 +43,9 @@ void OpenFileMenu::chooseExample()
 {
     task.clear();
     if ( sender()==applyAsIs ) {
-        task.context = DO_AsIs;
+        task.context = HOW_TO_DO::DO_AsIs;
     } else if ( sender()==editTemplate ) {
-        task.context = DO_Edit;
+        task.context = HOW_TO_DO::DO_Edit;
     } else {
         chooseManual();
         return;
@@ -56,7 +56,7 @@ void OpenFileMenu::chooseManual()
 {
     task.clear();
     task.act = act;
-    task.context = DO_Manually;
+    task.context = HOW_TO_DO::DO_Manually;
     emit fileForMethod(task);
 }
 void OpenFileMenu::emitParameters(const QString &title, const QString &dirPath)

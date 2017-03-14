@@ -104,45 +104,45 @@ void DomainControlMenu::emitExecMethod(QAction *action)
 {
     Act_Param paramList;
     if ( action == start) {
-        paramList.method = startEntity;
+        paramList.method = Methods::startEntity;
     } else if ( action == pause ) {
-        paramList.method = pauseEntity;
+        paramList.method = Methods::pauseEntity;
     } else if ( action == destroy ) {
-        paramList.method = destroyEntity;
+        paramList.method = Methods::destroyEntity;
     } else if ( action == edit ) {
-        paramList.method = editEntity;
+        paramList.method = Methods::editEntity;
     } else if ( action == reset ) {
-        paramList.method = resetVirtDomain;
+        paramList.method = Methods::resetVirtDomain;
     } else if ( action == reboot ) {
-        paramList.method = rebootVirtDomain;
+        paramList.method = Methods::rebootVirtDomain;
     } else if ( action == shutdown ) {
-        paramList.method = shutdownVirtDomain;
+        paramList.method = Methods::shutdownVirtDomain;
     } else if ( action == save ) {
-        paramList.method = saveVirtDomain;
+        paramList.method = Methods::saveVirtDomain;
     } else if ( action == undefine ) {
-        paramList.method = undefineEntity;
+        paramList.method = Methods::undefineEntity;
     } else if ( action == autoStart ) {
-        paramList.method = setAutostartEntity;
+        paramList.method = Methods::setAutostartEntity;
         paramList.path = (autostart)? "0" : "1";
     } else if ( action == RunningData ) {
-        paramList.method = getEntityXMLDesc;
-        paramList.context = DO_AsIs;
+        paramList.method = Methods::getEntityXMLDesc;
+        paramList.context = HOW_TO_DO::DO_AsIs;
     } else if ( action == InactiveData ) {
-        paramList.method = getEntityXMLDesc;
+        paramList.method = Methods::getEntityXMLDesc;
     } else if ( action == display ) {
-        paramList.method = displayVirtDomain;
+        paramList.method = Methods::displayVirtDomain;
     } else if ( action == displayInExternal ) {
-        paramList.method = displayVirtDomainInExternalViewer;
+        paramList.method = Methods::displayVirtDomainInExternalViewer;
     } else if ( action == addToMonitor ) {
-        paramList.method = monitorVirtDomain;
+        paramList.method = Methods::monitorVirtDomain;
     } else if ( action == migrate ) {
-        paramList.method = migrateVirtDomain;
+        paramList.method = Methods::migrateVirtDomain;
     } else if ( action == reload ) {
-        paramList.method = reloadEntity;
+        paramList.method = Methods::reloadEntity;
     } else if ( action == createSnapshot ) {
-        paramList.method = createVirtDomainSnapshot;
+        paramList.method = Methods::createVirtDomainSnapshot;
     } else if ( action == moreSnapshot_Actions ) {
-        paramList.method = moreSnapshotActions;
+        paramList.method = Methods::moreSnapshotActions;
     } else return;
     //qDebug()<<paramList<<"paramList from menu";
     emit execMethod(paramList);

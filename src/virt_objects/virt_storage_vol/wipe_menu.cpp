@@ -36,39 +36,39 @@ void WipeMenu::emitExecMethod(QAction *action)
 {
     Act_Param parameters;
     if ( action == algorithm_ZERO ) {
-        parameters.method = wipeVirtStorageVol;
+        parameters.method = Methods::wipeVirtStorageVol;
         parameters.path =
                 QString::number(VIR_STORAGE_VOL_WIPE_ALG_ZERO);
     } else if ( action == algorithm_NNSA ) {
-        parameters.method = wipeVirtStorageVol;
+        parameters.method = Methods::wipeVirtStorageVol;
         parameters.path =
                 QString::number(VIR_STORAGE_VOL_WIPE_ALG_NNSA);
     } else if ( action == algorithm_DOD ) {
-        parameters.method = wipeVirtStorageVol;
+        parameters.method = Methods::wipeVirtStorageVol;
         parameters.path =
                 QString::number(VIR_STORAGE_VOL_WIPE_ALG_DOD);
     } else if ( action == algorithm_BSI ) {
-        parameters.method = wipeVirtStorageVol;
+        parameters.method = Methods::wipeVirtStorageVol;
         parameters.path =
                 QString::number(VIR_STORAGE_VOL_WIPE_ALG_BSI);
     } else if ( action == algorithm_GUTMANN ) {
-        parameters.method = wipeVirtStorageVol;
+        parameters.method = Methods::wipeVirtStorageVol;
         parameters.path =
                 QString::number(VIR_STORAGE_VOL_WIPE_ALG_GUTMANN);
     } else if ( action == algorithm_SCHNEIER ) {
-        parameters.method = wipeVirtStorageVol;
+        parameters.method = Methods::wipeVirtStorageVol;
         parameters.path =
                 QString::number(VIR_STORAGE_VOL_WIPE_ALG_SCHNEIER);
     } else if ( action == algorithm_PFITZNER7 ) {
-        parameters.method = wipeVirtStorageVol;
+        parameters.method = Methods::wipeVirtStorageVol;
         parameters.path =
                 QString::number(VIR_STORAGE_VOL_WIPE_ALG_PFITZNER7);
     } else if ( action == algorithm_PFITZNER33 ) {
-        parameters.method = wipeVirtStorageVol;
+        parameters.method = Methods::wipeVirtStorageVol;
         parameters.path =
                 QString::number(VIR_STORAGE_VOL_WIPE_ALG_PFITZNER33);
     } else if ( action == algorithm_RANDOM ) {
-        parameters.method = wipeVirtStorageVol;
+        parameters.method = Methods::wipeVirtStorageVol;
         parameters.path =
                 QString::number(VIR_STORAGE_VOL_WIPE_ALG_RANDOM);
     } else return;

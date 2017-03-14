@@ -277,7 +277,7 @@ void Spice_Viewer::fullScreenTriggered()
     startAnimatedHide();
 }
 
-void Spice_Viewer::scaledScreenVirtDomain()
+void Spice_Viewer::scaleScreenVirtDomain()
 {
     spiceWdg->setScaledScreen(true);
 }

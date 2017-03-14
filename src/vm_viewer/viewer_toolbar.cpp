@@ -137,58 +137,58 @@ void ViewerToolBar::detectTriggeredAction(QAction *action)
     //    parameters << "startVirtDomain";
     //} else
     if        ( action == pause_Action ) {
-        parameters.method = pauseEntity;
+        parameters.method = Methods::pauseEntity;
     } else if ( action == destroy_Action ) {
-        parameters.method = destroyEntity;
+        parameters.method = Methods::destroyEntity;
     } else if ( action == reset_Action ) {
-        parameters.method = resetVirtDomain;
+        parameters.method = Methods::resetVirtDomain;
     } else if ( action == reboot_Action ) {
-        parameters.method = rebootVirtDomain;
+        parameters.method = Methods::rebootVirtDomain;
     } else if ( action == shutdown_Action ) {
-        parameters.method = shutdownVirtDomain;
+        parameters.method = Methods::shutdownVirtDomain;
     } else if ( action == save_Action ) {
-        parameters.method = saveVirtDomain;
+        parameters.method = Methods::saveVirtDomain;
     } else if ( action == restore_Action ) {
-        parameters.method = restoreVirtDomain;
+        parameters.method = Methods::restoreVirtDomain;
     } else if ( action == snapshot_Action ) {
-        parameters.method = createVirtDomainSnapshot;
+        parameters.method = Methods::createVirtDomainSnapshot;
     } else if ( action == createSnapshot ) {
-        parameters.method = createVirtDomainSnapshot;
+        parameters.method = Methods::createVirtDomainSnapshot;
     } else if ( action == moreSnapshot_Actions ) {
-        parameters.method = moreSnapshotActions;
+        parameters.method = Methods::moreSnapshotActions;
     } else if ( action == reconnect_Action ) {
-        parameters.method = reconnectToVirtDomainMethod;
+        parameters.method = Methods::reconnectToVirtDomain;
     } else if ( action == sendKeySeq_1 ) {
-        parameters.method = sendKeySeqToVirtDomainMethod;
+        parameters.method = Methods::sendKeySeqToVirtDomain;
         parameters.path = QString::number(Qt::Key_Launch1);
     } else if ( action == sendKeySeq_2 ) {
-        parameters.method = sendKeySeqToVirtDomainMethod;
+        parameters.method = Methods::sendKeySeqToVirtDomain;
         parameters.path = QString::number(Qt::Key_Launch2);
     } else if ( action == sendKeySeq_3 ) {
-        parameters.method = sendKeySeqToVirtDomainMethod;
+        parameters.method = Methods::sendKeySeqToVirtDomain;
         parameters.path = QString::number(Qt::Key_Launch3);
     } else if ( action == sendKeySeq_4 ) {
-        parameters.method = sendKeySeqToVirtDomainMethod;
+        parameters.method = Methods::sendKeySeqToVirtDomain;
         parameters.path = QString::number(Qt::Key_Launch4);
     } else if ( action == sendKeySeq_5 ) {
-        parameters.method = sendKeySeqToVirtDomainMethod;
+        parameters.method = Methods::sendKeySeqToVirtDomain;
         parameters.path = QString::number(Qt::Key_Launch5);
     } else if ( action == sendKeySeq_6 ) {
-        parameters.method = sendKeySeqToVirtDomainMethod;
+        parameters.method = Methods::sendKeySeqToVirtDomain;
         parameters.path = QString::number(Qt::Key_Launch6);
     } else if ( action == sendKeySeq_7 ) {
-        parameters.method = sendKeySeqToVirtDomainMethod;
+        parameters.method = Methods::sendKeySeqToVirtDomain;
         parameters.path = QString::number(Qt::Key_Launch7);
     } else if ( action == sendKeySeq_8 ) {
-        parameters.method = sendKeySeqToVirtDomainMethod;
+        parameters.method = Methods::sendKeySeqToVirtDomain;
         parameters.path = QString::number(Qt::Key_Launch8);
     } else if ( action == getScreenshot ) {
-        parameters.method = getScreenshotFromVirtDomainMethod;
+        parameters.method = Methods::getScreenshotFromVirtDomain;
     } else if ( action == sendKeySeq_BackSpc ) {
-        parameters.method = sendKeySeqToVirtDomainMethod;
+        parameters.method = Methods::sendKeySeqToVirtDomain;
         parameters.path = QString::number(Qt::Key_LaunchB);
     } else if ( action == sendKeySeq_Del ) {
-        parameters.method = sendKeySeqToVirtDomainMethod;
+        parameters.method = Methods::sendKeySeqToVirtDomain;
         parameters.path = QString::number(Qt::Key_LaunchD);
     } else if ( action == copyFiles_Action ) {
         if ( downloadIsCompleted ) {
@@ -197,18 +197,18 @@ void ViewerToolBar::detectTriggeredAction(QAction *action)
                         "Cancel Copying Files to Guest");
             copyFiles_Action->setIcon(
                         QIcon::fromTheme("delete"));
-            parameters.method = copyFilesToVirtDomainMethod;
+            parameters.method = Methods::copyFilesToVirtDomain;
         } else {
-            parameters.method = cancelCopyFilesToVirtDomainMethod;
+            parameters.method = Methods::cancelCopyFilesToVirtDomain;
         };
     } else if ( action == copyToClipboard ) {
-        parameters.method = copyToClipboardFromVirtDomainMethod;
+        parameters.method = Methods::copyToClipboardFromVirtDomain;
     } else if ( action == pasteClipboard ) {
-        parameters.method = pasteClipboardToVirtDomainMethod;
+        parameters.method = Methods::pasteClipboardToVirtDomain;
     } else if ( action == fullScreen ) {
-        parameters.method = fullScreenVirtDomainMethod;
+        parameters.method = Methods::fullScreenVirtDomain;
     } else if ( action == scaled_to ) {
-        parameters.method = scaledScreenVirtDomainMethod;
+        parameters.method = Methods::scaleScreenVirtDomain;
     } else return;
     emit execMethod(parameters);
 }

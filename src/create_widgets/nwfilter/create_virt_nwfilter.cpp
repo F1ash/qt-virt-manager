@@ -175,7 +175,7 @@ void CreateVirtNWFilter::buildXMLDescription()
     // if ( showDescription->isChecked() )
     //     QDesktopServices::openUrl(QUrl(_xml));
     task.args.path = _xml;
-    task.method = defineEntity;
+    task.method = Methods::defineEntity;
     task.object = name->text();
 }
 void CreateVirtNWFilter::sendMsg(const QString &msg)

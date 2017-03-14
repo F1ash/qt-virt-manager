@@ -86,7 +86,7 @@ QString VirtNWFilterControl::getCurrentNFUUID() const
 void VirtNWFilterControl::resultReceiver(Result *data)
 {
     //qDebug()<<data->action<<data->name<<"result";
-    if ( data->action == GET_ALL_ENTITY_STATE ) {
+    if ( data->action == Actions::GET_ALL_ENTITY_STATE ) {
         if ( data->data.count() > virtNWFilterModel->DataList.count() ) {
             int _diff = data->data.count() - virtNWFilterModel->DataList.count();
             for ( int i = 0; i<_diff; i++ ) {
@@ -116,7 +116,7 @@ void VirtNWFilterControl::resultReceiver(Result *data)
         };
         entityList->setEnabled(true);
         emit entityListUpdated();
-    } else if ( data->action == GET_XML_DESCRIPTION ) {
+    } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
         data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
         QString msg = QString("%1<br>%2")
@@ -125,7 +125,7 @@ void VirtNWFilterControl::resultReceiver(Result *data)
         msgRepeater(msg);
         if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
-    } else if ( data->action == EDIT_ENTITY ) {
+    } else if ( data->action == Actions::EDIT_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -135,16 +135,16 @@ void VirtNWFilterControl::resultReceiver(Result *data)
         if ( data->result ) {
             // show SRC Creator widget in Edit-mode
             TASK task;
-            task.type       = VIRT_NETWORK_FILTER;
+            task.type       = VIRT_ENTITY::VIRT_NETWORK_FILTER;
             task.srcConnPtr = ptr_ConnPtr;
             task.srcConName = currConnName;
             task.object     = data->name;
             task.args.path  = data->fileName;
-            task.method     = editEntity;
-            task.action     = DEFINE_ENTITY;
+            task.method     = Methods::editEntity;
+            task.action     = Actions::DEFINE_ENTITY;
             emit nwfilterToEditor(&task);
         };
-    } else if ( data->action != _NONE_ACTION ) {
+    } else if ( data->action != Actions::_NONE_ACTION ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -155,7 +155,7 @@ void VirtNWFilterControl::resultReceiver(Result *data)
             reloadState();
             // for different action's specified manipulation
             switch (data->action) {
-            case _NONE_ACTION:
+            case Actions::_NONE_ACTION:
                 // some job;
                 break;
             default:
@@ -171,11 +171,11 @@ void VirtNWFilterControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type       = VIRT_NETWORK_FILTER;
+    task.type       = VIRT_ENTITY::VIRT_NETWORK_FILTER;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = reloadEntity;
+    task.action     = Actions::GET_ALL_ENTITY_STATE;
+    task.method     = Methods::reloadEntity;
     emit addNewTask(&task);
 }
 void VirtNWFilterControl::changeDockVisibility()
@@ -215,7 +215,7 @@ void VirtNWFilterControl::entityDoubleClicked(const QModelIndex &index)
 void VirtNWFilterControl::execAction(const Act_Param &param)
 {
     TASK task;
-    task.type       = VIRT_NETWORK_FILTER;
+    task.type       = VIRT_ENTITY::VIRT_NETWORK_FILTER;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.method     = param.method;
@@ -223,35 +223,35 @@ void VirtNWFilterControl::execAction(const Act_Param &param)
     if ( idx.isValid() && virtNWFilterModel->DataList.count()>idx.row() ) {
         QString _name = virtNWFilterModel->DataList.at(idx.row())->getName();
         task.object = _name;
-        if        ( param.method==defineEntity ) {
-            task.action     = DEFINE_ENTITY;
+        if        ( param.method==Methods::defineEntity ) {
+            task.action     = Actions::DEFINE_ENTITY;
             emit nwfilterToEditor(&task);
-        } else if ( param.method==undefineEntity ) {
-            task.action     = UNDEFINE_ENTITY;
+        } else if ( param.method==Methods::undefineEntity ) {
+            task.action     = Actions::UNDEFINE_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==editEntity ) {
-            task.action     = EDIT_ENTITY;
+        } else if ( param.method==Methods::editEntity ) {
+            task.action     = Actions::EDIT_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==getEntityXMLDesc ) {
-            task.action     = GET_XML_DESCRIPTION;
+        } else if ( param.method==Methods::getEntityXMLDesc ) {
+            task.action     = Actions::GET_XML_DESCRIPTION;
             emit addNewTask(&task);
-        } else if ( param.method==reloadEntity ) {
+        } else if ( param.method==Methods::reloadEntity ) {
             reloadState();
         };
-    } else if ( param.method==reloadEntity ) {
+    } else if ( param.method==Methods::reloadEntity ) {
         reloadState();
     };
 }
 void VirtNWFilterControl::newVirtEntityFromXML(const Act_Param &args)
 {
     TASK task;
-    task.type       = VIRT_NETWORK_FILTER;
+    task.type       = VIRT_ENTITY::VIRT_NETWORK_FILTER;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.method     = defineEntity;
-    task.action     = DEFINE_ENTITY;
+    task.method     = Methods::defineEntity;
+    task.action     = Actions::DEFINE_ENTITY;
     task.args.path  = args.path;
-    if ( args.context==DO_AsIs ) {
+    if ( args.context==HOW_TO_DO::DO_AsIs ) {
         emit addNewTask(&task);
     } else {
         emit nwfilterToEditor(&task);

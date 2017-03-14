@@ -45,20 +45,20 @@ void StorageVolControlMenu::emitExecMethod(QAction *action)
 {
     Act_Param paramList;
     if ( action == resize_Action) {
-        paramList.method = resizeVirtStorageVol;
+        paramList.method = Methods::resizeVirtStorageVol;
     } else if ( action == delete_Action ) {
-        paramList.method = deleteEntity;
+        paramList.method = Methods::deleteEntity;
     } else if ( action == download_Action ) {
-        paramList.method = downloadVirtStorageVol;
+        paramList.method = Methods::downloadVirtStorageVol;
     } else if ( action == upload_Action ) {
-        paramList.method = uploadVirtStorageVol;
+        paramList.method = Methods::uploadVirtStorageVol;
     } else if ( action == wipe_Action ) {
-        paramList.method = wipeVirtStorageVol;
+        paramList.method = Methods::wipeVirtStorageVol;
         paramList.path = "0";
     } else if ( action == getXMLDesc_Action ) {
-        paramList.method = getEntityXMLDesc;
+        paramList.method = Methods::getEntityXMLDesc;
     } else if ( action == reload ) {
-        paramList.method = reloadEntity;
+        paramList.method = Methods::reloadEntity;
     } else return;
     emit execMethod(paramList);
 }

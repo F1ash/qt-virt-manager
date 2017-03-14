@@ -20,7 +20,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
     create_Action->setIcon(QIcon::fromTheme("define"));
     create_Action->setToolTip("New volume");
     create_Menu = new OpenFileMenu(
-                this, CREATE_ENTITY, VIRT_STORAGE_VOLUME);
+                this, Actions::CREATE_ENTITY, VIRT_ENTITY::VIRT_STORAGE_VOLUME);
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()),
             this, SLOT(showMenu()));
@@ -139,7 +139,7 @@ void StorageVolToolBar::timerEvent(QTimerEvent *event)
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
         Act_Param parameters;
-        parameters.method = reloadEntity;
+        parameters.method = Methods::reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -157,20 +157,20 @@ void StorageVolToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if ( action == upload_Action) {
-        parameters.method = uploadVirtStorageVol;
+        parameters.method = Methods::uploadVirtStorageVol;
     } else if ( action == delete_Action ) {
-        parameters.method = deleteEntity;
+        parameters.method = Methods::deleteEntity;
     } else if ( action == download_Action ) {
-        parameters.method = downloadVirtStorageVol;
+        parameters.method = Methods::downloadVirtStorageVol;
     } else if ( action == resize_Action ) {
-        parameters.method = resizeVirtStorageVol;
+        parameters.method = Methods::resizeVirtStorageVol;
     } else if ( action == wipe_Action ) {
-        parameters.method = wipeVirtStorageVol;
+        parameters.method = Methods::wipeVirtStorageVol;
         parameters.path = "0";
     //} else if ( action == getXMLDesc_Action ) {
     //    parameters << "getVirtStorageVolXMLDesc";
     } else if ( action == refresh_Action ) {
-        parameters.method = refreshVirtStorageVolList;
+        parameters.method = Methods::refreshVirtStorageVolList;
     } else return;
     emit execMethod(parameters);
 }

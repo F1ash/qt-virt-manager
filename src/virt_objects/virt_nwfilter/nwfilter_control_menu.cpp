@@ -27,11 +27,11 @@ void VirtNWFilterControlMenu::emitExecMethod(QAction *action)
 {
     Act_Param paramList;
     if        ( action == edit ) {
-        paramList.method = editEntity;
+        paramList.method = Methods::editEntity;
     } else if ( action == getXMLDesc ) {
-        paramList.method = getEntityXMLDesc;
+        paramList.method = Methods::getEntityXMLDesc;
     } else if ( action == reload ) {
-        paramList.method = reloadEntity;
+        paramList.method = Methods::reloadEntity;
     } else return;
     emit execMethod(paramList);
 }

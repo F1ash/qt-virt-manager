@@ -28,11 +28,11 @@ void VirtSecretControlMenu::emitExecMethod(QAction *action)
 {
     Act_Param paramList;
     if ( action == undefine ) {
-        paramList.method = undefineEntity;
+        paramList.method = Methods::undefineEntity;
     } else if ( action == getXMLDesc ) {
-        paramList.method = getEntityXMLDesc;
+        paramList.method = Methods::getEntityXMLDesc;
     } else if ( action == reload ) {
-        paramList.method = reloadEntity;
+        paramList.method = Methods::reloadEntity;
     } else return;
     emit execMethod(paramList);
 }

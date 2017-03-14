@@ -23,11 +23,11 @@ void Delete_Pool_Menu::emitExecMethod(QAction *action)
 {
     Act_Param parameters;
     if ( action == delete_Normal ) {
-        parameters.method = deleteEntity;
+        parameters.method = Methods::deleteEntity;
         parameters.path = QString::number(
                    VIR_STORAGE_POOL_DELETE_NORMAL);
     } else if ( action == delete_Zeroed ) {
-        parameters.method = deleteEntity;
+        parameters.method = Methods::deleteEntity;
         parameters.path = QString::number(
                    VIR_STORAGE_POOL_DELETE_ZEROED);
     } else return;

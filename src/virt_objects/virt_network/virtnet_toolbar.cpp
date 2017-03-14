@@ -13,7 +13,7 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     create_Action->setIcon(QIcon::fromTheme("create"));
     create_Action->setToolTip("Create for once usage");
     create_Menu = new OpenFileMenu(
-                this, CREATE_ENTITY, VIRT_NETWORK);
+                this, Actions::CREATE_ENTITY, VIRT_ENTITY::VIRT_NETWORK);
     create_Action->setMenu(create_Menu);
     connect(create_Action, SIGNAL(triggered()),
             this, SLOT(showMenu()));
@@ -21,7 +21,7 @@ VirtNetToolBar::VirtNetToolBar(QWidget *parent) :
     define_Action->setIcon(QIcon::fromTheme("define"));
     define_Action->setToolTip("Define for persistent usage");
     define_Menu = new OpenFileMenu(
-                this, DEFINE_ENTITY, VIRT_NETWORK);
+                this, Actions::DEFINE_ENTITY, VIRT_ENTITY::VIRT_NETWORK);
     define_Action->setMenu(define_Menu);
     connect(define_Action, SIGNAL(triggered()),
             this, SLOT(showMenu()));
@@ -139,7 +139,7 @@ void VirtNetToolBar::timerEvent(QTimerEvent *event)
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
         Act_Param parameters;
-        parameters.method = reloadEntity;
+        parameters.method = Methods::reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -178,11 +178,11 @@ void VirtNetToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if ( action == start_Action) {
-        parameters.method = startEntity;
+        parameters.method = Methods::startEntity;
     } else if ( action == destroy_Action ) {
-        parameters.method = destroyEntity;
+        parameters.method = Methods::destroyEntity;
     } else if ( action == undefine_Action ) {
-        parameters.method = undefineEntity;
+        parameters.method = Methods::undefineEntity;
     //} else if ( action == setAutostart_Action ) {
     //    parameters << "setAutostartVirtNetwork";
     //} else if ( action == getXMLDesc_Action ) {

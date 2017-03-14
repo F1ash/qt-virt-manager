@@ -25,9 +25,9 @@ void NetControlThread::execAction(uint _num, TASK _task)
         start();
     } else {
         Result result;
-        result.type   = VIRT_NETWORK;
+        result.type   = VIRT_ENTITY::VIRT_NETWORK;
         result.number = number;
-        result.action = _NONE_ACTION;
+        result.action = Actions::_NONE_ACTION;
         emit resultData(result);
     };
 }
@@ -37,31 +37,31 @@ void NetControlThread::run()
 {
     Result result;
     switch (task.action) {
-    case GET_ALL_ENTITY_STATE :
+    case Actions::GET_ALL_ENTITY_STATE :
         result = getAllNetworkList();
         break;
-    case CREATE_ENTITY :
+    case Actions::CREATE_ENTITY :
         result = createNetwork();
         break;
-    case DEFINE_ENTITY :
+    case Actions::DEFINE_ENTITY :
         result = defineNetwork();
         break;
-    case EDIT_ENTITY :
+    case Actions::EDIT_ENTITY :
         result = getVirtNetXMLDesc();
         break;
-    case START_ENTITY :
+    case Actions::START_ENTITY :
         result = startNetwork();
         break;
-    case DESTROY_ENTITY :
+    case Actions::DESTROY_ENTITY :
         result = destroyNetwork();
         break;
-    case UNDEFINE_ENTITY :
+    case Actions::UNDEFINE_ENTITY :
         result = undefineNetwork();
         break;
-    case CHANGE_ENTITY_AUTOSTART :
+    case Actions::CHANGE_ENTITY_AUTOSTART :
         result = changeAutoStartNetwork();
         break;
-    case GET_XML_DESCRIPTION :
+    case Actions::GET_XML_DESCRIPTION :
         result = getVirtNetXMLDesc();
         break;
     default:
@@ -69,7 +69,7 @@ void NetControlThread::run()
     };
     // task.srcConnPtr reference will closed in destructor as ptr_ConnPtr
     //virConnectClose(*task.srcConnPtr);
-    result.type   = VIRT_NETWORK;
+    result.type   = VIRT_ENTITY::VIRT_NETWORK;
     result.number = number;
     result.action = task.action;
     emit resultData(result);

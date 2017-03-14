@@ -87,7 +87,7 @@ void VirtDomainControl::execMigrateAction(virConnectPtr *conn, TASK *_task)
 void VirtDomainControl::resultReceiver(Result *data)
 {
     //qDebug()<<data->number<<data->action<<data->msg<<"result";
-    if ( data->action == GET_ALL_ENTITY_STATE ) {
+    if ( data->action == Actions::GET_ALL_ENTITY_STATE ) {
         if ( data->data.count() > domainModel->DataList.count() ) {
             int _diff = data->data.count()
                     - domainModel->DataList.count();
@@ -131,7 +131,7 @@ void VirtDomainControl::resultReceiver(Result *data)
         };
         entityList->setEnabled(true);
         emit entityListUpdated();
-    } else if ( data->action == GET_XML_DESCRIPTION ) {
+    } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
         data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
         QString msg = QString("%1<br>%2")
@@ -140,7 +140,7 @@ void VirtDomainControl::resultReceiver(Result *data)
         msgRepeater(msg);
         if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
-    } else if ( data->action == EDIT_ENTITY ) {
+    } else if ( data->action == Actions::EDIT_ENTITY ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -150,16 +150,16 @@ void VirtDomainControl::resultReceiver(Result *data)
         if ( data->result ) {
             // show SRC Creator widget in Edit-mode
             TASK task;
-            task.type       = VIRT_DOMAIN;
+            task.type       = VIRT_ENTITY::VIRT_DOMAIN;
             task.srcConnPtr = ptr_ConnPtr;
             task.srcConName = currConnName;
             task.object     = data->name;
             task.args.path  = data->fileName;
-            task.method     = editEntity;
-            task.action     = DEFINE_ENTITY;
+            task.method     = Methods::editEntity;
+            task.action     = Actions::DEFINE_ENTITY;
             emit domainToEditor(&task);
         };
-    } else if ( data->action == GET_ALL_ENTITY_DATA0 ) {
+    } else if ( data->action == Actions::GET_ALL_ENTITY_DATA0 ) {
         if ( !data->data.isEmpty() ) {
             TASK task;
             task.srcConnPtr = ptr_ConnPtr;
@@ -170,13 +170,13 @@ void VirtDomainControl::resultReceiver(Result *data)
             emit displayRequest(&task);
         } else
             msgRepeater(data->err);
-    } else if ( data->action == GET_ALL_ENTITY_DATA1 ) {
+    } else if ( data->action == Actions::GET_ALL_ENTITY_DATA1 ) {
         if ( !data->data.isEmpty() ) {
             QUrl url(data->data.first().value("URL", "EMPTY_URL").toString());
             QDesktopServices::openUrl(url);
         } else
             msgRepeater(data->err);
-    } else if ( data->action != _NONE_ACTION ) {
+    } else if ( data->action != Actions::_NONE_ACTION ) {
         if ( !data->msg.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
@@ -187,7 +187,7 @@ void VirtDomainControl::resultReceiver(Result *data)
             reloadState();
             /*
             switch (data->action) {
-            case DESTROY_ENTITY:
+            case Actions::DESTROY_ENTITY:
                 // don't use because implemented domainEnd signal
                 break;
             default:
@@ -204,11 +204,11 @@ void VirtDomainControl::reloadState()
     entityList->setEnabled(false);
     entityList->clearSelection();
     TASK task;
-    task.type       = VIRT_DOMAIN;
+    task.type       = VIRT_ENTITY::VIRT_DOMAIN;
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
-    task.action     = GET_ALL_ENTITY_STATE;
-    task.method     = reloadEntity;
+    task.action     = Actions::GET_ALL_ENTITY_STATE;
+    task.method     = Methods::reloadEntity;
     emit addNewTask(&task);
 }
 void VirtDomainControl::changeDockVisibility()
@@ -256,12 +256,12 @@ void VirtDomainControl::entityDoubleClicked(const QModelIndex &index)
         //emit addToStateMonitor(ptr_ConnPtr, currConnName, _domainName);
         //emit displayRequest(ptr_ConnPtr, currConnName, _domainName);
         TASK task;
-        task.type       = VIRT_DOMAIN;
+        task.type       = VIRT_ENTITY::VIRT_DOMAIN;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = _domainName;
-        task.method     = displayVirtDomain;
-        task.action     = GET_ALL_ENTITY_DATA0;
+        task.method     = Methods::displayVirtDomain;
+        task.action     = Actions::GET_ALL_ENTITY_DATA0;
         emit addNewTask(&task);
     }
 }
@@ -271,66 +271,66 @@ void VirtDomainControl::execAction(const Act_Param &param)
     if ( idx.isValid() && domainModel->DataList.count()>idx.row() ) {
         QString domainName = domainModel->DataList.at(idx.row())->getName();
         TASK task;
-        task.type       = VIRT_DOMAIN;
+        task.type       = VIRT_ENTITY::VIRT_DOMAIN;
         task.srcConnPtr = ptr_ConnPtr;
         task.srcConName = currConnName;
         task.object     = domainName;
         task.method     = param.method;
-        if        ( param.method==startEntity ) {
-            task.action     = START_ENTITY;
+        if        ( param.method==Methods::startEntity ) {
+            task.action     = Actions::START_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==pauseEntity ) {
-            task.action     = PAUSE_ENTITY;
+        } else if ( param.method==Methods::pauseEntity ) {
+            task.action     = Actions::PAUSE_ENTITY;
             task.args.state = domainModel->DataList
                     .at(idx.row())->getState_EXT();
             emit addNewTask(&task);
-        } else if ( param.method==destroyEntity ) {
-            task.action     = DESTROY_ENTITY;
+        } else if ( param.method==Methods::destroyEntity ) {
+            task.action     = Actions::DESTROY_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==editEntity ) {
-            task.action     = EDIT_ENTITY;
+        } else if ( param.method==Methods::editEntity ) {
+            task.action     = Actions::EDIT_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==resetVirtDomain ) {
-            task.action     = RESET_ENTITY;
+        } else if ( param.method==Methods::resetVirtDomain ) {
+            task.action     = Actions::RESET_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==rebootVirtDomain ) {
-            task.action     = REBOOT_ENTITY;
+        } else if ( param.method==Methods::rebootVirtDomain ) {
+            task.action     = Actions::REBOOT_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==shutdownVirtDomain ) {
-            task.action     = SHUTDOWN_ENTITY;
+        } else if ( param.method==Methods::shutdownVirtDomain ) {
+            task.action     = Actions::SHUTDOWN_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==saveVirtDomain ) {
+        } else if ( param.method==Methods::saveVirtDomain ) {
             QString to =
                     QFileDialog::getSaveFileName(
                         this, "Save to", "~");
             if ( !to.isEmpty() ) {
-                task.action     = SAVE_ENTITY;
+                task.action     = Actions::SAVE_ENTITY;
                 task.args.path  = to;
                 task.args.state = domainModel->DataList
                         .at(idx.row())->getState_EXT();
                 emit addNewTask(&task);
             };
-        } else if ( param.method==restoreVirtDomain ) {
+        } else if ( param.method==Methods::restoreVirtDomain ) {
             QString from =
                     QFileDialog::getOpenFileName(
                         this, "Restore from", "~");
             if ( !from.isEmpty() ) {
-                task.action     = RESTORE_ENTITY;
+                task.action     = Actions::RESTORE_ENTITY;
                 task.args.path  = from;
                 emit addNewTask(&task);
             };
-        } else if ( param.method==undefineEntity ) {
-            task.action     = UNDEFINE_ENTITY;
+        } else if ( param.method==Methods::undefineEntity ) {
+            task.action     = Actions::UNDEFINE_ENTITY;
             emit addNewTask(&task);
-        } else if ( param.method==setAutostartEntity ) {
+        } else if ( param.method==Methods::setAutostartEntity ) {
             /* set the opposite value */
             uint autostartState =
                 (domainModel->DataList.at(idx.row())->getAutostart())
                  ? 0 : 1;
-            task.action     = CHANGE_ENTITY_AUTOSTART;
+            task.action     = Actions::CHANGE_ENTITY_AUTOSTART;
             task.args.sign  = autostartState;
             emit addNewTask(&task);
-        } else if ( param.method==migrateVirtDomain ) {
+        } else if ( param.method==Methods::migrateVirtDomain ) {
             if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
                 MigrateDialog *migrateDialog =
                         new MigrateDialog(
@@ -338,7 +338,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
                 int exitCode = migrateDialog->exec();
                 MIGR_ARGS migrArgs = migrateDialog->getMigrateArgs();
                 migrateDialog->deleteLater();
-                task.action      = MIGRATE_ENTITY;
+                task.action      = Actions::MIGRATE_ENTITY;
                 task.args.sign   = migrArgs.flags;
                 task.args.object = migrArgs.new_name;
                 task.args.size   = migrArgs.bandwidth;
@@ -358,25 +358,25 @@ void VirtDomainControl::execAction(const Act_Param &param)
                 };
             } else
                 emit ptrIsNull();
-        } else if ( param.method==getEntityXMLDesc ) {
-            task.action     = GET_XML_DESCRIPTION;
-            task.args.sign  = (param.context==DO_AsIs)
+        } else if ( param.method==Methods::getEntityXMLDesc ) {
+            task.action     = Actions::GET_XML_DESCRIPTION;
+            task.args.sign  = (param.context==HOW_TO_DO::DO_AsIs)
                     ? 0:VIR_DOMAIN_XML_INACTIVE;
             emit addNewTask(&task);
-        } else if ( param.method==displayVirtDomain ) {
-            task.action     = GET_ALL_ENTITY_DATA0;
+        } else if ( param.method==Methods::displayVirtDomain ) {
+            task.action     = Actions::GET_ALL_ENTITY_DATA0;
             emit addNewTask(&task);
-        } else if ( param.method==displayVirtDomainInExternalViewer ) {
-            task.action     = GET_ALL_ENTITY_DATA1;
+        } else if ( param.method==Methods::displayVirtDomainInExternalViewer ) {
+            task.action     = Actions::GET_ALL_ENTITY_DATA1;
             emit addNewTask(&task);
-        } else if ( param.method==monitorVirtDomain ) {
+        } else if ( param.method==Methods::monitorVirtDomain ) {
             // send signal with Connection & Domain Names
             // to add into Domain State Monitor
             emit addToStateMonitor(ptr_ConnPtr, currConnName, domainName);
-        } else if ( param.method==reloadEntity ) {
+        } else if ( param.method==Methods::reloadEntity ) {
             reloadState();
-        } else if ( param.method==createVirtDomainSnapshot ) {
-            //qDebug()<<"createVirtDomainSnapshot";
+        } else if ( param.method==Methods::createVirtDomainSnapshot ) {
+            //qDebug()<<"Methods::createVirtDomainSnapshot";
             bool state = domainModel->DataList
                     .at(idx.row())->getState();
             CreateSnapshotDialog *_dialog =
@@ -389,13 +389,13 @@ void VirtDomainControl::execAction(const Act_Param &param)
                        this, SLOT(msgRepeater(const QString&)));
             _dialog->deleteLater();
             if ( exitCode ) {
-                task.action      = CREATE_DOMAIN_SNAPSHOT;
+                task.action      = Actions::CREATE_DOMAIN_SNAPSHOT;
                 task.args.object = _dialog->getSnapshotXMLDesc();
                 task.args.sign   = _dialog->getSnapshotFlags();
                 emit addNewTask(&task);
             };
-        } else if ( param.method==moreSnapshotActions ) {
-            //qDebug()<<"moreSnapshotActions";
+        } else if ( param.method==Methods::moreSnapshotActions ) {
+            //qDebug()<<"Methods::moreSnapshotActions";
             SnapshotActionDialog *_dialog =
                     new SnapshotActionDialog(
                         this, ptr_ConnPtr, domainName, currConnName);
@@ -405,10 +405,10 @@ void VirtDomainControl::execAction(const Act_Param &param)
                 Act_Param params = _dialog->getParameters();
                 task.action      = params.act;
                 Methods method;
-                if ( params.act==REVERT_TO_DOMAIN_SNAPSHOT ) {
-                    method = revertVirtDomainSnapshot;
-                } else if ( params.act==DELETE_DOMAIN_SNAPSHOT ) {
-                    method = deleteVirtDomainSnapshot;
+                if ( params.act==Actions::REVERT_TO_DOMAIN_SNAPSHOT ) {
+                    method = Methods::revertVirtDomainSnapshot;
+                } else if ( params.act==Actions::DELETE_DOMAIN_SNAPSHOT ) {
+                    method = Methods::deleteVirtDomainSnapshot;
                 };
                 task.method      = method;
                 task.args.object = params.path;
@@ -416,26 +416,26 @@ void VirtDomainControl::execAction(const Act_Param &param)
                 emit addNewTask(&task);
             };
         };
-    } else if ( param.method==reloadEntity ) {
+    } else if ( param.method==Methods::reloadEntity ) {
         reloadState();
     };
 }
 void VirtDomainControl::newVirtEntityFromXML(const Act_Param &args)
 {
     TASK task;
-    task.type = VIRT_DOMAIN;
+    task.type = VIRT_ENTITY::VIRT_DOMAIN;
     Methods method;
-    if ( args.act==CREATE_ENTITY ) {
-        method = createEntity;
+    if ( args.act== Actions::CREATE_ENTITY ) {
+        method = Methods::createEntity;
     } else {
-        method = defineEntity;
+        method = Methods::defineEntity;
     };
     task.srcConnPtr = ptr_ConnPtr;
     task.srcConName = currConnName;
     task.method     = method;
     task.action     = args.act;
     task.args.path  = args.path;
-    if ( args.context==DO_AsIs ) {
+    if ( args.context == HOW_TO_DO::DO_AsIs ) {
         emit addNewTask(&task);
     } else {
         emit domainToEditor(&task);

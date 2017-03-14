@@ -91,7 +91,7 @@ void VirtSecretToolBar::timerEvent(QTimerEvent *event)
     //qDebug()<<_timerId<<timerId;
     if ( _timerId && timerId==_timerId ) {
         Act_Param parameters;
-        parameters.method = reloadEntity;
+        parameters.method = Methods::reloadEntity;
         emit execMethod(parameters);
     };
 }
@@ -99,9 +99,9 @@ void VirtSecretToolBar::detectTriggeredAction(QAction *action)
 {
     Act_Param parameters;
     if        ( action == define_Action ) {
-        parameters.method = defineEntity;
+        parameters.method = Methods::defineEntity;
     } else if ( action == undefine_Action ) {
-        parameters.method = undefineEntity;
+        parameters.method = Methods::undefineEntity;
     //} else if ( action == getXMLDesc_Action ) {
     //    parameters << "getVirtSecretXMLDesc";
     } else return;
