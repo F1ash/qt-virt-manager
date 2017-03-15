@@ -15,7 +15,8 @@ Logical_Pool_Stuff::Logical_Pool_Stuff(
     source->deviceLabel->setVisible(true);
     //source->formatLabel->setVisible(true);
     source->device->setVisible(true);
-    source->device->setOneDeviceMode(true);
+    source->device->setOneDeviceMode(false);
+    source->device->name->setPlaceholderText("Physical volume name");
     //source->format->setVisible(true);
     source->format->addItems(LOGICAL_POOL_FORMAT_TYPES);
     source->namedLabel->setVisible(true);

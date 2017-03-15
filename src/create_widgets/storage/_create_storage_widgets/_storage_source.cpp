@@ -22,7 +22,7 @@ _Storage_Source::_Storage_Source(QWidget *parent, virConnectPtr *connPtrPtr) :
     named->setVisible(false);
     host = new _Hosts(this, "Use Hosts");
     host->setVisible(false);
-    device = new _BlockDevices(this, "Block devices");
+    device = new _DeviceList(this, "Device list");
     device->setVisible(false);
     dir = new QLineEdit(this);
     dir->setVisible(false);

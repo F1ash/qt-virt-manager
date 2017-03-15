@@ -18,7 +18,69 @@ SCSI_Pool_Stuff::SCSI_Pool_Stuff(
 
 void SCSI_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
 {
+    QDomDocument doc;
+    doc.setContent(_xmlDesc);
+    QDomElement _pool;
+    _pool = doc.firstChildElement("pool");
+    if ( !_pool.isNull() ) {
+        QDomNode _n = _pool.firstChild();
+        while ( !_n.isNull() ) {
+            QDomElement _el = _n.toElement();
+            if ( !_el.isNull() ) {
+                if ( _el.tagName()=="source" ) {
+                    QDomElement _el1 = _el.firstChildElement("adapter"); // May only occur once
+                    if ( !_el1.isNull() ) {
+                        QString _type = _el1.attribute("type", "scsi_host");
+                        if        ( _type.startsWith("scsi_host") ) {
 
+                        } else if ( _type.startsWith("fc_host") ) {
+
+                        };
+                        //QDomNode _n2 = _el1.firstChild();
+                        //while ( !_n2.isNull() ) {
+                        //    QDomElement _el2 = _n2.toElement();
+                        //    if ( !_el2.isNull() ) {
+                        //        if ( _el2.tagName()=="parentaddr" ) {
+
+                        //        };
+                        //    };
+                        //    _n2 = _n2.nextSibling();
+                        //};
+                    };
+                } else if ( _el.tagName()=="target" ) {
+                    QDomNode _n1 = _el.firstChild();
+                    while ( !_n1.isNull() ) {
+                        QDomElement _el1 = _n1.toElement();
+                        if ( !_el1.isNull() ) {
+                            if ( _el1.tagName()=="path" ) {
+                                target->path->setText(_el1.text());
+                            } else if ( _el1.tagName()=="permissions" ) {
+                                target->usePerm->setChecked(true);
+                                QDomNode _n2 = _el1.firstChild();
+                                while ( !_n2.isNull() ) {
+                                    QDomElement _el2 = _n2.toElement();
+                                    if ( !_el2.isNull() ) {
+                                        if ( _el2.tagName()=="owner" ) {
+                                            target->owner->setText(_el2.text());
+                                        } else if ( _el2.tagName()=="group" ) {
+                                            target->group->setText(_el2.text());
+                                        } else if ( _el2.tagName()=="mode" ) {
+                                            target->mode->setText(_el2.text());
+                                        } else if ( _el2.tagName()=="label" ) {
+                                            target->label->setText(_el2.text());
+                                        };
+                                    };
+                                    _n2 = _n2.nextSibling();
+                                };
+                            };
+                        };
+                        _n1 = _n1.nextSibling();
+                    };
+                };
+            };
+            _n = _n.nextSibling();
+        };
+    };
 }
 QDomDocument SCSI_Pool_Stuff::getDataDocument() const
 {

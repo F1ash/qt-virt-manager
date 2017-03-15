@@ -26,6 +26,7 @@ Fs_Pool_Stuff::Fs_Pool_Stuff(
     source->deviceLabel->setVisible(true);
     //source->formatLabel->setVisible(true);
     source->device->setVisible(true);
+    source->device->name->setPlaceholderText("/dev/VolGroup00/VirtImages");
     //source->format->setVisible(true);
     source->format->addItems(FS_POOL_FORMAT_TYPES);
     target->path->setPlaceholderText("/var/lib/virt/images");

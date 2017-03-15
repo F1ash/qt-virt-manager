@@ -1,14 +1,14 @@
-#ifndef _BLOCK_DEVICES_H
-#define _BLOCK_DEVICES_H
+#ifndef _DEVICE_LIST_H
+#define _DEVICE_LIST_H
 
 #include "create_widgets/common/_list_widget.h"
 #include <QFileDialog>
 
-class _BlockDevices : public _List_Widget
+class _DeviceList : public _List_Widget
 {
     Q_OBJECT
 public:
-    explicit _BlockDevices(
+    explicit _DeviceList(
             QWidget *parent = nullptr,
             QString  tag    = "");
     QLineEdit       *name;
@@ -28,4 +28,4 @@ private slots:
     void             setBlockDevPath();
 };
 
-#endif // _BLOCK_DEVICES_H
+#endif // _DEVICE_LIST_H

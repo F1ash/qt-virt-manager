@@ -12,6 +12,7 @@ ZFS_Pool_Stuff::ZFS_Pool_Stuff(
     source->named->setVisible(true);
     source->deviceLabel->setVisible(true);
     source->device->setVisible(true);
+    source->device->name->setPlaceholderText("ZFS volume name");
     source->host->setUsage(true);
     target->setVisible(false);
 }

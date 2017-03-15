@@ -7,7 +7,7 @@
 #include <QLineEdit>
 #include "_adapter.h"
 #include "_auth.h"
-#include "_block_devices.h"
+#include "_device_list.h"
 #include "create_widgets/domain/common_widgets/disk_widgets/_hosts.h"
 
 class _Storage_Source : public QWidget
@@ -24,7 +24,7 @@ public:
                         *adapterLabel, *authLabel,
                         *formatLabel;
     QComboBox           *format;
-    _BlockDevices       *device;
+    _DeviceList         *device;
     _Adapter            *adapter;
     _Storage_Auth       *auth;
     _Hosts              *host;
