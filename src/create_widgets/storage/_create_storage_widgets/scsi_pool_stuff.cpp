@@ -31,21 +31,40 @@ void SCSI_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
                     QDomElement _el1 = _el.firstChildElement("adapter"); // May only occur once
                     if ( !_el1.isNull() ) {
                         QString _type = _el1.attribute("type", "scsi_host");
+                        int idx = source->adapter->type->findText(_type);
+                        if ( idx<0 ) idx = 0;
+                        source->adapter->type->setCurrentIndex(idx);
                         if        ( _type.startsWith("scsi_host") ) {
-
+                            QDomElement _el2 = _el1.firstChildElement("parentaddr");
+                            if ( !_el2.isNull() ) {
+                                source->adapter->usePrntAddr->setChecked(true);
+                                source->adapter->adapterPrntID->setText(
+                                            _el2.attribute("unique_id"));
+                                QDomElement _el3 = _el2.firstChildElement("address");
+                                if ( !_el3.isNull() ) {
+                                    source->adapter->addr->domain->setText(
+                                                _el3.attribute("domain"));
+                                    source->adapter->addr->bus->setText(
+                                                _el3.attribute("bus"));
+                                    source->adapter->addr->slot->setText(
+                                                _el3.attribute("slot"));
+                                    source->adapter->addr->function->setValue(
+                                                _el3.attribute("function").toInt());
+                                };
+                            } else {
+                                source->adapter->name->setText(
+                                            _el1.attribute("name"));
+                            };
                         } else if ( _type.startsWith("fc_host") ) {
-
+                            source->adapter->name->setText(
+                                        _el1.attribute("name"));
+                            source->adapter->adapterPrnt->setText(
+                                        _el1.attribute("parent"));
+                            source->adapter->wwnn->setText(
+                                        _el1.attribute("wwnn"));
+                            source->adapter->wwpn->setText(
+                                        _el1.attribute("wwpn"));
                         };
-                        //QDomNode _n2 = _el1.firstChild();
-                        //while ( !_n2.isNull() ) {
-                        //    QDomElement _el2 = _n2.toElement();
-                        //    if ( !_el2.isNull() ) {
-                        //        if ( _el2.tagName()=="parentaddr" ) {
-
-                        //        };
-                        //    };
-                        //    _n2 = _n2.nextSibling();
-                        //};
                     };
                 } else if ( _el.tagName()=="target" ) {
                     QDomNode _n1 = _el.firstChild();
