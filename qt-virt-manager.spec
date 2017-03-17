@@ -4,7 +4,7 @@
 %bcond_without  qt5
 
 Name:           qt-virt-manager
-Version:        0.39.60
+Version:        0.42.67
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 Group:          Applications/System
@@ -60,8 +60,9 @@ BuildRequires:  libcacard-devel
 %endif
 
 %description
-Qt Virtual Machine Manager provides a graphical tool for administering virtual
-machines for QEMU/KVM, Xen, OpenVZ, VBox, VMWare and LXC and other Virtual Entities.
+Qt Virtual Machine Manager provides a graphical tool for administering
+a QEMU/KVM, Xen, LXC, OpenVZ, VBox, VMWare, HyperV, IBM PowerVM
+virtual machines and other Virtual Entities.
 Start, stop, add or remove virtual devices, connect to a graphical or serial console,
 and see resource usage statistics for existing VMs on local or remote machines.
 Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
@@ -70,8 +71,9 @@ Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
 Summary:        Qt4 Virtual Machine Manager
 
 %description -n qt4-virt-manager
-Qt4 Virtual Machine Manager provides a graphical tool for administering virtual
-machines for QEMU/KVM, Xen, OpenVZ, VBox, VMWare and LXC and other Virtual Entities.
+Qt4 Virtual Machine Manager provides a graphical tool for administering
+a QEMU/KVM, Xen, LXC, OpenVZ, VBox, VMWare, HyperV, IBM PowerVM
+virtual machines and other Virtual Entities.
 Start, stop, add or remove virtual devices, connect to a graphical or serial console,
 and see resource usage statistics for existing VMs on local or remote machines.
 Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
@@ -80,8 +82,9 @@ Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
 Summary:        Qt5 Virtual Machine Manager
 
 %description -n qt5-virt-manager
-Qt5 Virtual Machine Manager provides a graphical tool for administering virtual
-machines for QEMU/KVM, Xen, OpenVZ, VBox, VMWare and LXC and other Virtual Entities.
+Qt5 Virtual Machine Manager provides a graphical tool for administering
+a QEMU/KVM, Xen, LXC, OpenVZ, VBox, VMWare, HyperV, IBM PowerVM
+virtual machines and other Virtual Entities.
 Start, stop, add or remove virtual devices, connect to a graphical or serial console,
 and see resource usage statistics for existing VMs on local or remote machines.
 Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
@@ -192,6 +195,10 @@ fi
 %endif
 
 %changelog
+* Fri Mar 17 2017 Fl@sh <kaperang07@gmail.com> - 0.42.67-1
+- enhanced %%description;
+- version updated;
+
 * Mon Jan 30 2017 Fl@sh <kaperang07@gmail.com> - 0.39.60-1
 - removed libvirt-daemon-driver-qemu, libvncserver R;
 - version updated;

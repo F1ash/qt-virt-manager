@@ -160,3 +160,15 @@ implemented qt-remote-viewer
 fixed display icon for 'in process' state
     for processed connection;
 some fixes and enhancements;
+
+0.42.67 :
+added Hyper-V, IBM PowerVM connections;
+implemented edit-mode for CreatePool;
+implemented edit mode in Create Volume;
+added 'refresh Pool' action for VirtStorageVolControl;
+added choosing secrets in Volume into Encryption widget;
+fixed saveing the url in GetURLDialog at external usage;
+added LUKs encryption type in Create Volume;
+added TLS type of VirtSecret;
+fixed 'MiB' usage in Memory and CreateVolume;
+some enhancements and fixes for stability;
