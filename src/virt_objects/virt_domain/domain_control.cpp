@@ -404,7 +404,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
             if ( exitCode ) {
                 Act_Param params = _dialog->getParameters();
                 task.action      = params.act;
-                Methods method;
+                Methods method = Methods::_NONE_METHOD;
                 if ( params.act==Actions::REVERT_TO_DOMAIN_SNAPSHOT ) {
                     method = Methods::revertVirtDomainSnapshot;
                 } else if ( params.act==Actions::DELETE_DOMAIN_SNAPSHOT ) {

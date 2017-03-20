@@ -27,7 +27,7 @@ void WaitLocalConn::run()
                     const int count = connItemModel->rowCount();
                     for (int i=0; i<count; i++) {
                         ConnItemIndex *idx = nullptr;
-                        if ( 0<= i < connItemModel->connItemDataList.count() ) {
+                        if ( 0<=i && i< connItemModel->connItemDataList.count() ) {
                             idx = connItemModel->connItemDataList.at(i);
                         };
                         if ( nullptr==idx ) continue;

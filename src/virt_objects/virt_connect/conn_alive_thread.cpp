@@ -2,6 +2,20 @@
 
 #define WAIT_AUTH 300    // dev 10 (sec.)
 
+/* The list of credential types supported by our auth callback */
+static int credTypes[] = {
+    VIR_CRED_AUTHNAME,
+    VIR_CRED_PASSPHRASE
+};
+
+/* The auth struct that will be passed to virConnectOpenAuth */
+static virConnectAuth auth = {
+    credTypes,
+    sizeof(credTypes) / sizeof(int),
+    nullptr, // cb will be initialized in thread
+    nullptr, // cbdata will be initialized in thread
+};
+
 ConnAliveThread::ConnAliveThread(QObject *parent) :
     _VirtThread(parent)
 {

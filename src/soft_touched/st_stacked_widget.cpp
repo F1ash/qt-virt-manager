@@ -28,7 +28,7 @@ void ST_StackedWidget::removeAllWidgets()
 /* public slots */
 void ST_StackedWidget::showDock(const QString &_dock)
 {
-    for ( uint i=0; i<wdgCount; i++ ) {
+    for ( int i=0; i<wdgCount; i++ ) {
         QWidget *d =
                 static_cast<QWidget*>(widget(i));
         if ( d!=nullptr ) {

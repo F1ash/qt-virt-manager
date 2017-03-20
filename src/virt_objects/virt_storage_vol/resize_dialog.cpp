@@ -57,6 +57,7 @@ ResizeDialog::ResizeDialog(
         QString          _volName) :
     QDialog(parent)
 {
+    setWindowTitle("Resize");
     setEnabled(false);
     hlpThread = new resizeHelperThread(
                 this, connPtrPtr,
@@ -98,14 +99,15 @@ void ResizeDialog::cancelClicked()
 }
 void ResizeDialog::changeRange(int i)
 {
-    if ( i==0 && currentRange>bytes ) {
-        i = KiB-1;
+    uint newRange = (i<0)? 0 : (uint)i;
+    if ( newRange==0 && currentRange>bytes ) {
+        newRange = KiB-1;
         currentRange = currentRange/KiB;
-    } else if ( i==KiB ) {
-        i = 1;
+    } else if ( newRange==KiB ) {
+        newRange = 1;
         currentRange = currentRange*KiB;
     };
-    _size = i*currentRange;
+    _size = newRange*currentRange;
     changeRangeLong(_size);
 }
 void ResizeDialog::changeRangeLong(unsigned long long i)

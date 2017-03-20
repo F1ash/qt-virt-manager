@@ -152,9 +152,11 @@ Result StorageVolControlThread::getAllStorageVolList()
                 case VIR_STORAGE_VOL_NETDIR:
                     type.append("netdir");
                     break;
+#if LIBVIR_VERSION_NUMBER > 1003003
                 case VIR_STORAGE_VOL_PLOOP:
                     type.append("ploop");
                     break;
+#endif
                 default:
                     type.append("-");
                     break;

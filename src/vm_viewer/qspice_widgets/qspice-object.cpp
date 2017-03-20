@@ -133,7 +133,7 @@ QStringList QSpiceObject::getPropStrList(QString name)
     QStringList r;
     if (l) {
         guint count = g_strv_length(l);
-        for(int i=0; i<count; i++) {
+        for(uint i=0; i<count; i++) {
             //qDebug()<<(char*)l[i];
             r.append(l[i]);
         };
@@ -144,7 +144,7 @@ QStringList QSpiceObject::getPropStrList(QString name)
 
 void QSpiceObject::setProp(QString name, const QStringList &v)
 {
-    uint count = v.size();
+    int count = v.size();
     gchar *l[count+1];
     for(int i=0; i<count; i++) {
         char *s = v.at(i).toUtf8().data();

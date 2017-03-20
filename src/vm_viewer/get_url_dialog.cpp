@@ -64,7 +64,7 @@ GetURLDialog::~GetURLDialog()
     settings.clear();
     settings.setValue("GetURLGeometry", saveGeometry());
     settings.beginGroup("URLs");
-    for (uint i=0; i<urlList->count(); i++) {
+    for (int i=0; i<urlList->count(); i++) {
         QListWidgetItem *item =
                 urlList->item(i);
         if ( item==nullptr ) continue;
@@ -88,7 +88,7 @@ void GetURLDialog::saveToHistory(const QString &_url)
 bool GetURLDialog::isUnique(const QString &_url) const
 {
     bool exist = true;
-    for (uint i=0; i<urlList->count(); i++) {
+    for (int i=0; i<urlList->count(); i++) {
         QListWidgetItem *item =
                 urlList->item(i);
         if ( item==nullptr ) continue;

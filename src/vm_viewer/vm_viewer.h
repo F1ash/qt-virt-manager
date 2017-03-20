@@ -38,8 +38,8 @@ public:
     QSettings        settings;
     ViewerToolBar   *viewerToolBar = nullptr;
     uint             timerId = 0;
-    uint             killTimerId = 0;
-    uint             toolBarTimerId = 0;
+    int              killTimerId = 0;
+    int              toolBarTimerId = 0;
     uint             counter = 0;
 
     QVBoxLayout     *infoLayout = nullptr;

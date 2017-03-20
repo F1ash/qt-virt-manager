@@ -20,20 +20,6 @@ struct _AuthData {
 
 typedef struct _AuthData AuthData;
 
-/* The list of credential types supported by our auth callback */
-static int credTypes[] = {
-    VIR_CRED_AUTHNAME,
-    VIR_CRED_PASSPHRASE
-};
-
-/* The auth struct that will be passed to virConnectOpenAuth */
-static virConnectAuth auth = {
-    credTypes,
-    sizeof(credTypes) / sizeof(int),
-    nullptr, // cb will be initialized in thread
-    nullptr, // cbdata will be initialized in thread
-};
-
 class ConnAliveThread : public _VirtThread
 {
     Q_OBJECT
