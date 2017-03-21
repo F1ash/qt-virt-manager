@@ -48,6 +48,7 @@ void DomainMonitorThread::run()
         virDomainInfo info;
         quint64 curr_cpuTime, cpu_time_diff, _time_diff,
                 CPU_percent, MEM_percent, MEM;
+        CPU_percent = MEM_percent = MEM = 0;
         if ( virDomainGetInfo(domain, &info)+1 ) {
             curr_cpuTime = info.cpuTime;
             _time_diff = tMark.elapsed()/1000;

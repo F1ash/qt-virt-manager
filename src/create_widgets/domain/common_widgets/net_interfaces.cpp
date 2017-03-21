@@ -61,7 +61,7 @@ void NetInterfaces::init_wdg()
     };
     connect(type, SIGNAL(currentIndexChanged(int)),
             info, SLOT(setCurrentIndex(int)));
-    for ( uint i=0; i<info->count(); i++ ) {
+    for ( int i=0; i<info->count(); i++ ) {
         connect(info->widget(i), SIGNAL(dataChanged()),
                 this, SIGNAL(dataChanged()));
     };

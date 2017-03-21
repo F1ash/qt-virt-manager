@@ -40,7 +40,7 @@ AH_Attributes::AH_Attributes(QWidget *parent) :
     attrName->addItem("ipsetflags");
     attrEditor->addWidget(new IPSETFLAGS_Data(this, "ipsetflags"));
 
-    for (uint i=0; i<attrEditor->count(); i++) {
+    for (int i=0; i<attrEditor->count(); i++) {
         UntypedData *d = static_cast<UntypedData*>(
                     attrEditor->widget(i));
         if ( d==nullptr ) continue;

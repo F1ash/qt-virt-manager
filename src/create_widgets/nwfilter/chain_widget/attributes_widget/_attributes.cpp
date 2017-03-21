@@ -25,7 +25,7 @@ _Attributes::_Attributes(QWidget *parent, QString tag) :
 _Attributes::~_Attributes() {}
 void _Attributes::clearAllAttributeData()
 {
-    for (uint i=0; i<attrEditor->count(); i++) {
+    for (int i=0; i<attrEditor->count(); i++) {
         UntypedData *d = static_cast<UntypedData*>(
                     attrEditor->widget(i));
         if ( d==nullptr ) continue;

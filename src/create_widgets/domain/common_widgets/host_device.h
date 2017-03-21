@@ -26,7 +26,7 @@ public:
     QVBoxLayout     *commonLayout;
 
 private:
-    uint             completedWdg = 0;
+    int              completedWdg = 0;
 
 public slots:
     QDomDocument     getDataDocument() const;

@@ -83,7 +83,7 @@ QDomDocument Volume_Disk::getDataDocument() const
                 .firstChildElement("data")
                 .childNodes();
         uint j = 0;
-        uint count = _l.length();
+        int count = _l.length();
         for (int i=0; i<count;i++) {
             //qDebug()<<_l.item(j).nodeName()<<i;
             if (!_l.item(j).isNull()) _devDesc.appendChild(_l.item(j));

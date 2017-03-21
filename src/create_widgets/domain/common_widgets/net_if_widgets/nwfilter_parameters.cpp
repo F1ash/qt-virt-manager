@@ -69,7 +69,7 @@ QDomDocument NWFilter_Params::getDataDocument() const
     QDomElement _filterref;
     _filterref = doc.createElement("filterref");
     _filterref.setAttribute("filter", nwFilters->currentText());
-    for ( uint i=0; i<list->count(); i++ ) {
+    for ( int i=0; i<list->count(); i++ ) {
         QListWidgetItem *item = list->item(i);
         if ( item==nullptr ) continue;
         QStringList _expr = item->text().split("=");

@@ -23,8 +23,8 @@ Known issues:
 Building parameters:
 
     BUILD_QT_VERSION
-        if not defined or equal 4, then will build with Qt4,
-        if equal 5, then with Qt5
+        if not defined or equal 5, then will build with Qt5,
+        if equal 4, then with Qt4 (last supported version 0.42.67)
 
     WITH_LIBCACARD
         if defined and above zero, then libcacard.h required
@@ -45,7 +45,7 @@ Build requires:
     libQtNetwork.so
     libqtermwidget4.so
 
-    * with Qt5              (required, BUILD_QT_VERSION=5)
+    * with Qt5              (default, BUILD_QT_VERSION=5)
     libQt5Core.so
     libQt5Gui.so
     libQt5Multimedia.so

@@ -66,7 +66,7 @@ void Random_Edit::setDataDescription(const QString &_xmlDesc)
         _serial.setAttribute("type", _type);
         QDomNodeList _list = _backend.childNodes();
         uint j = 0;
-        uint count = _list.length();
+        int count = _list.length();
         for (int i=0; i<count; i++) {
             if (!_list.item(j).isNull()) {
                 _serial.appendChild( _list.item(j) );

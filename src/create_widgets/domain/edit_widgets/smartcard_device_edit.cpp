@@ -32,7 +32,7 @@ void SmartCardDevice_Edit::setDataDescription(const QString &_xmlDesc)
     _channel.setAttribute("type", _type);
     QDomNodeList list = _device.childNodes();
     uint j = 0;
-    uint count = list.length();
+    int count = list.length();
     for (int i=0; i<count;i++) {
         //qDebug()<<list.item(j).nodeName()<<i;
         if (!list.item(j).isNull() && list.item(j).toElement().tagName()!="address")

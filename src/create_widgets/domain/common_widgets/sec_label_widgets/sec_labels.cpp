@@ -204,7 +204,7 @@ void SecLabels::readXMLDesciption(const QString &_xmlDesc)
     if ( !_seclabel.isNull() ) {
         QDomNodeList _list = _domain.childNodes();
         uint j = 0;
-        uint count = _list.length();
+        int count = _list.length();
         for (int i=0; i<count; i++) {
             if (!_list.item(j).isNull()) {
                 //qDebug()<<_list.item(j).toElement().tagName();

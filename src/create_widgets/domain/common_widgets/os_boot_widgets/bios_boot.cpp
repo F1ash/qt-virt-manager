@@ -178,7 +178,7 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
      * network interfaces, and USB and PCI devices) were introduced
      * and they are the preferred way providing full control over booting order.
      */
-    uint count = _devices.length();
+    int count = _devices.length();
     uint j = 0;
     //search bootable devices
     for (int i=0; i<count; i++) {
@@ -218,9 +218,9 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
             _doc1.firstChildElement().removeChild(_boot);
         };
         bool exist = false;
-        uint j=0;
-        while ( j<_bootable.count() ) {
-            QDomElement _el = _bootable.at(j);
+        int k=0;
+        while ( k<_bootable.count() ) {
+            QDomElement _el = _bootable.at(k);
             if ( !_el.firstChildElement("boot").isNull() ) {
                 _el.removeChild(_el.firstChildElement("boot"));
             };
@@ -232,12 +232,12 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
             if (exist) {
                 break;
             } else {
-                ++j;
+                ++k;
             };
         };
         if (exist) {
             //qDebug()<<_doc1.toString()<<"exist"<<i;
-            _bootable.removeAt(j);
+            _bootable.removeAt(k);
         } else {
             //qDebug()<<_doc1.toString()<<"unexist"<<i;
             _unexist.append(i);

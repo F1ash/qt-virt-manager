@@ -77,7 +77,8 @@ void CPU_Topology::setMaxVCPU(int i)
 /* private slots */
 void CPU_Topology::newValue(int i)
 {
-    uint _value = sockets->value()*cores->value()*threads->value();
+    Q_UNUSED(i);
+    int _value = sockets->value()*cores->value()*threads->value();
     overload = MaxVCPU<_value;
     if ( overload ) {
         //QSpinBox *wdg = static_cast<QSpinBox*>(sender());

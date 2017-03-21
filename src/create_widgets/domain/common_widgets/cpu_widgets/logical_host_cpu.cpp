@@ -24,6 +24,6 @@ LogicalHostCPU::LogicalHostCPU(
 /* public slots */
 void LogicalHostCPU::changeInfoVisibility(int i)
 {
-    info->setVisible( i>cores );
-    icon->setVisible( i>cores );
+    info->setVisible( (uint)i > cores );
+    icon->setVisible( (uint)i > cores );
 }

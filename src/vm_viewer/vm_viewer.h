@@ -37,7 +37,7 @@ public:
     virErrorPtr      virtErrors = nullptr;
     QSettings        settings;
     ViewerToolBar   *viewerToolBar = nullptr;
-    uint             timerId = 0;
+    int              timerId = 0;
     int              killTimerId = 0;
     int              toolBarTimerId = 0;
     uint             counter = 0;

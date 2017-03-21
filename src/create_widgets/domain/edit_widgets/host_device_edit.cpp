@@ -48,7 +48,7 @@ void HostDevice_Edit::init_wdg()
     };
     connect(type, SIGNAL(currentIndexChanged(int)),
             infoEdit, SLOT(setCurrentIndex(int)));
-    for (uint i=0; i<infoEdit->count(); i++) {
+    for (int i=0; i<infoEdit->count(); i++) {
         _QWidget *wdg = static_cast<_QWidget*>(infoEdit->widget(i));
         if ( wdg!=nullptr ) {
             connect(wdg, SIGNAL(dataChanged()),

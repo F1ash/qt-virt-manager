@@ -297,7 +297,7 @@ bool CreateVirtDomain::buildXMLDescription()
          * therefore keep to seek on not-nullptr next element
          */
         uint j = 0;
-        uint count = list.length();
+        int count = list.length();
         for (int i=0; i<count; i++) {
             //qDebug()<<list.item(j).nodeName()<<i;
             if (!list.item(j).isNull())

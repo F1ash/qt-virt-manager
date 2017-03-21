@@ -86,7 +86,7 @@ ROOT_Attributes::ROOT_Attributes(QWidget *parent, QString tag) :
     attrName->addItem("ALL6");
     attrEditor->addWidget(new ALL6_Attributes(this));
 
-    for (uint i=0; i<attrEditor->count(); i++) {
+    for (int i=0; i<attrEditor->count(); i++) {
         _Attributes *a = static_cast<_Attributes*>(
                     attrEditor->widget(i));
         if ( a==nullptr ) continue;
@@ -98,7 +98,7 @@ ROOT_Attributes::ROOT_Attributes(QWidget *parent, QString tag) :
 }
 void ROOT_Attributes::clearAllAttributeData()
 {
-    for (uint i=0; i<attrEditor->count(); i++) {
+    for (int i=0; i<attrEditor->count(); i++) {
         _Attributes *a = static_cast<_Attributes*>(
                     attrEditor->widget(i));
         if ( a==nullptr ) continue;

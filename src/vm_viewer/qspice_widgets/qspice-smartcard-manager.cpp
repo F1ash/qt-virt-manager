@@ -123,7 +123,7 @@ QStringList QSpiceSmartcardManager::spiceSmartcardManager_get_readers()
     QStringList _readerList;
     GList *_list = spice_smartcard_manager_get_readers(
                 (SpiceSmartcardManager*)gobject);
-    size_t count = count = g_list_length(_list);
+    size_t count = g_list_length(_list);
     for ( uint i = 0; i<count; i++ ) {
         VReader *_reader =
                 static_cast<VReader*>(g_list_nth_data(_list, i));

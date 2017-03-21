@@ -35,7 +35,7 @@ RARP_Attributes::RARP_Attributes(QWidget *parent) :
     attrName->addItem("gratuitous");
     attrEditor->addWidget(new BOOLEAN_Data(this, "gratuitous"));
 
-    for (uint i=0; i<attrEditor->count(); i++) {
+    for (int i=0; i<attrEditor->count(); i++) {
         UntypedData *d = static_cast<UntypedData*>(
                     attrEditor->widget(i));
         if ( d==nullptr ) continue;

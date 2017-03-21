@@ -53,7 +53,7 @@ void HostDevice::init_wdg()
     };
     connect(type, SIGNAL(currentIndexChanged(int)),
             info, SLOT(setCurrentIndex(int)));
-    for(uint i=0; i<info->count(); ++i) {
+    for(int i=0; i<info->count(); ++i) {
         _QWidget *wdg = static_cast<_QWidget*>(info->widget(i));
         if ( wdg!=nullptr ) {
             connect(wdg, SIGNAL(complete()),

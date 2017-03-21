@@ -57,7 +57,7 @@ STP_Attributes::STP_Attributes(QWidget *parent) :
     attrName->addItem("comment");
     attrEditor->addWidget(new STRING_Data(this, "comment"));
 
-    for (uint i=0; i<attrEditor->count(); i++) {
+    for (int i=0; i<attrEditor->count(); i++) {
         UntypedData *d = static_cast<UntypedData*>(
                     attrEditor->widget(i));
         if ( d==nullptr ) continue;

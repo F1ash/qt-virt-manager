@@ -33,7 +33,7 @@ if ( NOT DEFAULT_ENCODING )
 endif ( NOT DEFAULT_ENCODING )
 
 if ( NOT BUILD_QT_VERSION )
-    set (BUILD_QT_VERSION 4)
+    set (BUILD_QT_VERSION 5)    # Qt5 is default and supported only
 endif ( NOT BUILD_QT_VERSION )
 
 if ( BUILD_QT_VERSION STREQUAL 4 )
