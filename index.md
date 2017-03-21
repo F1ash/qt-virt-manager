@@ -50,10 +50,6 @@ Applications are present as packages:
  * in repo (Qt5 only): `dnf install qt-virt-manager` or only
  `dnf install qt-remote-viewer`
 
- * in [Fedora Copr](https://copr.fedorainfracloud.org/coprs/f1ash/QtVirtManager/):
- `dnf install qt4-virt-manager` or  `dnf install qt5-virt-manager` or only
- `dnf install qt4-remote-viewer` or  `dnf install qt5-remote-viewer`
-
  * in [FedoraPeople](https://f1ash.fedorapeople.org/qt-virt-manager/)
 
 ![OS_X logo](https://upload.wikimedia.org/wikipedia/en/4/45/Mac_Finder_icon_%28OS_X_Yosemite%29.png)
