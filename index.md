@@ -1,3 +1,4 @@
+<meta name="ocs-site-verification" content="ba9d219365f62cbdadc0b356f1be1252" />
 
 [![Qt Virtual machines manager icon](https://f1ash.fedorapeople.org/Pictures/virtual-engineering.png)](#top)
 
