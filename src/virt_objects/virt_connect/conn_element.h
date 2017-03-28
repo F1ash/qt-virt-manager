@@ -37,8 +37,8 @@ signals:
     void              warning(const QString&);
     void              connToOverview(virConnectPtr*, const QString&);
     void              authRequested(const QString&);
-    void              domStateChanged(Result);
-    void              netStateChanged(Result);
+    void              domStateChanged();
+    void              netStateChanged();
     void              connClosed(bool, const QString&);
     void              domainEnd(const QString&);
     void              newOpenedConnection(const QString&);

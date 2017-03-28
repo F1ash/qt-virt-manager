@@ -27,9 +27,9 @@ public slots:
     bool                 setCurrentWorkConnect(virConnectPtr*);
     void                 setListHeader(const QString&);
     void                 resultReceiver(Result*);
+    void                 reloadState();
 
 private slots:
-    void                 reloadState();
     void                 changeDockVisibility();
     void                 entityClicked(const QPoint&);
     void                 entityDoubleClicked(const QModelIndex&);

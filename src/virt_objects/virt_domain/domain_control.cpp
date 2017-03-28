@@ -197,8 +197,6 @@ void VirtDomainControl::resultReceiver(Result *data)
         };
     };
 }
-
-/* private slots */
 void VirtDomainControl::reloadState()
 {
     entityList->setEnabled(false);
@@ -211,6 +209,8 @@ void VirtDomainControl::reloadState()
     task.method     = Methods::reloadEntity;
     emit addNewTask(&task);
 }
+
+/* private slots */
 void VirtDomainControl::changeDockVisibility()
 {
     toolBar->setEnabled( !toolBar->isEnabled() );

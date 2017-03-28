@@ -165,8 +165,6 @@ void VirtNetControl::resultReceiver(Result *data)
         };
     };
 }
-
-/* private slots */
 void VirtNetControl::reloadState()
 {
     entityList->setEnabled(false);
@@ -179,6 +177,8 @@ void VirtNetControl::reloadState()
     task.method     = Methods::reloadEntity;
     emit addNewTask(&task);
 }
+
+/* private slots */
 void VirtNetControl::changeDockVisibility()
 {
     toolBar->setEnabled( !toolBar->isEnabled() );

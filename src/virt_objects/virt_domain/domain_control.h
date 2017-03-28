@@ -36,9 +36,9 @@ public slots:
     virConnectPtr*           getPtr_connectionPtr();
     void                     execMigrateAction(virConnectPtr*, TASK*);
     void                     resultReceiver(Result*);
+    void                     reloadState();
 
 private slots:
-    void                     reloadState();
     void                     changeDockVisibility();
     void                     entityClicked(const QPoint&);
     void                     entityDoubleClicked(const QModelIndex&);

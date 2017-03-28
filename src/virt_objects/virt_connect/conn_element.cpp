@@ -15,10 +15,10 @@ ConnElement::ConnElement(QObject *parent) :
             this, SLOT(setConnectionState(CONN_STATE)));
     connect(connAliveThread, SIGNAL(authRequested(const QString&)),
             this, SLOT(getAuthCredentials(const QString&)));
-    connect(connAliveThread, SIGNAL(domStateChanged(Result)),
-            this, SIGNAL(domStateChanged(Result)));
-    connect(connAliveThread, SIGNAL(netStateChanged(Result)),
-            this, SIGNAL(netStateChanged(Result)));
+    connect(connAliveThread, SIGNAL(domStateChanged()),
+            this, SIGNAL(domStateChanged()));
+    connect(connAliveThread, SIGNAL(netStateChanged()),
+            this, SIGNAL(netStateChanged()));
     connect(connAliveThread, SIGNAL(connClosed(bool)),
             this, SLOT(forwardConnClosedSignal(bool)));
     connect(connAliveThread, SIGNAL(errorMsg(const QString&, const uint)),

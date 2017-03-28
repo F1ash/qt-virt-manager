@@ -1,7 +1,6 @@
 #ifndef CONN_ALIVE_THREAD_H
 #define CONN_ALIVE_THREAD_H
 
-#include "virt_objects/virt_entity_config.h"
 #include "virt_objects/_virt_thread.h"
 #include <QTime>
 
@@ -37,8 +36,8 @@ signals:
     void            connMsg(const QString&);
     void            changeConnState(CONN_STATE);
     void            authRequested(const QString&);
-    void            domStateChanged(Result);
-    void            netStateChanged(Result);
+    void            domStateChanged();
+    void            netStateChanged();
     void            connClosed(bool);
     void            domainEnd(const QString&);
 

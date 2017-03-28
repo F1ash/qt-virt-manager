@@ -261,10 +261,10 @@ void ConnectionList::createConnection(const QModelIndex &_item)
             this, SIGNAL(connToOverview(virConnectPtr*, const QString&)));
     connect(conn, SIGNAL(authRequested(const QString&)),
             this, SLOT(getAuthCredentials(const QString&)));
-    connect(conn, SIGNAL(domStateChanged(Result)),
-            this, SLOT(emitDomainStateChanged(Result)));
-    connect(conn, SIGNAL(netStateChanged(Result)),
-            this, SLOT(emitNetworkStateChanged(Result)));
+    connect(conn, SIGNAL(domStateChanged()),
+            this, SIGNAL(domStateChanged()));
+    connect(conn, SIGNAL(netStateChanged()),
+            this, SIGNAL(netStateChanged()));
     connect(conn, SIGNAL(connClosed(bool, const QString&)),
             this, SIGNAL(connClosed(bool, const QString&)));
     connect(conn, SIGNAL(connClosed(bool, const QString&)),
@@ -329,10 +329,10 @@ void ConnectionList::deleteCurrentConnection(const QModelIndex &_item)
                            this, SIGNAL(connToOverview(virConnectPtr*, const QString&)));
                 disconnect(conn, SIGNAL(authRequested(const QString&)),
                            this, SLOT(getAuthCredentials(const QString&)));
-                disconnect(conn, SIGNAL(domStateChanged(Result)),
-                           this, SLOT(emitDomainStateChanged(Result)));
-                disconnect(conn, SIGNAL(netStateChanged(Result)),
-                           this, SLOT(emitNetworkStateChanged(Result)));
+                disconnect(conn, SIGNAL(domStateChanged()),
+                           this, SIGNAL(domStateChanged()));
+                disconnect(conn, SIGNAL(netStateChanged()),
+                           this, SIGNAL(netStateChanged()));
                 disconnect(conn, SIGNAL(connClosed(bool, const QString&)),
                            this, SIGNAL(connClosed(bool, const QString&)));
                 disconnect(conn, SIGNAL(connClosed(bool, const QString&)),
@@ -533,10 +533,10 @@ void ConnectionList::createLocalConnection(const QString &uri)
             this, SIGNAL(connToOverview(virConnectPtr*, const QString&)));
     connect(conn, SIGNAL(authRequested(const QString&)),
             this, SLOT(getAuthCredentials(const QString&)));
-    connect(conn, SIGNAL(domStateChanged(Result)),
-            this, SLOT(emitDomainStateChanged(Result)));
-    connect(conn, SIGNAL(netStateChanged(Result)),
-            this, SLOT(emitNetworkStateChanged(Result)));
+    connect(conn, SIGNAL(domStateChanged()),
+            this, SIGNAL(domStateChanged()));
+    connect(conn, SIGNAL(netStateChanged()),
+            this, SIGNAL(netStateChanged()));
     connect(conn, SIGNAL(connClosed(bool, const QString&)),
             this, SIGNAL(connClosed(bool, const QString&)));
     connect(conn, SIGNAL(connClosed(bool, const QString&)),
@@ -619,12 +619,4 @@ void ConnectionList::newItemClosed(bool onView)
 {
     // if closed connection was onView, then set flag to FALSE
     if ( onView ) onViewExist = false;
-}
-void ConnectionList::emitDomainStateChanged(Result data)
-{
-    emit domResult(&data);
-}
-void ConnectionList::emitNetworkStateChanged(Result data)
-{
-    emit netResult(&data);
 }

@@ -492,8 +492,8 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK*)));
     connect(taskWrHouse, SIGNAL(domResult(Result*)),
             domainDockContent, SLOT(resultReceiver(Result*)));
-    connect(connListWidget->list, SIGNAL(domResult(Result*)),
-            domainDockContent, SLOT(resultReceiver(Result*)));
+    connect(connListWidget->list, SIGNAL(domStateChanged()),
+            domainDockContent, SLOT(reloadState()));
     connect(domainDockContent, SIGNAL(domainToEditor(TASK*)),
             this, SLOT(invokeDomainEditor(TASK*)));
     connect(domainDockContent, SIGNAL(entityListUpdated()),
@@ -521,8 +521,8 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK*)));
     connect(taskWrHouse, SIGNAL(netResult(Result*)),
             networkDockContent, SLOT(resultReceiver(Result*)));
-    connect(connListWidget->list, SIGNAL(netResult(Result*)),
-            networkDockContent, SLOT(resultReceiver(Result*)));
+    connect(connListWidget->list, SIGNAL(netStateChanged()),
+            networkDockContent, SLOT(reloadState()));
     connect(networkDockContent, SIGNAL(networkToEditor(TASK*)),
             this, SLOT(invokeNetworkEditor(TASK*)));
     connect(networkDockContent, SIGNAL(entityListUpdated()),

@@ -43,8 +43,8 @@ signals:
     void                 warning(const QString&);
     void                 connToOverview(virConnectPtr*, const QString&);
     void                 connClosed(bool, const QString&);
-    void                 domResult(Result*);
-    void                 netResult(Result*);
+    void                 domStateChanged();
+    void                 netStateChanged();
     void                 domainEnd(const QString&);
     void                 searchStarted();
     void                 searchFinished();
@@ -87,8 +87,6 @@ private slots:
     void                 searchLocalhostConnComplete();
     void                 setOnViewAvailableConnection(const QString&);
     void                 newItemClosed(bool);
-    void                 emitDomainStateChanged(Result);
-    void                 emitNetworkStateChanged(Result);
 };
 
 #endif   // CONN_LIST_WIDGET_H
