@@ -28,9 +28,9 @@ public slots:
     QString              getCurrentSecUUID() const;
     QString              getCurrentSecType() const;
     void                 resultReceiver(Result*);
+    void                 reloadState();
 
 private slots:
-    void                 reloadState();
     void                 changeDockVisibility();
     void                 entityClicked(const QPoint&);
     void                 entityDoubleClicked(const QModelIndex&);

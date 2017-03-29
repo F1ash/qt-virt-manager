@@ -45,6 +45,8 @@ signals:
     void                 connClosed(bool, const QString&);
     void                 domStateChanged();
     void                 netStateChanged();
+    void                 poolStateChanged();
+    void                 secStateChanged();
     void                 domainEnd(const QString&);
     void                 searchStarted();
     void                 searchFinished();

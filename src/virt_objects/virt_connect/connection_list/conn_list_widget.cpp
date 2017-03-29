@@ -265,6 +265,10 @@ void ConnectionList::createConnection(const QModelIndex &_item)
             this, SIGNAL(domStateChanged()));
     connect(conn, SIGNAL(netStateChanged()),
             this, SIGNAL(netStateChanged()));
+    connect(conn, SIGNAL(poolStateChanged()),
+            this, SIGNAL(poolStateChanged()));
+    connect(conn, SIGNAL(secStateChanged()),
+            this, SIGNAL(secStateChanged()));
     connect(conn, SIGNAL(connClosed(bool, const QString&)),
             this, SIGNAL(connClosed(bool, const QString&)));
     connect(conn, SIGNAL(connClosed(bool, const QString&)),
@@ -333,6 +337,10 @@ void ConnectionList::deleteCurrentConnection(const QModelIndex &_item)
                            this, SIGNAL(domStateChanged()));
                 disconnect(conn, SIGNAL(netStateChanged()),
                            this, SIGNAL(netStateChanged()));
+                disconnect(conn, SIGNAL(poolStateChanged()),
+                           this, SIGNAL(poolStateChanged()));
+                disconnect(conn, SIGNAL(secStateChanged()),
+                           this, SIGNAL(secStateChanged()));
                 disconnect(conn, SIGNAL(connClosed(bool, const QString&)),
                            this, SIGNAL(connClosed(bool, const QString&)));
                 disconnect(conn, SIGNAL(connClosed(bool, const QString&)),
@@ -537,6 +545,10 @@ void ConnectionList::createLocalConnection(const QString &uri)
             this, SIGNAL(domStateChanged()));
     connect(conn, SIGNAL(netStateChanged()),
             this, SIGNAL(netStateChanged()));
+    connect(conn, SIGNAL(poolStateChanged()),
+            this, SIGNAL(poolStateChanged()));
+    connect(conn, SIGNAL(secStateChanged()),
+            this, SIGNAL(secStateChanged()));
     connect(conn, SIGNAL(connClosed(bool, const QString&)),
             this, SIGNAL(connClosed(bool, const QString&)));
     connect(conn, SIGNAL(connClosed(bool, const QString&)),

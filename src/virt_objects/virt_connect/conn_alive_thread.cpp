@@ -1,4 +1,5 @@
 #include "conn_alive_thread.h"
+//#include <QTextStream>
 
 #define WAIT_AUTH 300    // dev 10 (sec.)
 
@@ -22,11 +23,16 @@ ConnAliveThread::ConnAliveThread(QObject *parent) :
     qRegisterMetaType<CONN_STATE>("CONN_STATE");
     _connPtr = nullptr;
     onView = false;
-    // virConnectRegisterCloseCallback && virConnectDomainEventRegisterAny
     // -1 on error; another is success or a callback identifier
-    closeCallbackRegistered  = false;
-    domainsLifeCycleCallback = -1;
-    networkLifeCycleCallback = -1;
+    closeCallbackRegistered     = false;
+    domainsLifeCycleCallback    = -1;
+    networksLifeCycleCallback   = -1;
+#if LIBVIR_VERSION_NUMBER >= 2000000
+    poolsLifeCycleCallback      = -1;
+#endif
+#if LIBVIR_VERSION_NUMBER >= 3000000
+    secretsLifeCycleCallback    = -1;
+#endif
 }
 ConnAliveThread::~ConnAliveThread()
 {
@@ -142,7 +148,7 @@ void ConnAliveThread::registerConnEvents()
                 nullptr);
     if (domainsLifeCycleCallback<0) sendConnErrors();
 
-    networkLifeCycleCallback = virConnectNetworkEventRegisterAny(
+    networksLifeCycleCallback = virConnectNetworkEventRegisterAny(
                 *ptr_ConnPtr,
                 nullptr,
     // set networksLifeCycleCallback signature
@@ -151,7 +157,33 @@ void ConnAliveThread::registerConnEvents()
                 this,
     // don't register freeData, because it remove this thread
                 nullptr);
-    if (networkLifeCycleCallback<0) sendConnErrors();
+    if (networksLifeCycleCallback<0) sendConnErrors();
+
+#if LIBVIR_VERSION_NUMBER >= 2000000
+    poolsLifeCycleCallback = virConnectStoragePoolEventRegisterAny(
+                *ptr_ConnPtr,
+                nullptr,
+    // set poolsLifeCycleCallback signature
+                VIR_STORAGE_POOL_EVENT_ID_LIFECYCLE,
+                VIR_STORAGE_POOL_EVENT_CALLBACK(poolEventCallback),
+                this,
+    // don't register freeData, because it remove this thread
+                nullptr);
+    if (poolsLifeCycleCallback<0) sendConnErrors();
+#endif
+
+#if LIBVIR_VERSION_NUMBER >= 3000000
+    secretsLifeCycleCallback = virConnectSecretEventRegisterAny(
+                *ptr_ConnPtr,
+                nullptr,
+    // set secretsLifeCycleCallback signature
+                VIR_SECRET_EVENT_ID_LIFECYCLE,
+                VIR_SECRET_EVENT_CALLBACK(secEventCallback),
+                this,
+    // don't register freeData, because it remove this thread
+                nullptr);
+    if (secretsLifeCycleCallback<0) sendConnErrors();
+#endif
 }
 void ConnAliveThread::unregisterConnEvents()
 {
@@ -168,12 +200,28 @@ void ConnAliveThread::unregisterConnEvents()
         if (ret<0) sendConnErrors();
         domainsLifeCycleCallback = -1;
     };
-    if ( networkLifeCycleCallback ) {
+    if ( networksLifeCycleCallback ) {
         int ret = virConnectNetworkEventDeregisterAny(
-                    *ptr_ConnPtr, networkLifeCycleCallback);
+                    *ptr_ConnPtr, networksLifeCycleCallback);
         if (ret<0) sendConnErrors();
-        networkLifeCycleCallback = -1;
+        networksLifeCycleCallback = -1;
     };
+#if LIBVIR_VERSION_NUMBER >= 2000000
+    if ( poolsLifeCycleCallback ) {
+        int ret = virConnectStoragePoolEventDeregisterAny(
+                    *ptr_ConnPtr, poolsLifeCycleCallback);
+        if (ret<0) sendConnErrors();
+        poolsLifeCycleCallback = -1;
+    };
+#endif
+#if LIBVIR_VERSION_NUMBER >= 3000000
+    if ( secretsLifeCycleCallback ) {
+        int ret = virConnectSecretEventDeregisterAny(
+                    *ptr_ConnPtr, secretsLifeCycleCallback);
+        if (ret<0) sendConnErrors();
+        secretsLifeCycleCallback = -1;
+    };
+#endif
     //qDebug()<<"unregisterConnEvents1"<<*ptr_ConnPtr<<URI;
 }
 void ConnAliveThread::freeData(void *opaque)
@@ -247,13 +295,13 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
 }
 int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, int event, int detail, void *opaque)
 {
-    //qDebug()<<"domEventCallback"<<_conn;
+    //QTextStream s(stdout); s<<"domEventCallback "<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
     if ( nullptr==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
     bool end = false;
     QString msg, domainName;
     domainName = QString(virDomainGetName(dom));
-    msg = QString("<b>'%1'</b> Domain %2 %3\n")
+    msg = QString("<b>'%1'</b> Domain %2: %3\n")
            .arg(domainName)
            .arg(obj->domEventToString(event))
            .arg(obj->domEventDetailToString(event, detail, &end));
@@ -266,11 +314,11 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
 }
 int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, int event, int detail, void *opaque)
 {
-    //qDebug()<<"netEventCallback"<<_conn;
+    //QTextStream s(stdout); s<<"netEventCallback "<<_conn;
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
     if ( nullptr==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
     QString msg;
-    msg = QString("<b>'%1'</b> Network %2 %3\n")
+    msg = QString("<b>'%1'</b> Network %2: %3\n")
            .arg(virNetworkGetName(net))
            .arg(obj->netEventToString(event))
            .arg(obj->netEventDetailToString(event, detail));
@@ -280,6 +328,42 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
     };
     return 0;
 }
+#if LIBVIR_VERSION_NUMBER >= 2000000
+int  ConnAliveThread::poolEventCallback(virConnectPtr _conn, virStoragePoolPtr pool, int event, int detail, void *opaque)
+{
+    //QTextStream s(stdout); s<<"poolEventCallback "<<_conn;
+    ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
+    if ( nullptr==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
+    QString msg;
+    msg = QString("<b>'%1'</b> Pool %2: %3\n")
+           .arg(virStoragePoolGetName(pool))
+           .arg(obj->poolEventToString(event))
+           .arg(obj->poolEventDetailToString(event, detail));
+    emit obj->connMsg(msg);
+    if ( obj->onView ) {
+        emit obj->poolStateChanged();
+    };
+    return 0;
+}
+#endif
+#if LIBVIR_VERSION_NUMBER >= 3000000
+int  ConnAliveThread::secEventCallback(virConnectPtr _conn, virSecretPtr sec, int event, int detail, void *opaque)
+{
+    //QTextStream s(stdout); s<<"secEventCallback "<<_conn;
+    ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
+    if ( nullptr==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
+    QString msg;
+    msg = QString("<b>'%1'</b> Secert %2: %3\n")
+           .arg(virSecretGetUsageID(sec))
+           .arg(obj->secEventToString(event))
+           .arg(obj->secEventDetailToString(event, detail));
+    emit obj->connMsg(msg);
+    if ( obj->onView ) {
+        emit obj->secStateChanged();
+    };
+    return 0;
+}
+#endif
 const char* ConnAliveThread::domEventToString(int event)
 {
     const char *ret = "";
@@ -322,31 +406,57 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool 
     const char *ret = "";
     switch ((virDomainEventType) event) {
         case VIR_DOMAIN_EVENT_DEFINED:
-            if (detail == VIR_DOMAIN_EVENT_DEFINED_ADDED)
-                ret = "Added";
-            else if (detail == VIR_DOMAIN_EVENT_DEFINED_UPDATED)
-                ret = "Updated";
+            switch ((virDomainEventDefinedDetailType) detail) {
+            case VIR_DOMAIN_EVENT_DEFINED_ADDED:
+                ret = "Newly created config file";
+                break;
+            case VIR_DOMAIN_EVENT_DEFINED_UPDATED:
+                ret = "Changed config file";
+                break;
+#if LIBVIR_VERSION_NUMBER >= 1002020
+            case VIR_DOMAIN_EVENT_DEFINED_RENAMED:
+                ret = "Domain was renamed";
+                break;
+#endif
+#if LIBVIR_VERSION_NUMBER >= 1003003
+            case VIR_DOMAIN_EVENT_DEFINED_FROM_SNAPSHOT:
+                ret = "Config was restored from a snapshot";
+                break;
+#endif
+            default:
+                break;
+            };
             break;
         case VIR_DOMAIN_EVENT_UNDEFINED:
-            if (detail == VIR_DOMAIN_EVENT_UNDEFINED_REMOVED)
-                ret = "Removed";
+            switch ((virDomainEventUndefinedDetailType) detail) {
+            case VIR_DOMAIN_EVENT_UNDEFINED_REMOVED:
+                ret = "Deleted the config file";
+                break;
+#if LIBVIR_VERSION_NUMBER >= 1002020
+            case VIR_DOMAIN_EVENT_UNDEFINED_RENAMED:
+                ret = "Domain was renamed";
+                break;
+#endif
+            default:
+                break;
+            };
             break;
         case VIR_DOMAIN_EVENT_STARTED:
             switch ((virDomainEventStartedDetailType) detail) {
                 case VIR_DOMAIN_EVENT_STARTED_BOOTED:
-                    ret = "Booted";
+                    ret = "Normal startup from boot";
                     break;
                 case VIR_DOMAIN_EVENT_STARTED_MIGRATED:
-                    ret = "Migrated";
+                    ret = "Incoming migration from another host";
                     break;
                 case VIR_DOMAIN_EVENT_STARTED_RESTORED:
-                    ret = "Restored";
+                    ret = "Restored from a state file";
                     break;
                 case VIR_DOMAIN_EVENT_STARTED_FROM_SNAPSHOT:
-                    ret = "Snapshot";
+                    ret = "Restored from snapshot";
                     break;
                 case VIR_DOMAIN_EVENT_STARTED_WAKEUP:
-                    ret = "Event wakeup";
+                    ret = "Started due to wakeup event";
                     break;
                 default:
                     ret = "Unknown";
@@ -356,26 +466,34 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool 
         case VIR_DOMAIN_EVENT_SUSPENDED:
             switch ((virDomainEventSuspendedDetailType) detail) {
                 case VIR_DOMAIN_EVENT_SUSPENDED_PAUSED:
-                    ret = "Paused";
+                    ret = "Normal suspend due to admin pause";
                     break;
                 case VIR_DOMAIN_EVENT_SUSPENDED_MIGRATED:
-                    ret = "Migrated";
+                    ret = "Suspended for offline migration";
                     break;
                 case VIR_DOMAIN_EVENT_SUSPENDED_IOERROR:
-                    ret = "I/O Error";
+                    ret = "Suspended due to a disk I/O error";
                     break;
                 case VIR_DOMAIN_EVENT_SUSPENDED_WATCHDOG:
-                    ret = "Watchdog";
+                    ret = "Suspended due to a watchdog firing";
                     break;
                 case VIR_DOMAIN_EVENT_SUSPENDED_RESTORED:
-                    ret = "Restored";
+                    ret = "Restored from paused state file";
                     break;
                 case VIR_DOMAIN_EVENT_SUSPENDED_FROM_SNAPSHOT:
-                    ret = "Snapshot";
+                    ret = "Restored from paused snapshot";
                     break;
                 case VIR_DOMAIN_EVENT_SUSPENDED_API_ERROR:
-                    ret = "API error";
+                    ret = "suspended after failure during libvirt API call";
                     break;
+#if LIBVIR_VERSION_NUMBER >= 1003001
+                case VIR_DOMAIN_EVENT_SUSPENDED_POSTCOPY:
+                    ret = "suspended for post-copy migration";
+                    break;
+                case VIR_DOMAIN_EVENT_SUSPENDED_POSTCOPY_FAILED:
+                    ret = "suspended after failed post-copy";
+                    break;
+#endif
                 default:
                     ret = "Unknown";
                     break;
@@ -384,14 +502,20 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool 
         case VIR_DOMAIN_EVENT_RESUMED:
             switch ((virDomainEventResumedDetailType) detail) {
                 case VIR_DOMAIN_EVENT_RESUMED_UNPAUSED:
-                    ret = "Unpaused";
+                    ret = "Normal resume due to admin unpause";
                     break;
                 case VIR_DOMAIN_EVENT_RESUMED_MIGRATED:
-                    ret = "Migrated";
+                    ret = "Resumed for completion of migration";
                     break;
                 case VIR_DOMAIN_EVENT_RESUMED_FROM_SNAPSHOT:
-                    ret = "Snapshot";
+                    ret = "Resumed from snapshot";
                     break;
+#if LIBVIR_VERSION_NUMBER >= 1003001
+                case VIR_DOMAIN_EVENT_RESUMED_POSTCOPY:
+                    ret = "Resumed, but migration is still \
+running in post-copy mode";
+                    break;
+#endif
                 default:
                     ret = "Unknown";
                     break;
@@ -400,29 +524,29 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool 
         case VIR_DOMAIN_EVENT_STOPPED:
             switch ((virDomainEventStoppedDetailType) detail) {
                 case VIR_DOMAIN_EVENT_STOPPED_SHUTDOWN:
-                    ret = "Shutdown";
+                    ret = "Normal shutdown";
                     *end = true;
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_DESTROYED:
-                    ret = "Destroyed";
+                    ret = "Forced poweroff from host";
                     *end = true;
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_CRASHED:
-                    ret = "Crashed";
+                    ret = "Guest crashed";
                     *end = true;
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_MIGRATED:
-                    ret = "Migrated";
+                    ret = "Migrated off to another host";
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_SAVED:
-                    ret = "Saved";
+                    ret = "Saved to a state file";
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_FAILED:
-                    ret = "Failed";
+                    ret = "Host emulator/mgmt failed";
                     *end = true;
                     break;
                 case VIR_DOMAIN_EVENT_STOPPED_FROM_SNAPSHOT:
-                    ret = "Snapshot";
+                    ret = "offline snapshot loaded";
                     break;
                 default:
                     ret = "Unknown";
@@ -445,20 +569,26 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool 
         case VIR_DOMAIN_EVENT_PMSUSPENDED:
             switch ((virDomainEventPMSuspendedDetailType) detail) {
             case VIR_DOMAIN_EVENT_PMSUSPENDED_MEMORY:
-                ret = "Memory";
+                ret = "Guest was PM suspended to memory";
                 break;
             case VIR_DOMAIN_EVENT_PMSUSPENDED_DISK:
-                ret = "Disk";
+                ret = "Guest was PM suspended to disk";
+                break;
+            default:
+                ret = "Unknown";
                 break;
             };
             break;
         case VIR_DOMAIN_EVENT_CRASHED:
            switch ((virDomainEventCrashedDetailType) detail) {
            case VIR_DOMAIN_EVENT_CRASHED_PANICKED:
-               ret = "Panicked";
-               *end = true;
+               ret = "Guest was panicked";
+               break;
+           default:
+               ret = "Unknown";
                break;
            };
+           *end = true;
            break;
         default:
             ret = "Unknown";
@@ -511,6 +641,86 @@ const char* ConnAliveThread::netEventDetailToString(int event, int detail)
     };
     return ret;
 }
+#if LIBVIR_VERSION_NUMBER >= 2000000
+const char* ConnAliveThread::poolEventToString(int event)
+{
+    const char *ret = "";
+    switch ((virStoragePoolEventLifecycleType) event) {
+        case VIR_STORAGE_POOL_EVENT_DEFINED:
+            ret = "Defined";
+            break;
+        case VIR_STORAGE_POOL_EVENT_UNDEFINED:
+            ret = "Undefined";
+            break;
+        case VIR_STORAGE_POOL_EVENT_STARTED:
+            ret = "Started";
+            break;
+        case VIR_STORAGE_POOL_EVENT_STOPPED:
+            ret = "Stopped";
+            break;
+        default:
+            ret = "Unknown";
+            break;
+    };
+    return ret;
+}
+const char* ConnAliveThread::poolEventDetailToString(int event, int detail)
+{
+    const char *ret = "";
+    switch ((virStoragePoolEventLifecycleType) event) {
+        case VIR_STORAGE_POOL_EVENT_DEFINED:
+            ret = "N0_DETAILS";
+            break;
+        case VIR_STORAGE_POOL_EVENT_UNDEFINED:
+            ret = "N0_DETAILS";
+            break;
+        case VIR_STORAGE_POOL_EVENT_STARTED:
+            ret = "N0_DETAILS";
+            break;
+        case VIR_STORAGE_POOL_EVENT_STOPPED:
+            ret = "N0_DETAILS";
+            break;
+        default:
+            ret = "N0_DETAILS";
+            break;
+    };
+    return ret;
+}
+#endif
+#if LIBVIR_VERSION_NUMBER >= 3000000
+const char* ConnAliveThread::secEventToString(int event)
+{
+    const char *ret = "";
+    switch ((virSecretEventLifecycleType) event) {
+        case VIR_SECRET_EVENT_DEFINED:
+            ret = "Defined";
+            break;
+        case VIR_SECRET_EVENT_UNDEFINED:
+            ret = "Undefined";
+            break;
+        default:
+            ret = "Unknown";
+            break;
+    };
+    return ret;
+}
+const char* ConnAliveThread::secEventDetailToString(int event, int detail)
+{
+    const char *ret = "";
+    switch ((virSecretEventLifecycleType) event) {
+        case VIR_SECRET_EVENT_DEFINED:
+            ret = "N0_DETAILS";
+            break;
+        case VIR_SECRET_EVENT_UNDEFINED:
+            ret = "N0_DETAILS";
+            break;
+        default:
+            ret = "N0_DETAILS";
+            break;
+    };
+    return ret;
+}
+#endif
 void ConnAliveThread::closeConnection(int reason)
 {
     //qDebug()<<"closeConnection(reason)"<<*ptr_ConnPtr<<URI;

@@ -549,6 +549,8 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK*)));
     connect(taskWrHouse, SIGNAL(poolResult(Result*)),
             storagePoolDockContent, SLOT(resultReceiver(Result*)));
+    connect(connListWidget->list, SIGNAL(poolStateChanged()),
+            storagePoolDockContent, SLOT(reloadState()));
     connect(storagePoolDockContent,
             SIGNAL(overviewStPool(virConnectPtr*, const QString&, const QString&)),
             this,
@@ -577,6 +579,8 @@ void MainWindow::initDockWidgets()
             taskWrHouse, SLOT(addNewTask(TASK*)));
     connect(taskWrHouse, SIGNAL(secResult(Result*)),
             secretDockContent, SLOT(resultReceiver(Result*)));
+    connect(connListWidget->list, SIGNAL(secStateChanged()),
+            secretDockContent, SLOT(reloadState()));
     connect(secretDockContent, SIGNAL(entityListUpdated()),
             this, SLOT(entityControlUpdated()));
 

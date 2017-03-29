@@ -29,9 +29,9 @@ public slots:
     void                       setListHeader(const QString&);
     void                       resultReceiver(Result*);
     void                       stopOverView();
+    void                       reloadState();
 
 private slots:
-    void                       reloadState();
     void                       changeDockVisibility();
     void                       entityClicked(const QPoint&);
     void                       entityDoubleClicked(const QModelIndex&);

@@ -19,6 +19,10 @@ ConnElement::ConnElement(QObject *parent) :
             this, SIGNAL(domStateChanged()));
     connect(connAliveThread, SIGNAL(netStateChanged()),
             this, SIGNAL(netStateChanged()));
+    connect(connAliveThread, SIGNAL(poolStateChanged()),
+            this, SIGNAL(poolStateChanged()));
+    connect(connAliveThread, SIGNAL(secStateChanged()),
+            this, SIGNAL(secStateChanged()));
     connect(connAliveThread, SIGNAL(connClosed(bool)),
             this, SLOT(forwardConnClosedSignal(bool)));
     connect(connAliveThread, SIGNAL(errorMsg(const QString&, const uint)),

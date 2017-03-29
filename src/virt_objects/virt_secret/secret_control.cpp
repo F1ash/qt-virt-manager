@@ -157,8 +157,6 @@ void VirtSecretControl::resultReceiver(Result *data)
         };
     };
 }
-
-/* private slots */
 void VirtSecretControl::reloadState()
 {
     entityList->setEnabled(false);
@@ -171,6 +169,8 @@ void VirtSecretControl::reloadState()
     task.method     = Methods::reloadEntity;
     emit addNewTask(&task);
 }
+
+/* private slots */
 void VirtSecretControl::changeDockVisibility()
 {
     toolBar->setEnabled( !toolBar->isEnabled() );

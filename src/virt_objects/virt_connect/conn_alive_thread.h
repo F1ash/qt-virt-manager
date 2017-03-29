@@ -2,7 +2,6 @@
 #define CONN_ALIVE_THREAD_H
 
 #include "virt_objects/_virt_thread.h"
-#include <QTime>
 
 enum CONN_STATE {
     FAILED  = -1,
@@ -38,13 +37,21 @@ signals:
     void            authRequested(const QString&);
     void            domStateChanged();
     void            netStateChanged();
+    void            poolStateChanged();
+    void            secStateChanged();
     void            connClosed(bool);
     void            domainEnd(const QString&);
 
 private:
     bool            onView;
     int             domainsLifeCycleCallback;
-    int             networkLifeCycleCallback;
+    int             networksLifeCycleCallback;
+#if LIBVIR_VERSION_NUMBER >= 2000000
+    int             poolsLifeCycleCallback;
+#endif
+#if LIBVIR_VERSION_NUMBER >= 3000000
+    int             secretsLifeCycleCallback;
+#endif
     bool            authWaitKey;
     AuthData        authData;
     QString         URI;
@@ -62,10 +69,26 @@ private:
                                      int, int, void*);
     static  int     netEventCallback(virConnectPtr, virNetworkPtr,
                                      int, int, void*);
+#if LIBVIR_VERSION_NUMBER >= 2000000
+    static  int     poolEventCallback(virConnectPtr, virStoragePoolPtr,
+                                     int, int, void*);
+#endif
+#if LIBVIR_VERSION_NUMBER >= 3000000
+    static  int     secEventCallback(virConnectPtr, virSecretPtr,
+                                     int, int, void*);
+#endif
     const char*     domEventToString(int event);
     const char*     domEventDetailToString(int event, int detail, bool *end);
     const char*     netEventToString(int event);
     const char*     netEventDetailToString(int event, int detail);
+#if LIBVIR_VERSION_NUMBER >= 2000000
+    const char*     poolEventToString(int event);
+    const char*     poolEventDetailToString(int event, int detail);
+#endif
+#if LIBVIR_VERSION_NUMBER >= 3000000
+    const char*     secEventToString(int event);
+    const char*     secEventDetailToString(int event, int detail);
+#endif
     void            closeConnection(int);
     void            getAuthCredentials(const QString&);
 };

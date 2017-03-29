@@ -181,8 +181,6 @@ void VirtStoragePoolControl::stopOverView()
         storagePoolModel->DataList.at(i)->setOnView(false);
     };
 }
-
-/* private slots */
 void VirtStoragePoolControl::reloadState()
 {
     entityList->setEnabled(false);
@@ -195,6 +193,8 @@ void VirtStoragePoolControl::reloadState()
     task.method     = Methods::reloadEntity;
     emit addNewTask(&task);
 }
+
+/* private slots */
 void VirtStoragePoolControl::changeDockVisibility()
 {
     toolBar->setEnabled( !toolBar->isEnabled() );

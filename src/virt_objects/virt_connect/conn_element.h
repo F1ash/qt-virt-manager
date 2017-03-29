@@ -39,6 +39,8 @@ signals:
     void              authRequested(const QString&);
     void              domStateChanged();
     void              netStateChanged();
+    void              poolStateChanged();
+    void              secStateChanged();
     void              connClosed(bool, const QString&);
     void              domainEnd(const QString&);
     void              newOpenedConnection(const QString&);
