@@ -7,13 +7,15 @@
 #include "settings/conn_settings.h"
 
 // http://libvirt.org/drivers.html#hypervisor
-#define HV_DRIVERS QStringList()<<"TEST"<<"LXC"<<"XEN"<<"QEMU/KVM"<<"QEMU/KVM user session"\
+#define HV_DRIVERS QStringList()\
+<<"TEST"<<"LXC"<<"XEN"<<"QEMU/KVM"<<"QEMU/KVM user session"\
 <<"VBox"<<"VMware Player"<<"VMware Workstation"<<"VMware Fusion"\
-<<"VMware ESX"<<"VMware GSX"<<"VMware VPX"<<"OpenVZ"<<"HyperV"<<"IBM PowerVM"//<<"UML"
+<<"VMware ESX"<<"VMware GSX"<<"VMware VPX"<<"OpenVZ"<<"HyperV"\
+<<"IBM PowerVM"<<"Bhyve"//<<"UML"
 
 // http://libvirt.org/remote.html#Remote_transports
-#define TRANSPORTS QStringList()<<" -- "<<"TLS"<<"SSH"<<"UNIX"<<"TCP"<<"LibSSH2"
-//<<"EXT"
+#define TRANSPORTS QStringList()\
+<<" -- "<<"TLS"<<"SSH"<<"UNIX"<<"TCP"<<"LibSSH2"<<"EXT"
 
 ConnSettings::ConnSettings(QWidget *parent) :
     QDialog(parent)
@@ -331,6 +333,11 @@ void ConnSettings::changeDriver(QString s)
         Host->setPlaceholderText("[username@]{hmc|ivm}");
         Transports->setCurrentIndex(0);
         Transports->setEnabled(false);
+        Path->setText( "system" );
+        Path->setEnabled(false);
+        Extra->clear();
+        Extra->setEnabled(false);
+    } else if ( _name=="bhyve" ) {
         Path->setText( "system" );
         Path->setEnabled(false);
         Extra->clear();

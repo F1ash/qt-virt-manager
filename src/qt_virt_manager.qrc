@@ -699,6 +699,11 @@
         <file alias="32x32/actions/frame-refresh.png">icons/32x32/actions/frame-refresh.png</file>
         <file alias="24x24/actions/frame-refresh.png">icons/24x24/actions/frame-refresh.png</file>
         <file alias="22x22/actions/frame-refresh.png">icons/22x22/actions/frame-refresh.png</file>
+        <file alias="64x64/actions/bhyve.png">icons/64x64/emblems/bhyve.png</file>
+        <file alias="48x48/actions/bhyve.png">icons/48x48/emblems/bhyve.png</file>
+        <file alias="32x32/actions/bhyve.png">icons/32x32/emblems/bhyve.png</file>
+        <file alias="24x24/actions/bhyve.png">icons/24x24/emblems/bhyve.png</file>
+        <file alias="22x22/actions/bhyve.png">icons/22x22/emblems/bhyve.png</file>
     </qresource>
     <qresource prefix="/misc">
         <file alias="domain/lxc_example1.xml">misc/domain/lxc_example1.xml</file>
