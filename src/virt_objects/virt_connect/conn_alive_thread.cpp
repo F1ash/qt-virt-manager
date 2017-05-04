@@ -194,34 +194,37 @@ void ConnAliveThread::unregisterConnEvents()
         if (ret<0) sendConnErrors();
         else closeCallbackRegistered = false;
     };
-    if ( domainsLifeCycleCallback ) {
+    if ( domainsLifeCycleCallback>=0 ) {
         int ret = virConnectDomainEventDeregisterAny(
                     *ptr_ConnPtr, domainsLifeCycleCallback);
         if (ret<0) sendConnErrors();
         domainsLifeCycleCallback = -1;
     };
-    if ( networksLifeCycleCallback ) {
+    if ( networksLifeCycleCallback>=0 ) {
         int ret = virConnectNetworkEventDeregisterAny(
                     *ptr_ConnPtr, networksLifeCycleCallback);
         if (ret<0) sendConnErrors();
         networksLifeCycleCallback = -1;
     };
+
 #if LIBVIR_VERSION_NUMBER >= 2000000
-    if ( poolsLifeCycleCallback ) {
+    if ( poolsLifeCycleCallback>=0 ) {
         int ret = virConnectStoragePoolEventDeregisterAny(
                     *ptr_ConnPtr, poolsLifeCycleCallback);
         if (ret<0) sendConnErrors();
         poolsLifeCycleCallback = -1;
     };
 #endif
+
 #if LIBVIR_VERSION_NUMBER >= 3000000
-    if ( secretsLifeCycleCallback ) {
+    if ( secretsLifeCycleCallback>=0 ) {
         int ret = virConnectSecretEventDeregisterAny(
                     *ptr_ConnPtr, secretsLifeCycleCallback);
         if (ret<0) sendConnErrors();
         secretsLifeCycleCallback = -1;
     };
 #endif
+
     //qDebug()<<"unregisterConnEvents1"<<*ptr_ConnPtr<<URI;
 }
 void ConnAliveThread::freeData(void *opaque)
@@ -328,6 +331,7 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
     };
     return 0;
 }
+
 #if LIBVIR_VERSION_NUMBER >= 2000000
 int  ConnAliveThread::poolEventCallback(virConnectPtr _conn, virStoragePoolPtr pool, int event, int detail, void *opaque)
 {
@@ -346,6 +350,7 @@ int  ConnAliveThread::poolEventCallback(virConnectPtr _conn, virStoragePoolPtr p
     return 0;
 }
 #endif
+
 #if LIBVIR_VERSION_NUMBER >= 3000000
 int  ConnAliveThread::secEventCallback(virConnectPtr _conn, virSecretPtr sec, int event, int detail, void *opaque)
 {
@@ -364,6 +369,7 @@ int  ConnAliveThread::secEventCallback(virConnectPtr _conn, virSecretPtr sec, in
     return 0;
 }
 #endif
+
 const char* ConnAliveThread::domEventToString(int event)
 {
     const char *ret = "";
@@ -641,6 +647,7 @@ const char* ConnAliveThread::netEventDetailToString(int event, int detail)
     };
     return ret;
 }
+
 #if LIBVIR_VERSION_NUMBER >= 2000000
 const char* ConnAliveThread::poolEventToString(int event)
 {
@@ -687,6 +694,7 @@ const char* ConnAliveThread::poolEventDetailToString(int event, int detail)
     return ret;
 }
 #endif
+
 #if LIBVIR_VERSION_NUMBER >= 3000000
 const char* ConnAliveThread::secEventToString(int event)
 {
@@ -721,6 +729,7 @@ const char* ConnAliveThread::secEventDetailToString(int event, int detail)
     return ret;
 }
 #endif
+
 void ConnAliveThread::closeConnection(int reason)
 {
     //qDebug()<<"closeConnection(reason)"<<*ptr_ConnPtr<<URI;
