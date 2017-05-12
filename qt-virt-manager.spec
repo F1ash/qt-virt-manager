@@ -1,52 +1,47 @@
-%global cmake_build_dir build-cmake
-%global debug_package   %{nil}
-%bcond_without  qt4
-%bcond_without  qt5
+%global binname qt5-virt-manager
 
 Name:           qt-virt-manager
-Version:        0.42.67
+Version:        0.43.70
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
-Group:          Applications/System
+
 License:        GPLv2+
-Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 URL:            http://f1ash.github.io/%{name}
+Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
+
+# be compatible with prior subpackages
+Provides:       virt-manager-qt4 = %{version}-%{release}
+Provides:       virt-manager-qt5 = %{version}-%{release}
+Obsoletes:      virt-manager-qt4 <= 0.25.47
+Obsoletes:      virt-manager-qt5 <= 0.25.47
+
+Requires:       hicolor-icon-theme
 
 Requires:       libvirt
-Requires:       hicolor-icon-theme
-%if %with qt4
-Requires:       qtermwidget >= 0.6.0-2
-Requires:       qt4-remote-viewer
-%endif
-%if %with qt5
-Requires:       qtermwidget-qt5 >= 0.6.0-2
-Requires:       qt5-remote-viewer
-# for SPICE audio channels
-Requires:       qt5-qtmultimedia
-%endif
+Requires:       qtermwidget >= 0.7.1
+Requires:       qt-remote-viewer
+
 # for use qemu-kvm (more useful)
 Requires:       qemu-kvm
 
 # for use SPICE viewer
 Requires:       spice-vdagent
 
-# for scrubbing (optional)
+# optional runtime extensions
+%if 0%{?fedora}
+# for scrubbing
 Suggests:       scrub
-# netcat for ssh-transported remote connections (optional)
+# netcat for ssh-transported remote connections
 Suggests:       nc
-# for use VNC client with tls (optional)
+# for use VNC client with tls
 Suggests:       gnutls
+%endif
 
-%if %with qt4
-BuildRequires:  qt4-devel
-BuildRequires:  qtermwidget-devel >= 0.6.0-2
-%endif
-%if %with qt5
 BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  qtermwidget-qt5-devel >= 0.6.0-2
 BuildRequires:  qt5-qtmultimedia-devel
-%endif
+BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  qtermwidget-devel >= 0.7.1
+
 BuildRequires:  libvirt-devel
 BuildRequires:  glibc-headers
 BuildRequires:  desktop-file-utils
@@ -60,95 +55,44 @@ BuildRequires:  libcacard-devel
 %endif
 
 %description
-Qt Virtual Machine Manager provides a graphical tool for administering
-a QEMU/KVM, Xen, LXC, OpenVZ, VBox, VMWare, HyperV, IBM PowerVM
-virtual machines and other Virtual Entities.
-Start, stop, add or remove virtual devices, connect to a graphical or serial console,
-and see resource usage statistics for existing VMs on local or remote machines.
-Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
+Qt Virtual Machine Manager provides a graphical tool for
+administering virtual machines for QEMU/KVM, Xen, LXC, OpenVZ,
+VBox, VMWare, HyperV, IBM PowerVM, Bhyve virtual machines
+and other Virtual Entities.
+Start, stop, add or remove virtual devices, connect to a
+graphical or serial console, and see resource usage
+statistics for existing VMs on local or remote machines.
+Uses libvirt as the back-end management API.
+Uses Spice/VNC viewers for control.
 
-%package -n qt4-virt-manager
-Summary:        Qt4 Virtual Machine Manager
+%package -n     qt-remote-viewer
+Summary:        Qt Remote Viewer
 
-%description -n qt4-virt-manager
-Qt4 Virtual Machine Manager provides a graphical tool for administering
-a QEMU/KVM, Xen, LXC, OpenVZ, VBox, VMWare, HyperV, IBM PowerVM
-virtual machines and other Virtual Entities.
-Start, stop, add or remove virtual devices, connect to a graphical or serial console,
-and see resource usage statistics for existing VMs on local or remote machines.
-Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
+%description -n qt-remote-viewer
+Qt viewer for remote access to Spice/VNC desktops.
 
-%package -n qt5-virt-manager
-Summary:        Qt5 Virtual Machine Manager
-
-%description -n qt5-virt-manager
-Qt5 Virtual Machine Manager provides a graphical tool for administering
-a QEMU/KVM, Xen, LXC, OpenVZ, VBox, VMWare, HyperV, IBM PowerVM
-virtual machines and other Virtual Entities.
-Start, stop, add or remove virtual devices, connect to a graphical or serial console,
-and see resource usage statistics for existing VMs on local or remote machines.
-Uses libvirt as the back-end management API. Uses Spice/VNC viewers for control.
-
-%package -n qt4-remote-viewer
-Summary:        Qt4 Remote Viewer
-
-%description -n qt4-remote-viewer
-Qt4 viewer for remote access to Spice/VNC desktops.
-
-%package -n qt5-remote-viewer
-Summary:        Qt5 Remote Viewer
-
-%description -n qt5-remote-viewer
-Qt5 viewer for remote access to Spice/VNC desktops.
 
 %prep
 %setup -q
 
 %build
-%if %with qt4
-mkdir %{cmake_build_dir}-qt4
-pushd %{cmake_build_dir}-qt4
+mkdir -p %{_target_platform}
+pushd %{_target_platform}
+%cmake -DBUILD_QT_VERSION=5 \
 %if %{?fedora}>=24
-      %cmake -DWITH_LIBCACARD=1 ..
-%else
-      %cmake ..
+ -DWITH_LIBCACARD=1 \
 %endif
-      %{make_build}
+ ..
 popd
-%endif
-%if %with qt5
-mkdir %{cmake_build_dir}-qt5
-pushd %{cmake_build_dir}-qt5
-%if %{?fedora}>=24
-      %cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=1 ..
-%else
-      %cmake -DBUILD_QT_VERSION=5 ..
-%endif
-      %{make_build}
-popd
-%endif
+%make_build -C %{_target_platform}
 
 %install
-%if %with qt4
-pushd %{cmake_build_dir}-qt4
-      %{make_install}
-popd
-%endif
-%if %with qt5
-pushd %{cmake_build_dir}-qt5
-      %{make_install}
-popd
-%endif
+%make_install -C %{_target_platform}
 
 %check
-%if %with qt4
-desktop-file-validate %{buildroot}/%{_datadir}/applications/qt4-virt-manager.desktop
-desktop-file-validate %{buildroot}/%{_datadir}/applications/qt4-remote-viewer.desktop
-%endif
-%if %with qt5
-desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-virt-manager.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{binname}.desktop
 desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-remote-viewer.desktop
-%endif
+
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
@@ -162,39 +106,28 @@ fi
 %posttrans
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
-%if %with qt4
-%files -n qt4-virt-manager
-%license LICENSE
-%doc README.md Licenses Changelog
-%{_bindir}/qt4-virt-manager
-%{_datadir}/applications/qt4-virt-manager.desktop
-%{_datadir}/qt4-virt-manager
+
+%files
+%license LICENSE Licenses
+%doc README.md Changelog
+%{_bindir}/%{binname}
+%{_datadir}/applications/%{binname}.desktop
+%{_datadir}/%{binname}/
 %{_datadir}/icons/hicolor/256x256/apps/virtual-engineering.png
 
-%files -n qt4-remote-viewer
-%license LICENSE
-%{_bindir}/qt4-remote-viewer
-%{_datadir}/applications/qt4-remote-viewer.desktop
-%{_datadir}/icons/hicolor/256x256/apps/remote-desktop-viewer.png
-%endif
-
-%if %with qt5
-%files -n qt5-virt-manager
-%license LICENSE
-%doc README.md Licenses Changelog
-%{_bindir}/qt5-virt-manager
-%{_datadir}/applications/qt5-virt-manager.desktop
-%{_datadir}/qt5-virt-manager
-%{_datadir}/icons/hicolor/256x256/apps/virtual-engineering.png
-
-%files -n qt5-remote-viewer
+%files -n       qt-remote-viewer
 %license LICENSE
 %{_bindir}/qt5-remote-viewer
 %{_datadir}/applications/qt5-remote-viewer.desktop
 %{_datadir}/icons/hicolor/256x256/apps/remote-desktop-viewer.png
-%endif
+
 
 %changelog
+* Fri May 12 2017 Fl@sh <kaperang07@gmail.com> - 0.43.70-1
+- enhanced %%description;
+- remove Qt4 build part;
+- version updated;
+
 * Fri Mar 17 2017 Fl@sh <kaperang07@gmail.com> - 0.42.67-1
 - enhanced %%description;
 - version updated;

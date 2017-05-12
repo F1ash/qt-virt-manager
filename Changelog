@@ -172,3 +172,11 @@ added LUKs encryption type in Create Volume;
 added TLS type of VirtSecret;
 fixed 'MiB' usage in Memory and CreateVolume;
 some enhancements and fixes for stability;
+
+0.43.70 :
+added Bhyve URI connection;
+simplified reload list of domains and networks
+    at event of change virtEntity state;
+implemented lifecycle events
+    for VirtStoragePools\Secrets;
+some fixes for unregister event callbacks;
