@@ -112,7 +112,7 @@ void ChainRules::setDataDescription(const QString &_xmlDesc)
 QDomDocument ChainRules::getDataDocument() const
 {
     QDomDocument doc;
-    for (uint i=0; i<ruleList->count(); i++) {
+    for (int i=0; i<ruleList->count(); i++) {
         QListWidgetItem *item = ruleList->item(i);
         if ( item!=nullptr ) {
             QString r = item->text();
@@ -141,7 +141,7 @@ QString ChainRules::getPriority() const
 void ChainRules::setChainIdx(const QString &c)
 {
     int idx = chainProtocol->count()-1;
-    for (uint i=0; i<chainProtocol->count(); i++) {
+    for (int i=0; i<chainProtocol->count(); i++) {
         QString s = chainProtocol->itemData(i).toString();
         if ( c.startsWith(s) ) {
             idx = i;

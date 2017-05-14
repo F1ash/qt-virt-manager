@@ -82,7 +82,7 @@ RuleInstance::RuleInstance(QWidget *parent) :
             this, SLOT(cancelEditRule()));
     connect(attributes, SIGNAL(currentChanged(int)),
             this, SLOT(attributesTypeChanged(int)));
-    for (uint i=0; i<attributes->count(); i++) {
+    for (int i=0; i<attributes->count(); i++) {
         connect(attributes->widget(i), SIGNAL(released(bool)),
                 clearRule, SLOT(setEnabled(bool)));
     };
