@@ -351,7 +351,7 @@ QString ConnSettings::getIconName(QString &_text) const
 {
     QString ret(_text.split("/").first().split(" ").first().toLower());
     if        ( ret=="test" ) {
-        ret = "user-trash";
+        ret = "wipe";
     } else if ( ret=="ibm" ) {
         ret = "phyp";
     };
