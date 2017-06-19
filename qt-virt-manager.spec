@@ -1,7 +1,7 @@
 %global binname qt5-virt-manager
 
 Name:           qt-virt-manager
-Version:        0.43.70
+Version:        0.43.72
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 
@@ -123,6 +123,9 @@ fi
 
 
 %changelog
+* Mon Jun 19 2017 Fl@sh <kaperang07@gmail.com> - 0.43.72-1
+- version updated;
+
 * Fri May 12 2017 Fl@sh <kaperang07@gmail.com> - 0.43.70-1
 - enhanced %%description;
 - remove Qt4 build part;

@@ -180,3 +180,8 @@ simplified reload list of domains and networks
 implemented lifecycle events
     for VirtStoragePools\Secrets;
 some fixes for unregister event callbacks;
+
+0.43.72 :
+fixed send errors to Log from Control widgets
+    and at Edit Domain config;
+some fixes;

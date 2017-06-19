@@ -79,7 +79,7 @@ ENDIF (NOT LIB_SUFFIX)
 set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
 set (VERSION_MAJOR   0)
 set (VERSION_MIDDLE  43)
-set (VERSION_MINOR   70)
+set (VERSION_MINOR   72)
 set (HEADERS_FOR_VIEWER
     src/vm_viewer/viewer_toolbar.h
     src/vm_viewer/vm_state_widget.h
