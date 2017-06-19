@@ -126,7 +126,7 @@ void VirtInterfaceControl::resultReceiver(Result *data)
         if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
     } else if ( data->action != Actions::_NONE_ACTION ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);

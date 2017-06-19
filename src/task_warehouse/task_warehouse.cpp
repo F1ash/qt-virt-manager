@@ -1,4 +1,5 @@
 #include "task_warehouse.h"
+//#include <QTextStream>
 
 #define LIST_STYLE QString("\
 QListWidget::item {\
@@ -58,13 +59,19 @@ void TaskWareHouse::stopTaskComputing()
 }
 void TaskWareHouse::addNewTask(TASK *task)
 {
-    //qDebug()<<task->srcConnPtr<<task->srcConName<<task->action
-    //      <<task->method<<task->object<<task->args.list()
-    //      <<task->args.dstConnPtr<<task->type<<"addNewTask_TASK";
-    //
+    //QTextStream s(stdout);
+    //s<<task->srcConnPtr<<task->srcConName;
+    //s<<" A:"<<enumToActionString(task->action);
+    //s<<" M:"<<enumToMethodString(task->method);
+    //s<<" "<<task->object<<task->args.list();
+    //s<<" "<<task->args.dstConnPtr;
+    //s<<" E:"<<enumToEntityString(task->type);
+    //s<<" addNewTask_TASK" <<endl;
+
     ++counter;
     QString _number = QString("").sprintf("%08d", counter);
-    if ( task->method!=Methods::reloadEntity && task->method!=Methods::editEntity ) {
+    if ( task->method!=Methods::reloadEntity &&
+         task->action!=Actions::EDIT_ENTITY ) {
         QString _name = QString("%5 %1 %2 <%3> in <%4>")
                 .arg(_number)
                 .arg( enumToMethodString(task->method) )

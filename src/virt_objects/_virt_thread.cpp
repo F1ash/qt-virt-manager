@@ -15,7 +15,7 @@ QString _VirtThread::sendConnErrors()
                 virConnGetLastError(*ptr_ConnPtr):nullptr;
     if ( virtErrors!=nullptr && virtErrors->code>0 ) {
         msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
-                .arg(QString().fromUtf8(virtErrors->message));
+                .arg(QString::fromUtf8(virtErrors->message));
         //emit errorMsg( msg, number );
         customErrorNotification( msg, virtErrors->code );
         virResetError(virtErrors);
@@ -29,7 +29,7 @@ QString _VirtThread::sendGlobalErrors()
     virtErrors = virGetLastError();
     if ( virtErrors!=nullptr && virtErrors->code>0 ) {
         msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
-                .arg(QString().fromUtf8(virtErrors->message));
+                .arg(QString::fromUtf8(virtErrors->message));
         //emit errorMsg( msg, number );
         customErrorNotification( msg, virtErrors->code );
     };

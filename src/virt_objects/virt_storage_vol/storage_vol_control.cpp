@@ -137,7 +137,7 @@ void VirtStorageVolControl::resultReceiver(Result *data)
             i++;
         };
     } else if ( data->action == Actions::CREATE_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
@@ -145,7 +145,7 @@ void VirtStorageVolControl::resultReceiver(Result *data)
             reloadState();
         };
     } else if ( data->action == Actions::DELETE_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
@@ -153,21 +153,21 @@ void VirtStorageVolControl::resultReceiver(Result *data)
             reloadState();
         };
     } else if ( data->action == Actions::DOWNLOAD_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
             msgRepeater(msg);
         };
     } else if ( data->action == Actions::UPLOAD_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
             msgRepeater(msg);
         };
     } else if ( data->action == Actions::RESIZE_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
@@ -175,7 +175,7 @@ void VirtStorageVolControl::resultReceiver(Result *data)
             reloadState();
         };
     } else if ( data->action == Actions::WIPE_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);

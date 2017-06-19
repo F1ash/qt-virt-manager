@@ -126,7 +126,7 @@ void VirtNWFilterControl::resultReceiver(Result *data)
         if ( data->result )
             QDesktopServices::openUrl(QUrl(xml));
     } else if ( data->action == Actions::EDIT_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
@@ -145,7 +145,7 @@ void VirtNWFilterControl::resultReceiver(Result *data)
             emit nwfilterToEditor(&task);
         };
     } else if ( data->action != Actions::_NONE_ACTION ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);

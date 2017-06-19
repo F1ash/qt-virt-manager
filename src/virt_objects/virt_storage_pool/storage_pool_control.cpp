@@ -117,7 +117,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
         entityList->setEnabled(true);
         emit entityListUpdated();
     } else if ( data->action == Actions::CREATE_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
@@ -125,7 +125,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             reloadState();
         };
     } else if ( data->action == Actions::DEFINE_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
@@ -133,7 +133,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             reloadState();
         };
     } else if ( data->action == Actions::START_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
@@ -141,7 +141,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             reloadState();
         };
     } else if ( data->action == Actions::DESTROY_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
@@ -149,7 +149,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             reloadState();
         };
     } else if ( data->action == Actions::UNDEFINE_ENTITY ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);
@@ -157,7 +157,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
             reloadState();
         };
     } else if ( data->action == Actions::CHANGE_ENTITY_AUTOSTART ) {
-        if ( !data->msg.isEmpty() ) {
+        if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")
                     .arg(data->msg.join(" "))
                     .arg(data->err);

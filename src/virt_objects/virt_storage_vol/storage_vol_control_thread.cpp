@@ -228,7 +228,7 @@ Result StorageVolControlThread::createStorageVol()
         result.result = false;
         return result;
     };
-    QString name = QString().fromUtf8( virStorageVolGetName(storageVol) );
+    QString name = QString::fromUtf8( virStorageVolGetName(storageVol) );
     result.msg.append(
                 QString("'<b>%1</b>' StorageVol from\n\"%2\"\nis created.")
                 .arg(name).arg(path));

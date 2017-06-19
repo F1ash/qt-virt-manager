@@ -329,7 +329,7 @@ Result DomControlThread::createDomain()
         result.err = sendConnErrors();
         return result;
     };
-    result.name = QString().fromUtf8( virDomainGetName(domain) );
+    result.name = QString::fromUtf8( virDomainGetName(domain) );
     result.result = true;
     result.msg.append(
                 QString("'<b>%1</b>' Domain from\n\"%2\"\nis created.")
@@ -363,7 +363,7 @@ Result DomControlThread::defineDomain()
         result.err = sendConnErrors();
         return result;
     };
-    result.name = QString().fromUtf8( virDomainGetName(domain) );
+    result.name = QString::fromUtf8( virDomainGetName(domain) );
     result.result = true;
     result.msg.append(
                 QString("'<b>%1</b>' Domain from\n\"%2\"\nis defined.")

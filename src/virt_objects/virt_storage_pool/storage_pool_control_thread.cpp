@@ -220,7 +220,7 @@ Result StoragePoolControlThread::createStoragePool()
         result.result = false;
         return result;
     };
-    result.name = QString().fromUtf8( virStoragePoolGetName(storagePool) );
+    result.name = QString::fromUtf8( virStoragePoolGetName(storagePool) );
     result.msg.append(QString("'<b>%1</b>' StoragePool from\n\"%2\"\nis Created.")
                   .arg(result.name).arg(path));
     virStoragePoolFree(storagePool);
@@ -257,7 +257,7 @@ Result StoragePoolControlThread::defineStoragePool()
         result.result = false;
         return result;
     };
-    result.name = QString().fromUtf8( virStoragePoolGetName(storagePool) );
+    result.name = QString::fromUtf8( virStoragePoolGetName(storagePool) );
     result.msg.append(
                 QString("'<b>%1</b>' StoragePool from\n\"%2\"\nis Defined.")
                 .arg(result.name).arg(path));

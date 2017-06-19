@@ -145,7 +145,7 @@ Result NetControlThread::createNetwork()
         result.err = sendConnErrors();
         return result;
     };
-    result.name = QString().fromUtf8( virNetworkGetName(network) );
+    result.name = QString::fromUtf8( virNetworkGetName(network) );
     result.result = true;
     result.msg.append(QString("'<b>%1</b>' Network from\n\"%2\"\nis created.")
                       .arg(result.name).arg(path));
@@ -178,7 +178,7 @@ Result NetControlThread::defineNetwork()
         result.err = sendConnErrors();
         return result;
     };
-    result.name = QString().fromUtf8( virNetworkGetName(network) );
+    result.name = QString::fromUtf8( virNetworkGetName(network) );
     result.result = true;
     result.msg.append(QString("'<b>%1</b>' Network from\n\"%2\"\nis defined.")
                       .arg(result.name).arg(path));
