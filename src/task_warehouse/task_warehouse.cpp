@@ -151,7 +151,7 @@ void TaskWareHouse::msgRepeater(const QString &msg, const uint _number)
     QString time = QTime::currentTime().toString();
     QString number = QString("").sprintf("%08d", _number);
     QString title = QString("in TASK %1 %2")
-            .arg(number).arg(QChar(0x273B));
+            .arg(QChar(0x273B)).arg(number);
     QString currMsg = QString(
     "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
             .arg(time).arg(title).arg(msg);
