@@ -98,11 +98,12 @@ Result SecretControlThread::getAllSecretList()
             case VIR_SECRET_USAGE_TYPE_ISCSI:
                 type.append("ISCSI");
                 break;
-#if LIBVIR_VERSION_NUMBER > 2002000
+#ifndef VIR_SECRET_USAGE_TYPE_TLS
+#define VIR_SECRET_USAGE_TYPE_TLS 4
+#endif
             case VIR_SECRET_USAGE_TYPE_TLS:
                 type.append("TLS");
                 break;
-#endif
             default:
                 type.append("NONE");
                 break;
