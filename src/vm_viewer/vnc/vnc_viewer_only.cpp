@@ -23,7 +23,7 @@ void VNC_Viewer_Only::reconnectToVirtDomain()
         // resizing to any,
         // because will need to init new display configuration
         //resize(getWidgetSizeAroundDisplay());
-        initVNCWidget();
+        initGraphicWidget();
         QSize around_size = getWidgetSizeAroundDisplay();
         //resize(around_size);
         if ( nullptr!=vncWdg ) {
@@ -185,7 +185,7 @@ void VNC_Viewer_Only::fullScreenVirtDomain()
 }
 
 /* private slots */
-void VNC_Viewer_Only::initVNCWidget()
+void VNC_Viewer_Only::initGraphicWidget()
 {
     vncWdg = new MachineView(this);
     setCentralWidget(vncWdg);
@@ -230,7 +230,7 @@ void VNC_Viewer_Only::timerEvent(QTimerEvent *ev)
     } else if ( ev->timerId()==startId ) {
         killTimer(startId);
         startId = 0;
-        initVNCWidget();
+        initGraphicWidget();
     }
 }
 

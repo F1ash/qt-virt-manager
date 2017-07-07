@@ -167,6 +167,12 @@ void VirtDomainControl::resultReceiver(Result *data)
             task.object     = data->name;
             task.args.object= data->data.first().value("DomainType").toString();
             task.args.state = data->data.first().value("DisplayType").toString();
+            task.args.path  = QString("%1;%2;%3;%4;%5")
+                    .arg(data->data.first().value("User").toString())
+                    .arg(data->data.first().value("Host").toString())
+                    .arg(data->data.first().value("Transport").toString())
+                    .arg(data->data.first().value("Address").toString())
+                    .arg(data->data.first().value("Port").toString());
             emit displayRequest(&task);
         } else
             msgRepeater(data->err);

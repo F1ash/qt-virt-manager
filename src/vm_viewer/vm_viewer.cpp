@@ -1,14 +1,15 @@
 #include "vm_viewer.h"
 
-VM_Viewer::VM_Viewer(
-        QWidget         *parent,
+VM_Viewer::VM_Viewer(QWidget         *parent,
         virConnectPtr   *connPtrPtr,
         QString          arg1,
-        QString          arg2) :
+        QString          arg2,
+        QString          arg3) :
     QMainWindow(parent),
     ptr_ConnPtr(connPtrPtr),
     connName(arg1),
-    domain(arg2)
+    domain(arg2),
+    addrData(arg3)
 {
     qRegisterMetaType<QString>("QString&");
     setWindowTitle(QString("<%1> Virtual Machine in [ %2 ] connection")
@@ -35,6 +36,8 @@ VM_Viewer::VM_Viewer(
             this, SLOT(hideToolBar()));
     connect(viewerToolBar, SIGNAL(positionChanged(const QPoint&)),
             this, SLOT(setNewPosition(const QPoint&)));
+    connect(this, SIGNAL(initGraphic()),
+            this, SLOT(initGraphicWidget()));
 }
 VM_Viewer::~VM_Viewer()
 {
@@ -52,6 +55,10 @@ VM_Viewer::~VM_Viewer()
 
 /* public slots */
 void VM_Viewer::init()
+{
+
+}
+void VM_Viewer::initGraphicWidget()
 {
 
 }
@@ -252,11 +259,11 @@ void VM_Viewer::showErrorInfo(const QString &_msg)
     QIcon _icon = QIcon::fromTheme("face-sad");
     icon = new QLabel(this);
     icon->setPixmap(_icon.pixmap(256));
-    msg = new QLabel(this);
-    msg->setText(_msg);
+    err_msg = new QLabel(this);
+    err_msg->setText(_msg);
     infoLayout = new QVBoxLayout();
     infoLayout->addWidget(icon, 0, Qt::AlignHCenter);
-    infoLayout->addWidget(msg);
+    infoLayout->addWidget(err_msg);
     infoLayout->addStretch(-1);
     info = new QWidget(this);
     info->setLayout(infoLayout);

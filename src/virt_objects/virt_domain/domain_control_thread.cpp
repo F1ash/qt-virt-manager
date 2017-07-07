@@ -208,16 +208,40 @@ Result DomControlThread::getAllDomainList()
 Result DomControlThread::getDomainData0()
 {
     Result result;
-    QString activeDomainXmlDesc, displayType;
+    QString activeDomainXmlDesc, displayType, addr,
+            port, transport, host, user;
     QVariantMap domainDesc;
     QString name = task.object;
+    result.name  = name;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
         result.err = "Connection pointer is NULL.";
         return result;
     };
+    QString uri = QString::fromUtf8( virConnectGetURI(*task.srcConnPtr) );
+    if ( !uri.isEmpty() ) {
+        QString part1 = uri.split("://").first();
+        QStringList part2 = part1.split("+");
+        if ( part2.count()>1 ) {
+            transport.append(part2.last());
+        };
+        QString part3 = uri.split("://").last();
+        if ( !part3.isEmpty() ) {
+            QString part4 = part3.split("/").first();
+            if ( part4.contains("@") ) {
+                QStringList part5 = part4.split("@");
+                user = part5.first();
+                host = part5.last();
+            } else if ( part4.isEmpty() ) {
+                host = "localhost.localdomain";
+            } else {
+                host = part4;
+            };
+        } else {
+            host = "localhost.localdomain";
+        };
+    };
     const char *_type = virConnectGetType(*task.srcConnPtr);
-    result.name   = name;
     if ( _type==nullptr ) {
         result.result = false;
         result.err = "Error in getting the connection type.";
@@ -233,10 +257,21 @@ Result DomControlThread::getDomainData0()
     QDomElement graph = doc.firstChildElement("domain")
        .firstChildElement("devices")
        .firstChildElement("graphics");
-    if ( !graph.isNull() )
+    if ( !graph.isNull() ) {
         displayType.append( graph.attribute("type").toLower() );
+        port.append( graph.attribute("port") );
+        QDomElement listen = graph.firstChildElement("listen");
+        if ( !listen.isNull() ) {
+            addr.append( listen.attribute("address") );
+        };
+    };
     domainDesc.insert("DomainType", _type);
     domainDesc.insert("DisplayType", displayType);
+    domainDesc.insert("Transport", transport);
+    domainDesc.insert("Address", addr);
+    domainDesc.insert("Port", port);
+    domainDesc.insert("User", user);
+    domainDesc.insert("Host", host);
     result.data.append(domainDesc);
     return result;
 }

@@ -976,6 +976,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
     QString domName = _task->object;
     QString type = _task->args.object;
     QString viewerType = _task->args.state;
+    QString addrData = _task->args.path;
     // WARNING: key must starts with connection name
     // see for: MainWindow::closeConnGenerations(QString &_connName)
     QString key = QString("%1_%2").arg(connName).arg(domName);
@@ -996,7 +997,8 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                             nullptr,
                             connPtrPtr,
                             connName,
-                            domName));
+                            domName,
+                            addrData));
         } else if ( viewerType=="spice" ) {
             VM_Displayed_Map.insert(
                         key,
@@ -1004,7 +1006,8 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                             nullptr,
                             connPtrPtr,
                             connName,
-                            domName));
+                            domName,
+                            addrData));
         } else {
             QMessageBox::information(
                         this,

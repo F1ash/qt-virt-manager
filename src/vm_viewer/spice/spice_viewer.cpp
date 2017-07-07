@@ -4,116 +4,63 @@ extern "C" {
 #include <spice/vd_agent.h>
 }
 
-spcHlpThread::spcHlpThread(
-        QObject *parent, virConnectPtr *connPtrPtr, QString _domain) :
-    _VirtThread(parent, connPtrPtr), domain(_domain)
-{
-
-}
-void spcHlpThread::run()
-{
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
-        emit ptrIsNull();
-        return;
-    };
-    if ( virConnectRef(*ptr_ConnPtr)<0 ) {
-        sendConnErrors();
-        return;
-    };
-    domainPtr =virDomainLookupByName(
-                    *ptr_ConnPtr, domain.toUtf8().data());
-    domainIsActive = (virDomainIsActive(domainPtr)>0);
-    uri.append(virConnectGetURI(*ptr_ConnPtr));
-    // flag=0 for get running domain xml-description
-    activeDomainXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
-    if ( virConnectClose(*ptr_ConnPtr)<0 )
-        sendConnErrors();
-}
-
 Spice_Viewer::Spice_Viewer(
-        QWidget *parent, virConnectPtr *connPtrPtr,
-        QString arg1, QString arg2) :
-    VM_Viewer(parent, connPtrPtr, arg1, arg2)
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          arg1,
+        QString          arg2,
+        QString          arg3) :
+    VM_Viewer(parent, connPtrPtr, arg1, arg2, arg3)
 {
     TYPE = "SPICE";
-
-    hlpThread = new spcHlpThread(this, ptr_ConnPtr, domain);
-    connect(hlpThread, SIGNAL(finished()),
-            this, SLOT(init()));
-    connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
-            this, SIGNAL(errorMsg(const QString&)));
-    hlpThread->start();
+    QStringList _addrData = addrData.split(";");
+    if ( _addrData.count()>4 ) {
+        user        = _addrData.at(0);
+        host        = _addrData.at(1);
+        transport   = _addrData.at(2);
+        addr        = _addrData.at(3);
+        port        = _addrData.at(4).toInt();
+    };
+    init();
 }
 
 /* public slots */
 void Spice_Viewer::init()
 {
-    // get address or hostname from URI
-    // driver[+transport]://[username@][hostname][:port]/[path][?extraparameters]
     QString msg;
-    if ( hlpThread->domainPtr!=nullptr && hlpThread->domainIsActive ) {
-        addr = hlpThread->uri.split("://").last();
-        hlpThread->uri = addr;
-        addr = hlpThread->uri.split("/").first();
-        hlpThread->uri = addr;
-        addr = hlpThread->uri.split(":").first();
-        hlpThread->uri = addr;
-        if ( hlpThread->uri.contains("@") ) {
-            addr = hlpThread->uri.split("@").last();
-            hlpThread->uri = addr;
-        };
-        addr.clear();
-        QDomDocument doc;
-        doc.setContent(hlpThread->activeDomainXmlDesc);
-        QDomElement graph = doc.firstChildElement("domain")
-           .firstChildElement("devices")
-           .firstChildElement("graphics");
-        //qDebug()<<doc.toByteArray(4);
-        if (graph.hasAttribute("listen")) {
-            // for listen address
-            addr = graph.attribute("listen");
-        } else if ( !graph.firstChildElement("listen").isNull() ) {
-            // for listen address from virt.network
-            addr = graph.firstChildElement("listen")
-                    .attribute("address");
-        } else {
-            if ( hlpThread->uri.isEmpty() ) {
-                addr = "127.0.0.1";
-                hlpThread->uri  = "127.0.0.1";
-            };
-        };
-        if ( addr!=hlpThread->uri && !hlpThread->uri.isEmpty() )
-            addr = hlpThread->uri;
-        port = (graph.hasAttribute("port"))?
-                    graph.attribute("port").toInt() : 5900;
-        //qDebug()<<"address:"<<addr<<port;
-        if ( !graph.isNull() && graph.attribute("type")=="spice" ) {
-            initSpiceWidget();
-            actFullScreen = new QShortcut(
-                        QKeySequence(tr("Shift+F11", "View|Full Screen")),
-                        this);
-            connect(actFullScreen, SIGNAL(activated()),
-                    SLOT(fullScreenTriggered()));
-        } else {
-            msg = QString(
-            "In '<b>%1</b>':<br> Unsupported type '%2'.<br> Use external Viewer.")
-                    .arg(domain)
-                    .arg((!graph.isNull())?
-                             graph.attribute("type"):"???");
-            sendErrMsg(msg);
-            showErrorInfo(msg);
-            startCloseProcess();
-        };
-    } else {
+    if ( addr.isEmpty() || port==0 ) {
         viewerToolBar->setEnabled(false);
-        msg = QString("In '<b>%1</b>':<br> Connection or Domain is NULL or inactive")
+        msg = QString("In '<b>%1</b>':<br> Getting the address data is failed.")
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);
         startCloseProcess();
+    } else if ( addr.contains("127.0.0") &&
+                !host.contains("localhost") &&
+                !host.contains("localdomain") ) {
+        viewerToolBar->setEnabled(false);
+        msg = QString("In '<b>%1</b>':<br>\n\
+Guest is on a remote host,\n\
+but is only configured to allow\n\
+local file descriptor connections.")
+                .arg(domain);
+        sendErrMsg(msg);
+        showErrorInfo(msg);
+        startCloseProcess();
+    } else {
+        actFullScreen = new QShortcut(
+                    QKeySequence(tr("Shift+F11", "View|Full Screen")),
+                    this);
+        connect(actFullScreen, SIGNAL(activated()),
+                SLOT(fullScreenTriggered()));
+        if ( host.contains("localhost") || host.contains("localdomain") ) {
+            // local VM, graphic is allow
+            emit initGraphic();
+        } else {
+            // need ssh tunnel
+            sshTunnelThread = new SSH_Tunnel(this);
+        };
     };
-    sendConnErrors();
-    //qDebug()<<msg<<"viewer inits";
 }
 void Spice_Viewer::reconnectToVirtDomain()
 {
@@ -123,7 +70,7 @@ void Spice_Viewer::reconnectToVirtDomain()
         // resizing to any,
         // because will need to init new display configuration
         //resize(getWidgetSizeAroundDisplay());
-        initSpiceWidget();
+        initGraphicWidget();
         QSize around_size = getWidgetSizeAroundDisplay();
         if ( nullptr!=spiceWdg ) {
             spiceWdg->updateSize(
@@ -170,7 +117,7 @@ void Spice_Viewer::fullScreenVirtDomain()
 }
 
 /* private slots */
-void Spice_Viewer::initSpiceWidget()
+void Spice_Viewer::initGraphicWidget()
 {
     spiceWdg = new QSpiceWidget(this);
     spiceWdg->setAttribute(Qt::WA_OpaquePaintEvent, true);

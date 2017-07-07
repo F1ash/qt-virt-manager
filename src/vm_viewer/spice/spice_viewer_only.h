@@ -35,7 +35,7 @@ public slots:
     void             scaleScreenVirtDomain();
 
 private slots:
-    void             initSpiceWidget();
+    void             initGraphicWidget();
     void             timerEvent(QTimerEvent*);
     void             resizeViewer(const QSize&);
     void             fullScreenTriggered();

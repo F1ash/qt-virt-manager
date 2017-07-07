@@ -24,9 +24,12 @@ void lxcHlpThread::run()
 }
 
 LXC_Viewer::LXC_Viewer(
-        QWidget *parent, virConnectPtr *connPtrPtr,
-        QString arg1, QString arg2,
-        const QString& work_dir, const QString& command) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          arg1,
+        QString          arg2,
+        const QString&   work_dir,
+        const QString&   command) :
     TermMainWindow(parent, connPtrPtr, arg1, arg2, work_dir, command)
 {
     TYPE = "LXC";

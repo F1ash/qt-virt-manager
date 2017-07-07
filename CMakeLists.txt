@@ -16,7 +16,8 @@ list(APPEND CMAKE_PREFIX_PATH
     # for new installed bundles in OS_X
     ${QT5_LIB_PATH}
     ${VNC_LIB_PATH}
-    ${SPICE_LIB_PATH})
+    ${SPICE_LIB_PATH}
+)
 
 cmake_minimum_required (VERSION 2.8.3)
 include(CheckFunctionExists)
@@ -514,6 +515,7 @@ set (HEADERS
   src/create_widgets/nwfilter/filterref_widget/filterref_widget.h
 
   src/vm_viewer/vm_viewer.h
+  src/vm_viewer/ssh_tunnel.h
   src/vm_viewer/spice/spice_viewer.h
   src/vm_viewer/vnc/vnc_viewer.h
   ${HEADERS_FOR_VIEWER}
@@ -909,6 +911,7 @@ set (SOURCES
   src/create_widgets/nwfilter/filterref_widget/filterref_widget.cpp
 
   src/vm_viewer/vm_viewer.cpp
+  src/vm_viewer/ssh_tunnel.cpp
   src/vm_viewer/spice/spice_viewer.cpp
   src/vm_viewer/vnc/vnc_viewer.cpp
   ${SOURCES_FOR_VIEWER}
@@ -1027,6 +1030,7 @@ message(STATUS "Build with Libcacard: ${WITH_LIBCACARD}")
 find_package(LibVirt              REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
 find_package(LibVNCServer         REQUIRED)
+find_package(LibSSH               REQUIRED)
 include_directories(
     ${GLib2_INCLUDE_DIRS}
     ${GOBJECT_INCLUDE_DIRS}
@@ -1037,6 +1041,7 @@ include_directories(
     ${LibVirt_INCLUDE_DIRS}
     ${QTERMWIDGET_INCLUDE_DIRS}
     ${LIBVNCCLIENT_INCLUDE_DIR}
+    ${LIBSSH_INCLUDE_DIRS}
 )
 set (VIEWER_BUILD_PROJECT_LIBRARIES
           ${BUILD_PROJECT_LIBRARIES})
@@ -1050,6 +1055,7 @@ list(APPEND BUILD_PROJECT_LIBRARIES
     ${Spice1_LIBRARIES}
     ${SPICE_CLIENT_GLIB2_LIBRARIES}
     ${LIBVNCCLIENT_LIBRARIES}
+    ${LIBSSH_LIBRARIES}
 )
 list(APPEND VIEWER_BUILD_PROJECT_LIBRARIES
     ${GLib2_LIBRARIES}
@@ -1068,7 +1074,9 @@ MESSAGE(STATUS "Found includes :
     ${SPICE_CLIENT_GLIB2_INCLUDE_DIRS}
     ${LibVirt_INCLUDE_DIRS}
     ${QTERMWIDGET_INCLUDE_DIRS}
-    ${LIBVNCCLIENT_INCLUDE_DIRS}")
+    ${LIBVNCCLIENT_INCLUDE_DIRS}
+    ${LIBSSH_INCLUDE_DIRS}"
+)
 MESSAGE(STATUS "Found BUILD_PROJECT_LIBRARIES: ${BUILD_PROJECT_LIBRARIES}")
 
 # * build & install application & files

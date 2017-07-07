@@ -21,7 +21,7 @@ void Spice_Viewer_Only::reconnectToVirtDomain()
         // resizing to any,
         // because will need to init new display configuration
         //resize(getWidgetSizeAroundDisplay());
-        initSpiceWidget();
+        initGraphicWidget();
         QSize around_size = getWidgetSizeAroundDisplay();
         if ( nullptr!=spiceWdg ) {
             spiceWdg->updateSize(
@@ -68,7 +68,7 @@ void Spice_Viewer_Only::fullScreenVirtDomain()
 }
 
 /* private slots */
-void Spice_Viewer_Only::initSpiceWidget()
+void Spice_Viewer_Only::initGraphicWidget()
 {
     spiceWdg = new QSpiceWidget(this);
     spiceWdg->setAttribute(Qt::WA_OpaquePaintEvent, true);
@@ -138,7 +138,7 @@ void Spice_Viewer_Only::timerEvent(QTimerEvent *ev)
         startAnimatedHide();
     } else if ( ev->timerId()==startId ) {
         if ( cycles==0 ) {
-            initSpiceWidget();
+            initGraphicWidget();
         } else if ( cycles==9 ) {
             killTimer(startId);
             startId = 0;

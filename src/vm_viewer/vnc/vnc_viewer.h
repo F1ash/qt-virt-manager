@@ -6,21 +6,7 @@
 #include <QTimerEvent>
 #include "vm_viewer/vm_viewer.h"
 #include "vm_viewer/krdc_vnc_qtonly/Machine_View.h"
-
-class vncHlpThread : public _VirtThread
-{
-    Q_OBJECT
-public:
-    explicit vncHlpThread(
-            QObject        *parent     = nullptr,
-            virConnectPtr  *connPtrPtr = nullptr,
-            QString         _domain    = QString());
-    const QString    domain;
-    bool             domainIsActive = false;
-    virDomainPtr     domainPtr = nullptr;
-    QString          uri, activeDomainXmlDesc;
-    void             run();
-};
+#include "vm_viewer/ssh_tunnel.h"
 
 class VNC_Viewer : public VM_Viewer
 {
@@ -30,14 +16,16 @@ public:
             QWidget        *parent     = nullptr,
             virConnectPtr  *connPtrPtr = nullptr,
             QString         arg1       = QString(),
-            QString         arg2       = QString());
+            QString         arg2       = QString(),
+            QString         arg3       = QString());
 
 private:
-    vncHlpThread    *hlpThread;
-    QString          addr;
+    QString          transport, addr, user, host;
     uint             port = 0;
     MachineView     *vncWdg = nullptr;
     QShortcut       *actFullScreen = nullptr;
+    bool             sshTunnelUsed = false;
+    SSH_Tunnel      *sshTunnelThread = nullptr;
 
 public slots:
     void             init();
@@ -51,7 +39,7 @@ public slots:
     void             scaleScreenVirtDomain();
 
 private slots:
-    void             initVNCWidget();
+    void             initGraphicWidget();
     void             timerEvent(QTimerEvent*);
     void             resizeViewer(const int, const int);
     void             fullScreenTriggered();
