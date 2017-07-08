@@ -79,8 +79,8 @@ ENDIF (NOT LIB_SUFFIX)
 
 set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
 set (VERSION_MAJOR   0)
-set (VERSION_MIDDLE  43)
-set (VERSION_MINOR   72)
+set (VERSION_MINOR  43)
+set (VERSION_MICRO  72)
 set (HEADERS_FOR_VIEWER
     src/vm_viewer/viewer_toolbar.h
     src/vm_viewer/vm_state_widget.h
@@ -515,7 +515,6 @@ set (HEADERS
   src/create_widgets/nwfilter/filterref_widget/filterref_widget.h
 
   src/vm_viewer/vm_viewer.h
-  src/vm_viewer/ssh_tunnel.h
   src/vm_viewer/spice/spice_viewer.h
   src/vm_viewer/vnc/vnc_viewer.h
   ${HEADERS_FOR_VIEWER}
@@ -539,6 +538,9 @@ set (HEADERS
   src/state_monitor/svg_templates.h
 
   src/task_warehouse/task_warehouse.h
+
+  #src/ssh_tunnel/ssh_common.h
+  src/ssh_tunnel/ssh_tunnel.h
 )
 set (SOURCES 
   src/main.cpp
@@ -911,7 +913,6 @@ set (SOURCES
   src/create_widgets/nwfilter/filterref_widget/filterref_widget.cpp
 
   src/vm_viewer/vm_viewer.cpp
-  src/vm_viewer/ssh_tunnel.cpp
   src/vm_viewer/spice/spice_viewer.cpp
   src/vm_viewer/vnc/vnc_viewer.cpp
   ${SOURCES_FOR_VIEWER}
@@ -933,6 +934,9 @@ set (SOURCES
   src/state_monitor/domain_state_viewer.cpp
 
   src/task_warehouse/task_warehouse.cpp
+
+  src/ssh_tunnel/ssh_common.c
+  src/ssh_tunnel/ssh_tunnel.cpp
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE qt-virt-manager.desktop)

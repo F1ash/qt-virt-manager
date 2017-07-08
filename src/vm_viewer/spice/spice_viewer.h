@@ -7,7 +7,7 @@
 #include <QScrollArea>
 #include "vm_viewer/vm_viewer.h"
 #include "vm_viewer/qspice_widgets/qspice-widget.h"
-#include "vm_viewer/ssh_tunnel.h"
+#include "ssh_tunnel/ssh_tunnel.h"
 
 class Spice_Viewer : public VM_Viewer
 {

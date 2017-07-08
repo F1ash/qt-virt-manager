@@ -41,8 +41,8 @@ void HelpMenu::showAboutSelf()
                  <br>(by SPICE/VNC client) and LXC terminals.")
                 .arg(QString("%1.%2.%3")
                      .arg(VERSION_MAJOR)
-                     .arg(VERSION_MIDDLE)
-                     .arg(VERSION_MINOR))
+                     .arg(VERSION_MINOR)
+                     .arg(VERSION_MICRO))
                 .arg(QT_VERSION_STR)
                 .arg(libvirtVer);
     QMessageBox::about(

@@ -58,7 +58,7 @@ local file descriptor connections.")
             emit initGraphic();
         } else {
             // need ssh tunnel
-            sshTunnelThread = new SSH_Tunnel(this);
+            //sshTunnelThread = new SSH_Tunnel(this);
         };
     };
 }
@@ -170,8 +170,12 @@ void Spice_Viewer::initGraphicWidget()
             this, SLOT(startAnimatedHide()));
 
     QSize around_size = getWidgetSizeAroundDisplay();
-    QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
-    spiceWdg->connectToSpiceSource(_uri);
+    if ( sshTunnelUsed ) {
+
+    } else {
+        QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
+        spiceWdg->connectToSpiceSource(_uri);
+    };
     spiceWdg->setNewSize(around_size.width(), around_size.height());
 }
 

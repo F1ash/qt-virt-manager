@@ -60,13 +60,14 @@ local file descriptor connections.")
         connect(actFullScreen, SIGNAL(activated()),
                 SLOT(fullScreenTriggered()));
         //s << "remote or local with allow to graphics stream" << endl;
-        if ( host.contains("localhost") || host.contains("localdomain") ) {
-            // local VM, graphic is allow
-            emit initGraphic();
-        } else {
+        //if ( host.contains("localhost") || host.contains("localdomain") ) {
+        //    // local VM, graphic is allow
+        //    emit initGraphic();
+        //} else {
             // need ssh tunnel
             sshTunnelThread = new SSH_Tunnel(this);
-        };
+            sshTunnelThread->start();
+        //};
     };
 }
 void VNC_Viewer::reconnectToVirtDomain()
@@ -259,10 +260,14 @@ void VNC_Viewer::initGraphicWidget()
             this, SLOT(startAnimatedHide()));
 
     QSize around_size = getWidgetSizeAroundDisplay();
-    qDebug()<<"address:"<<addr<<port;
-    vncWdg->Set_VNC_URL(addr, port);
-    vncWdg->Set_Scaling(true);
-    vncWdg->initView();
+    if ( sshTunnelUsed ) {
+
+    } else {
+        qDebug()<<"address:"<<addr<<port;
+        vncWdg->Set_VNC_URL(addr, port);
+        vncWdg->Set_Scaling(true);
+        vncWdg->initView();
+    };
     vncWdg->newViewSize(around_size.width(), around_size.height());
 }
 

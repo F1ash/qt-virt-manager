@@ -16,7 +16,7 @@ VM_Viewer::VM_Viewer(QWidget         *parent,
                    .arg(domain).arg(connName));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     setMinimumSize(100, 100);
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(0, 0, 0, 0);
     viewerToolBar = new ViewerToolBar(this);
     viewerToolBar->hide();
     addToolBar(Qt::TopToolBarArea, viewerToolBar);

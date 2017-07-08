@@ -6,7 +6,7 @@
 #include <QTimerEvent>
 #include "vm_viewer/vm_viewer.h"
 #include "vm_viewer/krdc_vnc_qtonly/Machine_View.h"
-#include "vm_viewer/ssh_tunnel.h"
+#include "ssh_tunnel/ssh_tunnel.h"
 
 class VNC_Viewer : public VM_Viewer
 {
