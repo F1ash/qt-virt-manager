@@ -1,19 +1,24 @@
-extern "C" {
-#include "ssh_common.c"
-}
+//extern "C" {
+//#include "ssh_common.c"
+//}
 #include "ssh_tunnel.h"
-#include <QProcess>
-#include <QTcpSocket>
+
+#define bufSize  4096
 
 SSH_Tunnel::SSH_Tunnel(QObject *parent) :
     QThread(parent)
 {
-
+    socketToViewerPort = new QTcpSocket(this);
+    ssh_tunnel = new QProcess(this);
 }
 
 void SSH_Tunnel::setData(QVariantMap _data)
 {
-
+    User = _data.value("User").toString();
+    remoteHost = _data.value("RemoteHost").toString();
+    remotePort = _data.value("RemotePort").toString();
+    graphicsAddr = _data.value("GraphicsAddr").toString();
+    graphicsPort = _data.value("GraphicsPort").toString();
 }
 void SSH_Tunnel::run()
 {
@@ -72,26 +77,66 @@ failed:
 
     return;
     */
-    QProcess ssh_tunnel;
-    ssh_tunnel.setProcessChannelMode(QProcess::SeparateChannels);
-    connect(&ssh_tunnel, SIGNAL(readyRead()),
+    uint viewerPort = 0;
+    for (viewerPort=33333; viewerPort<65536; viewerPort++) {
+        socketToViewerPort->connectToHost(
+                    "127.0.0.1",
+                    viewerPort,
+                    QIODevice::ReadWrite,
+                    QAbstractSocket::IPv4Protocol);
+        if ( socketToViewerPort->state()!=QAbstractSocket::ConnectedState ) {
+            continue;
+        };
+        if ( !socketToViewerPort->open(QIODevice::ReadWrite) ) {
+            continue;
+        } else {
+            break;
+        };
+    };
+    if ( !socketToViewerPort->isOpen() ) {
+        // emit error to Viewer
+        emit errMsg("Socket to Viwer port not established");
+        return;
+    };
+    // socket signal connections;
+    connect(socketToViewerPort, SIGNAL(readyRead()),
+            this, SLOT(write_to_remote_graphic_channel()));
+    connect(socketToViewerPort, SIGNAL(error(QAbstractSocket::SocketError)),
+            this, SLOT(send_socket_errors(QAbstractSocket::SocketError)));
+
+    ssh_tunnel->setProcessChannelMode(QProcess::SeparateChannels);
+    connect(ssh_tunnel, SIGNAL(readyRead()),
             this, SLOT(write_to_viewer()));
-    ssh_tunnel.start();
-    bool started = ssh_tunnel.waitForStarted();
-    emit connection_result(started, 0);
-    ssh_tunnel.waitForFinished(-1);
+    ssh_tunnel->start();
+    if ( !ssh_tunnel->waitForStarted() ) {
+        emit errMsg("SSH tunnel not established");
+        return;
+    } else {;
+        emit established(viewerPort);
+        ssh_tunnel->waitForFinished(-1);
+    };
+    if ( socketToViewerPort->isOpen() ) {
+        socketToViewerPort->disconnectFromHost();
+    };
 }
 
 /* private slots */
-uint SSH_Tunnel::get_free_port_for_listen()
-{
-    return 0;
-}
 void SSH_Tunnel::write_to_viewer()
 {
-
+    char *buff;
+    while ( 0<ssh_tunnel->read(buff, bufSize) ) {
+        socketToViewerPort->write(buff, bufSize);
+    };
 }
 void SSH_Tunnel::write_to_remote_graphic_channel()
 {
-
+    char *buff;
+    while ( 0<socketToViewerPort->read(buff, bufSize) ) {
+        ssh_tunnel->write(buff, bufSize);
+    };
+}
+void SSH_Tunnel::resend_socket_errors(QAbstractSocket::SocketError _err)
+{
+    Q_UNUSED(_err);
+    emit errMsg(socketToViewerPort->errorString());
 }
