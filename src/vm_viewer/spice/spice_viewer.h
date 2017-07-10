@@ -26,7 +26,6 @@ private:
     QScrollArea     *scrolled = nullptr;
     QSpiceWidget    *spiceWdg = nullptr;
     QShortcut       *actFullScreen = nullptr;
-    bool             sshTunnelUsed = false;
     SSH_Tunnel      *sshTunnelThread = nullptr;
 
 public slots:
@@ -43,6 +42,7 @@ public slots:
 
 private slots:
     void             initGraphicWidget();
+    void             useSSHTunnel(uint);
     void             timerEvent(QTimerEvent*);
     void             resizeViewer(const QSize&);
     void             fullScreenTriggered();

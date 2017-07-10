@@ -58,7 +58,22 @@ local file descriptor connections.")
             emit initGraphic();
         } else {
             // need ssh tunnel
-            //sshTunnelThread = new SSH_Tunnel(this);
+            QVariantMap _data;
+            _data.insert("User", user);
+            QStringList _remoteAddr = host.split(":");
+            _data.insert("RemoteHost", _remoteAddr.first());
+            if ( _remoteAddr.count()==2 ) {
+                _data.insert("RemotePort", _remoteAddr.last());
+            } else {
+                _data.insert("RemotePort", "22"); // default SSH service TCP port
+            };
+            _data.insert("GraphicsAddr", addr);
+            _data.insert("GraphicsPort", port);
+            sshTunnelThread = new SSH_Tunnel(this);
+            connect(sshTunnelThread, SIGNAL(established(uint)),
+                    this, SLOT(useSSHTunnel(uint)));
+            sshTunnelThread->setData(_data);
+            sshTunnelThread->start();
         };
     };
 }
@@ -170,13 +185,15 @@ void Spice_Viewer::initGraphicWidget()
             this, SLOT(startAnimatedHide()));
 
     QSize around_size = getWidgetSizeAroundDisplay();
-    if ( sshTunnelUsed ) {
-
-    } else {
-        QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
-        spiceWdg->connectToSpiceSource(_uri);
-    };
+    QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
+    spiceWdg->connectToSpiceSource(_uri);
     spiceWdg->setNewSize(around_size.width(), around_size.height());
+}
+
+void Spice_Viewer::useSSHTunnel(uint _port)
+{
+    port = _port;
+    initGraphicWidget();
 }
 
 void Spice_Viewer::timerEvent(QTimerEvent *ev)

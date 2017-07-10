@@ -29,6 +29,7 @@ private slots:
     void        write_to_viewer();
     void        write_to_remote_graphic_channel();
     void        resend_socket_errors(QAbstractSocket::SocketError);
+    void        resend_tunnel_errors(QProcess::ProcessError);
 };
 
 #endif // SSH_TUNNEL_H
