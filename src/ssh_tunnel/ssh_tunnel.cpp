@@ -5,7 +5,7 @@
 #include <QHostAddress>
 #include <QTextStream>
 
-#define bufSize  4096
+#define buffSize  4096
 
 SSH_Tunnel::SSH_Tunnel(QObject *parent) :
     QThread(parent)
@@ -82,19 +82,23 @@ failed:
     QTextStream s(stdout);
     uint viewerPort = 0;
     bool connected = false;
+    bool finished = false;
+    QStringList _args;
+    QString nc_command;
     for (viewerPort=33333; viewerPort<65536; viewerPort++) {
         bool bound = socketToViewerPort->bind(
                     QHostAddress("127.0.0.1"),
-                    viewerPort);
-        if ( !bound ) continue;
-        socketToViewerPort->connectToHost(
-                    "127.0.0.1",
                     viewerPort,
-                    QIODevice::ReadWrite,
-                    QAbstractSocket::IPv4Protocol);
-        if ( !socketToViewerPort->waitForConnected() ) {
-            continue;
-        };
+                    QAbstractSocket::DontShareAddress);
+        if ( !bound ) continue;
+        //socketToViewerPort->connectToHost(
+        //            "127.0.0.1",
+        //            viewerPort,
+        //            QIODevice::ReadWrite,
+        //            QAbstractSocket::IPv4Protocol);
+        //if ( !socketToViewerPort->waitForConnected() ) {
+        //    continue;
+        //};
         if ( !socketToViewerPort->open(QIODevice::ReadWrite) ) {
             continue;
         } else {
@@ -102,11 +106,11 @@ failed:
             break;
         };
     };
-    if ( !connected || !socketToViewerPort->isOpen() ) {
+    if ( !connected ) {
         // emit error to Viewer
         emit errMsg("Socket to Viwer port not established");
         s<< "not connected" << endl;
-        return;
+        goto thread_exit;
     };
     // socket signal connections;
     connect(socketToViewerPort, SIGNAL(readyRead()),
@@ -120,32 +124,32 @@ failed:
             this, SLOT(write_to_viewer()));
     connect(ssh_tunnel, SIGNAL(error(QProcess::ProcessError)),
             this, SLOT(resend_tunnel_errors(QProcess::ProcessError)));
-    QString nc_command = QString(
+    nc_command = QString(
 "'nc -q 2>&1 | grep \"requires an argument\" >/dev/null;\
 if [ $? -eq 0 ] ; then\
     CMD=\"nc -q 0 %1 %2\";\
 else\
-    CMD=\"nc  %1 %2\";\
+    CMD=\"nc %1 %2\";\
 fi;\
 eval \"$CMD\";'").arg(graphicsAddr).arg(graphicsPort);
-    QStringList _args;
     _args   << "-p" << remotePort
             << "-l" << User << remoteHost
             << "sh" << "-c"
             << nc_command;
     ssh_tunnel->start("ssh", _args, QIODevice::ReadWrite);
-    s << "conmmand args: "<< _args.join(" ") << endl;
+    //s << "conmmand args: "<< _args.join(" ") << endl;
 
     if ( !ssh_tunnel->waitForStarted() ) {
         s<< "established: "<< "none" << endl;
         emit errMsg("SSH tunnel not established");
-        return;
-    } else {
-        emit established(viewerPort);
-        s<< "established: "<< viewerPort << endl;
-        ssh_tunnel->waitForFinished(-1);
-        s<< "netcat is finished " << endl;
+        goto thread_exit;
     };
+    emit established(viewerPort);
+    s<< "established: "<< viewerPort <<" State: "<<ssh_tunnel->state()<< endl;
+    finished = ssh_tunnel->waitForFinished(-1);
+    s<< "netcat is finished: "<< finished << endl;
+
+thread_exit:
     if ( socketToViewerPort->isOpen() ) {
         socketToViewerPort->disconnectFromHost();
         socketToViewerPort->waitForDisconnected();
@@ -157,16 +161,24 @@ eval \"$CMD\";'").arg(graphicsAddr).arg(graphicsPort);
 /* private slots */
 void SSH_Tunnel::write_to_viewer()
 {
-    char *buff;
-    while ( 0<ssh_tunnel->read(buff, bufSize) ) {
-        socketToViewerPort->write(buff, bufSize);
+    QTextStream s(stdout);
+    char buff[buffSize];
+    quint64 bytes = ssh_tunnel->read(buff, buffSize);
+    while ( 0<bytes ) {
+        quint64 written = socketToViewerPort->write(buff, buffSize);
+        s<<"write_to_viewer: "<<written<<endl;
+        bytes = ssh_tunnel->read(buff, buffSize);
     };
 }
 void SSH_Tunnel::write_to_remote_graphic_channel()
 {
-    char *buff;
-    while ( 0<socketToViewerPort->read(buff, bufSize) ) {
-        ssh_tunnel->write(buff, bufSize);
+    QTextStream s(stdout);
+    char buff[buffSize];
+    quint64 bytes = socketToViewerPort->read(buff, buffSize);
+    while ( 0<bytes ) {
+        quint64 written = ssh_tunnel->write(buff, buffSize);
+        s<<"write_to_remote_graphic_channel: "<<written<<endl;
+        bytes = socketToViewerPort->read(buff, buffSize);
     };
 }
 void SSH_Tunnel::resend_socket_errors(QAbstractSocket::SocketError _err)

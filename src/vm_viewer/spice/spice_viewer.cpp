@@ -72,6 +72,8 @@ local file descriptor connections.")
             sshTunnelThread = new SSH_Tunnel(this);
             connect(sshTunnelThread, SIGNAL(established(uint)),
                     this, SLOT(useSSHTunnel(uint)));
+            connect(sshTunnelThread, SIGNAL(errMsg(QString)),
+                    this, SLOT(sendErrMsg(QString)));
             sshTunnelThread->setData(_data);
             sshTunnelThread->start();
         };

@@ -1,7 +1,7 @@
 #include "vnc_viewer.h"
 #include <QApplication>
 #include <QClipboard>
-//#include <QTextStream>
+#include <QTextStream>
 
 VNC_Viewer::VNC_Viewer(
         QWidget         *parent,
@@ -79,6 +79,8 @@ local file descriptor connections.")
             sshTunnelThread = new SSH_Tunnel(this);
             connect(sshTunnelThread, SIGNAL(established(uint)),
                     this, SLOT(useSSHTunnel(uint)));
+            connect(sshTunnelThread, SIGNAL(errMsg(QString)),
+                    this, SLOT(sendErrMsg(QString)));
             sshTunnelThread->setData(_data);
             sshTunnelThread->start();
         //};
@@ -274,7 +276,8 @@ void VNC_Viewer::initGraphicWidget()
             this, SLOT(startAnimatedHide()));
 
     QSize around_size = getWidgetSizeAroundDisplay();
-    qDebug()<<"address:"<<addr<<port;
+    QTextStream s(stdout);
+    s<<"address: "<<addr<<":"<<port<<endl;
     vncWdg->Set_VNC_URL(addr, port);
     vncWdg->Set_Scaling(true);
     vncWdg->initView();
