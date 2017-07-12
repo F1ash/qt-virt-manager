@@ -89,7 +89,7 @@ failed:
         bool bound = socketToViewerPort->bind(
                     QHostAddress("127.0.0.1"),
                     viewerPort,
-                    QAbstractSocket::DontShareAddress);
+                    QAbstractSocket::DontShareAddress); // as listen service
         if ( !bound ) continue;
         //socketToViewerPort->connectToHost(
         //            "127.0.0.1",
