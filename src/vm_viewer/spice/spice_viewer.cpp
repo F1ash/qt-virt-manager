@@ -53,10 +53,10 @@ local file descriptor connections.")
                     this);
         connect(actFullScreen, SIGNAL(activated()),
                 SLOT(fullScreenTriggered()));
-        if ( host.contains("localhost") || host.contains("localdomain") ) {
-            // local VM, graphic is allow
-            emit initGraphic();
-        } else {
+        //if ( host.contains("localhost") || host.contains("localdomain") ) {
+        //    // local VM, graphic is allow
+        //    emit initGraphic();
+        //} else {
             // need ssh tunnel
             QVariantMap _data;
             _data.insert("User", user);
@@ -76,7 +76,7 @@ local file descriptor connections.")
                     this, SLOT(sendErrMsg(QString)));
             sshTunnelThread->setData(_data);
             sshTunnelThread->start();
-        };
+        //};
     };
 }
 void Spice_Viewer::reconnectToVirtDomain()
@@ -194,6 +194,7 @@ void Spice_Viewer::initGraphicWidget()
 
 void Spice_Viewer::useSSHTunnel(uint _port)
 {
+    addr = "127.0.0.1";
     port = _port;
     initGraphicWidget();
 }

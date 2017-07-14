@@ -286,6 +286,7 @@ void VNC_Viewer::initGraphicWidget()
 
 void VNC_Viewer::useSSHTunnel(uint _port)
 {
+    addr = "127.0.0.1";
     port = _port;
     initGraphicWidget();
 }

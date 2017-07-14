@@ -11,6 +11,7 @@ class SSH_Tunnel : public QThread
     Q_OBJECT
 public:
     explicit SSH_Tunnel(QObject *parent = nullptr);
+    ~SSH_Tunnel();
     void        setData(QVariantMap);
     void        run();
 

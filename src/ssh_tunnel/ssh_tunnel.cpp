@@ -13,6 +13,15 @@ SSH_Tunnel::SSH_Tunnel(QObject *parent) :
     socketToViewerPort = new QTcpSocket(this);
     ssh_tunnel = new QProcess(this);
 }
+SSH_Tunnel::~SSH_Tunnel()
+{
+    QTextStream s(stdout);
+    if ( ssh_tunnel!=nullptr && ssh_tunnel->isOpen() ) {
+        ssh_tunnel->close();
+        ssh_tunnel->waitForFinished();
+        s<< "ssh_tunnel is finished at thread deletion" << endl;
+    };
+}
 
 void SSH_Tunnel::setData(QVariantMap _data)
 {
@@ -91,14 +100,14 @@ failed:
                     viewerPort,
                     QAbstractSocket::DontShareAddress); // as listen service
         if ( !bound ) continue;
-        //socketToViewerPort->connectToHost(
-        //            "127.0.0.1",
-        //            viewerPort,
-        //            QIODevice::ReadWrite,
-        //            QAbstractSocket::IPv4Protocol);
-        //if ( !socketToViewerPort->waitForConnected() ) {
-        //    continue;
-        //};
+        socketToViewerPort->connectToHost(
+                    "127.0.0.1",
+                    viewerPort,
+                    QIODevice::ReadWrite,
+                    QAbstractSocket::IPv4Protocol);
+        if ( !socketToViewerPort->waitForConnected() ) {
+            continue;
+        };
         if ( !socketToViewerPort->open(QIODevice::ReadWrite) ) {
             continue;
         } else {
@@ -162,24 +171,28 @@ thread_exit:
 void SSH_Tunnel::write_to_viewer()
 {
     QTextStream s(stdout);
+    quint64 written = 0;
     char buff[buffSize];
     quint64 bytes = ssh_tunnel->read(buff, buffSize);
     while ( 0<bytes ) {
-        quint64 written = socketToViewerPort->write(buff, buffSize);
-        s<<"write_to_viewer: "<<written<<endl;
+        s<<buff;
+        written += socketToViewerPort->write(buff, bytes);
         bytes = ssh_tunnel->read(buff, buffSize);
     };
+    s<<"\nwrite_to_viewer: "<<written<<endl;
 }
 void SSH_Tunnel::write_to_remote_graphic_channel()
 {
     QTextStream s(stdout);
+    quint64 written = 0;
     char buff[buffSize];
     quint64 bytes = socketToViewerPort->read(buff, buffSize);
     while ( 0<bytes ) {
-        quint64 written = ssh_tunnel->write(buff, buffSize);
-        s<<"write_to_remote_graphic_channel: "<<written<<endl;
+        s<<buff;
+        written += ssh_tunnel->write(buff, bytes);
         bytes = socketToViewerPort->read(buff, buffSize);
     };
+    s<<"\nwrite_to_remote_graphic_channel: "<<written<<endl;
 }
 void SSH_Tunnel::resend_socket_errors(QAbstractSocket::SocketError _err)
 {
