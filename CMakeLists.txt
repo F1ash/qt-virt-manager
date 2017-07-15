@@ -1034,7 +1034,7 @@ message(STATUS "Build with Libcacard: ${WITH_LIBCACARD}")
 find_package(LibVirt              REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
 find_package(LibVNCServer         REQUIRED)
-find_package(LibSSH               REQUIRED)
+#find_package(LibSSH               REQUIRED)
 include_directories(
     ${GLib2_INCLUDE_DIRS}
     ${GOBJECT_INCLUDE_DIRS}
