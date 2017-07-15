@@ -1,6 +1,8 @@
 #include "_virt_thread.h"
 
-_VirtThread::_VirtThread(QObject *parent, virConnectPtr *connPtrPtr) :
+_VirtThread::_VirtThread(
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     QThread(parent), ptr_ConnPtr(connPtrPtr)
 {
     virtErrors  = nullptr;

@@ -17,6 +17,7 @@ public:
 
 signals:
     void        established(const uint);
+    void        tunnel_finished();
     void        errMsg(const QString);
 
 private:
@@ -25,12 +26,14 @@ private:
                 graphicsAddr, graphicsPort;
     QTcpSocket *socketToViewerPort = nullptr;
     QProcess   *ssh_tunnel = nullptr;
+    Q_PID       pid;
 
 private slots:
     void        write_to_viewer();
     void        write_to_remote_graphic_channel();
     void        resend_socket_errors(QAbstractSocket::SocketError);
     void        resend_tunnel_errors(QProcess::ProcessError);
+    void        thread_finished();
 };
 
 #endif // SSH_TUNNEL_H

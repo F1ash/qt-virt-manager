@@ -79,10 +79,19 @@ local file descriptor connections.")
             sshTunnelThread = new SSH_Tunnel(this);
             connect(sshTunnelThread, SIGNAL(established(uint)),
                     this, SLOT(useSSHTunnel(uint)));
+            connect(sshTunnelThread, SIGNAL(tunnel_finished()),
+                    this, SLOT(startCloseProcess()));
             connect(sshTunnelThread, SIGNAL(errMsg(QString)),
                     this, SLOT(sendErrMsg(QString)));
             sshTunnelThread->setData(_data);
             sshTunnelThread->start();
+            // crazy solution >>>
+            connectBtn = new QPushButton(this);
+            connectBtn->setText("[Re-]Connect");
+            setCentralWidget(connectBtn);
+            connect(connectBtn, SIGNAL(released()),
+                    this, SLOT(initGraphicWidget()));
+            // <<< crazy solution
         //};
     };
 }
@@ -288,7 +297,7 @@ void VNC_Viewer::useSSHTunnel(uint _port)
 {
     addr = "127.0.0.1";
     port = _port;
-    initGraphicWidget();
+    //initGraphicWidget();
 }
 
 void VNC_Viewer::timerEvent(QTimerEvent *ev)

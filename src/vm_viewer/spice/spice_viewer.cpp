@@ -76,6 +76,13 @@ local file descriptor connections.")
                     this, SLOT(sendErrMsg(QString)));
             sshTunnelThread->setData(_data);
             sshTunnelThread->start();
+            // crazy solution >>>
+            connectBtn = new QPushButton(this);
+            connectBtn->setText("[Re-]Connect");
+            setCentralWidget(connectBtn);
+            connect(connectBtn, SIGNAL(released()),
+                    this, SLOT(initGraphicWidget()));
+            // <<< crazy solution
         //};
     };
 }
@@ -196,7 +203,7 @@ void Spice_Viewer::useSSHTunnel(uint _port)
 {
     addr = "127.0.0.1";
     port = _port;
-    initGraphicWidget();
+    //initGraphicWidget();
 }
 
 void Spice_Viewer::timerEvent(QTimerEvent *ev)
