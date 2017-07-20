@@ -4,7 +4,7 @@
 #include <QThread>
 #include <QVariantMap>
 #include <QProcess>
-#include <QTcpSocket>
+#include "tcp_server.h"
 
 class SSH_Tunnel : public QThread
 {
@@ -25,12 +25,13 @@ private:
     QString     remoteHost, remotePort, User,
                 graphicsAddr, graphicsPort;
     QTcpSocket *socketToViewerPort = nullptr;
+    TCP_Server *server = nullptr;
     QProcess   *ssh_tunnel = nullptr;
     Q_PID       pid;
 
 private slots:
     void        write_to_viewer();
-    void        write_to_remote_graphic_channel();
+    void        write_to_remote_graphic_channel(QTcpSocket*);
     void        resend_socket_errors(QAbstractSocket::SocketError);
     void        resend_tunnel_errors(QProcess::ProcessError);
     void        thread_finished();
