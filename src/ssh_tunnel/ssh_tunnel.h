@@ -4,7 +4,8 @@
 #include <QThread>
 #include <QVariantMap>
 #include <QProcess>
-#include "tcp_server.h"
+#include <QEventLoop>
+#include "tcp_server_thread.h"
 
 class SSH_Tunnel : public QThread
 {
@@ -16,18 +17,19 @@ public:
     void        run();
 
 signals:
-    void        established(const uint);
+    void        established(quint16);
     void        tunnel_finished();
     void        errMsg(const QString);
 
 private:
-    uint        portForViewer = 0;
     QString     remoteHost, remotePort, User,
                 graphicsAddr, graphicsPort;
-    QTcpSocket *socketToViewerPort = nullptr;
-    TCP_Server *server = nullptr;
+    QTcpSocket *listenSocket = nullptr;
     QProcess   *ssh_tunnel = nullptr;
     Q_PID       pid;
+    //QEventLoop *loop;
+    QAbstractEventDispatcher *evDsp;
+    TCP_Server_Thread *serverThread = nullptr;
 
 private slots:
     void        write_to_viewer();

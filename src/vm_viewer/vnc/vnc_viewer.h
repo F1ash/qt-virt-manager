@@ -40,7 +40,7 @@ public slots:
 
 private slots:
     void             initGraphicWidget();
-    void             useSSHTunnel(uint);
+    void             useSSHTunnel(quint16);
     void             timerEvent(QTimerEvent*);
     void             resizeViewer(const int, const int);
     void             fullScreenTriggered();

@@ -77,8 +77,8 @@ local file descriptor connections.")
             _data.insert("GraphicsAddr", addr);
             _data.insert("GraphicsPort", port);
             sshTunnelThread = new SSH_Tunnel(this);
-            connect(sshTunnelThread, SIGNAL(established(uint)),
-                    this, SLOT(useSSHTunnel(uint)));
+            connect(sshTunnelThread, SIGNAL(established(quint16)),
+                    this, SLOT(useSSHTunnel(quint16)));
             connect(sshTunnelThread, SIGNAL(tunnel_finished()),
                     this, SLOT(startCloseProcess()));
             connect(sshTunnelThread, SIGNAL(errMsg(QString)),
@@ -293,7 +293,7 @@ void VNC_Viewer::initGraphicWidget()
     vncWdg->newViewSize(around_size.width(), around_size.height());
 }
 
-void VNC_Viewer::useSSHTunnel(uint _port)
+void VNC_Viewer::useSSHTunnel(quint16 _port)
 {
     addr = "127.0.0.1";
     port = _port;
