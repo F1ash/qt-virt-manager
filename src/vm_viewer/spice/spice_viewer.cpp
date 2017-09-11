@@ -23,6 +23,15 @@ Spice_Viewer::Spice_Viewer(
     };
     init();
 }
+Spice_Viewer::~Spice_Viewer()
+{
+    if ( spiceWdg!=nullptr ) {
+        spiceWdg->disconnectFromSpiceSource();
+    };
+    if ( sshTunnelThread!=nullptr ) {
+        sshTunnelThread->deleteLater();
+    };
+}
 
 /* public slots */
 void Spice_Viewer::init()
@@ -35,18 +44,18 @@ void Spice_Viewer::init()
         sendErrMsg(msg);
         showErrorInfo(msg);
         startCloseProcess();
-    } else if ( addr.contains("127.0.0") &&
-                !host.contains("localhost") &&
-                !host.contains("localdomain") ) {
-        viewerToolBar->setEnabled(false);
-        msg = QString("In '<b>%1</b>':<br>\n\
-Guest is on a remote host,\n\
-but is only configured to allow\n\
-local file descriptor connections.")
-                .arg(domain);
-        sendErrMsg(msg);
-        showErrorInfo(msg);
-        startCloseProcess();
+//    } else if ( addr.contains("127.0.0") &&
+//                !host.contains("localhost") &&
+//                !host.contains("localdomain") ) {
+//        viewerToolBar->setEnabled(false);
+//        msg = QString("In '<b>%1</b>':<br>\n\
+//Guest is on a remote host,\n\
+//but is only configured to allow\n\
+//local file descriptor connections.")
+//                .arg(domain);
+//        sendErrMsg(msg);
+//        showErrorInfo(msg);
+//        startCloseProcess();
     } else {
         actFullScreen = new QShortcut(
                     QKeySequence(tr("Shift+F11", "View|Full Screen")),
@@ -70,8 +79,8 @@ local file descriptor connections.")
             _data.insert("GraphicsAddr", addr);
             _data.insert("GraphicsPort", port);
             sshTunnelThread = new SSH_Tunnel(this);
-            connect(sshTunnelThread, SIGNAL(established(uint)),
-                    this, SLOT(useSSHTunnel(uint)));
+            connect(sshTunnelThread, SIGNAL(established(quint16)),
+                    this, SLOT(useSSHTunnel(quint16)));
             connect(sshTunnelThread, SIGNAL(errMsg(QString)),
                     this, SLOT(sendErrMsg(QString)));
             sshTunnelThread->setData(_data);
@@ -194,12 +203,14 @@ void Spice_Viewer::initGraphicWidget()
             this, SLOT(startAnimatedHide()));
 
     QSize around_size = getWidgetSizeAroundDisplay();
+    QTextStream s(stdout);
+    s<<"address: "<<addr<<":"<<port<<endl;
     QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
     spiceWdg->connectToSpiceSource(_uri);
     spiceWdg->setNewSize(around_size.width(), around_size.height());
 }
 
-void Spice_Viewer::useSSHTunnel(uint _port)
+void Spice_Viewer::useSSHTunnel(quint16 _port)
 {
     addr = "127.0.0.1";
     port = _port;

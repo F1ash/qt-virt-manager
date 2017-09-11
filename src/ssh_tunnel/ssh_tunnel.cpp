@@ -30,23 +30,21 @@ SSH_Tunnel::~SSH_Tunnel()
 {
     QTextStream s(stdout);
     if ( ssh_tunnel!=nullptr ) {
-        //if ( ssh_tunnel->isOpen() ) {
-        //    ssh_tunnel->close();
-        //    //ssh_tunnel->waitForFinished();
-        //    s<< "ssh_tunnel is finished at thread deletion" << endl;
+        if ( ssh_tunnel->isOpen() ) {
+            ssh_tunnel->close();
+            //ssh_tunnel->waitForFinished();
+            s<< "ssh_tunnel is finished at thread deletion" << endl;
         //} else {
         //    ssh_tunnel->kill();
         //    s<< "ssh_tunnel is killed at thread deletion" << endl;
-        //};
+        };
         //kill(pid, SIGKILL);
         ssh_tunnel->kill();
-        delete ssh_tunnel;
-        ssh_tunnel = nullptr;
     };
-    if ( serverThread!=nullptr ) {
-        serverThread->server->close();
-        serverThread->stop();
-    };
+    //if ( serverThread!=nullptr ) {
+    //    serverThread->server->close();
+    //    serverThread->stop();
+    //};
     //listenSocket->disconnectFromHost();
     //listenSocket->waitForDisconnected();
     //listenSocket->close();
@@ -136,7 +134,7 @@ failed:
             viewerPort = 0;
             continue;
         };
-        listenSocket->
+        //listenSocket->
         viewerPort = listenSocket->localPort();
         if ( viewerPort>0 ) {
             connected = true;
@@ -168,28 +166,28 @@ failed:
     };
     */
     // socket signal connections;
-    connect(listenSocket, SIGNAL(readyRead()),
-            this, SLOT(write_to_remote_graphic_channel()));
-    connect(listenSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(send_socket_errors(QAbstractSocket::SocketError)));
+    //connect(listenSocket, SIGNAL(readyRead()),
+    //        this, SLOT(write_to_remote_graphic_channel()));
+    //connect(listenSocket, SIGNAL(error(QAbstractSocket::SocketError)),
+    //        this, SLOT(send_socket_errors(QAbstractSocket::SocketError)));
 
-    while ( !serverThread->server->start_listen(viewerPort) ) {
-        ++viewerPort;
-        if (viewerPort>65536) break;
-    };
+    //while ( !serverThread->server->start_listen(viewerPort) ) {
+    //    ++viewerPort;
+    //    if (viewerPort>65536) break;
+    //};
 
 
     // create SSH tunnel
     ssh_tunnel->setProcessChannelMode(QProcess::SeparateChannels);
-    connect(ssh_tunnel, SIGNAL(readyRead()),
-            this, SLOT(write_to_viewer()));
+    //connect(ssh_tunnel, SIGNAL(readyRead()),
+    //        this, SLOT(write_to_viewer()));
     //connect(ssh_tunnel, SIGNAL(finished(int)),
     //        this, SIGNAL(tunnel_finished()));
     //connect(ssh_tunnel, SIGNAL(destroyed(QObject*)),
     //        this, SIGNAL(tunnel_finished()));
     connect(ssh_tunnel, SIGNAL(error(QProcess::ProcessError)),
             this, SLOT(resend_tunnel_errors(QProcess::ProcessError)));
-    ///*
+    /*
     nc_command = QString(
 "'nc -q 2>&1 | grep \"requires an argument\" >/dev/null;\
 if [ $? -eq 0 ] ; then\
@@ -202,9 +200,9 @@ eval \"$CMD\";'").arg(graphicsAddr).arg(graphicsPort);
             << "-l" << User << remoteHost
             << "sh" << "-c"
             << nc_command;
-//*/
+*/
 
-    /*
+    ///*
     while ( !connected ) {
 
         if ( !listenSocket->bind(0) ) {
@@ -215,45 +213,47 @@ eval \"$CMD\";'").arg(graphicsAddr).arg(graphicsPort);
         nc_command.clear();
         _args   << "-p" << remotePort
                 << "-L"
-                << QString("%1:127.0.0.1:%2").arg(viewerPort).arg(graphicsPort)
+                << QString("%1:%3:%2").arg(viewerPort).arg(graphicsPort).arg(graphicsAddr)
                 << QString("%1@%2").arg(User).arg(remoteHost);
         ssh_tunnel->start("ssh", _args, QIODevice::ReadWrite);
-        s << "conmmand args: "<< _args.join(" ") << endl;
+        s << "command args: "<< _args.join(" ") << endl;
         if ( !ssh_tunnel->waitForStarted() ) continue;
         if ( !ssh_tunnel->isOpen() ) {
             ssh_tunnel->kill();
             continue;
         };
         listenSocket->close();
+        listenSocket->deleteLater();
         pid = ssh_tunnel->pid();
         connected = true;
         break;
     };
-    */
+    //*/
 
 
-    s << "conmmand args: "<< _args.join(" ") << endl;
-    ssh_tunnel->start("ssh", _args, QIODevice::ReadWrite);
-    if ( !ssh_tunnel->waitForStarted() ) {
-        s<< "remote redirect established: "<< "none" << endl;
-        emit errMsg("SSH tunnel not established");
-        goto thread_exit;
-    };
+    //s << "command args: "<< _args.join(" ") << endl;
+    //ssh_tunnel->start("ssh", _args, QIODevice::ReadWrite);
+    //if ( !ssh_tunnel->waitForStarted() ) {
+    //    s<< "remote redirect established: "<< "none" << endl;
+    //    emit errMsg("SSH tunnel not established");
+    //    goto thread_exit;
+    //};
 
     emit established(viewerPort);
-    serverThread->start();
+    //serverThread->start();
     s<< "established: "<< viewerPort <<" State: "<<ssh_tunnel->state()
      << " PID: "<< pid<< endl;
     finished = ssh_tunnel->waitForFinished(-1);
     //loop->exec();
+    //exec();
     s<< "netcat is finished: "<< finished << endl;
 
 thread_exit:
-    if ( listenSocket->isOpen() ) {
-        listenSocket->disconnectFromHost();
-        listenSocket->waitForDisconnected();
-        s<< "socket is disconnected " << endl;
-    };
+    //if ( listenSocket->isOpen() ) {
+    //    listenSocket->disconnectFromHost();
+    //    listenSocket->waitForDisconnected();
+    //    s<< "socket is disconnected " << endl;
+    //};
     s<< "ssh tunnel thread is finished " << endl;
 }
 
@@ -293,9 +293,9 @@ void SSH_Tunnel::write_to_remote_graphic_channel(QTcpSocket *_sock)
 void SSH_Tunnel::resend_socket_errors(QAbstractSocket::SocketError _err)
 {
     Q_UNUSED(_err);
-    QTextStream s(stdout);
-    s<<listenSocket->errorString()<<endl;
-    emit errMsg(listenSocket->errorString());
+    //QTextStream s(stdout);
+    //s<<listenSocket->errorString()<<endl;
+    //emit errMsg(listenSocket->errorString());
 }
 void SSH_Tunnel::resend_tunnel_errors(QProcess::ProcessError _err)
 {

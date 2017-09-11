@@ -18,6 +18,7 @@ public:
             QString         arg1       = QString(),
             QString         arg2       = QString(),
             QString         arg3       = QString());
+    ~VNC_Viewer();
 
 private:
     QString          transport, addr, user, host;

@@ -19,6 +19,7 @@ public:
             QString         arg1       = QString(),
             QString         arg2       = QString(),
             QString         arg3       = QString());
+    ~Spice_Viewer();
 
 private:
     QString          transport, addr, user, host;
@@ -43,7 +44,7 @@ public slots:
 
 private slots:
     void             initGraphicWidget();
-    void             useSSHTunnel(uint);
+    void             useSSHTunnel(quint16);
     void             timerEvent(QTimerEvent*);
     void             resizeViewer(const QSize&);
     void             fullScreenTriggered();

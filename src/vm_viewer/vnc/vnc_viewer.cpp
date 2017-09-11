@@ -26,6 +26,15 @@ VNC_Viewer::VNC_Viewer(
     };
     init();
 }
+VNC_Viewer::~VNC_Viewer()
+{
+    if ( vncWdg!=nullptr ) {
+        vncWdg->disconnectVNC();
+    };
+    if ( sshTunnelThread!=nullptr ) {
+        sshTunnelThread->deleteLater();
+    };
+}
 
 /* public slots */
 void VNC_Viewer::init()
@@ -40,18 +49,18 @@ void VNC_Viewer::init()
         showErrorInfo(msg);
         startCloseProcess();
         //s << "failed" << endl;
-    } else if ( addr.contains("127.0.0") &&
-                !host.contains("localhost") &&
-                !host.contains("localdomain") ) {
-        viewerToolBar->setEnabled(false);
-        msg = QString("In '<b>%1</b>':<br>\n\
-Guest is on a remote host,\n\
-but is only configured to allow\n\
-local file descriptor connections.")
-                .arg(domain);
-        sendErrMsg(msg);
-        showErrorInfo(msg);
-        startCloseProcess();
+    //} else if ( addr.contains("127.0.0") &&
+    //            !host.contains("localhost") &&
+    //            !host.contains("localdomain") ) {
+    //    viewerToolBar->setEnabled(false);
+    //    msg = QString("In '<b>%1</b>':<br>\n\
+//Guest is on a remote host,\n\
+//but is only configured to allow\n\
+//local file descriptor connections.")
+//                .arg(domain);
+//        sendErrMsg(msg);
+//        showErrorInfo(msg);
+//        startCloseProcess();
         //s << "local graphics only on remote host" << endl;
     } else {
         actFullScreen = new QShortcut(

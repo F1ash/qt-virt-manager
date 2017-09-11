@@ -31,7 +31,7 @@ public:
             QString         arg1       = QString(),
             QString         arg2       = QString(),
             QString         arg3       = QString());
-    virtual ~VM_Viewer();
+    ~VM_Viewer();
     QString          connName, domain, addrData, TYPE;
     virConnectPtr*   ptr_ConnPtr;
     virErrorPtr      virtErrors = nullptr;
