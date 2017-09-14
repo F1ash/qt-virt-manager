@@ -88,15 +88,13 @@ void VNC_Viewer::init()
             sshTunnelThread = new SSH_Tunnel(this);
             connect(sshTunnelThread, SIGNAL(established(quint16)),
                     this, SLOT(useSSHTunnel(quint16)));
-            connect(sshTunnelThread, SIGNAL(tunnel_finished()),
-                    this, SLOT(startCloseProcess()));
             connect(sshTunnelThread, SIGNAL(errMsg(QString)),
                     this, SLOT(sendErrMsg(QString)));
             sshTunnelThread->setData(_data);
             sshTunnelThread->start();
             // crazy solution >>>
             connectBtn = new QPushButton(this);
-            connectBtn->setText("[Re-]Connect");
+            connectBtn->setText("Connect to VM");
             setCentralWidget(connectBtn);
             connect(connectBtn, SIGNAL(released()),
                     this, SLOT(initGraphicWidget()));

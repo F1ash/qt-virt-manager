@@ -87,7 +87,7 @@ void Spice_Viewer::init()
             sshTunnelThread->start();
             // crazy solution >>>
             connectBtn = new QPushButton(this);
-            connectBtn->setText("[Re-]Connect");
+            connectBtn->setText("Connect to VM");
             setCentralWidget(connectBtn);
             connect(connectBtn, SIGNAL(released()),
                     this, SLOT(initGraphicWidget()));

@@ -541,9 +541,6 @@ set (HEADERS
 
   #src/ssh_tunnel/ssh_common.h
   src/ssh_tunnel/ssh_tunnel.h
-  src/ssh_tunnel/tcp_server.h
-  src/ssh_tunnel/tcp_socket_thread.h
-  src/ssh_tunnel/tcp_server_thread.h
 )
 set (SOURCES 
   src/main.cpp
@@ -940,9 +937,6 @@ set (SOURCES
 
   src/ssh_tunnel/ssh_common.c
   src/ssh_tunnel/ssh_tunnel.cpp
-  src/ssh_tunnel/tcp_server.cpp
-  src/ssh_tunnel/tcp_socket_thread.cpp
-  src/ssh_tunnel/tcp_server_thread.cpp
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE qt-virt-manager.desktop)
