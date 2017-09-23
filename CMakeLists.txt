@@ -539,7 +539,6 @@ set (HEADERS
 
   src/task_warehouse/task_warehouse.h
 
-  #src/ssh_tunnel/ssh_common.h
   src/ssh_tunnel/ssh_tunnel.h
 )
 set (SOURCES 
@@ -935,7 +934,6 @@ set (SOURCES
 
   src/task_warehouse/task_warehouse.cpp
 
-  src/ssh_tunnel/ssh_common.c
   src/ssh_tunnel/ssh_tunnel.cpp
 )
 set (SOURCES_DIRS src)
@@ -1034,7 +1032,6 @@ message(STATUS "Build with Libcacard: ${WITH_LIBCACARD}")
 find_package(LibVirt              REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
 find_package(LibVNCServer         REQUIRED)
-#find_package(LibSSH               REQUIRED)
 include_directories(
     ${GLib2_INCLUDE_DIRS}
     ${GOBJECT_INCLUDE_DIRS}
@@ -1045,7 +1042,6 @@ include_directories(
     ${LibVirt_INCLUDE_DIRS}
     ${QTERMWIDGET_INCLUDE_DIRS}
     ${LIBVNCCLIENT_INCLUDE_DIR}
-    ${LIBSSH_INCLUDE_DIRS}
 )
 set (VIEWER_BUILD_PROJECT_LIBRARIES
           ${BUILD_PROJECT_LIBRARIES})
@@ -1059,7 +1055,6 @@ list(APPEND BUILD_PROJECT_LIBRARIES
     ${Spice1_LIBRARIES}
     ${SPICE_CLIENT_GLIB2_LIBRARIES}
     ${LIBVNCCLIENT_LIBRARIES}
-    ${LIBSSH_LIBRARIES}
 )
 list(APPEND VIEWER_BUILD_PROJECT_LIBRARIES
     ${GLib2_LIBRARIES}
@@ -1078,8 +1073,7 @@ MESSAGE(STATUS "Found includes :
     ${SPICE_CLIENT_GLIB2_INCLUDE_DIRS}
     ${LibVirt_INCLUDE_DIRS}
     ${QTERMWIDGET_INCLUDE_DIRS}
-    ${LIBVNCCLIENT_INCLUDE_DIRS}
-    ${LIBSSH_INCLUDE_DIRS}"
+    ${LIBVNCCLIENT_INCLUDE_DIRS}"
 )
 MESSAGE(STATUS "Found BUILD_PROJECT_LIBRARIES: ${BUILD_PROJECT_LIBRARIES}")
 

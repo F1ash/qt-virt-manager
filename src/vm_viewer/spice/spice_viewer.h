@@ -28,7 +28,6 @@ private:
     QSpiceWidget    *spiceWdg = nullptr;
     QShortcut       *actFullScreen = nullptr;
     SSH_Tunnel      *sshTunnelThread = nullptr;
-    QPushButton     *connectBtn = nullptr;
 
 public slots:
     void             init();

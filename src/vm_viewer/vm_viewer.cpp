@@ -50,6 +50,10 @@ VM_Viewer::~VM_Viewer()
         killTimer(killTimerId);
         killTimerId = 0;
     };
+    if ( reinitTimerId>0 ) {
+        killTimer(reinitTimerId);
+        reinitTimerId = 0;
+    };
     //qDebug()<<"VM_Viewer destroyed";
 }
 
@@ -64,13 +68,12 @@ void VM_Viewer::initGraphicWidget()
 }
 void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
-    if ( ev->type()==QEvent::Close ) {
-        QString key = objectName();
-        QString msg = QString("'<b>%1</b>' VM viewer closed.")
-                .arg(domain);
-        sendErrMsg(msg);
-        emit finished(key);
-    }
+    ev->ignore();
+    QString key = objectName();
+    QString msg = QString("'<b>%1</b>' VM viewer closed.")
+            .arg(domain);
+    sendErrMsg(msg);
+    emit finished(key);
 }
 void VM_Viewer::sendErrMsg(const QString &msg)
 {

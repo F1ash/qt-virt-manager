@@ -123,8 +123,8 @@ void VNC_Viewer_Only::getScreenshotFromVirtDomain()
 void VNC_Viewer_Only::copyFilesToVirtDomain()
 {
     if ( nullptr==vncWdg ) return;
-    QStringList fileNames = QFileDialog::getOpenFileNames(
-                this, "Copy files to Guest", "~");
+    //QStringList fileNames = QFileDialog::getOpenFileNames(
+    //            this, "Copy files to Guest", "~");
     //vncWdg->fileCopyAsync(fileNames);
 }
 void VNC_Viewer_Only::copyToClipboardFromVirtDomain()

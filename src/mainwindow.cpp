@@ -1023,7 +1023,8 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                 logDockContent, SLOT(appendMsgToLog(const QString&)));
         connect(VM_Displayed_Map.value(key), SIGNAL(addNewTask(TASK*)),
                 taskWrHouse, SLOT(addNewTask(TASK*)));
-        VM_Displayed_Map.value(key)->show();
+        // will be showed when occured successful connect to VM
+        //VM_Displayed_Map.value(key)->show();
     } else {
         //qDebug()<<key<<"vm invoked"<<"exist";
         if ( VM_Displayed_Map.value(key)!=nullptr )

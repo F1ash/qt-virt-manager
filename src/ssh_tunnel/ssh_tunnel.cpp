@@ -1,12 +1,6 @@
-//extern "C" {
-//#include "ssh_common.c"
-//}
 #include "ssh_tunnel.h"
 #include <QTcpSocket>
-//#include <QTextStream>
-//#include <signal.h>
-
-#define buffSize  4096
+#include <QTextStream>
 
 SSH_Tunnel::SSH_Tunnel(QObject *parent) :
     QThread(parent)
@@ -15,8 +9,8 @@ SSH_Tunnel::SSH_Tunnel(QObject *parent) :
     ssh_tunnel->setProcessChannelMode(QProcess::SeparateChannels);
     connect(ssh_tunnel, SIGNAL(error(QProcess::ProcessError)),
             this, SLOT(resend_tunnel_errors(QProcess::ProcessError)));
-    connect(this, SIGNAL(finished()),
-            this, SLOT(thread_finished()));
+    //connect(this, SIGNAL(finished()),
+    //        this, SLOT(thread_finished()));
 }
 SSH_Tunnel::~SSH_Tunnel()
 {
@@ -24,15 +18,9 @@ SSH_Tunnel::~SSH_Tunnel()
     if ( ssh_tunnel!=nullptr ) {
         if ( ssh_tunnel->isOpen() ) {
             ssh_tunnel->close();
-            //ssh_tunnel->waitForFinished();
-            //s<< "ssh_tunnel is finished at thread deletion" << endl;
-        //} else {
-        //    ssh_tunnel->kill();
-        //    s<< "ssh_tunnel is killed at thread deletion" << endl;
         };
-        //kill(pid, SIGKILL);
         //ssh_tunnel->kill();
-        ssh_tunnel->deleteLater();
+        //ssh_tunnel->deleteLater();
     };
     //s<< "~SSH_Tunnel()" << endl;
 }
@@ -47,67 +35,11 @@ void SSH_Tunnel::setData(QVariantMap _data)
 }
 void SSH_Tunnel::run()
 {
-    /*
-    ssh_session session;
-    ssh_channel channel;
-    char buffer[256];
-    int nbytes;
-    int rc;
-
-    session = connect_ssh("stationar", "root", 0);
-    if (session == nullptr) {
-        return;
-    };
-
-    channel = ssh_channel_new(session);
-    if (channel == nullptr) {
-        ssh_disconnect(session);
-        ssh_free(session);
-        return;
-    };
-
-    rc = ssh_channel_open_session(channel);
-    if (rc < 0) {
-        goto failed;
-    };
-
-    rc = ssh_channel_request_exec(channel, "lsof");
-    if (rc < 0) {
-        goto failed;
-    };
-
-    nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
-    while (nbytes > 0) {
-        if (fwrite(buffer, 1, nbytes, stdout) != (unsigned int) nbytes) {
-            goto failed;
-        };
-        nbytes = ssh_channel_read(channel, buffer, sizeof(buffer), 0);
-    };
-
-    if (nbytes < 0) {
-        goto failed;
-    };
-
-    ssh_channel_send_eof(channel);
-    ssh_channel_close(channel);
-    ssh_channel_free(channel);
-    ssh_free(session);
-
-    return;
-failed:
-    ssh_channel_close(channel);
-    ssh_channel_free(channel);
-    ssh_disconnect(session);
-    ssh_free(session);
-
-    return;
-    */
     //QTextStream s(stdout);
     quint16 viewerPort = 33333;
     bool connected = false;
     bool finished = false;
     QStringList _args;
-    QString ssh_command;
 
     // create SSH tunnel
     QTcpSocket *listenSocket = new QTcpSocket();
@@ -118,7 +50,6 @@ failed:
         };
         viewerPort = listenSocket->localPort();
         _args.clear();
-        ssh_command.clear();
         _args   << "-p" << remotePort
                 << "-L"
                 << QString("%1:%2:%3").arg(viewerPort).arg(graphicsAddr).arg(graphicsPort)

@@ -16,7 +16,7 @@ public:
 
 signals:
     void        established(quint16);
-    void        errMsg(const QString);
+    void        errMsg(const QString&);
 
 private:
     QString     remoteHost, remotePort, User,

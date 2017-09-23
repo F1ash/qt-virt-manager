@@ -3,7 +3,6 @@
 
 #include <QDomDocument>
 #include <QShortcut>
-#include <QTimerEvent>
 #include "vm_viewer/vm_viewer.h"
 #include "vm_viewer/krdc_vnc_qtonly/Machine_View.h"
 #include "ssh_tunnel/ssh_tunnel.h"
@@ -26,7 +25,6 @@ private:
     MachineView     *vncWdg = nullptr;
     QShortcut       *actFullScreen = nullptr;
     SSH_Tunnel      *sshTunnelThread = nullptr;
-    QPushButton     *connectBtn = nullptr;
 
 public slots:
     void             init();

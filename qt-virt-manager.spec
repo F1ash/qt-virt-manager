@@ -31,8 +31,6 @@ Requires:       spice-vdagent
 %if 0%{?fedora}
 # for scrubbing
 Suggests:       scrub
-# netcat for ssh-transported remote connections
-Suggests:       nc
 # for use VNC client with tls
 Suggests:       gnutls
 %endif

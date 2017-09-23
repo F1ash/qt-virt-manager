@@ -28,9 +28,6 @@ Spice_Viewer::~Spice_Viewer()
     if ( spiceWdg!=nullptr ) {
         spiceWdg->disconnectFromSpiceSource();
     };
-    if ( sshTunnelThread!=nullptr ) {
-        sshTunnelThread->deleteLater();
-    };
 }
 
 /* public slots */
@@ -43,29 +40,17 @@ void Spice_Viewer::init()
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);
+        show();
         startCloseProcess();
-//    } else if ( addr.contains("127.0.0") &&
-//                !host.contains("localhost") &&
-//                !host.contains("localdomain") ) {
-//        viewerToolBar->setEnabled(false);
-//        msg = QString("In '<b>%1</b>':<br>\n\
-//Guest is on a remote host,\n\
-//but is only configured to allow\n\
-//local file descriptor connections.")
-//                .arg(domain);
-//        sendErrMsg(msg);
-//        showErrorInfo(msg);
-//        startCloseProcess();
     } else {
         actFullScreen = new QShortcut(
                     QKeySequence(tr("Shift+F11", "View|Full Screen")),
                     this);
         connect(actFullScreen, SIGNAL(activated()),
                 SLOT(fullScreenTriggered()));
-        //if ( host.contains("localhost") || host.contains("localdomain") ) {
-        //    // local VM, graphic is allow
-        //    emit initGraphic();
-        //} else {
+        if ( !transport.contains("ssh") ) {
+            emit initGraphic();
+        } else {
             // need ssh tunnel
             QVariantMap _data;
             _data.insert("User", user);
@@ -81,18 +66,11 @@ void Spice_Viewer::init()
             sshTunnelThread = new SSH_Tunnel(this);
             connect(sshTunnelThread, SIGNAL(established(quint16)),
                     this, SLOT(useSSHTunnel(quint16)));
-            connect(sshTunnelThread, SIGNAL(errMsg(QString)),
-                    this, SLOT(sendErrMsg(QString)));
+            connect(sshTunnelThread, SIGNAL(errMsg(const QString&)),
+                    this, SLOT(sendErrMsg(const QString&)));
             sshTunnelThread->setData(_data);
             sshTunnelThread->start();
-            // crazy solution >>>
-            connectBtn = new QPushButton(this);
-            connectBtn->setText("Connect to VM");
-            setCentralWidget(connectBtn);
-            connect(connectBtn, SIGNAL(released()),
-                    this, SLOT(initGraphicWidget()));
-            // <<< crazy solution
-        //};
+        };
     };
 }
 void Spice_Viewer::reconnectToVirtDomain()
@@ -110,6 +88,8 @@ void Spice_Viewer::reconnectToVirtDomain()
                         size().width()-around_size.width(),
                         size().height()-around_size.height());
         };
+    } else {
+        initGraphicWidget();
     };
 }
 void Spice_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
@@ -203,8 +183,8 @@ void Spice_Viewer::initGraphicWidget()
             this, SLOT(startAnimatedHide()));
 
     QSize around_size = getWidgetSizeAroundDisplay();
-    QTextStream s(stdout);
-    s<<"address: "<<addr<<":"<<port<<endl;
+    //QTextStream s(stdout);
+    //s<<"address: "<<addr<<":"<<port<<endl;
     QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
     spiceWdg->connectToSpiceSource(_uri);
     spiceWdg->setNewSize(around_size.width(), around_size.height());
@@ -214,7 +194,12 @@ void Spice_Viewer::useSSHTunnel(quint16 _port)
 {
     addr = "127.0.0.1";
     port = _port;
-    //initGraphicWidget();
+    // start timer for [re]connect to VM,
+    // when connection is successful,
+    // then will be resizeing occured and
+    // viewer will be showed.
+    // See for resizeViewer method.
+    reinitTimerId = startTimer(1000);
 }
 
 void Spice_Viewer::timerEvent(QTimerEvent *ev)
@@ -230,12 +215,23 @@ void Spice_Viewer::timerEvent(QTimerEvent *ev)
         };
     } else if ( ev->timerId()==toolBarTimerId ) {
         startAnimatedHide();
-    }
+    } else if ( ev->timerId()==reinitTimerId ) {
+        if ( !isVisible() ) {
+            reconnectToVirtDomain();
+        } else {
+            killTimer(reinitTimerId);
+            reinitTimerId = 0;
+        };
+    };
 }
 
 void Spice_Viewer::resizeViewer(const QSize &_size)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
+    // will be showed when occured successful connect to VM
+    if ( !isVisible() ) {
+        this->show();
+    };
     if ( _size+around_size==size() ) {
         return;
     };

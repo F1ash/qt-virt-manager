@@ -40,6 +40,7 @@ public:
     int              timerId = 0;
     int              killTimerId = 0;
     int              toolBarTimerId = 0;
+    int              reinitTimerId = 0;
     uint             counter = 0;
 
     QVBoxLayout     *infoLayout = nullptr;

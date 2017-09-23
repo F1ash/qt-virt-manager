@@ -1,7 +1,7 @@
 #include "vnc_viewer.h"
 #include <QApplication>
 #include <QClipboard>
-#include <QTextStream>
+//#include <QTextStream>
 
 VNC_Viewer::VNC_Viewer(
         QWidget         *parent,
@@ -31,9 +31,6 @@ VNC_Viewer::~VNC_Viewer()
     if ( vncWdg!=nullptr ) {
         vncWdg->disconnectVNC();
     };
-    if ( sshTunnelThread!=nullptr ) {
-        sshTunnelThread->deleteLater();
-    };
 }
 
 /* public slots */
@@ -47,21 +44,9 @@ void VNC_Viewer::init()
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);
+        show();
         startCloseProcess();
         //s << "failed" << endl;
-    //} else if ( addr.contains("127.0.0") &&
-    //            !host.contains("localhost") &&
-    //            !host.contains("localdomain") ) {
-    //    viewerToolBar->setEnabled(false);
-    //    msg = QString("In '<b>%1</b>':<br>\n\
-//Guest is on a remote host,\n\
-//but is only configured to allow\n\
-//local file descriptor connections.")
-//                .arg(domain);
-//        sendErrMsg(msg);
-//        showErrorInfo(msg);
-//        startCloseProcess();
-        //s << "local graphics only on remote host" << endl;
     } else {
         actFullScreen = new QShortcut(
                     QKeySequence(tr("Shift+F11", "View|Full Screen")),
@@ -69,10 +54,9 @@ void VNC_Viewer::init()
         connect(actFullScreen, SIGNAL(activated()),
                 SLOT(fullScreenTriggered()));
         //s << "remote or local with allow to graphics stream" << endl;
-        //if ( host.contains("localhost") || host.contains("localdomain") ) {
-        //    // local VM, graphic is allow
-        //    emit initGraphic();
-        //} else {
+        if ( !transport.contains("ssh") ) {
+            emit initGraphic();
+        } else {
             // need ssh tunnel
             QVariantMap _data;
             _data.insert("User", user);
@@ -88,18 +72,11 @@ void VNC_Viewer::init()
             sshTunnelThread = new SSH_Tunnel(this);
             connect(sshTunnelThread, SIGNAL(established(quint16)),
                     this, SLOT(useSSHTunnel(quint16)));
-            connect(sshTunnelThread, SIGNAL(errMsg(QString)),
-                    this, SLOT(sendErrMsg(QString)));
+            connect(sshTunnelThread, SIGNAL(errMsg(const QString&)),
+                    this, SLOT(sendErrMsg(const QString&)));
             sshTunnelThread->setData(_data);
             sshTunnelThread->start();
-            // crazy solution >>>
-            connectBtn = new QPushButton(this);
-            connectBtn->setText("Connect to VM");
-            setCentralWidget(connectBtn);
-            connect(connectBtn, SIGNAL(released()),
-                    this, SLOT(initGraphicWidget()));
-            // <<< crazy solution
-        //};
+        };
     };
 }
 void VNC_Viewer::reconnectToVirtDomain()
@@ -118,6 +95,8 @@ void VNC_Viewer::reconnectToVirtDomain()
                         size().width()-around_size.width(),
                         size().height()-around_size.height());
         };
+    } else {
+        initGraphicWidget();
     };
 }
 void VNC_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
@@ -214,8 +193,8 @@ void VNC_Viewer::getScreenshotFromVirtDomain()
 void VNC_Viewer::copyFilesToVirtDomain()
 {
     if ( nullptr==vncWdg ) return;
-    QStringList fileNames = QFileDialog::getOpenFileNames(
-                this, "Copy files to Guest", "~");
+    //QStringList fileNames = QFileDialog::getOpenFileNames(
+    //            this, "Copy files to Guest", "~");
     //vncWdg->fileCopyAsync(fileNames);
 }
 void VNC_Viewer::copyToClipboardFromVirtDomain()
@@ -292,8 +271,8 @@ void VNC_Viewer::initGraphicWidget()
             this, SLOT(startAnimatedHide()));
 
     QSize around_size = getWidgetSizeAroundDisplay();
-    QTextStream s(stdout);
-    s<<"address: "<<addr<<":"<<port<<endl;
+    //QTextStream s(stdout);
+    //s<<"address: "<<addr<<":"<<port<<endl;
     vncWdg->Set_VNC_URL(addr, port);
     vncWdg->Set_Scaling(true);
     vncWdg->initView();
@@ -304,7 +283,12 @@ void VNC_Viewer::useSSHTunnel(quint16 _port)
 {
     addr = "127.0.0.1";
     port = _port;
-    //initGraphicWidget();
+    // start timer for [re]connect to VM,
+    // when connection is successful,
+    // then will be resizeing occured and
+    // viewer will be showed.
+    // See for resizeViewer method.
+    reinitTimerId = startTimer(1000);
 }
 
 void VNC_Viewer::timerEvent(QTimerEvent *ev)
@@ -320,12 +304,23 @@ void VNC_Viewer::timerEvent(QTimerEvent *ev)
         };
     } else if ( ev->timerId()==toolBarTimerId ) {
         startAnimatedHide();
-    }
+    } else if ( ev->timerId()==reinitTimerId ) {
+        if ( !isVisible() ) {
+            reconnectToVirtDomain();
+        } else {
+            killTimer(reinitTimerId);
+            reinitTimerId = 0;
+        };
+    };
 }
 
 void VNC_Viewer::resizeViewer(const int h, const int w)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
+    // will be showed when occured successful connect to VM
+    if ( !isVisible() ) {
+        this->show();
+    };
     resize(QSize(h,w)+around_size);
 }
 
