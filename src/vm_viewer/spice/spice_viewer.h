@@ -19,7 +19,6 @@ public:
             QString         arg1       = QString(),
             QString         arg2       = QString(),
             QString         arg3       = QString());
-    ~Spice_Viewer();
 
 private:
     QString          transport, addr, user, host;
@@ -32,6 +31,7 @@ private:
 public slots:
     void             init();
     void             reconnectToVirtDomain();
+    void             disconnectFromVirtDomain();
     void             sendKeySeqToVirtDomain(Qt::Key);
     void             getScreenshotFromVirtDomain();
     void             copyFilesToVirtDomain();

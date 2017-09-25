@@ -1035,6 +1035,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
 void MainWindow::deleteVMDisplay(const QString &key)
 {
     if ( VM_Displayed_Map.contains(key) ) {
+        /*
         VM_Viewer *value = nullptr;
         QString _type =
                 VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
@@ -1045,6 +1046,10 @@ void MainWindow::deleteVMDisplay(const QString &key)
                 delete value;
                 value = nullptr;
             };
+        };
+        */
+        if ( VM_Displayed_Map.value(key, nullptr)!=nullptr ) {
+            VM_Displayed_Map.value(key, nullptr)->deleteLater();
         };
         VM_Displayed_Map.remove(key);
     }

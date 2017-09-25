@@ -54,6 +54,7 @@ VM_Viewer::~VM_Viewer()
         killTimer(reinitTimerId);
         reinitTimerId = 0;
     };
+    disconnectFromVirtDomain();
     //qDebug()<<"VM_Viewer destroyed";
 }
 
@@ -68,7 +69,7 @@ void VM_Viewer::initGraphicWidget()
 }
 void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
-    ev->ignore();
+    ev->accept();
     QString key = objectName();
     QString msg = QString("'<b>%1</b>' VM viewer closed.")
             .arg(domain);
@@ -222,6 +223,10 @@ void VM_Viewer::startCloseProcess()
     //qDebug()<<killTimerId<<"killTimer";
 }
 void VM_Viewer::reconnectToVirtDomain()
+{
+
+}
+void VM_Viewer::disconnectFromVirtDomain()
 {
 
 }

@@ -97,7 +97,7 @@ void ConnAliveThread::run()
 {
     openConnection();
     while ( keep_alive && nullptr!=*ptr_ConnPtr ) {
-        msleep(1000);
+        msleep(500);
     };
     keep_alive = false;
     //closeConnection();

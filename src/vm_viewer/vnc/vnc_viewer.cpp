@@ -26,12 +26,6 @@ VNC_Viewer::VNC_Viewer(
     };
     init();
 }
-VNC_Viewer::~VNC_Viewer()
-{
-    if ( vncWdg!=nullptr ) {
-        vncWdg->disconnectVNC();
-    };
-}
 
 /* public slots */
 void VNC_Viewer::init()
@@ -97,6 +91,12 @@ void VNC_Viewer::reconnectToVirtDomain()
         };
     } else {
         initGraphicWidget();
+    };
+}
+void VNC_Viewer::disconnectFromVirtDomain()
+{
+    if ( vncWdg!=nullptr ) {
+        vncWdg->disconnectVNC();
     };
 }
 void VNC_Viewer::sendKeySeqToVirtDomain(Qt::Key key)

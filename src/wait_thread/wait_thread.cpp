@@ -1,5 +1,5 @@
 #include "wait_thread.h"
-#define  PERIOD 333
+#define  PERIOD 1000
 
 Wait::Wait(QObject *parent, ConnectionList *wdgList) :
     QThread(parent), wdg(wdgList)

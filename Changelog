@@ -185,3 +185,7 @@ some fixes for unregister event callbacks;
 fixed send errors to Log from Control widgets
     and at Edit Domain config;
 some fixes;
+
+0.44.73 :
+implemented ssh-tunnel for ssh-transported VMs;
+some fixes;

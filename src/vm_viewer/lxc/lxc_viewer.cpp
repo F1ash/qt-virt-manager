@@ -75,7 +75,7 @@ void LXC_Viewer::init()
         timerId = startTimer(PERIOD);
     } else {
         msg = QString(
-                    "In '<b>%1</b>':<br> Connection or Domain is NULL or inactive")
+                "In '<b>%1</b>':<br> Connection or Domain is NULL or inactive")
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);
@@ -139,6 +139,7 @@ PTY opened. Terminal is active.")
                         .arg(domain);
             sendErrMsg(msg);
         };
+        show();
         /*
          * As usually a xterm terminals don't support
          * the Window manipulation through CSI,
@@ -156,8 +157,7 @@ PTY opened. Terminal is active.")
 }
 void LXC_Viewer::closeEvent(QCloseEvent *ev)
 {
-    if ( ev->type()==QEvent::Close ) {
-        QString key = QString("%1_%2").arg(connName).arg(domain);
-        emit finished(key);
-    };
+    ev->ignore();
+    QString key = QString("%1_%2").arg(connName).arg(domain);
+    emit finished(key);
 }

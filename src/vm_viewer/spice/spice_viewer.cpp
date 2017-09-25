@@ -23,12 +23,6 @@ Spice_Viewer::Spice_Viewer(
     };
     init();
 }
-Spice_Viewer::~Spice_Viewer()
-{
-    if ( spiceWdg!=nullptr ) {
-        spiceWdg->disconnectFromSpiceSource();
-    };
-}
 
 /* public slots */
 void Spice_Viewer::init()
@@ -90,6 +84,12 @@ void Spice_Viewer::reconnectToVirtDomain()
         };
     } else {
         initGraphicWidget();
+    };
+}
+void Spice_Viewer::disconnectFromVirtDomain()
+{
+    if ( spiceWdg!=nullptr ) {
+        spiceWdg->disconnectFromSpiceSource();
     };
 }
 void Spice_Viewer::sendKeySeqToVirtDomain(Qt::Key key)

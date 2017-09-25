@@ -31,7 +31,7 @@ public:
             QString         arg1       = QString(),
             QString         arg2       = QString(),
             QString         arg3       = QString());
-    ~VM_Viewer();
+    virtual ~VM_Viewer();
     QString          connName, domain, addrData, TYPE;
     virConnectPtr*   ptr_ConnPtr;
     virErrorPtr      virtErrors = nullptr;
@@ -82,6 +82,7 @@ public slots:
     void             resendExecMethod(const Act_Param&);
     void             startCloseProcess();
     virtual void     reconnectToVirtDomain();
+    virtual void     disconnectFromVirtDomain();
     virtual void     sendKeySeqToVirtDomain(Qt::Key);
     virtual void     getScreenshotFromVirtDomain();
     virtual void     copyFilesToVirtDomain();
