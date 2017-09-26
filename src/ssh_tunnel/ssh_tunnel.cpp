@@ -1,6 +1,6 @@
 #include "ssh_tunnel.h"
 #include <QTcpSocket>
-#include <QTextStream>
+//#include <QTextStream>
 
 SSH_Tunnel::SSH_Tunnel(QObject *parent) :
     QThread(parent)
@@ -15,12 +15,8 @@ SSH_Tunnel::SSH_Tunnel(QObject *parent) :
 SSH_Tunnel::~SSH_Tunnel()
 {
     //QTextStream s(stdout);
-    if ( ssh_tunnel!=nullptr ) {
-        if ( ssh_tunnel->isOpen() ) {
-            ssh_tunnel->close();
-        };
-        //ssh_tunnel->kill();
-        //ssh_tunnel->deleteLater();
+    if ( ssh_tunnel->isOpen() ) {
+        ssh_tunnel->close();
     };
     //s<< "~SSH_Tunnel()" << endl;
 }

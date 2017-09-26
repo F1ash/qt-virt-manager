@@ -22,7 +22,6 @@ private:
     QString     remoteHost, remotePort, User,
                 graphicsAddr, graphicsPort;
     QProcess   *ssh_tunnel = nullptr;
-    //Q_PID       pid;
 
 private slots:
     void        resend_tunnel_errors(QProcess::ProcessError);
