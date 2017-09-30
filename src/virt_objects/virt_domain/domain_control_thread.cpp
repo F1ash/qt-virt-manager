@@ -278,60 +278,69 @@ Result DomControlThread::getDomainData0()
 Result DomControlThread::getDomainData1()
 {
     Result result;
+    QString activeDomainXmlDesc, displayType, addr,
+            port, transport, host, user;
+    QString name = task.object;
+    result.name  = name;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
         result.err = "Connection pointer is NULL.";
         return result;
     };
-    QString activeDomainXmlDesc, url, uri, type, addr, port;
-    unsigned int flags = 0;
+    QString uri = QString::fromUtf8( virConnectGetURI(*task.srcConnPtr) );
+    if ( !uri.isEmpty() ) {
+        QString part1 = uri.split("://").first();
+        QStringList part2 = part1.split("+");
+        if ( part2.count()>1 ) {
+            transport.append(part2.last());
+        };
+        QString part3 = uri.split("://").last();
+        if ( !part3.isEmpty() ) {
+            QString part4 = part3.split("/").first();
+            if ( part4.contains("@") ) {
+                QStringList part5 = part4.split("@");
+                user = part5.first();
+                host = part5.last();
+            } else if ( part4.isEmpty() ) {
+                host = "localhost.localdomain";
+            } else {
+                host = part4;
+            };
+        } else {
+            host = "localhost.localdomain";
+        };
+    };
+    const char *_type = virConnectGetType(*task.srcConnPtr);
+    if ( _type==nullptr ) {
+        result.result = false;
+        result.err = "Error in getting the connection type.";
+    } else {
+        result.result = true;
+    };
     virDomainPtr domainPtr =virDomainLookupByName(
-                *task.srcConnPtr, task.object.toUtf8().data());
+                *task.srcConnPtr, name.toUtf8().data());
     // flag=0 for get running domain xml-description
-    activeDomainXmlDesc.append( virDomainGetXMLDesc(domainPtr, flags) );
+    activeDomainXmlDesc.append( virDomainGetXMLDesc(domainPtr, 0) );
     QDomDocument doc;
     doc.setContent(activeDomainXmlDesc);
     QDomElement graph = doc.firstChildElement("domain")
        .firstChildElement("devices")
        .firstChildElement("graphics");
-    uri.append(virConnectGetURI(*task.srcConnPtr));
-    addr = uri.split("://").last();
-    uri  = addr;
-    addr = uri.split("/").first();
-    uri  = addr;
-    addr = uri.split(":").first();
-    uri  = addr;
-    if ( uri.contains("@") ) {
-        addr = uri.split("@").last();
-        uri  = addr;
-    };
-    addr.clear();
     if ( !graph.isNull() ) {
-        type.append( graph.attribute("type").toLower() );
-        if (graph.hasAttribute("listen")) {
-            // for listen address
-            addr = graph.attribute("listen");
-        } else if ( !graph.firstChildElement("listen").isNull() ) {
-            // for listen address from virt.network
-            addr = graph.firstChildElement("listen")
-                    .attribute("address");
-        } else {
-            // if uri is empty then connection is local
-            if ( uri.isEmpty() ) {
-                addr = "127.0.0.1";
-                uri  = "127.0.0.1";
-            };
+        displayType.append( graph.attribute("type").toLower() );
+        port.append( graph.attribute("port") );
+        QDomElement listen = graph.firstChildElement("listen");
+        if ( !listen.isNull() ) {
+            addr.append( listen.attribute("address") );
         };
-        port = (graph.hasAttribute("port"))?
-                    graph.attribute("port") : "5900";
-    } else {
-        type = "???";
-        addr = "???";
-        port = "???";
     };
-    // if connection not local then use address from uri
-    if ( addr!=uri && !uri.isEmpty() ) addr = uri;
-    url = QString("%1://%2:%3").arg(type).arg(addr).arg(port);
+
+    QString url = QString("%1://%2/?transport=%3&addr=%4&port=%5")
+            .arg(displayType)
+            .arg(host)
+            .arg(transport)
+            .arg(addr)
+            .arg(port);
     QVariantMap _url;
     _url.insert("URL", url);
     result.data.append( _url );

@@ -1,6 +1,7 @@
 #include "vm_viewer.h"
 
-VM_Viewer::VM_Viewer(QWidget         *parent,
+VM_Viewer::VM_Viewer(
+        QWidget         *parent,
         virConnectPtr   *connPtrPtr,
         QString          arg1,
         QString          arg2,
