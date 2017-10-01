@@ -13,10 +13,13 @@
 #include <QLabel>
 #include <QPropertyAnimation>
 #include <QPoint>
+#include <QShortcut>
+#include <QTimerEvent>
 #include "viewer_toolbar.h"
 #include "virt_objects/virt_entity_config.h"
 #include "create_widgets/snapshot/create_snapshot_dialog.h"
 #include "create_widgets/snapshot/snapshot_action_dialog.h"
+#include "ssh_tunnel/ssh_tunnel.h"
 #include <QDebug>
 
 #define PERIOD      333
@@ -32,6 +35,7 @@ public:
             QString         arg2       = QString(),
             QString         arg3       = QString());
     virtual ~VM_Viewer();
+    virtual void     init();
     QString          connName, domain, addrData, TYPE;
     virConnectPtr*   ptr_ConnPtr;
     virErrorPtr      virtErrors = nullptr;
@@ -41,11 +45,17 @@ public:
     int              killTimerId = 0;
     int              toolBarTimerId = 0;
     int              reinitTimerId = 0;
-    uint             counter = 0;
+    uint             killCounter = 0;
+    uint             reinitCounter = 0;
 
     QVBoxLayout     *infoLayout = nullptr;
     QLabel          *icon = nullptr, *err_msg = nullptr;
     QWidget         *info = nullptr;
+    QShortcut       *actFullScreen = nullptr;
+    SSH_Tunnel      *sshTunnelThread = nullptr;
+
+    QString          transport, addr, user, host;
+    uint             port = 0;
 
 signals:
     void             initGraphic();
@@ -72,9 +82,10 @@ private:
                     *animatedHideToolBar;
 
 public slots:
-    virtual void     init();
     virtual void     initGraphicWidget();
-    virtual void     closeEvent(QCloseEvent *ev);
+    virtual void     timerEvent(QTimerEvent*);
+    virtual void     closeEvent(QCloseEvent*);
+    void             useSSHTunnel(quint16);
     void             sendErrMsg(const QString&);
     void             sendErrMsg(const QString&, const uint);
     void             sendConnErrors();

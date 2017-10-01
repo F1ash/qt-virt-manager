@@ -35,7 +35,8 @@ int main(int argc, char *argv[])
                 w = new Spice_Viewer_Only(nullptr, url);
             };
             if ( w!=nullptr ) {
-                w->show();
+                // it will be showed when connect to VM will be success
+                //w->show();
                 a.exec();
             };
         };

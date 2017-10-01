@@ -90,21 +90,21 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
 {
     if ( ev->timerId()==timerId ) {
         int ptySlaveFd = this->getPtySlaveFd();
-        counter++;
+        killCounter++;
         //qDebug()<<counter<<ptySlaveFd;
         if ( ptySlaveFd>0 && nullptr!=viewerThread ) {
             killTimer(timerId);
             timerId = 0;
-            counter = 0;
+            killCounter = 0;
             viewerThread->setData(
                         domain, hlpThread->domainPtr, ptySlaveFd);
             if ( viewerThread->setCurrentWorkConnect(ptr_ConnPtr) ) {
                 setTerminalParameters();
             };
-        } else if ( TIMEOUT<counter*PERIOD ) {
+        } else if ( TIMEOUT<killCounter*PERIOD ) {
             killTimer(timerId);
             timerId = 0;
-            counter = 0;
+            killCounter = 0;
             QString msg = QString(
                         "In '<b>%1</b>': Open PTY Error...")
                     .arg(domain);
@@ -113,10 +113,10 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             startCloseProcess();
         }
     } else if ( ev->timerId()==killTimerId ) {
-        counter++;
-        viewerToolBar->vm_stateWdg->setCloseProcessValue(counter*PERIOD*6);
-        if ( TIMEOUT<counter*PERIOD*6 ) {
-            counter = 0;
+        killCounter++;
+        viewerToolBar->vm_stateWdg->setCloseProcessValue(killCounter*PERIOD*6);
+        if ( TIMEOUT<killCounter*PERIOD*6 ) {
+            killCounter = 0;
             killTimer(killTimerId);
             killTimerId = 0;
             close();

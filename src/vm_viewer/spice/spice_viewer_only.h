@@ -1,8 +1,6 @@
 #ifndef SPICE_VIEWER_ONLY_H
 #define SPICE_VIEWER_ONLY_H
 
-#include <QShortcut>
-#include <QTimerEvent>
 #include <QScrollArea>
 #include "vm_viewer/vm_viewer_only.h"
 #include "vm_viewer/qspice_widgets/qspice-widget.h"
@@ -13,17 +11,13 @@ class Spice_Viewer_Only : public VM_Viewer_Only
 public:
     explicit Spice_Viewer_Only(
             QWidget        *parent  = nullptr,
-            const QString   url     = "");
+            const QString   _url    = "");
 
 private:
-    QString          addr;
-    uint             port = 0;
     QScrollArea     *scrolled = nullptr;
     QSpiceWidget    *spiceWdg = nullptr;
-    QShortcut       *actFullScreen = nullptr;
-    uint             cycles = 0;
 
-public slots:
+private slots:
     void             reconnectToVirtDomain();
     void             sendKeySeqToVirtDomain(Qt::Key);
     void             getScreenshotFromVirtDomain();
@@ -34,9 +28,7 @@ public slots:
     void             fullScreenVirtDomain();
     void             scaleScreenVirtDomain();
 
-private slots:
     void             initGraphicWidget();
-    void             timerEvent(QTimerEvent*);
     void             resizeViewer(const QSize&);
     void             fullScreenTriggered();
     void             resizeEvent(QResizeEvent*);

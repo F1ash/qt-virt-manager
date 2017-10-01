@@ -13,7 +13,10 @@
 #include <QLabel>
 #include <QPropertyAnimation>
 #include <QPoint>
+#include <QShortcut>
+#include <QTimerEvent>
 #include "viewer_toolbar.h"
+#include "ssh_tunnel/ssh_tunnel.h"
 #include <QDebug>
 
 #define PERIOD      333
@@ -24,21 +27,30 @@ class VM_Viewer_Only : public QMainWindow
 public:
     explicit VM_Viewer_Only(
             QWidget        *parent  = nullptr,
-            const QString   url     = "");
+            const QString   _url    = "");
     virtual ~VM_Viewer_Only();
+    virtual void     init();
+    void             parseURL();
     const QString    url;
+    QString          user, host, transport, addr, address;
     QSettings        settings;
     ViewerToolBar   *viewerToolBar = nullptr;
+    uint             port = 0;
     uint             timerId = 0;
     int              killTimerId = 0;
     int              toolBarTimerId = 0;
-    int              startId;
-    uint             counter = 0;
+    int              reinitTimerId = 0;
+    uint             killCounter = 0;
+    uint             reinitCounter = 0;
 
     QVBoxLayout     *infoLayout = nullptr;
     QLabel          *icon = nullptr, *msg = nullptr;
     QWidget         *info = nullptr;
+    SSH_Tunnel      *sshTunnelThread = nullptr;
+    QShortcut       *actFullScreen = nullptr;
 
+signals:
+    void             initGraphic();
     /*
      * Emitted, when user touched top boarder.
      * Used for show toolbar.
@@ -58,6 +70,9 @@ private:
                     *animatedHideToolBar;
 
 public slots:
+    virtual void     initGraphicWidget();
+    virtual void     timerEvent(QTimerEvent*);
+    void             useSSHTunnel(quint16);
     void             resendExecMethod(const Act_Param&);
     void             startCloseProcess();
     virtual void     reconnectToVirtDomain();

@@ -27,52 +27,7 @@ VNC_Viewer::VNC_Viewer(
     init();
 }
 
-/* public slots */
-void VNC_Viewer::init()
-{
-    //QTextStream s(stdout);
-    QString msg;
-    if ( addr.isEmpty() || port==0 ) {
-        viewerToolBar->setEnabled(false);
-        msg = QString("In '<b>%1</b>':<br> Getting the address data is failed.")
-                .arg(domain);
-        sendErrMsg(msg);
-        showErrorInfo(msg);
-        show();
-        startCloseProcess();
-        //s << "failed" << endl;
-    } else {
-        actFullScreen = new QShortcut(
-                    QKeySequence(tr("Shift+F11", "View|Full Screen")),
-                    this);
-        connect(actFullScreen, SIGNAL(activated()),
-                SLOT(fullScreenTriggered()));
-        //s << "remote or local with allow to graphics stream" << endl;
-        if ( !transport.contains("ssh") ) {
-            emit initGraphic();
-        } else {
-            // need ssh tunnel
-            QVariantMap _data;
-            _data.insert("User", user);
-            QStringList _remoteAddr = host.split(":");
-            _data.insert("RemoteHost", _remoteAddr.first());
-            if ( _remoteAddr.count()==2 ) {
-                _data.insert("RemotePort", _remoteAddr.last());
-            } else {
-                _data.insert("RemotePort", "22"); // default SSH service TCP port
-            };
-            _data.insert("GraphicsAddr", addr);
-            _data.insert("GraphicsPort", port);
-            sshTunnelThread = new SSH_Tunnel(this);
-            connect(sshTunnelThread, SIGNAL(established(quint16)),
-                    this, SLOT(useSSHTunnel(quint16)));
-            connect(sshTunnelThread, SIGNAL(errMsg(const QString&)),
-                    this, SLOT(sendErrMsg(const QString&)));
-            sshTunnelThread->setData(_data);
-            sshTunnelThread->start();
-        };
-    };
-}
+/* private slots */
 void VNC_Viewer::reconnectToVirtDomain()
 {
     if ( nullptr!=vncWdg ) {
@@ -254,7 +209,6 @@ void VNC_Viewer::fullScreenVirtDomain()
     fullScreenTriggered();
 }
 
-/* private slots */
 void VNC_Viewer::initGraphicWidget()
 {
     vncWdg = new MachineView(this);
@@ -277,41 +231,6 @@ void VNC_Viewer::initGraphicWidget()
     vncWdg->Set_Scaling(true);
     vncWdg->initView();
     vncWdg->newViewSize(around_size.width(), around_size.height());
-}
-
-void VNC_Viewer::useSSHTunnel(quint16 _port)
-{
-    addr = "127.0.0.1";
-    port = _port;
-    // start timer for [re]connect to VM,
-    // when connection is successful,
-    // then will be resizeing occured and
-    // viewer will be showed.
-    // See for resizeViewer method.
-    reinitTimerId = startTimer(1000);
-}
-
-void VNC_Viewer::timerEvent(QTimerEvent *ev)
-{
-    if ( ev->timerId()==killTimerId ) {
-        counter++;
-        viewerToolBar->vm_stateWdg->setCloseProcessValue(counter*PERIOD*6);
-        if ( TIMEOUT<counter*PERIOD*6 ) {
-            killTimer(killTimerId);
-            killTimerId = 0;
-            counter = 0;
-            close();
-        };
-    } else if ( ev->timerId()==toolBarTimerId ) {
-        startAnimatedHide();
-    } else if ( ev->timerId()==reinitTimerId ) {
-        if ( !isVisible() ) {
-            reconnectToVirtDomain();
-        } else {
-            killTimer(reinitTimerId);
-            reinitTimerId = 0;
-        };
-    };
 }
 
 void VNC_Viewer::resizeViewer(const int h, const int w)

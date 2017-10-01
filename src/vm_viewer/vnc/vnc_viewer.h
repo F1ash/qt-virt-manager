@@ -2,10 +2,8 @@
 #define VNC_VIEWER_H
 
 #include <QDomDocument>
-#include <QShortcut>
 #include "vm_viewer/vm_viewer.h"
 #include "vm_viewer/krdc_vnc_qtonly/Machine_View.h"
-#include "ssh_tunnel/ssh_tunnel.h"
 
 class VNC_Viewer : public VM_Viewer
 {
@@ -19,14 +17,9 @@ public:
             QString         arg3       = QString());
 
 private:
-    QString          transport, addr, user, host;
-    uint             port = 0;
     MachineView     *vncWdg = nullptr;
-    QShortcut       *actFullScreen = nullptr;
-    SSH_Tunnel      *sshTunnelThread = nullptr;
 
-public slots:
-    void             init();
+private slots:
     void             reconnectToVirtDomain();
     void             disconnectFromVirtDomain();
     void             sendKeySeqToVirtDomain(Qt::Key);
@@ -37,10 +30,7 @@ public slots:
     void             fullScreenVirtDomain();
     void             scaleScreenVirtDomain();
 
-private slots:
     void             initGraphicWidget();
-    void             useSSHTunnel(quint16);
-    void             timerEvent(QTimerEvent*);
     void             resizeViewer(const int, const int);
     void             fullScreenTriggered();
     void             resizeEvent(QResizeEvent*);

@@ -6,13 +6,13 @@ extern "C" {
 
 Spice_Viewer_Only::Spice_Viewer_Only(
         QWidget        *parent,
-        const QString   url) :
-    VM_Viewer_Only(parent, url)
+        const QString   _url) :
+    VM_Viewer_Only(parent, _url)
 {
-    startId = startTimer(1000);
+    init();
 }
 
-/* public slots */
+/* private slots */
 void Spice_Viewer_Only::reconnectToVirtDomain()
 {
     if ( nullptr!=spiceWdg ) {
@@ -28,6 +28,8 @@ void Spice_Viewer_Only::reconnectToVirtDomain()
                         size().width()-around_size.width(),
                         size().height()-around_size.height());
         };
+    } else {
+        initGraphicWidget();
     };
 }
 void Spice_Viewer_Only::sendKeySeqToVirtDomain(Qt::Key key)
@@ -67,7 +69,6 @@ void Spice_Viewer_Only::fullScreenVirtDomain()
     fullScreenTriggered();
 }
 
-/* private slots */
 void Spice_Viewer_Only::initGraphicWidget()
 {
     spiceWdg = new QSpiceWidget(this);
@@ -120,38 +121,13 @@ void Spice_Viewer_Only::initGraphicWidget()
             this, SLOT(startAnimatedHide()));
     connect(spiceWdg, SIGNAL(displayChannelChanged(bool)),
             this, SLOT(displayChannelState(bool)));
-    spiceWdg->connectToSpiceSource(url);
-}
 
-void Spice_Viewer_Only::timerEvent(QTimerEvent *ev)
-{
-    if ( ev->timerId()==killTimerId ) {
-        counter++;
-        viewerToolBar->vm_stateWdg->setCloseProcessValue(counter*PERIOD*6);
-        if ( TIMEOUT<counter*PERIOD*6 ) {
-            killTimer(killTimerId);
-            killTimerId = 0;
-            counter = 0;
-            close();
-        };
-    } else if ( ev->timerId()==toolBarTimerId ) {
-        startAnimatedHide();
-    } else if ( ev->timerId()==startId ) {
-        if ( cycles==0 ) {
-            initGraphicWidget();
-        } else if ( cycles==9 ) {
-            killTimer(startId);
-            startId = 0;
-            if ( spiceWdg==nullptr || !spiceWdg->isConnectedWithDisplay() ) {
-                delete spiceWdg;
-                spiceWdg = nullptr;
-                delete scrolled;
-                scrolled = nullptr;
-                showErrorInfo("");
-            };
-        };
-        ++cycles;
-    }
+    QSize around_size = getWidgetSizeAroundDisplay();
+    //QTextStream s(stdout);
+    //s<<"address: "<<addr<<":"<<port<<endl;
+    QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
+    spiceWdg->connectToSpiceSource(_uri);
+    spiceWdg->setNewSize(around_size.width(), around_size.height());
 }
 
 void Spice_Viewer_Only::resizeViewer(const QSize &_size)
@@ -159,6 +135,10 @@ void Spice_Viewer_Only::resizeViewer(const QSize &_size)
     if ( spiceWdg==nullptr ||
          !spiceWdg->isConnectedWithDisplay() ) return;
     QSize around_size = getWidgetSizeAroundDisplay();
+    // will be showed when occured successful connect to VM
+    if ( !isVisible() ) {
+        this->show();
+    };
     if ( _size+around_size==size() ) {
         return;
     };
@@ -236,7 +216,6 @@ void Spice_Viewer_Only::displayChannelState(bool state)
     if ( state ) {
         QSize around_size = getWidgetSizeAroundDisplay();
         spiceWdg->setNewSize(around_size.width(), around_size.height());
-        killTimer(startId);
         setWindowTitle(QString("Qt Remote Viewer -- %1").arg(url));
     } else {
         delete spiceWdg;

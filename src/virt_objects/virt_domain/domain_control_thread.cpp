@@ -335,10 +335,11 @@ Result DomControlThread::getDomainData1()
         };
     };
 
-    QString url = QString("%1://%2/?transport=%3&addr=%4&port=%5")
+    QString url = QString("%1://%2/?transport=%3&user=%4&addr=%5&port=%6")
             .arg(displayType)
             .arg(host)
             .arg(transport)
+            .arg(user)
             .arg(addr)
             .arg(port);
     QVariantMap _url;

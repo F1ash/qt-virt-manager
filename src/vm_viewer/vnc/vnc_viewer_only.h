@@ -1,8 +1,6 @@
 #ifndef VNC_VIEWER_ONLY_H
 #define VNC_VIEWER_ONLY_H
 
-#include <QShortcut>
-#include <QTimerEvent>
 #include "vm_viewer/vm_viewer_only.h"
 #include "vm_viewer/krdc_vnc_qtonly/Machine_View.h"
 
@@ -12,15 +10,12 @@ class VNC_Viewer_Only : public VM_Viewer_Only
 public:
     explicit VNC_Viewer_Only(
             QWidget        *parent  = nullptr,
-            const QString   url     = "");
+            const QString   _url    = "");
 
 private:
-    QString          addr;
-    uint             port = 0;
     MachineView     *vncWdg = nullptr;
-    QShortcut       *actFullScreen = nullptr;
 
-public slots:
+private slots:
     void             reconnectToVirtDomain();
     void             sendKeySeqToVirtDomain(Qt::Key);
     void             getScreenshotFromVirtDomain();
@@ -30,9 +25,7 @@ public slots:
     void             fullScreenVirtDomain();
     void             scaleScreenVirtDomain();
 
-private slots:
     void             initGraphicWidget();
-    void             timerEvent(QTimerEvent*);
     void             resizeViewer(const int, const int);
     void             fullScreenTriggered();
     void             resizeEvent(QResizeEvent*);

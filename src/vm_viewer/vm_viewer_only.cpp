@@ -2,7 +2,7 @@
 
 VM_Viewer_Only::VM_Viewer_Only(
         QWidget          *parent,
-        const QString     url) :
+        const QString     _url) :
     QMainWindow(parent), url(url)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -31,12 +31,15 @@ VM_Viewer_Only::VM_Viewer_Only(
             this, SLOT(hideToolBar()));
     connect(viewerToolBar, SIGNAL(positionChanged(const QPoint&)),
             this, SLOT(setNewPosition(const QPoint&)));
+    connect(this, SIGNAL(initGraphic()),
+            this, SLOT(initGraphicWidget()));
 
     viewerToolBar->removeAction(viewerToolBar->pause_Action);
     viewerToolBar->removeAction(viewerToolBar->destroy_Action);
     viewerToolBar->removeAction(viewerToolBar->snapshot_Action);
     viewerToolBar->removeAction(viewerToolBar->sep1);
     viewerToolBar->removeAction(viewerToolBar->sep2);
+    parseURL();
 }
 VM_Viewer_Only::~VM_Viewer_Only()
 {
@@ -51,8 +54,100 @@ VM_Viewer_Only::~VM_Viewer_Only()
     };
     //qDebug()<<"VM_Viewer_Only destroyed";
 }
+void VM_Viewer_Only::init()
+{
+    //QTextStream s(stdout);
+    QString msg;
+    if ( addr.isEmpty() || port==0 ) {
+        viewerToolBar->setEnabled(false);
+        msg = QString("In '<b>%1</b>':<br> Getting the address data is failed.")
+                .arg(url);
+        showErrorInfo(msg);
+        show();
+        startCloseProcess();
+        //s << "failed" << endl;
+    } else {
+        actFullScreen = new QShortcut(
+                    QKeySequence(tr("Shift+F11", "View|Full Screen")),
+                    this);
+        connect(actFullScreen, SIGNAL(activated()),
+                SLOT(fullScreenTriggered()));
+        //s << "remote or local with allow to graphics stream" << endl;
+        if ( !transport.contains("ssh") ) {
+            emit initGraphic();
+        } else {
+            // need ssh tunnel
+            QVariantMap _data;
+            _data.insert("User", user);
+            QStringList _remoteAddr = host.split(":");
+            _data.insert("RemoteHost", _remoteAddr.first());
+            if ( _remoteAddr.count()==2 ) {
+                _data.insert("RemotePort", _remoteAddr.last());
+            } else {
+                _data.insert("RemotePort", "22"); // default SSH service TCP port
+            };
+            _data.insert("GraphicsAddr", addr);
+            _data.insert("GraphicsPort", port);
+            sshTunnelThread = new SSH_Tunnel(this);
+            connect(sshTunnelThread, SIGNAL(established(quint16)),
+                    this, SLOT(useSSHTunnel(quint16)));
+            sshTunnelThread->setData(_data);
+            sshTunnelThread->start();
+        };
+    };
+}
+void VM_Viewer_Only::parseURL()
+{
+    QStringList parts1, parts2;
+    parts1 = url.split("://").at(1).split("/");
+    host = parts1.at(0);
+    parts2 = parts1.at(1).split("&");
+    transport = parts2.at(0).split("=").at(1);
+    user      = parts2.at(1).split("=").at(1);
+    addr      = parts2.at(2).split("=").at(1);
+    port      = parts2.at(3).split("=").at(1).toInt();
+}
 
 /* public slots */
+void VM_Viewer_Only::initGraphicWidget()
+{
+
+}
+void VM_Viewer_Only::timerEvent(QTimerEvent *ev)
+{
+    if ( ev->timerId()==killTimerId ) {
+        killCounter++;
+        viewerToolBar->vm_stateWdg->setCloseProcessValue(killCounter*PERIOD*6);
+        if ( TIMEOUT<killCounter*PERIOD*6 ) {
+            killTimer(killTimerId);
+            killTimerId = 0;
+            killCounter = 0;
+            close();
+        };
+    } else if ( ev->timerId()==toolBarTimerId ) {
+        startAnimatedHide();
+    } else if ( ev->timerId()==reinitTimerId ) {
+        reinitCounter++;
+        if ( !isVisible() && reinitCounter<30) {
+            reconnectToVirtDomain();
+        } else {
+            killTimer(reinitTimerId);
+            reinitTimerId = 0;
+            reinitCounter = 0;
+        };
+    };
+}
+void VM_Viewer_Only::useSSHTunnel(quint16 _port)
+{
+    address = "127.0.0.1";
+    port = _port;
+    // start timer for [re]connect to VM,
+    // when connection is successful,
+    // then will be resizeing occured and
+    // viewer will be showed.
+    // See for resizeViewer method.
+    reinitTimerId = startTimer(1000);
+}
 void VM_Viewer_Only::resendExecMethod(const Act_Param &params)
 {
     if ( params.method==Methods::reconnectToVirtDomain ) {

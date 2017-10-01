@@ -4,17 +4,17 @@
 
 VNC_Viewer_Only::VNC_Viewer_Only(
         QWidget         *parent,
-        const QString    url) :
-    VM_Viewer_Only(parent, url)
+        const QString    _url) :
+    VM_Viewer_Only(parent, _url)
 {
     viewerToolBar->removeAction(viewerToolBar->copyFiles_Action);
     viewerToolBar->removeAction(viewerToolBar->copyToClipboard);
     viewerToolBar->removeAction(viewerToolBar->pasteClipboard);
     viewerToolBar->removeAction(viewerToolBar->stateWdg_Action);
-    startId = startTimer(1000);
+    init();
 }
 
-/* public slots */
+/* private slots */
 void VNC_Viewer_Only::reconnectToVirtDomain()
 {
     if ( nullptr!=vncWdg ) {
@@ -31,6 +31,8 @@ void VNC_Viewer_Only::reconnectToVirtDomain()
                         size().width()-around_size.width(),
                         size().height()-around_size.height());
         };
+    } else {
+        initGraphicWidget();
     };
 }
 void VNC_Viewer_Only::sendKeySeqToVirtDomain(Qt::Key key)
@@ -184,7 +186,6 @@ void VNC_Viewer_Only::fullScreenVirtDomain()
     fullScreenTriggered();
 }
 
-/* private slots */
 void VNC_Viewer_Only::initGraphicWidget()
 {
     vncWdg = new MachineView(this);
@@ -204,39 +205,25 @@ void VNC_Viewer_Only::initGraphicWidget()
     connect(vncWdg, SIGNAL(CantConnect()),
             this, SLOT(cantConnect()));
 
-    QString _url = url.split("://").last();
-    QStringList _urlParams = _url.split(":");
-    addr = _urlParams.first();
-    port = _urlParams.last().toInt();
+    //QString _url = url.split("://").last();
+    //QStringList _urlParams = _url.split(":");
+    //addr = _urlParams.first();
+    //port = _urlParams.last().toInt();
+    QSize around_size = getWidgetSizeAroundDisplay();
     //qDebug()<<"address:"<<addr<<port;
     vncWdg->Set_VNC_URL(addr, port);
     vncWdg->Set_Scaling(true);
     vncWdg->initView();
-}
-
-void VNC_Viewer_Only::timerEvent(QTimerEvent *ev)
-{
-    if ( ev->timerId()==killTimerId ) {
-        counter++;
-        viewerToolBar->vm_stateWdg->setCloseProcessValue(counter*PERIOD*6);
-        if ( TIMEOUT<counter*PERIOD*6 ) {
-            killTimer(killTimerId);
-            killTimerId = 0;
-            counter = 0;
-            close();
-        };
-    } else if ( ev->timerId()==toolBarTimerId ) {
-        startAnimatedHide();
-    } else if ( ev->timerId()==startId ) {
-        killTimer(startId);
-        startId = 0;
-        initGraphicWidget();
-    }
+    vncWdg->newViewSize(around_size.width(), around_size.height());
 }
 
 void VNC_Viewer_Only::resizeViewer(const int h, const int w)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
+    // will be showed when occured successful connect to VM
+    if ( !isVisible() ) {
+        this->show();
+    };
     resize(QSize(h,w)+around_size);
 }
 

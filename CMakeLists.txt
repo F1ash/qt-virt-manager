@@ -111,6 +111,8 @@ set (HEADERS_FOR_VIEWER
     src/vm_viewer/krdc_vnc_qtonly/remoteview.h
     src/vm_viewer/krdc_vnc_qtonly/vncclientthread.h
     src/vm_viewer/krdc_vnc_qtonly/vncview.h
+
+    src/ssh_tunnel/ssh_tunnel.h
 )
 set (SOURCES_FOR_VIEWER
     src/vm_viewer/viewer_toolbar.cpp
@@ -142,6 +144,8 @@ set (SOURCES_FOR_VIEWER
     src/vm_viewer/krdc_vnc_qtonly/remoteview.cpp
     src/vm_viewer/krdc_vnc_qtonly/vncclientthread.cpp
     src/vm_viewer/krdc_vnc_qtonly/vncview.cpp
+
+    src/ssh_tunnel/ssh_tunnel.cpp
 )
 set (HEADERS
   src/mainwindow.h
@@ -538,8 +542,6 @@ set (HEADERS
   src/state_monitor/svg_templates.h
 
   src/task_warehouse/task_warehouse.h
-
-  src/ssh_tunnel/ssh_tunnel.h
 )
 set (SOURCES 
   src/main.cpp
@@ -933,8 +935,6 @@ set (SOURCES
   src/state_monitor/domain_state_viewer.cpp
 
   src/task_warehouse/task_warehouse.cpp
-
-  src/ssh_tunnel/ssh_tunnel.cpp
 )
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE qt-virt-manager.desktop)
