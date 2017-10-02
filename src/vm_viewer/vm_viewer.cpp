@@ -67,7 +67,6 @@ void VM_Viewer::init()
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);
-        show();
         startCloseProcess();
     } else {
         actFullScreen = new QShortcut(
@@ -126,6 +125,14 @@ void VM_Viewer::timerEvent(QTimerEvent *ev)
         } else {
             killTimer(reinitTimerId);
             reinitTimerId = 0;
+            if ( reinitCounter>=30 ) {
+                viewerToolBar->setEnabled(false);
+                QString msg =
+                    QString("In '<b>%1</b>':<br> Open the VM graphics is failed.")
+                    .arg(domain);
+                showErrorInfo(msg);
+                startCloseProcess();
+            };
             reinitCounter = 0;
         };
     };
@@ -350,6 +357,9 @@ void VM_Viewer::showErrorInfo(const QString &_msg)
     info = new QWidget(this);
     info->setLayout(infoLayout);
     setCentralWidget(info);
+    if ( !isVisible() ) {
+        this->show();
+    };
 }
 void VM_Viewer::startAnimatedShow()
 {

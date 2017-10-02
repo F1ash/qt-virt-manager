@@ -3,7 +3,7 @@
 VM_Viewer_Only::VM_Viewer_Only(
         QWidget          *parent,
         const QString     _url) :
-    QMainWindow(parent), url(url)
+    QMainWindow(parent), url(_url)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setMinimumSize(100, 100);
@@ -63,7 +63,6 @@ void VM_Viewer_Only::init()
         msg = QString("In '<b>%1</b>':<br> Getting the address data is failed.")
                 .arg(url);
         showErrorInfo(msg);
-        show();
         startCloseProcess();
         //s << "failed" << endl;
     } else {
@@ -73,6 +72,11 @@ void VM_Viewer_Only::init()
         connect(actFullScreen, SIGNAL(activated()),
                 SLOT(fullScreenTriggered()));
         //s << "remote or local with allow to graphics stream" << endl;
+        if ( host.contains(addr) ) {
+
+        } else {
+
+        };
         if ( !transport.contains("ssh") ) {
             emit initGraphic();
         } else {
@@ -99,13 +103,31 @@ void VM_Viewer_Only::init()
 void VM_Viewer_Only::parseURL()
 {
     QStringList parts1, parts2;
-    parts1 = url.split("://").at(1).split("/");
-    host = parts1.at(0);
-    parts2 = parts1.at(1).split("&");
-    transport = parts2.at(0).split("=").at(1);
-    user      = parts2.at(1).split("=").at(1);
-    addr      = parts2.at(2).split("=").at(1);
-    port      = parts2.at(3).split("=").at(1).toInt();
+    if ( url.split("://", QString::SkipEmptyParts).count()>1 ) {
+        parts1  = url.split("://", QString::SkipEmptyParts).at(1)
+                .split("/", QString::SkipEmptyParts);
+        host    = parts1.at(0);
+        if ( parts1.count()>1 ) {
+            if ( parts1.at(1).split("&", QString::SkipEmptyParts).count()>3 ) {
+                parts2      = parts1.at(1).split("&", QString::SkipEmptyParts);
+                transport   = parts2.at(0).split("=").at(1);
+                user        = parts2.at(1).split("=").at(1);
+                addr        = parts2.at(2).split("=").at(1);
+                port        = parts2.at(3).split("=").at(1).toInt();
+            };
+        } else {
+            parts2 = host.split(":", QString::SkipEmptyParts);
+            if ( parts2.count()>1 ) {
+                port = parts2.last().toInt();
+                parts2.removeLast();
+                if ( parts2.count()>1 ) {
+                    addr = parts2.join(":");
+                } else {
+                    addr = parts2.first();
+                };
+            };
+        };
+    };
 }
 
 /* public slots */
@@ -128,18 +150,26 @@ void VM_Viewer_Only::timerEvent(QTimerEvent *ev)
         startAnimatedHide();
     } else if ( ev->timerId()==reinitTimerId ) {
         reinitCounter++;
-        if ( !isVisible() && reinitCounter<30) {
+        if ( !isVisible() && reinitCounter<30 ) {
             reconnectToVirtDomain();
         } else {
             killTimer(reinitTimerId);
             reinitTimerId = 0;
+            if ( reinitCounter>=30 ) {
+                viewerToolBar->setEnabled(false);
+                QString msg =
+                        QString("In '<b>%1</b>':<br> Open the address is failed.")
+                        .arg(url);
+                showErrorInfo(msg);
+                startCloseProcess();
+            };
             reinitCounter = 0;
         };
     };
 }
 void VM_Viewer_Only::useSSHTunnel(quint16 _port)
 {
-    address = "127.0.0.1";
+    addr = "127.0.0.1";
     port = _port;
     // start timer for [re]connect to VM,
     // when connection is successful,
@@ -234,6 +264,9 @@ void VM_Viewer_Only::showErrorInfo(const QString &_msg)
     info = new QWidget(this);
     info->setLayout(infoLayout);
     setCentralWidget(info);
+    if ( !isVisible() ) {
+        this->show();
+    };
 }
 void VM_Viewer_Only::startAnimatedShow()
 {

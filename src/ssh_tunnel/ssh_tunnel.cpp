@@ -5,6 +5,7 @@
 SSH_Tunnel::SSH_Tunnel(QObject *parent) :
     QThread(parent)
 {
+    qRegisterMetaType<QProcess::ProcessError>("QProcess::ProcessError");
     ssh_tunnel = new QProcess(this);
     ssh_tunnel->setProcessChannelMode(QProcess::SeparateChannels);
     connect(ssh_tunnel, SIGNAL(error(QProcess::ProcessError)),
