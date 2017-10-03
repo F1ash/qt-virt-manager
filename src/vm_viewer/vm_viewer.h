@@ -110,6 +110,7 @@ private slots:
     void             toolBarShowed();
     void             hideToolBar();
     void             setNewPosition(const QPoint&);
+    void             sshThreadFinished();
 };
 
 #endif // VM_VIEWER_H

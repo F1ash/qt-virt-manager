@@ -76,6 +76,7 @@ public slots:
     void             resendExecMethod(const Act_Param&);
     void             startCloseProcess();
     virtual void     reconnectToVirtDomain();
+    virtual void     disconnectFromVirtDomain();
     virtual void     sendKeySeqToVirtDomain(Qt::Key);
     virtual void     getScreenshotFromVirtDomain();
     virtual void     copyFilesToVirtDomain();
@@ -92,6 +93,7 @@ private slots:
     void             toolBarShowed();
     void             hideToolBar();
     void             setNewPosition(const QPoint&);
+    void             sshThreadFinished();
 };
 
 #endif // VM_VIEWER_ONLY_H

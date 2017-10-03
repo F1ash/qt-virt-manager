@@ -35,6 +35,12 @@ void VNC_Viewer_Only::reconnectToVirtDomain()
         initGraphicWidget();
     };
 }
+void VNC_Viewer_Only::disconnectFromVirtDomain()
+{
+    if ( vncWdg!=nullptr ) {
+        vncWdg->disconnectVNC();
+    };
+}
 void VNC_Viewer_Only::sendKeySeqToVirtDomain(Qt::Key key)
 {
     if ( nullptr==vncWdg ) return;

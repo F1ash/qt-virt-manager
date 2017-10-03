@@ -19,6 +19,7 @@ private:
 
 private slots:
     void             reconnectToVirtDomain();
+    void             disconnectFromVirtDomain();
     void             sendKeySeqToVirtDomain(Qt::Key);
     void             getScreenshotFromVirtDomain();
     void             copyFilesToVirtDomain();

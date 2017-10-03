@@ -52,6 +52,14 @@ VM_Viewer_Only::~VM_Viewer_Only()
         killTimer(killTimerId);
         killTimerId = 0;
     };
+    if ( reinitTimerId>0 ) {
+        killTimer(reinitTimerId);
+        reinitTimerId = 0;
+    };
+    disconnectFromVirtDomain();
+    if ( sshTunnelThread!=nullptr ) {
+        sshTunnelThread->stop();
+    };
     //qDebug()<<"VM_Viewer_Only destroyed";
 }
 void VM_Viewer_Only::init()
@@ -92,9 +100,11 @@ void VM_Viewer_Only::init()
             };
             _data.insert("GraphicsAddr", addr);
             _data.insert("GraphicsPort", port);
-            sshTunnelThread = new SSH_Tunnel(this);
+            sshTunnelThread = new SSH_Tunnel();
             connect(sshTunnelThread, SIGNAL(established(quint16)),
                     this, SLOT(useSSHTunnel(quint16)));
+            connect(sshTunnelThread, SIGNAL(finished()),
+                    this, SLOT(sshThreadFinished()));
             sshTunnelThread->setData(_data);
             sshTunnelThread->start();
         };
@@ -214,6 +224,10 @@ void VM_Viewer_Only::reconnectToVirtDomain()
 {
 
 }
+void VM_Viewer_Only::disconnectFromVirtDomain()
+{
+
+}
 void VM_Viewer_Only::sendKeySeqToVirtDomain(Qt::Key key)
 {
     Q_UNUSED(key);
@@ -317,4 +331,8 @@ void VM_Viewer_Only::hideToolBar()
 void VM_Viewer_Only::setNewPosition(const QPoint &_pos)
 {
     toolBarPoint = mapFromParent(_pos);
+}
+void VM_Viewer_Only::sshThreadFinished()
+{
+    showErrorInfo("SSH tunnel is destroyed.");
 }

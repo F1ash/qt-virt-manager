@@ -5,21 +5,8 @@
 SSH_Tunnel::SSH_Tunnel(QObject *parent) :
     QThread(parent)
 {
-    qRegisterMetaType<QProcess::ProcessError>("QProcess::ProcessError");
-    ssh_tunnel = new QProcess(this);
+    ssh_tunnel = new QProcess();
     ssh_tunnel->setProcessChannelMode(QProcess::SeparateChannels);
-    connect(ssh_tunnel, SIGNAL(error(QProcess::ProcessError)),
-            this, SLOT(resend_tunnel_errors(QProcess::ProcessError)));
-    //connect(this, SIGNAL(finished()),
-    //        this, SLOT(thread_finished()));
-}
-SSH_Tunnel::~SSH_Tunnel()
-{
-    //QTextStream s(stdout);
-    if ( ssh_tunnel->isOpen() ) {
-        ssh_tunnel->close();
-    };
-    //s<< "~SSH_Tunnel()" << endl;
 }
 
 void SSH_Tunnel::setData(QVariantMap _data)
@@ -33,7 +20,7 @@ void SSH_Tunnel::setData(QVariantMap _data)
 void SSH_Tunnel::run()
 {
     //QTextStream s(stdout);
-    quint16 viewerPort = 33333;
+    quint16 viewerPort = 0;
     bool connected = false;
     bool finished = false;
     QStringList _args;
@@ -60,28 +47,19 @@ void SSH_Tunnel::run()
         };
         listenSocket->close();
         listenSocket->deleteLater();
-        //pid = ssh_tunnel->pid();
         connected = true;
         break;
     };
 
     emit established(viewerPort);
-    //s<< "established: "<< viewerPort <<" State: "<<ssh_tunnel->state()
-    // << " PID: "<< pid<< endl;
+    //s<< "established: "<< viewerPort <<" State: "<<ssh_tunnel->state();
     finished = ssh_tunnel->waitForFinished(-1);
     //s<< "ssh tunnel thread is finished " << endl;
 }
-
-/* private slots */
-void SSH_Tunnel::resend_tunnel_errors(QProcess::ProcessError _err)
+void SSH_Tunnel::stop()
 {
-    Q_UNUSED(_err);
-    //QTextStream s(stdout);
-    //s<<ssh_tunnel->errorString()<<endl;
-    emit errMsg(ssh_tunnel->errorString());
-}
-void SSH_Tunnel::thread_finished()
-{
-    //QTextStream s(stdout);
-    //s<<"ssh_command_process_is_finished" <<endl;
+    if ( ssh_tunnel->isOpen() ) {
+        ssh_tunnel->close();
+    };
+    ssh_tunnel->kill();
 }

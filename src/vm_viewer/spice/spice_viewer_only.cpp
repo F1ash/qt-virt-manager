@@ -32,6 +32,12 @@ void Spice_Viewer_Only::reconnectToVirtDomain()
         initGraphicWidget();
     };
 }
+void Spice_Viewer_Only::disconnectFromVirtDomain()
+{
+    if ( spiceWdg!=nullptr ) {
+        spiceWdg->disconnectFromSpiceSource();
+    };
+}
 void Spice_Viewer_Only::sendKeySeqToVirtDomain(Qt::Key key)
 {
     if ( nullptr==spiceWdg ) return;
