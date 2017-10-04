@@ -77,18 +77,23 @@ void VM_Viewer::init()
                     this);
         connect(actFullScreen, SIGNAL(activated()),
                 SLOT(fullScreenTriggered()));
-        if ( !transport.contains("ssh") ) {
+        if ( !transport.contains("ssh", Qt::CaseInsensitive) ) {
             emit initGraphic();
         } else {
             // need ssh tunnel
             QVariantMap _data;
             _data.insert("User", user);
-            QStringList _remoteAddr = host.split(":");
-            _data.insert("RemoteHost", _remoteAddr.first());
-            if ( _remoteAddr.count()==2 ) {
+            QStringList _remoteAddr = host.split(":", QString::SkipEmptyParts);
+            if ( _remoteAddr.count()>1 ) {
                 _data.insert("RemotePort", _remoteAddr.last());
+                _remoteAddr.removeLast();
             } else {
                 _data.insert("RemotePort", "22"); // default SSH service TCP port
+            };
+            if ( _remoteAddr.count()>1 ) {
+                _data.insert("RemoteHost", _remoteAddr.join(":"));
+            } else {
+                _data.insert("RemoteHost", _remoteAddr.first());
             };
             _data.insert("GraphicsAddr", addr);
             _data.insert("GraphicsPort", port);

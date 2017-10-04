@@ -35,7 +35,7 @@ public:
 
 private:
     QString          url;
-    QPushButton     *push;
+    QPushButton     *push, *info;
     QLineEdit       *urlEdit;
     QHBoxLayout     *urlLayout;
     QWidget         *urlWdg;
@@ -48,6 +48,7 @@ private:
 private slots:
     void             closeEvent(QCloseEvent*);
     void             saveUniqueURL();
+    void             showInfo();
     void             urlMenuRequested(const QPoint&);
     void             urlActivated(QListWidgetItem*);
 };

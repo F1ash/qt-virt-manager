@@ -1,4 +1,5 @@
 #include "get_url_dialog.h"
+#include <QMessageBox>
 
 URLMenu::URLMenu(QWidget *parent) :
     QMenu(parent)
@@ -30,12 +31,17 @@ GetURLDialog::GetURLDialog(QWidget *parent) :
     push = new QPushButton(this);
     push->setIcon(QIcon::fromTheme("disconnect"));
     push->setToolTip("Connect");
+    info = new QPushButton(this);
+    info->setIcon(QIcon::fromTheme("info"));
+    info->setToolTip("Info");
     urlEdit = new QLineEdit(this);
     urlEdit->setPlaceholderText("protocol://host:port");
-    urlEdit->setToolTip("spice://example.com:5900\nvnc://192.168.0.3:5901");
+    urlEdit->setToolTip("spice://example.com:5900\nvnc://192.168.0.3:5901\n\
+vnc://example.com/?transport=ssh&user=root&addr=192.168.122.1&port=5902");
     urlLayout = new QHBoxLayout(this);
     urlLayout->addWidget(urlEdit);
     urlLayout->addWidget(push);
+    urlLayout->addWidget(info);
     urlWdg = new QWidget(this);
     urlWdg->setLayout(urlLayout);
     urlList = new QListWidget(this);
@@ -46,6 +52,8 @@ GetURLDialog::GetURLDialog(QWidget *parent) :
     setLayout(commonLayout);
     connect(push, SIGNAL(released()),
             this, SLOT(saveUniqueURL()));
+    connect(info, SIGNAL(released()),
+            this, SLOT(showInfo()));
     connect(urlEdit, SIGNAL(returnPressed()),
             this, SLOT(saveUniqueURL()));
     connect(urlList, SIGNAL(customContextMenuRequested(const QPoint&)),
@@ -110,6 +118,17 @@ void GetURLDialog::saveUniqueURL()
     url = urlEdit->text();
     saveToHistory(url);
     done(0);
+}
+void GetURLDialog::showInfo()
+{
+    QMessageBox::information(
+                this,
+                "For VM on remote host",
+                "If you have SSH access to remote host\n\
+and an internal address for VM graphics\n\
+then you can use Remote Viewer with such path:\n\
+<vnc|spice>://HOST[:PORT]/?transport=ssh&user=<USER>&addr=<IP>&port=<NUMBER>",
+                QMessageBox::Ok);
 }
 void GetURLDialog::urlMenuRequested(const QPoint &pos)
 {

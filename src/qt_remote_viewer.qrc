@@ -1,4 +1,3 @@
-<?xml version="1.0" ?>
 <RCC>
     <qresource prefix="/icons/QtRemoteViewer">
         <file alias="index.theme">icons/index.theme</file>
@@ -116,5 +115,10 @@
         <file alias="128x128/actions/qt_icon.png">icons/128x128/actions/qt_icon.png</file>
         <file alias="128x128/actions/yandex_money.png">icons/128x128/actions/yandex_money.png</file>
         <file alias="256x256/apps/remote-desktop-viewer.png">icons/256x256/apps/remote-desktop-viewer.png</file>
+        <file alias="22x22/actions/info.png">icons/22x22/actions/info.png</file>
+        <file alias="24x24/actions/info.png">icons/24x24/actions/info.png</file>
+        <file alias="32x32/actions/info.png">icons/32x32/actions/info.png</file>
+        <file alias="48x48/actions/info.png">icons/48x48/actions/info.png</file>
+        <file alias="64x64/actions/info.png">icons/64x64/actions/info.png</file>
     </qresource>
 </RCC>

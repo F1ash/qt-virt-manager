@@ -64,7 +64,6 @@ VM_Viewer_Only::~VM_Viewer_Only()
 }
 void VM_Viewer_Only::init()
 {
-    //QTextStream s(stdout);
     QString msg;
     if ( addr.isEmpty() || port==0 ) {
         viewerToolBar->setEnabled(false);
@@ -79,24 +78,23 @@ void VM_Viewer_Only::init()
                     this);
         connect(actFullScreen, SIGNAL(activated()),
                 SLOT(fullScreenTriggered()));
-        //s << "remote or local with allow to graphics stream" << endl;
-        if ( host.contains(addr) ) {
-
-        } else {
-
-        };
-        if ( !transport.contains("ssh") ) {
+        if ( !transport.contains("ssh", Qt::CaseInsensitive) ) {
             emit initGraphic();
         } else {
             // need ssh tunnel
             QVariantMap _data;
             _data.insert("User", user);
-            QStringList _remoteAddr = host.split(":");
-            _data.insert("RemoteHost", _remoteAddr.first());
-            if ( _remoteAddr.count()==2 ) {
+            QStringList _remoteAddr = host.split(":", QString::SkipEmptyParts);
+            if ( _remoteAddr.count()>1 ) {
                 _data.insert("RemotePort", _remoteAddr.last());
+                _remoteAddr.removeLast();
             } else {
                 _data.insert("RemotePort", "22"); // default SSH service TCP port
+            };
+            if ( _remoteAddr.count()>1 ) {
+                _data.insert("RemoteHost", _remoteAddr.join(":"));
+            } else {
+                _data.insert("RemoteHost", _remoteAddr.first());
             };
             _data.insert("GraphicsAddr", addr);
             _data.insert("GraphicsPort", port);
@@ -118,14 +116,18 @@ void VM_Viewer_Only::parseURL()
                 .split("/", QString::SkipEmptyParts);
         host    = parts1.at(0);
         if ( parts1.count()>1 ) {
+            // address has extra parameters
             if ( parts1.at(1).split("&", QString::SkipEmptyParts).count()>3 ) {
                 parts2      = parts1.at(1).split("&", QString::SkipEmptyParts);
                 transport   = parts2.at(0).split("=").at(1);
                 user        = parts2.at(1).split("=").at(1);
                 addr        = parts2.at(2).split("=").at(1);
                 port        = parts2.at(3).split("=").at(1).toInt();
+            } else {
+                // Getting the address data is failed
             };
         } else {
+            // address has usual parameters only
             parts2 = host.split(":", QString::SkipEmptyParts);
             if ( parts2.count()>1 ) {
                 port = parts2.last().toInt();
@@ -135,8 +137,12 @@ void VM_Viewer_Only::parseURL()
                 } else {
                     addr = parts2.first();
                 };
+            } else {
+                // Getting the address data is failed
             };
         };
+    } else {
+        // Getting the address data is failed
     };
 }
 

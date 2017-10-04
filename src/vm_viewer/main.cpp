@@ -29,9 +29,9 @@ int main(int argc, char *argv[])
         if ( _ret!=255 ) {
             inLoop = true;
             VM_Viewer_Only *w = nullptr;
-            if ( url.startsWith("vnc") ) {
+            if ( url.startsWith("vnc", Qt::CaseInsensitive) ) {
                 w = new VNC_Viewer_Only(nullptr, url);
-            } else if ( url.startsWith("spice") ) {
+            } else if ( url.startsWith("spice", Qt::CaseInsensitive) ) {
                 w = new Spice_Viewer_Only(nullptr, url);
             };
             if ( w!=nullptr ) {
