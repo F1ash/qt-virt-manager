@@ -188,4 +188,8 @@ some fixes;
 
 0.44.73 :
 implemented ssh-tunnel for ssh-transported VMs;
-some fixes;
+some fixes and enhancements;
+
+0.45.75 :
+extended external VM Viewer for using ssh-tunnel;
+some enhancements;
