@@ -20,8 +20,12 @@
 #include "tray/traywidget.h"
 #include "wait_thread/wait_thread.h"
 #include "vm_viewer/lxc/lxc_viewer.h"
+#ifndef ONLY_VNC_BUILD
 #include "vm_viewer/spice/spice_viewer.h"
+#endif
+#ifndef ONLY_SPICE_BUILD
 #include "vm_viewer/vnc/vnc_viewer.h"
+#endif
 #include "state_monitor/domain_state_monitor.h"
 #include "task_warehouse/task_warehouse.h"
 #include "dock_head_widgets/dock_widget.h"

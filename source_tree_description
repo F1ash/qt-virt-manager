@@ -19,6 +19,7 @@
     ├── proxy_widget        (Proxy widget)
     ├── settings            (Connection settings widget)
     ├── soft_touched        (SoftTouched mode widgets)
+    ├── ssh_tunnel          (SSH tunnel thread object)
     ├── state_monitor       (StateMonitor widget)
     ├── task_warehouse      (TaskWarehouse widget)
     ├── tray                (Tray widget)

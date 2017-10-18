@@ -150,12 +150,16 @@ void MainWindow::closeEvent(QCloseEvent *ev)
                 if ( _type=="LXC" ) {
                     value = static_cast<LXC_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
+#ifndef ONLY_VNC_BUILD
                 } else if ( _type=="SPICE" ) {
                     value = static_cast<Spice_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
+#endif
+#ifndef ONLY_SPICE_BUILD
                 } else if ( _type=="VNC" ) {
                     value = static_cast<VNC_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
+#endif
                 };
                 if ( nullptr!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
@@ -991,6 +995,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                             connName,
                             domName));
         } else if ( viewerType=="vnc" ) {
+#ifndef ONLY_SPICE_BUILD
             VM_Displayed_Map.insert(
                         key,
                         new VNC_Viewer(
@@ -999,7 +1004,15 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                             connName,
                             domName,
                             addrData));
+#else
+            QMessageBox::information(
+                        this,
+                        "VM Viewer",
+                        QString("Application built without VNC"));
+            return;
+#endif
         } else if ( viewerType=="spice" ) {
+#ifndef ONLY_VNC_BUILD
             VM_Displayed_Map.insert(
                         key,
                         new Spice_Viewer(
@@ -1008,6 +1021,13 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                             connName,
                             domName,
                             addrData));
+#else
+            QMessageBox::information(
+                        this,
+                        "VM Viewer",
+                        QString("Application built without SPICE"));
+            return;
+#endif
         } else {
             QMessageBox::information(
                         this,

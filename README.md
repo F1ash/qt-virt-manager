@@ -34,6 +34,14 @@ Building parameters:
         if not defined or above zero, then will used
         Spice[Playback/Record] Channels for audio
 
+    ONLY_SPICE_BUILD
+        if defined and above zero, then will build without VNC;
+        unused with ONLY_VNC_BUILD, will build both
+
+    ONLY_VNC_BUILD
+        if defined and above zero, then will build without SPICE;
+        unused with ONLY_SPICE_BUILD, will build both
+
 Build requires:
 
     * with Qt4              (optional, BUILD_QT_VERSION=4)

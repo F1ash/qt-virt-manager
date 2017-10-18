@@ -26,7 +26,7 @@ include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 if(COMPILER_SUPPORTS_CXX11)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
+endif ()
 
 ##
 if ( NOT DEFAULT_ENCODING )
@@ -72,9 +72,9 @@ IF (NOT LIB_SUFFIX)
     IF (${CMAKE_SYSTEM_NAME} MATCHES "(FreeBSD|OpenBSD)")
         message(STATUS "LIB_SUFFIX is disabled for *BSD: ${CMAKE_SYSTEM_NAME}")
         SET (LIB_SUFFIX "")
-    ENDIF()
+    ENDIF ()
     #
-    MESSAGE(STATUS "")
+    MESSAGE (STATUS "")
 ENDIF (NOT LIB_SUFFIX)
 
 set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
@@ -1013,7 +1013,7 @@ else ( QT4_BUILD )
     qt5_add_resources(VIEWER_RCC ${VIEWER_RCC_SRC})
     #qt5_add_translation(VIEWER_QM ${VIEWER_TS})
     set(TERM_WIDGET_LIB qtermwidget5)
-endif( QT4_BUILD )
+endif ( QT4_BUILD )
 ##
 
 if (NOT DEFINED WITH_LIBCACARD)
@@ -1027,7 +1027,7 @@ find_package(Spice1               REQUIRED)
 find_package(SpiceClientGLib2     REQUIRED)
 if ( WITH_LIBCACARD )
     find_package(CACard           REQUIRED)
-endif()
+endif ()
 message(STATUS "Build with Libcacard: ${WITH_LIBCACARD}")
 find_package(LibVirt              REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
@@ -1085,11 +1085,17 @@ message(STATUS "Build with SPICE_AUDIO: ${USE_SPICE_AUDIO}")
 add_executable (${PROJECT_NAME}
     ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS} ${QTERM_RCC} ${QTERM_QM})
 target_link_libraries (${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
-SET_TARGET_PROPERTIES (${PROJECT_NAME} PROPERTIES COMPILE_FLAGS
-    "-DWITH_LIBCACARD=${WITH_LIBCACARD} \
-     -DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO} \
-     -DQSPICE_WIDGET_COMPILATION \
-     -DQTONLY")
+target_compile_definitions (${PROJECT_NAME} PRIVATE
+    WITH_LIBCACARD=${WITH_LIBCACARD}
+    USE_SPICE_AUDIO=${USE_SPICE_AUDIO}
+    QSPICE_WIDGET_COMPILATION
+    QTONLY)
+if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    target_compile_definitions (${PROJECT_NAME} PRIVATE ONLY_VNC_BUILD)
+endif ()
+if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+    target_compile_definitions (${PROJECT_NAME} PRIVATE ONLY_SPICE_BUILD)
+endif ()
 
 configure_file ( ${DESKTOP_FILE}.in ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE} )
 install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE}
@@ -1106,10 +1112,16 @@ set (VIEWER_NAME ${PROJ_PREFIX}-remote-viewer)
 add_executable(${VIEWER_NAME} ${VIEWER_HEADERS} ${VIEWER_SOURCES}
     ${MOC_VIEWER_SOURCES} ${VIEWER_RCC} ${VIEWER_QM})
 target_link_libraries (${VIEWER_NAME} ${VIEWER_BUILD_PROJECT_LIBRARIES})
-SET_TARGET_PROPERTIES (${VIEWER_NAME} PROPERTIES COMPILE_FLAGS
-    "-DUSE_SPICE_AUDIO=${USE_SPICE_AUDIO} \
-     -DQSPICE_WIDGET_COMPILATION \
-     -DQTONLY")
+target_compile_definitions (${VIEWER_NAME} PRIVATE
+    USE_SPICE_AUDIO=${USE_SPICE_AUDIO}
+    QSPICE_WIDGET_COMPILATION
+    QTONLY)
+if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    target_compile_definitions (${VIEWER_NAME} PRIVATE ONLY_VNC_BUILD)
+endif ()
+if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+    target_compile_definitions (${VIEWER_NAME} PRIVATE ONLY_SPICE_BUILD)
+endif ()
 
 configure_file ( ${VIEWER_DESKTOP_FILE}.in
     ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_DESKTOP_FILE} )
