@@ -81,11 +81,8 @@ set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
 set (VERSION_MAJOR   0)
 set (VERSION_MINOR  45)
 set (VERSION_MICRO  75)
-set (HEADERS_FOR_VIEWER
-    src/vm_viewer/viewer_toolbar.h
-    src/vm_viewer/vm_state_widget.h
-    src/vm_viewer/transformation_mode_menu.h
 
+set (QSPICE_HEADERS
     src/vm_viewer/qspice_widgets/qspice-channel.h
     src/vm_viewer/qspice_widgets/qspice-cursor-channel.h
     src/vm_viewer/qspice_widgets/qspice-display-channel.h
@@ -106,19 +103,36 @@ set (HEADERS_FOR_VIEWER
     src/vm_viewer/qspice_widgets/qspice-playback-channel.h
     src/vm_viewer/qspice_widgets/qspice-record-channel.h
     src/vm_viewer/qspice_widgets/qspice-audio.h
-
+)
+set (QVNC_HEADERS
     src/vm_viewer/krdc_vnc_qtonly/Machine_View.h
     src/vm_viewer/krdc_vnc_qtonly/remoteview.h
     src/vm_viewer/krdc_vnc_qtonly/vncclientthread.h
     src/vm_viewer/krdc_vnc_qtonly/vncview.h
+)
+set (HEADERS_FOR_VIEWER
+    src/vm_viewer/viewer_toolbar.h
+    src/vm_viewer/vm_state_widget.h
+    src/vm_viewer/transformation_mode_menu.h
 
     src/ssh_tunnel/ssh_tunnel.h
 )
-set (SOURCES_FOR_VIEWER
-    src/vm_viewer/viewer_toolbar.cpp
-    src/vm_viewer/vm_state_widget.cpp
-    src/vm_viewer/transformation_mode_menu.cpp
+if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND HEADERS_FOR_VIEWER ${QVNC_HEADERS})
+endif ()
+if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+    list(APPEND HEADERS_FOR_VIEWER ${QSPICE_HEADERS})
+endif ()
+if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
+    list(APPEND HEADERS_FOR_VIEWER
+        ${QSPICE_HEADERS} ${QVNC_HEADERS})
+endif ()
+if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND HEADERS_FOR_VIEWER
+        ${QSPICE_HEADERS} ${QVNC_HEADERS})
+endif ()
 
+set (QSPICE_SOURCES
     src/vm_viewer/qspice_widgets/qspice-channel.cpp
     src/vm_viewer/qspice_widgets/qspice-cursor-channel.cpp
     src/vm_viewer/qspice_widgets/qspice-display-channel.cpp
@@ -139,14 +153,35 @@ set (SOURCES_FOR_VIEWER
     src/vm_viewer/qspice_widgets/qspice-playback-channel.cpp
     src/vm_viewer/qspice_widgets/qspice-record-channel.cpp
     src/vm_viewer/qspice_widgets/qspice-audio.cpp
-
+)
+set (QVNC_SOURCES
     src/vm_viewer/krdc_vnc_qtonly/Machine_View.cpp
     src/vm_viewer/krdc_vnc_qtonly/remoteview.cpp
     src/vm_viewer/krdc_vnc_qtonly/vncclientthread.cpp
     src/vm_viewer/krdc_vnc_qtonly/vncview.cpp
+)
+set (SOURCES_FOR_VIEWER
+    src/vm_viewer/viewer_toolbar.cpp
+    src/vm_viewer/vm_state_widget.cpp
+    src/vm_viewer/transformation_mode_menu.cpp
 
     src/ssh_tunnel/ssh_tunnel.cpp
 )
+if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND SOURCES_FOR_VIEWER ${QVNC_SOURCES})
+endif ()
+if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+    list(APPEND SOURCES_FOR_VIEWER ${QSPICE_SOURCES})
+endif ()
+if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
+    list(APPEND SOURCES_FOR_VIEWER
+        ${QSPICE_SOURCES} ${QVNC_SOURCES})
+endif ()
+if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND SOURCES_FOR_VIEWER
+        ${QSPICE_SOURCES} ${QVNC_SOURCES})
+endif ()
+
 set (HEADERS
   src/mainwindow.h
   src/log_dock/log_dock.h
@@ -519,8 +554,6 @@ set (HEADERS
   src/create_widgets/nwfilter/filterref_widget/filterref_widget.h
 
   src/vm_viewer/vm_viewer.h
-  src/vm_viewer/spice/spice_viewer.h
-  src/vm_viewer/vnc/vnc_viewer.h
   ${HEADERS_FOR_VIEWER}
 
   src/vm_viewer/lxc/lxc_viewer.h
@@ -543,7 +576,22 @@ set (HEADERS
 
   src/task_warehouse/task_warehouse.h
 )
-set (SOURCES 
+if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND HEADERS src/vm_viewer/vnc/vnc_viewer.h)
+endif ()
+if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+    list(APPEND HEADERS src/vm_viewer/spice/spice_viewer.h)
+endif ()
+if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
+    list(APPEND HEADERS src/vm_viewer/spice/spice_viewer.h
+        src/vm_viewer/vnc/vnc_viewer.h)
+endif ()
+if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND HEADERS src/vm_viewer/spice/spice_viewer.h
+        src/vm_viewer/vnc/vnc_viewer.h)
+endif ()
+
+set (SOURCES
   src/main.cpp
   src/mainwindow.cpp
   src/log_dock/log_dock.cpp
@@ -914,8 +962,6 @@ set (SOURCES
   src/create_widgets/nwfilter/filterref_widget/filterref_widget.cpp
 
   src/vm_viewer/vm_viewer.cpp
-  src/vm_viewer/spice/spice_viewer.cpp
-  src/vm_viewer/vnc/vnc_viewer.cpp
   ${SOURCES_FOR_VIEWER}
 
   src/vm_viewer/lxc/lxc_viewer.cpp
@@ -936,6 +982,21 @@ set (SOURCES
 
   src/task_warehouse/task_warehouse.cpp
 )
+if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND SOURCES src/vm_viewer/vnc/vnc_viewer.cpp)
+endif ()
+if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+    list(APPEND SOURCES src/vm_viewer/spice/spice_viewer.cpp)
+endif ()
+if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
+    list(APPEND SOURCES src/vm_viewer/spice/spice_viewer.cpp
+        src/vm_viewer/vnc/vnc_viewer.cpp)
+endif ()
+if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND SOURCES src/vm_viewer/spice/spice_viewer.cpp
+        src/vm_viewer/vnc/vnc_viewer.cpp)
+endif ()
+
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE qt-virt-manager.desktop)
 set (VIEWER_DESKTOP_FILE src/vm_viewer/qt-remote-viewer.desktop)
@@ -971,20 +1032,46 @@ set (QTERM_TS
 set (VIEWER_HEADERS
     src/vm_viewer/get_url_dialog.h
     src/vm_viewer/vm_viewer_only.h
-    src/vm_viewer/spice/spice_viewer_only.h
-    src/vm_viewer/vnc/vnc_viewer_only.h
     ${HEADERS_FOR_VIEWER}
     src/create_widgets/common/click_label.h
 )
+if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND VIEWER_HEADERS src/vm_viewer/vnc/vnc_viewer_only.h)
+endif ()
+if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+    list(APPEND VIEWER_HEADERS src/vm_viewer/spice/spice_viewer_only.h)
+endif ()
+if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
+    list(APPEND VIEWER_HEADERS src/vm_viewer/spice/spice_viewer_only.h
+        src/vm_viewer/vnc/vnc_viewer_only.h)
+endif ()
+if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND VIEWER_HEADERS src/vm_viewer/spice/spice_viewer_only.h
+        src/vm_viewer/vnc/vnc_viewer_only.h)
+endif ()
+
 set (VIEWER_SOURCES
     src/vm_viewer/main.cpp
     src/vm_viewer/get_url_dialog.cpp
     src/vm_viewer/vm_viewer_only.cpp
-    src/vm_viewer/spice/spice_viewer_only.cpp
-    src/vm_viewer/vnc/vnc_viewer_only.cpp
     ${SOURCES_FOR_VIEWER}
     src/create_widgets/common/click_label.cpp
 )
+if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND VIEWER_SOURCES src/vm_viewer/vnc/vnc_viewer_only.cpp)
+endif ()
+if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+    list(APPEND VIEWER_SOURCES src/vm_viewer/spice/spice_viewer_only.cpp)
+endif ()
+if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
+    list(APPEND VIEWER_SOURCES src/vm_viewer/spice/spice_viewer_only.cpp
+        src/vm_viewer/vnc/vnc_viewer_only.cpp)
+endif ()
+if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    list(APPEND VIEWER_SOURCES src/vm_viewer/spice/spice_viewer_only.cpp
+        src/vm_viewer/vnc/vnc_viewer_only.cpp)
+endif ()
+
 set (VIEWER_RCC_SRC
     src/qt_remote_viewer.qrc
 )
@@ -1023,15 +1110,29 @@ endif ()
 find_package(GLib2                REQUIRED)
 find_package(GObject              REQUIRED)
 find_package(Gio                  REQUIRED)
-find_package(Spice1               REQUIRED)
-find_package(SpiceClientGLib2     REQUIRED)
 if ( WITH_LIBCACARD )
     find_package(CACard           REQUIRED)
 endif ()
-message(STATUS "Build with Libcacard: ${WITH_LIBCACARD}")
 find_package(LibVirt              REQUIRED)
 find_package("${TERM_WIDGET_LIB}" REQUIRED)
-find_package(LibVNCServer         REQUIRED)
+if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    find_package(LibVNCServer     REQUIRED)
+endif ()
+if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+    find_package(Spice1           REQUIRED)
+    find_package(SpiceClientGLib2 REQUIRED)
+endif ()
+if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
+    find_package(Spice1           REQUIRED)
+    find_package(SpiceClientGLib2 REQUIRED)
+    find_package(LibVNCServer     REQUIRED)
+endif ()
+if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+    find_package(Spice1           REQUIRED)
+    find_package(SpiceClientGLib2 REQUIRED)
+    find_package(LibVNCServer     REQUIRED)
+endif ()
+
 include_directories(
     ${GLib2_INCLUDE_DIRS}
     ${GOBJECT_INCLUDE_DIRS}
