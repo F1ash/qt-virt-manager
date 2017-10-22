@@ -33,9 +33,9 @@ if ( NOT DEFAULT_ENCODING )
     set ( DEFAULT_ENCODING "UTF-8" )
 endif ( NOT DEFAULT_ENCODING )
 
-if ( NOT BUILD_QT_VERSION )
+if ( NOT DEFINED BUILD_QT_VERSION )
     set (BUILD_QT_VERSION 5)    # Qt5 is default and supported only
-endif ( NOT BUILD_QT_VERSION )
+endif ()
 
 if ( BUILD_QT_VERSION STREQUAL 4 )
     set (QT4_BUILD 1)
@@ -77,6 +77,22 @@ IF (NOT LIB_SUFFIX)
     MESSAGE (STATUS "")
 ENDIF (NOT LIB_SUFFIX)
 
+if (NOT DEFINED BUILD_TYPE)
+    set (BUILD_TYPE "Release")
+endif ()
+if (NOT DEFINED WITH_LIBCACARD)
+    set (WITH_LIBCACARD 0)
+endif ()
+if (NOT DEFINED USE_SPICE_AUDIO)
+    set (USE_SPICE_AUDIO 1)
+endif ()
+if (NOT DEFINED WITH_SPICE_SUPPORT)
+    set (WITH_SPICE_SUPPORT 1)
+endif ()
+if (NOT DEFINED WITH_VNC_SUPPORT)
+    set (WITH_VNC_SUPPORT 1)
+endif ()
+
 set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
 set (VERSION_MAJOR   0)
 set (VERSION_MINOR  45)
@@ -117,19 +133,11 @@ set (HEADERS_FOR_VIEWER
 
     src/ssh_tunnel/ssh_tunnel.h
 )
-if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+if ( WITH_VNC_SUPPORT )
     list(APPEND HEADERS_FOR_VIEWER ${QVNC_HEADERS})
 endif ()
-if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+if ( WITH_SPICE_SUPPORT )
     list(APPEND HEADERS_FOR_VIEWER ${QSPICE_HEADERS})
-endif ()
-if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
-    list(APPEND HEADERS_FOR_VIEWER
-        ${QSPICE_HEADERS} ${QVNC_HEADERS})
-endif ()
-if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
-    list(APPEND HEADERS_FOR_VIEWER
-        ${QSPICE_HEADERS} ${QVNC_HEADERS})
 endif ()
 
 set (QSPICE_SOURCES
@@ -167,19 +175,11 @@ set (SOURCES_FOR_VIEWER
 
     src/ssh_tunnel/ssh_tunnel.cpp
 )
-if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+if ( WITH_VNC_SUPPORT )
     list(APPEND SOURCES_FOR_VIEWER ${QVNC_SOURCES})
 endif ()
-if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+if ( WITH_SPICE_SUPPORT )
     list(APPEND SOURCES_FOR_VIEWER ${QSPICE_SOURCES})
-endif ()
-if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
-    list(APPEND SOURCES_FOR_VIEWER
-        ${QSPICE_SOURCES} ${QVNC_SOURCES})
-endif ()
-if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
-    list(APPEND SOURCES_FOR_VIEWER
-        ${QSPICE_SOURCES} ${QVNC_SOURCES})
 endif ()
 
 set (HEADERS
@@ -576,19 +576,11 @@ set (HEADERS
 
   src/task_warehouse/task_warehouse.h
 )
-if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+if ( WITH_VNC_SUPPORT )
     list(APPEND HEADERS src/vm_viewer/vnc/vnc_viewer.h)
 endif ()
-if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+if ( WITH_SPICE_SUPPORT )
     list(APPEND HEADERS src/vm_viewer/spice/spice_viewer.h)
-endif ()
-if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
-    list(APPEND HEADERS src/vm_viewer/spice/spice_viewer.h
-        src/vm_viewer/vnc/vnc_viewer.h)
-endif ()
-if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
-    list(APPEND HEADERS src/vm_viewer/spice/spice_viewer.h
-        src/vm_viewer/vnc/vnc_viewer.h)
 endif ()
 
 set (SOURCES
@@ -982,19 +974,11 @@ set (SOURCES
 
   src/task_warehouse/task_warehouse.cpp
 )
-if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+if ( WITH_VNC_SUPPORT )
     list(APPEND SOURCES src/vm_viewer/vnc/vnc_viewer.cpp)
 endif ()
-if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+if ( WITH_SPICE_SUPPORT )
     list(APPEND SOURCES src/vm_viewer/spice/spice_viewer.cpp)
-endif ()
-if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
-    list(APPEND SOURCES src/vm_viewer/spice/spice_viewer.cpp
-        src/vm_viewer/vnc/vnc_viewer.cpp)
-endif ()
-if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
-    list(APPEND SOURCES src/vm_viewer/spice/spice_viewer.cpp
-        src/vm_viewer/vnc/vnc_viewer.cpp)
 endif ()
 
 set (SOURCES_DIRS src)
@@ -1035,19 +1019,11 @@ set (VIEWER_HEADERS
     ${HEADERS_FOR_VIEWER}
     src/create_widgets/common/click_label.h
 )
-if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+if ( WITH_VNC_SUPPORT )
     list(APPEND VIEWER_HEADERS src/vm_viewer/vnc/vnc_viewer_only.h)
 endif ()
-if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+if ( WITH_SPICE_SUPPORT )
     list(APPEND VIEWER_HEADERS src/vm_viewer/spice/spice_viewer_only.h)
-endif ()
-if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
-    list(APPEND VIEWER_HEADERS src/vm_viewer/spice/spice_viewer_only.h
-        src/vm_viewer/vnc/vnc_viewer_only.h)
-endif ()
-if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
-    list(APPEND VIEWER_HEADERS src/vm_viewer/spice/spice_viewer_only.h
-        src/vm_viewer/vnc/vnc_viewer_only.h)
 endif ()
 
 set (VIEWER_SOURCES
@@ -1057,19 +1033,11 @@ set (VIEWER_SOURCES
     ${SOURCES_FOR_VIEWER}
     src/create_widgets/common/click_label.cpp
 )
-if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
+if ( WITH_VNC_SUPPORT )
     list(APPEND VIEWER_SOURCES src/vm_viewer/vnc/vnc_viewer_only.cpp)
 endif ()
-if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
+if ( WITH_SPICE_SUPPORT )
     list(APPEND VIEWER_SOURCES src/vm_viewer/spice/spice_viewer_only.cpp)
-endif ()
-if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
-    list(APPEND VIEWER_SOURCES src/vm_viewer/spice/spice_viewer_only.cpp
-        src/vm_viewer/vnc/vnc_viewer_only.cpp)
-endif ()
-if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
-    list(APPEND VIEWER_SOURCES src/vm_viewer/spice/spice_viewer_only.cpp
-        src/vm_viewer/vnc/vnc_viewer_only.cpp)
 endif ()
 
 set (VIEWER_RCC_SRC
@@ -1103,34 +1071,20 @@ else ( QT4_BUILD )
 endif ( QT4_BUILD )
 ##
 
-if (NOT DEFINED WITH_LIBCACARD)
-    set (WITH_LIBCACARD 0)
+find_package(LibVirt                REQUIRED)
+find_package("${TERM_WIDGET_LIB}"   REQUIRED)
+if ( WITH_VNC_SUPPORT )
+    find_package(LibVNCServer       REQUIRED)
 endif ()
-
-find_package(GLib2                REQUIRED)
-find_package(GObject              REQUIRED)
-find_package(Gio                  REQUIRED)
-if ( WITH_LIBCACARD )
-    find_package(CACard           REQUIRED)
-endif ()
-find_package(LibVirt              REQUIRED)
-find_package("${TERM_WIDGET_LIB}" REQUIRED)
-if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
-    find_package(LibVNCServer     REQUIRED)
-endif ()
-if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
-    find_package(Spice1           REQUIRED)
-    find_package(SpiceClientGLib2 REQUIRED)
-endif ()
-if ( NOT ONLY_SPICE_BUILD AND NOT ONLY_VNC_BUILD )
-    find_package(Spice1           REQUIRED)
-    find_package(SpiceClientGLib2 REQUIRED)
-    find_package(LibVNCServer     REQUIRED)
-endif ()
-if ( ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
-    find_package(Spice1           REQUIRED)
-    find_package(SpiceClientGLib2 REQUIRED)
-    find_package(LibVNCServer     REQUIRED)
+if ( WITH_SPICE_SUPPORT )
+    find_package(GLib2              REQUIRED)
+    find_package(GObject            REQUIRED)
+    find_package(Gio                REQUIRED)
+    find_package(Spice1             REQUIRED)
+    find_package(SpiceClientGLib2   REQUIRED)
+    if ( WITH_LIBCACARD )
+        find_package(CACard         REQUIRED)
+    endif ()
 endif ()
 
 include_directories(
@@ -1161,6 +1115,7 @@ list(APPEND VIEWER_BUILD_PROJECT_LIBRARIES
     ${GLib2_LIBRARIES}
     ${GOBJECT_LIBRARIES}
     ${GIO_LIBRARIES}
+    ${CACard_LIBRARIES}
     ${Spice1_LIBRARIES}
     ${SPICE_CLIENT_GLIB2_LIBRARIES}
     ${LIBVNCCLIENT_LIBRARIES}
@@ -1179,23 +1134,25 @@ MESSAGE(STATUS "Found includes :
 MESSAGE(STATUS "Found BUILD_PROJECT_LIBRARIES: ${BUILD_PROJECT_LIBRARIES}")
 
 # * build & install application & files
-if (NOT DEFINED USE_SPICE_AUDIO)
-    set (USE_SPICE_AUDIO 1)
-endif ()
-message(STATUS "Build with SPICE_AUDIO: ${USE_SPICE_AUDIO}")
 add_executable (${PROJECT_NAME}
     ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS} ${QTERM_RCC} ${QTERM_QM})
 target_link_libraries (${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
-target_compile_definitions (${PROJECT_NAME} PRIVATE
-    WITH_LIBCACARD=${WITH_LIBCACARD}
-    USE_SPICE_AUDIO=${USE_SPICE_AUDIO}
-    QSPICE_WIDGET_COMPILATION
-    QTONLY)
-if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
-    target_compile_definitions (${PROJECT_NAME} PRIVATE ONLY_VNC_BUILD)
+target_compile_definitions (
+    ${PROJECT_NAME} PRIVATE
+    BUILD_TYPE=${BUILD_TYPE}
+    WITH_VNC_SUPPORT=${WITH_VNC_SUPPORT}
+    WITH_SPICE_SUPPORT=${WITH_SPICE_SUPPORT})
+if ( WITH_VNC_SUPPORT )
+    target_compile_definitions (
+        ${PROJECT_NAME} PRIVATE
+        QTONLY)
 endif ()
-if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
-    target_compile_definitions (${PROJECT_NAME} PRIVATE ONLY_SPICE_BUILD)
+if ( WITH_SPICE_SUPPORT )
+    target_compile_definitions (
+        ${PROJECT_NAME} PRIVATE
+        WITH_LIBCACARD=${WITH_LIBCACARD}
+        USE_SPICE_AUDIO=${USE_SPICE_AUDIO}
+        QSPICE_WIDGET_COMPILATION)
 endif ()
 
 configure_file ( ${DESKTOP_FILE}.in ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE} )
@@ -1209,29 +1166,39 @@ install ( DIRECTORY src/misc
 install ( FILES src/icons/256x256/apps/virtual-engineering.png
     DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
 
-set (VIEWER_NAME ${PROJ_PREFIX}-remote-viewer)
-add_executable(${VIEWER_NAME} ${VIEWER_HEADERS} ${VIEWER_SOURCES}
-    ${MOC_VIEWER_SOURCES} ${VIEWER_RCC} ${VIEWER_QM})
-target_link_libraries (${VIEWER_NAME} ${VIEWER_BUILD_PROJECT_LIBRARIES})
-target_compile_definitions (${VIEWER_NAME} PRIVATE
-    USE_SPICE_AUDIO=${USE_SPICE_AUDIO}
-    QSPICE_WIDGET_COMPILATION
-    QTONLY)
-if ( NOT ONLY_SPICE_BUILD AND ONLY_VNC_BUILD )
-    target_compile_definitions (${VIEWER_NAME} PRIVATE ONLY_VNC_BUILD)
-endif ()
-if ( NOT ONLY_VNC_BUILD AND ONLY_SPICE_BUILD )
-    target_compile_definitions (${VIEWER_NAME} PRIVATE ONLY_SPICE_BUILD)
-endif ()
+if ( WITH_VNC_SUPPORT OR WITH_SPICE_SUPPORT )
+    set (VIEWER_NAME ${PROJ_PREFIX}-remote-viewer)
+    add_executable(${VIEWER_NAME} ${VIEWER_HEADERS} ${VIEWER_SOURCES}
+        ${MOC_VIEWER_SOURCES} ${VIEWER_RCC} ${VIEWER_QM})
+    target_link_libraries (${VIEWER_NAME} ${VIEWER_BUILD_PROJECT_LIBRARIES})
+    target_compile_definitions (
+        ${VIEWER_NAME} PRIVATE
+        BUILD_TYPE=${BUILD_TYPE}
+        WITH_VNC_SUPPORT=${WITH_VNC_SUPPORT}
+        WITH_SPICE_SUPPORT=${WITH_SPICE_SUPPORT})
+    if ( WITH_VNC_SUPPORT )
+        target_compile_definitions (
+            ${VIEWER_NAME} PRIVATE
+            QTONLY)
+    endif (WITH_VNC_SUPPORT)
+    if ( WITH_SPICE_SUPPORT )
+        target_compile_definitions (
+            ${VIEWER_NAME} PRIVATE
+            WITH_LIBCACARD=${WITH_LIBCACARD}
+            USE_SPICE_AUDIO=${USE_SPICE_AUDIO}
+            QSPICE_WIDGET_COMPILATION)
+    endif (WITH_SPICE_SUPPORT)
 
-configure_file ( ${VIEWER_DESKTOP_FILE}.in
-    ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_DESKTOP_FILE} )
-install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_DESKTOP_FILE}
-    DESTINATION ${SHARE_INSTALL_PREFIX}/applications
-    RENAME ${VIEWER_NAME}.desktop )
-install ( TARGETS ${VIEWER_NAME}
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
-install ( FILES src/icons/256x256/apps/remote-desktop-viewer.png
+    configure_file ( ${VIEWER_DESKTOP_FILE}.in
+        ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_DESKTOP_FILE} )
+    install ( FILES ${CMAKE_CURRENT_BINARY_DIR}/${VIEWER_DESKTOP_FILE}
+        DESTINATION ${SHARE_INSTALL_PREFIX}/applications
+        RENAME ${VIEWER_NAME}.desktop )
+    install ( TARGETS ${VIEWER_NAME}
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
+    install ( FILES src/icons/256x256/apps/remote-desktop-viewer.png
     DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
-
+else ()
+    MESSAGE(STATUS "Build without Remote Viewer")
+endif ()
 # * end

@@ -150,12 +150,12 @@ void MainWindow::closeEvent(QCloseEvent *ev)
                 if ( _type=="LXC" ) {
                     value = static_cast<LXC_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
-#ifndef ONLY_VNC_BUILD
+#if WITH_SPICE_SUPPORT
                 } else if ( _type=="SPICE" ) {
                     value = static_cast<Spice_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
 #endif
-#ifndef ONLY_SPICE_BUILD
+#if WITH_VNC_SUPPORT
                 } else if ( _type=="VNC" ) {
                     value = static_cast<VNC_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
@@ -995,7 +995,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                             connName,
                             domName));
         } else if ( viewerType=="vnc" ) {
-#ifndef ONLY_SPICE_BUILD
+#if WITH_VNC_SUPPORT
             VM_Displayed_Map.insert(
                         key,
                         new VNC_Viewer(
@@ -1012,7 +1012,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
             return;
 #endif
         } else if ( viewerType=="spice" ) {
-#ifndef ONLY_VNC_BUILD
+#if WITH_SPICE_SUPPORT
             VM_Displayed_Map.insert(
                         key,
                         new Spice_Viewer(

@@ -1,11 +1,12 @@
 #include "vm_viewer/get_url_dialog.h"
-#ifndef ONLY_VNC_BUILD
+#if WITH_SPICE_SUPPORT
 #include "vm_viewer/spice/spice_viewer_only.h"
 #endif
-#ifndef ONLY_SPICE_BUILD
+#if WITH_VNC_SUPPORT
 #include "vm_viewer/vnc/vnc_viewer_only.h"
 #endif
 #include <QApplication>
+#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])
             inLoop = true;
             VM_Viewer_Only *w = nullptr;
             if ( url.startsWith("vnc", Qt::CaseInsensitive) ) {
-#ifndef ONLY_SPICE_BUILD
+#if WITH_VNC_SUPPORT
                 w = new VNC_Viewer_Only(nullptr, url);
 #else
                 QMessageBox::information(
@@ -43,7 +44,7 @@ int main(int argc, char *argv[])
                             QString("Application built without VNC"));
 #endif
             } else if ( url.startsWith("spice", Qt::CaseInsensitive) ) {
-#ifndef ONLY_VNC_BUILD
+#if WITH_SPICE_SUPPORT
                 w = new Spice_Viewer_Only(nullptr, url);
 #else
                 QMessageBox::information(
