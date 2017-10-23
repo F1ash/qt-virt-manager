@@ -179,19 +179,10 @@ void TaskWareHouse::taskResultReceiver(Result data)
     };
     QString _number = QString("").sprintf("%08d", data.number);
     ControlThread *cThread = static_cast<ControlThread*>(
-                threadPool->value(_number));
+                threadPool->take(_number));
     if ( nullptr!=cThread ) {
-        //qDebug()<<_number<<"delete";
-        disconnect(cThread, SIGNAL(errorMsg(const QString&, const uint)),
-                   this, SLOT(msgRepeater(const QString&, const uint)));
-        disconnect(cThread, SIGNAL(resultData(Result)),
-                   this, SLOT(taskResultReceiver(Result)));
-        threadPool->value(_number)->quit();
-        //cThread->deleteLater();
-        delete cThread;
-        cThread = nullptr;
+        cThread->deleteLater();
     };
-    int deleted = threadPool->remove(_number);
     //qDebug()<<_number<<"deleted:"<<deleted;
     if ( !correctly ) return;
     QString stateIcon;
