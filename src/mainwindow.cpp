@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -148,15 +149,17 @@ void MainWindow::closeEvent(QCloseEvent *ev)
                 QString _type =
                         VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
                 if ( _type=="LXC" ) {
+#if WITH_LXC_SUPPORT
                     value = static_cast<LXC_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
-#if WITH_SPICE_SUPPORT
+#endif
                 } else if ( _type=="SPICE" ) {
+#if WITH_SPICE_SUPPORT
                     value = static_cast<Spice_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
 #endif
-#if WITH_VNC_SUPPORT
                 } else if ( _type=="VNC" ) {
+#if WITH_VNC_SUPPORT
                     value = static_cast<VNC_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
 #endif
@@ -821,31 +824,26 @@ void MainWindow::closeConnGenerations(const QString &_connName)
     foreach (QString key, VM_Displayed_Map.keys()) {
         if ( key.startsWith(_connName) ) {
             VM_Displayed_Map.value(key)->close();
-            //VM_Displayed_Map.remove(key);
         };
     };
     foreach (QString key, Overviewed_StPool_Map.keys()) {
         if ( key.startsWith(_connName) ) {
             Overviewed_StPool_Map.value(key)->close();
-            //Overviewed_StPool_Map.remove(key);
         };
     };
     foreach (QString key, DomainEditor_Map.keys()) {
         if ( key.startsWith(_connName) ) {
             DomainEditor_Map.value(key)->close();
-            //DomainEditor_Map.remove(key);
         };
     };
     foreach (QString key, NetworkEditor_Map.keys()) {
         if ( key.startsWith(_connName) ) {
             NetworkEditor_Map.value(key)->close();
-            //NetworkEditor_Map.remove(key);
         };
     };
     foreach (QString key, NWFilterEditor_Map.keys()) {
         if ( key.startsWith(_connName) ) {
             NWFilterEditor_Map.value(key)->close();
-            //NWFilterEditor_Map.remove(key);
         };
     };
 }
@@ -987,6 +985,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
     if ( !VM_Displayed_Map.contains(key) ) {
         //qDebug()<<key<<"vm invoked"<<"new";
         if ( type.toLower()=="lxc" ) {
+#if WITH_LXC_SUPPORT
             VM_Displayed_Map.insert(
                         key,
                         new LXC_Viewer(
@@ -994,6 +993,13 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                             connPtrPtr,
                             connName,
                             domName));
+#else
+            QMessageBox::information(
+                        this,
+                        "VM Viewer",
+                        QString("Application built without LXC"));
+            return;
+#endif
         } else if ( viewerType=="vnc" ) {
 #if WITH_VNC_SUPPORT
             VM_Displayed_Map.insert(
@@ -1047,9 +1053,15 @@ void MainWindow::invokeVMDisplay(TASK *_task)
         //VM_Displayed_Map.value(key)->show();
     } else {
         //qDebug()<<key<<"vm invoked"<<"exist";
-        if ( VM_Displayed_Map.value(key)!=nullptr )
+        if ( VM_Displayed_Map.value(key)!=nullptr ) {
             VM_Displayed_Map.value(key)->show();
-        else VM_Displayed_Map.remove(key);
+        } else {
+            VM_Viewer *vm = static_cast<VM_Viewer*>(
+                        VM_Displayed_Map.take(key));
+            if ( vm!=nullptr ) {
+                vm->deleteLater();
+            };
+        };
     };
 }
 void MainWindow::deleteVMDisplay(const QString &key)
@@ -1068,10 +1080,15 @@ void MainWindow::deleteVMDisplay(const QString &key)
             };
         };
         */
-        if ( VM_Displayed_Map.value(key, nullptr)!=nullptr ) {
-            VM_Displayed_Map.value(key, nullptr)->deleteLater();
+        //if ( VM_Displayed_Map.value(key, nullptr)!=nullptr ) {
+        //    VM_Displayed_Map.value(key, nullptr)->deleteLater();
+        //};
+        //VM_Displayed_Map.remove(key);
+        VM_Viewer *vm = static_cast<VM_Viewer*>(
+                    VM_Displayed_Map.take(key));
+        if ( vm!=nullptr ) {
+            vm->deleteLater();
         };
-        VM_Displayed_Map.remove(key);
     }
 }
 void MainWindow::buildMigrateArgs(TASK *_task)

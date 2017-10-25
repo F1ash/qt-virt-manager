@@ -19,7 +19,9 @@
 #include "virt_objects/virt_nwfilter/nwfilter_control.h"
 #include "tray/traywidget.h"
 #include "wait_thread/wait_thread.h"
+#if WITH_LXC_SUPPORT
 #include "vm_viewer/lxc/lxc_viewer.h"
+#endif
 #if WITH_SPICE_SUPPORT
 #include "vm_viewer/spice/spice_viewer.h"
 #endif

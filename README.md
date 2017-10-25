@@ -40,6 +40,9 @@ Building parameters:
     WITH_VNC_SUPPORT
         if not defined or above zero, then will build with VNC
 
+    WITH_LXC_SUPPORT
+        if not defined or above zero, then will build with LXC
+
 Build requires:
 
     * with Qt4              (optional, BUILD_QT_VERSION=4)

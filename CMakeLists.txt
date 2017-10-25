@@ -92,11 +92,34 @@ endif ()
 if (NOT DEFINED WITH_VNC_SUPPORT)
     set (WITH_VNC_SUPPORT 1)
 endif ()
+if (NOT DEFINED WITH_LXC_SUPPORT)
+    set (WITH_LXC_SUPPORT 1)
+endif ()
 
 set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
 set (VERSION_MAJOR   0)
 set (VERSION_MINOR  45)
 set (VERSION_MICRO  75)
+
+set (QTERM_UI_SRC
+    src/vm_viewer/qterminal/forms/qterminal.ui
+    src/vm_viewer/qterminal/forms/propertiesdialog.ui
+    src/vm_viewer/qterminal/forms/bookmarkswidget.ui
+    src/vm_viewer/qterminal/forms/fontdialog.ui
+)
+set (QTERM_RCC_SRC
+    #src/vm_viewer/qterminal/icons.qrc
+    src/qt_virt_manager.qrc
+)
+set (QTERM_TS
+    src/vm_viewer/qterminal/translations/qterminal_cs.ts
+    src/vm_viewer/qterminal/translations/qterminal_de.ts
+    src/vm_viewer/qterminal/translations/qterminal_es.ts
+    src/vm_viewer/qterminal/translations/qterminal_et.ts
+    src/vm_viewer/qterminal/translations/qterminal_it.ts
+    src/vm_viewer/qterminal/translations/qterminal_pt.ts
+    src/vm_viewer/qterminal/translations/qterminal_ru.ts
+)
 
 set (QSPICE_HEADERS
     src/vm_viewer/qspice_widgets/qspice-channel.h
@@ -133,6 +156,18 @@ set (HEADERS_FOR_VIEWER
 
     src/ssh_tunnel/ssh_tunnel.h
 )
+set (QLXC_HEADERS
+    src/vm_viewer/qterminal/tabwidget.h
+    src/vm_viewer/qterminal/termwidgetholder.h
+    src/vm_viewer/qterminal/config.h
+    src/vm_viewer/qterminal/fontdialog.h
+    src/vm_viewer/qterminal/bookmarkswidget.h
+    src/vm_viewer/qterminal/term_mainwindow.h
+    src/vm_viewer/qterminal/properties.h
+    src/vm_viewer/qterminal/termwidget.h
+    src/vm_viewer/qterminal/propertiesdialog.h
+    ${QTERM_UI_SRC}
+)
 if ( WITH_VNC_SUPPORT )
     list(APPEND HEADERS_FOR_VIEWER ${QVNC_HEADERS})
 endif ()
@@ -167,6 +202,16 @@ set (QVNC_SOURCES
     src/vm_viewer/krdc_vnc_qtonly/remoteview.cpp
     src/vm_viewer/krdc_vnc_qtonly/vncclientthread.cpp
     src/vm_viewer/krdc_vnc_qtonly/vncview.cpp
+)
+set (QLXC_SOURCES
+    src/vm_viewer/qterminal/properties.cpp
+    src/vm_viewer/qterminal/bookmarkswidget.cpp
+    src/vm_viewer/qterminal/tabwidget.cpp
+    src/vm_viewer/qterminal/termwidgetholder.cpp
+    src/vm_viewer/qterminal/propertiesdialog.cpp
+    src/vm_viewer/qterminal/term_mainwindow.cpp
+    src/vm_viewer/qterminal/termwidget.cpp
+    src/vm_viewer/qterminal/fontdialog.cpp
 )
 set (SOURCES_FOR_VIEWER
     src/vm_viewer/viewer_toolbar.cpp
@@ -556,19 +601,6 @@ set (HEADERS
   src/vm_viewer/vm_viewer.h
   ${HEADERS_FOR_VIEWER}
 
-  src/vm_viewer/lxc/lxc_viewer.h
-  src/vm_viewer/lxc/lxc_viewer_thread.h
-  
-  src/vm_viewer/qterminal/tabwidget.h
-  src/vm_viewer/qterminal/termwidgetholder.h
-  src/vm_viewer/qterminal/config.h
-  src/vm_viewer/qterminal/fontdialog.h
-  src/vm_viewer/qterminal/bookmarkswidget.h
-  src/vm_viewer/qterminal/term_mainwindow.h
-  src/vm_viewer/qterminal/properties.h
-  src/vm_viewer/qterminal/termwidget.h
-  src/vm_viewer/qterminal/propertiesdialog.h
-
   src/state_monitor/domain_state_monitor.h
   src/state_monitor/domain_monitor_thread.h
   src/state_monitor/domain_state_viewer.h
@@ -581,6 +613,12 @@ if ( WITH_VNC_SUPPORT )
 endif ()
 if ( WITH_SPICE_SUPPORT )
     list(APPEND HEADERS src/vm_viewer/spice/spice_viewer.h)
+endif ()
+if ( WITH_LXC_SUPPORT )
+    list(APPEND HEADERS
+        ${QLXC_HEADERS}
+        src/vm_viewer/lxc/lxc_viewer.h
+        src/vm_viewer/lxc/lxc_viewer_thread.h)
 endif ()
 
 set (SOURCES
@@ -956,18 +994,6 @@ set (SOURCES
   src/vm_viewer/vm_viewer.cpp
   ${SOURCES_FOR_VIEWER}
 
-  src/vm_viewer/lxc/lxc_viewer.cpp
-  src/vm_viewer/lxc/lxc_viewer_thread.cpp
-
-  src/vm_viewer/qterminal/properties.cpp
-  src/vm_viewer/qterminal/bookmarkswidget.cpp
-  src/vm_viewer/qterminal/tabwidget.cpp
-  src/vm_viewer/qterminal/termwidgetholder.cpp
-  src/vm_viewer/qterminal/propertiesdialog.cpp
-  src/vm_viewer/qterminal/term_mainwindow.cpp
-  src/vm_viewer/qterminal/termwidget.cpp
-  src/vm_viewer/qterminal/fontdialog.cpp
-
   src/state_monitor/domain_state_monitor.cpp
   src/state_monitor/domain_monitor_thread.cpp
   src/state_monitor/domain_state_viewer.cpp
@@ -980,6 +1006,12 @@ endif ()
 if ( WITH_SPICE_SUPPORT )
     list(APPEND SOURCES src/vm_viewer/spice/spice_viewer.cpp)
 endif ()
+if ( WITH_LXC_SUPPORT )
+    list(APPEND SOURCES
+        ${QLXC_SOURCES}
+        src/vm_viewer/lxc/lxc_viewer.cpp
+        src/vm_viewer/lxc/lxc_viewer_thread.cpp)
+endif ()
 
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE qt-virt-manager.desktop)
@@ -991,26 +1023,6 @@ include_directories (
 configure_file (
     ${CMAKE_SOURCE_DIR}/src/version.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/version.h
-)
-
-set (QTERM_UI_SRC
-    src/vm_viewer/qterminal/forms/qterminal.ui
-    src/vm_viewer/qterminal/forms/propertiesdialog.ui
-    src/vm_viewer/qterminal/forms/bookmarkswidget.ui
-    src/vm_viewer/qterminal/forms/fontdialog.ui
-)
-set (QTERM_RCC_SRC
-    #src/vm_viewer/qterminal/icons.qrc
-    src/qt_virt_manager.qrc
-)
-set (QTERM_TS
-    src/vm_viewer/qterminal/translations/qterminal_cs.ts
-    src/vm_viewer/qterminal/translations/qterminal_de.ts
-    src/vm_viewer/qterminal/translations/qterminal_es.ts
-    src/vm_viewer/qterminal/translations/qterminal_et.ts
-    src/vm_viewer/qterminal/translations/qterminal_it.ts
-    src/vm_viewer/qterminal/translations/qterminal_pt.ts
-    src/vm_viewer/qterminal/translations/qterminal_ru.ts
 )
 
 set (VIEWER_HEADERS
@@ -1072,7 +1084,9 @@ endif ( QT4_BUILD )
 ##
 
 find_package(LibVirt                REQUIRED)
-find_package("${TERM_WIDGET_LIB}"   REQUIRED)
+if ( WITH_LXC_SUPPORT )
+    find_package(${TERM_WIDGET_LIB} REQUIRED)
+endif ()
 if ( WITH_VNC_SUPPORT )
     find_package(LibVNCServer       REQUIRED)
 endif ()
@@ -1140,6 +1154,7 @@ target_link_libraries (${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
 target_compile_definitions (
     ${PROJECT_NAME} PRIVATE
     BUILD_TYPE=${BUILD_TYPE}
+    WITH_LXC_SUPPORT=${WITH_LXC_SUPPORT}
     WITH_VNC_SUPPORT=${WITH_VNC_SUPPORT}
     WITH_SPICE_SUPPORT=${WITH_SPICE_SUPPORT})
 if ( WITH_VNC_SUPPORT )
