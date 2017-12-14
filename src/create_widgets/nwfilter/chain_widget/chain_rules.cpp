@@ -71,14 +71,14 @@ ChainRules::ChainRules(QWidget *parent) :
     setLayout(commonLayout);
 
     // order is template for attributes widgets
-    chainProtocol->addItem("STP", "stp");
-    chainProtocol->addItem("MAC", "mac");
-    chainProtocol->addItem("VLAN", "vlan");
-    chainProtocol->addItem("IPv4", "ipv4");
-    chainProtocol->addItem("IPv6", "ipv6");
-    chainProtocol->addItem("ARP", "arp");
-    chainProtocol->addItem("RARP", "rarp");
-    chainProtocol->addItem("ROOT", "root");
+    chainProtocol->addItem("STP",   "stp");
+    chainProtocol->addItem("MAC",   "mac");
+    chainProtocol->addItem("VLAN",  "vlan");
+    chainProtocol->addItem("IPv4",  "ip");
+    chainProtocol->addItem("IPv6",  "ipv6");
+    chainProtocol->addItem("ARP",   "arp");
+    chainProtocol->addItem("RARP",  "rarp");
+    chainProtocol->addItem("ROOT",  "root");
 }
 void ChainRules::setDataDescription(const QString &_xmlDesc)
 {

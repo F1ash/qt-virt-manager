@@ -156,20 +156,24 @@ void RuleInstance::addRuleToList()
     _Attributes *_a = static_cast<_Attributes*>(
                 attributes->currentWidget());
     if ( _a!=nullptr ) {
+        QDomElement _protocolID = doc.createElement(
+                    _a->getProtocolID());
         foreach (QString _attr, _a->getAttrList()) {
+            if ( _attr.isEmpty() ) continue;
             QVariantMap _m = _a->getAttrValue(_attr);
-            QDomElement _protocolID = doc.createElement(
-                        _m.value("protocolID").toString());
-            _protocolID.setAttribute(
-                        _m.value("name").toString(),
-                        _m.value("value").toString());
+            QString _name, _value;
+            _name = _m.value("name").toString();
+            _value = _m.value("value").toString();
+            if ( !_name.isEmpty() ) {
+                _protocolID.setAttribute(_name, _value);
+            };
             if ( _m.contains("match") ) {
                 _protocolID.setAttribute(
                             "match",
                             _m.value("match").toString());
             };
-            _rule.appendChild(_protocolID);
         };
+        _rule.appendChild(_protocolID);
     };
     doc.appendChild(_rule);
     emit insertRule(doc.toByteArray(4).constData(), editedRow);
