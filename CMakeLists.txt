@@ -1085,7 +1085,7 @@ endif ( QT4_BUILD )
 
 find_package(LibVirt                REQUIRED)
 if ( WITH_LXC_SUPPORT )
-    find_package(${TERM_WIDGET_LIB} REQUIRED)
+    pkg_check_modules(QTERMWIDGET ${TERM_WIDGET_LIB} REQUIRED)
 endif ()
 if ( WITH_VNC_SUPPORT )
     find_package(LibVNCServer       REQUIRED)
