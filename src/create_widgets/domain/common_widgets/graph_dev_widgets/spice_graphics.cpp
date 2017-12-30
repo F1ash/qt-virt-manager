@@ -54,8 +54,10 @@ Spice_Graphics::Spice_Graphics(
     address->addItem("LocalHost only", "127.0.0.1");
     address->addItem("All Interfaces", "0.0.0.0");
     address->addItem("Custom", "custom");
-    address->addItem("Named configured Network", "network");
+    address->addItem("Use named configured Network", "network");
+    address->addItem("Use Socket", "socket");
     address->insertSeparator(4);
+    address->insertSeparator(6);
     networks = new QComboBox(this);
     networks->setVisible(false);
     autoPort = new QCheckBox("AutoPort", this);
@@ -491,7 +493,7 @@ QDomDocument Spice_Graphics::getDataDocument() const
     };
     QString _address = address->itemData(
                 address->currentIndex(), Qt::UserRole).toString();
-    if ( !_address.isEmpty() && _address!="network" ) {
+    if ( !_address.isEmpty() && _address!="network" && _address!="socket" ) {
         _listen = doc.createElement("listen");
         _listen.setAttribute("type", "address");
         if ( _address!="custom" ) {
@@ -511,6 +513,11 @@ QDomDocument Spice_Graphics::getDataDocument() const
             _listen.setAttribute("type", "network");
             _listen.setAttribute("network", networks->currentText());
             _devDesc.appendChild(_listen);
+    } else if ( _address=="socket" ) {
+        //_listen = doc.createElement("listen");
+        //_listen.setAttribute("type", "network");
+        //_listen.setAttribute("network", networks->currentText());
+        _devDesc.setAttribute("socket", address->currentText());
     };
     if ( compress->isChecked() ) {
         if ( compressImage->isChecked() ) {
@@ -589,7 +596,16 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
                     Qt::MatchContains);
         keymap->setCurrentIndex( (idx<0)? 0:idx );
     };
-    _listen = _device.firstChildElement("listen");
+    if ( _device.hasAttribute("socket") ) {
+        idx = address->findData(
+                    "socket",
+                    Qt::UserRole,
+                    Qt::MatchContains);
+        address->setCurrentIndex( (idx<0)? 3:idx );
+        address->setEditText(_device.attribute("socket"));
+    } else {
+        _listen = _device.firstChildElement("listen");
+    };
     if ( !_listen.isNull() ) {
         QString _type, _data;
         _type = _listen.attribute("type");
@@ -608,12 +624,15 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
                             _data,
                             Qt::MatchContains);
                 networks->setCurrentIndex( (idx<0)? 0:idx );
-            } else
+            } else {
                 address->setCurrentIndex(0);
-        } else
+            };
+        } else {
             address->setCurrentIndex(0);
-    } else
+        };
+    } else {
         address->setCurrentIndex(0);
+    };
     QString _defaultPolicy = _device.attribute("defaultPolicy");
     idx = defaultPolicy->findText(
                 _defaultPolicy, Qt::MatchContains);
@@ -749,10 +768,15 @@ void Spice_Graphics::usePassword(bool state)
 }
 void Spice_Graphics::addressEdit(QString s)
 {
-    if ( s.contains("Network") ) {
+    if ( s.contains("network", Qt::CaseInsensitive) ) {
         address->setEditable(false);
         addrLabel->setText("Network:");
         networks->setVisible(true);
+    } else if ( s.contains("socket", Qt::CaseInsensitive) ) {
+        addrLabel->setText("Socket:");
+        networks->setVisible(false);
+        address->setEditable(true);
+        address->clearEditText();
     } else {
         addrLabel->setText("Address:");
         networks->setVisible(false);
