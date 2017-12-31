@@ -32,7 +32,7 @@ public:
     virtual void     init();
     void             parseURL();
     const QString    url;
-    QString          user, host, transport, addr;
+    QString          user, host, transport, addr, socket;
     QSettings        settings;
     ViewerToolBar   *viewerToolBar = nullptr;
     uint             port = 0;

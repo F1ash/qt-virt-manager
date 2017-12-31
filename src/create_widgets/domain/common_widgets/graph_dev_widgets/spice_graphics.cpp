@@ -428,14 +428,17 @@ QDomDocument Spice_Graphics::getDataDocument() const
     _device = doc.createElement("device");
     _devDesc = doc.createElement("graphics");
     _devDesc.setAttribute("type", "spice");
-    if ( tlsPortLabel->isChecked() )
-        _devDesc.setAttribute("tlsPort", tlsPort->text());
     _devDesc.setAttribute("defaultPolicy", defaultPolicy->currentText());
-    if ( autoPort->isChecked() ) {
-        _devDesc.setAttribute("autoport", "yes");
-        _devDesc.setAttribute("port", "-1");
-    } else {
-        _devDesc.setAttribute("port", port->text());
+    if ( tlsPortLabel->isEnabled() && tlsPortLabel->isChecked() ) {
+        _devDesc.setAttribute("tlsPort", tlsPort->text());
+    };
+    if ( autoPort->isEnabled() ) {
+        if ( autoPort->isChecked() ) {
+            _devDesc.setAttribute("autoport", "yes");
+            _devDesc.setAttribute("port", "-1");
+        } else {
+            _devDesc.setAttribute("port", port->text());
+        };
     };
     if ( usePassw->isChecked() ) {
         _devDesc.setAttribute("passwd", passw->text());
@@ -514,10 +517,11 @@ QDomDocument Spice_Graphics::getDataDocument() const
             _listen.setAttribute("network", networks->currentText());
             _devDesc.appendChild(_listen);
     } else if ( _address=="socket" ) {
-        //_listen = doc.createElement("listen");
-        //_listen.setAttribute("type", "network");
-        //_listen.setAttribute("network", networks->currentText());
         _devDesc.setAttribute("socket", address->currentText());
+        _listen = doc.createElement("listen");
+        _listen.setAttribute("type", "socket");
+        _listen.setAttribute("socket", address->currentText());
+        _devDesc.appendChild(_listen);
     };
     if ( compress->isChecked() ) {
         if ( compressImage->isChecked() ) {
@@ -580,13 +584,15 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
             .firstChildElement("graphics");
     autoPort->setChecked(
                 _device.attribute("autoport")=="yes");
-    if ( !autoPort->isChecked() )
+    if ( !autoPort->isChecked() ) {
         port->setValue(
                     _device.attribute("port").toInt());
+    };
     tlsPortLabel->setChecked( _device.hasAttribute("tlsPort") );
-    if ( tlsPortLabel->isChecked() )
+    if ( tlsPortLabel->isChecked() ) {
         tlsPort->setValue(
                     _device.attribute("tlsPort").toInt());
+    };
     usePassw->setChecked( _device.hasAttribute("passwd") );
     if ( _device.hasAttribute("passwd") ) {
         QString _password = _device.attribute("passwd");
@@ -624,14 +630,14 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
                             _data,
                             Qt::MatchContains);
                 networks->setCurrentIndex( (idx<0)? 0:idx );
+            } else if ( _type=="socket" ) {
+                address->setEditText(_data);
             } else {
                 address->setCurrentIndex(0);
             };
         } else {
             address->setCurrentIndex(0);
         };
-    } else {
-        address->setCurrentIndex(0);
     };
     QString _defaultPolicy = _device.attribute("defaultPolicy");
     idx = defaultPolicy->findText(
@@ -772,20 +778,32 @@ void Spice_Graphics::addressEdit(QString s)
         address->setEditable(false);
         addrLabel->setText("Network:");
         networks->setVisible(true);
+        autoPort->setEnabled(true);
+        port->setEnabled(true);
+        tlsPortLabel->setEnabled(true);
+        tlsPort->setEnabled(true);
     } else if ( s.contains("socket", Qt::CaseInsensitive) ) {
         addrLabel->setText("Socket:");
-        networks->setVisible(false);
         address->setEditable(true);
         address->clearEditText();
+        networks->setVisible(false);
+        autoPort->setEnabled(false);
+        port->setEnabled(false);
+        tlsPortLabel->setEnabled(false);
+        tlsPort->setEnabled(false);
     } else {
         addrLabel->setText("Address:");
-        networks->setVisible(false);
         if ( s == "Custom" ) {
             address->setEditable(true);
             address->clearEditText();
         } else {
             address->setEditable(false);
-        }
+        };
+        networks->setVisible(false);
+        autoPort->setEnabled(true);
+        port->setEnabled(true);
+        tlsPortLabel->setEnabled(true);
+        tlsPort->setEnabled(true);
     }
 }
 void Spice_Graphics::policyElementsSetRequired(bool state)

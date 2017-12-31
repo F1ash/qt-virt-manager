@@ -54,7 +54,7 @@ public:
     QShortcut       *actFullScreen = nullptr;
     SSH_Tunnel      *sshTunnelThread = nullptr;
 
-    QString          transport, addr, user, host;
+    QString          transport, addr, socket, user, host;
     uint             port = 0;
 
 signals:

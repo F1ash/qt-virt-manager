@@ -117,12 +117,13 @@ void VM_Viewer_Only::parseURL()
         host    = parts1.at(0);
         if ( parts1.count()>1 ) {
             // address has extra parameters
-            if ( parts1.at(1).split("&", QString::SkipEmptyParts).count()>3 ) {
+            if ( parts1.at(1).split("&", QString::SkipEmptyParts).count()>4 ) {
                 parts2      = parts1.at(1).split("&", QString::SkipEmptyParts);
                 transport   = parts2.at(0).split("=").at(1);
                 user        = parts2.at(1).split("=").at(1);
                 addr        = parts2.at(2).split("=").at(1);
                 port        = parts2.at(3).split("=").at(1).toInt();
+                socket      = parts2.at(4).split("=").at(1);
             } else {
                 // Getting the address data is failed
             };

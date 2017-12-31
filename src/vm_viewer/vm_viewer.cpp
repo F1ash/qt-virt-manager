@@ -64,7 +64,10 @@ VM_Viewer::~VM_Viewer()
 void VM_Viewer::init()
 {
     QString msg;
-    if ( addr.isEmpty() || port==0 ) {
+    if ( !socket.isEmpty() ) {
+        QTextStream s(stdout);
+        s<<"uses socket for graphics"<<endl;
+    } else if ( addr.isEmpty() || port==0 ) {
         viewerToolBar->setEnabled(false);
         msg = QString("In '<b>%1</b>':<br> Getting the address data is failed.")
                 .arg(domain);

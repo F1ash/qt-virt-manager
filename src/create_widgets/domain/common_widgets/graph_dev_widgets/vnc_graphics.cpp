@@ -138,11 +138,13 @@ QDomDocument VNC_Graphics::getDataDocument() const
                 sharePolicy->currentIndex(), Qt::UserRole).toString();
     if ( !_sharePolicy.isEmpty() )
         _devDesc.setAttribute("sharePolicy", _sharePolicy);
-    if ( autoPort->isChecked() ) {
-        _devDesc.setAttribute("autoport", "yes");
-        _devDesc.setAttribute("port", "-1");
-    } else {
-        _devDesc.setAttribute("port", port->text());
+    if ( autoPort->isEnabled() ) {
+        if ( autoPort->isChecked() ) {
+            _devDesc.setAttribute("autoport", "yes");
+            _devDesc.setAttribute("port", "-1");
+        } else {
+            _devDesc.setAttribute("port", port->text());
+        };
     };
     if ( usePassw->isChecked() ) {
         _devDesc.setAttribute("passwd", passw->text());
@@ -167,10 +169,11 @@ QDomDocument VNC_Graphics::getDataDocument() const
             _listen.setAttribute("network", networks->currentText());
             _devDesc.appendChild(_listen);
     } else if ( _address=="socket" ) {
-        //_listen = doc.createElement("listen");
-        //_listen.setAttribute("type", "network");
-        //_listen.setAttribute("network", networks->currentText());
         _devDesc.setAttribute("socket", address->currentText());
+        _listen = doc.createElement("listen");
+        _listen.setAttribute("type", "socket");
+        _listen.setAttribute("socket", address->currentText());
+        _devDesc.appendChild(_listen);
     };
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
@@ -192,9 +195,10 @@ void VNC_Graphics::setDataDescription(const QString &_xmlDesc)
     sharePolicy->setCurrentIndex( (idx<0)? 0:idx );
     autoPort->setChecked(
                 _device.attribute("autoport")=="yes");
-    if ( !autoPort->isChecked() )
+    if ( !autoPort->isChecked() ) {
         port->setValue(
                     _device.attribute("port").toInt());
+    };
     usePassw->setChecked( _device.hasAttribute("passwd") );
     if ( _device.hasAttribute("passwd") ) {
         QString _password = _device.attribute("passwd");
@@ -232,14 +236,14 @@ void VNC_Graphics::setDataDescription(const QString &_xmlDesc)
                             _data,
                             Qt::MatchContains);
                 networks->setCurrentIndex( (idx<0)? 0:idx );
+            } else if ( _type=="socket" ) {
+                address->setEditText(_data);
             } else {
                 address->setCurrentIndex(0);
             };
         } else {
             address->setCurrentIndex(0);
         };
-    } else {
-        address->setCurrentIndex(0);
     };
 }
 
@@ -259,20 +263,26 @@ void VNC_Graphics::addressEdit(QString s)
         address->setEditable(false);
         addrLabel->setText("Network:");
         networks->setVisible(true);
+        autoPort->setEnabled(true);
+        port->setEnabled(true);
     } else if ( s.contains("socket", Qt::CaseInsensitive) ) {
         addrLabel->setText("Socket:");
-        networks->setVisible(false);
         address->setEditable(true);
         address->clearEditText();
+        networks->setVisible(false);
+        autoPort->setEnabled(false);
+        port->setEnabled(false);
     } else {
         addrLabel->setText("Address:");
-        networks->setVisible(false);
         if ( s == "Custom" ) {
             address->setEditable(true);
             address->clearEditText();
         } else {
             address->setEditable(false);
-        }
+        };
+        networks->setVisible(false);
+        autoPort->setEnabled(true);
+        port->setEnabled(true);
     }
 }
 void VNC_Graphics::readNetworkList(QStringList &_nets)

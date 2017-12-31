@@ -17,12 +17,13 @@ VNC_Viewer::VNC_Viewer(
     viewerToolBar->removeAction(viewerToolBar->pasteClipboard);
     viewerToolBar->removeAction(viewerToolBar->stateWdg_Action);
     QStringList _addrData = addrData.split(";");
-    if ( _addrData.count()>4 ) {
+    if ( _addrData.count()>5 ) {
         user        = _addrData.at(0);
         host        = _addrData.at(1);
         transport   = _addrData.at(2);
         addr        = _addrData.at(3);
         port        = _addrData.at(4).toInt();
+        socket      = _addrData.at(5);
     };
     init();
 }

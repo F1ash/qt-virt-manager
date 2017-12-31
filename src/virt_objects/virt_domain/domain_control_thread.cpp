@@ -209,7 +209,7 @@ Result DomControlThread::getDomainData0()
 {
     Result result;
     QString activeDomainXmlDesc, displayType, addr,
-            port, transport, host, user;
+            port, transport, socket, host, user;
     QVariantMap domainDesc;
     QString name = task.object;
     result.name  = name;
@@ -260,9 +260,13 @@ Result DomControlThread::getDomainData0()
     if ( !graph.isNull() ) {
         displayType.append( graph.attribute("type").toLower() );
         port.append( graph.attribute("port") );
+        socket.append( graph.attribute("socket") );
         QDomElement listen = graph.firstChildElement("listen");
         if ( !listen.isNull() ) {
             addr.append( listen.attribute("address") );
+            if ( socket.isEmpty() ) {
+                socket.append( graph.attribute("socket") );
+            };
         };
     };
     domainDesc.insert("DomainType", _type);
@@ -270,6 +274,7 @@ Result DomControlThread::getDomainData0()
     domainDesc.insert("Transport", transport);
     domainDesc.insert("Address", addr);
     domainDesc.insert("Port", port);
+    domainDesc.insert("Socket", socket);
     domainDesc.insert("User", user);
     domainDesc.insert("Host", host);
     result.data.append(domainDesc);
@@ -279,7 +284,7 @@ Result DomControlThread::getDomainData1()
 {
     Result result;
     QString activeDomainXmlDesc, displayType, addr,
-            port, transport, host, user;
+            port, socket, transport, host, user;
     QString name = task.object;
     result.name  = name;
     if ( task.srcConnPtr==nullptr ) {
@@ -329,19 +334,26 @@ Result DomControlThread::getDomainData1()
     if ( !graph.isNull() ) {
         displayType.append( graph.attribute("type").toLower() );
         port.append( graph.attribute("port") );
+        socket.append( graph.attribute("socket") );
         QDomElement listen = graph.firstChildElement("listen");
         if ( !listen.isNull() ) {
             addr.append( listen.attribute("address") );
+            if ( socket.isEmpty() ) {
+                socket.append( graph.attribute("socket") );
+            };
         };
     };
 
-    QString url = QString("%1://%2/?transport=%3&user=%4&addr=%5&port=%6")
+    QString url = QString(
+                "%1://%2/?transport=%3&user=%4&addr=%5&port=%6&socket=%7"
+            )
             .arg(displayType)
             .arg(host)
             .arg(transport)
             .arg(user)
             .arg(addr)
-            .arg(port);
+            .arg(port)
+            .arg(socket);
     QVariantMap _url;
     _url.insert("URL", url);
     result.data.append( _url );
