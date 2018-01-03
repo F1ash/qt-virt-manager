@@ -19,7 +19,7 @@ signals:
 
 private:
     QString     remoteHost, remotePort, User,
-                graphicsAddr, graphicsPort;
+                graphicsAddr, graphicsPort, graphicsSock;
     QProcess   *ssh_tunnel = nullptr;
 };
 

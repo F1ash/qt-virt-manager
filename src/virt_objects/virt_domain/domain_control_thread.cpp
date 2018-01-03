@@ -265,7 +265,7 @@ Result DomControlThread::getDomainData0()
         if ( !listen.isNull() ) {
             addr.append( listen.attribute("address") );
             if ( socket.isEmpty() ) {
-                socket.append( graph.attribute("socket") );
+                socket.append( listen.attribute("socket") );
             };
         };
     };
@@ -277,6 +277,16 @@ Result DomControlThread::getDomainData0()
     domainDesc.insert("Socket", socket);
     domainDesc.insert("User", user);
     domainDesc.insert("Host", host);
+    // WARNING: open the Graphics  file descriptor for socket
+    // can be not needed
+    int fd = -1;
+    //if ( transport.isEmpty() ||
+    //     transport.contains("unix") ||
+    //     transport.contains("ssh") ) {
+    //    // uses localhost connection for domain
+    //    //fd = virDomainOpenGraphicsFD(domainPtr, 0, VIR_DOMAIN_OPEN_GRAPHICS_SKIPAUTH);
+    //};
+    domainDesc.insert("SocketFD", QString::number(fd));
     result.data.append(domainDesc);
     return result;
 }

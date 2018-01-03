@@ -11,11 +11,12 @@ SSH_Tunnel::SSH_Tunnel(QObject *parent) :
 
 void SSH_Tunnel::setData(QVariantMap _data)
 {
-    User = _data.value("User").toString();
-    remoteHost = _data.value("RemoteHost").toString();
-    remotePort = _data.value("RemotePort").toString();
+    User         = _data.value("User").toString();
+    remoteHost   = _data.value("RemoteHost").toString();
+    remotePort   = _data.value("RemotePort").toString();
     graphicsAddr = _data.value("GraphicsAddr").toString();
     graphicsPort = _data.value("GraphicsPort").toString();
+    graphicsSock = _data.value("GraphicsSock").toString();
 }
 void SSH_Tunnel::run()
 {
@@ -34,10 +35,15 @@ void SSH_Tunnel::run()
         };
         viewerPort = listenSocket->localPort();
         _args.clear();
-        _args   << "-p" << remotePort
-                << "-L"
-                << QString("%1:%2:%3").arg(viewerPort).arg(graphicsAddr).arg(graphicsPort)
-                << QString("%1@%2").arg(User).arg(remoteHost);
+        _args << "-p" << remotePort << "-L";
+        if ( !graphicsPort.isEmpty() && graphicsSock.isEmpty() ) {
+            _args << QString("%1:%2:%3").arg(viewerPort).arg(graphicsAddr).arg(graphicsPort);
+        } else if ( graphicsPort.isEmpty() && !graphicsSock.isEmpty() ) {
+            _args << QString("%1:%2").arg(viewerPort).arg(graphicsSock);
+        } else {
+            _args << "data_error";
+        };
+        _args << QString("%1@%2").arg(User).arg(remoteHost);
         ssh_tunnel->start("ssh", _args, QIODevice::ReadWrite);
         //s << "command args: "<< _args.join(" ") << endl;
         if ( !ssh_tunnel->waitForStarted() ) continue;

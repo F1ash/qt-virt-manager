@@ -65,8 +65,36 @@ void VM_Viewer::init()
 {
     QString msg;
     if ( !socket.isEmpty() ) {
-        QTextStream s(stdout);
-        s<<"uses socket for graphics"<<endl;
+        actFullScreen = new QShortcut(
+                    QKeySequence(tr("Shift+F11", "View|Full Screen")),
+                    this);
+        connect(actFullScreen, SIGNAL(activated()),
+                SLOT(fullScreenTriggered()));
+        // uses socket for domain graphics;
+        // dirty and lazy hack with ssh tunnel
+        QVariantMap _data;
+        _data.insert("User", "root");
+        QStringList _remoteAddr = host.split(":", QString::SkipEmptyParts);
+        if ( _remoteAddr.count()>1 ) {
+            _data.insert("RemotePort", _remoteAddr.last());
+            _remoteAddr.removeLast();
+        } else {
+            _data.insert("RemotePort", "22"); // default SSH service TCP port
+        };
+        if ( _remoteAddr.count()>1 ) {
+            _data.insert("RemoteHost", _remoteAddr.join(":"));
+        } else {
+            _data.insert("RemoteHost", _remoteAddr.first());
+        };
+        _data.insert("GraphicsAddr", addr);
+        _data.insert("GraphicsSock", socket);
+        sshTunnelThread = new SSH_Tunnel();
+        connect(sshTunnelThread, SIGNAL(established(quint16)),
+                this, SLOT(useSSHTunnel(quint16)));
+        connect(sshTunnelThread, SIGNAL(finished()),
+                this, SLOT(sshThreadFinished()));
+        sshTunnelThread->setData(_data);
+        sshTunnelThread->start();
     } else if ( addr.isEmpty() || port==0 ) {
         viewerToolBar->setEnabled(false);
         msg = QString("In '<b>%1</b>':<br> Getting the address data is failed.")
