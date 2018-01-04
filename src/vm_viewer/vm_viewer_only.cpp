@@ -65,7 +65,38 @@ VM_Viewer_Only::~VM_Viewer_Only()
 void VM_Viewer_Only::init()
 {
     QString msg;
-    if ( addr.isEmpty() || port==0 ) {
+    if ( !socket.isEmpty() ) {
+        actFullScreen = new QShortcut(
+                    QKeySequence(tr("Shift+F11", "View|Full Screen")),
+                    this);
+        connect(actFullScreen, SIGNAL(activated()),
+                SLOT(fullScreenTriggered()));
+        // uses socket for domain graphics;
+        // dirty (for local VMs) and lazy hack with ssh tunnel
+        QVariantMap _data;
+        _data.insert("User", "root");
+        QStringList _remoteAddr = host.split(":", QString::SkipEmptyParts);
+        if ( _remoteAddr.count()>1 ) {
+            _data.insert("RemotePort", _remoteAddr.last());
+            _remoteAddr.removeLast();
+        } else {
+            _data.insert("RemotePort", "22"); // default SSH service TCP port
+        };
+        if ( _remoteAddr.count()>1 ) {
+            _data.insert("RemoteHost", _remoteAddr.join(":"));
+        } else {
+            _data.insert("RemoteHost", _remoteAddr.first());
+        };
+        _data.insert("GraphicsAddr", addr);
+        _data.insert("GraphicsSock", socket);
+        sshTunnelThread = new SSH_Tunnel();
+        connect(sshTunnelThread, SIGNAL(established(quint16)),
+                this, SLOT(useSSHTunnel(quint16)));
+        connect(sshTunnelThread, SIGNAL(finished()),
+                this, SLOT(sshThreadFinished()));
+        sshTunnelThread->setData(_data);
+        sshTunnelThread->start();
+    } else if ( addr.isEmpty() || port==0 ) {
         viewerToolBar->setEnabled(false);
         msg = QString("In '<b>%1</b>':<br> Getting the address data is failed.")
                 .arg(url);
@@ -110,26 +141,26 @@ void VM_Viewer_Only::init()
 }
 void VM_Viewer_Only::parseURL()
 {
-    QStringList parts1, parts2;
     if ( url.split("://", QString::SkipEmptyParts).count()>1 ) {
-        parts1  = url.split("://", QString::SkipEmptyParts).at(1)
+        QStringList parts1 = url.split("://", QString::SkipEmptyParts).at(1)
                 .split("/", QString::SkipEmptyParts);
-        host    = parts1.at(0);
-        if ( parts1.count()>1 ) {
+        host    = parts1.first();
+        QStringList _parts = url.split("/?");
+        if ( _parts.count()>1 ) {
             // address has extra parameters
-            if ( parts1.at(1).split("&", QString::SkipEmptyParts).count()>4 ) {
-                parts2      = parts1.at(1).split("&", QString::SkipEmptyParts);
-                transport   = parts2.at(0).split("=").at(1);
-                user        = parts2.at(1).split("=").at(1);
-                addr        = parts2.at(2).split("=").at(1);
-                port        = parts2.at(3).split("=").at(1).toInt();
-                socket      = parts2.at(4).split("=").at(1);
-            } else {
-                // Getting the address data is failed
+            QVariantMap _data;
+            foreach (QString _str, _parts.at(1).split("&", QString::SkipEmptyParts)) {
+                QStringList _params = _str.split("=");
+                _data.insert(_params.first(), _params.last());
             };
+            transport   = _data.value("transport").toString();
+            user        = _data.value("user").toString();
+            addr        = _data.value("addr").toString();
+            port        = _data.value("port").toInt();
+            socket      = _data.value("socket").toString();
         } else {
             // address has usual parameters only
-            parts2 = host.split(":", QString::SkipEmptyParts);
+            QStringList parts2 = host.split(":", QString::SkipEmptyParts);
             if ( parts2.count()>1 ) {
                 port = parts2.last().toInt();
                 parts2.removeLast();

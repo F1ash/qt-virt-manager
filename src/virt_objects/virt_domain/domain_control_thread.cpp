@@ -271,22 +271,9 @@ Result DomControlThread::getDomainData0()
     };
     domainDesc.insert("DomainType", _type);
     domainDesc.insert("DisplayType", displayType);
-    domainDesc.insert("Transport", transport);
-    domainDesc.insert("Address", addr);
-    domainDesc.insert("Port", port);
-    domainDesc.insert("Socket", socket);
-    domainDesc.insert("User", user);
-    domainDesc.insert("Host", host);
-    // WARNING: open the Graphics  file descriptor for socket
-    // can be not needed
-    int fd = -1;
-    //if ( transport.isEmpty() ||
-    //     transport.contains("unix") ||
-    //     transport.contains("ssh") ) {
-    //    // uses localhost connection for domain
-    //    //fd = virDomainOpenGraphicsFD(domainPtr, 0, VIR_DOMAIN_OPEN_GRAPHICS_SKIPAUTH);
-    //};
-    domainDesc.insert("SocketFD", QString::number(fd));
+    domainDesc.insert("Path", QString("%1;%2;%3;%4;%5;%6")
+            .arg(user).arg(host).arg(transport)
+            .arg(addr).arg(port).arg(socket));
     result.data.append(domainDesc);
     return result;
 }
@@ -349,21 +336,37 @@ Result DomControlThread::getDomainData1()
         if ( !listen.isNull() ) {
             addr.append( listen.attribute("address") );
             if ( socket.isEmpty() ) {
-                socket.append( graph.attribute("socket") );
+                socket.append( listen.attribute("socket") );
             };
         };
     };
 
-    QString url = QString(
-                "%1://%2/?transport=%3&user=%4&addr=%5&port=%6&socket=%7"
-            )
-            .arg(displayType)
-            .arg(host)
-            .arg(transport)
-            .arg(user)
-            .arg(addr)
-            .arg(port)
-            .arg(socket);
+    QString url = QString("%1://%2").arg(displayType).arg(host);
+    if ( !socket.isEmpty() ) {
+        url.append("/?");
+        QString _ext = QString("socket=%1").arg(socket);
+        if ( !user.isEmpty() ) {
+            _ext.prepend("&");
+            _ext.prepend(QString("user=%1").arg(user));
+        };
+        if ( !transport.isEmpty() ) {
+            _ext.prepend("&");
+            _ext.prepend(QString("transport=%1").arg(transport));
+        };
+        url.append(_ext);
+    } else if ( !addr.isEmpty() && !port.isEmpty() ) {
+        url.append("/?");
+        QString _ext = QString("addr=%1&port=%2").arg(addr).arg(port);
+        if ( !user.isEmpty() ) {
+            _ext.prepend("&");
+            _ext.prepend(QString("user=%1").arg(user));
+        };
+        if ( !transport.isEmpty() ) {
+            _ext.prepend("&");
+            _ext.prepend(QString("transport=%1").arg(transport));
+        };
+        url.append(_ext);
+    };
     QVariantMap _url;
     _url.insert("URL", url);
     result.data.append( _url );

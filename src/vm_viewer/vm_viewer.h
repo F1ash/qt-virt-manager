@@ -56,7 +56,6 @@ public:
 
     QString          transport, addr, socket, user, host;
     uint             port = 0;
-    int              socketFD = -1;
 
 signals:
     void             initGraphic();

@@ -71,7 +71,7 @@ void VM_Viewer::init()
         connect(actFullScreen, SIGNAL(activated()),
                 SLOT(fullScreenTriggered()));
         // uses socket for domain graphics;
-        // dirty and lazy hack with ssh tunnel
+        // dirty (for local VMs) and lazy hack with ssh tunnel
         QVariantMap _data;
         _data.insert("User", "root");
         QStringList _remoteAddr = host.split(":", QString::SkipEmptyParts);

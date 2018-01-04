@@ -14,14 +14,13 @@ Spice_Viewer::Spice_Viewer(
 {
     TYPE = "SPICE";
     QStringList _addrData = addrData.split(";");
-    if ( _addrData.count()>6 ) {
+    if ( _addrData.count()>5 ) {
         user        = _addrData.at(0);
         host        = _addrData.at(1);
         transport   = _addrData.at(2);
         addr        = _addrData.at(3);
         port        = _addrData.at(4).toInt();
         socket      = _addrData.at(5);
-        socketFD    = _addrData.at(6).toInt();
     };
     init();
 }
