@@ -11,15 +11,22 @@
 #include <QMenu>
 #include <QCloseEvent>
 
+enum Menu_Act {
+    NONE,
+    DELETE_ITEM,
+    CLEAR_LIST
+};
+
 class URLMenu : public QMenu
 {
     Q_OBJECT
 public:
     explicit URLMenu(QWidget *parent = nullptr);
-    bool             isActivated() const;
+    Menu_Act         getState() const;
 private:
-    bool             state;
+    Menu_Act         state = NONE;
     QAction         *delURL;
+    QAction         *clearList;
 private slots:
     void             actionTriggered(QAction*);
 };

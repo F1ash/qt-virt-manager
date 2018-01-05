@@ -120,5 +120,10 @@
         <file alias="32x32/actions/info.png">icons/32x32/actions/info.png</file>
         <file alias="48x48/actions/info.png">icons/48x48/actions/info.png</file>
         <file alias="64x64/actions/info.png">icons/64x64/actions/info.png</file>
+        <file alias="64x64/actions/edit-clear.png">icons/64x64/actions/edit-clear.png</file>
+        <file alias="48x48/actions/edit-clear.png">icons/48x48/actions/edit-clear.png</file>
+        <file alias="32x32/actions/edit-clear.png">icons/32x32/actions/edit-clear.png</file>
+        <file alias="24x24/actions/edit-clear.png">icons/24x24/actions/edit-clear.png</file>
+        <file alias="22x22/actions/edit-clear.png">icons/22x22/actions/edit-clear.png</file>
     </qresource>
 </RCC>

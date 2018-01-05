@@ -142,9 +142,12 @@ void VM_Viewer_Only::init()
 void VM_Viewer_Only::parseURL()
 {
     if ( url.split("://", QString::SkipEmptyParts).count()>1 ) {
-        QStringList parts1 = url.split("://", QString::SkipEmptyParts).at(1)
-                .split("/", QString::SkipEmptyParts);
+        QStringList parts1 = url.split("://").at(1)
+                .split("/");
         host    = parts1.first();
+        if ( host.isEmpty() ) {
+            host.append("localhost.localdomain");
+        };
         QStringList _parts = url.split("/?");
         if ( _parts.count()>1 ) {
             // address has extra parameters

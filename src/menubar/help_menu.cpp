@@ -12,7 +12,7 @@ HelpMenu::HelpMenu(QWidget *parent) :
                 "About Qt");
     aboutSelf = addAction(
                 QIcon::fromTheme("virtual-engineering"),
-                "About QtVirtViewer");
+                "About QtVirtManager");
     addSeparator();
     donate = addAction(
                 QIcon::fromTheme("donate"),

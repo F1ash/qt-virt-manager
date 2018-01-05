@@ -4,20 +4,29 @@
 URLMenu::URLMenu(QWidget *parent) :
     QMenu(parent)
 {
-    state = false;
     delURL = addAction(
                 QIcon::fromTheme("delete"),
                 "delete URL from list");
+    clearList = addAction(
+                QIcon::fromTheme("edit-clear"),
+                "clear URL list");
+
     connect(this, SIGNAL(triggered(QAction*)),
             this, SLOT(actionTriggered(QAction*)));
 }
-bool URLMenu::isActivated() const
+Menu_Act URLMenu::getState() const
 {
     return state;
 }
 void URLMenu::actionTriggered(QAction *act)
 {
-    state = (act==delURL);
+    if ( act==clearList ) {
+        state = CLEAR_LIST;
+    } else if ( act==delURL ) {
+        state = DELETE_ITEM;
+    } else {
+        state = NONE;
+    };
 }
 
 GetURLDialog::GetURLDialog(QWidget *parent) :
@@ -35,9 +44,10 @@ GetURLDialog::GetURLDialog(QWidget *parent) :
     info->setIcon(QIcon::fromTheme("info"));
     info->setToolTip("Info");
     urlEdit = new QLineEdit(this);
-    urlEdit->setPlaceholderText("protocol://host:port");
+    urlEdit->setPlaceholderText("protocol://[host[:port]][/?extensions]");
     urlEdit->setToolTip("spice://example.com:5900\nvnc://192.168.0.3:5901\n\
-vnc://example.com/?transport=ssh&user=root&addr=192.168.122.1&port=5902");
+vnc://example.com/?transport=ssh&user=root&addr=192.168.122.1&port=5902\n\
+vnc:///?socket=/var/lib/libvirt/qemu/domain-7-myVM/vnc.sock");
     urlLayout = new QHBoxLayout(this);
     urlLayout->addWidget(urlEdit);
     urlLayout->addWidget(push);
@@ -123,11 +133,13 @@ void GetURLDialog::showInfo()
 {
     QMessageBox::information(
                 this,
-                "For VM on remote host",
+                "URL schema",
                 "If you have SSH access to remote host\n\
 and an internal address for VM graphics\n\
 then you can use Remote Viewer with such path:\n\
-<vnc|spice>://HOST[:PORT]/?transport=ssh&user=<USER>&addr=<IP>&port=<NUMBER>",
+<vnc|spice>://HOST[:PORT]/?transport=ssh&user=<USER>&addr=<IP>&port=<NUMBER>\n\
+\nIf you have graphic socket on local or remote host:\n\
+<vnc|spice>://[HOST[:PORT]]/?[transport=ssh&user=<USER>&]socket=/path/to/socket",
                 QMessageBox::Ok);
 }
 void GetURLDialog::urlMenuRequested(const QPoint &pos)
@@ -135,16 +147,20 @@ void GetURLDialog::urlMenuRequested(const QPoint &pos)
     URLMenu *m = new URLMenu(this);
     m->move(mapToGlobal(pos));
     m->exec();
-    const bool isActivated = m->isActivated();
+    const Menu_Act _state = m->getState();
     m->deleteLater();
-    if ( isActivated ) {
+    if ( _state==DELETE_ITEM ) {
         QModelIndex idx =
                 urlList->indexAt(pos);
         QListWidgetItem *item =
                 urlList->takeItem(idx.row());
         delete item;
         item = nullptr;
+    } else if ( _state==CLEAR_LIST ) {
+        url.clear();
+        urlList->clear();
     };
+
 }
 void GetURLDialog::urlActivated(QListWidgetItem *item)
 {

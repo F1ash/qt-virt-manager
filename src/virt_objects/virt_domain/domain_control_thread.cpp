@@ -304,12 +304,12 @@ Result DomControlThread::getDomainData1()
                 user = part5.first();
                 host = part5.last();
             } else if ( part4.isEmpty() ) {
-                host = "localhost.localdomain";
+                //host = "localhost.localdomain";
             } else {
                 host = part4;
             };
         } else {
-            host = "localhost.localdomain";
+            //host = "localhost.localdomain";
         };
     };
     const char *_type = virConnectGetType(*task.srcConnPtr);
