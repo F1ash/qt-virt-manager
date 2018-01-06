@@ -22,7 +22,7 @@ VNC_Viewer::VNC_Viewer(
         host        = _addrData.at(1);
         transport   = _addrData.at(2);
         addr        = _addrData.at(3);
-        port        = _addrData.at(4).toInt();
+        port        = _addrData.at(4);
         socket      = _addrData.at(5);
     };
     init();
@@ -228,7 +228,7 @@ void VNC_Viewer::initGraphicWidget()
     QSize around_size = getWidgetSizeAroundDisplay();
     //QTextStream s(stdout);
     //s<<"address: "<<addr<<":"<<port<<endl;
-    vncWdg->Set_VNC_URL(addr, port);
+    vncWdg->Set_VNC_URL(addr, port.toInt());
     vncWdg->Set_Scaling(true);
     vncWdg->initView();
     vncWdg->newViewSize(around_size.width(), around_size.height());

@@ -66,37 +66,11 @@ void VM_Viewer_Only::init()
 {
     QString msg;
     if ( !socket.isEmpty() ) {
-        actFullScreen = new QShortcut(
-                    QKeySequence(tr("Shift+F11", "View|Full Screen")),
-                    this);
-        connect(actFullScreen, SIGNAL(activated()),
-                SLOT(fullScreenTriggered()));
+        useFullScreen();
         // uses socket for domain graphics;
         // dirty (for local VMs) and lazy hack with ssh tunnel
-        QVariantMap _data;
-        _data.insert("User", "root");
-        QStringList _remoteAddr = host.split(":", QString::SkipEmptyParts);
-        if ( _remoteAddr.count()>1 ) {
-            _data.insert("RemotePort", _remoteAddr.last());
-            _remoteAddr.removeLast();
-        } else {
-            _data.insert("RemotePort", "22"); // default SSH service TCP port
-        };
-        if ( _remoteAddr.count()>1 ) {
-            _data.insert("RemoteHost", _remoteAddr.join(":"));
-        } else {
-            _data.insert("RemoteHost", _remoteAddr.first());
-        };
-        _data.insert("GraphicsAddr", addr);
-        _data.insert("GraphicsSock", socket);
-        sshTunnelThread = new SSH_Tunnel();
-        connect(sshTunnelThread, SIGNAL(established(quint16)),
-                this, SLOT(useSSHTunnel(quint16)));
-        connect(sshTunnelThread, SIGNAL(finished()),
-                this, SLOT(sshThreadFinished()));
-        sshTunnelThread->setData(_data);
-        sshTunnelThread->start();
-    } else if ( addr.isEmpty() || port==0 ) {
+        startSSHTunnel("root", socket);
+    } else if ( addr.isEmpty() || port.toInt()==0 ) {
         viewerToolBar->setEnabled(false);
         msg = QString("In '<b>%1</b>':<br> Getting the address data is failed.")
                 .arg(url);
@@ -104,38 +78,12 @@ void VM_Viewer_Only::init()
         startCloseProcess();
         //s << "failed" << endl;
     } else {
-        actFullScreen = new QShortcut(
-                    QKeySequence(tr("Shift+F11", "View|Full Screen")),
-                    this);
-        connect(actFullScreen, SIGNAL(activated()),
-                SLOT(fullScreenTriggered()));
+        useFullScreen();
         if ( !transport.contains("ssh", Qt::CaseInsensitive) ) {
             emit initGraphic();
         } else {
             // need ssh tunnel
-            QVariantMap _data;
-            _data.insert("User", user);
-            QStringList _remoteAddr = host.split(":", QString::SkipEmptyParts);
-            if ( _remoteAddr.count()>1 ) {
-                _data.insert("RemotePort", _remoteAddr.last());
-                _remoteAddr.removeLast();
-            } else {
-                _data.insert("RemotePort", "22"); // default SSH service TCP port
-            };
-            if ( _remoteAddr.count()>1 ) {
-                _data.insert("RemoteHost", _remoteAddr.join(":"));
-            } else {
-                _data.insert("RemoteHost", _remoteAddr.first());
-            };
-            _data.insert("GraphicsAddr", addr);
-            _data.insert("GraphicsPort", port);
-            sshTunnelThread = new SSH_Tunnel();
-            connect(sshTunnelThread, SIGNAL(established(quint16)),
-                    this, SLOT(useSSHTunnel(quint16)));
-            connect(sshTunnelThread, SIGNAL(finished()),
-                    this, SLOT(sshThreadFinished()));
-            sshTunnelThread->setData(_data);
-            sshTunnelThread->start();
+            startSSHTunnel(user, port);
         };
     };
 }
@@ -159,13 +107,13 @@ void VM_Viewer_Only::parseURL()
             transport   = _data.value("transport").toString();
             user        = _data.value("user").toString();
             addr        = _data.value("addr").toString();
-            port        = _data.value("port").toInt();
+            port        = _data.value("port").toString();
             socket      = _data.value("socket").toString();
         } else {
             // address has usual parameters only
             QStringList parts2 = host.split(":", QString::SkipEmptyParts);
             if ( parts2.count()>1 ) {
-                port = parts2.last().toInt();
+                port = parts2.last();
                 parts2.removeLast();
                 if ( parts2.count()>1 ) {
                     addr = parts2.join(":");
@@ -221,7 +169,7 @@ void VM_Viewer_Only::timerEvent(QTimerEvent *ev)
 void VM_Viewer_Only::useSSHTunnel(quint16 _port)
 {
     addr = "127.0.0.1";
-    port = _port;
+    port = QString::number(_port);
     // start timer for [re]connect to VM,
     // when connection is successful,
     // then will be resizeing occured and
@@ -376,4 +324,41 @@ void VM_Viewer_Only::setNewPosition(const QPoint &_pos)
 void VM_Viewer_Only::sshThreadFinished()
 {
     showErrorInfo("SSH tunnel is destroyed.");
+}
+void VM_Viewer_Only::startSSHTunnel(QString _user, QString _graphicsParam)
+{
+    QVariantMap _data;
+    _data.insert("User", _user);
+    QStringList _remoteAddr = host.split(":", QString::SkipEmptyParts);
+    if ( _remoteAddr.count()>1 ) {
+        _data.insert("RemotePort", _remoteAddr.last());
+        _remoteAddr.removeLast();
+    } else {
+        _data.insert("RemotePort", "22"); // default SSH service TCP port
+    };
+    if ( _remoteAddr.count()>1 ) {
+        _data.insert("RemoteHost", _remoteAddr.join(":"));
+    } else {
+        _data.insert("RemoteHost", _remoteAddr.first());
+    };
+    if ( socket.isEmpty() ) {
+        _data.insert("GraphicsAddr", addr);
+        _data.insert("GraphicsPort", _graphicsParam);
+    } else {
+        _data.insert("GraphicsSock", _graphicsParam);
+    };
+    sshTunnelThread = new SSH_Tunnel();
+    connect(sshTunnelThread, SIGNAL(established(quint16)),
+            this, SLOT(useSSHTunnel(quint16)));
+    connect(sshTunnelThread, SIGNAL(finished()),
+            this, SLOT(sshThreadFinished()));
+    sshTunnelThread->setData(_data);
+    sshTunnelThread->start();
+}
+void VM_Viewer_Only::useFullScreen() {
+    actFullScreen = new QShortcut(
+                QKeySequence(tr("Shift+F11", "View|Full Screen")),
+                this);
+    connect(actFullScreen, SIGNAL(activated()),
+            SLOT(fullScreenTriggered()));
 }

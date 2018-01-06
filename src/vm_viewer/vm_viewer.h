@@ -54,8 +54,8 @@ public:
     QShortcut       *actFullScreen = nullptr;
     SSH_Tunnel      *sshTunnelThread = nullptr;
 
-    QString          transport, addr, socket, user, host;
-    uint             port = 0;
+    QString          user, host, transport,
+                     addr, port, socket;
 
 signals:
     void             initGraphic();
@@ -80,6 +80,8 @@ private:
     QPropertyAnimation
                     *animatedShowToolBar,
                     *animatedHideToolBar;
+    void             useFullScreen();
+    void             startSSHTunnel(QString, QString);
 
 public slots:
     virtual void     initGraphicWidget();

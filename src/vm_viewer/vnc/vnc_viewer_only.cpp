@@ -217,7 +217,7 @@ void VNC_Viewer_Only::initGraphicWidget()
     //port = _urlParams.last().toInt();
     QSize around_size = getWidgetSizeAroundDisplay();
     //qDebug()<<"address:"<<addr<<port;
-    vncWdg->Set_VNC_URL(addr, port);
+    vncWdg->Set_VNC_URL(addr, port.toInt());
     vncWdg->Set_Scaling(true);
     vncWdg->initView();
     vncWdg->newViewSize(around_size.width(), around_size.height());

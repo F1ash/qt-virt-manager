@@ -32,10 +32,10 @@ public:
     virtual void     init();
     void             parseURL();
     const QString    url;
-    QString          user, host, transport, addr, socket;
+    QString          user, host, transport,
+                     addr, port, socket;
     QSettings        settings;
     ViewerToolBar   *viewerToolBar = nullptr;
-    uint             port = 0;
     uint             timerId = 0;
     int              killTimerId = 0;
     int              toolBarTimerId = 0;
@@ -68,6 +68,8 @@ private:
     QPropertyAnimation
                     *animatedShowToolBar,
                     *animatedHideToolBar;
+    void             useFullScreen();
+    void             startSSHTunnel(QString, QString);
 
 public slots:
     virtual void     initGraphicWidget();

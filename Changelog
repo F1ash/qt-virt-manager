@@ -193,3 +193,10 @@ some fixes and enhancements;
 0.45.75 :
 extended external VM Viewer for using ssh-tunnel;
 some enhancements;
+
+0.48.79 :
+implemented usage Viewer for VMs
+    with graphics through socket;
+enhancements for external Viewer;
+fixed the building a rule of NWFilter;
+enhancements for building;

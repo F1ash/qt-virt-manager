@@ -19,7 +19,7 @@ Spice_Viewer::Spice_Viewer(
         host        = _addrData.at(1);
         transport   = _addrData.at(2);
         addr        = _addrData.at(3);
-        port        = _addrData.at(4).toInt();
+        port        = _addrData.at(4);
         socket      = _addrData.at(5);
     };
     init();
