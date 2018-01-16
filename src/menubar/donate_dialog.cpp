@@ -16,9 +16,20 @@ Donate_Dialog::Donate_Dialog(QWidget *parent) :
     donate2->setToolTip("Donate to VISA QIWI Wallet\nCopy card number to Clipboard");
     donate2->setOpenExternalLinks(true);
     donate2->setPixmap(QIcon::fromTheme("qiwi_wallet_visa").pixmap(128));
+    donate3 = new Click_Label(this);
+    donate3->setToolTip("Donate Bitcoin\nCopy to Clipboard");
+    donate3->setOpenExternalLinks(true);
+    donate3->setPixmap(QIcon::fromTheme("electrum").pixmap(128));
+    donate4 = new Click_Label(this);
+    donate4->setToolTip("Donate BitcoinCash\nCopy to Clipboard");
+    donate4->setOpenExternalLinks(true);
+    donate4->setPixmap(QIcon::fromTheme("electron-cash").pixmap(128));
+
     donateLayout = new QGridLayout(this);
     donateLayout->addWidget(donate1, 0, 0, Qt::AlignCenter);
     donateLayout->addWidget(donate2, 0, 1, Qt::AlignCenter);
+    donateLayout->addWidget(donate3, 1, 0, Qt::AlignCenter);
+    donateLayout->addWidget(donate4, 1, 1, Qt::AlignCenter);
     donateWdg = new QWidget(this);
     donateWdg->setLayout(donateLayout);
     again = new QCheckBox("don't show again", this);
@@ -27,9 +38,14 @@ Donate_Dialog::Donate_Dialog(QWidget *parent) :
     commonLayout->addWidget(donateWdg);
     commonLayout->addWidget(again);
     setLayout(commonLayout);
+
     connect(donate1, SIGNAL(released()),
             this, SLOT(donationClicked()));
     connect(donate2, SIGNAL(released()),
+            this, SLOT(donationClicked()));
+    connect(donate3, SIGNAL(released()),
+            this, SLOT(donationClicked()));
+    connect(donate4, SIGNAL(released()),
             this, SLOT(donationClicked()));
 }
 
@@ -50,11 +66,22 @@ void Donate_Dialog::donationClicked()
 &target-visibility=on&project-name=QtVirtManager\
 &project-site=http://f1ash.github.io/qt-virt-manager&button-text=01\
 &successURL=");
+        QDesktopServices::openUrl(QUrl(url));
     } else if ( sender()==donate2 ) {
         donate2->setEnabled(false);
         QClipboard *c = QApplication::clipboard();
         c->setText("4890494460088297", QClipboard::Clipboard);
+    } else if ( sender()==donate3 ) {
+        donate3->setEnabled(false);
+        QClipboard *c = QApplication::clipboard();
+        c->setText(
+                "1KnFdQyxjY2PHEamoYjdwYsK1hcC7SzLEE",
+                QClipboard::Clipboard);
+    } else if ( sender()==donate4 ) {
+        donate4->setEnabled(false);
+        QClipboard *c = QApplication::clipboard();
+        c->setText(
+                "bitcoincash:qr7qepftr5nrl0t8p0t8fpg6cq2c9fycmveyv3fsff",
+                QClipboard::Clipboard);
     };
-    if ( !url.isEmpty() )
-            QDesktopServices::openUrl(QUrl(url));
 }
