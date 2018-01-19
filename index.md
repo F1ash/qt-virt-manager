@@ -158,6 +158,10 @@ occurs in GitHub [Issues page](https://github.com/F1ash/qt-virt-manager/issues) 
 
 ![VISA_Wallet](https://raw.githubusercontent.com/F1ash/qt-virt-manager/master/src/icons/128x128/actions/qiwi_wallet_visa.png) Card # : `4890494460088297`
 
+![Bitcoin_Wallet](https://raw.githubusercontent.com/F1ash/qt-virt-manager/master/src/icons/128x128/actions/electrum.png) Wallet : `1KnFdQyxjY2PHEamoYjdwYsK1hcC7SzLEE`
+
+![BitcionCash_Wallet](https://raw.githubusercontent.com/F1ash/qt-virt-manager/master/src/icons/128x128/actions/electron-cash.png) Wallet : `bitcoincash:qr7qepftr5nrl0t8p0t8fpg6cq2c9fycmveyv3fsff`
+
  [[^]](#top)
 
 ***
