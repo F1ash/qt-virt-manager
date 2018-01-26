@@ -117,7 +117,7 @@ void VNC_Viewer_Only::getScreenshotFromVirtDomain()
     QImage img = vncWdg->getScreenCapture();
     QString fileName = QFileDialog::getSaveFileName(
                 this,
-                "Save Image to",
+                tr("Save Image to"),
                 QString("%1%2_%3_%4.snapshot")
                     .arg(QDir::homePath())
                     .arg(QDir::separator())
@@ -281,7 +281,7 @@ void VNC_Viewer_Only::connectedToHost()
 {
     QSize around_size = getWidgetSizeAroundDisplay();
     vncWdg->newViewSize(around_size.width(), around_size.height());
-    setWindowTitle(QString("Qt Remote Viewer -- %1").arg(url));
+    setWindowTitle(QString(tr("Qt Remote Viewer -- %1")).arg(url));
 }
 
 void VNC_Viewer_Only::cantConnect()

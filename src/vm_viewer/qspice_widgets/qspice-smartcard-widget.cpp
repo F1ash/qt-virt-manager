@@ -3,7 +3,7 @@
 QSpiceSmartcardWidget::QSpiceSmartcardWidget(QWidget *parent) :
     QDialog(parent)
 {
-    setWindowTitle("Smartcards");
+    setWindowTitle(tr("Smartcards"));
     settings.beginGroup(windowTitle());
     restoreGeometry(settings.value("Geometry").toByteArray());
     settings.endGroup();

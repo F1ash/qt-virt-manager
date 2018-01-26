@@ -6,10 +6,10 @@ URLMenu::URLMenu(QWidget *parent) :
 {
     delURL = addAction(
                 QIcon::fromTheme("delete"),
-                "delete URL from list");
+                tr("delete URL from list"));
     clearList = addAction(
                 QIcon::fromTheme("edit-clear"),
-                "clear URL list");
+                tr("clear URL list"));
 
     connect(this, SIGNAL(triggered(QAction*)),
             this, SLOT(actionTriggered(QAction*)));
@@ -35,14 +35,14 @@ GetURLDialog::GetURLDialog(QWidget *parent) :
     url.clear();
     QIcon::setThemeName("QtRemoteViewer");
     setWindowIcon(QIcon::fromTheme("remote-desktop-viewer"));
-    setWindowTitle("Get URL");
+    setWindowTitle(tr("Get URL"));
     restoreGeometry(settings.value("GetURLGeometry").toByteArray());
     push = new QPushButton(this);
     push->setIcon(QIcon::fromTheme("disconnect"));
-    push->setToolTip("Connect");
+    push->setToolTip(tr("Connect"));
     info = new QPushButton(this);
     info->setIcon(QIcon::fromTheme("info"));
-    info->setToolTip("Info");
+    info->setToolTip(tr("Info"));
     urlEdit = new QLineEdit(this);
     urlEdit->setPlaceholderText("protocol://[host[:port]][/?extensions]");
     urlEdit->setToolTip("spice://example.com:5900\nvnc://192.168.0.3:5901\n\
@@ -133,13 +133,13 @@ void GetURLDialog::showInfo()
 {
     QMessageBox::information(
                 this,
-                "URL schema",
-                "If you have SSH access to remote host\n\
+                tr("URL schema"),
+                tr("If you have SSH access to remote host\n\
 and an internal address for VM graphics\n\
 then you can use Remote Viewer with such path:\n\
 <vnc|spice>://HOST[:PORT]/?transport=ssh&user=<USER>&addr=<IP>&port=<NUMBER>\n\
 \nIf you have graphic socket on local or remote host:\n\
-<vnc|spice>://[HOST[:PORT]]/?[transport=ssh&user=<USER>&]socket=/path/to/socket",
+<vnc|spice>://[HOST[:PORT]]/?[transport=ssh&user=<USER>&]socket=/path/to/socket"),
                 QMessageBox::Ok);
 }
 void GetURLDialog::urlMenuRequested(const QPoint &pos)

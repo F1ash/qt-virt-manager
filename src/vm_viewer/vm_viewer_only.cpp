@@ -72,7 +72,7 @@ void VM_Viewer_Only::init()
         startSSHTunnel("root", socket);
     } else if ( addr.isEmpty() || port.toInt()==0 ) {
         viewerToolBar->setEnabled(false);
-        msg = QString("In '<b>%1</b>':<br> Getting the address data is failed.")
+        msg = QString(tr("In '<b>%1</b>':<br> Getting the address data is failed."))
                 .arg(url);
         showErrorInfo(msg);
         startCloseProcess();
@@ -157,7 +157,7 @@ void VM_Viewer_Only::timerEvent(QTimerEvent *ev)
             if ( reinitCounter>=30 ) {
                 viewerToolBar->setEnabled(false);
                 QString msg =
-                        QString("In '<b>%1</b>':<br> Open the address is failed.")
+                        QString(tr("In '<b>%1</b>':<br> Open the address is failed."))
                         .arg(url);
                 showErrorInfo(msg);
                 startCloseProcess();
@@ -256,7 +256,7 @@ void VM_Viewer_Only::showErrorInfo(const QString &_msg)
     icon->setPixmap(_icon.pixmap(256));
     msg = new QLabel(this);
     if ( _msg.isEmpty() ) {
-        msg->setText(QString("Can't connect to host:\n%1").arg(url));
+        msg->setText(QString(tr("Can't connect to host:\n%1")).arg(url));
     } else {
         msg->setText(_msg);
     };
@@ -323,7 +323,7 @@ void VM_Viewer_Only::setNewPosition(const QPoint &_pos)
 }
 void VM_Viewer_Only::sshThreadFinished()
 {
-    showErrorInfo("SSH tunnel is destroyed.");
+    showErrorInfo(tr("SSH tunnel is destroyed."));
 }
 void VM_Viewer_Only::startSSHTunnel(QString _user, QString _graphicsParam)
 {

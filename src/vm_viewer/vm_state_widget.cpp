@@ -64,7 +64,7 @@ VM_State_Widget::VM_State_Widget(QWidget *parent) :
     setLayout(commoLayout);
     closeProcess->hide();
     //downloadProcess->hide();
-    downloadProcess->setToolTip("File download progress");
+    downloadProcess->setToolTip(tr("File download progress"));
     smartCard->setObjectName("SmartCard channel");
     mouse->setObjectName("Cursor channel");
     keyboard->setObjectName("Inputs channel");
@@ -122,8 +122,8 @@ void VM_State_Widget::changeSmartcardState(bool state)
     smartCard->setToolTip(
                 QString("%1 (%2)%3")
                 .arg(smartCard->objectName())
-                .arg(state? "ON":"OFF")
-                .arg(state? "\nClick to choose devices":""));
+                .arg(state? tr("ON"):tr("OFF"))
+                .arg(state? tr("\nClick to choose devices"):""));
 }
 void VM_State_Widget::changeMouseState(bool state)
 {
@@ -134,7 +134,7 @@ void VM_State_Widget::changeMouseState(bool state)
     mouse->setToolTip(
                 QString("%1 (%2)")
                 .arg(mouse->objectName())
-                .arg(state? "ON":"OFF"));
+                .arg(state? tr("ON"):tr("OFF")));
 }
 void VM_State_Widget::changeKeyboardState(bool state)
 {
@@ -145,7 +145,7 @@ void VM_State_Widget::changeKeyboardState(bool state)
     keyboard->setToolTip(
                 QString("%1 (%2)")
                 .arg(keyboard->objectName())
-                .arg(state? "ON":"OFF"));
+                .arg(state? tr("ON"):tr("OFF")));
 }
 void VM_State_Widget::changeDisplayState(bool state)
 {
@@ -157,8 +157,8 @@ void VM_State_Widget::changeDisplayState(bool state)
     display->setToolTip(
                 QString("%1 (%2)%3")
                 .arg(display->objectName())
-                .arg(state? "ON":"OFF")
-                .arg(state? "\nClick to choose mode":""));
+                .arg(state? tr("ON"):tr("OFF"))
+                .arg(state? tr("\nClick to choose mode"):""));
 }
 void VM_State_Widget::changeUsbredirState(bool state)
 {
@@ -170,8 +170,8 @@ void VM_State_Widget::changeUsbredirState(bool state)
     usbRedir->setToolTip(
                 QString("%1 (%2)%3")
                 .arg(usbRedir->objectName())
-                .arg(state? "ON":"OFF")
-                .arg(state? "\nClick to choose devices":""));
+                .arg(state? tr("ON"):tr("OFF"))
+                .arg(state? tr("\nClick to choose devices"):""));
 }
 void VM_State_Widget::changeWebDAVState(bool state)
 {
@@ -182,7 +182,7 @@ void VM_State_Widget::changeWebDAVState(bool state)
     webdav->setToolTip(
                 QString("%1 (%2)")
                 .arg(webdav->objectName())
-                .arg(state? "ON":"OFF"));
+                .arg(state? tr("ON"):tr("OFF")));
 }
 void VM_State_Widget::changePlaybackState(bool state)
 {
@@ -193,7 +193,7 @@ void VM_State_Widget::changePlaybackState(bool state)
     playback->setToolTip(
                 QString("%1 (%2)")
                 .arg(playback->objectName())
-                .arg(state? "ON":"OFF"));
+                .arg(state? tr("ON"):tr("OFF")));
 }
 void VM_State_Widget::changeRecordState(bool state)
 {
@@ -204,7 +204,7 @@ void VM_State_Widget::changeRecordState(bool state)
     record->setToolTip(
                 QString("%1 (%2)")
                 .arg(record->objectName())
-                .arg(state? "ON":"OFF"));
+                .arg(state? tr("ON"):tr("OFF")));
 }
 
 void VM_State_Widget::showTransformationModeMenu()

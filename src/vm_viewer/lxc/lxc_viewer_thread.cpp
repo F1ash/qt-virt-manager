@@ -51,12 +51,12 @@ void LXC_ViewerThread::run()
         QString msg;
         if ( ret+1 ) {
             msg = QString(
-                        "In '<b>%1</b>': Console opened in ZERO-mode...")
+                        tr("In '<b>%1</b>': Console opened in ZERO-mode..."))
                     .arg(domain);
             emit errorMsg(msg, number);
         } else {
             msg = QString(
-                        "In '<b>%1</b>': Open console failed...")
+                        tr("In '<b>%1</b>': Open console failed..."))
                     .arg(domain);
             emit errorMsg(msg, number);
             sendConnErrors();
@@ -196,7 +196,7 @@ void LXC_ViewerThread::sendDataToDisplay()
                 ptySlaveFd = -1;
                 //qDebug()<<"stream"<<stream<<keep_alive<<ptySlaveFd<<"in EOF";
             };
-            msg = QString("In '<b>%1</b>': EOF.").arg(domain);
+            msg = QString(tr("In '<b>%1</b>': EOF.")).arg(domain);
             emit errorMsg(msg, number);
             //qDebug()<<"emit errMsg";
         };
@@ -205,7 +205,7 @@ void LXC_ViewerThread::sendDataToDisplay()
     case -1:
         // Error stream
         if (ptySlaveFd) {
-            write(ptySlaveFd, "\nError in callback stream...", 19);
+            write(ptySlaveFd, "\nError in callback stream...", 28);
         };
         sendConnErrors();
         //qDebug()<<"sendDataToDisplay"<<"Error in callback stream"<<stream;

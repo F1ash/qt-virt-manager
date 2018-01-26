@@ -463,8 +463,8 @@ void QSpiceMainChannel::fileCopyFinish(void *channel, void *result, void *error)
         if (obj) {
             emit obj->downloaded(0, 100);
             SPICE_CHANNEL_MSG _msg;
-            _msg.channel = "main_channel";
-            _msg.context = "file transfer";
+            _msg.channel = tr("main_channel");
+            _msg.context = tr("file transfer");
             _msg.msg = QString::fromUtf8(errors[i]->message);
             emit obj->channelMsg(_msg);
         };

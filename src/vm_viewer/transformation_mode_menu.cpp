@@ -5,11 +5,11 @@ TransformationModeMenu::TransformationModeMenu(
     QMenu(parent), mode(_mode)
 {
     act_group = new QActionGroup(this);
-    fast    = addAction("fast (no smoothing)");
+    fast    = addAction(tr("fast (no smoothing)"));
     fast->setCheckable(true);
     fast->setChecked(mode==Qt::FastTransformation);
     fast->setActionGroup(act_group);
-    smooth  = addAction("smooth (slower)");
+    smooth  = addAction(tr("smooth (slower)"));
     smooth->setCheckable(true);
     smooth->setChecked(mode==Qt::SmoothTransformation);
     smooth->setActionGroup(act_group);

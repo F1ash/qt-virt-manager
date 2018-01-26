@@ -3,7 +3,7 @@
 QSpiceUsbDeviceWidget::QSpiceUsbDeviceWidget(QWidget *parent) :
     QDialog(parent)
 {
-    setWindowTitle("USB Redirection");
+    setWindowTitle(tr("USB Redirection"));
     settings.beginGroup(windowTitle());
     restoreGeometry(settings.value("Geometry").toByteArray());
     settings.endGroup();

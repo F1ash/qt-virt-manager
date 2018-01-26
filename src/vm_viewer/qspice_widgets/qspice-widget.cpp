@@ -985,7 +985,7 @@ void QSpiceWidget::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::yellow);
         painter.setOpacity(0.65);
         painter.setFont(QFont("Monospace", 30));
-        QString text = QString("Download: %1 %").arg(downloadProgress);
+        QString text = QString(tr("Download: %1 %")).arg(downloadProgress);
         painter.drawText(
                     QRect(10, 10, frameSize().width(), 50),
                     Qt::AlignLeft|Qt::AlignVCenter,
@@ -1035,41 +1035,41 @@ void QSpiceWidget::channelEvent(int _ev)
     switch (ev) {
     case SPICE_CHANNEL_NONE:
         eventDescription
-                .append("no event, or ignored event");
+                .append(tr("no event, or ignored event"));
         break;
     case SPICE_CHANNEL_OPENED:
         eventDescription
-                .append("connection is authentified and ready");
+                .append(tr("connection is authentified and ready"));
         break;
     case SPICE_CHANNEL_SWITCHING:
         eventDescription
                 .append(
-"disconnecting from the current host and connecting to the target host");
+tr("disconnecting from the current host and connecting to the target host"));
         break;
     case SPICE_CHANNEL_CLOSED:
         eventDescription
                 .append(
-"connection is closed normally (sent if channel was ready)");
+tr("connection is closed normally (sent if channel was ready)"));
         break;
     case SPICE_CHANNEL_ERROR_CONNECT:
         eventDescription
-                .append("connection error");
+                .append(tr("connection error"));
         break;
     case SPICE_CHANNEL_ERROR_TLS:
         eventDescription
-                .append("SSL error");
+                .append(tr("SSL error"));
         break;
     case SPICE_CHANNEL_ERROR_LINK:
         eventDescription
-                .append("error during link process");
+                .append(tr("error during link process"));
         break;
     case SPICE_CHANNEL_ERROR_AUTH:
         eventDescription
-                .append("authentication error");
+                .append(tr("authentication error"));
         break;
     case SPICE_CHANNEL_ERROR_IO:
         eventDescription
-                .append("IO error");
+                .append(tr("IO error"));
         break;
     default:
         break;
@@ -1182,7 +1182,7 @@ void QSpiceWidget::getScreenshot()
     // after last dot.
     QString fileName = QFileDialog::getSaveFileName(
                 this,
-                "Save Image to",
+                tr("Save Image to"),
                 QString("%1%2%3[%4]_%5_%6.snapshot")
                     .arg(QDir::homePath())
                     .arg(QDir::separator())

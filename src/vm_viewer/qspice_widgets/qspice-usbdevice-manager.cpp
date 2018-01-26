@@ -282,9 +282,9 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
                             nullptr,
                             (GAsyncReadyCallback)spiceUsbDeviceManager_connect_finish_callback,
                             this);
-                _msg.append("connect to guest.");
+                _msg.append(tr("connect to guest."));
             } else {
-                _msg.append("connected to guest already.");
+                _msg.append(tr("connected to guest already."));
             };
             emit deviceInfo(_id, _msg);
         };
@@ -317,9 +317,9 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_disconnect_device(QString &_i
             spice_usb_device_manager_disconnect_device(
                         (SpiceUsbDeviceManager*) gobject, _dev);
 #endif
-            _msg.append("disconnect from guest.");
+            _msg.append(tr("disconnect from guest."));
         } else {
-            _msg.append("disconnected from guest already.");
+            _msg.append(tr("disconnected from guest already."));
         };
         emit deviceInfo(_id, _msg);
     };

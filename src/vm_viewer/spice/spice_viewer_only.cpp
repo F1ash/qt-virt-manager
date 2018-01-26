@@ -52,7 +52,7 @@ void Spice_Viewer_Only::copyFilesToVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
     QStringList fileNames = QFileDialog::getOpenFileNames(
-                this, "Copy files to Guest", "~");
+                this, tr("Copy files to Guest"), "~");
     spiceWdg->fileCopyAsync(fileNames);
 }
 void Spice_Viewer_Only::cancelCopyFilesToVirtDomain()
@@ -222,7 +222,7 @@ void Spice_Viewer_Only::displayChannelState(bool state)
     if ( state ) {
         QSize around_size = getWidgetSizeAroundDisplay();
         spiceWdg->setNewSize(around_size.width(), around_size.height());
-        setWindowTitle(QString("Qt Remote Viewer -- %1").arg(url));
+        setWindowTitle(QString(tr("Qt Remote Viewer -- %1")).arg(url));
     } else {
         delete spiceWdg;
         spiceWdg = nullptr;

@@ -134,7 +134,7 @@ void VNC_Viewer::getScreenshotFromVirtDomain()
     // after last dot.
     QString fileName = QFileDialog::getSaveFileName(
                 this,
-                "Save Image to",
+                tr("Save Image to"),
                 QString("%1%2%3[%4]_%5_%6.snapshot")
                     .arg(QDir::homePath())
                     .arg(QDir::separator())

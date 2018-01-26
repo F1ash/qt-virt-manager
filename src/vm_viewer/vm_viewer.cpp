@@ -13,7 +13,7 @@ VM_Viewer::VM_Viewer(
     addrData(arg3)
 {
     qRegisterMetaType<QString>("QString&");
-    setWindowTitle(QString("<%1> Virtual Machine in [ %2 ] connection")
+    setWindowTitle(QString(tr("<%1> Virtual Machine in [ %2 ] connection"))
                    .arg(domain).arg(connName));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     setMinimumSize(100, 100);
@@ -71,7 +71,7 @@ void VM_Viewer::init()
         startSSHTunnel("root", socket);
     } else if ( addr.isEmpty() || port.toInt()==0 ) {
         viewerToolBar->setEnabled(false);
-        msg = QString("In '<b>%1</b>':<br> Getting the address data is failed.")
+        msg =QString(tr("In '<b>%1</b>':<br> Getting the address data is failed."))
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);
@@ -115,7 +115,7 @@ void VM_Viewer::timerEvent(QTimerEvent *ev)
             if ( reinitCounter>=30 ) {
                 viewerToolBar->setEnabled(false);
                 QString msg =
-                    QString("In '<b>%1</b>':<br> Open the VM graphics is failed.")
+                    QString(tr("In '<b>%1</b>':<br> Open the VM graphics is failed."))
                     .arg(domain);
                 showErrorInfo(msg);
                 startCloseProcess();
@@ -128,7 +128,7 @@ void VM_Viewer::closeEvent(QCloseEvent *ev)
 {
     ev->accept();
     QString key = objectName();
-    QString msg = QString("'<b>%1</b>' VM viewer closed.")
+    QString msg = QString(tr("'<b>%1</b>' VM viewer closed."))
             .arg(domain);
     sendErrMsg(msg);
     emit finished(key);
@@ -152,7 +152,7 @@ void VM_Viewer::sendErrMsg(const QString &msg, const uint _number)
 {
     Q_UNUSED(_number);
     QString time = QTime::currentTime().toString();
-    QString title = QString("Connection '%1'").arg(connName);
+    QString title = QString(tr("Connection '%1'")).arg(connName);
     QString errMsg = QString(
     "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
             .arg(time).arg(title).arg(msg);
@@ -207,7 +207,7 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
         task.action     = Actions::SHUTDOWN_ENTITY;
         emit addNewTask(&task);
     } else if ( params.method==Methods::saveVirtDomain ) {
-        QString to = QFileDialog::getSaveFileName(this, "Save to", "~");
+        QString to = QFileDialog::getSaveFileName(this, tr("Save to"), "~");
         if ( !to.isEmpty() ) {
             task.action     = Actions::SAVE_ENTITY;
             task.args.path  = to;
@@ -216,7 +216,7 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
     } else if ( params.method==Methods::restoreVirtDomain ) {
         QString from =
                 QFileDialog::getOpenFileName(
-                    this, "Restore from", "~");
+                    this, tr("Restore from"), "~");
         if ( !from.isEmpty() ) {
             task.action     = Actions::RESTORE_ENTITY;
             task.args.path  = from;
@@ -400,7 +400,7 @@ void VM_Viewer::setNewPosition(const QPoint &_pos)
 }
 void VM_Viewer::sshThreadFinished()
 {
-    showErrorInfo("SSH tunnel is destroyed.");
+    showErrorInfo(tr("SSH tunnel is destroyed."));
 }
 void VM_Viewer::startSSHTunnel(QString _user, QString _graphicsParam)
 {

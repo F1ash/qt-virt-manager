@@ -65,7 +65,7 @@ void Spice_Viewer::copyFilesToVirtDomain()
 {
     if ( nullptr==spiceWdg ) return;
     QStringList fileNames = QFileDialog::getOpenFileNames(
-                this, "Copy files to Guest", "~");
+                this, tr("Copy files to Guest"), "~");
     spiceWdg->fileCopyAsync(fileNames);
 }
 void Spice_Viewer::cancelCopyFilesToVirtDomain()
