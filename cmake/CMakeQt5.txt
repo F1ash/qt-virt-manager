@@ -2,13 +2,14 @@
 find_package(PkgConfig)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_OSX_ARCHITECTURES x86_64)
-find_package (Qt5 COMPONENTS Widgets Xml Svg Multimedia Network REQUIRED)
+find_package (Qt5 COMPONENTS Widgets Xml Svg Multimedia Network LinguistTools REQUIRED)
 include_directories(
     ${Qt5Widgets_INCLUDE_DIRS}
     ${Qt5Xml_INCLUDE_DIRS}
     ${Qt5Svg_INCLUDE_DIRS}
     ${Qt5Multimedia_INCLUDE_DIRS}
-    ${Qt5Network_INCLUDE_DIRS})
+    ${Qt5Network_INCLUDE_DIRS}
+    ${Qt5LinguistTools_INCLUDE_DIRS})
 
 if (WIN32)
     set (BUILD_PROJECT_LIBRARIES
@@ -17,19 +18,22 @@ if (WIN32)
     ${Qt5Svg_LIBRARIES}
     ${Qt5Core_QTMAIN_LIBRARIES}
     ${Qt5Multimedia_LIBRARIES}
-    ${Qt5Network_LIBRARIES})
+    ${Qt5Network_LIBRARIES}
+    ${Qt5LinguistTools_LIBRARIES})
 else (WIN32)
     set (BUILD_PROJECT_LIBRARIES
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Xml_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
     ${Qt5Multimedia_LIBRARIES}
-    ${Qt5Network_LIBRARIES})
+    ${Qt5Network_LIBRARIES}
+    ${Qt5LinguistTools_LIBRARIES})
 endif (WIN32)
 add_definitions(
     ${Qt5Widgets_DEFINITIONS}
     ${Qt5Xml_DEFINITIONS}
     ${Qt5Svg_DEFINITIONS}
     ${Qt5Multimedia_DEFINITIONS}
-    ${Qt5Network_DEFINITIONS})
+    ${Qt5Network_DEFINITIONS}
+    ${Qt5LinguistTools_DEFINITIONS})
 set (QT5_BUILD 1)

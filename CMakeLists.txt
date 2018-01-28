@@ -1059,6 +1059,10 @@ set (VIEWER_TS
     src/vm_viewer/translations/remote_viewer_ru.ts
 )
 
+set (MANAGER_TS
+    src/translations/qt_virt_manager_ru.ts
+)
+
 ##
 if ( QT4_BUILD )
     include("${CMAKE_MODULE_PATH}/CMakeQt4.txt")
@@ -1075,10 +1079,11 @@ else ( QT4_BUILD )
     qt5_wrap_cpp (MOC_SOURCES ${HEADERS})
     qt5_wrap_ui  (UI_SRCS ${QTERM_UI_SRC})
     qt5_add_resources(QTERM_RCC ${QTERM_RCC_SRC})
-    #qt5_add_translation(QTERM_QM ${QTERM_TS})
+    qt5_add_translation(QTERM_QM ${QTERM_TS})
     qt5_wrap_cpp (MOC_VIEWER_SOURCES ${VIEWER_HEADERS})
     qt5_add_resources(VIEWER_RCC ${VIEWER_RCC_SRC})
-    #qt5_add_translation(VIEWER_QM ${VIEWER_TS})
+    qt5_add_translation(VIEWER_QM ${VIEWER_TS})
+    qt5_add_translation(MANAGER_QM ${MANAGER_TS})
     set(TERM_WIDGET_LIB qtermwidget5)
 endif ( QT4_BUILD )
 ##
@@ -1153,7 +1158,8 @@ MESSAGE(STATUS "Found BUILD_PROJECT_LIBRARIES: ${BUILD_PROJECT_LIBRARIES}")
 
 # * build & install application & files
 add_executable (${PROJECT_NAME}
-    ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS} ${QTERM_RCC} ${QTERM_QM})
+    ${HEADERS} ${SOURCES} ${MOC_SOURCES} ${UI_SRCS}
+    ${QTERM_RCC} ${QTERM_QM} ${MANAGER_QM})
 target_link_libraries (${PROJECT_NAME} ${BUILD_PROJECT_LIBRARIES})
 target_compile_definitions (
     ${PROJECT_NAME} PRIVATE
