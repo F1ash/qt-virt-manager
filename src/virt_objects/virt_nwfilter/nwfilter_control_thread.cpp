@@ -105,13 +105,13 @@ Result NWFilterControlThread::defineNWFilter()
     QByteArray xmlData;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        QString msg = QString(tr("File \"%1\"\nnot opened.")).arg(path);
         emit errorMsg( msg, number );
         result.err = msg;
         return result;
@@ -128,7 +128,7 @@ Result NWFilterControlThread::defineNWFilter()
     result.name = QString::fromUtf8(name);
     result.result = true;
     result.msg.append(
-                QString("'<b>%1</b>' NWFilter from\n\"%2\"\nis defined.")
+                QString(tr("'<b>%1</b>' NWFilter from\n\"%2\"\nis defined."))
                 .arg(result.name).arg(path));
     virNWFilterFree(filter);
     return result;
@@ -140,7 +140,7 @@ Result NWFilterControlThread::undefineNWFilter()
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNWFilterPtr filter = virNWFilterLookupByName(
@@ -154,8 +154,8 @@ Result NWFilterControlThread::undefineNWFilter()
         result.err = sendConnErrors();
     result.name = name;
     result.result = deleted;
-    result.msg.append(QString("'<b>%1</b>' NWFilter %2 Undefined.")
-                      .arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' NWFilter %2 Undefined."))
+                      .arg(name).arg((deleted)? "": tr("don't")));
     return result;
 }
 Result NWFilterControlThread::getVirtNWFilterXMLDesc()
@@ -167,7 +167,7 @@ Result NWFilterControlThread::getVirtNWFilterXMLDesc()
     char *Returns = nullptr;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNWFilterPtr filter = virNWFilterLookupByName(
@@ -194,7 +194,7 @@ Result NWFilterControlThread::getVirtNWFilterXMLDesc()
     f.close();
     if ( Returns!=nullptr ) free(Returns);
     result.result = read;
-    result.msg.append(QString("'<b>%1</b>' NWFilter %2 XML'ed")
+    result.msg.append(QString(tr("'<b>%1</b>' NWFilter %2 XML'ed"))
                       .arg(name).arg((read)?"":"don't"));
     return result;
 }

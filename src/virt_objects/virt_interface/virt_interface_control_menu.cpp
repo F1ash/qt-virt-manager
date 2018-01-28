@@ -7,24 +7,24 @@ IfaceControlMenu::IfaceControlMenu(
     if ( !params.isEmpty() ) {
         state = params.value("state", false).toBool();
         changing = params.value("changing", false).toBool();
-        start = new QAction("Start", this);
+        start = new QAction(tr("Start"), this);
         start->setIcon(QIcon::fromTheme("start"));
         start->setVisible(!state );
-        destroy = new QAction("Destroy", this);
+        destroy = new QAction(tr("Destroy"), this);
         destroy->setIcon(QIcon::fromTheme("destroy"));
         destroy->setVisible(state);
-        undefine = new QAction("Undefine", this);
+        undefine = new QAction(tr("Undefine"), this);
         undefine->setIcon(QIcon::fromTheme("undefine"));
-        changeBegin = new QAction("Change Begin", this);
+        changeBegin = new QAction(tr("Change Begin"), this);
         changeBegin->setIcon(QIcon::fromTheme("document-open"));
         changeBegin->setVisible(changing);
-        changeCommit = new QAction("Change Commit", this);
+        changeCommit = new QAction(tr("Change Commit"), this);
         changeCommit->setIcon(QIcon::fromTheme("document-save"));
         changeCommit->setVisible(changing);
-        changeRollback = new QAction("Change Rollback", this);
+        changeRollback = new QAction(tr("Change Rollback"), this);
         changeRollback->setIcon(QIcon::fromTheme("document-revert"));
         changeRollback->setVisible(changing);
-        getXMLDesc = new QAction("get XML Description", this);
+        getXMLDesc = new QAction(tr("get XML Description"), this);
         getXMLDesc->setIcon(QIcon::fromTheme("application-xml"));
         getXMLDesc->setEnabled(true);
 
@@ -39,7 +39,7 @@ IfaceControlMenu::IfaceControlMenu(
         addAction(getXMLDesc);
         addSeparator();
     };
-    reload = new QAction("Reload Interface OverView", this);
+    reload = new QAction(tr("Reload Interface OverView"), this);
     reload->setIcon(QIcon::fromTheme("view-refresh"));
     reload->setEnabled(!autoReloadState);
 

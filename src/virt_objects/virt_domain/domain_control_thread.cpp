@@ -215,7 +215,7 @@ Result DomControlThread::getDomainData0()
     result.name  = name;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QString uri = QString::fromUtf8( virConnectGetURI(*task.srcConnPtr) );
@@ -244,7 +244,7 @@ Result DomControlThread::getDomainData0()
     const char *_type = virConnectGetType(*task.srcConnPtr);
     if ( _type==nullptr ) {
         result.result = false;
-        result.err = "Error in getting the connection type.";
+        result.err = tr("Error in getting the connection type.");
     } else {
         result.result = true;
     };
@@ -286,7 +286,7 @@ Result DomControlThread::getDomainData1()
     result.name  = name;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QString uri = QString::fromUtf8( virConnectGetURI(*task.srcConnPtr) );
@@ -315,7 +315,7 @@ Result DomControlThread::getDomainData1()
     const char *_type = virConnectGetType(*task.srcConnPtr);
     if ( _type==nullptr ) {
         result.result = false;
-        result.err = "Error in getting the connection type.";
+        result.err = tr("Error in getting the connection type.");
     } else {
         result.result = true;
     };
@@ -380,7 +380,7 @@ Result DomControlThread::createDomain()
     QByteArray xmlData;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QFile f;
@@ -402,7 +402,7 @@ Result DomControlThread::createDomain()
     result.name = QString::fromUtf8( virDomainGetName(domain) );
     result.result = true;
     result.msg.append(
-                QString("'<b>%1</b>' Domain from\n\"%2\"\nis created.")
+                QString(tr("'<b>%1</b>' Domain from\n\"%2\"\nis created."))
                 .arg(result.name).arg(path));
     virDomainFree(domain);
     return result;
@@ -414,13 +414,13 @@ Result DomControlThread::defineDomain()
     QByteArray xmlData;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        QString msg = QString(tr("File \"%1\"\nnot opened.")).arg(path);
         emit errorMsg( msg, number );
         result.err = msg;
         return result;
@@ -436,7 +436,7 @@ Result DomControlThread::defineDomain()
     result.name = QString::fromUtf8( virDomainGetName(domain) );
     result.result = true;
     result.msg.append(
-                QString("'<b>%1</b>' Domain from\n\"%2\"\nis defined.")
+                QString(tr("'<b>%1</b>' Domain from\n\"%2\"\nis defined."))
                 .arg(result.name).arg(path));
     virDomainFree(domain);
     return result;
@@ -447,7 +447,7 @@ Result DomControlThread::startDomain()
     QString name = task.object;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     bool started = false;
@@ -463,8 +463,8 @@ Result DomControlThread::startDomain()
     result.name = name;
     result.result = started;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 Started.")
-                .arg(name).arg((started)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 Started."))
+                .arg(name).arg((started)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::pauseDomain()
@@ -474,7 +474,7 @@ Result DomControlThread::pauseDomain()
     bool invoked = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
 
@@ -508,8 +508,8 @@ Result DomControlThread::pauseDomain()
     result.name = name;
     result.result = invoked;
     result.msg.append(
-                QString("'<b>%1</b>' Domain state %2 changed.")
-                .arg(name).arg((invoked)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain state %2 changed."))
+                .arg(name).arg((invoked)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::destroyDomain()
@@ -519,7 +519,7 @@ Result DomControlThread::destroyDomain()
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
@@ -534,8 +534,8 @@ Result DomControlThread::destroyDomain()
     result.name = name;
     result.result = deleted;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 Destroyed.")
-                .arg(name).arg((deleted)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 Destroyed."))
+                .arg(name).arg((deleted)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::resetDomain()
@@ -547,7 +547,7 @@ Result DomControlThread::resetDomain()
     unsigned int flags = 0;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
 
@@ -564,8 +564,8 @@ Result DomControlThread::resetDomain()
     result.name = name;
     result.result = invoked;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 reset.")
-                .arg(name).arg((invoked)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 reset."))
+                .arg(name).arg((invoked)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::rebootDomain()
@@ -581,7 +581,7 @@ Result DomControlThread::rebootDomain()
             VIR_DOMAIN_REBOOT_SIGNAL;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
 
@@ -598,8 +598,8 @@ Result DomControlThread::rebootDomain()
     result.name = name;
     result.result = invoked;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 reboot.")
-                .arg(name).arg((invoked)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 reboot."))
+                .arg(name).arg((invoked)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::shutdownDomain()
@@ -615,7 +615,7 @@ Result DomControlThread::shutdownDomain()
             VIR_DOMAIN_SHUTDOWN_SIGNAL;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
 
@@ -633,8 +633,8 @@ Result DomControlThread::shutdownDomain()
     result.name = name;
     result.result = invoked;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 shutdown.")
-                .arg(name).arg((invoked)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 shutdown."))
+                .arg(name).arg((invoked)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::saveDomain()
@@ -647,7 +647,7 @@ Result DomControlThread::saveDomain()
     unsigned int flags = VIR_DOMAIN_SAVE_BYPASS_CACHE;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
 
@@ -683,8 +683,8 @@ Result DomControlThread::saveDomain()
     result.name = name;
     result.result = invoked;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 saved.")
-                .arg(name).arg((invoked)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 saved."))
+                .arg(name).arg((invoked)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::restoreDomain()
@@ -712,8 +712,8 @@ Result DomControlThread::restoreDomain()
     result.name = name;
     result.result = invoked;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 restored.")
-                .arg(name).arg((invoked)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 restored."))
+                .arg(name).arg((invoked)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::undefineDomain()
@@ -723,7 +723,7 @@ Result DomControlThread::undefineDomain()
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
@@ -738,8 +738,8 @@ Result DomControlThread::undefineDomain()
     result.name = name;
     result.result = deleted;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 Undefined.")
-                .arg(name).arg((deleted)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 Undefined."))
+                .arg(name).arg((deleted)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::changeAutoStartDomain()
@@ -750,7 +750,7 @@ Result DomControlThread::changeAutoStartDomain()
     int autostart = task.args.sign;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
 
@@ -768,8 +768,8 @@ Result DomControlThread::changeAutoStartDomain()
     result.name = name;
     result.result = set;
     result.msg.append(
-                QString("'<b>%1</b>' Domain autostart %2 Set.")
-                .arg(name).arg((set)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain autostart %2 Set."))
+                .arg(name).arg((set)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::getDomainXMLDesc()
@@ -782,7 +782,7 @@ Result DomControlThread::getDomainXMLDesc()
     char *Returns = nullptr;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
@@ -809,8 +809,8 @@ Result DomControlThread::getDomainXMLDesc()
     result.name = name;
     result.result = read;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 XML'ed")
-                .arg(name).arg((read)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 XML'ed"))
+                .arg(name).arg((read)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::migrateDomain()
@@ -821,7 +821,7 @@ Result DomControlThread::migrateDomain()
     unsigned int flags = task.args.sign;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
@@ -861,8 +861,8 @@ Result DomControlThread::migrateDomain()
         result.err = sendConnErrors();
     result.result = migrated;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 Migrated.")
-                .arg(result.name).arg((migrated)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 Migrated."))
+                .arg(result.name).arg((migrated)? "": tr("don't")));
     //if ( task.args.dstConnPtr ) task.args.dstConnPtr = nullptr;
     return result;
 }
@@ -879,7 +879,7 @@ Result DomControlThread::createSnapshoteDomain()
     //qDebug()<<xmlDesc<<flags;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
@@ -899,8 +899,8 @@ Result DomControlThread::createSnapshoteDomain()
     };
     result.result = snapped;
     result.msg.append(
-                QString("'<b>%1</b>' Domain %2 snapped.")
-                .arg(result.name).arg((snapped)?"":"don't"));
+                QString(tr("'<b>%1</b>' Domain %2 snapped."))
+                .arg(result.name).arg((snapped)? "": tr("don't")));
     return result;
 }
 Result DomControlThread::revertSnapshoteDomain()
@@ -914,7 +914,7 @@ Result DomControlThread::revertSnapshoteDomain()
     //qDebug()<<snapshotName<<flags;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
@@ -939,8 +939,8 @@ Result DomControlThread::revertSnapshoteDomain()
         virDomainFree(domain);
     };
     result.msg.append(
-                QString("'<b>%1</b>' snapshot in <b>%2</b> Domain %3 reverted.")
-                .arg(result.name).arg(domName).arg((reverted)?"":"don't"));
+                QString(tr("'<b>%1</b>' snapshot in <b>%2</b> Domain %3 reverted."))
+                .arg(result.name).arg(domName).arg((reverted)? "": tr("don't")));
     result.result = reverted;
     return result;
 }
@@ -955,7 +955,7 @@ Result DomControlThread::deleteSnapshoteDomain()
     //qDebug()<<snapshotName<<flags;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
@@ -981,8 +981,8 @@ Result DomControlThread::deleteSnapshoteDomain()
         virDomainFree(domain);
     };
     result.msg.append(
-                QString("'<b>%1</b>' snapshot in <b>%2</b> Domain %3 deleted.")
-                .arg(result.name).arg(domName).arg((deleted)?"":"don't"));
+                QString(tr("'<b>%1</b>' snapshot in <b>%2</b> Domain %3 deleted."))
+                .arg(result.name).arg(domName).arg((deleted)? "": tr("don't")));
     result.result = deleted;
     return result;
 }

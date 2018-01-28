@@ -45,17 +45,17 @@ QVariant DomainModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::ToolTipRole && index.column() ) {
         switch (index.column()) {
         case 1:
-            res = QString("State: %1")
+            res = QString(tr("State: %1"))
                     .arg(DataList.at(
                              index.row())->getState_EXT());
             break;
         case 2:
-            res = QString("Autostart: %1")
+            res = QString(tr("Autostart: %1"))
                     .arg(DataList.at(
                              index.row())->getAutostart());
             break;
         case 3:
-            res = QString("Persistent: %1")
+            res = QString(tr("Persistent: %1"))
                     .arg(DataList.at(
                              index.row())->getPersistent());
             break;

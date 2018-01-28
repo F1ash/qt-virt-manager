@@ -4,8 +4,8 @@ VirtSecretModel::VirtSecretModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
     defined = QIcon::fromTheme("security");
-    column0 = "UUID";
-    column1 = "UsageID";
+    column0 = tr("UUID");
+    column1 = tr("UsageID");
 }
 VirtSecretModel::~VirtSecretModel()
 {
@@ -104,10 +104,10 @@ QVariant VirtSecretModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::ToolTipRole ) {
         switch (index.column()) {
         case 0:
-            res = QString("Description: %1").arg(DataList.at(index.row())->getDescription());
+            res = QString(tr("Description: %1")).arg(DataList.at(index.row())->getDescription());
             break;
         case 1:
-            res = QString("Type: %1").arg(DataList.at(index.row())->getType());
+            res = QString(tr("Type: %1")).arg(DataList.at(index.row())->getType());
             break;
         default:
             break;

@@ -7,21 +7,21 @@
 Donate_Dialog::Donate_Dialog(QWidget *parent) :
     QDialog(parent)
 {
-    setWindowTitle("Donate");
+    setWindowTitle(tr("Donate"));
     donate1 = new Click_Label(this);
-    donate1->setToolTip("Donate by Yandex.Money");
+    donate1->setToolTip(tr("Donate on Yandex.Money"));
     donate1->setOpenExternalLinks(true);
     donate1->setPixmap(QIcon::fromTheme("yandex_money").pixmap(128));
     donate2 = new Click_Label(this);
-    donate2->setToolTip("Donate to VISA QIWI Wallet\nCopy card number to Clipboard");
+    donate2->setToolTip(tr("Donate on VISA QIWI Wallet\nCopy card number to Clipboard"));
     donate2->setOpenExternalLinks(true);
     donate2->setPixmap(QIcon::fromTheme("qiwi_wallet_visa").pixmap(128));
     donate3 = new Click_Label(this);
-    donate3->setToolTip("Donate Bitcoin\nCopy to Clipboard");
+    donate3->setToolTip(tr("Donate Bitcoin\nCopy to Clipboard"));
     donate3->setOpenExternalLinks(true);
     donate3->setPixmap(QIcon::fromTheme("electrum").pixmap(128));
     donate4 = new Click_Label(this);
-    donate4->setToolTip("Donate BitcoinCash\nCopy to Clipboard");
+    donate4->setToolTip(tr("Donate BitcoinCash\nCopy to Clipboard"));
     donate4->setOpenExternalLinks(true);
     donate4->setPixmap(QIcon::fromTheme("electron-cash").pixmap(128));
 
@@ -32,7 +32,7 @@ Donate_Dialog::Donate_Dialog(QWidget *parent) :
     donateLayout->addWidget(donate4, 1, 1, Qt::AlignCenter);
     donateWdg = new QWidget(this);
     donateWdg->setLayout(donateLayout);
-    again = new QCheckBox("don't show again", this);
+    again = new QCheckBox(tr("don't show again"), this);
     again->hide();
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(donateWdg);

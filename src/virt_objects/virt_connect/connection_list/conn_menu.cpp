@@ -5,20 +5,20 @@ ConnectMenu::ConnectMenu(QWidget *parent)
 {
     act      = addAction(
                 QIcon::fromTheme("connect"),
-                "Open Connection");
+                tr("Open Connection"));
     addSeparator();
     display  = addAction(
                 QIcon::fromTheme("overview"),
-                "Overview of Connection");
+                tr("Overview of Connection"));
     edit     = addAction(
                 QIcon::fromTheme("configure"),
-                "Edit Connection");
+                tr("Edit Connection"));
     clean    = addAction(
                 QIcon::fromTheme("list-remove"),
-                "Delete Connection");
+                tr("Delete Connection"));
     addSeparator();
     refresh  = addAction(
                 QIcon::fromTheme("view-refresh"),
-                "Refresh Localhost Connection");
+                tr("Refresh Localhost Connection"));
     setSeparatorsCollapsible(true);
 }

@@ -4,7 +4,7 @@ VirtNWFilterControl::VirtNWFilterControl(QWidget *parent) :
     VirtEntityControl(parent)
 {
     setObjectName("VirtNWFilterControl");
-    setWindowTitle("VirtNWFilter Control");
+    setWindowTitle(tr("VirtNWFilter Control"));
     setWindowIcon(QIcon::fromTheme("nwfilter"));
     virtNWFilterModel = new VirtNWFilterModel();
     entityList->setModel(virtNWFilterModel);
@@ -49,7 +49,7 @@ void VirtNWFilterControl::stopProcessing()
     virtNWFilterModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Name"),
+                tr("Name"),
                 Qt::EditRole);
 
 }
@@ -64,7 +64,7 @@ void VirtNWFilterControl::setListHeader(const QString &connName)
 {
     virtNWFilterModel->setHeaderData(
                 0, Qt::Horizontal,
-                QString("NWFilter in [ %1 ]").arg(connName),
+                QString(tr("NWFilter in [ %1 ]")).arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);
@@ -118,7 +118,7 @@ void VirtNWFilterControl::resultReceiver(Result *data)
         emit entityListUpdated();
     } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
-        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        data->msg.append(QString(tr("to <a href='%1'>%1</a>")).arg(xml));
         QString msg = QString("%1<br>%2")
                 .arg(data->msg.join(" "))
                 .arg(data->err);

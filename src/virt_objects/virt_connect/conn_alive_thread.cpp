@@ -73,12 +73,12 @@ void ConnAliveThread::closeConnection()
             state = FAILED;
             sendConnErrors();
         } else {
-            emit connMsg( QString("close exit code: %1").arg(ret) );
+            emit connMsg( QString(tr("close exit code: %1")).arg(ret) );
             state = CLOSED;
             emit connClosed(onView);
         };
     } else {
-        emit connMsg( QString("connect is nullptr") );
+        emit connMsg( tr("connect is nullptr") );
         state = FAILED;
     };
     emit changeConnState(state);
@@ -113,12 +113,12 @@ void ConnAliveThread::openConnection()
     if ( nullptr==ptr_ConnPtr || *ptr_ConnPtr==nullptr ) {
         sendConnErrors();
         keep_alive = false;
-        emit connMsg( "Connection to the Hypervisor is failed." );
+        emit connMsg( tr("Connection to the Hypervisor is failed.") );
         emit changeConnState(FAILED);
     } else {
         //qDebug()<<" openConnection"<<*ptr_ConnPtr<<URI;
         keep_alive = true;
-        emit connMsg( QString("connect opened: %1")
+        emit connMsg( QString(tr("connect opened: %1"))
                       .arg(QVariant(*ptr_ConnPtr!=nullptr)
                            .toString()) );
         emit changeConnState(RUNNING);
@@ -266,7 +266,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
     for (i = 0; i < ncred; ++i) {
         switch (cred[i].type) {
             case VIR_CRED_AUTHNAME:
-                crd = "Username";
+                crd = tr("Username");
                 obj->getAuthCredentials(crd);
                 cred[i].result = strdup(obj->authData.username);
                 if (cred[i].result == nullptr) {
@@ -278,7 +278,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
                     memset(&obj->authData.username[0], 0, strlen(obj->authData.username));
                 break;
             case VIR_CRED_PASSPHRASE:
-                crd = "Password";
+                crd = tr("Password");
                 obj->getAuthCredentials(crd);
                 cred[i].result = strdup(obj->authData.password);
                 if (cred[i].result == nullptr) {
@@ -304,7 +304,8 @@ int  ConnAliveThread::domEventCallback(virConnectPtr _conn, virDomainPtr dom, in
     bool end = false;
     QString msg, domainName;
     domainName = QString(virDomainGetName(dom));
-    msg = QString("<b>'%1'</b> Domain %2: %3\n")
+    msg = QString(
+           tr("<b>'%1'</b> Domain %2: %3\n"))
            .arg(domainName)
            .arg(obj->domEventToString(event))
            .arg(obj->domEventDetailToString(event, detail, &end));
@@ -321,7 +322,8 @@ int  ConnAliveThread::netEventCallback(virConnectPtr _conn, virNetworkPtr net, i
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
     if ( nullptr==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
     QString msg;
-    msg = QString("<b>'%1'</b> Network %2: %3\n")
+    msg = QString(
+           tr("<b>'%1'</b> Network %2: %3\n"))
            .arg(virNetworkGetName(net))
            .arg(obj->netEventToString(event))
            .arg(obj->netEventDetailToString(event, detail));
@@ -339,7 +341,8 @@ int  ConnAliveThread::poolEventCallback(virConnectPtr _conn, virStoragePoolPtr p
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
     if ( nullptr==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
     QString msg;
-    msg = QString("<b>'%1'</b> Pool %2: %3\n")
+    msg = QString(
+           tr("<b>'%1'</b> Pool %2: %3\n"))
            .arg(virStoragePoolGetName(pool))
            .arg(obj->poolEventToString(event))
            .arg(obj->poolEventDetailToString(event, detail));

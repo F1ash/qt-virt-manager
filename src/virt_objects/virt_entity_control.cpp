@@ -71,9 +71,9 @@ void VirtEntityControl::setUsageInSoftTouched(bool state)
 void VirtEntityControl::msgRepeater(const QString &msg)
 {
     QString time = QTime::currentTime().toString();
-    QString title = QString("Connection '%1'").arg(currConnName);
+    QString title = QString(tr("Connection '%1'")).arg(currConnName);
     QString currMsg = QString(
-    "<b>%1 %2:</b><br><font color='green'><b>ACTION</b></font>: %3")
+    tr("<b>%1 %2:</b><br><font color='green'><b>ACTION</b></font>: %3"))
             .arg(time).arg(title).arg(msg);
     emit entityMsg(currMsg);
 }

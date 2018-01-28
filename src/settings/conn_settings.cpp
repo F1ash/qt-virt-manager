@@ -20,7 +20,7 @@
 ConnSettings::ConnSettings(QWidget *parent) :
     QDialog(parent)
 {
-    setWindowTitle("Connection: <noname>");
+    setWindowTitle(tr("Connection: <noname>"));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     restoreGeometry(settings.value("SetDlgGeometry").toByteArray());
     setModal(false);
@@ -28,8 +28,8 @@ ConnSettings::ConnSettings(QWidget *parent) :
     initParamLayout();
     warning = new QLabel(this);
     warning->setText(
-    "<b>WARNING</b> See for: <a href='http://libvirt.org/remote.html'>\
-<b>Libvirt Remote support</b></a>");
+    tr("<b>WARNING</b> See for: <a href='http://libvirt.org/remote.html'>\
+<b>Libvirt Remote support</b></a>"));
     warning->setOpenExternalLinks(true);
     initButtons();
     URI = new QTextEdit(this);
@@ -45,12 +45,12 @@ ConnSettings::ConnSettings(QWidget *parent) :
 }
 void ConnSettings::initParamLayout()
 {
-    connName = new QLabel("Connection:", this);
+    connName = new QLabel(tr("Connection:"), this);
     ConnName = new QLineEdit(this);
-    ConnName->setPlaceholderText("Enter Connection Name");
+    ConnName->setPlaceholderText(tr("Enter Connection Name"));
     connect(ConnName, SIGNAL(textChanged(QString)),
             this, SLOT(set_Title_Name(QString)));
-    driver = new QLabel("Driver:", this);
+    driver = new QLabel(tr("Driver:"), this);
     Drivers = new QComboBox(this);
     Drivers->addItems(HV_DRIVERS);
     for (int i=0; i<Drivers->count(); i++) {
@@ -61,7 +61,7 @@ void ConnSettings::initParamLayout()
     };
     connect(Drivers, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(changeDriver(QString)));
-    transport = new QLabel("Transport:", this);
+    transport = new QLabel(tr("Transport:"), this);
     Transports = new QComboBox(this);
     Transports->addItems(TRANSPORTS);
     for (int i=0; i<Transports->count(); i++) {
@@ -69,13 +69,13 @@ void ConnSettings::initParamLayout()
         if ( _text.contains("--") ) _text.clear();
         Transports->setItemData(i, _text.toLower() );
     };
-    host = new QLabel("Host:", this);
+    host = new QLabel(tr("Host:"), this);
     Host = new QLineEdit(this);
     Host->setPlaceholderText("[username@][hostname][:port]");
-    path = new QLabel("Path:", this);
+    path = new QLabel(tr("Path:"), this);
     Path = new QLineEdit(this);
     Path->setPlaceholderText("[path]");
-    extra = new QLabel("Extra:", this);
+    extra = new QLabel(tr("Extra:"), this);
     Extra = new QLineEdit(this);
     Extra->setPlaceholderText("[?extraparameters]");
     paramLayout = new QGridLayout();
@@ -104,12 +104,12 @@ void ConnSettings::initParamLayout()
 }
 void ConnSettings::initButtons()
 {
-    atStart = new QCheckBox("Connect at Start", this);
+    atStart = new QCheckBox(tr("Connect at Start"), this);
     atStart->setChecked(false);
     ok = new QPushButton(
-                QIcon::fromTheme("dialog-ok"),"Ok");
+                QIcon::fromTheme("dialog-ok"), tr("Ok"));
     cancel = new QPushButton(
-                QIcon::fromTheme("dialog-cancel"),"Cancel");
+                QIcon::fromTheme("dialog-cancel"), tr("Cancel"));
     buttonsLayout = new QHBoxLayout(this);
     buttonsLayout->addWidget(atStart);
     buttonsLayout->addWidget(ok);
@@ -141,22 +141,22 @@ void ConnSettings::saveConnect()
     if ( name.isEmpty() ) {
         QMessageBox::information(
                     this,
-                    QString("Info"),
-                    QString("Connection Name is empty."));
+                    tr("Info"),
+                    tr("Connection Name is empty."));
         return;
     } else if ( groups.contains(name) && !newbe && name==previousName ) {
         saveParameters();
     } else if ( groups.contains(name) && newbe ) {
         QMessageBox::information(
                     this,
-                    QString("Info"),
-                    QString("Same Connection Name is exist."));
+                    tr("Info"),
+                    tr("Same Connection Name is exist."));
         return;
     } else if ( groups.contains(name) && !newbe && name!=previousName ) {
         QMessageBox::information(
                     this,
-                    QString("Info"),
-                    QString("Same Connection Name is exist."));
+                    tr("Info"),
+                    tr("Same Connection Name is exist."));
         return;
     } else if ( !groups.contains(name) && newbe ) {
         saveParameters();
@@ -242,8 +242,8 @@ void ConnSettings::saveParameters()
     if ( own_index->getData().value("isRunning").toBool() )
         QMessageBox::information(
                     this,
-                    "Info",
-                    "New settings apply\nat next job start.");
+                    tr("Info"),
+                    tr("New settings apply\nat next job start."));
 }
 void ConnSettings::closeEvent(QCloseEvent *ev)
 {
@@ -254,7 +254,7 @@ void ConnSettings::set_Title_Name(QString s)
 {
     s.replace(" ", "_");
     ConnName->setText(s);
-    setWindowTitle(QString("Connection: %1").arg(s));
+    setWindowTitle(QString(tr("Connection: %1")).arg(s));
 }
 void ConnSettings::changeURI()
 {

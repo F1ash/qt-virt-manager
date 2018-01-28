@@ -5,13 +5,13 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
 {
     start_Action = new QAction(this);
     start_Action->setIcon(QIcon::fromTheme("start"));
-    start_Action->setToolTip("Start");
+    start_Action->setToolTip(tr("Start"));
     destroy_Action = new QAction(this);
     destroy_Action->setIcon(QIcon::fromTheme("destroy"));
-    destroy_Action->setToolTip("Stop");
+    destroy_Action->setToolTip(tr("Stop"));
     create_Action = new QAction(this);
     create_Action->setIcon(QIcon::fromTheme("create"));
-    create_Action->setToolTip("Create for once usage");
+    create_Action->setToolTip(tr("Create for once usage"));
     create_Menu = new OpenFileMenu(
                 this, Actions::CREATE_ENTITY, VIRT_ENTITY::VIRT_STORAGE_POOL);
     create_Action->setMenu(create_Menu);
@@ -19,7 +19,7 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
             this, SLOT(showMenu()));
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
-    define_Action->setToolTip("Define for persistent usage");
+    define_Action->setToolTip(tr("Define for persistent usage"));
     define_Menu = new OpenFileMenu(
                 this, Actions::DEFINE_ENTITY, VIRT_ENTITY::VIRT_STORAGE_POOL);
     define_Action->setMenu(define_Menu);
@@ -27,23 +27,23 @@ StoragePoolToolBar::StoragePoolToolBar(QWidget *parent) :
             this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
-    undefine_Action->setToolTip("Undefine");
+    undefine_Action->setToolTip(tr("Undefine"));
     //setAutostart_Action = new QAction(this);
     //setAutostart_Action->setIcon(QIcon::fromTheme("autostart"));
-    //setAutostart_Action->setToolTip("Change AutoStart State");
+    //setAutostart_Action->setToolTip(tr("Change AutoStart State"));
     //delete_Menu = new Delete_Pool_Menu(this);
     //delete_Action = new QAction(this);
     //delete_Action->setIcon(QIcon::fromTheme("delete"));
-    //delete_Action->setToolTip("Delete");
+    //delete_Action->setToolTip(tr("Delete"));
     //delete_Action->setMenu(delete_Menu);
     //getXMLDesc_Action = new QAction(this);
     //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
-    //getXMLDesc_Action->setToolTip("Get XML Description");
+    //getXMLDesc_Action->setToolTip(tr("Get XML Description"));
     overview_Action = new QAction(this);
     overview_Action->setIcon(QIcon::fromTheme("overview"));
-    overview_Action->setToolTip("Overview Pool");
+    overview_Action->setToolTip(tr("Overview Pool"));
     _autoReload = new QPushButton(this);
-    _autoReload->setToolTip("AutoReload Pool Overview");
+    _autoReload->setToolTip(tr("AutoReload Pool Overview"));
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
     _autoReload->setCheckable(true);
 

@@ -13,28 +13,28 @@ ToolBar::ToolBar (QWidget *parent) :
 void ToolBar::initActions()
 {
     _createAction = new QAction(
-                QString("New Connection"), this);
+                tr("New Connection"), this);
     _createAction->setIcon ( QIcon::fromTheme("list-add") );
     _editAction = new QAction(
-                QString("Edit Connection"), this);
+                tr("Edit Connection"), this);
     _editAction->setIcon ( QIcon::fromTheme("configure") );
     _deleteAction = new QAction(
-                QString("Delete Connection"), this);
+                tr("Delete Connection"), this);
     _deleteAction->setIcon ( QIcon::fromTheme("list-remove") );
     _openAction = new QAction(
-                QString("Open Connection"), this);
+                tr("Open Connection"), this);
     _openAction->setIcon ( QIcon::fromTheme("connect") );
     _closeAction = new QAction(
-                QString("Close Connection"), this);
+                tr("Close Connection"), this);
     _closeAction->setIcon ( QIcon::fromTheme("disconnect") );
     _closeAllAction = new QAction(
-                QString("Close all Connections"), this);
+                tr("Close all Connections"), this);
     _closeAllAction->setIcon ( QIcon::fromTheme("disconnect") );
     _overwiewAction = new QAction(
-                QString("Overview of Connection"), this);
+                tr("Overview of Connection"), this);
     _overwiewAction->setIcon ( QIcon::fromTheme("overview") );
     _closeOverview = new QAction(
-                QString("Close Overview"), this);
+                tr("Close Overview"), this);
     _closeOverview->setIcon ( QIcon::fromTheme("overview-stop") );
 
     addAction(_openAction);
@@ -53,7 +53,7 @@ void ToolBar::wheelEventEnabled(bool state)
     wheelEventState = state;
     QString t;
     if ( state ) {
-        t.append("Wheel for change dock\n( Ctrl+Alt+Right/Left )");
+        t.append(tr("Wheel for change dock\n( Ctrl+Alt+Right/Left )"));
     };
     setToolTip(t);
 }

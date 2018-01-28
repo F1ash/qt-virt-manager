@@ -4,7 +4,7 @@ VirtDomainControl::VirtDomainControl(QWidget *parent) :
     VirtEntityControl(parent)
 {
     setObjectName("VirtDomainControl");
-    setWindowTitle("Domain Control");
+    setWindowTitle(tr("Domain Control"));
     setWindowIcon(QIcon::fromTheme("domain"));
     domainModel = new DomainModel();
     connect(entityList, SIGNAL(doubleClicked(const QModelIndex&)),
@@ -53,7 +53,7 @@ void VirtDomainControl::stopProcessing()
     domainModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Name"),
+                tr("Name"),
                 Qt::EditRole);
 }
 bool VirtDomainControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
@@ -68,7 +68,7 @@ void VirtDomainControl::setListHeader(const QString &connName)
     domainModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("VM in [ %1 ]").arg(connName),
+                QString(tr("VM in [ %1 ]")).arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);
@@ -133,7 +133,8 @@ void VirtDomainControl::resultReceiver(Result *data)
         emit entityListUpdated();
     } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
-        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        data->msg.append(
+                    QString(tr("to <a href='%1'>%1</a>")).arg(xml));
         QString msg = QString("%1<br>%2")
                 .arg(data->msg.join(" "))
                 .arg(data->err);
@@ -303,7 +304,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
         } else if ( param.method==Methods::saveVirtDomain ) {
             QString to =
                     QFileDialog::getSaveFileName(
-                        this, "Save to", "~");
+                        this, tr("Save to"), "~");
             if ( !to.isEmpty() ) {
                 task.action     = Actions::SAVE_ENTITY;
                 task.args.path  = to;
@@ -314,7 +315,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
         } else if ( param.method==Methods::restoreVirtDomain ) {
             QString from =
                     QFileDialog::getOpenFileName(
-                        this, "Restore from", "~");
+                        this, tr("Restore from"), "~");
             if ( !from.isEmpty() ) {
                 task.action     = Actions::RESTORE_ENTITY;
                 task.args.path  = from;

@@ -50,16 +50,20 @@ QVariant StoragePoolModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::ToolTipRole && index.column() ) {
         switch (index.column()) {
         case 0:
-            res = QString("Name: %1").arg(DataList.at(index.row())->getName());
+            res = QString(tr("Name: %1"))
+                    .arg(DataList.at(index.row())->getName());
             break;
         case 1:
-            res = QString("State: %1").arg(DataList.at(index.row())->getState());
+            res = QString(tr("State: %1"))
+                    .arg(DataList.at(index.row())->getState());
             break;
         case 2:
-            res = QString("Autostart: %1").arg(DataList.at(index.row())->getAutostart());
+            res = QString(tr("Autostart: %1"))
+                    .arg(DataList.at(index.row())->getAutostart());
             break;
         case 3:
-            res = QString("Persistent: %1").arg(DataList.at(index.row())->getPersistent());
+            res = QString(tr("Persistent: %1"))
+                    .arg(DataList.at(index.row())->getPersistent());
             break;
         default:
             break;

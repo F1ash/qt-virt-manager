@@ -7,10 +7,10 @@ VirtIfaceModel::VirtIfaceModel(QObject *parent) :
     no_activeIcon = QIcon::fromTheme("list-remove");
     defined = QIcon::fromTheme("network-wired");
     changing = QIcon::fromTheme("dialog-warning");
-    column0 = "Name";
-    column1 = "MAC";
-    column2 = "State";
-    column3 = "Changing";
+    column0 = tr("Name");
+    column1 = tr("MAC");
+    column2 = tr("State");
+    column3 = tr("Changing");
 }
 VirtIfaceModel::~VirtIfaceModel()
 {
@@ -130,17 +130,17 @@ QVariant VirtIfaceModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::ToolTipRole ) {
         switch (index.column()) {
         case 0:
-            res = QString("Name: %1").arg(DataList.at(index.row())->getName());
+            res = QString(tr("Name: %1")).arg(DataList.at(index.row())->getName());
             break;
         case 1:
-            res = QString("MAC: %1").arg(DataList.at(index.row())->getMAC());
+            res = QString(tr("MAC: %1")).arg(DataList.at(index.row())->getMAC());
             break;
         case 2:
-            res = QString("State: %1").arg(DataList.at(index.row())->getState());
+            res = QString(tr("State: %1")).arg(DataList.at(index.row())->getState());
             break;
         case 3:
             if ( DataList.at(index.row())->getChanging() ) {
-                res = QString("Changing Began");
+                res = tr("Changing Began");
             };
             break;
         default:

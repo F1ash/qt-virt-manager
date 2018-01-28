@@ -57,7 +57,7 @@ ResizeDialog::ResizeDialog(
         QString          _volName) :
     QDialog(parent)
 {
-    setWindowTitle("Resize");
+    setWindowTitle(tr("Resize"));
     setEnabled(false);
     hlpThread = new resizeHelperThread(
                 this, connPtrPtr,
@@ -68,8 +68,8 @@ ResizeDialog::ResizeDialog(
     size = new QSpinBox(this);
     connect(size, SIGNAL(valueChanged(int)),
             this, SLOT(changeRange(int)));
-    ok = new QPushButton("Ok", this);
-    cancel = new QPushButton("Cancel", this);
+    ok = new QPushButton(tr("Ok"), this);
+    cancel = new QPushButton(tr("Cancel"), this);
     connect(ok, SIGNAL(clicked()),
             this, SLOT(okClicked()));
     connect(cancel, SIGNAL(clicked()),
@@ -113,23 +113,23 @@ void ResizeDialog::changeRange(int i)
 void ResizeDialog::changeRangeLong(unsigned long long i)
 {
     if        ( i >= TiB ) {
-        sizeLabel->setText("Size (TiB):");
+        sizeLabel->setText(tr("Size (TiB):"));
         currentRange = TiB;
         size->setValue(i/TiB);
     } else if ( i >= GiB ) {
-        sizeLabel->setText("Size (GiB):");
+        sizeLabel->setText(tr("Size (GiB):"));
         currentRange = GiB;
         size->setValue(i/GiB);
     } else if ( i >= MiB ) {
-        sizeLabel->setText("Size (MiB):");
+        sizeLabel->setText(tr("Size (MiB):"));
         currentRange = MiB;
         size->setValue(i/MiB);
     } else if ( i >= KiB ) {
-        sizeLabel->setText("Size (KiB):");
+        sizeLabel->setText(tr("Size (KiB):"));
         currentRange = KiB;
         size->setValue(i/KiB);
     } else {
-        sizeLabel->setText("Size (bytes):");
+        sizeLabel->setText(tr("Size (bytes):"));
         currentRange = bytes;
         size->setValue(i);
     };

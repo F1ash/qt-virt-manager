@@ -4,8 +4,8 @@ VirtNWFilterModel::VirtNWFilterModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
     defined = QIcon::fromTheme("nwfilter");
-    column0 = "Name";
-    column1 = "UUID";
+    column0 = tr("Name");
+    column1 = tr("UUID");
 }
 VirtNWFilterModel::~VirtNWFilterModel()
 {

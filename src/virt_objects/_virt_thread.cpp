@@ -16,7 +16,8 @@ QString _VirtThread::sendConnErrors()
     virtErrors = (nullptr!=ptr_ConnPtr && *ptr_ConnPtr)?
                 virConnGetLastError(*ptr_ConnPtr):nullptr;
     if ( virtErrors!=nullptr && virtErrors->code>0 ) {
-        msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
+        msg = QString("VirtError(%1) : %2")
+                .arg(virtErrors->code)
                 .arg(QString::fromUtf8(virtErrors->message));
         //emit errorMsg( msg, number );
         customErrorNotification( msg, virtErrors->code );
@@ -30,7 +31,8 @@ QString _VirtThread::sendGlobalErrors()
     QString msg;
     virtErrors = virGetLastError();
     if ( virtErrors!=nullptr && virtErrors->code>0 ) {
-        msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
+        msg = QString("VirtError(%1) : %2")
+                .arg(virtErrors->code)
                 .arg(QString::fromUtf8(virtErrors->message));
         //emit errorMsg( msg, number );
         customErrorNotification( msg, virtErrors->code );
@@ -43,10 +45,11 @@ void _VirtThread::customErrorNotification(const QString &_msg, const uint code)
     QString msg;
     switch ( code ) {
     case 38:
-        msg = QString("%1 : [ <font color='red'>WARNING:</font> %2 ]")
+        msg = QString(
+                tr("%1 : [ <font color='red'>WARNING:</font> %2 ]"))
                 .arg(_msg)
                 .arg(
-    "Make sure the required Libvirt or another service is installed and running");
+    tr("Make sure the required Libvirt or another service is installed and running"));
         break;
     default:
         msg = _msg;

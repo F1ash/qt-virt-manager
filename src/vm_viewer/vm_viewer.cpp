@@ -13,7 +13,8 @@ VM_Viewer::VM_Viewer(
     addrData(arg3)
 {
     qRegisterMetaType<QString>("QString&");
-    setWindowTitle(QString(tr("<%1> Virtual Machine in [ %2 ] connection"))
+    setWindowTitle(QString(
+                   tr("<%1> Virtual Machine in [ %2 ] connection"))
                    .arg(domain).arg(connName));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     setMinimumSize(100, 100);
@@ -71,7 +72,8 @@ void VM_Viewer::init()
         startSSHTunnel("root", socket);
     } else if ( addr.isEmpty() || port.toInt()==0 ) {
         viewerToolBar->setEnabled(false);
-        msg =QString(tr("In '<b>%1</b>':<br> Getting the address data is failed."))
+        msg =QString(
+                tr("In '<b>%1</b>':<br> Getting the address data is failed."))
                 .arg(domain);
         sendErrMsg(msg);
         showErrorInfo(msg);
@@ -154,7 +156,7 @@ void VM_Viewer::sendErrMsg(const QString &msg, const uint _number)
     QString time = QTime::currentTime().toString();
     QString title = QString(tr("Connection '%1'")).arg(connName);
     QString errMsg = QString(
-    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+    tr("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3"))
             .arg(time).arg(title).arg(msg);
     emit errorMsg(errMsg);
 }

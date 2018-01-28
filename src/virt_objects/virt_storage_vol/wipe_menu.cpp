@@ -4,7 +4,7 @@
 WipeMenu::WipeMenu(QWidget *parent) :
     QMenu(parent)
 {
-    setTitle("Wipe Algorithm");
+    setTitle(tr("Wipe Algorithm"));
     algorithm_ZERO = new QAction("ZERO", this);
     algorithm_NNSA = new QAction("NNSA", this);
     algorithm_DOD = new QAction("DOD", this);
@@ -78,25 +78,27 @@ void WipeMenu::showActionToolTip(QAction *action)
 {
     QString toolTip;
     if ( action == algorithm_ZERO ) {
-        toolTip = QString("1-pass, all zeroes");
+        toolTip = QString(tr("1-pass, all zeroes"));
     } else if ( action == algorithm_NNSA ) {
-        toolTip = QString("4-pass NNSA Policy Letter NAP-14.1-C (XVI-8)");
+        toolTip = QString(tr("4-pass NNSA Policy Letter NAP-14.1-C (XVI-8)"));
     } else if ( action == algorithm_DOD ) {
-        toolTip = QString("4-pass DoD 5220.22-M section 8-306 procedure");
+        toolTip = QString(tr("4-pass DoD 5220.22-M section 8-306 procedure"));
     } else if ( action == algorithm_BSI ) {
         toolTip = QString(
-"9-pass method recommended by the German Center\nof Security in Information Technologies");
+                    tr("9-pass method recommended by the German Center\n\
+of Security in Information Technologies"));
     } else if ( action == algorithm_GUTMANN ) {
-        toolTip = QString("The canonical 35-pass sequence");
+        toolTip = QString(tr("The canonical 35-pass sequence"));
     } else if ( action == algorithm_SCHNEIER ) {
         toolTip = QString(
-"7-pass method described by Bruce Schneier\nin \"Applied Cryptography\" (1996)");
+                    tr("7-pass method described by Bruce Schneier\n\
+in \"Applied Cryptography\" (1996)"));
     } else if ( action == algorithm_PFITZNER7 ) {
-        toolTip = QString("7-pass random");
+        toolTip = QString(tr("7-pass random"));
     } else if ( action == algorithm_PFITZNER33 ) {
-        toolTip = QString("33-pass random");
+        toolTip = QString(tr("33-pass random"));
     } else if ( action == algorithm_RANDOM ) {
-        toolTip = QString("1-pass random");
+        toolTip = QString(tr("1-pass random"));
     };
     setToolTip(toolTip);
 }

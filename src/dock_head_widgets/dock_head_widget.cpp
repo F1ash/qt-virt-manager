@@ -25,9 +25,9 @@ void DockHeadWidget::setFloatible(bool state)
     floatIt->setEnabled(state);
     QString t;
     if ( state ) {
-        t.append("DoubleClick for floatible");
+        t.append(tr("DoubleClick for floatible"));
     } else {
-        t.append("Wheel for change dock\n( Ctrl+Alt+Right/Left )");
+        t.append(tr("Wheel for change dock\n( Ctrl+Alt+Right/Left )"));
     };
     setToolTip(t);
 }
@@ -48,10 +48,10 @@ void DockHeadWidget::floatStateChanged(bool _floated)
     QString _icon, _toolTip;
     if (_floated) {
         _icon.append("dock_down");
-        _toolTip.append("Push to dock");
+        _toolTip.append(tr("Push to dock"));
     } else {
         _icon.append("dock_up");
-        _toolTip.append("Undock");
+        _toolTip.append(tr("Undock"));
     };
     floatIt->setIcon(QIcon::fromTheme(_icon));
     floatIt->setToolTip(_toolTip);

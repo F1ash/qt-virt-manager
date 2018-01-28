@@ -13,9 +13,9 @@ DomainStateViewer::DomainStateViewer(
     monitorName = new QLabel(domainName, this);
     closeViewer = new QPushButton(
                 QIcon::fromTheme("dialog-close"), "", this);
-    closeViewer->setToolTip("Close current state viewer");
-    cpuLabel = new QLabel("Host CPU\nUsage:", this);
-    memLabel = new QLabel("Guest Memory\nUsage:", this);
+    closeViewer->setToolTip(tr("Close current state viewer"));
+    cpuLabel = new QLabel(tr("Host CPU\nUsage:"), this);
+    memLabel = new QLabel(tr("Guest Memory\nUsage:"), this);
     cpuGraphic = new QSvgWidget(this);
     memGraphic = new QSvgWidget(this);
     baseLayout = new QGridLayout();
@@ -57,7 +57,7 @@ DomainStateViewer::DomainStateViewer(
                 this, SIGNAL(errorMsg(const QString&)));
         timerId = startTimer(PERIOD*1000);
     } else {
-        monitorName->setText("State:<br><b>Connection Error</b></br>");
+        monitorName->setText(tr("State:<br><b>Connection Error</b></br>"));
     };
 }
 
@@ -115,7 +115,7 @@ void DomainStateViewer::setData(
         break;
     };
     monitorName->setText(
-                QString("State:<br><b>%1</b></br>").arg(state));
+                QString(tr("State:<br><b>%1</b></br>")).arg(state));
 
     QDomElement _l, line;
     QDomText _data;

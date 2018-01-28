@@ -5,7 +5,7 @@ VirtStorageVolControl::VirtStorageVolControl(QWidget *parent) :
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setObjectName("VirtStorageVolControl");
-    setWindowTitle("StorageVol Control");
+    setWindowTitle(tr("StorageVol Control"));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     storageVolModel = new StorageVolModel();
     entityList->setModel(storageVolModel);
@@ -69,7 +69,7 @@ void VirtStorageVolControl::stopProcessing()
     storageVolModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Name"),
+                tr("Name"),
                 Qt::EditRole);
 }
 bool VirtStorageVolControl::setCurrentStoragePool(
@@ -83,7 +83,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(
     storageVolModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Volume in [ %1 ]").arg(poolName),
+                QString(tr("Volume in [ %1 ]")).arg(poolName),
                 Qt::EditRole);
     toolBar->enableAutoReload();
     // for initiation content
@@ -183,7 +183,7 @@ void VirtStorageVolControl::resultReceiver(Result *data)
         };
     } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
-        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        data->msg.append(QString(tr("to <a href='%1'>%1</a>")).arg(xml));
         QString msg = QString("%1<br>%2")
                 .arg(data->msg.join(" "))
                 .arg(data->err);
@@ -196,7 +196,7 @@ void VirtStorageVolControl::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
         QString key = objectName();
-        QString msg = QString("'<b>%1</b>' pool overview closed.")
+        QString msg = QString(tr("'<b>%1</b>' pool overview closed."))
                 .arg(currPoolName);
         emit msgRepeater(msg);
         emit finished(key);
@@ -275,7 +275,7 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
         } else if ( param.method==Methods::downloadVirtStorageVol ) {
             QString path =
                     QFileDialog::getSaveFileName(
-                        this, "Save to", "~");
+                        this, tr("Save to"), "~");
             if ( !path.isEmpty() ) {
                 task.action     = Actions::DOWNLOAD_ENTITY;
                 task.args.path  = path;
@@ -302,7 +302,7 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
         } else if ( param.method==Methods::uploadVirtStorageVol ) {
             QString path =
                     QFileDialog::getOpenFileName(
-                        this, "Read from", "~");
+                        this, tr("Read from"), "~");
             if ( !path.isEmpty() ) {
                 task.action     = Actions::UPLOAD_ENTITY;
                 task.args.path  = path;

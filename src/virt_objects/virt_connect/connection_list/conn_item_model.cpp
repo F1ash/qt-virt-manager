@@ -61,13 +61,13 @@ QVariant ConnItemModel::headerData(int section, Qt::Orientation orientation, int
         if ( role == Qt::DisplayRole ) {
             switch (section) {
             case 0:
-                return QString("Connection");
+                return tr("Connection");
                 break;
             case 1:
-                return QString("URI");
+                return tr("URI");
                 break;
             case 2:
-                return QString("State");
+                return tr("State");
                 break;
             default:
                 break;
@@ -131,20 +131,20 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
         QString a;
         switch (index.column()) {
         case 0:
-            s.append(QString("Name: %1").arg(_name));
+            s.append(QString(tr("Name: %1")).arg(_name));
             a = ( connItemDataList.at(index.row())->getData()
-                  .value("availability").toBool() )? "Available":"Busy";
-            s.append(QString("\nState: %1").arg(a));
+                  .value("availability").toBool() )? tr("Available"): tr("Busy");
+            s.append(QString(tr("\nState: %1")).arg(a));
             res = s;
             break;
         case 1:
-            res = QString("URI: %1").arg(_uri);
+            res = QString(tr("URI: %1")).arg(_uri);
             break;
         case 2:
             if ( ok && percent>=100 ) {
-                res = QString("State: waiting period has expired");
+                res = tr("State: waiting period has expired");
             } else {
-                res = QString("State: %1").arg(_state);
+                res = QString(tr("State: %1")).arg(_state);
             };
             break;
         default:

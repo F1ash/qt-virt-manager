@@ -4,11 +4,11 @@ StorageVolModel::StorageVolModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
     defined = QIcon::fromTheme("storage");
-    column0 = "Name";
-    column1 = "Path";
-    column2 = "Type";
-    column3 = "Allocation";
-    column4 = "Capacity";
+    column0 = tr("Name");
+    column1 = tr("Path");
+    column2 = tr("Type");
+    column3 = tr("Allocation");
+    column4 = tr("Capacity");
 }
 StorageVolModel::~StorageVolModel()
 {
@@ -130,23 +130,23 @@ QVariant StorageVolModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::ToolTipRole && index.column() ) {
         switch (index.column()) {
         case 0:
-            res = QString("Path: %1")
+            res = QString(tr("Path: %1"))
                     .arg(DataList.at(index.row())->getName());
             break;
         case 1:
-            res = QString("Path: %1")
+            res = QString(tr("Path: %1"))
                     .arg(DataList.at(index.row())->getPath());
             break;
         case 2:
-            res = QString("Type: %1")
+            res = QString(tr("Type: %1"))
                     .arg(DataList.at(index.row())->getType());
             break;
         case 3:
-            res = QString("Current Size: %1")
+            res = QString(tr("Current Size: %1"))
                     .arg(DataList.at(index.row())->getCurrSize());
             break;
         case 4:
-            res = QString("Logic Volume Size: %1")
+            res = QString(tr("Logic Volume Size: %1"))
                     .arg(DataList.at(index.row())->getLogicSize());
             break;
         default:

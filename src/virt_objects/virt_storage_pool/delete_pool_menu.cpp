@@ -4,9 +4,9 @@
 Delete_Pool_Menu::Delete_Pool_Menu(QWidget *parent) :
     QMenu(parent)
 {
-    delete_Normal = new QAction("Delete Normal", this);
+    delete_Normal = new QAction(tr("Delete Normal"), this);
     delete_Normal->setIcon(QIcon::fromTheme("delete"));
-    delete_Zeroed = new QAction("Delete Zeroed", this);
+    delete_Zeroed = new QAction(tr("Delete Zeroed"), this);
     delete_Zeroed->setIcon(QIcon::fromTheme("delete"));
 
     addAction(delete_Normal);
@@ -37,9 +37,9 @@ void Delete_Pool_Menu::showActionToolTip(QAction *action)
 {
     QString toolTip;
     if ( action == delete_Normal ) {
-        toolTip = QString("Delete metadata only (fast)");
+        toolTip = tr("Delete metadata only (fast)");
     } else if ( action == delete_Zeroed ) {
-        toolTip = QString("Clear all data to zeros (slow)");
+        toolTip = tr("Clear all data to zeros (slow)");
     };
     setToolTip(toolTip);
 }

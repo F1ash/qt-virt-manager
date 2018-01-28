@@ -1,32 +1,32 @@
 #include "migrate_dialog.h"
 
-#define APPEND_URI_HELP_0 QString("The destination libvirtd server \
+#define APPEND_URI_HELP_0 tr("The destination libvirtd server \
 will automatically determine the native hypervisor URI for migration, \
 based off the primary hostname. ")
 
-#define APPEND_URI_HELP_1 QString("The optional uri parameter controls \
+#define APPEND_URI_HELP_1 tr("The optional uri parameter controls \
 how the source libvirtd connects to the destination libvirtd, \
 in case it is not accessible using the same address that the client uses \
 to connect to the destination, or a different encryption/auth scheme is required. ")
 
-#define APPEND_URI_HELP_2 QString("The native hypervisor URI format is not used at all. ")
+#define APPEND_URI_HELP_2 tr("The native hypervisor URI format is not used at all. ")
 
-#define APPEND_URI_HELP_3 QString("To force migration over an alternate \
+#define APPEND_URI_HELP_3 tr("To force migration over an alternate \
 network interface the optional hypervisor specific URI must be provided. ")
 
-#define APPEND_URI_HELP_4 QString("There is no scope for forcing \
+#define APPEND_URI_HELP_4 tr("There is no scope for forcing \
 an alternative network interface for the native migration data with this method. ")
 
-#define APPEND_URI_HELP_5 QString("There is no use or requirement for a destination \
+#define APPEND_URI_HELP_5 tr("There is no use or requirement for a destination \
 libvirtd instance at all. This is typically used when the hypervisor has \
 its own native management daemon available to handle incoming migration attempts \
 on the destination. ")
 
-#define APPEND_URI_HELP_6 QString("The destination URI must be reachable using \
+#define APPEND_URI_HELP_6 tr("The destination URI must be reachable using \
 the source libvirtd credentials (which are not necessarily the same as \
 the credentials of the client in connecting to the source). ")
 
-#define EXAMPLE_URI_1 QString("<b>syntax <font color='red'>for virsh</font></b>:<br>\
+#define EXAMPLE_URI_1 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
 virsh migrate GUESTNAME DEST-LIBVIRT-URI [HV-URI]<br><br>\
 <i>eg using default network interface</i>:<br><br>\
 virsh migrate web1 qemu+ssh://desthost/system<br>\
@@ -35,18 +35,18 @@ virsh migrate web1 xen+tls://desthost/system<br><br>\
 virsh migrate web1 qemu://desthost/system tcp://10.0.0.1/<br>\
 virsh migrate web1 xen+tcp://desthost/system xenmigr:10.0.0.1/")
 
-#define EXAMPLE_URI_2 QString("<b>syntax <font color='red'>for virsh</font></b>:<br>\
+#define EXAMPLE_URI_2 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
 This mode cannot be invoked from virsh ")
 
-#define EXAMPLE_URI_3 QString("<b>syntax <font color='red'>for virsh</font></b>:<br>\
+#define EXAMPLE_URI_3 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
 This mode cannot be invoked from virsh ")
 
-#define EXAMPLE_URI_4 QString("<b>syntax <font color='red'>for virsh</font></b>:<br>\
+#define EXAMPLE_URI_4 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
 virsh migrate GUESTNAME HV-URI<br><br>\
 <i>eg using same libvirt URI for all connections</i>:<br><br>\
 virsh migrate --direct web1 xenmigr://desthost/")
 
-#define EXAMPLE_URI_5 QString("<b>syntax <font color='red'>for virsh</font></b>:<br>\
+#define EXAMPLE_URI_5 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
 virsh migrate GUESTNAME DEST-LIBVIRT-URI [ALT-DEST-LIBVIRT-URI]<br><br>\
 <i>eg using same libvirt URI for all connections</i>:<br><br>\
 virsh migrate --p2p web1 qemu+ssh://desthost/system<br><br>\
@@ -55,7 +55,7 @@ virsh migrate --p2p web1 qemu+ssh://desthost/system qemu+tls:/desthost/system<br
 <i>eg using different libvirt URI hostname for peer2peer connections</i>:<br><br>\
 virsh migrate --p2p web1 qemu+ssh://desthost/system qemu+ssh://10.0.0.1/system")
 
-#define EXAMPLE_URI_6 QString("<b>syntax <font color='red'>for virsh</font></b>:<br>\
+#define EXAMPLE_URI_6 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
 virsh migrate GUESTNAME DEST-LIBVIRT-URI [ALT-DEST-LIBVIRT-URI]<br><br>\
 <i>eg using same libvirt URI for all connections</i>:<br><br>\
 virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system<br><br>\
@@ -92,14 +92,14 @@ MigrateDialog::MigrateDialog(
             virConnectPtr *connPtrPtr) :
     QDialog(parent), domainName(_domain)
 {
-    setWindowTitle(QString("Migrate '%1'").arg(domainName));
+    setWindowTitle(QString(tr("Migrate '%1'")).arg(domainName));
     commonLayout = new QVBoxLayout();
     Name = new QLineEdit(this);
     Name->setText(domainName);
-    Name->setPlaceholderText("Enter new VM name");
-    Name->setToolTip("migrate as <Name>");
+    Name->setPlaceholderText(tr("Enter new VM name"));
+    Name->setToolTip(tr("migrate as <Name>"));
     host = new QLabel(this);
-    newHost = new QLabel("Destination Host / Connection :", this);
+    newHost = new QLabel(tr("Destination Host / Connection :"), this);
     connectList = new QComboBox(this);
     commonLayout->addWidget(host);
     commonLayout->addWidget(Name);
@@ -107,12 +107,12 @@ MigrateDialog::MigrateDialog(
     commonLayout->addWidget(connectList);
 
     connLayout = new QGridLayout();
-    uriLabel = new QLabel("Destination\nHost/URI", this);
+    uriLabel = new QLabel(tr("Destination\nHost/URI"), this);
     uri = new QLineEdit(this);
     help = new QLabel(this);
     QIcon icon = QIcon::fromTheme("dialog-warning");
     if ( icon.isNull() ) {
-        help->setText("Help:");
+        help->setText(tr("Help:"));
     } else {
         help->setPixmap(icon.pixmap(this->fontInfo().pixelSize()));
     };
@@ -124,7 +124,7 @@ MigrateDialog::MigrateDialog(
     connectivity = new QWidget(this);
     connectivity->setLayout(connLayout);
 
-    useAdvanced = new QCheckBox("Advanced", this);
+    useAdvanced = new QCheckBox(tr("Advanced"), this);
     useAdvanced->setChecked(false);
     commonLayout->addWidget(useAdvanced);
     //commonLayout->addWidget(connectivity);
@@ -134,17 +134,18 @@ MigrateDialog::MigrateDialog(
     advanced->setEnabled(false);
     advLayout = new QGridLayout();
     nativeMigration = new QRadioButton(
-                "Native migration data\nover hypervisor transport\n(encrypt if HV support it)",
+                tr("Native migration data\nover hypervisor transport\n\
+(encrypt if HV support it)"),
                 this);
     nativeMigration->setChecked(true);
     nativeMigration->setLayoutDirection(Qt::RightToLeft);
     tunnelMigration = new QRadioButton(
-                "Tunnel migration data\nover libvirtd connection\n(encrypt always)",
+                tr("Tunnel migration data\nover libvirtd connection\n(encrypt always)"),
                 this);
     tunnelMigration->setLayoutDirection(Qt::LeftToRight);
-    p2pMigration = new QLabel("Use peer2peer", this);
+    p2pMigration = new QLabel(tr("Use peer2peer"), this);
     maxDownTimeLabel = new QLabel(
-                "Maximum tolerable downtime\nfor live migration (ms)",
+                tr("Maximum tolerable downtime\nfor live migration (ms)"),
                 this);
     p2pCheck = new QCheckBox(this);
     p2pCheck->setChecked(p2p);
@@ -153,45 +154,45 @@ MigrateDialog::MigrateDialog(
     maxDownTime = new QSpinBox(this);
     maxDownTime->setEnabled(false);
     maxDownTime->setValue(30);
-    bandWdthLabel = new QLabel("BandWidth (MiB/s)", this);
+    bandWdthLabel = new QLabel(tr("BandWidth (MiB/s)"), this);
     bandWdthCheck = new QCheckBox(this);
     bandWdthCheck->setChecked(false);
     bandwidth = new QSpinBox(this);
     bandwidth->setEnabled(false);
-    liveMigration = new QCheckBox("Live migration", this);
+    liveMigration = new QCheckBox(tr("Live migration"), this);
     liveMigration->setLayoutDirection(Qt::RightToLeft);
     persistDestMigration = new QCheckBox(
-                "Persist the VM\non the destination",
+                tr("Persist the VM\non the destination"),
                 this);
     persistDestMigration->setLayoutDirection(Qt::LeftToRight);
     undefineSourceMigration = new QCheckBox(
-                "Undefine the VM\non the source",
+                tr("Undefine the VM\non the source"),
                 this);
     undefineSourceMigration->setLayoutDirection(Qt::RightToLeft);
     pausedMigration = new QCheckBox(
-                "Leave\nthe domain suspended\non the remote side",
+                tr("Leave\nthe domain suspended\non the remote side"),
                 this);
     pausedMigration->setLayoutDirection(Qt::LeftToRight);
     fullNonSharedDiskMigration = new QCheckBox(
-                "Migration with\nnon-shared storage\nwith full disk copy",
+                tr("Migration with\nnon-shared storage\nwith full disk copy"),
                 this);
     fullNonSharedDiskMigration->setLayoutDirection(Qt::RightToLeft);
     incNonSharedDiskMigration = new QCheckBox(
-                "Migration with\nnon-shared storage\nwith incremental copy",
+                tr("Migration with\nnon-shared storage\nwith incremental copy"),
                 this);
     incNonSharedDiskMigration->setLayoutDirection(Qt::LeftToRight);
     unsafeMigration = new QCheckBox(
-                "Force migration even\nif it is considered unsafe",
+                tr("Force migration even\nif it is considered unsafe"),
                 this);
     unsafeMigration->setLayoutDirection(Qt::RightToLeft);
-    offlineMigration = new QCheckBox("Migrate offline", this);
+    offlineMigration = new QCheckBox(tr("Migrate offline"), this);
     offlineMigration->setLayoutDirection(Qt::LeftToRight);
     compressedMigration = new QCheckBox(
-                "Compress data\nduring migration",
+                tr("Compress data\nduring migration"),
                 this);
     compressedMigration->setLayoutDirection(Qt::RightToLeft);
     abortOnMigration = new QCheckBox(
-                "Abort migration\non I/O errors happened\nduring migration",
+                tr("Abort migration\non I/O errors happened\nduring migration"),
                 this);
     abortOnMigration->setLayoutDirection(Qt::LeftToRight);
     advLayout->addWidget(nativeMigration, 0, 0);
@@ -224,12 +225,12 @@ MigrateDialog::MigrateDialog(
     commonLayout->addWidget(splitter);
 
     helpLinkLabel = new QLabel(
-                "<a href='http://libvirt.org/migration.html'>About Migration</a>",
+                tr("<a href='http://libvirt.org/migration.html'>About Migration</a>"),
                 this);
     helpLinkLabel->setOpenExternalLinks(true);
-    ok = new QPushButton("Migrate", this);
+    ok = new QPushButton(tr("Migrate"), this);
     ok->setIcon(QIcon::fromTheme("migrate"));
-    cancel = new QPushButton("Cancel", this);
+    cancel = new QPushButton(tr("Cancel"), this);
     cancel->setIcon(QIcon::fromTheme("dialog-cancel"));
     buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(helpLinkLabel);
@@ -282,7 +283,7 @@ MIGR_ARGS MigrateDialog::getMigrateArgs() const
 void MigrateDialog::fillData()
 {
     QStringList connList;
-    connList.prepend("Set Host/URI manually");
+    connList.prepend(tr("Set Host/URI manually"));
     settings.beginGroup("Connects");
     foreach (QString conn, settings.childGroups()) {
         settings.beginGroup(conn);
@@ -293,7 +294,7 @@ void MigrateDialog::fillData()
     };
     settings.endGroup();
     host->setText(
-                QString("Original Host / Connection Type : %1 / %2")
+                QString(tr("Original Host / Connection Type : %1 / %2"))
                 .arg(hlpThread->hostName)
                 .arg(hlpThread->connType.toUpper()));
     connectList->addItems(connList);
@@ -377,10 +378,10 @@ void MigrateDialog::connectChanged(int i)
     bool useDURI = i==0;
     if ( !useDURI ) {
         connectivity->setEnabled(advanced->isEnabled());
-        uriLabel->setText("Optional\nHost/URI");
+        uriLabel->setText(tr("Optional\nHost/URI"));
     } else {
         connectivity->setEnabled(useDURI);
-        uriLabel->setText("Destination\nHost/URI");
+        uriLabel->setText(tr("Destination\nHost/URI"));
     };
     migrTransportChanged(useDURI);
 }
@@ -423,7 +424,7 @@ void MigrateDialog::migrTransportChanged(bool useDURI)
 {
     QString uri_opt, uri_as_seen, example;
     if ( useDURI ) {
-        uri_as_seen = "Mandatory URI for the destination host.";
+        uri_as_seen = tr("Mandatory URI for the destination host.");
         if ( !useAdvanced->isChecked() ) {
             uri_opt.append(APPEND_URI_HELP_5);
             example.append(EXAMPLE_URI_4);
@@ -447,7 +448,7 @@ void MigrateDialog::migrTransportChanged(bool useDURI)
             uri->setPlaceholderText("HV-URI");
         };
     } else {
-        uri_as_seen = "Destination hostname/URI as seen from the source host.";
+        uri_as_seen = tr("Destination hostname/URI as seen from the source host.");
         if ( !useAdvanced->isChecked() ) {
             uri_opt.append(APPEND_URI_HELP_0);
             uri_opt.append(APPEND_URI_HELP_3);

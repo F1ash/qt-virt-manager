@@ -113,7 +113,7 @@ Result StorageVolControlThread::getAllStorageVolList()
     };
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     currStoragePool = virStoragePoolLookupByName(
@@ -201,13 +201,13 @@ Result StorageVolControlThread::createStorageVol()
     QByteArray xmlData;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        QString msg = QString(tr("File \"%1\"\nnot opened.")).arg(path);
         emit errorMsg( msg, number );
         result.result = false;
         result.err = msg;
@@ -230,7 +230,7 @@ Result StorageVolControlThread::createStorageVol()
     };
     QString name = QString::fromUtf8( virStorageVolGetName(storageVol) );
     result.msg.append(
-                QString("'<b>%1</b>' StorageVol from\n\"%2\"\nis created.")
+                QString(tr("'<b>%1</b>' StorageVol from\n\"%2\"\nis created."))
                 .arg(name).arg(path));
     virStorageVolFree(storageVol);
     result.result = true;
@@ -247,7 +247,7 @@ Result StorageVolControlThread::deleteStorageVol()
     };
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     currStoragePool = virStoragePoolLookupByName(
@@ -265,8 +265,8 @@ Result StorageVolControlThread::deleteStorageVol()
         virStorageVolFree(storageVol);
     } else
         result.err = sendConnErrors();
-    result.msg.append(QString("'<b>%1</b>' StorageVol %2 Deleted.")
-                      .arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' StorageVol %2 Deleted."))
+                      .arg(name).arg((deleted)? "": tr("don't")));
     result.result = deleted;
     return result;
 }
@@ -284,7 +284,7 @@ Result StorageVolControlThread::downloadStorageVol()
     };
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     currStoragePool = virStoragePoolLookupByName(
@@ -325,7 +325,8 @@ Result StorageVolControlThread::downloadStorageVol()
                 //qDebug()<<"got<>saved"<<got<<saved<<step;
                 if ( saved+1 ) length += saved;
                 else {
-                    QString msg = QString("WriteError after (%2): %1 bytes")
+                    QString msg = QString(
+                            tr("WriteError after (%2): %1 bytes"))
                             .arg(length).arg(step);
                     emit errorMsg( msg, number );
                     result.err = msg;
@@ -339,7 +340,8 @@ Result StorageVolControlThread::downloadStorageVol()
     f->close();
     f->deleteLater();
     result.msg.append(
-                QString("'<b>%1</b>' StorageVol %2 Downloaded into %3 (%4).")
+                QString(
+                tr("'<b>%1</b>' StorageVol %2 Downloaded into %3 (%4)."))
                 .arg(name).arg((downloaded)?"":"don't")
                 .arg(path).arg(length));
     result.result = downloaded;
@@ -356,7 +358,7 @@ Result StorageVolControlThread::resizeStorageVol()
     };
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     currStoragePool = virStoragePoolLookupByName(
@@ -379,8 +381,8 @@ Result StorageVolControlThread::resizeStorageVol()
     } else
         result.err = sendConnErrors();
     result.msg.append(
-                QString("'<b>%1</b>' StorageVol %2 Resized to %3 (bytes).")
-                .arg(name).arg((resized)?"":"don't").arg(capacity));
+                QString(tr("'<b>%1</b>' StorageVol %2 Resized to %3 (bytes)."))
+                .arg(name).arg((resized)? "": tr("don't")).arg(capacity));
     result.result = resized;
     return result;
 }
@@ -398,7 +400,7 @@ Result StorageVolControlThread::uploadStorageVol()
     };
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     currStoragePool = virStoragePoolLookupByName(
@@ -429,7 +431,8 @@ Result StorageVolControlThread::uploadStorageVol()
                 got = f->read(buf, BLOCK_SIZE);
                 if (got == 0) break;
                 if ( got<0 ) {
-                    QString msg = QString("ReadError after (%2): %1 bytes")
+                    QString msg = QString(
+                            tr("ReadError after (%2): %1 bytes"))
                             .arg(length).arg(step);
                     emit errorMsg( msg, number );
                     result.err = msg;
@@ -454,7 +457,7 @@ Result StorageVolControlThread::uploadStorageVol()
     f->close();
     f->deleteLater();
     result.msg.append(
-                QString("'<b>%1</b>' StorageVol %2 Uploaded from %3 (%4).")
+                QString(tr("'<b>%1</b>' StorageVol %2 Uploaded from %3 (%4)."))
                 .arg(name).arg((uploaded)?"":"don't")
                 .arg(path).arg(length));
     result.result = uploaded;
@@ -472,7 +475,7 @@ Result StorageVolControlThread::wipeStorageVol()
     };
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     currStoragePool = virStoragePoolLookupByName(
@@ -525,8 +528,8 @@ Result StorageVolControlThread::wipeStorageVol()
         break;
     };
     result.msg.append(
-                QString("'<b>%1</b>' StorageVol %2 Wiped with %3 algorithm.")
-                .arg(name).arg((wiped)?"":"don't").arg(algorithm));
+                QString(tr("'<b>%1</b>' StorageVol %2 Wiped with %3 algorithm."))
+                .arg(name).arg((wiped)? "": tr("don't")).arg(algorithm));
     result.result = wiped;
     return result;
 }
@@ -540,7 +543,7 @@ Result StorageVolControlThread::refreshStorageVolList()
     };
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     currStoragePool = virStoragePoolLookupByName(
@@ -555,8 +558,8 @@ Result StorageVolControlThread::refreshStorageVolList()
         result.err = sendConnErrors();
     };
     result.msg.append(
-                QString("StoragePool %1 refreshed.")
-                .arg((done)?"":"don't"));
+                QString(tr("StoragePool %1 refreshed."))
+                .arg((done)? "": tr("don't")));
     result.result = done;
     return result;
 }
@@ -571,7 +574,7 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
     };
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     currStoragePool = virStoragePoolLookupByName(
@@ -600,8 +603,8 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
     result.fileName.append(f.fileName());
     f.close();
     if ( Returns!=nullptr ) free(Returns);
-    result.msg.append(QString("'<b>%1</b>' StorageVol %2 XML'ed")
-                  .arg(name).arg((read)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' StorageVol %2 XML'ed"))
+                  .arg(name).arg((read)? "": tr("don't")));
     result.result = read;
     return result;
 }

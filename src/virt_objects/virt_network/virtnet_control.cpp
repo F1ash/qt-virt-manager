@@ -4,7 +4,7 @@ VirtNetControl::VirtNetControl(QWidget *parent) :
     VirtEntityControl(parent)
 {
     setObjectName("VirtNetControl");
-    setWindowTitle("VirtNet Control");
+    setWindowTitle(tr("VirtNet Control"));
     setWindowIcon(QIcon::fromTheme("network"));
     virtNetModel = new VirtNetModel();
     entityList->setModel(virtNetModel);
@@ -53,7 +53,7 @@ void VirtNetControl::stopProcessing()
     virtNetModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Name"),
+                tr("Name"),
                 Qt::EditRole);
 
 }
@@ -69,7 +69,7 @@ void VirtNetControl::setListHeader(const QString &connName)
     virtNetModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Network in [ %1 ]").arg(connName),
+                QString(tr("Network in [ %1 ]")).arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);
@@ -119,7 +119,7 @@ void VirtNetControl::resultReceiver(Result *data)
         emit entityListUpdated();
     } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
-        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        data->msg.append(QString(tr("to <a href='%1'>%1</a>")).arg(xml));
         QString msg = QString("%1<br>%2")
                 .arg(data->msg.join(" "))
                 .arg(data->err);

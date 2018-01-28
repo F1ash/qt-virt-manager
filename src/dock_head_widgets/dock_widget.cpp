@@ -31,7 +31,7 @@ void DockWidget::changeWarningState(bool state)
                     QPalette::Window,
                     midBrush);
         setPalette(standard);
-        setWindowTitle("Log");
+        setWindowTitle(tr("Log"));
     };
 }
 
@@ -43,7 +43,7 @@ void DockWidget::timerEvent(QTimerEvent *ev)
                     QPalette::Window,
                     (_mark)? lightBrush : darkBrush);
         setPalette(standard);
-        setWindowTitle((_mark)? "Log" : "long");
+        setWindowTitle((_mark)? tr("Log") : tr("long"));
         _mark=!_mark;
     };
 }

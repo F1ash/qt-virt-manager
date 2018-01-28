@@ -8,11 +8,11 @@ MenuBar::MenuBar(QWidget *parent) :
     dockMenu = new DockMenu(this);
     helpMenu = new HelpMenu(this);
     fileAct = addMenu(fileMenu);
-    fileAct->setText("&File");
+    fileAct->setText(tr("&File"));
     viewAct = addMenu(viewMenu);
-    viewAct->setText("View &Mode");
+    viewAct->setText(tr("View &Mode"));
     dockAct = addMenu(dockMenu);
-    dockAct->setText("&Virtual Entity Views");
+    dockAct->setText(tr("&Virtual Entity Views"));
     helpAct = addMenu(helpMenu);
-    helpAct->setText("&Help");
+    helpAct->setText(tr("&Help"));
 }

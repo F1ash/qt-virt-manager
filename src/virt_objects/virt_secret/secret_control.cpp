@@ -4,7 +4,7 @@ VirtSecretControl::VirtSecretControl(QWidget *parent) :
     VirtEntityControl(parent)
 {
     setObjectName("VirtSecretControl");
-    setWindowTitle("VirtSecret Control");
+    setWindowTitle(tr("VirtSecret Control"));
     setWindowIcon(QIcon::fromTheme("security"));
     virtSecretModel = new VirtSecretModel();
     entityList->setModel(virtSecretModel);
@@ -47,7 +47,7 @@ void VirtSecretControl::stopProcessing()
     virtSecretModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("UUID"),
+                tr("UUID"),
                 Qt::EditRole);
 
 }
@@ -62,7 +62,7 @@ void VirtSecretControl::setListHeader(const QString &connName)
 {
     virtSecretModel->setHeaderData(
                 0, Qt::Horizontal,
-                QString("Secret UUID in [ %1 ]").arg(connName),
+                QString(tr("Secret UUID in [ %1 ]")).arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);
@@ -130,7 +130,7 @@ void VirtSecretControl::resultReceiver(Result *data)
         emit entityListUpdated();
     } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
-        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        data->msg.append(QString(tr("to <a href='%1'>%1</a>")).arg(xml));
         QString msg = QString("%1<br>%2")
                 .arg(data->msg.join(" "))
                 .arg(data->err);
@@ -226,8 +226,8 @@ void VirtSecretControl::execAction(const Act_Param &param)
                 xml = createVirtSec->getXMLDescFileName();
                 show = createVirtSec->getShowing();
                 QStringList data;
-                data.append("New Secret XML'ed");
-                data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+                data.append(tr("New Secret XML'ed"));
+                data.append(QString(tr("to <a href='%1'>%1</a>")).arg(xml));
                 QString msg = data.join(" ");
                 msgRepeater(msg);
                 if ( show ) QDesktopServices::openUrl(QUrl(xml));
@@ -262,8 +262,8 @@ void VirtSecretControl::execAction(const Act_Param &param)
             xml = createVirtSec->getXMLDescFileName();
             show = createVirtSec->getShowing();
             QStringList data;
-            data.append("New Secret XML'ed");
-            data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+            data.append(tr("New Secret XML'ed"));
+            data.append(QString(tr("to <a href='%1'>%1</a>")).arg(xml));
             QString msg = data.join(" ");
             msgRepeater(msg);
             if ( show ) QDesktopServices::openUrl(QUrl(xml));

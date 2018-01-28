@@ -5,15 +5,15 @@ VirtSecretToolBar::VirtSecretToolBar(QWidget *parent) :
 {
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
-    define_Action->setToolTip("Define for persistent usage");
+    define_Action->setToolTip(tr("Define for persistent usage"));
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
-    undefine_Action->setToolTip("Undefine");
+    undefine_Action->setToolTip(tr("Undefine"));
     //getXMLDesc_Action = new QAction(this);
     //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
-    //getXMLDesc_Action->setToolTip("Get XML Description");
+    //getXMLDesc_Action->setToolTip(tr("Get XML Description"));
     _autoReload = new QPushButton(this);
-    _autoReload->setToolTip("AutoReload Secret Overview");
+    _autoReload->setToolTip(tr("AutoReload Secret Overview"));
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
     _autoReload->setCheckable(true);
 

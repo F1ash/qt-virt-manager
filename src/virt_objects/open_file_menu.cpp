@@ -10,20 +10,20 @@ OpenFileMenu::OpenFileMenu(
     applyAsIs = new QAction(this);
     applyAsIs->setText(
                 QString(
-    "%1 Virtual %2 from example XML description as is")
+    tr("%1 Virtual %2 from example XML description as is"))
                 .arg(enumToActionString(_act))
                 .arg(enumToEntityString(_e)));
     applyAsIs->setIcon(icon);
     editTemplate = new QAction(this);
     editTemplate->setText(
                 QString(
-    "%1 Virtual %2 by edit example XML description")
+    tr("%1 Virtual %2 by edit example XML description"))
                 .arg(enumToActionString(_act))
                 .arg(enumToEntityString(_e)));
     editTemplate->setIcon(icon);
     manual = new QAction(this);
     manual->setText(
-                QString("%1 Virtual %2 manually")
+                QString(tr("%1 Virtual %2 manually"))
                 .arg(enumToActionString(_act))
                 .arg(enumToEntityString(_e)));
     manual->setIcon(icon);
@@ -50,7 +50,7 @@ void OpenFileMenu::chooseExample()
         chooseManual();
         return;
     };
-    emitParameters("Get Custom Source XML", "~");
+    emitParameters(tr("Get Custom Source XML"), "~");
 }
 void OpenFileMenu::chooseManual()
 {

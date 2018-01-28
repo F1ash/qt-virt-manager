@@ -1,6 +1,7 @@
 #include "bar_name.h"
 
-BarNameLabel::BarNameLabel(QWidget *parent) : QLabel(parent)
+BarNameLabel::BarNameLabel(QWidget *parent) :
+    QLabel(parent)
 {
     _size = this->fontInfo().pixelSize();
     setMaximumWidth(_size*2);

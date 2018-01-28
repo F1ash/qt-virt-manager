@@ -5,13 +5,13 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
 {
     start_Action = new QAction(this);
     start_Action->setIcon(QIcon::fromTheme("start"));
-    start_Action->setToolTip("Start");
+    start_Action->setToolTip(tr("Start"));
     destroy_Action = new QAction(this);
     destroy_Action->setIcon(QIcon::fromTheme("destroy"));
-    destroy_Action->setToolTip("Destroy");
+    destroy_Action->setToolTip(tr("Destroy"));
     define_Action = new QAction(this);
     define_Action->setIcon(QIcon::fromTheme("define"));
-    define_Action->setToolTip("Define for persistent usage");
+    define_Action->setToolTip(tr("Define for persistent usage"));
     define_Menu = new OpenFileMenu(
                 this, Actions::DEFINE_ENTITY, VIRT_ENTITY::VIRT_INTERFACE);
     define_Action->setMenu(define_Menu);
@@ -19,21 +19,21 @@ InterfaceToolBar::InterfaceToolBar(QWidget *parent) :
             this, SLOT(showMenu()));
     undefine_Action = new QAction(this);
     undefine_Action->setIcon(QIcon::fromTheme("undefine"));
-    undefine_Action->setToolTip("Undefine");
+    undefine_Action->setToolTip(tr("Undefine"));
     changeBegin_Action = new QAction(this);
     changeBegin_Action->setIcon(QIcon::fromTheme("document-open"));
-    changeBegin_Action->setToolTip("Change Begin");
+    changeBegin_Action->setToolTip(tr("Change Begin"));
     changeCommit_Action = new QAction(this);
     changeCommit_Action->setIcon(QIcon::fromTheme("document-save"));
-    changeCommit_Action->setToolTip("Change Commit");
+    changeCommit_Action->setToolTip(tr("Change Commit"));
     changeRollback_Action = new QAction(this);
     changeRollback_Action->setIcon(QIcon::fromTheme("document-revert"));
-    changeRollback_Action->setToolTip("Change Rollback");
+    changeRollback_Action->setToolTip(tr("Change Rollback"));
     //getXMLDesc_Action = new QAction(this);
     //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
-    //getXMLDesc_Action->setToolTip("Get XML Description");
+    //getXMLDesc_Action->setToolTip(tr("Get XML Description"));
     _autoReload = new QPushButton(this);
-    _autoReload->setToolTip("AutoReload Interface Overview");
+    _autoReload->setToolTip(tr("AutoReload Interface Overview"));
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
     _autoReload->setCheckable(true);
 

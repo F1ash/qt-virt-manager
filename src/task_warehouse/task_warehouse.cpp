@@ -20,7 +20,7 @@ TaskWareHouse::TaskWareHouse(QWidget *parent) :
                   (QSizePolicy::MinimumExpanding,
                    QSizePolicy::MinimumExpanding));
     setContentsMargins(0, 0, 0, 5);
-    setWindowTitle("Task WareHouse");
+    setWindowTitle(tr("Task WareHouse"));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     settings.beginGroup("TaskWareHouse");
     QByteArray _geometry = settings.value("Geometry").toByteArray();
@@ -93,7 +93,7 @@ void TaskWareHouse::addNewTask(TASK *task)
                         .arg(QString("").sprintf("%03d", _time.msec())));
         itemData.insert("End", "-");
         itemData.insert("Arguments", task->args.list());
-        itemData.insert("Result", "Processing");
+        itemData.insert("Result", tr("Processing"));
         itemData.insert("Message", "-");
         _item->setData(Qt::UserRole, itemData);
         setNewTooltip(_item);
@@ -150,10 +150,10 @@ void TaskWareHouse::msgRepeater(const QString &msg, const uint _number)
 {
     QString time = QTime::currentTime().toString();
     QString number = QString("").sprintf("%08d", _number);
-    QString title = QString("in TASK %1 %2")
+    QString title = QString(tr("in TASK %1 %2"))
             .arg(QChar(0x273B)).arg(number);
     QString currMsg = QString(
-    "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+    tr("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3"))
             .arg(time).arg(title).arg(msg);
     emit taskMsg(currMsg);
 }
@@ -205,7 +205,7 @@ void TaskWareHouse::taskResultReceiver(Result data)
                      .arg(QString("").sprintf("%02d", _time.minute()))
                      .arg(QString("").sprintf("%02d", _time.second()))
                      .arg(QString("").sprintf("%03d", _time.msec())));
-        _data.insert("Result", (data.result)? "Success":"Fail");
+        _data.insert("Result", (data.result)? tr("Success"): tr("Fail"));
         _data.insert("Message", data.msg.join("\n"));
         _data.insert("Error", data.err);
         _list.at(0)->setData(Qt::UserRole, _data);
@@ -219,29 +219,29 @@ void TaskWareHouse::setNewTooltip(QListWidgetItem *_item)
             _task, _time, _res, _msg, _err;
     QVariant data = _item->data(Qt::UserRole);
     _conn.append(QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
-                 .arg("<b>Connection</b>")
+                 .arg(tr("<b>Connection</b>"))
                  .arg(data.toMap().value("Connection").toString()));
     _dom.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
-                 .arg("<b>Object</b>")
+                 .arg(tr("<b>Object</b>"))
                  .arg(data.toMap().value("Object").toString()));
     _task.append(QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
-                 .arg("<b>Action</b>")
+                 .arg(tr("<b>Action</b>"))
                  .arg(data.toMap().value("Action").toString()));
     _arg.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
-                 .arg("<b>Arguments</b>")
+                 .arg(tr("<b>Arguments</b>"))
                  .arg(data.toMap().value("Arguments").toString()));
     _time.append(QString("<TR><TD>%1</TD><TD>%2 - %3</TD></TR>")
-                 .arg("<b>Time</b>")
+                 .arg(tr("<b>Time</b>"))
                  .arg(data.toMap().value("Start").toString())
                  .arg(data.toMap().value("End").toString()));
     _res.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
-                 .arg("<b>Result</b>")
+                 .arg(tr("<b>Result</b>"))
                  .arg(data.toMap().value("Result").toString()));
     _msg.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
-                 .arg("<b>Message</b>")
+                 .arg(tr("<b>Message</b>"))
                  .arg(data.toMap().value("Message").toString()));
     _err.append (QString("<TR><TD>%1</TD><TD>%2</TD></TR>")
-                 .arg("<b>Error</b>")
+                 .arg(tr("<b>Error</b>"))
                  .arg(data.toMap().value("Error").toString()));
     _table.append(QString("%1%2%3%4%5%6%7%8")
                   .arg(_conn)

@@ -197,13 +197,13 @@ Result StoragePoolControlThread::createStoragePool()
     QByteArray xmlData;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        QString msg = QString(tr("File \"%1\"\nnot opened.")).arg(path);
         emit errorMsg( msg, number );
         result.result = false;
         result.err = msg;
@@ -221,7 +221,7 @@ Result StoragePoolControlThread::createStoragePool()
         return result;
     };
     result.name = QString::fromUtf8( virStoragePoolGetName(storagePool) );
-    result.msg.append(QString("'<b>%1</b>' StoragePool from\n\"%2\"\nis Created.")
+    result.msg.append(QString(tr("'<b>%1</b>' StoragePool from\n\"%2\"\nis Created."))
                   .arg(result.name).arg(path));
     virStoragePoolFree(storagePool);
     result.result = true;
@@ -234,13 +234,13 @@ Result StoragePoolControlThread::defineStoragePool()
     QByteArray xmlData;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        QString msg = QString(tr("File \"%1\"\nnot opened.")).arg(path);
         emit errorMsg( msg, number );
         result.result = false;
         result.err = msg;
@@ -259,7 +259,7 @@ Result StoragePoolControlThread::defineStoragePool()
     };
     result.name = QString::fromUtf8( virStoragePoolGetName(storagePool) );
     result.msg.append(
-                QString("'<b>%1</b>' StoragePool from\n\"%2\"\nis Defined.")
+                QString(tr("'<b>%1</b>' StoragePool from\n\"%2\"\nis Defined."))
                 .arg(result.name).arg(path));
     virStoragePoolFree(storagePool);
     result.result = true;
@@ -274,7 +274,7 @@ Result StoragePoolControlThread::startStoragePool()
     bool started = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     // flags: extra flags; not used yet, so callers should always pass 0
@@ -288,8 +288,8 @@ Result StoragePoolControlThread::startStoragePool()
         virStoragePoolFree(storagePool);
     } else
         result.err = sendConnErrors();
-    result.msg.append(QString("'<b>%1</b>' StoragePool %2 Started.")
-                  .arg(name).arg((started)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 Started."))
+                  .arg(name).arg((started)? "": tr("don't")));
     result.name = name;
     result.result = started;
     return result;
@@ -301,7 +301,7 @@ Result StoragePoolControlThread::destroyStoragePool()
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
@@ -313,8 +313,8 @@ Result StoragePoolControlThread::destroyStoragePool()
         virStoragePoolFree(storagePool);
     } else
         result.err = sendConnErrors();
-    result.msg.append(QString("'<b>%1</b>' StoragePool %2 Destroyed.")
-                  .arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 Destroyed."))
+                  .arg(name).arg((deleted)? "": tr("don't")));
     result.name = name;
     result.result = deleted;
     return result;
@@ -326,7 +326,7 @@ Result StoragePoolControlThread::undefineStoragePool()
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
@@ -338,8 +338,8 @@ Result StoragePoolControlThread::undefineStoragePool()
         virStoragePoolFree(storagePool);
     } else
         result.err = sendConnErrors();
-    result.msg.append(QString("'<b>%1</b>' StoragePool %2 Undefined.")
-                  .arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 Undefined."))
+                  .arg(name).arg((deleted)? "": tr("don't")));
     result.name = name;
     result.result = deleted;
     return result;
@@ -352,7 +352,7 @@ Result StoragePoolControlThread::changeAutoStartStoragePool()
     bool set = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
@@ -364,8 +364,8 @@ Result StoragePoolControlThread::changeAutoStartStoragePool()
         virStoragePoolFree(storagePool);
     } else
         result.err = sendConnErrors();
-    result.msg.append(QString("'<b>%1</b>' StoragePool autostart %2 Set.")
-                  .arg(name).arg((set)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' StoragePool autostart %2 Set."))
+                  .arg(name).arg((set)? "": tr("don't")));
     result.name = name;
     result.result = set;
     return result;
@@ -379,7 +379,7 @@ Result StoragePoolControlThread::deleteStoragePool()
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
@@ -391,8 +391,8 @@ Result StoragePoolControlThread::deleteStoragePool()
         virStoragePoolFree(storagePool);
     } else
         result.err = sendConnErrors();
-    result.msg.append(QString("'<b>%1</b>' StoragePool %2 Deleted.")
-                  .arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 Deleted."))
+                  .arg(name).arg((deleted)? "": tr("don't")));
     result.name = name;
     result.result = deleted;
     return result;
@@ -405,7 +405,7 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     char *Returns = nullptr;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
@@ -427,8 +427,8 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     result.fileName.append(f.fileName());
     f.close();
     if ( Returns!=nullptr ) free(Returns);
-    result.msg.append(QString("'<b>%1</b>' StoragePool %2 XML'ed")
-                  .arg(name).arg((read)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 XML'ed"))
+                  .arg(name).arg((read)? "": tr("don't")));
     result.name = name;
     result.result = read;
     return result;

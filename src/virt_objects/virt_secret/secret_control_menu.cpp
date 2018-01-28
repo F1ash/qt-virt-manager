@@ -5,9 +5,9 @@ VirtSecretControlMenu::VirtSecretControlMenu(
     QMenu(parent), parameters(params), autoReloadState(state)
 {
     if ( !parameters.isEmpty() ) {
-        undefine = new QAction("Undefine", this);
+        undefine = new QAction(tr("Undefine"), this);
         undefine->setIcon(QIcon::fromTheme("undefine"));
-        getXMLDesc = new QAction("get XML Description", this);
+        getXMLDesc = new QAction(tr("get XML Description"), this);
         getXMLDesc->setIcon(QIcon::fromTheme("application-xml"));
         getXMLDesc->setEnabled(true);
 
@@ -16,12 +16,13 @@ VirtSecretControlMenu::VirtSecretControlMenu(
         addAction(getXMLDesc);
         addSeparator();
     };
-    reload = new QAction("Reload Secret OverView", this);
+    reload = new QAction(tr("Reload Secret OverView"), this);
     reload->setIcon(QIcon::fromTheme("view-refresh"));
     reload->setEnabled(!autoReloadState);
 
     addAction(reload);
-    connect(this, SIGNAL(triggered(QAction*)), this, SLOT(emitExecMethod(QAction*)));
+    connect(this, SIGNAL(triggered(QAction*)),
+            this, SLOT(emitExecMethod(QAction*)));
 }
 
 void VirtSecretControlMenu::emitExecMethod(QAction *action)

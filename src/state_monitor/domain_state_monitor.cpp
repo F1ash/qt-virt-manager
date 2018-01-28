@@ -17,7 +17,7 @@ DomainStateMonitor::DomainStateMonitor(QWidget *parent) :
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     setMinimumSize(100, 100);
     setContentsMargins(0, 0, 0, 5);
-    setWindowTitle("Domain State Monitor");
+    setWindowTitle(tr("Domain State Monitor"));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     settings.beginGroup("DomainStateMonitor");
     //restoreState(settings.value("State").toByteArray());
@@ -46,7 +46,7 @@ DomainStateMonitor::DomainStateMonitor(QWidget *parent) :
 void DomainStateMonitor::setNewMonitoredDomain(
         virConnectPtr *connPtrPtr, const QString &connName, const QString &domainName)
 {
-    QString _id = QString("Domain : %1\nConnect: %2")
+    QString _id = QString(tr("Domain : %1\nConnect: %2"))
             .arg(domainName)
             .arg(connName);
     int idx =

@@ -125,7 +125,7 @@ Result InterfaceControlThread::startIface()
     bool started = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virInterfacePtr iface = virInterfaceLookupByName(
@@ -141,8 +141,8 @@ Result InterfaceControlThread::startIface()
     result.name = name;
     result.result = started;
     result.msg.append(
-                QString("'<b>%1</b>' Interface %2 started.")
-                .arg(name).arg((started)?"":"don't"));
+                QString(tr("'<b>%1</b>' Interface %2 started."))
+                .arg(name).arg((started)? "": tr("don't")));
     return result;
 }
 Result InterfaceControlThread::destroyIface()
@@ -152,7 +152,7 @@ Result InterfaceControlThread::destroyIface()
     bool destroyed = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virInterfacePtr iface = virInterfaceLookupByName(
@@ -168,8 +168,8 @@ Result InterfaceControlThread::destroyIface()
     result.name = name;
     result.result = destroyed;
     result.msg.append(
-                QString("'<b>%1</b>' Interface %2 destroyed.")
-                .arg(name).arg((destroyed)?"":"don't"));
+                QString(tr("'<b>%1</b>' Interface %2 destroyed."))
+                .arg(name).arg((destroyed)? "": tr("don't")));
     return result;
 }
 Result InterfaceControlThread::defineIface()
@@ -179,13 +179,13 @@ Result InterfaceControlThread::defineIface()
     QByteArray xmlData;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        QString msg = QString(tr("File \"%1\"\nnot opened.")).arg(path);
         emit errorMsg( msg, number );
         result.err = msg;
         return result;
@@ -203,7 +203,7 @@ Result InterfaceControlThread::defineIface()
     result.name = QString::fromUtf8(virInterfaceGetName(iface));
     result.result = true;
     result.msg.append(
-                QString("'<b>%1</b>' Interface from\n\"%2\"\nis defined.")
+                QString(tr("'<b>%1</b>' Interface from\n\"%2\"\nis defined."))
                 .arg(result.name).arg(path));
     virInterfaceFree(iface);
     return result;
@@ -215,7 +215,7 @@ Result InterfaceControlThread::undefineIface()
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virInterfacePtr iface = virInterfaceLookupByName(
@@ -230,8 +230,8 @@ Result InterfaceControlThread::undefineIface()
     result.name = name;
     result.result = deleted;
     result.msg.append(
-                QString("'<b>%1</b>' Interface %2 undefined.")
-                .arg(name).arg((deleted)?"":"don't"));
+                QString(tr("'<b>%1</b>' Interface %2 undefined."))
+                .arg(name).arg((deleted)? "": tr("don't")));
     return result;
 }
 Result InterfaceControlThread::ifaceChangeBegin()
@@ -241,7 +241,7 @@ Result InterfaceControlThread::ifaceChangeBegin()
     bool processed = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     // extra flags; not used yet, so callers should always pass 0
@@ -252,8 +252,8 @@ Result InterfaceControlThread::ifaceChangeBegin()
     result.name = name;
     result.result = processed;
     result.msg.append(
-                QString("'<b>%1</b>' Interface %2 in changing.")
-                .arg(name).arg((processed)?"":"don't"));
+                QString(tr("'<b>%1</b>' Interface %2 in changing."))
+                .arg(name).arg((processed)? "": tr("don't")));
     return result;
 }
 Result InterfaceControlThread::ifaceChangeCommit()
@@ -263,7 +263,7 @@ Result InterfaceControlThread::ifaceChangeCommit()
     bool processed = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     // extra flags; not used yet, so callers should always pass 0
@@ -274,8 +274,8 @@ Result InterfaceControlThread::ifaceChangeCommit()
     result.name = name;
     result.result = processed;
     result.msg.append(
-                QString("'<b>%1</b>' Interface %2 commited.")
-                .arg(name).arg((processed)?"":"don't"));
+                QString(tr("'<b>%1</b>' Interface %2 commited."))
+                .arg(name).arg((processed)? "": tr("don't")));
     return result;
 }
 Result InterfaceControlThread::ifaceChangeRollback()
@@ -285,7 +285,7 @@ Result InterfaceControlThread::ifaceChangeRollback()
     bool processed = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     // extra flags; not used yet, so callers should always pass 0
@@ -296,8 +296,8 @@ Result InterfaceControlThread::ifaceChangeRollback()
     result.name = name;
     result.result = processed;
     result.msg.append(
-                QString("'<b>%1</b>' Interface %2 rollbacked.")
-                .arg(name).arg((processed)?"":"don't"));
+                QString(tr("'<b>%1</b>' Interface %2 rollbacked."))
+                .arg(name).arg((processed)? "": tr("don't")));
     return result;
 }
 Result InterfaceControlThread::getVirtIfaceXMLDesc()
@@ -309,7 +309,7 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
     char *Returns = nullptr;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virInterfacePtr iface = virInterfaceLookupByName(
@@ -337,7 +337,7 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
     if ( Returns!=nullptr ) free(Returns);
     result.result = read;
     result.msg.append(
-                QString("'<b>%1</b>' Interface %2 XML'ed")
-                .arg(name).arg((read)?"":"don't"));
+                QString(tr("'<b>%1</b>' Interface %2 XML'ed"))
+                .arg(name).arg((read)? "": tr("don't")));
     return result;
 }

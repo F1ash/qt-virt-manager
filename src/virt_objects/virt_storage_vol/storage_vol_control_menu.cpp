@@ -5,21 +5,21 @@ StorageVolControlMenu::StorageVolControlMenu(
     QMenu(parent), parameters(params), autoReloadState(state)
 {
     if ( !parameters.isEmpty() ) {
-        delete_Action = new QAction("Delete", this);
+        delete_Action = new QAction(tr("Delete"), this);
         delete_Action->setIcon(QIcon::fromTheme("delete"));
-        download_Action = new QAction("Download", this);
+        download_Action = new QAction(tr("Download"), this);
         download_Action->setIcon(QIcon::fromTheme("download"));
-        resize_Action = new QAction("Resize", this);
+        resize_Action = new QAction(tr("Resize"), this);
         resize_Action->setIcon(QIcon::fromTheme("resize"));
-        upload_Action = new QAction("Upload", this);
+        upload_Action = new QAction(tr("Upload"), this);
         upload_Action->setIcon(QIcon::fromTheme("upload"));
         wipe_Menu = new WipeMenu(this);
-        wipe_Action = new QAction("Wipe", this);
+        wipe_Action = new QAction(tr("Wipe"), this);
         wipe_Action->setIcon(QIcon::fromTheme("wipe"));
         wipe_Action->setMenu(wipe_Menu);
         connect(wipe_Menu, SIGNAL(execMethod(const Act_Param&)),
                 this, SIGNAL(execMethod(const Act_Param&)));
-        getXMLDesc_Action = new QAction("get XML Description", this);
+        getXMLDesc_Action = new QAction(tr("get XML Description"), this);
         getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
 
         addAction(delete_Action);
@@ -32,7 +32,7 @@ StorageVolControlMenu::StorageVolControlMenu(
         addAction(getXMLDesc_Action);
         addSeparator();
     };
-    reload = new QAction("Reload Volume OverView", this);
+    reload = new QAction(tr("Reload Volume OverView"), this);
     reload->setIcon(QIcon::fromTheme("view-refresh"));
     reload->setEnabled(!autoReloadState);
 

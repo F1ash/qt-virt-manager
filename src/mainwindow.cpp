@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
                     QSizePolicy::MinimumExpanding));
     setMinimumSize(100, 100);
     setContentsMargins(0, 0, 0, 5);
-    setWindowTitle("Qt VirtManager");
+    setWindowTitle(tr("Qt VirtManager"));
     QIcon::setThemeName("QtVirtManager");
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     //setMouseTracking(true);
@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     closeProgress = new QProgressBar(this);
     closeProgress->setRange(0, waitAtClose*1000);
     closeProgress->setToolTip(
-                "Progress for waiting the connection close");
+                tr("Progress for waiting the connection close"));
     statusBar()->addPermanentWidget(closeProgress);
     statusBar()->hide();
     wait_thread = nullptr;
@@ -313,7 +313,7 @@ void MainWindow::changeVisibility()
 {
     if (this->isVisible()) {
         this->hide();
-        trayIcon->hideAction->setText (QString("Up"));
+        trayIcon->hideAction->setText (tr("Up"));
         trayIcon->hideAction->setIcon (QIcon::fromTheme("up"));
         if ( logDock->isFloating() ) logDock->hide();
         if ( domainDock->isFloating() ) domainDock->hide();
@@ -324,7 +324,7 @@ void MainWindow::changeVisibility()
         if ( nwfilterDock->isFloating() ) nwfilterDock->hide();
     } else {
         this->show();
-        trayIcon->hideAction->setText (QString("Down"));
+        trayIcon->hideAction->setText (tr("Down"));
         trayIcon->hideAction->setIcon (QIcon::fromTheme("down"));
         if ( logDock->isFloating()
              && menuBar->dockMenu->logAct->isChecked() )
@@ -452,8 +452,8 @@ void MainWindow::initDockWidgets()
 {
     logDock = new DockWidget(this);
     logDock->setObjectName("logDock");
-    logDock->setWindowTitle("Log");
-    logHeadWdg = new DockHeadWidget(this, "Events & Errors");
+    logDock->setWindowTitle(tr("Log"));
+    logHeadWdg = new DockHeadWidget(this, tr("Events & Errors"));
     logHeadWdg->setTabBarName("utilities-log-viewer");
     logDock->setTitleBarWidget(logHeadWdg);
     connect(logHeadWdg, SIGNAL(floatChanged(bool)),
@@ -472,9 +472,9 @@ void MainWindow::initDockWidgets()
     // Control #1
     domainDock = new DockWidget(this);
     domainDock->setObjectName("domainDock");
-    domainDock->setWindowTitle("Domain");
+    domainDock->setWindowTitle(tr("Domain"));
     domainDock->setWindowIcon(QIcon::fromTheme("domain"));
-    domHeadWdg = new DockHeadWidget(this, "Virtual Machines");
+    domHeadWdg = new DockHeadWidget(this, tr("Virtual Machines"));
     domHeadWdg->setTabBarName("domain");
     domainDock->setTitleBarWidget(domHeadWdg);
     connect(domHeadWdg, SIGNAL(floatChanged(bool)),
@@ -509,9 +509,9 @@ void MainWindow::initDockWidgets()
     // Control #2
     networkDock = new DockWidget(this);
     networkDock->setObjectName("networkDock");
-    networkDock->setWindowTitle("Network");
+    networkDock->setWindowTitle(tr("Network"));
     networkDock->setWindowIcon(QIcon::fromTheme("network"));
-    netHeadWdg = new DockHeadWidget(this, "Virtual Networks");
+    netHeadWdg = new DockHeadWidget(this, tr("Virtual Networks"));
     netHeadWdg->setTabBarName("network");
     networkDock->setTitleBarWidget(netHeadWdg);
     connect(netHeadWdg, SIGNAL(floatChanged(bool)),
@@ -538,8 +538,8 @@ void MainWindow::initDockWidgets()
     // Control #3
     storagePoolDock = new DockWidget(this);
     storagePoolDock->setObjectName("storagePoolDock");
-    storagePoolDock->setWindowTitle("StoragePool");
-    poolHeadWdg = new DockHeadWidget(this, "Storage Pools");
+    storagePoolDock->setWindowTitle(tr("StoragePool"));
+    poolHeadWdg = new DockHeadWidget(this, tr("Storage Pools"));
     poolHeadWdg->setTabBarName("storage");
     storagePoolDock->setTitleBarWidget(poolHeadWdg);
     connect(poolHeadWdg, SIGNAL(floatChanged(bool)),
@@ -568,8 +568,8 @@ void MainWindow::initDockWidgets()
     // Control #4
     secretDock = new DockWidget(this);
     secretDock->setObjectName("secretDock");
-    secretDock->setWindowTitle("Secret");
-    scrtHeadWdg = new DockHeadWidget(this, "Secrets");
+    secretDock->setWindowTitle(tr("Secret"));
+    scrtHeadWdg = new DockHeadWidget(this, tr("Secrets"));
     scrtHeadWdg->setTabBarName("security");
     secretDock->setTitleBarWidget(scrtHeadWdg);
     connect(scrtHeadWdg, SIGNAL(floatChanged(bool)),
@@ -594,8 +594,8 @@ void MainWindow::initDockWidgets()
     // Control #5
     ifaceDock = new DockWidget(this);
     ifaceDock->setObjectName("ifaceDock");
-    ifaceDock->setWindowTitle("Interface");
-    ifaceHeadWdg = new DockHeadWidget(this, "Interfaces");
+    ifaceDock->setWindowTitle(tr("Interface"));
+    ifaceHeadWdg = new DockHeadWidget(this, tr("Interfaces"));
     ifaceHeadWdg->setTabBarName("network-wired");
     ifaceDock->setTitleBarWidget(ifaceHeadWdg);
     connect(ifaceHeadWdg, SIGNAL(floatChanged(bool)),
@@ -618,8 +618,8 @@ void MainWindow::initDockWidgets()
     // Control #6
     nwfilterDock = new DockWidget(this);
     nwfilterDock->setObjectName("nwfilterDock");
-    nwfilterDock->setWindowTitle("NWFilter");
-    nwfilterHeadWdg = new DockHeadWidget(this, "NWFilters");
+    nwfilterDock->setWindowTitle(tr("NWFilter"));
+    nwfilterHeadWdg = new DockHeadWidget(this, tr("NWFilters"));
     nwfilterHeadWdg->setTabBarName("nwfilter");
     nwfilterDock->setTitleBarWidget(nwfilterHeadWdg);
     connect(nwfilterHeadWdg, SIGNAL(floatChanged(bool)),
@@ -687,11 +687,11 @@ void MainWindow::restartApplication()
 {
     startRadarAnimation();
     //qDebug()<<"restart Application";
-    QString msg("Restart Application.");
+    QString msg(tr("Restart Application."));
     QString time = QTime::currentTime().toString();
-    QString title("Libvirt EventLoop");
+    QString title(tr("Libvirt EventLoop"));
     QString currMsg = QString(
-    "<b>%1 %2:</b><br><font color='green'><b>ACTION</b></font>: %3")
+    tr("<b>%1 %2:</b><br><font color='green'><b>ACTION</b></font>: %3"))
             .arg(time).arg(title).arg(msg);
     logDockContent->appendMsgToLog(currMsg);
     reloadFlag = true;
@@ -712,17 +712,19 @@ void MainWindow::initConnections(bool started)
     menuBar->helpMenu->setLibvirtVersion(
                 virtEventLoop->libVersion);
     QString time = QTime::currentTime().toString();
-    QString title("App initialization");
-    QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
-                       <b>EVENT</b></font>: Libvirt service%3%4")
+    QString title(tr("App initialization"));
+    QString currMsg = QString(
+            tr("<b>%1 %2:</b><br><font color='blue'>\
+                <b>EVENT</b></font>: Libvirt service%3%4"))
             .arg(time).arg(title)
-            .arg(!virtEventLoop->isSuccess()?" not ":" ")
-            .arg("exist in system");
+            .arg(!virtEventLoop->isSuccess()? tr(" not "):" ")
+            .arg(tr("exist in system"));
     logDockContent->appendMsgToLog(currMsg);
-    currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
-                               <b>EVENT</b></font>: virtEventLoop%3%4")
+    currMsg = QString(
+            tr("<b>%1 %2:</b><br><font color='blue'>\
+                <b>EVENT</b></font>: virtEventLoop%3%4"))
             .arg(time).arg(title)
-            .arg(!started?" not ":" ").arg("started");
+            .arg(!started? tr(" not "):" ").arg(tr("started"));
     logDockContent->appendMsgToLog(currMsg);
     if ( !started || !virtEventLoop->isSuccess() ) {
         return;
@@ -755,11 +757,12 @@ void MainWindow::finishRadarAnimation()
 }
 void MainWindow::initConnectionsCompleted()
 {
-    QString title("App initialization");
+    QString title(tr("App initialization"));
     QString time = QTime::currentTime().toString();
-    QString currMsg = QString("<b>%1 %2:</b><br><font color='blue'>\
-                       <b>EVENT</b></font>: %3")
-            .arg(time).arg(title).arg("Connections inited");
+    QString currMsg = QString(
+            tr("<b>%1 %2:</b><br><font color='blue'>\
+                <b>EVENT</b></font>: %3"))
+            .arg(time).arg(title).arg(tr("Connections inited"));
     logDockContent->appendMsgToLog(currMsg);
     reloadFlag = false;
 }
@@ -877,9 +880,9 @@ void MainWindow::writeToErrorLog(const QString &msg, const uint _number)
 {
     Q_UNUSED(_number);
     QString time = QTime::currentTime().toString();
-    QString title("Libvirt EventLoop");
+    QString title(tr("Libvirt EventLoop"));
     QString currMsg = QString(
-    "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+    tr("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3"))
             .arg(time).arg(title).arg(msg);
     logDockContent->appendMsgToLog(currMsg);
 }
@@ -996,8 +999,8 @@ void MainWindow::invokeVMDisplay(TASK *_task)
 #else
             QMessageBox::information(
                         this,
-                        "VM Viewer",
-                        QString("Application built without LXC"));
+                        tr("VM Viewer"),
+                        tr("Application built without LXC"));
             return;
 #endif
         } else if ( viewerType=="vnc" ) {
@@ -1013,8 +1016,8 @@ void MainWindow::invokeVMDisplay(TASK *_task)
 #else
             QMessageBox::information(
                         this,
-                        "VM Viewer",
-                        QString("Application built without VNC"));
+                        tr("VM Viewer"),
+                        tr("Application built without VNC"));
             return;
 #endif
         } else if ( viewerType=="spice" ) {
@@ -1030,15 +1033,15 @@ void MainWindow::invokeVMDisplay(TASK *_task)
 #else
             QMessageBox::information(
                         this,
-                        "VM Viewer",
-                        QString("Application built without SPICE"));
+                        tr("VM Viewer"),
+                        tr("Application built without SPICE"));
             return;
 #endif
         } else {
             QMessageBox::information(
                         this,
-                        "VM Viewer",
-                        QString("Not implemented type: %1\n or viewer: %2")
+                        tr("VM Viewer"),
+                        tr("Not implemented type: %1\n or viewer: %2")
                         .arg(type).arg(viewerType));
             return;
         };
@@ -1100,12 +1103,12 @@ void MainWindow::buildMigrateArgs(TASK *_task)
     } else {
         QString time = QTime::currentTime().toString();
         QString title =
-                QString("Domain Migration '%1'")
+                tr("Domain Migration '%1'")
                 .arg(_task->object);
         QString msg =
-                QString("Migation not possible to NULL connection.");
+                tr("Migation not possible to NULL connection.");
         QString currMsg = QString(
-                    "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+                tr("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3"))
                 .arg(time).arg(title).arg(msg);
         logDockContent->appendMsgToLog(currMsg);
     }
@@ -1121,7 +1124,7 @@ void MainWindow::overviewStoragePool(
         Overviewed_StPool_Map.insert(key, new VirtStorageVolControl());
         Overviewed_StPool_Map.value(key)->setObjectName(key);
         Overviewed_StPool_Map.value(key)
-                ->setWindowTitle(QString("%1 Pool").arg(key));
+                ->setWindowTitle(tr("%1 Pool").arg(key));
         connect(Overviewed_StPool_Map.value(key), SIGNAL(entityMsg(const QString&)),
                 this, SLOT(writeToErrorLog(const QString&)));
         connect(Overviewed_StPool_Map.value(key), SIGNAL(finished(const QString&)),
@@ -1162,7 +1165,7 @@ void MainWindow::invokeDomainEditor(TASK *_task)
                     new CreateVirtDomain(nullptr, *_task));
         DomainEditor_Map.value(key)->setObjectName(key);
         DomainEditor_Map.value(key)->setWindowTitle(
-                    QString("VM Settings / <%1> in [%2]")
+                    tr("VM Settings / <%1> in [%2]")
                     .arg(domName).arg(connName));
         connect(DomainEditor_Map.value(key), SIGNAL(errorMsg(const QString&)),
                 this, SLOT(writeToErrorLog(const QString&)));
@@ -1228,7 +1231,7 @@ void MainWindow::invokeNetworkEditor(TASK *_task)
                     new CreateVirtNetwork(nullptr, *_task));
         NetworkEditor_Map.value(key)->setObjectName(key);
         NetworkEditor_Map.value(key)->setWindowTitle(
-                    QString("Network Editor / <%1> in [%2]")
+                    tr("Network Editor / <%1> in [%2]")
                     .arg(networkName).arg(connName));
         connect(NetworkEditor_Map.value(key), SIGNAL(errorMsg(const QString&)),
                 this, SLOT(writeToErrorLog(const QString&)));
@@ -1264,7 +1267,7 @@ void MainWindow::invokeNWFilterEditor(TASK *_task)
                     new CreateVirtNWFilter(nullptr, *_task));
         NWFilterEditor_Map.value(key)->setObjectName(key);
         NWFilterEditor_Map.value(key)->setWindowTitle(
-                    QString("NWFilter Editor / <%1> in [%2]")
+                    tr("NWFilter Editor / <%1> in [%2]")
                     .arg(nwfilterName).arg(connName));
         connect(NWFilterEditor_Map.value(key), SIGNAL(errorMsg(const QString&)),
                 this, SLOT(writeToErrorLog(const QString&)));

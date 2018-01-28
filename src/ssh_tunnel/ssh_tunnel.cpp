@@ -41,7 +41,7 @@ void SSH_Tunnel::run()
         } else if ( graphicsPort.isEmpty() && !graphicsSock.isEmpty() ) {
             _args << QString("%1:%2").arg(viewerPort).arg(graphicsSock);
         } else {
-            _args << "data_error";
+            _args << tr("data_error");
         };
         _args << QString("%1@%2").arg(User).arg(remoteHost);
         ssh_tunnel->start("ssh", _args, QIODevice::ReadWrite);

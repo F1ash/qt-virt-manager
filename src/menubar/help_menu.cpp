@@ -9,14 +9,14 @@ HelpMenu::HelpMenu(QWidget *parent) :
 {
     aboutQt = addAction(
                 QIcon::fromTheme("qt_icon"),
-                "About Qt");
+                tr("About Qt"));
     aboutSelf = addAction(
                 QIcon::fromTheme("virtual-engineering"),
-                "About QtVirtManager");
+                tr("About QtVirtManager"));
     addSeparator();
     donate = addAction(
                 QIcon::fromTheme("donate"),
-                "Donate");
+                tr("Donate"));
     connect(aboutQt, SIGNAL(triggered(bool)),
             this, SLOT(showAboutQt()));
     connect(aboutSelf, SIGNAL(triggered(bool)),
@@ -32,7 +32,7 @@ void HelpMenu::showAboutQt()
 }
 void HelpMenu::showAboutSelf()
 {
-    QString message = QString(
+    QString message = tr(
                 "<a href='http://f1ash.github.io/qt-virt-manager'>\
                  Qt Virtual machines manager</a>, version %1.\
                  <br>Based on Qt %2. Uses libvirt (%3) API.\
@@ -47,7 +47,7 @@ void HelpMenu::showAboutSelf()
                 .arg(libvirtVer);
     QMessageBox::about(
                 this,
-                "About QtVirtManager",
+                tr("About QtVirtManager"),
                 message);
 }
 void HelpMenu::showDonateDialog()

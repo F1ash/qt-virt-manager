@@ -192,7 +192,7 @@ int  ConnectionList::connItemEditAction()
     int exitCode = QDialog::Rejected;
     QModelIndex _item = currentIndex();
     if ( !_item.isValid() ) {
-        showMessage("Info", "Item not exist.");
+        showMessage(tr("Info"), tr("Item not exist."));
         return exitCode;
     };
     ConnItemIndex *idx = getConnItemDataListIndex(_item.row());
@@ -309,8 +309,8 @@ void ConnectionList::deleteCurrentConnection(const QModelIndex &_item)
                 .toBool();
         if ( !conn_availability ) {
             showMessage(
-                        QString("Connection '%1'").arg(connection),
-                        "Connection is Busy.");
+                        QString(tr("Connection '%1'")).arg(connection),
+                        tr("Connection is Busy."));
             clearSelection();
             return;
         };
@@ -321,8 +321,8 @@ void ConnectionList::deleteCurrentConnection(const QModelIndex &_item)
                 .toInt();
         if ( conn && conn_state==RUNNING ) {
             showMessage(
-                        QString("Connection '%1'").arg(connection),
-                        "Connection is Running.");
+                        QString(tr("Connection '%1'")).arg(connection),
+                        tr("Connection is Running."));
         } else {
             if ( conn ) {
                 disconnect(conn, SIGNAL(warningShowed()),
@@ -356,7 +356,7 @@ void ConnectionList::deleteCurrentConnection(const QModelIndex &_item)
             };
             connItemModel->removeRow(_item.row());
         };
-    } else showMessage("Info", "Item not exist.");
+    } else showMessage(tr("Info"), tr("Item not exist."));
 }
 void ConnectionList::showMessage(const QString &title, const QString &msg)
 {
@@ -389,7 +389,7 @@ void ConnectionList::connContextMenuRequested(const QPoint &pos)
     bool to_run = TO_RUN;
     ConnectMenu *connectMenu = new ConnectMenu(this);
     if ( conn_Status.value("isRunning", CLOSED).toInt()==RUNNING ) {
-        connectMenu->act->setText("Close Connection");
+        connectMenu->act->setText(tr("Close Connection"));
         connectMenu->act->setIcon(QIcon::fromTheme("disconnect"));
         connect(connectMenu->act, SIGNAL(triggered()),
                 this, SLOT(connItemKillAction()));
@@ -397,7 +397,7 @@ void ConnectionList::connContextMenuRequested(const QPoint &pos)
         connectMenu->display->setEnabled(true);
         to_run = TO_STOP;
     } else {
-        connectMenu->act->setText("Open Connection");
+        connectMenu->act->setText(tr("Open Connection"));
         connectMenu->act->setIcon(QIcon::fromTheme("connect"));
         connect(connectMenu->act, SIGNAL(triggered()),
                 this, SLOT(connItemRunAction()));
@@ -480,7 +480,7 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
     conn_state = conn_Status.value(QString("isRunning"), FAILED).toInt();
     if ( !conn_Status.value(
              QString("availability"), NOT_AVAILABLE).toBool() ) {
-        showMessage("Info", "Connection is busy.");
+        showMessage(tr("Info"), tr("Connection is busy."));
     } else if ( conn_state!=RUNNING ) {
         conn->openConnection();
     } else if ( conn_state==RUNNING ) {
@@ -573,10 +573,10 @@ void ConnectionList::sendWarning(const QString &msg)
 void ConnectionList::sendWarning(const QString &msg, const uint _num)
 {
     Q_UNUSED(_num);
-    QString title("Search local connections");
+    QString title(tr("Search local connections"));
     QString time = QTime::currentTime().toString();
     QString errorMsg = QString(
-    "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+    tr("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3"))
             .arg(time).arg(title).arg(msg);
     emit warning(errorMsg);
 }
@@ -594,7 +594,7 @@ void ConnectionList::getAuthCredentials(const QString &crd)
                 QLineEdit::Normal;
     text = QInputDialog::getText(
                     this,
-                    QString("<%1> credentials").arg(obj->getName()),
+                    QString(tr("<%1> credentials")).arg(obj->getName()),
                     crd,
                     mode);
     obj->setAuthCredentials(crd, text);

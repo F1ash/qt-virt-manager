@@ -4,7 +4,7 @@ VirtInterfaceControl::VirtInterfaceControl(QWidget *parent) :
     VirtEntityControl(parent)
 {
     setObjectName("VirtIfaceControl");
-    setWindowTitle("VirtIface Control");
+    setWindowTitle(tr("VirtIface Control"));
     setWindowIcon(QIcon::fromTheme("network-wired"));
     virtIfaceModel = new VirtIfaceModel();
     entityList->setModel(virtIfaceModel);
@@ -53,7 +53,7 @@ void VirtInterfaceControl::stopProcessing()
     virtIfaceModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Name"),
+                tr("Name"),
                 Qt::EditRole);
 
 }
@@ -68,7 +68,7 @@ void VirtInterfaceControl::setListHeader(const QString &connName)
 {
     virtIfaceModel->setHeaderData(
                 0, Qt::Horizontal,
-                QString("Interface in [ %1 ]").arg(connName),
+                QString(tr("Interface in [ %1 ]")).arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);
@@ -118,7 +118,7 @@ void VirtInterfaceControl::resultReceiver(Result *data)
         emit entityListUpdated();
     } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
-        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        data->msg.append(QString(tr("to <a href='%1'>%1</a>")).arg(xml));
         QString msg = QString("%1<br>%2")
                 .arg(data->msg.join(" "))
                 .arg(data->err);
@@ -286,8 +286,8 @@ void VirtInterfaceControl::newVirtEntityFromXML(const Act_Param &args)
             xml = createIface->getXMLDescFileName();
             show = createIface->getShowing();
             QStringList data;
-            data.append("New Interface XML'ed");
-            data.append(QString("to <a href='%1'>%1</a>").arg(xml));
+            data.append(tr("New Interface XML'ed"));
+            data.append(QString(tr("to <a href='%1'>%1</a>")).arg(xml));
             QString msg = data.join(" ");
             msgRepeater(msg);
             if ( show ) QDesktopServices::openUrl(QUrl(xml));

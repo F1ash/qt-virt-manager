@@ -8,15 +8,15 @@ TrayIcon::TrayIcon(QWidget *parent)
     appIcon = QIcon::fromTheme("virtual-engineering");
     warningIcon = QIcon::fromTheme("dialog-warning");
     setIcon(appIcon);
-    hideAction = new QAction(QString("Down"), this);
+    hideAction = new QAction(tr("Down"), this);
     hideAction->setIcon (QIcon::fromTheme("down"));
-    //logUpAction = new QAction(QString("Show Log Viewer"), this);
+    //logUpAction = new QAction(tr("Show Log Viewer"), this);
     //logUpAction->setIcon ( QIcon::fromTheme("utilities-log-viewer") );
-    monitorAction = new QAction(QString("Domains State Monitor"), this);
+    monitorAction = new QAction(tr("Domains State Monitor"), this);
     monitorAction->setIcon ( QIcon::fromTheme("utilities-monitor") );
-    taskUpAction = new QAction(QString("Task WareHouse"), this);
+    taskUpAction = new QAction(tr("Task WareHouse"), this);
     taskUpAction->setIcon ( QIcon::fromTheme("job") );
-    closeAction = new QAction(QString("Exit"), this);
+    closeAction = new QAction(tr("Exit"), this);
     closeAction->setIcon (QIcon::fromTheme("exit"));
 
     trayIconMenu = new QMenu(parent);
@@ -28,7 +28,7 @@ TrayIcon::TrayIcon(QWidget *parent)
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(closeAction);
 
-    setToolTip(QString("Qt VirtManager"));
+    setToolTip(tr("Qt VirtManager"));
     setContextMenu(trayIconMenu);
     show();
 }
@@ -41,14 +41,14 @@ void TrayIcon::setLogUpActionText(QString &s)
 void TrayIcon::stateMonitorVisibilityChanged(bool state)
 {
     monitorAction->setText(
-                QString("%1 Domains State Monitor")
-                .arg( (state)? "Hide" : "Show" ));
+                tr("%1 Domains State Monitor")
+                .arg( (state)? tr("Hide") : tr("Show") ));
 }
 void TrayIcon::stateTaskWareHouseVisibilityChanged(bool state)
 {
     taskUpAction->setText(
-                QString("%1 Task WareHouse")
-                .arg( (state)? "Hide" : "Show" ));
+                tr("%1 Task WareHouse")
+                .arg( (state)? tr("Hide") : tr("Show") ));
 }
 void TrayIcon::changeWarningState(bool state)
 {

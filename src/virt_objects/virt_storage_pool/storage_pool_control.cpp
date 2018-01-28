@@ -4,7 +4,7 @@ VirtStoragePoolControl::VirtStoragePoolControl(QWidget *parent) :
     VirtEntityControl(parent)
 {
     setObjectName("VirtStoragePoolControl");
-    setWindowTitle("StoragePool Control");
+    setWindowTitle(tr("StoragePool Control"));
     setWindowIcon(QIcon::fromTheme("storagePool"));
     storagePoolModel = new StoragePoolModel();
     entityList->setModel(storagePoolModel);
@@ -53,7 +53,7 @@ void VirtStoragePoolControl::stopProcessing()
     storagePoolModel->setHeaderData(
                 0,
                 Qt::Horizontal,
-                QString("Name"),
+                tr("Name"),
                 Qt::EditRole);
 
 }
@@ -68,7 +68,7 @@ void VirtStoragePoolControl::setListHeader(const QString &connName)
 {
     storagePoolModel->setHeaderData(
                 0, Qt::Horizontal,
-                QString("Pool in [ %1 ]").arg(connName),
+                QString(tr("Pool in [ %1 ]")).arg(connName),
                 Qt::EditRole);
     currConnName = connName;
     setEnabled(true);
@@ -166,7 +166,7 @@ void VirtStoragePoolControl::resultReceiver(Result *data)
         };
     } else if ( data->action == Actions::GET_XML_DESCRIPTION ) {
         QString xml = data->fileName;
-        data->msg.append(QString("to <a href='%1'>%1</a>").arg(xml));
+        data->msg.append(QString(tr("to <a href='%1'>%1</a>")).arg(xml));
         QString msg = QString("%1<br>%2")
                 .arg(data->msg.join(" "))
                 .arg(data->err);

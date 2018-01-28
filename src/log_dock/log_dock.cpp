@@ -20,17 +20,17 @@ LogDock::LogDock(QWidget *parent) :
     int _size = this->fontInfo().pixelSize();
     currentTime = new QLabel(this);
     logSize = new QSpinBox(this);
-    logSize->setToolTip("Size of Log (MB)");
+    logSize->setToolTip(tr("Size of Log (MB)"));
     logSize->setRange(1, 100);
     logSize->setSuffix("MB");
     logSize->setValue(currLogSize);
     autoSaveLog = new QCheckBox(this);
-    autoSaveLog->setToolTip("AutoSave");
+    autoSaveLog->setToolTip(tr("AutoSave"));
     saveLog = new QPushButton(
                 QIcon::fromTheme("document-save"),
                 "",
                 this);
-    saveLog->setToolTip("Save Log to File");
+    saveLog->setToolTip(tr("Save Log to File"));
     //saveLog->setMaximumSize(QSize(_size, _size));
     titleLayout = new QHBoxLayout();
     titleLayout->addWidget(currentTime, 0, Qt::AlignRight);
@@ -45,7 +45,7 @@ LogDock::LogDock(QWidget *parent) :
 
     Log = new TextBrowser(this);
     Log->setToolTip(QString(
-    "Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
+    tr("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2"))
                     .arg(currLogSize * ONE_MB)
                     .arg(Log->toPlainText().count()));
     connect(Log, SIGNAL(anchorClicked(QUrl)),
@@ -93,7 +93,7 @@ void LogDock::appendMsgToLog(const QString &msg)
     Log->append(QString("%1 %2").arg(DOT).arg(msg));
     Log->append(DEMARK);
     Log->setToolTip(QString(
-    "Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
+    tr("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2"))
                 .arg(currLogSize * ONE_MB)
                 .arg(Log->toPlainText().count()));
     if ( Log->toPlainText().count()>currLogSize * ONE_MB ) {
@@ -110,7 +110,7 @@ void LogDock::timerEvent(QTimerEvent *ev)
 {
     if ( timerId==ev->timerId() )
         currentTime->setText(
-                    QString("Current Time: <b>%1</b>")
+                    QString(tr("Current Time: <b>%1</b>"))
                     .arg(QTime::currentTime().toString()));
 }
 void LogDock::openLink(QUrl url)
@@ -134,7 +134,7 @@ void LogDock::saveLogToFile()
     } else {
         _fileName = QFileDialog::getSaveFileName(
                 this,
-                "Save Log To",
+                tr("Save Log To"),
                 QString("~/%1")
                     .arg(getTemplateFilename()));
     };
@@ -149,17 +149,17 @@ void LogDock::saveLogToFile()
         if ( written==text.size() ) {
             Log->clear();
             emit overflow(false);
-            msg.append(QString("Save Log to %1 done.")
+            msg.append(QString(tr("Save Log to %1 done."))
                        .arg(_fileName));
             lastProbe = true;
         } else {
-            msg.append(QString("Save Log to %1 failed.")
+            msg.append(QString(tr("Save Log to %1 failed."))
                        .arg(_fileName));
             lastProbe = false;
         };
         QString time = QTime::currentTime().toString();
         QString currMsg = QString(
-        "<b>%1:</b><br><font color='green'><b>ACTION</b></font>: %3")
+        tr("<b>%1:</b><br><font color='green'><b>ACTION</b></font>: %3"))
                 .arg(time).arg(msg);
         appendMsgToLog(currMsg);
     };
@@ -176,7 +176,7 @@ void LogDock::changeLogSize(int i)
 {
     currLogSize = i;
     Log->setToolTip(QString(
-    "Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2")
+    tr("Event/Error Log\nMaxSize:\t%1 Bytes\nCurrent:\t%2"))
                     .arg(currLogSize * ONE_MB)
                     .arg(Log->toPlainText().count()));
 }

@@ -5,16 +5,16 @@ ViewMenu::ViewMenu(QWidget *parent) :
 {
     actGroup = new QActionGroup(this);
     actGroup->setExclusive(true);
-    hardClassic = addAction("&Hard Classic");
+    hardClassic = addAction(tr("&Hard Classic"));
     hardClassic->setCheckable(true);
     hardClassic->setActionGroup(actGroup);
     hardClassic->setShortcut(
-                QKeySequence(tr("Ctrl+Shift+H")));
-    softTouched = addAction("So&ft Touched");
+                QKeySequence("Ctrl+Shift+H"));
+    softTouched = addAction(tr("So&ft Touched"));
     softTouched->setCheckable(true);
     softTouched->setActionGroup(actGroup);
     softTouched->setShortcut(
-                QKeySequence(tr("Ctrl+Shift+F")));
+                QKeySequence("Ctrl+Shift+F"));
     connect(hardClassic, SIGNAL(toggled(bool)),
             this, SLOT(viewModeChanged()));
     connect(softTouched, SIGNAL(toggled(bool)),

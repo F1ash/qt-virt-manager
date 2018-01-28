@@ -126,13 +126,13 @@ Result NetControlThread::createNetwork()
     QByteArray xmlData;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        QString msg = QString(tr("File \"%1\"\nnot opened.")).arg(path);
         emit errorMsg( msg, number );
         result.err = msg;
         return result;
@@ -147,7 +147,7 @@ Result NetControlThread::createNetwork()
     };
     result.name = QString::fromUtf8( virNetworkGetName(network) );
     result.result = true;
-    result.msg.append(QString("'<b>%1</b>' Network from\n\"%2\"\nis created.")
+    result.msg.append(QString(tr("'<b>%1</b>' Network from\n\"%2\"\nis created."))
                       .arg(result.name).arg(path));
     virNetworkFree(network);
     return result;
@@ -159,13 +159,13 @@ Result NetControlThread::defineNetwork()
     QByteArray xmlData;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        QString msg = QString(tr("File \"%1\"\nnot opened.")).arg(path);
         emit errorMsg( msg, number );
         result.err = msg;
         return result;
@@ -180,7 +180,7 @@ Result NetControlThread::defineNetwork()
     };
     result.name = QString::fromUtf8( virNetworkGetName(network) );
     result.result = true;
-    result.msg.append(QString("'<b>%1</b>' Network from\n\"%2\"\nis defined.")
+    result.msg.append(QString(tr("'<b>%1</b>' Network from\n\"%2\"\nis defined."))
                       .arg(result.name).arg(path));
     virNetworkFree(network);
     return result;
@@ -192,7 +192,7 @@ Result NetControlThread::startNetwork()
     bool started = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNetworkPtr network = virNetworkLookupByName(
@@ -206,8 +206,8 @@ Result NetControlThread::startNetwork()
         result.err = sendConnErrors();
     result.name = name;
     result.result = started;
-    result.msg.append(QString("'<b>%1</b>' Network %2 Started.")
-                      .arg(name).arg((started)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' Network %2 Started."))
+                      .arg(name).arg((started)? "": tr("don't")));
     return result;
 }
 Result NetControlThread::destroyNetwork()
@@ -217,7 +217,7 @@ Result NetControlThread::destroyNetwork()
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNetworkPtr network = virNetworkLookupByName(
@@ -231,8 +231,8 @@ Result NetControlThread::destroyNetwork()
         result.err = sendConnErrors();
     result.name = name;
     result.result = deleted;
-    result.msg.append(QString("'<b>%1</b>' Network %2 Destroyed.")
-                      .arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' Network %2 Destroyed."))
+                      .arg(name).arg((deleted)? "": tr("don't")));
     return result;
 }
 Result NetControlThread::undefineNetwork()
@@ -242,7 +242,7 @@ Result NetControlThread::undefineNetwork()
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNetworkPtr network = virNetworkLookupByName(
@@ -256,8 +256,8 @@ Result NetControlThread::undefineNetwork()
         result.err = sendConnErrors();
     result.name = name;
     result.result = deleted;
-    result.msg.append(QString("'<b>%1</b>' Network %2 Undefined.")
-                      .arg(name).arg((deleted)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' Network %2 Undefined."))
+                      .arg(name).arg((deleted)? "": tr("don't")));
     return result;
 }
 Result NetControlThread::changeAutoStartNetwork()
@@ -269,7 +269,7 @@ Result NetControlThread::changeAutoStartNetwork()
     bool set = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNetworkPtr network = virNetworkLookupByName(
@@ -282,8 +282,8 @@ Result NetControlThread::changeAutoStartNetwork()
     } else
         result.err = sendConnErrors();
     result.result = set;
-    result.msg.append(QString("'<b>%1</b>' Network autostart %2 Set.")
-                      .arg(name).arg((set)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' Network autostart %2 Set."))
+                      .arg(name).arg((set)? "": tr("don't")));
     return result;
 }
 Result NetControlThread::getVirtNetXMLDesc()
@@ -295,7 +295,7 @@ Result NetControlThread::getVirtNetXMLDesc()
     char *Returns = nullptr;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNetworkPtr network = virNetworkLookupByName(
@@ -320,7 +320,7 @@ Result NetControlThread::getVirtNetXMLDesc()
     f.close();
     if ( Returns!=nullptr ) free(Returns);
     result.result = read;
-    result.msg.append(QString("'<b>%1</b>' Network %2 XML'ed")
-                      .arg(name).arg((read)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' Network %2 XML'ed"))
+                      .arg(name).arg((read)? "": tr("don't")));
     return result;
 }

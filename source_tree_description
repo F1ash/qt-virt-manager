@@ -22,6 +22,7 @@
     ├── ssh_tunnel          (SSH tunnel thread object)
     ├── state_monitor       (StateMonitor widget)
     ├── task_warehouse      (TaskWarehouse widget)
+    ├── translations        (Translation files for QtVirtManager)
     ├── tray                (Tray widget)
     ├── virt_objects        (base libvirt entities)
     │   ├── virt_connect        (for virConnect)

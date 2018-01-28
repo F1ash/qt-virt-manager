@@ -146,13 +146,13 @@ Result SecretControlThread::defineSecret()
     QByteArray xmlData;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     QFile f;
     f.setFileName(path);
     if ( !f.open(QIODevice::ReadOnly) ) {
-        QString msg = QString("File \"%1\"\nnot opened.").arg(path);
+        QString msg = QString(tr("File \"%1\"\nnot opened.")).arg(path);
         emit errorMsg( msg, number );
         result.err = msg;
         return result;
@@ -179,9 +179,9 @@ Result SecretControlThread::defineSecret()
     result.name = QString::fromUtf8(uuid);
     result.result = true;
     result.msg.append(
-                QString("'<b>%1</b>' Secret from\n\"%2\"\nis defined.")
+                QString(tr("'<b>%1</b>' Secret from\n\"%2\"\nis defined."))
                 .arg(result.name).arg(path));
-    if ( ret<0 ) result.msg.append("Secret Value not set.");
+    if ( ret<0 ) result.msg.append(tr("Secret Value not set."));
     virSecretFree(secret);
     return result;
 }
@@ -192,7 +192,7 @@ Result SecretControlThread::undefineSecret()
     bool deleted = false;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virSecretPtr secret = virSecretLookupByUUIDString(
@@ -206,8 +206,8 @@ Result SecretControlThread::undefineSecret()
         result.err = sendConnErrors();
     result.name = uuid;
     result.result = deleted;
-    result.msg.append(QString("'<b>%1</b>' Secret %2 Undefined.")
-                      .arg(uuid).arg((deleted)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' Secret %2 Undefined."))
+                      .arg(uuid).arg((deleted)? "": tr("don't")));
     return result;
 }
 Result SecretControlThread::getVirtSecretXMLDesc()
@@ -219,7 +219,7 @@ Result SecretControlThread::getVirtSecretXMLDesc()
     char *Returns = nullptr;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
-        result.err = "Connection pointer is NULL.";
+        result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virSecretPtr secret = virSecretLookupByUUIDString(
@@ -246,7 +246,7 @@ Result SecretControlThread::getVirtSecretXMLDesc()
     f.close();
     if ( Returns!=nullptr ) free(Returns);
     result.result = read;
-    result.msg.append(QString("'<b>%1</b>' Secret %2 XML'ed")
-                      .arg(uuid).arg((read)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' Secret %2 XML'ed"))
+                      .arg(uuid).arg((read)? "": tr("don't")));
     return result;
 }

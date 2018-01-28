@@ -8,22 +8,22 @@ VirtNetControlMenu::VirtNetControlMenu(
         active = params.value("active", false).toBool();
         autostart = params.value("auto", false).toBool();
         persistent = params.value("persistent", false).toBool();
-        start = new QAction("Start", this);
+        start = new QAction(tr("Start"), this);
         start->setIcon(QIcon::fromTheme("start"));
         start->setEnabled( persistent && !active );
-        destroy = new QAction("Destroy", this);
+        destroy = new QAction(tr("Destroy"), this);
         destroy->setIcon(QIcon::fromTheme("destroy"));
         destroy->setEnabled(active);
-        undefine = new QAction("Undefine", this);
+        undefine = new QAction(tr("Undefine"), this);
         undefine->setIcon(QIcon::fromTheme("undefine"));
         undefine->setEnabled(persistent);
-        autoStart = new QAction("change AutoStart", this);
+        autoStart = new QAction(tr("change AutoStart"), this);
         autoStart->setIcon(QIcon::fromTheme("autostart"));
         autoStart->setEnabled(persistent);
-        edit = new QAction("Edit", this);
+        edit = new QAction(tr("Edit"), this);
         edit->setIcon(QIcon::fromTheme("configure"));
         edit->setVisible(true);
-        getXMLDesc = new QAction("get XML Description", this);
+        getXMLDesc = new QAction(tr("get XML Description"), this);
         getXMLDesc->setIcon(QIcon::fromTheme("application-xml"));
         getXMLDesc->setEnabled(true);
 
@@ -37,7 +37,7 @@ VirtNetControlMenu::VirtNetControlMenu(
         addAction(getXMLDesc);
         addSeparator();
     };
-    reload = new QAction("Reload Network OverView", this);
+    reload = new QAction(tr("Reload Network OverView"), this);
     reload->setIcon(QIcon::fromTheme("view-refresh"));
     reload->setEnabled(!autoReloadState);
 

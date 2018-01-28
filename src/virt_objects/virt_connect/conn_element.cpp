@@ -153,8 +153,9 @@ void ConnElement::openConnection()
         _diff = 0;
         waitTimerId = startTimer(1000);
     } else {
-        addMsgToLog(QString("Connection '%1'").arg(name),
-            QString("Wait Timer is running: %1").arg(waitTimerId));
+        addMsgToLog(
+            QString(tr("Connection '%1'")).arg(name),
+            QString(tr("Wait Timer is running: %1")).arg(waitTimerId));
     };
 }
 void ConnElement::closeConnection()
@@ -190,7 +191,7 @@ void ConnElement::addMsgToLog(const QString title, const QString msg)
 {
     QString time = QTime::currentTime().toString();
     QString errorMsg = QString(
-    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+    tr("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3"))
             .arg(time).arg(title).arg(msg);
     sendWarning(errorMsg);
     mainWindowUp();
@@ -229,17 +230,17 @@ void ConnElement::setConnectionState(CONN_STATE status)
         case 2:
             switch (status) {
             case FAILED:
-                data = "FAILED";
+                data = tr("FAILED");
                 break;
             case CLOSED:
-                data = "CLOSED";
+                data = tr("CLOSED");
                 break;
             case RUNNING:
-                data = "OPENED";
+                data = tr("OPENED");
                 emit newOpenedConnection(name);
                 break;
             case CONNECT:
-                data = "in_Process";
+                data = tr("in_Process");
                 break;
             default:
                 break;
@@ -266,15 +267,15 @@ void ConnElement::timerEvent(QTimerEvent *event)
 }
 void ConnElement::receiveConnMessage(const QString &msg)
 {
-    addMsgToLog( QString("Connection '%1'").arg(name), msg );
+    addMsgToLog( QString(tr("Connection '%1'")).arg(name), msg );
 }
 void ConnElement::writeErrorToLog(const QString &msg, const uint _num)
 {
     Q_UNUSED(_num);
     QString time = QTime::currentTime().toString();
-    QString title(QString("Connection '%1'").arg(name));
+    QString title(QString(tr("Connection '%1'")).arg(name));
     QString errorMsg = QString(
-    "<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3")
+    tr("<b>%1 %2:</b><br><font color='red'><b>ERROR</b></font>: %3"))
             .arg(time).arg(title).arg(msg);
     sendWarning(errorMsg);
 }

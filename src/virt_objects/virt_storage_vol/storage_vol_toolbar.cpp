@@ -18,7 +18,7 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
 {
     create_Action = new QAction(this);
     create_Action->setIcon(QIcon::fromTheme("define"));
-    create_Action->setToolTip("New volume");
+    create_Action->setToolTip(tr("New volume"));
     create_Menu = new OpenFileMenu(
                 this, Actions::CREATE_ENTITY, VIRT_ENTITY::VIRT_STORAGE_VOLUME);
     create_Action->setMenu(create_Menu);
@@ -26,29 +26,29 @@ StorageVolToolBar::StorageVolToolBar(QWidget *parent) :
             this, SLOT(showMenu()));
     delete_Action = new QAction(this);
     delete_Action->setIcon(QIcon::fromTheme("delete"));
-    delete_Action->setToolTip("Delete");
+    delete_Action->setToolTip(tr("Delete"));
     download_Action = new QAction(this);
     download_Action->setIcon(QIcon::fromTheme("download"));
-    download_Action->setToolTip("Download");
+    download_Action->setToolTip(tr("Download"));
     resize_Action = new QAction(this);
     resize_Action->setIcon(QIcon::fromTheme("resize"));
-    resize_Action->setToolTip("Resize");
+    resize_Action->setToolTip(tr("Resize"));
     upload_Action = new QAction(this);
     upload_Action->setIcon(QIcon::fromTheme("upload"));
-    upload_Action->setToolTip("Upload");
+    upload_Action->setToolTip(tr("Upload"));
     wipe_Menu = new WipeMenu(this);
     wipe_Action = new QAction(this);
     wipe_Action->setIcon(QIcon::fromTheme("wipe"));
-    wipe_Action->setToolTip("Wipe");
+    wipe_Action->setToolTip(tr("Wipe"));
     wipe_Action->setMenu(wipe_Menu);
     refresh_Action = new QAction(this);
     refresh_Action->setIcon(QIcon::fromTheme("frame-refresh"));
-    refresh_Action->setToolTip("Refresh list");
+    refresh_Action->setToolTip(tr("Refresh list"));
     //getXMLDesc_Action = new QAction(this);
     //getXMLDesc_Action->setIcon(QIcon::fromTheme("application-xml"));
-    //getXMLDesc_Action->setToolTip("Get XML Description");
+    //getXMLDesc_Action->setToolTip(tr("Get XML Description"));
     _autoReload = new QPushButton(this);
-    _autoReload->setToolTip("AutoReload Volume Overview");
+    _autoReload->setToolTip(tr("AutoReload Volume Overview"));
     _autoReload->setIcon(QIcon::fromTheme("view-refresh"));
     _autoReload->setCheckable(true);
 
