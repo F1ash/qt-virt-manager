@@ -4,9 +4,9 @@ RestorePanel::RestorePanel(QWidget *parent) :
     QWidget(parent)
 {
     save = new QPushButton(QIcon::fromTheme("document-save"), "", this);
-    save->setToolTip("Save current page state");
+    save->setToolTip(tr("Save current page state"));
     revert = new QPushButton(QIcon::fromTheme("document-revert"), "", this);
-    revert->setToolTip("Revert to previous page state");
+    revert->setToolTip(tr("Revert to previous page state"));
     restoreMenu = new DeviceRestoreMenu(this);
     restoreMenu->revertData->setEnabled(false);
     revert->setMenu(restoreMenu);

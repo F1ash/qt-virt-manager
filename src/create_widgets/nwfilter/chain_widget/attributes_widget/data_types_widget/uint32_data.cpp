@@ -1,14 +1,16 @@
 #include "uint32_data.h"
 
 UINT32_Data::UINT32_Data(
-        QWidget *parent, QString tag, QString topValue) :
+        QWidget *parent,
+        QString  tag,
+        QString  topValue) :
     UntypedData(parent, tag)
 {
     data = new QDoubleSpinBox(this);
     data->setDecimals(0);
     data->setRange(0, topValue.toDouble());
     data->setSingleStep(1);
-    data->setToolTip("TYPE: UINT32");
+    data->setToolTip(tr("TYPE: UINT32"));
     addDataWidget(data);
     clearData();
     connect(data, SIGNAL(valueChanged(int)),

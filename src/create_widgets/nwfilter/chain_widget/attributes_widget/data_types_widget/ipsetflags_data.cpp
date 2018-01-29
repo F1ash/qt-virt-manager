@@ -1,14 +1,16 @@
 #include "ipsetflags_data.h"
 
 IPSETFLAGS_Data::IPSETFLAGS_Data(
-        QWidget *parent, QString tag, QString topValue) :
+        QWidget *parent,
+        QString  tag,
+        QString  topValue) :
     UntypedData(parent, tag)
 {
     data = new QLineEdit(this);
     data->setPlaceholderText(" src,src,dst,...");
-    data->setToolTip("TYPE: IPSETFLAGS\n\
+    data->setToolTip(tr("TYPE: IPSETFLAGS\n\
 (The source and destination flags of the ipset\n\
-described by up to 6 'src' or 'dst' elements)");
+described by up to 6 'src' or 'dst' elements)"));
     addDataWidget(data);
     connect(data, SIGNAL(textChanged(QString)),
             this, SIGNAL(dataChanged()));

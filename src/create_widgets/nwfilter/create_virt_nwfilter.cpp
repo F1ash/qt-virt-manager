@@ -1,7 +1,8 @@
 #include "create_virt_nwfilter.h"
 
 NetFilterHelperThread::NetFilterHelperThread(
-        QObject *parent, virConnectPtr *connPtrPtr) :
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     _VirtThread(parent, connPtrPtr)
 {
 
@@ -45,38 +46,38 @@ CreateVirtNWFilter::CreateVirtNWFilter(
     setAttribute(Qt::WA_DeleteOnClose);
     xmlFileName = task.args.path;
     ptr_ConnPtr = task.srcConnPtr;
-    setWindowTitle("NWFilter Editor");
+    setWindowTitle(tr("NWFilter Editor"));
     setWindowIcon(QIcon::fromTheme("nwfilter"));
     setEnabled(false);
 
     name = new QLineEdit(this);
-    name->setPlaceholderText("set filter name");
+    name->setPlaceholderText(tr("set filter name"));
     uuid = new QLineEdit(this);
-    uuid->setPlaceholderText("UUID will set automatically if occured");
+    uuid->setPlaceholderText(tr("UUID will set automatically if occured"));
 
     tabs = new QTabWidget(this);
     tabs->setTabPosition(QTabWidget::West);
-    filterRefs = new FilterrefWidget(this, "Use another filters");
+    filterRefs = new FilterrefWidget(this, tr("Use another filters"));
     chainRules = new ChainRules(this);
-    tabs->addTab(filterRefs, "Filters");
-    tabs->addTab(chainRules, "Chain");
-    //tabs->addTab(new QWidget(), "Filter tree");
+    tabs->addTab(filterRefs, tr("Filters"));
+    tabs->addTab(chainRules, tr("Chain"));
+    //tabs->addTab(new QWidget(), tr("Filter tree"));
 
     about = new QLabel(
-    "<a href='https://libvirt.org/formatnwfilter.html'>About</a>",
+    tr("<a href='https://libvirt.org/formatnwfilter.html'>About</a>"),
                 this);
     about->setOpenExternalLinks(true);
     about->setToolTip("https://libvirt.org/formatnwfilter.html");
     ok = new QPushButton(
                 QIcon::fromTheme("dialog-ok"),
-                "Ok",
+                tr("Ok"),
                 this);
     ok->setAutoDefault(true);
     connect(ok, SIGNAL(clicked()),
             this, SLOT(set_Result()));
     cancel = new QPushButton(
                 QIcon::fromTheme("dialog-cancel"),
-                "Cancel",
+                tr("Cancel"),
                 this);
     cancel->setAutoDefault(true);
     connect(cancel, SIGNAL(clicked()),
@@ -168,8 +169,8 @@ void CreateVirtNWFilter::buildXMLDescription()
     QString _xml = xml->fileName();
     xml->close();
     QStringList data;
-    data.append("New NWFilter XML'ed");
-    data.append(QString("to <a href='%1'>%1</a>").arg(_xml));
+    data.append(tr("New NWFilter XML'ed"));
+    data.append(QString(tr("to <a href='%1'>%1</a>")).arg(_xml));
     QString msg = data.join(" ");
     sendMsg(msg);
     // if ( showDescription->isChecked() )
@@ -181,9 +182,9 @@ void CreateVirtNWFilter::buildXMLDescription()
 void CreateVirtNWFilter::sendMsg(const QString &msg)
 {
     QString time = QTime::currentTime().toString();
-    QString title = QString("Connection '%1'").arg(task.srcConName);
+    QString title = QString(tr("Connection '%1'")).arg(task.srcConName);
     QString currMsg = QString(
-    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+    tr("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3"))
             .arg(time).arg(title).arg(msg);
     emit errorMsg(currMsg);
 }
@@ -194,7 +195,7 @@ void CreateVirtNWFilter::closeEvent(QCloseEvent *ev)
     if ( ev->type()==QEvent::Close ) {
         QString key = objectName();
         QString msg = QString(
-        "'<b>%1</b>' network filter editor closed.")
+                tr("'<b>%1</b>' network filter editor closed."))
                 .arg(task.object);
         sendMsg(msg);
         emit finished(key);
@@ -231,6 +232,6 @@ void CreateVirtNWFilter::setNewWindowTitle(const QString &_name)
 {
     QString connName = task.srcConName;
     setWindowTitle(
-                QString("NWFilter Editor / <%1> in [%2]")
+                QString(tr("NWFilter Editor / <%1> in [%2]"))
                 .arg(_name).arg(connName));
 }

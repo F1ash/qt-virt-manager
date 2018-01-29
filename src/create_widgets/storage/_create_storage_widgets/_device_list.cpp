@@ -1,6 +1,7 @@
 #include "_device_list.h"
 
-_DeviceList::_DeviceList(QWidget *parent, QString tag) :
+_DeviceList::_DeviceList(
+        QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
     setUsage(true);
@@ -59,7 +60,7 @@ void _DeviceList::setBlockDevPath()
 {
     QString _dev = QFileDialog::getOpenFileName(
                 this,
-                "Block Device Path",
+                tr("Block Device Path"),
                 QString("/dev"));
     if ( !_dev.isEmpty() ) name->setText(_dev);
 }

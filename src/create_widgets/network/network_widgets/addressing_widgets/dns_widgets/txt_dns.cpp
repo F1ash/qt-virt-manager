@@ -1,6 +1,7 @@
 #include "txt_dns.h"
 
-TXT_DNS::TXT_DNS(QWidget *parent, QString tag) :
+TXT_DNS::TXT_DNS(
+        QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
     comma = new QLabel(":", this);

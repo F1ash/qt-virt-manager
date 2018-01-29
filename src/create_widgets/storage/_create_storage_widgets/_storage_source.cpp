@@ -1,28 +1,30 @@
 #include "_storage_source.h"
 
-_Storage_Source::_Storage_Source(QWidget *parent, virConnectPtr *connPtrPtr) :
+_Storage_Source::_Storage_Source(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     QWidget(parent)
 {
-    namedLabel = new QLabel("Name:", this);
+    namedLabel = new QLabel(tr("Name:"), this);
     namedLabel->setVisible(false);
-    hostLabel = new QLabel("Host:", this);
+    hostLabel = new QLabel(tr("Host:"), this);
     hostLabel->setVisible(false);
-    deviceLabel = new QLabel("Device:", this);
+    deviceLabel = new QLabel(tr("Device:"), this);
     deviceLabel->setVisible(false);
-    dirLabel = new QLabel("Dir:", this);
+    dirLabel = new QLabel(tr("Dir:"), this);
     dirLabel->setVisible(false);
-    formatLabel = new QLabel("Format:", this);
+    formatLabel = new QLabel(tr("Format:"), this);
     formatLabel->setVisible(false);
-    vendorLabel = new QLabel("Vendor:", this);
+    vendorLabel = new QLabel(tr("Vendor:"), this);
     vendorLabel->setVisible(false);
-    productLabel = new QLabel("Product:", this);
+    productLabel = new QLabel(tr("Product:"), this);
     productLabel->setVisible(false);
     named = new QLineEdit(this);
-    named->setPlaceholderText("a named element");
+    named->setPlaceholderText(tr("a named element"));
     named->setVisible(false);
-    host = new _Hosts(this, "Use Hosts");
+    host = new _Hosts(this, tr("Use Hosts"));
     host->setVisible(false);
-    device = new _DeviceList(this, "Device list");
+    device = new _DeviceList(this, tr("Device list"));
     device->setVisible(false);
     dir = new QLineEdit(this);
     dir->setVisible(false);
@@ -32,16 +34,16 @@ _Storage_Source::_Storage_Source(QWidget *parent, virConnectPtr *connPtrPtr) :
     vendor->setVisible(false);
     product = new QLineEdit(this);
     product->setVisible(false);
-    adapterLabel = new QLabel("Adapter:", this);
+    adapterLabel = new QLabel(tr("Adapter:"), this);
     adapterLabel->setVisible(false);
     adapter = new _Adapter(this);
     adapter->setVisible(false);
-    authLabel = new QLabel("Auth:", this);
+    authLabel = new QLabel(tr("Auth:"), this);
     authLabel->setVisible(false);
     auth = new _Storage_Auth(this, connPtrPtr);
     auth->setVisible(false);
     commonLayout = new QGridLayout();
-    commonLayout->addWidget(new QLabel("<b>Source</b>"), 0, 0);
+    commonLayout->addWidget(new QLabel(tr("<b>Source</b>")), 0, 0);
     commonLayout->addWidget(namedLabel, 1, 0);
     commonLayout->addWidget(named, 1, 1);
     commonLayout->addWidget(hostLabel, 2, 0);

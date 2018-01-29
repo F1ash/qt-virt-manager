@@ -8,6 +8,6 @@ MemStateSnapshot::MemStateSnapshot(QWidget *parent, bool _state) :
     filePath->setVisible(false);
     diskWarn->setVisible(false);
     disks->setVisible(false);
-    info = new QLabel("For this use <b>Save</b> action.", this);
+    info = new QLabel(tr("For this use <b>Save</b> action."), this);
     commonLayout->addWidget(info);
 }

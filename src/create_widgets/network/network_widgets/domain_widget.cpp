@@ -1,15 +1,16 @@
 #include "domain_widget.h"
 
-Domain_Widget::Domain_Widget(QWidget *parent, QString tag) :
+Domain_Widget::Domain_Widget(
+        QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
     domain = new QLineEdit(this);
     domain->setPlaceholderText("example.com");
     domain->setEnabled(false);
-    localOnly = new QCheckBox("Local only", this);
+    localOnly = new QCheckBox(tr("Local only"), this);
     localOnly->setToolTip(
-"DNS requests under this domain will only be resolved\n\
-by the virtual network's own DNS server");
+tr("DNS requests under this domain will only be resolved\n\
+by the virtual network's own DNS server"));
     baseLayout->addWidget(domain);
     baseLayout->addWidget(localOnly);
     baseLayout->addStretch(-1);

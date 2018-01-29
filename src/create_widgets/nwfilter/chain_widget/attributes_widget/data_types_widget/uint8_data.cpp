@@ -1,12 +1,14 @@
 #include "uint8_data.h"
 
 UINT8_Data::UINT8_Data(
-        QWidget *parent, QString tag, QString topValue) :
+        QWidget *parent,
+        QString  tag,
+        QString  topValue) :
     UntypedData(parent, tag)
 {
     data = new QSpinBox(this);
     data->setRange(0, topValue.toInt());
-    data->setToolTip("TYPE: UINT8");
+    data->setToolTip(tr("TYPE: UINT8"));
     addDataWidget(data);
     clearData();
     connect(data, SIGNAL(valueChanged(int)),

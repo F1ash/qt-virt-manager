@@ -25,7 +25,7 @@ void _Disks::setDisksData(QDomElement &_disk, bool external)
                     disksLayout->itemAt(disksLayout->count()-1)->widget());
         if ( wdg!=nullptr ) {
             wdg->setDiskName(_name);
-            _type = QString(external? "external" : "internal");
+            _type = QString(external? tr("external") : tr("internal"));
             wdg->setSnapshotType(_type);
             if ( !_disk.firstChildElement("driver").isNull() ) {
                 _driver = _disk.firstChildElement("driver").attribute("type");
@@ -49,7 +49,7 @@ QDomDocument _Disks::getElements(bool all) const
         if ( wdg->isUsed() || all ) {
             _disk.setAttribute("name", wdg->getName());
             _disk.setAttribute("snapshot", wdg->getSnapshotType());
-            if ( wdg->getSnapshotType()=="external" ) {
+            if ( wdg->getSnapshotType()==tr("external") ) {
                 QString source, driver;
                 source = wdg->getSource();
                 if (!source.isEmpty()) {

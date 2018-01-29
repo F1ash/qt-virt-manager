@@ -5,14 +5,15 @@
  */
 
 ZFS_Pool_Stuff::ZFS_Pool_Stuff(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Pool_Stuff(parent, connPtrPtr)
 {
     source->namedLabel->setVisible(true);
     source->named->setVisible(true);
     source->deviceLabel->setVisible(true);
     source->device->setVisible(true);
-    source->device->name->setPlaceholderText("ZFS volume name");
+    source->device->name->setPlaceholderText(tr("ZFS volume name"));
     source->host->setUsage(true);
     target->setVisible(false);
 }

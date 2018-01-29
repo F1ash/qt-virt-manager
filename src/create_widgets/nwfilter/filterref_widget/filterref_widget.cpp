@@ -1,6 +1,7 @@
 #include "filterref_widget.h"
 
-FilterrefWidget::FilterrefWidget(QWidget *parent, QString tag) :
+FilterrefWidget::FilterrefWidget(
+        QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
     filters = new QComboBox(this);

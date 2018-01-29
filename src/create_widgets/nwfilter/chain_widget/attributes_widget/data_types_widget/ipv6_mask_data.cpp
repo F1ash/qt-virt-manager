@@ -1,13 +1,15 @@
 #include "ipv6_mask_data.h"
 
 IPv6_MASK_Data::IPv6_MASK_Data(
-        QWidget *parent, QString tag, QString topValue) :
+        QWidget *parent,
+        QString  tag,
+        QString  topValue) :
     UntypedData(parent, tag)
 {
     setMatchUnusable();
     data = new QLineEdit(this);
     data->setPlaceholderText("FFFF:FFFF:FC00::");
-    data->setToolTip("TYPE: IPv6_MASK (numbers format or CIDR)");
+    data->setToolTip(tr("TYPE: IPv6_MASK (numbers format or CIDR"));
     addDataWidget(data);
     connect(data, SIGNAL(textChanged(QString)),
             this, SIGNAL(dataChanged()));

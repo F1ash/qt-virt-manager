@@ -8,11 +8,14 @@ PciAddr::PciAddr(QWidget *parent) :
     slotLabel = new QLabel("Slot:", this);
     functLabel = new QLabel("Function:", this);
     domain = new QLineEdit(this);
-    domain->setPlaceholderText("a 2-byte hex integer, not currently used by qemu");
+    domain->setPlaceholderText(
+                tr("a 2-byte hex integer, not currently used by qemu"));
     bus = new QLineEdit(this);
-    bus->setPlaceholderText("a hex value between 0 and 0xff, inclusive");
+    bus->setPlaceholderText(
+                tr("a hex value between 0 and 0xff, inclusive"));
     slot = new QLineEdit(this);
-    slot->setPlaceholderText("a hex value between 0x0 and 0x1f, inclusive");
+    slot->setPlaceholderText(
+                tr("a hex value between 0x0 and 0x1f, inclusive"));
     function = new QSpinBox(this);
     function->setRange(0, 7);
     function->setPrefix("0x");

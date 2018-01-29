@@ -5,7 +5,8 @@ SpaprVioAddr::SpaprVioAddr(QWidget *parent) :
 {
     regLabel = new QLabel("Reg:", this);
     reg = new QLineEdit(this);
-    reg->setPlaceholderText("the hex value address of the starting register");
+    reg->setPlaceholderText(
+                tr("the hex value address of the starting register"));
     commonlayout = new QGridLayout();
     commonlayout->addWidget(regLabel, 0, 0);
     commonlayout->addWidget(reg, 0, 1);

@@ -6,9 +6,9 @@ CCIDAddr::CCIDAddr(QWidget *parent) :
     busLabel = new QLabel("Bus:", this);
     slotLabel = new QLabel("Slot:", this);
     bus = new QLineEdit(this);
-    bus->setPlaceholderText("a 2-digit bus number");
+    bus->setPlaceholderText(tr("a 2-digit bus number"));
     slot = new QLineEdit(this);
-    slot->setPlaceholderText("a 2-digit slot within the bus");
+    slot->setPlaceholderText(tr("a 2-digit slot within the bus"));
     commonlayout = new QGridLayout();
     commonlayout->addWidget(busLabel, 0, 0);
     commonlayout->addWidget(slotLabel, 1, 0);

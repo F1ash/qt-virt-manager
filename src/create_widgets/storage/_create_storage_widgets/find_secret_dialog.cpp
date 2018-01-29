@@ -1,10 +1,12 @@
 #include "find_secret_dialog.h"
 
-FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtrPtr) :
+FindSecretDialog::FindSecretDialog(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     QDialog(parent), ptr_ConnPtr(connPtrPtr)
 {
     setModal(true);
-    setWindowTitle("FindSecretDialog");
+    setWindowTitle(tr("FindSecretDialog"));
     settings.beginGroup("FindSecretDialog");
     restoreGeometry(
                 settings.value("Geometry").toByteArray());
@@ -21,9 +23,9 @@ FindSecretDialog::FindSecretDialog(QWidget *parent, virConnectPtr *connPtrPtr) :
     listWidget->setLayout(listLayout);
 
     chooseSecret = new QPushButton(
-                QIcon::fromTheme("dialog-ok"), "Choose Secret", this);
+                QIcon::fromTheme("dialog-ok"), tr("Choose Secret"), this);
     cancel = new QPushButton(
-                QIcon::fromTheme("dialog-cancel"), "Cancel", this);
+                QIcon::fromTheme("dialog-cancel"), tr("Cancel"), this);
     connect(chooseSecret, SIGNAL(clicked()),
             this, SLOT(set_Result()));
     connect(cancel, SIGNAL(clicked()),
@@ -59,7 +61,7 @@ void FindSecretDialog::showMsg(const QString &msg)
 {
     QMessageBox::information(
                 this,
-                "FindSecretDialog",
+                tr("FindSecretDialog"),
                 msg,
                 QMessageBox::Ok);
 }

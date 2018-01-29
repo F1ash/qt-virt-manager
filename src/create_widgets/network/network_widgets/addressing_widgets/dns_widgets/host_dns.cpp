@@ -1,6 +1,7 @@
 #include "host_dns.h"
 
-Host_DNS::Host_DNS(QWidget *parent, QString tag) :
+Host_DNS::Host_DNS(
+        QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
     ipLabel = new QLabel("DNS IP:", this);
@@ -12,7 +13,7 @@ Host_DNS::Host_DNS(QWidget *parent, QString tag) :
     ipWidget = new QWidget(this);
     ipWidget->setLayout(ipLayout);
     hostName = new QLineEdit(this);
-    hostName->setPlaceholderText("DNS Host Name");
+    hostName->setPlaceholderText(tr("DNS Host Name"));
     baseLayout->insertWidget(0, ipWidget);
     panelLayout->insertWidget(1, hostName);
 }

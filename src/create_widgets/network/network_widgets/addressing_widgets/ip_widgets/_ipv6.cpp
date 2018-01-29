@@ -1,6 +1,7 @@
 #include "_ipv6.h"
 
-_IPv6::_IPv6(QWidget *parent, bool hasDHCP, uint _ver) :
+_IPv6::_IPv6(
+        QWidget *parent, bool hasDHCP, uint _ver) :
     _IPvX(parent, hasDHCP, _ver)
 {
     setObjectName("IPv6");

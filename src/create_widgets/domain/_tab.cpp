@@ -12,8 +12,8 @@ bool _Tab::closeDataEdit()
     if ( !currentStateSaved ) {
         int answer = QMessageBox::question(
                     this,
-                    QString("Save Data"),
-                    QString("In %1:\nSave last changes?")
+                    tr("Save Data"),
+                    QString(tr("In %1:\nSave last changes?"))
                     .arg(objectName()),
                     QMessageBox::Ok,
                     QMessageBox::Cancel);

@@ -1,18 +1,19 @@
 #include "untyped_data.h"
 
-UntypedData::UntypedData(QWidget *parent, QString tag) :
+UntypedData::UntypedData(
+        QWidget *parent, QString tag) :
     QWidget(parent)
 {
     match = new QCheckBox(this);
     match->setCheckable(true);
     match->setChecked(true);    // default
-    match->setToolTip("Match");
+    match->setToolTip(tr("Match"));
     name = new QLabel(tag, this);
     clear = new QPushButton(
                 QIcon::fromTheme("edit-clear"),
                 "",
                 this);
-    clear->setToolTip("Clear attribute data");
+    clear->setToolTip(tr("Clear attribute data"));
     connect(clear, SIGNAL(clicked(bool)),
             this, SLOT(clearData()));
     connect(match, SIGNAL(toggled(bool)),

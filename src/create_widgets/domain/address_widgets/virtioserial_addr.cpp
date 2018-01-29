@@ -7,11 +7,14 @@ VirtioSerialAddr::VirtioSerialAddr(QWidget *parent) :
     busLabel = new QLabel("Bus:", this);
     slotLabel = new QLabel("Slot:", this);
     controller = new QLineEdit(this);
-    controller->setPlaceholderText("a 2-digit controller number");
+    controller->setPlaceholderText(
+                tr("a 2-digit controller number"));
     bus = new QLineEdit(this);
-    bus->setPlaceholderText("a 2-digit bus number");
+    bus->setPlaceholderText(
+                tr("a 2-digit bus number"));
     slot = new QLineEdit(this);
-    slot->setPlaceholderText("a 2-digit slot within the bus");
+    slot->setPlaceholderText(
+                tr("a 2-digit slot within the bus"));
     commonlayout = new QGridLayout();
     commonlayout->addWidget(contrLabel, 0, 0);
     commonlayout->addWidget(busLabel, 1, 0);

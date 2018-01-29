@@ -19,19 +19,20 @@ CreateSnapshotDialog::CreateSnapshotDialog(
         virConnectPtr *connPtrPtr) :
     QDialog(parent)
 {
-    QString winTitle = QString("Create Snapshot of <%1> in [ %2 ] connection")
+    QString winTitle = QString(
+            tr("Create Snapshot of <%1> in [ %2 ] connection"))
             .arg(domainName).arg(_conName);
     setWindowTitle(winTitle);
     settings.beginGroup("CreateSnapshotDialog");
     restoreGeometry( settings.value("Geometry").toByteArray() );
     settings.endGroup();
     titleLayout = new QHBoxLayout(this);
-    nameLabel = new QLabel("Name:", this);
+    nameLabel = new QLabel(tr("Name:"), this);
     name = new QLineEdit(this);
-    name->setPlaceholderText("generate if omit");
+    name->setPlaceholderText(tr("autogenerates if omit"));
     name->setMinimumWidth(100);
     addTimeSuff = new QCheckBox(this);
-    addTimeSuff->setToolTip("Add Time to Snapshot Name");
+    addTimeSuff->setToolTip(tr("Add Time to Snapshot Name"));
     timeLabel = new QLabel(this);
     QString _date(QTime::currentTime().toString());
     _date.append("-");
@@ -45,14 +46,14 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     titleWdg = new QWidget(this);
     titleWdg->setLayout(titleLayout);
     description = new QLineEdit(this);
-    description->setPlaceholderText("Short Description");
+    description->setPlaceholderText(tr("Short Description"));
     snapshotType = new QComboBox(this);
     snapshotType->addItems(SNAPSHOT_TYPES);
     flagsMenu = new CreateSnapshotFlags(this);
     flags = new QPushButton(QIcon::fromTheme("flag"), "", this);
     flags->setMenu(flagsMenu);
     flags->setMaximumWidth(flags->sizeHint().width());
-    flags->setToolTip("Creation Snapshot Flags");
+    flags->setToolTip(tr("Creation Snapshot Flags"));
     // because first item is non-actual there
     flags->setEnabled(false);
     typeLayout = new QHBoxLayout(this);
@@ -66,13 +67,15 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     baseWdg->addWidget(new DiskSnapshot(this, _state, true));
     baseWdg->addWidget(new SystemCheckpoint(this, _state, false));
     baseWdg->addWidget(new SystemCheckpoint(this, _state, true));
-    info = new QLabel("<a href='https://libvirt.org/formatsnapshot.html'>About</a>", this);
+    info = new QLabel(
+                tr("<a href='https://libvirt.org/formatsnapshot.html'>About</a>"),
+                this);
     info->setOpenExternalLinks(true);
     info->setToolTip("https://libvirt.org/formatsnapshot.html");
-    ok = new QPushButton("Ok", this);
+    ok = new QPushButton(tr("Ok"), this);
     // because first item is non-actual there
     ok->setEnabled(false);
-    cancel = new QPushButton("Cancel", this);
+    cancel = new QPushButton(tr("Cancel"), this);
     buttonsLayout = new QHBoxLayout(this);
     buttonsLayout->addWidget(info);
     buttonsLayout->addWidget(ok);
@@ -169,7 +172,7 @@ void CreateSnapshotDialog::accept()
         QMessageBox::warning(
                     this,
                     QString(),
-                    QString("Count of disk subset not can be equal zero"));
+                    tr("Count of disk subset not can be equal zero"));
     } else {
         killTimer(timerID);
         done(1);

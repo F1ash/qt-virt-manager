@@ -1,13 +1,19 @@
 #include "lxc_os_booting.h"
 
-LXC_OSBooting::LXC_OSBooting(QWidget *parent, QString _caps) :
+LXC_OSBooting::LXC_OSBooting(
+        QWidget *parent, QString _caps) :
     _QWidget(parent), capabilities(_caps)
 {
     setObjectName("Booting");
-    initPathLabel = new QLabel("Init path (Ex.: /sbin/init, /bin/sh, etc.) and arguments:", this);
+    initPathLabel = new QLabel(
+                tr("Init path and arguments:"),
+                this);
     initPath = new QLineEdit(this);
-    initPath->setPlaceholderText("Enter Init Path");
-    nameSpaceEnable = new QCheckBox("Enable User Namespace", this);
+    initPath->setPlaceholderText(
+                tr("Enter Init Path (Ex.: /sbin/init, /bin/sh, etc.)"));
+    nameSpaceEnable = new QCheckBox(
+                tr("Enable User Namespace"),
+                this);
     nameSpaceEnable->setChecked(false);
     uidStart = new QLabel("0", this);
     gidStart = new QLabel("0", this);

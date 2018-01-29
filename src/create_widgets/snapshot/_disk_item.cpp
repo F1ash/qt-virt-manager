@@ -1,16 +1,19 @@
 #include "_disk_item.h"
 
-_DiskItem::_DiskItem(QWidget *parent) : QWidget(parent)
+_DiskItem::_DiskItem(QWidget *parent) :
+    QWidget(parent)
 {
     usage = new QCheckBox(this);
     name = new QLineEdit(this);
     name->setReadOnly(true);
     source = new QLineEdit(this);
-    source->setPlaceholderText("Source file path");
-    source->setToolTip("The absolute path to the disk snapshot image/file");
+    source->setPlaceholderText(tr("Source file path"));
+    source->setToolTip(
+tr("The absolute path to the disk snapshot image/file"));
     driver = new QComboBox(this);
-    driver->setToolTip("The driver type of the new file\n\
-created by the external snapshot\n(optional)");
+    driver->setToolTip(
+tr("The driver type of the new file\n\
+created by the external snapshot\n(optional)"));
     snapshotType = new QComboBox(this);
     paramLayout = new QHBoxLayout(this);
     paramLayout->addWidget(driver);
@@ -35,9 +38,11 @@ created by the external snapshot\n(optional)");
             this, SLOT(snapshotTypeChanged(QString)));
     connect(driver, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(driverTypeChanged(QString)));
-    driver->addItems(QStringList()<<"custom"<<"qcow2"<<"qcow"<<"raw"<<"qed"
+    driver->addItems(QStringList()
+                     <<tr("custom")<<"qcow2"<<"qcow"<<"raw"<<"qed"
                      <<"bochs"<<"vmdk"<<"dmg"<<"iso");
-    snapshotType->addItems(QStringList()<<"internal"<<"external");
+    snapshotType->addItems(
+                QStringList()<<tr("internal")<<tr("external"));
 }
 
 /* public slots */
@@ -82,12 +87,12 @@ bool _DiskItem::isUsed() const
 /* private  slots */
 void _DiskItem::snapshotTypeChanged(QString _text)
 {
-    driver->setEnabled( _text=="external" );
-    source->setEnabled( _text=="external" );
+    driver->setEnabled( _text==tr("external") );
+    source->setEnabled( _text==tr("external") );
 }
 void _DiskItem::driverTypeChanged(QString _text)
 {
-    if ( _text=="custom" ) {
+    if ( _text==tr("custom") ) {
         driver->setEditable(true);
         driver->clearEditText();
     } else {

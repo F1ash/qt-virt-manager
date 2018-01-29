@@ -5,7 +5,7 @@ TreeItem::TreeItem(const QString &data, TreeItem *parent)
 {
     parentItem = parent;
     itemData = data;
-    itemDate = QString("Date");
+    itemDate = QObject::tr("Date");
     itemDesc = QString();
     state = false;
 }

@@ -3,7 +3,7 @@
 DiskSnapshot::DiskSnapshot(QWidget *parent, bool _state, bool _external) :
     _SnapshotStuff(parent, _state, _external)
 {
-    memLabel->setText("<b>Memory</b> is no");
+    memLabel->setText(tr("<b>Memory</b> is no"));
     memLabel->setVisible(true);
     filePathLabel->setVisible(false);
     filePath->setVisible(false);

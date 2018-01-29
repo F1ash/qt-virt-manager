@@ -17,7 +17,7 @@ CreateVirtSecret::CreateVirtSecret(
     QDialog(parent), ptr_ConnPtr(connPtrPtr)
 {
     setModal(true);
-    setWindowTitle("Create Secret");
+    setWindowTitle(tr("Create Secret"));
     settings.beginGroup("VirtSecretControl");
     restoreGeometry(settings.value("SecretCreateGeometry").toByteArray());
     bool showDesc = settings.value("SecCreateShowDesc").toBool();
@@ -27,17 +27,17 @@ CreateVirtSecret::CreateVirtSecret(
     baseWdg->setLayout(baseLayout);
 
     showXMLDescription = new QCheckBox(
-                "Show XML Description\nat close", this);
+                tr("Show XML Description\nat close"), this);
     showXMLDescription->setChecked(showDesc);
     about = new QLabel(
                 "<a href='http://libvirt.org/formatsecret.html'>About</a>",
                 this);
     about->setOpenExternalLinks(true);
     about->setToolTip("http://libvirt.org/formatsecret.html");
-    ok = new QPushButton("Ok", this);
+    ok = new QPushButton(tr("Ok"), this);
     ok->setAutoDefault(true);
     connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
-    cancel = new QPushButton("Cancel", this);
+    cancel = new QPushButton(tr("Cancel"), this);
     cancel->setAutoDefault(true);
     connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout();
@@ -49,21 +49,21 @@ CreateVirtSecret::CreateVirtSecret(
     buttons->setLayout(buttonLayout);
 
     uuid = new QLineEdit(this);
-    uuid->setPlaceholderText("UUID generated if omitted");
+    uuid->setPlaceholderText(tr("UUID generated if omitted"));
     secDesc = new QLineEdit(this);
     secDesc->setPlaceholderText(
-"A human-readable description of the purpose of the secret");
+tr("A human-readable description of the purpose of the secret"));
     secType = new QComboBox(this);
     secType->addItems(SECRET_TYPES);
-    secType->setToolTip("Type");
-    ephemeralAttr = new QCheckBox("Ephemeral", this);
+    secType->setToolTip(tr("Type"));
+    ephemeralAttr = new QCheckBox(tr("Ephemeral"), this);
     ephemeralAttr->setToolTip(
-"This secret must only be kept in memory,\n\
-never stored persistently");
-    privateAttr = new QCheckBox("Private", this);
+tr("This secret must only be kept in memory,\n\
+never stored persistently"));
+    privateAttr = new QCheckBox(tr("Private"), this);
     privateAttr->setToolTip(
-"The value of the secret must not be revealed to any caller of libvirt,\n\
-nor to any other node");
+tr("The value of the secret must not be revealed to any caller of libvirt,\n\
+nor to any other node"));
     propLayout = new QHBoxLayout(this);
     propLayout->addWidget(secType);
     propLayout->addWidget(ephemeralAttr);
@@ -71,7 +71,7 @@ nor to any other node");
     propWdg = new QWidget(this);
     propWdg->setLayout(propLayout);
     secValue = new QLineEdit(this);
-    secValue->setPlaceholderText("Enter secret value/phrase");
+    secValue->setPlaceholderText(tr("Enter secret value/phrase"));
     stuffWdg = new QStackedWidget(this);
     stuffWdg->addWidget(new VolumeSecType(this, ptr_ConnPtr));
     stuffWdg->addWidget(new CephSecType(this, ptr_ConnPtr));

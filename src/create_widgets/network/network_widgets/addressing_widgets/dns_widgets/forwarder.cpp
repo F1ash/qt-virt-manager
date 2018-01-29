@@ -1,6 +1,7 @@
 #include "forwarder.h"
 
-Forwarder::Forwarder(QWidget *parent, QString tag) :
+Forwarder::Forwarder(
+        QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
     frwds = new QLineEdit(this);

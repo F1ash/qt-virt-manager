@@ -15,19 +15,19 @@ RuleInstance::RuleInstance(QWidget *parent) :
 {
     editedRow = -1;
     action = new QComboBox(this);
-    action->setToolTip("Action");
+    action->setToolTip(tr("Action"));
     action->addItems(QStringList()
                      <<"drop"<<"reject"<<"accept"
                      <<"return"<<"continue");
     direction = new QComboBox(this);
-    direction->setToolTip("Direction");
+    direction->setToolTip(tr("Direction"));
     direction->addItems(QStringList()
                         <<"out"<<"in"<<"inout");
     priority = new QSpinBox(this);
     priority->setRange(-1000, 1000);
     priority->setValue(500);
-    priority->setToolTip("Priority");
-    stateMatch = new QCheckBox("StateMatch", this);
+    priority->setToolTip(tr("Priority"));
+    stateMatch = new QCheckBox(tr("StateMatch"), this);
     stateMatch->setCheckable(true);
     stateMatch->setChecked(true);
 
@@ -63,17 +63,17 @@ RuleInstance::RuleInstance(QWidget *parent) :
                 QIcon::fromTheme("dialog-ok"),
                 "",
                 this);
-    addRule->setToolTip("Rule to chain");
+    addRule->setToolTip(tr("Rule to chain"));
     clearRule = new QPushButton(
                 QIcon::fromTheme("edit-clear"),
                 "",
                 this);
-    clearRule->setToolTip("Clear all attributes data");
+    clearRule->setToolTip(tr("Clear all attributes data"));
     cancel  = new QPushButton(
                 QIcon::fromTheme("dialog-cancel"),
                 "",
                 this);
-    cancel->setToolTip("Cancel");
+    cancel->setToolTip(tr("Cancel"));
     connect(addRule, SIGNAL(clicked(bool)),
             this, SLOT(addRuleToList()));
     connect(clearRule, SIGNAL(clicked(bool)),

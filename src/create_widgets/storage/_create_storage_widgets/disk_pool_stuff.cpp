@@ -15,7 +15,8 @@
     <<"lvm2"
 
 Disk_Pool_Stuff::Disk_Pool_Stuff(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Pool_Stuff(parent, connPtrPtr)
 {
     source->deviceLabel->setVisible(true);
@@ -24,7 +25,7 @@ Disk_Pool_Stuff::Disk_Pool_Stuff(
     //source->format->setVisible(true);
     source->format->addItems(DISK_POOL_FORMAT_TYPES);
     source->device->setOneDeviceMode(true);
-    source->device->name->setPlaceholderText("Block device name");
+    source->device->name->setPlaceholderText(tr("Block device name"));
     target->path->setPlaceholderText("/dev");
 }
 

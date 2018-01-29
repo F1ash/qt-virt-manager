@@ -9,13 +9,13 @@ tlsSecType::tlsSecType(
     _SecType(parent, connPtrPtr)
 {
     usage = new QLineEdit(this);
-    usage->setPlaceholderText("Enter usage name");
+    usage->setPlaceholderText(tr("Enter usage name"));
     usageLayout = new QHBoxLayout();
     usageLayout->addWidget(usage);
     usageWdg = new QWidget(this);
     usageWdg->setLayout(usageLayout);
     baseLayout->addWidget(usageWdg);
-    info->setText("Using for authentification");
+    info->setText(tr("Using for authentification"));
 }
 QDomDocument tlsSecType::getSecStuff() const
 {

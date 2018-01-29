@@ -8,13 +8,17 @@ DriveAddr::DriveAddr(QWidget *parent) :
     targetLabel = new QLabel("Target:", this);
     unitLabel = new QLabel("Unit:", this);
     controller = new QLineEdit(this);
-    controller->setPlaceholderText("a 2-digit controller number");
+    controller->setPlaceholderText(
+                tr("a 2-digit controller number"));
     bus = new QLineEdit(this);
-    bus->setPlaceholderText("a 2-digit bus number");
+    bus->setPlaceholderText(
+                tr("a 2-digit bus number"));
     target = new QLineEdit(this);
-    target->setPlaceholderText("a 2-digit bus number");
+    target->setPlaceholderText(
+                tr("a 2-digit bus number"));
     unit = new QLineEdit(this);
-    unit->setPlaceholderText("a 2-digit unit number on the bus");
+    unit->setPlaceholderText(
+                tr("a 2-digit unit number on the bus"));
     commonlayout = new QGridLayout();
     commonlayout->addWidget(contrLabel, 0, 0);
     commonlayout->addWidget(busLabel, 1, 0);

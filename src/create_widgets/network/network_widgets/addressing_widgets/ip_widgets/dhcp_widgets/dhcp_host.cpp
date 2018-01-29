@@ -1,10 +1,11 @@
 #include "dhcp_host.h"
 
-DHCP_Host::DHCP_Host(QWidget *parent, QString tag) :
+DHCP_Host::DHCP_Host(
+        QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
     name = new QLineEdit(this);
-    name->setPlaceholderText("Host Name");
+    name->setPlaceholderText(tr("Host Name"));
     ip = new QLineEdit(this);
     ip->setPlaceholderText("IP");
     mac = new QLineEdit(this);

@@ -1,12 +1,13 @@
 #include "dhcp_range.h"
 
-DHCP_Range::DHCP_Range(QWidget *parent, QString tag) :
+DHCP_Range::DHCP_Range(
+        QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
     start = new QLineEdit(this);
-    start->setPlaceholderText("start IP");
+    start->setPlaceholderText(tr("start IP"));
     end = new QLineEdit(this);
-    end->setPlaceholderText("end IP");
+    end->setPlaceholderText(tr("end IP"));
     panelLayout->insertWidget(1, start);
     panelLayout->insertWidget(2, end);
 }

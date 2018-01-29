@@ -4,8 +4,8 @@
 ChainRules::ChainRules(QWidget *parent) :
     _QWidget(parent)
 {
-    prot = new QLabel("Protocol:", this);
-    prior = new QLabel("Priority:", this);
+    prot = new QLabel(tr("Protocol:"), this);
+    prior = new QLabel(tr("Priority:"), this);
     chainProtocol = new QComboBox(this);
     connect(chainProtocol, SIGNAL(currentIndexChanged(int)),
             this, SLOT(changePriorityDefault(int)));
@@ -23,17 +23,17 @@ ChainRules::ChainRules(QWidget *parent) :
                 QIcon::fromTheme("list-add"),
                 "",
                 this);
-    addRule->setToolTip("New rule");
+    addRule->setToolTip(tr("New rule"));
     editRule = new QPushButton(
                 QIcon::fromTheme("configure"),
                 "",
                 this);
-    editRule->setToolTip("Edit selected rule");
+    editRule->setToolTip(tr("Edit selected rule"));
     delRule  = new QPushButton(
                 QIcon::fromTheme("list-remove"),
                 "",
                 this);
-    delRule->setToolTip("Delete selected rule");
+    delRule->setToolTip(tr("Delete selected rule"));
     ruleButtonsLayout = new QHBoxLayout(this);
     ruleButtonsLayout->addWidget(addRule);
     ruleButtonsLayout->addWidget(editRule);

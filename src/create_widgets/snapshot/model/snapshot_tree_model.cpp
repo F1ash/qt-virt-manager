@@ -5,7 +5,7 @@ SnapshotTreeModel::SnapshotTreeModel(QObject *parent) :
 {
     icon = QIcon::fromTheme("camera-photo");
     work = QIcon::fromTheme("run");
-    rootItem = new TreeItem("Snapshots");
+    rootItem = new TreeItem(tr("Snapshots"));
 }
 
 QModelIndex SnapshotTreeModel::index(int row, int column, const QModelIndex &parent) const

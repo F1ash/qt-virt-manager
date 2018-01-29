@@ -1,19 +1,21 @@
 #include "_auth.h"
 
 _Storage_Auth::_Storage_Auth(
-        QWidget *parent, virConnectPtr *connPtrPtr, QString _type) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          _type) :
     _Changed(parent), ptr_ConnPtr(connPtrPtr), secType(_type)
 {
-    auth = new QCheckBox("Authentication", this);
+    auth = new QCheckBox(tr("Authentication"), this);
     auth->setLayoutDirection(Qt::RightToLeft);
-    userLabel = new QLabel("User Name:", this);
+    userLabel = new QLabel(tr("User Name:"), this);
     userName = new QLineEdit(this);
     usageType = new QComboBox(this);
-    usageType->addItems(QStringList()<<"Usage"<<"UUID");
+    usageType->addItems(QStringList()<<tr("Usage")<<"UUID");
     usage = new QLineEdit(this);
     usage->setPlaceholderText("libvirtiscsi");
     findSecret = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
-    findSecret->setToolTip("Find/Create Secret");
+    findSecret->setToolTip(tr("Find/Create Secret"));
     authLayout = new QGridLayout();
     authLayout->addWidget(userLabel, 0, 0);
     authLayout->addWidget(userName, 0, 1);
@@ -75,7 +77,7 @@ void _Storage_Auth::setSecret()
     findSecDialog->deleteLater();
     if ( (NOT_VOLUME!=secType.toUpper() && res.type.toLower()!=secType.toLower())
          || res.type.toLower()=="volume" ) {
-        QString msg = QString("Type of secret should be is a %1")
+        QString msg = QString(tr("Type of secret should be is a %1"))
                 .arg(secType);
         findSecDialog->showMsg(msg);
         return;

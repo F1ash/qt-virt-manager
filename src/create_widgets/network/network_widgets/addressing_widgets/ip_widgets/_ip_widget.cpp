@@ -2,12 +2,12 @@
 
 _IP_Widget::_IP_Widget(
         QWidget *parent,
-        bool _IPv4HasDHCP,
-        bool _IPv6HasDHCP) :
+        bool     _IPv4HasDHCP,
+        bool     _IPv6HasDHCP) :
     _QWidget(parent)
 {
-    ipv6 = new QCheckBox("Use IPv6", this);
-    staticRoute = new QCheckBox("Static Route", this);
+    ipv6 = new QCheckBox(tr("Use IPv6"), this);
+    staticRoute = new QCheckBox(tr("Static Route"), this);
     manageLayout = new QHBoxLayout();
     manageLayout->addWidget(ipv6);
     manageLayout->addWidget(staticRoute);

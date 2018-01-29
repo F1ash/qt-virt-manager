@@ -3,11 +3,12 @@
 SystemCheckpoint::SystemCheckpoint(QWidget *parent, bool _state, bool _external) :
     _SnapshotStuff(parent, _state, _external)
 {
-    QString _memAttr("<b>Memory</b> is ");
+    QString _memAttr(tr("<b>Memory</b> is "));
     if ( !state ) {
-        _memAttr.append("no (Domain inactive)");
-    } else
-        _memAttr.append(external? "external" : "internal");
+        _memAttr.append(tr("no (Domain inactive)"));
+    } else {
+        _memAttr.append(external? tr("external") : tr("internal"));
+    };
     memLabel->setText(_memAttr);
     filePathLabel->setVisible(state && external);
     filePath->setVisible(state && external);

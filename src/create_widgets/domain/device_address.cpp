@@ -3,17 +3,17 @@
 DeviceAddress::DeviceAddress(QWidget *parent) :
     _Changed(parent)
 {
-    use = new QCheckBox("Use address", this);
+    use = new QCheckBox(tr("Use address"), this);
     type =new QComboBox(this);
     type->setVisible(false);
-    type->addItem("PCI addresses", "pci");
-    type->addItem("Drive addresses", "drive");
-    type->addItem("Virtio-serial address", "virtio-serial");
-    type->addItem("A CCID address, for smart-cards", "ccid");
-    type->addItem("USB addresses", "usb");
-    type->addItem("On PowerPC", "spapr-vio");
-    type->addItem("s390 guests", "ccw");
-    type->addItem("ISA addresses", "isa");
+    type->addItem(tr("PCI addresses"), "pci");
+    type->addItem(tr("Drive addresses"), "drive");
+    type->addItem(tr("Virtio-serial address"), "virtio-serial");
+    type->addItem(tr("A CCID address, for smart-cards"), "ccid");
+    type->addItem(tr("USB addresses"), "usb");
+    type->addItem(tr("On PowerPC"), "spapr-vio");
+    type->addItem(tr("s390 guests"), "ccw");
+    type->addItem(tr("ISA addresses"), "isa");
     info = new QStackedWidget(this);
     info->setVisible(false);
     info->addWidget(new PciAddr(this));

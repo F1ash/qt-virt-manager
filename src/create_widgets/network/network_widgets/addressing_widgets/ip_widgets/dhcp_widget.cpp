@@ -1,10 +1,11 @@
 #include "dhcp_widget.h"
 
-DHCP_Widget::DHCP_Widget(QWidget *parent, QString tag) :
+DHCP_Widget::DHCP_Widget(
+        QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
-    host = new DHCP_Host(this, "HOSTs");
-    range = new DHCP_Range(this, "RANGEs");
+    host = new DHCP_Host(this, tr("HOSTs"));
+    range = new DHCP_Range(this, tr("RANGEs"));
     baseLayout->insertWidget(1, host);
     baseLayout->insertWidget(2, range);
 }

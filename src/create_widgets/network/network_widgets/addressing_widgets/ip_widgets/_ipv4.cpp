@@ -1,6 +1,7 @@
 #include "_ipv4.h"
 
-_IPv4::_IPv4(QWidget *parent, bool hasDHCP, uint _ver) :
+_IPv4::_IPv4(
+        QWidget *parent, bool hasDHCP, uint _ver) :
     _IPvX(parent, hasDHCP, _ver)
 {
     setObjectName("IPv4");

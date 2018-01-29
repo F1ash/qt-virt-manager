@@ -12,8 +12,8 @@ QoS_Widget::QoS_Widget(
     outbound = new Bound_Widget(this);
     outbound->setFloorUsage(false);
     bandWidth = new QTabWidget(this);
-    bandWidth->addTab(inbound, "Inbound");
-    bandWidth->addTab(outbound, "Outbound");
+    bandWidth->addTab(inbound, tr("Inbound"));
+    bandWidth->addTab(outbound, tr("Outbound"));
     baseLayout->addWidget(bandWidth);
     baseLayout->addStretch(-1);
 }

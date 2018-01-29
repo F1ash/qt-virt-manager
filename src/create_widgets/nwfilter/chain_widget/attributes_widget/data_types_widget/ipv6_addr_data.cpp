@@ -1,12 +1,14 @@
 #include "ipv6_addr_data.h"
 
 IPv6_ADDR_Data::IPv6_ADDR_Data(
-        QWidget *parent, QString tag, QString topValue) :
+        QWidget *parent,
+        QString  tag,
+        QString  topValue) :
     UntypedData(parent, tag)
 {
     data = new QLineEdit(this);
     data->setPlaceholderText("FFFF::1");
-    data->setToolTip("TYPE: IPv6_ADDR");
+    data->setToolTip(tr("TYPE: IPv6_ADDR"));
     addDataWidget(data);
     connect(data, SIGNAL(textChanged(QString)),
             this, SIGNAL(dataChanged()));

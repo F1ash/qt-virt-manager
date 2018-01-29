@@ -1,6 +1,7 @@
 #include "_ipvx.h"
 
-_IPvX::_IPvX(QWidget *parent, bool hasDHCP, uint _ver) :
+_IPvX::_IPvX(
+        QWidget *parent, bool hasDHCP, uint _ver) :
     _QWidget(parent), ver(_ver)
 {
     networkHasDHCP = hasDHCP;
@@ -17,9 +18,9 @@ _IPvX::_IPvX(QWidget *parent, bool hasDHCP, uint _ver) :
     baselayout->addWidget(significantBits, 1, 1);
     baseWidget = new QWidget(this);
     baseWidget->setLayout(baselayout);
-    gatewayL = new QLabel("Gateway:", this);
+    gatewayL = new QLabel(tr("Gateway:"), this);
     gateway = new QLineEdit(this);
-    metricL = new QLabel("Metric:", this);
+    metricL = new QLabel(tr("Metric:"), this);
     metric = new QSpinBox(this);
     metric->setRange(0, 100);
     gatewayLayout = new QGridLayout();
@@ -30,10 +31,10 @@ _IPvX::_IPvX(QWidget *parent, bool hasDHCP, uint _ver) :
     gatewayWidget = new QWidget(this);
     gatewayWidget->setLayout(gatewayLayout);
     gatewayWidget->setEnabled(false);
-    useDHCP = new DHCP_Widget(this, "Use DHCP");
+    useDHCP = new DHCP_Widget(this, tr("Use DHCP"));
     useDHCP->setUsageToolTip(
-    "WARNING: allows one (each IPv4 and IPv6)\n\
-definition a DHCP server on the network");
+    tr("WARNING: allows one (each IPv4 and IPv6)\n\
+definition a DHCP server on the network"));
     updateDHCPUsage(networkHasDHCP);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWidget);
@@ -110,7 +111,7 @@ void _IPvX::significantBitsChanged(int idx)
         };
         break;
     default:
-        p.append("error");
+        p.append(tr("error"));
         break;
     };
     significantBits->clear();

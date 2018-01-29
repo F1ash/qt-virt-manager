@@ -5,7 +5,8 @@
  */
 
 MPath_Pool_Stuff::MPath_Pool_Stuff(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Pool_Stuff(parent, connPtrPtr)
 {
     source->setVisible(false);

@@ -1,7 +1,9 @@
 #include "boolean_data.h"
 
 BOOLEAN_Data::BOOLEAN_Data(
-        QWidget *parent, QString tag, QString topValue) :
+        QWidget *parent,
+        QString  tag,
+        QString  topValue) :
     UntypedData(parent, tag)
 {
     changed = false;
@@ -12,7 +14,7 @@ BOOLEAN_Data::BOOLEAN_Data(
                 topValue=="yes" ||
                 topValue=="1");
     data->setChecked( state );
-    data->setToolTip("TYPE: boolean (yes/no)");
+    data->setToolTip(tr("TYPE: boolean (yes/no)"));
     addDataWidget(data);
     connect(data, SIGNAL(toggled(bool)),
             this, SIGNAL(dataChanged()));

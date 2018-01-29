@@ -5,7 +5,8 @@
  */
 
 SheepDog_Pool_Stuff::SheepDog_Pool_Stuff(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Pool_Stuff(parent, connPtrPtr)
 {
     source->namedLabel->setVisible(true);

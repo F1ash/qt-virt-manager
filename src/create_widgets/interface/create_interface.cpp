@@ -4,18 +4,19 @@ CreateInterface::CreateInterface(QWidget *parent) :
     QDialog(parent)
 {
     setModal(true);
-    setWindowTitle("Interface Settings");
+    setWindowTitle(tr("Interface Settings"));
     settings.beginGroup("VirtIfaceControl");
     restoreGeometry(settings.value("IfaceCreateGeometry").toByteArray());
     bool showDesc = settings.value("IfaceCreateShowDesc").toBool();
     settings.endGroup();
 
-    showXMLDescription = new QCheckBox("Show XML Description\nat close", this);
+    showXMLDescription = new QCheckBox(
+                tr("Show XML Description\nat close"), this);
     showXMLDescription->setChecked(showDesc);
-    ok = new QPushButton("Ok", this);
+    ok = new QPushButton(tr("Ok"), this);
     ok->setAutoDefault(true);
     connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
-    cancel = new QPushButton("Cancel", this);
+    cancel = new QPushButton(tr("Cancel"), this);
     cancel->setAutoDefault(true);
     connect(cancel, SIGNAL(clicked()), this, SLOT(set_Result()));
     buttonLayout = new QHBoxLayout();
@@ -26,24 +27,24 @@ CreateInterface::CreateInterface(QWidget *parent) :
     buttons->setLayout(buttonLayout);
 
     name = new QLineEdit(this);
-    name->setPlaceholderText("the public name for interface");
+    name->setPlaceholderText(tr("the public name for interface"));
     type = new QComboBox(this);
     type->addItems(QStringList()<<"ethernet");
-    type->setToolTip("Type");
+    type->setToolTip(tr("Type"));
     ip4 = new QLabel("ip4", this);
     ip4Addr = new QLineEdit(this);
-    ip4Addr->setPlaceholderText("inet address");
+    ip4Addr->setPlaceholderText(tr("inet address"));
     ip4Pref = new QSpinBox(this);
     ip4Pref->setRange(0, 1024);
     ip4Pref->setValue(8);
-    ip4Pref->setToolTip("Prefix");
+    ip4Pref->setToolTip(tr("Prefix"));
     ip6 = new QLabel("ip6", this);
     ip6Addr = new QLineEdit(this);
-    ip6Addr->setPlaceholderText("inet address");
+    ip6Addr->setPlaceholderText(tr("inet address"));
     ip6Pref = new QSpinBox(this);
     ip6Pref->setRange(0, 1024);
     ip6Pref->setValue(128);
-    ip6Pref->setToolTip("Prefix");
+    ip6Pref->setToolTip(tr("Prefix"));
     ipLayout = new QGridLayout(this);
     ipLayout->addWidget(name, 0, 1);
     ipLayout->addWidget(type, 0, 2);

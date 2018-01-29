@@ -15,7 +15,7 @@ SnapshotActionDialog::SnapshotActionDialog(
 {
     params.clear();
     QString winTitle = QString(
-                "<%1> Snapshot Actions in [ %2 ] connection")
+            tr("<%1> Snapshot Actions in [ %2 ] connection"))
             .arg(domName).arg(_conName);
     setWindowTitle(winTitle);
     settings.beginGroup("SnapshotActionDialog");
@@ -26,22 +26,22 @@ SnapshotActionDialog::SnapshotActionDialog(
     revertFlagsMenu = new RevertSnapshotFlags(this);
     revertAction = new QAction(
                 QIcon::fromTheme("document-revert"),
-                "Revert To",
+                tr("Revert To"),
                 this);
     revertAction->setMenu(revertFlagsMenu);
     deleteFlagsMenu = new DeleteSnapshotFlags(this);
     deleteAction = new QAction(
                 QIcon::fromTheme("list-remove"),
-                "Delete",
+                tr("Delete"),
                 this);
     deleteAction->setMenu(deleteFlagsMenu);
     refreshAction = new QAction(
                 QIcon::fromTheme("view-refresh"),
-                "Refresh",
+                tr("Refresh"),
                 this);
     getXMLDescAction = new QAction(
                 QIcon::fromTheme("application-xml"),
-                "get XML Description",
+                tr("get XML Description"),
                 this);
     toolBar = new QToolBar(this);
     toolBar->addAction(revertAction);
@@ -61,9 +61,9 @@ SnapshotActionDialog::SnapshotActionDialog(
     info->setOpenExternalLinks(true);
     info->setToolTip(
                 "https://libvirt.org/html/libvirt-libvirt-domain-snapshot.html");
-    ok = new QPushButton("Ok", this);
-    cancel = new QPushButton("Cancel", this);
-    closeWdg = new QPushButton("Close", this);
+    ok = new QPushButton(tr("Ok"), this);
+    cancel = new QPushButton(tr("Cancel"), this);
+    closeWdg = new QPushButton(tr("Close"), this);
     buttonsLayout = new QHBoxLayout(this);
     buttonsLayout->addWidget(info);
     buttonsLayout->addWidget(ok);

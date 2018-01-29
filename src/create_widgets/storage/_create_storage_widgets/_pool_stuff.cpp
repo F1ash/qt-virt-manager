@@ -1,6 +1,8 @@
 #include "_pool_stuff.h"
 
-_Pool_Stuff::_Pool_Stuff(QWidget *parent, virConnectPtr* connPtrPtr) :
+_Pool_Stuff::_Pool_Stuff(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     QWidget(parent)
 {
     source = new _Storage_Source(this, connPtrPtr);

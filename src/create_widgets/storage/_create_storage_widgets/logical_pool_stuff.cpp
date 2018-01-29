@@ -9,14 +9,15 @@
     <<"lvm2"
 
 Logical_Pool_Stuff::Logical_Pool_Stuff(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Pool_Stuff(parent, connPtrPtr)
 {
     source->deviceLabel->setVisible(true);
     //source->formatLabel->setVisible(true);
     source->device->setVisible(true);
     source->device->setOneDeviceMode(false);
-    source->device->name->setPlaceholderText("Physical volume name");
+    source->device->name->setPlaceholderText(tr("Physical volume name"));
     //source->format->setVisible(true);
     source->format->addItems(LOGICAL_POOL_FORMAT_TYPES);
     source->namedLabel->setVisible(true);

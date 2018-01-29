@@ -1,6 +1,7 @@
 #include "srv_dns.h"
 
-SRV_DNS::SRV_DNS(QWidget *parent, QString tag) :
+SRV_DNS::SRV_DNS(
+        QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
     serviceL = new QLabel("Service", this);

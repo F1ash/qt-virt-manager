@@ -5,7 +5,8 @@
  * which is a IP or state route addressing.
  */
 
-IP_Widget::IP_Widget(QWidget *parent, QString tag) :
+IP_Widget::IP_Widget(
+        QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
     addIP = new AddTab(this);
@@ -111,7 +112,7 @@ void IP_Widget::addTab()
                     this,
                     IPv4HasDHCP,
                     IPv6HasDHCP),
-                "IP Element");
+                tr("IP Element"));
     _IP_Widget *wdg =
             static_cast<_IP_Widget*>(ipSet->widget(i));
     if ( nullptr!=wdg ) {

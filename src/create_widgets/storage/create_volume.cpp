@@ -45,7 +45,7 @@ CreateVolume::CreateVolume(
     _CreateStorage(parent, connPtrPtr, _xmlFile)
 {
     QString _title =
-            QString("Create Volume in [%1] Pool")
+            QString(tr("Create Volume in [%1] Pool"))
             .arg(_poolName);
     setWindowTitle(_title);
     setUrl("http://libvirt.org/formatstorage.html");

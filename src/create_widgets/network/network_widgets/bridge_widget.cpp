@@ -1,10 +1,11 @@
 #include "bridge_widget.h"
 
-Bridge_Widget::Bridge_Widget(QWidget *parent, QString tag) :
+Bridge_Widget::Bridge_Widget(
+        QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
     bridgeName = new QLineEdit(this);
-    bridgeName->setPlaceholderText("Enter bridge name (Ex.: br0)");
+    bridgeName->setPlaceholderText(tr("Enter bridge name (Ex.: br0)"));
     stp = new QCheckBox("Spanning Tree Protocol", this);
     stp->setChecked(true); // default state
     bridgeLt = new QHBoxLayout();

@@ -7,9 +7,9 @@ _CreateStorage::_CreateStorage(
     QDialog(parent), ptr_ConnPtr(connPtrPtr), xmlFileName(_xmlFile)
 {
     setModal(false);
-    typeLabel = new QLabel("Pool Type:", this);
+    typeLabel = new QLabel(tr("Pool Type:"), this);
     type = new QComboBox(this);
-    stNameLabel = new QLabel("Name:", this);
+    stNameLabel = new QLabel(tr("Name:"), this);
     stName = new QLineEdit(this);
     suff = new QLabel(".img", this);
     suff->setVisible(false);
@@ -25,14 +25,14 @@ _CreateStorage::_CreateStorage(
     about = new QLabel(this);
     about->setOpenExternalLinks(true);
     showAtClose = new QCheckBox(
-                "Show XML Description\nat close", this);
+                tr("Show XML Description\nat close"), this);
     chooseStorage = new QPushButton(
                 QIcon::fromTheme("dialog-ok"),
-                "Choose Storage",
+                tr("Choose Storage"),
                 this);
     cancel = new QPushButton(
                 QIcon::fromTheme("dialog-cancel"),
-                "Cancel",
+                tr("Cancel"),
                 this);
     connect(chooseStorage, SIGNAL(clicked()),
             this, SLOT(set_Result()));
@@ -130,7 +130,7 @@ bool _CreateStorage::showXMLDescription() const
 void _CreateStorage::setUrl(QString _url)
 {
     about->setText(
-                QString("<a href='%1'>About</a>")
+                QString(tr("<a href='%1'>About</a>"))
                 .arg(_url));
     about->setToolTip(_url);
 }

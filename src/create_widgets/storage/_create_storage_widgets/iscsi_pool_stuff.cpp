@@ -5,7 +5,8 @@
  */
 
 iSCSI_Pool_Stuff::iSCSI_Pool_Stuff(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Pool_Stuff(parent, connPtrPtr)
 {
     source->deviceLabel->setVisible(true);

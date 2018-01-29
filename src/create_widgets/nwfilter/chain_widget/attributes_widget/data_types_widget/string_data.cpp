@@ -1,13 +1,15 @@
 #include "string_data.h"
 
 STRING_Data::STRING_Data(
-        QWidget *parent, QString tag, QString topValue) :
+        QWidget *parent,
+        QString  tag,
+        QString  topValue) :
     UntypedData(parent, tag)
 {
     data = new QLineEdit(this);
     data->setMaxLength(256);
-    data->setPlaceholderText("some string");
-    data->setToolTip("TYPE: STRING (usual not more than 256 letters)");
+    data->setPlaceholderText(tr("some string"));
+    data->setToolTip(tr("TYPE: STRING (usual not more than 256 letters)"));
     addDataWidget(data);
     connect(data, SIGNAL(textChanged(QString)),
             this, SIGNAL(dataChanged()));

@@ -1,12 +1,15 @@
 #include "_snapshot_stuff.h"
 
-_SnapshotStuff::_SnapshotStuff(QWidget *parent, bool _state, bool _external) :
+_SnapshotStuff::_SnapshotStuff(
+        QWidget *parent, bool _state, bool _external) :
     QWidget(parent), state(_state), external(_external)
 {
     memLabel = new QLabel(this);
-    filePathLabel = new QLabel("Absolute path of the file holding the VM memory state", this);
+    filePathLabel = new QLabel(
+                tr("Absolute path of the file holding the VM memory state"),
+                this);
     filePath = new QLineEdit(this);
-    diskWarn = new QCheckBox("Snapshot all disks", this);
+    diskWarn = new QCheckBox(tr("Snapshot all disks"), this);
     disks = new _Disks(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(memLabel);

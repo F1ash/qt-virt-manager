@@ -11,11 +11,13 @@ CCWAddr::CCWAddr(QWidget *parent) :
     machine->setText("s390-ccw-virtio");
     machine->setReadOnly(true);
     cssid = new QLineEdit(this);
-    cssid->setPlaceholderText("a hex value between 0 and 0xfe, inclusive");
+    cssid->setPlaceholderText(
+                tr("a hex value between 0 and 0xfe, inclusive"));
     ssid = new QSpinBox(this);
     ssid->setRange(0, 3);
     devno = new QLineEdit(this);
-    devno->setPlaceholderText("a hex value between 0 and 0xffff, inclusive");
+    devno->setPlaceholderText(
+                tr("a hex value between 0 and 0xffff, inclusive"));
     commonlayout = new QGridLayout();
     commonlayout->addWidget(machineLabel, 0, 0);
     commonlayout->addWidget(cssidLabel, 1, 0);

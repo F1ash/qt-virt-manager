@@ -9,14 +9,14 @@ VolumeSecType::VolumeSecType(QWidget *parent, virConnectPtr *connPtrPtr) :
 {
     usage = new QLineEdit(this);
     find  = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
-    find->setToolTip("Search volume storage");
+    find->setToolTip(tr("Search volume storage"));
     usageLayout = new QHBoxLayout();
     usageLayout->addWidget(usage);
     usageLayout->addWidget(find);
     usageWdg = new QWidget(this);
     usageWdg->setLayout(usageLayout);
     baseLayout->addWidget(usageWdg);
-    info->setText("Using for encryption");
+    info->setText(tr("Using for encryption"));
     connect(find,SIGNAL(clicked(bool)),
             this, SLOT(showVolumeChoose()));
 }

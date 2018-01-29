@@ -38,7 +38,7 @@ CreatePool::CreatePool(
 {
     //setModal(false);
     QString _title =
-            QString("Create Pool in [%1]")
+            QString(tr("Create Pool in [%1]"))
             .arg(_connName);
     setWindowTitle(_title);
     setUrl("http://libvirt.org/formatstorage.html");
@@ -71,7 +71,7 @@ CreatePool::CreatePool(
     uuidLabel = new QLabel("UUID:", this);
     uuid = new QLineEdit(this);
     uuid->setPlaceholderText(
-                "a UUID will be generated if omitted");
+                tr("UUID will be generated if omitted"));
     uuidLayout = new QHBoxLayout();
     uuidLayout->addWidget(uuidLabel);
     uuidLayout->addWidget(uuid);

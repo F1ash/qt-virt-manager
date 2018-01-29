@@ -1,12 +1,14 @@
 #include "ip_addr_data.h"
 
 IP_ADDR_Data::IP_ADDR_Data(
-        QWidget *parent, QString tag, QString topValue) :
+        QWidget *parent,
+        QString  tag,
+        QString  topValue) :
     UntypedData(parent, tag)
 {
     data = new QLineEdit(this);
     data->setPlaceholderText("10.1.2.3");
-    data->setToolTip("TYPE: IP_ADDR");
+    data->setToolTip(tr("TYPE: IP_ADDR"));
     addDataWidget(data);
     connect(data, SIGNAL(textChanged(QString)),
             this, SIGNAL(dataChanged()));

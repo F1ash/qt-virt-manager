@@ -1,6 +1,7 @@
 #include "mac_widget.h"
 
-MAC_Widget::MAC_Widget(QWidget *parent, QString tag) :
+MAC_Widget::MAC_Widget(
+        QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
     mac = new QLineEdit(this);

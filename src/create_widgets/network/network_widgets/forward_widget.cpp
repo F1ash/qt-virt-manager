@@ -13,12 +13,13 @@ Forward_Widget::Forward_Widget(
         QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
-    modeLabel = new QLabel("Mode:", this);
+    modeLabel = new QLabel(tr("Mode:"), this);
     mode = new QComboBox(this);
     mode->addItems(FORWARD_MODE);
-    devLabel = new QCheckBox("Dev name:", this);
+    devLabel = new QCheckBox(tr("Dev name:"), this);
     devLabel->setToolTip(
-    "if enabled, firewall rules will restrict forwarding to the named device only");
+    tr("if enabled firewall rules\n\
+will restrict forwarding\n\to the named device only"));
     dev = new QLineEdit(this);
     dev->setPlaceholderText("eth0 | enp2s0 | wlp3s0");
     dev->setEnabled(false);

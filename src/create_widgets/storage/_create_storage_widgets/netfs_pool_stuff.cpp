@@ -11,7 +11,8 @@
     <<"cifs"
 
 NetFs_Pool_Stuff::NetFs_Pool_Stuff(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Pool_Stuff(parent, connPtrPtr)
 {
     source->hostLabel->setVisible(true);

@@ -8,7 +8,9 @@
 #include "common_widgets/devices.h"
 #include <QTime>
 
-HelperThread::HelperThread(QObject *parent, virConnectPtr *connPtrPtr) :
+HelperThread::HelperThread(
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     _VirtThread(parent, connPtrPtr)
 {
 
@@ -126,7 +128,7 @@ CreateVirtDomain::CreateVirtDomain(
     setAttribute(Qt::WA_DeleteOnClose);
     xmlFileName = task.args.path;
     ptr_ConnPtr = task.srcConnPtr;
-    setWindowTitle("VM Settings");
+    setWindowTitle(tr("VM Settings"));
     setWindowIcon(QIcon::fromTheme("virtual-engineering"));
     restoreGeometry(settings.value("DomCreateGeometry").toByteArray());
     xml = new QTemporaryFile(this);
@@ -156,7 +158,8 @@ void CreateVirtDomain::closeEvent(QCloseEvent *ev)
 {
     if ( ev->type()==QEvent::Close ) {
         QString key = objectName();
-        QString msg = QString("'<b>%1</b>' domain editor closed.")
+        QString msg = QString(
+                tr("'<b>%1</b>' domain editor closed."))
                 .arg(task.object);
         sendMsg(msg);
         emit finished(key);
@@ -208,7 +211,7 @@ void CreateVirtDomain::readDataLists()
         create_specified_widgets();
         set_specified_Tabs();
         about = new QLabel(
-        "<a href='http://libvirt.org/formatdomain.html'>About</a>",
+        tr("<a href='http://libvirt.org/formatdomain.html'>About</a>"),
                     this);
         about->setToolTip("http://libvirt.org/formatdomain.html");
         about->setOpenExternalLinks(true);
@@ -216,20 +219,20 @@ void CreateVirtDomain::readDataLists()
         //showDescription->setChecked(settings.value("DomCreateShowDesc").toBool());
         ok = new QPushButton(
                     QIcon::fromTheme("dialog-ok"),
-                    "Ok",
+                    tr("Ok"),
                     this);
         ok->setAutoDefault(true);
         connect(ok, SIGNAL(clicked()), this, SLOT(set_Result()));
         restore = new QPushButton(
                     QIcon::fromTheme("go-first"),
-                    "Restore all",
+                    tr("Restore all"),
                     this);
-        restore->setToolTip("Restore all pages to first state");
+        restore->setToolTip(tr("Restore all pages to first state"));
         connect(restore, SIGNAL(clicked()),
                 this, SLOT(restoreParameters()));
         cancel = new QPushButton(
                     QIcon::fromTheme("dialog-cancel"),
-                    "Cancel",
+                    tr("Cancel"),
                     this);
         cancel->setAutoDefault(true);
         connect(cancel, SIGNAL(clicked()),
@@ -250,7 +253,8 @@ void CreateVirtDomain::readDataLists()
         setEnabled(true);
         setCentralWidget(baseWdg);
     } else {
-        QString msg = QString("Read Data in %1 failed.")
+        QString msg = QString(
+                tr("Read Data in %1 failed."))
                 .arg(objectName());
         sendMsg( msg );
         // to done()
@@ -322,8 +326,8 @@ void CreateVirtDomain::set_Result()
         };
         QString _xml = xml->fileName();
         QStringList data;
-        data.append("New Domain XML'ed");
-        data.append(QString("to <a href='%1'>%1</a>").arg(_xml));
+        data.append(tr("New Domain XML'ed"));
+        data.append(QString(tr("to <a href='%1'>%1</a>")).arg(_xml));
         QString msg = data.join(" ");
         sendMsg(msg);
         // if ( showDescription->isChecked() )
@@ -385,25 +389,25 @@ void CreateVirtDomain::set_specified_Tabs()
         QString key;
         switch (idx) {
         case 0:
-            key = "General";
+            key = tr("General");
             break;
         case 1:
-            key = "Misc.";
+            key = tr("Misc.");
             break;
         case 2:
-            key = "OS_Booting";
+            key = tr("OS_Booting");
             break;
         case 3:
-            key = "CPU";
+            key = tr("CPU");
             break;
         case 4:
-            key = "Memory";
+            key = tr("Memory");
             break;
         case 5:
-            key = "Devices";
+            key = tr("Devices");
             break;
         case 6:
-            key = "SecurityLabel";
+            key = tr("SecurityLabel");
             break;
         default:
             break;
@@ -505,16 +509,16 @@ void CreateVirtDomain::setBootOrder(QDomElement *_devices)
 void CreateVirtDomain::setNewWindowTitle(const QString &_name)
 {
     QString connName = task.srcConName;
-    setWindowTitle(
-                QString("VM Settings / <%1> in [%2]")
+    setWindowTitle(QString(
+                tr("VM Settings / <%1> in [%2]"))
                 .arg(_name).arg(connName));
 }
 void CreateVirtDomain::sendMsg(const QString &msg)
 {
     QString time = QTime::currentTime().toString();
-    QString title = QString("Connection '%1'").arg(task.srcConName);
+    QString title = QString(tr("Connection '%1'")).arg(task.srcConName);
     QString currMsg = QString(
-    "<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3")
+    tr("<b>%1 %2:</b><br><font color='blue'><b>EVENT</b></font>: %3"))
             .arg(time).arg(title).arg(msg);
     emit errorMsg(currMsg);
 }

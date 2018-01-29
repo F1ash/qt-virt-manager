@@ -20,7 +20,8 @@ _Storage_Target::_Storage_Target(
     QWidget(parent), currPoolType(_type)
 {
     setAutoFillBackground(true);
-    pathLabel = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
+    pathLabel = new QPushButton(
+                QIcon::fromTheme("edit-find"), "", this);
     path = new QLineEdit(this);
     pathLayout = new QHBoxLayout(this);
     pathLayout->addWidget(pathLabel);
@@ -28,7 +29,7 @@ _Storage_Target::_Storage_Target(
     pathWdg = new QWidget(this);
     pathWdg->setLayout(pathLayout);
 
-    formatLabel = new QLabel("Format:", this);
+    formatLabel = new QLabel(tr("Format:"), this);
     format = new QComboBox(this);
     format->addItem("default");
     QStringList l;
@@ -39,18 +40,20 @@ _Storage_Target::_Storage_Target(
         else format->addItems(DIR_VOLUME_TYPES);
     };
     format->insertSeparator(format->count());
-    format->addItem(QIcon::fromTheme("insert-text"), "Set manually");
+    format->addItem(
+                QIcon::fromTheme("insert-text"),
+                tr("Set manually"));
     formatLayout = new QHBoxLayout(this);
     formatLayout->addWidget(formatLabel);
     formatLayout->addWidget(format);
     formatWdg = new QWidget(this);
     formatWdg->setLayout(formatLayout);
 
-    usePerm = new QCheckBox("Use Permission", this);
-    ownerLabel = new QLabel("Owner:", this);
-    groupLabel = new QLabel("Group:", this);
-    modeLabel = new QLabel("Mode:", this);
-    labelLabel = new QLabel("Label:", this);
+    usePerm = new QCheckBox(tr("Use Permission"), this);
+    ownerLabel = new QLabel(tr("Owner:"), this);
+    groupLabel = new QLabel(tr("Group:"), this);
+    modeLabel = new QLabel(tr("Mode:"), this);
+    labelLabel = new QLabel(tr("Label:"), this);
     owner = new QLineEdit(this);
     owner->setPlaceholderText("107");
     group = new QLineEdit(this);
@@ -58,7 +61,7 @@ _Storage_Target::_Storage_Target(
     mode = new QLineEdit(this);
     mode->setPlaceholderText("0744");
     label = new QLineEdit(this);
-    label->setPlaceholderText("MAC (eg SELinux) label string");
+    label->setPlaceholderText(tr("MAC (eg SELinux) label string"));
     permLayout = new QGridLayout();
     permLayout->addWidget(ownerLabel, 0, 0);
     permLayout->addWidget(owner, 0, 1);
@@ -75,7 +78,7 @@ _Storage_Target::_Storage_Target(
     encrypt = new Encryption(this, connPtrPtr);
 
     commonLayout = new QVBoxLayout(this);
-    commonLayout->addWidget(new QLabel("<b>Target</b>"));
+    commonLayout->addWidget(new QLabel(tr("<b>Target</b>")));
     commonLayout->addWidget(pathWdg);
     commonLayout->addWidget(formatWdg);
     commonLayout->addWidget(usePerm);
@@ -109,7 +112,7 @@ void _Storage_Target::setTargetDirectory()
 {
     QString _dir = QFileDialog::getExistingDirectory(
                 this,
-                "Get Target Directory",
+                tr("Get Target Directory"),
                 QString("/"));
     if ( !_dir.isEmpty() ) {
         path->setText(_dir);

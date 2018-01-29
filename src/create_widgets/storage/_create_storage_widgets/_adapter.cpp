@@ -3,8 +3,8 @@
 _Adapter::_Adapter(QWidget *parent) :
     QWidget(parent)
 {
-    nameLabel = new QLabel("Name:", this);
-    typeLabel = new QLabel("Type:", this);
+    nameLabel = new QLabel(tr("Name:"), this);
+    typeLabel = new QLabel(tr("Type:"), this);
     name = new QLineEdit(this);
     name->setPlaceholderText("scsi_host1");
     type = new QComboBox(this);
@@ -12,15 +12,15 @@ _Adapter::_Adapter(QWidget *parent) :
             this, SLOT(typeAdapterChanged(QString)));
     wwnnLabel = new QLabel("WWNN:", this);
     wwpnLabel = new QLabel("WWPN:", this);
-    adapterPrntLabel = new QLabel("Parent", this);
+    adapterPrntLabel = new QLabel(tr("Parent"), this);
     wwnn = new QLineEdit(this);
     wwnn->setPlaceholderText("20000000c9831b4b");
     wwpn = new QLineEdit(this);
     wwpn->setPlaceholderText("10000000c9831b4b");
     adapterPrnt = new QLineEdit(this);
     adapterPrnt->setPlaceholderText("scsi_host5");
-    usePrntAddr = new QCheckBox("Use Parent Address", this);
-    adapterPrntIDLabel = new QLabel("Unique_ID:", this);
+    usePrntAddr = new QCheckBox(tr("Use Parent Address"), this);
+    adapterPrntIDLabel = new QLabel(tr("Unique_ID:"), this);
     adapterPrntIDLabel->setVisible(false);
     adapterPrntID = new QLineEdit(this);
     adapterPrntID->setPlaceholderText("1");
@@ -28,7 +28,7 @@ _Adapter::_Adapter(QWidget *parent) :
     addr = new PciAddr(this);
     addr->setVisible(false);
     commonLayout = new QGridLayout();
-    commonLayout->addWidget(new QLabel("<u>Adapter</u>", this), 0, 0);
+    commonLayout->addWidget(new QLabel(tr("<u>Adapter</u>"), this), 0, 0);
     commonLayout->addWidget(nameLabel, 1, 0);
     commonLayout->addWidget(name, 1, 1);
     commonLayout->addWidget(typeLabel, 2, 0);

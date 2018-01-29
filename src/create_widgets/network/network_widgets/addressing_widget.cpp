@@ -1,6 +1,7 @@
 #include "addressing_widget.h"
 
-Addressing_Widget::Addressing_Widget(QWidget *parent, QString tag) :
+Addressing_Widget::Addressing_Widget(
+        QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
     dns = new DNS_Widget(this);
