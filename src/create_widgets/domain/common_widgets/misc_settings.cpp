@@ -5,10 +5,10 @@ Misc_Settings::Misc_Settings(QWidget *parent, QString _caps, QString _xmlDesc) :
 {
     setObjectName("Misc.");
     readCapabilities();
-    eventsLabel = new QLabel("Events configuration", this);
-    powerLabel = new QCheckBox("Power Management", this);
+    eventsLabel = new QLabel(tr("Events configuration"), this);
+    powerLabel = new QCheckBox(tr("Power Management"), this);
     powerLabel->setEnabled( type=="qemu" || type=="kvm" );
-    featuresLabel = new QCheckBox("Hypervisor features", this);
+    featuresLabel = new QCheckBox(tr("Hypervisor features"), this);
     eventsWdg = new Events(this);
     powerWdg = new Power(this);
     powerWdg->setEnabled(false);

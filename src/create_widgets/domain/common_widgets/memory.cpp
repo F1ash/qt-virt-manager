@@ -7,15 +7,15 @@ Memory::Memory(
     setObjectName("Memory");
     readCapabilities();
     hostMemory = new QLabel(
-                QString("Host Memory (%1): %2")
+                QString(tr("Host Memory (%1): %2"))
                 .arg(memUnit).arg(memValue), this);
-    maxMemLabel = new QLabel("Maximum Memory:", this);
+    maxMemLabel = new QLabel(tr("Maximum Memory:"), this);
     maxMemValue = new QSpinBox(this);
     maxMemValue->setRange(0, memValue.toULongLong());
     maxMemValue->setSuffix(" (MiB)");
     connect(maxMemValue, SIGNAL(valueChanged(int)),
             this, SLOT(changeCurrentMemValue(int)));
-    currMemLabel = new QLabel("Current Memory:", this);
+    currMemLabel = new QLabel(tr("Current Memory:"), this);
     currMemValue = new QSpinBox(this);
     currMemValue->setRange(0, memValue.toULongLong());
     currMemValue->setSuffix(" (MiB)");
@@ -28,12 +28,13 @@ Memory::Memory(
     memLayout->addWidget(currMemValue, 1, 1);
     memWdg = new QWidget(this);
     memWdg->setLayout(memLayout);
-    enableMemBacking = new QCheckBox("Enable Memory Backing", this);
-    hugepages = new QCheckBox("Hugepages");
+    enableMemBacking = new QCheckBox(
+                tr("Enable Memory Backing"), this);
+    hugepages = new QCheckBox(tr("Hugepages"));
     hugePagesList = new HugePages(this);
     hugePagesList->setVisible(false);
-    nosharepages = new QCheckBox("No share pages");
-    locked = new QCheckBox("Locked");
+    nosharepages = new QCheckBox(tr("No share pages"));
+    locked = new QCheckBox(tr("Locked"));
     memBackingLayout = new QGridLayout();
     memBackingLayout->addWidget(hugepages, 0, 1);
     memBackingLayout->addWidget(nosharepages, 1, 1);
@@ -42,20 +43,21 @@ Memory::Memory(
     memBackingWdg = new QWidget(this);
     memBackingWdg->setLayout(memBackingLayout);
     memBackingWdg->setVisible(false);
-    enableMemTune = new QCheckBox("Enable Memory Tuning", this);
-    hardLabel = new QLabel("Hard limit", this);
+    enableMemTune = new QCheckBox(
+                tr("Enable Memory Tuning"), this);
+    hardLabel = new QLabel(tr("Hard limit"), this);
     hard_limit = new QSpinBox(this);
     hard_limit->setRange(0, memValue.toULongLong());
     hard_limit->setSuffix(" (MiB)");
-    softLabel = new QLabel("Soft limit", this);
+    softLabel = new QLabel(tr("Soft limit"), this);
     soft_limit = new QSpinBox(this);
     soft_limit->setRange(0, memValue.toULongLong());
     soft_limit->setSuffix(" (MiB)");
-    swapLabel = new QLabel("Swap hard limit", this);
+    swapLabel = new QLabel(tr("Swap hard limit"), this);
     swap_hard_limit = new QSpinBox(this);
     swap_hard_limit->setRange(0, memValue.toULongLong());
     swap_hard_limit->setSuffix(" (MiB)");
-    guaranteeLabel = new QLabel("Min guarantee", this);
+    guaranteeLabel = new QLabel(tr("Min guarantee"), this);
     min_guarantee = new QSpinBox(this);
     min_guarantee->setRange(0, memValue.toULongLong());
     min_guarantee->setSuffix(" (MiB)");

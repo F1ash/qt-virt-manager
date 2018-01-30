@@ -6,21 +6,21 @@ General::General(
 {
     setObjectName("Domain");
     readCapabilities();
-    typeLabel = new QLabel(QString("VM Type: %1").arg(type.toUpper()), this);
-    archLabel = new QLabel(QString("Host Arch: %1").arg(arch), this);
-    nameLabel = new QLabel("Name:", this);
+    typeLabel = new QLabel(QString(tr("VM Type: %1")).arg(type.toUpper()), this);
+    archLabel = new QLabel(QString(tr("Host Arch: %1")).arg(arch), this);
+    nameLabel = new QLabel(tr("Name:"), this);
     name = new QLineEdit(this);
     name->setAlignment(Qt::AlignRight);
-    name->setPlaceholderText("Enter VM name");
+    name->setPlaceholderText(tr("Enter VM name"));
     uuidLabel = new QLabel("UUID:", this);
     uuid = new QLineEdit(this);
     uuid->setAlignment(Qt::AlignRight);
-    uuid->setPlaceholderText("auto-generate if omitted");
-    titleLabel = new QLabel("Title:", this);
+    uuid->setPlaceholderText(tr("auto-generate if omitted"));
+    titleLabel = new QLabel(tr("Title:"), this);
     title = new QLineEdit(this);
     title->setAlignment(Qt::AlignRight);
-    title->setPlaceholderText("Enter VM title");
-    descLabel = new QLabel("Description:", this);
+    title->setPlaceholderText(tr("Enter VM title"));
+    descLabel = new QLabel(tr("Description:"), this);
     description = new QTextEdit(this);
     restorePanel = new RestorePanel(this);
     commonLayout = new QVBoxLayout(this);
@@ -93,7 +93,7 @@ QDomDocument General::getDataDocument() const
 void General::changeArch(const QString &_arch)
 {
     type = _arch;
-    typeLabel->setText(QString("VM Type: %1").arg(type.toUpper()));
+    typeLabel->setText(QString(tr("VM Type: %1")).arg(type.toUpper()));
 }
 
 /* private slots */
