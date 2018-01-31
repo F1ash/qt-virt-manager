@@ -3,8 +3,9 @@
 Power::Power(QWidget *parent) :
     _Changed(parent)
 {
-    suspend_to_disk = new QCheckBox("Suspend_to_Disk", this);
-    suspend_to_mem = new QCheckBox("Suspend_to_Memory", this);
+    suspend_to_disk = new QCheckBox(
+                tr("Suspend_to_Disk"), this);
+    suspend_to_mem = new QCheckBox(tr("Suspend_to_Memory"), this);
     commonLayout = new QHBoxLayout(this);
     commonLayout->addWidget(suspend_to_disk);
     commonLayout->addWidget(suspend_to_mem);

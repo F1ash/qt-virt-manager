@@ -4,13 +4,13 @@ RedirFilter::RedirFilter(QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
     _class = new QLineEdit(this);
-    _class->setPlaceholderText("Class");
+    _class->setPlaceholderText(tr("Class"));
     _vendor = new QLineEdit(this);
-    _vendor->setPlaceholderText("Vendor");
+    _vendor->setPlaceholderText(tr("Vendor"));
     _product = new QLineEdit(this);
-    _product->setPlaceholderText("Product");
+    _product->setPlaceholderText(tr("Product"));
     _version = new QLineEdit(this);
-    _version->setPlaceholderText("Version");
+    _version->setPlaceholderText(tr("Version"));
 
     panelLayout->insertWidget(1, _class);
     panelLayout->insertWidget(2, _vendor);

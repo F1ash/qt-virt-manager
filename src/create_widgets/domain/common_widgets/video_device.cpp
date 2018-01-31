@@ -7,7 +7,7 @@
 VideoDevice::VideoDevice(QWidget *parent) :
     _QWidget(parent)
 {
-    modelLabel = new QLabel("Video Device Type:", this);
+    modelLabel = new QLabel(tr("Video Device Type:"), this);
     model = new QComboBox(this);
     model->addItem("VGA");
     model->addItem("Cirrus");
@@ -15,11 +15,11 @@ VideoDevice::VideoDevice(QWidget *parent) :
     model->addItem("XEN");
     model->addItem("VBOX");
     model->addItem("QXL");
-    vramLabel = new QLabel("VRAM (MiB):", this);
+    vramLabel = new QLabel(tr("VRAM (MiB):"), this);
     vram = new QSpinBox(this);
     vram->setRange(8, 12800);
-    accel2d = new QCheckBox("Acceleration 2D", this);
-    accel3d = new QCheckBox("Acceleration 3D", this);
+    accel2d = new QCheckBox(tr("Acceleration 2D"), this);
+    accel3d = new QCheckBox(tr("Acceleration 3D"), this);
     addr = new DeviceAddress(this);
     int idx = addr->type->findData(
                 "pci",

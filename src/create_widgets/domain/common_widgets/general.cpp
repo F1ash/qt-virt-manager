@@ -12,7 +12,7 @@ General::General(
     name = new QLineEdit(this);
     name->setAlignment(Qt::AlignRight);
     name->setPlaceholderText(tr("Enter VM name"));
-    uuidLabel = new QLabel("UUID:", this);
+    uuidLabel = new QLabel(tr("UUID:"), this);
     uuid = new QLineEdit(this);
     uuid->setAlignment(Qt::AlignRight);
     uuid->setPlaceholderText(tr("auto-generate if omitted"));

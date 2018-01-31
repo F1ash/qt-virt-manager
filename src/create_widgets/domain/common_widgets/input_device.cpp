@@ -7,15 +7,16 @@
 InputDevice::InputDevice(QWidget *parent) :
     _QWidget(parent)
 {
-    info = new QLabel("To add additional devices explicitly", this);
+    info = new QLabel(
+                tr("To add additional devices explicitly"), this);
     type = new QComboBox(this);
-    type->addItem("EvTouch Graphics Tablet", "tablet");
-    type->addItem("Generic Mouse", "mouse");
-    type->addItem("Generic Keyboard", "keyboard");
+    type->addItem(tr("EvTouch Graphics Tablet"), "tablet");
+    type->addItem(tr("Generic Mouse"), "mouse");
+    type->addItem(tr("Generic Keyboard"), "keyboard");
     bus  = new QComboBox(this);
-    bus->addItem("Default (USB)", "usb");
-    bus->addItem("PS/2", "ps2");
-    bus->addItem("Paravirtualized (XEN)", "xen");
+    bus->addItem(tr("Default (USB)"), "usb");
+    bus->addItem(tr("PS/2"), "ps2");
+    bus->addItem(tr("Paravirtualized (XEN)"), "xen");
     addr = new DeviceAddress(this);
     int idx = addr->type->findData(
                 "pci",

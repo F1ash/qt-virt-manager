@@ -3,7 +3,7 @@
 Emulator::Emulator(QWidget *parent) :
     _QWidget(parent)
 {
-    emulLabel = new QLabel("Emulator:", this);
+    emulLabel = new QLabel(tr("Emulator:"), this);
     emulator = new QLabel(this);
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(emulLabel, 0, Qt::AlignHCenter);

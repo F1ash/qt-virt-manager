@@ -9,11 +9,11 @@ RedirDevDevice::RedirDevDevice(
     _QWidget(parent, connPtrPtr)
 {
     type = new QComboBox(this);
-    type->addItem("TCP channel", "tcp");
-    type->addItem("Spice channel", "spicevmc");
+    type->addItem(tr("TCP channel"), "tcp");
+    type->addItem(tr("Spice channel"), "spicevmc");
 
-    hostLabel = new QLabel("Host:", this);
-    portLabel = new QLabel("Port", this);
+    hostLabel = new QLabel(tr("Host:"), this);
+    portLabel = new QLabel(tr("Port"), this);
     host = new QLineEdit(this);
     port = new QSpinBox(this);
     port->setRange(1000, 65535);
@@ -35,7 +35,7 @@ RedirDevDevice::RedirDevDevice(
     address->type->setEnabled(false);
     address->setCurrentAddrWidget(idx);
 
-    filter = new RedirFilter(this, "Use filter");
+    filter = new RedirFilter(this, tr("Use filter"));
 
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(type);

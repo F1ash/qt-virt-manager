@@ -3,8 +3,8 @@
 BootMenu::BootMenu(QWidget *parent) :
     _Changed(parent)
 {
-    timeLabel = new QLabel("Timeout:", this);
-    menu = new QCheckBox("BootMenu", this);
+    timeLabel = new QLabel(tr("Timeout:"), this);
+    menu = new QCheckBox(tr("BootMenu"), this);
     timeOut = new QSpinBox(this);
     timeOut->setRange(0, 65535);
     commonLayout = new QHBoxLayout(this);

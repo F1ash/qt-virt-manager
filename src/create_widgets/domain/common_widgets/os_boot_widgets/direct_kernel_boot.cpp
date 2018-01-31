@@ -3,11 +3,13 @@
 Direct_Kernel_Boot::Direct_Kernel_Boot(QWidget *parent) :
     _QWidget(parent)
 {
-    loaderLabel = new QLabel("Boot loader path:", this);
-    kernelLabel = new QLabel("Kernel path:", this);
-    initrdLabel = new QLabel("Initrd path:", this);
-    cmdlineLabel = new QLabel("Command line:", this);
-    dtbLabel = new QLabel("Path to the (optional) device tree binary:", this);
+    loaderLabel = new QLabel(tr("Boot loader path:"), this);
+    kernelLabel = new QLabel(tr("Kernel path:"), this);
+    initrdLabel = new QLabel(tr("Initrd path:"), this);
+    cmdlineLabel = new QLabel(tr("Command line:"), this);
+    dtbLabel = new QLabel(
+                tr("Path to the (optional) device tree binary:"),
+                this);
     loader = new Path_To_File(this);
     QString _placeHolderText = QString("/usr/lib/xen/boot/hvmloader");
     loader->setPlaceholderText(_placeHolderText);

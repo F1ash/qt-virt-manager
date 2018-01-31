@@ -9,11 +9,11 @@ GraphicsDevice::GraphicsDevice(
     _QWidget(parent, connPtrPtr)
 {
     type = new QComboBox(this);
-    type->addItem("Displays a window on the host desktop", "sdl");
-    type->addItem("Use a VNC", "vnc");
-    type->addItem("Use a Spice", "spice");
-    type->addItem("Use a RDP", "rdp");
-    type->addItem("Reserved for VirtualBox domains", "desktop");
+    type->addItem(tr("Displays a window on the host desktop"), "sdl");
+    type->addItem(tr("Use a VNC"), "vnc");
+    type->addItem(tr("Use a Spice"), "spice");
+    type->addItem(tr("Use a RDP"), "rdp");
+    type->addItem(tr("Reserved for VirtualBox domains"), "desktop");
     info = new QStackedWidget(this);
     for (int i=0; i<type->count(); i++) {
         setWidgets(i);

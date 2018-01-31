@@ -32,10 +32,10 @@ Since 1.0.2
 
 ConsoleDevice::ConsoleDevice(
         QWidget *parent, virConnectPtr *connPtrPtr, virDomainPtr domain) :
-    CharDevice(parent, connPtrPtr, domain, QString("console"))
+    CharDevice(parent, connPtrPtr, domain, "console")
 {
     devType->clear();
-    devType->addItem("PseudoTTY (pty)", "pty");
+    devType->addItem(tr("PseudoTTY (pty)"), "pty");
     targetType = new QComboBox(this);
     commonLayout->insertWidget(1, targetType, -1);
     hlpThread->start();
@@ -69,16 +69,16 @@ void ConsoleDevice::init_wdg()
         targetType->addItem("LXC", "lxc");
     } else if ( hlpThread->connType.toLower()=="qemu" ) {
         targetType->addItem(
-                    "Default device type is according to the HV's rules",
+                    tr("Default device type is according to the HV's rules"),
                     "");
         targetType->addItem(
-                    "Only the first console element may use 'serial' Type",
+                    tr("Only the first console element may use 'serial' Type"),
                     "serial");
         targetType->addItem(
-                    "Secondary consoles must all be paravirtualized 'virtio'",
+                    tr("Secondary consoles must all be paravirtualized 'virtio'"),
                     "virtio");
         targetType->addItem(
-                    "SCLP is the native console type for s390",
+                    tr("SCLP is the native console type for s390"),
                     "sclp");
     };
 }

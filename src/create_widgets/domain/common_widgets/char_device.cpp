@@ -1,18 +1,19 @@
 #include "char_device.h"
 
 CharDevice::CharDevice(
-        QWidget *parent, virConnectPtr *connPtrPtr,
-        virDomainPtr domain, QString _tag
-        ) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        virDomainPtr     domain,
+        QString          _tag) :
     _QWidget_Threaded(parent, connPtrPtr, domain), tag(_tag)
 {
     devType = new QComboBox(this);
-    devType->addItem("Pseudo TTY", "pty");
-    devType->addItem("Physical host character device", "dev");
-    devType->addItem("Output to a file", "file");
-    devType->addItem("TCP net console", "tcp");
-    devType->addItem("UDP net console", "udp");
-    devType->addItem("Unix socket", "unix");
+    devType->addItem(tr("Pseudo TTY"), "pty");
+    devType->addItem(tr("Physical host character device"), "dev");
+    devType->addItem(tr("Output to a file"), "file");
+    devType->addItem(tr("TCP net console"), "tcp");
+    devType->addItem(tr("UDP net console"), "udp");
+    devType->addItem(tr("Unix socket"), "unix");
 
     ptyWdg  = new PtyWidget(this, tag);
     devWdg  = new DevWidget(this, tag);

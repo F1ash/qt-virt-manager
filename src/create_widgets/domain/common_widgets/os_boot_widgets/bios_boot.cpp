@@ -4,15 +4,15 @@ BIOS_Boot::BIOS_Boot(QWidget *parent, QString _caps) :
     _QWidget(parent), capabilities(_caps)
 {
     architecture = new _Arch(this, capabilities);
-    loaderLabel = new QLabel("Boot loader path:", this);
+    loaderLabel = new QLabel(tr("Boot loader path:"), this);
     loader = new Path_To_File(this);
     QString _placeHolderText = QString("/usr/lib/xen/boot/hvmloader");
     loader->setPlaceholderText(_placeHolderText);
-    nvramLabel = new QLabel("NVRAM:", this);
+    nvramLabel = new QLabel(tr("NVRAM:"), this);
     nvram = new Path_To_File(this);
     _placeHolderText = QString("/var/lib/libvirt/nvram/guest_VARS.fd");
     nvram->setPlaceholderText(_placeHolderText);
-    templateLabel = new QLabel("NVRAM template (optional):", this);
+    templateLabel = new QLabel(tr("NVRAM template (optional):"), this);
     nvramTemplate = new Path_To_File(this);
     _placeHolderText = QString("/usr/share/OVMF/OVMF_VARS.fd");
     nvramTemplate->setPlaceholderText(_placeHolderText);

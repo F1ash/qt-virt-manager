@@ -6,26 +6,27 @@ OpenFileMenu::OpenFileMenu(
 {
     act = _act;
     icon = QIcon::fromTheme(
-                QString("%1").arg(enumToActionString(_act)) );
+                QString("%1")
+                .arg(_TO_STRING::enumToActionString(_act)) );
     applyAsIs = new QAction(this);
     applyAsIs->setText(
                 QString(
     tr("%1 Virtual %2 from example XML description as is"))
-                .arg(enumToActionString(_act))
-                .arg(enumToEntityString(_e)));
+                .arg(_TO_STRING::enumToActionString(_act))
+                .arg(_TO_STRING::enumToEntityString(_e)));
     applyAsIs->setIcon(icon);
     editTemplate = new QAction(this);
     editTemplate->setText(
                 QString(
     tr("%1 Virtual %2 by edit example XML description"))
-                .arg(enumToActionString(_act))
-                .arg(enumToEntityString(_e)));
+                .arg(_TO_STRING::enumToActionString(_act))
+                .arg(_TO_STRING::enumToEntityString(_e)));
     editTemplate->setIcon(icon);
     manual = new QAction(this);
     manual->setText(
                 QString(tr("%1 Virtual %2 manually"))
-                .arg(enumToActionString(_act))
-                .arg(enumToEntityString(_e)));
+                .arg(_TO_STRING::enumToActionString(_act))
+                .arg(_TO_STRING::enumToEntityString(_e)));
     manual->setIcon(icon);
     connect(applyAsIs, SIGNAL(triggered()),
             this, SLOT(chooseExample()));

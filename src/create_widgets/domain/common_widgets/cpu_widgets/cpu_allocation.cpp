@@ -15,16 +15,16 @@ CPU_Allocation::CPU_Allocation(
     if ( !_domain.isNull() ) {
         type = _domain.attribute("type").toLower();
     };
-    vcpuLabel = new QLabel("VCPUs:", this);
+    vcpuLabel = new QLabel(tr("VCPUs:"), this);
     vcpu = new QSpinBox(this);
-    cpusetLabel = new QCheckBox("CPU Set:", this);
+    cpusetLabel = new QCheckBox(tr("CPU Set:"), this);
     cpuset = new QLineEdit(this);
     cpuset->setEnabled(false);
     cpuset->setPlaceholderText("1-4,^3,6");
-    currLabel = new QCheckBox("Current:", this);
+    currLabel = new QCheckBox(tr("Current:"), this);
     current = new QSpinBox(this);
     current->setEnabled(false);
-    placementLabel = new QCheckBox("Placement:", this);
+    placementLabel = new QCheckBox(tr("Placement:"), this);
     // Since 0.9.11 (QEMU and KVM only)
     placement = new QComboBox(this);
     placement->addItems(QStringList()<<"static"<<"auto");

@@ -10,15 +10,20 @@ Disk::Disk(QWidget *parent, virConnectPtr *connPtrPtr) :
     sourceLabel = new QLabel("Source:", this);
     source = new QComboBox(this);
     source->addItem(
-                "Storage Volume to use as the disk", "volume");
+                tr("Storage Volume to use as the disk"),
+                "volume");
     source->addItem(
-                "Host Device to serve as the disk", "block");
+                tr("Host Device to serve as the disk"),
+                "block");
     source->addItem(
-                "Directory to use as the disk", "dir");
+                tr("Directory to use as the disk"),
+                "dir");
     source->addItem(
-                "File holding the disk", "file");
+                tr("File holding the disk"),
+                "file");
     source->addItem(
-                "Network volume/image to use as the disk", "network");
+                tr("Network volume/image to use as the disk"),
+                "network");
     sourceLayout = new QHBoxLayout(this);
     sourceLayout->addWidget(sourceLabel);
     sourceLayout->addWidget(source);

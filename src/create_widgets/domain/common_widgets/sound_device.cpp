@@ -7,17 +7,20 @@
 SoundDevice::SoundDevice(QWidget *parent) :
     _QWidget(parent)
 {
-    modelLabel = new QLabel("Sound Device Model:", this);
+    modelLabel = new QLabel(tr("Sound Device Model:"), this);
     model = new QComboBox(this);
     model->addItem("es1370");
     model->addItem("sb16");
     model->addItem("ac97");
     model->addItem("ich6");
     model->addItem("usb");
-    defaultICH6reg = new QRadioButton("Allow playback\nrecording", this);
+    defaultICH6reg = new QRadioButton(
+                tr("Allow playback\nrecording"), this);
     defaultICH6reg->setChecked(true);
-    duplexICH6reg = new QRadioButton("Line-in\nline-out", this);
-    microICH6reg = new QRadioButton("Speaker\nmicrophone", this);
+    duplexICH6reg = new QRadioButton(
+                tr("Line-in\nline-out"), this);
+    microICH6reg = new QRadioButton(
+                tr("Speaker\nmicrophone"), this);
     regWdgLayout = new QHBoxLayout(this);
     regWdgLayout->addWidget(defaultICH6reg);
     regWdgLayout->addWidget(duplexICH6reg);

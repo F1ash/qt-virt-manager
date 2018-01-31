@@ -3,7 +3,7 @@
 MemBalloon::MemBalloon(QWidget *parent, virConnectPtr *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
-    modelLabel = new QLabel("Model for:", this);
+    modelLabel = new QLabel(tr("Model for:"), this);
     model = new QComboBox(this);
     model->addItem("NONE", "none");
     model->addItem("QEMU/KVM", "virtio");
@@ -11,7 +11,7 @@ MemBalloon::MemBalloon(QWidget *parent, virConnectPtr *connPtrPtr) :
     model->setItemIcon(0, QIcon::fromTheme(""));
     model->setItemIcon(1, QIcon::fromTheme("qemu"));
     model->setItemIcon(2, QIcon::fromTheme("xen"));
-    periodLabel = new QCheckBox("Period", this);
+    periodLabel = new QCheckBox(tr("Period"), this);
     periodLabel->setVisible(false);
     period = new QSpinBox(this);
     period->setVisible(false);

@@ -1,10 +1,10 @@
 #include "channel_device.h"
 
 ChannelDevice::ChannelDevice(QWidget *parent) :
-    CharDevice(parent, nullptr, nullptr, QString("channel"))
+    CharDevice(parent, nullptr, nullptr, "channel")
 {
-    devType->insertItem(6, "Spice Agent", "spicevmc");
-    devType->insertItem(7, "Spice WebDAV", "spiceport");
+    devType->insertItem(6, tr("Spice Agent"), "spicevmc");
+    devType->insertItem(7, tr("Spice WebDAV"), "spiceport");
     chanType = new QComboBox(this);
     chanType->setEditable(true);
     chanType->addItem("com.redhat.spice.0");

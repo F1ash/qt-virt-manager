@@ -45,10 +45,10 @@ Bridge_to_LAN::Bridge_to_LAN(
         QWidget *parent, virConnectPtr *connPtrPtr) :
     _QWidget_Threaded(parent, connPtrPtr)
 {
-    bridgeLabel = new QLabel("Bridge:", this);
+    bridgeLabel = new QLabel(tr("Bridge:"), this);
     bridge = new QLineEdit(this);
     bridge->setPlaceholderText("br0");
-    targetLabel = new QLabel("Target Device name:", this);
+    targetLabel = new QLabel(tr("Target Device name:"), this);
     target = new QLineEdit(this);
     target->setPlaceholderText("vnet7");
     baseLayout = new QGridLayout();
@@ -69,7 +69,7 @@ Bridge_to_LAN::Bridge_to_LAN(
     addr->type->setEnabled(false);
     nwFilterParams = new NWFilter_Params(
                 this,
-                "Network Filter on Interface");
+                tr("Network Filter on Interface"));
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(mac);

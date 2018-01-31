@@ -7,7 +7,7 @@
 HubDevice::HubDevice(QWidget *parent) :
     _QWidget(parent)
 {
-    info = new QLabel("To add USB Hub", this);
+    info = new QLabel(tr("To add USB Hub"), this);
     addr = new DeviceAddress(this);
     int idx = addr->type->findData(
                 "usb",

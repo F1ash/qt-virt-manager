@@ -7,15 +7,16 @@ Encryption::Encryption(
     QWidget(parent), ptr_ConnPtr(connPtrPtr)
 {
     setAutoFillBackground(true);
-    useEncryption = new QCheckBox("Use Encryption", this);
-    formatLabel = new QLabel("Format:", this);
+    useEncryption = new QCheckBox(
+                tr("Use Encryption"), this);
+    formatLabel = new QLabel(tr("Format:"), this);
     format = new QComboBox(this);
     format->addItems(QStringList()<<"default"<<"qcow"<<"luks");
-    autoSecret = new QCheckBox("Auto-generate Secret", this);
+    autoSecret = new QCheckBox(tr("Auto-generate Secret"), this);
     autoSecret->setChecked(true);
     secUUID = new QLabel(this);
     findSecret = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
-    findSecret->setToolTip("Find Secret");
+    findSecret->setToolTip(tr("Find Secret"));
     secretLayout = new QHBoxLayout(this);
     secretWdg = new QWidget(this);
     secretWdg->setLayout(secretLayout);
@@ -91,7 +92,7 @@ void Encryption::setSecret()
     FSD_Result res = findSecDialog->getResult();
     findSecDialog->deleteLater();
     if ( "VOLUME"!=res.type.toUpper() ) {
-        QString msg = QString("Type of secret should be is a VOLUME");
+        QString msg = tr("Type of secret should be is a VOLUME");
         findSecDialog->showMsg(msg);
         return;
     };

@@ -3,10 +3,10 @@
 CPU_Topology::CPU_Topology(QWidget *parent) :
     _QWidget(parent)
 {
-    use = new QCheckBox("Use Topology", this);
-    socketsLabel = new QLabel("Sockets", this);
-    coresLabel = new QLabel("Cores", this);
-    threadsLabel = new QLabel("Threads", this);
+    use = new QCheckBox(tr("Use Topology"), this);
+    socketsLabel = new QLabel(tr("Sockets"), this);
+    coresLabel = new QLabel(tr("Cores"), this);
+    threadsLabel = new QLabel(tr("Threads"), this);
     sockets = new QSpinBox(this);
     sockets->setMinimum(1);
     cores = new QSpinBox(this);
@@ -17,7 +17,8 @@ CPU_Topology::CPU_Topology(QWidget *parent) :
     infoIcon->setPixmap(
                 QIcon::fromTheme("dialog-warning")
                 .pixmap(this->fontInfo().pixelSize()));
-    info = new QLabel("<b>Number of CPU overload</b>", this);
+    info = new QLabel(
+                tr("<b>Number of CPU overload</b>"), this);
     changeInfoVisibility(false);
     baseLayout = new QGridLayout();
     baseLayout->addWidget(socketsLabel, 0, 0);

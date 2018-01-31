@@ -17,10 +17,10 @@
 Events::Events(QWidget *parent) :
     _Changed(parent)
 {
-    powerOffLabel = new QCheckBox("PowerOff", this);
-    rebootLabel = new QCheckBox("Reboot", this);
-    crashLabel = new QCheckBox("Crash", this);
-    lockFailureLabel = new QCheckBox("LockFailure", this);
+    powerOffLabel = new QCheckBox(tr("PowerOff"), this);
+    rebootLabel = new QCheckBox(tr("Reboot"), this);
+    crashLabel = new QCheckBox(tr("Crash"), this);
+    lockFailureLabel = new QCheckBox(tr("LockFailure"), this);
     on_powerOff = new QComboBox(this);
     on_powerOff->addItems(COMMON_ACTIONS);
     on_reboot = new QComboBox(this);

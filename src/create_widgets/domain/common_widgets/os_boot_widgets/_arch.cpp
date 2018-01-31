@@ -4,8 +4,8 @@ _Arch::_Arch(QWidget *parent, QString _caps) :
     _QWidget(parent), capabilities(_caps)
 {
     doc.setContent(capabilities);
-    archLabel = new QLabel("Architectures:", this);
-    machLabel = new QLabel("Machines:", this);
+    archLabel = new QLabel(tr("Architectures:"), this);
+    machLabel = new QLabel(tr("Machines:"), this);
     arch = new QComboBox(this);
     machines = new QComboBox(this);
     commonLayout = new QGridLayout();

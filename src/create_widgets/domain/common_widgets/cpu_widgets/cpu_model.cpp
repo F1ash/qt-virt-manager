@@ -14,17 +14,18 @@ CPU_Model::CPU_Model(QWidget *parent) :
             _ppc64 = _el;
         _el = _el.nextSiblingElement("arch");
     };
-    useModel = new QCheckBox("Use model", this);
-    copyHostCPU = new QCheckBox("Exactly the same as the host CPU", this);
+    useModel = new QCheckBox(tr("Use model"), this);
+    copyHostCPU = new QCheckBox(
+                tr("Exactly the same as the host CPU"), this);
     copyHostCPU->setChecked(false);
     model = new QComboBox(this);
     model->setEditable(false);
     model->setEditText("");
-    matchLabel = new QLabel("Match:", this);
+    matchLabel = new QLabel(tr("Match:"), this);
     match = new QComboBox(this);
     match->addItems(QStringList()<<"exact"<<"strict"<<"minimum");
     match->setEnabled(false);
-    allowFallback = new QCheckBox("Allow fallback", this);
+    allowFallback = new QCheckBox(tr("Allow fallback"), this);
     baseLayout = new QGridLayout();
     baseLayout->addWidget(copyHostCPU, 0, 0);
     baseLayout->addWidget(model, 0, 1);
@@ -80,8 +81,8 @@ void CPU_Model::archChanged(const QString &_arch)
         model->addItem(_model.attribute("name"), "custom");
         _model = _model.nextSiblingElement("model");
     };
-    model->insertItem(0, "Copy Host CPU configuration", "host-model");
-    model->insertItem(1, "Manually set guest CPU", "custom");
+    model->insertItem(0, tr("Copy Host CPU configuration"), "host-model");
+    model->insertItem(1, tr("Manually set guest CPU"), "custom");
     model->setCurrentIndex(0);
     setModel(currModel);
     // insert the separator after set the Model, because

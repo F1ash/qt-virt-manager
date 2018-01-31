@@ -8,8 +8,8 @@ SmartCardDevice::SmartCardDevice(QWidget *parent) :
     _QWidget(parent)
 {
     mode = new QComboBox(this);
-    mode->addItem("Host", "host");
-    mode->addItem("Passthrough", "passthrough");
+    mode->addItem(tr("Host"), "host");
+    mode->addItem(tr("Passthrough"), "passthrough");
     channel = new ChannelDevice(this);
     channel->setVisible(false);
     addr = new DeviceAddress(this);

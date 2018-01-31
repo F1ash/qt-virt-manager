@@ -14,7 +14,7 @@ FileSystems::FileSystems(
         QWidget *parent, virConnectPtr *connPtrPtr) :
     _QWidget_Threaded(parent, connPtrPtr)
 {
-    typeLabel = new QLabel("Type:", this);
+    typeLabel = new QLabel(tr("Type:"), this);
     type = new QComboBox(this);
     typeLayout = new QHBoxLayout(this);
     typeLayout->addWidget(typeLabel);

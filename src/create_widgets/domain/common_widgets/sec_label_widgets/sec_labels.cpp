@@ -3,8 +3,8 @@
 SecLabels::SecLabels(QWidget *parent) :
     _QWidget(parent)
 {
-    useSecLabel = new QCheckBox("Use Security Label", this);
-    typeLabel = new QLabel("Type:", this);
+    useSecLabel = new QCheckBox(tr("Use Security Label"), this);
+    typeLabel = new QLabel(tr("Type:"), this);
     type = new QComboBox(this);
     type->addItems(QStringList()<<"None"<<"Dynamic"<<"Static");
     typeLayout = new QHBoxLayout(this);
@@ -13,13 +13,13 @@ SecLabels::SecLabels(QWidget *parent) :
     typeWdg = new QWidget(this);
     typeWdg->setLayout(typeLayout);
 
-    modelLabel = new QLabel("Model:", this);
+    modelLabel = new QLabel(tr("Model:"), this);
     model = new QComboBox(this);
     model->addItems(QStringList()<<"SELinux"<<"AppArmor"<<"DAC");
     labelTypeLabel = new QComboBox(this);
     labelTypeLabel->addItems(QStringList()<<"Label"<<"BaseLabel"<<"ImageLabel");
     label = new QLineEdit(this);
-    relabelLabel = new QLabel("Relabel:", this);
+    relabelLabel = new QLabel(tr("Relabel:"), this);
     relabel = new QComboBox(this);
     relabel->addItems(QStringList()<<"Default"<<"Yes"<<"No");
     baseLayout = new QGridLayout();
@@ -130,7 +130,7 @@ void SecLabels::modelTypeChanged(QString _type)
             label->setPlaceholderText("system_u:system_r:svirt_t:s0");
         };
     } else if ( _type.toLower()=="apparmor" ) {
-        label->setPlaceholderText("an AppArmor profile");
+        label->setPlaceholderText(tr("an AppArmor profile"));
     } else if ( _type.toLower()=="dac" ) {
         label->setPlaceholderText("USER:GROUP  or  +UID:GID");
     };
@@ -159,7 +159,7 @@ void SecLabels::securityTypeChanged(QString _type)
             label->setPlaceholderText("system_u:system_r:svirt_t:s0");
         };
     } else if ( model->currentText().toLower()=="apparmor" ) {
-        label->setPlaceholderText("an AppArmor profile");
+        label->setPlaceholderText(tr("an AppArmor profile"));
     } else if ( model->currentText().toLower()=="dac" ) {
         label->setPlaceholderText("USER:GROUP  or  +UID:GID");
     };

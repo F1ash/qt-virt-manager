@@ -3,8 +3,8 @@
 Host_Boot::Host_Boot(QWidget *parent) :
     _QWidget(parent)
 {
-    loaderLabel = new QLabel("Boot loader:", this);
-    argsLabel = new QLabel("Boot loader args:", this);
+    loaderLabel = new QLabel(tr("Boot loader:"), this);
+    argsLabel = new QLabel(tr("Boot loader args:"), this);
     loader = new Path_To_File(this);
     QString _placeHolderText = QString("/usr/bin/pygrub");
     loader->setPlaceholderText(_placeHolderText);

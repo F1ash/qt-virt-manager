@@ -41,7 +41,7 @@ void Path_To_File::searchPath()
 {
     QString _path = QFileDialog::getOpenFileName(
                 this,
-                "Get path",
+                tr("Get path"),
                 "~");
     if ( !_path.isEmpty() ) path->setText(_path);
 }

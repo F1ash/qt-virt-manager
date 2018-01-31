@@ -7,17 +7,17 @@
 Random::Random(QWidget *parent) :
     _QWidget(parent)
 {
-    modelLabel = new QLabel("Model:", this);
+    modelLabel = new QLabel(tr("Model:"), this);
     model = new QComboBox(this);
     model->setEditable(false);
     model->addItem("virtio");
     model->insertSeparator(1);
     model->addItem("Custom model");
     model->setItemIcon(0, QIcon::fromTheme("drive-virtual-io"));
-    rate = new QCheckBox("Use Rate:", this);
-    periodLabel = new QLabel("Period:", this);
+    rate = new QCheckBox(tr("Use Rate:"), this);
+    periodLabel = new QLabel(tr("Period:"), this);
     periodLabel->setEnabled(false);
-    bytesLabel = new QLabel("Bytes:", this);
+    bytesLabel = new QLabel(tr("Bytes:"), this);
     bytesLabel->setEnabled(false);
     period = new QSpinBox(this);
     period->setRange(0, 65535);
@@ -27,7 +27,7 @@ Random::Random(QWidget *parent) :
     bytes->setRange(0, 65535);
     bytes->setValue(1024);
     bytes->setEnabled(false);
-    bkModelLabel = new QLabel("Backend Model:", this);
+    bkModelLabel = new QLabel(tr("Backend Model:"), this);
     bkModel = new QComboBox(this);
     bkModel->addItems(QStringList()<<"random"<<"egd");
     baseLayout = new QGridLayout();
@@ -43,7 +43,7 @@ Random::Random(QWidget *parent) :
     baseWdg = new QWidget(this);
     baseWdg->setLayout(baseLayout);
 
-    bkRandomLabel = new QLabel("Source:", this);
+    bkRandomLabel = new QLabel(tr("Source:"), this);
     bkRandom = new QComboBox(this);
     bkRandom->addItems(QStringList()<<"default"<<"/dev/random"<<"/dev/hwrng");
     bkRandomLayout = new QHBoxLayout(this);
