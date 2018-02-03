@@ -1,15 +1,16 @@
 #include "volume_disk.h"
 
 Volume_Disk::Volume_Disk(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Disk(parent, connPtrPtr)
 {
-    poolLabel = new QLabel("Pool:", this);
+    poolLabel = new QLabel(tr("Pool:"), this);
     pool = new QLabel(this);
-    volumeLabel = new QPushButton("Volume:", this);
+    volumeLabel = new QPushButton(tr("Volume:"), this);
     volume = new QLineEdit(this);
     volume->setReadOnly(true);
-    modeLabel = new QLabel("Source Mode:", this);
+    modeLabel = new QLabel(tr("Source Mode:"), this);
     modeLabel->setEnabled(false);
     mode = new QComboBox(this);
     mode->addItems(QStringList()<<"Host"<<"Direct");
@@ -225,9 +226,7 @@ void Volume_Disk::setDataDescription(const QString &_xmlDesc)
     if ( !_addr.isNull() ) {
         _attr = _addr.attribute("type");
         idx = addr->type->findData(
-                    _attr,
-                    Qt::UserRole,
-                    Qt::MatchContains);
+                    _attr, Qt::UserRole, Qt::MatchExactly);
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
         if ( _attr=="pci" ) {
             PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
@@ -259,7 +258,8 @@ void Volume_Disk::setDataDescription(const QString &_xmlDesc)
 void Volume_Disk::getVolumeNames()
 {
     VVD_Result _ret;
-    VirtVolumeDialog *volumeDialog = new VirtVolumeDialog(this, ptr_ConnPtr);
+    VirtVolumeDialog *volumeDialog =
+            new VirtVolumeDialog(this, ptr_ConnPtr);
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();
         pool->setText(_ret.pool);

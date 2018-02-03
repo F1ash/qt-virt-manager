@@ -6,12 +6,14 @@ DeviceExistanceMenu::DeviceExistanceMenu(
 {
     qRegisterMetaType<Device_Action>("Device_Action");
     addNewDevice = addAction(
-                QIcon::fromTheme("list-add"), "Add Device");
+                QIcon::fromTheme("list-add"),
+                tr("Add Device"));
     connect(addNewDevice, SIGNAL(triggered()),
             this, SLOT(emitJobSignal()));
     if (validItem) {
         delSelDevice = addAction(
-                    QIcon::fromTheme("list-remove"), "Del Device");
+                    QIcon::fromTheme("list-remove"),
+                    tr("Del Device"));
         connect(delSelDevice, SIGNAL(triggered()),
                 this, SLOT(emitJobSignal()));
     };

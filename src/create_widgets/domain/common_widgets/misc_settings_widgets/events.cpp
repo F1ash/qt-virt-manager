@@ -1,18 +1,18 @@
 #include "events.h"
 
 #define COMMON_ACTIONS QStringList()\
-    <<"destroy"\
-    <<"restart"\
-    <<"preserve"\
-    <<"rename-restart"
+    <<tr("destroy")\
+    <<tr("restart")\
+    <<tr("preserve")\
+    <<tr("rename-restart")
 #define ADDITIONAL_ACTIONS QStringList()\
-    <<"coredump-destroy"\
-    <<"coredump-restart"
+    <<tr("coredump-destroy")\
+    <<tr("coredump-restart")
 #define LOCK_FAILURE_ACTIONS QStringList()\
-    <<"poweroff"\
-    <<"restart"\
-    <<"pause"\
-    <<"ignore"
+    <<tr("poweroff")\
+    <<tr("restart")\
+    <<tr("pause")\
+    <<tr("ignore")
 
 Events::Events(QWidget *parent) :
     _Changed(parent)

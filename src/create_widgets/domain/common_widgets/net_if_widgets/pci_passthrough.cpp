@@ -1,21 +1,23 @@
 #include "pci_passthrough.h"
 
 PCI_Passthrough::PCI_Passthrough(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget_Threaded(parent, connPtrPtr)
 {
     attentionIcon = new QLabel(this);
-    attentionIcon->setPixmap(QIcon::fromTheme("dialog-warning")
-                             .pixmap(this->fontInfo().pixelSize()));
+    attentionIcon->setPixmap(
+                QIcon::fromTheme("dialog-warning")
+                .pixmap(this->fontInfo().pixelSize()));
     attention = new QLabel(
-                "WARNING: only for SR-IOV\n(Single Root I/O Virtualization)",
+tr("WARNING: only for SR-IOV\n(Single Root I/O Virtualization)"),
                 this);
-    driverLabel = new QLabel("Driver:", this);
+    driverLabel = new QLabel(tr("Driver:"), this);
     driver = new QComboBox(this);
-    macLabel = new QLabel("MAC:", this);
+    macLabel = new QLabel(tr("MAC:"), this);
     mac = new QLineEdit(this);
     mac->setPlaceholderText("11:22:33:44:55:66");
-    pciAddrLabel = new QLabel("PCI Device Address:", this);
+    pciAddrLabel = new QLabel(tr("PCI Device Address:"), this);
     pciAddr = new PciAddr(this);
     baseLayout = new QGridLayout();
     baseLayout->addWidget(attentionIcon, 0, 0);
@@ -190,7 +192,8 @@ void PCI_Passthrough::init_wdg()
         driver->addItem("KVM");
     };
     virtPort->type->setCurrentIndex(
-                virtPort->type->findText("802.1Qbh") );
+                virtPort->type->findData(
+                    "802.1Qbh", Qt::UserRole, Qt::MatchExactly));
     // dataChanged connections
     connect(driver, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));

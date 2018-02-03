@@ -3,7 +3,7 @@
 MAC_Address::MAC_Address(QWidget *parent) :
     _Changed(parent)
 {
-    useMac = new QCheckBox("MAC:", this);
+    useMac = new QCheckBox(tr("MAC:"), this);
     useMac->setLayoutDirection(Qt::RightToLeft);
     mac = new QLineEdit(this);
     mac->setPlaceholderText("11:22:33:44:55:66");

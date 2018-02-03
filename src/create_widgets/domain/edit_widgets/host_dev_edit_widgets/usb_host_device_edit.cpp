@@ -3,8 +3,8 @@
 USB_Host_Device_Edit::USB_Host_Device_Edit(QWidget *parent) :
     _QWidget(parent)
 {
-    vendorLabel = new QLabel("Vendor:", this);
-    productLabel = new QLabel("Product:", this);
+    vendorLabel = new QLabel(tr("Vendor:"), this);
+    productLabel = new QLabel(tr("Product:"), this);
     vendor = new QLineEdit(this);
     product = new QLineEdit(this);
     startupPolicy = new _StartupPolicy(this);
@@ -18,9 +18,7 @@ USB_Host_Device_Edit::USB_Host_Device_Edit(QWidget *parent) :
     baseWdg->setLayout(baseLayout);
     addr = new DeviceAddress(this);
     int idx = addr->type->findData(
-                "usb",
-                Qt::UserRole,
-                Qt::MatchContains);
+                "usb", Qt::UserRole, Qt::MatchExactly);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     addr->type->setEnabled(false);
     addr->setCurrentAddrWidget(idx);

@@ -1,8 +1,8 @@
 #include "usb_host_device.h"
 
 usb_hostHlpThread::usb_hostHlpThread(
-        QObject *parent,
-        virConnectPtr* connPtrPtr) :
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     _VirtThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
@@ -45,7 +45,8 @@ void usb_hostHlpThread::run()
 }
 
 USB_Host_Device::USB_Host_Device(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
     devList = new QListWidget(this);

@@ -1,7 +1,8 @@
 #include "spice_graphics.h"
 
 spice_graphHlpThread::spice_graphHlpThread(
-        QObject *parent, virConnectPtr* connPtrPtr) :
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     _VirtThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
@@ -44,45 +45,46 @@ void spice_graphHlpThread::run()
 #define KEYMAPs QStringList()<<"auto"<<"en-gb"<<"en-us"<<"ru"<<"fr"<<"de"<<"is"<<"it"<<"ja"
 
 Spice_Graphics::Spice_Graphics(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
-    addrLabel = new QLabel("Address:", this);
+    addrLabel = new QLabel(tr("Address:"), this);
     address = new QComboBox(this);
     address->setEditable(false);
-    address->addItem("HyperVisor default", "");
-    address->addItem("LocalHost only", "127.0.0.1");
-    address->addItem("All Interfaces", "0.0.0.0");
-    address->addItem("Custom", "custom");
-    address->addItem("Use named configured Network", "network");
-    address->addItem("Use Socket", "socket");
+    address->addItem(tr("HyperVisor default"), "");
+    address->addItem(tr("LocalHost only"), "127.0.0.1");
+    address->addItem(tr("All Interfaces"), "0.0.0.0");
+    address->addItem(tr("Custom"), "custom");
+    address->addItem(tr("Use named configured Network"), "network");
+    address->addItem(tr("Use Socket"), "socket");
     address->insertSeparator(4);
     address->insertSeparator(6);
     networks = new QComboBox(this);
     networks->setVisible(false);
-    autoPort = new QCheckBox("AutoPort", this);
+    autoPort = new QCheckBox(tr("AutoPort"), this);
     port = new QSpinBox(this);
     port->setRange(1000, 65535);
     port->setValue(5900);
     port->setEnabled(false);
-    tlsPortLabel = new QCheckBox("Use TLS", this);
+    tlsPortLabel = new QCheckBox(tr("Use TLS"), this);
     tlsPort = new QSpinBox(this);
     tlsPort->setRange(10, 65535);
     tlsPort->setValue(5901);
     tlsPort->setEnabled(false);
-    usePassw = new QCheckBox("Password", this);
+    usePassw = new QCheckBox(tr("Password"), this);
     passw = new QLineEdit(this);
     passw->setEnabled(false);
-    keymapLabel = new QLabel("Keymap", this);
+    keymapLabel = new QLabel(tr("Keymap"), this);
     keymap = new QComboBox(this);
     keymap->setEditable(true);
     keymap->addItems(KEYMAPs);
     keymap->setEnabled(false);
-    defaultLabel = new QLabel("Default policy", this);
+    defaultLabel = new QLabel(tr("Default policy"), this);
     defaultPolicy = new QComboBox(this);
-    defaultPolicy->addItem("any");
-    defaultPolicy->addItem("secure");
-    defaultPolicy->addItem("insecure");
+    defaultPolicy->addItem(tr("Any"), "any");
+    defaultPolicy->addItem(tr("Secure"), "secure");
+    defaultPolicy->addItem(tr("Insecure"), "insecure");
     baseLayout = new QGridLayout();
     baseLayout->addWidget(addrLabel, 0, 0);
     baseLayout->addWidget(address, 0, 1);
@@ -100,63 +102,63 @@ Spice_Graphics::Spice_Graphics(
     baseElements = new QWidget(this);
     baseElements->setLayout(baseLayout);
 
-    mainLabel = new QCheckBox("Main", this);
+    mainLabel = new QCheckBox(tr("Main"), this);
     mainLabel->setLayoutDirection(Qt::RightToLeft);
     main = new QComboBox(this);
-    main->addItem("any");
-    main->addItem("secure");
-    main->addItem("insecure");
+    main->addItem(tr("Any"), "any");
+    main->addItem(tr("Secure"), "secure");
+    main->addItem(tr("Insecure"), "insecure");
     main->setEnabled(false);
-    displayLabel = new QCheckBox("Display", this);
+    displayLabel = new QCheckBox(tr("Display"), this);
     displayLabel->setLayoutDirection(Qt::RightToLeft);
     display = new QComboBox(this);
-    display->addItem("any");
-    display->addItem("secure");
-    display->addItem("insecure");
+    display->addItem(tr("Any"), "any");
+    display->addItem(tr("Secure"), "secure");
+    display->addItem(tr("Insecure"), "insecure");
     display->setEnabled(false);
-    inputsLabel = new QCheckBox("Inputs", this);
+    inputsLabel = new QCheckBox(tr("Inputs"), this);
     inputsLabel->setLayoutDirection(Qt::RightToLeft);
     inputs = new QComboBox(this);
-    inputs->addItem("any");
-    inputs->addItem("secure");
-    inputs->addItem("insecure");
+    inputs->addItem(tr("Any"), "any");
+    inputs->addItem(tr("Secure"), "secure");
+    inputs->addItem(tr("Insecure"), "insecure");
     inputs->setEnabled(false);
-    cursorLabel = new QCheckBox("Cursor", this);
+    cursorLabel = new QCheckBox(tr("Cursor"), this);
     cursorLabel->setLayoutDirection(Qt::RightToLeft);
     cursor = new QComboBox(this);
-    cursor->addItem("any");
-    cursor->addItem("secure");
-    cursor->addItem("insecure");
+    cursor->addItem(tr("Any"), "any");
+    cursor->addItem(tr("Secure"), "secure");
+    cursor->addItem(tr("Insecure"), "insecure");
     cursor->setEnabled(false);
-    playbackLabel = new QCheckBox("Playback", this);
+    playbackLabel = new QCheckBox(tr("Playback"), this);
     playbackLabel->setLayoutDirection(Qt::RightToLeft);
     playback = new QComboBox(this);
-    playback->addItem("any");
-    playback->addItem("secure");
-    playback->addItem("insecure");
+    playback->addItem(tr("Any"), "any");
+    playback->addItem(tr("Secure"), "secure");
+    playback->addItem(tr("Insecure"), "insecure");
     playback->setEnabled(false);
-    recordLabel = new QCheckBox("Record", this);
+    recordLabel = new QCheckBox(tr("Record"), this);
     recordLabel->setLayoutDirection(Qt::RightToLeft);
     record = new QComboBox(this);
-    record->addItem("any");
-    record->addItem("secure");
-    record->addItem("insecure");
+    record->addItem(tr("Any"), "any");
+    record->addItem(tr("Secure"), "secure");
+    record->addItem(tr("Insecure"), "insecure");
     record->setEnabled(false);
-    smartcardLabel = new QCheckBox("Smartcard", this);
+    smartcardLabel = new QCheckBox(tr("Smartcard"), this);
     smartcardLabel->setLayoutDirection(Qt::RightToLeft);
     smartcard = new QComboBox(this);
-    smartcard->addItem("any");
-    smartcard->addItem("secure");
-    smartcard->addItem("insecure");
+    smartcard->addItem(tr("Any"), "any");
+    smartcard->addItem(tr("Secure"), "secure");
+    smartcard->addItem(tr("Insecure"), "insecure");
     smartcard->setEnabled(false);
-    usbredirLabel = new QCheckBox("Usbredir", this);
+    usbredirLabel = new QCheckBox(tr("Usbredir"), this);
     usbredirLabel->setLayoutDirection(Qt::RightToLeft);
     usbredir = new QComboBox(this);
-    usbredir->addItem("any");
-    usbredir->addItem("secure");
-    usbredir->addItem("insecure");
+    usbredir->addItem(tr("Any"), "any");
+    usbredir->addItem(tr("Secure"), "secure");
+    usbredir->addItem(tr("Insecure"), "insecure");
     usbredir->setEnabled(false);
-    channelLabel = new QLabel("<b>Channels</b>", this);
+    channelLabel = new QLabel(tr("<b>Channels</b>"), this);
     policyElementsLayout = new QGridLayout();
     policyElementsLayout->addWidget(channelLabel, 0, 0, Qt::AlignRight);
     policyElementsLayout->addWidget(mainLabel, 1, 0);
@@ -179,14 +181,14 @@ Spice_Graphics::Spice_Graphics(
     policyElements->setVisible(false);
     policyElements->setLayout(policyElementsLayout);
 
-    compress = new QCheckBox("Compression", this);
+    compress = new QCheckBox(tr("Compression"), this);
     compressImage = new QCheckBox("Image", this);
     compressImage->setLayoutDirection(Qt::RightToLeft);
     compressJpeg = new QCheckBox("Jpeg", this);
     compressJpeg->setLayoutDirection(Qt::RightToLeft);
     compressZlib = new QCheckBox("Zlib", this);
     compressZlib->setLayoutDirection(Qt::RightToLeft);
-    compressPlayback = new QCheckBox("Playback", this);
+    compressPlayback = new QCheckBox(tr("Playback"), this);
     compressPlayback->setLayoutDirection(Qt::RightToLeft);
     imageElement = new QComboBox(this);
     imageElement->setEnabled(false);
@@ -198,18 +200,18 @@ Spice_Graphics::Spice_Graphics(
     imageElement->addItem("off");
     jpegElement = new QComboBox(this);
     jpegElement->setEnabled(false);
-    jpegElement->addItem("auto");
-    jpegElement->addItem("never");
-    jpegElement->addItem("always");
+    jpegElement->addItem(tr("Auto"), "auto");
+    jpegElement->addItem(tr("Never"), "never");
+    jpegElement->addItem(tr("Always"), "always");
     zlibElement = new QComboBox(this);
     zlibElement->setEnabled(false);
-    zlibElement->addItem("auto");
-    zlibElement->addItem("never");
-    zlibElement->addItem("always");
+    zlibElement->addItem(tr("Auto"), "auto");
+    zlibElement->addItem(tr("Never"), "never");
+    zlibElement->addItem(tr("Always"), "always");
     playbackElement = new QComboBox(this);
     playbackElement->setEnabled(false);
-    playbackElement->addItem("on");
-    playbackElement->addItem("off");
+    playbackElement->addItem(tr("On"), "on");
+    playbackElement->addItem(tr("Off"), "off");
     compressElementsLayout = new QGridLayout();
     compressElementsLayout->addWidget(compressImage, 0, 0);
     compressElementsLayout->addWidget(imageElement, 0, 1);
@@ -223,14 +225,14 @@ Spice_Graphics::Spice_Graphics(
     compressElements->setVisible(false);
     compressElements->setLayout(compressElementsLayout);
 
-    addition = new QCheckBox("Addition", this);
-    streaming = new QCheckBox("Streaming", this);
+    addition = new QCheckBox(tr("Addition"), this);
+    streaming = new QCheckBox(tr("Streaming"), this);
     streaming->setLayoutDirection(Qt::RightToLeft);
-    clipboard = new QCheckBox("Clipboard", this);
+    clipboard = new QCheckBox(tr("Clipboard"), this);
     clipboard->setLayoutDirection(Qt::RightToLeft);
-    mouse = new QCheckBox("Mouse", this);
+    mouse = new QCheckBox(tr("Mouse"), this);
     mouse->setLayoutDirection(Qt::RightToLeft);
-    filetransfer = new QCheckBox("File transfer", this);
+    filetransfer = new QCheckBox(tr("File transfer"), this);
     filetransfer->setLayoutDirection(Qt::RightToLeft);
     streamingElement = new QComboBox(this);
     streamingElement->setEnabled(false);
@@ -239,16 +241,16 @@ Spice_Graphics::Spice_Graphics(
     streamingElement->addItem("off");
     clipboardElement = new QComboBox(this);
     clipboardElement->setEnabled(false);
-    //clipboardElement->addItem("yes");
-    clipboardElement->addItem("no");
+    //clipboardElement->addItem(tr("Yes), "yes");
+    clipboardElement->addItem(tr("No"), "no");
     mouseElement = new QComboBox(this);
     mouseElement->setEnabled(false);
-    mouseElement->addItem("client");
-    mouseElement->addItem("server");
+    mouseElement->addItem(tr("Client"), "client");
+    mouseElement->addItem(tr("Server"), "server");
     filetransferElement = new QComboBox(this);
     filetransferElement->setEnabled(false);
-    //filetransferElement->addItem("yes");
-    filetransferElement->addItem("no");
+    //filetransferElement->addItem(tr("Yes), "yes");
+    filetransferElement->addItem(tr("No"), "no");
     additionElementsLayout = new QGridLayout();
     additionElementsLayout->addWidget(streaming, 0, 0);
     additionElementsLayout->addWidget(streamingElement, 0, 1);
@@ -271,8 +273,8 @@ Spice_Graphics::Spice_Graphics(
     commonLayout->addWidget(additionElements);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    connect(address, SIGNAL(currentIndexChanged(QString)),
-            this, SLOT(addressEdit(QString)));
+    connect(address, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(addressEdit(int)));
     connect(autoPort, SIGNAL(toggled(bool)),
             this, SLOT(useAutoPort(bool)));
     connect(tlsPortLabel, SIGNAL(toggled(bool)),
@@ -428,7 +430,9 @@ QDomDocument Spice_Graphics::getDataDocument() const
     _device = doc.createElement("device");
     _devDesc = doc.createElement("graphics");
     _devDesc.setAttribute("type", "spice");
-    _devDesc.setAttribute("defaultPolicy", defaultPolicy->currentText());
+    _devDesc.setAttribute(
+                "defaultPolicy",
+                defaultPolicy->currentData(Qt::UserRole).toString());
     if ( tlsPortLabel->isEnabled() && tlsPortLabel->isChecked() ) {
         _devDesc.setAttribute("tlsPort", tlsPort->text());
     };
@@ -448,54 +452,69 @@ QDomDocument Spice_Graphics::getDataDocument() const
         if ( mainLabel->isChecked() ) {
             QDomElement _main = doc.createElement("channel");
             _main.setAttribute("name", "main");
-            _main.setAttribute("mode", main->currentText());
+            _main.setAttribute(
+                        "mode",
+                        main->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_main);
         };
         if ( displayLabel->isChecked() ) {
             QDomElement _display = doc.createElement("channel");
             _display.setAttribute("name", "display");
-            _display.setAttribute("mode", display->currentText());
+            _display.setAttribute(
+                        "mode",
+                        display->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_display);
         };
         if ( inputsLabel->isChecked() ) {
             QDomElement _inputs = doc.createElement("channel");
             _inputs.setAttribute("name", "inputs");
-            _inputs.setAttribute("mode", inputs->currentText());
+            _inputs.setAttribute(
+                        "mode",
+                        inputs->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_inputs);
         };
         if ( cursorLabel->isChecked() ) {
             QDomElement _cursor = doc.createElement("channel");
             _cursor.setAttribute("name", "cursor");
-            _cursor.setAttribute("mode", cursor->currentText());
+            _cursor.setAttribute(
+                        "mode",
+                        cursor->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_cursor);
         };
         if ( playbackLabel->isChecked() ) {
             QDomElement _playback = doc.createElement("channel");
             _playback.setAttribute("name", "playback");
-            _playback.setAttribute("mode", playback->currentText());
+            _playback.setAttribute(
+                        "mode",
+                        playback->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_playback);
         };
         if ( recordLabel->isChecked() ) {
             QDomElement _record = doc.createElement("channel");
             _record.setAttribute("name", "record");
-            _record.setAttribute("mode", record->currentText());
+            _record.setAttribute(
+                        "mode",
+                        record->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_record);
         };
         if ( smartcardLabel->isChecked() ) {
             QDomElement _smartcard = doc.createElement("channel");
             _smartcard.setAttribute("name", "smartcard");
-            _smartcard.setAttribute("mode", smartcard->currentText());
+            _smartcard.setAttribute(
+                        "mode",
+                        smartcard->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_smartcard);
         };
         if ( usbredirLabel->isChecked() ) {
             QDomElement _usbredir = doc.createElement("channel");
             _usbredir.setAttribute("name", "usbredir");
-            _usbredir.setAttribute("mode", usbredir->currentText());
+            _usbredir.setAttribute(
+                        "mode",
+                        usbredir->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_usbredir);
         };
     };
-    QString _address = address->itemData(
-                address->currentIndex(), Qt::UserRole).toString();
+    QString _address = address->currentData(Qt::UserRole).toString();
     if ( !_address.isEmpty() && _address!="network" && _address!="socket" ) {
         _listen = doc.createElement("listen");
         _listen.setAttribute("type", "address");
@@ -531,39 +550,53 @@ QDomDocument Spice_Graphics::getDataDocument() const
         };
         if ( compressJpeg->isChecked() ) {
             QDomElement _jpeg = doc.createElement("jpeg");
-            _jpeg.setAttribute("compression", jpegElement->currentText());
+            _jpeg.setAttribute(
+                        "compression",
+                        jpegElement->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_jpeg);
         };
         if ( compressZlib->isChecked() ) {
             QDomElement _zlib = doc.createElement("zlib");
-            _zlib.setAttribute("compression", zlibElement->currentText());
+            _zlib.setAttribute(
+                        "compression",
+                        zlibElement->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_zlib);
         };
         if ( compressPlayback->isChecked() ) {
             QDomElement _playback = doc.createElement("playback");
-            _playback.setAttribute("compression", playbackElement->currentText());
+            _playback.setAttribute(
+                        "compression",
+                        playbackElement->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_playback);
         };
     };
     if ( addition->isChecked() ) {
         if ( streaming->isChecked() ) {
             QDomElement _streaming = doc.createElement("streaming");
-            _streaming.setAttribute("mode", streamingElement->currentText());
+            _streaming.setAttribute(
+                        "mode",
+                        streamingElement->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_streaming);
         };
         if ( clipboard->isChecked() ) {
             QDomElement _clipboard = doc.createElement("clipboard");
-            _clipboard.setAttribute("copypaste", clipboardElement->currentText());
+            _clipboard.setAttribute(
+                        "copypaste",
+                        clipboardElement->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_clipboard);
         };
         if ( mouse->isChecked() ) {
             QDomElement _mouse = doc.createElement("mouse");
-            _mouse.setAttribute("mode", mouseElement->currentText());
+            _mouse.setAttribute(
+                        "mode",
+                        mouseElement->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_mouse);
         };
         if ( filetransfer->isChecked() ) {
             QDomElement _filetransfer = doc.createElement("filetransfer");
-            _filetransfer.setAttribute("enable", filetransferElement->currentText());
+            _filetransfer.setAttribute(
+                        "enable",
+                        filetransferElement->currentData(Qt::UserRole).toString());
             _devDesc.appendChild(_filetransfer);
         };
     };
@@ -604,9 +637,7 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
     };
     if ( _device.hasAttribute("socket") ) {
         idx = address->findData(
-                    "socket",
-                    Qt::UserRole,
-                    Qt::MatchContains);
+                    "socket", Qt::UserRole, Qt::MatchExactly);
         address->setCurrentIndex( (idx<0)? 3:idx );
         address->setEditText(_device.attribute("socket"));
     } else {
@@ -618,17 +649,14 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
         _data = _listen.attribute(_type);
         if ( !_type.isEmpty() ) {
             idx = address->findData(
-                        _type,
-                        Qt::UserRole,
-                        Qt::MatchContains);
+                        _type, Qt::UserRole, Qt::MatchExactly);
             address->setCurrentIndex( (idx<0)? 3:idx );
             if ( _type=="address" ) {
                 if ( address->currentIndex()==3 )
                     address->setEditText(_data);
             } else if ( _type=="network" ) {
                 idx = networks->findText(
-                            _data,
-                            Qt::MatchContains);
+                            _data, Qt::MatchContains);
                 networks->setCurrentIndex( (idx<0)? 0:idx );
             } else if ( _type=="socket" ) {
                 address->setEditText(_data);
@@ -640,8 +668,8 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
         };
     };
     QString _defaultPolicy = _device.attribute("defaultPolicy");
-    idx = defaultPolicy->findText(
-                _defaultPolicy, Qt::MatchContains);
+    idx = defaultPolicy->findData(
+                _defaultPolicy, Qt::UserRole, Qt::MatchExactly);
     defaultPolicy->setCurrentIndex( (idx<0)? 0:idx );
     _channel = _device.firstChildElement("channel");
     while ( !_channel.isNull() ) {
@@ -675,7 +703,7 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
             obj = usbredir;
         };
         if ( nullptr!=obj ) {
-            idx = obj->findText(_mode, Qt::MatchContains);
+            idx = obj->findData(_mode, Qt::UserRole, Qt::MatchExactly);
             obj->setCurrentIndex( (idx<0)? 0:idx);
         };
         _channel = _channel.nextSiblingElement("channel");
@@ -702,23 +730,26 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
          !_filetransfer.isNull() ) {
         addition->setChecked(true);
         if ( !_streaming.isNull() ) {
-            idx = streamingElement->findText(
+            idx = streamingElement->findData(
                         _streaming.attribute("mode"));
             streamingElement->setCurrentIndex( (idx<0)? 0:idx );
         };
         if ( !_clipboard.isNull() ) {
-            idx = clipboardElement->findText(
-                        _clipboard.attribute("copypaste"));
+            idx = clipboardElement->findData(
+                        _clipboard.attribute("copypaste"),
+                        Qt::UserRole, Qt::MatchExactly);
             clipboardElement->setCurrentIndex( (idx<0)? 0:idx );
         };
         if ( !_mouse.isNull() ) {
-            idx = mouseElement->findText(
-                        _mouse.attribute("mode"));
+            idx = mouseElement->findData(
+                        _mouse.attribute("mode"),
+                        Qt::UserRole, Qt::MatchExactly);
             mouseElement->setCurrentIndex( (idx<0)? 0:idx );
         };
         if ( !_filetransfer.isNull() ) {
-            idx = filetransferElement->findText(
-                        _filetransfer.attribute("enable"));
+            idx = filetransferElement->findData(
+                        _filetransfer.attribute("enable"),
+                        Qt::UserRole, Qt::MatchExactly);
             filetransferElement->setCurrentIndex( (idx<0)? 0:idx );
         }
     } else {
@@ -735,18 +766,21 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
             imageElement->setCurrentIndex( (idx<0)? 0:idx );
         };
         if ( !_jpeg.isNull() ) {
-            idx = jpegElement->findText(
-                        _jpeg.attribute("compression"));
+            idx = jpegElement->findData(
+                        _jpeg.attribute("compression"),
+                        Qt::UserRole, Qt::MatchExactly);
             jpegElement->setCurrentIndex( (idx<0)? 0:idx );
         };
         if ( !_zlib.isNull() ) {
-            idx = zlibElement->findText(
-                        _zlib.attribute("compression"));
+            idx = zlibElement->findData(
+                        _zlib.attribute("compression"),
+                        Qt::UserRole, Qt::MatchExactly);
             zlibElement->setCurrentIndex( (idx<0)? 0:idx );
         };
         if ( !_playback.isNull() ) {
-            idx = playbackElement->findText(
-                        _playback.attribute("compression"));
+            idx = playbackElement->findData(
+                        _playback.attribute("compression"),
+                        Qt::UserRole, Qt::MatchExactly);
             playbackElement->setCurrentIndex( (idx<0)? 0:idx );
         }
     } else {
@@ -772,18 +806,19 @@ void Spice_Graphics::usePassword(bool state)
     passw->setEnabled(state);
     keymap->setEnabled(state);
 }
-void Spice_Graphics::addressEdit(QString s)
+void Spice_Graphics::addressEdit(int i)
 {
-    if ( s.contains("network", Qt::CaseInsensitive) ) {
+    QString s = address->itemData(i, Qt::UserRole).toString();
+    if ( s == "network" ) {
         address->setEditable(false);
-        addrLabel->setText("Network:");
+        addrLabel->setText(tr("Network:"));
         networks->setVisible(true);
         autoPort->setEnabled(true);
         port->setEnabled(true);
         tlsPortLabel->setEnabled(true);
         tlsPort->setEnabled(true);
-    } else if ( s.contains("socket", Qt::CaseInsensitive) ) {
-        addrLabel->setText("Socket:");
+    } else if ( s == "socket" ) {
+        addrLabel->setText(tr("Socket:"));
         address->setEditable(true);
         address->clearEditText();
         networks->setVisible(false);
@@ -792,8 +827,8 @@ void Spice_Graphics::addressEdit(QString s)
         tlsPortLabel->setEnabled(false);
         tlsPort->setEnabled(false);
     } else {
-        addrLabel->setText("Address:");
-        if ( s == "Custom" ) {
+        addrLabel->setText(tr("Address:"));
+        if ( s == "custom" ) {
             address->setEditable(true);
             address->clearEditText();
         } else {

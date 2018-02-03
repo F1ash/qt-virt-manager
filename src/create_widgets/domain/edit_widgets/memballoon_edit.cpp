@@ -1,7 +1,8 @@
 #include "memballoon_edit.h"
 
 MemBalloon_Edit::MemBalloon_Edit(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     MemBalloon(parent, connPtrPtr)
 {
     connect(model, SIGNAL(currentIndexChanged(int)),
@@ -26,9 +27,7 @@ void MemBalloon_Edit::setDataDescription(const QString &_xmlDesc)
     QString _attr;
     _attr = _device.attribute("model");
     int idx = model->findData(
-                _attr,
-                Qt::UserRole,
-                Qt::MatchContains);
+                _attr, Qt::UserRole, Qt::MatchExactly);
     model->setCurrentIndex( (idx<0)? 0:idx );
     _stats = _device.firstChildElement("stats");
     periodLabel->setChecked( !_stats.isNull() );

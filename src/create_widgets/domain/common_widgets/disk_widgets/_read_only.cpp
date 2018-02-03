@@ -3,7 +3,7 @@
 _ReadOnly::_ReadOnly(QWidget *parent) :
     _Changed(parent)
 {
-    readOnly = new QCheckBox("Read Only", this);
+    readOnly = new QCheckBox(tr("Read Only"), this);
     readOnly->setLayoutDirection(Qt::RightToLeft);
     commonLayout = new QHBoxLayout(this);
     commonLayout->addWidget(readOnly);

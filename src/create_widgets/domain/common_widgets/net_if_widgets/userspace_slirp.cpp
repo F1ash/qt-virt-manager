@@ -1,6 +1,6 @@
 #include "userspace_slirp.h"
 
-#define INFO QString("\n\
+#define INFO tr("\n\
 Provides a virtual LAN with NAT to the outside world.\n\
 The virtual network has DHCP & DNS services and \n\
 will give the guest VM addresses starting from 10.0.2.15.\n\
@@ -10,13 +10,15 @@ for unprivileged users who need their VMs\n\
 to have outgoing access. ")
 
 Userspace_SLIRP::Userspace_SLIRP(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
     mac = new MAC_Address(this);
     infoIcon = new QLabel(this);
-    infoIcon->setPixmap(QIcon::fromTheme("dialog-warning")
-                        .pixmap(this->fontInfo().pixelSize()));
+    infoIcon->setPixmap(
+                QIcon::fromTheme("dialog-warning")
+                .pixmap(this->fontInfo().pixelSize()));
     info = new QLabel(this);
     info->setText(INFO);
     addr = new DeviceAddress(this);

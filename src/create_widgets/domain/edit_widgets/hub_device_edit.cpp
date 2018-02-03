@@ -17,7 +17,7 @@ void HubDevice_Edit::setDataDescription(const QString &_xmlDesc)
     _device = doc.firstChildElement("device")
             .firstChildElement("hub");
     QString _type = _device.attribute("type", "");
-    int idx = addr->type->findText(_type, Qt::MatchContains);
+    int idx = addr->type->findData(_type, Qt::UserRole, Qt::MatchExactly);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     _addr = _device.firstChildElement("address");
     addr->use->setChecked(!_addr.isNull());

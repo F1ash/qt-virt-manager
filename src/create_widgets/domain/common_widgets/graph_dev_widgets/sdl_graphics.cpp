@@ -3,13 +3,13 @@
 SDL_Graphics::SDL_Graphics(QWidget *parent) :
     _QWidget(parent)
 {
-    displayLabel = new QLabel("Display:", this);
-    xauthLabel = new QLabel("Xauth:", this);
+    displayLabel = new QLabel(tr("Display:"), this);
+    xauthLabel = new QLabel(tr("Xauth:"), this);
     display = new QLineEdit(this);
     display->setPlaceholderText(":0.0");
     xauth = new QLineEdit(this);
     xauth->setPlaceholderText("${HOME}/.Xauthority");
-    fullscreen = new QCheckBox("Fullscreen", this);
+    fullscreen = new QCheckBox(tr("Fullscreen"), this);
     browse = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
     commonLayout = new QGridLayout();
     commonLayout->addWidget(displayLabel, 0, 0);
@@ -40,7 +40,9 @@ QDomDocument SDL_Graphics::getDataDocument() const
     _devDesc.setAttribute("type", "sdl");
     _devDesc.setAttribute("display", display->text());
     _devDesc.setAttribute("xauth", xauth->text());
-    _devDesc.setAttribute("fullscreen", (fullscreen->isChecked())? "yes" : "no");
+    _devDesc.setAttribute(
+                "fullscreen",
+                (fullscreen->isChecked())? "yes" : "no");
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     //qDebug()<<doc.toString();
@@ -68,6 +70,6 @@ void SDL_Graphics::getPathToXauthority() const
                 nullptr,
                 tr("Specify Xauth"),
                 "/home",
-                tr("Xauth (.Xauthority)"));
+                "Xauth (.Xauthority)");
     if ( !file.isEmpty() ) xauth->setText(file);
 }

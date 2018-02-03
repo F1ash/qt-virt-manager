@@ -41,7 +41,7 @@ void SmartCardDevice_Edit::setDataDescription(const QString &_xmlDesc)
     };
     _channelXMLDesc = channelDoc.toString();
     channel->setDataDescription(_channelXMLDesc);
-    idx = addr->type->findText("ccid", Qt::MatchContains);
+    idx = addr->type->findData("ccid", Qt::UserRole, Qt::MatchExactly);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     _addr = _device.firstChildElement("address");
     addr->use->setChecked(!_addr.isNull());

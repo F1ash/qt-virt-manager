@@ -12,10 +12,10 @@ NWFilter_Params::NWFilter_Params(
     _List_Widget(parent, tag)
 {
     list->setToolTip(
-    "Network filter parameters:\nVARIABLE = VALUE");
+    tr("Network filter parameters:\nVARIABLE = VALUE"));
     nwFilters = new QComboBox(this);
-    nwFilters->setToolTip("Availabled network filters");
-    useAutoIP = new QCheckBox("Autodetect IP", this);
+    nwFilters->setToolTip(tr("Availabled network filters"));
+    useAutoIP = new QCheckBox(tr("Autodetect IP"), this);
     autoIpTypes = new QComboBox(this);
     autoIpTypes->addItems(QStringList()<<"any"<<"dhcp"<<"none");
     autoIpTypes->setEnabled(false);
@@ -31,7 +31,7 @@ NWFilter_Params::NWFilter_Params(
     paramName->insertItem(0, "");
     paramName->addItems(DESERVED_VARs);
     paramVal = new QLineEdit(this);
-    paramVal->setPlaceholderText("VARIABLE's VALUE");
+    paramVal->setPlaceholderText(tr("VARIABLE's VALUE"));
     panelLayout->insertWidget(1, paramName);
     panelLayout->insertWidget(2, paramVal);
     connect(useAutoIP, SIGNAL(toggled(bool)),

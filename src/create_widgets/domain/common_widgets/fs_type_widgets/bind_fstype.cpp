@@ -11,9 +11,9 @@ BindFsType::BindFsType(QWidget *parent, QString _type) :
     driver->setVisible(false);
     commonLayout->removeWidget(sourceLabel);
     sourceLabel->deleteLater();
-    commonLayout->addWidget(new QLabel("Source:", this), 4, 0);
-    source->setPlaceholderText("Source guest directory");
-    target->setPlaceholderText("Target guest directory");
+    commonLayout->addWidget(new QLabel(tr("Source:"), this), 4, 0);
+    source->setPlaceholderText(tr("Source guest directory"));
+    target->setPlaceholderText(tr("Target guest directory"));
     // dataChanged connections
     connect(source, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));

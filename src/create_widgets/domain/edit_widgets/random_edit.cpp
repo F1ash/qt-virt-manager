@@ -76,9 +76,7 @@ void Random_Edit::setDataDescription(const QString &_xmlDesc)
         QString _xml = _charDoc.toString();
         //qDebug()<<_xml;
         int idx = bkEGD->devType->findData(
-                    _type,
-                    Qt::UserRole,
-                    Qt::MatchContains);
+                    _type, Qt::UserRole, Qt::MatchExactly);
         bkEGD->devType->setCurrentIndex( (idx<0)? 0:idx );
         _QWidget *wdg = static_cast<_QWidget*>(
                     bkEGD->charDevWdg->currentWidget() );

@@ -3,8 +3,8 @@
 BlockFsType::BlockFsType(QWidget *parent, QString _type) :
     _FsType(parent, _type)
 {
-    source->setPlaceholderText("Source host block device");
-    target->setPlaceholderText("Target guest directory");
+    source->setPlaceholderText(tr("Source host block device"));
+    target->setPlaceholderText(tr("Target guest directory"));
     connect(sourceLabel, SIGNAL(clicked()),
             this, SLOT(getSourcePath()));
     // dataChanged connections
@@ -115,7 +115,7 @@ void BlockFsType::getSourcePath()
 {
     QString fileName = QFileDialog::getOpenFileName(
                 this,
-                "Source Path",
+                tr("Source Path"),
                 "/dev");
     if ( !fileName.isEmpty() ) source->setText(fileName);
 }

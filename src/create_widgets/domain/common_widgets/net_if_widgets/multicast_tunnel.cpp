@@ -1,11 +1,12 @@
 #include "multicast_tunnel.h"
 
 MultiCast_Tunnel::MultiCast_Tunnel(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
-    addrLabel = new QLabel("Address:", this);
-    portLabel = new QLabel("Port:", this);
+    addrLabel = new QLabel(tr("Address:"), this);
+    portLabel = new QLabel(tr("Port:"), this);
     ipAddr = new QLineEdit(this);
     ipAddr->setPlaceholderText("230.0.0.1");
     port = new QSpinBox(this);

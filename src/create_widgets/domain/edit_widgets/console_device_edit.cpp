@@ -1,6 +1,8 @@
 #include "console_device_edit.h"
 
-ConsoleDevice_Edit::ConsoleDevice_Edit(QWidget *parent, virConnectPtr *connPtrPtr) :
+ConsoleDevice_Edit::ConsoleDevice_Edit(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     ConsoleDevice(parent, connPtrPtr)
 {
     connect(targetType, SIGNAL(currentIndexChanged(int)),
@@ -20,9 +22,7 @@ void ConsoleDevice_Edit::setDataDescription(const QString &_xmlDesc)
     if ( !_target.isNull() ) {
         QString _console = _target.attribute("type", "");
         int idx = targetType->findData(
-                _console,
-                Qt::UserRole,
-                Qt::MatchContains);
+                _console, Qt::UserRole, Qt::MatchExactly);
         targetType->setCurrentIndex( (idx<0)? 0:idx );
     };
 }

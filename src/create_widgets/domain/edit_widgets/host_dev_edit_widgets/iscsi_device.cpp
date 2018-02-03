@@ -3,8 +3,8 @@
 ISCSI_Device::ISCSI_Device(QWidget *parent, virConnectPtr *connPtrPtr) :
     QWidget(parent)
 {
-    hostLabel = new QLabel("Host:", this);
-    portLabel = new QLabel("Port:", this);
+    hostLabel = new QLabel(tr("Host:"), this);
+    portLabel = new QLabel(tr("Port:"), this);
     host = new QLineEdit(this);
     port = new QSpinBox(this);
     port->setRange(0, 65536);

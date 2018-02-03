@@ -1,7 +1,8 @@
 #include "host_device_edit.h"
 
 HostDevice_Edit::HostDevice_Edit(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     HostDevice(parent, connPtrPtr)
 {
     info->setVisible(false);

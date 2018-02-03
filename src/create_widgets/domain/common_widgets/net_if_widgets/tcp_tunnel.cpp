@@ -1,12 +1,13 @@
 #include "tcp_tunnel.h"
 
 TCP_Tunnel::TCP_Tunnel(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
-    typeLabel =new QLabel("Type:", this);
-    addrLabel = new QLabel("Address:", this);
-    portLabel = new QLabel("Port:", this);
+    typeLabel =new QLabel(tr("Type:"), this);
+    addrLabel = new QLabel(tr("Address:"), this);
+    portLabel = new QLabel(tr("Port:"), this);
     type = new QComboBox(this);
     type->addItems(QStringList()<<"server"<<"client");
     ipAddr = new QLineEdit(this);

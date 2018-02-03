@@ -129,11 +129,11 @@ DeviceStack::DeviceStack(
 
     addDevice = new QPushButton(
                 QIcon::fromTheme("dialog-ok"),
-                "Add Device",
+                tr("Add Device"),
                 this);
     cancel = new QPushButton(
                 QIcon::fromTheme("dialog-cancel"),
-                "Cancel",
+                tr("Cancel"),
                 this);
     connect(addDevice, SIGNAL(clicked()),
             this, SLOT(set_Result()));

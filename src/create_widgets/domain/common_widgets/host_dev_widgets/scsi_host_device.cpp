@@ -1,8 +1,8 @@
 #include "scsi_host_device.h"
 
 iscsi_hostHlpThread::iscsi_hostHlpThread(
-        QObject *parent,
-        virConnectPtr* connPtrPtr) :
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     _VirtThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
@@ -45,7 +45,8 @@ void iscsi_hostHlpThread::run()
 }
 
 SCSI_Host_Device::SCSI_Host_Device(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
     devList = new QListWidget(this);
@@ -150,7 +151,8 @@ void SCSI_Host_Device::setAvailabledSCSIDevices(QStringList &devices)
         devName.append("\t(");
         devName.append(type.firstChild().toText().data().toUpper());
         devName.append(")\n");
-        devName.append(QString("Host:Bus:Target:Lun (%1)").arg(devIdentity));
+        devName.append(QString(
+                tr("Host:Bus:Target:Lun (%1)")).arg(devIdentity));
         devName.append("\n");
         devName.append(path.firstChild().toText().data());
         if ( devList->findItems(devName,

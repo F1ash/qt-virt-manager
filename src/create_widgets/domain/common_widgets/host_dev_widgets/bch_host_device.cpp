@@ -1,21 +1,23 @@
 #include "bch_host_device.h"
 
 BCh_Host_Device::BCh_Host_Device(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
-    typeLabel = new QLabel("Type:", this);
-    deviceLabel = new QLabel("Device:", this);
+    typeLabel = new QLabel(tr("Type:"), this);
+    deviceLabel = new QLabel(tr("Device:"), this);
     type = new QComboBox(this);
-    type->addItem("A block device", "storage");
-    type->addItem("A character device", "misc");
-    type->addItem("A host network interface", "net");
+    type->addItem(tr("A block device"), "storage");
+    type->addItem(tr("A character device"), "misc");
+    type->addItem(tr("A host network interface"), "net");
     device = new QLineEdit(this);
     device->setPlaceholderText("/dev/sdf1");
-    info = new QLabel("The device as seen from the host", this);
+    info = new QLabel(tr("The device as seen from the host"), this);
     attention = new QLabel(this);
-    attention->setPixmap(QIcon::fromTheme("dialog-warning")
-                         .pixmap(this->fontInfo().pixelSize()));
+    attention->setPixmap(
+                QIcon::fromTheme("dialog-warning")
+                .pixmap(this->fontInfo().pixelSize()));
     commonLayout = new QGridLayout();
     commonLayout->addWidget(typeLabel, 0, 0);
     commonLayout->addWidget(type, 0, 1);
@@ -79,7 +81,7 @@ void BCh_Host_Device::typeChanged(int i)
         device->setPlaceholderText("eth0");
         break;
     default:
-        device->setPlaceholderText("The device as seen from the host");
+        device->setPlaceholderText(tr("The device as seen from the host"));
         break;
     }
 }

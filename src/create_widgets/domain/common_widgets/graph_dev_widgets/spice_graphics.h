@@ -72,7 +72,7 @@ private slots:
     void             useAutoPort(bool);
     void             useTLSPort(bool);
     void             usePassword(bool);
-    void             addressEdit(QString);
+    void             addressEdit(int);
     void             policyElementsSetRequired(bool);
     void             defaultPolicyChanged(int);
     void             compressStateChanged(bool);

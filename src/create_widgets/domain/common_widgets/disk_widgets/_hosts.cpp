@@ -4,9 +4,9 @@ _Hosts::_Hosts(QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
     name = new QLineEdit(this);
-    name->setPlaceholderText("Host name");
+    name->setPlaceholderText(tr("Host name"));
     port = new QLineEdit(this);
-    port->setPlaceholderText("Port");
+    port->setPlaceholderText(tr("Port"));
     panelLayout->insertWidget(1, name, 32);
     panelLayout->insertWidget(2, port, 8);
     setFullHostMode(true);

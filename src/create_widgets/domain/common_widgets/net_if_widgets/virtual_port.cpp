@@ -3,19 +3,19 @@
 VirtualPort::VirtualPort(QWidget *parent) :
     _Changed(parent)
 {
-    useVirtPort = new QCheckBox("VirtualPort", this);
-    typeLabel = new QLabel("Type:", this);
-    managerIdLabel = new QLabel("ManagerId:", this);
-    typeIdLabel = new QLabel("TypeId:", this);
-    typeIdVerLabel = new QLabel("TypeId Version:", this);
-    instanceIdLabel = new QLabel("InstanceId:", this);
-    interfaceIdLabel = new QLabel("InterfaceId:", this);
-    profileIdLabel = new QLabel("ProfileId:", this);
+    useVirtPort = new QCheckBox(tr("VirtualPort"), this);
+    typeLabel = new QLabel(tr("Type:"), this);
+    managerIdLabel = new QLabel(tr("ManagerId:"), this);
+    typeIdLabel = new QLabel(tr("TypeId:"), this);
+    typeIdVerLabel = new QLabel(tr("TypeId Version:"), this);
+    instanceIdLabel = new QLabel(tr("InstanceId:"), this);
+    interfaceIdLabel = new QLabel(tr("InterfaceId:"), this);
+    profileIdLabel = new QLabel(tr("ProfileId:"), this);
     type = new QComboBox(this);
     type->addItem("802.1Qbh", "802.1Qbh");
     type->addItem("Open vSwitch", "openvswitch");
     type->insertSeparator(2);
-    type->addItem("Set manually", "");
+    type->addItem(tr("Set manually"), "");
     type->setEditText("");
     managerId = new QLineEdit(this);
     typeId = new QLineEdit(this);
@@ -85,8 +85,10 @@ void VirtualPort::setUsage(bool state)
 VirtPortParamList VirtualPort::getParameterList() const
 {
     VirtPortParamList _ret;
-    QString _type = type->itemData(type->currentIndex(), Qt::UserRole).toString();
-    if ( _type.isEmpty() ) _type = type->currentText();
+    QString _type = type->currentData(Qt::UserRole).toString();
+    if ( _type.isEmpty() ) {
+        _type = type->currentData(Qt::UserRole).toString();
+    };
     if ( useVirtPort->isChecked() ) {
         if ( !_type.isEmpty() ) {
             _ret.insert("type", _type);

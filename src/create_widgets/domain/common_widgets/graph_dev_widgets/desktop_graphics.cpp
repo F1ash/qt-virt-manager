@@ -3,10 +3,10 @@
 Desktop_Graphics::Desktop_Graphics(QWidget *parent) :
     _QWidget(parent)
 {
-    displayLabel = new QLabel("Display:", this);
+    displayLabel = new QLabel(tr("Display:"), this);
     display = new QLineEdit(this);
     display->setPlaceholderText(":0.0");
-    fullscreen = new QCheckBox("Fullscreen", this);
+    fullscreen = new QCheckBox(tr("Fullscreen"), this);
     commonLayout = new QGridLayout();
     commonLayout->addWidget(displayLabel, 0, 0);
     commonLayout->addWidget(display, 0, 1);

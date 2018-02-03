@@ -1,6 +1,8 @@
 #include "disk_edit.h"
 
-Disk_Edit::Disk_Edit(QWidget *parent, virConnectPtr *connPtrPtr) :
+Disk_Edit::Disk_Edit(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     Disk(parent, connPtrPtr)
 {
     connect(source, SIGNAL(currentIndexChanged(int)),
@@ -22,9 +24,7 @@ void Disk_Edit::setDataDescription(const QString &_xmlDesc)
             .firstChildElement("disk");
     QString _source = _device.attribute("type");
     int idx = source->findData(
-                _source,
-                Qt::UserRole,
-                Qt::MatchContains);
+                _source, Qt::UserRole, Qt::MatchExactly);
     source->setCurrentIndex( (idx<0)? 0:idx );
     source->setEnabled(false);
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());

@@ -49,7 +49,7 @@ public slots:
 private slots:
     void             usePort(bool);
     void             usePassword(bool);
-    void             addressEdit(QString);
+    void             addressEdit(int);
     void             readNetworkList(QStringList&);
     void             emitCompleteSignal();
 };

@@ -7,7 +7,7 @@
 NIC_Model::NIC_Model(QWidget *parent) :
     _Changed(parent)
 {
-    useModel = new QCheckBox("Device model:", this);
+    useModel = new QCheckBox(tr("Device model:"), this);
     useModel->setLayoutDirection(Qt::RightToLeft);
     model = new QComboBox(this);
     model->addItems(QEMU_DEV_MODELS);

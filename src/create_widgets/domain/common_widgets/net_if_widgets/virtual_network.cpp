@@ -1,8 +1,8 @@
 #include "virtual_network.h"
 
 virtNet_HlpThread::virtNet_HlpThread(
-        QObject *parent,
-        virConnectPtr* connPtrPtr) :
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     qwdHelpThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
@@ -63,12 +63,13 @@ void virtNet_HlpThread::run()
 }
 
 Virtual_Network::Virtual_Network(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget_Threaded(parent, connPtrPtr)
 {
-    networkLabel = new QLabel("Network:", this);
+    networkLabel = new QLabel(tr("Network:"), this);
     network = new QComboBox(this);
-    targetLabel = new QLabel("Target Device name:", this);
+    targetLabel = new QLabel(tr("Target Device name:"), this);
     target = new QLineEdit(this);
     target->setPlaceholderText("vnet7");
     baseLayout = new QGridLayout();
@@ -90,7 +91,7 @@ Virtual_Network::Virtual_Network(
     addr->type->setEnabled(false);
     nwFilterParams = new NWFilter_Params(
                 this,
-                "Network Filter on Interface");
+                tr("Network Filter on Interface"));
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(mac);
@@ -304,12 +305,12 @@ void Virtual_Network::setAvailableVirtNetworks(QStringList &_nets)
 {
     foreach (QString _network, _nets) {
         network->addItem(
-                    QString("Virtual network '%1'")
+                    QString(tr("Virtual network '%1'"))
                     .arg(_network),
                      _network);
     };
     network->insertSeparator(network->count());
-    network->addItem("Set exist Virtual Network manually", "");
+    network->addItem(tr("Set exist Virtual Network manually"), "");
 }
 void Virtual_Network::emitCompleteSignal()
 {

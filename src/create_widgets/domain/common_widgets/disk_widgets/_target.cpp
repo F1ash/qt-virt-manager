@@ -8,7 +8,7 @@
 _Target::_Target(QWidget *parent) :
     _Changed(parent)
 {
-    busLabel = new QLabel("Bus:", this);
+    busLabel = new QLabel(tr("Bus:"), this);
     bus = new QComboBox(this);
     bus->addItems(BUS_TYPES);
     bus->setItemIcon(0, QIcon::fromTheme(""));
@@ -19,15 +19,15 @@ _Target::_Target(QWidget *parent) :
     bus->setItemIcon(5, QIcon::fromTheme("drive-sd"));
     bus->setItemIcon(6, QIcon::fromTheme("drive-virtual-io"));
     bus->setItemIcon(7, QIcon::fromTheme("xen"));
-    devNameLabel = new QLabel("Logical Device name:", this);
+    devNameLabel = new QLabel(tr("Logical Device name:"), this);
     devName = new QLineEdit(this);
     devName->setPlaceholderText("sda");
-    trayLabel = new QCheckBox("Tray status:", this);
+    trayLabel = new QCheckBox(tr("Tray status:"), this);
     trayLabel->setLayoutDirection(Qt::RightToLeft);
     tray = new QComboBox(this);
     tray->addItems(QStringList()<<"closed"<<"open");
     tray->setEnabled(false);
-    removableLabel = new QCheckBox("Removable\nstatus:", this);
+    removableLabel = new QCheckBox(tr("Removable\nstatus:"), this);
     removableLabel->setLayoutDirection(Qt::RightToLeft);
     removable = new QComboBox(this);
     removable->addItems(QStringList()<<"off"<<"on");

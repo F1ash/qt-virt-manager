@@ -1,8 +1,8 @@
 #include "bridge_to_lan.h"
 
 bridge_HlpThread::bridge_HlpThread(
-        QObject *parent,
-        virConnectPtr* connPtrPtr) :
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     qwdHelpThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
@@ -42,7 +42,8 @@ void bridge_HlpThread::run()
 }
 
 Bridge_to_LAN::Bridge_to_LAN(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget_Threaded(parent, connPtrPtr)
 {
     bridgeLabel = new QLabel(tr("Bridge:"), this);
@@ -79,7 +80,7 @@ Bridge_to_LAN::Bridge_to_LAN(
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
     virtPort->type->setCurrentIndex(
-                virtPort->type->findText("Open vSwitch") );
+                virtPort->type->findData("openvswitch") );
     hlpThread = new bridge_HlpThread(this, connPtrPtr);
     connect(hlpThread, SIGNAL(errorMsg(const QString&, const uint)),
             this, SIGNAL(errorMsg(const QString&)));

@@ -1,8 +1,8 @@
 #include "direct_attachment.h"
 
 dirAttach_HlpThread::dirAttach_HlpThread(
-        QObject *parent,
-        virConnectPtr* connPtrPtr) :
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     qwdHelpThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
@@ -77,11 +77,12 @@ void dirAttach_HlpThread::run()
 }
 
 DirectAttachment::DirectAttachment(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget_Threaded(parent, connPtrPtr)
 {
-    netSourceLabel = new QLabel("Network source:", this);
-    sourceModeLabel = new QLabel("Source mode:", this);
+    netSourceLabel = new QLabel(tr("Network source:"), this);
+    sourceModeLabel = new QLabel(tr("Source mode:"), this);
     netSource = new QComboBox(this);
     sourceMode = new QComboBox(this);
     sourceMode->addItem("VEPA");
@@ -105,7 +106,7 @@ DirectAttachment::DirectAttachment(
     addr->type->setEnabled(false);
     nwFilterParams = new NWFilter_Params(
                 this,
-                "Network Filter on Interface");
+                tr("Network Filter on Interface"));
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(baseWdg);
     commonLayout->addWidget(virtPort);
@@ -278,11 +279,13 @@ void DirectAttachment::setAvailableSources(QStringList &_devs)
     foreach (QString _interface, _devs) {
         netSource->insertItem(
                 0,
-                QString("Host Device '%1' : macvtap")
+                QString(tr("Host Device '%1' : macvtap"))
                 .arg(_interface),
                 _interface);
     };
-    virtPort->type->setCurrentIndex( virtPort->type->findText("802.1Qbh") );
+    virtPort->type->setCurrentIndex(
+                virtPort->type->findData(
+                    "802.1Qbh", Qt::UserRole, Qt::MatchExactly));
 }
 void DirectAttachment::emitCompleteSignal()
 {

@@ -1,8 +1,10 @@
 #include "char_device_edit.h"
 
 CharDevice_Edit::CharDevice_Edit(
-        QWidget *parent, virConnectPtr *connPtrPtr,
-        virDomainPtr domain, QString _tag) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        virDomainPtr     domain,
+        QString          _tag) :
     CharDevice(parent, connPtrPtr, domain, _tag)
 {
     connect(devType, SIGNAL(currentIndexChanged(int)),
@@ -24,9 +26,7 @@ void CharDevice_Edit::setDataDescription(const QString &_xmlDesc)
             .firstChildElement(tag);
     QString _type = _device.attribute("type", "unix");
     int idx = devType->findData(
-                _type,
-                Qt::UserRole,
-                Qt::MatchContains);
+                _type, Qt::UserRole, Qt::MatchExactly);
     devType->setCurrentIndex( (idx<0)? 0:idx );
     _QWidget *wdg = static_cast<_QWidget*>(charDevWdg->currentWidget());
     if ( wdg!=nullptr ) wdg->setDataDescription(_xmlDesc);

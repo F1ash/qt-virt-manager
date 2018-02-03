@@ -67,7 +67,9 @@
 */
 
 Devices::Devices(
-        QWidget *parent, virConnectPtr *connPtrPtr, QString _xmlDesc) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          _xmlDesc) :
     _QWidget(parent, connPtrPtr), xmlDesc(_xmlDesc)
 {
     setObjectName("Devices");

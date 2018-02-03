@@ -21,18 +21,25 @@ DeviceData::DeviceData(
     QWidget(parent), ptr_ConnPtr(conn)
 {
     devName = new QLabel(this);
-    save = new QPushButton(QIcon::fromTheme("document-save"), "", this);
-    save->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    save->setToolTip("Save current device state");
-    revert = new QPushButton(QIcon::fromTheme("document-revert"), "", this);
-    revert->setToolTip("Revert to previous device state");
-    revert->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    save = new QPushButton(
+                QIcon::fromTheme("document-save"), "", this);
+    save->setSizePolicy(
+                QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    save->setToolTip(tr("Save current device state"));
+    revert = new QPushButton(
+                QIcon::fromTheme("document-revert"), "", this);
+    revert->setToolTip(
+                tr("Revert to previous device state"));
+    revert->setSizePolicy(
+                QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     restoreMenu = new DeviceRestoreMenu(this);
     restoreMenu->revertData->setEnabled(false);
     revert->setMenu(restoreMenu);
-    _close = new QPushButton(QIcon::fromTheme("dialog-close"), "", this);
-    _close->setToolTip("Close device editor");
-    _close->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    _close = new QPushButton(
+                QIcon::fromTheme("dialog-close"), "", this);
+    _close->setToolTip(tr("Close device editor"));
+    _close->setSizePolicy(
+                QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     panelLayout = new QHBoxLayout(this);
     panelLayout->addWidget(devName, 10, Qt::AlignLeft);
     panelLayout->addWidget(save, 1, Qt::AlignRight);
@@ -167,8 +174,8 @@ void DeviceData::closeDataEdit()
     if ( !currentStateSaved ) {
         int answer = QMessageBox::question(
                     this,
-                    "Save Device Data",
-                    "In Devices:\nSave last changes?",
+                    tr("Save Device Data"),
+                    tr("In Devices:\nSave last changes?"),
                     QMessageBox::Ok,
                     QMessageBox::Cancel);
         if ( answer==QMessageBox::Ok ) {

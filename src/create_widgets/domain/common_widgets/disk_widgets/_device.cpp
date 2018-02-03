@@ -6,7 +6,7 @@
 _Device::_Device(QWidget *parent) :
     _Changed(parent)
 {
-    devTypeLabel = new QLabel("Device type:", this);
+    devTypeLabel = new QLabel(tr("Device type:"), this);
     devType = new QComboBox(this);
     devType->addItems(DEVICE_TYPES);
     devType->setItemIcon(0, QIcon::fromTheme("drive-harddisk"));

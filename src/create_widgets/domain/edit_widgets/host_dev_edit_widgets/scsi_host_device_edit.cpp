@@ -1,17 +1,20 @@
 #include "scsi_host_device_edit.h"
 
 SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
     info = new QLabel(this);
     info->setPixmap(QIcon::fromTheme("dialog-warning")
                     .pixmap(this->fontInfo().pixelSize()));
     infoText = new QLabel(this);
-    infoText->setText("For SCSI devices, user\nis responsible to make sure\nthe device is not used by host");
+    infoText->setText(
+tr("For SCSI devices, user\nis responsible to make sure\n\
+the device is not used by host"));
     scsiType = new QComboBox(this);
-    scsiType->addItem("SCSI Adapter Name", "scsi");
-    scsiType->addItem("iSCSI Device Name", "iscsi");
+    scsiType->addItem(tr("SCSI Adapter Name"), "scsi");
+    scsiType->addItem(tr("iSCSI Device Name"), "iscsi");
     devName = new QLineEdit(this);
     devName->setPlaceholderText("scsi_hostN");
     scsiDevice = new AdapterAddress(this);
@@ -29,9 +32,7 @@ SCSI_Host_Device_Edit::SCSI_Host_Device_Edit(
     baseWdg->setLayout(baseLayout);
     addr = new DeviceAddress(this);
     int idx = addr->type->findData(
-                "drive",
-                Qt::UserRole,
-                Qt::MatchContains);
+                "drive", Qt::UserRole, Qt::MatchExactly);
     addr->type->setCurrentIndex( (idx<0)? 0:idx );
     addr->type->setEnabled(false);
     addr->setCurrentAddrWidget(idx);

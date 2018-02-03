@@ -3,12 +3,12 @@
 UnixWidget::UnixWidget(QWidget *parent, QString _tag) :
     _QWidget(parent), tag(_tag)
 {
-    pathLabel = new QLabel("Path:", this);
+    pathLabel = new QLabel(tr("Path:"), this);
     path = new QLineEdit(this);
-    modeLabel = new QLabel("Mode:", this);
+    modeLabel = new QLabel(tr("Mode:"), this);
     mode = new QComboBox(this);
-    mode->addItem("Server mode (bind)", "bind");
-    mode->addItem("Client mode (connect)", "connect");
+    mode->addItem(tr("Server mode (bind)"), "bind");
+    mode->addItem(tr("Client mode (connect)"), "connect");
     unixLayout = new QGridLayout(this);
     unixLayout->addWidget(pathLabel, 0, 0);
     unixLayout->addWidget(path, 0, 1);

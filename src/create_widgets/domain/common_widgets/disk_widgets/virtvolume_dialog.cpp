@@ -1,7 +1,9 @@
 #include "virtvolume_dialog.h"
 
 VirtVolumeDialog::VirtVolumeDialog(
-        QWidget *parent, virConnectPtr *connPtrPtr, QString _type) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr,
+        QString          _type) :
     QDialog(parent), ptr_ConnPtr(connPtrPtr), type(_type)
 {
     setModal(true);
@@ -24,11 +26,11 @@ VirtVolumeDialog::VirtVolumeDialog(
 
     chooseVolume = new QPushButton(
                 QIcon::fromTheme("dialog-ok"),
-                "Choose Volume",
+                tr("Choose Volume"),
                 this);
     cancel = new QPushButton(
                 QIcon::fromTheme("dialog-cancel"),
-                "Cancel",
+                tr("Cancel"),
                 this);
     connect(chooseVolume, SIGNAL(clicked()),
             this, SLOT(set_Result()));
@@ -102,7 +104,7 @@ void VirtVolumeDialog::showMsg(const QString &msg)
 {
     QMessageBox::information(
                 this,
-                "VirtVolumeDialog",
+                tr("VirtVolumeDialog"),
                 msg,
                 QMessageBox::Ok);
 }
@@ -113,7 +115,7 @@ void VirtVolumeDialog::execAction(TASK *_task)
 void VirtVolumeDialog::poolThreadResult(Result data)
 {
     if ( data.data.isEmpty() ) {
-        poolList->addItem("Not found");
+        poolList->addItem(tr("Not found"));
     } else {
         foreach ( QVariantMap _data, data.data ) {
             QString _type = _data.value("type", "EMPTY_STR").toString();

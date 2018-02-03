@@ -1,10 +1,11 @@
 #include "dir_disk.h"
 
 Dir_Disk::Dir_Disk(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Disk(parent, connPtrPtr)
 {
-    browse = new QPushButton("Directory:", this);
+    browse = new QPushButton(tr("Directory:"), this);
     path = new QLineEdit(this);
     path->setPlaceholderText("/var/lib/xen/images/");
 
@@ -166,7 +167,7 @@ void Dir_Disk::setDirPath()
 {
     QString dirPath = QFileDialog::getExistingDirectory(
                 this,
-                "Directory Path",
+                tr("Directory Path"),
                 "/");
     if ( !dirPath.isEmpty() ) path->setText(dirPath);
 }

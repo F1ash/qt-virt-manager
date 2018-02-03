@@ -1,8 +1,8 @@
 #include "pci_host_device.h"
 
 pci_hostHlpThread::pci_hostHlpThread(
-        QObject *parent,
-        virConnectPtr* connPtrPtr) :
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     _VirtThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
@@ -45,7 +45,8 @@ void pci_hostHlpThread::run()
 }
 
 PCI_Host_Device::PCI_Host_Device(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
     devList = new QListWidget(this);
@@ -70,7 +71,8 @@ QDomDocument PCI_Host_Device::getDataDocument() const
     QDomDocument doc;
     QString _Addr, domain, bus, slot, function, _hex;
     if ( devList->selectedItems().count()>0 ) {
-        _Addr = devList->selectedItems().first()->data(Qt::UserRole).toString();
+        _Addr = devList->selectedItems()
+                .first()->data(Qt::UserRole).toString();
         QStringList _AddrList = _Addr.split(":");
         // if some from parameters is not set, then don't set whole element
         QDomElement _source, _address, _device, _devDesc;

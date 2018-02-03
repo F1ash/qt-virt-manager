@@ -1,11 +1,10 @@
 #include "mount_fstype.h"
 
-MountFsType::MountFsType(QWidget *parent,
-                         QString _type) :
+MountFsType::MountFsType(QWidget *parent, QString _type) :
     _FsType(parent, _type)
 {
-    source->setPlaceholderText("Source host directory");
-    target->setPlaceholderText("Target guest directory");
+    source->setPlaceholderText(tr("Source host directory"));
+    target->setPlaceholderText(tr("Target guest directory"));
     connect(sourceLabel, SIGNAL(clicked()),
             this, SLOT(getSourcePath()));
     // dataChanged connections
@@ -112,7 +111,7 @@ void MountFsType::getSourcePath()
 {
     QString dirName = QFileDialog::getExistingDirectory(
                 this,
-                "Source Path",
+                tr("Source Path"),
                 "~");
     if ( !dirName.isEmpty() ) source->setText(dirName);
 }

@@ -3,7 +3,7 @@
 _StartupPolicy::_StartupPolicy(QWidget *parent) :
     _Changed(parent)
 {
-    startupPolicyLabel = new QCheckBox("startupPolicy:", this);
+    startupPolicyLabel = new QCheckBox(tr("startupPolicy:"), this);
     startupPolicyLabel->setLayoutDirection(Qt::RightToLeft);
     startupPolicy = new QComboBox(this);
     startupPolicy->addItems(QStringList()<<"mandatory"<<"requisite"<<"optional");

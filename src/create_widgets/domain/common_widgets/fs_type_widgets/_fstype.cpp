@@ -1,15 +1,16 @@
 #include "_fstype.h"
 
-_FsType::_FsType(QWidget *parent,
-                 QString _type) :
+_FsType::_FsType(
+        QWidget *parent,
+        QString  _type) :
     _QWidget(parent), connType(_type)
 {
-    driverLabel = new QLabel("Driver:", this);
-    wrPolicyLabel = new QLabel("WrPolicy:", this);
-    formatLabel = new QLabel("Format:", this);
-    accessModeLabel = new QLabel("AccessMode:", this);
-    sourceLabel = new QPushButton("Source:", this);
-    targetLabel = new QLabel("Target:", this);
+    driverLabel = new QLabel(tr("Driver:"), this);
+    wrPolicyLabel = new QLabel(tr("WrPolicy:"), this);
+    formatLabel = new QLabel(tr("Format:"), this);
+    accessModeLabel = new QLabel(tr("AccessMode:"), this);
+    sourceLabel = new QPushButton(tr("Source:"), this);
+    targetLabel = new QLabel(tr("Target:"), this);
     driver = new QComboBox(this);
     if ( connType=="lxc" ) {
         driver->addItems(LXC_DRIVER_TYPES);
@@ -39,7 +40,7 @@ _FsType::_FsType(QWidget *parent,
     driverAttrWdg->setVisible(false);
     source = new QLineEdit(this);
     target = new QLineEdit(this);
-    readOnly = new QCheckBox("Export filesystem readonly", this);
+    readOnly = new QCheckBox(tr("Export filesystem readonly"), this);
 
     commonLayout = new QGridLayout();
     commonLayout->addWidget(driverLabel, 0, 0);

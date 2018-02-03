@@ -1,10 +1,11 @@
 #include "block_disk.h"
 
 Block_Disk::Block_Disk(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Disk(parent, connPtrPtr)
 {
-    browse = new QPushButton("Block device:", this);
+    browse = new QPushButton(tr("Block device:"), this);
     path = new QLineEdit(this);
     path->setPlaceholderText("/dev/sda");
 
@@ -190,7 +191,7 @@ void Block_Disk::setDevPath()
 {
     QString filePath = QFileDialog::getOpenFileName(
                 this,
-                "Block Device Path",
+                tr("Block Device Path"),
                 "/dev");
     if ( !filePath.isEmpty() ) path->setText(filePath);
 }

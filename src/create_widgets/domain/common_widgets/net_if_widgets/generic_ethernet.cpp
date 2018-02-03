@@ -1,11 +1,12 @@
 #include "generic_ethernet.h"
 
 Generic_Ethernet::Generic_Ethernet(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
-    targetLabel = new QLabel("Target Device name:", this);
-    scriptLabel = new QLabel("Script path:", this);
+    targetLabel = new QLabel(tr("Target Device name:"), this);
+    scriptLabel = new QLabel(tr("Script path:"), this);
     target = new QLineEdit(this);
     target->setPlaceholderText("vnetN");
     script = new QLineEdit(this);

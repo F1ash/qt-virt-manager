@@ -4,17 +4,18 @@
     <<"nbd"<<"iscsi"<<"rbd"<<"sheepdog"<<"gluster"
 
 Network_Disk::Network_Disk(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Disk(parent, connPtrPtr)
 {
-    protocolLabel = new QLabel("Protocol:", this);
+    protocolLabel = new QLabel(tr("Protocol:"), this);
     protocol = new QComboBox(this);
     protocol->addItems(PROTOCOLS);
     protocol->insertSeparator(protocol->count());
-    protocol->insertItem(protocol->count(), "Set manually");
-    sourceLabel = new QPushButton("Source:", this);
+    protocol->insertItem(protocol->count(), tr("Set manually"));
+    sourceLabel = new QPushButton(tr("Source:"), this);
     sourceName = new QLineEdit(this);
-    sourceName->setPlaceholderText("Source name or URL path");
+    sourceName->setPlaceholderText(tr("Source name or URL path"));
     auth = new _Storage_Auth(this, ptr_ConnPtr);
     auth->setVisible(false);
 

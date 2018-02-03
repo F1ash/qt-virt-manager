@@ -3,7 +3,7 @@
 DevWidget::DevWidget(QWidget *parent, QString _tag) :
     _QWidget(parent), tag(_tag)
 {
-    pathLabel = new QLabel("Path:", this);
+    pathLabel = new QLabel(tr("Path:"), this);
     path = new QLineEdit(this);
     devLayout = new QGridLayout(this);
     devLayout->addWidget(pathLabel, 0, 0);

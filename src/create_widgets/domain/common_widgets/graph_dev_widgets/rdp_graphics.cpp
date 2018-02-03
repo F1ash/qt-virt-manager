@@ -3,11 +3,11 @@
 RDP_Graphics::RDP_Graphics(QWidget *parent) :
     _QWidget(parent)
 {
-    autoPort = new QCheckBox("AutoPort", this);
+    autoPort = new QCheckBox(tr("AutoPort"), this);
     port = new QSpinBox(this);
     port->setRange(1000, 65535);
-    replaceUser = new QCheckBox("Replace\nUser", this);
-    multiUser = new QCheckBox("MultiUser", this);
+    replaceUser = new QCheckBox(tr("Replace\nUser"), this);
+    multiUser = new QCheckBox(tr("MultiUser"), this);
     commonLayout = new QGridLayout();
     commonLayout->addWidget(autoPort, 0, 0);
     commonLayout->addWidget(port, 0, 1);
@@ -42,8 +42,12 @@ QDomDocument RDP_Graphics::getDataDocument() const
     } else {
         _devDesc.setAttribute("port", port->text());
     };
-    if ( multiUser->isChecked() ) _devDesc.setAttribute("multiUser", "yes");
-    if ( replaceUser->isChecked() ) _devDesc.setAttribute("replaceUser", "yes");
+    if ( multiUser->isChecked() ) {
+        _devDesc.setAttribute("multiUser", "yes");
+    };
+    if ( replaceUser->isChecked() ) {
+        _devDesc.setAttribute("replaceUser", "yes");
+    };
     _device.appendChild(_devDesc);
     doc.appendChild(_device);
     return doc;

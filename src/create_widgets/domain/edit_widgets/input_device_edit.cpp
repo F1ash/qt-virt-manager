@@ -23,15 +23,11 @@ void InputDevice_Edit::setDataDescription(const QString &_xmlDesc)
     QString _attr;
     _attr = _device.attribute("type");
     int idx = type->findData(
-                _attr,
-                Qt::UserRole,
-                Qt::MatchContains);
+                _attr, Qt::UserRole, Qt::MatchExactly);
     type->setCurrentIndex( (idx<0)? 0:idx );
     _attr = _device.attribute("bus");
     idx = bus->findData(
-                _attr,
-                Qt::UserRole,
-                Qt::MatchContains);
+                _attr, Qt::UserRole, Qt::MatchExactly);
     bus->setCurrentIndex( (idx<0)? 0:idx );
     _addr = _device.firstChildElement("address");
     addr->use->setChecked(!_addr.isNull());

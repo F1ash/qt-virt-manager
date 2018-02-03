@@ -3,17 +3,17 @@
 UdpWidget::UdpWidget(QWidget *parent, QString _tag) :
     _QWidget(parent), tag(_tag)
 {
-    hostLabel = new QLabel("Host:", this);
+    hostLabel = new QLabel(tr("Host:"), this);
     host = new QLineEdit(this);
     host->setText("127.0.0.1");
-    port1Label = new QLabel("Port:", this);
+    port1Label = new QLabel(tr("Port:"), this);
     port1 = new QSpinBox(this);
     port1->setRange(0, 65535);
     port1->setValue(4555);
-    bindHostLabel = new QLabel("Bind Host:", this);
+    bindHostLabel = new QLabel(tr("Bind Host:"), this);
     bindHost = new QLineEdit(this);
     bindHost->setText("127.0.0.1");
-    port2Label = new QLabel("Port:", this);
+    port2Label = new QLabel(tr("Port:"), this);
     port2 = new QSpinBox(this);
     port2->setRange(0, 65535);
     port2->setValue(4555);

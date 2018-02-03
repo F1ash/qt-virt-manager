@@ -3,10 +3,11 @@
 AdapterAddress::AdapterAddress(QWidget *parent) :
     QWidget(parent)
 {
-    adapterAddr = new QCheckBox("SCSI Device\n address:", this);
-    busLabel = new QLabel("Bus:", this);
-    targetLabel = new QLabel("Target:", this);
-    unitLabel = new QLabel("Unit:", this);
+    adapterAddr = new QCheckBox(
+                tr("SCSI Device\n address:"), this);
+    busLabel = new QLabel(tr("Bus:"), this);
+    targetLabel = new QLabel(tr("Target:"), this);
+    unitLabel = new QLabel(tr("Unit:"), this);
     bus = new QSpinBox(this);
     target = new QSpinBox(this);
     unit = new QSpinBox(this);

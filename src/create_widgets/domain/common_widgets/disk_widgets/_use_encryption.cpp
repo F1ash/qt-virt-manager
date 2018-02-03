@@ -1,13 +1,16 @@
 #include "_use_encryption.h"
 
-_UseEncryption::_UseEncryption(QWidget *parent, virConnectPtr *connPtrPtr) :
+_UseEncryption::_UseEncryption(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Changed(parent), ptr_ConnPtr(connPtrPtr)
 {
-    usage = new QCheckBox("Use Encryption", this);
+    usage = new QCheckBox(tr("Use Encryption"), this);
     usage->setLayoutDirection(Qt::RightToLeft);
     secUsage = new QLineEdit(this);
-    findSecret = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
-    findSecret->setToolTip("Find Secret");
+    findSecret = new QPushButton(
+                QIcon::fromTheme("edit-find"), "", this);
+    findSecret->setToolTip(tr("Find Secret"));
     baseLayout = new QHBoxLayout(this);
     baseLayout->addWidget(secUsage);
     baseLayout->addWidget(findSecret);
@@ -99,19 +102,19 @@ void _UseEncryption::resultReceiver(Result data)
     bool secExist = false;
     if ( currVolumePath.isEmpty() ) {
         if ( _secUUIDs.contains(secUsage->text()) ) {
-            _text = "Secret is exist";
+            _text = tr("Secret is exist");
             secExist = true;
         } else {
-            _text = "Secret isn't exist";
+            _text = tr("Secret isn't exist");
         }
     } else {
         if ( _secUsages.contains(currVolumePath) ) {
-            _text = "Secret is exist for current volume";
+            _text = tr("Secret is exist for current volume");
             int i = _secUsages.indexOf(currVolumePath);
             secUsage->setText(_secUUIDs.at(i));
             secExist = true;
         } else {
-            _text = "Secret isn't exist for current volume";
+            _text = tr("Secret isn't exist for current volume");
             secUsage->clear();
         };
     };
@@ -130,7 +133,7 @@ void _UseEncryption::setVolumeSecret()
     FSD_Result res = findSecDialog->getResult();
     findSecDialog->deleteLater();
     if ( "VOLUME"!=res.type.toUpper() ) {
-        QString msg = QString("Type of secret should be is a VOLUME");
+        QString msg = tr("Type of secret should be is a VOLUME");
         findSecDialog->showMsg(msg);
         return;
     };

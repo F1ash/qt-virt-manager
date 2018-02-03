@@ -12,13 +12,13 @@ RAMFsType::RAMFsType(QWidget *parent, QString _type) :
     readOnly->setVisible(false);
     commonLayout->removeWidget(sourceLabel);
     sourceLabel->deleteLater();
-    commonLayout->addWidget(new QLabel("Usage (MiB):", this), 4, 0);
+    commonLayout->addWidget(new QLabel(tr("Usage (MiB):"), this), 4, 0);
     commonLayout->removeWidget(source);
     source->deleteLater();
     usage = new QSpinBox(this);
     usage->setRange(0, 1024);
     commonLayout->addWidget(usage, 4, 1);
-    target->setPlaceholderText("Target guest directory");
+    target->setPlaceholderText(tr("Target guest directory"));
     // dataChanged connections
     connect(usage, SIGNAL(valueChanged(int)),
             this, SLOT(stateChanged()));

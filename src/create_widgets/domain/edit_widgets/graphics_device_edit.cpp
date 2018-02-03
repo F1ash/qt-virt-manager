@@ -1,7 +1,8 @@
 #include "graphics_device_edit.h"
 
 GraphicsDevice_Edit::GraphicsDevice_Edit(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     GraphicsDevice(parent, connPtrPtr)
 {
     // dataChanged signals
@@ -22,9 +23,7 @@ void GraphicsDevice_Edit::setDataDescription(const QString &_xmlDesc)
             .firstChildElement("graphics");
     QString _type = _device.attribute("type", "");
     int idx = type->findData(
-                _type,
-                Qt::UserRole,
-                Qt::MatchContains);
+                _type, Qt::UserRole, Qt::MatchExactly);
     type->setCurrentIndex( (idx<0)? 0:idx );
     type->setEnabled(false);
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());

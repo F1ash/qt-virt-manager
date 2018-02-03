@@ -1,10 +1,11 @@
 #include "file_disk.h"
 
 File_Disk::File_Disk(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _Disk(parent, connPtrPtr)
 {
-    browse = new QPushButton("File:", this);
+    browse = new QPushButton(tr("File:"), this);
     path = new QLineEdit(this);
     path->setPlaceholderText("/var/lib/xen/images/fv0");
 
@@ -194,7 +195,7 @@ void File_Disk::setFilePath()
 {
     QString filePath = QFileDialog::getOpenFileName(
                 this,
-                "File Path",
+                tr("File Path"),
                 "/");
     if ( !filePath.isEmpty() ) path->setText(filePath);
 }

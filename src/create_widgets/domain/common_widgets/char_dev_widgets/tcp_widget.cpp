@@ -3,23 +3,23 @@
 TcpWidget::TcpWidget(QWidget *parent, QString _tag) :
     _QWidget(parent), tag(_tag)
 {
-    modeLabel = new QLabel("Mode:", this);
+    modeLabel = new QLabel(tr("Mode:"), this);
     mode = new QComboBox(this);
-    mode->addItem("Server mode (bind)", "bind");
-    mode->addItem("Client mode (connect)", "connect");
-    hostLabel = new QLabel("Host:", this);
+    mode->addItem(tr("Server mode (bind)"), "bind");
+    mode->addItem(tr("Client mode (connect)"), "connect");
+    hostLabel = new QLabel(tr("Host:"), this);
     host = new QLineEdit(this);
     host->setText("127.0.0.1");
-    portLabel = new QLabel("Port:", this);
+    portLabel = new QLabel(tr("Port:"), this);
     port = new QSpinBox(this);
     port->setRange(0, 65535);
     port->setValue(4555);
-    telnetLabel = new QLabel("Use Telnet:", this);
+    telnetLabel = new QLabel(tr("Use Telnet:"), this);
     telnet = new QComboBox(this);
-    telnet->addItem("Usual", "raw");
-    telnet->addItem("Telnet", "telnet");
-    telnet->addItem("Secure Telnet", "telnets");
-    telnet->addItem("TLS", "tls");
+    telnet->addItem(tr("Usual"), "raw");
+    telnet->addItem(tr("Telnet"), "telnet");
+    telnet->addItem(tr("Secure Telnet"), "telnets");
+    telnet->addItem(tr("TLS"), "tls");
     tcpLayout = new QGridLayout();
     tcpLayout->addWidget(modeLabel, 0, 0);
     tcpLayout->addWidget(mode, 0, 1);

@@ -1,7 +1,8 @@
 #include "vnc_graphics.h"
 
 vnc_graphHlpThread::vnc_graphHlpThread(
-        QObject *parent, virConnectPtr* connPtrPtr) :
+        QObject         *parent,
+        virConnectPtr   *connPtrPtr) :
     _VirtThread(parent, connPtrPtr)
 {
     qRegisterMetaType<QStringList>("QStringList&");
@@ -43,41 +44,46 @@ void vnc_graphHlpThread::run()
 #define KEYMAPs QStringList()<<"auto"<<"en-gb"<<"en-us"<<"ru"<<"fr"<<"de"<<"is"<<"it"<<"ja"
 
 VNC_Graphics::VNC_Graphics(
-        QWidget *parent, virConnectPtr *connPtrPtr) :
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     _QWidget(parent, connPtrPtr)
 {
-    addrLabel = new QLabel("Address:", this);
+    addrLabel = new QLabel(tr("Address:"), this);
     address = new QComboBox(this);
     address->setEditable(false);
-    address->addItem("HyperVisor default", "");
-    address->addItem("LocalHost only", "127.0.0.1");
-    address->addItem("All Interfaces", "0.0.0.0");
-    address->addItem("Custom", "custom");
-    address->addItem("Use named configured Network", "network");
-    address->addItem("Use Socket", "socket");
+    address->addItem(tr("HyperVisor default"), "");
+    address->addItem(tr("LocalHost only"), "127.0.0.1");
+    address->addItem(tr("All Interfaces"), "0.0.0.0");
+    address->addItem(tr("Custom"), "custom");
+    address->addItem(tr("Use named configured Network"), "network");
+    address->addItem(tr("Use Socket"), "socket");
     address->insertSeparator(4);
     address->insertSeparator(6);
     networks = new QComboBox(this);
     networks->setVisible(false);
-    autoPort = new QCheckBox("AutoPort", this);
+    autoPort = new QCheckBox(tr("AutoPort"), this);
     port = new QSpinBox(this);
     port->setRange(1000, 65535);
     port->setValue(5900);
     port->setEnabled(false);
-    usePassw = new QCheckBox("Password", this);
+    usePassw = new QCheckBox(tr("Password"), this);
     passw = new QLineEdit(this);
     passw->setEnabled(false);
-    keymapLabel = new QLabel("Keymap:", this);
+    keymapLabel = new QLabel(tr("Keymap:"), this);
     keymap = new QComboBox(this);
     keymap->setEditable(true);
     keymap->addItems(KEYMAPs);
     keymap->setEnabled(false);
-    shareLabel = new QLabel("Share policy:", this);
+    shareLabel = new QLabel(tr("Share policy:"), this);
     sharePolicy = new QComboBox(this);
-    sharePolicy->addItem("Multiple clients (default)", "");
-    sharePolicy->addItem("Exclusive access", "allow-exclusive");
-    sharePolicy->addItem("Disable exclusive client access", "force-shared");
-    sharePolicy->addItem("Welcomes every connection unconditionally", "ignore");
+    sharePolicy->addItem(
+                tr("Multiple clients (default)"), "");
+    sharePolicy->addItem(
+                tr("Exclusive access"), "allow-exclusive");
+    sharePolicy->addItem(
+                tr("Disable exclusive client access"), "force-shared");
+    sharePolicy->addItem(
+                tr("Welcomes every connection unconditionally"), "ignore");
     commonLayout = new QGridLayout();
     commonLayout->addWidget(addrLabel, 0, 0);
     commonLayout->addWidget(address, 0, 1);
@@ -91,8 +97,8 @@ VNC_Graphics::VNC_Graphics(
     commonLayout->addWidget(shareLabel, 5, 0, Qt::AlignTop);
     commonLayout->addWidget(sharePolicy, 5, 1, Qt::AlignTop);
     setLayout(commonLayout);
-    connect(address, SIGNAL(currentIndexChanged(QString)),
-            this, SLOT(addressEdit(QString)));
+    connect(address, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(addressEdit(int)));
     connect(autoPort, SIGNAL(toggled(bool)),
             this, SLOT(usePort(bool)));
     connect(usePassw, SIGNAL(toggled(bool)),
@@ -189,9 +195,7 @@ void VNC_Graphics::setDataDescription(const QString &_xmlDesc)
             .firstChildElement("graphics");
     QString _sharePolicy = _device.attribute("sharePolicy");
     int idx = sharePolicy->findData(
-                _sharePolicy,
-                Qt::UserRole,
-                Qt::MatchContains);
+                _sharePolicy, Qt::UserRole, Qt::MatchExactly);
     sharePolicy->setCurrentIndex( (idx<0)? 0:idx );
     autoPort->setChecked(
                 _device.attribute("autoport")=="yes");
@@ -210,9 +214,7 @@ void VNC_Graphics::setDataDescription(const QString &_xmlDesc)
     };
     if ( _device.hasAttribute("socket") ) {
         idx = address->findData(
-                    "socket",
-                    Qt::UserRole,
-                    Qt::MatchContains);
+                    "socket", Qt::UserRole, Qt::MatchExactly);
         address->setCurrentIndex( (idx<0)? 3:idx );
         address->setEditText(_device.attribute("socket"));
     } else {
@@ -224,9 +226,7 @@ void VNC_Graphics::setDataDescription(const QString &_xmlDesc)
         _data = _listen.attribute(_type);
         if ( !_type.isEmpty() ) {
             idx = address->findData(
-                        _type,
-                        Qt::UserRole,
-                        Qt::MatchContains);
+                        _type, Qt::UserRole, Qt::MatchExactly);
             address->setCurrentIndex( (idx<0)? 3:idx );
             if ( _type=="address" ) {
                 if ( address->currentIndex()==3 )
@@ -257,24 +257,25 @@ void VNC_Graphics::usePassword(bool state)
     passw->setEnabled(state);
     keymap->setEnabled(state);
 }
-void VNC_Graphics::addressEdit(QString s)
+void VNC_Graphics::addressEdit(int i)
 {
-    if ( s.contains("network", Qt::CaseInsensitive) ) {
+    QString s = address->itemData(i, Qt::UserRole).toString();
+    if ( s == "network" ) {
         address->setEditable(false);
-        addrLabel->setText("Network:");
+        addrLabel->setText(tr("Network:"));
         networks->setVisible(true);
         autoPort->setEnabled(true);
         port->setEnabled(true);
-    } else if ( s.contains("socket", Qt::CaseInsensitive) ) {
-        addrLabel->setText("Socket:");
+    } else if ( s == "socket" ) {
+        addrLabel->setText(tr("Socket:"));
         address->setEditable(true);
         address->clearEditText();
         networks->setVisible(false);
         autoPort->setEnabled(false);
         port->setEnabled(false);
     } else {
-        addrLabel->setText("Address:");
-        if ( s == "Custom" ) {
+        addrLabel->setText(tr("Address:"));
+        if ( s == "custom" ) {
             address->setEditable(true);
             address->clearEditText();
         } else {

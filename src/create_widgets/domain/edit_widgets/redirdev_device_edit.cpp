@@ -1,6 +1,8 @@
 #include "redirdev_device_edit.h"
 
-RedirDevDevice_Edit::RedirDevDevice_Edit(QWidget *parent, virConnectPtr *connPtrPtr) :
+RedirDevDevice_Edit::RedirDevDevice_Edit(
+        QWidget         *parent,
+        virConnectPtr   *connPtrPtr) :
     RedirDevDevice(parent, connPtrPtr)
 {
     connect(type, SIGNAL(currentIndexChanged(int)),
@@ -26,9 +28,7 @@ void RedirDevDevice_Edit::setDataDescription(const QString &_xmlDesc)
             .firstChildElement("redirdev");
     QString _type = _device.attribute("type", "tcp");
     int idx = type->findData(
-                _type,
-                Qt::UserRole,
-                Qt::MatchContains);
+                _type, Qt::UserRole, Qt::MatchExactly);
     type->setCurrentIndex( (idx<0)? 0:idx );
     if ( _type=="tcp" ) {
         _source = _device.firstChildElement("source");
