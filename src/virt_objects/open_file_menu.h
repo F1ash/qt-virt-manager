@@ -26,6 +26,7 @@ private:
     QAction    *manual;
     Act_Param   task;
     Actions     act;
+    _TO_STRING *TO_STRING;
 
 private slots:
     void        chooseExample();

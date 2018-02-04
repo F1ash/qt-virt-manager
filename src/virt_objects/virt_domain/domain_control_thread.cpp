@@ -244,7 +244,7 @@ Result DomControlThread::getDomainData0()
     const char *_type = virConnectGetType(*task.srcConnPtr);
     if ( _type==nullptr ) {
         result.result = false;
-        result.err = tr("Error in getting the connection type.");
+        result.err = tr("Error at getting the connection type.");
     } else {
         result.result = true;
     };
@@ -315,7 +315,7 @@ Result DomControlThread::getDomainData1()
     const char *_type = virConnectGetType(*task.srcConnPtr);
     if ( _type==nullptr ) {
         result.result = false;
-        result.err = tr("Error in getting the connection type.");
+        result.err = tr("Error at getting the connection type.");
     } else {
         result.result = true;
     };
@@ -768,7 +768,7 @@ Result DomControlThread::changeAutoStartDomain()
     result.name = name;
     result.result = set;
     result.msg.append(
-                QString(tr("'<b>%1</b>' Domain autostart %2 Set."))
+                QString(tr("'<b>%1</b>' Domain autostart %2 changed."))
                 .arg(name).arg((set)? "": tr("don't")));
     return result;
 }
@@ -809,7 +809,7 @@ Result DomControlThread::getDomainXMLDesc()
     result.name = name;
     result.result = read;
     result.msg.append(
-                QString(tr("'<b>%1</b>' Domain %2 XML'ed"))
+                QString(tr("'<b>%1</b>' Domain %2 XML'ed."))
                 .arg(name).arg((read)? "": tr("don't")));
     return result;
 }
@@ -939,7 +939,7 @@ Result DomControlThread::revertSnapshoteDomain()
         virDomainFree(domain);
     };
     result.msg.append(
-                QString(tr("'<b>%1</b>' snapshot in <b>%2</b> Domain %3 reverted."))
+                QString(tr("'<b>%1</b>' snapshot state for <b>%2</b> Domain %3 reverted."))
                 .arg(result.name).arg(domName).arg((reverted)? "": tr("don't")));
     result.result = reverted;
     return result;
@@ -981,7 +981,7 @@ Result DomControlThread::deleteSnapshoteDomain()
         virDomainFree(domain);
     };
     result.msg.append(
-                QString(tr("'<b>%1</b>' snapshot in <b>%2</b> Domain %3 deleted."))
+                QString(tr("'<b>%1</b>' snapshot for <b>%2</b> Domain %3 deleted."))
                 .arg(result.name).arg(domName).arg((deleted)? "": tr("don't")));
     result.result = deleted;
     return result;

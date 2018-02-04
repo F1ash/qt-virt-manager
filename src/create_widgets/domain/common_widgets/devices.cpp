@@ -219,81 +219,81 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc, const bool flag)
         // Hard drives, floppy disks, CDROMs
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Disk %1")).arg(desc.toUpper()));
+        name.append(QString("Disk %1").arg(desc.toUpper()));
     } else if ( device=="interface" ) {
         // Network Interface
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Network %1")).arg(desc.toUpper()));
+        name.append(QString("Network %1").arg(desc.toUpper()));
     } else if ( device=="serial" ) {
         // Serial port
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Serial Port %1")).arg(desc.toUpper()));
+        name.append(QString("Serial Port %1").arg(desc.toUpper()));
     } else if ( device=="parallel" ) {
         // Parallel port
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Parallel Port %1")).arg(desc.toUpper()));
+        name.append(QString("Parallel Port %1").arg(desc.toUpper()));
     } else if ( device=="console" ) {
         // Console
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Console %1")).arg(desc.toUpper()));
+        name.append(QString("Console %1").arg(desc.toUpper()));
     } else if ( device=="channel" ) {
         // Channel
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Channel %1")).arg(desc.toUpper()));
+        name.append(QString("Channel %1").arg(desc.toUpper()));
     } else if ( device=="smartcard" ) {
         // SmartCard
-        name.append(QString(tr("SmartCard %1")).arg(desc.toUpper()));
+        name.append(QString("SmartCard %1").arg(desc.toUpper()));
     } else if ( device=="input" ) {
         // Input
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Input %1")).arg(desc.toUpper()));
+        name.append(QString("Input %1").arg(desc.toUpper()));
     } else if ( device=="hub" ) {
         // Hub
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Hub %1")).arg(desc.toUpper()));
+        name.append(QString("Hub %1").arg(desc.toUpper()));
     } else if ( device=="video" ) {
         // Video
         if (list.item(0).firstChildElement("model").attributes().contains("type"))
             desc = list.item(0).firstChildElement("model")
                     .attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Video %1")).arg(desc.toUpper()));
+        name.append(QString("Video %1").arg(desc.toUpper()));
     } else if ( device=="sound" ) {
         // Sound
         if (list.item(0).attributes().contains("model"))
             desc = list.item(0).attributes().namedItem("model").nodeValue();
-        name.append(QString(tr("Sound %1")).arg(desc.toUpper()));
+        name.append(QString("Sound %1").arg(desc.toUpper()));
     } else if ( device=="hostdev" ) {
         // HostDevice
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Host Device %1")).arg(desc.toUpper()));
+        name.append(QString("Host Device %1").arg(desc.toUpper()));
     } else if ( device=="graphics" ) {
         // Graphics
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Display %1")).arg(desc.toUpper()));
+        name.append(QString("Display %1").arg(desc.toUpper()));
     } else if ( device=="redirdev" ) {
         // Redirected devices
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("USB Redirector %1")).arg(desc.toUpper()));
+        name.append(QString("USB Redirector %1").arg(desc.toUpper()));
     } else if ( device=="filesystem" ) {
         // Filesystems
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Filesystem %1")).arg(desc.toUpper()));
+        name.append(QString("Filesystem %1").arg(desc.toUpper()));
     } else if ( device=="controller" ) {
         // Controller
         if (list.item(0).attributes().contains("type"))
             desc = list.item(0).attributes().namedItem("type").nodeValue();
-        name.append(QString(tr("Controller %1")).arg(desc.toUpper()));
+        name.append(QString("Controller %1").arg(desc.toUpper()));
     } else if ( device=="emulator" ) {
         // Emulator should be unique
         QList<QListWidgetItem*> _family =
@@ -308,33 +308,33 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc, const bool flag)
                 item = nullptr;
             };
         };
-        name.append(tr("Emulator"));
+        name.append("Emulator");
     } else if ( device=="watchdog" ) {
         // WatchDog
         if (list.item(0).attributes().contains("model"))
             desc = list.item(0).attributes().namedItem("model").nodeValue();
-        name.append(QString(tr("WatchDog %1")).arg(desc.toUpper()));
+        name.append(QString("WatchDog %1").arg(desc.toUpper()));
     } else if ( device=="memballoon" ) {
         // MemBalloon
         if (list.item(0).attributes().contains("model"))
             desc = list.item(0).attributes().namedItem("model").nodeValue();
-        name.append(QString(tr("MemBalloon %1")).arg(desc.toUpper()));
+        name.append(QString("MemBalloon %1").arg(desc.toUpper()));
     } else if ( device=="rng" ) {
         // Random
         if (list.item(0).attributes().contains("model"))
             desc = list.item(0).attributes().namedItem("model").nodeValue();
-        name.append(QString(tr("RNG %1")).arg(desc.toUpper()));
+        name.append(QString("RNG %1").arg(desc.toUpper()));
     } else if ( device=="tpm" ) {
         // TPM
         if (list.item(0).attributes().contains("model"))
             desc = list.item(0).attributes().namedItem("model").nodeValue();
-        name.append(QString(tr("TPM %1")).arg(desc.toUpper()));
+        name.append(QString("TPM %1").arg(desc.toUpper()));
     } else if ( device=="nvram" ) {
         // NVRAM
-        name.append(tr("NVRAM"));
+        name.append("NVRAM");
     } else if ( device=="panic" ) {
         // Panic
-        name.append(tr("Panic"));
+        name.append("Panic");
     } else return;
     // find DeviceName in Order
     int i = -1;

@@ -170,14 +170,16 @@ void VirtDomainControl::resultReceiver(Result *data)
             task.args.state = data->data.first().value("DisplayType").toString();
             task.args.path  = data->data.first().value("Path").toString();
             emit displayRequest(&task);
-        } else
+        } else {
             msgRepeater(data->err);
+        };
     } else if ( data->action == Actions::GET_ALL_ENTITY_DATA1 ) {
         if ( !data->data.isEmpty() ) {
             QUrl url(data->data.first().value("URL", "EMPTY_URL").toString());
             QDesktopServices::openUrl(url);
-        } else
+        } else {
             msgRepeater(data->err);
+        };
     } else if ( data->action != Actions::_NONE_ACTION ) {
         if ( !data->msg.isEmpty() || !data->err.isEmpty() ) {
             QString msg = QString("%1<br>%2")

@@ -41,8 +41,8 @@ QDomDocument VolumeSecType::getSecStuff() const
 }
 void VolumeSecType::showVolumeChoose()
 {
-    VirtVolumeDialog *dialog = new VirtVolumeDialog(
-                this, ptr_ConnPtr);
+    VirtVolumeDialog *dialog =
+            new VirtVolumeDialog(this, ptr_ConnPtr);
     dialog->exec();
     usage->setText(dialog->getResult().path);
     dialog->deleteLater();

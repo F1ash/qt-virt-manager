@@ -603,7 +603,7 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
     result.fileName.append(f.fileName());
     f.close();
     if ( Returns!=nullptr ) free(Returns);
-    result.msg.append(QString(tr("'<b>%1</b>' StorageVol %2 XML'ed"))
+    result.msg.append(QString(tr("'<b>%1</b>' StorageVol %2 XML'ed."))
                   .arg(name).arg((read)? "": tr("don't")));
     result.result = read;
     return result;

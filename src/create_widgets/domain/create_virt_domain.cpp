@@ -178,8 +178,9 @@ void CreateVirtDomain::readCapabilities()
     if ( !_domain.isNull() ) {
         type = _domain.attribute("type");
         ready = true;
-    } else
+    } else {
         ready = false;
+    };
     if ( xmlFileName.isEmpty() ) {
         // create/define new VM
         if (type.toLower()=="lxc") {
@@ -192,7 +193,7 @@ void CreateVirtDomain::readCapabilities()
             _xml.open(QIODevice::ReadOnly);
             xmlDesc.append(_xml.readAll().constData());
             _xml.close();
-        }
+        };
     } else {
         // read for edit exist VM parameters
         QFile *_xml = new QFile(this);
@@ -341,44 +342,44 @@ void CreateVirtDomain::create_specified_widgets()
 {
     if ( !type.isEmpty() ) {
         wdgList.insert(
-                    "General",
+                    tr("General"),
                     new General(this, hlpThread->capabilities, xmlDesc));
         wdgList.insert(
-                    "Misc.",
+                    tr("Misc."),
                     new Misc_Settings(this, hlpThread->capabilities, xmlDesc));
         wdgList.insert(
-                    "OS_Booting",
+                    tr("OS_Booting"),
                     new OS_Booting(this, hlpThread->capabilities, xmlDesc));
         wdgList.insert(
-                    "Memory",
+                    tr("Memory"),
                     new Memory(this, hlpThread->capabilities, xmlDesc));
         wdgList.insert(
-                    "CPU",
+                    tr("CPU"),
                     new CPU(this, hlpThread->capabilities, xmlDesc, hlpThread->cores));
         wdgList.insert(
-                    "Devices",
+                    tr("Devices"),
                     new Devices(this, ptr_ConnPtr, xmlDesc));
         wdgList.insert(
-                    "SecurityLabel",
+                    tr("SecurityLabel"),
                     new SecurityLabel(this, xmlDesc));
-        connect(wdgList.value("General"), SIGNAL(newName(const QString&)),
+        connect(wdgList.value(tr("General")), SIGNAL(newName(const QString&)),
                 this, SLOT(setNewWindowTitle(const QString&)));
-        connect(wdgList.value("OS_Booting"), SIGNAL(domainType(const QString&)),
-                wdgList.value("General"), SLOT(changeArch(const QString&)));
-        connect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(const QString&)),
-                wdgList.value("Devices"), SLOT(setEmulator(const QString&)));
-        connect(wdgList.value("Devices"), SIGNAL(devicesChanged(QDomDocument&)),
-                wdgList.value("OS_Booting"), SLOT(searchBootableDevices(QDomDocument&)));
-        connect(wdgList.value("OS_Booting"), SIGNAL(maxVCPU(const QString&)),
-                wdgList.value("CPU"), SLOT(setMaxVCPU(const QString&)));
-        connect(wdgList.value("OS_Booting"), SIGNAL(archChanged(const QString&)),
-                wdgList.value("CPU"), SLOT(changeArch(const QString&)));
+        connect(wdgList.value(tr("OS_Booting")), SIGNAL(domainType(const QString&)),
+                wdgList.value(tr("General")), SLOT(changeArch(const QString&)));
+        connect(wdgList.value(tr("OS_Booting")), SIGNAL(emulatorType(const QString&)),
+                wdgList.value(tr("Devices")), SLOT(setEmulator(const QString&)));
+        connect(wdgList.value(tr("Devices")), SIGNAL(devicesChanged(QDomDocument&)),
+                wdgList.value(tr("OS_Booting")), SLOT(searchBootableDevices(QDomDocument&)));
+        connect(wdgList.value(tr("OS_Booting")), SIGNAL(maxVCPU(const QString&)),
+                wdgList.value(tr("CPU")), SLOT(setMaxVCPU(const QString&)));
+        connect(wdgList.value(tr("OS_Booting")), SIGNAL(archChanged(const QString&)),
+                wdgList.value(tr("CPU")), SLOT(changeArch(const QString&)));
     } else {
         wdgList.clear();
         QMessageBox::information(
                     this,
-                    "Info",
-                    "Type of VM not defined.\nPlease, install nessesary drivers.",
+                    tr("Info"),
+                    tr("Type of VM not defined.\nPlease, install nessesary drivers."),
                     QMessageBox::Ok);
     };
 }
@@ -439,10 +440,10 @@ void CreateVirtDomain::restoreParameters()
 {
     setEnabled(false);
     tabWidget->clear();
-    //disconnect(wdgList.value("OS_Booting"), SIGNAL(domainType(const QString&)),
-    //           wdgList.value("General"), SLOT(changeArch(const QString&)));
-    //disconnect(wdgList.value("OS_Booting"), SIGNAL(emulatorType(const QString&)),
-    //           wdgList.value("Devices"), SLOT(setEmulator(QString&)));
+    //disconnect(wdgList.value(tr("OS_Booting")), SIGNAL(domainType(const QString&)),
+    //           wdgList.value(tr("General")), SLOT(changeArch(const QString&)));
+    //disconnect(wdgList.value(tr("OS_Booting")), SIGNAL(emulatorType(const QString&)),
+    //           wdgList.value(tr("Devices")), SLOT(setEmulator(QString&)));
     foreach (QString key, wdgList.keys()) {
         _QWidget *Wdg = static_cast<_QWidget*>(wdgList.value(key));
         if ( nullptr!=Wdg ) {
@@ -456,7 +457,8 @@ void CreateVirtDomain::restoreParameters()
 }
 void CreateVirtDomain::setBootOrder(QDomElement *_devices)
 {
-    OS_Booting *Wdg = static_cast<OS_Booting*>(wdgList.value("OS_Booting"));
+    OS_Booting *Wdg = static_cast<OS_Booting*>(
+                wdgList.value(tr("OS_Booting")));
     if ( nullptr!=Wdg ) {
         BootOrderList list = Wdg->getBootOrder();
         QDomDocument _bootDevDoc;

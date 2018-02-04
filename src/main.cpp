@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QTranslator>
 
 int main(int argc, char *argv[])
 {
@@ -9,6 +10,12 @@ int main(int argc, char *argv[])
     a.setOrganizationName(name);
     a.setApplicationName(name);
     QSettings::setDefaultFormat(QSettings::IniFormat);
+    QTranslator tr;
+    QLocale lc = QLocale();
+    if ( lc.language() == QLocale::Russian ) {
+        tr.load("qt_virt_manager_ru");
+    };
+    a.installTranslator(&tr);
     MainWindow w;
     w.show();
     return a.exec();

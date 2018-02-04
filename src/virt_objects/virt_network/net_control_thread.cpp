@@ -320,7 +320,7 @@ Result NetControlThread::getVirtNetXMLDesc()
     f.close();
     if ( Returns!=nullptr ) free(Returns);
     result.result = read;
-    result.msg.append(QString(tr("'<b>%1</b>' Network %2 XML'ed"))
+    result.msg.append(QString(tr("'<b>%1</b>' Network %2 XML'ed."))
                       .arg(name).arg((read)? "": tr("don't")));
     return result;
 }

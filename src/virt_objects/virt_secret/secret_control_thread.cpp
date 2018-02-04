@@ -246,7 +246,7 @@ Result SecretControlThread::getVirtSecretXMLDesc()
     f.close();
     if ( Returns!=nullptr ) free(Returns);
     result.result = read;
-    result.msg.append(QString(tr("'<b>%1</b>' Secret %2 XML'ed"))
+    result.msg.append(QString(tr("'<b>%1</b>' Secret %2 XML'ed."))
                       .arg(uuid).arg((read)? "": tr("don't")));
     return result;
 }

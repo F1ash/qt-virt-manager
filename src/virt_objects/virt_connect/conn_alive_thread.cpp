@@ -78,7 +78,7 @@ void ConnAliveThread::closeConnection()
             emit connClosed(onView);
         };
     } else {
-        emit connMsg( tr("connect is nullptr") );
+        emit connMsg( tr("connection pointer is NULL") );
         state = FAILED;
     };
     emit changeConnState(state);
@@ -118,9 +118,8 @@ void ConnAliveThread::openConnection()
     } else {
         //qDebug()<<" openConnection"<<*ptr_ConnPtr<<URI;
         keep_alive = true;
-        emit connMsg( QString(tr("connect opened: %1"))
-                      .arg(QVariant(*ptr_ConnPtr!=nullptr)
-                           .toString()) );
+        emit connMsg( QString(tr("connection is %1 opened."))
+                      .arg((*ptr_ConnPtr!=nullptr)? "" : tr("not")));
         emit changeConnState(RUNNING);
         registerConnEvents();
     };
@@ -266,7 +265,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
     for (i = 0; i < ncred; ++i) {
         switch (cred[i].type) {
             case VIR_CRED_AUTHNAME:
-                crd = tr("Username");
+                crd = "Username";
                 obj->getAuthCredentials(crd);
                 cred[i].result = strdup(obj->authData.username);
                 if (cred[i].result == nullptr) {
@@ -278,7 +277,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
                     memset(&obj->authData.username[0], 0, strlen(obj->authData.username));
                 break;
             case VIR_CRED_PASSPHRASE:
-                crd = tr("Password");
+                crd = "Password";
                 obj->getAuthCredentials(crd);
                 cred[i].result = strdup(obj->authData.password);
                 if (cred[i].result == nullptr) {
@@ -290,7 +289,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
                     memset(&obj->authData.password[0], 0, strlen(obj->authData.password));
                 break;
             default:
-                qDebug()<<cred[i].type<<"unused credential type";
+                //qDebug()<<cred[i].type<<"unused credential type";
                 return -1;
         };
     };
@@ -361,7 +360,7 @@ int  ConnAliveThread::secEventCallback(virConnectPtr _conn, virSecretPtr sec, in
     ConnAliveThread *obj = static_cast<ConnAliveThread*>(opaque);
     if ( nullptr==obj || *(obj->ptr_ConnPtr)!=_conn ) return 0;
     QString msg;
-    msg = QString("<b>'%1'</b> Secert %2: %3\n")
+    msg = QString(tr("<b>'%1'</b> Secert %2: %3\n"))
            .arg(virSecretGetUsageID(sec))
            .arg(obj->secEventToString(event))
            .arg(obj->secEventDetailToString(event, detail));
@@ -739,19 +738,19 @@ void ConnAliveThread::closeConnection(int reason)
     keep_alive = false;
     switch (reason) {
         case VIR_CONNECT_CLOSE_REASON_ERROR:
-            emit connMsg("Connection closed: Misc I/O error");
+            emit connMsg(tr("Connection closed: Misc I/O error"));
             break;
         case VIR_CONNECT_CLOSE_REASON_EOF:
-            emit connMsg("Connection closed: End-of-file from server");
+            emit connMsg(tr("Connection closed: End-of-file from server"));
             break;
         case VIR_CONNECT_CLOSE_REASON_KEEPALIVE:
-            emit connMsg("Connection closed: Keepalive timer triggered");
+            emit connMsg(tr("Connection closed: Keepalive timer triggered"));
             break;
         case VIR_CONNECT_CLOSE_REASON_CLIENT:
-            emit connMsg("Connection closed: Client requested it");
+            emit connMsg(tr("Connection closed: Client requested it"));
             break;
         default:
-            emit connMsg("Connection closed: Unknown reason");
+            emit connMsg(tr("Connection closed: Unknown reason"));
             break;
     };
     // emit connCloseed(bool), because thread is finished

@@ -337,7 +337,7 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
     if ( Returns!=nullptr ) free(Returns);
     result.result = read;
     result.msg.append(
-                QString(tr("'<b>%1</b>' Interface %2 XML'ed"))
+                QString(tr("'<b>%1</b>' Interface %2 XML'ed."))
                 .arg(name).arg((read)? "": tr("don't")));
     return result;
 }

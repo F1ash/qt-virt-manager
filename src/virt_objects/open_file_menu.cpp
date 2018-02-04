@@ -5,28 +5,39 @@ OpenFileMenu::OpenFileMenu(
     QMenu(parent)
 {
     act = _act;
-    icon = QIcon::fromTheme(
-                QString("%1")
-                .arg(_TO_STRING::enumToActionString(_act)) );
+    QString __act;
+    switch (act) {
+    case Actions::CREATE_ENTITY:
+        __act = "create";
+        break;
+    case Actions::DEFINE_ENTITY:
+        __act = "define";
+        break;
+    case Actions::_NONE_ACTION:
+    default:
+        break;
+    };
+    icon = QIcon::fromTheme(__act);
     applyAsIs = new QAction(this);
+    TO_STRING = new _TO_STRING;
     applyAsIs->setText(
                 QString(
     tr("%1 Virtual %2 from example XML description as is"))
-                .arg(_TO_STRING::enumToActionString(_act))
-                .arg(_TO_STRING::enumToEntityString(_e)));
+                .arg(TO_STRING->enumToActionString(_act))
+                .arg(TO_STRING->enumToEntityString(_e)));
     applyAsIs->setIcon(icon);
     editTemplate = new QAction(this);
     editTemplate->setText(
                 QString(
     tr("%1 Virtual %2 by edit example XML description"))
-                .arg(_TO_STRING::enumToActionString(_act))
-                .arg(_TO_STRING::enumToEntityString(_e)));
+                .arg(TO_STRING->enumToActionString(_act))
+                .arg(TO_STRING->enumToEntityString(_e)));
     editTemplate->setIcon(icon);
     manual = new QAction(this);
     manual->setText(
                 QString(tr("%1 Virtual %2 manually"))
-                .arg(_TO_STRING::enumToActionString(_act))
-                .arg(_TO_STRING::enumToEntityString(_e)));
+                .arg(TO_STRING->enumToActionString(_act))
+                .arg(TO_STRING->enumToEntityString(_e)));
     manual->setIcon(icon);
     connect(applyAsIs, SIGNAL(triggered()),
             this, SLOT(chooseExample()));

@@ -37,6 +37,7 @@ TaskWareHouse::TaskWareHouse(QWidget *parent) :
             taskList, SLOT(clearSelection()));
     setCentralWidget(taskList);
     threadPool = new THREAD_POOL;
+    TO_STRING = new _TO_STRING;
 }
 
 /* public slots */
@@ -74,7 +75,7 @@ void TaskWareHouse::addNewTask(TASK *task)
          task->action!=Actions::EDIT_ENTITY ) {
         QString _name = QString("%5 %1 %2 <%3> in <%4>")
                 .arg(_number)
-                .arg( _TO_STRING::enumToMethodString(task->method) )
+                .arg( TO_STRING->enumToMethodString(task->method) )
                 .arg(task->object)
                 .arg(task->srcConName)
                 .arg(QChar(0x273B));
@@ -85,7 +86,7 @@ void TaskWareHouse::addNewTask(TASK *task)
         QMap<QString, QVariant> itemData;
         itemData.insert("Connection", task->srcConName);
         itemData.insert("Object", task->object);
-        itemData.insert("Action", _TO_STRING::enumToMethodString(task->method));
+        itemData.insert("Action", TO_STRING->enumToMethodString(task->method));
         itemData.insert("Start", QString("%1:%2:%3:%4")
                         .arg(QString("").sprintf("%02d", _time.hour()))
                         .arg(QString("").sprintf("%02d", _time.minute()))

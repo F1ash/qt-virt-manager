@@ -41,6 +41,7 @@ private:
     THREAD_POOL     *threadPool;
     QSettings        settings;
     QListWidget     *taskList;
+    _TO_STRING      *TO_STRING;
 
 public slots:
     void             changeVisibility();

@@ -134,7 +134,7 @@ void LXC_Viewer::setTerminalParameters()
         viewerThread->start();
         if ( viewerThread->keep_alive ) {
             QString msg = QString(
-                        tr("In '<b>%1</b>': Stream Registation success. \
+                        tr("In '<b>%1</b>': Stream Registration success. \
 PTY opened. Terminal is active."))
                         .arg(domain);
             sendErrMsg(msg);

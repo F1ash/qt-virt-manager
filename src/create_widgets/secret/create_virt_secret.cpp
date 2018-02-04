@@ -30,7 +30,7 @@ CreateVirtSecret::CreateVirtSecret(
                 tr("Show XML Description\nat close"), this);
     showXMLDescription->setChecked(showDesc);
     about = new QLabel(
-                "<a href='http://libvirt.org/formatsecret.html'>About</a>",
+                tr("<a href='http://libvirt.org/formatsecret.html'>About</a>"),
                 this);
     about->setOpenExternalLinks(true);
     about->setToolTip("http://libvirt.org/formatsecret.html");

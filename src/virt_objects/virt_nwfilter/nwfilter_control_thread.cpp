@@ -155,7 +155,7 @@ Result NWFilterControlThread::undefineNWFilter()
     result.name = name;
     result.result = deleted;
     result.msg.append(QString(tr("'<b>%1</b>' NWFilter %2 Undefined."))
-                      .arg(name).arg((deleted)? "": tr("don't")));
+                      .arg(name).arg((deleted)? "": tr("not")));
     return result;
 }
 Result NWFilterControlThread::getVirtNWFilterXMLDesc()
@@ -194,7 +194,7 @@ Result NWFilterControlThread::getVirtNWFilterXMLDesc()
     f.close();
     if ( Returns!=nullptr ) free(Returns);
     result.result = read;
-    result.msg.append(QString(tr("'<b>%1</b>' NWFilter %2 XML'ed"))
-                      .arg(name).arg((read)?"":"don't"));
+    result.msg.append(QString(tr("'<b>%1</b>' NWFilter %2 XML'ed."))
+                      .arg(name).arg((read)?"":"not"));
     return result;
 }
