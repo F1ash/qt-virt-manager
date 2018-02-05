@@ -1,69 +1,5 @@
 #include "migrate_dialog.h"
 
-#define APPEND_URI_HELP_0 tr("The destination libvirtd server \
-will automatically determine the native hypervisor URI for migration, \
-based off the primary hostname. ")
-
-#define APPEND_URI_HELP_1 tr("The optional uri parameter controls \
-how the source libvirtd connects to the destination libvirtd, \
-in case it is not accessible using the same address that the client uses \
-to connect to the destination, or a different encryption/auth scheme is required. ")
-
-#define APPEND_URI_HELP_2 tr("The native hypervisor URI format is not used at all. ")
-
-#define APPEND_URI_HELP_3 tr("To force migration over an alternate \
-network interface the optional hypervisor specific URI must be provided. ")
-
-#define APPEND_URI_HELP_4 tr("There is no scope for forcing \
-an alternative network interface for the native migration data with this method. ")
-
-#define APPEND_URI_HELP_5 tr("There is no use or requirement for a destination \
-libvirtd instance at all. This is typically used when the hypervisor has \
-its own native management daemon available to handle incoming migration attempts \
-on the destination. ")
-
-#define APPEND_URI_HELP_6 tr("The destination URI must be reachable using \
-the source libvirtd credentials (which are not necessarily the same as \
-the credentials of the client in connecting to the source). ")
-
-#define EXAMPLE_URI_1 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
-virsh migrate GUESTNAME DEST-LIBVIRT-URI [HV-URI]<br><br>\
-<i>eg using default network interface</i>:<br><br>\
-virsh migrate web1 qemu+ssh://desthost/system<br>\
-virsh migrate web1 xen+tls://desthost/system<br><br>\
-<i>eg using secondary network interface:</i><br><br>\
-virsh migrate web1 qemu://desthost/system tcp://10.0.0.1/<br>\
-virsh migrate web1 xen+tcp://desthost/system xenmigr:10.0.0.1/")
-
-#define EXAMPLE_URI_2 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
-This mode cannot be invoked from virsh ")
-
-#define EXAMPLE_URI_3 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
-This mode cannot be invoked from virsh ")
-
-#define EXAMPLE_URI_4 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
-virsh migrate GUESTNAME HV-URI<br><br>\
-<i>eg using same libvirt URI for all connections</i>:<br><br>\
-virsh migrate --direct web1 xenmigr://desthost/")
-
-#define EXAMPLE_URI_5 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
-virsh migrate GUESTNAME DEST-LIBVIRT-URI [ALT-DEST-LIBVIRT-URI]<br><br>\
-<i>eg using same libvirt URI for all connections</i>:<br><br>\
-virsh migrate --p2p web1 qemu+ssh://desthost/system<br><br>\
-<i>eg using different libvirt URI auth scheme for peer2peer connections</i>:<br><br>\
-virsh migrate --p2p web1 qemu+ssh://desthost/system qemu+tls:/desthost/system<br><br>\
-<i>eg using different libvirt URI hostname for peer2peer connections</i>:<br><br>\
-virsh migrate --p2p web1 qemu+ssh://desthost/system qemu+ssh://10.0.0.1/system")
-
-#define EXAMPLE_URI_6 tr("<b>syntax <font color='red'>for virsh</font></b>:<br>\
-virsh migrate GUESTNAME DEST-LIBVIRT-URI [ALT-DEST-LIBVIRT-URI]<br><br>\
-<i>eg using same libvirt URI for all connections</i>:<br><br>\
-virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system<br><br>\
-<i>eg using different libvirt URI auth scheme for peer2peer connections</i>:<br><br>\
-virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system qemu+tls:/desthost/system<br><br>\
-<i>eg using different libvirt URI hostname for peer2peer connections</i>:<br><br>\
-virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system qemu+ssh://10.0.0.1/system")
-
 mgrHelpThread::mgrHelpThread(
             QObject         *parent,
             virConnectPtr   *connPtrPtr) :
@@ -87,9 +23,9 @@ void mgrHelpThread::run()
 }
 
 MigrateDialog::MigrateDialog(
-            QWidget *parent,
-            QString _domain,
-            virConnectPtr *connPtrPtr) :
+            QWidget         *parent,
+            QString          _domain,
+            virConnectPtr   *connPtrPtr) :
     QDialog(parent), domainName(_domain)
 {
     setWindowTitle(QString(tr("Migrate '%1'")).arg(domainName));
@@ -426,50 +362,50 @@ void MigrateDialog::migrTransportChanged(bool useDURI)
     if ( useDURI ) {
         uri_as_seen = tr("Mandatory URI for the destination host.");
         if ( !useAdvanced->isChecked() ) {
-            uri_opt.append(APPEND_URI_HELP_5);
-            example.append(EXAMPLE_URI_4);
+            uri_opt.append(_HELP::APPEND_URI_HELP_5());
+            example.append(_HELP::EXAMPLE_URI_4());
             uri->setPlaceholderText("HV-URI");
         } else if ( tunnelMigration->isChecked() ) {
-            uri_opt.append(APPEND_URI_HELP_0);
-            uri_opt.append(APPEND_URI_HELP_1);
-            uri_opt.append(APPEND_URI_HELP_2);
-            uri_opt.append(APPEND_URI_HELP_6);
-            example.append(EXAMPLE_URI_6);
+            uri_opt.append(_HELP::APPEND_URI_HELP_0());
+            uri_opt.append(_HELP::APPEND_URI_HELP_1());
+            uri_opt.append(_HELP::APPEND_URI_HELP_2());
+            uri_opt.append(_HELP::APPEND_URI_HELP_6());
+            example.append(_HELP::EXAMPLE_URI_6());
             uri->setPlaceholderText("[ALT-DEST-LIBVIRT-URI]");
         } else if ( nativeMigration->isChecked() && p2pCheck->isChecked() ) {
-            uri_opt.append(APPEND_URI_HELP_0);
-            uri_opt.append(APPEND_URI_HELP_4);
-            uri_opt.append(APPEND_URI_HELP_6);
-            example.append(EXAMPLE_URI_5);
+            uri_opt.append(_HELP::APPEND_URI_HELP_0());
+            uri_opt.append(_HELP::APPEND_URI_HELP_4());
+            uri_opt.append(_HELP::APPEND_URI_HELP_6());
+            example.append(_HELP::EXAMPLE_URI_5());
             uri->setPlaceholderText("[ALT-DEST-LIBVIRT-URI]");
         } else {
-            uri_opt.append(APPEND_URI_HELP_5);
-            example.append(EXAMPLE_URI_4);
+            uri_opt.append(_HELP::APPEND_URI_HELP_5());
+            example.append(_HELP::EXAMPLE_URI_4());
             uri->setPlaceholderText("HV-URI");
         };
     } else {
         uri_as_seen = tr("Destination hostname/URI as seen from the source host.");
         if ( !useAdvanced->isChecked() ) {
-            uri_opt.append(APPEND_URI_HELP_0);
-            uri_opt.append(APPEND_URI_HELP_3);
-            example.append(EXAMPLE_URI_1);
+            uri_opt.append(_HELP::APPEND_URI_HELP_0());
+            uri_opt.append(_HELP::APPEND_URI_HELP_3());
+            example.append(_HELP::EXAMPLE_URI_1());
             uri->setPlaceholderText("[HV-URI]");
         } else if ( tunnelMigration->isChecked() ) {
-            uri_opt.append(APPEND_URI_HELP_0);
-            uri_opt.append(APPEND_URI_HELP_1);
-            uri_opt.append(APPEND_URI_HELP_2);
-            example.append(EXAMPLE_URI_3);
+            uri_opt.append(_HELP::APPEND_URI_HELP_0());
+            uri_opt.append(_HELP::APPEND_URI_HELP_1());
+            uri_opt.append(_HELP::APPEND_URI_HELP_2());
+            example.append(_HELP::EXAMPLE_URI_3());
             uri->setPlaceholderText("");
         } else if ( nativeMigration->isChecked() && p2pCheck->isChecked() ) {
-            uri_opt.append(APPEND_URI_HELP_0);
-            uri_opt.append(APPEND_URI_HELP_1);
-            uri_opt.append(APPEND_URI_HELP_4);
-            example.append(EXAMPLE_URI_2);
+            uri_opt.append(_HELP::APPEND_URI_HELP_0());
+            uri_opt.append(_HELP::APPEND_URI_HELP_1());
+            uri_opt.append(_HELP::APPEND_URI_HELP_4());
+            example.append(_HELP::EXAMPLE_URI_2());
             uri->setPlaceholderText("[HV-URI]");
         } else {
-            uri_opt.append(APPEND_URI_HELP_0);
-            uri_opt.append(APPEND_URI_HELP_3);
-            example.append(EXAMPLE_URI_1);
+            uri_opt.append(_HELP::APPEND_URI_HELP_0());
+            uri_opt.append(_HELP::APPEND_URI_HELP_3());
+            example.append(_HELP::EXAMPLE_URI_1());
             uri->setPlaceholderText("[HV-URI]");
         };
     };

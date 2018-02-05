@@ -19,7 +19,8 @@ Forward_Widget::Forward_Widget(
     devLabel = new QCheckBox(tr("Dev name:"), this);
     devLabel->setToolTip(
     tr("if enabled firewall rules\n\
-will restrict forwarding\n\to the named device only"));
+will restrict forwarding\n\
+to the named device only"));
     dev = new QLineEdit(this);
     dev->setPlaceholderText("eth0 | enp2s0 | wlp3s0");
     dev->setEnabled(false);

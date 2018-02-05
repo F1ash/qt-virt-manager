@@ -14,7 +14,7 @@ Random::Random(QWidget *parent) :
     model->insertSeparator(1);
     model->addItem("Custom model");
     model->setItemIcon(0, QIcon::fromTheme("drive-virtual-io"));
-    rate = new QCheckBox(tr("Use Rate:"), this);
+    rate = new QCheckBox(tr("Use Rate limit:"), this);
     periodLabel = new QLabel(tr("Period:"), this);
     periodLabel->setEnabled(false);
     bytesLabel = new QLabel(tr("Bytes:"), this);

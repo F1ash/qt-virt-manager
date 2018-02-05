@@ -1,14 +1,5 @@
 #include "userspace_slirp.h"
 
-#define INFO tr("\n\
-Provides a virtual LAN with NAT to the outside world.\n\
-The virtual network has DHCP & DNS services and \n\
-will give the guest VM addresses starting from 10.0.2.15.\n\
-The default router will be 10.0.2.2 and the DNS server\n\
-will be 10.0.2.3. This networking is the only option\n\
-for unprivileged users who need their VMs\n\
-to have outgoing access. ")
-
 Userspace_SLIRP::Userspace_SLIRP(
         QWidget         *parent,
         virConnectPtr   *connPtrPtr) :
@@ -20,7 +11,15 @@ Userspace_SLIRP::Userspace_SLIRP(
                 QIcon::fromTheme("dialog-warning")
                 .pixmap(this->fontInfo().pixelSize()));
     info = new QLabel(this);
-    info->setText(INFO);
+    info->setText(
+tr("\n\
+Provides a virtual LAN with NAT to the outside world.\n\
+The virtual network has DHCP & DNS services and \n\
+will give the guest VM addresses starting from 10.0.2.15.\n\
+The default router will be 10.0.2.2 and the DNS server\n\
+will be 10.0.2.3. This networking is the only option\n\
+for unprivileged users who need their VMs\n\
+to have outgoing access."));
     addr = new DeviceAddress(this);
     int idx = addr->type->findData(
                 "pci",

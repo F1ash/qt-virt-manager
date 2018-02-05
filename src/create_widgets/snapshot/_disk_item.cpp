@@ -13,7 +13,8 @@ tr("The absolute path to the disk snapshot image/file"));
     driver = new QComboBox(this);
     driver->setToolTip(
 tr("The driver type of the new file\n\
-created by the external snapshot\n(optional)"));
+created by the external snapshot\n\
+(optional)"));
     snapshotType = new QComboBox(this);
     paramLayout = new QHBoxLayout(this);
     paramLayout->addWidget(driver);

@@ -6,7 +6,7 @@ _FsType::_FsType(
     _QWidget(parent), connType(_type)
 {
     driverLabel = new QLabel(tr("Driver:"), this);
-    wrPolicyLabel = new QLabel(tr("WrPolicy:"), this);
+    wrPolicyLabel = new QLabel(tr("WritePolicy (optional):"), this);
     formatLabel = new QLabel(tr("Format:"), this);
     accessModeLabel = new QLabel(tr("AccessMode:"), this);
     sourceLabel = new QPushButton(tr("Source:"), this);

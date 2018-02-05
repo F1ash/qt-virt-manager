@@ -97,6 +97,7 @@ enum class Methods {
 
 class _TO_STRING : public QObject
 {
+    Q_OBJECT
 public:
 
     static QString enumToEntityString(VIRT_ENTITY entity)
