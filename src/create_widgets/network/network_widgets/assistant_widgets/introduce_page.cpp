@@ -4,20 +4,22 @@
 IntroducePage::IntroducePage(QWidget *parent) :
     QWizardPage(parent)
 {
-    setTitle("Welcome to VirtNetwork Assistant");
+    setTitle(tr("Welcome to VirtNetwork Assistant"));
     setSubTitle(
-    "Please choose network type to create it.");
+    tr("Please choose network type to create it."));
 
     networkName = new QLineEdit(this);
-    networkName->setPlaceholderText("Set new Network name");
+    networkName->setPlaceholderText(
+                tr("Set new Network name"));
     bridgeNet = new QRadioButton(
-    "Create network using existing host bridge", this);
+                tr("Create network using existing host bridge"),
+                this);
     natNet = new QRadioButton(
-    "Create NAT based network", this);
+                tr("Create NAT based network"), this);
     routedNet = new QRadioButton(
-    "Create routed network", this);
+                tr("Create routed network"), this);
     isolatedNet = new QRadioButton(
-    "Create isolated network", this);
+                tr("Create isolated network"), this);
     lt = new QVBoxLayout(this);
     lt->addWidget(networkName);
     lt->addWidget(bridgeNet);

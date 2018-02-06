@@ -62,7 +62,8 @@ tr("This secret must only be kept in memory,\n\
 never stored persistently"));
     privateAttr = new QCheckBox(tr("Private"), this);
     privateAttr->setToolTip(
-tr("The value of the secret must not be revealed to any caller of libvirt,\n\
+tr("The value of the secret must not be revealed\n\
+to any caller of libvirt,\n\
 nor to any other node"));
     propLayout = new QHBoxLayout(this);
     propLayout->addWidget(secType);

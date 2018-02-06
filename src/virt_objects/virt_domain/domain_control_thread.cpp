@@ -464,7 +464,7 @@ Result DomControlThread::startDomain()
     result.result = started;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 Started."))
-                .arg(name).arg((started)? "": tr("don't")));
+                .arg(name).arg((started)? "": tr("not")));
     return result;
 }
 Result DomControlThread::pauseDomain()
@@ -509,7 +509,7 @@ Result DomControlThread::pauseDomain()
     result.result = invoked;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain state %2 changed."))
-                .arg(name).arg((invoked)? "": tr("don't")));
+                .arg(name).arg((invoked)? "": tr("not")));
     return result;
 }
 Result DomControlThread::destroyDomain()
@@ -535,7 +535,7 @@ Result DomControlThread::destroyDomain()
     result.result = deleted;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 Destroyed."))
-                .arg(name).arg((deleted)? "": tr("don't")));
+                .arg(name).arg((deleted)? "": tr("not")));
     return result;
 }
 Result DomControlThread::resetDomain()
@@ -565,7 +565,7 @@ Result DomControlThread::resetDomain()
     result.result = invoked;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 reset."))
-                .arg(name).arg((invoked)? "": tr("don't")));
+                .arg(name).arg((invoked)? "": tr("not")));
     return result;
 }
 Result DomControlThread::rebootDomain()
@@ -599,7 +599,7 @@ Result DomControlThread::rebootDomain()
     result.result = invoked;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 reboot."))
-                .arg(name).arg((invoked)? "": tr("don't")));
+                .arg(name).arg((invoked)? "": tr("not")));
     return result;
 }
 Result DomControlThread::shutdownDomain()
@@ -634,7 +634,7 @@ Result DomControlThread::shutdownDomain()
     result.result = invoked;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 shutdown."))
-                .arg(name).arg((invoked)? "": tr("don't")));
+                .arg(name).arg((invoked)? "": tr("not")));
     return result;
 }
 Result DomControlThread::saveDomain()
@@ -684,7 +684,7 @@ Result DomControlThread::saveDomain()
     result.result = invoked;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 saved."))
-                .arg(name).arg((invoked)? "": tr("don't")));
+                .arg(name).arg((invoked)? "": tr("not")));
     return result;
 }
 Result DomControlThread::restoreDomain()
@@ -713,7 +713,7 @@ Result DomControlThread::restoreDomain()
     result.result = invoked;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 restored."))
-                .arg(name).arg((invoked)? "": tr("don't")));
+                .arg(name).arg((invoked)? "": tr("not")));
     return result;
 }
 Result DomControlThread::undefineDomain()
@@ -739,7 +739,7 @@ Result DomControlThread::undefineDomain()
     result.result = deleted;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 Undefined."))
-                .arg(name).arg((deleted)? "": tr("don't")));
+                .arg(name).arg((deleted)? "": tr("not")));
     return result;
 }
 Result DomControlThread::changeAutoStartDomain()
@@ -769,7 +769,7 @@ Result DomControlThread::changeAutoStartDomain()
     result.result = set;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain autostart %2 changed."))
-                .arg(name).arg((set)? "": tr("don't")));
+                .arg(name).arg((set)? "": tr("not")));
     return result;
 }
 Result DomControlThread::getDomainXMLDesc()
@@ -810,7 +810,7 @@ Result DomControlThread::getDomainXMLDesc()
     result.result = read;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 XML'ed."))
-                .arg(name).arg((read)? "": tr("don't")));
+                .arg(name).arg((read)? "": tr("not")));
     return result;
 }
 Result DomControlThread::migrateDomain()
@@ -862,7 +862,7 @@ Result DomControlThread::migrateDomain()
     result.result = migrated;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 Migrated."))
-                .arg(result.name).arg((migrated)? "": tr("don't")));
+                .arg(result.name).arg((migrated)? "": tr("not")));
     //if ( task.args.dstConnPtr ) task.args.dstConnPtr = nullptr;
     return result;
 }
@@ -900,7 +900,7 @@ Result DomControlThread::createSnapshoteDomain()
     result.result = snapped;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 snapped."))
-                .arg(result.name).arg((snapped)? "": tr("don't")));
+                .arg(result.name).arg((snapped)? "": tr("not")));
     return result;
 }
 Result DomControlThread::revertSnapshoteDomain()
@@ -940,7 +940,7 @@ Result DomControlThread::revertSnapshoteDomain()
     };
     result.msg.append(
                 QString(tr("'<b>%1</b>' snapshot state for <b>%2</b> Domain %3 reverted."))
-                .arg(result.name).arg(domName).arg((reverted)? "": tr("don't")));
+                .arg(result.name).arg(domName).arg((reverted)? "": tr("not")));
     result.result = reverted;
     return result;
 }
@@ -982,7 +982,7 @@ Result DomControlThread::deleteSnapshoteDomain()
     };
     result.msg.append(
                 QString(tr("'<b>%1</b>' snapshot for <b>%2</b> Domain %3 deleted."))
-                .arg(result.name).arg(domName).arg((deleted)? "": tr("don't")));
+                .arg(result.name).arg(domName).arg((deleted)? "": tr("not")));
     result.result = deleted;
     return result;
 }

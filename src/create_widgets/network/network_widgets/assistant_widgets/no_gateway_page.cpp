@@ -3,12 +3,12 @@
 NoGatewayPage::NoGatewayPage(QWidget *parent) :
     QWizardPage(parent)
 {
-    setTitle("Isolated network");
+    setTitle(tr("Isolated network"));
     setSubTitle(
-    "This virtual network can be used\
- for guest-to-guest communication only.");
+tr("This virtual network can be used\
+ for guest-to-guest communication only."));
 
-    ipv6 = new QCheckBox("Use IPv6 network", this);
+    ipv6 = new QCheckBox(tr("Use IPv6 network"), this);
     lt = new QVBoxLayout(this);
     lt->addWidget(ipv6);
     setLayout(lt);

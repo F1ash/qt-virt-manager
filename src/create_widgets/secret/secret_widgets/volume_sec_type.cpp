@@ -8,6 +8,8 @@ VolumeSecType::VolumeSecType(QWidget *parent, virConnectPtr *connPtrPtr) :
     _SecType(parent, connPtrPtr)
 {
     usage = new QLineEdit(this);
+    usage->setPlaceholderText(
+                tr("path to will encrypted Volume"));
     find  = new QPushButton(QIcon::fromTheme("edit-find"), "", this);
     find->setToolTip(tr("Search volume storage"));
     usageLayout = new QHBoxLayout();

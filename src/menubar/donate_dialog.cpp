@@ -32,11 +32,11 @@ Donate_Dialog::Donate_Dialog(QWidget *parent) :
     donateLayout->addWidget(donate4, 1, 1, Qt::AlignCenter);
     donateWdg = new QWidget(this);
     donateWdg->setLayout(donateLayout);
-    again = new QCheckBox(tr("don't show again"), this);
-    again->hide();
+    //again = new QCheckBox(tr("don't show again"), this);
+    //again->hide();
     commonLayout = new QVBoxLayout(this);
     commonLayout->addWidget(donateWdg);
-    commonLayout->addWidget(again);
+    //commonLayout->addWidget(again);
     setLayout(commonLayout);
 
     connect(donate1, SIGNAL(released()),
@@ -49,10 +49,10 @@ Donate_Dialog::Donate_Dialog(QWidget *parent) :
             this, SLOT(donationClicked()));
 }
 
-bool Donate_Dialog::showAgain() const
-{
-    return !again->isChecked();
-}
+//bool Donate_Dialog::showAgain() const
+//{
+//    return !again->isChecked();
+//}
 
 /* private slots */
 void Donate_Dialog::donationClicked()

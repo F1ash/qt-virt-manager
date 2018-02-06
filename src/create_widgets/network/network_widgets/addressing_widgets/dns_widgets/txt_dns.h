@@ -9,7 +9,7 @@ class TXT_DNS : public _List_Widget
 public:
     explicit TXT_DNS(
             QWidget *parent = nullptr,
-            QString  tag = "TXTs");
+            QString  tag    = "TXTs");
 
 private:
     QLabel          *comma;

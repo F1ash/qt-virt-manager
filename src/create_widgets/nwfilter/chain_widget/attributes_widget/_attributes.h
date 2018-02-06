@@ -22,7 +22,7 @@ class _Attributes : public _QWidget
 public:
     explicit _Attributes(
             QWidget *parent = nullptr,
-            QString  tag    = "Attribute:");
+            QString  tag    = tr("Attribute:"));
     virtual ~_Attributes()  = 0;
     QString             protocolID;
     QComboBox          *attrName;

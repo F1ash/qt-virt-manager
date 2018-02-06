@@ -4,7 +4,8 @@ DNS_Widget::DNS_Widget(
         QWidget *parent, QString tag) :
     _Checked_Widget(parent, tag)
 {
-    forwardPlainNames = new QCheckBox("forwardPlainNames", this);
+    forwardPlainNames = new QCheckBox(
+                tr("forwardPlainNames"), this);
     forwarder = new Forwarder(this);
     hosts = new Host_DNS(this);
     txts = new TXT_DNS(this);

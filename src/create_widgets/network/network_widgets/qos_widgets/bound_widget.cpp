@@ -3,19 +3,27 @@
 Bound_Widget::Bound_Widget(QWidget *parent) :
     QWidget(parent)
 {
-    averageL = new QCheckBox("A&verage (0-10000 KB/s)", this);
+    averageL = new QCheckBox(
+                tr("A&verage (0-10000 KB/s)"), this);
     averageL->setToolTip(
-    "Specifies the desired average bit rate for the interface being shaped");
-    peakL = new QCheckBox("&Peak (0-10000 KB/s)", this);
+tr("Specifies the desired average bit rate\n\
+for the interface being shaped"));
+    peakL = new QCheckBox(
+                tr("&Peak (0-10000 KB/s)"), this);
     peakL->setToolTip(
-    "Specifies the maximum rate at which the bridge can send data");
-    burstL = new QCheckBox("B&urst (0-10000 KB/s)", this);
+tr("Specifies the maximum rate\n\
+at which the bridge can send data"));
+    burstL = new QCheckBox(
+                tr("B&urst (0-10000 KB/s)"), this);
     burstL->setToolTip(
-    "Specifies the amount of kilobytes that can be transmitted\
- in a single burst at peak speed");
-    floorL = new QCheckBox("F&loor (0-10000 KB/s)", this);
+tr("Specifies the amount of kilobytes\n\
+that can be transmitted in a single burst\n\
+at peak speed"));
+    floorL = new QCheckBox(
+                tr("F&loor (0-10000 KB/s)"), this);
     floorL->setToolTip(
-    "Guarantees minimal throughput for shaped interfaces");
+tr("Guarantees minimal throughput\n\
+for shaped interfaces"));
     average = new QSpinBox(this);
     average->setRange(0, 10000);
     average->setEnabled(false);

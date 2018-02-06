@@ -9,7 +9,7 @@ class Forwarder : public _List_Widget
 public:
     Forwarder(
             QWidget *parent = nullptr,
-            QString  tag = "Forwarders");
+            QString  tag    = "Forwarders");
 
 private:
     QLineEdit       *frwds;

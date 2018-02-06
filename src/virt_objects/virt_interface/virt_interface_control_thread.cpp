@@ -142,7 +142,7 @@ Result InterfaceControlThread::startIface()
     result.result = started;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Interface %2 started."))
-                .arg(name).arg((started)? "": tr("don't")));
+                .arg(name).arg((started)? "": tr("not")));
     return result;
 }
 Result InterfaceControlThread::destroyIface()
@@ -169,7 +169,7 @@ Result InterfaceControlThread::destroyIface()
     result.result = destroyed;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Interface %2 destroyed."))
-                .arg(name).arg((destroyed)? "": tr("don't")));
+                .arg(name).arg((destroyed)? "": tr("not")));
     return result;
 }
 Result InterfaceControlThread::defineIface()
@@ -231,7 +231,7 @@ Result InterfaceControlThread::undefineIface()
     result.result = deleted;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Interface %2 undefined."))
-                .arg(name).arg((deleted)? "": tr("don't")));
+                .arg(name).arg((deleted)? "": tr("not")));
     return result;
 }
 Result InterfaceControlThread::ifaceChangeBegin()
@@ -253,7 +253,7 @@ Result InterfaceControlThread::ifaceChangeBegin()
     result.result = processed;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Interface %2 in changing."))
-                .arg(name).arg((processed)? "": tr("don't")));
+                .arg(name).arg((processed)? "": tr("not")));
     return result;
 }
 Result InterfaceControlThread::ifaceChangeCommit()
@@ -275,7 +275,7 @@ Result InterfaceControlThread::ifaceChangeCommit()
     result.result = processed;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Interface %2 commited."))
-                .arg(name).arg((processed)? "": tr("don't")));
+                .arg(name).arg((processed)? "": tr("not")));
     return result;
 }
 Result InterfaceControlThread::ifaceChangeRollback()
@@ -297,7 +297,7 @@ Result InterfaceControlThread::ifaceChangeRollback()
     result.result = processed;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Interface %2 rollbacked."))
-                .arg(name).arg((processed)? "": tr("don't")));
+                .arg(name).arg((processed)? "": tr("not")));
     return result;
 }
 Result InterfaceControlThread::getVirtIfaceXMLDesc()
@@ -338,6 +338,6 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
     result.result = read;
     result.msg.append(
                 QString(tr("'<b>%1</b>' Interface %2 XML'ed."))
-                .arg(name).arg((read)? "": tr("don't")));
+                .arg(name).arg((read)? "": tr("not")));
     return result;
 }

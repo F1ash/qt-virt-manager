@@ -9,7 +9,7 @@ class Host_DNS : public _List_Widget
 public:
     Host_DNS(
             QWidget *parent = nullptr,
-            QString  tag = "HOSTs");
+            QString  tag    = "HOSTs");
 
 private:
     QLabel          *ipLabel;

@@ -289,7 +289,7 @@ Result StoragePoolControlThread::startStoragePool()
     } else
         result.err = sendConnErrors();
     result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 Started."))
-                  .arg(name).arg((started)? "": tr("don't")));
+                  .arg(name).arg((started)? "": tr("not")));
     result.name = name;
     result.result = started;
     return result;
@@ -314,7 +314,7 @@ Result StoragePoolControlThread::destroyStoragePool()
     } else
         result.err = sendConnErrors();
     result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 Destroyed."))
-                  .arg(name).arg((deleted)? "": tr("don't")));
+                  .arg(name).arg((deleted)? "": tr("not")));
     result.name = name;
     result.result = deleted;
     return result;
@@ -339,7 +339,7 @@ Result StoragePoolControlThread::undefineStoragePool()
     } else
         result.err = sendConnErrors();
     result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 Undefined."))
-                  .arg(name).arg((deleted)? "": tr("don't")));
+                  .arg(name).arg((deleted)? "": tr("not")));
     result.name = name;
     result.result = deleted;
     return result;
@@ -365,7 +365,7 @@ Result StoragePoolControlThread::changeAutoStartStoragePool()
     } else
         result.err = sendConnErrors();
     result.msg.append(QString(tr("'<b>%1</b>' StoragePool autostart %2 Set."))
-                  .arg(name).arg((set)? "": tr("don't")));
+                  .arg(name).arg((set)? "": tr("not")));
     result.name = name;
     result.result = set;
     return result;
@@ -392,7 +392,7 @@ Result StoragePoolControlThread::deleteStoragePool()
     } else
         result.err = sendConnErrors();
     result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 Deleted."))
-                  .arg(name).arg((deleted)? "": tr("don't")));
+                  .arg(name).arg((deleted)? "": tr("not")));
     result.name = name;
     result.result = deleted;
     return result;
@@ -428,7 +428,7 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     f.close();
     if ( Returns!=nullptr ) free(Returns);
     result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 XML'ed."))
-                  .arg(name).arg((read)? "": tr("don't")));
+                  .arg(name).arg((read)? "": tr("not")));
     result.name = name;
     result.result = read;
     return result;

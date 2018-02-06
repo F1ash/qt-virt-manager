@@ -4,7 +4,7 @@ Host_DNS::Host_DNS(
         QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
-    ipLabel = new QLabel("DNS IP:", this);
+    ipLabel = new QLabel(tr("DNS IP:"), this);
     hostIP = new QLineEdit(this);
     hostIP->setPlaceholderText("192.168.122.2");
     ipLayout = new QHBoxLayout();

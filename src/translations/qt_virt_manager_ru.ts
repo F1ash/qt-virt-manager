@@ -26,7 +26,7 @@
     <name>AddTab</name>
     <message>
         <source>add new IP Element</source>
-        <translation>добавитьновый IP элемент</translation>
+        <translation>добавить новый IP элемент</translation>
     </message>
 </context>
 <context>
@@ -76,6 +76,13 @@
     <message>
         <source>TYPE: boolean (yes/no)</source>
         <translation>ТИП: boolean (да/нет)</translation>
+    </message>
+</context>
+<context>
+    <name>BRIDGE_Mode_widget</name>
+    <message>
+        <source>Forward by existing host, Open vSwitch or macvtap bridge</source>
+        <translation>Пересылать существующим хостом, Open vSwitch или macvtap мостом</translation>
     </message>
 </context>
 <context>
@@ -141,19 +148,19 @@
     <name>BootType</name>
     <message>
         <source>BIOS bootloader</source>
-        <translation type="unfinished"></translation>
+        <translation>BIOS загрузчик</translation>
     </message>
     <message>
         <source>Host bootloader</source>
-        <translation type="unfinished"></translation>
+        <translation>Хостовый загрузчик</translation>
     </message>
     <message>
         <source>Direct kernel boot</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка ядра хоста</translation>
     </message>
     <message>
         <source>Container boot</source>
-        <translation type="unfinished"></translation>
+        <translation>Контейнерный загрузчик</translation>
     </message>
     <message>
         <source>Type:</source>
@@ -161,10 +168,78 @@
     </message>
 </context>
 <context>
+    <name>Bound_Widget</name>
+    <message>
+        <source>A&amp;verage (0-10000 KB/s)</source>
+        <translation>&amp;Желаемая (0-10000 KB/s)</translation>
+    </message>
+    <message>
+        <source>Specifies the desired average bit rate
+for the interface being shaped</source>
+        <translation>Определяет желаемую среднюю скорость передачи битов
+для формируемого интерфейса</translation>
+    </message>
+    <message>
+        <source>&amp;Peak (0-10000 KB/s)</source>
+        <translation>&amp;Пик (0-10000 KB/s)</translation>
+    </message>
+    <message>
+        <source>Specifies the maximum rate
+at which the bridge can send data</source>
+        <translation>Оопределяет максимальную скорость,
+с которой мост может отправлять данные</translation>
+    </message>
+    <message>
+        <source>B&amp;urst (0-10000 KB/s)</source>
+        <translation>&amp;Всплеск (0-10000 KB/s)</translation>
+    </message>
+    <message>
+        <source>Specifies the amount of kilobytes
+that can be transmitted in a single burst
+at peak speed</source>
+        <translation>Определяет количество килобайт,
+которое может быть передано в одном пакете
+с максимальной скоростью</translation>
+    </message>
+    <message>
+        <source>F&amp;loor (0-10000 KB/s)</source>
+        <translation>&amp;Штиль (0-10000 KB/s)</translation>
+    </message>
+    <message>
+        <source>Guarantees minimal throughput
+for shaped interfaces</source>
+        <translation>Гарантирует минимальную пропускную способность
+для формируемых интерфейсов</translation>
+    </message>
+</context>
+<context>
+    <name>BridgePage</name>
+    <message>
+        <source>Bridge Network</source>
+        <translation>Сеть через &quot;мост&quot;</translation>
+    </message>
+    <message>
+        <source>The guests will be directly connected to the physical network.</source>
+        <translation>Гостевые ВМ будут непосредственно соединяться с физической сетью.</translation>
+    </message>
+</context>
+<context>
     <name>Bridge_Widget</name>
     <message>
         <source>Enter bridge name (Ex.: br0)</source>
         <translation>Введите имя моста (Напр.: br0)</translation>
+    </message>
+    <message>
+        <source>Spanning Tree Protocol</source>
+        <translation>Spanning Tree Protocol</translation>
+    </message>
+    <message>
+        <source>Delay</source>
+        <translation>Задержка</translation>
+    </message>
+    <message>
+        <source>macTableManager</source>
+        <translation>macTableManager</translation>
     </message>
 </context>
 <context>
@@ -186,22 +261,22 @@
     <name>CCIDAddr</name>
     <message>
         <source>a 2-digit bus number</source>
-        <translation type="unfinished"></translation>
+        <translation>двузначный номер шины</translation>
     </message>
     <message>
         <source>a 2-digit slot within the bus</source>
-        <translation type="unfinished"></translation>
+        <translation>двузначный номер слота в шине</translation>
     </message>
 </context>
 <context>
     <name>CCWAddr</name>
     <message>
         <source>a hex value between 0 and 0xfe, inclusive</source>
-        <translation type="unfinished"></translation>
+        <translation>16-тиричное число [0-0xfe] включительно</translation>
     </message>
     <message>
         <source>a hex value between 0 and 0xffff, inclusive</source>
-        <translation type="unfinished"></translation>
+        <translation>16-тиричное число [0-0xffff] включительно</translation>
     </message>
 </context>
 <context>
@@ -276,12 +351,12 @@
 <context>
     <name>CephSecType</name>
     <message>
-        <source>Enter usage name</source>
-        <translation type="unfinished"></translation>
+        <source>Using for authentification</source>
+        <translation>Использовать для аутентификации</translation>
     </message>
     <message>
-        <source>Using for authentification</source>
-        <translation type="unfinished"></translation>
+        <source>Enter unique usage name for the secret</source>
+        <translation>Введите уникальное имя использования секрета</translation>
     </message>
 </context>
 <context>
@@ -343,6 +418,23 @@
     <message>
         <source>Unix socket</source>
         <translation>Unix сокет</translation>
+    </message>
+</context>
+<context>
+    <name>ConclusionPage</name>
+    <message>
+        <source>Exit from VirtNetwork Assistant</source>
+        <translation>Выход из Ассистента</translation>
+    </message>
+    <message>
+        <source>Done.</source>
+        <translation>Завершено.</translation>
+    </message>
+    <message>
+        <source>Build up the data for &lt; %1 &gt; network done.
+Other parameters of network you can change later in Network Editor.</source>
+        <translation>Сборка данных &lt; %1 &gt; сети завершена.
+Другие парамерты сети вы сможете изменить позже в Редакторе Сети.</translation>
     </message>
 </context>
 <context>
@@ -977,6 +1069,26 @@ Please, install nessesary drivers.</source>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
+    <message>
+        <source>Guest-to-guest</source>
+        <translation>Гость-c-гостем</translation>
+    </message>
+    <message>
+        <source>trustGuestRxFilters</source>
+        <translation>trustGuestRxFilters</translation>
+    </message>
+    <message>
+        <source>Bridge</source>
+        <translation>Мост</translation>
+    </message>
+    <message>
+        <source>DNS Domain</source>
+        <translation>DNS домен</translation>
+    </message>
+    <message>
+        <source>Forward</source>
+        <translation>Форвардинг</translation>
+    </message>
 </context>
 <context>
     <name>CreateVirtSecret</name>
@@ -1027,7 +1139,7 @@ never stored persistently</source>
     <message>
         <source>The value of the secret must not be revealed to any caller of libvirt,
 nor to any other node</source>
-        <translation>Содержимое секрета не должно быть раскрыто ни любому лицу, вызывающему libvirt,
+        <translation type="vanished">Содержимое секрета не должно быть раскрыто ни любому лицу, вызывающему libvirt,
 ни любому другому узлу</translation>
     </message>
     <message>
@@ -1037,6 +1149,14 @@ nor to any other node</source>
     <message>
         <source>&lt;a href=&apos;http://libvirt.org/formatsecret.html&apos;&gt;About&lt;/a&gt;</source>
         <translation>&lt;a href=&apos;https://libvirt.org/formatnwfilter.html&apos;&gt;О секретах&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>The value of the secret must not be revealed
+to any caller of libvirt,
+nor to any other node</source>
+        <translation>Содержимое секрета не должно быть раскрыто
+ни любому лицу, вызывающему libvirt,
+ни любому другому узлу</translation>
     </message>
 </context>
 <context>
@@ -1068,11 +1188,18 @@ nor to any other node</source>
     <name>DHCP_Widget</name>
     <message>
         <source>HOSTs</source>
-        <translation type="unfinished"></translation>
+        <translation>Хосты</translation>
     </message>
     <message>
         <source>RANGEs</source>
-        <translation type="unfinished"></translation>
+        <translation>Диапазоны</translation>
+    </message>
+</context>
+<context>
+    <name>DNS_Widget</name>
+    <message>
+        <source>forwardPlainNames</source>
+        <translation>forwardPlainNames</translation>
     </message>
 </context>
 <context>
@@ -1498,11 +1625,6 @@ is defined.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 запущена.</translation>
     </message>
     <message>
-        <source>don&apos;t</source>
-        <translatorcomment>не</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain state %2 changed.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Состояние вирт.машины %2 изменено.</translation>
     </message>
@@ -1569,6 +1691,10 @@ is defined.</source>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; snapshot for &lt;b&gt;%2&lt;/b&gt; Domain %3 deleted.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; снимок для &lt;b&gt;%2&lt;/b&gt; вирт.машины %3 удалён.</translation>
+    </message>
+    <message>
+        <source>not</source>
+        <translation>не</translation>
     </message>
 </context>
 <context>
@@ -1807,22 +1933,22 @@ Copy to Clipboard</source>
     </message>
     <message>
         <source>don&apos;t show again</source>
-        <translation>не показывать снова</translation>
+        <translation type="vanished">не показывать снова</translation>
     </message>
 </context>
 <context>
     <name>DriveAddr</name>
     <message>
         <source>a 2-digit controller number</source>
-        <translation type="unfinished"></translation>
+        <translation>двузначный номер контроллера</translation>
     </message>
     <message>
         <source>a 2-digit bus number</source>
-        <translation type="unfinished"></translation>
+        <translation>двузначный номер шины</translation>
     </message>
     <message>
         <source>a 2-digit unit number on the bus</source>
-        <translation type="unfinished"></translation>
+        <translation>двузначный номер элемента в шине</translation>
     </message>
 </context>
 <context>
@@ -1980,6 +2106,21 @@ Copy to Clipboard</source>
     </message>
 </context>
 <context>
+    <name>ForwardPage</name>
+    <message>
+        <source>NAT based network</source>
+        <translation>Сеть с NAT</translation>
+    </message>
+    <message>
+        <source>The guests will be directly connected to the virtual network.</source>
+        <translation>Гостевые ВМ будут непосредственно соединяться с вирт.сетью.</translation>
+    </message>
+    <message>
+        <source>Routed Network</source>
+        <translation>Маршрутизированная сеть</translation>
+    </message>
+</context>
+<context>
     <name>Forward_Widget</name>
     <message>
         <source>Mode:</source>
@@ -2107,6 +2248,13 @@ If you have graphic socket on local or remote host:
     </message>
 </context>
 <context>
+    <name>HOSTDEV_Mode_widget</name>
+    <message>
+        <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Не реализовано для редактирования&lt;/b&gt;&lt;/font&gt;</translation>
+    </message>
+</context>
+<context>
     <name>HelpMenu</name>
     <message>
         <source>About Qt</source>
@@ -2142,6 +2290,10 @@ If you have graphic socket on local or remote host:
         <source>DNS Host Name</source>
         <translation>Имя DNS хоста</translation>
     </message>
+    <message>
+        <source>DNS IP:</source>
+        <translation>DNS IP:</translation>
+    </message>
 </context>
 <context>
     <name>HubDevice</name>
@@ -2173,6 +2325,29 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     <message>
         <source>TYPE: IP_MASK (dotted decimal format or CIDR)</source>
         <translation>ТИП: IP_MASK (формат десятичныес точками или CIDR)</translation>
+    </message>
+</context>
+<context>
+    <name>IP_Page</name>
+    <message>
+        <source>Isolated Network</source>
+        <translation>Изолированная сеть</translation>
+    </message>
+    <message>
+        <source>The guests can talk to each other (and the host OS if IP&amp;DHCP used), but can&apos;t reach any other machines on the LAN</source>
+        <translation>Гостевые ВМ могут общаться друг с другом (и ОС хоста, если IP&amp;DHCP использован), но не с любыми другими машинами в LAN</translation>
+    </message>
+    <message>
+        <source>NAT based network</source>
+        <translation>Сеть с NAT</translation>
+    </message>
+    <message>
+        <source>The guests will be directly connected to the virtual network.</source>
+        <translation>Гостевые ВМ будут непосредственно соединяться с вирт.сетью.</translation>
+    </message>
+    <message>
+        <source>Routed Network</source>
+        <translation>Маршрутизированная сеть</translation>
     </message>
 </context>
 <context>
@@ -2250,15 +2425,15 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     </message>
     <message>
         <source>EvTouch Graphics Tablet</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Generic Mouse</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Generic Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Default (USB)</source>
@@ -2266,11 +2441,11 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     </message>
     <message>
         <source>PS/2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Paravirtualized (XEN)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2285,7 +2460,7 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation type="vanished">не</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 destroyed.</source>
@@ -2325,6 +2500,10 @@ is defined.</source>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 XML&apos;ed.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс %2 XML&apos;ирован.</translation>
     </message>
+    <message>
+        <source>not</source>
+        <translation>не</translation>
+    </message>
 </context>
 <context>
     <name>InterfaceToolBar</name>
@@ -2359,6 +2538,37 @@ is defined.</source>
     <message>
         <source>AutoReload Interface Overview</source>
         <translation>Перезагрузка обзора Интерфейсов</translation>
+    </message>
+</context>
+<context>
+    <name>IntroducePage</name>
+    <message>
+        <source>Welcome to VirtNetwork Assistant</source>
+        <translation>Приветствуем в Сетевом Ассистенте</translation>
+    </message>
+    <message>
+        <source>Please choose network type to create it.</source>
+        <translation>Для создания сети выберите её тип.</translation>
+    </message>
+    <message>
+        <source>Set new Network name</source>
+        <translation>Задайте имя сети</translation>
+    </message>
+    <message>
+        <source>Create network using existing host bridge</source>
+        <translation>Создать сеть, используя существующий мост хоста</translation>
+    </message>
+    <message>
+        <source>Create NAT based network</source>
+        <translation>Создать сеть с NAT</translation>
+    </message>
+    <message>
+        <source>Create routed network</source>
+        <translation>Создать маршрутизированную сеть</translation>
+    </message>
+    <message>
+        <source>Create isolated network</source>
+        <translation>Создать изолированную сеть</translation>
     </message>
 </context>
 <context>
@@ -2757,94 +2967,111 @@ Current:	%2</source>
     <name>MigrateDialog</name>
     <message>
         <source>Migrate &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Миграция &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Enter new VM name</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите новое имя ВМ</translation>
     </message>
     <message>
         <source>migrate as &lt;Name&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>мигрировать как &lt;Name&gt;</translation>
     </message>
     <message>
         <source>Destination Host / Connection :</source>
-        <translation type="unfinished"></translation>
+        <translation>Целевые Хост/Соединение :</translation>
     </message>
     <message>
         <source>Destination
 Host/URI</source>
-        <translation type="unfinished"></translation>
+        <translation>Целевые
+Хост/URI</translation>
     </message>
     <message>
         <source>Help:</source>
-        <translation type="unfinished"></translation>
+        <translation>Помощь:</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Детальней</translation>
     </message>
     <message>
         <source>Native migration data
 over hypervisor transport
 (encrypt if HV support it)</source>
-        <translation type="unfinished"></translation>
+        <translation>Прямая миграция данных
+через транспорт гипервизора
+(шифрование гипервизора если есть)</translation>
     </message>
     <message>
         <source>Tunnel migration data
 over libvirtd connection
 (encrypt always)</source>
-        <translation type="unfinished"></translation>
+        <translation>Туннельная миграция данных
+через соединение Libvirt
+(обычно шифрованое)</translation>
     </message>
     <message>
         <source>Use peer2peer</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать peer2peer</translation>
     </message>
     <message>
         <source>Maximum tolerable downtime
 for live migration (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимально допустимые простои
+для &quot;живой&quot; миграции (ms)</translation>
     </message>
     <message>
         <source>BandWidth (MiB/s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Пропускная способность
+(MiB/s)</translation>
     </message>
     <message>
         <source>Live migration</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;Живая&quot; миграция</translation>
     </message>
     <message>
         <source>Persist the VM
 on the destination</source>
-        <translation type="unfinished"></translation>
+        <translation>Сделать ВМ непостоянной
+на целевом хосте</translation>
     </message>
     <message>
         <source>Undefine the VM
 on the source</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить ВМ
+с хоста ресурса</translation>
     </message>
     <message>
         <source>Leave
 the domain suspended
 on the remote side</source>
-        <translation type="unfinished"></translation>
+        <translation>Оставить ВМ
+спящим
+на удалённой стороне</translation>
     </message>
     <message>
         <source>Migration with
 non-shared storage
 with full disk copy</source>
-        <translation type="unfinished"></translation>
+        <translation>При миграции
+с необщим хранилищем
+копировать диск полностью</translation>
     </message>
     <message>
         <source>Migration with
 non-shared storage
 with incremental copy</source>
-        <translation type="unfinished"></translation>
+        <translation>При миграции
+с необщим хранилищем
+копировать толко разницу</translation>
     </message>
     <message>
         <source>Force migration even
 if it is considered unsafe</source>
-        <translation type="unfinished"></translation>
+        <translation>Мигрировать принудительно
+даже если
+это считается небезопасным</translation>
     </message>
     <message>
         <source>Migrate offline</source>
@@ -2860,11 +3087,12 @@ during migration</source>
         <source>Abort migration
 on I/O errors happened
 during migration</source>
-        <translation type="unfinished"></translation>
+        <translation>Прервать миграцию
+в случае I/O ошибок</translation>
     </message>
     <message>
         <source>&lt;a href=&apos;http://libvirt.org/migration.html&apos;&gt;About Migration&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&apos;http://libvirt.org/migration.html&apos;&gt;О миграции&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Migrate</source>
@@ -2890,11 +3118,11 @@ Host/URI</source>
     </message>
     <message>
         <source>Mandatory URI for the destination host.</source>
-        <translation type="unfinished"></translation>
+        <translation>URI обязательно для целевого хоста.</translation>
     </message>
     <message>
         <source>Destination hostname/URI as seen from the source host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Целевое имя_хоста/URI как оно видно из хоста ресурса.</translation>
     </message>
 </context>
 <context>
@@ -2971,6 +3199,17 @@ Host/URI</source>
     <message>
         <source>Port:</source>
         <translation>Порт:</translation>
+    </message>
+</context>
+<context>
+    <name>NAT_Mode_widget</name>
+    <message>
+        <source>Use Address Range</source>
+        <translation>Использовать диапазан адресов</translation>
+    </message>
+    <message>
+        <source>Use Port Range</source>
+        <translation>Использовать диапазан портов</translation>
     </message>
 </context>
 <context>
@@ -3072,7 +3311,7 @@ is defined.</source>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation type="vanished">не</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network %2 Destroyed.</source>
@@ -3089,6 +3328,10 @@ is defined.</source>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network %2 XML&apos;ed.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сеть %2 XML&apos;ирована.</translation>
+    </message>
+    <message>
+        <source>not</source>
+        <translation>не</translation>
     </message>
 </context>
 <context>
@@ -3118,6 +3361,21 @@ is defined.</source>
     </message>
 </context>
 <context>
+    <name>NoGatewayPage</name>
+    <message>
+        <source>Isolated network</source>
+        <translation>Изолированная сеть</translation>
+    </message>
+    <message>
+        <source>This virtual network can be used for guest-to-guest communication only.</source>
+        <translation>Эта вирт.сеть может использоваться только для общения гость-с-гостем.</translation>
+    </message>
+    <message>
+        <source>Use IPv6 network</source>
+        <translation>Использовать IPv6 сеть</translation>
+    </message>
+</context>
+<context>
     <name>OpenFileMenu</name>
     <message>
         <source>%1 Virtual %2 from example XML description as is</source>
@@ -3134,6 +3392,13 @@ is defined.</source>
     <message>
         <source>Get Custom Source XML</source>
         <translation>из частного XML ресурса</translation>
+    </message>
+</context>
+<context>
+    <name>PASSTHROUGH_Mode_widget</name>
+    <message>
+        <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Не реализовано для редактирования&lt;/b&gt;&lt;/font&gt;</translation>
     </message>
 </context>
 <context>
@@ -3158,6 +3423,13 @@ is defined.</source>
     </message>
 </context>
 <context>
+    <name>PRIVATE_Mode_widget</name>
+    <message>
+        <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Не реализовано для редактирования&lt;/b&gt;&lt;/font&gt;</translation>
+    </message>
+</context>
+<context>
     <name>Path_To_File</name>
     <message>
         <source>Get path</source>
@@ -3168,15 +3440,15 @@ is defined.</source>
     <name>PciAddr</name>
     <message>
         <source>a 2-byte hex integer, not currently used by qemu</source>
-        <translation type="unfinished"></translation>
+        <translation>дву-байтовое 16-тиричное целое, (не поддерживается QEMU)</translation>
     </message>
     <message>
         <source>a hex value between 0 and 0xff, inclusive</source>
-        <translation type="unfinished"></translation>
+        <translation>16-тиричное число [0-0xff] включительно</translation>
     </message>
     <message>
         <source>a hex value between 0x0 and 0x1f, inclusive</source>
-        <translation type="unfinished"></translation>
+        <translation>16-тиричное число [0-0x1f] включительно</translation>
     </message>
 </context>
 <context>
@@ -3620,11 +3892,11 @@ Ctrl+Alt+G</translation>
     <name>QoS_Widget</name>
     <message>
         <source>Inbound</source>
-        <translation>Входящие</translation>
+        <translation>Входящий</translation>
     </message>
     <message>
         <source>Outbound</source>
-        <translation>Исходящие</translation>
+        <translation>Исходящий</translation>
     </message>
 </context>
 <context>
@@ -3805,7 +4077,7 @@ User</source>
     <name>SCSI_Host_Device</name>
     <message>
         <source>Host:Bus:Target:Lun (%1)</source>
-        <translation type="unfinished">Хост:Шина:Цель:LUN (%1)</translation>
+        <translation>Хост:Шина:Цель:LUN (%1)</translation>
     </message>
 </context>
 <context>
@@ -3844,6 +4116,33 @@ the device is not used by host</source>
     <message>
         <source>Specify Xauth</source>
         <translation>Указать Xauth</translation>
+    </message>
+</context>
+<context>
+    <name>SRV_DNS</name>
+    <message>
+        <source>Service</source>
+        <translation>Сервис</translation>
+    </message>
+    <message>
+        <source>Domain</source>
+        <translation>Домен</translation>
+    </message>
+    <message>
+        <source>Target</source>
+        <translation>Цель</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+    <message>
+        <source>Priority</source>
+        <translation>Приоритет</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation>Нагрузка</translation>
     </message>
 </context>
 <context>
@@ -3917,11 +4216,15 @@ is defined.</source>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation type="vanished">не</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Secret %2 XML&apos;ed.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Секрет %2 XML&apos;ирован.</translation>
+    </message>
+    <message>
+        <source>not</source>
+        <translation>не</translation>
     </message>
 </context>
 <context>
@@ -4005,7 +4308,7 @@ microphone</source>
     <name>SpaprVioAddr</name>
     <message>
         <source>the hex value address of the starting register</source>
-        <translation type="unfinished"></translation>
+        <translation>16-тиричный адрес стартового регистра</translation>
     </message>
 </context>
 <context>
@@ -4258,7 +4561,7 @@ is Defined.</source>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation type="vanished">не</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool %2 Destroyed.</source>
@@ -4279,6 +4582,10 @@ is Defined.</source>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool %2 XML&apos;ed.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Пул хранилищ %2 XML&apos;ирован.</translation>
+    </message>
+    <message>
+        <source>not</source>
+        <translation>не</translation>
     </message>
 </context>
 <context>
@@ -4388,7 +4695,7 @@ is created.</source>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation type="vanished">не</translation>
     </message>
     <message>
         <source>WriteError after (%2): %1 bytes</source>
@@ -4421,6 +4728,10 @@ is created.</source>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StorageVol %2 XML&apos;ed.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Хранилище %2 XML&apos;ировано.</translation>
+    </message>
+    <message>
+        <source>not</source>
+        <translation>не</translation>
     </message>
 </context>
 <context>
@@ -4872,11 +5183,11 @@ is created.</source>
     <name>USBAddr</name>
     <message>
         <source>a hex value between 0 and 0xfff, inclusive</source>
-        <translation type="unfinished"></translation>
+        <translation>16-тиричное число [0-0xfff] включительно</translation>
     </message>
     <message>
         <source>a dotted notation, such as 1.2 or 2.1.3.1</source>
-        <translation type="unfinished"></translation>
+        <translation>чрез-точечная запись, типа 1.2 or 2.1.3.1</translation>
     </message>
 </context>
 <context>
@@ -4953,6 +5264,13 @@ to have outgoing access.</source>
 Маршрутизатор по умолчанию будет 10.0.2.2, а DNS-сервер будет 10.0.2.3.
 Эта сеть единственный вариант для непривилегированных пользователей,
 которым нужны виртуальные машины с исходящим доступом.</translation>
+    </message>
+</context>
+<context>
+    <name>VEPA_Mode_widget</name>
+    <message>
+        <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Не реализовано для редактирования&lt;/b&gt;&lt;/font&gt;</translation>
     </message>
 </context>
 <context>
@@ -5622,15 +5940,15 @@ Click to choose mode</source>
     <name>VirtioSerialAddr</name>
     <message>
         <source>a 2-digit controller number</source>
-        <translation type="unfinished"></translation>
+        <translation>двузначный номер контроллера</translation>
     </message>
     <message>
         <source>a 2-digit bus number</source>
-        <translation type="unfinished"></translation>
+        <translation>двузначный номер шины</translation>
     </message>
     <message>
         <source>a 2-digit slot within the bus</source>
-        <translation type="unfinished"></translation>
+        <translation>двузначный номер слота в шине</translation>
     </message>
 </context>
 <context>
@@ -5645,27 +5963,27 @@ Click to choose mode</source>
     </message>
     <message>
         <source>ManagerId:</source>
-        <translation type="unfinished"></translation>
+        <translation>ManagerId:</translation>
     </message>
     <message>
         <source>TypeId:</source>
-        <translation type="unfinished"></translation>
+        <translation>TypeId:</translation>
     </message>
     <message>
         <source>TypeId Version:</source>
-        <translation type="unfinished"></translation>
+        <translation>TypeId Version:</translation>
     </message>
     <message>
         <source>InstanceId:</source>
-        <translation type="unfinished"></translation>
+        <translation>InstanceId:</translation>
     </message>
     <message>
         <source>InterfaceId:</source>
-        <translation type="unfinished"></translation>
+        <translation>InterfaceId:</translation>
     </message>
     <message>
         <source>ProfileId:</source>
-        <translation type="unfinished"></translation>
+        <translation>ProfileId:</translation>
     </message>
     <message>
         <source>Set manually</source>
@@ -5715,6 +6033,10 @@ Click to choose mode</source>
     <message>
         <source>Using for encryption</source>
         <translation>Использовать для шифрования</translation>
+    </message>
+    <message>
+        <source>path to will encrypted Volume</source>
+        <translation>путь к шифруемому Хранилищу</translation>
     </message>
 </context>
 <context>
@@ -5822,6 +6144,13 @@ in &quot;Applied Cryptography&quot; (1996)</source>
     <message>
         <source>Machines:</source>
         <translation>Машины:</translation>
+    </message>
+</context>
+<context>
+    <name>_Attributes</name>
+    <message>
+        <source>Attribute:</source>
+        <translation>Атрибут:</translation>
     </message>
 </context>
 <context>
@@ -5948,51 +6277,51 @@ created by the external snapshot
     <name>_HELP</name>
     <message>
         <source>The destination libvirtd server will automatically determine the native hypervisor URI for migration, based off the primary hostname. </source>
-        <translation type="unfinished"></translation>
+        <translation>Сервер назначения с libvirtd автоматически определяет собственный URI нативного гипервизора для миграции, исходя из основного имени хоста. </translation>
     </message>
     <message>
         <source>The optional uri parameter controls how the source libvirtd connects to the destination libvirtd, in case it is not accessible using the same address that the client uses to connect to the destination, or a different encryption/auth scheme is required. </source>
-        <translation type="unfinished"></translation>
+        <translation>Необязательный параметр uri, контролирует, как libvirtd ресурса подключается к целевому libvirtd, в случае если он недоступен с использованием того же адреса, который клиент использует для подключения к получателю, или требуется другая схема шифрования/авторизации. </translation>
     </message>
     <message>
         <source>The native hypervisor URI format is not used at all. </source>
-        <translation type="unfinished"></translation>
+        <translation>Формат URI нативного гипервизора не используется вообще. </translation>
     </message>
     <message>
         <source>To force migration over an alternate network interface the optional hypervisor specific URI must be provided. </source>
-        <translation type="unfinished"></translation>
+        <translation>Чтобы принудительно выполнить миграцию через альтернативный сетевой интерфейс, должен быть предоставлен дополнительный URI гипервизора. </translation>
     </message>
     <message>
         <source>There is no scope for forcing an alternative network interface for the native migration data with this method. </source>
-        <translation type="unfinished"></translation>
+        <translation>Этот способ не позволяет применять альтернативный сетевой интерфейс для нативной миграции данных. </translation>
     </message>
     <message>
         <source>There is no use or requirement for a destination libvirtd instance at all. This is typically used when the hypervisor has its own native management daemon available to handle incoming migration attempts on the destination. </source>
-        <translation type="unfinished"></translation>
+        <translation>Вообще не требуется или не используется Libvirt в пункте назначения. Обычно это используется, когда гипервизор имеет собственный нативный демон управления, доступный для обработки попыток входящей миграции в пункте назначения. </translation>
     </message>
     <message>
         <source>The destination URI must be reachable using the source libvirtd credentials (which are not necessarily the same as the credentials of the client in connecting to the source). </source>
-        <translation type="unfinished"></translation>
+        <translation>Целевой URI должен быть доступен с использованием учетных данных libvirtd ресурса (которые не обязательно совпадают с учетными данными клиента при подключении к ресурсу). </translation>
     </message>
     <message>
         <source>&lt;b&gt;syntax &lt;font color=&apos;red&apos;&gt;for virsh&lt;/font&gt;&lt;/b&gt;:&lt;br&gt;virsh migrate GUESTNAME DEST-LIBVIRT-URI [HV-URI]&lt;br&gt;&lt;br&gt;&lt;i&gt;eg using default network interface&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate web1 qemu+ssh://desthost/system&lt;br&gt;virsh migrate web1 xen+tls://desthost/system&lt;br&gt;&lt;br&gt;&lt;i&gt;eg using secondary network interface:&lt;/i&gt;&lt;br&gt;&lt;br&gt;virsh migrate web1 qemu://desthost/system tcp://10.0.0.1/&lt;br&gt;virsh migrate web1 xen+tcp://desthost/system xenmigr:10.0.0.1/</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;синтакс &lt;font color=&apos;red&apos;&gt;для virsh&lt;/font&gt;&lt;/b&gt;:&lt;br&gt;virsh migrate GUESTNAME DEST-LIBVIRT-URI [HV-URI]&lt;br&gt;&lt;br&gt;&lt;i&gt;т.е. используя сетевой интерфейс по умолчанию&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate web1 qemu+ssh://desthost/system&lt;br&gt;virsh migrate web1 xen+tls://desthost/system&lt;br&gt;&lt;br&gt;&lt;i&gt;т.е. используя вторичный сетевой интерфейс:&lt;/i&gt;&lt;br&gt;&lt;br&gt;virsh migrate web1 qemu://desthost/system tcp://10.0.0.1/&lt;br&gt;virsh migrate web1 xen+tcp://desthost/system xenmigr:10.0.0.1/</translation>
     </message>
     <message>
         <source>&lt;b&gt;syntax &lt;font color=&apos;red&apos;&gt;for virsh&lt;/font&gt;&lt;/b&gt;:&lt;br&gt;This mode cannot be invoked from virsh </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;синтакс &lt;font color=&apos;red&apos;&gt;для virsh&lt;/font&gt;&lt;/b&gt;:&lt;br&gt; Этот способ не может быть вызван из virsh </translation>
     </message>
     <message>
         <source>&lt;b&gt;syntax &lt;font color=&apos;red&apos;&gt;for virsh&lt;/font&gt;&lt;/b&gt;:&lt;br&gt;virsh migrate GUESTNAME HV-URI&lt;br&gt;&lt;br&gt;&lt;i&gt;eg using same libvirt URI for all connections&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --direct web1 xenmigr://desthost/</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;синтакс &lt;font color=&apos;red&apos;&gt;для virsh&lt;/font&gt;&lt;/b&gt;:&lt;br&gt;virsh migrate GUESTNAME HV-URI&lt;br&gt;&lt;br&gt;&lt;i&gt;т.е. используя тот же libvirt URI для всех соединений&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --direct web1 xenmigr://desthost/</translation>
     </message>
     <message>
         <source>&lt;b&gt;syntax &lt;font color=&apos;red&apos;&gt;for virsh&lt;/font&gt;&lt;/b&gt;:&lt;br&gt;virsh migrate GUESTNAME DEST-LIBVIRT-URI [ALT-DEST-LIBVIRT-URI]&lt;br&gt;&lt;br&gt;&lt;i&gt;eg using same libvirt URI for all connections&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p web1 qemu+ssh://desthost/system&lt;br&gt;&lt;br&gt;&lt;i&gt;eg using different libvirt URI auth scheme for peer2peer connections&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p web1 qemu+ssh://desthost/system qemu+tls:/desthost/system&lt;br&gt;&lt;br&gt;&lt;i&gt;eg using different libvirt URI hostname for peer2peer connections&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p web1 qemu+ssh://desthost/system qemu+ssh://10.0.0.1/system</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;синтакс &lt;font color=&apos;red&apos;&gt;для virsh&lt;/font&gt;&lt;/b&gt;:&lt;br&gt;virsh migrate GUESTNAME DEST-LIBVIRT-URI [ALT-DEST-LIBVIRT-URI]&lt;br&gt;&lt;br&gt;&lt;i&gt;т.е. используя тот же libvirt URI для всех соединений&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p web1 qemu+ssh://desthost/system&lt;br&gt;&lt;br&gt;&lt;i&gt;т.е. используя иную libvirt URI auth scheme для peer2peer соединений&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p web1 qemu+ssh://desthost/system qemu+tls:/desthost/system&lt;br&gt;&lt;br&gt;&lt;i&gt;т.е. используя иной libvirt URI hostname для peer2peer соединений&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p web1 qemu+ssh://desthost/system qemu+ssh://10.0.0.1/system</translation>
     </message>
     <message>
         <source>&lt;b&gt;syntax &lt;font color=&apos;red&apos;&gt;for virsh&lt;/font&gt;&lt;/b&gt;:&lt;br&gt;virsh migrate GUESTNAME DEST-LIBVIRT-URI [ALT-DEST-LIBVIRT-URI]&lt;br&gt;&lt;br&gt;&lt;i&gt;eg using same libvirt URI for all connections&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system&lt;br&gt;&lt;br&gt;&lt;i&gt;eg using different libvirt URI auth scheme for peer2peer connections&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system qemu+tls:/desthost/system&lt;br&gt;&lt;br&gt;&lt;i&gt;eg using different libvirt URI hostname for peer2peer connections&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system qemu+ssh://10.0.0.1/system</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;синтакс &lt;font color=&apos;red&apos;&gt;для virsh&lt;/font&gt;&lt;/b&gt;:&lt;br&gt;virsh migrate GUESTNAME DEST-LIBVIRT-URI [ALT-DEST-LIBVIRT-URI]&lt;br&gt;&lt;br&gt;&lt;i&gt;т.е. используя тот же libvirt URI для всех соединений&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system&lt;br&gt;&lt;br&gt;&lt;i&gt;т.е. используя иную libvirt URI auth scheme для peer2peer соединений&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system qemu+tls:/desthost/system&lt;br&gt;&lt;br&gt;&lt;i&gt;т.е. используя иной libvirt URI hostname для peer2peer соединений&lt;/i&gt;:&lt;br&gt;&lt;br&gt;virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system qemu+ssh://10.0.0.1/system</translation>
     </message>
 </context>
 <context>
@@ -6161,7 +6490,7 @@ definition a DHCP server on the network</source>
     </message>
     <message>
         <source>Owner:</source>
-        <translation>Хозяин:</translation>
+        <translation>Владелец:</translation>
     </message>
     <message>
         <source>Group:</source>
@@ -6169,7 +6498,7 @@ definition a DHCP server on the network</source>
     </message>
     <message>
         <source>Mode:</source>
-        <translation>Вид:</translation>
+        <translation>Доступ:</translation>
     </message>
     <message>
         <source>Label:</source>
@@ -6204,7 +6533,7 @@ definition a DHCP server on the network</source>
     </message>
     <message>
         <source>volume</source>
-        <translation>вместилище</translation>
+        <translation>хранилище</translation>
     </message>
     <message>
         <source>interface</source>
@@ -6413,12 +6742,12 @@ status:</source>
 <context>
     <name>iSCSISecType</name>
     <message>
-        <source>Enter usage name</source>
-        <translation type="unfinished"></translation>
+        <source>Using for authentification</source>
+        <translation>Использовать для аутентификации</translation>
     </message>
     <message>
-        <source>Using for authentification</source>
-        <translation type="unfinished"></translation>
+        <source>Enter unique usage name for the secret</source>
+        <translation>Введите уникальное имя использования секрета</translation>
     </message>
 </context>
 <context>
@@ -6467,12 +6796,12 @@ status:</source>
 <context>
     <name>tlsSecType</name>
     <message>
-        <source>Enter usage name</source>
-        <translation type="unfinished"></translation>
+        <source>Using for authentification</source>
+        <translation>Использовать для аутентификации</translation>
     </message>
     <message>
-        <source>Using for authentification</source>
-        <translation type="unfinished"></translation>
+        <source>Enter unique usage name for the secret</source>
+        <translation>Введите уникальное имя использования секрета</translation>
     </message>
 </context>
 </TS>

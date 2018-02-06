@@ -27,18 +27,18 @@ void IP_Page::initializePage()
 {
     QString t, s;
     if ( wizard()->field("IsolatedType").toBool() ) {
-        t = "Isolated Network";
+        t = tr("Isolated Network");
         s =
-    "The guests can talk to each other (and the host OS\
- if IP&DHCP used), but can't reach any other machines on the LAN";
+tr("The guests can talk to each other (and the host OS\
+ if IP&DHCP used), but can't reach any other machines on the LAN");
     } else if ( wizard()->field("NATedType").toBool() ) {
-        t = "NAT based network";
+        t = tr("NAT based network");
         s =
-    "The guests will be directly connected to the virtual network.";
+tr("The guests will be directly connected to the virtual network.");
     } else if ( wizard()->field("RoutedType").toBool() ) {
-        t = "Routed Network";
+        t = tr("Routed Network");
         s =
-    "The guests will be directly connected to the virtual network.";
+tr("The guests will be directly connected to the virtual network.");
     };
     setTitle(t);
     setSubTitle(s);

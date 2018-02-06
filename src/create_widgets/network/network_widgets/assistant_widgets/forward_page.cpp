@@ -17,14 +17,14 @@ void ForwardPage::initializePage()
     QString t, s;
     if ( wizard()->field("NATedType").toBool() ) {
         fr->setCurrentMode("nat");
-        t = "NAT based network";
+        t = tr("NAT based network");
         s =
-    "The guests will be directly connected to the virtual network.";
+tr("The guests will be directly connected to the virtual network.");
     } else if ( wizard()->field("RoutedType").toBool() ) {
         fr->setCurrentMode("route");
-        t = "Routed Network";
+        t = tr("Routed Network");
         s =
-    "The guests will be directly connected to the virtual network.";
+tr("The guests will be directly connected to the virtual network.");
     };
     setTitle(t);
     setSubTitle(s);

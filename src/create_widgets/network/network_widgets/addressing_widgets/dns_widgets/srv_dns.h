@@ -9,7 +9,7 @@ class SRV_DNS : public _List_Widget
 public:
     explicit SRV_DNS(
             QWidget *parent = nullptr,
-            QString  tag = "SRVs");
+            QString  tag    = "SRVs");
 
 private:
     QLabel          *serviceL, *domainL, *targetL,

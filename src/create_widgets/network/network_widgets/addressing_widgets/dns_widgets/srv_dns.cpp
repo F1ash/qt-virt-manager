@@ -4,12 +4,12 @@ SRV_DNS::SRV_DNS(
         QWidget *parent, QString tag) :
     _List_Widget(parent, tag)
 {
-    serviceL = new QLabel("Service", this);
-    domainL = new QLabel("Domain", this);
-    targetL = new QLabel("Target", this);
-    portL = new QLabel("Port", this);
-    priorityL = new QLabel("Priority", this);
-    weightL = new QLabel("Weight", this);
+    serviceL = new QLabel(tr("Service"), this);
+    domainL = new QLabel(tr("Domain"), this);
+    targetL = new QLabel(tr("Target"), this);
+    portL = new QLabel(tr("Port"), this);
+    priorityL = new QLabel(tr("Priority"), this);
+    weightL = new QLabel(tr("Weight"), this);
     service = new QLineEdit(this);
     service->setPlaceholderText("DNS_Name");
     domain = new QLineEdit(this);

@@ -5,8 +5,10 @@ Bridge_Widget::Bridge_Widget(
     _Checked_Widget(parent, tag)
 {
     bridgeName = new QLineEdit(this);
-    bridgeName->setPlaceholderText(tr("Enter bridge name (Ex.: br0)"));
-    stp = new QCheckBox("Spanning Tree Protocol", this);
+    bridgeName->setPlaceholderText(
+                tr("Enter bridge name (Ex.: br0)"));
+    stp = new QCheckBox(
+                tr("Spanning Tree Protocol"), this);
     stp->setChecked(true); // default state
     bridgeLt = new QHBoxLayout();
     bridgeLt->addWidget(bridgeName);
@@ -14,10 +16,10 @@ Bridge_Widget::Bridge_Widget(
     bridgeWdg = new QWidget(this);
     bridgeWdg->setLayout(bridgeLt);
     bridgeWdg->setEnabled(false);
-    delayLabel = new QLabel("Delay", this);
+    delayLabel = new QLabel(tr("Delay"), this);
     delay = new QSpinBox(this);
     delay->setRange(0, 360);
-    macTabLabel = new QLabel("macTableManager", this);
+    macTabLabel = new QLabel(tr("macTableManager"), this);
     macTableManager = new QComboBox(this);
     macTableManager->addItems(QStringList()<<"kernel"<<"libvirt");
     macTabLt = new QHBoxLayout();

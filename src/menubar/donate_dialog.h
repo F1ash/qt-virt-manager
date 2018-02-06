@@ -12,14 +12,14 @@ class Donate_Dialog : public QDialog
     Q_OBJECT
 public:
     Donate_Dialog(QWidget *parent = nullptr);
-    bool             showAgain() const;
+    //bool             showAgain() const;
 
 private:
     Click_Label     *donate1, *donate2,
                     *donate3, *donate4;
     QGridLayout     *donateLayout;
     QWidget         *donateWdg;
-    QCheckBox       *again;
+    //QCheckBox       *again;
     QVBoxLayout     *commonLayout;
 
 private slots:

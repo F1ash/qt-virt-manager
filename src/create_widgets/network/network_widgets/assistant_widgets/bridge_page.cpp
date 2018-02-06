@@ -5,9 +5,9 @@
 BridgePage::BridgePage(QWidget *parent) :
     QWizardPage(parent)
 {
-    setTitle("Bridge Network");
+    setTitle(tr("Bridge Network"));
     setSubTitle(
-    "The guests will be directly connected to the physical network.");
+tr("The guests will be directly connected to the physical network."));
 
     br = new Bridge_Widget(this);
     lt = new QVBoxLayout(this);

@@ -3,7 +3,7 @@
 NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
     _QWidget(parent)
 {
-    addrRange = new QCheckBox("Use Address Range", this);
+    addrRange = new QCheckBox(tr("Use Address Range"), this);
     ipStart = new QLineEdit(this);
     ipEnd = new QLineEdit(this);
     ipStart->setEnabled(false);
@@ -12,7 +12,7 @@ NAT_Mode_widget::NAT_Mode_widget(QWidget *parent) :
     addrLayout->addWidget(addrRange);
     addrLayout->addWidget(ipStart);
     addrLayout->addWidget(ipEnd);
-    portRange = new QCheckBox("Use Port Range", this);
+    portRange = new QCheckBox(tr("Use Port Range"), this);
     portStart = new QSpinBox(this);
     portStart->setRange(0, 65535);
     portEnd = new QSpinBox(this);

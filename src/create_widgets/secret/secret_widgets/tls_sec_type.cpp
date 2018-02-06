@@ -9,7 +9,8 @@ tlsSecType::tlsSecType(
     _SecType(parent, connPtrPtr)
 {
     usage = new QLineEdit(this);
-    usage->setPlaceholderText(tr("Enter usage name"));
+    usage->setPlaceholderText(
+                tr("Enter unique usage name for the secret"));
     usageLayout = new QHBoxLayout();
     usageLayout->addWidget(usage);
     usageWdg = new QWidget(this);

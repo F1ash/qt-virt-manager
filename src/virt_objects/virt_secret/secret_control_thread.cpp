@@ -207,7 +207,7 @@ Result SecretControlThread::undefineSecret()
     result.name = uuid;
     result.result = deleted;
     result.msg.append(QString(tr("'<b>%1</b>' Secret %2 Undefined."))
-                      .arg(uuid).arg((deleted)? "": tr("don't")));
+                      .arg(uuid).arg((deleted)? "": tr("not")));
     return result;
 }
 Result SecretControlThread::getVirtSecretXMLDesc()
@@ -247,6 +247,6 @@ Result SecretControlThread::getVirtSecretXMLDesc()
     if ( Returns!=nullptr ) free(Returns);
     result.result = read;
     result.msg.append(QString(tr("'<b>%1</b>' Secret %2 XML'ed."))
-                      .arg(uuid).arg((read)? "": tr("don't")));
+                      .arg(uuid).arg((read)? "": tr("not")));
     return result;
 }

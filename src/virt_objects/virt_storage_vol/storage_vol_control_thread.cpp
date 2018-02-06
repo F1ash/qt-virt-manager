@@ -266,7 +266,7 @@ Result StorageVolControlThread::deleteStorageVol()
     } else
         result.err = sendConnErrors();
     result.msg.append(QString(tr("'<b>%1</b>' StorageVol %2 Deleted."))
-                      .arg(name).arg((deleted)? "": tr("don't")));
+                      .arg(name).arg((deleted)? "": tr("not")));
     result.result = deleted;
     return result;
 }
@@ -342,7 +342,7 @@ Result StorageVolControlThread::downloadStorageVol()
     result.msg.append(
                 QString(
                 tr("'<b>%1</b>' StorageVol %2 Downloaded into %3 (%4)."))
-                .arg(name).arg((downloaded)?"":"don't")
+                .arg(name).arg((downloaded)?"":"not")
                 .arg(path).arg(length));
     result.result = downloaded;
     return result;
@@ -382,7 +382,7 @@ Result StorageVolControlThread::resizeStorageVol()
         result.err = sendConnErrors();
     result.msg.append(
                 QString(tr("'<b>%1</b>' StorageVol %2 Resized to %3 (bytes)."))
-                .arg(name).arg((resized)? "": tr("don't")).arg(capacity));
+                .arg(name).arg((resized)? "": tr("not")).arg(capacity));
     result.result = resized;
     return result;
 }
@@ -458,7 +458,7 @@ Result StorageVolControlThread::uploadStorageVol()
     f->deleteLater();
     result.msg.append(
                 QString(tr("'<b>%1</b>' StorageVol %2 Uploaded from %3 (%4)."))
-                .arg(name).arg((uploaded)?"":"don't")
+                .arg(name).arg((uploaded)?"":"not")
                 .arg(path).arg(length));
     result.result = uploaded;
     return result;
@@ -529,7 +529,7 @@ Result StorageVolControlThread::wipeStorageVol()
     };
     result.msg.append(
                 QString(tr("'<b>%1</b>' StorageVol %2 Wiped with %3 algorithm."))
-                .arg(name).arg((wiped)? "": tr("don't")).arg(algorithm));
+                .arg(name).arg((wiped)? "": tr("not")).arg(algorithm));
     result.result = wiped;
     return result;
 }
@@ -559,7 +559,7 @@ Result StorageVolControlThread::refreshStorageVolList()
     };
     result.msg.append(
                 QString(tr("StoragePool %1 refreshed."))
-                .arg((done)? "": tr("don't")));
+                .arg((done)? "": tr("not")));
     result.result = done;
     return result;
 }
@@ -604,7 +604,7 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
     f.close();
     if ( Returns!=nullptr ) free(Returns);
     result.msg.append(QString(tr("'<b>%1</b>' StorageVol %2 XML'ed."))
-                  .arg(name).arg((read)? "": tr("don't")));
+                  .arg(name).arg((read)? "": tr("not")));
     result.result = read;
     return result;
 }
