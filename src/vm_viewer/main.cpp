@@ -7,12 +7,18 @@
 #endif
 #include <QApplication>
 #include <QMessageBox>
+#include <QTranslator>
 
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(qt_remote_viewer);
     QString name("qt-remote-viewer");
     QSettings::setDefaultFormat(QSettings::IniFormat);
+    QTranslator tr;
+    QLocale lc = QLocale();
+    if ( lc.language() == QLocale::Russian ) {
+        tr.load("remote_viewer_ru");
+    };
     QString url;
     bool inLoop = false;
     int _ret = 0;
@@ -20,6 +26,7 @@ int main(int argc, char *argv[])
         QApplication a(argc, argv);
         a.setOrganizationName(name);
         a.setApplicationName(name);
+        a.installTranslator(&tr);
         if ( argc>1 && !inLoop ) {
             url = argv[1];
         } else {

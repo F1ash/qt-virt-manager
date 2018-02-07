@@ -2220,7 +2220,7 @@ If you have graphic socket on local or remote host:
 то вы можете использовать Удалённый Просмотрщик так:
 &lt;vnc|spice&gt;://HOST[:PORT]/?transport=ssh&amp;user=&lt;USER&gt;&amp;addr=&lt;IP&gt;&amp;port=&lt;NUMBER&gt;
 
-Если у вас есть графический сокет на локальном или удалённом хосте:
+Если у ВМ есть графический сокет на локальном или удалённом хосте:
 &lt;vnc|spice&gt;://[HOST[:PORT]]/?[transport=ssh&amp;user=&lt;USER&gt;&amp;]socket=/path/to/socket</translation>
     </message>
 </context>
@@ -2606,7 +2606,7 @@ is defined.</source>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Stream Registration success. PTY opened. Terminal is active.</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Регистрация потока успешна. PTY открыто. Терминал активен.</translation>
+        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Регистрация потока успешна. PTY открыт. Терминал активен.</translation>
     </message>
 </context>
 <context>
@@ -3819,7 +3819,7 @@ Ctrl+Alt+G</translation>
     <name>QSpiceUsbDeviceManager</name>
     <message>
         <source>connect to guest.</source>
-        <translation>соединить к ВМ.</translation>
+        <translation>соединиться к ВМ.</translation>
     </message>
     <message>
         <source>connected to guest already.</source>
@@ -3827,7 +3827,7 @@ Ctrl+Alt+G</translation>
     </message>
     <message>
         <source>disconnect from guest.</source>
-        <translation>отсоединить от ВМ.</translation>
+        <translation>отсоединиться от ВМ.</translation>
     </message>
     <message>
         <source>disconnected from guest already.</source>
@@ -3838,7 +3838,7 @@ Ctrl+Alt+G</translation>
     <name>QSpiceUsbDeviceWidget</name>
     <message>
         <source>USB Redirection</source>
-        <translation>Перенаправление USB</translation>
+        <translation>Проброс USB</translation>
     </message>
 </context>
 <context>
@@ -3849,7 +3849,7 @@ Ctrl+Alt+G</translation>
     </message>
     <message>
         <source>no event, or ignored event</source>
-        <translation>нет событий или игнорируются</translation>
+        <translation>событий нет или игнорируются</translation>
     </message>
     <message>
         <source>connection is authentified and ready</source>
@@ -3857,7 +3857,7 @@ Ctrl+Alt+G</translation>
     </message>
     <message>
         <source>disconnecting from the current host and connecting to the target host</source>
-        <translation>отсоединение от текущего хоста и соединение к целевому хосту</translation>
+        <translation>отсоединение от текущего хоста и соединение к целевому</translation>
     </message>
     <message>
         <source>connection is closed normally (sent if channel was ready)</source>
@@ -3873,7 +3873,7 @@ Ctrl+Alt+G</translation>
     </message>
     <message>
         <source>error during link process</source>
-        <translation>error during link process</translation>
+        <translation>ошибка в процессе линкования</translation>
     </message>
     <message>
         <source>authentication error</source>
@@ -5176,7 +5176,7 @@ is created.</source>
     </message>
     <message>
         <source>clear URL list</source>
-        <translation>очистить URL список</translation>
+        <translation>очистить список</translation>
     </message>
 </context>
 <context>
@@ -5499,11 +5499,11 @@ Click to choose mode</source>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Перезагрузить</translation>
+        <translation>Перезагрузка</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation>Перезапустить</translation>
+        <translation>Перезапуск</translation>
     </message>
     <message>
         <source>Shutdown</source>
@@ -5519,11 +5519,11 @@ Click to choose mode</source>
     </message>
     <message>
         <source>create Snapshot of Current Domain</source>
-        <translation>создать снапшот этого ВМ</translation>
+        <translation>создать снимок состояния ВМ</translation>
     </message>
     <message>
         <source>more Snapshot actions for Domain</source>
-        <translation>больше действий со снапшотами</translation>
+        <translation>больше действий со снимками ВМ</translation>
     </message>
     <message>
         <source>Snapshot now!</source>
@@ -5531,11 +5531,11 @@ Click to choose mode</source>
     </message>
     <message>
         <source>Reconnect</source>
-        <translation>Пересоедить</translation>
+        <translation>Пересоединиться</translation>
     </message>
     <message>
         <source>Send key sequence</source>
-        <translation>Послать последовательность клавишь</translation>
+        <translation>Отослать комбинацию клавишь</translation>
     </message>
     <message>
         <source>get Guest Screenshot</source>
@@ -6021,7 +6021,7 @@ Click to choose mode</source>
     </message>
     <message>
         <source>Please enter the password for the remote desktop:</source>
-        <translation>Пожалуйста введите пароль удалённого десктопа:</translation>
+        <translation>Пожалуйста введите пароль к удалённому десктопу:</translation>
     </message>
 </context>
 <context>
