@@ -72,7 +72,8 @@ void VM_Viewer_Only::init()
         startSSHTunnel("root", socket);
     } else if ( addr.isEmpty() || port.toInt()==0 ) {
         viewerToolBar->setEnabled(false);
-        msg = QString(tr("In '<b>%1</b>':<br> Getting the address data is failed."))
+        msg = QString(
+                tr("In '<b>%1</b>':<br> Getting the address data is failed."))
                 .arg(url);
         showErrorInfo(msg);
         startCloseProcess();
@@ -89,10 +90,44 @@ void VM_Viewer_Only::init()
 }
 void VM_Viewer_Only::parseURL()
 {
-    if ( url.split("://", QString::SkipEmptyParts).count()>1 ) {
-        QStringList parts1 = url.split("://").at(1)
-                .split("/");
-        host    = parts1.first();
+    if ( url.endsWith(".vv") ) {
+// See for details:
+// https://github.com/SPICE/virt-viewer/blob/master/man/remote-viewer.pod#connection-file
+        QSettings vv_file(url, QSettings::IniFormat);
+        vv_file.beginGroup("virt-viewer");
+        // host, port/ssh-port
+        QVariantMap _data;
+        foreach (QString _key, vv_file.allKeys()) {
+            _data.insert(_key, vv_file.value(_key));
+        };
+        vv_file.endGroup();
+        host = _data.value("host").toString();
+        user = _data.value("username", "root").toString();
+        if ( !_data.value("ssh-port").toString().isEmpty() ) {
+            port = _data.value("ssh-port").toString();
+            transport = "ssh";
+        } else if ( !_data.value("port").toString().isEmpty() ) {
+            port = _data.value("port").toString();
+        };
+        if ( !port.isEmpty() ) {
+            host.append(":").append(port);
+        };
+        port.clear();
+        _data.clear();
+        vv_file.beginGroup("graphics");
+        // (addr, port)/socket
+        foreach (QString _key, vv_file.allKeys()) {
+            _data.insert(_key, vv_file.value(_key));
+        };
+        vv_file.endGroup();
+        // if 'socket' key is defined then (addr\port) data
+        // will be ignored anyway
+        addr    = _data.value("address").toString();
+        port    = _data.value("port").toString();
+        socket  = _data.value("socket").toString();
+    } else if ( url.split("://", QString::SkipEmptyParts).count()>1 ) {
+        QStringList parts1 = url.split("://").at(1).split("/");
+        host = parts1.first();
         if ( host.isEmpty() ) {
             host.append("localhost.localdomain");
         };

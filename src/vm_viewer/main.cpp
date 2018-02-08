@@ -38,10 +38,25 @@ int main(int argc, char *argv[])
             delete d;
             d = nullptr;
         };
+        QString _type;
+        if ( url.endsWith(".vv") ) {
+            QSettings vv_file(url, QSettings::IniFormat);
+            vv_file.beginGroup("virt-viewer");
+            QVariantMap _data;
+            foreach (QString _key, vv_file.allKeys()) {
+                _data.insert(_key, vv_file.value(_key));
+            };
+            vv_file.endGroup();
+            _type = _data.value("type").toString().toLower();
+        } else if ( url.startsWith("vnc", Qt::CaseInsensitive) ) {
+            _type = "vnc";
+        } else if ( url.startsWith("spice", Qt::CaseInsensitive) ) {
+            _type = "spice";
+        };
         if ( _ret!=255 ) {
             inLoop = true;
             VM_Viewer_Only *w = nullptr;
-            if ( url.startsWith("vnc", Qt::CaseInsensitive) ) {
+            if ( _type == "vnc" ) {
 #if WITH_VNC_SUPPORT
                 w = new VNC_Viewer_Only(nullptr, url);
 #else
@@ -50,7 +65,7 @@ int main(int argc, char *argv[])
                             "VM Viewer",
                             QString("Application built without VNC"));
 #endif
-            } else if ( url.startsWith("spice", Qt::CaseInsensitive) ) {
+            } else if ( _type == "spice" ) {
 #if WITH_SPICE_SUPPORT
                 w = new Spice_Viewer_Only(nullptr, url);
 #else
@@ -63,7 +78,7 @@ int main(int argc, char *argv[])
             if ( w!=nullptr ) {
                 // it will be showed when connect to VM will be success
                 //w->show();
-                a.exec();
+                _ret = a.exec();
             };
         };
     };

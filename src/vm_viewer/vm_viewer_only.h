@@ -15,6 +15,7 @@
 #include <QPoint>
 #include <QShortcut>
 #include <QTimerEvent>
+#include <QSettings>
 #include "viewer_toolbar.h"
 #include "ssh_tunnel/ssh_tunnel.h"
 #include <QDebug>
