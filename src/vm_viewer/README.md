@@ -2,23 +2,78 @@ qt-remote-viewer
 =================
 
 A GUI application for view graphics on remote hosts.
-Suppotrs VNC/Spice protocols.
+Supports are VNC/Spice protocols.
 
-About `virt-viewer` [connection file](https://github.com/SPICE/virt-viewer/blob/master/man/remote-viewer.pod#connection-file) `(.vv)`.
+## Command line usage
 
-Additional key for `virt-viewer` group:
+**qt5-remote-viewer** [ URL | Path_to_connection_file ]
 
-    `ssh-port`      for SSH access to remote host which has VM graphics
-    with internal `address:port` or `socket`.
+**URL**
 
-Additional group:
+    protocol://[user@]host[:port][/?extensions]
 
-    `[graphics]`    contains keys for internal VM graphics
+`protocol`=(spice|vnc)
 
-    `address`       is an address of internal graphics
+`extensions` is a string with additional parameters for using VM graphics with internal `address:port`
 
-    `port`          is a port of internal graphics
+     [transport=ssh&user=<USER>&]addr=<IP>&port=<NUMBER>
 
-    `socket`        is a socket for internal graphics
+or with internal `socket`
 
-    NOTE: if `socket` is present then `address:port` will be ignored anyway.
+    [transport=ssh&user=<USER>&]socket=/path/to/socket
+
+**Path_to_connection_file**
+
+    qt5-remote-viewer ~/some_folder/example_connection_file.vv
+
+**NOTE**: For access to internal VM graphics uses `ssh-tunnel`.
+
+## Connection file
+
+About `virt-viewer` connection file (aka `*.vv`) read more [here](https://github.com/SPICE/virt-viewer/blob/master/man/remote-viewer.pod#connection-file).
+
+Additional key for **`[virt-viewer]`** group:
+
+**`ssh-port`**      for SSH access to remote host which has VM graphics with internal `address:port` or `socket`.
+**NOTE**: if `ssh-port` is present then `port` will be ignored anyway.
+
+Additional group **`[graphics]`** contains keys for VM graphics with internal access:
+
+**`address`**       is an internal address;
+
+**`port`**             is an internal port;
+
+**`socket`**         is an internal socket.
+
+**NOTE**: if `socket` is present then `address:port` will be ignored anyway.
+
+## Examples
+
+    [virt-viewer]
+    type=vnc
+    host=example.com
+    port=45678
+    ssh-port=22022
+    username=root
+
+    [graphics]
+    address=192.168.1.3
+    port=5901
+
+In that example `port` will be ignored.
+
+
+
+    [virt-viewer]
+    type=spice
+    host=example.com
+    ssh-port=22022
+    username=root
+
+    [graphics]
+    address=192.168.1.3
+    port=5900
+    socket=/var/lib/libvirt/qemu/domain-3-QEmu-F20-KDE-min/spice.sock
+
+In that example `address:port` will be ignored.
+
