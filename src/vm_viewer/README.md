@@ -1,8 +1,10 @@
 qt-remote-viewer
 =================
 
-A GUI application for view graphics on remote hosts.
-Supports are VNC/Spice protocols.
+![Qt Remote Viewer]( https://raw.githubusercontent.com/F1ash/qt-virt-manager/gh-pages/images/snapshot59.png )
+
+A GUI application for viewing graphics on remote hosts.
+VNC/Spice protocols are supports.
 
 ## Command line usage
 
@@ -35,6 +37,7 @@ About `virt-viewer` connection file (aka `*.vv`) read more [here](https://github
 Additional key for **`[virt-viewer]`** group:
 
 **`ssh-port`**      for SSH access to remote host which has VM graphics with internal `address:port` or `socket`.
+
 **NOTE**: if `ssh-port` is present then `port` will be ignored anyway.
 
 Additional group **`[graphics]`** contains keys for VM graphics with internal access:
