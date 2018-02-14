@@ -1,5 +1,5 @@
 title: Qt Virtual machines manager
-description: qt virtual machine manager libvirt spice vnc lxc kvm qemu xen openvz vbox vmware hyperv powervm bhyve
+description: qt virtual machine manager libvirt spice vnc lxc kvm qemu xen openvz vbox vmware hyperv powervm bhyve virt-viewer
 google_analytics: 
 show_downloads: true
 theme: jekyll-theme-minimal
