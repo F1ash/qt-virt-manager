@@ -66,7 +66,7 @@ If you have graphic socket on local or remote host:
     <name>LXC_Viewer</name>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Display destroyed.</source>
-        <translation type="unfinished">В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Дистплей остановлен.</translation>
+        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Дисплей остановлен.</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Connection or Domain is NULL or inactive</source>
@@ -74,7 +74,7 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Open PTY Error...</source>
-        <translation type="unfinished">В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Ошибка открытия PTY...</translation>
+        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Ошибка открытия PTY...</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Stream Registration success. PTY opened. Terminal is active.</source>
@@ -560,6 +560,38 @@ Click to choose devices</source>
 Click to choose mode</source>
         <translation>
 Кликнуть для выбора режима</translation>
+    </message>
+    <message>
+        <source>SmartCard channel</source>
+        <translation>Канал для смарткарт</translation>
+    </message>
+    <message>
+        <source>Cursor channel</source>
+        <translation>Канал для курсора</translation>
+    </message>
+    <message>
+        <source>Inputs channel</source>
+        <translation>Канал ввода</translation>
+    </message>
+    <message>
+        <source>Display channel</source>
+        <translation>Канал для дисплея</translation>
+    </message>
+    <message>
+        <source>USB Redirect channel</source>
+        <translation>Канал USB проброса</translation>
+    </message>
+    <message>
+        <source>WebDAV channel</source>
+        <translation>WebDAV канал</translation>
+    </message>
+    <message>
+        <source>Playback channel</source>
+        <translation>Канал воспроизведения</translation>
+    </message>
+    <message>
+        <source>Record channel</source>
+        <translation>Канал записи</translation>
     </message>
 </context>
 <context>

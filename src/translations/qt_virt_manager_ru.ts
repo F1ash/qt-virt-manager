@@ -5299,6 +5299,38 @@ Click to choose mode</source>
         <translation>
 Кликнуть для выбора режима</translation>
     </message>
+    <message>
+        <source>SmartCard channel</source>
+        <translation>Канал для смарткарт</translation>
+    </message>
+    <message>
+        <source>Cursor channel</source>
+        <translation>Канал для курсора</translation>
+    </message>
+    <message>
+        <source>Inputs channel</source>
+        <translation>Канал ввода</translation>
+    </message>
+    <message>
+        <source>Display channel</source>
+        <translation>Канал для дисплея</translation>
+    </message>
+    <message>
+        <source>USB Redirect channel</source>
+        <translation>Канал USB проброса</translation>
+    </message>
+    <message>
+        <source>WebDAV channel</source>
+        <translation>WebDAV канал</translation>
+    </message>
+    <message>
+        <source>Playback channel</source>
+        <translation>Канал воспроизведения</translation>
+    </message>
+    <message>
+        <source>Record channel</source>
+        <translation>Канал записи</translation>
+    </message>
 </context>
 <context>
     <name>VM_Viewer</name>

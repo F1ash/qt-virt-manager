@@ -8,4 +8,4 @@ Icon=remote-desktop-viewer
 Exec=@PROJ_PREFIX@-remote-viewer %u
 Terminal=false
 StartupNotify=true
-MimeType=x-scheme-handler/spice;x-scheme-handler/vnc;
+MimeType=x-scheme-handler/spice;x-scheme-handler/vnc;application/x-virt-viewer;
