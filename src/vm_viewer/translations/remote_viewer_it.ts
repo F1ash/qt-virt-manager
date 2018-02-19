@@ -154,27 +154,27 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Terminal transparency</source>
-        <translation type="unfinished"></translation>
+        <translation>Trasparenza del terminale</translation>
     </message>
     <message>
         <source>Start with preset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvia con preimpostazione:</translation>
     </message>
     <message>
         <source>None (single terminal)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuna (terminale singolo)</translation>
     </message>
     <message>
         <source>2 terminals horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>2 terminali orizzontalmente</translation>
     </message>
     <message>
         <source>2 terminals vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>2 terminali verticalmente</translation>
     </message>
     <message>
         <source>4 terminals</source>
-        <translation type="unfinished"></translation>
+        <translation>4 terminali</translation>
     </message>
     <message>
         <source>Font</source>
@@ -218,11 +218,11 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Tasto</translation>
     </message>
     <message>
         <source>Show on start</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra all&apos;avvio</translation>
     </message>
     <message>
         <source>Size</source>
@@ -411,14 +411,14 @@ If you have graphic socket on local or remote host:
     <name>Spice_Viewer</name>
     <message>
         <source>Copy files to Guest</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia file a guest</translation>
     </message>
 </context>
 <context>
     <name>Spice_Viewer_Only</name>
     <message>
         <source>Copy files to Guest</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia file a guest</translation>
     </message>
     <message>
         <source>Qt Remote Viewer -- %1</source>
@@ -453,11 +453,11 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingrandisci</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimpicciolisci</translation>
     </message>
     <message>
         <source>Zoom reset</source>
@@ -477,7 +477,7 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <source>Right</source>
@@ -493,7 +493,7 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>A lightweight multiplatform terminal emulator</source>
-        <translation type="unfinished"></translation>
+        <translation>Un emulatore di terminale leggero e multi-piattaforma</translation>
     </message>
 </context>
 <context>
@@ -522,11 +522,11 @@ If you have graphic socket on local or remote host:
     <name>URLMenu</name>
     <message>
         <source>delete URL from list</source>
-        <translation type="unfinished"></translation>
+        <translation>elimina URL dall&apos;elenco</translation>
     </message>
     <message>
         <source>clear URL list</source>
-        <translation type="unfinished"></translation>
+        <translation>cancella elenco degli URL</translation>
     </message>
 </context>
 <context>
@@ -546,12 +546,14 @@ If you have graphic socket on local or remote host:
     <message>
         <source>
 Click to choose devices</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Fai clic per scegliere i dispositivi</translation>
     </message>
     <message>
         <source>
 Click to choose mode</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>SmartCard channel</source>
@@ -643,7 +645,8 @@ Click to choose mode</source>
     <message>
         <source>Can&apos;t connect to host:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile connettersi all&apos;host:
+%1</translation>
     </message>
     <message>
         <source>SSH tunnel is destroyed.</source>
