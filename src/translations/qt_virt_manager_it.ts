@@ -75,7 +75,7 @@
     <name>BOOLEAN_Data</name>
     <message>
         <source>TYPE: boolean (yes/no)</source>
-        <translation type="unfinished">ТIPO: booleano (sì/no)</translation>
+        <translation type="unfinished"> IPO: booleano (sì/no)</translation>
     </message>
 </context>
 <context>
@@ -171,45 +171,40 @@
     <name>Bound_Widget</name>
     <message>
         <source>A&amp;verage (0-10000 KB/s)</source>
-        <translation>&amp;Желаемая (0-10000 KB/s)</translation>
+        <translation type="unfinished">&amp;Media (0-10000 KB/s)</translation>
     </message>
     <message>
         <source>Specifies the desired average bit rate
 for the interface being shaped</source>
-        <translation>Определяет желаемую среднюю скорость передачи битов
-для формируемого интерфейса</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Peak (0-10000 KB/s)</source>
-        <translation>&amp;Пик (0-10000 KB/s)</translation>
+        <translation type="unfinished">&amp;Picco (0-10000 KB/s)</translation>
     </message>
     <message>
         <source>Specifies the maximum rate
 at which the bridge can send data</source>
-        <translation>Оопределяет максимальную скорость,
-с которой мост может отправлять данные</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>B&amp;urst (0-10000 KB/s)</source>
-        <translation>&amp;Всплеск (0-10000 KB/s)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Specifies the amount of kilobytes
 that can be transmitted in a single burst
 at peak speed</source>
-        <translation>Определяет количество килобайт,
-которое может быть передано в одном пакете
-с максимальной скоростью</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>F&amp;loor (0-10000 KB/s)</source>
-        <translation>&amp;Штиль (0-10000 KB/s)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Guarantees minimal throughput
 for shaped interfaces</source>
-        <translation>Гарантирует минимальную пропускную способность
-для формируемых интерфейсов</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -227,15 +222,15 @@ for shaped interfaces</source>
     <name>Bridge_Widget</name>
     <message>
         <source>Enter bridge name (Ex.: br0)</source>
-        <translation>Введите имя моста (Напр.: br0)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Spanning Tree Protocol</source>
-        <translation>Spanning Tree Protocol</translation>
+        <translation type="unfinished">Spanning tree protocol</translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation>Задержка</translation>
+        <translation type="unfinished">Ritardo</translation>
     </message>
     <message>
         <source>macTableManager</source>
@@ -246,147 +241,147 @@ for shaped interfaces</source>
     <name>Bridge_to_LAN</name>
     <message>
         <source>Bridge:</source>
-        <translation>Мост:</translation>
+        <translation type="unfinished">Bridge:</translation>
     </message>
     <message>
         <source>Target Device name:</source>
-        <translation>Имя целевого устройства:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Network Filter on Interface</source>
-        <translation>Сетевой фильтр на Интерфейсе</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CCIDAddr</name>
     <message>
         <source>a 2-digit bus number</source>
-        <translation>двузначный номер шины</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>a 2-digit slot within the bus</source>
-        <translation>двузначный номер слота в шине</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CCWAddr</name>
     <message>
         <source>a hex value between 0 and 0xfe, inclusive</source>
-        <translation>16-тиричное число [0-0xfe] включительно</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>a hex value between 0 and 0xffff, inclusive</source>
-        <translation>16-тиричное число [0-0xffff] включительно</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CPU_Allocation</name>
     <message>
         <source>VCPUs:</source>
-        <translation>Вирт.ЦПУ-ва:</translation>
+        <translation type="unfinished">VCPU:</translation>
     </message>
     <message>
         <source>CPU Set:</source>
-        <translation>Задать ЦПУ:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Current:</source>
-        <translation>Текущее:</translation>
+        <translation type="unfinished">Attuale:</translation>
     </message>
     <message>
         <source>Placement:</source>
-        <translation>Размещение:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CPU_Model</name>
     <message>
         <source>Use model</source>
-        <translation>Использовать модель</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Exactly the same as the host CPU</source>
-        <translation>В точности, как ЦПУ хоста</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Match:</source>
-        <translation>Соответствие:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Allow fallback</source>
-        <translation>Разрешить откат</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Copy Host CPU configuration</source>
-        <translation>Копировать конфигурацию ЦПУ хоста</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Manually set guest CPU</source>
-        <translation>Задать гостевой ЦПУ вручную</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CPU_Topology</name>
     <message>
         <source>Use Topology</source>
-        <translation>Использовать топологию</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sockets</source>
-        <translation>Сокеты</translation>
+        <translation type="unfinished">Socket</translation>
     </message>
     <message>
         <source>Cores</source>
-        <translation>Ядра</translation>
+        <translation type="unfinished">Core</translation>
     </message>
     <message>
         <source>Threads</source>
-        <translation>Потоки</translation>
+        <translation type="unfinished">Thread</translation>
     </message>
     <message>
         <source>&lt;b&gt;Number of CPU overload&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Количество перегрузок ЦП&lt;/b&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CephSecType</name>
     <message>
         <source>Using for authentification</source>
-        <translation>Использовать для аутентификации</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Enter unique usage name for the secret</source>
-        <translation>Введите уникальное имя использования секрета</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ChainRules</name>
     <message>
         <source>Protocol:</source>
-        <translation>Протокол:</translation>
+        <translation type="unfinished">Protocollo:</translation>
     </message>
     <message>
         <source>Priority:</source>
-        <translation>Приоритет:</translation>
+        <translation type="unfinished">Priorità:</translation>
     </message>
     <message>
         <source>New rule</source>
-        <translation>Новое правило</translation>
+        <translation type="unfinished">Nuova regola</translation>
     </message>
     <message>
         <source>Edit selected rule</source>
-        <translation>Редактировать выделенное правило</translation>
+        <translation type="unfinished">Modifica la regola selezionata</translation>
     </message>
     <message>
         <source>Delete selected rule</source>
-        <translation>Удалить выделенное правило</translation>
+        <translation type="unfinished">Elimina la regola selezionata</translation>
     </message>
 </context>
 <context>
     <name>ChannelDevice</name>
     <message>
         <source>Spice Agent</source>
-        <translation>Spice агент</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Spice WebDAV</source>
@@ -397,145 +392,141 @@ for shaped interfaces</source>
     <name>CharDevice</name>
     <message>
         <source>Pseudo TTY</source>
-        <translation>Псевдо TTY</translation>
+        <translation type="unfinished">Pseudo TTY</translation>
     </message>
     <message>
         <source>Physical host character device</source>
-        <translation>Символьное устройство физического хоста</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Output to a file</source>
-        <translation>Вывод в файл</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>TCP net console</source>
-        <translation>TCP консоль</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>UDP net console</source>
-        <translation>UDP консоль</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Unix socket</source>
-        <translation>Unix сокет</translation>
+        <translation type="unfinished">Socket Unix</translation>
     </message>
 </context>
 <context>
     <name>ConclusionPage</name>
     <message>
         <source>Exit from VirtNetwork Assistant</source>
-        <translation>Выход из Ассистента</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Done.</source>
-        <translation>Завершено.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Build up the data for &lt; %1 &gt; network done.
 Other parameters of network you can change later in Network Editor.</source>
-        <translation>Сборка данных &lt; %1 &gt; сети завершена.
-Другие парамерты сети вы сможете изменить позже в Редакторе Сети.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ConnAliveThread</name>
     <message>
         <source>close exit code: %1</source>
-        <translation>код результата закрытия: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>connect is nullptr</source>
-        <translation type="obsolete">с</translation>
+        <translation type="obsolete"> </translation>
     </message>
     <message>
         <source>Connection to the Hypervisor is failed.</source>
-        <translation>Соединение к гипервизору не успешно.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Domain %2: %3
 </source>
-        <translation>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; ВМ %2: %3
-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Network %2: %3
 </source>
-        <translation>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Сеть %2: %3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Pool %2: %3
 </source>
-        <translation>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Пул %2: %3
-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>connection pointer is NULL</source>
-        <translation>указатель соединения -- NULL</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>connection is opened: %1</source>
-        <translation type="obsolete">соединение открыто: %1</translation>
+        <translation type="obsolete">   : %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Secert %2: %3
 </source>
-        <translation>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Секрет %2: %3
-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection closed: Misc I/O error</source>
-        <translation>Соединение закрыто: какая-то ошибка ввода/вывода</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection closed: End-of-file from server</source>
-        <translation>Соединение закрыто: получен &quot;конец файла&quot; от сервера</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection closed: Keepalive timer triggered</source>
-        <translation>Соединение закрыто: сработал таймер поддержания соединения</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection closed: Client requested it</source>
-        <translation>Соединение закрыто: по требованию клиента</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection closed: Unknown reason</source>
-        <translation>Соединение закрыто: причина не известна</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>connection is %1 opened.</source>
-        <translation>соединение %1 открыто.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>not</source>
-        <translation>не</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ConnElement</name>
     <message>
         <source>Connection &apos;%1&apos;</source>
-        <translation>Соединение: &apos;%1&apos;</translation>
+        <translation type="unfinished">Connessione: &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Wait Timer is running: %1</source>
-        <translation>Ожидание продолжается: %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;СОБЫТИЕ&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation type="unfinished">&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;EVENTO&lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
     <message>
         <source>FAILED</source>
-        <translation>FAILED</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>CLOSED</source>
-        <translation>CLOSED</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>OPENED</source>
-        <translation>OPENED</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>in_Process</source>
@@ -543,14 +534,14 @@ Other parameters of network you can change later in Network Editor.</source>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ERROR&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ОШИБКА&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation type="unfinished">&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ERRORE&lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
 </context>
 <context>
     <name>ConnItemModel</name>
     <message>
         <source>Connection</source>
-        <translation>Соединение</translation>
+        <translation type="unfinished">Connessione</translation>
     </message>
     <message>
         <source>URI</source>
@@ -558,25 +549,25 @@ Other parameters of network you can change later in Network Editor.</source>
     </message>
     <message>
         <source>State</source>
-        <translation>Состояние</translation>
+        <translation type="unfinished">Stato</translation>
     </message>
     <message>
         <source>Name: %1</source>
-        <translation>Имя: %1</translation>
+        <translation type="unfinished">Nome: %1</translation>
     </message>
     <message>
         <source>Available</source>
-        <translation>Доступно</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Busy</source>
-        <translation>Занято</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>
 State: %1</source>
-        <translation>
-Состояние: %1</translation>
+        <translation type="unfinished">
+Stato: %1</translation>
     </message>
     <message>
         <source>URI: %1</source>
@@ -584,494 +575,491 @@ State: %1</source>
     </message>
     <message>
         <source>State: waiting period has expired</source>
-        <translation>Состояние: период ожидания истёк</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>State: %1</source>
-        <translation>Состояние: %1</translation>
+        <translation type="unfinished">Stato: %1</translation>
     </message>
 </context>
 <context>
     <name>ConnSettings</name>
     <message>
         <source>Connection: &lt;noname&gt;</source>
-        <translation>Соединение: &lt;noname&gt;</translation>
+        <translation type="unfinished">Connessione: &lt;noname&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;WARNING&lt;/b&gt; See for: &lt;a href=&apos;http://libvirt.org/remote.html&apos;&gt;&lt;b&gt;Libvirt Remote support&lt;/b&gt;&lt;/a&gt;</source>
-        <translation>&lt;b&gt;ПРЕДУПРЕЖДЕНИЕ&lt;/b&gt; Смотри: &lt;a href=&apos;http://libvirt.org/remote.html&apos;&gt;&lt;b&gt;&lt;br&gt;&lt;/br&gt;Libvirt об удалённых соединениях&lt;/b&gt;&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection:</source>
-        <translation>Соединение:</translation>
+        <translation type="unfinished">Connessione:</translation>
     </message>
     <message>
         <source>Enter Connection Name</source>
-        <translation>Введите имя соединения</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Driver:</source>
-        <translation>Драйвер:</translation>
+        <translation type="unfinished">Driver:</translation>
     </message>
     <message>
         <source>Transport:</source>
-        <translation>Транспорт:</translation>
+        <translation type="unfinished">Trasporto:</translation>
     </message>
     <message>
         <source>Host:</source>
-        <translation>Хост:</translation>
+        <translation type="unfinished">Host:</translation>
     </message>
     <message>
         <source>Path:</source>
-        <translation>Путь:</translation>
+        <translation type="unfinished">Percorso:</translation>
     </message>
     <message>
         <source>Extra:</source>
-        <translation>Расширенные:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connect at Start</source>
-        <translation>Соединять при запуске</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ок</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation type="unfinished">Annulla</translation>
     </message>
     <message>
         <source>Info</source>
-        <translation>Информация</translation>
+        <translation type="unfinished">Informazioni</translation>
     </message>
     <message>
         <source>Connection Name is empty.</source>
-        <translation>Имя оединения пусто.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Same Connection Name is exist.</source>
-        <translation>Такое имя соединения существует.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>New settings apply
 at next job start.</source>
-        <translation>Новые настройки будут применены
-при следующем запуске соединения.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection: %1</source>
-        <translation>Соединение: %1</translation>
+        <translation type="unfinished">Connessione: %1</translation>
     </message>
 </context>
 <context>
     <name>ConnectMenu</name>
     <message>
         <source>Open Connection</source>
-        <translation>Открыть соединение</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Overview of Connection</source>
-        <translation>Обзор соединения</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit Connection</source>
-        <translation>Редактировать соединение</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete Connection</source>
-        <translation>Удалить соединение</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Refresh Localhost Connection</source>
-        <translation>Обновить локальные соединения</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ConnectionList</name>
     <message>
         <source>Info</source>
-        <translation>Информация</translation>
+        <translation type="unfinished">Informazioni</translation>
     </message>
     <message>
         <source>Item not exist.</source>
-        <translation>Объект не существует.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
-        <translation>Соединение &apos;%1&apos;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection is Busy.</source>
-        <translation>Соединение занято.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection is Running.</source>
-        <translation>Соединение в действии.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Close Connection</source>
-        <translation>Закрыть соединение</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open Connection</source>
-        <translation>Открыть соединение</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection is busy.</source>
-        <translation>Соединение занято.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Search local connections</source>
-        <translation>Искать локальные соединения</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ERROR&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ОШИБКА&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation type="unfinished">&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ERRORE&lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
     <message>
         <source>&lt;%1&gt; credentials</source>
-        <translation>Учётные данные: &lt;%1&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ConsoleDevice</name>
     <message>
         <source>PseudoTTY (pty)</source>
-        <translation>Псевдо TTY (pty)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Default device type is according to the HV&apos;s rules</source>
-        <translation>Тип устройства соответствующий правилам гипервизора</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Only the first console element may use &apos;serial&apos; Type</source>
-        <translation>Только первая консоль может быть &apos;serial&apos; типа</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Secondary consoles must all be paravirtualized &apos;virtio&apos;</source>
-        <translation>Все вторичные консоли должны быть &apos;virtio&apos; типа</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>SCLP is the native console type for s390</source>
-        <translation>SCLP -- нативный тип консоли для s390</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CreateInterface</name>
     <message>
         <source>Interface Settings</source>
-        <translation>Настройки интерфейса</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Show XML Description
 at close</source>
-        <translation>Открыть XML описание
-после закрытия</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ок</translation>
+        <translation type="unfinished">Ok</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation type="unfinished">Annulla</translation>
     </message>
     <message>
         <source>the public name for interface</source>
-        <translation>публичное имя интерфейса</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation type="unfinished">Tipo</translation>
     </message>
     <message>
         <source>inet address</source>
-        <translation>сетевой адрес</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Prefix</source>
-        <translation>префикс</translation>
+        <translation type="unfinished">Prefisso</translation>
     </message>
 </context>
 <context>
     <name>CreatePool</name>
     <message>
         <source>Create Pool in [%1]</source>
-        <translation>Создать Пул в [%1]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>UUID will be generated if omitted</source>
-        <translation>UUID будет автогенерирован, если не задан</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CreateSnapshotDialog</name>
     <message>
         <source>Create Snapshot of &lt;%1&gt; in [ %2 ] connection</source>
-        <translation>Создать снимок состояния &lt;%1&gt; ВМ в [ %2 ] соединении</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Имя:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>autogenerates if omit</source>
-        <translation>автогенерируется, если не задан</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add Time to Snapshot Name</source>
-        <translation>Добавить время к имени снимка</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Short Description</source>
-        <translation>Короткое описание</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Creation Snapshot Flags</source>
-        <translation>Флаги создания снимка</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;a href=&apos;https://libvirt.org/formatsnapshot.html&apos;&gt;About&lt;/a&gt;</source>
-        <translation>&lt;a href=&apos;https://libvirt.org/formatsnapshot.html&apos;&gt;О снапшотах&lt;/a&gt;</translation>
+        <translation type="unfinished">&lt;a href=&apos;https://libvirt.org/formatsnapshot.html&apos;&gt;Informazioni&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ок</translation>
+        <translation type="unfinished">Ok</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation type="unfinished">Annulla</translation>
     </message>
     <message>
         <source>Count of disk subset not can be equal zero</source>
-        <translation>Множество дисков не должно быть пустым</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CreateVirtDomain</name>
     <message>
         <source>VM Settings</source>
-        <translation>ВМ настройки</translation>
+        <translation type="unfinished">Impostazioni VM</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; domain editor closed.</source>
-        <translation>Редактор &apos;&lt;b&gt;%1&lt;/b&gt;&apos; вирт.машины закрыт.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;a href=&apos;http://libvirt.org/formatdomain.html&apos;&gt;About&lt;/a&gt;</source>
-        <translation>&lt;a href=&apos;http://libvirt.org/formatdomain.html&apos;&gt;О составе вирт.машин&lt;/a&gt;</translation>
+        <translation type="unfinished">&lt;a href=&apos;http://libvirt.org/formatdomain.html&apos;&gt;Informazioni&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ок</translation>
+        <translation type="unfinished">Ok</translation>
     </message>
     <message>
         <source>Restore all</source>
-        <translation>Восстановить всё</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Restore all pages to first state</source>
-        <translation>Восстановить всё в первоначальное состояние</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation type="unfinished">Annulla</translation>
     </message>
     <message>
         <source>Read Data in %1 failed.</source>
-        <translation>Чтение данных в %1 не успешно.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>New Domain XML&apos;ed</source>
-        <translation>Новая ВМ XML&apos;ирована</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>в &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Общее</translation>
+        <translation type="unfinished">Generale</translation>
     </message>
     <message>
         <source>Misc.</source>
-        <translation>Проч.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>OS_Booting</source>
-        <translation>Загрузка ОС</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>CPU</source>
-        <translation>ЦПУ</translation>
+        <translation type="unfinished">CPU</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation>Память</translation>
+        <translation type="unfinished">Memoria</translation>
     </message>
     <message>
         <source>Devices</source>
-        <translation>Устройства</translation>
+        <translation type="unfinished">Dispositivi</translation>
     </message>
     <message>
         <source>SecurityLabel</source>
-        <translation>Метки безопасности</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>VM Settings / &lt;%1&gt; in [%2]</source>
-        <translation>ВМ Настройки / &lt;%1&gt; в [%2]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
-        <translation>Соединение &apos;%1&apos;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;СОБЫТИЕ&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation type="unfinished">&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;EVENTO&lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
     <message>
         <source>Info</source>
-        <translation>Информация</translation>
+        <translation type="unfinished">Informazioni</translation>
     </message>
     <message>
         <source>Type of VM not defined.
 Please, install nessesary drivers.</source>
-        <translation>Тип ВМ не определён.
-Пожалуйста, установите необходимые драйвера.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CreateVirtNWFilter</name>
     <message>
         <source>NWFilter Editor</source>
-        <translation>Редактор сетевого фильтра</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>set filter name</source>
-        <translation>задать имя фильтра</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>UUID will set automatically if occured</source>
-        <translation>UUID будет автогенерирован, если не задан</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use another filters</source>
-        <translation>Использовать другой фильтр</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Filters</source>
-        <translation>Фильтры</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Chain</source>
-        <translation>Цепочка</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;a href=&apos;https://libvirt.org/formatnwfilter.html&apos;&gt;About&lt;/a&gt;</source>
-        <translation>&lt;a href=&apos;https://libvirt.org/formatnwfilter.html&apos;&gt;О сетевых фильтрах&lt;/a&gt;</translation>
+        <translation type="unfinished">&lt;a href=&apos;https://libvirt.org/formatnwfilter.html&apos;&gt;Informazion i&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ок</translation>
+        <translation type="unfinished">Ok</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation type="unfinished">Annulla</translation>
     </message>
     <message>
         <source>New NWFilter XML&apos;ed</source>
-        <translation>Новый фильтр XML&apos;ирован</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>в &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
-        <translation>Соединение &apos;%1&apos;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;СОБЫТИЕ&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation type="unfinished">&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;EVENTO&lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; network filter editor closed.</source>
-        <translation>Редактор &apos;&lt;b&gt;%1&lt;/b&gt;&apos; сетевого фильтра закрыт.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>NWFilter Editor / &lt;%1&gt; in [%2]</source>
-        <translation>Редактор сетевого фильтра / &lt;%1&gt; в [%2]</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CreateVirtNetwork</name>
     <message>
         <source>Network Editor</source>
-        <translation>Редактор Сети</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; network editor closed.</source>
-        <translation>Редактор &apos;&lt;b&gt;%1&lt;/b&gt;&apos; сети закрыт.</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;    .</translation>
     </message>
     <message>
         <source>Network Assistant in [%1]</source>
-        <translation>Сетевой Помощник в [%1]</translation>
+        <translation>      [%1]</translation>
     </message>
     <message>
         <source>New Network XML&apos;ed</source>
-        <translation>Новая Сеть XML&apos;ирована</translation>
+        <translation>    XML&apos; </translation>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>в &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
+        <translation>  &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Network Editor / &lt;%1&gt; in [%2]</source>
-        <translation>Редактор Сети / &lt;%1&gt; в [%2]</translation>
+        <translation>    / &lt;%1&gt;   [%2]</translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
-        <translation>Соединение &apos;%1&apos;</translation>
+        <translation>  &apos;%1&apos;</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;СОБЫТИЕ&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt; &lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
 </context>
 <context>
     <name>CreateVirtNetwork_Adv</name>
     <message>
         <source>Network Settings</source>
-        <translation>Настройки Сети</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Имя:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Enter Network Name</source>
-        <translation>Введите имя сети</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>if omitted, then autogenerated</source>
-        <translation>автогенерируется, если не задано</translation>
+        <translation> ,      </translation>
     </message>
     <message>
         <source>&lt;a href=&apos;http://libvirt.org/formatnetwork.html&apos;&gt;About&lt;/a&gt;</source>
-        <translation>&lt;a href=&apos;http://libvirt.org/formatnetwork.html&apos;&gt;О сетях&lt;/a&gt;</translation>
+        <translation>&lt;a href=&apos;http://libvirt.org/formatnetwork.html&apos;&gt;   &lt;/a&gt;</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ок</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Guest-to-guest</source>
-        <translation>Гость-c-гостем</translation>
+        <translation> -c- </translation>
     </message>
     <message>
         <source>trustGuestRxFilters</source>
@@ -1079,120 +1067,120 @@ Please, install nessesary drivers.</source>
     </message>
     <message>
         <source>Bridge</source>
-        <translation>Мост</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>DNS Domain</source>
-        <translation>DNS домен</translation>
+        <translation>DNS  </translation>
     </message>
     <message>
         <source>Forward</source>
-        <translation>Форвардинг</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>CreateVirtSecret</name>
     <message>
         <source>Create Secret</source>
-        <translation>Создать Секрет</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Show XML Description
 at close</source>
-        <translation>Открыть XML описание
-после закрытия</translation>
+        <translation>  XML  
+   </translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ок</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>UUID generated if omitted</source>
-        <translation>UUID будет автогенерирован, если не задан</translation>
+        <translation>UUID    ,      </translation>
     </message>
     <message>
         <source>A human-readable description of the purpose of the secret</source>
-        <translation>Человеко-читаемое описание назначения секрета</translation>
+        <translation> -       </translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Ephemeral</source>
-        <translation>Эфемерный</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>This secret must only be kept in memory,
 never stored persistently</source>
-        <translation>Этот секрет должен храниться только в памяти,
-никогда не хранится постоянно</translation>
+        <translation>             ,
+       </translation>
     </message>
     <message>
         <source>Private</source>
-        <translation>Частный</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>The value of the secret must not be revealed to any caller of libvirt,
 nor to any other node</source>
-        <translation>Содержимое секрета не должно быть раскрыто ни любому лицу, вызывающему libvirt,
-ни любому другому узлу</translation>
+        <translation>                 ,   libvirt,
+       </translation>
     </message>
     <message>
         <source>Enter secret value/phrase</source>
-        <translation>Введите секретное значение/фразу</translation>
+        <translation>     / </translation>
     </message>
     <message>
         <source>&lt;a href=&apos;http://libvirt.org/formatsecret.html&apos;&gt;About&lt;/a&gt;</source>
-        <translation>&lt;a href=&apos;https://libvirt.org/formatnwfilter.html&apos;&gt;О секретах&lt;/a&gt;</translation>
+        <translation>&lt;a href=&apos;https://libvirt.org/formatnwfilter.html&apos;&gt;   &lt;/a&gt;</translation>
     </message>
     <message>
         <source>The value of the secret must not be revealed
 to any caller of libvirt,
 nor to any other node</source>
-        <translation>Содержимое секрета не должно быть раскрыто
-ни любому лицу, вызывающему libvirt,
-ни любому другому узлу</translation>
+        <translation>           
+     ,   libvirt,
+       </translation>
     </message>
 </context>
 <context>
     <name>CreateVolume</name>
     <message>
         <source>Create Volume in [%1] Pool</source>
-        <translation>Создать Хранилище в [%1] Пуле</translation>
+        <translation>      [%1]  </translation>
     </message>
 </context>
 <context>
     <name>DHCP_Host</name>
     <message>
         <source>Host Name</source>
-        <translation>Имя хоста</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>DHCP_Range</name>
     <message>
         <source>start IP</source>
-        <translation>начальное IP</translation>
+        <translation>  IP</translation>
     </message>
     <message>
         <source>end IP</source>
-        <translation>конечное IP</translation>
+        <translation>  IP</translation>
     </message>
 </context>
 <context>
     <name>DHCP_Widget</name>
     <message>
         <source>HOSTs</source>
-        <translation>Хосты</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>RANGEs</source>
-        <translation>Диапазоны</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
@@ -1206,213 +1194,213 @@ nor to any other node</source>
     <name>Delete_Pool_Menu</name>
     <message>
         <source>Delete Normal</source>
-        <translation>Удалить обычно</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Delete Zeroed</source>
-        <translation>Удалить обнулением</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Delete metadata only (fast)</source>
-        <translation>Удалить только метаданные (быстро)</translation>
+        <translation>      ( )</translation>
     </message>
     <message>
         <source>Clear all data to zeros (slow)</source>
-        <translation>Очистить все данные обнулением (медленно)</translation>
+        <translation>        ( )</translation>
     </message>
 </context>
 <context>
     <name>Desktop_Graphics</name>
     <message>
         <source>Display:</source>
-        <translation>Дисплей:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation>Полный экран</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>DevWidget</name>
     <message>
         <source>Path:</source>
-        <translation>Путь:</translation>
+        <translation> :</translation>
     </message>
 </context>
 <context>
     <name>DeviceAddress</name>
     <message>
         <source>Use address</source>
-        <translation>Использовать адрес</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>PCI addresses</source>
-        <translation>PCI адреса</translation>
+        <translation>PCI  </translation>
     </message>
     <message>
         <source>Drive addresses</source>
-        <translation>Drive адреса</translation>
+        <translation>Drive  </translation>
     </message>
     <message>
         <source>Virtio-serial address</source>
-        <translation>Virtio-serial адреса</translation>
+        <translation>Virtio-serial  </translation>
     </message>
     <message>
         <source>A CCID address, for smart-cards</source>
-        <translation>CCID адреса для смарт-карт</translation>
+        <translation>CCID      - </translation>
     </message>
     <message>
         <source>USB addresses</source>
-        <translation>USB адреса</translation>
+        <translation>USB  </translation>
     </message>
     <message>
         <source>On PowerPC</source>
-        <translation>Для PowerPC</translation>
+        <translation>  PowerPC</translation>
     </message>
     <message>
         <source>s390 guests</source>
-        <translation>Для гостевых s390</translation>
+        <translation>    s390</translation>
     </message>
     <message>
         <source>ISA addresses</source>
-        <translation>ISA адреса</translation>
+        <translation>ISA  </translation>
     </message>
 </context>
 <context>
     <name>DeviceData</name>
     <message>
         <source>Save current device state</source>
-        <translation>Сохранить текущее состояние устройства</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Revert to previous device state</source>
-        <translation>Вернуть к предыдущему состоянию устройства</translation>
+        <translation>         </translation>
     </message>
     <message>
         <source>Close device editor</source>
-        <translation>Закрыть редактор устройства</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Save Device Data</source>
-        <translation>Сохранить данные устройства</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>In Devices:
 Save last changes?</source>
-        <translation>В Устройствах:
-Сохранить последние изменения?</translation>
+        <translation>   :
+     ?</translation>
     </message>
 </context>
 <context>
     <name>DeviceExistanceMenu</name>
     <message>
         <source>Add Device</source>
-        <translation>Добавить устройство</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Del Device</source>
-        <translation>Удалить устройство</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>DeviceRestoreMenu</name>
     <message>
         <source>Revert to previous state</source>
-        <translation>Вернуть к предыдущему состоянию</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reset to first state</source>
-        <translation>Вернуть к первоначальному состоянию</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DeviceStack</name>
     <message>
         <source>Add Device</source>
-        <translation>Добавить устройство</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation type="unfinished">Annulla</translation>
     </message>
 </context>
 <context>
     <name>Devices</name>
     <message>
         <source>Add Device</source>
-        <translation>Добавить устройство</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Del Device</source>
-        <translation>Удалить устройство</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disk %1</source>
-        <translation>Диск %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Network %1</source>
-        <translation>Сеть %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Serial Port %1</source>
-        <translation>Серийный порт %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Parallel Port %1</source>
-        <translation>Параллельный порт %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Console %1</source>
-        <translation>Консоль %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Channel %1</source>
-        <translation>Канал %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>SmartCard %1</source>
-        <translation>СмартКарта %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Input %1</source>
-        <translation>Ввод %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hub %1</source>
-        <translation>Хаб %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Video %1</source>
-        <translation>Видео %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sound %1</source>
-        <translation>Звук %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Host Device %1</source>
-        <translation>Устройство Хоста %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Display %1</source>
-        <translation>Дисплей %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>USB Redirector %1</source>
-        <translation>USB Перенаправление %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Filesystem %1</source>
-        <translation>Файловая система %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Controller %1</source>
-        <translation>Контроллер %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Emulator</source>
-        <translation>Эмулятор</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>WatchDog %1</source>
@@ -1424,7 +1412,7 @@ Save last changes?</source>
     </message>
     <message>
         <source>RNG %1</source>
-        <translation>Рандомайзер %1</translation>
+        <translation type="unfinished">RNG %1</translation>
     </message>
     <message>
         <source>TPM %1</source>
@@ -1443,218 +1431,212 @@ Save last changes?</source>
     <name>Dir_Disk</name>
     <message>
         <source>Directory:</source>
-        <translation>Директория:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Directory Path</source>
-        <translation>Путь к директории</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DirectAttachment</name>
     <message>
         <source>Network source:</source>
-        <translation>Сетевой ресурс:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Source mode:</source>
-        <translation>Вид ресурса:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Network Filter on Interface</source>
-        <translation>Сетевой фильтр на Интерфейсе</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Host Device &apos;%1&apos; : macvtap</source>
-        <translation>Устройство хоста &apos;%1&apos; : macvtap</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Direct_Kernel_Boot</name>
     <message>
         <source>Boot loader path:</source>
-        <translation>Путь к Boot загрузчику:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Kernel path:</source>
-        <translation>Путь к ядру:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Initrd path:</source>
-        <translation>Путь к initrd:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Command line:</source>
-        <translation>Команда:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Path to the (optional) device tree binary (dtb) image in the host OS:</source>
-        <translation>Путь к образу дерева устройств (dtb) на хостовой ОС:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Disk</name>
     <message>
         <source>Storage Volume to use as the disk</source>
-        <translation>Использовать Хранилище как диск</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Host Device to serve as the disk</source>
-        <translation>Устройство хоста служит как диск</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Directory to use as the disk</source>
-        <translation>Использовать директорию как диск</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>File holding the disk</source>
-        <translation>Файл содержит диск</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Network volume/image to use as the disk</source>
-        <translation>Использовать сетевое хранилище/образ как диск</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DiskSnapshot</name>
     <message>
         <source>&lt;b&gt;Memory&lt;/b&gt; is no</source>
-        <translation>&lt;b&gt;Память&lt;/b&gt; нет</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Disk_Pool_Stuff</name>
     <message>
         <source>Block device name</source>
-        <translation>Имя блочного устройства</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DockHeadWidget</name>
     <message>
         <source>DoubleClick for floatible</source>
-        <translation>Двойной щелчёк, чтобы отстегнуть\пристегнуть</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Wheel for change dock
 ( Ctrl+Alt+Right/Left )</source>
-        <translation>Сменять док колёсиком мыши
-( Ctrl+Alt+Right/Left )</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Push to dock</source>
-        <translation>Пристегнуть</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Undock</source>
-        <translation>Отстегнуть</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DockMenu</name>
     <message>
         <source>&amp;Log</source>
-        <translation>&amp;Лог</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Virtual Machines</source>
-        <translation>&amp;Виртуальные машины</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Networks</source>
-        <translation>&amp;Сети</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Storage Pools</source>
-        <translation>&amp;Места хранения</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Interfaces</source>
-        <translation>&amp;Интерфейсы</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sec&amp;rets</source>
-        <translation>Сек&amp;реты</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Network &amp;Filters</source>
-        <translation>Сетевые &amp;фильтры</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DockWidget</name>
     <message>
         <source>Log</source>
-        <translation>Лог</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>long</source>
-        <translation>длинный</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DomControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation>Указатель соединения -- NULL.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain from
 &quot;%2&quot;
 is created.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина из
-&quot;%2&quot;
-создана как одноразовая.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation>Файл &quot;%1&quot;
-не открыт.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain from
 &quot;%2&quot;
 is defined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина
-&quot;%2&quot;
-создана как постоянная.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 Started.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 запущена.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain state %2 changed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Состояние вирт.машины %2 изменено.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 Destroyed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 остановлена.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 reset.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 перезапущена (RESET).</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 reboot.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 перезагружена (REBOOT).</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 shutdown.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 остановлена (SHUTDOWN).</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 saved.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 сохранена.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 restored.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 восстановлена.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 Undefined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 удалена.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain autostart %2 Set.</source>
@@ -1662,364 +1644,361 @@ is defined.</source>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 XML&apos;ed</source>
-        <translation type="obsolete">&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 XML&apos;на.</translation>
+        <translation type="obsolete">&apos;&lt;b&gt;%1&lt;/b&gt;&apos;  .  %2 XML&apos; .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 Migrated.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 мигрирована.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 snapped.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машине %2 сделан снимок состояния.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Error at getting the connection type.</source>
-        <translation>Ошибка при получении типа соединения.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain autostart %2 changed.</source>
-        <translation>&apos;Автостарт &lt;b&gt;%1&lt;/b&gt;&apos; вирт.машины %2 изменён.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 XML&apos;ed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 XML&apos;ирована.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; snapshot state for &lt;b&gt;%2&lt;/b&gt; Domain %3 reverted.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; состояние снимка для &lt;b&gt;%2&lt;/b&gt; вырт.машины %3 возвращено.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; snapshot for &lt;b&gt;%2&lt;/b&gt; Domain %3 deleted.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; снимок для &lt;b&gt;%2&lt;/b&gt; вирт.машины %3 удалён.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>not</source>
-        <translation>не</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DomainControlMenu</name>
     <message>
         <source>Start</source>
-        <translation>Запустить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Приостановить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Destroy</source>
-        <translation>Остановить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Редактировать</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation>Перезапустить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Перезагрузить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Выключить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Сохранить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>change AutoStart</source>
-        <translation>изменить Автостарт</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Snapshot now!</source>
-        <translation>Снимок состояния сейчас!</translation>
+        <translation>     !</translation>
     </message>
     <message>
         <source>more Snapshot actions</source>
-        <translation>другие действия со снимками</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>get XML Description</source>
-        <translation>получить XML описание</translation>
+        <translation>  XML  </translation>
     </message>
     <message>
         <source>current state data</source>
-        <translation>текущего состояния</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>inactive state data</source>
-        <translation>неактивного состояния</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>display VM</source>
-        <translation>показать ВМ в Просмотрщике</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>display VM in external Viewer</source>
-        <translation>показать ВМ во внешнем Просмотрщике</translation>
+        <translation>         </translation>
     </message>
     <message>
         <source>add to State Monitor</source>
-        <translation>добавить в Монитор состояния</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Migrate</source>
-        <translation>Мигрировать</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Reload Domain OverView</source>
-        <translation>Перезагрузить обзор соединения для ВМ</translation>
+        <translation>         </translation>
     </message>
 </context>
 <context>
     <name>DomainModel</name>
     <message>
         <source>State: %1</source>
-        <translation>Состояние: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>Autostart: %1</source>
-        <translation>Автостарт: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>Persistent: %1</source>
-        <translation>Постоянный: %1</translation>
+        <translation> : %1</translation>
     </message>
 </context>
 <context>
     <name>DomainStateMonitor</name>
     <message>
         <source>Domain State Monitor</source>
-        <translation>Монитор состояния ВМ</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Domain : %1
 Connect: %2</source>
-        <translation>Вирт.Машина:	%1
-Соединение:	%2</translation>
+        <translation> . :	%1
+ :	%2</translation>
     </message>
 </context>
 <context>
     <name>DomainStateViewer</name>
     <message>
         <source>Close current state viewer</source>
-        <translation>Закрыть просмотрщик состояния</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Host CPU
 Usage:</source>
-        <translation>Использование
-ЦПУ хоста:</translation>
+        <translation> 
+   :</translation>
     </message>
     <message>
         <source>Guest Memory
 Usage:</source>
-        <translation>Использование
-гостевой ОП:</translation>
+        <translation> 
+   :</translation>
     </message>
     <message>
         <source>State:&lt;br&gt;&lt;b&gt;Connection Error&lt;/b&gt;&lt;/br&gt;</source>
-        <translation>Состояние:&lt;br&gt;&lt;b&gt;ошибка соединения&lt;/b&gt;&lt;/br&gt;</translation>
+        <translation> :&lt;br&gt;&lt;b&gt;   &lt;/b&gt;&lt;/br&gt;</translation>
     </message>
     <message>
         <source>State:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;/br&gt;</source>
-        <translation>Состояние:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;/br&gt;</translation>
+        <translation> :&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;/br&gt;</translation>
     </message>
 </context>
 <context>
     <name>DomainToolBar</name>
     <message>
         <source>Start</source>
-        <translation>Запустить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Restore</source>
-        <translation>Восстановить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Приостановить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Перезагрузить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation>Перезапустить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Выключить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Сохранить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Остановить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Create for once usage</source>
-        <translation>Создать для одноразового использования</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Define for persistent usage</source>
-        <translation>Создать для постоянного использования</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>AutoReload Domain Overview</source>
-        <translation>Авто-перезагрузка обзора для ВМ</translation>
+        <translation> -       </translation>
     </message>
     <message>
         <source>Snapshot now!</source>
-        <translation>Снимок состояния сейчас!</translation>
+        <translation>     !</translation>
     </message>
 </context>
 <context>
     <name>Domain_Widget</name>
     <message>
         <source>Local only</source>
-        <translation>Только локально</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>DNS requests under this domain will only be resolved
 by the virtual network&apos;s own DNS server</source>
-        <translation>Запросы DNS в этом домене будут обрабатываться
-собственным DNS-сервером виртуальной сети</translation>
+        <translation>  DNS          
+  DNS-     </translation>
     </message>
 </context>
 <context>
     <name>Donate_Dialog</name>
     <message>
         <source>Donate</source>
-        <translation>Поддержать</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Donate on Yandex.Money</source>
-        <translation>Поддержать через Яндекс.Деньги</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Donate on VISA QIWI Wallet
 Copy card number to Clipboard</source>
-        <translation>Поддержать через VISA QIWI Wallet
-Копировать номер карты в Clipboard</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Donate Bitcoin
 Copy to Clipboard</source>
-        <translation>Поддержать Bitcoin-ом
-Копировать в Clipboard</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Donate BitcoinCash
 Copy to Clipboard</source>
-        <translation>Поддержать BitcoinCash-ем
-Копировать в Clipboard</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>don&apos;t show again</source>
-        <translation>не показывать снова</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DriveAddr</name>
     <message>
         <source>a 2-digit controller number</source>
-        <translation>двузначный номер контроллера</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>a 2-digit bus number</source>
-        <translation>двузначный номер шины</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>a 2-digit unit number on the bus</source>
-        <translation>двузначный номер элемента в шине</translation>
+        <translation>         </translation>
     </message>
 </context>
 <context>
     <name>Emulator</name>
     <message>
         <source>Emulator:</source>
-        <translation>Эмулятор:</translation>
+        <translation> :</translation>
     </message>
 </context>
 <context>
     <name>Encryption</name>
     <message>
         <source>Use Encryption</source>
-        <translation>Использовать шифрование</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Format:</source>
-        <translation>Формат:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Auto-generate Secret</source>
-        <translation>автогенерируется, если не задан</translation>
+        <translation> ,      </translation>
     </message>
     <message>
         <source>Find Secret</source>
-        <translation>Найти Секрет</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Type of secret should be is a VOLUME</source>
-        <translation>Тип Секрета должен быть VOLUME</translation>
+        <translation>        VOLUME</translation>
     </message>
 </context>
 <context>
     <name>Events</name>
     <message>
         <source>PowerOff</source>
-        <translation>Выключить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Перезагрузить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Crash</source>
-        <translation>Крах</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>LockFailure</source>
-        <translation>Лок.Ошибка</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>FileFsType</name>
     <message>
         <source>Source host file</source>
-        <translation>Ресурс файл хоста</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Target guest directory</source>
-        <translation>Гостевая директория цели</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Source Path</source>
-        <translation>Путь к ресурсу</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>FileMenu</name>
     <message>
         <source>&amp;New connection</source>
-        <translation>&amp;Новое соединение</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ctrl+N</source>
@@ -2027,11 +2006,11 @@ Copy to Clipboard</source>
     </message>
     <message>
         <source>&amp;Hide to tray</source>
-        <translation>&amp;Спрятать в трей</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Restart</source>
-        <translation>&amp;Перезапуск</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ctrl+R</source>
@@ -2039,7 +2018,7 @@ Copy to Clipboard</source>
     </message>
     <message>
         <source>&amp;Exit</source>
-        <translation>&amp;Выход</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
@@ -2050,40 +2029,40 @@ Copy to Clipboard</source>
     <name>FileSystems</name>
     <message>
         <source>Type:</source>
-        <translation>Тип:</translation>
+        <translation> :</translation>
     </message>
 </context>
 <context>
     <name>FileWidget</name>
     <message>
         <source>Path:</source>
-        <translation>Путь:</translation>
+        <translation> :</translation>
     </message>
 </context>
 <context>
     <name>File_Disk</name>
     <message>
         <source>File:</source>
-        <translation>Файл:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>File Path</source>
-        <translation>Путь к файлу</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>FindSecretDialog</name>
     <message>
         <source>FindSecretDialog</source>
-        <translation>Диалог поиска Секретов</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Choose Secret</source>
-        <translation>Выбрать Секрет</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
@@ -2109,53 +2088,53 @@ Copy to Clipboard</source>
     <name>ForwardPage</name>
     <message>
         <source>NAT based network</source>
-        <translation>Сеть с NAT</translation>
+        <translation>    NAT</translation>
     </message>
     <message>
         <source>The guests will be directly connected to the virtual network.</source>
-        <translation>Гостевые ВМ будут непосредственно соединяться с вирт.сетью.</translation>
+        <translation>             . .</translation>
     </message>
     <message>
         <source>Routed Network</source>
-        <translation>Маршрутизированная сеть</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>Forward_Widget</name>
     <message>
         <source>Mode:</source>
-        <translation>Способ:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Dev name:</source>
-        <translation>Имя устройства:</translation>
+        <translation>   :</translation>
     </message>
     <message>
         <source>if enabled firewall rules
 will restrict forwarding
 to the named device only</source>
-        <translation>Если фаерволл включен, то
-форвардинг будет ограничен
-только на указанном устройстве</translation>
+        <translation>     ,  
+     
+       </translation>
     </message>
 </context>
 <context>
     <name>General</name>
     <message>
         <source>VM Type: %1</source>
-        <translation>ВМ тип: %1</translation>
+        <translation>   : %1</translation>
     </message>
     <message>
         <source>Host Arch: %1</source>
-        <translation>Архитектура хоста: %1</translation>
+        <translation>   : %1</translation>
     </message>
     <message>
         <source>Name:</source>
-        <translation>Имя:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Enter VM name</source>
-        <translation>Введите имя ВМ</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>UUID:</source>
@@ -2163,49 +2142,49 @@ to the named device only</source>
     </message>
     <message>
         <source>auto-generate if omitted</source>
-        <translation>автогенерируется, если не задан</translation>
+        <translation> ,      </translation>
     </message>
     <message>
         <source>Title:</source>
-        <translation>Заголовок:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Enter VM title</source>
-        <translation>Введите заголовок ВМ</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Description:</source>
-        <translation>Описание:</translation>
+        <translation> :</translation>
     </message>
 </context>
 <context>
     <name>Generic_Ethernet</name>
     <message>
         <source>Target Device name:</source>
-        <translation>Имя целевого устройства:</translation>
+        <translation>     :</translation>
     </message>
     <message>
         <source>Script path:</source>
-        <translation>Путь к скрипту:</translation>
+        <translation>     :</translation>
     </message>
 </context>
 <context>
     <name>GetURLDialog</name>
     <message>
         <source>Get URL</source>
-        <translation>Получить URL</translation>
+        <translation>  URL</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation>Соединить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Info</source>
-        <translation>Информация</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>URL schema</source>
-        <translation>Схема URL</translation>
+        <translation>  URL</translation>
     </message>
     <message>
         <source>If you have SSH access to remote host
@@ -2215,12 +2194,12 @@ then you can use Remote Viewer with such path:
 
 If you have graphic socket on local or remote host:
 &lt;vnc|spice&gt;://[HOST[:PORT]]/?[transport=ssh&amp;user=&lt;USER&gt;&amp;]socket=/path/to/socket</source>
-        <translation>Если у вас есть SSH доступ к удалённому хосту
-и внутренний адрес к графике ВМ,
-то вы можете использовать Удалённый Просмотрщик так:
+        <translation>        SSH        
+           ,
+             :
 &lt;vnc|spice&gt;://HOST[:PORT]/?transport=ssh&amp;user=&lt;USER&gt;&amp;addr=&lt;IP&gt;&amp;port=&lt;NUMBER&gt;
 
-Если у ВМ есть графический сокет на локальном или удалённом хосте:
+                     :
 &lt;vnc|spice&gt;://[HOST[:PORT]]/?[transport=ssh&amp;user=&lt;USER&gt;&amp;]socket=/path/to/socket</translation>
     </message>
 </context>
@@ -2228,67 +2207,67 @@ If you have graphic socket on local or remote host:
     <name>GraphicsDevice</name>
     <message>
         <source>Displays a window on the host desktop</source>
-        <translation>Показать окно на десктопе хоста</translation>
+        <translation>         </translation>
     </message>
     <message>
         <source>Use a VNC</source>
-        <translation>Использовать VNC</translation>
+        <translation>  VNC</translation>
     </message>
     <message>
         <source>Use a Spice</source>
-        <translation>Использовать Spice</translation>
+        <translation>  Spice</translation>
     </message>
     <message>
         <source>Use a RDP</source>
-        <translation>Использовать RDP</translation>
+        <translation>  RDP</translation>
     </message>
     <message>
         <source>Reserved for VirtualBox domains</source>
-        <translation>Зарезервирован для VirtualBox ВМ</translation>
+        <translation>    VirtualBox  </translation>
     </message>
 </context>
 <context>
     <name>HOSTDEV_Mode_widget</name>
     <message>
         <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
-        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Не реализовано для редактирования&lt;/b&gt;&lt;/font&gt;</translation>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;       &lt;/b&gt;&lt;/font&gt;</translation>
     </message>
 </context>
 <context>
     <name>HelpMenu</name>
     <message>
         <source>About Qt</source>
-        <translation>О Qt</translation>
+        <translation>  Qt</translation>
     </message>
     <message>
         <source>About QtVirtManager</source>
-        <translation>О приложении</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Donate</source>
-        <translation>Поддержать проект</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>&lt;a href=&apos;http://f1ash.github.io/qt-virt-manager&apos;&gt;                 Qt Virtual machines manager&lt;/a&gt;, version %1.                 &lt;br&gt;Based on Qt %2. Uses libvirt (%3) API.                 &lt;br&gt;Implemented graphical consoles                 &lt;br&gt;for Virtual Machine displays                 &lt;br&gt;(by SPICE/VNC client) and LXC terminals.</source>
-        <translation>&lt;a href=&apos;http://f1ash.github.io/qt-virt-manager&apos;&gt;                 Qt Менеджер виртуальных машин&lt;/a&gt;, версия %1.                 &lt;br&gt;Собран на Qt %2. Используется libvirt (%3) API.                 &lt;br&gt;Реализованы графические просмотрщики                 &lt;br&gt;для виртуальных машин &lt;br&gt;(SPICE/VNC клиентами) и LXC терминалов.</translation>
+        <translation>&lt;a href=&apos;http://f1ash.github.io/qt-virt-manager&apos;&gt;                 Qt      &lt;/a&gt;,   %1.                 &lt;br&gt;    Qt %2.   libvirt (%3) API.                 &lt;br&gt;                      &lt;br&gt;      &lt;br&gt;(SPICE/VNC  )   LXC  .</translation>
     </message>
 </context>
 <context>
     <name>Host_Boot</name>
     <message>
         <source>Boot loader:</source>
-        <translation>Boot загрузчик:</translation>
+        <translation>Boot  :</translation>
     </message>
     <message>
         <source>Boot loader args:</source>
-        <translation>Аргументы загрузчика:</translation>
+        <translation>   :</translation>
     </message>
 </context>
 <context>
     <name>Host_DNS</name>
     <message>
         <source>DNS Host Name</source>
-        <translation>Имя DNS хоста</translation>
+        <translation>  DNS  </translation>
     </message>
     <message>
         <source>DNS IP:</source>
@@ -2299,7 +2278,7 @@ If you have graphic socket on local or remote host:
     <name>HubDevice</name>
     <message>
         <source>To add USB Hub</source>
-        <translation>Добавить USB хаб</translation>
+        <translation>  USB  </translation>
     </message>
 </context>
 <context>
@@ -2308,46 +2287,46 @@ If you have graphic socket on local or remote host:
         <source>TYPE: IPSETFLAGS
 (The source and destination flags of the ipset
 described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
-        <translation>ТИП: IPSETFLAGS
-(IPSET флаги источника и назначения
-содержат до 6 элементов &apos;src&apos; или &apos;dst&apos;)</translation>
+        <translation> : IPSETFLAGS
+(IPSET        
+    6   &apos;src&apos;   &apos;dst&apos;)</translation>
     </message>
 </context>
 <context>
     <name>IP_ADDR_Data</name>
     <message>
         <source>TYPE: IP_ADDR</source>
-        <translation type="unfinished">ТIPO: IP_ADDR</translation>
+        <translation type="unfinished"> IPO: IP_ADDR</translation>
     </message>
 </context>
 <context>
     <name>IP_MASK_Data</name>
     <message>
         <source>TYPE: IP_MASK (dotted decimal format or CIDR)</source>
-        <translation type="unfinished">ТIPO: IP_MASK (formato decimale con punti o CIDR)</translation>
+        <translation type="unfinished"> IPO: IP_MASK (formato decimale con punti o CIDR)</translation>
     </message>
 </context>
 <context>
     <name>IP_Page</name>
     <message>
         <source>Isolated Network</source>
-        <translation>Изолированная сеть</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>The guests can talk to each other (and the host OS if IP&amp;DHCP used), but can&apos;t reach any other machines on the LAN</source>
-        <translation>Гостевые ВМ могут общаться друг с другом (и ОС хоста, если IP&amp;DHCP использован), но не с любыми другими машинами в LAN</translation>
+        <translation>              (     ,   IP&amp;DHCP  ),               LAN</translation>
     </message>
     <message>
         <source>NAT based network</source>
-        <translation>Сеть с NAT</translation>
+        <translation>    NAT</translation>
     </message>
     <message>
         <source>The guests will be directly connected to the virtual network.</source>
-        <translation>Гостевые ВМ будут непосредственно соединяться с вирт.сетью.</translation>
+        <translation>             . .</translation>
     </message>
     <message>
         <source>Routed Network</source>
-        <translation>Маршрутизированная сеть</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
@@ -2361,14 +2340,14 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     <name>IPv6_ADDR_Data</name>
     <message>
         <source>TYPE: IPv6_ADDR</source>
-        <translation type="unfinished">ТIPO: IPv6_ADDR</translation>
+        <translation type="unfinished"> IPO: IPv6_ADDR</translation>
     </message>
 </context>
 <context>
     <name>IPv6_MASK_Data</name>
     <message>
         <source>TYPE: IPv6_MASK (numbers format or CIDR)</source>
-        <translation type="unfinished">ТIPO: IPv6_MASK (formato numerico o CIDR)</translation>
+        <translation type="unfinished"> IPO: IPv6_MASK (formato numerico o CIDR)</translation>
     </message>
 </context>
 <context>
@@ -2386,296 +2365,296 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     <name>IfaceControlMenu</name>
     <message>
         <source>Start</source>
-        <translation>Запустить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Destroy</source>
-        <translation>Остановить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Change Begin</source>
-        <translation>Начать изменение</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Change Commit</source>
-        <translation>Сохранить изменения</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Change Rollback</source>
-        <translation>Откатить изменения</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>get XML Description</source>
-        <translation>получить XML описание</translation>
+        <translation>  XML  </translation>
     </message>
     <message>
         <source>Reload Interface OverView</source>
-        <translation>Перезагрузить обзор Интерфейсов</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>InputDevice</name>
     <message>
         <source>To add additional devices explicitly</source>
-        <translation>Добавить доп. устройства явно</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>EvTouch Graphics Tablet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Generic Mouse</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Generic Keyboard</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Default (USB)</source>
-        <translation>По умолчанию (USB)</translation>
+        <translation type="unfinished">    (USB)</translation>
     </message>
     <message>
         <source>PS/2</source>
-        <translation></translation>
+        <translation type="unfinished">PS/2</translation>
     </message>
     <message>
         <source>Paravirtualized (XEN)</source>
-        <translation></translation>
+        <translation type="unfinished">Paravirtualizzato (XEN)</translation>
     </message>
 </context>
 <context>
     <name>InterfaceControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation>Указатель соединения -- NULL.</translation>
+        <translation>    -- NULL.</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 started.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс %2 запущен.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2  .</translation>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 destroyed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс %2 остановлен.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2  .</translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation>Файл &quot;%1&quot;
-не открыт.</translation>
+        <translation>  &quot;%1&quot;
+   .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface from
 &quot;%2&quot;
 is defined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс из
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;    
 &quot;%2&quot;
-создан.</translation>
+ .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 undefined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс %2 удалён.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2  .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 in changing.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс %2 в изменении.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2    .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 commited.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс %2 сохранён после изменения.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2      .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 rollbacked.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс %2 откачен назад после изменения.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2        .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 XML&apos;ed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс %2 XML&apos;ирован.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2 XML&apos; .</translation>
     </message>
     <message>
         <source>not</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>InterfaceToolBar</name>
     <message>
         <source>Start</source>
-        <translation>Запустить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Destroy</source>
-        <translation>Остановить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Define for persistent usage</source>
-        <translation>Создать для постоянного использования</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Change Begin</source>
-        <translation>Начать изменение</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Change Commit</source>
-        <translation>Сохранить изменения</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Change Rollback</source>
-        <translation>Откатить изменения</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>AutoReload Interface Overview</source>
-        <translation>Перезагрузка обзора Интерфейсов</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>IntroducePage</name>
     <message>
         <source>Welcome to VirtNetwork Assistant</source>
-        <translation>Приветствуем в Сетевом Ассистенте</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Please choose network type to create it.</source>
-        <translation>Для создания сети выберите её тип.</translation>
+        <translation>           .</translation>
     </message>
     <message>
         <source>Set new Network name</source>
-        <translation>Задайте имя сети</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Create network using existing host bridge</source>
-        <translation>Создать сеть, используя существующий мост хоста</translation>
+        <translation>   ,        </translation>
     </message>
     <message>
         <source>Create NAT based network</source>
-        <translation>Создать сеть с NAT</translation>
+        <translation>      NAT</translation>
     </message>
     <message>
         <source>Create routed network</source>
-        <translation>Создать маршрутизированную сеть</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Create isolated network</source>
-        <translation>Создать изолированную сеть</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>LXC_OSBooting</name>
     <message>
         <source>Init path and arguments:</source>
-        <translation>Путь инициализации и аргументы:</translation>
+        <translation>       :</translation>
     </message>
     <message>
         <source>Enter Init Path (Ex.: /sbin/init, /bin/sh, etc.)</source>
-        <translation>Введите путь инициализации (Напр.: /sbin/init, /bin/sh, и т.п.)</translation>
+        <translation>      ( .: /sbin/init, /bin/sh,    . .)</translation>
     </message>
     <message>
         <source>Enable User Namespace</source>
-        <translation>Включить пользовательское пространство имён</translation>
+        <translation>       </translation>
     </message>
 </context>
 <context>
     <name>LXC_Viewer</name>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Display destroyed.</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Дисплей остановлен.</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:    .</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Connection or Domain is NULL or inactive</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Указатель соединения или ВМ -- NULL или неактивно</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt;         -- NULL    </translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Open PTY Error...</source>
-        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Ошибка открытия PTY...</translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:     PTY...</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Stream Registation success. PTY opened. Terminal is active.</source>
-        <translation type="obsolete">В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Stream Registation success. PTY opened. Terminal is active.</translation>
+        <translation type="obsolete">  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Stream Registation success. PTY opened. Terminal is active.</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Stream Registration success. PTY opened. Terminal is active.</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Регистрация потока успешна. PTY открыт. Терминал активен.</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:      . PTY  .    .</translation>
     </message>
 </context>
 <context>
     <name>LXC_ViewerThread</name>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Console opened in ZERO-mode...</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Консоль открыта в ZERO-режиме...</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:       ZERO- ...</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Open console failed...</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Открыть консоль не удалось...</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:        ...</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: EOF.</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: EOF.</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: EOF.</translation>
     </message>
 </context>
 <context>
     <name>LogDock</name>
     <message>
         <source>Size of Log (MB)</source>
-        <translation>Размер Лога (МВ)</translation>
+        <translation>    ( )</translation>
     </message>
     <message>
         <source>AutoSave</source>
-        <translation>Автосохранение</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Save Log to File</source>
-        <translation>Сохранить Лог в файл</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Event/Error Log
 MaxSize:	%1 Bytes
 Current:	%2</source>
-        <translation>Лог событий\ошибок
-Макс.размер:	%1 Bytes
-Текущий:		%2</translation>
+        <translation>   \ 
+ . :	%1 Bytes
+ :		%2</translation>
     </message>
     <message>
         <source>Current Time: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>Время: &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation> : &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Save Log To</source>
-        <translation>Сохранить Лог в</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Save Log to %1 done.</source>
-        <translation>Сохранение Лога в %1 завершено.</translation>
+        <translation>      %1  .</translation>
     </message>
     <message>
         <source>Save Log to %1 failed.</source>
-        <translation>Сохранение Лога в %1 неудачно.</translation>
+        <translation>      %1  .</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;green&apos;&gt;&lt;b&gt;ACTION&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;green&apos;&gt;&lt;b&gt;ДЕЙСТВИЕ&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation>&lt;b&gt;%1:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;green&apos;&gt;&lt;b&gt; &lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
 </context>
 <context>
     <name>LogicalHostCPU</name>
     <message>
         <source>Logical host cores: %1</source>
-        <translation>Логических ядер на хосте: %1</translation>
+        <translation>       : %1</translation>
     </message>
     <message>
         <source>Overcommitting vCPUs can hurt performance</source>
-        <translation>Избыточные vCPU могут повредить производительность</translation>
+        <translation>  vCPU      </translation>
     </message>
 </context>
 <context>
@@ -2689,7 +2668,7 @@ Current:	%2</source>
     <name>MAC_ADDR_Data</name>
     <message>
         <source>TYPE: MAC_ADDR</source>
-        <translation type="unfinished">ТIPO: MAC_ADDR</translation>
+        <translation type="unfinished"> IPO: MAC_ADDR</translation>
     </message>
 </context>
 <context>
@@ -2703,7 +2682,7 @@ Current:	%2</source>
     <name>MAC_MASK_Data</name>
     <message>
         <source>TYPE: MAC_MASK</source>
-        <translation type="unfinished">ТIPO: MAC_MASK</translation>
+        <translation type="unfinished"> IPO: MAC_MASK</translation>
     </message>
 </context>
 <context>
@@ -2714,7 +2693,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>Progress for waiting the connection close</source>
-        <translation>Прогресс закрытия соединений</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Up</source>
@@ -2750,11 +2729,11 @@ Current:	%2</source>
     </message>
     <message>
         <source>StoragePool</source>
-        <translation>Пулы хранилищ</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Storage Pools</source>
-        <translation>Пулы хранилищ</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Secret</source>
@@ -2774,27 +2753,27 @@ Current:	%2</source>
     </message>
     <message>
         <source>NWFilter</source>
-        <translation>Сетевые фильтры</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>NWFilters</source>
-        <translation>Сетевые фильтры</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Restart Application.</source>
-        <translation>Перезапуск приложения.</translation>
+        <translation>   .</translation>
     </message>
     <message>
         <source>Libvirt EventLoop</source>
-        <translation>Цикл событий Libvirt</translation>
+        <translation>    Libvirt</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;green&apos;&gt;&lt;b&gt;ACTION&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;green&apos;&gt;&lt;b&gt;ДЕЙСТВИЕ&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;green&apos;&gt;&lt;b&gt; &lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
     <message>
         <source>App initialization</source>
-        <translation>Инициализация приложения</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: Libvirt service%3%4</source>
@@ -2802,61 +2781,61 @@ Current:	%2</source>
     </message>
     <message>
         <source> not </source>
-        <translation> не </translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>exist in system</source>
-        <translation>существует в системе</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: virtEventLoop%3%4</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt;СОБЫТИЕ&lt;/b&gt;&lt;/font&gt;: цикл событий Libvirt%3%4</translation>
+        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt; &lt;/b&gt;&lt;/font&gt;:     Libvirt%3%4</translation>
     </message>
     <message>
         <source>started</source>
-        <translation>запущен</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt;СОБЫТИЕ&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt; &lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
     <message>
         <source>Connections inited</source>
-        <translation>Соединения инициализированы</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ERROR&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ОШИБКА&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt; &lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
     <message>
         <source>VM Viewer</source>
-        <translation>ВМ Просмотрщик</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Application built without LXC</source>
-        <translation>Приложение собрано без LXC</translation>
+        <translation>      LXC</translation>
     </message>
     <message>
         <source>Application built without VNC</source>
-        <translation>Приложение собрано без VNC</translation>
+        <translation>      VNC</translation>
     </message>
     <message>
         <source>Application built without SPICE</source>
-        <translation>Приложение собрано без SPICE</translation>
+        <translation>      SPICE</translation>
     </message>
     <message>
         <source>Not implemented type: %1
  or viewer: %2</source>
-        <translation>Нереализованный тип: %1
-или Просмотрщик: %2</translation>
+        <translation>   : %1
+   : %2</translation>
     </message>
     <message>
         <source>Domain Migration &apos;%1&apos;</source>
-        <translation>Миграция вирт.машины &apos;%1&apos;</translation>
+        <translation>   .  &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Migation not possible to NULL connection.</source>
-        <translation>Миграция не возможна: отсутствует соединение.</translation>
+        <translation>     :    .</translation>
     </message>
     <message>
         <source>%1 Pool</source>
@@ -2868,11 +2847,11 @@ Current:	%2</source>
     </message>
     <message>
         <source>Network Editor / &lt;%1&gt; in [%2]</source>
-        <translation>Редактор сети / &lt;%1&gt; in [%2]</translation>
+        <translation>    / &lt;%1&gt; in [%2]</translation>
     </message>
     <message>
         <source>NWFilter Editor / &lt;%1&gt; in [%2]</source>
-        <translation>Редактор сетевого фильтра / &lt;%1&gt; in [%2]</translation>
+        <translation>      / &lt;%1&gt; in [%2]</translation>
     </message>
 </context>
 <context>
@@ -2897,363 +2876,363 @@ Current:	%2</source>
     <name>Memory</name>
     <message>
         <source>Host Memory (%1): %2</source>
-        <translation>Память хоста (%1): %2</translation>
+        <translation>    (%1): %2</translation>
     </message>
     <message>
         <source>Maximum Memory:</source>
-        <translation>Максимально памяти:</translation>
+        <translation>   :</translation>
     </message>
     <message>
         <source>Current Memory:</source>
-        <translation>Текущая память:</translation>
+        <translation>   :</translation>
     </message>
     <message>
         <source>Enable Memory Backing</source>
-        <translation>Включить поддержку памяти</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Hugepages</source>
-        <translation>Огромные страницы</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>No share pages</source>
-        <translation>Страницы не делать общими</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Locked</source>
-        <translation>Закрыть</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Enable Memory Tuning</source>
-        <translation>Включить настройку памяти</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Hard limit</source>
-        <translation>Лимит на железе</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Soft limit</source>
-        <translation>Программный лимит</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Swap hard limit</source>
-        <translation>Лимит swap на железе</translation>
+        <translation>  swap    </translation>
     </message>
     <message>
         <source>Min guarantee</source>
-        <translation>Минимально гарантированное</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>MenuBar</name>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;Файл</translation>
+        <translation type="unfinished">&amp;File</translation>
     </message>
     <message>
         <source>View &amp;Mode</source>
-        <translation>&amp;Вид</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Virtual Entity Views</source>
-        <translation>&amp;Отображение виртуальных объектов</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Помощь</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MigrateDialog</name>
     <message>
         <source>Migrate &apos;%1&apos;</source>
-        <translation>Миграция &apos;%1&apos;</translation>
+        <translation>  &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Enter new VM name</source>
-        <translation>Введите новое имя ВМ</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>migrate as &lt;Name&gt;</source>
-        <translation>мигрировать как &lt;Name&gt;</translation>
+        <translation>    &lt;Name&gt;</translation>
     </message>
     <message>
         <source>Destination Host / Connection :</source>
-        <translation>Целевые Хост/Соединение :</translation>
+        <translation>   /  :</translation>
     </message>
     <message>
         <source>Destination
 Host/URI</source>
-        <translation>Целевые
-Хост/URI</translation>
+        <translation> 
+ /URI</translation>
     </message>
     <message>
         <source>Help:</source>
-        <translation>Помощь:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation>Детальней</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Native migration data
 over hypervisor transport
 (encrypt if HV support it)</source>
-        <translation>Прямая миграция данных
-через транспорт гипервизора
-(шифрование гипервизора если есть)</translation>
+        <translation>     
+     
+(       )</translation>
     </message>
     <message>
         <source>Tunnel migration data
 over libvirtd connection
 (encrypt always)</source>
-        <translation>Туннельная миграция данных
-через соединение Libvirt
-(обычно шифрованое)</translation>
+        <translation>     
+    Libvirt
+(   )</translation>
     </message>
     <message>
         <source>Use peer2peer</source>
-        <translation>Использовать peer2peer</translation>
+        <translation>  peer2peer</translation>
     </message>
     <message>
         <source>Maximum tolerable downtime
 for live migration (ms)</source>
-        <translation>Максимально допустимые простои
-для &quot;живой&quot; миграции (ms)</translation>
+        <translation>     
+  &quot; &quot;   (ms)</translation>
     </message>
     <message>
         <source>BandWidth (MiB/s)</source>
-        <translation>Пропускная способность
+        <translation>   
 (MiB/s)</translation>
     </message>
     <message>
         <source>Live migration</source>
-        <translation>&quot;Живая&quot; миграция</translation>
+        <translation>&quot; &quot;  </translation>
     </message>
     <message>
         <source>Persist the VM
 on the destination</source>
-        <translation>Сделать ВМ непостоянной
-на целевом хосте</translation>
+        <translation>     
+     </translation>
     </message>
     <message>
         <source>Undefine the VM
 on the source</source>
-        <translation>Удалить ВМ
-с хоста ресурса</translation>
+        <translation>   
+     </translation>
     </message>
     <message>
         <source>Leave
 the domain suspended
 on the remote side</source>
-        <translation>Оставить ВМ
-спящим
-на удалённой стороне</translation>
+        <translation>   
+ 
+     </translation>
     </message>
     <message>
         <source>Migration with
 non-shared storage
 with full disk copy</source>
-        <translation>При миграции
-с необщим хранилищем
-копировать диск полностью</translation>
+        <translation>   
+     
+     </translation>
     </message>
     <message>
         <source>Migration with
 non-shared storage
 with incremental copy</source>
-        <translation>При миграции
-с необщим хранилищем
-копировать толко разницу</translation>
+        <translation>   
+     
+     </translation>
     </message>
     <message>
         <source>Force migration even
 if it is considered unsafe</source>
-        <translation>Мигрировать принудительно
-даже если
-это считается небезопасным</translation>
+        <translation>   
+   
+     </translation>
     </message>
     <message>
         <source>Migrate offline</source>
-        <translation>Мигрировать оффлайн</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Compress data
 during migration</source>
-        <translation>Сжимать данные
-в процессе миграции</translation>
+        <translation>   
+     </translation>
     </message>
     <message>
         <source>Abort migration
 on I/O errors happened
 during migration</source>
-        <translation>Прервать миграцию
-в случае I/O ошибок</translation>
+        <translation>   
+    I/O  </translation>
     </message>
     <message>
         <source>&lt;a href=&apos;http://libvirt.org/migration.html&apos;&gt;About Migration&lt;/a&gt;</source>
-        <translation>&lt;a href=&apos;http://libvirt.org/migration.html&apos;&gt;О миграции&lt;/a&gt;</translation>
+        <translation>&lt;a href=&apos;http://libvirt.org/migration.html&apos;&gt;   &lt;/a&gt;</translation>
     </message>
     <message>
         <source>Migrate</source>
-        <translation>Мигрировать</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Set Host/URI manually</source>
-        <translation>Задать Хост/URI вручную</translation>
+        <translation>   /URI  </translation>
     </message>
     <message>
         <source>Original Host / Connection Type : %1 / %2</source>
-        <translation>Оригинальные Хост / Тип соединения : %1 / %2</translation>
+        <translation>    /     : %1 / %2</translation>
     </message>
     <message>
         <source>Optional
 Host/URI</source>
-        <translation>Опционально
-Хост/URI</translation>
+        <translation> 
+ /URI</translation>
     </message>
     <message>
         <source>Mandatory URI for the destination host.</source>
-        <translation>URI обязательно для целевого хоста.</translation>
+        <translation>URI        .</translation>
     </message>
     <message>
         <source>Destination hostname/URI as seen from the source host.</source>
-        <translation>Целевое имя_хоста/URI как оно видно из хоста ресурса.</translation>
+        <translation>   _ /URI            .</translation>
     </message>
 </context>
 <context>
     <name>Misc_Settings</name>
     <message>
         <source>Events configuration</source>
-        <translation>Конфигурация событий</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Power Management</source>
-        <translation>Управление питанием</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Hypervisor features</source>
-        <translation>Возможности гипервизора</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>Model</name>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Состояние</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>Авто</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Persistent</source>
-        <translation>Постоянный</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Name: %1</source>
-        <translation>Имя: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>State: %1</source>
-        <translation>Состояние: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>Autostart: %1</source>
-        <translation>Автостарт: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>Persistent: %1</source>
-        <translation>Постоянный: %1</translation>
+        <translation> : %1</translation>
     </message>
 </context>
 <context>
     <name>MountFsType</name>
     <message>
         <source>Source host directory</source>
-        <translation>Хостовая директория ресурса</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Target guest directory</source>
-        <translation>Гостевая директория цели</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Source Path</source>
-        <translation>Путь к ресурсу</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>MultiCast_Tunnel</name>
     <message>
         <source>Address:</source>
-        <translation>Адрес:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>Порт:</translation>
+        <translation> :</translation>
     </message>
 </context>
 <context>
     <name>NAT_Mode_widget</name>
     <message>
         <source>Use Address Range</source>
-        <translation>Использовать диапазан адресов</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Use Port Range</source>
-        <translation>Использовать диапазан портов</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>NIC_Model</name>
     <message>
         <source>Device model:</source>
-        <translation>Модель устройства:</translation>
+        <translation>   :</translation>
     </message>
 </context>
 <context>
     <name>NWFilterControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation>Указатель соединения -- NULL.</translation>
+        <translation>    -- NULL.</translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation>Файл &quot;%1&quot;
-не открыт.</translation>
+        <translation>  &quot;%1&quot;
+   .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; NWFilter from
 &quot;%2&quot;
 is defined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сетевой фильтр из
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;      
 &quot;%2&quot;
-создан.</translation>
+ .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; NWFilter %2 Undefined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сетевой фильтр %2 удалён.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;     %2  .</translation>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; NWFilter %2 XML&apos;ed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сетевой фильтр %2 XML&apos;ирован.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;     %2 XML&apos; .</translation>
     </message>
     <message>
         <source>not</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
@@ -3261,77 +3240,77 @@ is defined.</source>
     <message>
         <source>Network filter parameters:
 VARIABLE = VALUE</source>
-        <translation>Парметры Сетевого фильтра:
+        <translation>     :
 VARIABLE = VALUE</translation>
     </message>
     <message>
         <source>Availabled network filters</source>
-        <translation>Доступные Сетевые фильтры</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Autodetect IP</source>
-        <translation>Автоопределение IP</translation>
+        <translation>  IP</translation>
     </message>
     <message>
         <source>VARIABLE&apos;s VALUE</source>
-        <translation>ЗНАЧЕНИЕ ПЕРЕМЕННОЙ</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>NetControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation>Указатель соединения -- NULL.</translation>
+        <translation>    -- NULL.</translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation>Файл &quot;%1&quot;
-не открыт.</translation>
+        <translation>  &quot;%1&quot;
+   .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network from
 &quot;%2&quot;
 is created.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сеть из
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;    
 &quot;%2&quot;
-создана как одноразовая.</translation>
+     .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network from
 &quot;%2&quot;
 is defined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сеть
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;  
 &quot;%2&quot;
-создана как постоянная.</translation>
+     .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network %2 Started.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сеть %2 запущена.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2  .</translation>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network %2 Destroyed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сеть %2 остановлена.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2  .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network %2 Undefined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сеть %2 удалена.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2  .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network autostart %2 Set.</source>
-        <translation>&apos;Автостарт &lt;b&gt;%1&lt;/b&gt;&apos; сети %2 изменён.</translation>
+        <translation>&apos;  &lt;b&gt;%1&lt;/b&gt;&apos;   %2  .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network %2 XML&apos;ed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сеть %2 XML&apos;ирована.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2 XML&apos; .</translation>
     </message>
     <message>
         <source>not</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
@@ -3379,26 +3358,26 @@ is defined.</source>
     <name>OpenFileMenu</name>
     <message>
         <source>%1 Virtual %2 from example XML description as is</source>
-        <translation>%1 вирт.%2 из примера XML описания как есть</translation>
+        <translation>%1  .%2     XML      </translation>
     </message>
     <message>
         <source>%1 Virtual %2 by edit example XML description</source>
-        <translation>%1 вирт.%2 редактируя пример XML описания</translation>
+        <translation>%1  .%2     XML  </translation>
     </message>
     <message>
         <source>%1 Virtual %2 manually</source>
-        <translation>%1 вирт.%2 вручную</translation>
+        <translation>%1  .%2  </translation>
     </message>
     <message>
         <source>Get Custom Source XML</source>
-        <translation>из частного XML ресурса</translation>
+        <translation>    XML  </translation>
     </message>
 </context>
 <context>
     <name>PASSTHROUGH_Mode_widget</name>
     <message>
         <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
-        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Не реализовано для редактирования&lt;/b&gt;&lt;/font&gt;</translation>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;       &lt;/b&gt;&lt;/font&gt;</translation>
     </message>
 </context>
 <context>
@@ -3406,12 +3385,12 @@ is defined.</source>
     <message>
         <source>WARNING: only for SR-IOV
 (Single Root I/O Virtualization)</source>
-        <translation>ПРЕДУПРЕЖДЕНИЕ: только для SR-IOV
+        <translation> :     SR-IOV
 (Single Root I/O Virtualization)</translation>
     </message>
     <message>
         <source>Driver:</source>
-        <translation>Драйвер:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>MAC:</source>
@@ -3419,14 +3398,14 @@ is defined.</source>
     </message>
     <message>
         <source>PCI Device Address:</source>
-        <translation>Адрес PCI устройства:</translation>
+        <translation>  PCI  :</translation>
     </message>
 </context>
 <context>
     <name>PRIVATE_Mode_widget</name>
     <message>
         <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
-        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Не реализовано для редактирования&lt;/b&gt;&lt;/font&gt;</translation>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;       &lt;/b&gt;&lt;/font&gt;</translation>
     </message>
 </context>
 <context>
@@ -3440,26 +3419,26 @@ is defined.</source>
     <name>PciAddr</name>
     <message>
         <source>a 2-byte hex integer, not currently used by qemu</source>
-        <translation>дву-байтовое 16-тиричное целое, (не поддерживается QEMU)</translation>
+        <translation> -  16-   , (    QEMU)</translation>
     </message>
     <message>
         <source>a hex value between 0 and 0xff, inclusive</source>
-        <translation>16-тиричное число [0-0xff] включительно</translation>
+        <translation>16-    [0-0xff]  </translation>
     </message>
     <message>
         <source>a hex value between 0x0 and 0x1f, inclusive</source>
-        <translation>16-тиричное число [0-0x1f] включительно</translation>
+        <translation>16-    [0-0x1f]  </translation>
     </message>
 </context>
 <context>
     <name>Power</name>
     <message>
         <source>Suspend_to_Disk</source>
-        <translation>Засыпать на диск</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Suspend_to_Memory</source>
-        <translation>Засыпать в память</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
@@ -3732,53 +3711,53 @@ is defined.</source>
     <message>
         <source>Connections
 Ctrl+Alt+C</source>
-        <translation>Соединения
+        <translation> 
 Ctrl+Alt+C</translation>
     </message>
     <message>
         <source>Virtual
 machines
 Ctrl+Alt+D</source>
-        <translation>Виртуальные
-машины
+        <translation> 
+ 
 Ctrl+Alt+D</translation>
     </message>
     <message>
         <source>Network
 filters
 Ctrl+Alt+F</source>
-        <translation>Сетевые
-фильтры
+        <translation> 
+ 
 Ctrl+Alt+F</translation>
     </message>
     <message>
         <source>Networks
 Ctrl+Alt+N</source>
-        <translation>Сети
+        <translation> 
 Ctrl+Alt+N</translation>
     </message>
     <message>
         <source>Storages
 Ctrl+Alt+S</source>
-        <translation>Хранилища
+        <translation> 
 Ctrl+Alt+S</translation>
     </message>
     <message>
         <source>Secrets
 Ctrl+Alt+E</source>
-        <translation>Секреты
+        <translation> 
 Ctrl+Alt+E</translation>
     </message>
     <message>
         <source>Interfaces
 Ctrl+Alt+I</source>
-        <translation>Интерфейсы
+        <translation> 
 Ctrl+Alt+I</translation>
     </message>
     <message>
         <source>Log
 Ctrl+Alt+G</source>
-        <translation>Лог
+        <translation> 
 Ctrl+Alt+G</translation>
     </message>
 </context>
@@ -3801,141 +3780,141 @@ Ctrl+Alt+G</translation>
     <name>QSpiceMainChannel</name>
     <message>
         <source>main_channel</source>
-        <translation>основной канал</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>file transfer</source>
-        <translation>передача файла</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>QSpiceSmartcardWidget</name>
     <message>
         <source>Smartcards</source>
-        <translation>Смарткарты</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>QSpiceUsbDeviceManager</name>
     <message>
         <source>connect to guest.</source>
-        <translation>соединиться к ВМ.</translation>
+        <translation>     .</translation>
     </message>
     <message>
         <source>connected to guest already.</source>
-        <translation>уже соединён к ВМ.</translation>
+        <translation>       .</translation>
     </message>
     <message>
         <source>disconnect from guest.</source>
-        <translation>отсоединиться от ВМ.</translation>
+        <translation>     .</translation>
     </message>
     <message>
         <source>disconnected from guest already.</source>
-        <translation>уже отсоединён от ВМ.</translation>
+        <translation>       .</translation>
     </message>
 </context>
 <context>
     <name>QSpiceUsbDeviceWidget</name>
     <message>
         <source>USB Redirection</source>
-        <translation>Проброс USB</translation>
+        <translation>  USB</translation>
     </message>
 </context>
 <context>
     <name>QSpiceWidget</name>
     <message>
         <source>Download: %1 %</source>
-        <translation>Загружено: %1 %</translation>
+        <translation> : %1 %</translation>
     </message>
     <message>
         <source>no event, or ignored event</source>
-        <translation>событий нет или игнорируются</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>connection is authentified and ready</source>
-        <translation>соединение аутентифицировано и готово</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>disconnecting from the current host and connecting to the target host</source>
-        <translation>отсоединение от текущего хоста и соединение к целевому</translation>
+        <translation>               </translation>
     </message>
     <message>
         <source>connection is closed normally (sent if channel was ready)</source>
-        <translation>соединение закрыто нормально (отвылается если канал был готов)</translation>
+        <translation>      (         )</translation>
     </message>
     <message>
         <source>connection error</source>
-        <translation>ошибка соединения</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>SSL error</source>
-        <translation>ошибка SSL</translation>
+        <translation>  SSL</translation>
     </message>
     <message>
         <source>error during link process</source>
-        <translation>ошибка в процессе линкования</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>authentication error</source>
-        <translation>ошибка аутентификации</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>IO error</source>
-        <translation>ошибка ввода/вывода</translation>
+        <translation>   / </translation>
     </message>
     <message>
         <source>Save Image to</source>
-        <translation>Сохранить изображение в</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>QoS_Widget</name>
     <message>
         <source>Inbound</source>
-        <translation>Входящий</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Outbound</source>
-        <translation>Исходящий</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>RAMFsType</name>
     <message>
         <source>Usage (MiB):</source>
-        <translation>Использование (MiB):</translation>
+        <translation>  (MiB):</translation>
     </message>
     <message>
         <source>Target guest directory</source>
-        <translation>Гостевая директория цели</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>RDP_Graphics</name>
     <message>
         <source>AutoPort</source>
-        <translation>Автопорт</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Replace
 User</source>
-        <translation>Заменять
-Пользователя</translation>
+        <translation> 
+ </translation>
     </message>
     <message>
         <source>MultiUser</source>
-        <translation>Многопользовательский</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>Random</name>
     <message>
         <source>Model:</source>
-        <translation>Модель:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Period:</source>
-        <translation>Период:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Bytes:</source>
@@ -3943,141 +3922,141 @@ User</source>
     </message>
     <message>
         <source>Backend Model:</source>
-        <translation>Модель бекэнда:</translation>
+        <translation>   :</translation>
     </message>
     <message>
         <source>Source:</source>
-        <translation>Ресурс:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Use Rate limit:</source>
-        <translation>Использовать ограничения:</translation>
+        <translation>   :</translation>
     </message>
 </context>
 <context>
     <name>RedirDevDevice</name>
     <message>
         <source>TCP channel</source>
-        <translation>TCP канал</translation>
+        <translation>TCP  </translation>
     </message>
     <message>
         <source>Spice channel</source>
-        <translation>Spice канал</translation>
+        <translation>Spice  </translation>
     </message>
     <message>
         <source>Host:</source>
-        <translation>Хост:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Port</source>
-        <translation>Порт</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Use filter</source>
-        <translation>Использовать фильтр</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>RedirFilter</name>
     <message>
         <source>Class</source>
-        <translation>Класс</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Vendor</source>
-        <translation>Производитель</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Product</source>
-        <translation>Продукт</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Version</source>
-        <translation>Версия</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>ResizeDialog</name>
     <message>
         <source>Resize</source>
-        <translation>Изменить размер</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ок</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Size (TiB):</source>
-        <translation>Размер (TiB):</translation>
+        <translation>  (TiB):</translation>
     </message>
     <message>
         <source>Size (GiB):</source>
-        <translation>Размер (GiB):</translation>
+        <translation>  (GiB):</translation>
     </message>
     <message>
         <source>Size (MiB):</source>
-        <translation>Размер (MiB):</translation>
+        <translation>  (MiB):</translation>
     </message>
     <message>
         <source>Size (KiB):</source>
-        <translation>Размер (KiB):</translation>
+        <translation>  (KiB):</translation>
     </message>
     <message>
         <source>Size (bytes):</source>
-        <translation>Размер (bytes):</translation>
+        <translation>  (bytes):</translation>
     </message>
 </context>
 <context>
     <name>RestorePanel</name>
     <message>
         <source>Save current page state</source>
-        <translation>Сохранить состояние текущей страницы</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Revert to previous page state</source>
-        <translation>Вернуть к предыдущему состоянию страницы</translation>
+        <translation>         </translation>
     </message>
 </context>
 <context>
     <name>RuleInstance</name>
     <message>
         <source>Action</source>
-        <translation>Действие</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Direction</source>
-        <translation>Направление</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation>Приоритет</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>StateMatch</source>
-        <translation>Соответствовать</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Rule to chain</source>
-        <translation>Правило принять в цепочку</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Clear all attributes data</source>
-        <translation>Очистить данные всех атрибутов</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>SCSI_Host_Device</name>
     <message>
         <source>Host:Bus:Target:Lun (%1)</source>
-        <translation>Хост:Шина:Цель:LUN (%1)</translation>
+        <translation> : : :LUN (%1)</translation>
     </message>
 </context>
 <context>
@@ -4086,24 +4065,24 @@ User</source>
         <source>For SCSI devices, user
 is responsible to make sure
 the device is not used by host</source>
-        <translation>Для устройств SCSI пользователь
-ответственен за то, что
-устройство не используется хостом</translation>
+        <translation>    SCSI  
+     ,  
+       </translation>
     </message>
     <message>
         <source>SCSI Adapter Name</source>
-        <translation>Имя SCSI адаптера</translation>
+        <translation>  SCSI  </translation>
     </message>
     <message>
         <source>iSCSI Device Name</source>
-        <translation>Имя iSCSI устройства</translation>
+        <translation>  iSCSI  </translation>
     </message>
 </context>
 <context>
     <name>SDL_Graphics</name>
     <message>
         <source>Display:</source>
-        <translation>Дисплей:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Xauth:</source>
@@ -4111,185 +4090,185 @@ the device is not used by host</source>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation>Полный экран</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Specify Xauth</source>
-        <translation>Указать Xauth</translation>
+        <translation>  Xauth</translation>
     </message>
 </context>
 <context>
     <name>SRV_DNS</name>
     <message>
         <source>Service</source>
-        <translation>Сервис</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Domain</source>
-        <translation>Домен</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Target</source>
-        <translation>Цель</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Port</source>
-        <translation>Порт</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Priority</source>
-        <translation>Приоритет</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Weight</source>
-        <translation>Нагрузка</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>SSH_Tunnel</name>
     <message>
         <source>data_error</source>
-        <translation>ошибка данных</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>STRING_Data</name>
     <message>
         <source>some string</source>
-        <translation>некоторая строка</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>TYPE: STRING (usual not more than 256 letters)</source>
-        <translation>ТИП: СТРОКА (обычно не более 256 букв)</translation>
+        <translation> :   (      256  )</translation>
     </message>
 </context>
 <context>
     <name>SecLabels</name>
     <message>
         <source>Use Security Label</source>
-        <translation>Использовать разметку безопасности</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Type:</source>
-        <translation>Тип:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Model:</source>
-        <translation>Модель:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Relabel:</source>
-        <translation>Переразметка:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>an AppArmor profile</source>
-        <translation>Профиль AppArmor</translation>
+        <translation>  AppArmor</translation>
     </message>
 </context>
 <context>
     <name>SecretControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation>Указатель соединения -- NULL.</translation>
+        <translation>    -- NULL.</translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation>Файл &quot;%1&quot;
-не открыт.</translation>
+        <translation>  &quot;%1&quot;
+   .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Secret from
 &quot;%2&quot;
 is defined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Секрет из
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;    
 &quot;%2&quot;
-создан.</translation>
+ .</translation>
     </message>
     <message>
         <source>Secret Value not set.</source>
-        <translation>Секретное значение не задано.</translation>
+        <translation>       .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Secret %2 Undefined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Секрет %2 удалён.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2  .</translation>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Secret %2 XML&apos;ed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Секрет %2 XML&apos;ирован.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2 XML&apos; .</translation>
     </message>
     <message>
         <source>not</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>SmartCardDevice</name>
     <message>
         <source>Host</source>
-        <translation>Хост</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Passthrough</source>
-        <translation>Через</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>SnapshotActionDialog</name>
     <message>
         <source>&lt;%1&gt; Snapshot Actions in [ %2 ] connection</source>
-        <translation>&lt;%1&gt; Действия со снимками в [ %2 ] соединении</translation>
+        <translation>&lt;%1&gt;         [ %2 ]  </translation>
     </message>
     <message>
         <source>Revert To</source>
-        <translation>Возвратить к</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Удалить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>Обновить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>get XML Description</source>
-        <translation>получить XML описание</translation>
+        <translation>  XML  </translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Ок</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Закрыть</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>SnapshotTreeModel</name>
     <message>
         <source>Snapshots</source>
-        <translation>Снапшот</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>SoundDevice</name>
     <message>
         <source>Sound Device Model:</source>
-        <translation>Модель звук.устройства:</translation>
+        <translation>   . :</translation>
     </message>
     <message>
         <source>Allow playback
 recording</source>
-        <translation>Разрешать запись звука</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Line-in
@@ -4301,145 +4280,145 @@ line-out</translation>
         <source>Speaker
 microphone</source>
         <translation>Speaker
-микрофон</translation>
+ </translation>
     </message>
 </context>
 <context>
     <name>SpaprVioAddr</name>
     <message>
         <source>the hex value address of the starting register</source>
-        <translation>16-тиричный адрес стартового регистра</translation>
+        <translation>16-       </translation>
     </message>
 </context>
 <context>
     <name>Spice_Graphics</name>
     <message>
         <source>Address:</source>
-        <translation>Адрес:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>HyperVisor default</source>
-        <translation>Умолчание гипервизора</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>LocalHost only</source>
-        <translation>Только локально</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>All Interfaces</source>
-        <translation>Все интерфейсы</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation>Задать самостоятельно</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Use named configured Network</source>
-        <translation>Использовать именованую Сеть</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Use Socket</source>
-        <translation>Использовать сокет</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>AutoPort</source>
-        <translation>Автопорт</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Use TLS</source>
-        <translation>Использовать TLS</translation>
+        <translation>  TLS</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Пароль</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Keymap</source>
-        <translation>Раскладка</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Default policy</source>
-        <translation>Политика по умолчанию</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Any</source>
-        <translation>Любая</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Secure</source>
-        <translation>Защищённая</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Insecure</source>
-        <translation>Незащищённая</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Main</source>
-        <translation>Основной</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Display</source>
-        <translation>Дисплей</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Inputs</source>
-        <translation>Ввод</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Cursor</source>
-        <translation>Курсор</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Playback</source>
-        <translation>Звук</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Record</source>
-        <translation>Запись</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Smartcard</source>
-        <translation>Смарткарта</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Usbredir</source>
-        <translation>USB пенаправление</translation>
+        <translation>USB  </translation>
     </message>
     <message>
         <source>&lt;b&gt;Channels&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Каналы&lt;/b&gt;</translation>
+        <translation>&lt;b&gt; &lt;/b&gt;</translation>
     </message>
     <message>
         <source>Compression</source>
-        <translation>Сжатие</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>Авто</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Never</source>
-        <translation>Никогда</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Always</source>
-        <translation>Всегда</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>On</source>
-        <translation>ВКЛ</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Off</source>
-        <translation>ВЫКЛ</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Addition</source>
-        <translation>Дополнительно</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Streaming</source>
-        <translation>Стриминг</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Clipboard</source>
@@ -4447,489 +4426,489 @@ microphone</source>
     </message>
     <message>
         <source>Mouse</source>
-        <translation>Мышь</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>File transfer</source>
-        <translation>Передача файлов</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>No</source>
-        <translation>Нет</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Client</source>
-        <translation>Клиент</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Server</source>
-        <translation>Сервер</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Network:</source>
-        <translation>Сеть:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Socket:</source>
-        <translation>Сокет:</translation>
+        <translation> :</translation>
     </message>
 </context>
 <context>
     <name>Spice_Viewer</name>
     <message>
         <source>Copy files to Guest</source>
-        <translation>Копировать файлы в гостевую ВМ</translation>
+        <translation>         </translation>
     </message>
 </context>
 <context>
     <name>Spice_Viewer_Only</name>
     <message>
         <source>Copy files to Guest</source>
-        <translation>Копировать файлы в гостевую ВМ</translation>
+        <translation>         </translation>
     </message>
     <message>
         <source>Qt Remote Viewer -- %1</source>
-        <translation>Qt Удалённый Просмотрщик -- %1</translation>
+        <translation>Qt     -- %1</translation>
     </message>
 </context>
 <context>
     <name>StoragePoolControlMenu</name>
     <message>
         <source>Start</source>
-        <translation>Запустить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Destroy</source>
-        <translation>Остановить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>change AutoStart</source>
-        <translation>изменить Автостарт</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Удалить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>get XML Description</source>
-        <translation>получить XML описание</translation>
+        <translation>  XML  </translation>
     </message>
     <message>
         <source>overview Pool</source>
-        <translation>обзор Пула</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Reload Pool OverView</source>
-        <translation>Пергрузить обзор Пулов</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>StoragePoolControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation>Указатель соединения -- NULL.</translation>
+        <translation>    -- NULL.</translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation>Файл &quot;%1&quot;
-не открыт.</translation>
+        <translation>  &quot;%1&quot;
+   .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool from
 &quot;%2&quot;
 is Created.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Пул хранилищ из
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;      
 &quot;%2&quot;
-создан как одноразовый.</translation>
+     .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool from
 &quot;%2&quot;
 is Defined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Пул хранилищ из
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;      
 &quot;%2&quot;
-создан как постоянный.</translation>
+     .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool %2 Started.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Пул хранилищ %2 запущен.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;     %2  .</translation>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool %2 Destroyed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Пул хранилищ %2 остановлен.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;     %2  .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool %2 Undefined.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Пул хранилищ %2 удалён.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;     %2  .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool autostart %2 Set.</source>
-        <translation>&apos;Автостарт &lt;b&gt;%1&lt;/b&gt;&apos; Пула хранилищ %2 изменён.</translation>
+        <translation>&apos;  &lt;b&gt;%1&lt;/b&gt;&apos;     %2  .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool %2 Deleted.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Пул хранилищ %2 удалён.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;     %2  .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool %2 XML&apos;ed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Пул хранилищ %2 XML&apos;ирован.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;     %2 XML&apos; .</translation>
     </message>
     <message>
         <source>not</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>StoragePoolModel</name>
     <message>
         <source>Name: %1</source>
-        <translation>Имя: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>State: %1</source>
-        <translation>Состояние: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>Autostart: %1</source>
-        <translation>Автостарт: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>Persistent: %1</source>
-        <translation>Постоянный: %1</translation>
+        <translation> : %1</translation>
     </message>
 </context>
 <context>
     <name>StoragePoolToolBar</name>
     <message>
         <source>Start</source>
-        <translation>Запустить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Остановить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Create for once usage</source>
-        <translation>Создать для одноразового использования</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Define for persistent usage</source>
-        <translation>Создать для постоянного использования</translation>
+        <translation>       </translation>
     </message>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Overview Pool</source>
-        <translation>Обзор Пула</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>AutoReload Pool Overview</source>
-        <translation>Автоперезагрузка обзора Пулов</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>StorageVolControlMenu</name>
     <message>
         <source>Delete</source>
-        <translation>Удалить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Загрузить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Resize</source>
-        <translation>Изменить размер</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Отгрузить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Wipe</source>
-        <translation>Очистить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>get XML Description</source>
-        <translation>получить XML описание</translation>
+        <translation>  XML  </translation>
     </message>
     <message>
         <source>Reload Volume OverView</source>
-        <translation>Перезагрузить обзор Хранилища</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>StorageVolControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation>Указатель соединения -- NULL.</translation>
+        <translation>    -- NULL.</translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation>Файл &quot;%1&quot;
-не открыт.</translation>
+        <translation>  &quot;%1&quot;
+   .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StorageVol from
 &quot;%2&quot;
 is created.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Хранилище из
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;    
 &quot;%2&quot;
-создано.</translation>
+ .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StorageVol %2 Deleted.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Хранилище %2 удалено.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2  .</translation>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>WriteError after (%2): %1 bytes</source>
-        <translation>Ошибка записи после (%2): %1 bytes</translation>
+        <translation>      (%2): %1 bytes</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StorageVol %2 Downloaded into %3 (%4).</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Хранилище %2 загружено в %3 (%4).</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2     %3 (%4).</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StorageVol %2 Resized to %3 (bytes).</source>
-        <translation>У &apos;&lt;b&gt;%1&lt;/b&gt;&apos; Хранилища %2 измнён размер до %3 (bytes).</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2       %3 (bytes).</translation>
     </message>
     <message>
         <source>ReadError after (%2): %1 bytes</source>
-        <translation>Ошибка чтения после (%2): %1 bytes</translation>
+        <translation>      (%2): %1 bytes</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StorageVol %2 Uploaded from %3 (%4).</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Хранилище %2 отгружено из %3 (%4).</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2     %3 (%4).</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StorageVol %2 Wiped with %3 algorithm.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Хранилище %2 очищено %3 способом.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2   %3  .</translation>
     </message>
     <message>
         <source>StoragePool %1 refreshed.</source>
-        <translation>Пул хранилищ %1 обновлён.</translation>
+        <translation>    %1  .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StorageVol %2 XML&apos;ed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Хранилище %2 XML&apos;ировано.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;   %2 XML&apos; .</translation>
     </message>
     <message>
         <source>not</source>
-        <translation>не</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>StorageVolModel</name>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Path</source>
-        <translation>Путь</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Тип</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Allocation</source>
-        <translation>Выделено</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Capacity</source>
-        <translation>Вместимость</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Path: %1</source>
-        <translation>Путь: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>Type: %1</source>
-        <translation>Тип: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>Current Size: %1</source>
-        <translation>Текущийразмер: %1</translation>
+        <translation> : %1</translation>
     </message>
     <message>
         <source>Logic Volume Size: %1</source>
-        <translation>Размер логического хранилища: %1</translation>
+        <translation>     : %1</translation>
     </message>
 </context>
 <context>
     <name>StorageVolToolBar</name>
     <message>
         <source>New volume</source>
-        <translation>Новое Хранилище</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Удалить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Загрузить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Resize</source>
-        <translation>Изменить размер</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Отгрузить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Wipe</source>
-        <translation>Очистить</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Refresh list</source>
-        <translation>Обновить список</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>AutoReload Volume Overview</source>
-        <translation>Автоперезагрузка обзора Хранилищ</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>SystemCheckpoint</name>
     <message>
         <source>&lt;b&gt;Memory&lt;/b&gt; is </source>
-        <translation>&lt;b&gt;Память&lt;/b&gt; -- </translation>
+        <translation>&lt;b&gt; &lt;/b&gt; -- </translation>
     </message>
     <message>
         <source>no (Domain inactive)</source>
-        <translation>нет (ВМ неактивна)</translation>
+        <translation>  (   )</translation>
     </message>
     <message>
         <source>external</source>
-        <translation>внешний</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>internal</source>
-        <translation>внутренний</translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
     <name>TCP_Tunnel</name>
     <message>
         <source>Type:</source>
-        <translation>Тип:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Address:</source>
-        <translation>Адрес:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>Порт:</translation>
+        <translation> :</translation>
     </message>
 </context>
 <context>
     <name>TaskWareHouse</name>
     <message>
         <source>Task WareHouse</source>
-        <translation>Лог запущенных задач</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Processing</source>
-        <translation>Обработка</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>in TASK %1 %2</source>
-        <translation>в ЗАДАЧЕ %1 %2</translation>
+        <translation>    %1 %2</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ERROR&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ОШИБКА&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt; &lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
     <message>
         <source>Success</source>
-        <translation>Успешно</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Fail</source>
-        <translation>Не успешно</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>&lt;b&gt;Connection&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Соединение&lt;/b&gt;</translation>
+        <translation>&lt;b&gt; &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Object&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Объект&lt;/b&gt;</translation>
+        <translation>&lt;b&gt; &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Action&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Действие&lt;/b&gt;</translation>
+        <translation>&lt;b&gt; &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Arguments&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Аргументы&lt;/b&gt;</translation>
+        <translation>&lt;b&gt; &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Time&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Время&lt;/b&gt;</translation>
+        <translation>&lt;b&gt; &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Result&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Результат&lt;/b&gt;</translation>
+        <translation>&lt;b&gt; &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Message&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Сообщение&lt;/b&gt;</translation>
+        <translation>&lt;b&gt; &lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Error&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Ошибка&lt;/b&gt;</translation>
+        <translation>&lt;b&gt; &lt;/b&gt;</translation>
     </message>
 </context>
 <context>
     <name>TcpWidget</name>
     <message>
         <source>Mode:</source>
-        <translation>Способ:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Server mode (bind)</source>
-        <translation>Как сервер (bind)</translation>
+        <translation>    (bind)</translation>
     </message>
     <message>
         <source>Client mode (connect)</source>
-        <translation>Как клиент (connect)</translation>
+        <translation>    (connect)</translation>
     </message>
     <message>
         <source>Host:</source>
-        <translation>Хост:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>Порт:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Use Telnet:</source>
-        <translation>Использовать Telnet:</translation>
+        <translation>  Telnet:</translation>
     </message>
     <message>
         <source>Usual</source>
-        <translation>Обычный</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Telnet</source>
@@ -4937,7 +4916,7 @@ is created.</source>
     </message>
     <message>
         <source>Secure Telnet</source>
-        <translation>Защищёный Telnet</translation>
+        <translation>  Telnet</translation>
     </message>
     <message>
         <source>TLS</source>
@@ -5030,55 +5009,55 @@ is created.</source>
     <name>TextBrowser</name>
     <message>
         <source>Previous dock</source>
-        <translation>Предыдущий док</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Next dock</source>
-        <translation>Следующий док</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>To dock page</source>
-        <translation>На общую страницу</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>ToolBar</name>
     <message>
         <source>New Connection</source>
-        <translation>Новое соединение</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Edit Connection</source>
-        <translation>Редактировать соединение</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Delete Connection</source>
-        <translation>Удалить соединение</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Open Connection</source>
-        <translation>Открыть соединение</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Close Connection</source>
-        <translation>Закрыть соединение</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Close all Connections</source>
-        <translation>Закрыть все соединения</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Overview of Connection</source>
-        <translation>Обзор соединения</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Close Overview</source>
-        <translation>Закрыть обзор соединения</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Wheel for change dock
 ( Ctrl+Alt+Right/Left )</source>
-        <translation>Сменять док колёсиком мыши
+        <translation>       
 ( Ctrl+Alt+Right/Left )</translation>
     </message>
 </context>
@@ -5086,164 +5065,164 @@ is created.</source>
     <name>TransformationModeMenu</name>
     <message>
         <source>fast (no smoothing)</source>
-        <translation>быстро (без сглаживания)</translation>
+        <translation>  (   )</translation>
     </message>
     <message>
         <source>smooth (slower)</source>
-        <translation>сглаживать (медленнее)</translation>
+        <translation>  ( )</translation>
     </message>
 </context>
 <context>
     <name>TrayIcon</name>
     <message>
         <source>Down</source>
-        <translation>Вниз</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Domains State Monitor</source>
-        <translation>Монитор состояния ВМ</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Task WareHouse</source>
-        <translation>Лог запущенных задач</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation>Выход</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Qt VirtManager</source>
-        <translation>Менеджер виртуальных машин</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>%1 Domains State Monitor</source>
-        <translation>%1 Монитор состояния ВМ</translation>
+        <translation>%1      </translation>
     </message>
     <message>
         <source>Hide</source>
-        <translation>Свернуть</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Show</source>
-        <translation>Показать</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>%1 Task WareHouse</source>
-        <translation>%1 Лог запущенных задач</translation>
+        <translation>%1      </translation>
     </message>
 </context>
 <context>
     <name>TreeView</name>
     <message>
         <source>Previous dock</source>
-        <translation>Предыдущий док</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Next dock</source>
-        <translation>Следующий док</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>To dock page</source>
-        <translation>На общую страницу</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
     <name>UINT16_Data</name>
     <message>
         <source>TYPE: UINT16</source>
-        <translation>ТИП: UINT16</translation>
+        <translation> : UINT16</translation>
     </message>
 </context>
 <context>
     <name>UINT32_Data</name>
     <message>
         <source>TYPE: UINT32</source>
-        <translation>ТИП: UINT32</translation>
+        <translation> : UINT32</translation>
     </message>
 </context>
 <context>
     <name>UINT8_Data</name>
     <message>
         <source>TYPE: UINT8</source>
-        <translation>ТИП: UINT8</translation>
+        <translation> : UINT8</translation>
     </message>
 </context>
 <context>
     <name>URLMenu</name>
     <message>
         <source>delete URL from list</source>
-        <translation>удалить URL из списка</translation>
+        <translation>  URL    </translation>
     </message>
     <message>
         <source>clear URL list</source>
-        <translation>очистить список</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>USBAddr</name>
     <message>
         <source>a hex value between 0 and 0xfff, inclusive</source>
-        <translation>16-тиричное число [0-0xfff] включительно</translation>
+        <translation>16-    [0-0xfff]  </translation>
     </message>
     <message>
         <source>a dotted notation, such as 1.2 or 2.1.3.1</source>
-        <translation>чрез-точечная запись, типа 1.2 or 2.1.3.1</translation>
+        <translation> -   ,   1.2 or 2.1.3.1</translation>
     </message>
 </context>
 <context>
     <name>USB_Host_Device_Edit</name>
     <message>
         <source>Vendor:</source>
-        <translation>Производитель:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Product:</source>
-        <translation>Продукт:</translation>
+        <translation> :</translation>
     </message>
 </context>
 <context>
     <name>UdpWidget</name>
     <message>
         <source>Host:</source>
-        <translation>Хост:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>Порт:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Bind Host:</source>
-        <translation>Связанный хост:</translation>
+        <translation>   :</translation>
     </message>
 </context>
 <context>
     <name>UnixWidget</name>
     <message>
         <source>Path:</source>
-        <translation>Путь:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Mode:</source>
-        <translation>Способ:</translation>
+        <translation> :</translation>
     </message>
     <message>
         <source>Server mode (bind)</source>
-        <translation>Как сервер (bind)</translation>
+        <translation>    (bind)</translation>
     </message>
     <message>
         <source>Client mode (connect)</source>
-        <translation>Как клиент (connect)</translation>
+        <translation>    (connect)</translation>
     </message>
 </context>
 <context>
     <name>UntypedData</name>
     <message>
         <source>Match</source>
-        <translation>Соответствие</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Clear attribute data</source>
-        <translation>Очистить данные атрибута</translation>
+        <translation>     </translation>
     </message>
 </context>
 <context>
@@ -5258,122 +5237,122 @@ will be 10.0.2.3. This networking is the only option
 for unprivileged users who need their VMs
 to have outgoing access.</source>
         <translation>
-Предоставляет виртуальную локальную сеть с NAT для внешнего мира.
-Виртуальная сеть имеет службы DHCP и DNS и предоставит
-гостевые виртуальные адреса, начиная с 10.0.2.15.
-Маршрутизатор по умолчанию будет 10.0.2.2, а DNS-сервер будет 10.0.2.3.
-Эта сеть единственный вариант для непривилегированных пользователей,
-которым нужны виртуальные машины с исходящим доступом.</translation>
+          NAT      .
+        DHCP   DNS    
+     ,     10.0.2.15.
+        10.0.2.2,   DNS-    10.0.2.3.
+             ,
+             .</translation>
     </message>
 </context>
 <context>
     <name>VEPA_Mode_widget</name>
     <message>
         <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
-        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Не реализовано для редактирования&lt;/b&gt;&lt;/font&gt;</translation>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;       &lt;/b&gt;&lt;/font&gt;</translation>
     </message>
 </context>
 <context>
     <name>VM_State_Widget</name>
     <message>
         <source>File download progress</source>
-        <translation>Прогресс загрузки файла</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>ON</source>
-        <translation>ВКЛ</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>OFF</source>
-        <translation>ВЫКЛ</translation>
+        <translation> </translation>
     </message>
     <message>
         <source>
 Click to choose devices</source>
         <translation>
-Кликнуть для выбора устройств</translation>
+       </translation>
     </message>
     <message>
         <source>
 Click to choose mode</source>
         <translation>
-Кликнуть для выбора режима</translation>
+       </translation>
     </message>
     <message>
         <source>SmartCard channel</source>
-        <translation>Канал для смарткарт</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Cursor channel</source>
-        <translation>Канал для курсора</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Inputs channel</source>
-        <translation>Канал ввода</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Display channel</source>
-        <translation>Канал для дисплея</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>USB Redirect channel</source>
-        <translation>Канал USB проброса</translation>
+        <translation>  USB  </translation>
     </message>
     <message>
         <source>WebDAV channel</source>
-        <translation>WebDAV канал</translation>
+        <translation>WebDAV  </translation>
     </message>
     <message>
         <source>Playback channel</source>
-        <translation>Канал воспроизведения</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Record channel</source>
-        <translation>Канал записи</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
     <name>VM_Viewer</name>
     <message>
         <source>&lt;%1&gt; Virtual Machine in [ %2 ] connection</source>
-        <translation>&lt;%1&gt; ВМ в [ %2 ] соединении</translation>
+        <translation>&lt;%1&gt;     [ %2 ]  </translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Getting the address data is failed.</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Не удалось получить данные адреса.</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt;          .</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Open the VM graphics is failed.</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Не удалось открыть графику ВМ.</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt;          .</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; VM viewer closed.</source>
-        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; ВМ Просмотрщик закрыт.</translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos;      .</translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
-        <translation>Соединение &apos;%1&apos;</translation>
+        <translation>  &apos;%1&apos;</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt;СОБЫТИЕ&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;&lt;b&gt; &lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
     <message>
         <source>Save to</source>
-        <translation>Сохранить в</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>Restore from</source>
-        <translation>Восстановить из</translation>
+        <translation>   </translation>
     </message>
     <message>
         <source>SSH tunnel is destroyed.</source>
-        <translation>SSH тоннель остановлен.</translation>
+        <translation>SSH    .</translation>
     </message>
     <message>
         <source>Shift+F11</source>
         <comment>View|Full Screen</comment>
-        <translatorcomment>Просмотр | Полный экран</translatorcomment>
+        <translatorcomment>  |    </translatorcomment>
         <translation>Shift+F11</translation>
     </message>
 </context>
@@ -5381,26 +5360,26 @@ Click to choose mode</source>
     <name>VM_Viewer_Only</name>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Getting the address data is failed.</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Не удалось получить данные адреса.</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt;          .</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Open the address is failed.</source>
-        <translation>В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Не удалось открыть адрес.</translation>
+        <translation>  &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt;        .</translation>
     </message>
     <message>
         <source>Can&apos;t connect to host:
 %1</source>
-        <translation>Не могу соединиться с хостом:
+        <translation>         :
 %1</translation>
     </message>
     <message>
         <source>SSH tunnel is destroyed.</source>
-        <translation>SSH тоннель остановлен.</translation>
+        <translation>SSH    .</translation>
     </message>
     <message>
         <source>Shift+F11</source>
         <comment>View|Full Screen</comment>
-        <translatorcomment>Просмотр | Полный экран</translatorcomment>
+        <translatorcomment>  |    </translatorcomment>
         <translation>Shift+F11</translation>
     </message>
 </context>
@@ -5408,96 +5387,96 @@ Click to choose mode</source>
     <name>VNC_Graphics</name>
     <message>
         <source>Address:</source>
-        <translation>Адрес:</translation>
+        <translation type="unfinished">Indirizzo:</translation>
     </message>
     <message>
         <source>HyperVisor default</source>
-        <translation>Умолчание гипервизора</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>LocalHost only</source>
-        <translation>Только локально</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>All Interfaces</source>
-        <translation>Все интерфейсы</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Custom</source>
-        <translation>Задать самостоятельно</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use named configured Network</source>
-        <translation>Использовать именованую Сеть</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use Socket</source>
-        <translation>Использовать сокет</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>AutoPort</source>
-        <translation>Автопорт</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Пароль</translation>
+        <translation type="unfinished">Password</translation>
     </message>
     <message>
         <source>Keymap:</source>
-        <translation>Раскладка:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Share policy:</source>
-        <translation>Поитика участия:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Multiple clients (default)</source>
-        <translation>Многопользовательски (по умолчанию)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Exclusive access</source>
-        <translation>Исключительный доступ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable exclusive client access</source>
-        <translation>Отключить исключительный доступ клиента</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Welcomes every connection unconditionally</source>
-        <translation>Каждое соединение безоговорочно</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Network:</source>
-        <translation>Сеть:</translation>
+        <translation type="unfinished">Rete:</translation>
     </message>
     <message>
         <source>Socket:</source>
-        <translation>Сокет:</translation>
+        <translation type="unfinished">Socket:</translation>
     </message>
 </context>
 <context>
     <name>VNC_Viewer</name>
     <message>
         <source>Save Image to</source>
-        <translation>Сохранить изображение в</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VNC_Viewer_Only</name>
     <message>
         <source>Save Image to</source>
-        <translation>Сохранить изображение в</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Qt Remote Viewer -- %1</source>
-        <translation>Qt Удалённый Просмотрщик -- %1</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VideoDevice</name>
     <message>
         <source>Video Device Type:</source>
-        <translation>Тип видеокарты:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>VRAM (MiB):</source>
@@ -5505,230 +5484,230 @@ Click to choose mode</source>
     </message>
     <message>
         <source>Acceleration 2D</source>
-        <translation>Ускорение 2D</translation>
+        <translation type="unfinished">Accelerazione 2D</translation>
     </message>
     <message>
         <source>Acceleration 3D</source>
-        <translation>Ускорение 3D</translation>
+        <translation type="unfinished">Accelerazione 3D</translation>
     </message>
 </context>
 <context>
     <name>ViewMenu</name>
     <message>
         <source>&amp;Hard Classic</source>
-        <translation>&amp;Классический</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>So&amp;ft Touched</source>
-        <translation>&amp;Мягкое касание</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ViewerToolBar</name>
     <message>
         <source>Pause</source>
-        <translation>Приостановить</translation>
+        <translation type="unfinished">Sospendi</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation>Перезагрузка</translation>
+        <translation type="unfinished">Riavvia</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation>Перезапуск</translation>
+        <translation type="unfinished">Reset</translation>
     </message>
     <message>
         <source>Shutdown</source>
-        <translation>Выключить</translation>
+        <translation type="unfinished">Spegni</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Сохранить</translation>
+        <translation type="unfinished">Salva</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Остановить</translation>
+        <translation type="unfinished">Ferma</translation>
     </message>
     <message>
         <source>create Snapshot of Current Domain</source>
-        <translation>создать снимок состояния ВМ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>more Snapshot actions for Domain</source>
-        <translation>больше действий со снимками ВМ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Snapshot now!</source>
-        <translation>Снимок состояния сейчас!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reconnect</source>
-        <translation>Пересоединиться</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Send key sequence</source>
-        <translation>Отослать комбинацию клавишь</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>get Guest Screenshot</source>
-        <translation>получить снимок экрана ВМ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Copy Files to Guest</source>
-        <translation>Копировать файлы в ВМ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Copy from Guest to Clipboard</source>
-        <translation>Копировать из ВМ в Clipboard</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Paste Clipboard to Guest</source>
-        <translation>Вставить из Clipboard в ВМ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>FullScreen</source>
-        <translation>Полный экран</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Scale to window</source>
-        <translation>Подогнать размер</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtDomainControl</name>
     <message>
         <source>Domain Control</source>
-        <translation>ВМ Контроль</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="unfinished">Nome</translation>
     </message>
     <message>
         <source>VM in [ %1 ]</source>
-        <translation>ВМ в [ %1 ]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>в &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Save to</source>
-        <translation>Сохранить в</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Restore from</source>
-        <translation>Восстановить из</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtEntityControl</name>
     <message>
         <source>Connection &apos;%1&apos;</source>
-        <translation>Соединение &apos;%1&apos;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;green&apos;&gt;&lt;b&gt;ACTION&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;green&apos;&gt;&lt;b&gt;ДЕЙСТВИЕ&lt;/b&gt;&lt;/font&gt;: %3</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtIfaceModel</name>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="unfinished">Nome</translation>
     </message>
     <message>
         <source>MAC</source>
-        <translation>МАС</translation>
+        <translation type="unfinished">MAC</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Состояние</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Changing</source>
-        <translation>Изменение</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name: %1</source>
-        <translation>Имя: %1</translation>
+        <translation type="unfinished">Nome: %1</translation>
     </message>
     <message>
         <source>MAC: %1</source>
-        <translation>МАС: %1</translation>
+        <translation type="unfinished">MAC: %1</translation>
     </message>
     <message>
         <source>State: %1</source>
-        <translation>Состояние: %1</translation>
+        <translation type="unfinished">Stato: %1</translation>
     </message>
     <message>
         <source>Changing Began</source>
-        <translation>Изменение начато</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtInterfaceControl</name>
     <message>
         <source>VirtIface Control</source>
-        <translation>Интерфейс Контроль</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="unfinished">Nome</translation>
     </message>
     <message>
         <source>Interface in [ %1 ]</source>
-        <translation>Интерфейс в [ %1 ]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>в &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>New Interface XML&apos;ed</source>
-        <translation>Новый интерфейс XML&apos;ирован</translation>
+        <translation type="unfinished"> </translation>
     </message>
 </context>
 <context>
     <name>VirtNWFilterControl</name>
     <message>
         <source>VirtNWFilter Control</source>
-        <translation>Сетевого фильтра Контроль</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="unfinished">Nome</translation>
     </message>
     <message>
         <source>NWFilter in [ %1 ]</source>
-        <translation>Сетевой фильтр в [ %1 ]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>в &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtNWFilterControlMenu</name>
     <message>
         <source>Edit</source>
-        <translation>Редактировать</translation>
+        <translation type="unfinished">Modifica</translation>
     </message>
     <message>
         <source>get XML Description</source>
-        <translation>получить XML описание</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reload NWFilter OverView</source>
-        <translation>Перезагрузить обзор Сетевых фильтров</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtNWFilterModel</name>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="unfinished">Nome</translation>
     </message>
     <message>
         <source>UUID</source>
@@ -5739,99 +5718,99 @@ Click to choose mode</source>
     <name>VirtNWFilterToolBar</name>
     <message>
         <source>Define for persistent usage</source>
-        <translation>Создать для постоянного использования</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>AutoReload NwFilters Overview</source>
-        <translation>Автоперезагрузка обзора Сетевых фильтров</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtNetControl</name>
     <message>
         <source>VirtNet Control</source>
-        <translation>Сети Контроль</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="unfinished">Nome</translation>
     </message>
     <message>
         <source>Network in [ %1 ]</source>
-        <translation>Сеть в [ %1 ]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>в &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtNetControlMenu</name>
     <message>
         <source>Start</source>
-        <translation>Запустить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Destroy</source>
-        <translation>Остановить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>change AutoStart</source>
-        <translation>изменить Автостарт</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Редактировать</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>get XML Description</source>
-        <translation>получить XML описание</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reload Network OverView</source>
-        <translation>Перезагрузить обзор Сетей</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtNetToolBar</name>
     <message>
         <source>Start</source>
-        <translation>Запустить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Остановить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Create for once usage</source>
-        <translation>Создать для одноразового использования</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Define for persistent usage</source>
-        <translation>Создать для постоянного использования</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>AutoReload Network Overview</source>
-        <translation>Автоперезагрузка обзора Сетей</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtSecretControl</name>
     <message>
         <source>VirtSecret Control</source>
-        <translation>Секретов Контроль</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>UUID</source>
@@ -5839,30 +5818,30 @@ Click to choose mode</source>
     </message>
     <message>
         <source>Secret UUID in [ %1 ]</source>
-        <translation>Секрет в [ %1 ]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>в &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>New Secret XML&apos;ed</source>
-        <translation>Новый Секрет XML&apos;ирован</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtSecretControlMenu</name>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>get XML Description</source>
-        <translation>получить XML описание</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reload Secret OverView</source>
-        <translation>Перезагрузить обзор для Секретов</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5873,80 +5852,80 @@ Click to choose mode</source>
     </message>
     <message>
         <source>UsageID</source>
-        <translation>ID использования</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Description: %1</source>
-        <translation>Описание: %1</translation>
+        <translation type="unfinished">Descrizione: %1</translation>
     </message>
     <message>
         <source>Type: %1</source>
-        <translation>Тип: %1</translation>
+        <translation type="unfinished"> ipo: %1</translation>
     </message>
 </context>
 <context>
     <name>VirtSecretToolBar</name>
     <message>
         <source>Define for persistent usage</source>
-        <translation>Создать для постоянного использования</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Undefine</source>
-        <translation>Удалить</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>AutoReload Secret Overview</source>
-        <translation>Автоперезагрузка обзора Секретов</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtStoragePoolControl</name>
     <message>
         <source>StoragePool Control</source>
-        <translation>Пулов Контроль</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="unfinished">Nome</translation>
     </message>
     <message>
         <source>Pool in [ %1 ]</source>
-        <translation>Пул в [ %1 ]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>в &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VirtStorageVolControl</name>
     <message>
         <source>StorageVol Control</source>
-        <translation>Хранилища Контроль</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Имя</translation>
+        <translation type="unfinished">Nome</translation>
     </message>
     <message>
         <source>Volume in [ %1 ]</source>
-        <translation>Хранилище в [ %1 ]</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation>в &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; pool overview closed.</source>
-        <translation>Просмотрщик &apos;&lt;b&gt;%1&lt;/b&gt;&apos; пула закрыт.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Save to</source>
-        <translation>Сохранить в</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Read from</source>
-        <translation>Читать из</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5961,11 +5940,11 @@ Click to choose mode</source>
     </message>
     <message>
         <source>VirtVolumeDialog</source>
-        <translation>Диалог выбора Хранилища</translation>
+        <translation>     </translation>
     </message>
     <message>
         <source>Not found</source>
-        <translation>Не найдено</translation>
+        <translation>   </translation>
     </message>
 </context>
 <context>
@@ -6274,7 +6253,7 @@ created by the external snapshot
     </message>
     <message>
         <source>WrPolicy:</source>
-        <translation type="obsolete">Политка записи (опционально):</translation>
+        <translation type="obsolete">    ( ):</translation>
     </message>
     <message>
         <source>Format:</source>
@@ -6427,7 +6406,7 @@ definition a DHCP server on the network</source>
     <name>_Storage_Auth</name>
     <message>
         <source>Authentication</source>
-        <translation type="unfinished">Аutenticazione</translation>
+        <translation type="unfinished"> utenticazione</translation>
     </message>
     <message>
         <source>User Name:</source>
