@@ -249,7 +249,7 @@ for shaped interfaces</source>
     </message>
     <message>
         <source>Network Filter on Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtro di rete su interfaccia</translation>
     </message>
 </context>
 <context>
@@ -301,7 +301,7 @@ for shaped interfaces</source>
     </message>
     <message>
         <source>Exactly the same as the host CPU</source>
-        <translation type="unfinished"></translation>
+        <translation>Esattamente lo stesso come la CPU dell&apos;host</translation>
     </message>
     <message>
         <source>Match:</source>
@@ -309,7 +309,7 @@ for shaped interfaces</source>
     </message>
     <message>
         <source>Allow fallback</source>
-        <translation type="unfinished"></translation>
+        <translation>Consenti il ripiego</translation>
     </message>
     <message>
         <source>Copy Host CPU configuration</source>
@@ -561,7 +561,7 @@ Other parameters of network you can change later in Network Editor.</source>
     </message>
     <message>
         <source>Busy</source>
-        <translation type="unfinished"></translation>
+        <translation>Occupata</translation>
     </message>
     <message>
         <source>
@@ -575,7 +575,7 @@ Stato: %1</translation>
     </message>
     <message>
         <source>State: waiting period has expired</source>
-        <translation type="unfinished"></translation>
+        <translation>Stato: il periodo di attesa è scaduto</translation>
     </message>
     <message>
         <source>State: %1</source>
@@ -598,7 +598,7 @@ Stato: %1</translation>
     </message>
     <message>
         <source>Enter Connection Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Digita nome della connessione</translation>
     </message>
     <message>
         <source>Driver:</source>
@@ -622,7 +622,7 @@ Stato: %1</translation>
     </message>
     <message>
         <source>Connect at Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Connetti all&apos;avvio</translation>
     </message>
     <message>
         <source>Ok</source>
@@ -638,7 +638,7 @@ Stato: %1</translation>
     </message>
     <message>
         <source>Connection Name is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il nome della connessione è vuoto.</translation>
     </message>
     <message>
         <source>Same Connection Name is exist.</source>
@@ -857,7 +857,7 @@ at close</source>
     </message>
     <message>
         <source>Restore all</source>
-        <translation type="unfinished"></translation>
+        <translation>Ripristina tutto</translation>
     </message>
     <message>
         <source>Restore all pages to first state</source>
@@ -909,7 +909,7 @@ at close</source>
     </message>
     <message>
         <source>VM Settings / &lt;%1&gt; in [%2]</source>
-        <translation type="unfinished"></translation>
+        <translation>Impostazioni VM / &lt;%1&gt; in [%2]</translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
@@ -2720,11 +2720,11 @@ Current:	%2</source>
     </message>
     <message>
         <source>Interface</source>
-        <translation type="unfinished">Interfaccia</translation>
+        <translation>Interfaccia</translation>
     </message>
     <message>
         <source>Interfaces</source>
-        <translation type="unfinished">Interfacce</translation>
+        <translation>Interfacce</translation>
     </message>
     <message>
         <source>NWFilter</source>
@@ -2736,7 +2736,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>Restart Application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Riavvia applicazione.</translation>
     </message>
     <message>
         <source>Libvirt EventLoop</source>
@@ -2760,11 +2760,11 @@ Current:	%2</source>
     </message>
     <message>
         <source>exist in system</source>
-        <translation type="unfinished"></translation>
+        <translation>esiste nel sistema</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: virtEventLoop%3%4</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt;EVENTO&lt;/b&gt;&lt;/font&gt;: virtEventLoop%3%4</translation>
     </message>
     <message>
         <source>started</source>
@@ -2784,7 +2784,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>VM Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Visore VM</translation>
     </message>
     <message>
         <source>Application built without LXC</source>
@@ -2858,7 +2858,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>Current Memory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Memoria attuale:</translation>
     </message>
     <message>
         <source>Enable Memory Backing</source>
@@ -2913,14 +2913,14 @@ Current:	%2</source>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aiuto</translation>
     </message>
 </context>
 <context>
     <name>MigrateDialog</name>
     <message>
         <source>Migrate &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Migra &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Enter new VM name</source>
@@ -3026,7 +3026,7 @@ during migration</source>
     </message>
     <message>
         <source>&lt;a href=&apos;http://libvirt.org/migration.html&apos;&gt;About Migration&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&apos;http://libvirt.org/migration.html&apos;&gt;Informazioni di migrazione&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Migrate</source>
@@ -3062,11 +3062,11 @@ Host/URI</source>
     <name>Misc_Settings</name>
     <message>
         <source>Events configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurazione eventi</translation>
     </message>
     <message>
         <source>Power Management</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestione energetica</translation>
     </message>
     <message>
         <source>Hypervisor features</source>
@@ -3101,7 +3101,7 @@ Host/URI</source>
     </message>
     <message>
         <source>Autostart: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvio automatico: %1</translation>
     </message>
     <message>
         <source>Persistent: %1</source>
@@ -3112,7 +3112,7 @@ Host/URI</source>
     <name>MountFsType</name>
     <message>
         <source>Source host directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella di origine dell&apos;host</translation>
     </message>
     <message>
         <source>Target guest directory</source>
@@ -3120,7 +3120,7 @@ Host/URI</source>
     </message>
     <message>
         <source>Source Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Percorso di origine</translation>
     </message>
 </context>
 <context>
@@ -3149,19 +3149,20 @@ Host/URI</source>
     <name>NIC_Model</name>
     <message>
         <source>Device model:</source>
-        <translation type="unfinished"></translation>
+        <translation>Modello del dispositivo:</translation>
     </message>
 </context>
 <context>
     <name>NWFilterControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il puntatore di connessione è NULL.</translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation type="unfinished"></translation>
+        <translation>File &quot;%1&quot;
+non aperto.</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; NWFilter from
@@ -3191,11 +3192,12 @@ is defined.</source>
     <message>
         <source>Network filter parameters:
 VARIABLE = VALUE</source>
-        <translation type="unfinished"></translation>
+        <translation>Parametri del filtro di rete:
+VARIABILE = VALORE</translation>
     </message>
     <message>
         <source>Availabled network filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtri di rete disponibili</translation>
     </message>
     <message>
         <source>Autodetect IP</source>
@@ -3210,12 +3212,13 @@ VARIABLE = VALUE</source>
     <name>NetControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il puntatore di connessione è NULL.</translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation type="unfinished"></translation>
+        <translation>File &quot;%1&quot;
+non aperto.</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network from
@@ -3322,7 +3325,7 @@ is defined.</source>
     <name>PASSTHROUGH_Mode_widget</name>
     <message>
         <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Non implementato per la modifica&lt;/b&gt;&lt;/font&gt;</translation>
     </message>
 </context>
 <context>
@@ -3349,7 +3352,7 @@ is defined.</source>
     <name>PRIVATE_Mode_widget</name>
     <message>
         <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Non implementato per la modifica&lt;/b&gt;&lt;/font&gt;</translation>
     </message>
 </context>
 <context>
@@ -3378,11 +3381,11 @@ is defined.</source>
     <name>Power</name>
     <message>
         <source>Suspend_to_Disk</source>
-        <translation type="unfinished"></translation>
+        <translation>Sospendi su disco</translation>
     </message>
     <message>
         <source>Suspend_to_Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sospendi in memoria</translation>
     </message>
 </context>
 <context>
@@ -3417,11 +3420,11 @@ is defined.</source>
     </message>
     <message>
         <source>Widget style</source>
-        <translation type="unfinished"></translation>
+        <translation>Stile degli oggetti</translation>
     </message>
     <message>
         <source>Scrollbar position</source>
-        <translation type="unfinished"></translation>
+        <translation>Posizione della barra di scorrimento</translation>
     </message>
     <message>
         <source>Tabs position</source>
@@ -3477,7 +3480,7 @@ is defined.</source>
     </message>
     <message>
         <source>&amp;Set Font...</source>
-        <translation type="unfinished"></translation>
+        <translation>Impo&amp;sta carattere...</translation>
     </message>
     <message>
         <source>Emulation</source>
@@ -3501,7 +3504,7 @@ is defined.</source>
     </message>
     <message>
         <source>Unlimited history</source>
-        <translation type="unfinished"></translation>
+        <translation>Cronologia illimitata</translation>
     </message>
     <message>
         <source>History size (in lines)</source>
@@ -3573,7 +3576,7 @@ is defined.</source>
     </message>
     <message>
         <source>Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Alto</translation>
     </message>
     <message>
         <source>Bottom</source>
@@ -3713,11 +3716,11 @@ Ctrl+Alt+G</translation>
     </message>
     <message>
         <source>Local Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Segnalibri locali</translation>
     </message>
     <message>
         <source>Synchronized Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Segnalibri sincronizzati</translation>
     </message>
 </context>
 <context>
