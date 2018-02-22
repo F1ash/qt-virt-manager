@@ -18,6 +18,8 @@ int main(int argc, char *argv[])
     QLocale lc = QLocale();
     if ( lc.language() == QLocale::Russian ) {
         tr.load("remote_viewer_ru");
+    } else if ( lc.language() == QLocale::Italian ) {
+        tr.load("remote_viewer_it");
     };
     QString url;
     bool inLoop = false;

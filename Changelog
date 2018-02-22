@@ -200,3 +200,9 @@ implemented usage Viewer for VMs
 enhancements for external Viewer;
 fixed the building a rule of NWFilter;
 enhancements for building;
+
+0.52.80 :
+improved Donation menu;
+implemented using virt-viewer connection file (aka *.vv);
+implemented the translation;
+added Russian and Italian translations;

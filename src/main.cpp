@@ -14,6 +14,8 @@ int main(int argc, char *argv[])
     QLocale lc = QLocale();
     if ( lc.language() == QLocale::Russian ) {
         tr.load("qt_virt_manager_ru");
+    } else if ( lc.language() == QLocale::Italian ) {
+        tr.load("qt_virt_manager_it");
     };
     a.installTranslator(&tr);
     MainWindow w;
