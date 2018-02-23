@@ -689,7 +689,7 @@ at next job start.</source>
     </message>
     <message>
         <source>Item not exist.</source>
-        <translation>L&apos;elemento non eiste.</translation>
+        <translation type="unfinished">L&apos;elemento non esiste.</translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
@@ -893,7 +893,7 @@ at close</source>
     </message>
     <message>
         <source>OS_Booting</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvio OS</translation>
     </message>
     <message>
         <source>CPU</source>
@@ -930,7 +930,8 @@ at close</source>
     <message>
         <source>Type of VM not defined.
 Please, install nessesary drivers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo di VM non definito.
+Installa i driver necessari.</translation>
     </message>
 </context>
 <context>
@@ -941,7 +942,7 @@ Please, install nessesary drivers.</source>
     </message>
     <message>
         <source>set filter name</source>
-        <translation type="unfinished"></translation>
+        <translation>imposta il nome del filtro</translation>
     </message>
     <message>
         <source>UUID will set automatically if occured</source>
@@ -949,7 +950,7 @@ Please, install nessesary drivers.</source>
     </message>
     <message>
         <source>Use another filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa altri filtri</translation>
     </message>
     <message>
         <source>Filters</source>
@@ -977,7 +978,7 @@ Please, install nessesary drivers.</source>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>a &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
@@ -1000,7 +1001,7 @@ Please, install nessesary drivers.</source>
     <name>CreateVirtNetwork</name>
     <message>
         <source>Network Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor di rete</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; network editor closed.</source>
@@ -1008,7 +1009,7 @@ Please, install nessesary drivers.</source>
     </message>
     <message>
         <source>Network Assistant in [%1]</source>
-        <translation type="unfinished"></translation>
+        <translation>Assistente di rete in [%1]</translation>
     </message>
     <message>
         <source>New Network XML&apos;ed</source>
@@ -1016,11 +1017,11 @@ Please, install nessesary drivers.</source>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>a &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Network Editor / &lt;%1&gt; in [%2]</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor di rete / &lt;%1&gt; in [%2]</translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
@@ -1124,7 +1125,7 @@ never stored persistently</source>
     </message>
     <message>
         <source>Private</source>
-        <translation type="unfinished"></translation>
+        <translation>Privato</translation>
     </message>
     <message>
         <source>The value of the secret must not be revealed to any caller of libvirt,
@@ -1137,7 +1138,7 @@ nor to any other node</source>
     </message>
     <message>
         <source>&lt;a href=&apos;http://libvirt.org/formatsecret.html&apos;&gt;About&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;a href=&apos;http://libvirt.org/formatsecret.html&apos;&gt;Informazioni&lt;/a&gt;</translation>
     </message>
     <message>
         <source>The value of the secret must not be revealed
@@ -1150,7 +1151,7 @@ nor to any other node</source>
     <name>CreateVolume</name>
     <message>
         <source>Create Volume in [%1] Pool</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea volume nel pool [%1]</translation>
     </message>
 </context>
 <context>
@@ -1193,19 +1194,19 @@ nor to any other node</source>
     <name>Delete_Pool_Menu</name>
     <message>
         <source>Delete Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina normale</translation>
     </message>
     <message>
         <source>Delete Zeroed</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina con zero</translation>
     </message>
     <message>
         <source>Delete metadata only (fast)</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina solo i metadati (veloce)</translation>
     </message>
     <message>
         <source>Clear all data to zeros (slow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella tutti i dati con zero (lenta)</translation>
     </message>
 </context>
 <context>
@@ -1230,11 +1231,11 @@ nor to any other node</source>
     <name>DeviceAddress</name>
     <message>
         <source>Use address</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa indirizzo</translation>
     </message>
     <message>
         <source>PCI addresses</source>
-        <translation type="unfinished">Indirizzi PCI</translation>
+        <translation>Indirizzi PCI</translation>
     </message>
     <message>
         <source>Drive addresses</source>
@@ -1250,19 +1251,19 @@ nor to any other node</source>
     </message>
     <message>
         <source>USB addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzi USB</translation>
     </message>
     <message>
         <source>On PowerPC</source>
-        <translation type="unfinished">Su PowerPC</translation>
+        <translation>Su PowerPC</translation>
     </message>
     <message>
         <source>s390 guests</source>
-        <translation type="unfinished">Guest s390</translation>
+        <translation>Guest s390</translation>
     </message>
     <message>
         <source>ISA addresses</source>
-        <translation type="unfinished">Indirizzi ISA</translation>
+        <translation>Indirizzi ISA</translation>
     </message>
 </context>
 <context>
@@ -1362,7 +1363,7 @@ Save last changes?</source>
     </message>
     <message>
         <source>Input %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingresso %1</translation>
     </message>
     <message>
         <source>Hub %1</source>
@@ -1378,7 +1379,7 @@ Save last changes?</source>
     </message>
     <message>
         <source>Host Device %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo host %1</translation>
     </message>
     <message>
         <source>Display %1</source>
@@ -1448,7 +1449,7 @@ Save last changes?</source>
     </message>
     <message>
         <source>Network Filter on Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtro di rete su interfaccia</translation>
     </message>
     <message>
         <source>Host Device &apos;%1&apos; : macvtap</source>
@@ -1459,19 +1460,19 @@ Save last changes?</source>
     <name>Direct_Kernel_Boot</name>
     <message>
         <source>Boot loader path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Percorso del boot loader:</translation>
     </message>
     <message>
         <source>Kernel path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Percorso del kernel:</translation>
     </message>
     <message>
         <source>Initrd path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Percorso del initrd:</translation>
     </message>
     <message>
         <source>Command line:</source>
-        <translation type="unfinished"></translation>
+        <translation>Riga di comando:</translation>
     </message>
     <message>
         <source>Path to the (optional) device tree binary (dtb) image in the host OS:</source>
@@ -1570,7 +1571,7 @@ Save last changes?</source>
     <name>DockWidget</name>
     <message>
         <source>Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Log</translation>
     </message>
     <message>
         <source>long</source>
@@ -1581,7 +1582,7 @@ Save last changes?</source>
     <name>DomControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il puntatore di connessione è NULL.</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain from
@@ -1592,7 +1593,8 @@ is created.</source>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation type="unfinished"></translation>
+        <translation>File &quot;%1&quot;
+non aperto.</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain from
@@ -1674,7 +1676,7 @@ is defined.</source>
     </message>
     <message>
         <source>not</source>
-        <translation type="unfinished"></translation>
+        <translation>non</translation>
     </message>
 </context>
 <context>
@@ -1805,11 +1807,11 @@ Usage:</source>
     </message>
     <message>
         <source>State:&lt;br&gt;&lt;b&gt;Connection Error&lt;/b&gt;&lt;/br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Stato:&lt;br&gt;&lt;b&gt;Errore di connessione&lt;/b&gt;&lt;/br&gt;</translation>
     </message>
     <message>
         <source>State:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;/br&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Stato:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;/br&gt;</translation>
     </message>
 </context>
 <context>
@@ -1958,15 +1960,15 @@ Copy to Clipboard</source>
     <name>Events</name>
     <message>
         <source>PowerOff</source>
-        <translation type="unfinished"></translation>
+        <translation>Spegnimento</translation>
     </message>
     <message>
         <source>Reboot</source>
-        <translation type="unfinished"></translation>
+        <translation>Riavvio</translation>
     </message>
     <message>
         <source>Crash</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiusura inattesa</translation>
     </message>
     <message>
         <source>LockFailure</source>
@@ -1992,7 +1994,7 @@ Copy to Clipboard</source>
     <name>FileMenu</name>
     <message>
         <source>&amp;New connection</source>
-        <translation type="unfinished">&amp;Nuova connessione</translation>
+        <translation>&amp;Nuova connessione</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
@@ -2126,7 +2128,7 @@ to the named device only</source>
     </message>
     <message>
         <source>Enter VM name</source>
-        <translation type="unfinished"></translation>
+        <translation>Digita nome VM</translation>
     </message>
     <message>
         <source>UUID:</source>
@@ -2142,7 +2144,7 @@ to the named device only</source>
     </message>
     <message>
         <source>Enter VM title</source>
-        <translation type="unfinished"></translation>
+        <translation>Digita titolo VM</translation>
     </message>
     <message>
         <source>Description:</source>
@@ -2157,7 +2159,7 @@ to the named device only</source>
     </message>
     <message>
         <source>Script path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Percorso script:</translation>
     </message>
 </context>
 <context>
@@ -2176,7 +2178,7 @@ to the named device only</source>
     </message>
     <message>
         <source>URL schema</source>
-        <translation type="unfinished"></translation>
+        <translation>Schema URL</translation>
     </message>
     <message>
         <source>If you have SSH access to remote host
@@ -2216,7 +2218,7 @@ If you have graphic socket on local or remote host:
     <name>HOSTDEV_Mode_widget</name>
     <message>
         <source>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Don&apos;t implemented for edit&lt;/b&gt;&lt;/font&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;font color=&apos;red&apos;&gt;&lt;b&gt;Non implementato per la modifica&lt;/b&gt;&lt;/font&gt;</translation>
     </message>
 </context>
 <context>
@@ -2242,11 +2244,11 @@ If you have graphic socket on local or remote host:
     <name>Host_Boot</name>
     <message>
         <source>Boot loader:</source>
-        <translation type="unfinished"></translation>
+        <translation>Boot loader:</translation>
     </message>
     <message>
         <source>Boot loader args:</source>
-        <translation type="unfinished"></translation>
+        <translation>Argomenti del boot loader:</translation>
     </message>
 </context>
 <context>
@@ -2415,7 +2417,7 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     <name>InterfaceControlThread</name>
     <message>
         <source>Connection pointer is NULL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il puntatore di connessione è NULL.</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 started.</source>
@@ -2423,7 +2425,7 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     </message>
     <message>
         <source>don&apos;t</source>
-        <translation type="unfinished"></translation>
+        <translation>non</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 destroyed.</source>
@@ -2432,7 +2434,8 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     <message>
         <source>File &quot;%1&quot;
 not opened.</source>
-        <translation type="unfinished"></translation>
+        <translation>File &quot;%1&quot;
+non aperto.</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface from
@@ -2462,7 +2465,7 @@ is defined.</source>
     </message>
     <message>
         <source>not</source>
-        <translation type="unfinished"></translation>
+        <translation>non</translation>
     </message>
 </context>
 <context>
@@ -2524,11 +2527,11 @@ is defined.</source>
     </message>
     <message>
         <source>Create routed network</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea rete instradata</translation>
     </message>
     <message>
         <source>Create isolated network</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea rete isolata</translation>
     </message>
 </context>
 <context>
@@ -2581,14 +2584,14 @@ is defined.</source>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: EOF.</source>
-        <translation type="unfinished"></translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: EOF.</translation>
     </message>
 </context>
 <context>
     <name>LogDock</name>
     <message>
         <source>Size of Log (MB)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione del log (MiB)</translation>
     </message>
     <message>
         <source>AutoSave</source>
@@ -2760,7 +2763,7 @@ Current:	%2</source>
     </message>
     <message>
         <source> not </source>
-        <translation type="unfinished"></translation>
+        <translation>non</translation>
     </message>
     <message>
         <source>exist in system</source>
@@ -2825,7 +2828,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>Network Editor / &lt;%1&gt; in [%2]</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor di rete / &lt;%1&gt; in [%2]</translation>
     </message>
     <message>
         <source>NWFilter Editor / &lt;%1&gt; in [%2]</source>
@@ -2913,7 +2916,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>&amp;Virtual Entity Views</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vista entità virtuali</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -2928,11 +2931,11 @@ Current:	%2</source>
     </message>
     <message>
         <source>Enter new VM name</source>
-        <translation type="unfinished"></translation>
+        <translation>Digita nuovo nome VM</translation>
     </message>
     <message>
         <source>migrate as &lt;Name&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>migra come &lt;Nome&gt;</translation>
     </message>
     <message>
         <source>Destination Host / Connection :</source>
@@ -3074,7 +3077,7 @@ Host/URI</source>
     </message>
     <message>
         <source>Hypervisor features</source>
-        <translation type="unfinished"></translation>
+        <translation>Funzionalità dell&apos;hypervisor</translation>
     </message>
 </context>
 <context>
@@ -3142,11 +3145,11 @@ Host/URI</source>
     <name>NAT_Mode_widget</name>
     <message>
         <source>Use Address Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa intervallo di indirizzi</translation>
     </message>
     <message>
         <source>Use Port Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa intervallo di porte</translation>
     </message>
 </context>
 <context>
