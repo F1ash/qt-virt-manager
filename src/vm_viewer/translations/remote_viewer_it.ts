@@ -53,37 +53,40 @@ then you can use Remote Viewer with such path:
 
 If you have graphic socket on local or remote host:
 &lt;vnc|spice&gt;://[HOST[:PORT]]/?[transport=ssh&amp;user=&lt;USER&gt;&amp;]socket=/path/to/socket</source>
-        <translation type="unfinished"></translation>
+        <translation>Se hai accesso SSH all&apos;host remoto
+e un indirizzo interno per la schermo della VM
+puoi utilizzare il visualizzatore remoto con questo percorso:
+&lt;vnc|spice&gt;://HOST[:PORTA]/?transport=ssh&amp;user=&lt;UTENTE&gt;&amp;addr=&lt;IP&gt;&amp;port=&lt;NUMERO&gt;</translation>
     </message>
 </context>
 <context>
     <name>LXC_Viewer</name>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Display destroyed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: schermo distrutto.</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Connection or Domain is NULL or inactive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; La connessione o il dominio è NULL o attiva</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Open PTY Error...</source>
-        <translation type="unfinished"></translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: errore di apertura PTY...</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Stream Registration success. PTY opened. Terminal is active.</source>
-        <translation type="unfinished"></translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: registrazione del flusso avvenuta. PTY aperto. Il terminale è attivo.</translation>
     </message>
 </context>
 <context>
     <name>LXC_ViewerThread</name>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Console opened in ZERO-mode...</source>
-        <translation type="unfinished"></translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: console aperta in modalità ZERO...</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Open console failed...</source>
-        <translation type="unfinished"></translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: apertura della console non riuscita...</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: EOF.</source>
@@ -138,15 +141,15 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Always show the tab bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra sempre la barra delle schede</translation>
     </message>
     <message>
         <source>Show a border around the current terminal</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra un bordo intorno al terminale attuale</translation>
     </message>
     <message>
         <source>Application transparency</source>
-        <translation type="unfinished"></translation>
+        <translation>Trasparenza dell&apos;applicazione</translation>
     </message>
     <message>
         <source> %</source>
@@ -182,7 +185,7 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>&amp;Set Font...</source>
-        <translation type="unfinished"></translation>
+        <translation>Impo&amp;sta carattere...</translation>
     </message>
     <message>
         <source>Emulation</source>
@@ -194,23 +197,23 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Action after paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Azione dopo incolla</translation>
     </message>
     <message>
         <source>Open new terminals in current working directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri nuovi terminali nella cartella di lavoro attuale</translation>
     </message>
     <message>
         <source>Ask for confirmation when closing</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiedi conferma alla chiusura</translation>
     </message>
     <message>
         <source>Unlimited history</source>
-        <translation type="unfinished"></translation>
+        <translation>Cronologia illimitata</translation>
     </message>
     <message>
         <source>History size (in lines)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione della cronologia (in righe)</translation>
     </message>
     <message>
         <source>Shortcut</source>
@@ -246,15 +249,15 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Edit bookmark file contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica il contenuto del file dei segnalibri</translation>
     </message>
     <message>
         <source>Enable bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita i segnalibri</translation>
     </message>
     <message>
         <source>Bookmark file</source>
-        <translation type="unfinished"></translation>
+        <translation>File dei segnalibri</translation>
     </message>
     <message>
         <source>Find...</source>
@@ -262,11 +265,11 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>You can specify your own bookmarks file location. It allows easy bookmark sharing with tools like OwnCloud or Dropbox.</source>
-        <translation type="unfinished"></translation>
+        <translation>Puoi specificare la posizione del tuo file dei segnalibri. Consente una rapida condivisione dei segnalibri con strumenti come OwnCloud o Dropbox.</translation>
     </message>
     <message>
         <source>No scrollbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuna barra di scorrimento</translation>
     </message>
     <message>
         <source>Left</source>
@@ -286,15 +289,15 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>No move</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuno spostamento</translation>
     </message>
     <message>
         <source>Move start</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta all&apos;inizio</translation>
     </message>
     <message>
         <source>Move end</source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta alla fine</translation>
     </message>
     <message>
         <source>System Default</source>
@@ -302,7 +305,7 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Open or create bookmarks file</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri o crea il file dei segnalibri</translation>
     </message>
 </context>
 <context>
@@ -320,7 +323,7 @@ If you have graphic socket on local or remote host:
     <name>QSpiceMainChannel</name>
     <message>
         <source>main_channel</source>
-        <translation type="unfinished"></translation>
+        <translation>canale principale</translation>
     </message>
     <message>
         <source>file transfer</source>
@@ -368,19 +371,19 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>no event, or ignored event</source>
-        <translation type="unfinished"></translation>
+        <translation>nessun evento, o evento ignorato</translation>
     </message>
     <message>
         <source>connection is authentified and ready</source>
-        <translation type="unfinished"></translation>
+        <translation>la connessione è autenticata e pronta</translation>
     </message>
     <message>
         <source>disconnecting from the current host and connecting to the target host</source>
-        <translation type="unfinished"></translation>
+        <translation>disconnessione dall&apos;host attuale e connessione all&apos;host di destinazione</translation>
     </message>
     <message>
         <source>connection is closed normally (sent if channel was ready)</source>
-        <translation type="unfinished"></translation>
+        <translation>la connessione è chiusa normalmente (inviata se il canale era pronto)</translation>
     </message>
     <message>
         <source>connection error</source>
@@ -392,7 +395,7 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>error during link process</source>
-        <translation type="unfinished"></translation>
+        <translation>errore durante il processo di collegamento</translation>
     </message>
     <message>
         <source>authentication error</source>
@@ -411,14 +414,14 @@ If you have graphic socket on local or remote host:
     <name>Spice_Viewer</name>
     <message>
         <source>Copy files to Guest</source>
-        <translation>Copia file a guest</translation>
+        <translation>Copia file al guest</translation>
     </message>
 </context>
 <context>
     <name>Spice_Viewer_Only</name>
     <message>
         <source>Copy files to Guest</source>
-        <translation>Copia file a guest</translation>
+        <translation>Copia file al guest</translation>
     </message>
     <message>
         <source>Qt Remote Viewer -- %1</source>
@@ -437,7 +440,7 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Clear Current Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella scheda attuale</translation>
     </message>
     <message>
         <source>Copy Selection</source>
@@ -445,7 +448,7 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Paste Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Incolla appunti</translation>
     </message>
     <message>
         <source>Paste Selection</source>
@@ -461,7 +464,7 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Zoom reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Ripristina ingrandimento</translation>
     </message>
     <message>
         <source>Find...</source>
@@ -469,11 +472,11 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Toggle Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Commuta menu</translation>
     </message>
     <message>
         <source>Hide Window Borders</source>
-        <translation type="unfinished"></translation>
+        <translation>Nascondi bordi delle finestre</translation>
     </message>
     <message>
         <source>None</source>
@@ -489,7 +492,7 @@ If you have graphic socket on local or remote host:
     </message>
     <message>
         <source>Scrollbar Layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Disposizione barra di scorrimento</translation>
     </message>
     <message>
         <source>A lightweight multiplatform terminal emulator</source>
@@ -511,7 +514,7 @@ If you have graphic socket on local or remote host:
     <name>TransformationModeMenu</name>
     <message>
         <source>fast (no smoothing)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">veloce ()</translation>
     </message>
     <message>
         <source>smooth (slower)</source>
@@ -533,7 +536,7 @@ If you have graphic socket on local or remote host:
     <name>VM_State_Widget</name>
     <message>
         <source>File download progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Avanzamento dello scaricamento dei file</translation>
     </message>
     <message>
         <source>ON</source>
@@ -557,23 +560,23 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>SmartCard channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canale smartcard</translation>
     </message>
     <message>
         <source>Cursor channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canale del cursore</translation>
     </message>
     <message>
         <source>Inputs channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canale degli ingressi</translation>
     </message>
     <message>
         <source>Display channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canale dello schermo</translation>
     </message>
     <message>
         <source>USB Redirect channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canale redirezione USB</translation>
     </message>
     <message>
         <source>WebDAV channel</source>
@@ -581,7 +584,7 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>Playback channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canale di riproduzione</translation>
     </message>
     <message>
         <source>Record channel</source>
@@ -604,7 +607,7 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; VM viewer closed.</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Visore VM chiuso.</translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
@@ -624,7 +627,7 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>SSH tunnel is destroyed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Il canale SSH è distrutto.</translation>
     </message>
     <message>
         <source>Shift+F11</source>
@@ -636,11 +639,11 @@ Fai clic per scegliere la modalità</translation>
     <name>VM_Viewer_Only</name>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Getting the address data is failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Recupero dei dati dell&apos;indirizzo non riuscito.</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Open the address is failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Apertura dell&apos;indirizzo non riuscita.</translation>
     </message>
     <message>
         <source>Can&apos;t connect to host:
@@ -650,7 +653,7 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>SSH tunnel is destroyed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Il tunnel SSH è distrutto.</translation>
     </message>
     <message>
         <source>Shift+F11</source>
@@ -704,7 +707,7 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>create Snapshot of Current Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>crea istantanea del dominio attuale</translation>
     </message>
     <message>
         <source>more Snapshot actions for Domain</source>
@@ -728,15 +731,15 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>Copy Files to Guest</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia file al guest</translation>
     </message>
     <message>
         <source>Copy from Guest to Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Copia dal guest agli appunti</translation>
     </message>
     <message>
         <source>Paste Clipboard to Guest</source>
-        <translation type="unfinished"></translation>
+        <translation>Incolla appunti al guest</translation>
     </message>
     <message>
         <source>FullScreen</source>

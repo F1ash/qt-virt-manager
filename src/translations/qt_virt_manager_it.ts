@@ -435,7 +435,7 @@ Other parameters of network you can change later in Network Editor.</source>
     <name>ConnAliveThread</name>
     <message>
         <source>close exit code: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>codice di uscita: %1</translation>
     </message>
     <message>
         <source>connect is nullptr</source>
@@ -443,7 +443,7 @@ Other parameters of network you can change later in Network Editor.</source>
     </message>
     <message>
         <source>Connection to the Hypervisor is failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>La connessione all&apos;hypervisor non è riuscita.</translation>
     </message>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Domain %2: %3
@@ -474,7 +474,8 @@ Other parameters of network you can change later in Network Editor.</source>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Secert %2: %3
 </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Secert %2: %3
+</translation>
     </message>
     <message>
         <source>Connection closed: Misc I/O error</source>
@@ -490,11 +491,11 @@ Other parameters of network you can change later in Network Editor.</source>
     </message>
     <message>
         <source>Connection closed: Client requested it</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione terminata: lo ha richiesto il client</translation>
     </message>
     <message>
         <source>Connection closed: Unknown reason</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione terminata: motivo sconosciuto</translation>
     </message>
     <message>
         <source>connection is %1 opened.</source>
@@ -502,7 +503,7 @@ Other parameters of network you can change later in Network Editor.</source>
     </message>
     <message>
         <source>not</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">non</translation>
     </message>
 </context>
 <context>
@@ -521,15 +522,15 @@ Other parameters of network you can change later in Network Editor.</source>
     </message>
     <message>
         <source>FAILED</source>
-        <translation type="unfinished"></translation>
+        <translation>NON RIUSCITA</translation>
     </message>
     <message>
         <source>CLOSED</source>
-        <translation type="unfinished"></translation>
+        <translation>CHIUSA</translation>
     </message>
     <message>
         <source>OPENED</source>
-        <translation type="unfinished"></translation>
+        <translation>APERTA</translation>
     </message>
     <message>
         <source>in_Process</source>
@@ -688,7 +689,7 @@ at next job start.</source>
     </message>
     <message>
         <source>Item not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;elemento non eiste.</translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
@@ -716,7 +717,7 @@ at next job start.</source>
     </message>
     <message>
         <source>Search local connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca nelle connessioni locali</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;red&apos;&gt;&lt;b&gt;ERROR&lt;/b&gt;&lt;/font&gt;: %3</source>
