@@ -599,11 +599,11 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Getting the address data is failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Recupero dei dati dell&apos;indirizzo non riuscito.</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Open the VM graphics is failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Apertura dello schermo delle VM non riuscita.</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; VM viewer closed.</source>
