@@ -448,21 +448,24 @@ Other parameters of network you can change later in Network Editor.</source>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Domain %2: %3
 </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Dominio %2: %3
+</translation>
     </message>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Network %2: %3
 </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Rete %2: %3
+</translation>
     </message>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Pool %2: %3
 </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Pool %2: %3
+</translation>
     </message>
     <message>
         <source>connection pointer is NULL</source>
-        <translation type="unfinished"></translation>
+        <translation>il puntatore di connessione è NULL</translation>
     </message>
     <message>
         <source>connection is opened: %1</source>
