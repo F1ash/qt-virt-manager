@@ -2355,7 +2355,7 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     </message>
     <message>
         <source>Destroy</source>
-        <translation type="unfinished"></translation>
+        <translation>Termina</translation>
     </message>
     <message>
         <source>Undefine</source>
@@ -2386,11 +2386,11 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     <name>InputDevice</name>
     <message>
         <source>To add additional devices explicitly</source>
-        <translation type="unfinished"></translation>
+        <translation>Per aggiungere esplicitamente dispositivi aggiuntivi</translation>
     </message>
     <message>
         <source>EvTouch Graphics Tablet</source>
-        <translation type="unfinished"></translation>
+        <translation>Tavoletta grafica EvTouch</translation>
     </message>
     <message>
         <source>Generic Mouse</source>
@@ -2421,7 +2421,7 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 started.</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interfaccia %2 avviata.</translation>
     </message>
     <message>
         <source>don&apos;t</source>
@@ -2429,7 +2429,7 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 destroyed.</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interfaccia %2 terminata.</translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
