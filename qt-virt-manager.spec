@@ -2,7 +2,7 @@
 
 Name:           qt-virt-manager
 Version:        0.52.80
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Qt Virtual Machine Manager
 
 License:        GPLv2+
@@ -39,6 +39,7 @@ BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  qt5-qtsvg-devel
 BuildRequires:  qtermwidget-devel >= 0.7.1
+BuildRequires:  qt5-linguist
 
 BuildRequires:  libvirt-devel
 BuildRequires:  glibc-headers
@@ -48,7 +49,8 @@ BuildRequires:  glib2-devel
 BuildRequires:  spice-protocol
 BuildRequires:  spice-glib-devel
 BuildRequires:  libvncserver-devel
-%if %{?fedora}>=24
+%if 0%{?fedora}
+%global libcacard 1
 BuildRequires:  libcacard-devel
 %endif
 
@@ -76,11 +78,10 @@ Qt viewer for remote access to Spice/VNC desktops.
 %build
 mkdir -p %{_target_platform}
 pushd %{_target_platform}
-%cmake -DBUILD_QT_VERSION=5 \
-%if %{?fedora}>=24
- -DWITH_LIBCACARD=1 \
-%endif
- ..
+%cmake .. \
+  -DBUILD_QT_VERSION=5 \
+  %{?libcacard:-DWITH_LIBCACARD=1}
+
 popd
 %make_build -C %{_target_platform}
 
@@ -91,36 +92,25 @@ popd
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{binname}.desktop
 desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-remote-viewer.desktop
 
-
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-
-%postun
-if [ $1 -eq 0 ] ; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-fi
-
-%posttrans
-/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-
-
 %files
 %license LICENSE Licenses
 %doc README.md Changelog
 %{_bindir}/%{binname}
 %{_datadir}/applications/%{binname}.desktop
 %{_datadir}/%{binname}/
-%{_datadir}/icons/hicolor/256x256/apps/virtual-engineering.png
+%{_datadir}/icons/hicolor/*/apps/virtual-engineering.*
 
 %files -n       qt-remote-viewer
 %license LICENSE
 %{_bindir}/qt5-remote-viewer
 %{_datadir}/applications/qt5-remote-viewer.desktop
-%{_datadir}/icons/hicolor/256x256/apps/remote-desktop-viewer.png
+%{_datadir}/icons/hicolor/*/apps/remote-desktop-viewer.*
 
 
 %changelog
+* Sat Feb 24 2018 Fl@sh <kaperang07@gmail.com> - 0.52.80-2
+- release updated;
+
 * Thu Feb 22 2018 Fl@sh <kaperang07@gmail.com> - 0.52.80-1
 - version updated;
 
