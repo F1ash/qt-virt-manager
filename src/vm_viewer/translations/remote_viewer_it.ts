@@ -63,11 +63,11 @@ puoi utilizzare il visualizzatore remoto con questo percorso:
     <name>LXC_Viewer</name>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Display destroyed.</source>
-        <translation type="unfinished">In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: schermo distrutto.</translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: schermo terminato.</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Connection or Domain is NULL or inactive</source>
-        <translation type="unfinished">In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; La connessione o il dominio è NULL o attiva</translation>
+        <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; La connessione o il dominio è NULL o inattiva</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Open PTY Error...</source>
@@ -113,7 +113,7 @@ puoi utilizzare il visualizzatore remoto con questo percorso:
     </message>
     <message>
         <source>Dropdown</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu a tendina</translation>
     </message>
     <message>
         <source>Bookmarks</source>
@@ -193,7 +193,7 @@ puoi utilizzare il visualizzatore remoto con questo percorso:
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Which behavior to emulate. Note that this does not have to match your operating system.&lt;/p&gt;&lt;p&gt;The &lt;span style=&quot; font-weight:600;&quot;&gt;default&lt;/span&gt; emulation is a fallback with a minimal featureset.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quale comportamento emulare. Nota che questo non deve corrispondere al tuo sistema operativo.&lt;/p&gt;&lt;p&gt;L&apos;emulazione &lt;span style=&quot; font-weight:600;&quot;&gt;predefinita&lt;/span&gt; è un ripiego con un insieme ridotto di funzionalità.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Action after paste</source>
@@ -514,11 +514,11 @@ puoi utilizzare il visualizzatore remoto con questo percorso:
     <name>TransformationModeMenu</name>
     <message>
         <source>fast (no smoothing)</source>
-        <translation type="unfinished">veloce ()</translation>
+        <translation>veloce (senza arrotondamento)</translation>
     </message>
     <message>
         <source>smooth (slower)</source>
-        <translation type="unfinished"></translation>
+        <translation>regolare (più lenta)</translation>
     </message>
 </context>
 <context>
@@ -540,11 +540,11 @@ puoi utilizzare il visualizzatore remoto con questo percorso:
     </message>
     <message>
         <source>ON</source>
-        <translation type="unfinished"></translation>
+        <translation>ON</translation>
     </message>
     <message>
         <source>OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>OFF</translation>
     </message>
     <message>
         <source>
@@ -595,7 +595,7 @@ Fai clic per scegliere la modalità</translation>
     <name>VM_Viewer</name>
     <message>
         <source>&lt;%1&gt; Virtual Machine in [ %2 ] connection</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;%1&gt; Macchina virtuale nella connessione [ %2 ]</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;:&lt;br&gt; Getting the address data is failed.</source>
@@ -627,7 +627,7 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>SSH tunnel is destroyed.</source>
-        <translation type="unfinished">Il canale SSH è distrutto.</translation>
+        <translation>Il canale SSH è terminato.</translation>
     </message>
     <message>
         <source>Shift+F11</source>
@@ -653,7 +653,7 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>SSH tunnel is destroyed.</source>
-        <translation type="unfinished">Il tunnel SSH è distrutto.</translation>
+        <translation>Il tunnel SSH è terminato.</translation>
     </message>
     <message>
         <source>Shift+F11</source>
@@ -711,11 +711,11 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>more Snapshot actions for Domain</source>
-        <translation type="unfinished"></translation>
+        <translation>altre azioni di istantanea per dominio</translation>
     </message>
     <message>
         <source>Snapshot now!</source>
-        <translation type="unfinished"></translation>
+        <translation>Istantanea subito!</translation>
     </message>
     <message>
         <source>Reconnect</source>
@@ -747,7 +747,7 @@ Fai clic per scegliere la modalità</translation>
     </message>
     <message>
         <source>Scale to window</source>
-        <translation type="unfinished"></translation>
+        <translation>Scala alla finestra</translation>
     </message>
 </context>
 <context>
