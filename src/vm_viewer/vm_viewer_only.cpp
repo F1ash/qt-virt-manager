@@ -70,7 +70,7 @@ void VM_Viewer_Only::init()
         // uses socket for domain graphics;
         // dirty (for local VMs) and lazy hack with ssh tunnel
         startSSHTunnel("root", socket);
-    } else if ( addr.isEmpty() || port.toInt()==0 ) {
+    } else if ( host.isEmpty() ) {
         viewerToolBar->setEnabled(false);
         msg = QString(
                 tr("In '<b>%1</b>':<br> Getting the address data is failed."))
@@ -81,6 +81,9 @@ void VM_Viewer_Only::init()
     } else {
         useFullScreen();
         if ( !transport.contains("ssh", Qt::CaseInsensitive) ) {
+            QStringList _ADDR = host.split(":");
+            addr = _ADDR.first();
+            port = _ADDR.last();
             emit initGraphic();
         } else {
             // need ssh tunnel
@@ -146,6 +149,8 @@ void VM_Viewer_Only::parseURL()
             socket      = _data.value("socket").toString();
         } else {
             // address has usual parameters only
+            // `host` will parsed later in init()
+            /*
             QStringList parts2 = host.split(":", QString::SkipEmptyParts);
             if ( parts2.count()>1 ) {
                 port = parts2.last();
@@ -158,6 +163,7 @@ void VM_Viewer_Only::parseURL()
             } else {
                 // Getting the address data is failed
             };
+            */
         };
     } else {
         // Getting the address data is failed

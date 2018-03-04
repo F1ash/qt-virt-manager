@@ -206,3 +206,6 @@ improved Donation menu;
 implemented using virt-viewer connection file (aka *.vv);
 implemented the translation;
 added Russian and Italian translations;
+
+0.52.81 :
+fixed issue #29
