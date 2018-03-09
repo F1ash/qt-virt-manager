@@ -1016,6 +1016,7 @@ endif ()
 set (SOURCES_DIRS src)
 set (DESKTOP_FILE qt-virt-manager.desktop)
 set (VIEWER_DESKTOP_FILE src/vm_viewer/qt-remote-viewer.desktop)
+set (VIEWER_MIME_FILE    src/vm_viewer/qt-remote-viewer-mime.xml)
 
 include_directories (
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -1225,6 +1226,8 @@ if ( WITH_VNC_SUPPORT OR WITH_SPICE_SUPPORT )
         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
     install ( FILES src/icons/256x256/apps/remote-desktop-viewer.png
     DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
+install ( FILES ${VIEWER_MIME_FILE}
+    DESTINATION ${SHARE_INSTALL_PREFIX}/mime/packages )
 else ()
     MESSAGE(STATUS "Build without Remote Viewer")
 endif ()

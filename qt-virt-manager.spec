@@ -105,6 +105,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-remote-viewer.de
 %{_bindir}/qt5-remote-viewer
 %{_datadir}/applications/qt5-remote-viewer.desktop
 %{_datadir}/icons/hicolor/*/apps/remote-desktop-viewer.*
+%{_datadir}/mime/packages/qt-remote-viewer-mime.xml
 
 
 %changelog
