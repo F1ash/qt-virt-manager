@@ -13,9 +13,9 @@ Donate_Dialog::Donate_Dialog(QWidget *parent) :
     donate1->setOpenExternalLinks(true);
     donate1->setPixmap(QIcon::fromTheme("yandex_money").pixmap(128));
     donate2 = new Click_Label(this);
-    donate2->setToolTip(tr("Donate on VISA QIWI Wallet\nCopy card number to Clipboard"));
+    donate2->setToolTip(tr("Donate on MaserCard\nCopy card number to Clipboard"));
     donate2->setOpenExternalLinks(true);
-    donate2->setPixmap(QIcon::fromTheme("qiwi_wallet_visa").pixmap(128));
+    donate2->setPixmap(QIcon::fromTheme("mastercard").pixmap(128));
     donate3 = new Click_Label(this);
     donate3->setToolTip(tr("Donate Bitcoin\nCopy to Clipboard"));
     donate3->setOpenExternalLinks(true);
@@ -70,7 +70,7 @@ void Donate_Dialog::donationClicked()
     } else if ( sender()==donate2 ) {
         donate2->setEnabled(false);
         QClipboard *c = QApplication::clipboard();
-        c->setText("4890494460088297", QClipboard::Clipboard);
+        c->setText("5106218039443361", QClipboard::Clipboard);
     } else if ( sender()==donate3 ) {
         donate3->setEnabled(false);
         QClipboard *c = QApplication::clipboard();

@@ -706,6 +706,7 @@
         <file alias="22x22/actions/bhyve.png">icons/22x22/emblems/bhyve.png</file>
         <file alias="128x128/actions/electron-cash.png">icons/128x128/actions/electron-cash.png</file>
         <file alias="128x128/actions/electrum.png">icons/128x128/actions/electrum.png</file>
+        <file alias="128x128/actions/mastercard.png">icons/128x128/actions/mastercard.png</file>
     </qresource>
     <qresource prefix="/misc">
         <file alias="domain/lxc_example1.xml">misc/domain/lxc_example1.xml</file>
