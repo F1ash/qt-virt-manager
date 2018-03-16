@@ -209,3 +209,9 @@ added Russian and Italian translations;
 
 0.52.81 :
 fixed issue #29
+
+0.53.83 :
+added MIME info for *.vv files;
+fixed segfault at call *.vv file
+    with graphics socket;
+changed Donate dialog;

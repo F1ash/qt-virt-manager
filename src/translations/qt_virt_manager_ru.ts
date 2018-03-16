@@ -1914,9 +1914,9 @@ by the virtual network&apos;s own DNS server</source>
         <translation>Поддержать через Яндекс.Деньги</translation>
     </message>
     <message>
-        <source>Donate on VISA QIWI Wallet
+        <source>Donate on MasterCard
 Copy card number to Clipboard</source>
-        <translation>Поддержать через VISA QIWI Wallet
+        <translation>Поддержать через MasterCard
 Копировать номер карты в Clipboard</translation>
     </message>
     <message>

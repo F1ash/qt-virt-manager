@@ -13,7 +13,7 @@ Donate_Dialog::Donate_Dialog(QWidget *parent) :
     donate1->setOpenExternalLinks(true);
     donate1->setPixmap(QIcon::fromTheme("yandex_money").pixmap(128));
     donate2 = new Click_Label(this);
-    donate2->setToolTip(tr("Donate on MaserCard\nCopy card number to Clipboard"));
+    donate2->setToolTip(tr("Donate on MasterCard\nCopy card number to Clipboard"));
     donate2->setOpenExternalLinks(true);
     donate2->setPixmap(QIcon::fromTheme("mastercard").pixmap(128));
     donate3 = new Click_Label(this);
