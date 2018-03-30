@@ -37,6 +37,7 @@ public:
     friend class QSpiceUsbDeviceManager;
 
     Q_GPROP_STR (Uri, "uri")
+    Q_GPROP_STR (Password, "password")
     //Q_GPROP_BOOL(EnableClientSockets, "client-sockets") // doc default FALSE
     Q_GPROP_BOOL(EnableAudio, "enable-audio")           // doc default TRUE
     Q_GPROP_BOOL(EnableSmartcard, "enable-smartcard")   // doc default FALSE

@@ -32,7 +32,7 @@ public:
     /*
      * Connect to SPICE source by uri, start spice-session.
      */
-    bool connectToSpiceSource(const QString &uri);
+    bool connectToSpiceSource(const QString &uri, const QString &passwd);
 
     /*
      * Disconnect from SPICE source, stop spice-session.

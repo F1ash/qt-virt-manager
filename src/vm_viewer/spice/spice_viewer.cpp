@@ -14,13 +14,14 @@ Spice_Viewer::Spice_Viewer(
 {
     TYPE = "SPICE";
     QStringList _addrData = addrData.split(";");
-    if ( _addrData.count()>5 ) {
+    if ( _addrData.count()>6 ) {
         user        = _addrData.at(0);
         host        = _addrData.at(1);
         transport   = _addrData.at(2);
         addr        = _addrData.at(3);
         port        = _addrData.at(4);
         socket      = _addrData.at(5);
+        passwd      = _addrData.at(6);
     };
     init();
 }
@@ -144,7 +145,7 @@ void Spice_Viewer::initGraphicWidget()
     //QTextStream s(stdout);
     //s<<"address: "<<addr<<":"<<port<<endl;
     QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
-    spiceWdg->connectToSpiceSource(_uri);
+    spiceWdg->connectToSpiceSource(_uri, passwd);
     spiceWdg->setNewSize(around_size.width(), around_size.height());
 }
 

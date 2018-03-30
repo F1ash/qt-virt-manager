@@ -34,7 +34,7 @@ public:
     void             parseURL();
     const QString    url;
     QString          user, host, transport,
-                     addr, port, socket;
+                     addr, port, socket, passwd;
     QSettings        settings;
     ViewerToolBar   *viewerToolBar = nullptr;
     uint             timerId = 0;

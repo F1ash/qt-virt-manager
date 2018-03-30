@@ -82,8 +82,9 @@ QSpiceWidget::~QSpiceWidget()
     disconnectFromSpiceSource();
 }
 
-bool QSpiceWidget::connectToSpiceSource(const QString &uri)
+bool QSpiceWidget::connectToSpiceSource(const QString &uri, const QString &passwd)
 {
+    spiceSession->setPassword(passwd);
     spiceSession->setUri(uri);
     return spiceSession->openSession();
 }

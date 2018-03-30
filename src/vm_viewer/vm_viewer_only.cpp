@@ -99,26 +99,23 @@ void VM_Viewer_Only::parseURL()
         QSettings vv_file(url, QSettings::IniFormat);
         vv_file.beginGroup("virt-viewer");
         // host, port/ssh-port
-        QVariantMap _data;
-        foreach (QString _key, vv_file.allKeys()) {
-            _data.insert(_key, vv_file.value(_key));
-        };
-        vv_file.endGroup();
-        host = _data.value("host").toString();
-        user = _data.value("username", "root").toString();
-        if ( !_data.value("ssh-port").toString().isEmpty() ) {
-            port = _data.value("ssh-port").toString();
+        host = vv_file.value("host").toString();
+        user = vv_file.value("username", "root").toString();
+        if ( !vv_file.value("ssh-port").toString().isEmpty() ) {
+            port = vv_file.value("ssh-port").toString();
             transport = "ssh";
-        } else if ( !_data.value("port").toString().isEmpty() ) {
-            port = _data.value("port").toString();
+        } else if ( !vv_file.value("port").toString().isEmpty() ) {
+            port = vv_file.value("port").toString();
         };
+        passwd = vv_file.value("password").toString();
+        vv_file.endGroup();
         if ( !port.isEmpty() ) {
             host.append(":").append(port);
         };
         port.clear();
-        _data.clear();
         vv_file.beginGroup("graphics");
         // (addr, port)/socket
+        QVariantMap _data;
         foreach (QString _key, vv_file.allKeys()) {
             _data.insert(_key, vv_file.value(_key));
         };
@@ -147,6 +144,7 @@ void VM_Viewer_Only::parseURL()
             addr        = _data.value("addr").toString();
             port        = _data.value("port").toString();
             socket      = _data.value("socket").toString();
+            passwd      = _data.value("passwd").toString();
         } else {
             // address has usual parameters only
             // `host` will parsed later in init()

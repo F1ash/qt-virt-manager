@@ -132,7 +132,7 @@ void Spice_Viewer_Only::initGraphicWidget()
     //QTextStream s(stdout);
     //s<<"address: "<<addr<<":"<<port<<endl;
     QString _uri = QString("spice://%1:%2").arg(addr).arg(port);
-    spiceWdg->connectToSpiceSource(_uri);
+    spiceWdg->connectToSpiceSource(_uri, passwd);
     spiceWdg->setNewSize(around_size.width(), around_size.height());
 }
 

@@ -55,7 +55,7 @@ public:
     SSH_Tunnel      *sshTunnelThread = nullptr;
 
     QString          user, host, transport,
-                     addr, port, socket;
+                     addr, port, socket, passwd;
 
 signals:
     void             initGraphic();

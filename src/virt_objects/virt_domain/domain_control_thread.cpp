@@ -209,7 +209,7 @@ Result DomControlThread::getDomainData0()
 {
     Result result;
     QString activeDomainXmlDesc, displayType, addr,
-            port, transport, socket, host, user;
+            port, transport, socket, host, user, passwd;
     QVariantMap domainDesc;
     QString name = task.object;
     result.name  = name;
@@ -261,6 +261,7 @@ Result DomControlThread::getDomainData0()
         displayType.append( graph.attribute("type").toLower() );
         port.append( graph.attribute("port") );
         socket.append( graph.attribute("socket") );
+        passwd.append( graph.attribute("passwd") );
         QDomElement listen = graph.firstChildElement("listen");
         if ( !listen.isNull() ) {
             addr.append( listen.attribute("address") );
@@ -271,9 +272,9 @@ Result DomControlThread::getDomainData0()
     };
     domainDesc.insert("DomainType", _type);
     domainDesc.insert("DisplayType", displayType);
-    domainDesc.insert("Path", QString("%1;%2;%3;%4;%5;%6")
+    domainDesc.insert("Path", QString("%1;%2;%3;%4;%5;%6;%7")
             .arg(user).arg(host).arg(transport)
-            .arg(addr).arg(port).arg(socket));
+            .arg(addr).arg(port).arg(socket).arg(passwd));
     result.data.append(domainDesc);
     return result;
 }
@@ -281,7 +282,7 @@ Result DomControlThread::getDomainData1()
 {
     Result result;
     QString activeDomainXmlDesc, displayType, addr,
-            port, socket, transport, host, user;
+            port, socket, transport, host, user, passwd;
     QString name = task.object;
     result.name  = name;
     if ( task.srcConnPtr==nullptr ) {
@@ -332,6 +333,7 @@ Result DomControlThread::getDomainData1()
         displayType.append( graph.attribute("type").toLower() );
         port.append( graph.attribute("port") );
         socket.append( graph.attribute("socket") );
+        passwd.append( graph.attribute("passwd") );
         QDomElement listen = graph.firstChildElement("listen");
         if ( !listen.isNull() ) {
             addr.append( listen.attribute("address") );
@@ -345,6 +347,9 @@ Result DomControlThread::getDomainData1()
     if ( !socket.isEmpty() ) {
         url.append("/?");
         QString _ext = QString("socket=%1").arg(socket);
+        if ( !passwd.isEmpty() ) {
+            _ext.append(QString("&passwd=%1").arg(passwd));
+        };
         if ( !user.isEmpty() ) {
             _ext.prepend("&");
             _ext.prepend(QString("user=%1").arg(user));
@@ -357,6 +362,9 @@ Result DomControlThread::getDomainData1()
     } else if ( !addr.isEmpty() && !port.isEmpty() ) {
         url.append("/?");
         QString _ext = QString("addr=%1&port=%2").arg(addr).arg(port);
+        if ( !passwd.isEmpty() ) {
+            _ext.append(QString("&passwd=%1").arg(passwd));
+        };
         if ( !user.isEmpty() ) {
             _ext.prepend("&");
             _ext.prepend(QString("user=%1").arg(user));
