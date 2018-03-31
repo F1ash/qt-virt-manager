@@ -52,10 +52,10 @@ void SSH_Tunnel::run()
             continue;
         };
         listenSocket->close();
-        listenSocket->deleteLater();
         connected = true;
         break;
     };
+    listenSocket->deleteLater();
 
     emit established(viewerPort);
     //s<< "established: "<< viewerPort <<" State: "<<ssh_tunnel->state();
@@ -64,8 +64,9 @@ void SSH_Tunnel::run()
 }
 void SSH_Tunnel::stop()
 {
+    if ( ssh_tunnel==Q_NULLPTR ) return;
     if ( ssh_tunnel->isOpen() ) {
         ssh_tunnel->close();
+        ssh_tunnel->kill();
     };
-    ssh_tunnel->kill();
 }

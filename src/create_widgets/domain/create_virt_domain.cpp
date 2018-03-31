@@ -280,7 +280,7 @@ bool CreateVirtDomain::buildXMLDescription()
         if ( nullptr==Wdg ) continue;
         tabWidget->setCurrentWidget(Wdg);
         QDomNodeList list;
-        if ( key=="Devices" ) {
+        if ( key==tr("Devices") ) {
             tabWidget->setCurrentWidget(Wdg);
             bool ret = Wdg->closeDataEdit();
             if ( !ret ) return false;

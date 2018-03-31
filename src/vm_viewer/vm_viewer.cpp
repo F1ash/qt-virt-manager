@@ -20,6 +20,7 @@ VM_Viewer::VM_Viewer(
     setMinimumSize(100, 100);
     setContentsMargins(0, 0, 0, 0);
     viewerToolBar = new ViewerToolBar(this);
+    viewerToolBar->setAllowedAreas(Qt::NoToolBarArea);
     viewerToolBar->hide();
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const Act_Param&)),
@@ -57,9 +58,10 @@ VM_Viewer::~VM_Viewer()
         reinitTimerId = 0;
     };
     disconnectFromVirtDomain();
-    if ( sshTunnelThread!=nullptr ) {
-        sshTunnelThread->stop();
-    };
+    // double call segfault
+    //if ( sshTunnelThread!=nullptr ) {
+    //    sshTunnelThread->stop();
+    //};
     //qDebug()<<"VM_Viewer destroyed";
 }
 void VM_Viewer::init()

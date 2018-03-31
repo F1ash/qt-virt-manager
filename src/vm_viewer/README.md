@@ -18,11 +18,11 @@ VNC/Spice protocols are supports.
 
 `extensions` is a string with additional parameters for using VM graphics with internal `address:port`
 
-     [transport=ssh&user=<USER>&]addr=<IP>&port=<NUMBER>
+     [transport=ssh&user=<USER>&]addr=<IP>&port=<NUMBER>[&passwd=<PASSWORD>]
 
 or with internal `socket`
 
-    [transport=ssh&user=<USER>&]socket=/path/to/socket
+    [transport=ssh&user=<USER>&]socket=/path/to/socket[&passwd=<PASSWORD>]
 
 **Path_to_connection_file**
 
@@ -58,6 +58,7 @@ Additional group **`[graphics]`** contains keys for VM graphics with internal ac
     port=45678
     ssh-port=22022
     username=root
+    password=%PASSWD
 
     [graphics]
     address=192.168.1.3
@@ -72,6 +73,7 @@ In that example `port` will be ignored.
     host=example.com
     ssh-port=22022
     username=root
+    password=%PASSWD
 
     [graphics]
     address=192.168.1.3

@@ -1,4 +1,5 @@
 #include "vm_viewer_only.h"
+//#include <QTextStream>
 
 VM_Viewer_Only::VM_Viewer_Only(
         QWidget          *parent,
@@ -13,6 +14,7 @@ VM_Viewer_Only::VM_Viewer_Only(
     setWindowIcon(QIcon::fromTheme("remote-desktop-viewer"));
 
     viewerToolBar = new ViewerToolBar(this);
+    viewerToolBar->setAllowedAreas(Qt::NoToolBarArea);
     viewerToolBar->hide();
     addToolBar(Qt::TopToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const Act_Param&)),
@@ -93,6 +95,8 @@ void VM_Viewer_Only::init()
 }
 void VM_Viewer_Only::parseURL()
 {
+    //QTextStream s(stdout);
+    //s<< url << endl;
     if ( url.endsWith(".vv") ) {
 // See for details:
 // https://github.com/SPICE/virt-viewer/blob/master/man/remote-viewer.pod#connection-file
@@ -115,22 +119,15 @@ void VM_Viewer_Only::parseURL()
         port.clear();
         vv_file.beginGroup("graphics");
         // (addr, port)/socket
-        QVariantMap _data;
-        foreach (QString _key, vv_file.allKeys()) {
-            _data.insert(_key, vv_file.value(_key));
-        };
-        vv_file.endGroup();
         // if 'socket' key is defined then (addr\port) data
         // will be ignored anyway
-        addr    = _data.value("address").toString();
-        port    = _data.value("port").toString();
-        socket  = _data.value("socket").toString();
+        addr    = vv_file.value("address").toString();
+        port    = vv_file.value("port").toString();
+        socket  = vv_file.value("socket").toString();
+        vv_file.endGroup();
     } else if ( url.split("://", QString::SkipEmptyParts).count()>1 ) {
         QStringList parts1 = url.split("://").at(1).split("/");
         host = parts1.first();
-        if ( host.isEmpty() ) {
-            host.append("localhost.localdomain");
-        };
         QStringList _parts = url.split("/?");
         if ( _parts.count()>1 ) {
             // address has extra parameters
@@ -145,6 +142,11 @@ void VM_Viewer_Only::parseURL()
             port        = _data.value("port").toString();
             socket      = _data.value("socket").toString();
             passwd      = _data.value("passwd").toString();
+            _data.clear();
+            if ( !addr.isEmpty() && !port.isEmpty() ) {
+                host.clear();
+                host.append(addr).append(":").append(port);
+            };
         } else {
             // address has usual parameters only
             // `host` will parsed later in init()
