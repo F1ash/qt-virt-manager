@@ -37,9 +37,9 @@ public:
             int display,
             int button_state);
 
-    void inputsButtonPress(int button, int button_state);
+    void inputsButtonPress(uint button, uint button_state);
 
-    void inputsButtonRelease(int button, int button_state);
+    void inputsButtonRelease(uint button, uint button_state);
 
     // keyboard
     // SPICE protocol use PC AT scan codes
@@ -49,8 +49,8 @@ public:
     void inputsSetKeyLocks(uint locks);
 
     // Qt Virtual Keys (platform independant)
-    void inputsQKeyPress(int key);
-    void inputsQKeyRelease(int key);
+    void inputsQKeyPress(uint key);
+    void inputsQKeyRelease(uint key);
 
 signals:
     void inputsModifiers();

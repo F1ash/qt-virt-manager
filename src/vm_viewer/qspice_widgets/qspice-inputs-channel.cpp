@@ -48,12 +48,12 @@ void QSpiceInputsChannel::inputsPosition(
     spice_inputs_position((SpiceInputsChannel *) gobject, x, y, display, button_state);
 }
 
-void QSpiceInputsChannel::inputsButtonPress(int button, int button_state)
+void QSpiceInputsChannel::inputsButtonPress(uint button, uint button_state)
 {
     spice_inputs_button_press((SpiceInputsChannel *) gobject, button, button_state);
 }
 
-void QSpiceInputsChannel::inputsButtonRelease(int button, int button_state)
+void QSpiceInputsChannel::inputsButtonRelease(uint button, uint button_state)
 {
     spice_inputs_button_release((SpiceInputsChannel *) gobject, button, button_state);
 }
@@ -273,7 +273,7 @@ void InitScanCodeMap()
 }
 
 // Qt Virtual Keys (platform independant)
-QScanCodeArray QKeyToScanCode(int key)
+QScanCodeArray QKeyToScanCode(uint key)
 {
     if (scanCodeHash.empty())
         InitScanCodeMap();
@@ -285,17 +285,17 @@ QScanCodeArray QKeyToScanCode(int key)
         return it.value();
 }
 
-void QSpiceInputsChannel::inputsQKeyPress(int key)
+void QSpiceInputsChannel::inputsQKeyPress(uint key)
 {
     QScanCodeArray scanCode = QKeyToScanCode(key);
-    for (int i = 0; i < scanCode.count(); i++)
+    for (uint i = 0; i < scanCode.count(); i++)
         inputsKeyPress(scanCode[i]);
 }
 
-void QSpiceInputsChannel::inputsQKeyRelease(int key)
+void QSpiceInputsChannel::inputsQKeyRelease(uint key)
 {
     QScanCodeArray scanCode = QKeyToScanCode(key);
-    for (int i = 0; i < scanCode.count(); i++)
+    for (uint i = 0; i < scanCode.count(); i++)
         inputsKeyRelease(scanCode[i]);
 
 }
