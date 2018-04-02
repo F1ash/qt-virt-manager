@@ -22,7 +22,7 @@ VM_Viewer::VM_Viewer(
     viewerToolBar = new ViewerToolBar(this);
     viewerToolBar->setAllowedAreas(Qt::NoToolBarArea);
     viewerToolBar->hide();
-    addToolBar(Qt::TopToolBarArea, viewerToolBar);
+    addToolBar(Qt::NoToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const Act_Param&)),
             this, SLOT(resendExecMethod(const Act_Param&)));
 
@@ -82,7 +82,7 @@ void VM_Viewer::init()
         startCloseProcess();
     } else {
         useFullScreen();
-        if ( !transport.contains("ssh", Qt::CaseInsensitive) ) {
+        if ( transport.compare("ssh")!=0 ) {
             emit initGraphic();
         } else {
             // need ssh tunnel
@@ -436,10 +436,17 @@ void VM_Viewer::startSSHTunnel(QString _user, QString _graphicsParam)
     sshTunnelThread->setData(_data);
     sshTunnelThread->start();
 }
-void VM_Viewer::useFullScreen() {
+void VM_Viewer::useFullScreen()
+{
     actFullScreen = new QShortcut(
                 QKeySequence(tr("Shift+F11", "View|Full Screen")),
                 this);
     connect(actFullScreen, SIGNAL(activated()),
             SLOT(fullScreenTriggered()));
+}
+void VM_Viewer::moveEvent(QMoveEvent *ev)
+{
+    Q_UNUSED(ev)
+    //viewerToolBar->move(mapToGlobal(toolBarPoint));
+    startAnimatedHide();
 }

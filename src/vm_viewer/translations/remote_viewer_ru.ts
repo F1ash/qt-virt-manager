@@ -49,17 +49,29 @@
         <source>If you have SSH access to remote host
 and an internal address for VM graphics
 then you can use Remote Viewer with such path:
-&lt;vnc|spice&gt;://HOST[:PORT]/?transport=ssh&amp;user=&lt;USER&gt;&amp;addr=&lt;IP&gt;&amp;port=&lt;NUMBER&gt;
+&lt;vnc|spice&gt;://[HOST[:PORT]]/?
+[transport=ssh&amp;user=&lt;USER&gt;&amp;]
+addr=&lt;IP&gt;&amp;port=&lt;NUMBER&gt;
+[&amp;passwd=&lt;PASSWORD&gt;]
 
 If you have graphic socket on local or remote host:
-&lt;vnc|spice&gt;://[HOST[:PORT]]/?[transport=ssh&amp;user=&lt;USER&gt;&amp;]socket=/path/to/socket</source>
+&lt;vnc|spice&gt;://[HOST[:PORT]]/?
+[transport=ssh&amp;user=&lt;USER&gt;&amp;]
+socket=/path/to/socket
+[&amp;passwd=&lt;PASSWORD&gt;]</source>
         <translation>Если у вас есть SSH доступ к удалённому хосту
 и внутренний адрес грфики ВМ,
 то вы можете использовать Удалённый Просмотрщик так:
-&lt;vnc|spice&gt;://HOST[:PORT]/?transport=ssh&amp;user=&lt;USER&gt;&amp;addr=&lt;IP&gt;&amp;port=&lt;NUMBER&gt;
+&lt;vnc|spice&gt;://[HOST[:PORT]]/?
+[transport=ssh&amp;user=&lt;USER&gt;&amp;]
+addr=&lt;IP&gt;&amp;port=&lt;NUMBER&gt;
+[&amp;passwd=&lt;PASSWORD&gt;]
 
 Если у ВМ есть графический сокет на локальном или удалённом хосте:
-&lt;vnc|spice&gt;://[HOST[:PORT]]/?[transport=ssh&amp;user=&lt;USER&gt;&amp;]socket=/path/to/socket</translation>
+&lt;vnc|spice&gt;://[HOST[:PORT]]/?
+[transport=ssh&amp;user=&lt;USER&gt;&amp;]
+socket=/path/to/socket
+[&amp;passwd=&lt;PASSWORD&gt;]</translation>
     </message>
 </context>
 <context>
@@ -343,20 +355,24 @@ If you have graphic socket on local or remote host:
 <context>
     <name>QSpiceUsbDeviceManager</name>
     <message>
-        <source>connect to guest.</source>
-        <translation>соединиться к ВМ.</translation>
-    </message>
-    <message>
         <source>connected to guest already.</source>
-        <translation>уже соединён с ВМ.</translation>
-    </message>
-    <message>
-        <source>disconnect from guest.</source>
-        <translation>отсоединиться от ВМ.</translation>
+        <translation>уже подключено к гостю.</translation>
     </message>
     <message>
         <source>disconnected from guest already.</source>
-        <translation>уже отсоединён от ВМ.</translation>
+        <translation>уже отключено от гостя.</translation>
+    </message>
+    <message>
+        <source>connection impossible.</source>
+        <translation>подключение невозможно.</translation>
+    </message>
+    <message>
+        <source>connected to guest.</source>
+        <translation>подключено к гостю.</translation>
+    </message>
+    <message>
+        <source>disconnected from guest.</source>
+        <translation>отключено от гостя.</translation>
     </message>
 </context>
 <context>
@@ -411,6 +427,10 @@ If you have graphic socket on local or remote host:
     <message>
         <source>Save Image to</source>
         <translation>Сохранить изображение в</translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation>Информация</translation>
     </message>
 </context>
 <context>

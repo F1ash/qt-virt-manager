@@ -15,6 +15,7 @@
 #include <QPoint>
 #include <QShortcut>
 #include <QTimerEvent>
+#include <QMoveEvent>
 #include <QSettings>
 #include "viewer_toolbar.h"
 #include "ssh_tunnel/ssh_tunnel.h"
@@ -97,6 +98,7 @@ private slots:
     void             hideToolBar();
     void             setNewPosition(const QPoint&);
     void             sshThreadFinished();
+    void             moveEvent(QMoveEvent*);
 };
 
 #endif // VM_VIEWER_ONLY_H

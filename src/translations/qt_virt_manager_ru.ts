@@ -444,10 +444,6 @@ Other parameters of network you can change later in Network Editor.</source>
         <translation>код результата закрытия: %1</translation>
     </message>
     <message>
-        <source>connect is nullptr</source>
-        <translation type="obsolete">с</translation>
-    </message>
-    <message>
         <source>Connection to the Hypervisor is failed.</source>
         <translation>Соединение к гипервизору не успешно.</translation>
     </message>
@@ -471,10 +467,6 @@ Other parameters of network you can change later in Network Editor.</source>
     <message>
         <source>connection pointer is NULL</source>
         <translation>указатель соединения -- NULL</translation>
-    </message>
-    <message>
-        <source>connection is opened: %1</source>
-        <translation type="obsolete">соединение открыто: %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Secert %2: %3
@@ -1137,12 +1129,6 @@ never stored persistently</source>
         <translation>Частный</translation>
     </message>
     <message>
-        <source>The value of the secret must not be revealed to any caller of libvirt,
-nor to any other node</source>
-        <translation type="vanished">Содержимое секрета не должно быть раскрыто ни любому лицу, вызывающему libvirt,
-ни любому другому узлу</translation>
-    </message>
-    <message>
         <source>Enter secret value/phrase</source>
         <translation>Введите секретное значение/фразу</translation>
     </message>
@@ -1345,98 +1331,6 @@ Save last changes?</source>
     <message>
         <source>Del Device</source>
         <translation>Удалить устройство</translation>
-    </message>
-    <message>
-        <source>Disk %1</source>
-        <translation type="vanished">Диск %1</translation>
-    </message>
-    <message>
-        <source>Network %1</source>
-        <translation type="vanished">Сеть %1</translation>
-    </message>
-    <message>
-        <source>Serial Port %1</source>
-        <translation type="vanished">Серийный порт %1</translation>
-    </message>
-    <message>
-        <source>Parallel Port %1</source>
-        <translation type="vanished">Параллельный порт %1</translation>
-    </message>
-    <message>
-        <source>Console %1</source>
-        <translation type="vanished">Консоль %1</translation>
-    </message>
-    <message>
-        <source>Channel %1</source>
-        <translation type="vanished">Канал %1</translation>
-    </message>
-    <message>
-        <source>SmartCard %1</source>
-        <translation type="vanished">СмартКарта %1</translation>
-    </message>
-    <message>
-        <source>Input %1</source>
-        <translation type="vanished">Ввод %1</translation>
-    </message>
-    <message>
-        <source>Hub %1</source>
-        <translation type="vanished">Хаб %1</translation>
-    </message>
-    <message>
-        <source>Video %1</source>
-        <translation type="vanished">Видео %1</translation>
-    </message>
-    <message>
-        <source>Sound %1</source>
-        <translation type="vanished">Звук %1</translation>
-    </message>
-    <message>
-        <source>Host Device %1</source>
-        <translation type="vanished">Устройство Хоста %1</translation>
-    </message>
-    <message>
-        <source>Display %1</source>
-        <translation type="vanished">Дисплей %1</translation>
-    </message>
-    <message>
-        <source>USB Redirector %1</source>
-        <translation type="vanished">USB Перенаправление %1</translation>
-    </message>
-    <message>
-        <source>Filesystem %1</source>
-        <translation type="vanished">Файловая система %1</translation>
-    </message>
-    <message>
-        <source>Controller %1</source>
-        <translation type="vanished">Контроллер %1</translation>
-    </message>
-    <message>
-        <source>Emulator</source>
-        <translation type="vanished">Эмулятор</translation>
-    </message>
-    <message>
-        <source>WatchDog %1</source>
-        <translation type="vanished">WatchDog %1</translation>
-    </message>
-    <message>
-        <source>MemBalloon %1</source>
-        <translation type="vanished">MemBalloon %1</translation>
-    </message>
-    <message>
-        <source>RNG %1</source>
-        <translation type="vanished">Рандомайзер %1</translation>
-    </message>
-    <message>
-        <source>TPM %1</source>
-        <translation type="vanished">TPM %1</translation>
-    </message>
-    <message>
-        <source>NVRAM</source>
-        <translation type="vanished">NVRAM</translation>
-    </message>
-    <message>
-        <source>Panic</source>
-        <translation type="vanished">Panic</translation>
     </message>
 </context>
 <context>
@@ -1655,14 +1549,6 @@ is defined.</source>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 Undefined.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 удалена.</translation>
-    </message>
-    <message>
-        <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain autostart %2 Set.</source>
-        <translation type="obsolete">&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain autostart %2 Set.</translation>
-    </message>
-    <message>
-        <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 XML&apos;ed</source>
-        <translation type="obsolete">&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Вирт.машина %2 XML&apos;на.</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Domain %2 Migrated.</source>
@@ -1930,10 +1816,6 @@ Copy to Clipboard</source>
 Copy to Clipboard</source>
         <translation>Поддержать BitcoinCash-ем
 Копировать в Clipboard</translation>
-    </message>
-    <message>
-        <source>don&apos;t show again</source>
-        <translation type="vanished">не показывать снова</translation>
     </message>
 </context>
 <context>
@@ -2211,17 +2093,29 @@ to the named device only</source>
         <source>If you have SSH access to remote host
 and an internal address for VM graphics
 then you can use Remote Viewer with such path:
-&lt;vnc|spice&gt;://HOST[:PORT]/?transport=ssh&amp;user=&lt;USER&gt;&amp;addr=&lt;IP&gt;&amp;port=&lt;NUMBER&gt;
+&lt;vnc|spice&gt;://[HOST[:PORT]]/?
+[transport=ssh&amp;user=&lt;USER&gt;&amp;]
+addr=&lt;IP&gt;&amp;port=&lt;NUMBER&gt;
+[&amp;passwd=&lt;PASSWORD&gt;]
 
 If you have graphic socket on local or remote host:
-&lt;vnc|spice&gt;://[HOST[:PORT]]/?[transport=ssh&amp;user=&lt;USER&gt;&amp;]socket=/path/to/socket</source>
+&lt;vnc|spice&gt;://[HOST[:PORT]]/?
+[transport=ssh&amp;user=&lt;USER&gt;&amp;]
+socket=/path/to/socket
+[&amp;passwd=&lt;PASSWORD&gt;]</source>
         <translation>Если у вас есть SSH доступ к удалённому хосту
 и внутренний адрес к графике ВМ,
 то вы можете использовать Удалённый Просмотрщик так:
-&lt;vnc|spice&gt;://HOST[:PORT]/?transport=ssh&amp;user=&lt;USER&gt;&amp;addr=&lt;IP&gt;&amp;port=&lt;NUMBER&gt;
+&lt;vnc|spice&gt;://[HOST[:PORT]]/?
+[transport=ssh&amp;user=&lt;USER&gt;&amp;]
+addr=&lt;IP&gt;&amp;port=&lt;NUMBER&gt;
+[&amp;passwd=&lt;PASSWORD&gt;]
 
 Если у ВМ есть графический сокет на локальном или удалённом хосте:
-&lt;vnc|spice&gt;://[HOST[:PORT]]/?[transport=ssh&amp;user=&lt;USER&gt;&amp;]socket=/path/to/socket</translation>
+&lt;vnc|spice&gt;://[HOST[:PORT]]/?
+[transport=ssh&amp;user=&lt;USER&gt;&amp;]
+socket=/path/to/socket
+[&amp;passwd=&lt;PASSWORD&gt;]</translation>
     </message>
 </context>
 <context>
@@ -2459,10 +2353,6 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс %2 запущен.</translation>
     </message>
     <message>
-        <source>don&apos;t</source>
-        <translation type="vanished">не</translation>
-    </message>
-    <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 destroyed.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Интерфейс %2 остановлен.</translation>
     </message>
@@ -2599,10 +2489,6 @@ is defined.</source>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Open PTY Error...</source>
         <translation>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Ошибка открытия PTY...</translation>
-    </message>
-    <message>
-        <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Stream Registation success. PTY opened. Terminal is active.</source>
-        <translation type="obsolete">В &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Stream Registation success. PTY opened. Terminal is active.</translation>
     </message>
     <message>
         <source>In &apos;&lt;b&gt;%1&lt;/b&gt;&apos;: Stream Registration success. PTY opened. Terminal is active.</source>
@@ -3244,10 +3130,6 @@ is defined.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сетевой фильтр %2 удалён.</translation>
     </message>
     <message>
-        <source>don&apos;t</source>
-        <translation type="vanished">не</translation>
-    </message>
-    <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; NWFilter %2 XML&apos;ed.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сетевой фильтр %2 XML&apos;ирован.</translation>
     </message>
@@ -3308,10 +3190,6 @@ is defined.</source>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network %2 Started.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Сеть %2 запущена.</translation>
-    </message>
-    <message>
-        <source>don&apos;t</source>
-        <translation type="vanished">не</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Network %2 Destroyed.</source>
@@ -3818,20 +3696,24 @@ Ctrl+Alt+G</translation>
 <context>
     <name>QSpiceUsbDeviceManager</name>
     <message>
-        <source>connect to guest.</source>
-        <translation>соединиться к ВМ.</translation>
-    </message>
-    <message>
         <source>connected to guest already.</source>
-        <translation>уже соединён к ВМ.</translation>
-    </message>
-    <message>
-        <source>disconnect from guest.</source>
-        <translation>отсоединиться от ВМ.</translation>
+        <translation>уже подключен к ВМ.</translation>
     </message>
     <message>
         <source>disconnected from guest already.</source>
-        <translation>уже отсоединён от ВМ.</translation>
+        <translation>уже отключен от ВМ.</translation>
+    </message>
+    <message>
+        <source>connection impossible.</source>
+        <translation>подключение невозможно.</translation>
+    </message>
+    <message>
+        <source>connected to guest.</source>
+        <translation>подключено к гостю.</translation>
+    </message>
+    <message>
+        <source>disconnected from guest.</source>
+        <translation>отключено от гостя.</translation>
     </message>
 </context>
 <context>
@@ -3886,6 +3768,10 @@ Ctrl+Alt+G</translation>
     <message>
         <source>Save Image to</source>
         <translation>Сохранить изображение в</translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation>Информация</translation>
     </message>
 </context>
 <context>
@@ -4213,10 +4099,6 @@ is defined.</source>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Secret %2 Undefined.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Секрет %2 удалён.</translation>
-    </message>
-    <message>
-        <source>don&apos;t</source>
-        <translation type="vanished">не</translation>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Secret %2 XML&apos;ed.</source>
@@ -4560,10 +4442,6 @@ is Defined.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Пул хранилищ %2 запущен.</translation>
     </message>
     <message>
-        <source>don&apos;t</source>
-        <translation type="vanished">не</translation>
-    </message>
-    <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StoragePool %2 Destroyed.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Пул хранилищ %2 остановлен.</translation>
     </message>
@@ -4692,10 +4570,6 @@ is created.</source>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; StorageVol %2 Deleted.</source>
         <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Хранилище %2 удалено.</translation>
-    </message>
-    <message>
-        <source>don&apos;t</source>
-        <translation type="vanished">не</translation>
     </message>
     <message>
         <source>WriteError after (%2): %1 bytes</source>
@@ -6275,10 +6149,6 @@ created by the external snapshot
     <message>
         <source>Driver:</source>
         <translation>Драйвер:</translation>
-    </message>
-    <message>
-        <source>WrPolicy:</source>
-        <translation type="obsolete">Политка записи (опционально):</translation>
     </message>
     <message>
         <source>Format:</source>

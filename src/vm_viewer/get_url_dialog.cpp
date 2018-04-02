@@ -137,9 +137,15 @@ void GetURLDialog::showInfo()
                 tr("If you have SSH access to remote host\n\
 and an internal address for VM graphics\n\
 then you can use Remote Viewer with such path:\n\
-<vnc|spice>://HOST[:PORT]/?[transport=ssh&user=<USER>&]addr=<IP>&port=<NUMBER>[&passwd=<PASSWORD>]\n\
+<vnc|spice>://[HOST[:PORT]]/?\n\
+[transport=ssh&user=<USER>&]\n\
+addr=<IP>&port=<NUMBER>\n\
+[&passwd=<PASSWORD>]\n\
 \nIf you have graphic socket on local or remote host:\n\
-<vnc|spice>://[HOST[:PORT]]/?[transport=ssh&user=<USER>&]socket=/path/to/socket[&passwd=<PASSWORD>]"),
+<vnc|spice>://[HOST[:PORT]]/?\n\
+[transport=ssh&user=<USER>&]\n\
+socket=/path/to/socket\n\
+[&passwd=<PASSWORD>]"),
                 QMessageBox::Ok);
 }
 void GetURLDialog::urlMenuRequested(const QPoint &pos)

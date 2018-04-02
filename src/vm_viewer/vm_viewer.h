@@ -15,6 +15,7 @@
 #include <QPoint>
 #include <QShortcut>
 #include <QTimerEvent>
+#include <QMoveEvent>
 #include "viewer_toolbar.h"
 #include "virt_objects/virt_entity_config.h"
 #include "create_widgets/snapshot/create_snapshot_dialog.h"
@@ -113,6 +114,7 @@ private slots:
     void             hideToolBar();
     void             setNewPosition(const QPoint&);
     void             sshThreadFinished();
+    void             moveEvent(QMoveEvent*);
 };
 
 #endif // VM_VIEWER_H

@@ -31,6 +31,7 @@ extern "C" {
 #include <QDate>
 #include <QFileDialog>
 #include <QPainter>
+#include <QMessageBox>
 
 #define MARGIN 0
 
@@ -632,6 +633,10 @@ void QSpiceWidget::usbDevError(QString &dev, QString &err)
             .arg(dev).arg(err);
     emit errMsg(_msg);
     //qDebug()<<"usbDevError"<< dev<< err;
+    QMessageBox::information(
+                this,
+                tr("Info"),
+                _msg);
 }
 
 void QSpiceWidget::usbDevRemoved(QString &dev)

@@ -16,7 +16,7 @@ VM_Viewer_Only::VM_Viewer_Only(
     viewerToolBar = new ViewerToolBar(this);
     viewerToolBar->setAllowedAreas(Qt::NoToolBarArea);
     viewerToolBar->hide();
-    addToolBar(Qt::TopToolBarArea, viewerToolBar);
+    addToolBar(Qt::NoToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const Act_Param&)),
             this, SLOT(resendExecMethod(const Act_Param&)));
 
@@ -59,9 +59,10 @@ VM_Viewer_Only::~VM_Viewer_Only()
         reinitTimerId = 0;
     };
     disconnectFromVirtDomain();
-    if ( sshTunnelThread!=nullptr ) {
-        sshTunnelThread->stop();
-    };
+    // double call segfault
+    //if ( sshTunnelThread!=nullptr ) {
+    //    sshTunnelThread->stop();
+    //};
     //qDebug()<<"VM_Viewer_Only destroyed";
 }
 void VM_Viewer_Only::init()
@@ -82,7 +83,7 @@ void VM_Viewer_Only::init()
         //s << "failed" << endl;
     } else {
         useFullScreen();
-        if ( !transport.contains("ssh", Qt::CaseInsensitive) ) {
+        if ( transport.compare("ssh")!=0 ) {
             QStringList _ADDR = host.split(":");
             addr = _ADDR.first();
             port = _ADDR.last();
@@ -128,6 +129,9 @@ void VM_Viewer_Only::parseURL()
     } else if ( url.split("://", QString::SkipEmptyParts).count()>1 ) {
         QStringList parts1 = url.split("://").at(1).split("/");
         host = parts1.first();
+        if ( host.isEmpty() ) {
+            host.append("localhost.localdomain");
+        };
         QStringList _parts = url.split("/?");
         if ( _parts.count()>1 ) {
             // address has extra parameters
@@ -144,8 +148,10 @@ void VM_Viewer_Only::parseURL()
             passwd      = _data.value("passwd").toString();
             _data.clear();
             if ( !addr.isEmpty() && !port.isEmpty() ) {
-                host.clear();
-                host.append(addr).append(":").append(port);
+                if ( transport.compare("ssh")!=0 ) {
+                    host.clear();
+                    host.append(addr).append(":").append(port);
+                };
             };
         } else {
             // address has usual parameters only
@@ -396,10 +402,17 @@ void VM_Viewer_Only::startSSHTunnel(QString _user, QString _graphicsParam)
     sshTunnelThread->setData(_data);
     sshTunnelThread->start();
 }
-void VM_Viewer_Only::useFullScreen() {
+void VM_Viewer_Only::useFullScreen()
+{
     actFullScreen = new QShortcut(
                 QKeySequence(tr("Shift+F11", "View|Full Screen")),
                 this);
     connect(actFullScreen, SIGNAL(activated()),
             SLOT(fullScreenTriggered()));
+}
+void VM_Viewer_Only::moveEvent(QMoveEvent *ev)
+{
+    Q_UNUSED(ev)
+    //viewerToolBar->move(mapToGlobal(toolBarPoint));
+    startAnimatedHide();
 }
