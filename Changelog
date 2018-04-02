@@ -215,3 +215,13 @@ added MIME info for *.vv files;
 fixed segfault at call *.vv file
     with graphics socket;
 changed Donate dialog;
+
+0.56.86 :
+implemented using `passwd` key for remote host graphics;
+fixed the building of VM's XML description
+....at using not LANG=C;
+fixed the double call (segfault) at using ssh-tunnel;
+fixed the Viewer at using with simple URI;
+dropped the attaching toolbar in Viewer
+    for avoid resizeing loop;
+some fixes and enhancements;

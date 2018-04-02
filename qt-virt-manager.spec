@@ -1,7 +1,7 @@
 %global binname qt5-virt-manager
 
 Name:           qt-virt-manager
-Version:        0.53.83
+Version:        0.56.86
 Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 
@@ -109,6 +109,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-remote-viewer.de
 
 
 %changelog
+* Mon Apr  2 2018 Fl@sh <kaperang07@gmail.com> - 0.56.86-1
+- version updated;
+
 * Thu Mar 15 2018 Fl@sh <kaperang07@gmail.com> - 0.53.83-1
 - version updated;
 

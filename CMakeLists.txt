@@ -98,8 +98,8 @@ endif ()
 
 set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
 set (VERSION_MAJOR   0)
-set (VERSION_MINOR  53)
-set (VERSION_MICRO  83)
+set (VERSION_MINOR  56)
+set (VERSION_MICRO  86)
 
 set (QTERM_UI_SRC
     src/vm_viewer/qterminal/forms/qterminal.ui
