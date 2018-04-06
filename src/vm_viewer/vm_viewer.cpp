@@ -267,7 +267,7 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
     } else if ( params.method==Methods::reconnectToVirtDomain ) {
         reconnectToVirtDomain();
     } else if ( params.method==Methods::sendKeySeqToVirtDomain ) {
-        sendKeySeqToVirtDomain((Qt::Key)params.path.toInt());
+        sendKeySeqToVirtDomain((Qt::Key)params.path.toUInt());
     } else if ( params.method==Methods::getScreenshotFromVirtDomain ) {
         getScreenshotFromVirtDomain();
     } else if ( params.method==Methods::copyFilesToVirtDomain ) {

@@ -40,6 +40,7 @@
     │   ├── qspice_widgets      (wrapper for spice-glib-client)
     │   ├── qterminal           (terminal for LXC viewer)
     │   ├── spice               (Spice Viewer)
+    │   ├── translations        (Translation files for QtRemoteViewer)
     │   ├── vnc                 (VNC Viewer)
     │   └──                     (parent classes for viewers)
     └── wait_thread         (Wait thread for close connections)

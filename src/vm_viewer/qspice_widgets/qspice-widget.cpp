@@ -78,8 +78,9 @@ QSpiceWidget::~QSpiceWidget()
 {
     // set NULL for drop signals from
     // display-channel with changes data
-    if ( display!=nullptr )
+    if ( display!=nullptr ) {
         display->setParentWidget(nullptr);
+    };
     disconnectFromSpiceSource();
 }
 
@@ -107,14 +108,16 @@ void QSpiceWidget::sendKeySequience(Qt::Key key)
 
 void QSpiceWidget::fileCopyAsync(QStringList &fileNames)
 {
-    if ( nullptr!=main )
+    if ( nullptr!=main ) {
         main->fileCopyAsync(fileNames);
+    };
 }
 
 void QSpiceWidget::cancelFileCopyAsync()
 {
-    if ( nullptr!=main )
+    if ( nullptr!=main ) {
         main->cancelFileCopyAsync();
+    };
 }
 
 void QSpiceWidget::copyClipboardDataFromGuest()
@@ -157,8 +160,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
 {
     QSpiceMainChannel * _main =
             dynamic_cast<QSpiceMainChannel *>(channel);
-    if (_main)
-    {
+    if (_main) {
         main = _main;
         connect(main, SIGNAL(channelEvent(int)),
                 this, SLOT(channelEvent(int)));
@@ -188,8 +190,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
 
     QSpiceDisplayChannel *_display =
             dynamic_cast<QSpiceDisplayChannel *>(channel);
-    if (_display)
-    {
+    if (_display) {
         display = _display;
         display->setParentWidget((void*)this);
         connect(display, SIGNAL(channelEvent(int)),
@@ -213,8 +214,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
 
     QSpiceInputsChannel * _inputs =
             dynamic_cast<QSpiceInputsChannel *>(channel);
-    if (_inputs)
-    {
+    if (_inputs) {
         inputs = _inputs;
         connect(inputs, SIGNAL(channelEvent(int)),
                 this, SLOT(channelEvent(int)));
@@ -227,8 +227,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
 
     QSpiceCursorChannel * _cursor =
             dynamic_cast<QSpiceCursorChannel *>(channel);
-    if (_cursor)
-    {
+    if (_cursor) {
         cursor = _cursor;
         connect(cursor, SIGNAL(channelEvent(int)),
                 this, SLOT(channelEvent(int)));
@@ -243,8 +242,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
 
     QSpiceSmartcardChannel * _smartcard =
             dynamic_cast<QSpiceSmartcardChannel *>(channel);
-    if (_smartcard)
-    {
+    if (_smartcard) {
         smartcard = _smartcard;
         connect(smartcard, SIGNAL(channelEvent(int)),
                 this, SLOT(channelEvent(int)));
@@ -276,8 +274,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
 
     QSpiceUSBRedirChannel * _usbredir =
             dynamic_cast<QSpiceUSBRedirChannel *>(channel);
-    if (_usbredir)
-    {
+    if (_usbredir) {
         usbredir = _usbredir;
         connect(usbredir, SIGNAL(channelEvent(int)),
                 this, SLOT(channelEvent(int)));
@@ -303,8 +300,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
 
     QSpiceWebDAVChannel * _webdav =
             dynamic_cast<QSpiceWebDAVChannel *>(channel);
-    if (_webdav)
-    {
+    if (_webdav) {
         webdav = _webdav;
         connect(webdav, SIGNAL(channelEvent(int)),
                 this, SLOT(channelEvent(int)));
@@ -317,8 +313,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
 
     QSpicePlaybackChannel * _playback =
             dynamic_cast<QSpicePlaybackChannel *>(channel);
-    if (_playback)
-    {
+    if (_playback) {
         playback = _playback;
         connect(main, SIGNAL(channelEvent(int)),
                 this, SLOT(channelEvent(int)));
@@ -346,8 +341,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
 
     QSpiceRecordChannel * _record =
             dynamic_cast<QSpiceRecordChannel *>(channel);
-    if (_record)
-    {
+    if (_record) {
         record = _record;
         connect(main, SIGNAL(channelEvent(int)),
                 this, SLOT(channelEvent(int)));
@@ -377,8 +371,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
 
 void QSpiceWidget::obstructChannel(int channelType)
 {
-    switch(channelType)
-    {
+    switch(channelType) {
     case SPICE_CHANNEL_MAIN:
         delete main;
         main = nullptr;
@@ -796,34 +789,30 @@ void QSpiceWidget::reloadSmartcardList(void *obj)
 
 int QtButtonToSpice(QMouseEvent *ev)
 {
-    switch (ev->button())
-    {
+    switch (ev->button()) {
     case Qt::LeftButton:
         return SPICE_MOUSE_BUTTON_LEFT;
-
     case Qt::MiddleButton:
         return SPICE_MOUSE_BUTTON_MIDDLE;
-
     case Qt::RightButton:
         return SPICE_MOUSE_BUTTON_RIGHT;
-
     default:
         return SPICE_MOUSE_BUTTON_INVALID;
-    }
+    };
 }
 
 int QtButtonsMaskToSpice(Qt::MouseButtons buttons)
 {
     int mask = 0;
-    if (buttons & Qt::LeftButton)
+    if (buttons & Qt::LeftButton) {
         mask |= SPICE_MOUSE_BUTTON_MASK_LEFT;
-
-    if (buttons & Qt::MiddleButton)
+    };
+    if (buttons & Qt::MiddleButton) {
         mask |= SPICE_MOUSE_BUTTON_MASK_MIDDLE;
-
-    if (buttons & Qt::RightButton)
+    };
+    if (buttons & Qt::RightButton) {
         mask |= SPICE_MOUSE_BUTTON_MASK_RIGHT;
-
+    };
     return mask;
 }
 
@@ -839,8 +828,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     if (! (display && inputs))
         return false;
 
-    if (event->type() == QEvent::MouseMove )
-    {
+    if ( event->type() == QEvent::MouseMove ) {
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         if ( ev==nullptr ) return false;
         //qDebug()<<ev->x()<<ev->y()<<":"
@@ -856,8 +844,9 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         //    d_X = d_Y = 0;
         //};
         QPoint position = ev->pos();//-QPoint(d_X, d_Y);
-        if ( 0<=position.y() && position.y()<= 3 )
+        if ( 0<=position.y() && position.y()<= 3 ) {
             emit boarderTouched();
+        };
         inputs->inputsPosition(
                     //ev->x()*zoom,
                     //ev->y()*zoom,
@@ -866,54 +855,40 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
                     display->getChannelID(),
                     QtButtonsMaskToSpice(ev));
         return true;
-    }
-    else if (event->type() == QEvent::MouseButtonPress)
-    {
+    } else if ( event->type() == QEvent::MouseButtonPress ) {
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         if ( ev==nullptr ) return false;
         inputs->inputsButtonPress(
                     QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
         return true;
-    }
-    else if (event->type() == QEvent::MouseButtonRelease)
-    {
+    } else if ( event->type() == QEvent::MouseButtonRelease ) {
         emit mouseClickedInto();
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
         if ( ev==nullptr ) return false;
         inputs->inputsButtonRelease(
                     QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
         return true;
-    }
-    else if (event->type() == QEvent::KeyPress)
-    {
+    } else if ( event->type() == QEvent::KeyPress ) {
         QKeyEvent *ev = static_cast<QKeyEvent*>(event);
         if ( ev==nullptr ) return false;
         inputs->inputsQKeyPress(ev->key());
         return true;
-    }
-    else if (event->type() == QEvent::KeyRelease)
-    {
+    } else if ( event->type() == QEvent::KeyRelease ) {
         QKeyEvent *ev = static_cast<QKeyEvent*>(event);
         if ( ev==nullptr ) return false;
         inputs->inputsQKeyRelease(ev->key());
         return true;
-    }
-    else if (event->type() == QEvent::MouseButtonDblClick)
-    {
+    } else if ( event->type() == QEvent::MouseButtonDblClick ) {
         inputs->inputsButtonPress(
                     SPICE_MOUSE_BUTTON_LEFT,
                     SPICE_MOUSE_BUTTON_MASK_LEFT);
         inputs->inputsButtonRelease(
-                    SPICE_MOUSE_BUTTON_LEFT,
-                    0);
+                    SPICE_MOUSE_BUTTON_LEFT, 0);
         return true;
-    }
-    else if (event->type() == QEvent::Wheel)
-    {
+    } else if ( event->type() == QEvent::Wheel ) {
         QWheelEvent *ev = static_cast<QWheelEvent*>(event);
         if ( ev==nullptr ) return false;
-        if (ev->delta() > 0)
-        {
+        if (ev->delta() > 0) {
             inputs->inputsButtonPress(
                         SPICE_MOUSE_BUTTON_UP,
                         QtButtonsMaskToSpice(
@@ -922,9 +897,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
                         SPICE_MOUSE_BUTTON_UP,
                         QtButtonsMaskToSpice(
                             QApplication::mouseButtons()));
-        }
-        else
-        {
+        } else {
             inputs->inputsButtonPress(
                         SPICE_MOUSE_BUTTON_DOWN,
                         QtButtonsMaskToSpice(
@@ -933,15 +906,11 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
                         SPICE_MOUSE_BUTTON_DOWN,
                         QtButtonsMaskToSpice(
                             QApplication::mouseButtons()));
-
-        }
+        };
         ev->accept();
         return true;
-    }
-
-
+    };
     return false;
-
 }
 
 void QSpiceWidget::resizeEvent ( QResizeEvent * event )

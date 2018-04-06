@@ -26,6 +26,8 @@ Requires:       qemu-kvm
 
 # for use SPICE viewer
 Requires:       spice-vdagent
+# for use VNC viewer
+Requires:       krdc-libs
 
 # optional runtime extensions
 %if 0%{?fedora}
@@ -49,6 +51,7 @@ BuildRequires:  glib2-devel
 BuildRequires:  spice-protocol
 BuildRequires:  spice-glib-devel
 BuildRequires:  libvncserver-devel
+BuildRequires:  krdc-devel
 %if 0%{?fedora}
 %global libcacard 1
 BuildRequires:  libcacard-devel

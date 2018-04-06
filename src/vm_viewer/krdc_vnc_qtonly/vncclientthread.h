@@ -34,7 +34,13 @@
     #include <KLocale>
 #endif
 
-#include "remoteview.h"
+#ifdef Q_OS_LINUX
+    #include <krdc/remoteview.h>
+    #include <QUrl>
+    #define KUrl QUrl
+#else
+    #include "remoteview.h"
+#endif
 
 #include <QQueue>
 #include <QThread>

@@ -297,5 +297,4 @@ void QSpiceInputsChannel::inputsQKeyRelease(uint key)
     QScanCodeArray scanCode = QKeyToScanCode(key);
     for (uint i = 0; i < scanCode.count(); i++)
         inputsKeyRelease(scanCode[i]);
-
 }

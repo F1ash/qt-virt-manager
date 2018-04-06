@@ -24,7 +24,6 @@
 #ifndef VNCVIEW_H
 #define VNCVIEW_H
 
-#include "remoteview.h"
 #include "vncclientthread.h"
 
 #ifdef QTONLY

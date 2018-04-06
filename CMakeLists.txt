@@ -47,6 +47,7 @@ else ( BUILD_QT_VERSION STREQUAL 4 )
     set (PROJ_PREFIX qt5)
 endif ( BUILD_QT_VERSION STREQUAL 4 )
 
+message (STATUS "Build on system: ${CMAKE_SYSTEM_NAME}")
 message (STATUS "Build with QT version: ${BUILD_QT_VERSION}")
 message (STATUS "QT4 build: ${QT4_BUILD}")
 message (STATUS "QT5 build: ${QT5_BUILD}")
@@ -1091,25 +1092,29 @@ else ( QT4_BUILD )
 endif ( QT4_BUILD )
 ##
 
-find_package(LibVirt                REQUIRED)
+find_package(LibVirt                        REQUIRED)
 if ( WITH_LXC_SUPPORT )
     if (NOT APPLE)
-        pkg_check_modules(QTERMWIDGET ${TERM_WIDGET_LIB} REQUIRED)
+        pkg_check_modules(
+            QTERMWIDGET ${TERM_WIDGET_LIB}  REQUIRED)
     else (NOT APPLE)
-        find_package(${TERM_WIDGET_LIB} REQUIRED)
+        find_package(${TERM_WIDGET_LIB}     REQUIRED)
     endif (NOT APPLE)
 endif ()
 if ( WITH_VNC_SUPPORT )
-    find_package(LibVNCServer       REQUIRED)
+    find_package(LibVNCServer               REQUIRED)
+    if ( ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
+        find_package(KRDC                   REQUIRED)
+    endif ()
 endif ()
 if ( WITH_SPICE_SUPPORT )
-    find_package(GLib2              REQUIRED)
-    find_package(GObject            REQUIRED)
-    find_package(Gio                REQUIRED)
-    find_package(Spice1             REQUIRED)
-    find_package(SpiceClientGLib2   REQUIRED)
+    find_package(GLib2                      REQUIRED)
+    find_package(GObject                    REQUIRED)
+    find_package(Gio                        REQUIRED)
+    find_package(Spice1                     REQUIRED)
+    find_package(SpiceClientGLib2           REQUIRED)
     if ( WITH_LIBCACARD )
-        find_package(CACard         REQUIRED)
+        find_package(CACard                 REQUIRED)
     endif ()
 endif ()
 
@@ -1122,7 +1127,8 @@ include_directories(
     ${SPICE_CLIENT_GLIB2_INCLUDE_DIRS}
     ${LibVirt_INCLUDE_DIRS}
     ${QTERMWIDGET_INCLUDE_DIRS}
-    ${LIBVNCCLIENT_INCLUDE_DIR}
+    ${LIBVNCCLIENT_INCLUDE_DIRS}
+    ${KRDC_INCLUDE_DIRS}
 )
 set (VIEWER_BUILD_PROJECT_LIBRARIES
           ${BUILD_PROJECT_LIBRARIES})
@@ -1136,6 +1142,7 @@ list(APPEND BUILD_PROJECT_LIBRARIES
     ${Spice1_LIBRARIES}
     ${SPICE_CLIENT_GLIB2_LIBRARIES}
     ${LIBVNCCLIENT_LIBRARIES}
+    ${KRDC_LIBRARIES}
 )
 list(APPEND VIEWER_BUILD_PROJECT_LIBRARIES
     ${GLib2_LIBRARIES}
@@ -1145,6 +1152,7 @@ list(APPEND VIEWER_BUILD_PROJECT_LIBRARIES
     ${Spice1_LIBRARIES}
     ${SPICE_CLIENT_GLIB2_LIBRARIES}
     ${LIBVNCCLIENT_LIBRARIES}
+    ${KRDC_LIBRARIES}
 )
 MESSAGE(STATUS "Found includes :
     ${GLib2_INCLUDE_DIRS}
@@ -1155,7 +1163,8 @@ MESSAGE(STATUS "Found includes :
     ${SPICE_CLIENT_GLIB2_INCLUDE_DIRS}
     ${LibVirt_INCLUDE_DIRS}
     ${QTERMWIDGET_INCLUDE_DIRS}
-    ${LIBVNCCLIENT_INCLUDE_DIRS}"
+    ${LIBVNCCLIENT_INCLUDE_DIRS}
+    ${KRDC_INCLUDE_DIRS}"
 )
 MESSAGE(STATUS "Found BUILD_PROJECT_LIBRARIES: ${BUILD_PROJECT_LIBRARIES}")
 
