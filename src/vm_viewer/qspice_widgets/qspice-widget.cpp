@@ -871,12 +871,20 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     } else if ( event->type() == QEvent::KeyPress ) {
         QKeyEvent *ev = static_cast<QKeyEvent*>(event);
         if ( ev==nullptr ) return false;
-        inputs->inputsQKeyPress(ev->key());
+        if ( ev->modifiers() & Qt::KeypadModifier ) {
+            inputs->inputsQKeypadKeyPress(ev->key());
+        } else {
+            inputs->inputsQKeyPress(ev->key());
+        };
         return true;
     } else if ( event->type() == QEvent::KeyRelease ) {
         QKeyEvent *ev = static_cast<QKeyEvent*>(event);
         if ( ev==nullptr ) return false;
-        inputs->inputsQKeyRelease(ev->key());
+        if ( ev->modifiers() & Qt::KeypadModifier ) {
+            inputs->inputsQKeypadKeyRelease(ev->key());
+        } else {
+            inputs->inputsQKeyRelease(ev->key());
+        };
         return true;
     } else if ( event->type() == QEvent::MouseButtonDblClick ) {
         inputs->inputsButtonPress(
@@ -888,6 +896,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     } else if ( event->type() == QEvent::Wheel ) {
         QWheelEvent *ev = static_cast<QWheelEvent*>(event);
         if ( ev==nullptr ) return false;
+        // TODO: ev->delta() is deprecated now, use pixelDelta or angleDelta
         if (ev->delta() > 0) {
             inputs->inputsButtonPress(
                         SPICE_MOUSE_BUTTON_UP,

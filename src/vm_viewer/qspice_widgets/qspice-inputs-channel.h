@@ -49,8 +49,10 @@ public:
     void inputsSetKeyLocks(uint locks);
 
     // Qt Virtual Keys (platform independant)
-    void inputsQKeyPress(uint key);
-    void inputsQKeyRelease(uint key);
+    void inputsQKeypadKeyPress(int key);
+    void inputsQKeypadKeyRelease(int key);
+    void inputsQKeyPress(int key);
+    void inputsQKeyRelease(int key);
 
 signals:
     void inputsModifiers();
