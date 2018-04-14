@@ -25,6 +25,45 @@
 
 #include "qspice-channel.h"
 
+#include <QHash>
+#include <QVarLengthArray>
+
+class QScanCodeArray : public QVarLengthArray<uint>
+{
+public:
+    QScanCodeArray()
+    {
+    }
+
+    QScanCodeArray(uint code)
+    {
+        append(code);
+    }
+
+    QScanCodeArray(uint code1, uint code2)
+    {
+        append(code1);
+        append(code2);
+    }
+
+    QScanCodeArray(uint code1, uint code2, uint code3)
+    {
+        append(code1);
+        append(code2);
+        append(code3);
+    }
+
+    QScanCodeArray(uint code1, uint code2, uint code3, uint code4)
+    {
+        append(code1);
+        append(code2);
+        append(code3);
+        append(code4);
+    }
+
+};
+
+typedef QHash<int, QScanCodeArray> ScanCodeHash;
 
 class QSpiceInputsChannel : public QSpiceChannel
 {
@@ -49,10 +88,12 @@ public:
     void inputsSetKeyLocks(uint locks);
 
     // Qt Virtual Keys (platform independant)
-    void inputsQKeypadKeyPress(int key);
-    void inputsQKeypadKeyRelease(int key);
     void inputsQKeyPress(int key);
     void inputsQKeyRelease(int key);
+    void inputsQKeypadKeyPress(int key);
+    void inputsQKeypadKeyRelease(int key);
+    void inputsQSequenceKeyPress(int key);
+    void inputsQSequenceKeyRelease(int key);
 
 signals:
     void inputsModifiers();
@@ -60,10 +101,22 @@ signals:
 protected:
     inline QSpiceInputsChannel(void *channel) :
         QSpiceChannel(channel)
-    {initCallbacks();}
+    {
+        initCallbacks();
+        initScanCodeMap();
+        initKeypadScanCodeMap();
+        initSequenceScanCodeMap();
+    }
     friend class QSpiceHelper;
 
     void initCallbacks();
 
+private:
+    QHash<int, uint>    scanCodeHash, keypadScanCodeHash;
+    ScanCodeHash        sequenceCodeHash;
+    void                initScanCodeMap();
+    void                initKeypadScanCodeMap();
+    void                initSequenceScanCodeMap();
+    QScanCodeArray      QSequenceKeyToScanCode(int key);
 };
 #endif // QSPICE_INPUTS_CHANNEL_H

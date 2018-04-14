@@ -18,11 +18,7 @@
 #include "qspice-helper.h"
 #include "qspice-inputs-channel.h"
 
-#include <QHash>
-#include <QVarLengthArray>
-
 // Inputs
-
 void QSpiceHelper::inputs_modifiers(SpiceInputsChannel *spiceinputschannel, gpointer user_data)
 {
     Q_UNUSED(spiceinputschannel)
@@ -58,7 +54,6 @@ void QSpiceInputsChannel::inputsButtonRelease(uint button, uint button_state)
     spice_inputs_button_release((SpiceInputsChannel *) gobject, button, button_state);
 }
 
-
 // keyboard
 void QSpiceInputsChannel::inputsKeyPress(uint scancode)
 {
@@ -80,53 +75,7 @@ void QSpiceInputsChannel::inputsSetKeyLocks(uint locks)
     spice_inputs_set_key_locks((SpiceInputsChannel *) gobject, locks);
 }
 
-class QScanCodeArray : public QVarLengthArray<uint>
-{
-public:
-    QScanCodeArray()
-    {
-    }
-
-    QScanCodeArray(uint code)
-    {
-        append(code);
-    }
-
-    QScanCodeArray(uint code1, uint code2)
-    {
-        append(code1);
-        append(code2);
-    }
-
-    QScanCodeArray(uint code1, uint code2, uint code3)
-    {
-        append(code1);
-        append(code2);
-        append(code3);
-    }
-
-    QScanCodeArray(uint code1, uint code2, uint code3, uint code4)
-    {
-        append(code1);
-        append(code2);
-        append(code3);
-        append(code4);
-    }
-
-};
-
-
-// Scan Code Hash
-#define ADD_SCAN1(q, s1)    scanCodeHash.insert(q, s1);
-#define ADD_SCAN2(q, s1, s2)    scanCodeHash.insert(q, QScanCodeArray(s1, s2));
-#define ADD_SCAN3(q, s1, s2, s3)    scanCodeHash.insert(q, QScanCodeArray(s1, s2, s3));
-#define ADD_SCAN4(q, s1, s2, s3, s4)    scanCodeHash.insert(q, QScanCodeArray(s1, s2, s3, s4));
-
-typedef QHash<int, QScanCodeArray> ScanCodeHash;
-
-static ScanCodeHash scanCodeHash, keypadScanCodeHash;
-
-void InitScanCodeMap()
+void QSpiceInputsChannel::initScanCodeMap()
 {
     // SPICE protocol use PC AT scan codes for keyboard
     // See for: https://github.com/CendioOssman/keycodemapdb/blob/master/data/keymaps.csv
@@ -584,23 +533,9 @@ void InitScanCodeMap()
     //scanCodeHash.insert(Qt::Key_Zoom, 0x00);
     scanCodeHash.insert(Qt::Key_Exit, 0x71);
     scanCodeHash.insert(Qt::Key_Cancel, 0x014a);
-
-    // additional non-keyboard called keys :
-    // not applicable in PC AT keyboard,
-    // therefore used for send key sequence
-    ADD_SCAN3          (Qt::Key_Launch1,        0x1D, 0x38, 0x3B);          // CtrlAltF1
-    ADD_SCAN3          (Qt::Key_Launch2,        0x1D, 0x38, 0x3C);          // CtrlAltF2
-    ADD_SCAN3          (Qt::Key_Launch3,        0x1D, 0x38, 0x3D);          // CtrlAltF3
-    ADD_SCAN3          (Qt::Key_Launch4,        0x1D, 0x38, 0x3E);          // CtrlAltF4
-    ADD_SCAN3          (Qt::Key_Launch5,        0x1D, 0x38, 0x3F);          // CtrlAltF5
-    ADD_SCAN3          (Qt::Key_Launch6,        0x1D, 0x38, 0x40);          // CtrlAltF6
-    ADD_SCAN3          (Qt::Key_Launch7,        0x1D, 0x38, 0x41);          // CtrlAltF7
-    ADD_SCAN3          (Qt::Key_Launch8,        0x1D, 0x38, 0x42);          // CtrlAltF8
-    ADD_SCAN3          (Qt::Key_LaunchB,        0x1D, 0x38, 0x0E);          // CtrlAltBackSpc
-    ADD_SCAN4          (Qt::Key_LaunchD,        0x1D, 0x38, 0xE0, 0x53);    // CtrlAltDel
 }
 
-void InitKeypadScanCodeMap()
+void QSpiceInputsChannel::initKeypadScanCodeMap()
 {
     keypadScanCodeHash.clear();
     keypadScanCodeHash.insert(Qt::Key_Slash, 0x0135);   // KEY_KPSLASH
@@ -636,55 +571,69 @@ void InitKeypadScanCodeMap()
     keypadScanCodeHash.insert(Qt::Key_ParenRight, 0x017b);// KEY_KPRIGHTPAREN
 }
 
+void QSpiceInputsChannel::initSequenceScanCodeMap()
+{
+    // Sequence Scan Code Hash
+    #define ADD_SCAN1(q, s1)    sequenceCodeHash.insert(q, s1);
+    #define ADD_SCAN2(q, s1, s2)    sequenceCodeHash.insert(q, QScanCodeArray(s1, s2));
+    #define ADD_SCAN3(q, s1, s2, s3)    sequenceCodeHash.insert(q, QScanCodeArray(s1, s2, s3));
+    #define ADD_SCAN4(q, s1, s2, s3, s4)    sequenceCodeHash.insert(q, QScanCodeArray(s1, s2, s3, s4));
+
+    // additional non-keyboard called keys :
+    // not applicable in PC AT keyboard,
+    // therefore used for send key sequence
+    ADD_SCAN3   (Qt::Key_Launch1, 0x1D, 0x38, 0x3B);          // CtrlAltF1
+    ADD_SCAN3   (Qt::Key_Launch2, 0x1D, 0x38, 0x3C);          // CtrlAltF2
+    ADD_SCAN3   (Qt::Key_Launch3, 0x1D, 0x38, 0x3D);          // CtrlAltF3
+    ADD_SCAN3   (Qt::Key_Launch4, 0x1D, 0x38, 0x3E);          // CtrlAltF4
+    ADD_SCAN3   (Qt::Key_Launch5, 0x1D, 0x38, 0x3F);          // CtrlAltF5
+    ADD_SCAN3   (Qt::Key_Launch6, 0x1D, 0x38, 0x40);          // CtrlAltF6
+    ADD_SCAN3   (Qt::Key_Launch7, 0x1D, 0x38, 0x41);          // CtrlAltF7
+    ADD_SCAN3   (Qt::Key_Launch8, 0x1D, 0x38, 0x42);          // CtrlAltF8
+    ADD_SCAN3   (Qt::Key_LaunchB, 0x1D, 0x38, 0x0E);          // CtrlAltBackSpc
+    ADD_SCAN4   (Qt::Key_LaunchD, 0x1D, 0x38, 0xE0, 0x53);    // CtrlAltDel
+}
+
 // Qt Virtual Keys (platform independant)
-QScanCodeArray QKeyToScanCode(int key)
-{
-    if (scanCodeHash.empty())
-        InitScanCodeMap();
-
-    ScanCodeHash::iterator it = scanCodeHash.find(key);
-    if (it == scanCodeHash.end())
-        return QScanCodeArray();
-    else
-        return it.value();
-}
-
-QScanCodeArray QKeypadKeyToScanCode(int key)
-{
-    if (keypadScanCodeHash.empty())
-        InitKeypadScanCodeMap();
-
-    ScanCodeHash::iterator it = keypadScanCodeHash.find(key);
-    if (it == keypadScanCodeHash.end())
-        return QScanCodeArray();
-    else
-        return it.value();
-}
-
-void QSpiceInputsChannel::inputsQKeypadKeyPress(int key)
-{
-    QScanCodeArray scanCode = QKeypadKeyToScanCode(key);
-    for (int i = 0; i < scanCode.count(); i++)
-        inputsKeyPress(scanCode[i]);
-}
-
-void QSpiceInputsChannel::inputsQKeypadKeyRelease(int key)
-{
-    QScanCodeArray scanCode = QKeypadKeyToScanCode(key);
-    for (int i = 0; i < scanCode.count(); i++)
-        inputsKeyRelease(scanCode[i]);
-}
-
 void QSpiceInputsChannel::inputsQKeyPress(int key)
 {
-    QScanCodeArray scanCode = QKeyToScanCode(key);
-    for (int i = 0; i < scanCode.count(); i++)
-        inputsKeyPress(scanCode[i]);
+    inputsKeyPress(scanCodeHash.value(key));
 }
 
 void QSpiceInputsChannel::inputsQKeyRelease(int key)
 {
-    QScanCodeArray scanCode = QKeyToScanCode(key);
+    inputsKeyRelease(scanCodeHash.value(key));
+}
+
+void QSpiceInputsChannel::inputsQKeypadKeyPress(int key)
+{
+    inputsKeyPress(keypadScanCodeHash.value(key));
+}
+
+void QSpiceInputsChannel::inputsQKeypadKeyRelease(int key)
+{
+    inputsKeyRelease(keypadScanCodeHash.value(key));
+}
+
+QScanCodeArray QSpiceInputsChannel::QSequenceKeyToScanCode(int key)
+{
+    ScanCodeHash::iterator it = sequenceCodeHash.find(key);
+    if (it == sequenceCodeHash.end())
+        return QScanCodeArray();
+    else
+        return it.value();
+}
+
+void QSpiceInputsChannel::inputsQSequenceKeyPress(int key)
+{
+    QScanCodeArray scanCode = QSequenceKeyToScanCode(key);
+    for (int i = 0; i < scanCode.count(); i++)
+        inputsKeyPress(scanCode[i]);
+}
+
+void QSpiceInputsChannel::inputsQSequenceKeyRelease(int key)
+{
+    QScanCodeArray scanCode = QSequenceKeyToScanCode(key);
     for (int i = 0; i < scanCode.count(); i++)
         inputsKeyRelease(scanCode[i]);
 }

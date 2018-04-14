@@ -101,8 +101,8 @@ void QSpiceWidget::sendKeySequience(Qt::Key key)
     if ( nullptr!=inputs ) {
         // inputs->inputsKeyPressAndRelease()
         // does not give the desired effect
-        inputs->inputsQKeyPress(key);
-        inputs->inputsQKeyRelease(key);
+        inputs->inputsQSequenceKeyPress(key);
+        inputs->inputsQSequenceKeyRelease(key);
     };
 }
 
