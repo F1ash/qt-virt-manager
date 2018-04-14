@@ -222,7 +222,7 @@ for shaped interfaces</source>
     <name>Bridge_Widget</name>
     <message>
         <source>Enter bridge name (Ex.: br0)</source>
-        <translation type="unfinished"></translation>
+        <translation>Digita il nome del bridge (ad es.: br0)</translation>
     </message>
     <message>
         <source>Spanning Tree Protocol</source>
@@ -245,7 +245,7 @@ for shaped interfaces</source>
     </message>
     <message>
         <source>Target Device name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome dispositivo di destinazione:</translation>
     </message>
     <message>
         <source>Network Filter on Interface</source>
@@ -256,11 +256,11 @@ for shaped interfaces</source>
     <name>CCIDAddr</name>
     <message>
         <source>a 2-digit bus number</source>
-        <translation type="unfinished"></translation>
+        <translation>un numero a 2 cifre del bus</translation>
     </message>
     <message>
         <source>a 2-digit slot within the bus</source>
-        <translation type="unfinished"></translation>
+        <translation>un numero a 2 cifre dello slot nel bus</translation>
     </message>
 </context>
 <context>
@@ -290,7 +290,7 @@ for shaped interfaces</source>
     </message>
     <message>
         <source>Placement:</source>
-        <translation type="unfinished"></translation>
+        <translation>Posizionamento:</translation>
     </message>
 </context>
 <context>
@@ -396,19 +396,19 @@ for shaped interfaces</source>
     </message>
     <message>
         <source>Physical host character device</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispositivo a caratteri dell&apos;host fisico</translation>
     </message>
     <message>
         <source>Output to a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Uscita su file</translation>
     </message>
     <message>
         <source>TCP net console</source>
-        <translation type="unfinished"></translation>
+        <translation>Console di rete TCP</translation>
     </message>
     <message>
         <source>UDP net console</source>
-        <translation type="unfinished"></translation>
+        <translation>Console di rete UDP</translation>
     </message>
     <message>
         <source>Unix socket</source>
@@ -419,11 +419,11 @@ for shaped interfaces</source>
     <name>ConclusionPage</name>
     <message>
         <source>Exit from VirtNetwork Assistant</source>
-        <translation type="unfinished"></translation>
+        <translation>Esci da VirtNetwork Assistant</translation>
     </message>
     <message>
         <source>Done.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fatto.</translation>
     </message>
     <message>
         <source>Build up the data for &lt; %1 &gt; network done.
@@ -479,11 +479,11 @@ Other parameters of network you can change later in Network Editor.</source>
     </message>
     <message>
         <source>Connection closed: Misc I/O error</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione terminata: errore generico di I/O</translation>
     </message>
     <message>
         <source>Connection closed: End-of-file from server</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione terminata: fine del file dal server</translation>
     </message>
     <message>
         <source>Connection closed: Keepalive timer triggered</source>
@@ -503,7 +503,7 @@ Other parameters of network you can change later in Network Editor.</source>
     </message>
     <message>
         <source>not</source>
-        <translation type="unfinished">non</translation>
+        <translation>non</translation>
     </message>
 </context>
 <context>
@@ -594,7 +594,7 @@ Stato: %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;WARNING&lt;/b&gt; See for: &lt;a href=&apos;http://libvirt.org/remote.html&apos;&gt;&lt;b&gt;Libvirt Remote support&lt;/b&gt;&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Avviso&lt;/b&gt; Vedi: &lt;a href=&apos;http://libvirt.org/remote.html&apos;&gt;&lt;b&gt;Libvirt Remote support&lt;/b&gt;&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Connection:</source>
@@ -622,7 +622,7 @@ Stato: %1</translation>
     </message>
     <message>
         <source>Extra:</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiuntivo:</translation>
     </message>
     <message>
         <source>Connect at Start</source>
@@ -646,7 +646,7 @@ Stato: %1</translation>
     </message>
     <message>
         <source>Same Connection Name is exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esiste già una connessione con lo stesso nome.</translation>
     </message>
     <message>
         <source>New settings apply
@@ -689,7 +689,7 @@ at next job start.</source>
     </message>
     <message>
         <source>Item not exist.</source>
-        <translation type="unfinished">L&apos;elemento non esiste.</translation>
+        <translation>L&apos;elemento non esiste.</translation>
     </message>
     <message>
         <source>Connection &apos;%1&apos;</source>
@@ -697,11 +697,11 @@ at next job start.</source>
     </message>
     <message>
         <source>Connection is Busy.</source>
-        <translation type="unfinished"></translation>
+        <translation>La connessione è occupata.</translation>
     </message>
     <message>
         <source>Connection is Running.</source>
-        <translation type="unfinished"></translation>
+        <translation>La connessione è in esecuzione.</translation>
     </message>
     <message>
         <source>Close Connection</source>
@@ -713,7 +713,7 @@ at next job start.</source>
     </message>
     <message>
         <source>Connection is busy.</source>
-        <translation type="unfinished"></translation>
+        <translation>La connessione è occupata.</translation>
     </message>
     <message>
         <source>Search local connections</source>
@@ -725,7 +725,7 @@ at next job start.</source>
     </message>
     <message>
         <source>&lt;%1&gt; credentials</source>
-        <translation type="unfinished"></translation>
+        <translation>Credenziali di &lt;%1&gt;</translation>
     </message>
 </context>
 <context>
@@ -760,7 +760,8 @@ at next job start.</source>
     <message>
         <source>Show XML Description
 at close</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra la descrizione XML
+alla chiusura</translation>
     </message>
     <message>
         <source>Ok</source>
@@ -772,7 +773,7 @@ at close</source>
     </message>
     <message>
         <source>the public name for interface</source>
-        <translation type="unfinished"></translation>
+        <translation>il nome pubblico dell&apos;interfaccia</translation>
     </message>
     <message>
         <source>Type</source>
@@ -780,7 +781,7 @@ at close</source>
     </message>
     <message>
         <source>inet address</source>
-        <translation type="unfinished"></translation>
+        <translation>indirizzo inet</translation>
     </message>
     <message>
         <source>Prefix</source>
@@ -791,11 +792,11 @@ at close</source>
     <name>CreatePool</name>
     <message>
         <source>Create Pool in [%1]</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea pool in [%1]</translation>
     </message>
     <message>
         <source>UUID will be generated if omitted</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;UUID sarà generato se non specificato</translation>
     </message>
 </context>
 <context>
@@ -814,11 +815,11 @@ at close</source>
     </message>
     <message>
         <source>Add Time to Snapshot Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi orario al nome dell&apos;istantanea</translation>
     </message>
     <message>
         <source>Short Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descrizione breve</translation>
     </message>
     <message>
         <source>Creation Snapshot Flags</source>
@@ -865,7 +866,7 @@ at close</source>
     </message>
     <message>
         <source>Restore all pages to first state</source>
-        <translation type="unfinished"></translation>
+        <translation>Ripristina tutte le pagine al primo stato</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -873,7 +874,7 @@ at close</source>
     </message>
     <message>
         <source>Read Data in %1 failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lettura dei dati in %1 non riuscita.</translation>
     </message>
     <message>
         <source>New Domain XML&apos;ed</source>
@@ -881,7 +882,7 @@ at close</source>
     </message>
     <message>
         <source>to &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>a &lt;a href=&apos;%1&apos;&gt;%1&lt;/a&gt;</translation>
     </message>
     <message>
         <source>General</source>
@@ -938,7 +939,7 @@ Installa i driver necessari.</translation>
     <name>CreateVirtNWFilter</name>
     <message>
         <source>NWFilter Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor NWFilter</translation>
     </message>
     <message>
         <source>set filter name</source>
@@ -946,7 +947,7 @@ Installa i driver necessari.</translation>
     </message>
     <message>
         <source>UUID will set automatically if occured</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;UUID sarà impostato automaticamente se necessario</translation>
     </message>
     <message>
         <source>Use another filters</source>
@@ -994,7 +995,7 @@ Installa i driver necessari.</translation>
     </message>
     <message>
         <source>NWFilter Editor / &lt;%1&gt; in [%2]</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor NWFilter / &lt;%1&gt; in [%2]</translation>
     </message>
 </context>
 <context>
@@ -1044,11 +1045,11 @@ Installa i driver necessari.</translation>
     </message>
     <message>
         <source>Enter Network Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Digita nome della rete</translation>
     </message>
     <message>
         <source>if omitted, then autogenerated</source>
-        <translation type="unfinished"></translation>
+        <translation>Se non specificato, sarà generato automaticamente</translation>
     </message>
     <message>
         <source>&lt;a href=&apos;http://libvirt.org/formatnetwork.html&apos;&gt;About&lt;/a&gt;</source>
@@ -1104,7 +1105,7 @@ at close</source>
     </message>
     <message>
         <source>UUID generated if omitted</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;UUID sarà generato se non specificato</translation>
     </message>
     <message>
         <source>A human-readable description of the purpose of the secret</source>
@@ -1187,7 +1188,7 @@ nor to any other node</source>
     <name>DNS_Widget</name>
     <message>
         <source>forwardPlainNames</source>
-        <translation type="unfinished"></translation>
+        <translation>forwardPlainNames</translation>
     </message>
 </context>
 <context>
@@ -1243,11 +1244,11 @@ nor to any other node</source>
     </message>
     <message>
         <source>Virtio-serial address</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo virtio-serial</translation>
     </message>
     <message>
         <source>A CCID address, for smart-cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Un indirizzo CCID, per le smartcard</translation>
     </message>
     <message>
         <source>USB addresses</source>
@@ -1298,7 +1299,7 @@ Save last changes?</source>
     </message>
     <message>
         <source>Del Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina dispositivo</translation>
     </message>
 </context>
 <context>
@@ -1331,7 +1332,7 @@ Save last changes?</source>
     </message>
     <message>
         <source>Del Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina dispositivo</translation>
     </message>
     <message>
         <source>Disk %1</source>
@@ -1491,7 +1492,7 @@ Save last changes?</source>
     </message>
     <message>
         <source>Directory to use as the disk</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartella da utilizzare come disco</translation>
     </message>
     <message>
         <source>File holding the disk</source>
@@ -1513,7 +1514,7 @@ Save last changes?</source>
     <name>Disk_Pool_Stuff</name>
     <message>
         <source>Block device name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome del dispositivo a blocchi</translation>
     </message>
 </context>
 <context>
@@ -1575,7 +1576,7 @@ Save last changes?</source>
     </message>
     <message>
         <source>long</source>
-        <translation type="unfinished"></translation>
+        <translation>lungo</translation>
     </message>
 </context>
 <context>
@@ -1691,7 +1692,7 @@ is defined.</source>
     </message>
     <message>
         <source>Destroy</source>
-        <translation type="unfinished"></translation>
+        <translation>Distruggi</translation>
     </message>
     <message>
         <source>Edit</source>
@@ -1743,11 +1744,11 @@ is defined.</source>
     </message>
     <message>
         <source>display VM</source>
-        <translation type="unfinished"></translation>
+        <translation>visualizza VM</translation>
     </message>
     <message>
         <source>display VM in external Viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>visualizza VM in visore esterno</translation>
     </message>
     <message>
         <source>add to State Monitor</source>
@@ -1770,7 +1771,7 @@ is defined.</source>
     </message>
     <message>
         <source>Autostart: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvio automatico: %1</translation>
     </message>
     <message>
         <source>Persistent: %1</source>
@@ -1798,12 +1799,14 @@ Connect: %2</source>
     <message>
         <source>Host CPU
 Usage:</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU host
+Utilizzo:</translation>
     </message>
     <message>
         <source>Guest Memory
 Usage:</source>
-        <translation type="unfinished"></translation>
+        <translation>Memoria guest
+Utilizzo:</translation>
     </message>
     <message>
         <source>State:&lt;br&gt;&lt;b&gt;Connection Error&lt;/b&gt;&lt;/br&gt;</source>
@@ -1889,22 +1892,25 @@ by the virtual network&apos;s own DNS server</source>
     </message>
     <message>
         <source>Donate on Yandex.Money</source>
-        <translation type="unfinished"></translation>
+        <translation>Donazione su Yandex.Money</translation>
     </message>
     <message>
         <source>Donate on VISA QIWI Wallet
 Copy card number to Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Donazione su Wallet QIWI di VISA
+Copia negli appunti</translation>
     </message>
     <message>
         <source>Donate Bitcoin
 Copy to Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Donazione Bitcoin
+Copia negli appunti</translation>
     </message>
     <message>
         <source>Donate BitcoinCash
 Copy to Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Donazione BitcoinCash
+Copia negli appunti</translation>
     </message>
     <message>
         <source>don&apos;t show again</source>
@@ -1915,15 +1921,15 @@ Copy to Clipboard</source>
     <name>DriveAddr</name>
     <message>
         <source>a 2-digit controller number</source>
-        <translation type="unfinished"></translation>
+        <translation>un numero a 2 cifre del controller</translation>
     </message>
     <message>
         <source>a 2-digit bus number</source>
-        <translation type="unfinished"></translation>
+        <translation>un numero a 2 cifre del bus</translation>
     </message>
     <message>
         <source>a 2-digit unit number on the bus</source>
-        <translation type="unfinished"></translation>
+        <translation>un numero a 2 cifre dell&apos;unità sul bus</translation>
     </message>
 </context>
 <context>
@@ -1937,7 +1943,7 @@ Copy to Clipboard</source>
     <name>Encryption</name>
     <message>
         <source>Use Encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa cifratura</translation>
     </message>
     <message>
         <source>Format:</source>
@@ -1949,7 +1955,7 @@ Copy to Clipboard</source>
     </message>
     <message>
         <source>Find Secret</source>
-        <translation type="unfinished"></translation>
+        <translation>Trova segreto</translation>
     </message>
     <message>
         <source>Type of secret should be is a VOLUME</source>
@@ -2002,7 +2008,7 @@ Copy to Clipboard</source>
     </message>
     <message>
         <source>&amp;Hide to tray</source>
-        <translation type="unfinished"></translation>
+        <translation>Nascondi nel &amp;vassoio</translation>
     </message>
     <message>
         <source>&amp;Restart</source>
@@ -2054,7 +2060,7 @@ Copy to Clipboard</source>
     </message>
     <message>
         <source>Choose Secret</source>
-        <translation type="unfinished"></translation>
+        <translation>Scegli segreto</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2103,7 +2109,7 @@ Copy to Clipboard</source>
     </message>
     <message>
         <source>Dev name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome dispositivo:</translation>
     </message>
     <message>
         <source>if enabled firewall rules
@@ -2155,7 +2161,7 @@ to the named device only</source>
     <name>Generic_Ethernet</name>
     <message>
         <source>Target Device name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome dispositivo di destinazione:</translation>
     </message>
     <message>
         <source>Script path:</source>
@@ -2195,23 +2201,23 @@ If you have graphic socket on local or remote host:
     <name>GraphicsDevice</name>
     <message>
         <source>Displays a window on the host desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza una finestra sul desktop dell&apos;host</translation>
     </message>
     <message>
         <source>Use a VNC</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa VNC</translation>
     </message>
     <message>
         <source>Use a Spice</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa Spice</translation>
     </message>
     <message>
         <source>Use a RDP</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa RDP</translation>
     </message>
     <message>
         <source>Reserved for VirtualBox domains</source>
-        <translation type="unfinished"></translation>
+        <translation>Riservato per i domini di VirtualBox</translation>
     </message>
 </context>
 <context>
@@ -2355,7 +2361,7 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     </message>
     <message>
         <source>Destroy</source>
-        <translation type="unfinished"></translation>
+        <translation>Termina</translation>
     </message>
     <message>
         <source>Undefine</source>
@@ -2386,11 +2392,11 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     <name>InputDevice</name>
     <message>
         <source>To add additional devices explicitly</source>
-        <translation type="unfinished"></translation>
+        <translation>Per aggiungere esplicitamente dispositivi aggiuntivi</translation>
     </message>
     <message>
         <source>EvTouch Graphics Tablet</source>
-        <translation type="unfinished"></translation>
+        <translation>Tavoletta grafica EvTouch</translation>
     </message>
     <message>
         <source>Generic Mouse</source>
@@ -2421,7 +2427,7 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 started.</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interfaccia %2 avviata.</translation>
     </message>
     <message>
         <source>don&apos;t</source>
@@ -2429,7 +2435,7 @@ described by up to 6 &apos;src&apos; or &apos;dst&apos; elements)</source>
     </message>
     <message>
         <source>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interface %2 destroyed.</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;&lt;b&gt;%1&lt;/b&gt;&apos; Interfaccia %2 terminata.</translation>
     </message>
     <message>
         <source>File &quot;%1&quot;
@@ -2476,7 +2482,7 @@ is defined.</source>
     </message>
     <message>
         <source>Destroy</source>
-        <translation type="unfinished"></translation>
+        <translation>Distruggi</translation>
     </message>
     <message>
         <source>Define for persistent usage</source>
@@ -2515,7 +2521,7 @@ is defined.</source>
     </message>
     <message>
         <source>Set new Network name</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposta un nuovo nome della rete</translation>
     </message>
     <message>
         <source>Create network using existing host bridge</source>
@@ -2523,7 +2529,7 @@ is defined.</source>
     </message>
     <message>
         <source>Create NAT based network</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea rete basata su NAT</translation>
     </message>
     <message>
         <source>Create routed network</source>
@@ -2595,11 +2601,11 @@ is defined.</source>
     </message>
     <message>
         <source>AutoSave</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvataggio automatico</translation>
     </message>
     <message>
         <source>Save Log to File</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva log su file</translation>
     </message>
     <message>
         <source>Event/Error Log
@@ -2609,7 +2615,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>Current Time: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ora attuale: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Save Log To</source>
@@ -2625,7 +2631,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>&lt;b&gt;%1:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;green&apos;&gt;&lt;b&gt;ACTION&lt;/b&gt;&lt;/font&gt;: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;%1:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;green&apos;&gt;&lt;b&gt;AZIONE&lt;/b&gt;&lt;/font&gt;: %3</translation>
     </message>
 </context>
 <context>
@@ -2735,11 +2741,11 @@ Current:	%2</source>
     </message>
     <message>
         <source>NWFilter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">NWFilter</translation>
     </message>
     <message>
         <source>NWFilters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">NWFilter</translation>
     </message>
     <message>
         <source>Restart Application.</source>
@@ -2755,7 +2761,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>App initialization</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizializzazione applicazione</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: Libvirt service%3%4</source>
@@ -2775,7 +2781,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>started</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">avviata</translation>
     </message>
     <message>
         <source>&lt;b&gt;%1 %2:&lt;/b&gt;&lt;br&gt;&lt;font color=&apos;blue&apos;&gt;                &lt;b&gt;EVENT&lt;/b&gt;&lt;/font&gt;: %3</source>
@@ -2795,15 +2801,15 @@ Current:	%2</source>
     </message>
     <message>
         <source>Application built without LXC</source>
-        <translation type="unfinished"></translation>
+        <translation>Applicazione creata senza LXC</translation>
     </message>
     <message>
         <source>Application built without VNC</source>
-        <translation type="unfinished"></translation>
+        <translation>Applicazione creata senza VNC</translation>
     </message>
     <message>
         <source>Application built without SPICE</source>
-        <translation type="unfinished"></translation>
+        <translation>Applicazione creata senza SPICE</translation>
     </message>
     <message>
         <source>Not implemented type: %1
@@ -2832,7 +2838,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>NWFilter Editor / &lt;%1&gt; in [%2]</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor NWFilter / &lt;%1&gt; in [%2]</translation>
     </message>
 </context>
 <context>
@@ -2861,7 +2867,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>Maximum Memory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Memoria massima:</translation>
     </message>
     <message>
         <source>Current Memory:</source>
@@ -2912,7 +2918,7 @@ Current:	%2</source>
     </message>
     <message>
         <source>View &amp;Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Modalità di visualizzazione</translation>
     </message>
     <message>
         <source>&amp;Virtual Entity Views</source>
@@ -3045,7 +3051,7 @@ during migration</source>
     </message>
     <message>
         <source>Set Host/URI manually</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposta host/URI manualmente</translation>
     </message>
     <message>
         <source>Original Host / Connection Type : %1 / %2</source>
