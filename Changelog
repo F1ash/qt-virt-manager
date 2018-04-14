@@ -226,3 +226,13 @@ dropped the attaching toolbar in Viewer
     for avoid resizing loop;
 fixed USBRedir device order;
 some fixes and enhancements;
+
+0.60.88 :
+fixed the code without bundled krdc-libs
+    for according Fedora requirements;
+fixed scancodes for PC AT set 1
+    (with Keypad and extra keys);
+improved QSpiceInputsChannel
+    for best display of keyboard events;
+Italian translation updated;
+some fixes and enhancements for readablility;
