@@ -54,7 +54,6 @@ void QSpiceInputsChannel::inputsButtonRelease(uint button, uint button_state)
     spice_inputs_button_release((SpiceInputsChannel *) gobject, button, button_state);
 }
 
-// keyboard
 void QSpiceInputsChannel::inputsKeyPress(uint scancode)
 {
     spice_inputs_key_press((SpiceInputsChannel *) gobject, scancode);
@@ -75,6 +74,7 @@ void QSpiceInputsChannel::inputsSetKeyLocks(uint locks)
     spice_inputs_set_key_locks((SpiceInputsChannel *) gobject, locks);
 }
 
+// Qt Keys map of scancodes (platform independent)
 void QSpiceInputsChannel::initScanCodeMap()
 {
     // SPICE protocol use PC AT scan codes for keyboard
@@ -594,7 +594,7 @@ void QSpiceInputsChannel::initSequenceScanCodeMap()
     ADD_SCAN4   (Qt::Key_LaunchD, 0x1D, 0x38, 0xE0, 0x53);    // CtrlAltDel
 }
 
-// Qt Virtual Keys (platform independant)
+// sends scancodes to inputs-channel
 void QSpiceInputsChannel::inputsQKeyPress(int key)
 {
     inputsKeyPress(scanCodeHash.value(key));
