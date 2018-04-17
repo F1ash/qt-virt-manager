@@ -11,7 +11,6 @@ os:
 
 before_install:
   - brew update
-  - brew link --overwrite python@2
   - brew tap F1ash/homebrew-qt-virt-manager
  
 
