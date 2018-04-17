@@ -15,8 +15,7 @@ before_install:
  
 
 install:
-  - brew upgrade libxml2
-  - brew install spice-client-glib2 qtermwidget libvnc libxml2 libvirt-glib
+  - brew install spice-client-glib2 qtermwidget libvnc libxml2pythonless libvirt-glib
 
 script:
   - cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=0
