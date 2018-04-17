@@ -15,7 +15,7 @@ before_install:
  
 
 install:
-  - brew install --build-from-source ./libxml2.rb
+  - brew install --build-from-source /usr/local/Homebrew/Library/Taps/f1ash/homebrew-qt-virt-manager/libxml2.rb
   - brew install spice-client-glib2 qtermwidget libvnc libvirt-glib
 
 script:
