@@ -15,7 +15,9 @@ before_install:
  
 
 install:
-  - brew install --build-from-source /usr/local/Homebrew/Library/Taps/f1ash/homebrew-qt-virt-manager/libxml2.rb
+  - brew install python@2
+  - brew unlink python
+  - brew link --overwrite python@2
   - brew install spice-client-glib2 qtermwidget libvnc libvirt-glib
 
 script:
