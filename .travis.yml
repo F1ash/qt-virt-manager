@@ -11,14 +11,11 @@ os:
 
 before_install:
   - brew update
-  - brew tap jeffreywildman/homebrew-virt-manager
   - brew tap F1ash/homebrew-qt-virt-manager
  
 
 install:
-  - brew install spice-client-glib2
-  - brew link --overwrite python@2
-  - brew install qtermwidget libvnc libvirt-glib
+  - brew install spice-client-glib2 qtermwidget libvnc libvirt-glib
 
 script:
   - cmake -DBUILD_QT_VERSION=5 -DWITH_LIBCACARD=0
