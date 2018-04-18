@@ -79,5 +79,5 @@ Build requires:
 
 Experimental `HomeBrew` for OS X
 
-  * [README](https://github.com/F1ash/homebrew-qt-virt-manager)
+  * [README](https://github.com/F1ash/homebrew-qt-virt-manager) [![Build Status](https://travis-ci.org/F1ash/qt-virt-manager.svg?branch=master)](https://travis-ci.org/F1ash/qt-virt-manager)
 

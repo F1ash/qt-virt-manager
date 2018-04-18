@@ -34,19 +34,15 @@
 
 #include <QClipboard>
 
-extern "C" {
-#include <rfb/rfbclient.h>
-}
-
 class VncView: public RemoteView
 {
     Q_OBJECT
 
 public:
     explicit VncView(
-            QWidget *parent = 0,
-            const KUrl &url = KUrl(),
-            KConfigGroup configGroup = KConfigGroup());
+            QWidget      *parent        = 0,
+            const KUrl   &url           = KUrl(),
+            KConfigGroup  configGroup   = KConfigGroup());
     ~VncView();
 
     QSize framebufferSize();
