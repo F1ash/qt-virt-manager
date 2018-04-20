@@ -2,7 +2,7 @@
 
 Name:           qt-virt-manager
 Version:        0.60.88
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Qt Virtual Machine Manager
 
 License:        GPLv2+
@@ -13,6 +13,7 @@ Source0:        https://github.com/F1ash/%{name}/archive/%{version}.tar.gz
 Provides:       virt-manager-qt4 = %{version}-%{release}
 Provides:       virt-manager-qt5 = %{version}-%{release}
 Provides:       bundled(krdc-libs)
+Provides:       bundled(qterminal)
 Obsoletes:      virt-manager-qt4 <= 0.25.47
 Obsoletes:      virt-manager-qt5 <= 0.25.47
 
@@ -113,6 +114,10 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-remote-viewer.de
 
 
 %changelog
+* Fri Apr 20 2018 Fl@sh <kaperang07@gmail.com> - 0.60.88-3
+- added bundled qterminal Provides;
+- release updated;
+
 * Sat Apr 14 2018 Fl@sh <kaperang07@gmail.com> - 0.60.88-2
 - added bundled krdc Provides;
 - release updated;
