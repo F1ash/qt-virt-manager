@@ -156,7 +156,7 @@ occurs in GitHub [Issues page](https://github.com/F1ash/qt-virt-manager/issues) 
 
 [![Yandex_money](https://raw.githubusercontent.com/F1ash/qt-virt-manager/master/src/icons/128x128/actions/yandex_money.png)](https://money.yandex.ru/embed/donate.xml?account=410014229313543&quickpay=donate&payment-type-choice=on&mobile-payment-type-choice=on&default-sum=300&targets=Donation+for+develop&target-visibility=on&project-name=QtVirtManager&project-site=http://f1ash.github.io/qt-virt-manager&button-text=01)
 
-![VISA_Wallet](https://raw.githubusercontent.com/F1ash/qt-virt-manager/master/src/icons/128x128/actions/qiwi_wallet_visa.png) Card # : `4890494460088297`
+![MasterCard](https://raw.githubusercontent.com/F1ash/qt-virt-manager/master/src/icons/128x128/actions/mastercard.png) Card # : `5106218039443361`
 
 ![Bitcoin_Wallet](https://raw.githubusercontent.com/F1ash/qt-virt-manager/master/src/icons/128x128/actions/electrum.png) Wallet : `1KnFdQyxjY2PHEamoYjdwYsK1hcC7SzLEE`
 
