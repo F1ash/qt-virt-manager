@@ -51,7 +51,7 @@ Applications are present as packages:
  * in repo (Qt5 only): `dnf install qt-virt-manager` or only
  `dnf install qt-remote-viewer`
 
- * in [FedoraPeople](https://f1ash.fedorapeople.org/qt-virt-manager/)
+ The package building for another Linux distributions supports by own maintainers. Building on OS_Win not tested.
 
 ![OS_X logo](https://upload.wikimedia.org/wikipedia/en/4/45/Mac_Finder_icon_%28OS_X_Yosemite%29.png)
 
