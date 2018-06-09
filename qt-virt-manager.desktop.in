@@ -2,7 +2,7 @@
 Name=Qt@BUILD_QT_VERSION@ VirtManager
 GenericName=Qt@BUILD_QT_VERSION@ Virtual Machine Manager
 Type=Application
-Categories=Development;System;
+Categories=System;
 Icon=virtual-engineering
 Exec=@PROJ_PREFIX@-virt-manager
 Terminal=false
