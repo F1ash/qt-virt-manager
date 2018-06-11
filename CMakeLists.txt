@@ -1093,6 +1093,8 @@ endif ( QT4_BUILD )
 ##
 
 find_package(LibVirt                        REQUIRED)
+# uncomment below if libutf8proc is required
+#find_package(Utf8Proc                       REQUIRED)
 if ( WITH_LXC_SUPPORT )
     if (NOT APPLE)
         pkg_check_modules(
@@ -1117,8 +1119,6 @@ if ( WITH_SPICE_SUPPORT )
         find_package(CACard                 REQUIRED)
     endif ()
 endif ()
-# uncomment below if libutf8proc is required
-#find_package(LibUtf8Proc                    REQUIRED)
 
 include_directories(
     ${GLib2_INCLUDE_DIRS}
@@ -1131,7 +1131,7 @@ include_directories(
     ${QTERMWIDGET_INCLUDE_DIRS}
     ${LIBVNCCLIENT_INCLUDE_DIRS}
     ${KRDC_INCLUDE_DIRS}
-    ${LIB_UTF8_PROC_INCLUDE_DIRS}
+    ${UTF8PROC_INCLUDE_DIRS}
 )
 set (VIEWER_BUILD_PROJECT_LIBRARIES
           ${BUILD_PROJECT_LIBRARIES})
@@ -1146,7 +1146,7 @@ list(APPEND BUILD_PROJECT_LIBRARIES
     ${SPICE_CLIENT_GLIB2_LIBRARIES}
     ${LIBVNCCLIENT_LIBRARIES}
     ${KRDC_LIBRARIES}
-    ${LIB_UTF8_PROC_LIBRARIES}
+    ${UTF8PROC_LIBRARIES}
 )
 list(APPEND VIEWER_BUILD_PROJECT_LIBRARIES
     ${GLib2_LIBRARIES}
@@ -1169,7 +1169,7 @@ MESSAGE(STATUS "Found includes :
     ${QTERMWIDGET_INCLUDE_DIRS}
     ${LIBVNCCLIENT_INCLUDE_DIRS}
     ${KRDC_INCLUDE_DIRS}
-    ${LIB_UTF8_PROC_INCLUDE_DIRS}"
+    ${UTF8PROC_INCLUDE_DIRS}"
 )
 MESSAGE(STATUS "Found BUILD_PROJECT_LIBRARIES: ${BUILD_PROJECT_LIBRARIES}")
 
