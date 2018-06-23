@@ -79,9 +79,17 @@ void QSpiceRecordChannel::initCallbacks()
 
 void QSpiceRecordChannel::spiceRecord_send_data(void *data, size_t bytes, quint32 time)
 {
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_record_channel_send_data(
+                static_cast<SpiceRecordChannel*>(gobject),
+                data,
+                bytes,
+                time);
+#else
     spice_record_send_data(
                 (SpiceRecordChannel*)gobject,
                 data,
                 bytes,
                 time);
+#endif
 }

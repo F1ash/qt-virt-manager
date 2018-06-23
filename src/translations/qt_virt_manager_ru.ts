@@ -1663,7 +1663,7 @@ is defined.</source>
     </message>
     <message>
         <source>Reload Domain OverView</source>
-        <translation>Перезагрузить обзор соединения для ВМ</translation>
+        <translation>Перезагрузить обзор ВМ</translation>
     </message>
 </context>
 <context>
@@ -1769,7 +1769,7 @@ Usage:</source>
     </message>
     <message>
         <source>AutoReload Domain Overview</source>
-        <translation>Авто-перезагрузка обзора для ВМ</translation>
+        <translation>Автоперезагрузка обзора ВМ</translation>
     </message>
     <message>
         <source>Snapshot now!</source>
@@ -2427,7 +2427,7 @@ is defined.</source>
     </message>
     <message>
         <source>AutoReload Interface Overview</source>
-        <translation>Перезагрузка обзора Интерфейсов</translation>
+        <translation>Автоперезагрузка обзора Интерфейсов</translation>
     </message>
 </context>
 <context>
@@ -4406,7 +4406,7 @@ microphone</source>
     </message>
     <message>
         <source>Reload Pool OverView</source>
-        <translation>Пергрузить обзор Пулов</translation>
+        <translation>Перезагрузить обзор Пулов</translation>
     </message>
 </context>
 <context>

@@ -76,9 +76,9 @@ public:
             int display,
             int button_state);
 
-    void inputsButtonPress(uint button, uint button_state);
+    void inputsButtonPress(int button, int button_state);
 
-    void inputsButtonRelease(uint button, uint button_state);
+    void inputsButtonRelease(int button, int button_state);
 
     // keyboard
     // SPICE protocol use PC AT scan codes
