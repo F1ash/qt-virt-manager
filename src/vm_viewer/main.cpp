@@ -5,6 +5,7 @@
 #if WITH_VNC_SUPPORT
 #include "vm_viewer/vnc/vnc_viewer_only.h"
 #endif
+#include "vm_viewer/vm_viewer_only.h"
 #include <QApplication>
 #include <QMessageBox>
 #include <QTranslator>
