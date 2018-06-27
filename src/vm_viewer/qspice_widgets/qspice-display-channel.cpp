@@ -85,13 +85,13 @@ void QSpiceHelper::display_mark(SpiceDisplayChannel *display,
 void QSpiceDisplayChannel::initCallbacks()
 {
     g_signal_connect(gobject, "display-primary-create",
-                     (GCallback) QSpiceHelper::display_primary_create, this);
+                     GCallback(QSpiceHelper::display_primary_create), this);
     g_signal_connect(gobject, "display-invalidate",
-                     (GCallback) QSpiceHelper::display_invalidate, this);
+                     GCallback(QSpiceHelper::display_invalidate), this);
     g_signal_connect(gobject, "display-primary-destroy",
-                     (GCallback) QSpiceHelper::display_primary_destroy, this);
+                     GCallback(QSpiceHelper::display_primary_destroy), this);
     g_signal_connect(gobject, "display-mark",
-                     (GCallback) QSpiceHelper::display_mark, this);
+                     GCallback(QSpiceHelper::display_mark), this);
 }
 
 void QSpiceDisplayChannel::setParentWidget(void *_obj)

@@ -41,7 +41,7 @@ QSpiceChannel::QSpiceChannel(void *channel) :
 void QSpiceChannel::initCallbacks()
 {
     g_signal_connect(gobject, "channel-event",
-                     (GCallback) QSpiceHelper::channel_event, this);
+                     GCallback(QSpiceHelper::channel_event), this);
 }
 
 // Channel
@@ -53,7 +53,7 @@ bool QSpiceChannel::objectDisposed()
 
 bool QSpiceChannel::connectToChannel()
 {
-    connected = spice_channel_connect((SpiceChannel *) gobject);
+    connected = spice_channel_connect(static_cast<SpiceChannel *>(gobject));
     return connected;
 }
 

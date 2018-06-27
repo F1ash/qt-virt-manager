@@ -136,7 +136,7 @@ void QSpiceWidget::pasteClipboardDataToGuest()
     };
 }
 
-void QSpiceWidget::sendClipboardDataToGuest(uint selection, quint32 type, const uchar *_data, size_t _size)
+void QSpiceWidget::sendClipboardDataToGuest(uint selection, quint32 type, const uchar *_data, long _size)
 {
     if ( nullptr!=main ) {
         main->clipboardSelectionNotify(selection, type, _data, _size);
@@ -176,8 +176,8 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
                 SLOT(clientClipboardSelectionRequested(uint,uint)));
         connect(main, SIGNAL(mouseUpdated()),
                 SLOT(mainMouseUpdate()));
-        connect(main, SIGNAL(downloaded(int,int)),
-                this, SLOT(setDownloadProgress(int,int)));
+        connect(main, SIGNAL(downloaded(qint64,qint64)),
+                this, SLOT(setDownloadProgress(qint64,qint64)));
         connect(main, SIGNAL(cancelled()),
                 this, SIGNAL(fileTransferIsCancelled()));
         connect(main, SIGNAL(downloadCompleted()),
@@ -192,7 +192,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
             dynamic_cast<QSpiceDisplayChannel *>(channel);
     if (_display) {
         display = _display;
-        display->setParentWidget((void*)this);
+        display->setParentWidget(static_cast<void*>(this));
         connect(display, SIGNAL(channelEvent(int)),
                 this, SLOT(channelEvent(int)));
         connect(display,
@@ -463,22 +463,22 @@ void QSpiceWidget::mainClipboardSelection(uint type, void *_data, uint _size)
         break;
     case VD_AGENT_CLIPBOARD_UTF8_TEXT:
         QApplication::clipboard()->setText(
-                    QString::fromUtf8((char*)_data, _size));
+                    QString::fromUtf8(static_cast<char*>(_data), int(_size)));
         break;
     case VD_AGENT_CLIPBOARD_IMAGE_PNG:
-        res = _img.loadFromData((uchar*)_data, _size, "PNG");
+        res = _img.loadFromData(static_cast<uchar*>(_data), int(_size), "PNG");
         if (res) QApplication::clipboard()->setImage(_img);
         break;
     case VD_AGENT_CLIPBOARD_IMAGE_BMP:
-        res = _img.loadFromData((uchar*)_data, _size, "BMP");
+        res = _img.loadFromData(static_cast<uchar*>(_data), int(_size), "BMP");
         if (res) QApplication::clipboard()->setImage(_img);
         break;
     case VD_AGENT_CLIPBOARD_IMAGE_JPG:
-        res = _img.loadFromData((uchar*)_data, _size, "JPG");
+        res = _img.loadFromData(static_cast<uchar*>(_data), int(_size), "JPG");
         if (res) QApplication::clipboard()->setImage(_img);
         break;
     case VD_AGENT_CLIPBOARD_IMAGE_TIFF:
-        res = _img.loadFromData((uchar*)_data, _size, "TIFF");
+        res = _img.loadFromData(static_cast<uchar*>(_data), int(_size), "TIFF");
         if (res) QApplication::clipboard()->setImage(_img);
         break;
     default:
@@ -577,8 +577,8 @@ void QSpiceWidget::sendTextClipboardDataToGuest(QClipboard::Mode mode)
         sendClipboardDataToGuest(
                     selection,
                     VD_AGENT_CLIPBOARD_UTF8_TEXT,
-                    (const uchar*)_text.toUtf8().data(),
-                    _text.size());
+                    reinterpret_cast<const uchar*>(_text.toUtf8().data()),
+                    long(_text.size()));
     };
 }
 
@@ -592,7 +592,7 @@ void QSpiceWidget::sendImageClipboardDataToGuest(QClipboard::Mode mode)
                     selection,
                     VD_AGENT_CLIPBOARD_IMAGE_PNG,
                     _image.constBits(),
-                    _image.byteCount());
+                    long(_image.byteCount()));
     };
 }
 
@@ -735,7 +735,7 @@ void QSpiceWidget::setClientCursor(
         int                hot_y,
         void*              rgba)
 {
-    QImage c_img((uchar*) rgba, width, height, QImage::Format_ARGB32);
+    QImage c_img(static_cast<uchar*>(rgba), width, height, QImage::Format_ARGB32);
     QPixmap pix = QPixmap::fromImage(c_img);
     QCursor c(pix, hot_x*zoom, hot_y*zoom);
     setCursor(c);
@@ -993,11 +993,11 @@ void QSpiceWidget::resizeDone()
     setScaledScreen(true);
 }
 
-void QSpiceWidget::setDownloadProgress(int d, int v)
+void QSpiceWidget::setDownloadProgress(qint64 d, qint64 v)
 {
-    downloadProgress = ((qreal)d/v)*100;
+    downloadProgress = (qreal(d)/v)*100;
     repaint(QRect(10, 10, frameSize().width(), 50));
-    emit downloaded(d, v);
+    emit downloaded(downloadProgress, 100);
 }
 
 void QSpiceWidget::formatMsg(SPICE_CHANNEL_MSG &_msg)
@@ -1206,9 +1206,9 @@ void QSpiceWidget::setScaledScreen(bool state)
     if ( img==nullptr ) return;
     scaled = state;
     if( scaled ) {
-        qreal h_zoom = (qreal)frameSize().height()/
+        qreal h_zoom = qreal(frameSize().height())/
                 img->height();
-        qreal w_zoom = (qreal)frameSize().width()/
+        qreal w_zoom = qreal(frameSize().width())/
                 img->width();
         zoom=qMin(w_zoom, h_zoom);
         if ( zoom==1.0 ) scaled = false;

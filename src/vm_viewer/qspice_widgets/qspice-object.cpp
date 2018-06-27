@@ -39,7 +39,7 @@ void QSpiceHelper::GDisposeEvent(gpointer data, GObject *gobject)
 
 QSpiceObject::QSpiceObject(void *_gobject) : gobject(_gobject)
 {
-    g_object_weak_ref((GObject *) gobject, QSpiceHelper::GDisposeEvent, this);
+    g_object_weak_ref(G_OBJECT(gobject), QSpiceHelper::GDisposeEvent, this);
 }
 
 bool QSpiceObject::objectDisposed()
@@ -51,7 +51,8 @@ int QSpiceObject::getPropInt(QString name)
 {
     gint v = 0;
     g_object_get(G_OBJECT (gobject),
-                 name.toUtf8().data(), &v,
+                 name.toUtf8().data(),
+                 &v,
                  nullptr);
 
     return v;
@@ -60,15 +61,17 @@ int QSpiceObject::getPropInt(QString name)
 void QSpiceObject::setProp(QString name, const int i)
 {
     g_object_set(G_OBJECT (gobject),
-              name.toUtf8().data(), i,
-              nullptr);
+                 name.toUtf8().data(),
+                 i,
+                 nullptr);
 }
 
 QString QSpiceObject::getPropString(QString name)
 {
     gchar *v = nullptr;
     g_object_get(G_OBJECT (gobject),
-                 name.toUtf8().data(), &v,
+                 name.toUtf8().data(),
+                 &v,
                  nullptr);
 
     if (v)
@@ -85,15 +88,17 @@ QString QSpiceObject::getPropString(QString name)
 void QSpiceObject::setProp(QString name, const QString &s)
 {
     g_object_set(G_OBJECT (gobject),
-              name.toUtf8().data(), s.toUtf8().data(),
-              nullptr);
+                 name.toUtf8().data(),
+                 s.toUtf8().data(),
+                 nullptr);
 }
 
 bool QSpiceObject::getPropBool(QString name)
 {
     bool v = false;
     g_object_get(G_OBJECT (gobject),
-                 name.toUtf8().data(), &v,
+                 name.toUtf8().data(),
+                 &v,
                  nullptr);
 
     return v;
@@ -102,15 +107,17 @@ bool QSpiceObject::getPropBool(QString name)
 void QSpiceObject::setProp(QString name, const bool b)
 {
     g_object_set(G_OBJECT (gobject),
-              name.toUtf8().data(), b,
-              nullptr);
+                 name.toUtf8().data(),
+                 b,
+                 nullptr);
 }
 
 void* QSpiceObject::getPropPointer(QString name)
 {
     void* v = nullptr;
     g_object_get(G_OBJECT (gobject),
-                 name.toUtf8().data(), &v,
+                 name.toUtf8().data(),
+                 &v,
                  nullptr);
 
     return v;
@@ -119,15 +126,17 @@ void* QSpiceObject::getPropPointer(QString name)
 void QSpiceObject::setProp(QString name, const void *v)
 {
     g_object_set(G_OBJECT (gobject),
-              name.toUtf8().data(), v,
-              nullptr);
+                 name.toUtf8().data(),
+                 v,
+                 nullptr);
 }
 
 QStringList QSpiceObject::getPropStrList(QString name)
 {
     GStrv l = nullptr;
     g_object_get(G_OBJECT (gobject),
-                 name.toUtf8().data(), &l,
+                 name.toUtf8().data(),
+                 &l,
                  nullptr);
 
     QStringList r;
@@ -153,6 +162,7 @@ void QSpiceObject::setProp(QString name, const QStringList &v)
     };
     l[count] = nullptr;
     g_object_set(G_OBJECT (gobject),
-              name.toUtf8().data(), l,
-              nullptr);
+                 name.toUtf8().data(),
+                 l,
+                 nullptr);
 }

@@ -58,7 +58,7 @@ void QSpiceHelper::record_stop(SpiceRecordChannel *channel,
         if ( _record->_dev->isOpen() ) {
             _record->_dev->flush();
             _record->spiceRecord_send_data(
-                        (void*)_record->_dev->readAll().constData(),
+                        _record->_dev->readAll().constData(),
                         _record->_dev->size(),
                         _record->audioInput->processedUSecs());
             _record->_dev->close();
@@ -71,25 +71,21 @@ void QSpiceRecordChannel::initCallbacks()
 {
 #if USE_SPICE_AUDIO
     g_signal_connect(gobject, "record-start",
-                     (GCallback) QSpiceHelper::record_start, this);
+                     GCallback(QSpiceHelper::record_start), this);
     g_signal_connect(gobject, "record-stop",
-                     (GCallback) QSpiceHelper::record_stop, this);
+                     GCallback(QSpiceHelper::record_stop), this);
 #endif
 }
 
-void QSpiceRecordChannel::spiceRecord_send_data(void *data, size_t bytes, quint32 time)
+void QSpiceRecordChannel::spiceRecord_send_data(const char *data, qint64 bytes, qint64 time)
 {
 #if SPICE_GTK_CHECK_VERSION(0, 35, 0)
     spice_record_channel_send_data(
-                static_cast<SpiceRecordChannel*>(gobject),
-                data,
-                bytes,
-                time);
 #else
     spice_record_send_data(
-                (SpiceRecordChannel*)gobject,
-                data,
-                bytes,
-                time);
 #endif
+                static_cast<SpiceRecordChannel*>(gobject),
+                (void*)data,
+                gsize(bytes),
+                guint32(time));
 }

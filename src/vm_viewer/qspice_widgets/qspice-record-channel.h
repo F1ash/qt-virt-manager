@@ -38,7 +38,7 @@ private:
     QTemporaryFile  *_dev;
     QAudioFormat     audioFormat;
     QAudioInput     *audioInput;
-    void             spiceRecord_send_data(void*, size_t, quint32);
+    void             spiceRecord_send_data(const char*, qint64, qint64);
 };
 
 #endif // QSPICE_RECORD_CHANNEL_H

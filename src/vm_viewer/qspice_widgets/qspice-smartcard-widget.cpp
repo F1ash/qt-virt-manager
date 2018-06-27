@@ -48,11 +48,11 @@ void QSpiceSmartcardWidget::clearList()
 void QSpiceSmartcardWidget::addCard(QString &card)
 {
     Q_UNUSED(card);
-    emit cardsChanged((void*)this);
+    emit cardsChanged(static_cast<void*>(this));
 }
 
 void QSpiceSmartcardWidget::removeCard(QString &card)
 {
     Q_UNUSED(card);
-    emit cardsChanged((void*)this);
+    emit cardsChanged(static_cast<void*>(this));
 }

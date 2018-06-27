@@ -24,7 +24,7 @@ void QSpiceHelper::card_inserted(SpiceSmartcardManager *manager,
             static_cast<QSpiceSmartcardManager*>(user_data);
     if ( nullptr==obj ) return;
     QString _name;
-    VReader *_reader = (VReader*)reader;
+    VReader *_reader = reinterpret_cast<VReader*>(reader);
     _name.append(vreader_get_name(_reader));
     if (_reader) vreader_free(_reader);
     if (!_name.isEmpty()) obj->cardInserted(_name);
@@ -45,7 +45,7 @@ void QSpiceHelper::card_removed(SpiceSmartcardManager *manager,
             static_cast<QSpiceSmartcardManager*>(user_data);
     if ( nullptr==obj ) return;
     QString _name;
-    VReader *_reader = (VReader*)reader;
+    VReader *_reader = reinterpret_cast<VReader*>(reader);
     _name.append(vreader_get_name(_reader));
     if (_reader) vreader_free(_reader);
     if (!_name.isEmpty()) obj->cardRemoved(_name);
@@ -65,7 +65,7 @@ void QSpiceHelper::reader_added(SpiceSmartcardManager *manager,
             static_cast<QSpiceSmartcardManager*>(user_data);
     if ( nullptr==obj ) return;
     QString _name;
-    VReader *_reader = (VReader*)reader;
+    VReader *_reader = reinterpret_cast<VReader*>(reader);
     _name.append(vreader_get_name(_reader));
     if (_reader) vreader_free(_reader);
     if (!_name.isEmpty()) obj->readerAdded(_name);
@@ -85,7 +85,7 @@ void QSpiceHelper::reader_removed(SpiceSmartcardManager *manager,
             static_cast<QSpiceSmartcardManager*>(user_data);
     if ( nullptr==obj ) return;
     QString _name;
-    VReader *_reader = (VReader*)reader;
+    VReader *_reader = reinterpret_cast<VReader*>(reader);
     _name.append(vreader_get_name(_reader));
     if (_reader) vreader_free(_reader);
     if (!_name.isEmpty()) obj->readerRemoved(_name);
@@ -102,13 +102,13 @@ void QSpiceSmartcardManager::init()
     gobject = spice_smartcard_manager_get();
     if ( gobject ) {
         g_signal_connect(gobject, "card-inserted",
-                         (GCallback) QSpiceHelper::card_inserted, this);
+                         GCallback(QSpiceHelper::card_inserted), this);
         g_signal_connect(gobject, "card-removed",
-                         (GCallback) QSpiceHelper::card_removed, this);
+                         GCallback(QSpiceHelper::card_removed), this);
         g_signal_connect(gobject, "reader-added",
-                         (GCallback) QSpiceHelper::reader_added, this);
+                         GCallback(QSpiceHelper::reader_added), this);
         g_signal_connect(gobject, "reader-removed",
-                         (GCallback) QSpiceHelper::reader_removed, this);
+                         GCallback(QSpiceHelper::reader_removed), this);
         //qDebug()<<"SpiceSmartcardManager initiated";
     } else {
         //qDebug()<<"SpiceSmartcardManager not initiated";
@@ -124,7 +124,7 @@ QStringList QSpiceSmartcardManager::spiceSmartcardManager_get_readers()
 #if WITH_LIBCACARD
     QStringList _readerList;
     GList *_list = spice_smartcard_manager_get_readers(
-                (SpiceSmartcardManager*)gobject);
+                static_cast<SpiceSmartcardManager*>(gobject));
     size_t count = g_list_length(_list);
     for ( uint i = 0; i<count; i++ ) {
         VReader *_reader =
@@ -153,7 +153,7 @@ bool QSpiceSmartcardManager::spiceSmartcardReader_is_software (QString &reader)
     VReader *_reader = vreader_get_reader_by_name(
                 reader.toUtf8().constData());
     return spice_smartcard_reader_is_software(
-                (SpiceSmartcardReader*)_reader);
+                reinterpret_cast<SpiceSmartcardReader*>(_reader));
 #else
     Q_UNUSED(reader);
     return false;

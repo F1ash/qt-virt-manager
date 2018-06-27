@@ -96,13 +96,13 @@ void QSpiceUsbDeviceManager::init(QSpiceSession *session)
         gobject = spice_usb_device_manager_get(_session, err);
         if ( gobject ) {
             g_signal_connect(gobject, "auto-connect-failed",
-                             (GCallback) QSpiceHelper::auto_connect_failed, this);
+                             GCallback(QSpiceHelper::auto_connect_failed), this);
             g_signal_connect(gobject, "device-added",
-                             (GCallback) QSpiceHelper::device_added, this);
+                             GCallback(QSpiceHelper::device_added), this);
             g_signal_connect(gobject, "device-error",
-                             (GCallback) QSpiceHelper::device_error, this);
+                             GCallback(QSpiceHelper::device_error), this);
             g_signal_connect(gobject, "device-removed",
-                             (GCallback) QSpiceHelper::device_removed, this);
+                             GCallback(QSpiceHelper::device_removed), this);
             //qDebug()<<"UsbDeviceManager initiated";
         } else {
             //qDebug()<<"UsbDeviceManager not initiated";
@@ -114,7 +114,7 @@ void get_descriptions(gpointer item, void *res)
 {
     QStringList *_devList =
             static_cast<QStringList*>(res);
-    SpiceUsbDevice *_dev = (SpiceUsbDevice*) item;
+    SpiceUsbDevice *_dev = static_cast<SpiceUsbDevice*>(item);
     QString dev;
     gchar *dev_desc = spice_usb_device_get_description(
                 _dev, "%s %s<||>%s at %d-%d");
@@ -127,7 +127,7 @@ QStringList QSpiceUsbDeviceManager::spiceUsbDeviceManager_get_devices()
 {
     QStringList _devList;
     GPtrArray *_devs = spice_usb_device_manager_get_devices(
-                (SpiceUsbDeviceManager*) gobject);
+                static_cast<SpiceUsbDeviceManager*>(gobject));
     g_ptr_array_foreach(_devs, get_descriptions, &_devList);
     g_ptr_array_free(_devs, true);
     return _devList;
@@ -138,7 +138,8 @@ QStringList QSpiceUsbDeviceManager::spiceUsbDeviceManager_get_devices_with_filte
 {
     QStringList _devList;
     GPtrArray *_devs = spice_usb_device_manager_get_devices_with_filter(
-                (SpiceUsbDeviceManager*) gobject, filter.toUtf8().data());
+                static_cast<SpiceUsbDeviceManager*>(gobject),
+                filter.toUtf8().data());
     g_ptr_array_foreach(_devs, get_descriptions, &_devList);
     g_ptr_array_free(_devs, true);
     return _devList;
@@ -147,7 +148,7 @@ QStringList QSpiceUsbDeviceManager::spiceUsbDeviceManager_get_devices_with_filte
 void get_operation_result(gpointer item, void *res)
 {
     RES *_res = static_cast<RES*>(res);
-    SpiceUsbDevice *_dev = (SpiceUsbDevice*) item;
+    SpiceUsbDevice *_dev = static_cast<SpiceUsbDevice*>(item);
     QString dev;
     gchar *dev_desc = spice_usb_device_get_description(
                 _dev, "%s %s %s at %d-%d");
@@ -156,7 +157,7 @@ void get_operation_result(gpointer item, void *res)
     if ( _res!=nullptr ) {
         if ( dev.contains(_res->id) ) {
             _res->result = spice_usb_device_manager_is_device_connected(
-                        (SpiceUsbDeviceManager*) _res->obj, _dev);
+                        static_cast<SpiceUsbDeviceManager*>(_res->obj), _dev);
         };
     };
 }
@@ -169,7 +170,7 @@ bool QSpiceUsbDeviceManager::spiceUsbDeviceManager_is_device_connected
     _res.id = _id;
     _res.obj = gobject;
     GPtrArray *_devs = spice_usb_device_manager_get_devices(
-                (SpiceUsbDeviceManager*)gobject);
+                static_cast<SpiceUsbDeviceManager*>(gobject));
     g_ptr_array_foreach(_devs, get_operation_result, &_res);
     g_ptr_array_free(_devs, true);
     return _res.result;
@@ -178,7 +179,7 @@ bool QSpiceUsbDeviceManager::spiceUsbDeviceManager_is_device_connected
 void get_device_idx(gpointer item, void *res)
 {
     RES *_res = static_cast<RES*>(res);
-    SpiceUsbDevice *_dev = (SpiceUsbDevice*) item;
+    SpiceUsbDevice *_dev = static_cast<SpiceUsbDevice*>(item);
     QString dev;
     gchar *dev_desc = spice_usb_device_get_description(
                 _dev, "%s %s %s at %d-%d");
@@ -195,10 +196,10 @@ void get_device_idx(gpointer item, void *res)
 void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_finish_callback
                                                 (void *self, void *res, void *err)
 {
-    GError **errors = (GError**) err;
-    GAsyncResult *result = (GAsyncResult*) res;
+    GError **errors = static_cast<GError**>(err);
+    GAsyncResult *result = static_cast<GAsyncResult*>(res);
     bool _res = spice_usb_device_manager_connect_device_finish(
-                (SpiceUsbDeviceManager*) self, result, errors);
+                static_cast<SpiceUsbDeviceManager*>(self), result, errors);
     if ( !_res ) {
         QSpiceUsbDeviceManager *obj =
                 static_cast<QSpiceUsbDeviceManager*>(
@@ -219,14 +220,14 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_finish_callback
     };
 }
 
-#if SPICE_GTK_MAJOR_VERSION==0 && SPICE_GTK_MINOR_VERSION>=32
 void QSpiceUsbDeviceManager::spiceUsbDeviceManager_disconnect_finish_callback
                                                 (void *self, void *res, void *_err)
 {
-    GError **errors = (GError**) _err;
-    GAsyncResult *result = (GAsyncResult*) res;
+#if SPICE_GTK_CHECK_VERSION(0, 32, 0)
+    GError **errors = static_cast<GError**>(_err);
+    GAsyncResult *result = static_cast<GAsyncResult*>(res);
     bool _res = spice_usb_device_manager_disconnect_device_finish(
-                (SpiceUsbDeviceManager*) self, result, errors);
+                static_cast<SpiceUsbDeviceManager*>(self), result, errors);
     if ( !_res ) {
         QSpiceUsbDeviceManager *obj =
                 static_cast<QSpiceUsbDeviceManager*>(
@@ -250,8 +251,8 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_disconnect_finish_callback
         QString dev("???");
         emit obj->deviceInfo(dev, err);
     };
-}
 #endif
+}
 
 /* public slots */
 void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
@@ -260,14 +261,16 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
     RES _res;
     _res.id = _id;
     GPtrArray *_devs = spice_usb_device_manager_get_devices(
-                (SpiceUsbDeviceManager*) gobject);
+                static_cast<SpiceUsbDeviceManager*>(gobject));
     g_ptr_array_foreach(_devs, get_device_idx, &_res);
     if ( _res.idx!=-1 ) {
         SpiceUsbDevice *_dev =
-                (SpiceUsbDevice*) g_ptr_array_index (_devs, _res.idx);
+                static_cast<SpiceUsbDevice*>(g_ptr_array_index(_devs, _res.idx));
         GError **errors = nullptr;
         bool possibility = spice_usb_device_manager_can_redirect_device(
-                    (SpiceUsbDeviceManager*) gobject, _dev, errors);
+                    static_cast<SpiceUsbDeviceManager*>(gobject),
+                    _dev,
+                    errors);
         if (!possibility) {
             QString err;
             if ( nullptr!=errors ) {
@@ -287,14 +290,14 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
             emit deviceInfo(_id, err);
         } else {
             bool connected = spice_usb_device_manager_is_device_connected(
-                        (SpiceUsbDeviceManager*) gobject, _dev);
+                        static_cast<SpiceUsbDeviceManager*>(gobject), _dev);
             QString _msg;
             if ( !connected ) {
                 spice_usb_device_manager_connect_device_async(
-                            (SpiceUsbDeviceManager*) gobject,
+                            static_cast<SpiceUsbDeviceManager*>(gobject),
                             _dev,
                             nullptr,
-                            (GAsyncReadyCallback)spiceUsbDeviceManager_connect_finish_callback,
+                            GAsyncReadyCallback(spiceUsbDeviceManager_connect_finish_callback),
                             this);
                 _msg.append(tr("connected to guest."));
             } else {
@@ -311,21 +314,21 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_disconnect_device(QString &_i
     RES _res;
     _res.id = _id;
     GPtrArray *_devs = spice_usb_device_manager_get_devices(
-                (SpiceUsbDeviceManager*) gobject);
+                static_cast<SpiceUsbDeviceManager*>(gobject));
     g_ptr_array_foreach(_devs, get_device_idx, &_res);
     if ( _res.idx!=-1 ) {
         SpiceUsbDevice *_dev =
-                (SpiceUsbDevice*) g_ptr_array_index (_devs, _res.idx);
+                static_cast<SpiceUsbDevice*>(g_ptr_array_index(_devs, _res.idx));
         bool connected = spice_usb_device_manager_is_device_connected(
-                    (SpiceUsbDeviceManager*) gobject, _dev);
+                    static_cast<SpiceUsbDeviceManager*>(gobject), _dev);
         QString _msg;
         if ( connected ) {
-#if SPICE_GTK_MAJOR_VERSION==0 && SPICE_GTK_MINOR_VERSION>=32
+#if SPICE_GTK_CHECK_VERSION(0, 32, 0)
             spice_usb_device_manager_disconnect_device_async(
-                        (SpiceUsbDeviceManager*) gobject,
+                        static_cast<SpiceUsbDeviceManager*>(gobject),
                         _dev,
                         nullptr,
-                        (GAsyncReadyCallback)spiceUsbDeviceManager_disconnect_finish_callback,
+                        GAsyncReadyCallback(spiceUsbDeviceManager_disconnect_finish_callback),
                         this);
 #else
             spice_usb_device_manager_disconnect_device(

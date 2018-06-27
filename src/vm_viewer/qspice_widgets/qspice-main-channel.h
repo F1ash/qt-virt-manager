@@ -40,13 +40,13 @@ public:
     void clipboardSelectionGrab(uint, quint32*, int);
     void clipboardSelectionRelease();
     void initGuestClipboardSelectionRequest();
-    void clipboardSelectionNotify(uint, quint32, const uchar*, size_t);
+    void clipboardSelectionNotify(uint, quint32, const uchar*, long);
     void guestClipboardSelectionRequest();
 
     void fileCopyAsync(QStringList&);
     void cancelFileCopyAsync();
     static void fileCopyFinish(void*, void*, void*);
-    static void progressCallback(uint, uint, void*);
+    static void progressCallback(qint64, qint64, void*);
 
 signals:
     void agentUpdated();
@@ -57,7 +57,7 @@ signals:
     void mouseUpdated();
     void migrationStarted();
     void newFileTransfer(const QString&);
-    void downloaded(int, int);
+    void downloaded(qint64, qint64);
     void cancelled();
     void downloadCompleted();
 

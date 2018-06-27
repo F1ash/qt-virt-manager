@@ -129,9 +129,9 @@ void QSpiceSession::init()
     setReadOnly(false);
     //setSharedDir(QString("%1/Public").arg(qgetenv("HOME").data()));
     g_signal_connect(gobject, "channel-new",
-                     (GCallback) QSpiceHelper::ss_channel_new, this);
+                     GCallback(QSpiceHelper::ss_channel_new), this);
     g_signal_connect(gobject, "channel-destroy",
-                     (GCallback) QSpiceHelper::ss_channel_destroy, this);
+                     GCallback(QSpiceHelper::ss_channel_destroy), this);
     qDebug()<<getSharedDir()<<"shared";
 #if WITH_LIBCACARD
     // http://www.spice-space.org/page/SmartcardUsage#Using_a_software_smartcard
@@ -147,11 +147,11 @@ void QSpiceSession::init()
 
 bool QSpiceSession::openSession()
 {
-    return spice_session_connect ((SpiceSession *) gobject);
+    return spice_session_connect (static_cast<SpiceSession*>(gobject));
 }
 
 void QSpiceSession::closeSession()
 {
-    spice_session_disconnect((SpiceSession *)  gobject);
+    spice_session_disconnect(static_cast<SpiceSession*>(gobject));
 }
 

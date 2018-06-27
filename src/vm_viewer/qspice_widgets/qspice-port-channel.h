@@ -15,8 +15,8 @@ public:
     Q_GPROP_BOOL(PortOpened, "port-opened")     // Default value: FALSE
 
 signals:
-    void portData(void*,size_t);
-    void portEvent(qint8);
+    void portData(void*, size_t);
+    void portEvent(int);
 
 protected:
     inline QSpicePortChannel(void *channel) :
@@ -25,7 +25,7 @@ protected:
     friend class QSpiceHelper;
 
     void initCallbacks();
-    void sendEventToPort(qint8);
+    void sendEventToPort(quint8);
     void writeBuffToPort(const void*, size_t);
     static void writeFinishToPort(void*, void*, void*);
 };

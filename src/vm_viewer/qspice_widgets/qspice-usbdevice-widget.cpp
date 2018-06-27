@@ -50,11 +50,11 @@ void QSpiceUsbDeviceWidget::clearList()
 void QSpiceUsbDeviceWidget::addDevice(QString &dev)
 {
     Q_UNUSED(dev);
-    emit devicesChanged((void*)this);
+    emit devicesChanged(static_cast<void*>(this));
 }
 
 void QSpiceUsbDeviceWidget::removeDevice(QString &dev)
 {
     Q_UNUSED(dev);
-    emit devicesChanged((void*)this);
+    emit devicesChanged(static_cast<void*>(this));
 }

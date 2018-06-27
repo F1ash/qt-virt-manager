@@ -27,10 +27,13 @@ typedef enum {
     NEWLINE_TYPE_CR_LF
 } NewlineType;
 
-static gssize get_line(const gchar *str, gsize len,
-                       NewlineType type, gsize *nl_len,
-                       GError **error)
+static gssize get_line(const gchar *str,
+                       gssize       len,
+                       NewlineType  type,
+                       gsize       *nl_len,
+                       GError     **error)
 {
+    Q_UNUSED(error)
     const gchar *p, *endl;
     gsize nl = 0;
 
@@ -45,10 +48,11 @@ static gssize get_line(const gchar *str, gsize len,
     return len;
 }
 
-static char* spice_convert_newlines(const gchar *str, gssize len,
+static char* spice_convert_newlines(const gchar *str,
+                                     gssize      len,
                                      NewlineType from,
                                      NewlineType to,
-                                     GError **error)
+                                     GError    **error)
 {
     GError *err = nullptr;
     gssize length;
@@ -67,7 +71,7 @@ static char* spice_convert_newlines(const gchar *str, gssize len,
                           to == NEWLINE_TYPE_LF), nullptr);
 
     if (len == -1)
-        len = strlen(str);
+        len = long(strlen(str));
     /* sometime we get \0 terminated strings, skip that, or it fails
        to utf8 validate line with \0 end */
     else if (len > 0 && str[len-1] == 0)
@@ -77,9 +81,9 @@ static char* spice_convert_newlines(const gchar *str, gssize len,
      * if it's big, malloc will put us in mmap'd region, and we can
      * over allocate.
      */
-    output = g_string_sized_new(len * 2 + 1);
+    output = g_string_sized_new(ulong(len) * 2 + 1);
 
-    for (i = 0; i < len; i += length + nl) {
+    for (i = 0; i < len; i += ulong(length) + nl) {
         length = get_line(str + i, len - i, from, &nl, &err);
         if (length < 0)
             break;
@@ -127,7 +131,7 @@ void QSpiceHelper::main_clipboard_selection(SpiceMainChannel *mainchannel,
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
     if ( nullptr==_mainchannel ) return;
-    emit _mainchannel->clipboardSelection(type, (void*)data, size);
+    emit _mainchannel->clipboardSelection(type, data, size);
 }
 bool QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *mainchannel,
                                                  guint selection,
@@ -136,6 +140,9 @@ bool QSpiceHelper::main_clipboard_selection_grab(SpiceMainChannel *mainchannel,
                                                  gpointer user_data)
 {
     Q_UNUSED(mainchannel);
+    Q_UNUSED(selection);
+    Q_UNUSED(types);
+    Q_UNUSED(ntypes);
     //qDebug()<<"main_clipboard_selection_grub";
     QSpiceMainChannel *_mainchannel =
             static_cast<QSpiceMainChannel*>(user_data);
@@ -202,7 +209,7 @@ void QSpiceHelper::operation_cancelled(GCancellable *cancellable,
     emit _mainchannel->cancelled();
 }
 
-#if SPICE_GTK_MAJOR_VERSION==0 && SPICE_GTK_MINOR_VERSION>=31
+#if SPICE_GTK_CHECK_VERSION(0, 31, 0)
 void QSpiceHelper::new_file_transfer(SpiceMainChannel *mainchannel,
                                      SpiceFileTransferTask *task,
                                      gpointer user_data)
@@ -227,47 +234,57 @@ void QSpiceMainChannel::initCallbacks()
     cancellable = g_cancellable_new();
     g_signal_connect(
                 gobject, "main-agent-update",
-                (GCallback) QSpiceHelper::main_agent_update,
+                GCallback(QSpiceHelper::main_agent_update),
                 this);
     g_signal_connect(
                 gobject, "main-clipboard-selection",
-                (GCallback) QSpiceHelper::main_clipboard_selection,
+                GCallback(QSpiceHelper::main_clipboard_selection),
                 this);
     g_signal_connect(
                 gobject, "main-clipboard-selection-grab",
-                (GCallback) QSpiceHelper::main_clipboard_selection_grab,
+                GCallback(QSpiceHelper::main_clipboard_selection_grab),
                 this);
     g_signal_connect(
                 gobject, "main-clipboard-selection-release",
-                (GCallback) QSpiceHelper::main_clipboard_selection_release,
+                GCallback(QSpiceHelper::main_clipboard_selection_release),
                 this);
     g_signal_connect(
                 gobject,
                 "main-clipboard-selection-request",
-                (GCallback) QSpiceHelper::main_clipboard_selection_request,
+                GCallback(QSpiceHelper::main_clipboard_selection_request),
                 this);
     g_signal_connect(
                 gobject, "main-mouse-update",
-                (GCallback) QSpiceHelper::main_mouse_update,
+                GCallback(QSpiceHelper::main_mouse_update),
                 this);
     g_signal_connect(
                 gobject, "migration-started",
-                (GCallback) QSpiceHelper::migration_started,
+                GCallback(QSpiceHelper::migration_started),
                 this);
     g_signal_connect(
                 cancellable, "cancelled",
-                (GCallback) QSpiceHelper::operation_cancelled,
+                GCallback(QSpiceHelper::operation_cancelled),
                 this);
-#if SPICE_GTK_MAJOR_VERSION==0 && SPICE_GTK_MINOR_VERSION>=31
+#if SPICE_GTK_CHECK_VERSION(0, 31, 0)
     g_signal_connect(
                 gobject, "new-file-transfer",
-                (GCallback) QSpiceHelper::new_file_transfer,
+                GCallback(QSpiceHelper::new_file_transfer),
                 this);
 #endif
 }
 
 void QSpiceMainChannel::setDisplay(int id, int x, int y, int width, int height)
 {
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_update_display(
+                static_cast<SpiceMainChannel*>(gobject),
+                id,
+                x,
+                y,
+                width,
+                height,
+                true);
+#else
     spice_main_set_display(
                 (SpiceMainChannel *) gobject,
                 id,
@@ -275,20 +292,33 @@ void QSpiceMainChannel::setDisplay(int id, int x, int y, int width, int height)
                 y,
                 width,
                 height);
+#endif
 }
 
 void QSpiceMainChannel::setDisplayEnabled(int id, bool enabled)
 {
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_update_display_enabled(
+                static_cast<SpiceMainChannel*>(gobject),
+                id,
+                enabled,
+                true);
+#else
     spice_main_set_display_enabled(
                 (SpiceMainChannel *) gobject,
                 id,
                 enabled);
+#endif
 }
 
 void QSpiceMainChannel::updateDisplay(int id, int x, int y, int width, int height, bool update)
 {
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_update_display(
+#else
     spice_main_update_display(
-                (SpiceMainChannel *) gobject,
+#endif
+                static_cast<SpiceMainChannel*>(gobject),
                 id,
                 x,
                 y,
@@ -299,7 +329,13 @@ void QSpiceMainChannel::updateDisplay(int id, int x, int y, int width, int heigh
 
 void QSpiceMainChannel::updateDisplayEnabled(int id, bool enabled, bool update)
 {
-#if SPICE_GTK_CHECK_VERSION(0, 30, 0)
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_update_display_enabled(
+                static_cast<SpiceMainChannel*>(gobject),
+                id,
+                enabled,
+                update);
+#elif SPICE_GTK_CHECK_VERSION(0, 30, 0)
     spice_main_update_display_enabled(
                 (SpiceMainChannel *) gobject,
                 id,
@@ -314,14 +350,23 @@ void QSpiceMainChannel::updateDisplayEnabled(int id, bool enabled, bool update)
 
 bool QSpiceMainChannel::sendMonitorConfig()
 {
-    return spice_main_send_monitor_config(
-                (SpiceMainChannel *) gobject);
+    return
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+           spice_main_channel_send_monitor_config(
+#else
+           spice_main_send_monitor_config(
+#endif
+                static_cast<SpiceMainChannel*>(gobject));
 }
 
 void QSpiceMainChannel::clipboardSelectionGrab(uint selection, quint32 *types, int ntypes)
 {
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_clipboard_selection_grab(
+#else
     spice_main_clipboard_selection_grab(
-                (SpiceMainChannel *) gobject,
+#endif
+                static_cast<SpiceMainChannel*>(gobject),
                 selection,
                 types,
                 ntypes);
@@ -329,40 +374,54 @@ void QSpiceMainChannel::clipboardSelectionGrab(uint selection, quint32 *types, i
 
 void QSpiceMainChannel::clipboardSelectionRelease()
 {
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_clipboard_selection_release(
+#else
     spice_main_clipboard_selection_release(
-                (SpiceMainChannel *) gobject,
+#endif
+                static_cast<SpiceMainChannel*>(gobject),
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD);
 }
 
 void QSpiceMainChannel::initGuestClipboardSelectionRequest()
 {
-    guint32 types[5] = {
+    const int ntypes = 5;
+    guint32 types[ntypes] = {
             VD_AGENT_CLIPBOARD_UTF8_TEXT,
             VD_AGENT_CLIPBOARD_IMAGE_BMP,
             VD_AGENT_CLIPBOARD_IMAGE_JPG,
             VD_AGENT_CLIPBOARD_IMAGE_PNG,
             VD_AGENT_CLIPBOARD_IMAGE_TIFF};
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_clipboard_selection_grab (
+#else
     spice_main_clipboard_selection_grab (
-                (SpiceMainChannel *) gobject,
+#endif
+                static_cast<SpiceMainChannel*>(gobject),
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
                 types,
-                5);
+                ntypes);
 }
 
-void QSpiceMainChannel::clipboardSelectionNotify(uint selection, quint32 type, const uchar *data, size_t size)
+void QSpiceMainChannel::clipboardSelectionNotify(uint selection, quint32 type, const uchar *data, long size)
 {
     //qDebug()<<"clipboardSelectionNotify";
 
     gpointer conv = nullptr;
-    gint len = 0;
+    size_t len = 0;
     if ( type==VD_AGENT_CLIPBOARD_UTF8_TEXT ) {
         /* gtk+ internal utf8 newline is always LF, even on windows */
-        if (spice_main_agent_test_capability(
-                    (SpiceMainChannel *) gobject,
-                    VD_AGENT_CAP_GUEST_LINEEND_CRLF)) {
+        if (
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+             spice_main_channel_agent_test_capability(
+#else
+             spice_main_agent_test_capability(
+#endif
+                    static_cast<SpiceMainChannel*>(gobject),
+                    VD_AGENT_CAP_GUEST_LINEEND_CRLF) ) {
             GError *err = nullptr;
             conv = spice_convert_newlines(
-                        (char*)data,
+                        reinterpret_cast<const char*>(data),
                         size,
                         NEWLINE_TYPE_LF,
                         NEWLINE_TYPE_CR_LF,
@@ -370,9 +429,11 @@ void QSpiceMainChannel::clipboardSelectionNotify(uint selection, quint32 type, c
             if (err) {
                 qWarning("Failed to convert text line ending: %s", err->message);
                 g_clear_error(&err);
-                return;
+                // continue for paste empty string
+                // and to do paste notify for unblock Copy\Paste toolbar buttons
+                //return;
             };
-            len = strlen((char*)conv);
+            len = strlen(static_cast<char*>(conv));
         } else {
             /* On Windows, with some versions of gtk+, GtkSelectionData::length
              * will include the final '\0'. When a string with this trailing '\0'
@@ -381,22 +442,49 @@ void QSpiceMainChannel::clipboardSelectionNotify(uint selection, quint32 type, c
              * send to the agent does not include any trailing '\0'
              * This is gtk+ bug https://bugzilla.gnome.org/show_bug.cgi?id=734670
              */
-            len = strlen((const char *)data);
+            len = strlen(reinterpret_cast<const char*>(data));
         };
     };
 
     //qDebug()<<data<<conv<<len;
+    const guchar* _conv = static_cast<const guchar*>(conv);
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_clipboard_selection_notify(
+#else
     spice_main_clipboard_selection_notify(
-                (SpiceMainChannel *) gobject,
+#endif
+                static_cast<SpiceMainChannel*>(gobject),
                 selection,
                 type,
-                (const guchar*)(conv ? conv : data),
-                (len)? len : size);
+                _conv ? _conv : data,
+                len? len : size_t(size));
     g_free(conv);
 }
 
 void QSpiceMainChannel::guestClipboardSelectionRequest()
 {
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_clipboard_selection_request(
+                static_cast<SpiceMainChannel*>(gobject),
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_UTF8_TEXT);
+    spice_main_channel_clipboard_selection_request(
+                static_cast<SpiceMainChannel*>(gobject),
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_PNG);
+    spice_main_channel_clipboard_selection_request(
+                static_cast<SpiceMainChannel*>(gobject),
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_JPG);
+    spice_main_channel_clipboard_selection_request(
+                static_cast<SpiceMainChannel*>(gobject),
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_BMP);
+    spice_main_channel_clipboard_selection_request(
+                static_cast<SpiceMainChannel*>(gobject),
+                VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
+                VD_AGENT_CLIPBOARD_IMAGE_TIFF);
+#else
     spice_main_clipboard_selection_request(
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
@@ -417,6 +505,7 @@ void QSpiceMainChannel::guestClipboardSelectionRequest()
                 (SpiceMainChannel *) gobject,
                 VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD,
                 VD_AGENT_CLIPBOARD_IMAGE_TIFF);
+#endif
 }
 
 void QSpiceMainChannel::fileCopyAsync(QStringList &fileNames)
@@ -425,7 +514,7 @@ void QSpiceMainChannel::fileCopyAsync(QStringList &fileNames)
         emit downloadCompleted();
         return;
     };
-    uint count = fileNames.count();
+    const uint count = uint(fileNames.count());
     //qDebug()<<fileNames<<count;
     GFile* sources[count];
     uint i = 0;
@@ -435,23 +524,31 @@ void QSpiceMainChannel::fileCopyAsync(QStringList &fileNames)
     };
     sources[i] = nullptr;
     //qDebug()<<"SpiceMainChannel"<<this->gobject;
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_file_copy_async(
+#else
     spice_main_file_copy_async(
-                (SpiceMainChannel *) gobject,
+#endif
+                static_cast<SpiceMainChannel*>(gobject),
                 sources,
                 G_FILE_COPY_BACKUP,
-                (GCancellable*)cancellable,
-                (GFileProgressCallback)progressCallback,
+                static_cast<GCancellable*>(cancellable),
+                GFileProgressCallback(progressCallback),
                 this,
-                (GAsyncReadyCallback)fileCopyFinish,
+                GAsyncReadyCallback(fileCopyFinish),
                 this);
 }
 
 void QSpiceMainChannel::fileCopyFinish(void *channel, void *result, void *error)
 {
-    GAsyncResult *asyncResult = (GAsyncResult *)result;
-    GError **errors = (GError **)error;
+    GAsyncResult *asyncResult = static_cast<GAsyncResult *>(result);
+    GError **errors = static_cast<GError**>(error);
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_main_channel_file_copy_finish(
+#else
     spice_main_file_copy_finish(
-                (SpiceMainChannel *)channel,
+#endif
+                static_cast<SpiceMainChannel*>(channel),
                 asyncResult,
                 errors);
     QSpiceMainChannel *obj = static_cast<QSpiceMainChannel*>(
@@ -472,11 +569,11 @@ void QSpiceMainChannel::fileCopyFinish(void *channel, void *result, void *error)
     if (obj) {
         emit obj->downloadCompleted();
         // reset cancellable for allow the start new task
-        g_cancellable_reset((GCancellable*)obj->cancellable);
+        g_cancellable_reset(static_cast<GCancellable*>(obj->cancellable));
     };
 }
 
-void QSpiceMainChannel::progressCallback(uint current_num_bytes, uint total_num_bytes, void *user_data)
+void QSpiceMainChannel::progressCallback(qint64 current_num_bytes, qint64 total_num_bytes, void *user_data)
 {
     QSpiceMainChannel *obj = static_cast<QSpiceMainChannel*>(user_data);
     //qDebug()<<current_num_bytes<<total_num_bytes;
@@ -485,7 +582,7 @@ void QSpiceMainChannel::progressCallback(uint current_num_bytes, uint total_num_
 
 void QSpiceMainChannel::cancelFileCopyAsync()
 {
-    GCancellable* c = (GCancellable*)cancellable;
+    GCancellable* c = static_cast<GCancellable*>(cancellable);
     if ( !g_cancellable_is_cancelled(c) )
         g_cancellable_cancel(c);
 }

@@ -28,7 +28,7 @@ void QSpiceHelper::playback_data(SpicePlaybackChannel *channel,
                         _playback->_dev->open(QIODevice::WriteOnly);
             if ( opened ) {
                 qint64 written = _playback->_dev->write(
-                            (const char*)data, data_size);
+                            static_cast<const char*>(data), data_size);
                 //qDebug()<<data_size<<"playback_data_written"<<written;
                 _playback->_dev->close();
             };
@@ -98,13 +98,13 @@ void QSpicePlaybackChannel::initCallbacks()
 {
 #if USE_SPICE_AUDIO
     g_signal_connect(gobject, "playback-data",
-                     (GCallback) QSpiceHelper::playback_data, this);
+                     GCallback(QSpiceHelper::playback_data), this);
     g_signal_connect(gobject, "playback-get-delay",
-                     (GCallback) QSpiceHelper::playback_get_delay, this);
+                     GCallback(QSpiceHelper::playback_get_delay), this);
     g_signal_connect(gobject, "playback-start",
-                     (GCallback) QSpiceHelper::playback_start, this);
+                     GCallback(QSpiceHelper::playback_start), this);
     g_signal_connect(gobject, "playback-stop",
-                     (GCallback) QSpiceHelper::playback_stop, this);
+                     GCallback(QSpiceHelper::playback_stop), this);
 #endif
 }
 

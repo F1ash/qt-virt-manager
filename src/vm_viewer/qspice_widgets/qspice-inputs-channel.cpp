@@ -32,7 +32,7 @@ void QSpiceHelper::inputs_modifiers(SpiceInputsChannel *spiceinputschannel, gpoi
 void QSpiceInputsChannel::initCallbacks()
 {
     g_signal_connect(gobject, "inputs-modifiers",
-                     (GCallback) QSpiceHelper::inputs_modifiers, this);
+                     GCallback(QSpiceHelper::inputs_modifiers), this);
 }
 
 void QSpiceInputsChannel::inputsPosition(
@@ -43,74 +43,78 @@ void QSpiceInputsChannel::inputsPosition(
 {
 #if SPICE_GTK_CHECK_VERSION(0, 35, 0)
     spice_inputs_channel_position(
-                static_cast<SpiceInputsChannel*>(gobject), x, y, display, button_state);
 #else
-    spice_inputs_position((SpiceInputsChannel *) gobject, x, y, display, button_state);
+    spice_inputs_position(
 #endif
+                static_cast<SpiceInputsChannel*>(gobject), x, y, display, button_state);
 }
 
 void QSpiceInputsChannel::inputsButtonPress(int button, int button_state)
 {
 #if SPICE_GTK_CHECK_VERSION(0, 35, 0)
     spice_inputs_channel_button_press(
+#else
+    spice_inputs_button_press(
+#endif
                 static_cast<SpiceInputsChannel*>(gobject),
                 button,
                 button_state);
-#else
-    spice_inputs_button_press((SpiceInputsChannel *) gobject, button, button_state);
-#endif
 }
 
 void QSpiceInputsChannel::inputsButtonRelease(int button, int button_state)
 {
 #if SPICE_GTK_CHECK_VERSION(0, 35, 0)
     spice_inputs_channel_button_release(
+#else
+    spice_inputs_button_release(
+#endif
                 static_cast<SpiceInputsChannel*>(gobject),
                 button,
                 button_state);
-#else
-    spice_inputs_button_release((SpiceInputsChannel *) gobject, button, button_state);
-#endif
 }
 
 void QSpiceInputsChannel::inputsKeyPress(uint scancode)
 {
 #if SPICE_GTK_CHECK_VERSION(0, 35, 0)
     spice_inputs_channel_key_press(
-                static_cast<SpiceInputsChannel*>(gobject), scancode);
 #else
-    spice_inputs_key_press((SpiceInputsChannel *) gobject, scancode);
+    spice_inputs_key_press(
 #endif
+                static_cast<SpiceInputsChannel*>(gobject),
+                scancode);
 }
 
 void QSpiceInputsChannel::inputsKeyPressAndRelease(uint scancode)
 {
 #if SPICE_GTK_CHECK_VERSION(0, 35, 0)
     spice_inputs_channel_key_press_and_release(
-                static_cast<SpiceInputsChannel*>(gobject), scancode);
 #else
-    spice_inputs_key_press_and_release((SpiceInputsChannel *) gobject, scancode);
+    spice_inputs_key_press_and_release(
 #endif
+                static_cast<SpiceInputsChannel*>(gobject),
+                scancode);
 }
 
 void QSpiceInputsChannel::inputsKeyRelease(uint scancode)
 {
 #if SPICE_GTK_CHECK_VERSION(0, 35, 0)
     spice_inputs_channel_key_release(
-                static_cast<SpiceInputsChannel*>(gobject), scancode);
 #else
-    spice_inputs_key_release((SpiceInputsChannel *) gobject, scancode);
+    spice_inputs_key_release(
 #endif
+                static_cast<SpiceInputsChannel*>(gobject),
+                scancode);
 }
 
 void QSpiceInputsChannel::inputsSetKeyLocks(uint locks)
 {
 #if SPICE_GTK_CHECK_VERSION(0, 35, 0)
     spice_inputs_channel_set_key_locks(
-                static_cast<SpiceInputsChannel*>(gobject), locks);
 #else
-    spice_inputs_set_key_locks((SpiceInputsChannel *) gobject, locks);
+    spice_inputs_set_key_locks(
 #endif
+                static_cast<SpiceInputsChannel*>(gobject),
+                locks);
 }
 
 // Qt Keys map of scancodes (platform independent)

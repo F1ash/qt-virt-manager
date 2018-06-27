@@ -11,7 +11,7 @@ void QSpiceHelper::port_data(SpicePortChannel *spiceportchannel,
     Q_UNUSED(spiceportchannel)
     QSpicePortChannel *_port = static_cast<QSpicePortChannel*>(user_data);
     if ( nullptr==_port ) return;
-    emit _port->portData((void*)arg1, arg2);
+    emit _port->portData(arg1, size_t(arg2));
 }
 
 void QSpiceHelper::port_event(SpicePortChannel *spiceportchannel,
@@ -27,33 +27,47 @@ void QSpiceHelper::port_event(SpicePortChannel *spiceportchannel,
 void QSpicePortChannel::initCallbacks()
 {
     g_signal_connect(gobject, "port-data",
-                     (GCallback) QSpiceHelper::port_data, this);
+                     GCallback(QSpiceHelper::port_data), this);
     g_signal_connect(gobject, "port-event",
-                     (GCallback) QSpiceHelper::port_event, this);
+                     GCallback(QSpiceHelper::port_event), this);
 }
 
-void QSpicePortChannel::sendEventToPort(qint8 event)
+void QSpicePortChannel::sendEventToPort(quint8 event)
 {
-    spice_port_event((SpicePortChannel *)gobject, (guint8) event);
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_port_channel_event(
+#else
+    spice_port_event(
+#endif
+                static_cast<SpicePortChannel*>(gobject),
+                guint8(event));
 }
 
 void QSpicePortChannel::writeBuffToPort(const void *buff, size_t _size)
 {
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    spice_port_channel_write_async(
+#else
     spice_port_write_async(
-                (SpicePortChannel*)gobject,
+#endif
+                static_cast<SpicePortChannel*>(gobject),
                 buff,
                 _size,
                 nullptr,
-                (GAsyncReadyCallback)writeFinishToPort,
+                GAsyncReadyCallback(writeFinishToPort),
                 this);
 }
 
 void QSpicePortChannel::writeFinishToPort(void *_port, void *_res, void *_errs)
 {
-    GAsyncResult *result = (GAsyncResult*) _res;
-    GError **errors = (GError**) _errs;
-    int ssize = spice_port_write_finish(
-                (SpicePortChannel*)_port,
+    GAsyncResult *result = static_cast<GAsyncResult*>(_res);
+    GError **errors = static_cast<GError**>(_errs);
+#if SPICE_GTK_CHECK_VERSION(0, 35, 0)
+    long ssize = spice_port_channel_write_finish(
+#else
+    long ssize = spice_port_write_finish(
+#endif
+                static_cast<SpicePortChannel*>(_port),
                 result,
                 errors);
     //QSpicePortChannel *obj = static_cast<QSpicePortChannel*>(

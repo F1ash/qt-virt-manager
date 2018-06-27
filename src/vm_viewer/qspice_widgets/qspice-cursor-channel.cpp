@@ -21,7 +21,8 @@
 
 void QSpiceCursorChannel::initCallbacks()
 {
-    g_signal_connect(gobject, "cursor-set", (GCallback) QSpiceHelper::cursor_set, this);
+    g_signal_connect(gobject, "cursor-set",
+                     GCallback(QSpiceHelper::cursor_set), this);
 }
 
 void QSpiceHelper::cursor_set(SpiceCursorChannel *cursor,

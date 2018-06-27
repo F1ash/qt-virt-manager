@@ -67,7 +67,7 @@ public:
     /*
      * Send client Clipboard data to guest Clipboard.
      */
-    void sendClipboardDataToGuest(uint, quint32, const uchar*, size_t);
+    void sendClipboardDataToGuest(uint, quint32, const uchar*, long);
 
     /*
      * Get isScaled state
@@ -182,7 +182,7 @@ private:
                              init_h, init_w,
                              d_X, d_Y;
     qreal                    zoom;
-    uint                     downloadProgress;
+    int                      downloadProgress;
     bool                     scaled, is_FullScreen;
 
 protected:
@@ -257,7 +257,7 @@ private slots:
     void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *event);
     void resizeDone();
-    void setDownloadProgress(int, int);
+    void setDownloadProgress(qint64, qint64);
     void formatMsg(SPICE_CHANNEL_MSG&);
     void channelEvent(int);
 

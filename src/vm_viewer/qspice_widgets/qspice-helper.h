@@ -141,7 +141,7 @@ public:
             GCancellable        *cancellable,
             gpointer             user_data);
 
-#if SPICE_GTK_MAJOR_VERSION==0 && SPICE_GTK_MINOR_VERSION>=31
+#if SPICE_GTK_CHECK_VERSION(0, 31, 0)
     static void new_file_transfer(
             SpiceMainChannel      *mainchannel,
             SpiceFileTransferTask *task,
