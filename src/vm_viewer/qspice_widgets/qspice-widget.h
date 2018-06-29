@@ -57,12 +57,12 @@ public:
     /*
      * Copy guest Clipboard data to client Clipboard.
      */
-    void copyClipboardDataFromGuest();
+    void copyToClipboardFromGuest();
 
     /*
      * Initiation paste client Clipboard data to guest Clipboard.
      */
-    void pasteClipboardDataToGuest();
+    void pasteClipboardToGuest();
 
     /*
      * Send client Clipboard data to guest Clipboard.
@@ -147,7 +147,7 @@ signals:
      * In develop.
      * Emitted, when guest/client clipboards transfer start/done.
      */
-    void clipboardsReleased(bool);
+    void copyPasteStateChanged(bool);
 
     /*
      * Emitted, when user touched top boarder.
@@ -205,12 +205,12 @@ private slots:
     void obstructChannel(int);
 
     void mainAgentUpdate();
-    void mainClipboardSelection(uint, void*, uint);
+    void pasteClipboardSelectionFromGuest(uint, void*, uint);
     void clipboardSelectionGrab();
-    void guestClipboardSelectionReleased(uint);
+    void releaseClipboardSelection(uint);
     QClipboard::Mode selectionToClipboardMode(uint);
-    uint clipbordModeToSelection(QClipboard::Mode);
-    void clientClipboardSelectionRequested(uint, uint);
+    uint clipboardModeToSelection(QClipboard::Mode);
+    void checkGuestClipboardSelectionRequest(uint, uint);
     void sendTextClipboardDataToGuest(QClipboard::Mode);
     void sendImageClipboardDataToGuest(QClipboard::Mode);
     void mainMouseUpdate();

@@ -63,12 +63,12 @@ void Spice_Viewer_Only::cancelCopyFilesToVirtDomain()
 void Spice_Viewer_Only::copyToClipboardFromVirtDomain()
 {
     if ( nullptr!=spiceWdg )
-        spiceWdg->copyClipboardDataFromGuest();
+        spiceWdg->copyToClipboardFromGuest();
 }
 void Spice_Viewer_Only::pasteClipboardToVirtDomain()
 {
     if ( nullptr!=spiceWdg )
-        spiceWdg->pasteClipboardDataToGuest();
+        spiceWdg->pasteClipboardToGuest();
 }
 void Spice_Viewer_Only::fullScreenVirtDomain()
 {
@@ -119,7 +119,7 @@ void Spice_Viewer_Only::initGraphicWidget()
             spiceWdg, SLOT(setTransformationMode(Qt::TransformationMode)));
     //connect(spiceWdg, SIGNAL(errMsg(const QString&)),
     //        this, SLOT(sendErrMsg(const QString&)));
-    connect(spiceWdg, SIGNAL(clipboardsReleased(bool)),
+    connect(spiceWdg, SIGNAL(copyPasteStateChanged(bool)),
             viewerToolBar, SLOT(setCopyPasteState(bool)));
     connect(spiceWdg, SIGNAL(boarderTouched()),
             this, SLOT(startAnimatedShow()));

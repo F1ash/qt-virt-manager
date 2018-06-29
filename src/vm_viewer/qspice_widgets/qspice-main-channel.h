@@ -38,10 +38,10 @@ public:
     bool sendMonitorConfig();
 
     void clipboardSelectionGrab(uint, quint32*, int);
-    void clipboardSelectionRelease();
-    void initGuestClipboardSelectionRequest();
+    void initClipboardSelectionRequestOnGuest();
+    void initClipboardSelectionRequestOnHost();
     void clipboardSelectionNotify(uint, quint32, const uchar*, long);
-    void guestClipboardSelectionRequest();
+    void clipboardSelectionRelease(quint32);
 
     void fileCopyAsync(QStringList&);
     void cancelFileCopyAsync();
@@ -50,10 +50,10 @@ public:
 
 signals:
     void agentUpdated();
-    void clipboardSelection(uint, void*, uint);
+    void guestClipboardSelectionReceived(uint, void*, uint);
     void clipboardSelectionGrabbed(uint, void*, uint);
-    void clipboardSelectionReleased(uint);
-    void clipboardSelectionRequested(uint, uint);
+    void guestClipboardSelectionReleased(uint);
+    void clipboardSelectionRequestedFromGuest(uint, uint);
     void mouseUpdated();
     void migrationStarted();
     void newFileTransfer(const QString&);

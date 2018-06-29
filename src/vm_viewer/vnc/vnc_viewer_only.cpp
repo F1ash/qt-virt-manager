@@ -138,7 +138,7 @@ void VNC_Viewer_Only::copyFilesToVirtDomain()
 void VNC_Viewer_Only::copyToClipboardFromVirtDomain()
 {
     if ( nullptr==vncWdg ) return;
-    //vncWdg->copyClipboardDataFromGuest();
+    //vncWdg->copyToClipboardFromGuest();
 }
 void VNC_Viewer_Only::pasteClipboardToVirtDomain()
 {
@@ -200,7 +200,7 @@ void VNC_Viewer_Only::initGraphicWidget()
             SLOT(resizeViewer(const int, const int)));
     //connect(vncWdg, SIGNAL(errMsg(const QString&)),
     //        this, SLOT(sendErrMsg(const QString&)));
-    //connect(vncWdg, SIGNAL(clipboardsReleased(bool)),
+    //connect(vncWdg, SIGNAL(copyPasteStateChanged(bool)),
     //        viewerToolBar, SLOT(setCopyPasteState(bool)));
     connect(vncWdg, SIGNAL(boarderTouched()),
             this, SLOT(startAnimatedShow()));

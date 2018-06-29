@@ -120,19 +120,19 @@ void QSpiceWidget::cancelFileCopyAsync()
     };
 }
 
-void QSpiceWidget::copyClipboardDataFromGuest()
+void QSpiceWidget::copyToClipboardFromGuest()
 {
     if ( nullptr!=main ) {
-        emit clipboardsReleased(false);
-        main->guestClipboardSelectionRequest();
+        emit copyPasteStateChanged(false);
+        main->initClipboardSelectionRequestOnHost();
     };
 }
 
-void QSpiceWidget::pasteClipboardDataToGuest()
+void QSpiceWidget::pasteClipboardToGuest()
 {
     if ( nullptr!=main ) {
-        emit clipboardsReleased(false);
-        main->initGuestClipboardSelectionRequest();
+        emit copyPasteStateChanged(false);
+        main->initClipboardSelectionRequestOnGuest();
     };
 }
 
@@ -140,8 +140,8 @@ void QSpiceWidget::sendClipboardDataToGuest(uint selection, quint32 type, const 
 {
     if ( nullptr!=main ) {
         main->clipboardSelectionNotify(selection, type, _data, _size);
-        emit clipboardsReleased(true);
     };
+    emit copyPasteStateChanged(true);
 }
 
 bool QSpiceWidget::isScaledScreen() const
@@ -166,14 +166,14 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
                 this, SLOT(channelEvent(int)));
         connect(main, SIGNAL(agentUpdated()),
                 SLOT(mainAgentUpdate()));
-        connect(main, SIGNAL(clipboardSelection(uint,void*,uint)),
-                SLOT(mainClipboardSelection(uint,void*,uint)));
-        connect(main, SIGNAL(clipboardSelectionGrabbed(uint,void*,uint)),
-                SLOT(clipboardSelectionGrab()));
-        connect(main, SIGNAL(clipboardSelectionReleased(uint)),
-                SLOT(guestClipboardSelectionReleased(uint)));
-        connect(main, SIGNAL(clipboardSelectionRequested(uint,uint)),
-                SLOT(clientClipboardSelectionRequested(uint,uint)));
+        connect(main, SIGNAL(guestClipboardSelectionReceived(uint,void*,uint)),
+                SLOT(pasteClipboardSelectionFromGuest(uint,void*,uint)));
+        //connect(main, SIGNAL(clipboardSelectionGrabbed(uint,void*,uint)),
+        //        SLOT(clipboardSelectionGrab()));
+        connect(main, SIGNAL(guestClipboardSelectionReleased(uint)),
+                SLOT(releaseClipboardSelection(uint)));
+        connect(main, SIGNAL(clipboardSelectionRequestedFromGuest(uint,uint)),
+                SLOT(checkGuestClipboardSelectionRequest(uint,uint)));
         connect(main, SIGNAL(mouseUpdated()),
                 SLOT(mainMouseUpdate()));
         connect(main, SIGNAL(downloaded(qint64,qint64)),
@@ -453,7 +453,7 @@ void QSpiceWidget::mainAgentUpdate()
     //qDebug()<<"main: AgentUpdate";
 }
 
-void QSpiceWidget::mainClipboardSelection(uint type, void *_data, uint _size)
+void QSpiceWidget::pasteClipboardSelectionFromGuest(uint type, void *_data, uint _size)
 {
     //qDebug()<<"main: ClipboardSelection";
     QImage _img;
@@ -484,7 +484,7 @@ void QSpiceWidget::mainClipboardSelection(uint type, void *_data, uint _size)
     default:
         break;
     };
-    emit clipboardsReleased(true);
+    emit copyPasteStateChanged(true);
 }
 
 void QSpiceWidget::clipboardSelectionGrab()
@@ -492,7 +492,7 @@ void QSpiceWidget::clipboardSelectionGrab()
     qDebug()<<"main: ClipboardSelectionGrabbed";
 }
 
-void QSpiceWidget::guestClipboardSelectionReleased(uint selection)
+void QSpiceWidget::releaseClipboardSelection(uint selection)
 {
     switch (selection) {
     case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
@@ -507,6 +507,7 @@ void QSpiceWidget::guestClipboardSelectionReleased(uint selection)
     default:
         break;
     };
+    emit copyPasteStateChanged(true);
 }
 
 QClipboard::Mode QSpiceWidget::selectionToClipboardMode(uint selection)
@@ -529,7 +530,7 @@ QClipboard::Mode QSpiceWidget::selectionToClipboardMode(uint selection)
     return mode;
 }
 
-uint QSpiceWidget::clipbordModeToSelection(QClipboard::Mode mode)
+uint QSpiceWidget::clipboardModeToSelection(QClipboard::Mode mode)
 {
     uint selection;
     switch (mode) {
@@ -549,7 +550,7 @@ uint QSpiceWidget::clipbordModeToSelection(QClipboard::Mode mode)
     return selection;
 }
 
-void QSpiceWidget::clientClipboardSelectionRequested(uint selection, uint type)
+void QSpiceWidget::checkGuestClipboardSelectionRequest(uint selection, uint type)
 {
     QClipboard::Mode mode = selectionToClipboardMode(selection);
     switch (type) {
@@ -564,6 +565,7 @@ void QSpiceWidget::clientClipboardSelectionRequested(uint selection, uint type)
         break;
     case VD_AGENT_CLIPBOARD_NONE:
     default:
+        emit copyPasteStateChanged(true);
         break;
     };
 }
@@ -573,12 +575,14 @@ void QSpiceWidget::sendTextClipboardDataToGuest(QClipboard::Mode mode)
     const QString _text =
             QApplication::clipboard()->text(mode);
     if ( !_text.isEmpty() ) {
-        uint selection = clipbordModeToSelection(mode);
+        uint selection = clipboardModeToSelection(mode);
         sendClipboardDataToGuest(
                     selection,
                     VD_AGENT_CLIPBOARD_UTF8_TEXT,
                     reinterpret_cast<const uchar*>(_text.toUtf8().data()),
                     long(_text.size()));
+    } else {
+        emit copyPasteStateChanged(true);
     };
 }
 
@@ -587,12 +591,14 @@ void QSpiceWidget::sendImageClipboardDataToGuest(QClipboard::Mode mode)
     const QImage _image =
             QApplication::clipboard()->image(mode);
     if ( !_image.isNull() ) {
-        uint selection = clipbordModeToSelection(mode);
+        uint selection = clipboardModeToSelection(mode);
         sendClipboardDataToGuest(
                     selection,
                     VD_AGENT_CLIPBOARD_IMAGE_PNG,
                     _image.constBits(),
                     long(_image.byteCount()));
+    } else {
+        emit copyPasteStateChanged(true);
     };
 }
 

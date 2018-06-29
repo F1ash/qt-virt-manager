@@ -110,7 +110,7 @@ public:
             guint                size,
             gpointer             user_data);
 
-    static bool main_clipboard_selection_grab(
+    static void main_clipboard_selection_grab(
             SpiceMainChannel    *mainchannel,
             guint                selection,
             gpointer             types,
@@ -122,7 +122,7 @@ public:
             guint                selection,
             gpointer             user_data);
 
-    static bool main_clipboard_selection_request(
+    static void main_clipboard_selection_request(
             SpiceMainChannel    *mainchannel,
             guint                selection,
             guint                type,
