@@ -19,7 +19,7 @@
 
 is the GUI for (remote) control a Virtual machines and entities (aka [`Qt VirtManager`](#overview)). The application is designed for (semi-)professional usage and contain external viewer (aka [`Qt Remote Viewer`](#virtual-machines-viewer)) for accessing to (remote) VMs or desktops.
 
-Current version: 0.60.88
+`Last stable version: 0.60.88`
 
 ***
 
