@@ -53,10 +53,10 @@ void DomainMonitorThread::run()
             curr_cpuTime = info.cpuTime;
             _time_diff = tMark.elapsed()/1000;
             cpu_time_diff = (firstStep)? 0 : curr_cpuTime - prev_cpuTime;
-            CPU_percent = (qreal)100/(_time_diff * info.nrVirtCpu)*(qreal)cpu_time_diff/1000000000;
+            CPU_percent = qreal(100)/(_time_diff * info.nrVirtCpu)*qreal(cpu_time_diff)/1000000000;
             tMark.restart();
             MEM = info.maxMem;
-            MEM_percent = 100*(qreal)info.memory / MEM;
+            MEM_percent = qreal(info.memory)*100 / MEM;
             //qDebug()<<CPU_percent<< MEM_percent<<info.memory<< MEM;
             prev_cpuTime = curr_cpuTime;
             if ( firstStep ) firstStep = false;

@@ -67,8 +67,8 @@ private slots:
     void                 initParamLayout();
     void                 initButtons();
     void                 initParameters();
-    void                 saveConnect();
-    void                 cancelConnect();
+    void                 saveConnection();
+    void                 cancelConnection();
     void                 saveParameters();
     void                 closeEvent(QCloseEvent*);
     void                 set_Title_Name(QString);

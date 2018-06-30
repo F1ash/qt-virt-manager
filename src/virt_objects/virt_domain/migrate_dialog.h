@@ -118,12 +118,12 @@ virsh migrate --p2p --tunnelled web1 qemu+ssh://desthost/system qemu+ssh://10.0.
 };
 
 struct MIGR_ARGS {
-    int flags           = 0;
-    int bandwidth       = 0;
-    int maxDownTime     = 0;
-    QString uri         = QString();
-    QString new_name    = QString();
-    QString connName    = QString();
+    int flags               = 0;
+    ulong bandwidth         = 0;
+    qulonglong maxDownTime  = 0;
+    QString uri             = QString();
+    QString new_name        = QString();
+    QString connName        = QString();
 };
 
 class mgrHelpThread : public _VirtThread

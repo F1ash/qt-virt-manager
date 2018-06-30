@@ -46,8 +46,8 @@ public:
     int              killTimerId = 0;
     int              toolBarTimerId = 0;
     int              reinitTimerId = 0;
-    uint             killCounter = 0;
-    uint             reinitCounter = 0;
+    int              killCounter = 0;
+    int              reinitCounter = 0;
 
     QVBoxLayout     *infoLayout = nullptr;
     QLabel          *icon = nullptr, *err_msg = nullptr;

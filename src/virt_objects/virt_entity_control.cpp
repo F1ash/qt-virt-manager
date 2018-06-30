@@ -23,7 +23,7 @@ VirtEntityControl::~VirtEntityControl()
 }
 
 void VirtEntityControl::stopProcessing() {}
-bool VirtEntityControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
+bool VirtEntityControl::setCurrentWorkConnection(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
     ptr_ConnPtr = connPtrPtr;

@@ -14,7 +14,7 @@ MAC_Address::MAC_Address(QWidget *parent) :
     setLayout(commonLayout);
     connect(useMac, SIGNAL(toggled(bool)),
             mac, SLOT(setEnabled(bool)));
-    // dataChanged connects
+    // dataChanged connections
     connect(useMac, SIGNAL(toggled(bool)),
             this, SLOT(stateChanged()));
     connect(mac, SIGNAL(textEdited(QString)),

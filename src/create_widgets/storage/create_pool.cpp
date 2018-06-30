@@ -158,7 +158,7 @@ QString CreatePool::getXMLDescFileName() const
          * but NULL-elemens not removed
          * therefore keep to seek on not-NULL next element
          */
-        uint j = 0;
+        int j = 0;
         const int count = list.length();
         for (int i=0; i<count;i++) {
             //qDebug()<<list.item(j).nodeName()<<i;

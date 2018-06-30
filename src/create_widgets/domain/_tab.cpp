@@ -39,7 +39,7 @@ void _Tab::readXMLDesciption()
 }
 void _Tab::readXMLDesciption(const QString &_xmlDesc)
 {
-
+    Q_UNUSED(_xmlDesc)
 }
 void _Tab::resetData()
 {

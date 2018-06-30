@@ -49,10 +49,12 @@ Qt::ItemFlags ConnItemModel::flags(const QModelIndex &index) const
 }
 int ConnItemModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return connItemDataList.count();
 }
 int ConnItemModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 3;
 }
 QVariant ConnItemModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -62,13 +64,10 @@ QVariant ConnItemModel::headerData(int section, Qt::Orientation orientation, int
             switch (section) {
             case 0:
                 return tr("Connection");
-                break;
             case 1:
                 return tr("URI");
-                break;
             case 2:
                 return tr("State");
-                break;
             default:
                 break;
             }

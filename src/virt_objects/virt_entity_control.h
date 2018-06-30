@@ -22,7 +22,7 @@ public:
     virConnectPtr           *ptr_ConnPtr = nullptr;
 
     virtual void             stopProcessing();
-    virtual bool             setCurrentWorkConnect(virConnectPtr*);
+    virtual bool             setCurrentWorkConnection(virConnectPtr*);
     virtual void             setListHeader(const QString&);
     virtual void             reloadState();
     virtual void             changeDockVisibility();

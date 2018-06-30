@@ -25,7 +25,7 @@ private:
 
 public slots:
     void                 stopProcessing();
-    bool                 setCurrentWorkConnect(virConnectPtr*);
+    bool                 setCurrentWorkConnection(virConnectPtr*);
     void                 setListHeader(const QString&);
     QString              getCurrentNFName() const;
     QString              getCurrentNFUUID() const;

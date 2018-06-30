@@ -72,7 +72,7 @@ void RemoteView::setStatus(RemoteView::RemoteStatus s)
             if (m_status == Disconnected)
                 return;
         } else {
-            Q_ASSERT(((int) s) >= 0);
+            Q_ASSERT((int(s)) >= 0);
             if (m_status > s) {
                 m_status = Disconnected;
                 emit statusChanged(Disconnected);
@@ -80,8 +80,8 @@ void RemoteView::setStatus(RemoteView::RemoteStatus s)
             // smooth state transition
             RemoteStatus origState = m_status;
             for (int i = origState; i < s; ++i) {
-                m_status = (RemoteStatus) i;
-                emit statusChanged((RemoteStatus) i);
+                m_status = RemoteStatus(i);
+                emit statusChanged(RemoteStatus(i));
             }
         }
     }

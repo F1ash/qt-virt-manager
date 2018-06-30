@@ -10,14 +10,15 @@ _SnapshotFlags::_SnapshotFlags(QWidget *parent) :
 }
 void _SnapshotFlags::changeAvailableFlags(int control)
 {
+    Q_UNUSED(control)
     return;
 }
-int _SnapshotFlags::getCompositeFlag() const
+uint _SnapshotFlags::getCompositeFlag() const
 {
-    int ret = 0;
+    uint ret = 0;
     foreach (QAction *act, actGroup->actions()) {
         if ( act->isChecked() ) {
-            ret += act->data().toInt();
+            ret += act->data().toUInt();
         };
     };
     return ret;

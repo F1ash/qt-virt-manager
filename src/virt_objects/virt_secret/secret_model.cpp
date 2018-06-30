@@ -30,10 +30,12 @@ Qt::ItemFlags VirtSecretModel::flags(const QModelIndex &index) const
 }
 int VirtSecretModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return DataList.count();
 }
 int VirtSecretModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 2;
 }
 bool VirtSecretModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)

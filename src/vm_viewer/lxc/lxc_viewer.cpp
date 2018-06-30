@@ -98,7 +98,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
             killCounter = 0;
             viewerThread->setData(
                         domain, hlpThread->domainPtr, ptySlaveFd);
-            if ( viewerThread->setCurrentWorkConnect(ptr_ConnPtr) ) {
+            if ( viewerThread->setCurrentWorkConnection(ptr_ConnPtr) ) {
                 setTerminalParameters();
             };
         } else if ( TIMEOUT<killCounter*PERIOD ) {

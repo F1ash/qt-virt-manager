@@ -34,7 +34,7 @@ to have outgoing access."));
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    // dataChanged connects
+    // dataChanged connections
     connect(mac, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(addr, SIGNAL(dataChanged()),

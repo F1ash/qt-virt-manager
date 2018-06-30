@@ -271,7 +271,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
                 if (cred[i].result == nullptr) {
                     return -1;
                 };
-                cred[i].resultlen = strlen(cred[i].result);
+                cred[i].resultlen = uint(strlen(cred[i].result));
                 // clear/shred authData credential for more security
                 if ( obj->authData.username!=nullptr )
                     memset(&obj->authData.username[0], 0, strlen(obj->authData.username));
@@ -283,7 +283,7 @@ int  ConnAliveThread::authCallback(virConnectCredentialPtr cred, unsigned int nc
                 if (cred[i].result == nullptr) {
                     return -1;
                 };
-                cred[i].resultlen = strlen(cred[i].result);
+                cred[i].resultlen = uint(strlen(cred[i].result));
                 // clear/shred authData credential for more security
                 if ( obj->authData.password!=nullptr )
                     memset(&obj->authData.password[0], 0, strlen(obj->authData.password));
@@ -375,7 +375,7 @@ int  ConnAliveThread::secEventCallback(virConnectPtr _conn, virSecretPtr sec, in
 const char* ConnAliveThread::domEventToString(int event)
 {
     const char *ret = "";
-    switch ((virDomainEventType) event) {
+    switch (static_cast<virDomainEventType>(event)) {
         case VIR_DOMAIN_EVENT_DEFINED:
             ret = "Defined";
             break;
@@ -412,9 +412,9 @@ const char* ConnAliveThread::domEventToString(int event)
 const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool *end)
 {
     const char *ret = "";
-    switch ((virDomainEventType) event) {
+    switch (static_cast<virDomainEventType>(event)) {
         case VIR_DOMAIN_EVENT_DEFINED:
-            switch ((virDomainEventDefinedDetailType) detail) {
+            switch (static_cast<virDomainEventDefinedDetailType>(detail)) {
             case VIR_DOMAIN_EVENT_DEFINED_ADDED:
                 ret = "Newly created config file";
                 break;
@@ -436,7 +436,7 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool 
             };
             break;
         case VIR_DOMAIN_EVENT_UNDEFINED:
-            switch ((virDomainEventUndefinedDetailType) detail) {
+            switch (static_cast<virDomainEventUndefinedDetailType>(detail)) {
             case VIR_DOMAIN_EVENT_UNDEFINED_REMOVED:
                 ret = "Deleted the config file";
                 break;
@@ -450,7 +450,7 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool 
             };
             break;
         case VIR_DOMAIN_EVENT_STARTED:
-            switch ((virDomainEventStartedDetailType) detail) {
+            switch (static_cast<virDomainEventStartedDetailType>(detail)) {
                 case VIR_DOMAIN_EVENT_STARTED_BOOTED:
                     ret = "Normal startup from boot";
                     break;
@@ -472,7 +472,7 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool 
             };
             break;
         case VIR_DOMAIN_EVENT_SUSPENDED:
-            switch ((virDomainEventSuspendedDetailType) detail) {
+            switch (static_cast<virDomainEventSuspendedDetailType>(detail)) {
                 case VIR_DOMAIN_EVENT_SUSPENDED_PAUSED:
                     ret = "Normal suspend due to admin pause";
                     break;
@@ -508,7 +508,7 @@ const char* ConnAliveThread::domEventDetailToString(int event, int detail, bool 
             };
             break;
         case VIR_DOMAIN_EVENT_RESUMED:
-            switch ((virDomainEventResumedDetailType) detail) {
+            switch (static_cast<virDomainEventResumedDetailType>(detail)) {
                 case VIR_DOMAIN_EVENT_RESUMED_UNPAUSED:
                     ret = "Normal resume due to admin unpause";
                     break;
@@ -530,7 +530,7 @@ running in post-copy mode";
             };
             break;
         case VIR_DOMAIN_EVENT_STOPPED:
-            switch ((virDomainEventStoppedDetailType) detail) {
+            switch (static_cast<virDomainEventStoppedDetailType>(detail)) {
                 case VIR_DOMAIN_EVENT_STOPPED_SHUTDOWN:
                     ret = "Normal shutdown";
                     *end = true;
@@ -563,7 +563,7 @@ running in post-copy mode";
             };
             break;
         case VIR_DOMAIN_EVENT_SHUTDOWN:
-            switch ((virDomainEventShutdownDetailType) detail) {
+            switch (static_cast<virDomainEventShutdownDetailType>(detail)) {
                 case VIR_DOMAIN_EVENT_SHUTDOWN_FINISHED:
                     ret = "Finished";
                     *end = true;
@@ -575,7 +575,7 @@ running in post-copy mode";
                 };
             break;
         case VIR_DOMAIN_EVENT_PMSUSPENDED:
-            switch ((virDomainEventPMSuspendedDetailType) detail) {
+            switch (static_cast<virDomainEventPMSuspendedDetailType>(detail)) {
             case VIR_DOMAIN_EVENT_PMSUSPENDED_MEMORY:
                 ret = "Guest was PM suspended to memory";
                 break;
@@ -588,7 +588,7 @@ running in post-copy mode";
             };
             break;
         case VIR_DOMAIN_EVENT_CRASHED:
-           switch ((virDomainEventCrashedDetailType) detail) {
+           switch (static_cast<virDomainEventCrashedDetailType>(detail)) {
            case VIR_DOMAIN_EVENT_CRASHED_PANICKED:
                ret = "Guest was panicked";
                break;
@@ -608,7 +608,7 @@ running in post-copy mode";
 const char* ConnAliveThread::netEventToString(int event)
 {
     const char *ret = "";
-    switch ((virNetworkEventLifecycleType) event) {
+    switch (static_cast<virNetworkEventLifecycleType>(event)) {
         case VIR_NETWORK_EVENT_DEFINED:
             ret = "Defined";
             break;
@@ -629,8 +629,9 @@ const char* ConnAliveThread::netEventToString(int event)
 }
 const char* ConnAliveThread::netEventDetailToString(int event, int detail)
 {
+    Q_UNUSED(detail)
     const char *ret = "";
-    switch ((virNetworkEventLifecycleType) event) {
+    switch (static_cast<virNetworkEventLifecycleType>(event)) {
         case VIR_NETWORK_EVENT_DEFINED:
             ret = "N0_DETAILS";
             break;
@@ -654,7 +655,7 @@ const char* ConnAliveThread::netEventDetailToString(int event, int detail)
 const char* ConnAliveThread::poolEventToString(int event)
 {
     const char *ret = "";
-    switch ((virStoragePoolEventLifecycleType) event) {
+    switch (static_cast<virStoragePoolEventLifecycleType>(event)) {
         case VIR_STORAGE_POOL_EVENT_DEFINED:
             ret = "Defined";
             break;
@@ -675,8 +676,9 @@ const char* ConnAliveThread::poolEventToString(int event)
 }
 const char* ConnAliveThread::poolEventDetailToString(int event, int detail)
 {
+    Q_UNUSED(detail)
     const char *ret = "";
-    switch ((virStoragePoolEventLifecycleType) event) {
+    switch (static_cast<virStoragePoolEventLifecycleType>(event)) {
         case VIR_STORAGE_POOL_EVENT_DEFINED:
             ret = "N0_DETAILS";
             break;
@@ -701,7 +703,7 @@ const char* ConnAliveThread::poolEventDetailToString(int event, int detail)
 const char* ConnAliveThread::secEventToString(int event)
 {
     const char *ret = "";
-    switch ((virSecretEventLifecycleType) event) {
+    switch (static_cast<virSecretEventLifecycleType>(event)) {
         case VIR_SECRET_EVENT_DEFINED:
             ret = "Defined";
             break;
@@ -716,8 +718,9 @@ const char* ConnAliveThread::secEventToString(int event)
 }
 const char* ConnAliveThread::secEventDetailToString(int event, int detail)
 {
+    Q_UNUSED(detail)
     const char *ret = "";
-    switch ((virSecretEventLifecycleType) event) {
+    switch (static_cast<virSecretEventLifecycleType>(event)) {
         case VIR_SECRET_EVENT_DEFINED:
             ret = "N0_DETAILS";
             break;

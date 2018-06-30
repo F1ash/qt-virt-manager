@@ -44,9 +44,11 @@ DomainStateMonitor::DomainStateMonitor(QWidget *parent) :
 
 /* public slots */
 void DomainStateMonitor::setNewMonitoredDomain(
-        virConnectPtr *connPtrPtr, const QString &connName, const QString &domainName)
+        virConnectPtr  *connPtrPtr,
+        const QString  &connName,
+        const QString  &domainName)
 {
-    QString _id = QString(tr("Domain : %1\nConnect: %2"))
+    QString _id = QString(tr("Domain : %1\nConnection: %2"))
             .arg(domainName)
             .arg(connName);
     int idx =

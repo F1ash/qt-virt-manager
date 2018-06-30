@@ -657,29 +657,6 @@ at next job start.</source>
     </message>
 </context>
 <context>
-    <name>ConnectMenu</name>
-    <message>
-        <source>Open Connection</source>
-        <translation>Открыть соединение</translation>
-    </message>
-    <message>
-        <source>Overview of Connection</source>
-        <translation>Обзор соединения</translation>
-    </message>
-    <message>
-        <source>Edit Connection</source>
-        <translation>Редактировать соединение</translation>
-    </message>
-    <message>
-        <source>Delete Connection</source>
-        <translation>Удалить соединение</translation>
-    </message>
-    <message>
-        <source>Refresh Localhost Connection</source>
-        <translation>Обновить локальные соединения</translation>
-    </message>
-</context>
-<context>
     <name>ConnectionList</name>
     <message>
         <source>Info</source>
@@ -724,6 +701,29 @@ at next job start.</source>
     <message>
         <source>&lt;%1&gt; credentials</source>
         <translation>Учётные данные: &lt;%1&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>ConnectionMenu</name>
+    <message>
+        <source>Open Connection</source>
+        <translation>Открыть соединение</translation>
+    </message>
+    <message>
+        <source>Overview of Connection</source>
+        <translation>Обзор соединения</translation>
+    </message>
+    <message>
+        <source>Edit Connection</source>
+        <translation>Редактировать соединение</translation>
+    </message>
+    <message>
+        <source>Delete Connection</source>
+        <translation>Удалить соединение</translation>
+    </message>
+    <message>
+        <source>Refresh Localhost Connection</source>
+        <translation>Обновить локальные соединения</translation>
     </message>
 </context>
 <context>
@@ -1689,7 +1689,7 @@ is defined.</source>
     </message>
     <message>
         <source>Domain : %1
-Connect: %2</source>
+Connection: %2</source>
         <translation>Вирт.Машина:	%1
 Соединение:	%2</translation>
     </message>

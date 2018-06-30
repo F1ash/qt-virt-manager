@@ -30,7 +30,8 @@ static QString outputErrorMessageString; // FIXME test it (static?)
 
 rfbBool VncClientThread::newclient(rfbClient *cl)
 {
-    VncClientThread *t = (VncClientThread*)rfbClientGetClientData(cl, 0);
+    VncClientThread *t =
+            static_cast<VncClientThread*>(rfbClientGetClientData(cl, nullptr));
     Q_ASSERT(t);
 
     const int width = cl->width, height = cl->height, depth = cl->format.bitsPerPixel;
@@ -39,7 +40,7 @@ rfbBool VncClientThread::newclient(rfbClient *cl)
         delete [] t->frameBuffer; // do not leak if we get a new framebuffer size
     t->frameBuffer = new uint8_t[size];
     cl->frameBuffer = t->frameBuffer;
-    memset(cl->frameBuffer, '\0', size);
+    memset(cl->frameBuffer, '\0', size_t(size));
     cl->format.bitsPerPixel = 32;
     cl->format.redShift = 16;
     cl->format.greenShift = 8;
@@ -87,7 +88,8 @@ void VncClientThread::updatefb(rfbClient* cl, int x, int y, int w, int h)
         kDebug(5011) << "image not loaded";
     }
 
-    VncClientThread *t = (VncClientThread*)rfbClientGetClientData(cl, 0);
+    VncClientThread *t =
+            static_cast<VncClientThread*>(rfbClientGetClientData(cl, nullptr));
     Q_ASSERT(t);
 
     t->setImage(img);
@@ -101,7 +103,8 @@ void VncClientThread::cuttext(rfbClient* cl, const char *text, int textlen)
     kDebug(5011) << cutText;
 
     if (!cutText.isEmpty()) {
-        VncClientThread *t = (VncClientThread*)rfbClientGetClientData(cl, 0);
+        VncClientThread *t =
+                static_cast<VncClientThread*>(rfbClientGetClientData(cl, nullptr));
         Q_ASSERT(t);
 
         t->emitGotCut(cutText);
@@ -112,7 +115,8 @@ char *VncClientThread::passwdHandler(rfbClient *cl)
 {
     kDebug(5011) << "password request" << kBacktrace();
 
-    VncClientThread *t = (VncClientThread*)rfbClientGetClientData(cl, 0);
+    VncClientThread *t =
+            static_cast<VncClientThread*>(rfbClientGetClientData(cl, nullptr));
     Q_ASSERT(t);
 
     t->passwordRequest();
@@ -156,7 +160,7 @@ void VncClientThread::outputHandler(const char *format, ...)
 
 VncClientThread::VncClientThread(QObject *parent)
         : QThread(parent)
-        , frameBuffer(0)
+        , frameBuffer(nullptr)
 {
     QMutexLocker locker(&mutex);
     m_stopped = false;
@@ -260,7 +264,7 @@ void VncClientThread::run()
         cl->GetPassword = passwdHandler;
         cl->GotFrameBufferUpdate = updatefb;
         cl->GotXCutText = cuttext;
-        rfbClientSetClientData(cl, 0, this);
+        rfbClientSetClientData(cl, nullptr, this);
 
         cl->serverHost = strdup(m_host.toUtf8().constData());
 
@@ -273,7 +277,7 @@ void VncClientThread::run()
 
         kDebug(5011) << "--------------------- trying init ---------------------";
 
-        if (rfbInitClient(cl, 0, 0))
+        if (rfbInitClient(cl, nullptr, nullptr))
             break;
 
         if (m_passwordError)

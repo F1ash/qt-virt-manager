@@ -47,7 +47,7 @@ BIOS_Boot::BIOS_Boot(QWidget *parent, QString _caps) :
     connect(architecture, SIGNAL(archType(const QString&)),
             this, SLOT(changeArch(const QString&)));
     architecture->setItems();
-    // dataChanged connectins
+    // dataChanged connections
     connect(architecture, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(loader, SIGNAL(dataChanged()),

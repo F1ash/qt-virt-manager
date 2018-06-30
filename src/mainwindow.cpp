@@ -779,12 +779,12 @@ void MainWindow::deleteCurrentConnection()
 {
     connListWidget->list->deleteCurrentConnection();
 }
-void MainWindow::removeConnItem(const QString &connect)
+void MainWindow::removeConnItem(const QString &connection)
 {
     settings.beginGroup("Connects");
-    settings.remove(connect);
+    settings.remove(connection);
     settings.endGroup();
-    //qDebug()<<connect<<"connect deleted";
+    //qDebug()<<connection<<"connection deleted";
 }
 void MainWindow::openCurrentConnection()
 {
@@ -914,18 +914,18 @@ void MainWindow::receiveConnPtrPtr(virConnectPtr *_connPtrPtr, const QString &na
     entityControlIsUpdated = 0;
     connListWidget->setEnabled(false);
     //qDebug()<<"receiveConnPtrPtr:"<<(*_connPtrPtr);
-    // send connect ptr to all related virtual resources for operating
-    if ( domainDockContent->setCurrentWorkConnect(_connPtrPtr) )
+    // send connection ptr to all related virtual resources for operating
+    if ( domainDockContent->setCurrentWorkConnection(_connPtrPtr) )
         domainDockContent->setListHeader(name);
-    if ( networkDockContent->setCurrentWorkConnect(_connPtrPtr) )
+    if ( networkDockContent->setCurrentWorkConnection(_connPtrPtr) )
         networkDockContent->setListHeader(name);
-    if ( storagePoolDockContent->setCurrentWorkConnect(_connPtrPtr) )
+    if ( storagePoolDockContent->setCurrentWorkConnection(_connPtrPtr) )
         storagePoolDockContent->setListHeader(name);
-    if ( secretDockContent->setCurrentWorkConnect(_connPtrPtr) )
+    if ( secretDockContent->setCurrentWorkConnection(_connPtrPtr) )
         secretDockContent->setListHeader(name);
-    if ( ifaceDockContent->setCurrentWorkConnect(_connPtrPtr) )
+    if ( ifaceDockContent->setCurrentWorkConnection(_connPtrPtr) )
         ifaceDockContent->setListHeader(name);
-    if ( nwfilterDockContent->setCurrentWorkConnect(_connPtrPtr) )
+    if ( nwfilterDockContent->setCurrentWorkConnection(_connPtrPtr) )
         nwfilterDockContent->setListHeader(name);
 }
 void MainWindow::entityControlUpdated()
@@ -957,7 +957,7 @@ void MainWindow::entityControlUpdated()
 }
 void MainWindow::stopConnProcessing(bool onView, const QString &_connName)
 {
-    // clear Overview Docks if closed connect is on View
+    // clear Overview Docks if closed connection is on View
     if ( onView ) {
         stopProcessing();
     };
@@ -1052,7 +1052,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                 logDockContent, SLOT(appendMsgToLog(const QString&)));
         connect(VM_Displayed_Map.value(key), SIGNAL(addNewTask(TASK*)),
                 taskWrHouse, SLOT(addNewTask(TASK*)));
-        // will be showed when occured successful connect to VM
+        // will be showed when occured successful connection to VM
         //VM_Displayed_Map.value(key)->show();
     } else {
         //qDebug()<<key<<"vm invoked"<<"exist";
@@ -1096,10 +1096,10 @@ void MainWindow::deleteVMDisplay(const QString &key)
 }
 void MainWindow::buildMigrateArgs(TASK *_task)
 {
-    virConnectPtr *namedConnect =
+    virConnectPtr *namedConnection =
             connListWidget->list->getPtr_connectionPtr(_task->args.path);
-    if ( nullptr!=namedConnect ) {
-        domainDockContent->execMigrateAction(namedConnect, _task);
+    if ( nullptr!=namedConnection ) {
+        domainDockContent->execMigrateAction(namedConnection, _task);
     } else {
         QString time = QTime::currentTime().toString();
         QString title =

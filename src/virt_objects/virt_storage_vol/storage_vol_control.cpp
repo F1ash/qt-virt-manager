@@ -310,7 +310,7 @@ void VirtStorageVolControl::execAction(const Act_Param &param)
             } else return;
         } else if ( param.method==Methods::wipeVirtStorageVol ) {
             task.action     = Actions::WIPE_ENTITY;
-            task.args.sign  = param.path.toUInt();
+            task.args.sign  = param.path.toInt();
             emit addNewTask(&task);
         } else if ( param.method==Methods::getEntityXMLDesc ) {
             task.action     = Actions::GET_XML_DESCRIPTION;

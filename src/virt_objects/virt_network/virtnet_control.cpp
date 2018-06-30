@@ -57,7 +57,7 @@ void VirtNetControl::stopProcessing()
                 Qt::EditRole);
 
 }
-bool VirtNetControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
+bool VirtNetControl::setCurrentWorkConnection(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
     ptr_ConnPtr = connPtrPtr;
@@ -252,7 +252,7 @@ void VirtNetControl::execAction(const Act_Param &param)
                 (virtNetModel->DataList.at(idx.row())->getAutostart())
                  ? 0 : 1;
             task.action = Actions::CHANGE_ENTITY_AUTOSTART;
-            task.args.sign = autostartState;
+            task.args.sign = int(autostartState);
             emit addNewTask(&task);
         } else if ( param.method==Methods::editEntity ) {
             task.action     = Actions::EDIT_ENTITY;

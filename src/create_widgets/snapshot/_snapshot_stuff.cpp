@@ -30,7 +30,7 @@ QDomDocument _SnapshotStuff::getElements() const
 void _SnapshotStuff::setParameters(virConnectPtr* connPtrPtr, QString &_domName)
 {
     SetDisksDataThread *setThread = new SetDisksDataThread(this);
-    setThread->setCurrentWorkConnect(connPtrPtr, 0, _domName);
+    setThread->setCurrentWorkConnection(connPtrPtr, 0, _domName);
     connect(setThread, SIGNAL(diskData(QDomElement&)),
             this, SLOT(setDiskItem(QDomElement&)));
     connect(setThread, SIGNAL(errorMsg(const QString&, const uint)),

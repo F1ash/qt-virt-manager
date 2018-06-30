@@ -56,7 +56,7 @@ void VirtDomainControl::stopProcessing()
                 tr("Name"),
                 Qt::EditRole);
 }
-bool VirtDomainControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
+bool VirtDomainControl::setCurrentWorkConnection(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
     ptr_ConnPtr = connPtrPtr;
@@ -332,7 +332,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
                 (domainModel->DataList.at(idx.row())->getAutostart())
                  ? 0 : 1;
             task.action     = Actions::CHANGE_ENTITY_AUTOSTART;
-            task.args.sign  = autostartState;
+            task.args.sign  = int(autostartState);
             emit addNewTask(&task);
         } else if ( param.method==Methods::migrateVirtDomain ) {
             if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
@@ -345,7 +345,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
                 task.action      = Actions::MIGRATE_ENTITY;
                 task.args.sign   = migrArgs.flags;
                 task.args.object = migrArgs.new_name;
-                task.args.size   = migrArgs.bandwidth;
+                task.args.size   = qulonglong(migrArgs.bandwidth);
                 task.args.offset = migrArgs.maxDownTime;
                 //qDebug()<<exitCode<<migrArgs.new_name
                 //       <<migrArgs.connName<<task.object;
@@ -355,7 +355,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
                         task.args.path = migrArgs.uri;
                         emit addNewTask(&task);
                     } else {
-                        // migrate useing specified connect
+                        // migrate useing specified connection
                         task.args.path = migrArgs.connName;
                         emit migrateToConnect(&task);
                     };
@@ -395,7 +395,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
             if ( exitCode ) {
                 task.action      = Actions::CREATE_DOMAIN_SNAPSHOT;
                 task.args.object = _dialog->getSnapshotXMLDesc();
-                task.args.sign   = _dialog->getSnapshotFlags();
+                task.args.sign   = int(_dialog->getSnapshotFlags());
                 emit addNewTask(&task);
             };
         } else if ( param.method==Methods::moreSnapshotActions ) {
@@ -416,7 +416,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
                 };
                 task.method      = method;
                 task.args.object = params.path;
-                task.args.sign   = _dialog->getSnapshotFlags();
+                task.args.sign   = int(_dialog->getSnapshotFlags());
                 emit addNewTask(&task);
             };
         };

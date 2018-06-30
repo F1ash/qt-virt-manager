@@ -117,9 +117,9 @@ void ConnSettings::initButtons()
     buttons = new QWidget(this);
     buttons->setLayout(buttonsLayout);
     connect(ok, SIGNAL(clicked()),
-            this, SLOT(saveConnect()));
+            this, SLOT(saveConnection()));
     connect(cancel, SIGNAL(clicked()),
-            this, SLOT(cancelConnect()));
+            this, SLOT(cancelConnection()));
 }
 void ConnSettings::setConnectItem(ConnItemIndex *idx)
 {
@@ -131,7 +131,7 @@ void ConnSettings::setConnectItem(ConnItemIndex *idx)
         initParameters();
     };
 }
-void ConnSettings::saveConnect()
+void ConnSettings::saveConnection()
 {
     name = ConnName->text();
     settings.beginGroup("Connects");
@@ -171,7 +171,7 @@ void ConnSettings::saveConnect()
     settings.sync();
     done(QDialog::Accepted);
 }
-void ConnSettings::cancelConnect()
+void ConnSettings::cancelConnection()
 {
     if (newbe) {
         settings.beginGroup("Connects");
@@ -248,7 +248,7 @@ void ConnSettings::saveParameters()
 void ConnSettings::closeEvent(QCloseEvent *ev)
 {
     ev->ignore();
-    cancelConnect();
+    cancelConnection();
 }
 void ConnSettings::set_Title_Name(QString s)
 {

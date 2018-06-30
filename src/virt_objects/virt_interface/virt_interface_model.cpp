@@ -35,10 +35,12 @@ Qt::ItemFlags VirtIfaceModel::flags(const QModelIndex &index) const
 }
 int VirtIfaceModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return DataList.count();
 }
 int VirtIfaceModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 4;
 }
 bool VirtIfaceModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)

@@ -229,7 +229,7 @@ void VM_Viewer_Only::resendExecMethod(const Act_Param &params)
     if ( params.method==Methods::reconnectToVirtDomain ) {
         reconnectToVirtDomain();
     } else if ( params.method==Methods::sendKeySeqToVirtDomain ) {
-        sendKeySeqToVirtDomain((Qt::Key)params.path.toUInt());
+        sendKeySeqToVirtDomain(static_cast<Qt::Key>(params.path.toUInt()));
     } else if ( params.method==Methods::getScreenshotFromVirtDomain ) {
         getScreenshotFromVirtDomain();
     } else if ( params.method==Methods::copyFilesToVirtDomain ) {

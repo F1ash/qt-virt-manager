@@ -508,11 +508,12 @@ Result DomControlThread::pauseDomain()
                 break;
             default:
                 break;
-            virDomainFree(domain);
             };
         };
-    } else
+        virDomainFree(domain);
+    } else {
         result.err = sendConnErrors();
+    };
     result.name = name;
     result.result = invoked;
     result.msg.append(
@@ -672,7 +673,6 @@ Result DomControlThread::saveDomain()
             case VIR_DOMAIN_RUNNING:
                 flags = flags | VIR_DOMAIN_SAVE_RUNNING;
                 break;
-                break;
             case VIR_DOMAIN_PAUSED:
                 flags = flags | VIR_DOMAIN_SAVE_PAUSED;
                 break;
@@ -683,8 +683,7 @@ Result DomControlThread::saveDomain()
         invoked = (virDomainSaveFlags(
                        domain, to, dxml, flags)+1)
                 ? true : false;
-        if (!invoked)
-            result.err = sendConnErrors();
+        if (!invoked) result.err = sendConnErrors();
         virDomainFree(domain);
     } else
         result.err = sendConnErrors();
@@ -784,7 +783,7 @@ Result DomControlThread::getDomainXMLDesc()
 {
     Result result;
     QString name = task.object;
-    unsigned int flags = task.args.sign;
+    int flags = task.args.sign;
 
     bool read = false;
     char *Returns = nullptr;
@@ -796,7 +795,7 @@ Result DomControlThread::getDomainXMLDesc()
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
     if ( domain!=nullptr ) {
-        Returns = (virDomainGetXMLDesc(domain, flags));
+        Returns = virDomainGetXMLDesc(domain, uint(flags));
         if ( Returns==nullptr )
             result.err = sendConnErrors();
         else read = true;
@@ -826,7 +825,7 @@ Result DomControlThread::migrateDomain()
     Result result;
     bool migrated = false;
     result.name = task.object;
-    unsigned int flags = task.args.sign;
+    ulong flags = ulong(task.args.sign);
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
@@ -835,14 +834,14 @@ Result DomControlThread::migrateDomain()
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, result.name.toUtf8().constData());
     //const char *uri = ( args[2].isEmpty() ) ? nullptr : args[2].toUtf8().constData();
-    int maxDownTime = task.args.offset;
-    int bdw = task.args.size;
+    qulonglong maxDownTime = task.args.offset;
+    qulonglong bdw = task.args.size;
     if ( domain!=nullptr ) {
         // virDomainMigrateSetMaxDowntime
         // flags: extra flags; not used yet, so callers should always pass 0
         virDomainMigrateSetMaxDowntime(domain, maxDownTime, 0);
         if ( nullptr!=task.args.dstConnPtr ) {
-            qDebug()<<"migrate to exist connect";
+            //qDebug()<<"migrate to exist connection";
             virDomainPtr newDomain =
             virDomainMigrate(domain,
                              *task.args.dstConnPtr,
@@ -880,7 +879,7 @@ Result DomControlThread::createSnapshoteDomain()
     bool snapped = false;
     QString domName = task.object;
     result.name = domName;
-    unsigned int flags = task.args.sign;
+    uint flags = uint(task.args.sign);
     QByteArray _xmlDesc;
     _xmlDesc.append(task.args.object);
     const char *xmlDesc = _xmlDesc.data();
@@ -918,7 +917,7 @@ Result DomControlThread::revertSnapshoteDomain()
     QString domName = task.object;
     result.name = task.args.object;
     QString snapshotName(task.args.object);
-    unsigned int flags = task.args.sign;
+    uint flags = uint(task.args.sign);
     //qDebug()<<snapshotName<<flags;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;
@@ -959,7 +958,7 @@ Result DomControlThread::deleteSnapshoteDomain()
     QString domName = task.object;
     result.name = task.args.object;
     QString snapshotName(task.args.object);
-    unsigned int flags = task.args.sign;
+    uint flags = uint(task.args.sign);
     //qDebug()<<snapshotName<<flags;
     if ( task.srcConnPtr==nullptr ) {
         result.result = false;

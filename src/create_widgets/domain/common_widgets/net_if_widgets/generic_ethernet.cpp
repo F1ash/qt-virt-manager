@@ -30,7 +30,7 @@ Generic_Ethernet::Generic_Ethernet(
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    // dataChanged connects
+    // dataChanged connections
     connect(target, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
     connect(script, SIGNAL(textEdited(QString)),

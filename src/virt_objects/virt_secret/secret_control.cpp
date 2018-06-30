@@ -51,7 +51,7 @@ void VirtSecretControl::stopProcessing()
                 Qt::EditRole);
 
 }
-bool VirtSecretControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
+bool VirtSecretControl::setCurrentWorkConnection(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
     ptr_ConnPtr = connPtrPtr;

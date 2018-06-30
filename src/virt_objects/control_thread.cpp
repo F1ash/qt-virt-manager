@@ -7,7 +7,7 @@ ControlThread::ControlThread(QObject *parent) :
 }
 
 /* public slots */
-bool ControlThread::setCurrentWorkConnect(
+bool ControlThread::setCurrentWorkConnection(
         virConnectPtr *_connPtrPtr, uint i, QString _name)
 {
     keep_alive = true;

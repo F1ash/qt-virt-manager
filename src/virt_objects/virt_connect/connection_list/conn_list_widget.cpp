@@ -107,13 +107,13 @@ void ConnectionList::addConnItem(const QString &s)
             _item = connItemModel->index(0,j);
             connItemModel->setData(_item, data, Qt::EditRole);
         };
-        int _createConnect = QDialog::Accepted;
+        int _createConnection = QDialog::Accepted;
         if ( s==QString("<noname>") && _item.isValid() ) {
             setCurrentIndex(_item);
-            _createConnect = connItemEditAction();
+            _createConnection = connItemEditAction();
         };
         // check item if it exist and correct
-        if ( _createConnect==QDialog::Accepted )
+        if ( _createConnection==QDialog::Accepted )
             createConnection(_item);
     };
 }
@@ -387,50 +387,50 @@ void ConnectionList::connContextMenuRequested(const QPoint &pos)
     if ( !conn_Status.value("availability", NOT_AVAILABLE).toBool() )
         return;
     bool to_run = TO_RUN;
-    ConnectMenu *connectMenu = new ConnectMenu(this);
+    ConnectionMenu *connMenu = new ConnectionMenu(this);
     if ( conn_Status.value("isRunning", CLOSED).toInt()==RUNNING ) {
-        connectMenu->act->setText(tr("Close Connection"));
-        connectMenu->act->setIcon(QIcon::fromTheme("disconnect"));
-        connect(connectMenu->act, SIGNAL(triggered()),
+        connMenu->act->setText(tr("Close Connection"));
+        connMenu->act->setIcon(QIcon::fromTheme("disconnect"));
+        connect(connMenu->act, SIGNAL(triggered()),
                 this, SLOT(connItemKillAction()));
-        //connectMenu->clean->setEnabled(true);
-        connectMenu->display->setEnabled(true);
+        //connMenu->clean->setEnabled(true);
+        connMenu->display->setEnabled(true);
         to_run = TO_STOP;
     } else {
-        connectMenu->act->setText(tr("Open Connection"));
-        connectMenu->act->setIcon(QIcon::fromTheme("connect"));
-        connect(connectMenu->act, SIGNAL(triggered()),
+        connMenu->act->setText(tr("Open Connection"));
+        connMenu->act->setIcon(QIcon::fromTheme("connect"));
+        connect(connMenu->act, SIGNAL(triggered()),
                 this, SLOT(connItemRunAction()));
-        //connectMenu->clean->setEnabled(false);
-        connectMenu->display->setEnabled(false);
+        //connMenu->clean->setEnabled(false);
+        connMenu->display->setEnabled(false);
         to_run = TO_RUN;
     };
     idx->setData(conn_Status);
-    connect(connectMenu->edit, SIGNAL(triggered()),
+    connect(connMenu->edit, SIGNAL(triggered()),
             this, SLOT(connItemEditAction()));
-    connect(connectMenu->display, SIGNAL(triggered()),
+    connect(connMenu->display, SIGNAL(triggered()),
             this, SLOT(connItemShowAction()));
-    connect(connectMenu->clean, SIGNAL(triggered()),
+    connect(connMenu->clean, SIGNAL(triggered()),
             this, SLOT(deleteCurrentConnection()));
-    connect(connectMenu->refresh, SIGNAL(triggered()),
+    connect(connMenu->refresh, SIGNAL(triggered()),
             this, SLOT(refreshLocalhostConnection()));
-    connectMenu->move(mapToGlobal(pos));
-    connectMenu->exec();
+    connMenu->move(mapToGlobal(pos));
+    connMenu->exec();
     if (to_run)
-        disconnect(connectMenu->act, SIGNAL(triggered()),
+        disconnect(connMenu->act, SIGNAL(triggered()),
                    this, SLOT(connItemRunAction()));
     else
-        disconnect(connectMenu->act, SIGNAL(triggered()),
+        disconnect(connMenu->act, SIGNAL(triggered()),
                    this, SLOT(connItemKillAction()));
-    disconnect(connectMenu->edit, SIGNAL(triggered()),
+    disconnect(connMenu->edit, SIGNAL(triggered()),
                this, SLOT(connItemEditAction()));
-    disconnect(connectMenu->display, SIGNAL(triggered()),
+    disconnect(connMenu->display, SIGNAL(triggered()),
                this, SLOT(connItemShowAction()));
-    disconnect(connectMenu->clean, SIGNAL(triggered()),
+    disconnect(connMenu->clean, SIGNAL(triggered()),
                this, SLOT(deleteCurrentConnection()));
-    disconnect(connectMenu->refresh, SIGNAL(triggered()),
+    disconnect(connMenu->refresh, SIGNAL(triggered()),
                this, SLOT(refreshLocalhostConnection()));
-    connectMenu->deleteLater();
+    connMenu->deleteLater();
 }
 void ConnectionList::connItemClicked(const QModelIndex &_item)
 {

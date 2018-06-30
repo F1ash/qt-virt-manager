@@ -226,7 +226,7 @@ void VNC_Viewer_Only::initGraphicWidget()
 void VNC_Viewer_Only::resizeViewer(const int h, const int w)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
-    // will be showed when occured successful connect to VM
+    // will be showed when occured successful connection to VM
     if ( !isVisible() ) {
         this->show();
     };

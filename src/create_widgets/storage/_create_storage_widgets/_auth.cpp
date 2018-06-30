@@ -60,6 +60,7 @@ QString _Storage_Auth::getSecretType() const
 /* private slots */
 void _Storage_Auth::usageTypeChanged(int i)
 {
+    Q_UNUSED(i)
     QString _type = usageType->currentText().toLower();
     if ( _type=="usage" ) {
         usage->setPlaceholderText("libvirtiscsi");

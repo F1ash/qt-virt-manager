@@ -53,7 +53,7 @@ void VirtNWFilterControl::stopProcessing()
                 Qt::EditRole);
 
 }
-bool VirtNWFilterControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
+bool VirtNWFilterControl::setCurrentWorkConnection(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
     ptr_ConnPtr = connPtrPtr;

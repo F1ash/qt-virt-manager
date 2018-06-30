@@ -258,7 +258,7 @@ void ConnElement::timerEvent(QTimerEvent *event)
     int percent = 0;
     int _timerId = event->timerId();
     if ( _timerId && waitTimerId==_timerId ) {
-        percent = int ((float(_diff)/checkTimeout)*100.0);
+        percent = int(_diff*100.0/checkTimeout);
         QModelIndex _idx = own_model->index(
                     own_model->connItemDataList.indexOf( own_index ), 2);
         own_model->setData(_idx, QString::number(percent), Qt::EditRole);

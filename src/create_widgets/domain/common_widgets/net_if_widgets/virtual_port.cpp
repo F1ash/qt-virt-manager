@@ -52,7 +52,7 @@ VirtualPort::VirtualPort(QWidget *parent) :
             this, SLOT(virtPortTypeChanged(int)));
     // set empty type for the general case
     type->setCurrentIndex(type->count()-1);
-    // dataChanged connects
+    // dataChanged connections
     connect(useVirtPort, SIGNAL(toggled(bool)),
             this, SLOT(stateChanged()));
     connect(type, SIGNAL(currentIndexChanged(int)),

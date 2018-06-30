@@ -1,10 +1,12 @@
 #include "wait_local_conn.h"
 
 WaitLocalConn::WaitLocalConn(
-        QObject *parent,
-        CONN_LIST *_conns,
-        ConnItemModel *_model) :
-    QThread(parent), connections(_conns), connItemModel(_model)
+        QObject        *parent,
+        CONN_LIST      *_conns,
+        ConnItemModel  *_model) :
+    QThread(parent),
+    connections(_conns),
+    connItemModel(_model)
 {
 
 }

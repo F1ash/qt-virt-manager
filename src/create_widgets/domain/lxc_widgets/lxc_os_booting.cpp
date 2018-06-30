@@ -69,7 +69,7 @@ LXC_OSBooting::LXC_OSBooting(
     connect(architecture, SIGNAL(emulatorType(const QString&)),
             this, SIGNAL(emulatorType(const QString&)));
     architecture->setItems();
-    // dataChanged connectins
+    // dataChanged connections
     connect(architecture, SIGNAL(dataChanged()),
             this, SLOT(stateChanged()));
     connect(initPath, SIGNAL(textEdited(QString)),

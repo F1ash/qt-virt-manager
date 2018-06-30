@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 #endif
             };
             if ( w!=nullptr ) {
-                // it will be showed when connect to VM will be success
+                // it will be showed when connection to VM will be success
                 //w->show();
                 _ret = a.exec();
             };

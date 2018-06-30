@@ -57,7 +57,7 @@ void VirtStoragePoolControl::stopProcessing()
                 Qt::EditRole);
 
 }
-bool VirtStoragePoolControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
+bool VirtStoragePoolControl::setCurrentWorkConnection(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
     ptr_ConnPtr = connPtrPtr;
@@ -268,11 +268,11 @@ void VirtStoragePoolControl::execAction(const Act_Param &param)
                 (storagePoolModel->DataList.at(idx.row())->getAutostart())
                  ? 0 : 1;
             task.action     = Actions::CHANGE_ENTITY_AUTOSTART;
-            task.args.sign  = autostartState;
+            task.args.sign  = int(autostartState);
             emit addNewTask(&task);
         } else if ( param.method==Methods::deleteEntity ) {
             task.action     = Actions::DELETE_ENTITY;
-            task.args.sign  = param.path.toUInt();
+            task.args.sign  = param.path.toInt();
             emit addNewTask(&task);
         } else if ( param.method==Methods::getEntityXMLDesc ) {
             task.action     = Actions::GET_XML_DESCRIPTION;

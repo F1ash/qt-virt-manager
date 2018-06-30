@@ -33,10 +33,12 @@ Qt::ItemFlags Model::flags(const QModelIndex &index) const
 }
 int Model::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return DataList.count();
 }
 int Model::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 4;
 }
 bool Model::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)

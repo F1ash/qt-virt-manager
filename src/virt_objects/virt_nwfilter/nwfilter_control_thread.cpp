@@ -174,7 +174,7 @@ Result NWFilterControlThread::getVirtNWFilterXMLDesc()
                 *task.srcConnPtr, name.toUtf8().data());
     if ( filter!=nullptr ) {
         //extra flags; not used yet, so callers should always pass 0
-        int flags = 0;
+        uint flags = 0;
         Returns = (virNWFilterGetXMLDesc(filter, flags));
         if ( Returns==nullptr )
             result.err = sendConnErrors();

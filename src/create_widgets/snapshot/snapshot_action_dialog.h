@@ -41,7 +41,7 @@ private:
     virDomainPtr         domain = nullptr;
     const QString        domName;
     Act_Param            params;
-    int                  flags = 0;
+    uint                 flags = 0;
     SnapshotTreeModel   *model;
     QAction             *revertAction;
     RevertSnapshotFlags *revertFlagsMenu;

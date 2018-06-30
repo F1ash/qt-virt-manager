@@ -63,6 +63,7 @@ int SnapshotTreeModel::rowCount(const QModelIndex &parent) const
 }
 int SnapshotTreeModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 2;
 }
 QVariant SnapshotTreeModel::headerData(int section, Qt::Orientation orientation, int role) const

@@ -13,7 +13,7 @@ FindSecretDialog::FindSecretDialog(
     settings.endGroup();
     secrets = new VirtSecretControl(this);
     secrets->setUsageInSoftTouched(false);
-    secrets->setCurrentWorkConnect(ptr_ConnPtr);
+    secrets->setCurrentWorkConnection(ptr_ConnPtr);
     hlpThread = new SecretControlThread(this);
     connect(hlpThread, SIGNAL(resultData(Result)),
             this, SLOT(hlpThreadResult(Result)));

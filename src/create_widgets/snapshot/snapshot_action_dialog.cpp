@@ -133,7 +133,7 @@ void SnapshotActionDialog::addSnapshotChild(int row, const QModelIndex &parent, 
             _data.clear();
             _data.append(
                   QDateTime::fromMSecsSinceEpoch(
-                      _el.text().toULongLong()*1000)
+                      _el.text().toLongLong()*1000)
                         .toString("yyyy-MM-dd_HH:mm:ss"));
         };
         _el = doc

@@ -9,7 +9,7 @@ BarNameLabel::BarNameLabel(QWidget *parent) :
 }
 
 /* public slots */
-void BarNameLabel::setColor(int color)
+void BarNameLabel::setColor(uint color)
 {
     _color = color;
 }

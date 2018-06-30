@@ -99,7 +99,7 @@ void ResizeDialog::cancelClicked()
 }
 void ResizeDialog::changeRange(int i)
 {
-    uint newRange = (i<0)? 0 : (uint)i;
+    qulonglong newRange = (i<0)? 0 : qulonglong(i);
     if ( newRange==0 && currentRange>bytes ) {
         newRange = KiB-1;
         currentRange = currentRange/KiB;

@@ -19,7 +19,7 @@ signals:
     void             resultData(Result);
 
 public slots:
-    bool             setCurrentWorkConnect(
+    bool             setCurrentWorkConnection(
                         virConnectPtr*,
                         uint i=0,
                         QString _name="");

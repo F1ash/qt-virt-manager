@@ -33,10 +33,12 @@ Qt::ItemFlags StorageVolModel::flags(const QModelIndex &index) const
 }
 int StorageVolModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return DataList.count();
 }
 int StorageVolModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 5;
 }
 bool StorageVolModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)

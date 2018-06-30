@@ -12,11 +12,11 @@ public:
     explicit BarNameLabel(QWidget *parent = nullptr);
 
 private:
-    int _size = 0;
-    int _color = 0x000000;
+    int _size   = 0;
+    uint _color = 0x000000;
 
 public slots:
-    void setColor(int);
+    void setColor(uint);
 
 private slots:
     void paintEvent(QPaintEvent*);

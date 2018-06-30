@@ -40,7 +40,7 @@ QString _VirtThread::sendGlobalErrors()
     virResetLastError();
     return msg;
 }
-void _VirtThread::customErrorNotification(const QString &_msg, const uint code)
+void _VirtThread::customErrorNotification(const QString &_msg, const int code)
 {
     QString msg;
     switch ( code ) {

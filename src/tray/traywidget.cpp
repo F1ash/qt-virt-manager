@@ -36,6 +36,7 @@ TrayIcon::TrayIcon(QWidget *parent)
 /* public slots */
 void TrayIcon::setLogUpActionText(QString &s)
 {
+    Q_UNUSED(s)
     //logUpAction->setText(s);
 }
 void TrayIcon::stateMonitorVisibilityChanged(bool state)

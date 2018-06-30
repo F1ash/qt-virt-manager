@@ -150,8 +150,8 @@ void VncView::scaleResize(int w, int h)
     
     //kDebug(5011) << w << h;
     if (m_scale) {
-        m_verticalFactor = (qreal) h / m_frame.height();
-        m_horizontalFactor = (qreal) w / m_frame.width();
+        m_verticalFactor = qreal(h) / m_frame.height();
+        m_horizontalFactor = qreal(w) / m_frame.width();
 
 #ifndef QTONLY
         if (Settings::keepAspectRatio()) {
@@ -521,26 +521,22 @@ bool VncView::event(QEvent *event)
 //         kDebug(5011) << "keyEvent";
         if ( ek!=nullptr ) keyEventHandler(ek);
         return true;
-        break;
     case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonRelease:
         emit mouseClickedInto();
         if ( ev!=nullptr ) mouseEventHandler(ev);
         return true;
-        break;
     case QEvent::MouseMove:
 //         kDebug(5011) << "mouseEvent";
         if ( 0<=ev->y() && ev->y()<= 3 )
             emit boarderTouched();
         mouseEventHandler(ev);
         return true;
-        break;
     case QEvent::Wheel:
 //         kDebug(5011) << "wheelEvent";
         if ( ew!=nullptr ) wheelEventHandler(ew);
         return true;
-        break;
     default:
         return RemoteView::event(event);
     }

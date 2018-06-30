@@ -1,6 +1,6 @@
 #include "conn_menu.h"
 
-ConnectMenu::ConnectMenu(QWidget *parent)
+ConnectionMenu::ConnectionMenu(QWidget *parent)
     : QMenu(parent)
 {
     act      = addAction(

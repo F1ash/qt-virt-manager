@@ -152,7 +152,7 @@ void Spice_Viewer::initGraphicWidget()
 void Spice_Viewer::resizeViewer(const QSize &_size)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
-    // will be showed when occured successful connect to VM
+    // will be showed when occured successful connection to VM
     if ( !isVisible() ) {
         this->show();
     };

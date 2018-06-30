@@ -24,7 +24,7 @@ private:
 
 public slots:
     void                 stopProcessing();
-    bool                 setCurrentWorkConnect(virConnectPtr*);
+    bool                 setCurrentWorkConnection(virConnectPtr*);
     void                 setListHeader(const QString&);
     void                 resultReceiver(Result*);
     void                 reloadState();

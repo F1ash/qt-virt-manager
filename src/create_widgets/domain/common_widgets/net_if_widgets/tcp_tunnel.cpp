@@ -38,7 +38,7 @@ TCP_Tunnel::TCP_Tunnel(
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    // dataChanged connects
+    // dataChanged connections
     connect(type, SIGNAL(currentIndexChanged(int)),
             this, SLOT(stateChanged()));
     connect(ipAddr, SIGNAL(textEdited(QString)),

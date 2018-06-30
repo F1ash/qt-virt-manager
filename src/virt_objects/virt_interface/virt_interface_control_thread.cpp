@@ -193,7 +193,7 @@ Result InterfaceControlThread::defineIface()
     xmlData = f.readAll();
     f.close();
     //extra flags; not used yet, so callers should always pass 0
-    int flags = 0;
+    uint flags = 0;
     virInterfacePtr iface = virInterfaceDefineXML(
                 *task.srcConnPtr, xmlData.data(), flags);
     if ( iface==nullptr ) {
@@ -316,7 +316,7 @@ Result InterfaceControlThread::getVirtIfaceXMLDesc()
                 *task.srcConnPtr, name.toUtf8().data());
     if ( iface!=nullptr ) {
         //extra flags; not used yet, so callers should always pass 0
-        int flags = 0;
+        uint flags = 0;
         Returns = virInterfaceGetXMLDesc(iface, flags);
         if ( Returns==nullptr )
             result.err = sendConnErrors();

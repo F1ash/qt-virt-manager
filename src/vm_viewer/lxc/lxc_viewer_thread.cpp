@@ -118,7 +118,7 @@ void LXC_ViewerThread::freeData(void *opaque)
 }
 void LXC_ViewerThread::streamEventCallBack(virStreamPtr _stream, int events, void *opaque)
 {
-    //Q_UNUSED(_stream);
+    Q_UNUSED(_stream);
     //QTextStream s(stdout);
     //qDebug()<<"streamEventCallBack";
     //s<<"streamEventCallBack"<<" "<<_stream<<endl;
@@ -174,7 +174,7 @@ void LXC_ViewerThread::sendDataToDisplay()
     };
     QString msg;
     size_t _size = sizeof(char)*BLOCK_SIZE;
-    char *buff = (char*) malloc(_size);
+    char *buff = static_cast<char*>(malloc(_size));
     if (buff==nullptr) return;
     int got = virStreamRecv(stream, buff, _size);
     switch ( got ) {
@@ -218,7 +218,7 @@ void LXC_ViewerThread::sendDataToDisplay()
         //s<<"sendDataToDisplay "<<"send to TermEmulator stdout "<<ptySlaveFd<<endl;
         for ( int i=0; i<got; i++ ) {
             if (ptySlaveFd) {
-                int sent = write(ptySlaveFd, &buff[i], 1);
+                long sent = write(ptySlaveFd, &buff[i], 1);
                 if ( sent<0 ) {
                     keep_alive = false;
                     break;
@@ -229,7 +229,7 @@ void LXC_ViewerThread::sendDataToDisplay()
     };
     free(buff);
 }
-void LXC_ViewerThread::sendDataToVMachine(const char *buff, int got)
+void LXC_ViewerThread::sendDataToVMachine(const char *buff, ulong got)
 {
     //qDebug()<<"sendDataToVMachine"<<"from"<<ptySlaveFd;
     //QTextStream s(stdout);

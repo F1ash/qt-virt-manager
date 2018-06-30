@@ -30,10 +30,12 @@ Qt::ItemFlags VirtNWFilterModel::flags(const QModelIndex &index) const
 }
 int VirtNWFilterModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return DataList.count();
 }
 int VirtNWFilterModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 2;
 }
 bool VirtNWFilterModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)

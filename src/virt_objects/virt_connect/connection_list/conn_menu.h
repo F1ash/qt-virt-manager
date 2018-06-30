@@ -2,11 +2,11 @@
 #define JOBMENU_H
 #include <QMenu>
 
-class ConnectMenu : public QMenu
+class ConnectionMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit ConnectMenu(QWidget *parent = nullptr);
+    explicit ConnectionMenu(QWidget *parent = nullptr);
 
     QAction  *edit;
     QAction  *display;

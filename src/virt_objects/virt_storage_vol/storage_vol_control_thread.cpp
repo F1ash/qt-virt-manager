@@ -13,7 +13,7 @@ void StorageVolControlThread::stop()
         virStoragePoolFree(currStoragePool);
         currStoragePool = nullptr;
     };
-    //qDebug()<<"stVol_thread (stop)\n\tConnect\t\t"<<ptr_ConnPtr
+    //qDebug()<<"stVol_thread (stop)\n\tConnection\t\t"<<ptr_ConnPtr
     //        <<"\n\tPool\t\t"<<currStoragePool
     //        <<"\n\tName\t\t"<<currPoolName;
 }
@@ -49,13 +49,13 @@ QString StorageVolControlThread::intToRangedStr(unsigned long long i)
 {
     QString res;
     if        ( i >= TiB ) {
-        res = QString("%1 TiB").arg(QString::number((float)i/TiB, 'f', 2));
+        res = QString("%1 TiB").arg(QString::number(qreal(i)/TiB, 'f', 2));
     } else if ( i >= GiB ) {
-        res = QString("%1 GiB").arg(QString::number((float)i/GiB, 'f', 2));
+        res = QString("%1 GiB").arg(QString::number(qreal(i)/GiB, 'f', 2));
     } else if ( i >= MiB ) {
-        res = QString("%1 MiB").arg(QString::number((float)i/MiB, 'f', 2));
+        res = QString("%1 MiB").arg(QString::number(qreal(i)/MiB, 'f', 2));
     } else if ( i >= KiB ) {
-        res = QString("%1 KiB").arg(QString::number((float)i/KiB, 'f', 2));
+        res = QString("%1 KiB").arg(QString::number(qreal(i)/KiB, 'f', 2));
     } else {
         res = QString("%1 Bytes").arg(QString::number(i));
     };
@@ -294,11 +294,11 @@ Result StorageVolControlThread::downloadStorageVol()
 
     bool downloaded = false;
     virStreamPtr stream = virStreamNew(*task.srcConnPtr, 0);
-    unsigned long long offset = 0;
+    qulonglong offset = 0;
     // unsigned long long length = task.args.size;
-    unsigned long long length = 0;
+    qulonglong length = 0;
     // flags: extra flags; not used yet, so callers should always pass 0
-    unsigned int flags = 0;
+    uint flags = 0;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
     if ( storageVol!=nullptr ) {
@@ -310,7 +310,8 @@ Result StorageVolControlThread::downloadStorageVol()
             downloaded = true;
             length = 0;
             char buf[BLOCK_SIZE];
-            int got, saved, step;
+            qlonglong saved, step;
+            int got;
             step = 0;
             while ( 1 && keep_alive ) {
                 got = virStreamRecv(stream, buf, BLOCK_SIZE);
@@ -323,7 +324,7 @@ Result StorageVolControlThread::downloadStorageVol()
                 step++;
                 saved = f->write(buf, got);
                 //qDebug()<<"got<>saved"<<got<<saved<<step;
-                if ( saved+1 ) length += saved;
+                if ( saved+1 ) length += qulonglong(saved);
                 else {
                     QString msg = QString(
                             tr("WriteError after (%2): %1 bytes"))
@@ -410,10 +411,10 @@ Result StorageVolControlThread::uploadStorageVol()
 
     bool uploaded = false;
     virStreamPtr stream = virStreamNew(*task.srcConnPtr, 0);
-    unsigned long long offset = 0;
-    unsigned long long length = f->size();
+    qulonglong offset = 0;
+    qulonglong length = (f->size())? qulonglong(f->size()) : 0;
     // flags: extra flags; not used yet, so callers should always pass 0
-    unsigned int flags = 0;
+    uint flags = 0;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
     if ( storageVol!=nullptr ) {
@@ -424,7 +425,7 @@ Result StorageVolControlThread::uploadStorageVol()
         } else {
             uploaded = true;
             length = 0;
-            int got, saved, step;
+            long got, saved, step;
             step = 0;
             char buf[BLOCK_SIZE];
             while ( 1 && keep_alive ) {
@@ -437,14 +438,14 @@ Result StorageVolControlThread::uploadStorageVol()
                     emit errorMsg( msg, number );
                     result.err = msg;
                 } else {
-                    saved = virStreamSend(stream, buf, got);
+                    saved = virStreamSend(stream, buf, ulong(got));
                     if (saved < 0) {
                         result.err = sendConnErrors();
                         uploaded = false;
                         break;
                     };
                     step++;
-                    length += saved;
+                    length += qulonglong(saved);
                     //qDebug()<<"got<>saved:length"<<got<<saved<<step<<length;
                 };
             };
@@ -483,7 +484,7 @@ Result StorageVolControlThread::wipeStorageVol()
 
     //flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
-    unsigned int alg = task.args.sign;
+    uint alg = uint(task.args.sign);
     bool wiped = false;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());

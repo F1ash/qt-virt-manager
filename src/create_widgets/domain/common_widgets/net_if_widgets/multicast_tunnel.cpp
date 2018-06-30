@@ -33,7 +33,7 @@ MultiCast_Tunnel::MultiCast_Tunnel(
     commonLayout->addWidget(addr);
     commonLayout->addStretch(-1);
     setLayout(commonLayout);
-    // dataChanged connects
+    // dataChanged connections
     connect(ipAddr, SIGNAL(textEdited(QString)),
             this, SLOT(stateChanged()));
     connect(port, SIGNAL(valueChanged(int)),

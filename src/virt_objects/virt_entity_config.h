@@ -34,7 +34,7 @@ struct TASK {
         virConnectPtr*  dstConnPtr  = nullptr;
         qulonglong      offset      = 0;
         qulonglong      size        = 0;
-        uint            sign        = 0;
+        int             sign        = 0;
         QString         path        = QString();
         QString         state       = QString();
         QString         object      = QString();

@@ -160,16 +160,16 @@ Result SecretControlThread::defineSecret()
     xmlData = f.readAll();
     f.close();
     //extra flags; not used yet, so callers should always pass 0
-    int flags = 0;
+    uint flags = 0;
     virSecretPtr secret = virSecretDefineXML(
                 *task.srcConnPtr, xmlData.data(), flags);
     if ( secret==nullptr ) {
         result.err = sendConnErrors();
         return result;
     };
-    unsigned char *value = (unsigned char*)(
+    unsigned char *value = reinterpret_cast<unsigned char*>(
                 task.secret->getSecretValue().data());
-    size_t value_size = task.secret->getSecretValue().length();
+    size_t value_size = size_t(task.secret->getSecretValue().length());
     //qDebug()<<task.secret->getSecretValue().data()<<(const char*)(value)<<value_size;
     //extra flags; not used yet, so callers should always pass 0
     flags = 0;
@@ -226,7 +226,7 @@ Result SecretControlThread::getVirtSecretXMLDesc()
                 *task.srcConnPtr, uuid.toUtf8().data());
     if ( secret!=nullptr ) {
         //extra flags; not used yet, so callers should always pass 0
-        int flags = 0;
+        uint flags = 0;
         Returns = (virSecretGetXMLDesc(secret, flags));
         if ( Returns==nullptr )
             result.err = sendConnErrors();

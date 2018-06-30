@@ -258,6 +258,8 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
                 method = Methods::revertVirtDomainSnapshot;
             } else if ( params.act==Actions::DELETE_DOMAIN_SNAPSHOT ) {
                 method = Methods::deleteVirtDomainSnapshot;
+            } else {
+                method = Methods::_NONE_METHOD;
             };
             task.method      = method;
             task.args.object = params.path;
@@ -267,7 +269,7 @@ void VM_Viewer::resendExecMethod(const Act_Param &params)
     } else if ( params.method==Methods::reconnectToVirtDomain ) {
         reconnectToVirtDomain();
     } else if ( params.method==Methods::sendKeySeqToVirtDomain ) {
-        sendKeySeqToVirtDomain((Qt::Key)params.path.toUInt());
+        sendKeySeqToVirtDomain(static_cast<Qt::Key>(params.path.toUInt()));
     } else if ( params.method==Methods::getScreenshotFromVirtDomain ) {
         getScreenshotFromVirtDomain();
     } else if ( params.method==Methods::copyFilesToVirtDomain ) {

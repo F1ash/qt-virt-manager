@@ -22,7 +22,7 @@ private:
 public slots:
     void            setData(QString&, virDomainPtr, int);
     void            run();
-    void            sendDataToVMachine(const char*, int);
+    void            sendDataToVMachine(const char*, ulong);
 
 private slots:
     int             registerStreamEvents();

@@ -288,10 +288,10 @@ void MigrateDialog::migrateClicked()
     };
     if ( useAdvanced->isChecked() ) {
         if ( maxDownCheck->isChecked() ) {
-             migrateArgs.maxDownTime = maxDownTime->value();
+             migrateArgs.maxDownTime = maxDownTime->text().toULongLong();
         };
         if ( bandWdthCheck->isChecked() ) {
-             migrateArgs.bandwidth = bandwidth->value();
+             migrateArgs.bandwidth = bandwidth->text().toULong();
         };
     };
     migrateArgs.new_name = Name->text();

@@ -57,7 +57,7 @@ void VirtInterfaceControl::stopProcessing()
                 Qt::EditRole);
 
 }
-bool VirtInterfaceControl::setCurrentWorkConnect(virConnectPtr *connPtrPtr)
+bool VirtInterfaceControl::setCurrentWorkConnection(virConnectPtr *connPtrPtr)
 {
     stopProcessing();
     ptr_ConnPtr = connPtrPtr;
