@@ -47,9 +47,9 @@ void _Attributes::setAttrValue(const QVariantMap &_map)
             if ( !u->isMatchUnusable() ) {
                 QString match = _map.value("match").toString();
                 bool state = (
-                            match=="true" ||
-                            match=="yes" ||
-                            match=="1");
+                            match.compare("true")==0 ||
+                            match.compare("yes")==0 ||
+                            match.compare("1")==0);
                 u->setMatchState(state);
             };
         };

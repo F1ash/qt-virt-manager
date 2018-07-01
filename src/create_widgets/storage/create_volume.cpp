@@ -105,51 +105,51 @@ void CreateVolume::setDataDescription(const QString &_xmlDesc)
         while ( !_n.isNull() ) {
             QDomElement _el = _n.toElement();
             if ( !_el.isNull() ) {
-                if ( _el.tagName()=="name" ) {
+                if ( _el.tagName().compare("name")==0 ) {
                     stName->setText(_el.text());
-                } else if ( _el.tagName()=="allocation" ) {
+                } else if ( _el.tagName().compare("allocation")==0 ) {
                     QString _unit = _el.attribute("unit", "bytes");
                     allocation->setValue(
                                 convertNiBtoMiB(_el.text().toULongLong(), _unit));
                     int idx = allocLabel->findData("MiB", Qt::UserRole);
                     if (idx <0 ) idx = 0;
                     allocLabel->setCurrentIndex(idx);
-                } else if ( _el.tagName()=="capacity" ) {
+                } else if ( _el.tagName().compare("capacity")==0 ) {
                     QString _unit = _el.attribute("unit", "bytes");
                     capacity->setValue(
                                 convertNiBtoMiB(_el.text().toULongLong(), _unit));
                     int idx = capLabel->findData("MiB", Qt::UserRole);
                     if (idx <0 ) idx = 0;
                     capLabel->setCurrentIndex(idx);
-                } else if ( _el.tagName()=="target" ) {
+                } else if ( _el.tagName().compare("target")==0 ) {
                     QDomNode _n1 = _el.firstChild();
                     while ( !_n1.isNull() ) {
                         QDomElement _el1 = _n1.toElement();
                         if ( !_el1.isNull() ) {
-                            if ( _el1.tagName()=="path" ) {
+                            if ( _el1.tagName().compare("path")==0 ) {
                                 target->path->setText(_el1.text());
-                            } else if ( _el1.tagName()=="format" ) {
+                            } else if ( _el1.tagName().compare("format")==0 ) {
                                 target->setVolumeFormat(
                                             _el1.attribute("type", "default"));
-                            } else if ( _el1.tagName()=="permissions" ) {
+                            } else if ( _el1.tagName().compare("permissions")==0 ) {
                                 target->usePerm->setChecked(true);
                                 QDomNode _n2 = _el1.firstChild();
                                 while ( !_n2.isNull() ) {
                                     QDomElement _el2 = _n2.toElement();
                                     if ( !_el2.isNull() ) {
-                                        if ( _el2.tagName()=="owner" ) {
+                                        if ( _el2.tagName().compare("owner")==0 ) {
                                             target->owner->setText(_el2.text());
-                                        } else if ( _el2.tagName()=="group" ) {
+                                        } else if ( _el2.tagName().compare("group")==0 ) {
                                             target->group->setText(_el2.text());
-                                        } else if ( _el2.tagName()=="mode" ) {
+                                        } else if ( _el2.tagName().compare("mode")==0 ) {
                                             target->mode->setText(_el2.text());
-                                        } else if ( _el2.tagName()=="label" ) {
+                                        } else if ( _el2.tagName().compare("label")==0 ) {
                                             target->label->setText(_el2.text());
                                         };
                                     };
                                     _n2 = _n2.nextSibling();
                                 };
-                            } else if ( _el1.tagName()=="encryption" ) {
+                            } else if ( _el1.tagName().compare("encryption")==0 ) {
                                 target->encrypt->setUsage(true);
                                 target->encrypt->setFormat(
                                             _el1.attribute("format", "default"));
@@ -205,8 +205,8 @@ QString CreateVolume::getXMLDescFileName() const
     _volume.appendChild(_capacity);
     _target = doc.createElement("target");
     if ( target->usePerm->isChecked() ||
-         target->format->currentText()!="default" ) {
-        if ( target->format->currentText()!="default" ) {
+         target->format->currentText().compare("default")!=0 ) {
+        if ( target->format->currentText().compare("default")!=0 ) {
             _format = doc.createElement("format");
             _format.setAttribute(
                         "type",

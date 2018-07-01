@@ -85,9 +85,9 @@ void ConnAliveThread::closeConnection()
 }
 void ConnAliveThread::setAuthCredentials(const QString &crd, const QString &text)
 {
-    if ( crd.toLower()=="username" )
+    if ( crd.toLower().compare("username")==0 )
         authData.username = text.toUtf8().data();
-    if ( crd.toLower()=="password" )
+    if ( crd.toLower().compare("password")==0 )
         authData.password = text.toUtf8().data();
     authWaitKey = false;
 }

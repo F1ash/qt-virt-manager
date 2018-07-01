@@ -158,10 +158,12 @@ QDomDocument VNC_Graphics::getDataDocument() const
     };
     QString _address = address->itemData(
                 address->currentIndex(), Qt::UserRole).toString();
-    if ( !_address.isEmpty() && _address!="network" && _address!="socket" ) {
+    if ( !_address.isEmpty()
+         && _address.compare("network")!=0
+         && _address.compare("socket")!=0 ) {
         _listen = doc.createElement("listen");
         _listen.setAttribute("type", "address");
-        if ( _address!="custom" ) {
+        if ( _address.compare("custom")!=0 ) {
             _listen.setAttribute("address", _address);
         } else {
             _listen.setAttribute(
@@ -198,7 +200,7 @@ void VNC_Graphics::setDataDescription(const QString &_xmlDesc)
                 _sharePolicy, Qt::UserRole, Qt::MatchExactly);
     sharePolicy->setCurrentIndex( (idx<0)? 0:idx );
     autoPort->setChecked(
-                _device.attribute("autoport")=="yes");
+                _device.attribute("autoport").compare("yes")==0);
     if ( !autoPort->isChecked() ) {
         port->setValue(
                     _device.attribute("port").toInt());
@@ -260,13 +262,13 @@ void VNC_Graphics::usePassword(bool state)
 void VNC_Graphics::addressEdit(int i)
 {
     QString s = address->itemData(i, Qt::UserRole).toString();
-    if ( s == "network" ) {
+    if ( s.compare("network")==0 ) {
         address->setEditable(false);
         addrLabel->setText(tr("Network:"));
         networks->setVisible(true);
         autoPort->setEnabled(true);
         port->setEnabled(true);
-    } else if ( s == "socket" ) {
+    } else if ( s.compare("socket")==0 ) {
         addrLabel->setText(tr("Socket:"));
         address->setEditable(true);
         address->clearEditText();
@@ -275,7 +277,7 @@ void VNC_Graphics::addressEdit(int i)
         port->setEnabled(false);
     } else {
         addrLabel->setText(tr("Address:"));
-        if ( s == "custom" ) {
+        if ( s.compare("custom")==0 ) {
             address->setEditable(true);
             address->clearEditText();
         } else {

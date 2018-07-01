@@ -44,11 +44,11 @@ QDomDocument _Pool_Stuff::getDataDocument() const
     _pool.appendChild(_name);
     _source = doc.createElement("source");
     if ( source->auth->auth->isChecked() &&
-         (_poolType=="iscsi" || _poolType=="rbd") ) {
+         (_poolType.compare("iscsi")==0 || _poolType.compare("rbd")==0) ) {
         _auth = doc.createElement("auth");
         _auth.setAttribute(
                     "type",
-                    (_poolType=="rbd")? "ceph" : "chap");
+                    (_poolType.compare("rbd")==0)? "ceph" : "chap");
         _auth.setAttribute(
                     "username",
                     source->auth->userName->text());
@@ -73,7 +73,7 @@ QDomDocument _Pool_Stuff::getDataDocument() const
         _source.appendChild(_name);
     };
     if ( source->format->count()!=0 &&
-         source->format->currentText()!="default" ) {
+         source->format->currentText().compare("default")!=0 ) {
         _format = doc.createElement("format");
         _format.setAttribute(
                     "type",
@@ -123,7 +123,7 @@ QDomDocument _Pool_Stuff::getDataDocument() const
         _permissions.appendChild(_label);
         _target.appendChild(_permissions);
     };
-    if ( target->format->currentText()!="default" ) {
+    if ( target->format->currentText().compare("default")!=0 ) {
         _format = doc.createElement("format");
         _format.setAttribute(
                     "type",

@@ -88,12 +88,12 @@ bool _DiskItem::isUsed() const
 /* private  slots */
 void _DiskItem::snapshotTypeChanged(QString _text)
 {
-    driver->setEnabled( _text==tr("external") );
-    source->setEnabled( _text==tr("external") );
+    driver->setEnabled( _text.compare(tr("external"))==0 );
+    source->setEnabled( _text.compare(tr("external"))==0 );
 }
 void _DiskItem::driverTypeChanged(QString _text)
 {
-    if ( _text==tr("custom") ) {
+    if ( _text.compare(tr("custom"))==0 ) {
         driver->setEditable(true);
         driver->clearEditText();
     } else {

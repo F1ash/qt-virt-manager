@@ -95,63 +95,63 @@ void DeviceData::showDevice(
     devIcon->setPixmap(QIcon::fromTheme(
                            QString("device-%1").arg(deviceType))
                        .pixmap(64));
-    if        ( deviceType == "disk" ) {
+    if        ( deviceType.compare("disk")==0 ) {
         device = new Disk_Edit(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "interface" ) {
+    } else if ( deviceType.compare("interface")==0 ) {
         device = new NetInterfaces_Edit(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "serial" ) {
+    } else if ( deviceType.compare("serial")==0 ) {
         device = new CharDevice_Edit(
                     this,
                     nullptr,
                     nullptr,
                     deviceType);
-    } else if ( deviceType == "parallel" ) {
+    } else if ( deviceType.compare("parallel")==0 ) {
         device = new CharDevice_Edit(
                     this,
                     nullptr,
                     nullptr,
                     deviceType);
-    } else if ( deviceType == "channel" ) {
+    } else if ( deviceType.compare("channel")==0 ) {
         device = new ChannelDevice(this);
-    } else if ( deviceType == "console" ) {
+    } else if ( deviceType.compare("console")==0 ) {
         device = new ConsoleDevice_Edit(
                           this,
                           ptr_ConnPtr);
-    } else if ( deviceType == "smartcard" ) {
+    } else if ( deviceType.compare("smartcard")==0 ) {
         device = new SmartCardDevice_Edit(this);
-    } else if ( deviceType == "input" ) {
+    } else if ( deviceType.compare("input")==0 ) {
         device = new InputDevice_Edit(this);
-    } else if ( deviceType == "hub" ) {
+    } else if ( deviceType.compare("hub")==0 ) {
         device = new HubDevice_Edit(this);
-    } else if ( deviceType == "video" ) {
+    } else if ( deviceType.compare("video")==0 ) {
         device = new VideoDevice_Edit(this);
-    } else if ( deviceType == "sound" ) {
+    } else if ( deviceType.compare("sound")==0 ) {
         device = new SoundDevice_Edit(this);
-    } else if ( deviceType == "hostdev" ) {
+    } else if ( deviceType.compare("hostdev")==0 ) {
         device = new HostDevice_Edit(
                           this,
                           ptr_ConnPtr);
-    } else if ( deviceType == "graphics" ) {
+    } else if ( deviceType.compare("graphics")==0 ) {
         device = new GraphicsDevice_Edit(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "redirdev" ) {
+    } else if ( deviceType.compare("redirdev")==0 ) {
         device = new RedirDevDevice_Edit(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "filesystem" ) {
+    } else if ( deviceType.compare("filesystem")==0 ) {
         device = new FileSystems_Edit(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "emulator" ) {
+    } else if ( deviceType.compare("emulator")==0 ) {
         device = new Emulator_Edit(this);
-    } else if ( deviceType == "rng" ) {
+    } else if ( deviceType.compare("rng")==0 ) {
         device = new Random_Edit(this);
-    } else if ( deviceType == "memballoon" ) {
+    } else if ( deviceType.compare("memballoon")==0 ) {
         device = new MemBalloon_Edit(
                     this,
                     ptr_ConnPtr);

@@ -33,7 +33,7 @@ void WaitLocalConn::run()
                             idx = connItemModel->connItemDataList.at(i);
                         };
                         if ( nullptr==idx ) continue;
-                        if ( idx->getName()==_name ) {
+                        if ( idx->getName().compare(_name)==0 ) {
                             DATA _data = idx->getData();
                             if ( _data.value("isRunning").toInt()!=RUNNING ) {
                                 to_Delete.append(key);
@@ -60,7 +60,7 @@ void WaitLocalConn::run()
                      ++i) {
                     ConnItemIndex *idx = (*i);
                     if ( nullptr==idx ) continue;
-                    if ( idx->getName()==_name ) {
+                    if ( idx->getName().compare(_name)==0 ) {
                         int row =
                                 connItemModel->connItemDataList.indexOf(idx);
                         connItemModel->removeRow(row);

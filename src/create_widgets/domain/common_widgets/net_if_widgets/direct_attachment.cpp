@@ -46,7 +46,7 @@ void dirAttach_HlpThread::run()
                     firstChildElement("capability").
                     firstChildElement("interface").
                     firstChild().toText().data();
-            if ( _interface!="lo" )
+            if ( _interface.compare("lo")!=0 )
                 devices.append(_interface);
             virNodeDeviceFree(nodeDevices[i]);
             i++;
@@ -158,7 +158,7 @@ QDomDocument DirectAttachment::getDataDocument() const
         _parameters = doc.createElement("parameters");
         foreach (QString key, p.keys()) {
             if ( !key.isEmpty() ) {
-                if ( key=="type" ) {
+                if ( key.compare("type")==0 ) {
                     _virtualport.setAttribute(key, p.value(key));
                 } else
                     _parameters.setAttribute(key, p.value(key));
@@ -253,7 +253,7 @@ void DirectAttachment::setDataDescription(const QString &_xmlDesc)
             if ( _addr.hasAttribute("multifunction") ) {
                 wdg->multifunction->setEnabled(true);
                 wdg->multifunction->setChecked(
-                            _addr.attribute("multifunction")=="on" );
+                            _addr.attribute("multifunction").compare("on")==0 );
             };
         };
     };
@@ -270,7 +270,8 @@ void DirectAttachment::setDataDescription(const QString &_xmlDesc)
 /* private slots */
 void DirectAttachment::sourceModeChanged(QString _mode)
 {
-    bool state = ( hlpThread->connType=="qemu" && _mode=="Bridge");
+    bool state = ( hlpThread->connType.compare("qemu")==0
+                   && _mode.compare("Bridge")==0);
     nwFilterParams->setUsage(false);
     nwFilterParams->setVisible(state);
 }
@@ -290,7 +291,7 @@ void DirectAttachment::setAvailableSources(QStringList &_devs)
 void DirectAttachment::emitCompleteSignal()
 {
     sourceModeChanged(sourceMode->currentText());
-    if ( hlpThread->connType=="qemu" ) {
+    if ( hlpThread->connType.compare("qemu")==0 ) {
         nwFilterParams->setNWFiltersList(
                     hlpThread->nwFilters);
     };

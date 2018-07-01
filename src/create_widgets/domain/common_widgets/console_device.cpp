@@ -65,9 +65,9 @@ QDomDocument ConsoleDevice::getDataDocument() const
 /* private slots */
 void ConsoleDevice::init_wdg()
 {
-    if ( hlpThread->connType.toLower()=="lxc" ) {
+    if ( hlpThread->connType.toLower().compare("lxc")==0 ) {
         targetType->addItem("LXC", "lxc");
-    } else if ( hlpThread->connType.toLower()=="qemu" ) {
+    } else if ( hlpThread->connType.toLower().compare("qemu")==0 ) {
         targetType->addItem(
                     tr("Default device type is according to the HV's rules"),
                     "");

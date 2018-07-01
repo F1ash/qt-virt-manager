@@ -103,9 +103,9 @@ void CreatePool::setDataDescription(const QString &_xmlDesc)
         while ( !_n.isNull() ) {
             QDomElement _el = _n.toElement();
             if ( !_el.isNull() ) {
-                if ( _el.tagName()=="name" ) {
+                if ( _el.tagName().compare("name")==0 ) {
                     stName->setText(_el.text());
-                } else if ( _el.tagName()=="uuid" ) {
+                } else if ( _el.tagName().compare("uuid")==0 ) {
                         uuid->setText(_el.text());
                 };
             };

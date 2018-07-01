@@ -91,7 +91,7 @@ void Bridge_Widget::setDataDescription(const QString &_xmlDesc)
                 bridgeName->setText(n);
             if ( !s.isEmpty() )
                 stp->setChecked(
-                            (s=="on")?
+                            (s.compare("on")==0)?
                                 Qt::Checked : Qt::Unchecked);
             if ( !d.isEmpty() )
                 delay->setValue(d.toInt());

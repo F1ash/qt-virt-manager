@@ -110,7 +110,7 @@ bool GetURLDialog::isUnique(const QString &_url) const
         QListWidgetItem *item =
                 urlList->item(i);
         if ( item==nullptr ) continue;
-        if ( item->text()==_url ) {
+        if ( item->text().compare(_url)==0 ) {
             exist = false;
         };
     };

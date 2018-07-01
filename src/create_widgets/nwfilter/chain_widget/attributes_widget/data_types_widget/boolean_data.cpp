@@ -10,9 +10,9 @@ BOOLEAN_Data::BOOLEAN_Data(
     data = new QCheckBox(this);
     data->setCheckable(true);
     bool state = (
-                topValue=="true" ||
-                topValue=="yes" ||
-                topValue=="1");
+                topValue.compare("true")==0 ||
+                topValue.compare("yes")==0 ||
+                topValue.compare("1")==0);
     data->setChecked( state );
     data->setToolTip(tr("TYPE: boolean (yes/no)"));
     addDataWidget(data);
@@ -32,9 +32,9 @@ QString BOOLEAN_Data::getAttrValue() const
 void BOOLEAN_Data::setAttrValue(const QString &_value)
 {
     data->setChecked(
-                _value=="true" ||
-                _value=="yes" ||
-                _value=="1");
+                _value.compare("true")==0 ||
+                _value.compare("yes")==0 ||
+                _value.compare("1")==0);
 }
 void BOOLEAN_Data::dataWasChanged()
 {

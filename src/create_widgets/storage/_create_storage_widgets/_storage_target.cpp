@@ -35,7 +35,7 @@ _Storage_Target::_Storage_Target(
     QStringList l;
     l.append(CUSTOMIZABLE_POOL_TYPES);
     if ( l.contains(currPoolType) ) {
-        if ( currPoolType=="disk" )
+        if ( currPoolType.compare("disk")==0 )
             format->addItems(DISK_VOLUME_TYPES);
         else format->addItems(DIR_VOLUME_TYPES);
     };

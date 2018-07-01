@@ -31,19 +31,22 @@ QDomDocument MountFsType::getDataDocument() const
     QDomElement _source, _target, _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("filesystem");
-    if ( connType=="qemu" && accessMode->currentText()!="default" ) {
+    if ( connType.compare("qemu")==0
+         && accessMode->currentText().compare("default")!=0 ) {
         _devDesc.setAttribute("accessmode", accessMode->currentText());
     };
-    if ( connType=="qemu" && driver->currentText()!="default" ) {
+    if ( connType.compare("qemu")==0
+         && driver->currentText().compare("default")!=0 ) {
         QDomElement _driver = doc.createElement("driver");
         _devDesc.appendChild(_driver);
         _driver.setAttribute("type", driver->currentText());
-        if ( wrPolicy->currentText()!="default" )
+        if ( wrPolicy->currentText().compare("default")!=0 )
             _driver.setAttribute("wrpolicy", wrPolicy->currentText());
-    } else if ( connType=="lxc" && driver->currentText()!="default" ) {
+    } else if ( connType.compare("lxc")==0
+                && driver->currentText().compare("default")!=0 ) {
         QDomElement _driver = doc.createElement("driver");
         _devDesc.appendChild(_driver);
-        if ( wrPolicy->currentText()!="default" )
+        if ( wrPolicy->currentText().compare("default")!=0 )
             _driver.setAttribute("wrpolicy", wrPolicy->currentText());
         _driver.setAttribute("type", driver->currentText());
         _driver.setAttribute("format", format->currentText());

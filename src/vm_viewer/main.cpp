@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
         if ( _ret!=255 ) {
             inLoop = true;
             VM_Viewer_Only *w = nullptr;
-            if ( _type == "vnc" ) {
+            if ( _type.compare("vnc")==0 ) {
 #if WITH_VNC_SUPPORT
                 w = new VNC_Viewer_Only(nullptr, url);
 #else
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
                             "VM Viewer",
                             QString("Application built without VNC"));
 #endif
-            } else if ( _type == "spice" ) {
+            } else if ( _type.compare("spice")==0 ) {
 #if WITH_SPICE_SUPPORT
                 w = new Spice_Viewer_Only(nullptr, url);
 #else

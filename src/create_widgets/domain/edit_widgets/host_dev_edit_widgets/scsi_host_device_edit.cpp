@@ -69,7 +69,7 @@ QDomDocument SCSI_Host_Device_Edit::getDataDocument() const
     QString _protocol = scsiType->itemData(
                 scsiType->currentIndex(),
                 Qt::UserRole).toString();
-    if ( _protocol=="iscsi" ) {
+    if ( _protocol.compare("iscsi")==0 ) {
         QDomElement _host, _auth, _secret;
         _source.setAttribute("protocol", "iscsi");
         _source.setAttribute(
@@ -150,7 +150,7 @@ void SCSI_Host_Device_Edit::setDataDescription(const QString &_xmlDesc)
                 Qt::UserRole,
                 Qt::MatchContains);
     scsiType->setCurrentIndex( (idx<0)? 0:idx );
-    if ( _protocol=="iscsi" ) {
+    if ( _protocol.compare("iscsi")==0 ) {
         devName->setText(
                     _source
                     .attribute("name"));
@@ -221,9 +221,9 @@ void SCSI_Host_Device_Edit::setDataDescription(const QString &_xmlDesc)
 void SCSI_Host_Device_Edit::scsiTypeChanged(int i)
 {
     QString _type = scsiType->itemData(i, Qt::UserRole).toString();
-    if ( _type=="scsi" ) {
+    if ( _type.compare("scsi")==0 ) {
         devName->setPlaceholderText("scsi_hostN");
-    } else if ( _type=="iscsi" ) {
+    } else if ( _type.compare("iscsi")==0 ) {
         devName->setPlaceholderText(
                     "iqn.2014-08.com.example:iscsi-nopool/1");
     }

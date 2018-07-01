@@ -77,7 +77,7 @@ QDomDocument PCI_Passthrough::getDataDocument() const
         _parameters = doc.createElement("parameters");
         foreach (QString key, p.keys()) {
             if ( !key.isEmpty() ) {
-                if ( key=="type" ) {
+                if ( key.compare("type")==0 ) {
                     _virtualport.setAttribute(key, p.value(key));
                 } else
                     _parameters.setAttribute(key, p.value(key));
@@ -176,7 +176,7 @@ void PCI_Passthrough::setDataDescription(const QString &_xmlDesc)
             if ( _addr.hasAttribute("multifunction") ) {
                 wdg->multifunction->setEnabled(true);
                 wdg->multifunction->setChecked(
-                            _addr.attribute("multifunction")=="on" );
+                            _addr.attribute("multifunction").compare("on")==0 );
             };
         };
     };
@@ -185,9 +185,9 @@ void PCI_Passthrough::setDataDescription(const QString &_xmlDesc)
 /* private slots */
 void PCI_Passthrough::init_wdg()
 {
-    if ( hlpThread->connType.toLower()=="lxc" ) {
+    if ( hlpThread->connType.toLower().compare("lxc")==0 ) {
         driver->addItem("VFIO");
-    } else if ( hlpThread->connType.toLower()=="qemu" ) {
+    } else if ( hlpThread->connType.toLower().compare("qemu")==0 ) {
         driver->addItem("VFIO");
         driver->addItem("KVM");
     };

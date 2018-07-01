@@ -49,11 +49,11 @@ QDomDocument NetInterfaces::getDataDocument() const
 /* private slots */
 void NetInterfaces::init_wdg()
 {
-    if ( hlpThread->connType.toLower()=="lxc" ) {
+    if ( hlpThread->connType.toLower().compare("lxc")==0 ) {
         type->addItems(LXC_NET_TYPES);
-    } else if ( hlpThread->connType.toLower()=="qemu" ) {
+    } else if ( hlpThread->connType.toLower().compare("qemu")==0 ) {
         type->addItems(QEMU_NET_TYPES);
-    } else if ( hlpThread->connType.toLower()=="xen" ) {
+    } else if ( hlpThread->connType.toLower().compare("xen")==0 ) {
         type->addItems(XEN_NET_TYPES);
     };
     for (int i=0; i<type->count(); i++) {

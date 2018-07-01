@@ -131,7 +131,7 @@ QDomDocument Bridge_to_LAN::getDataDocument() const
         _parameters = doc.createElement("parameters");
         foreach (QString key, p.keys()) {
             if ( !key.isEmpty() ) {
-                if ( key=="type" ) {
+                if ( key.compare("type")==0 ) {
                     _virtualport.setAttribute(key, p.value(key));
                 } else
                     _parameters.setAttribute(key, p.value(key));
@@ -224,7 +224,7 @@ void Bridge_to_LAN::setDataDescription(const QString &_xmlDesc)
             if ( _addr.hasAttribute("multifunction") ) {
                 wdg->multifunction->setEnabled(true);
                 wdg->multifunction->setChecked(
-                            _addr.attribute("multifunction")=="on" );
+                            _addr.attribute("multifunction").compare("on")==0 );
             };
         };
     };
@@ -241,7 +241,7 @@ void Bridge_to_LAN::setDataDescription(const QString &_xmlDesc)
 /* private slots */
 void Bridge_to_LAN::emitCompleteSignal()
 {
-    bool state = ( hlpThread->connType=="qemu" );
+    bool state = ( hlpThread->connType.compare("qemu")==0 );
     nwFilterParams->setVisible(state);
     if ( state ) {
         nwFilterParams->setNWFiltersList(

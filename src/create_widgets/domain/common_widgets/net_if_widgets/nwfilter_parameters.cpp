@@ -109,7 +109,7 @@ void NWFilter_Params::setDataDescription(const QString &_xmlDesc)
             QString p, v;
             p = _parameter.attribute("name");
             v = _parameter.attribute("value");
-            if ( p=="CTRL_IP_LEARNING" ) {
+            if ( p.compare("CTRL_IP_LEARNING")==0 ) {
                 useAutoIP->setChecked(true);
                 idx = autoIpTypes->findText(v);
                 if (-1==idx) idx = 0;

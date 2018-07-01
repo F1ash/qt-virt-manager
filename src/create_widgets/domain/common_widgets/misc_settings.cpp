@@ -7,7 +7,8 @@ Misc_Settings::Misc_Settings(QWidget *parent, QString _caps, QString _xmlDesc) :
     readCapabilities();
     eventsLabel = new QLabel(tr("Events configuration"), this);
     powerLabel = new QCheckBox(tr("Power Management"), this);
-    powerLabel->setEnabled( type=="qemu" || type=="kvm" );
+    powerLabel->setEnabled( type.compare("qemu")==0
+                            || type.compare("kvm")==0 );
     featuresLabel = new QCheckBox(tr("Hypervisor features"), this);
     eventsWdg = new Events(this);
     powerWdg = new Power(this);
@@ -196,9 +197,9 @@ void Misc_Settings::readXMLDesciption(const QString &xmlDesc)
         _suspend_to_disk = _pm.firstChildElement("suspend-to-disk");
         _suspend_to_mem = _pm.firstChildElement("suspend-to-mem");
         powerWdg->suspend_to_disk->setChecked(
-                    _suspend_to_disk.attribute("enabled")=="yes");
+                    _suspend_to_disk.attribute("enabled").compare("yes")==0);
         powerWdg->suspend_to_mem->setChecked(
-                    _suspend_to_mem.attribute("enabled")=="yes");
+                    _suspend_to_mem.attribute("enabled").compare("yes")==0);
     };
     featuresLabel->setChecked( !_features.isNull() );
     if ( !_features.isNull() ) {

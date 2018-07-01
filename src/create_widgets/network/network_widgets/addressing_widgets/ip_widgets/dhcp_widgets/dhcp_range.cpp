@@ -50,7 +50,7 @@ void DHCP_Range::addItem()
     _text.append(end->text());
     bool exist = false;
     for (int i=0; i<list->count(); i++) {
-        if ( list->item(i)->text()==_text ) {
+        if ( list->item(i)->text().compare(_text)==0 ) {
             exist = true;
             break;
         };

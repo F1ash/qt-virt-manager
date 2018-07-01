@@ -91,7 +91,7 @@ void ConnectionList::addConnItem(const QString &s)
     bool exist = false;
     for (int i=0; i<count; i++) {
         ConnItemIndex *idx = getConnItemDataListIndex(i);
-        if ( idx!=nullptr && idx->getName()==s ) {
+        if ( idx!=nullptr && idx->getName().compare(s)==0 ) {
             exist = true;
             break;
         }
@@ -108,7 +108,7 @@ void ConnectionList::addConnItem(const QString &s)
             connItemModel->setData(_item, data, Qt::EditRole);
         };
         int _createConnection = QDialog::Accepted;
-        if ( s==QString("<noname>") && _item.isValid() ) {
+        if ( s.compare("<noname>")==0 && _item.isValid() ) {
             setCurrentIndex(_item);
             _createConnection = connItemEditAction();
         };
@@ -443,7 +443,7 @@ void ConnectionList::connItemClicked(const QModelIndex &_item)
     ConnElement *conn = static_cast<ConnElement*>(
                 connections->value(key));
     if ( nullptr==conn ) return;
-    if ( key != _name ) {
+    if ( key.compare(_name)!=0 ) {
         conn_Status.insert(QString("initName"), QVariant(_name));
         connections->insert(_name, conn);
         connections->remove(key);
@@ -469,7 +469,7 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
     ConnElement *conn = static_cast<ConnElement*>(
                 connections->value(key));
     if ( nullptr==conn ) return;
-    if ( key != _name ) {
+    if ( key.compare(_name)!=0 ) {
         conn_Status.insert(QString("initName"), QVariant(_name));
         connections->insert(_name, conn);
         connections->remove(key);
@@ -589,7 +589,7 @@ void ConnectionList::getAuthCredentials(const QString &crd)
     ConnElement *obj = static_cast<ConnElement*>(sender());
     if ( nullptr==obj ) return;
     QString text;
-    QLineEdit::EchoMode mode = (crd.toLower()=="password") ?
+    QLineEdit::EchoMode mode = (crd.toLower().compare("password")==0) ?
                 QLineEdit::PasswordEchoOnEdit :
                 QLineEdit::Normal;
     text = QInputDialog::getText(
@@ -617,7 +617,7 @@ void ConnectionList::setOnViewAvailableConnection(const QString &_newName)
         ConnItemIndex *idx = (*i);
         if ( idx==nullptr ) continue;
         const QString _name = idx->getName();
-        if ( _newName!=_name ) continue;
+        if ( _newName.compare(_name)!=0 ) continue;
         ConnElement *conn = static_cast<ConnElement*>(
                     connections->value(_name));
         if ( nullptr==conn ) continue;

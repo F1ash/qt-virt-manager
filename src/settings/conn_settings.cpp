@@ -127,7 +127,7 @@ void ConnSettings::setConnectItem(ConnItemIndex *idx)
     name = idx->getName();
     previousName = name;
     set_Title_Name(name);
-    if (name!=QString("<noname>")) {
+    if (name.compare("<noname>")!=0) {
         initParameters();
     };
 }
@@ -144,7 +144,8 @@ void ConnSettings::saveConnection()
                     tr("Info"),
                     tr("Connection Name is empty."));
         return;
-    } else if ( groups.contains(name) && !newbe && name==previousName ) {
+    } else if ( groups.contains(name)
+                && !newbe && name.compare(previousName)==0 ) {
         saveParameters();
     } else if ( groups.contains(name) && newbe ) {
         QMessageBox::information(
@@ -152,7 +153,8 @@ void ConnSettings::saveConnection()
                     tr("Info"),
                     tr("Same Connection Name is exist."));
         return;
-    } else if ( groups.contains(name) && !newbe && name!=previousName ) {
+    } else if ( groups.contains(name) && !newbe
+                && name.compare(previousName)!=0 ) {
         QMessageBox::information(
                     this,
                     tr("Info"),
@@ -302,13 +304,13 @@ void ConnSettings::changeDriver(QString s)
     Path->setEnabled(true);
     Extra->setPlaceholderText("[?extraparameters]");
     Extra->setEnabled(true);
-    if ( _name=="qemu" ) {
+    if ( _name.compare("qemu")==0 ) {
         Path->setText( (s.endsWith("session"))?"session":"system" );
         Path->setEnabled(false);
-    } else if ( _name=="vbox" ) {
+    } else if ( _name.compare("vbox")==0 ) {
         Path->setText( "session" );
         Path->setEnabled(false);
-    } else if ( _name=="vmware" ) {
+    } else if ( _name.compare("vmware")==0 ) {
         if ( getDriverName(s).startsWith("vmware") ) {
             // VMware Player/Workstation
             Path->setText( "session" );
@@ -321,15 +323,15 @@ void ConnSettings::changeDriver(QString s)
             "[[folder/...]datacenter/[folder/...][cluster/]server]");
             Path->clear();
         };
-    } else if ( _name=="openvz" ) {
+    } else if ( _name.compare("openvz")==0 ) {
         Path->setText( "system" );
         Path->setEnabled(false);
-    } else if ( _name=="hyperv" ) {
+    } else if ( _name.compare("hyperv")==0 ) {
         Transports->setCurrentIndex(0);
         Transports->setEnabled(false);
         Path->clear();
         Path->setEnabled(false);
-    } else if ( _name=="phyp" ) {
+    } else if ( _name.compare("phyp")==0 ) {
         Host->setPlaceholderText("[username@]{hmc|ivm}");
         Transports->setCurrentIndex(0);
         Transports->setEnabled(false);
@@ -337,12 +339,12 @@ void ConnSettings::changeDriver(QString s)
         Path->setEnabled(false);
         Extra->clear();
         Extra->setEnabled(false);
-    } else if ( _name=="bhyve" ) {
+    } else if ( _name.compare("bhyve")==0 ) {
         Path->setText( "system" );
         Path->setEnabled(false);
         Extra->clear();
         Extra->setEnabled(false);
-    } else if ( getDriverName(s)=="test" ) {
+    } else if ( getDriverName(s).compare("test")==0 ) {
         Path->setText( "default" );
     } else Path->clear();
     changeURI();
@@ -350,9 +352,9 @@ void ConnSettings::changeDriver(QString s)
 QString ConnSettings::getIconName(QString &_text) const
 {
     QString ret(_text.split("/").first().split(" ").first().toLower());
-    if        ( ret=="test" ) {
+    if        ( ret.compare("test")==0 ) {
         ret = "wipe";
-    } else if ( ret=="ibm" ) {
+    } else if ( ret.compare("ibm")==0 ) {
         ret = "phyp";
     };
     return ret;

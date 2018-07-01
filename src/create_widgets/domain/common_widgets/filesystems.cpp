@@ -44,11 +44,11 @@ QDomDocument FileSystems::getDataDocument() const
 /* private slots */
 void FileSystems::init_wdg()
 {
-    if ( hlpThread->connType.toLower()=="lxc" ) {
+    if ( hlpThread->connType.toLower().compare("lxc")==0 ) {
         type->addItems(LXC_FS_TYPES);
-    } else if ( hlpThread->connType.toLower()=="qemu" ) {
+    } else if ( hlpThread->connType.toLower().compare("qemu")==0 ) {
         type->addItems(QEMU_FS_TYPES);
-    } else if ( hlpThread->connType.toLower()=="xen" ) {
+    } else if ( hlpThread->connType.toLower().compare("xen")==0 ) {
         type->addItems(XEN_FS_TYPES);
     };
     for (int i=0; i<type->count(); i++) {
@@ -59,15 +59,15 @@ void FileSystems::init_wdg()
 }
 void FileSystems::setWidgets(QString _type)
 {
-    if ( _type.toLower()=="mount" ) {
+    if ( _type.toLower().compare("mount")==0 ) {
         info->addWidget(new MountFsType(this, connType));
-    } else if ( _type.toLower()=="file" ) {
+    } else if ( _type.toLower().compare("file")==0 ) {
         info->addWidget(new FileFsType(this, connType));
-    } else if ( _type.toLower()=="block" ) {
+    } else if ( _type.toLower().compare("block")==0 ) {
         info->addWidget(new BlockFsType(this, connType));
-    } else if ( _type.toLower()=="ram" ) {
+    } else if ( _type.toLower().compare("ram")==0 ) {
         info->addWidget(new RAMFsType(this, connType));
-    } else if ( _type.toLower()=="bind" ) {
+    } else if ( _type.toLower().compare("bind")==0 ) {
         info->addWidget(new BindFsType(this, connType));
     };
 }

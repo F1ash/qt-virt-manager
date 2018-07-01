@@ -89,12 +89,12 @@ QDomDocument Random::getDataDocument() const
     _backend = doc.createElement("backend");
     QString _bkModel = bkModel->currentText();
     _backend.setAttribute("model", _bkModel);
-    if ( _bkModel=="random" ) {
+    if ( _bkModel.compare("random")==0 ) {
         QDomText _data = doc.createTextNode(
                     bkRandom->currentText());
-        if ( _data.toText().data()!="default" )
+        if ( _data.toText().data().compare("default")!=0 )
             _backend.appendChild(_data);
-    } else if ( _bkModel=="egd" ) {
+    } else if ( _bkModel.compare("egd")==0 ) {
         _charDevDoc = bkEGD->getDataDocument();
         QString _type = _charDevDoc
                 .firstChildElement("device")
@@ -105,7 +105,7 @@ QDomDocument Random::getDataDocument() const
                 .firstChildElement("device")
                 .firstChildElement("serial")
                 .childNodes();
-        uint j = 0;
+        int j = 0;
         int count = list.length();
         for (int i=0; i<count;i++) {
             if (!list.item(j).isNull()) {

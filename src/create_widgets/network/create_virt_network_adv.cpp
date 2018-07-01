@@ -129,11 +129,11 @@ void CreateVirtNetwork_Adv::readXmlDescData(const QString &_xmlDesc)
         _forward = _network.firstChildElement("forward");
         if ( _network.hasAttribute("ipv6") )
             ipv6->setChecked(
-                        (_network.attribute("ipv6")=="yes")?
+                        (_network.attribute("ipv6").compare("yes")==0)?
                             Qt::Checked : Qt::Unchecked);
         if ( _network.hasAttribute("trustGuestRxFilters") )
             trustGuestRxFilters->setChecked(
-                        (_network.attribute("trustGuestRxFilters")=="yes")?
+                        (_network.attribute("trustGuestRxFilters").compare("yes")==0)?
                             Qt::Checked : Qt::Unchecked);
         _name = _network.firstChildElement("name");
         _uuid = _network.firstChildElement("uuid");
@@ -224,8 +224,8 @@ void CreateVirtNetwork_Adv::networkTypeChanged(bool state)
 {
     Q_UNUSED(state)
     //bool _state =
-    //        forwardWdg->getCurrentMode()=="nat" ||
-    //        forwardWdg->getCurrentMode()=="route";
+    //        forwardWdg->getCurrentMode().compare("nat")==0 ||
+    //        forwardWdg->getCurrentMode().compare("route")==0;
     //bridgeWdg->setUsage(!state || _state);
     //domainWdg->setUsage(!state || _state);
 }

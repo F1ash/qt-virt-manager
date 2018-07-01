@@ -53,7 +53,7 @@ QDomDocument Volume_Disk::getDataDocument() const
         _auth.setAttribute(
                     "username", auth->userName->text());
         _secret = doc.createElement("secret");
-        if ( auth->getSecretType().toLower()=="iscsi" ) {
+        if ( auth->getSecretType().toLower().compare("iscsi")==0 ) {
             _secret.setAttribute("type", "iscsi");
             _secret.setAttribute(
                         auth->usageType->currentText().toLower(),
@@ -83,7 +83,7 @@ QDomDocument Volume_Disk::getDataDocument() const
         QDomNodeList _l = secLabels->getDataDocument()
                 .firstChildElement("data")
                 .childNodes();
-        uint j = 0;
+        int j = 0;
         int count = _l.length();
         for (int i=0; i<count;i++) {
             //qDebug()<<_l.item(j).nodeName()<<i;
@@ -141,7 +141,7 @@ void Volume_Disk::setDataDescription(const QString &_xmlDesc)
     _addr = _device.firstChildElement("address");
     _driver = _device.firstChildElement("driver");
     QString _attr;
-    int idx;
+    int idx = -1;
     _attr = _device.attribute("device");
     devType->setDeviceType(_attr);
     _attr = _source.attribute("pool");
@@ -239,7 +239,7 @@ void Volume_Disk::setDataDescription(const QString &_xmlDesc)
                 if ( _addr.hasAttribute("multifunction") ) {
                     wdg->multifunction->setEnabled(true);
                     wdg->multifunction->setChecked(
-                                _addr.attribute("multifunction")=="on" );
+                                _addr.attribute("multifunction").compare("on")==0 );
                 };
             };
         } else if ( _attr=="drive" ) {
@@ -265,7 +265,7 @@ void Volume_Disk::getVolumeNames()
         pool->setText(_ret.pool);
         volume->setText(_ret.name);
         encrypt->setCurrVolumePath(_ret.path);
-        if ( _ret.type=="iscsi" ) {
+        if ( _ret.type.compare("iscsi")==0 ) {
             auth->setVisible(true);
             auth->setSecretType("ISCSI");
             mode->setEnabled(true);

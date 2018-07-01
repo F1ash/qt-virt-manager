@@ -58,7 +58,7 @@ QDomDocument RedirDevDevice::getDataDocument() const
     _redirFilter = doc.createElement("redirfilter");
 
     QString _type = type->itemData(type->currentIndex(), Qt::UserRole).toString();
-    if ( _type == "tcp" ) {
+    if ( _type.compare("tcp")==0 ) {
         _source = doc.createElement("source");
         _source.setAttribute("mode", "connect");
         _source.setAttribute("host", host->text());
@@ -114,5 +114,5 @@ QDomDocument RedirDevDevice::getDataDocument() const
 void RedirDevDevice::typeChanged(int i)
 {
     QString _type = type->itemData(i, Qt::UserRole).toString();
-    source->setVisible( _type == "tcp" );
+    source->setVisible( _type.compare("tcp")==0 );
 }

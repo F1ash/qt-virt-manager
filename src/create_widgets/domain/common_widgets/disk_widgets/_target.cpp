@@ -66,7 +66,7 @@ TargetAttrs _Target::getTargetAttrs() const
 {
     TargetAttrs attrs;
     attrs.insert("dev", devName->text());
-    if ( bus->currentText().toLower()!="default" )
+    if ( bus->currentText().toLower().compare("default")!=0 )
         attrs.insert("bus", bus->currentText().toLower());
     if ( tray->isEnabled() )
         attrs.insert("tray", tray->currentText());

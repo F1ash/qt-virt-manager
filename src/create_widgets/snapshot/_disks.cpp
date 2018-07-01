@@ -49,7 +49,7 @@ QDomDocument _Disks::getElements(bool all) const
         if ( wdg->isUsed() || all ) {
             _disk.setAttribute("name", wdg->getName());
             _disk.setAttribute("snapshot", wdg->getSnapshotType());
-            if ( wdg->getSnapshotType()==tr("external") ) {
+            if ( wdg->getSnapshotType().compare(tr("external"))==0 ) {
                 QString source, driver;
                 source = wdg->getSource();
                 if (!source.isEmpty()) {

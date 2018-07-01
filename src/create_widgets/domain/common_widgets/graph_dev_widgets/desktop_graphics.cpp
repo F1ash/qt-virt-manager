@@ -43,5 +43,5 @@ void Desktop_Graphics::setDataDescription(const QString &_xmlDesc)
     display->setText(
                 _device.attribute("display"));
     fullscreen->setChecked(
-                _device.attribute("fullscreen")=="yes");
+                _device.attribute("fullscreen").compare("yes")==0);
 }

@@ -40,38 +40,38 @@ void Disk_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
         while ( !_n.isNull() ) {
             QDomElement _el = _n.toElement();
             if ( !_el.isNull() ) {
-                if ( _el.tagName()=="source" ) {
+                if ( _el.tagName().compare("source")==0 ) {
                     QDomNode _n1 = _el.firstChild();
                     while ( !_n1.isNull() ) {
                         QDomElement _el1 = _n1.toElement();
                         if ( !_el1.isNull() ) {
-                            if ( _el1.tagName()=="device" ) {
+                            if ( _el1.tagName().compare("device")==0 ) {
                                 source->device->addNewDevicePath(
                                             _el1.attribute("path"));
                             };
                         };
                         _n1 = _n1.nextSibling();
                     };
-                } else if ( _el.tagName()=="target" ) {
+                } else if ( _el.tagName().compare("target")==0 ) {
                     QDomNode _n1 = _el.firstChild();
                     while ( !_n1.isNull() ) {
                         QDomElement _el1 = _n1.toElement();
                         if ( !_el1.isNull() ) {
-                            if ( _el1.tagName()=="path" ) {
+                            if ( _el1.tagName().compare("path")==0 ) {
                                 target->path->setText(_el1.text());
-                            } else if ( _el1.tagName()=="permissions" ) {
+                            } else if ( _el1.tagName().compare("permissions")==0 ) {
                                 target->usePerm->setChecked(true);
                                 QDomNode _n2 = _el1.firstChild();
                                 while ( !_n2.isNull() ) {
                                     QDomElement _el2 = _n2.toElement();
                                     if ( !_el2.isNull() ) {
-                                        if ( _el2.tagName()=="owner" ) {
+                                        if ( _el2.tagName().compare("owner")==0 ) {
                                             target->owner->setText(_el2.text());
-                                        } else if ( _el2.tagName()=="group" ) {
+                                        } else if ( _el2.tagName().compare("group")==0 ) {
                                             target->group->setText(_el2.text());
-                                        } else if ( _el2.tagName()=="mode" ) {
+                                        } else if ( _el2.tagName().compare("mode")==0 ) {
                                             target->mode->setText(_el2.text());
-                                        } else if ( _el2.tagName()=="label" ) {
+                                        } else if ( _el2.tagName().compare("label")==0 ) {
                                             target->label->setText(_el2.text());
                                         };
                                     };

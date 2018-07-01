@@ -30,7 +30,7 @@ void RedirDevDevice_Edit::setDataDescription(const QString &_xmlDesc)
     int idx = type->findData(
                 _type, Qt::UserRole, Qt::MatchExactly);
     type->setCurrentIndex( (idx<0)? 0:idx );
-    if ( _type=="tcp" ) {
+    if ( _type.compare("tcp")==0 ) {
         _source = _device.firstChildElement("source");
         if ( !_source.isNull() ) {
             host->setText(_source.attribute("host"));
@@ -52,12 +52,12 @@ void RedirDevDevice_Edit::setDataDescription(const QString &_xmlDesc)
     filter->clearList();
     if ( !_filter.isNull() ) {
         QDomNodeList _list = _filter.childNodes();
-        uint j = 0;
+        int j = 0;
         int count = _list.length();
         for (int i=0; i<count; i++) {
             if (!_list.item(j).isNull()) {
                 //qDebug()<<_list.item(j).toElement().tagName();
-                if ( _list.item(j).toElement().tagName()=="usbdev" ) {
+                if ( _list.item(j).toElement().tagName().compare("usbdev")==0 ) {
                     QDomElement _el = _list.item(j).toElement();
                     QString _class, _vendor, _product, _version, _allow, _split;
                     _class = _el.attribute("class", "");
@@ -72,7 +72,7 @@ void RedirDevDevice_Edit::setDataDescription(const QString &_xmlDesc)
                     _split.append(_product);
                     _split.append(":");
                     _split.append(_version);
-                    filter->setFiltersList(_split, (_allow=="yes") );
+                    filter->setFiltersList(_split, _allow.compare("yes")==0 );
                 };
             } else
                 ++j;

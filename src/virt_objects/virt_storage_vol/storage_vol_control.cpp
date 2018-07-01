@@ -92,7 +92,7 @@ bool VirtStorageVolControl::setCurrentStoragePool(
 }
 void VirtStorageVolControl::resultReceiver(Result *data)
 {
-    if ( data->name!=objectName() ) return;
+    if ( data->name.compare(objectName())!=0 ) return;
     //qDebug()<<data.msg<<"result";
     if ( data->action == Actions::GET_ALL_ENTITY_STATE ) {
         entityList->setEnabled(true);

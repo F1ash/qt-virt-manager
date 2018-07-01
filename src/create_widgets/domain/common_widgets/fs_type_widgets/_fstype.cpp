@@ -12,9 +12,9 @@ _FsType::_FsType(
     sourceLabel = new QPushButton(tr("Source:"), this);
     targetLabel = new QLabel(tr("Target:"), this);
     driver = new QComboBox(this);
-    if ( connType=="lxc" ) {
+    if ( connType.compare("lxc")==0 ) {
         driver->addItems(LXC_DRIVER_TYPES);
-    } else if ( connType=="qemu" ) {
+    } else if ( connType.compare("qemu")==0 ) {
         driver->addItems(QEMU_DRIVER_TYPES);
     };
     wrPolicy = new QComboBox(this);
@@ -66,21 +66,21 @@ QDomDocument _FsType::getDataDocument() const
 void _FsType::driverTypeChanged(QString _type)
 {
     format->clear();
-    driverAttrWdg->setVisible( _type!="default" );
+    driverAttrWdg->setVisible( _type.compare("default")!=0 );
     /*
      * Currently this only works with type='mount' for the QEMU/KVM driver.
      */
-    accessModeLabel->setVisible( connType=="qemu" );
-    accessMode->setVisible( connType=="qemu" );
+    accessModeLabel->setVisible( connType.compare("qemu")==0 );
+    accessMode->setVisible( connType.compare("qemu")==0 );
     /*
      * LXC supports a type of "loop", with a format of "raw" or "nbd" with any format.
      * QEMU supports a type of "path" or "handle", but no formats.
      */
-    formatLabel->setVisible( connType=="lxc" );
-    format->setVisible( connType=="lxc" );
-    if ( _type=="loop" ) {
+    formatLabel->setVisible( connType.compare("lxc")==0 );
+    format->setVisible( connType.compare("lxc")==0 );
+    if ( _type.compare("loop")==0 ) {
         format->addItem("raw");
-    } else if ( _type=="nbd" ) {
+    } else if ( _type.compare("nbd")==0 ) {
         format->addItems(FORMAT_TYPES);
     }
 }

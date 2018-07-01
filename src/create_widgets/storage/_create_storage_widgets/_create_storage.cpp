@@ -92,28 +92,28 @@ void _CreateStorage::setDataDescription(const QString &_xmlDesc)
 }
 quint64 _CreateStorage::convertNiBtoMiB(quint64 _NiB, const QString &_unit)
 {
-    if ( _unit=="b" || _unit=="bytes" ) {
+    if ( _unit.compare("b")==0 || _unit.compare("bytes")==0 ) {
         quint64 _res = _NiB / 1048576;
         return (_res==0)? 1 : _res;
-    } else if ( _unit=="K" || _unit=="KiB" ) {
+    } else if ( _unit.compare("K")==0 || _unit.compare("KiB")==0 ) {
         return _NiB / 1024;
-    } else if ( _unit=="KB" ) {
+    } else if ( _unit.compare("KB")==0 ) {
         return convertNiBtoMiB(_NiB*1000, "b");
-    } else if ( _unit=="M" || _unit=="MiB" ) {
+    } else if ( _unit.compare("M")==0 || _unit.compare("MiB")==0 ) {
         return _NiB;
-    } else if ( _unit=="MB" ) {
+    } else if ( _unit.compare("MB")==0 ) {
         return _NiB*1000 / 1024;
-    } else if ( _unit=="G" || _unit=="GiB" ) {
+    } else if ( _unit.compare("G")==0 || _unit.compare("GiB")==0 ) {
         return _NiB*1024;
-    } else if ( _unit=="GB" ) {
+    } else if ( _unit.compare("GB")==0 ) {
         return _NiB*1000000/1024;
-    } else if ( _unit=="T" || _unit=="TiB" ) {
+    } else if ( _unit.compare("T")==0 || _unit.compare("TiB")==0 ) {
         return _NiB*1048576;
-    } else if ( _unit=="TB" ) {
+    } else if ( _unit.compare("TB")==0 ) {
         return _NiB*1000000000/1024;
-    } else if ( _unit=="E" || _unit=="EiB" ) {
+    } else if ( _unit.compare("E")==0 || _unit.compare("EiB")==0 ) {
         return _NiB*1073741824;
-    } else if ( _unit=="EB" ) {
+    } else if ( _unit.compare("EB")==0 ) {
         return _NiB*1000000000000/1024;
     } else return 0;
 }

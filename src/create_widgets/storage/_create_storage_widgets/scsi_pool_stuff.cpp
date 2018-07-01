@@ -28,7 +28,7 @@ void SCSI_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
         while ( !_n.isNull() ) {
             QDomElement _el = _n.toElement();
             if ( !_el.isNull() ) {
-                if ( _el.tagName()=="source" ) {
+                if ( _el.tagName().compare("source")==0 ) {
                     QDomElement _el1 = _el.firstChildElement("adapter"); // May only occur once
                     if ( !_el1.isNull() ) {
                         QString _type = _el1.attribute("type", "scsi_host");
@@ -67,26 +67,26 @@ void SCSI_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
                                         _el1.attribute("wwpn"));
                         };
                     };
-                } else if ( _el.tagName()=="target" ) {
+                } else if ( _el.tagName().compare("target")==0 ) {
                     QDomNode _n1 = _el.firstChild();
                     while ( !_n1.isNull() ) {
                         QDomElement _el1 = _n1.toElement();
                         if ( !_el1.isNull() ) {
-                            if ( _el1.tagName()=="path" ) {
+                            if ( _el1.tagName().compare("path")==0 ) {
                                 target->path->setText(_el1.text());
-                            } else if ( _el1.tagName()=="permissions" ) {
+                            } else if ( _el1.tagName().compare("permissions")==0 ) {
                                 target->usePerm->setChecked(true);
                                 QDomNode _n2 = _el1.firstChild();
                                 while ( !_n2.isNull() ) {
                                     QDomElement _el2 = _n2.toElement();
                                     if ( !_el2.isNull() ) {
-                                        if ( _el2.tagName()=="owner" ) {
+                                        if ( _el2.tagName().compare("owner")==0 ) {
                                             target->owner->setText(_el2.text());
-                                        } else if ( _el2.tagName()=="group" ) {
+                                        } else if ( _el2.tagName().compare("group")==0 ) {
                                             target->group->setText(_el2.text());
-                                        } else if ( _el2.tagName()=="mode" ) {
+                                        } else if ( _el2.tagName().compare("mode")==0 ) {
                                             target->mode->setText(_el2.text());
-                                        } else if ( _el2.tagName()=="label" ) {
+                                        } else if ( _el2.tagName().compare("label")==0 ) {
                                             target->label->setText(_el2.text());
                                         };
                                     };
@@ -115,7 +115,7 @@ QDomDocument SCSI_Pool_Stuff::getDataDocument() const
 
     _adapter = doc.createElement("adapter");
     _source.appendChild(_adapter);
-    if ( source->adapter->type->currentText()=="scsi_host" ) {
+    if ( source->adapter->type->currentText().compare("scsi_host")==0 ) {
         _adapter.setAttribute("type", "scsi_host");
         if ( source->adapter->usePrntAddr->isChecked() ) {
             QDomElement _address, _parentaddr;
@@ -136,7 +136,7 @@ QDomDocument SCSI_Pool_Stuff::getDataDocument() const
                         "name",
                         source->adapter->name->text());
         };
-    } else if ( source->adapter->type->currentText()=="fc_host" ) {
+    } else if ( source->adapter->type->currentText().compare("fc_host")==0 ) {
         if ( !source->adapter->name->text().isEmpty() )
             _adapter.setAttribute("name", source->adapter->name->text());
         _adapter.setAttribute("type", "fc_host");

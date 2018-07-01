@@ -58,7 +58,8 @@ void DNS_Widget::setDataDescription(const QString &_xmlDesc)
             QString f = _dns.attribute("forwardPlainNames");
             if ( !f.isEmpty() ) {
                 forwardPlainNames->setChecked(
-                            (f=="yes")? Qt::Checked:Qt::Unchecked);
+                            (f.compare("yes")==0)?
+                                Qt::Checked:Qt::Unchecked);
             };
             forwarder->setDataDescription(_xmlDesc);
             hosts->setDataDescription(_xmlDesc);

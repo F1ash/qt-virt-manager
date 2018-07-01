@@ -31,13 +31,16 @@ void SmartCardDevice_Edit::setDataDescription(const QString &_xmlDesc)
     _type = _device.attribute("type", "spicevmc");
     _channel.setAttribute("type", _type);
     QDomNodeList list = _device.childNodes();
-    uint j = 0;
+    int j = 0;
     int count = list.length();
     for (int i=0; i<count;i++) {
         //qDebug()<<list.item(j).nodeName()<<i;
-        if (!list.item(j).isNull() && list.item(j).toElement().tagName()!="address")
+        if (!list.item(j).isNull()
+                && list.item(j).toElement().tagName().compare("address")!=0) {
             _channel.appendChild(list.item(j));
-        else ++j;
+        } else {
+            ++j;
+        };
     };
     _channelXMLDesc = channelDoc.toString();
     channel->setDataDescription(_channelXMLDesc);

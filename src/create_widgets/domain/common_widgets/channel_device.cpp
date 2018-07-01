@@ -50,7 +50,7 @@ QDomDocument ChannelDevice::getDataDocument() const
     doc.firstChildElement("device")
             .firstChildElement("channel")
             .setAttribute("type", _type);
-    if ( _type=="spiceport" ) {
+    if ( _type.compare("spiceport")==0 ) {
         _source = doc.createElement("source");
         _source.setAttribute("channel", chanType->currentText());
         doc.firstChildElement("device")

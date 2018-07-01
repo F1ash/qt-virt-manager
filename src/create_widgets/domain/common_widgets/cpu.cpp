@@ -170,16 +170,16 @@ void CPU::readXMLDesciption(const QString &_xmlDesc)
     cpuModel->setUsage(false);
     if ( !_cpu.isNull() ) {
         _attr = _cpu.attribute("mode");
-        cpuModel->copyHostCPU->setChecked( _attr=="host-passthrough" );
+        cpuModel->copyHostCPU->setChecked( _attr.compare("host-passthrough")==0 );
         cpuModel->setUsage(true);
-        if ( _attr!="host-passthrough" ) {
+        if ( _attr.compare("host-passthrough")!=0 ) {
             _model = _cpu.firstChildElement("model");
             if ( !_model.isNull() ) {
                 cpuModel->setUsage(true);
                 _attr = _model.firstChild().toText().data();
                 cpuModel->setModel( _attr );
                 _attr = _model.attribute("fallback");
-                cpuModel->allowFallback->setChecked( _attr=="allow" );
+                cpuModel->allowFallback->setChecked( _attr.compare("allow")==0 );
             };
             if ( _cpu.hasAttribute("match") ) {
                 cpuModel->setUsage(true);

@@ -106,7 +106,7 @@ QVariant ConnItemModel::data(const QModelIndex &index, int role) const
     if ( role==Qt::DecorationRole ) {
         switch (index.column()) {
         case 0:
-            if ( _state.toLower()=="opened" ) {
+            if ( _state.toLower().compare("opened")==0 ) {
                 res = activeIcon;
             } else res = no_activeIcon;
             break;

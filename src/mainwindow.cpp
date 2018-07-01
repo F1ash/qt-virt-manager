@@ -148,17 +148,17 @@ void MainWindow::closeEvent(QCloseEvent *ev)
                 VM_Viewer *value = nullptr;
                 QString _type =
                         VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
-                if ( _type=="LXC" ) {
+                if ( _type.compare("LXC")==0 ) {
 #if WITH_LXC_SUPPORT
                     value = static_cast<LXC_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
 #endif
-                } else if ( _type=="SPICE" ) {
+                } else if ( _type.compare("SPICE")==0 ) {
 #if WITH_SPICE_SUPPORT
                     value = static_cast<Spice_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
 #endif
-                } else if ( _type=="VNC" ) {
+                } else if ( _type.compare("VNC")==0 ) {
 #if WITH_VNC_SUPPORT
                     value = static_cast<VNC_Viewer*>(
                                 VM_Displayed_Map.value(key, nullptr));
@@ -987,7 +987,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
     QString key = QString("%1_%2").arg(connName).arg(domName);
     if ( !VM_Displayed_Map.contains(key) ) {
         //qDebug()<<key<<"vm invoked"<<"new";
-        if ( type.toLower()=="lxc" ) {
+        if ( type.toLower().compare("lxc")==0 ) {
 #if WITH_LXC_SUPPORT
             VM_Displayed_Map.insert(
                         key,
@@ -1003,7 +1003,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                         tr("Application built without LXC"));
             return;
 #endif
-        } else if ( viewerType=="vnc" ) {
+        } else if ( viewerType.compare("vnc")==0 ) {
 #if WITH_VNC_SUPPORT
             VM_Displayed_Map.insert(
                         key,
@@ -1020,7 +1020,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
                         tr("Application built without VNC"));
             return;
 #endif
-        } else if ( viewerType=="spice" ) {
+        } else if ( viewerType.compare("spice")==0 ) {
 #if WITH_SPICE_SUPPORT
             VM_Displayed_Map.insert(
                         key,
@@ -1074,7 +1074,7 @@ void MainWindow::deleteVMDisplay(const QString &key)
         VM_Viewer *value = nullptr;
         QString _type =
                 VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
-        if ( _type!="LXC" ) {
+        if ( _type.compare("LXC")!=0 ) {
             value = static_cast<VM_Viewer*>(
                         VM_Displayed_Map.value(key, nullptr));
             if ( nullptr!=value ) {

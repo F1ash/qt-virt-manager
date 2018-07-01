@@ -183,12 +183,12 @@ void CreateVirtDomain::readCapabilities()
     };
     if ( xmlFileName.isEmpty() ) {
         // create/define new VM
-        if (type.toLower()=="lxc") {
+        if (type.toLower().compare("lxc")==0) {
             QFile _xml(":/misc/domain/lxc_example1.xml", this);
             _xml.open(QIODevice::ReadOnly);
             xmlDesc.append(_xml.readAll().constData());
             _xml.close();
-        } else if ( type.toLower()=="qemu" ) {
+        } else if ( type.toLower().compare("qemu")==0 ) {
             QFile _xml(":/misc/domain/qemu_guest_x86_64.xml", this);
             _xml.open(QIODevice::ReadOnly);
             xmlDesc.append(_xml.readAll().constData());
@@ -280,7 +280,7 @@ bool CreateVirtDomain::buildXMLDescription()
         if ( nullptr==Wdg ) continue;
         tabWidget->setCurrentWidget(Wdg);
         QDomNodeList list;
-        if ( key==tr("Devices") ) {
+        if ( key.compare(tr("Devices"))==0 ) {
             tabWidget->setCurrentWidget(Wdg);
             bool ret = Wdg->closeDataEdit();
             if ( !ret ) return false;
@@ -495,7 +495,7 @@ void CreateVirtDomain::setBootOrder(QDomElement *_devices)
                     _new_dev.removeChild(_new_dev.firstChildElement("boot"));
                 };
                 //qDebug()<<_doc.toString()<<_doc1.toString();
-                if ( _doc.toString()==_doc1.toString() ) {
+                if ( _doc.toString().compare(_doc1.toString())==0 ) {
                     if ( _data.usage ) {
                         QDomElement _boot = _doc.createElement("boot");
                         _boot.setAttribute("order", _data.order);

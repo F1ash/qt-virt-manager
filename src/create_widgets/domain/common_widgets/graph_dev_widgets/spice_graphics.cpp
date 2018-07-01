@@ -515,10 +515,12 @@ QDomDocument Spice_Graphics::getDataDocument() const
         };
     };
     QString _address = address->currentData(Qt::UserRole).toString();
-    if ( !_address.isEmpty() && _address!="network" && _address!="socket" ) {
+    if ( !_address.isEmpty()
+         && _address.compare("network")!=0
+         && _address.compare("socket")!=0 ) {
         _listen = doc.createElement("listen");
         _listen.setAttribute("type", "address");
-        if ( _address!="custom" ) {
+        if ( _address.compare("custom")!=0 ) {
             _listen.setAttribute("address", _address);
             _devDesc.setAttribute("listen", _address);
         } else {
@@ -530,12 +532,12 @@ QDomDocument Spice_Graphics::getDataDocument() const
                         address->currentText());
         };
         _devDesc.appendChild(_listen);
-    } else if ( _address=="network" && networks->count()>0 ) {
+    } else if ( _address.compare("network")==0 && networks->count()>0 ) {
             _listen = doc.createElement("listen");
             _listen.setAttribute("type", "network");
             _listen.setAttribute("network", networks->currentText());
             _devDesc.appendChild(_listen);
-    } else if ( _address=="socket" ) {
+    } else if ( _address.compare("socket")==0 ) {
         _devDesc.setAttribute("socket", address->currentText());
         _listen = doc.createElement("listen");
         _listen.setAttribute("type", "socket");
@@ -616,7 +618,7 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
     _device = doc.firstChildElement("device")
             .firstChildElement("graphics");
     autoPort->setChecked(
-                _device.attribute("autoport")=="yes");
+                _device.attribute("autoport").compare("yes")==0);
     if ( !autoPort->isChecked() ) {
         port->setValue(
                     _device.attribute("port").toInt());
@@ -809,7 +811,7 @@ void Spice_Graphics::usePassword(bool state)
 void Spice_Graphics::addressEdit(int i)
 {
     QString s = address->itemData(i, Qt::UserRole).toString();
-    if ( s == "network" ) {
+    if ( s.compare("network")==0 ) {
         address->setEditable(false);
         addrLabel->setText(tr("Network:"));
         networks->setVisible(true);
@@ -817,7 +819,7 @@ void Spice_Graphics::addressEdit(int i)
         port->setEnabled(true);
         tlsPortLabel->setEnabled(true);
         tlsPort->setEnabled(true);
-    } else if ( s == "socket" ) {
+    } else if ( s.compare("socket")==0 ) {
         addrLabel->setText(tr("Socket:"));
         address->setEditable(true);
         address->clearEditText();
@@ -828,7 +830,7 @@ void Spice_Graphics::addressEdit(int i)
         tlsPort->setEnabled(false);
     } else {
         addrLabel->setText(tr("Address:"));
-        if ( s == "custom" ) {
+        if ( s.compare("custom")==0 ) {
             address->setEditable(true);
             address->clearEditText();
         } else {

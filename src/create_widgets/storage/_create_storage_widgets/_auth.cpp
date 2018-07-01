@@ -62,9 +62,9 @@ void _Storage_Auth::usageTypeChanged(int i)
 {
     Q_UNUSED(i)
     QString _type = usageType->currentText().toLower();
-    if ( _type=="usage" ) {
+    if ( _type.compare("usage")==0 ) {
         usage->setPlaceholderText("libvirtiscsi");
-    } else if ( _type=="uuid" ) {
+    } else if ( _type.compare("uuid")==0 ) {
         usage->setPlaceholderText("3e3fce45-4f53-4fa7-bb32-11f34168b82b");
     };
     usage->clear();
@@ -76,8 +76,9 @@ void _Storage_Auth::setSecret()
     int result = findSecDialog->exec();
     FSD_Result res = findSecDialog->getResult();
     findSecDialog->deleteLater();
-    if ( (NOT_VOLUME!=secType.toUpper() && res.type.toLower()!=secType.toLower())
-         || res.type.toLower()=="volume" ) {
+    if ( (secType.toUpper().compare(NOT_VOLUME)!=0
+          && res.type.toLower().compare(secType.toLower())!=0)
+         || res.type.toLower().compare("volume")==0 ) {
         QString msg = QString(tr("Type of secret should be is a %1"))
                 .arg(secType);
         findSecDialog->showMsg(msg);
@@ -85,9 +86,9 @@ void _Storage_Auth::setSecret()
     };
     if ( result==QDialog::Rejected ) return;
     QString _type = usageType->currentText().toLower();
-    if ( _type=="usage" && !res.usage.isEmpty() ) {
+    if ( _type.compare("usage")==0 && !res.usage.isEmpty() ) {
         usage->setText(res.usage);
-    } else if ( _type=="uuid" && !res.uuid.isEmpty() ) {
+    } else if ( _type.compare("uuid")==0 && !res.uuid.isEmpty() ) {
         usage->setText(res.uuid);
     }
 }

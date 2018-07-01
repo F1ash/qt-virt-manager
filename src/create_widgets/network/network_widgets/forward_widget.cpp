@@ -130,7 +130,8 @@ void Forward_Widget::setDataDescription(const QString &_xmlDesc)
 /* private slots */
 void Forward_Widget::modeChanged(const QString &_mode)
 {
-    bool state = ( _mode=="nat" || _mode=="route" );
+    bool state = ( _mode.compare("nat")==0
+                   || _mode.compare("route")==0 );
     emit optionalsNeed(state);
     emit QoSAvailable(state);
     devWdg->setEnabled(state);

@@ -123,15 +123,15 @@ void SecLabels::delSecLabel()
 void SecLabels::modelTypeChanged(QString _type)
 {
     label->setPlaceholderText("");
-    if ( _type.toLower()=="selinux" ) {
-        if ( type->currentText().toLower()=="static" ) {
+    if ( _type.toLower().compare("selinux")==0 ) {
+        if ( type->currentText().toLower().compare("static")==0 ) {
             label->setPlaceholderText("system_u:system_r:svirt_t:s0:c392,c662");
-        } else if ( type->currentText().toLower()=="dynamic" ) {
+        } else if ( type->currentText().toLower().compare("dynamic")==0 ) {
             label->setPlaceholderText("system_u:system_r:svirt_t:s0");
         };
-    } else if ( _type.toLower()=="apparmor" ) {
+    } else if ( _type.toLower().compare("apparmor")==0 ) {
         label->setPlaceholderText(tr("an AppArmor profile"));
-    } else if ( _type.toLower()=="dac" ) {
+    } else if ( _type.toLower().compare("dac")==0 ) {
         label->setPlaceholderText("USER:GROUP  or  +UID:GID");
     };
 }
@@ -140,27 +140,28 @@ void SecLabels::usedStateChanged(bool state)
     typeLabel->setVisible(state);
     type->setVisible(state);
     listWdg->setVisible(state);
-    baseWdg->setVisible( state && type->currentText().toLower()!="none" );
+    baseWdg->setVisible(
+                state && type->currentText().toLower().compare("none")!=0 );
 }
 void SecLabels::securityTypeChanged(QString _type)
 {
     relabel->clear();
-    baseWdg->setVisible( _type.toLower()!="none" );
-    if ( _type.toLower()=="static" ) {
+    baseWdg->setVisible( _type.toLower().compare("none")!=0 );
+    if ( _type.toLower().compare("static")==0 ) {
         relabel->addItems(QStringList()<<"Default"<<"Yes"<<"No");
-    } else if ( _type.toLower()=="dynamic" ) {
+    } else if ( _type.toLower().compare("dynamic")==0 ) {
         relabel->addItems(QStringList()<<"Yes");
     };
     label->setPlaceholderText("");
-    if ( model->currentText().toLower()=="selinux" ) {
-        if ( _type.toLower()=="static" ) {
+    if ( model->currentText().toLower().compare("selinux")==0 ) {
+        if ( _type.toLower().compare("static")==0 ) {
             label->setPlaceholderText("system_u:system_r:svirt_t:s0:c392,c662");
-        } else if ( _type.toLower()=="dynamic" ) {
+        } else if ( _type.toLower().compare("dynamic")==0 ) {
             label->setPlaceholderText("system_u:system_r:svirt_t:s0");
         };
-    } else if ( model->currentText().toLower()=="apparmor" ) {
+    } else if ( model->currentText().toLower().compare("apparmor")==0 ) {
         label->setPlaceholderText(tr("an AppArmor profile"));
-    } else if ( model->currentText().toLower()=="dac" ) {
+    } else if ( model->currentText().toLower().compare("dac")==0 ) {
         label->setPlaceholderText("USER:GROUP  or  +UID:GID");
     };
 }
@@ -174,11 +175,11 @@ QDomDocument SecLabels::readData()
     _secLabel= doc.createElement("seclabel");
 
     _t = type->currentText().toLower();
-    if ( _t!="none" ) {
+    if ( _t.compare("none")!=0 ) {
         _m = model->currentText().toLower();
          _secLabel.setAttribute("model", model->currentText().toLower());
         _r = relabel->currentText().toLower();
-        if ( _r!="default" ) {
+        if ( _r.compare("default")!=0 ) {
             _secLabel.setAttribute("relabel", _r);
         };
         _label =doc.createElement(labelTypeLabel->currentText().toLower());
@@ -203,12 +204,12 @@ void SecLabels::readXMLDesciption(const QString &_xmlDesc)
     list->clear();
     if ( !_seclabel.isNull() ) {
         QDomNodeList _list = _domain.childNodes();
-        uint j = 0;
+        int j = 0;
         int count = _list.length();
         for (int i=0; i<count; i++) {
             if (!_list.item(j).isNull()) {
                 //qDebug()<<_list.item(j).toElement().tagName();
-                if ( _list.item(j).toElement().tagName()=="seclabel" ) {
+                if ( _list.item(j).toElement().tagName().compare("seclabel")==0 ) {
                     QDomDocument _doc;
                     _doc.setContent(QString());
                     _doc.appendChild( _list.item(j) );

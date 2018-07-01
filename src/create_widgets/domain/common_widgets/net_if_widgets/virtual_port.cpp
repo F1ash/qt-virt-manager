@@ -155,14 +155,14 @@ void VirtualPort::useingChanged(bool state)
 void VirtualPort::virtPortTypeChanged(int i)
 {
     QString _type = type->itemData(i, Qt::UserRole).toString();
-    if ( _type=="802.1Qbh" ) {
+    if ( _type.compare("802.1Qbh")==0 ) {
         type->setEditable(false);
         managerId->setVisible(true);
         typeId->setVisible(true);
         typeIdVer->setVisible(true);
         instanceId->setVisible(true);
         interfaceId->setVisible(false);
-    } else if ( _type=="openvswitch" ) {
+    } else if ( _type.compare("openvswitch")==0 ) {
         type->setEditable(false);
         managerId->setVisible(false);
         typeId->setVisible(false);

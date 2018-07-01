@@ -50,11 +50,11 @@ void Random_Edit::setDataDescription(const QString &_xmlDesc)
     _bkModel = _backend.attribute("model", "random");
     idx = bkModel->findText(_bkModel, Qt::MatchContains);
     bkModel->setCurrentIndex( (idx<0)? 0:idx );
-    if ( _bkModel=="random" ) {
+    if ( _bkModel.compare("random")==0 ) {
         _bkRandom = _backend.firstChild().toText().data();
         idx = bkRandom->findText(_bkRandom, Qt::MatchContains);
         bkRandom->setCurrentIndex( (idx<0)? 0:idx );
-    } else if ( _bkModel=="egd" ) {
+    } else if ( _bkModel.compare("egd")==0 ) {
         QDomDocument _charDoc;
         QDomElement _charDevice, _serial;
         _charDoc.setContent(QString());

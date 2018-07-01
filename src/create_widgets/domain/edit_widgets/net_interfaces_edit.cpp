@@ -24,21 +24,21 @@ void NetInterfaces_Edit::setDataDescription(const QString &_xmlDesc)
     _device = doc.firstChildElement("device")
             .firstChildElement("interface");
     QString _type = _device.attribute("type");
-    if ( _type=="mcast" ) {
+    if ( _type.compare("mcast")==0 ) {
         _string.append("Multicast");
-    } else if ( _type=="server" || _type=="client" ) {
+    } else if ( _type.compare("server")==0 || _type.compare("client")==0 ) {
         _string.append("TCP");
-    } else if ( _type=="hostdev" ) {
+    } else if ( _type.compare("hostdev")==0 ) {
         _string.append("PCI");
-    } else if ( _type=="direct" ) {
+    } else if ( _type.compare("direct")==0 ) {
         _string.append("Direct");
-    } else if ( _type=="ethernet" ) {
+    } else if ( _type.compare("ethernet")==0 ) {
         _string.append("Generic");
-    } else if ( _type=="user" ) {
+    } else if ( _type.compare("user")==0 ) {
         _string.append("Userspace");
-    } else if ( _type=="bridge" ) {
+    } else if ( _type.compare("bridge")==0 ) {
         _string.append("Bridge");
-    } else if ( _type=="network" ) {
+    } else if ( _type.compare("network")==0 ) {
         _string.append("Virtual");
     };
     int idx = type->findText(_string, Qt::MatchContains);

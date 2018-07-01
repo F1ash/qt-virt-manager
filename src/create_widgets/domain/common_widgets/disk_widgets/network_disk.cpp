@@ -63,7 +63,7 @@ QDomDocument Network_Disk::getDataDocument() const
         _auth.setAttribute(
                     "username", auth->userName->text());
         _secret = doc.createElement("secret");
-        if ( protocol->currentText()=="iscsi" ) {
+        if ( protocol->currentText().compare("iscsi")==0 ) {
             _secret.setAttribute("type", "iscsi");
         } else
             _secret.setAttribute("type", "ceph");
@@ -238,7 +238,7 @@ void Network_Disk::setDataDescription(const QString &_xmlDesc)
                 if ( _addr.hasAttribute("multifunction") ) {
                     wdg->multifunction->setEnabled(true);
                     wdg->multifunction->setChecked(
-                                _addr.attribute("multifunction")=="on" );
+                                _addr.attribute("multifunction").compare("on")==0 );
                 };
             };
         } else if ( _attr=="drive" ) {
@@ -261,10 +261,10 @@ void Network_Disk::protocolTypeChanged(int i)
 }
 void Network_Disk::protocolTypeChanged(QString _type)
 {
-    if ( _type.toLower()=="rbd" ) {
+    if ( _type.toLower().compare("rbd")==0 ) {
         auth->setSecretType("CEPH");
         auth->setVisible(true);
-    } else if ( _type.toLower()=="iscsi" ) {
+    } else if ( _type.toLower().compare("iscsi")==0 ) {
         auth->setSecretType("ISCSI");
         auth->setVisible(true);
     } else {
@@ -332,7 +332,7 @@ void Network_Disk::setTypedData(VVD_Result &_data)
                 _secret = _auth.firstChildElement("secret");
                 if ( !_secret.isNull() ) {
                     QString _u;
-                    int idx;
+                    int idx = -1;
                     if ( _secret.hasAttribute("usage") ) {
                         idx = auth->usageType->findText(
                                     "usage", Qt::MatchContains);
@@ -355,7 +355,7 @@ void Network_Disk::setTypedData(VVD_Result &_data)
                 _secret = _auth.firstChildElement("secret");
                 if ( !_secret.isNull() ) {
                     QString _u;
-                    int idx;
+                    int idx = -1;
                     if ( _secret.hasAttribute("usage") ) {
                         idx = auth->usageType->findText(
                                     "usage", Qt::MatchContains);

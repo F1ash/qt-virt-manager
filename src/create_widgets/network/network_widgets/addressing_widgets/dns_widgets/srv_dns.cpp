@@ -89,7 +89,7 @@ void SRV_DNS::setDataDescription(const QString &_xmlDesc)
         setUsage(true);
         _el = _n.toElement();
         if ( !_el.isNull() ) {
-            if ( _el.tagName()=="srv" ) {
+            if ( _el.tagName().compare("srv")==0 ) {
                 service->setText(
                             _el.attribute("service"));
                 domain->setText(
@@ -131,7 +131,7 @@ void SRV_DNS::addItem()
     if ( !_text.isEmpty() ) {
         bool exist = false;
         for (int i=0; i<list->count(); i++) {
-            if ( _text==list->item(i)->text() ) {
+            if ( _text.compare(list->item(i)->text())==0 ) {
                 exist = true;
                 break;
             }

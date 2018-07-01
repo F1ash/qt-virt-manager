@@ -80,7 +80,7 @@ void UdpWidget::setDataDescription(const QString &_xmlDesc)
     QString _mode;
     if ( !_source1.isNull() ) {
         _mode = _source1.attribute("mode");
-        if ( _mode=="bind" ) {
+        if ( _mode.compare("bind")==0 ) {
             bindHost->setText(_source1.attribute("host"));
             port2->setValue(_source1.attribute("service").toInt());
         } else {
@@ -90,7 +90,7 @@ void UdpWidget::setDataDescription(const QString &_xmlDesc)
     };
     if ( !_source2.isNull() ) {
         _mode = _source2.attribute("mode");
-        if ( _mode=="bind" ) {
+        if ( _mode.compare("bind")==0 ) {
             bindHost->setText(_source2.attribute("host"));
             port2->setValue(_source2.attribute("service").toInt());
         } else {

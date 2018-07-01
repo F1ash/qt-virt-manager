@@ -135,7 +135,7 @@ void VirtInterfaceControl::resultReceiver(Result *data)
         if ( data->result ) {
             int row = -1;
             for ( int i=0; i<virtIfaceModel->DataList.count(); i++ ) {
-                if ( virtIfaceModel->DataList.at(i)->getName()==data->name ) {
+                if ( virtIfaceModel->DataList.at(i)->getName().compare(data->name)==0 ) {
                     row = i;
                     break;
                 };

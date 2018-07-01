@@ -112,7 +112,7 @@ void MultiCast_Tunnel::setDataDescription(const QString &_xmlDesc)
             if ( _addr.hasAttribute("multifunction") ) {
                 wdg->multifunction->setEnabled(true);
                 wdg->multifunction->setChecked(
-                            _addr.attribute("multifunction")=="on" );
+                            _addr.attribute("multifunction").compare("on")==0 );
             };
         };
     };

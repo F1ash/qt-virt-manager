@@ -49,7 +49,8 @@ void IP_Widget::setDataDescription(const QString &_xmlDesc)
             while ( !n.isNull() ) {
                 QDomElement e = n.toElement();
                 if(!e.isNull()) {
-                    if ( e.tagName()=="ip" || e.tagName()=="route" ) {
+                    if ( e.tagName().compare("ip")==0
+                         || e.tagName().compare("route")==0 ) {
                         setUsage(true);
                         if ( i>0 ) addTab();
                         _IP_Widget *wdg =

@@ -95,7 +95,7 @@ void ChainRules::setDataDescription(const QString &_xmlDesc)
         while ( !_n.isNull() ) {
             QDomElement _el = _n.toElement();
             if ( !_el.isNull() ) {
-                if ( _el.tagName()=="rule" ) {
+                if ( _el.tagName().compare("rule")==0 ) {
                     QListWidgetItem *item = new QListWidgetItem;
                     QString str;
                     QTextStream stream(&str);

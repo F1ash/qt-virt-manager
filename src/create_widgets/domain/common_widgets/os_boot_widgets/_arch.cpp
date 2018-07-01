@@ -75,7 +75,7 @@ void _Arch::machineChanged(const QString &_machine)
     while ( !_el.isNull() ) {
         if ( _el
              .firstChildElement("arch")
-             .attribute("name")==_arch ) {
+             .attribute("name").compare(_arch)==0 ) {
             QDomElement _domain, _ell;
             _domain = _el
                     .firstChildElement("arch")
@@ -85,7 +85,7 @@ void _Arch::machineChanged(const QString &_machine)
                 QString _domType = _domain.attribute("type");
                 // WARNING: in this application
                 // KVM has the advantage over QEMU
-                if ( _domType=="kvm" ) {
+                if ( _domType.compare("kvm")==0 ) {
                     _ell = _domain
                             .firstChildElement("machine");
                     exist = true;
@@ -99,7 +99,7 @@ void _Arch::machineChanged(const QString &_machine)
                         .firstChildElement("machine");
             };
             while ( !_ell.isNull() ) {
-                if ( machines->currentText()==_machine ) {
+                if ( machines->currentText().compare(_machine)==0 ) {
                     _vcpu = _ell.attribute("maxCpus");
                     break;
                 };
@@ -126,7 +126,7 @@ void _Arch::archChanged(const QString &_arch)
                 .firstChild().toText().data();
         if ( _el
              .firstChildElement("arch")
-             .attribute("name")==_arch ) {
+             .attribute("name").compare(_arch)==0 ) {
             QDomElement _domain, _ell;
             _domain = _el
                     .firstChildElement("arch")
@@ -139,7 +139,7 @@ void _Arch::archChanged(const QString &_arch)
                         .firstChild().toText().data();
                 // WARNING: in this application
                 // KVM has the advantage over QEMU
-                if ( _domType=="kvm" ) {
+                if ( _domType.compare("kvm")==0 ) {
                     _ell = _domain
                             .firstChildElement("machine");
                     exist = true;

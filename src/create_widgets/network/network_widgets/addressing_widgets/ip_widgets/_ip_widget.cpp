@@ -97,7 +97,7 @@ void _IP_Widget::setDataDescription(const QString &_xmlDesc)
     doc.setContent(_xmlDesc);
     QDomElement _el = doc.documentElement();
     QString _ver = _el.attribute("family");
-    ipv6->setChecked( _ver=="ipv6" );
+    ipv6->setChecked( _ver.compare("ipv6")==0 );
     _IPvX *wdg = static_cast<_IPvX*>(sets->currentWidget());
     if ( nullptr!=wdg ) {
         wdg->address->setText(
@@ -111,7 +111,7 @@ void _IP_Widget::setDataDescription(const QString &_xmlDesc)
             wdg->significantBits->setText(
                         _el.attribute("prefix"));
         };
-        if        ( _el.tagName()=="ip" ) {
+        if        ( _el.tagName().compare("ip")==0 ) {
             // if dhcp used then set it
             QDomElement _dhcp = _el.firstChildElement("dhcp");
             if ( !_dhcp.isNull() && !wdg->isNetworkHasDHCP() ) {
@@ -121,7 +121,7 @@ void _IP_Widget::setDataDescription(const QString &_xmlDesc)
                 QString _xml = _doc.toString();
                 wdg->useDHCP->setDataDescription(_xml);
             };
-        } else if ( _el.tagName()=="route" ) {
+        } else if ( _el.tagName().compare("route")==0 ) {
             // set gateway and metric
             staticRoute->setChecked(true);
             wdg->gateway->setText(

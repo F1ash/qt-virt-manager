@@ -143,7 +143,7 @@ void BIOS_Boot::setDataDescription(const QString &_xmlDesc)
     bootMenu->menu->setChecked( !_bootMenu.isNull() );
     if ( !_bootMenu.isNull() ) {
         bootMenu->menu->setChecked(
-                    _bootMenu.attribute("enable")=="yes");
+                    _bootMenu.attribute("enable").compare("yes")==0);
         bootMenu->timeOut->setValue(
                     _bootMenu.attribute("timeout").toInt());
     };
@@ -179,7 +179,7 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
      * and they are the preferred way providing full control over booting order.
      */
     int count = _devices.length();
-    uint j = 0;
+    int j = 0;
     //search bootable devices
     for (int i=0; i<count; i++) {
         //qDebug()<<_devices.item(j).nodeName()<<i;
@@ -188,14 +188,14 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
             _el = _devices.item(j).toElement();
             QString _devName = _el.tagName();
             QString _devType = _el.attribute("type");
-            if ( _devName=="hostdev" ) {
-                if ( _devType=="pci" || _devType=="usb" ) {
+            if ( _devName.compare("hostdev")==0 ) {
+                if ( _devType.compare("pci")==0 || _devType.compare("usb")==0 ) {
                 } else {
                     ++j;
                     continue;
                 };
-            } else if ( _devName=="disk" ) {
-            } else if ( _devName=="interface" ) {
+            } else if ( _devName.compare("disk")==0 ) {
+            } else if ( _devName.compare("interface")==0 ) {
             } else {
                 ++j;
                 continue;
@@ -228,7 +228,7 @@ void BIOS_Boot::searchBootableDevices(QDomDocument &_doc)
             _doc2.setContent(QString());
             _doc2.appendChild(_el);
             //qDebug()<<_doc1.toString()<<_doc2.toString();
-            exist = ( _doc1.toString()==_doc2.toString() );
+            exist = ( _doc1.toString().compare(_doc2.toString())==0 );
             if (exist) {
                 break;
             } else {

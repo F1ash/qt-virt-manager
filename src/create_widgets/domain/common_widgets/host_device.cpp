@@ -41,12 +41,12 @@ QDomDocument HostDevice::getDataDocument() const
 /* private slots */
 void HostDevice::init_wdg()
 {
-    if ( hlpThread->connType.toLower()=="qemu" ) {
+    if ( hlpThread->connType.toLower().compare("qemu")==0 ) {
         type->addItems(QEMU_DEV_LIST);
         info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));
         info->addWidget(new PCI_Host_Device(this, ptr_ConnPtr));
         info->addWidget(new SCSI_Host_Device(this, ptr_ConnPtr));
-    } else if ( hlpThread->connType.toLower()=="lxc" ) {
+    } else if ( hlpThread->connType.toLower().compare("lxc")==0 ) {
         type->addItems(LXC_DEV_LIST);
         info->addWidget(new USB_Host_Device(this, ptr_ConnPtr));
         info->addWidget(new BCh_Host_Device(this, ptr_ConnPtr));

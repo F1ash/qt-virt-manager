@@ -164,14 +164,14 @@ void VNC_Viewer_Only::pasteClipboardToVirtDomain()
                         QString("Unknown image format:\n'%1'")
                         .arg(_text));
             return;
-        } else if ( _format.toLower()=="png" ) {
+        } else if ( _format.toLower().compare("png")==0 ) {
             qDebug()<<"png";
             _frmt = VD_AGENT_CLIPBOARD_IMAGE_PNG;
-        } else if ( _format.toLower()=="bmp" ) {
+        } else if ( _format.toLower().compare("bmp")==0 ) {
             _frmt = VD_AGENT_CLIPBOARD_IMAGE_BMP;
-        } else if ( _format.toLower()=="jpg" ) {
+        } else if ( _format.toLower().compare("jpg")==0 ) {
             _frmt = VD_AGENT_CLIPBOARD_IMAGE_JPG;
-        } else if ( _format.toLower()=="tiff" ) {
+        } else if ( _format.toLower().compare("tiff")==0 ) {
             _frmt = VD_AGENT_CLIPBOARD_IMAGE_TIFF;
         } else {
             QMessageBox::information(

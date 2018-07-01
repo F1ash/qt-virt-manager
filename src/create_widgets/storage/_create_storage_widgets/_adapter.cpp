@@ -52,14 +52,14 @@ _Adapter::_Adapter(QWidget *parent) :
 /* private slots */
 void _Adapter::typeAdapterChanged(QString _type)
 {
-    wwnnLabel->setVisible( _type=="fc_host" );
-    wwpnLabel->setVisible( _type=="fc_host" );
-    wwnn->setVisible( _type=="fc_host" );
-    wwpn->setVisible( _type=="fc_host" );
-    adapterPrntLabel->setVisible( _type=="fc_host" );
-    adapterPrnt->setVisible( _type=="fc_host" );
-    usePrntAddr->setVisible( _type=="scsi_host" );
-    if ( _type=="fc_host" ) usePrntAddr->setChecked( false );
+    wwnnLabel->setVisible( _type.compare("fc_host")==0 );
+    wwpnLabel->setVisible( _type.compare("fc_host")==0 );
+    wwnn->setVisible( _type.compare("fc_host")==0 );
+    wwpn->setVisible( _type.compare("fc_host")==0 );
+    adapterPrntLabel->setVisible( _type.compare("fc_host")==0 );
+    adapterPrnt->setVisible( _type.compare("fc_host")==0 );
+    usePrntAddr->setVisible( _type.compare("scsi_host")==0 );
+    if ( _type.compare("fc_host")==0 ) usePrntAddr->setChecked( false );
 }
 
 /* private slots */

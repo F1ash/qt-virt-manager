@@ -51,7 +51,7 @@ QDomDocument SmartCardDevice::getDataDocument() const
     QString _mode = mode->itemData(mode->currentIndex(), Qt::UserRole)
             .toString();
     _devDesc.setAttribute("mode", _mode);
-    if ( _mode=="passthrough" ) {
+    if ( _mode.compare("passthrough")==0 ) {
         //_channel = static_cast<CharDevice*>(
         //            channel->charDevWdg->currentWidget())->getDataDocument();
         _channel = channel->getDataDocument();
@@ -64,12 +64,12 @@ QDomDocument SmartCardDevice::getDataDocument() const
                 .firstChildElement("device")
                 .firstChildElement("channel")
                 .childNodes();
-        uint j = 0;
+        int j = 0;
         int count = list.length();
         for (int i=0; i<count;i++) {
             //qDebug()<<list.item(j).nodeName()<<i;
             if ( !list.item(j).isNull() &&
-                  list.item(j).toElement().tagName()!="target" )
+                  list.item(j).toElement().tagName().compare("target")!=0 )
                 _devDesc.appendChild(list.item(j));
             else ++j;
         };
@@ -92,7 +92,7 @@ QDomDocument SmartCardDevice::getDataDocument() const
 void SmartCardDevice::modeTypeChanged(int i)
 {
     QString _mode = mode->itemData(i, Qt::UserRole).toString();
-    if ( _mode=="passthrough" ) {
+    if ( _mode.compare("passthrough")==0 ) {
         channel->setVisible(true);
     } else {
         channel->setVisible(false);

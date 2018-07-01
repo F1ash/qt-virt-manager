@@ -114,7 +114,7 @@ void RuleInstance::editRule(const QString &rule, int row)
     if ( idx<0 ) idx = 0;
     direction->setCurrentIndex(idx);
     priority->setValue(_rule.attribute("priority").toInt());
-    stateMatch->setChecked(_rule.attribute("statematch", "true")=="true");
+    stateMatch->setChecked(_rule.attribute("statematch", "true").compare("true")==0);
     QDomNode _n = _rule.firstChild();
     while ( !_n.isNull() ) {
         QDomElement _el = _n.toElement();

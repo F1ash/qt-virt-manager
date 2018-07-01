@@ -1,6 +1,9 @@
 #include "os_booting.h"
 
-OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
+OS_Booting::OS_Booting(
+        QWidget *parent,
+        QString _caps,
+        QString _xmlDesc) :
     _Tab(parent), capabilities(_caps), xmlDesc(_xmlDesc)
 {
     setObjectName("OS_Booting");
@@ -11,11 +14,11 @@ OS_Booting::OS_Booting(QWidget *parent, QString _caps, QString _xmlDesc) :
     bootSet->addWidget(new Host_Boot(this));
     bootSet->addWidget(new Direct_Kernel_Boot(this));
     bootSet->addWidget(new LXC_OSBooting(this, capabilities));
-    bootSet->widget(0)->setEnabled(type.toLower()!="lxc");
-    bootSet->widget(1)->setEnabled(type.toLower()!="lxc");
-    bootSet->widget(2)->setEnabled(type.toLower()!="lxc");
-    bootSet->widget(3)->setEnabled(type.toLower()=="lxc");
-    bootType->osType->setEnabled(type.toLower()!="lxc");
+    bootSet->widget(0)->setEnabled(type.toLower().compare("lxc")!=0);
+    bootSet->widget(1)->setEnabled(type.toLower().compare("lxc")!=0);
+    bootSet->widget(2)->setEnabled(type.toLower().compare("lxc")!=0);
+    bootSet->widget(3)->setEnabled(type.toLower().compare("lxc")==0);
+    bootType->osType->setEnabled(type.toLower().compare("lxc")!=0);
     connect(bootType->bootType, SIGNAL(currentIndexChanged(int)),
             bootSet, SLOT(setCurrentIndex(int)));
     connect(bootType->bootType, SIGNAL(currentIndexChanged(int)),
@@ -80,7 +83,7 @@ QDomDocument OS_Booting::getDataDocument() const
     QString _bootType = bootType->bootType->itemData(
                 bootType->bootType->currentIndex(), Qt::UserRole)
             .toString();
-    if ( _bootType!="host" ) {
+    if ( _bootType.compare("host")!=0 ) {
         if ( !_os.isNull() ) {
             _type = _os
                     .firstChildElement("type");
@@ -118,7 +121,7 @@ BootOrderList OS_Booting::getBootOrder() const
 }
 void OS_Booting::initMaxVCPU()
 {
-    if ( type.toLower()=="lxc" ) {
+    if ( type.toLower().compare("lxc")==0 ) {
         LXC_OSBooting *wdg = static_cast<LXC_OSBooting*>(bootSet->widget(3));
         wdg->architecture->machineChanged(
                     wdg->architecture->getMachine());
@@ -174,7 +177,7 @@ void OS_Booting::readXMLDesciption(const QString &_xmlDesc)
     if ( !_domain.firstChildElement("bootloader").isNull() ) {
         _bootType.append("host");
     } else if ( !_type.isNull() &&
-                _type.firstChild().toText().data()=="exe" ) {
+                _type.firstChild().toText().data().compare("exe")==0 ) {
         _bootType.append("container");
     } else if ( !_type.isNull() &&
                 !_os.firstChildElement("kernel")
@@ -210,5 +213,6 @@ void OS_Booting::changeBootType()
                 bootType->bootType->currentIndex(), Qt::UserRole)
             .toString();
     bootType->osType->setEnabled(
-                _type!="host" && bootSet->currentWidget()->isEnabled());
+                _type.compare("host")!=0
+                 && bootSet->currentWidget()->isEnabled());
 }

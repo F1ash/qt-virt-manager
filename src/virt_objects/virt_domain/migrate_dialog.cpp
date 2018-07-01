@@ -235,9 +235,9 @@ void MigrateDialog::fillData()
                 .arg(hlpThread->connType.toUpper()));
     connectList->addItems(connList);
     maxDownTimeLabel->setEnabled(
-                hlpThread->connType.toLower()!="lxc" );
+                hlpThread->connType.toLower().compare("lxc")!=0 );
     maxDownCheck->setEnabled(
-                hlpThread->connType.toLower()!="lxc" );
+                hlpThread->connType.toLower().compare("lxc")!=0 );
 }
 void MigrateDialog::closeEvent(QCloseEvent *ev)
 {
@@ -332,7 +332,7 @@ void MigrateDialog::bandWdthVisibility(bool state)
 }
 void MigrateDialog::maxDownTimeVisibility(bool state)
 {
-    if ( hlpThread->connType.toLower()!="lxc" )
+    if ( hlpThread->connType.toLower().compare("lxc")!=0 )
         maxDownTime->setEnabled(state);
 }
 void MigrateDialog::migrDiskRegimeChanged()

@@ -8,9 +8,9 @@ CPU_Model::CPU_Model(QWidget *parent) :
             .firstChildElement("cpus")
             .firstChildElement("arch");
     while ( !_el.isNull() ) {
-        if ( _el.attribute("name")=="x86" )
+        if ( _el.attribute("name").compare("x86")==0 )
             _x86 = _el;
-        else if ( _el.attribute("name")=="ppc64" )
+        else if ( _el.attribute("name").compare("ppc64")==0 )
             _ppc64 = _el;
         _el = _el.nextSiblingElement("arch");
     };
@@ -72,9 +72,9 @@ void CPU_Model::archChanged(const QString &_arch)
     //qDebug()<<_arch;
     model->clear();
     QDomElement _el, _model;
-    if ( _arch=="i686" || _arch=="x86_64" )
+    if ( _arch.compare("i686")==0 || _arch.compare("x86_64")==0 )
         _el = _x86;
-    else if ( _arch=="ppc64" || _arch=="ppc" )
+    else if ( _arch.compare("ppc64")==0 || _arch.compare("ppc")==0 )
         _el = _ppc64;
     _model = _el.firstChildElement("model");
     while ( !_model.isNull() ) {
@@ -108,7 +108,7 @@ QString CPU_Model::getMatch() const
     QString _res, _mode;
     _mode = model->itemData(
                 model->currentIndex(), Qt::UserRole).toString();
-    if ( _mode!="host-model" ) _res = match->currentText();
+    if ( _mode.compare("host-model")!=0 ) _res = match->currentText();
     return _res;
 }
 void CPU_Model::setModel(QString &_model)
@@ -143,7 +143,7 @@ void CPU_Model::copyHostCPUState(bool state)
     } else {
         int idx = model->currentIndex();
         QString _mode = model->itemData(idx, Qt::UserRole).toString();
-        match->setEnabled( _mode!="host-model" );
+        match->setEnabled( _mode.compare("host-model")!=0 );
     };
     matchLabel->setEnabled( !state );
     allowFallback->setEnabled( !state );
@@ -154,5 +154,5 @@ void CPU_Model::modelChanged(int i)
     model->setEditable(i==1);
     //if (i==1) model->clearEditText();
     QString _mode = model->itemData(i, Qt::UserRole).toString();
-    match->setEnabled( _mode!="host-model" );
+    match->setEnabled( _mode.compare("host-model")!=0 );
 }

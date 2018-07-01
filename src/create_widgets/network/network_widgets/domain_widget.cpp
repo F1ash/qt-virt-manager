@@ -53,7 +53,7 @@ void Domain_Widget::setDataDescription(const QString &_xmlDesc)
             };
             if ( !l.isEmpty() ) {
                 localOnly->setChecked(
-                            (l=="on")?
+                            (l.compare("on")==0)?
                                 Qt::Checked : Qt::Unchecked);
             };
         };

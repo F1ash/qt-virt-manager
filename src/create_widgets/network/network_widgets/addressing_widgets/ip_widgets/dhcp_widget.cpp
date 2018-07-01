@@ -41,9 +41,9 @@ void DHCP_Widget::setDataDescription(const QString &_xmlDesc)
                 _doc.setContent(QString());
                 _doc.appendChild(e.cloneNode());
                 QString _xml = _doc.toString();
-                if ( e.tagName()=="host" ) {
+                if ( e.tagName().compare("host")==0 ) {
                     host->setDataDescription(_xml);
-                } else if ( e.tagName()=="range" ) {
+                } else if ( e.tagName().compare("range")==0 ) {
                     range->setDataDescription(_xml);
                 };
             };

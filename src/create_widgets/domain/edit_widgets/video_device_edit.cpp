@@ -32,9 +32,9 @@ void VideoDevice_Edit::setDataDescription(const QString &_xmlDesc)
     _accel = _model.firstChildElement("acceleration");
     if ( !_accel.isNull() ) {
         accel2d->setChecked(
-                    _accel.attribute("accel2d")=="yes");
+                    _accel.attribute("accel2d").compare("yes")==0);
         accel3d->setChecked(
-                    _accel.attribute("accel3d")=="yes");
+                    _accel.attribute("accel3d").compare("yes")==0);
     } else {
         accel2d->setChecked(false);
         accel3d->setChecked(false);
@@ -52,7 +52,7 @@ void VideoDevice_Edit::setDataDescription(const QString &_xmlDesc)
             if ( _addr.hasAttribute("multifunction") ) {
                 wdg->multifunction->setEnabled(true);
                 wdg->multifunction->setChecked(
-                            _addr.attribute("multifunction")=="on" );
+                            _addr.attribute("multifunction").compare("on")==0 );
             };
         };
     };

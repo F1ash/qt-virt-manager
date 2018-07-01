@@ -91,7 +91,7 @@ void Encryption::setSecret()
     int result = findSecDialog->exec();
     FSD_Result res = findSecDialog->getResult();
     findSecDialog->deleteLater();
-    if ( "VOLUME"!=res.type.toUpper() ) {
+    if ( res.type.toUpper().compare("VOLUME")!=0 ) {
         QString msg = tr("Type of secret should be is a VOLUME");
         findSecDialog->showMsg(msg);
         return;

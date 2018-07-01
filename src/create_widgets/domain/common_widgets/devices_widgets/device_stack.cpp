@@ -185,17 +185,17 @@ void DeviceStack::init_wdg()
     QStringList devSet, devList, devType;
     devList = DEV_LIST;
     devType = DEV_TYPE;
-    if ( hlpThread->connType.toLower()=="qemu" ) {
+    if ( hlpThread->connType.toLower().compare("qemu")==0 ) {
         devSet = QEMU_DEVICE_LIST;
-    } else if ( hlpThread->connType.toLower()=="lxc" ) {
+    } else if ( hlpThread->connType.toLower().compare("lxc")==0 ) {
         devSet = LXC_DEVICE_LIST;
-    } else if ( hlpThread->connType.toLower()=="xen" ) {
+    } else if ( hlpThread->connType.toLower().compare("xen")==0 ) {
         devSet = XEN_DEVICE_LIST;
-    } else if ( hlpThread->connType.toLower()=="vbox" ) {
+    } else if ( hlpThread->connType.toLower().compare("vbox")==0 ) {
         devSet = VBOX_DEVICE_LIST;
-    } else if ( hlpThread->connType.toLower()=="vmware" ) {
+    } else if ( hlpThread->connType.toLower().compare("vmware")==0 ) {
         devSet = VMWARE_DEVICE_LIST;
-    } else if ( hlpThread->connType.toLower()=="openvz" ) {
+    } else if ( hlpThread->connType.toLower().compare("openvz")==0 ) {
         devSet = OPENVZ_DEVICE_LIST;
     };
     /* set icons & user data */
@@ -232,66 +232,66 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     devIcon->setPixmap(QIcon::fromTheme(
                            QString("device-%1").arg(deviceType))
                        .pixmap(64));
-    if        ( deviceType == "disk" ) {
+    if        ( deviceType.compare("disk")==0 ) {
         device = new Disk(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "interface" ) {
+    } else if ( deviceType.compare("interface")==0 ) {
         device = new NetInterfaces(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "serial" ) {
+    } else if ( deviceType.compare("serial")==0 ) {
         device = new CharDevice(
                     this,
                     nullptr,
                     nullptr,
                     deviceType);
-    } else if ( deviceType == "parallel" ) {
+    } else if ( deviceType.compare("parallel")==0 ) {
         device = new CharDevice(
                     this,
                     nullptr,
                     nullptr,
                     deviceType);
-    } else if ( deviceType == "channel" ) {
+    } else if ( deviceType.compare("channel")==0 ) {
         device = new ChannelDevice(this);
-    } else if ( deviceType == "console" ) {
+    } else if ( deviceType.compare("console")==0 ) {
         device = new ConsoleDevice(
                     this,
                      ptr_ConnPtr);
-    } else if ( deviceType == "smartcard" ) {
+    } else if ( deviceType.compare("smartcard")==0 ) {
         device = new SmartCardDevice(this);
-    } else if ( deviceType == "input" ) {
+    } else if ( deviceType.compare("input")==0 ) {
         device = new InputDevice(this);
-    } else if ( deviceType == "hub" ) {
+    } else if ( deviceType.compare("hub")==0 ) {
         device = new HubDevice(this);
-    } else if ( deviceType == "video" ) {
+    } else if ( deviceType.compare("video")==0 ) {
         device = new VideoDevice(this);
-    } else if ( deviceType == "sound" ) {
+    } else if ( deviceType.compare("sound")==0 ) {
         device = new SoundDevice(this);
-    } else if ( deviceType == "hostdev" ) {
+    } else if ( deviceType.compare("hostdev")==0 ) {
         device = new HostDevice(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "graphics" ) {
+    } else if ( deviceType.compare("graphics")==0 ) {
         device = new GraphicsDevice(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "redirdev" ) {
+    } else if ( deviceType.compare("redirdev")==0 ) {
         device = new RedirDevDevice(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "filesystem" ) {
+    } else if ( deviceType.compare("filesystem")==0 ) {
         device = new FileSystems(
                     this,
                     ptr_ConnPtr);
-    } else if ( deviceType == "emulator" ) {
+    } else if ( deviceType.compare("emulator")==0 ) {
         device = new _QWidget(this);
         //device = new Emulator(
         //            this,
         //            ptr_ConnPtr);
-    } else if ( deviceType == "rng" ) {
+    } else if ( deviceType.compare("rng")==0 ) {
         device = new Random(this);
-    } else if ( deviceType == "memballoon" ) {
+    } else if ( deviceType.compare("memballoon")==0 ) {
         device = new MemBalloon(
                     this,
                     ptr_ConnPtr);

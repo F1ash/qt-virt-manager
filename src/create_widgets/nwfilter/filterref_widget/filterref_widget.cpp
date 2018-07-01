@@ -33,7 +33,7 @@ void FilterrefWidget::setDataDescription(const QString &_xmlDesc)
             setUsage(true);
             QDomElement _el = _n.toElement();
             if ( !_el.isNull() ) {
-                if ( _el.tagName()=="filterref" ) {
+                if ( _el.tagName().compare("filterref")==0 ) {
                     QString _filterName =
                             _el.attribute("filter");
                     list->addItem(_filterName);

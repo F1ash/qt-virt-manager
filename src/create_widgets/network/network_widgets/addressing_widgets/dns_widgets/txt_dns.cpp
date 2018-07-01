@@ -41,7 +41,7 @@ void TXT_DNS::setDataDescription(const QString &_xmlDesc)
         setUsage(true);
         _el = _n.toElement();
         if ( !_el.isNull() ) {
-            if ( _el.tagName()=="txt" ) {
+            if ( _el.tagName().compare("txt")==0 ) {
                 hostName->setText(
                             _el.attribute("name"));
                 hostValue->setText(
@@ -60,7 +60,7 @@ void TXT_DNS::addItem()
     if ( !_text.isEmpty() ) {
         bool exist = false;
         for (int i=0; i<list->count(); i++) {
-            if ( _text==list->item(i)->text() ) {
+            if ( _text.compare(list->item(i)->text())==0 ) {
                 exist = true;
                 break;
             }

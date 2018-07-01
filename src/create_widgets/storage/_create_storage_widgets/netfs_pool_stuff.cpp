@@ -40,16 +40,16 @@ void NetFs_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
         while ( !_n.isNull() ) {
             QDomElement _el = _n.toElement();
             if ( !_el.isNull() ) {
-                if ( _el.tagName()=="source" ) {
+                if ( _el.tagName().compare("source")==0 ) {
                     QDomNode _n1 = _el.firstChild();
                     while ( !_n1.isNull() ) {
                         QDomElement _el1 = _n1.toElement();
                         if ( !_el1.isNull() ) {
-                            if ( _el1.tagName()=="host" ) {
+                            if ( _el1.tagName().compare("host")==0 ) {
                                 source->host->setHostItem(_el1.attribute("name"));
-                            } else if ( _el1.tagName()=="dir" ) {
+                            } else if ( _el1.tagName().compare("dir")==0 ) {
                                 source->dir->setText(_el1.attribute("path", ""));
-                            } else if ( _el1.tagName()=="format" ) {
+                            } else if ( _el1.tagName().compare("format")==0 ) {
                                 QString _fmt = _el1.attribute("type", "auto");
                                 int idx = source->format->findText(_fmt);
                                 if ( idx<0 ) idx = 0;
@@ -58,12 +58,12 @@ void NetFs_Pool_Stuff::setDataDescription(const QString &_xmlDesc)
                         };
                         _n1 = _n1.nextSibling();
                     };
-                } else if ( _el.tagName()=="target" ) {
+                } else if ( _el.tagName().compare("target")==0 ) {
                     QDomNode _n1 = _el.firstChild();
                     while ( !_n1.isNull() ) {
                         QDomElement _el1 = _n1.toElement();
                         if ( !_el1.isNull() ) {
-                            if ( _el1.tagName()=="path" ) {
+                            if ( _el1.tagName().compare("path")==0 ) {
                                 target->path->setText(_el1.text());
                             };
                         };

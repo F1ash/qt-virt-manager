@@ -60,12 +60,12 @@ void RDP_Graphics::setDataDescription(const QString &_xmlDesc)
     _device = doc.firstChildElement("device")
             .firstChildElement("graphics");
     autoPort->setChecked(
-                _device.attribute("autoport")=="yes");
+                _device.attribute("autoport").compare("yes")==0);
     port->setValue(_device.attribute("port", "10").toInt());
     multiUser->setChecked(
-                _device.attribute("multiUser")=="yes");
+                _device.attribute("multiUser").compare("yes")==0);
     replaceUser->setChecked(
-                _device.attribute("replaceUser")=="yes");
+                _device.attribute("replaceUser").compare("yes")==0);
 }
 
 /* private slots */

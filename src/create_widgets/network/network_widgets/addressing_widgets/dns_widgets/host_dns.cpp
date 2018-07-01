@@ -52,7 +52,7 @@ void Host_DNS::setDataDescription(const QString &_xmlDesc)
         while ( !_n.isNull() ) {
             _el = _n.toElement();
             if ( !_el.isNull() ) {
-                if ( _el.tagName()=="hostname" ) {
+                if ( _el.tagName().compare("hostname")==0 ) {
                     hostName->setText(
                                 _el.text());
                     addItem();
@@ -68,7 +68,7 @@ void Host_DNS::addItem()
     if ( !_text.isEmpty() ) {
         bool exist = false;
         for (int i=0; i<list->count(); i++) {
-            if ( _text==list->item(i)->text() ) {
+            if ( _text.compare(list->item(i)->text())==0 ) {
                 exist = true;
                 break;
             }

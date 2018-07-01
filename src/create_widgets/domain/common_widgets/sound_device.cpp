@@ -53,7 +53,7 @@ QDomDocument SoundDevice::getDataDocument() const
     QDomElement _device, _devDesc;
     _device = doc.createElement("device");
     _devDesc = doc.createElement("sound");
-    if ( model->currentText()=="ich6" && !defaultICH6reg->isChecked() ) {
+    if ( model->currentText().compare("ich6")==0 && !defaultICH6reg->isChecked() ) {
         QDomElement _codec = doc.createElement("codec");
         if ( duplexICH6reg->isChecked() )
             _codec.setAttribute("type", "duplex");
@@ -80,5 +80,5 @@ QDomDocument SoundDevice::getDataDocument() const
 /* private slots */
 void SoundDevice::modelChanged(QString _model)
 {
-    regWdg->setVisible( ( _model=="ich6" ) );
+    regWdg->setVisible( ( _model.compare("ich6")==0 ) );
 }

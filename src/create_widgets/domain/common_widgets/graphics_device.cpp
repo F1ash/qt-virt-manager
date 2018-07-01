@@ -42,15 +42,15 @@ QDomDocument GraphicsDevice::getDataDocument() const
 void GraphicsDevice::setWidgets(int i)
 {
     QString _type = type->itemData(i, Qt::UserRole).toString();
-    if ( _type == "sdl" ) {
+    if ( _type.compare("sdl")==0 ) {
         info->addWidget(new SDL_Graphics(this));
-    } else if ( _type == "vnc" ) {
+    } else if ( _type.compare("vnc")==0 ) {
         info->addWidget(new VNC_Graphics(this, ptr_ConnPtr));
-    } else if ( _type == "spice" ) {
+    } else if ( _type.compare("spice")==0 ) {
         info->addWidget(new Spice_Graphics(this, ptr_ConnPtr));
-    } else if ( _type == "rdp" ) {
+    } else if ( _type.compare("rdp")==0 ) {
         info->addWidget( new RDP_Graphics(this));
-    } else if ( _type == "desktop" ) {
+    } else if ( _type.compare("desktop")==0 ) {
         info->addWidget(new Desktop_Graphics(this));
     };
 }

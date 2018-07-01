@@ -60,7 +60,7 @@ void SDL_Graphics::setDataDescription(const QString &_xmlDesc)
     xauth->setText(
                 _device.attribute("xauth"));
     fullscreen->setChecked(
-                _device.attribute("fullscreen")=="yes");
+                _device.attribute("fullscreen").compare("yes")==0);
 }
 
 /* private slots */

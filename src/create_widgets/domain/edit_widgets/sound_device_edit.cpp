@@ -30,9 +30,9 @@ void SoundDevice_Edit::setDataDescription(const QString &_xmlDesc)
     _codec = _device.firstChildElement("codec");
     if ( !_codec.isNull() ) {
         QString codec = _codec.attribute("type", "");
-        if ( codec=="micro" ) {
+        if ( codec.compare("micro")==0 ) {
             microICH6reg->setChecked(true);
-        } else if ( codec=="duplex" ) {
+        } else if ( codec.compare("duplex")==0 ) {
             duplexICH6reg->setChecked(true);
         } else
             defaultICH6reg->setChecked(true);
@@ -52,7 +52,7 @@ void SoundDevice_Edit::setDataDescription(const QString &_xmlDesc)
             if ( _addr.hasAttribute("multifunction") ) {
                 wdg->multifunction->setEnabled(true);
                 wdg->multifunction->setChecked(
-                            _addr.attribute("multifunction")=="on" );
+                            _addr.attribute("multifunction").compare("on")==0 );
             };
         };
     };

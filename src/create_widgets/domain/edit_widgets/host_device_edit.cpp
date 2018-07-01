@@ -37,12 +37,12 @@ void HostDevice_Edit::setDataDescription(const QString &_xmlDesc)
 /* private slots */
 void HostDevice_Edit::init_wdg()
 {
-    if ( hlpThread->connType.toLower()=="qemu" ) {
+    if ( hlpThread->connType.toLower().compare("qemu")==0 ) {
         type->addItems(QEMU_DEV_LIST);
         infoEdit->addWidget(new USB_Host_Device_Edit(this));
         infoEdit->addWidget(new PCI_Host_Device_Edit(this));
         infoEdit->addWidget(new SCSI_Host_Device_Edit(this, ptr_ConnPtr));
-    } else if ( hlpThread->connType.toLower()=="lxc" ) {
+    } else if ( hlpThread->connType.toLower().compare("lxc")==0 ) {
         type->addItems(LXC_DEV_LIST);
         infoEdit->addWidget(new USB_Host_Device_Edit(this));
         infoEdit->addWidget(new BCh_Host_Device_Edit(this));

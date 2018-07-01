@@ -81,17 +81,17 @@ QDomDocument MemBalloon::getDataDocument() const
 void MemBalloon::modelChanged(int idx)
 {
     QString _model = model->itemData(idx, Qt::UserRole).toString();
-    if ( _model=="none" ) {
+    if ( _model.compare("none")==0 ) {
         periodLabel->setChecked(false);
         periodLabel->setVisible(false);
         period->setVisible(false);
         addr->use->setChecked(false);
         addr->setVisible(false);
-    } else if ( _model=="virtio" ) {
+    } else if ( _model.compare("virtio")==0 ) {
         periodLabel->setVisible(true);
         period->setVisible(true);
         addr->setVisible(true);
-    } else if ( _model=="xen" ) {
+    } else if ( _model.compare("xen")==0 ) {
         periodLabel->setChecked(false);
         periodLabel->setVisible(false);
         period->setVisible(false);
