@@ -63,18 +63,27 @@ void QSpicePortChannel::writeFinishToPort(void *_port, void *_res, void *_errs)
     GAsyncResult *result = static_cast<GAsyncResult*>(_res);
     GError **errors = static_cast<GError**>(_errs);
 #if SPICE_GTK_CHECK_VERSION(0, 35, 0)
-    long ssize = spice_port_channel_write_finish(
+    long _size = spice_port_channel_write_finish(
 #else
-    long ssize = spice_port_write_finish(
+    long _size = spice_port_write_finish(
 #endif
                 static_cast<SpicePortChannel*>(_port),
                 result,
                 errors);
-    //QSpicePortChannel *obj = static_cast<QSpicePortChannel*>(
-    //            g_async_result_get_user_data(result));
-    size_t count = sizeof(errors)/sizeof(*errors);
-    for ( uint i = 0; i<count; i++ ) {
-        if ( nullptr==errors[i] ) continue;
-        qDebug()<<errors[i]->code<< QString::fromUtf8(errors[i]->message);
+
+    QSpicePortChannel *obj = static_cast<QSpicePortChannel*>(
+                g_async_result_get_user_data(result));
+    if ( obj!=nullptr) {
+        SPICE_CHANNEL_MSG _msg;
+        _msg.channel = tr("port");
+        _msg.context = tr("writing data finished");
+        if ( errors!=nullptr && *errors!=nullptr ) {
+                _msg.msg = QString(tr("Error(%1): %2"))
+                        .arg((*errors)->code)
+                        .arg(QString::fromUtf8((*errors)->message));
+        } else {
+            _msg.msg = QString(tr("Sent %1 bytes")).arg(_size);
+        };
+        emit obj->channelMsg(_msg);
     };
 }

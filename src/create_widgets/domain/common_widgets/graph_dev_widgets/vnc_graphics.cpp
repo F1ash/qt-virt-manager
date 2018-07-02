@@ -171,12 +171,12 @@ QDomDocument VNC_Graphics::getDataDocument() const
                         address->currentText());
         };
         _devDesc.appendChild(_listen);
-    } else if ( _address=="network" && networks->count()>0 ) {
+    } else if ( _address.compare("network")==0 && networks->count()>0 ) {
             _listen = doc.createElement("listen");
             _listen.setAttribute("type", "network");
             _listen.setAttribute("network", networks->currentText());
             _devDesc.appendChild(_listen);
-    } else if ( _address=="socket" ) {
+    } else if ( _address.compare("socket")==0 ) {
         _devDesc.setAttribute("socket", address->currentText());
         _listen = doc.createElement("listen");
         _listen.setAttribute("type", "socket");
@@ -230,15 +230,15 @@ void VNC_Graphics::setDataDescription(const QString &_xmlDesc)
             idx = address->findData(
                         _type, Qt::UserRole, Qt::MatchExactly);
             address->setCurrentIndex( (idx<0)? 3:idx );
-            if ( _type=="address" ) {
+            if ( _type.compare("address")==0 ) {
                 if ( address->currentIndex()==3 )
                     address->setEditText(_data);
-            } else if ( _type=="network" ) {
+            } else if ( _type.compare("network")==0 ) {
                 idx = networks->findText(
                             _data,
                             Qt::MatchContains);
                 networks->setCurrentIndex( (idx<0)? 0:idx );
-            } else if ( _type=="socket" ) {
+            } else if ( _type.compare("socket")==0 ) {
                 address->setEditText(_data);
             } else {
                 address->setCurrentIndex(0);

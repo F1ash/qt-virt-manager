@@ -49,7 +49,7 @@ QDomDocument File_Disk::getDataDocument() const
         QDomNodeList _l = secLabels->getDataDocument()
                 .firstChildElement("data")
                 .childNodes();
-        uint j = 0;
+        int j = 0;
         int count = _l.length();
         for (int i=0; i<count;i++) {
             //qDebug()<<_l.item(j).nodeName()<<i;
@@ -163,7 +163,7 @@ void File_Disk::setDataDescription(const QString &_xmlDesc)
                     Qt::UserRole,
                     Qt::MatchContains);
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
-        if ( _attr=="pci" ) {
+        if ( _attr.compare("pci")==0 ) {
             PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
             if ( wdg!=nullptr ) {
                 wdg->domain->setText( _addr.attribute("domain") );
@@ -178,7 +178,7 @@ void File_Disk::setDataDescription(const QString &_xmlDesc)
                                 _addr.attribute("multifunction").compare("on")==0 );
                 };
             };
-        } else if ( _attr=="drive" ) {
+        } else if ( _attr.compare("drive")==0 ) {
             DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
             if ( wdg!=nullptr ) {
                 wdg->controller->setText( _addr.attribute("controller") );

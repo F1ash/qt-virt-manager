@@ -88,7 +88,7 @@ void IP_Widget::updateDHCPUsage(uint ver, uint idx, bool state)
     //qDebug()<<"IPv6:"<<IPv6HasDHCP;
 
     for (int i=0; i<ipSet->count(); i++) {
-        if ( i==(int)idx ) continue;
+        if ( i==int(idx) ) continue;
         _IP_Widget *wdg =
                 static_cast<_IP_Widget*>(ipSet->widget(i));
         if ( nullptr==wdg ) continue;

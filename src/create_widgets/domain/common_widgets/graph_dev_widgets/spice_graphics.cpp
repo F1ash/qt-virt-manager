@@ -653,14 +653,14 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
             idx = address->findData(
                         _type, Qt::UserRole, Qt::MatchExactly);
             address->setCurrentIndex( (idx<0)? 3:idx );
-            if ( _type=="address" ) {
+            if ( _type.compare("address")==0 ) {
                 if ( address->currentIndex()==3 )
                     address->setEditText(_data);
-            } else if ( _type=="network" ) {
+            } else if ( _type.compare("network")==0 ) {
                 idx = networks->findText(
                             _data, Qt::MatchContains);
                 networks->setCurrentIndex( (idx<0)? 0:idx );
-            } else if ( _type=="socket" ) {
+            } else if ( _type.compare("socket")==0 ) {
                 address->setEditText(_data);
             } else {
                 address->setCurrentIndex(0);
@@ -679,28 +679,28 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
         QString _name, _mode;
         _name = _channel.attribute("name");
         _mode = _channel.attribute("mode");
-        if ( _name=="main" ) {
+        if ( _name.compare("main")==0 ) {
             mainLabel->setChecked(true);
             obj = main;
-        } else if ( _name=="display" ) {
+        } else if ( _name.compare("display")==0 ) {
             displayLabel->setChecked(true);
             obj = display;
-        } else if ( _name=="inputs" ) {
+        } else if ( _name.compare("inputs")==0 ) {
             inputsLabel->setChecked(true);
             obj = inputs;
-        } else if ( _name=="cursor" ) {
+        } else if ( _name.compare("cursor")==0 ) {
             cursorLabel->setChecked(true);
             obj = cursor;
-        } else if ( _name=="playback" ) {
+        } else if ( _name.compare("playback")==0 ) {
             playbackLabel->setChecked(true);
             obj = playback;
-        } else if ( _name=="record" ) {
+        } else if ( _name.compare("record")==0 ) {
             recordLabel->setChecked(true);
             obj = record;
-        } else if ( _name=="smartcard" ) {
+        } else if ( _name.compare("smartcard")==0 ) {
             smartcardLabel->setChecked(true);
             obj = smartcard;
-        } else if ( _name=="usbredir" ) {
+        } else if ( _name.compare("usbredir")==0 ) {
             usbredirLabel->setChecked(true);
             obj = usbredir;
         };
@@ -713,11 +713,11 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
     _streaming = _device.firstChildElement("streaming");
     _clipboard = _device.firstChildElement("clipboard");
     _mouse = _device.firstChildElement("mouse");
-    _filetransfer = _device.firstChildElement("filetransfer"),
+    _filetransfer = _device.firstChildElement("filetransfer");
     _image = _device.firstChildElement("image");
     _jpeg = _device.firstChildElement("jpeg");
     _zlib = _device.firstChildElement("zlib");
-    _playback = _device.firstChildElement("playback ");
+    _playback = _device.firstChildElement("playback");
     streaming->setChecked( !_streaming.isNull() );
     clipboard->setChecked( !_clipboard.isNull() );
     mouse->setChecked( !_mouse.isNull() );

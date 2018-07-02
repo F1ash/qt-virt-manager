@@ -83,20 +83,20 @@ void BlockFsType::setDataDescription(const QString &_xmlDesc)
     _target = _device.firstChildElement("target");
     _readOnly = _device.firstChildElement("readonly");
     /* Currently this only works with type='mount' for the QEMU/KVM driver.
-    if ( connType=="qemu" ) {
+    if ( connType.compare("qemu")==0 ) {
         idx = accessMode->findText(
                     _device.attribute("accessmode"), Qt::MatchContains);
         accessMode->setCurrentIndex( (idx<0)? 0:idx );
     };
     */
-    if ( connType=="qemu" && !_driver.isNull() ) {
+    if ( connType.compare("qemu")==0 && !_driver.isNull() ) {
         idx = driver->findText(
                     _driver.attribute("type"), Qt::MatchContains);
         driver->setCurrentIndex( (idx<0)? 0:idx );
         idx = wrPolicy->findText(
                     _driver.attribute("wrpolicy"), Qt::MatchContains);
         wrPolicy->setCurrentIndex( (idx<0)? 0:idx );
-    } else if ( connType=="lxc" && !_driver.isNull() ) {
+    } else if ( connType.compare("lxc")==0 && !_driver.isNull() ) {
         idx = driver->findText(
                     _driver.attribute("type"), Qt::MatchContains);
         driver->setCurrentIndex( (idx<0)? 0:idx );

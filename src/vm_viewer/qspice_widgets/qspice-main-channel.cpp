@@ -460,13 +460,13 @@ void QSpiceMainChannel::clipboardSelectionNotify(uint selection, quint32 type, c
                         NEWLINE_TYPE_LF,
                         NEWLINE_TYPE_CR_LF,
                         &err);
-            if (err) {
+            if (err!=nullptr) {
                 qWarning("Failed to convert text line ending: %s", err->message);
-                g_clear_error(&err);
                 // continue for paste empty string
                 // and to do paste notify for unblock Copy\Paste toolbar buttons
                 //return;
             };
+            g_clear_error(&err);
             len = strlen(static_cast<char*>(conv));
         } else {
             /* On Windows, with some versions of gtk+, GtkSelectionData::length
@@ -551,22 +551,20 @@ void QSpiceMainChannel::fileCopyFinish(void *channel, void *result, void *error)
                 static_cast<SpiceMainChannel*>(channel),
                 asyncResult,
                 errors);
+
     QSpiceMainChannel *obj = static_cast<QSpiceMainChannel*>(
                 g_async_result_get_user_data(asyncResult));
-    size_t count = sizeof(errors)/sizeof(*errors);
-    for ( uint i = 0; i<count; i++ ) {
-        if ( nullptr==errors[i] ) continue;
-        //qDebug()<<errors[i]->code<< QString::fromUtf8(errors[i]->message);
-        if (obj) {
-            emit obj->downloaded(0, 100);
-            SPICE_CHANNEL_MSG _msg;
-            _msg.channel = tr("main_channel");
-            _msg.context = tr("file transfer");
-            _msg.msg = QString::fromUtf8(errors[i]->message);
-            emit obj->channelMsg(_msg);
+    if ( obj!=nullptr) {
+        emit obj->downloaded(0, 100);
+        SPICE_CHANNEL_MSG _msg;
+        _msg.channel = tr("main_channel");
+        _msg.context = tr("file transferring finished");
+        if ( errors!=nullptr && *errors!=nullptr ) {
+                _msg.msg = QString(tr("Error(%1): %2"))
+                        .arg((*errors)->code)
+                        .arg(QString::fromUtf8((*errors)->message));
         };
-    };
-    if (obj) {
+        emit obj->channelMsg(_msg);
         emit obj->downloadCompleted();
         // reset cancellable for allow the start new task
         g_cancellable_reset(static_cast<GCancellable*>(obj->cancellable));

@@ -228,7 +228,7 @@ void Volume_Disk::setDataDescription(const QString &_xmlDesc)
         idx = addr->type->findData(
                     _attr, Qt::UserRole, Qt::MatchExactly);
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
-        if ( _attr=="pci" ) {
+        if ( _attr.compare("pci")==0 ) {
             PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
             if ( wdg!=nullptr ) {
                 wdg->domain->setText( _addr.attribute("domain") );
@@ -242,7 +242,7 @@ void Volume_Disk::setDataDescription(const QString &_xmlDesc)
                                 _addr.attribute("multifunction").compare("on")==0 );
                 };
             };
-        } else if ( _attr=="drive" ) {
+        } else if ( _attr.compare("drive")==0 ) {
             DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
             if ( wdg!=nullptr ) {
                 wdg->controller->setText( _addr.attribute("controller") );

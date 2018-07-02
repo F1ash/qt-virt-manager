@@ -106,7 +106,8 @@ void QSpiceUsbDeviceManager::init(QSpiceSession *session)
             //qDebug()<<"UsbDeviceManager initiated";
         } else {
             //qDebug()<<"UsbDeviceManager not initiated";
-        }
+        };
+        g_clear_error(err);
     };
 }
 
@@ -199,24 +200,21 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_finish_callback
     GError **errors = static_cast<GError**>(err);
     GAsyncResult *result = static_cast<GAsyncResult*>(res);
     bool _res = spice_usb_device_manager_connect_device_finish(
-                static_cast<SpiceUsbDeviceManager*>(self), result, errors);
+                static_cast<SpiceUsbDeviceManager*>(self),
+                result,
+                errors);
+
+    QSpiceUsbDeviceManager *obj = static_cast<QSpiceUsbDeviceManager*>(
+                g_async_result_get_user_data(result));
     if ( !_res ) {
-        QSpiceUsbDeviceManager *obj =
-                static_cast<QSpiceUsbDeviceManager*>(
-                    g_async_result_get_user_data(result));
-        if ( obj==nullptr ) return;
-        QString err;
-        size_t count = sizeof(errors)/sizeof(*errors);
-        for ( uint i = 0; i<count; i++ ) {
-            if ( nullptr==errors[i] ) continue;
-            GError *error = errors[i];
-            err.append(error->code);
-            err.append(error->message);
+        if ( obj!=nullptr && errors!=nullptr && (*errors)!=nullptr ) {
+            QString err;
+            err.append((*errors)->code);
+            err.append((*errors)->message);
             err.append('\n');
-            g_error_free(error);
+            QString dev("???");
+            emit obj->deviceInfo(dev, err);
         };
-        QString dev("???");
-        emit obj->deviceInfo(dev, err);
     };
 }
 
@@ -227,29 +225,21 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_disconnect_finish_callback
     GError **errors = static_cast<GError**>(_err);
     GAsyncResult *result = static_cast<GAsyncResult*>(res);
     bool _res = spice_usb_device_manager_disconnect_device_finish(
-                static_cast<SpiceUsbDeviceManager*>(self), result, errors);
-    if ( !_res ) {
-        QSpiceUsbDeviceManager *obj =
-                static_cast<QSpiceUsbDeviceManager*>(
-                    g_async_result_get_user_data(result));
-        if ( obj==nullptr ) return;
-        QString err;
-        if ( nullptr!=errors ) {
-            size_t count = sizeof(errors)/sizeof(*errors);
-            for ( uint i = 0; i<count; i++ ) {
-                if ( nullptr==errors[i] ) continue;
-                GError *error = errors[i];
-                err.append(error->code);
-                err.append(" ");
-                err.append(error->message);
-                err.append('\n');
-                g_error_free(error);
-            };
-        } else {
+                static_cast<SpiceUsbDeviceManager*>(self),
+                result,
+                errors);
 
+    QSpiceUsbDeviceManager *obj = static_cast<QSpiceUsbDeviceManager*>(
+                g_async_result_get_user_data(result));
+    if ( !_res ) {
+        if ( obj!=nullptr && errors!=nullptr && (*errors)!=nullptr ) {
+            QString err;
+            err.append((*errors)->code);
+            err.append((*errors)->message);
+            err.append('\n');
+            QString dev("???");
+            emit obj->deviceInfo(dev, err);
         };
-        QString dev("???");
-        emit obj->deviceInfo(dev, err);
     };
 #endif
 }
@@ -273,17 +263,11 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
                     errors);
         if (!possibility) {
             QString err;
-            if ( nullptr!=errors ) {
-                size_t count = sizeof(errors)/sizeof(*errors);
-                for ( uint i = 0; i<count; i++ ) {
-                    if ( nullptr==errors[i] ) continue;
-                    GError *error = errors[i];
-                    err.append(error->code);
-                    err.append(" ");
-                    err.append(error->message);
-                    err.append('\n');
-                    g_error_free(error);
-                };
+            if ( nullptr!=errors && (*errors)!= nullptr ) {
+                err.append((*errors)->code);
+                err.append(" ");
+                err.append((*errors)->message);
+                err.append('\n');
             } else {
                 err.append(tr("connection impossible."));
             };
@@ -305,6 +289,7 @@ void QSpiceUsbDeviceManager::spiceUsbDeviceManager_connect_device(QString &_id)
             };
             emit deviceInfo(_id, _msg);
         };
+        g_clear_error(errors);
     };
     g_ptr_array_free(_devs, true);
 }

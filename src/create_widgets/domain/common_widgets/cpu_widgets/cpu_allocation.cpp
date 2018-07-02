@@ -84,5 +84,7 @@ void CPU_Allocation::vcpuValueChanged(int i)
 }
 void CPU_Allocation::placementStateChanged(bool state)
 {
-    placement->setEnabled( state && (type=="qemu" || type=="kvm") );
+    placement->setEnabled(
+                state &&
+                (type.compare("qemu")==0 || type.compare("kvm")==0) );
 }

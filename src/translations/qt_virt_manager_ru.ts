@@ -3682,8 +3682,31 @@ Ctrl+Alt+G</translation>
         <translation>основной канал</translation>
     </message>
     <message>
-        <source>file transfer</source>
-        <translation>передача файла</translation>
+        <source>file transferring finished</source>
+        <translation>передача файлов завершена</translation>
+    </message>
+    <message>
+        <source>Error(%1): %2</source>
+        <translation>Ошибка(%1): %2</translation>
+    </message>
+</context>
+<context>
+    <name>QSpicePortChannel</name>
+    <message>
+        <source>port</source>
+        <translation>порт</translation>
+    </message>
+    <message>
+        <source>writing data finished</source>
+        <translation>запись данных завершена</translation>
+    </message>
+    <message>
+        <source>Error(%1): %2</source>
+        <translation>Ошибка(%1): %2</translation>
+    </message>
+    <message>
+        <source>Sent %1 bytes</source>
+        <translation>Отправлено %1 байт</translation>
     </message>
 </context>
 <context>

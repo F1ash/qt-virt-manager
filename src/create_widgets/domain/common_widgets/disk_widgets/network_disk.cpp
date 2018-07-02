@@ -227,7 +227,7 @@ void Network_Disk::setDataDescription(const QString &_xmlDesc)
                     Qt::UserRole,
                     Qt::MatchContains);
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
-        if ( _attr=="pci" ) {
+        if ( _attr.compare("pci")==0 ) {
             PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
             if ( wdg!=nullptr ) {
                 wdg->domain->setText( _addr.attribute("domain") );
@@ -241,7 +241,7 @@ void Network_Disk::setDataDescription(const QString &_xmlDesc)
                                 _addr.attribute("multifunction").compare("on")==0 );
                 };
             };
-        } else if ( _attr=="drive" ) {
+        } else if ( _attr.compare("drive")==0 ) {
             DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
             if ( wdg!=nullptr ) {
                 wdg->controller->setText( _addr.attribute("controller") );
@@ -283,10 +283,10 @@ void Network_Disk::getVolumeNames()
                     this, ptr_ConnPtr, _type);
     if ( volumeDialog->exec()==QDialog::Accepted ) {
         _ret = volumeDialog->getResult();
-        if ( _ret.type=="iscsi" ) {
+        if ( _ret.type.compare("iscsi")==0 ) {
             auth->setVisible(true);
             auth->setSecretType("ISCSI");
-        }else if ( _ret.type=="rnd" ) {
+        }else if ( _ret.type.compare("rnd")==0 ) {
             auth->setVisible(true);
             auth->setSecretType("CEPH");
         } else {
@@ -316,7 +316,7 @@ void Network_Disk::setTypedData(VVD_Result &_data)
             hosts->setHostItem(_addr);
         };
         _device = _source.firstChildElement("device");
-        if        ( _data.type=="iscsi" ) {
+        if        ( _data.type.compare("iscsi")==0 ) {
             _auth = _source.firstChildElement("auth");
             if ( !_device.isNull() ) {
                 _name.append(
@@ -347,7 +347,7 @@ void Network_Disk::setTypedData(VVD_Result &_data)
                     auth->setSecretType("ISCSI");
                 };
             };
-        } else if ( _data.type=="rnd" ) {
+        } else if ( _data.type.compare("rnd")==0 ) {
             if ( !_auth.isNull() ) {
                 auth->auth->setChecked(true);
                 auth->userName->setText(
@@ -370,9 +370,9 @@ void Network_Disk::setTypedData(VVD_Result &_data)
                     auth->setSecretType("CEPH");
                 };
             };
-        } else if ( _data.type=="nbd" ) {
-        } else if ( _data.type=="sheepdog" ) {
-        } else if ( _data.type=="gluster" ) {
+        } else if ( _data.type.compare("nbd")==0 ) {
+        } else if ( _data.type.compare("sheepdog")==0 ) {
+        } else if ( _data.type.compare("gluster")==0 ) {
         } else {
             _name.append(_data.name);
         };

@@ -122,7 +122,7 @@ void VirtVolumeDialog::poolThreadResult(Result data)
             //qDebug()<<_data;
             if        ( type.isEmpty() ) {
                 addPoolItem(_data);
-            } else if ( type==_type ) {
+            } else if ( type.compare(_type)==0 ) {
                 addPoolItem(_data);
             }
         };

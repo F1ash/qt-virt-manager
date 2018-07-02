@@ -42,7 +42,7 @@ void _IP_Widget::tabToClose()
         _IPvX *wdg = static_cast<_IPvX*>(
                         sets->currentWidget());
         if ( nullptr!=wdg && wdg->getDHCPUsageState() ) {
-            emit dhcpUsageChanged(wdg->ver, tabIdx, false);
+            emit dhcpUsageChanged(wdg->ver, uint(tabIdx), false);
         };
     };
 }
@@ -164,13 +164,13 @@ void _IP_Widget::ipv6StateChanged(bool state)
                     sets->widget( (state)? 0:1 ));
     if ( nullptr!=wdg && wdg->getDHCPUsageState() ) {
         wdg->updateDHCPUsage(false);
-        emit dhcpUsageChanged(wdg->ver, tabIdx, false);
+        emit dhcpUsageChanged(wdg->ver, uint(tabIdx), false);
     };
 }
 void _IP_Widget::dhcpUsageChanged(uint ver, bool state)
 {
     if ( -1<tabIdx )
-        emit dhcpUsageChanged(ver, tabIdx, state);
+        emit dhcpUsageChanged(ver, uint(tabIdx), state);
 }
 void _IP_Widget::staticRouteChanged(bool state)
 {
