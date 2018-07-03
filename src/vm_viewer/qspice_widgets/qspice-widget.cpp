@@ -251,9 +251,9 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
         bool online = false;
 #if WITH_LIBCACARD
         online = smartcard->connectToChannel();
-        qDebug()<<"WITH_LIBCACARD";
+        //qDebug()<<"WITH_LIBCACARD";
 #else
-        qDebug()<<"NOT WITH_LIBCACARD";
+        //qDebug()<<"NOT WITH_LIBCACARD";
 #endif
         if ( online ) {
             smartcardManager = new QSpiceSmartcardManager(this);
@@ -322,9 +322,9 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
         bool online = false;
 #if USE_SPICE_AUDIO
         online = playback->connectToChannel();
-        qDebug()<<"USE_SPICE_AUDIO";
+        //qDebug()<<"USE_SPICE_AUDIO";
 #else
-        qDebug()<<"NOT USE_SPICE_AUDIO";
+        //qDebug()<<"NOT USE_SPICE_AUDIO";
 #endif
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
@@ -350,7 +350,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
         bool online = false;
 #if USE_SPICE_AUDIO
         online = record->connectToChannel();
-        qDebug()<<"USE_SPICE_AUDIO";
+        //qDebug()<<"USE_SPICE_AUDIO";
 #else
         qDebug()<<"NOT USE_SPICE_AUDIO";
 #endif
@@ -489,20 +489,20 @@ void QSpiceWidget::pasteClipboardSelectionFromGuest(uint type, void *_data, uint
 
 void QSpiceWidget::clipboardSelectionGrab()
 {
-    qDebug()<<"main: ClipboardSelectionGrabbed";
+    //qDebug()<<"main: ClipboardSelectionGrabbed";
 }
 
 void QSpiceWidget::releaseClipboardSelection(uint selection)
 {
     switch (selection) {
     case VD_AGENT_CLIPBOARD_SELECTION_CLIPBOARD:
-        qDebug()<<"guestClipboard_CLIPBOARDSelectionReleased";
+        //qDebug()<<"guestClipboard_CLIPBOARDSelectionReleased";
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_PRIMARY:
-        qDebug()<<"guestClipboard_PRIMARYSelectionReleased";
+        //qDebug()<<"guestClipboard_PRIMARYSelectionReleased";
         break;
     case VD_AGENT_CLIPBOARD_SELECTION_SECONDARY:
-        qDebug()<<"guestClipboard_SECONDARYSelectionReleased";
+        //qDebug()<<"guestClipboard_SECONDARYSelectionReleased";
         break;
     default:
         break;
@@ -649,22 +649,22 @@ void QSpiceWidget::usbDevRemoved(QString &dev)
 
 void QSpiceWidget::cardInserted(QString &_vcard)
 {
-    qDebug()<<"cardInserted"<<_vcard;
+    //qDebug()<<"cardInserted"<<_vcard;
 }
 
 void QSpiceWidget::cardRemoved(QString &_vcard)
 {
-    qDebug()<<"cardRemoved"<<_vcard;
+    //qDebug()<<"cardRemoved"<<_vcard;
 }
 
 void QSpiceWidget::readerAdded(QString &_reader)
 {
-    qDebug()<<"readerAdded"<<_reader;
+    //qDebug()<<"readerAdded"<<_reader;
 }
 
 void QSpiceWidget::readerRemoved(QString &_reader)
 {
-    qDebug()<<"readerRemoved"<<_reader;
+    //qDebug()<<"readerRemoved"<<_reader;
 }
 
 void QSpiceWidget::displayPrimaryCreate(
@@ -695,7 +695,8 @@ void QSpiceWidget::displayPrimaryCreate(
         break;
 
     default:
-        qDebug() << "Unknown display format " << _format;
+        //qDebug() << "Unknown display format " << _format;
+        ;;
     };
     if ( _format!=QImage::Format_Invalid ) {
         img = new QImage(
@@ -731,7 +732,7 @@ void QSpiceWidget::displayPrimaryDestroy()
 
 void QSpiceWidget::displayMark(int mark)
 {
-    qDebug() << "Display Mark " << mark;
+    //qDebug() << "Display Mark " << mark;
 }
 
 void QSpiceWidget::setClientCursor(

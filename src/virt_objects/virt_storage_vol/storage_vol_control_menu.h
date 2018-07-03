@@ -8,7 +8,7 @@
 #include "wipe_menu.h"
 #include "resize_dialog.h"
 #include "virt_objects/virt_entity_enums.h"
-#include <QDebug>
+//#include <QDebug>
 
 class StorageVolControlMenu : public QMenu
 {

@@ -456,7 +456,8 @@ Other parameters of network you can change later in Network Editor.</source>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Network %2: %3
 </source>
-        <translation>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Сеть %2: %3</translation>
+        <translation>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Сеть %2: %3
+</translation>
     </message>
     <message>
         <source>&lt;b&gt;&apos;%1&apos;&lt;/b&gt; Pool %2: %3
@@ -5759,7 +5760,7 @@ Click to choose mode</source>
     </message>
     <message>
         <source>Reload Secret OverView</source>
-        <translation>Перезагрузить обзор для Секретов</translation>
+        <translation>Перезагрузить обзор Секретов</translation>
     </message>
 </context>
 <context>

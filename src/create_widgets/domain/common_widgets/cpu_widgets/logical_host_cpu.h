@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QIcon>
 #include <QHBoxLayout>
-#include <QDebug>
+//#include <QDebug>
 
 class LogicalHostCPU : public QWidget
 {

@@ -6,7 +6,7 @@
 #include <QIcon>
 #include <QVariantMap>
 #include "virt_objects/virt_entity_enums.h"
-#include <QDebug>
+//#include <QDebug>
 
 class IfaceControlMenu : public QMenu
 {

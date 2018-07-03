@@ -202,7 +202,7 @@ void VirtSecretControl::entityClicked(const QPoint &p)
 void VirtSecretControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<virtSecretModel->DataList.at(index.row())->getUUID();
+        //qDebug()<<virtSecretModel->DataList.at(index.row())->getUUID();
     }
 }
 void VirtSecretControl::execAction(const Act_Param &param)

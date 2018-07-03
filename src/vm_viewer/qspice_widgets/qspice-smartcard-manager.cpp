@@ -28,7 +28,7 @@ void QSpiceHelper::card_inserted(SpiceSmartcardManager *manager,
     _name.append(vreader_get_name(_reader));
     if (_reader) vreader_free(_reader);
     if (!_name.isEmpty()) obj->cardInserted(_name);
-    qDebug()<<"WITH_LIBCACARD";
+    //qDebug()<<"WITH_LIBCACARD";
 #else
     Q_UNUSED(reader);
     Q_UNUSED(user_data);
@@ -98,7 +98,7 @@ void QSpiceHelper::reader_removed(SpiceSmartcardManager *manager,
 void QSpiceSmartcardManager::init()
 {
 #if WITH_LIBCACARD
-    qDebug()<<"WITH_LIBCACARD";
+    //qDebug()<<"WITH_LIBCACARD";
     gobject = spice_smartcard_manager_get();
     if ( gobject ) {
         g_signal_connect(gobject, "card-inserted",

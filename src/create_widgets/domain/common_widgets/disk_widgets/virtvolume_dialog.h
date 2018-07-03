@@ -9,7 +9,7 @@
 #include "virt_objects/virt_storage_vol/storage_vol_control.h"
 #include "virt_objects/virt_storage_vol/storage_vol_control_thread.h"
 #include "virt_objects/virt_storage_pool/storage_pool_control_thread.h"
-#include <QDebug>
+//#include <QDebug>
 
 struct VVD_Result {
     QString pool    = QString();

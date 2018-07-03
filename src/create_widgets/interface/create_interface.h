@@ -14,7 +14,7 @@
 #include <QDir>
 #include <QTemporaryFile>
 #include <QDomDocument>
-#include <QDebug>
+//#include <QDebug>
 
 class CreateInterface : public QDialog
 {

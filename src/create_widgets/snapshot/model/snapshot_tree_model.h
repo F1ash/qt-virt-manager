@@ -4,8 +4,8 @@
 #include <QAbstractItemModel>
 #include <QIcon>
 #include <QList>
-#include <QDebug>
 #include "snapshot_tree_index.h"
+//#include <QDebug>
 
 class SnapshotTreeModel : public QAbstractItemModel
 {

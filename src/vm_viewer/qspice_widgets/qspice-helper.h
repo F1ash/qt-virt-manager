@@ -26,7 +26,7 @@
 extern "C" {
 #include <spice-client.h>
 }
-#include <QDebug>
+//#include <QDebug>
 
 class QSpiceHelper
 {

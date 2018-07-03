@@ -22,8 +22,9 @@
 #warning "Only <qspice-widget.h> can be included directly"
 #endif
 
+#include <QObject>
 #include <QStringList>
-#include <QDebug>
+//#include <QDebug>
 
 class QSpiceObject : public QObject
 {

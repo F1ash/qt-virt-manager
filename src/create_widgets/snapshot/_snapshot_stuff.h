@@ -8,7 +8,7 @@
 #include <QCheckBox>
 #include "_disks.h"
 #include "set_disks_data_thread.h"
-#include <QDebug>
+//#include <QDebug>
 
 class _SnapshotStuff : public QWidget
 {

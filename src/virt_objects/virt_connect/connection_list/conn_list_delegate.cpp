@@ -1,5 +1,5 @@
 #include "conn_list_delegate.h"
-#include <QDebug>
+//#include <QDebug>
 
 ConnListDelegate::ConnListDelegate(
         QObject *parent) :

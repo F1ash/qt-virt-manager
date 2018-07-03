@@ -6,7 +6,7 @@
 #include <QList>
 #include <QMap>
 #include "conn_item_index.h"
-#include <QDebug>
+//#include <QDebug>
 
 class ConnItemModel : public QAbstractTableModel
 {

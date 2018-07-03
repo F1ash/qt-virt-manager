@@ -217,7 +217,7 @@ void VirtInterfaceControl::entityClicked(const QPoint &p)
 void VirtInterfaceControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<virtIfaceModel->DataList.at(index.row())->getName();
+        //qDebug()<<virtIfaceModel->DataList.at(index.row())->getName();
     }
 }
 void VirtInterfaceControl::execAction(const Act_Param &param)

@@ -1,6 +1,6 @@
 #include "proxy_widget.h"
 #include <QPainter>
-#include <QDebug>
+//#include <QDebug>
 
 #define ICON_NATIVE_SIZE 256
 

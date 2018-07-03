@@ -1,5 +1,6 @@
 #include "storage_pool_control_thread.h"
 #include <QDomDocument>
+#include <QTextStream>
 
 StoragePoolControlThread::StoragePoolControlThread(QObject *parent) :
     ControlThread(parent)

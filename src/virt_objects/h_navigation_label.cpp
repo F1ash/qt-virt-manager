@@ -1,14 +1,16 @@
 #include "h_navigation_label.h"
 #include <QPainter>
-#include <QDebug>
+//#include <QDebug>
 
-#define L_OPACITY  0.20
+#define L_OPACITY   0.20
 
-HNavigationLabel::HNavigationLabel(QWidget *parent) :
-    QLabel(parent)
+HNavigationLabel::HNavigationLabel(
+        QWidget *parent,
+        DIRECT   direction) :
+    QLabel(parent), direction(direction)
 {
     inUsage = false;
-    opacity = 0;
+    opacity = 0.0;
     setMouseTracking(true);
 }
 
@@ -33,6 +35,17 @@ void HNavigationLabel::mouseReleaseEvent(QMouseEvent *ev)
     if ( !inUsage ) return;
     if ( ev->type()==QEvent::MouseButtonRelease ) {
         emit released();
+    };
+}
+void HNavigationLabel::wheelEvent(QWheelEvent *ev)
+{
+    ev->accept();
+    if ( !inUsage ) return;
+    if ( ev->type()==QEvent::Wheel ) {
+        int _d = static_cast<int>(direction);
+        if ( _d*ev->angleDelta().y()>0 ) {
+            emit released();
+        };
     };
 }
 void HNavigationLabel::enterEvent(QEvent *ev)

@@ -6,7 +6,7 @@
 #include <QIcon>
 #include <QStringList>
 #include "virt_objects/virt_entity_enums.h"
-#include <QDebug>
+//#include <QDebug>
 
 class VirtNWFilterControlMenu : public QMenu
 {

@@ -3,7 +3,7 @@
 
 #include "dhcp_widget.h"
 #include <QComboBox>
-#include <QDebug>
+//#include <QDebug>
 
 class _IPvX : public _QWidget
 {

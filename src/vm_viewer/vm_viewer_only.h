@@ -19,7 +19,7 @@
 #include <QSettings>
 #include "viewer_toolbar.h"
 #include "ssh_tunnel/ssh_tunnel.h"
-#include <QDebug>
+//#include <QDebug>
 
 #define PERIOD      333
 

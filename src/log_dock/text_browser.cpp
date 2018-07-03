@@ -5,11 +5,11 @@
 TextBrowser::TextBrowser(QWidget *parent) :
     QTextBrowser(parent)
 {
-    prevL = new HNavigationLabel(this);
+    prevL = new HNavigationLabel(this, DIRECT::PREV);
     prevL->setToolTip(tr("Previous dock"));
-    nextL = new HNavigationLabel(this);
+    nextL = new HNavigationLabel(this, DIRECT::NEXT);
     nextL->setToolTip(tr("Next dock"));
-    homeL = new HNavigationLabel(this);
+    homeL = new HNavigationLabel(this, DIRECT::NONE);
     homeL->setToolTip(tr("To dock page"));
     next = QIcon::fromTheme("next")
             .pixmap(HNAVY_SIZE);

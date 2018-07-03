@@ -8,8 +8,8 @@
 #include <QCheckBox>
 #include <QDomDocument>
 #include "CPU_Models.h"
-#include <QDebug>
 #include "create_widgets/common/_changed.h"
+//#include <QDebug>
 
 class CPU_Model : public _Changed
 {

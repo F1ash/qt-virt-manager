@@ -8,7 +8,7 @@
 #include <QVBoxLayout>
 #include <QWheelEvent>
 #include "bar_name.h"
-#include <QDebug>
+//#include <QDebug>
 
 class DockHeadWidget : public QWidget
 {

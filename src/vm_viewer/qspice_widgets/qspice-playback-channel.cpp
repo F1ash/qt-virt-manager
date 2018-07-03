@@ -69,7 +69,7 @@ void QSpiceHelper::playback_start(SpicePlaybackChannel *channel,
     _playback->audioFormat.setSampleRate(rate);
     QAudioDeviceInfo info(QAudioDeviceInfo::defaultInputDevice());
     if (!info.isFormatSupported(_playback->audioFormat)) {
-        qWarning()<<"default format not supported, try to use nearest";
+        //qWarning()<<"default format not supported, try to use nearest";
         _playback->audioFormat = info.nearestFormat(_playback->audioFormat);
     };
     if ( _playback->audioOutput==nullptr ) {

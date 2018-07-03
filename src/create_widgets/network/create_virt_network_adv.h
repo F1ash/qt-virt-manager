@@ -11,7 +11,7 @@
 #include "network_widgets/forward_widget.h"
 #include "network_widgets/addressing_widget.h"
 #include "network_widgets/qos_widget.h"
-#include <QDebug>
+//#include <QDebug>
 
 class CreateVirtNetwork_Adv : public QWidget
 {

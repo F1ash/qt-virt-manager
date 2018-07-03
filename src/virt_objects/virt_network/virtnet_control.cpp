@@ -220,7 +220,7 @@ void VirtNetControl::entityClicked(const QPoint &p)
 void VirtNetControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<virtNetModel->DataList.at(index.row())->getName();
+        //qDebug()<<virtNetModel->DataList.at(index.row())->getName();
     }
 }
 void VirtNetControl::execAction(const Act_Param &param)

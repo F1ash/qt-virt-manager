@@ -251,7 +251,7 @@ void VirtStorageVolControl::entityClicked(const QPoint &p)
 void VirtStorageVolControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<storageVolModel->DataList.at(index.row())->getName();
+        //qDebug()<<storageVolModel->DataList.at(index.row())->getName();
     }
 }
 void VirtStorageVolControl::execAction(const Act_Param &param)

@@ -9,7 +9,7 @@
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QSettings>
-#include <QDebug>
+//#include <QDebug>
 
 class QSpiceSmartcardWidget : public QDialog
 {

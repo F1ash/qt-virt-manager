@@ -8,7 +8,7 @@
 #include <QTimerEvent>
 #include <QSettings>
 #include "virt_objects/virt_entity_enums.h"
-#include <QDebug>
+//#include <QDebug>
 
 class VirtSecretToolBar : public QToolBar
 {

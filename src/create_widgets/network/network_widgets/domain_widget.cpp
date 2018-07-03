@@ -51,11 +51,7 @@ void Domain_Widget::setDataDescription(const QString &_xmlDesc)
             if ( !n.isEmpty() ) {
                 domain->setText(n);
             };
-            if ( !l.isEmpty() ) {
-                localOnly->setChecked(
-                            (l.compare("on")==0)?
-                                Qt::Checked : Qt::Unchecked);
-            };
+            localOnly->setChecked(l.compare("on")==0);
         };
     };
 }

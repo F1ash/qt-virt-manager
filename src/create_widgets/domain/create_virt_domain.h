@@ -11,7 +11,7 @@
 #include <QCloseEvent>
 #include "virt_objects/virt_entity_config.h"
 #include "create_widgets/common/_qwidget_threaded.h"
-#include <QDebug>
+//#include <QDebug>
 
 class HelperThread : public _VirtThread
 {

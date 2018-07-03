@@ -5,7 +5,7 @@
 #include <QIcon>
 #include <QList>
 #include "secret_index.h"
-#include <QDebug>
+//#include <QDebug>
 
 class VirtSecretModel : public QAbstractTableModel
 {

@@ -209,7 +209,7 @@ void VirtNWFilterControl::entityClicked(const QPoint &p)
 void VirtNWFilterControl::entityDoubleClicked(const QModelIndex &index)
 {
     if ( index.isValid() ) {
-        qDebug()<<virtNWFilterModel->DataList.at(index.row())->getUUID();
+        //qDebug()<<virtNWFilterModel->DataList.at(index.row())->getUUID();
     }
 }
 void VirtNWFilterControl::execAction(const Act_Param &param)

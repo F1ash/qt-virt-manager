@@ -4,8 +4,8 @@
 #include <QAbstractTableModel>
 #include <QIcon>
 #include <QList>
-#include <QDebug>
 #include "storage_vol_index.h"
+//#include <QDebug>
 
 class StorageVolModel : public QAbstractTableModel
 {

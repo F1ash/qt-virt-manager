@@ -2,7 +2,7 @@
 #define _CHANGED_H
 
 #include <QWidget>
-#include <QDebug>
+//#include <QDebug>
 
 class _Changed : public QWidget
 {

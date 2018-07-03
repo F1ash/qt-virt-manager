@@ -20,7 +20,7 @@ void VirtEventLoop::run()
             libVersion.append("?.??.???");
         } else {
             success = true;
-            uint maj, min, rel;
+            ulong maj, min, rel;
             maj = libVer/1000000;
             min = (libVer-maj*1000000)/1000;
             rel = (libVer-maj*1000000-min*1000);

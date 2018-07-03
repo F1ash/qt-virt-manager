@@ -3,7 +3,7 @@
 
 #include <QStringList>
 #include "virt_objects/_virt_thread.h"
-#include <QDebug>
+//#include <QDebug>
 
 class SearchThread : public _VirtThread
 {

@@ -3,8 +3,8 @@
 
 #include <QThread>
 #include <QTime>
-#include <QDebug>
 #include "virt_objects/_virt_thread.h"
+//#include <QDebug>
 
 class DomainMonitorThread : public _VirtThread
 {

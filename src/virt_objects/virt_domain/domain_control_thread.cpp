@@ -852,7 +852,7 @@ Result DomControlThread::migrateDomain()
             migrated = nullptr!=newDomain;
             if (migrated) virDomainFree( newDomain );
         } else {
-            qDebug()<< "migrate to URI";
+            //qDebug()<< "migrate to URI";
             migrated = (virDomainMigrateToURI(
                             domain,
                             task.args.path.toUtf8().data(),

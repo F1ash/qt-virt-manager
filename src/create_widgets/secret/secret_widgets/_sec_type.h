@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QDomDocument>
 #include "virt_objects/virt_entity_config.h"
-#include <QDebug>
+//#include <QDebug>
 
 class _SecType : public QWidget
 {

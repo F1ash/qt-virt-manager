@@ -89,10 +89,7 @@ void Bridge_Widget::setDataDescription(const QString &_xmlDesc)
             m = _bridge.attribute("macTableManager");
             if ( !n.isEmpty() )
                 bridgeName->setText(n);
-            if ( !s.isEmpty() )
-                stp->setChecked(
-                            (s.compare("on")==0)?
-                                Qt::Checked : Qt::Unchecked);
+            stp->setChecked(s.compare("on")==0);
             if ( !d.isEmpty() )
                 delay->setValue(d.toInt());
             if ( !m.isEmpty() ) {

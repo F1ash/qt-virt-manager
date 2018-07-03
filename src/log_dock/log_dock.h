@@ -17,7 +17,7 @@
 #include <QCheckBox>
 #include <QSpinBox>
 #include "text_browser.h"
-#include <QDebug>
+//#include <QDebug>
 
 #define ONE_MB 1048576
 

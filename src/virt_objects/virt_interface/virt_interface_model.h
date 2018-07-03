@@ -5,7 +5,7 @@
 #include <QIcon>
 #include <QList>
 #include "virt_interface_index.h"
-#include <QDebug>
+//#include <QDebug>
 
 class VirtIfaceModel : public QAbstractTableModel
 {

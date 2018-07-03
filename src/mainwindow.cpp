@@ -224,17 +224,13 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         //qDebug()<<"DomainEditors cleared";
         wait_thread = new Wait(this, connListWidget->list);
         // stop virtEventLoop after closing all connections;
-        // used 'terminate', because 'virEventRunDefaultImpl'
-        // not occures when libvirt unavailable.
         connect(wait_thread, SIGNAL(finished()),
-                virtEventLoop, SLOT(terminate()));
+                virtEventLoop, SLOT(stop()));
         wait_thread->start();
         ev->ignore();
         startCloseProcess();
     } else if ( virtEventLoop->isRunning() ) {
-        // used 'terminate', because 'virEventRunDefaultImpl'
-        // not occures when libvirt unavailable.
-        virtEventLoop->terminate();
+        virtEventLoop->stop();
         ev->ignore();
     } else if ( !runningConnExist() &&
                 (wait_thread==nullptr || !wait_thread->isRunning()) ) {
@@ -661,7 +657,7 @@ void MainWindow::initDockWidgets()
 void MainWindow::initVirEventloop()
 {
     virtEventLoop = new VirtEventLoop(this);
-    // close application after closing virtEventLoop
+    // close application after closing virtEventLoop if reloadFlag is false
     connect(virtEventLoop, SIGNAL(finished()),
             this, SLOT(virtEventLoopFinished()));
     connect(virtEventLoop, SIGNAL(errorMsg(const QString&, const uint)),
@@ -698,14 +694,9 @@ void MainWindow::restartApplication()
     closeAllConnections();
     wait_thread = new Wait(this, connListWidget->list);
     // stop virtEventLoop after closing all connections;
-    // used 'terminate', because 'virEventRunDefaultImpl'
-    // not occures when libvirt unavailable.
     connect(wait_thread, SIGNAL(finished()),
-            virtEventLoop, SLOT(terminate()));
+            virtEventLoop, SLOT(stop()));
     wait_thread->start();
-    // used 'terminate', because 'virEventRunDefaultImpl'
-    // not occures when libvirt unavailable.
-    //virtEventLoop->terminate();
 }
 void MainWindow::initConnections(bool started)
 {
@@ -741,6 +732,7 @@ void MainWindow::initConnections(bool started)
 }
 void MainWindow::startRadarAnimation()
 {
+    menuBar->viewMenu->setEnabled(false);
     menuBar->fileMenu->setEnabled(false);
     connListWidget->list->setEnabled(false);
     connListWidget->toolBar->setEnabled(false);
@@ -748,12 +740,12 @@ void MainWindow::startRadarAnimation()
 }
 void MainWindow::finishRadarAnimation()
 {
-    menuBar->fileMenu->setEnabled(true);
+    if ( reloadFlag ) initConnectionsCompleted();
+    connListWidget->list->loadL->stop();
     connListWidget->list->setEnabled(true);
     connListWidget->toolBar->setEnabled(true);
-    connListWidget->list->loadL->stop();
-    if ( reloadFlag )
-        initConnectionsCompleted();
+    menuBar->fileMenu->setEnabled(true);
+    menuBar->viewMenu->setEnabled(true);
 }
 void MainWindow::initConnectionsCompleted()
 {

@@ -1,7 +1,7 @@
 #include "st_stacked_widget.h"
 #include "dock_head_widgets/dock_widget.h"
 #include <QMainWindow>
-#include <QDebug>
+//#include <QDebug>
 
 ST_StackedWidget::ST_StackedWidget(QWidget *parent) :
     QStackedWidget(parent)

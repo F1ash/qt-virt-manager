@@ -119,7 +119,7 @@ void QSpiceSession::init()
     //       <<"\nDEBUG mode:"<<(bool)spice_util_get_debug();
     gobject = spice_session_new ();
     if ( nullptr==gobject ) {
-        qDebug()<<"session not inited";
+        //qDebug()<<"session not inited";
         return;
     };
     //setEnableClientSockets(true);
@@ -132,7 +132,7 @@ void QSpiceSession::init()
                      GCallback(QSpiceHelper::ss_channel_new), this);
     g_signal_connect(gobject, "channel-destroy",
                      GCallback(QSpiceHelper::ss_channel_destroy), this);
-    qDebug()<<getSharedDir()<<"shared";
+    //qDebug()<<getSharedDir()<<"shared";
 #if WITH_LIBCACARD
     // http://www.spice-space.org/page/SmartcardUsage#Using_a_software_smartcard
     // for test only
@@ -140,7 +140,7 @@ void QSpiceSession::init()
         setSmartcardDB(QString("%1/.netscape").arg(qgetenv("HOME").data()));
         setSmartcardCAC(QStringList()<<"cert1"<<"cert2"<<"cert3");
     };
-    qDebug()<<getSmartcardDB()<<"DB"<<getSmartcardCAC()<<"SmartcardCAC";
+    //qDebug()<<getSmartcardDB()<<"DB"<<getSmartcardCAC()<<"SmartcardCAC";
 #endif
 }
 

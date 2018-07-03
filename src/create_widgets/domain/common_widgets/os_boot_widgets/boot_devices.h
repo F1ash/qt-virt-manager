@@ -6,8 +6,8 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QDomDocument>
-#include <QDebug>
 #include "create_widgets/common/_changed.h"
+//#include <QDebug>
 
 class Boot_Devices : public _Changed
 {

@@ -4,7 +4,7 @@
 #include <QTimerEvent>
 #include "vm_viewer/qterminal/term_mainwindow.h"
 #include "lxc_viewer_thread.h"
-#include <QDebug>
+//#include <QDebug>
 
 class lxcHlpThread : public _VirtThread
 {

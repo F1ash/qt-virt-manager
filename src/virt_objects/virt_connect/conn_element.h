@@ -7,7 +7,7 @@
 #include "conn_alive_thread.h"
 #include "settings/conn_settings.h"
 #include "connection_list/conn_item_model.h"
-#include <QDebug>
+//#include <QDebug>
 
 #define AVAILABLE     true
 #define NOT_AVAILABLE false

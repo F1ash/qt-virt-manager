@@ -1,5 +1,4 @@
 #include "conn_list_widget.h"
-#include <QMutexLocker>
 
 ConnectionList::ConnectionList(QWidget *parent)
     : TreeView(parent)
@@ -608,7 +607,6 @@ void ConnectionList::setOnViewAvailableConnection(const QString &_newName)
 {
     if ( waitLocalConn->isRunning() ) return;
     if ( searchThread->isRunning() ) return;
-    QMutexLocker locker(&mutex);
     if ( onViewExist || connections->count()==0 ) return;
     QList<ConnItemIndex*>::const_iterator i;
     for (i=connItemModel->connItemDataList.constBegin();

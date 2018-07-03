@@ -5,7 +5,7 @@
 #include <QString>
 #include <libvirt.h>
 #include <virterror.h>
-#include <QDebug>
+//#include <QDebug>
 
 class _VirtThread : public QThread
 {

@@ -5,7 +5,7 @@
 #include <QTimerEvent>
 #include <QPalette>
 #include <QIcon>
-#include <QDebug>
+//#include <QDebug>
 
 class DockWidget : public QDockWidget
 {

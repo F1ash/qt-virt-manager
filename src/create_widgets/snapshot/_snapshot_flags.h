@@ -3,8 +3,8 @@
 
 #include <QMenuBar>
 #include <QActionGroup>
-#include <QDebug>
 #include <math.h>
+//#include <QDebug>
 
 class _SnapshotFlags : public QMenu
 {

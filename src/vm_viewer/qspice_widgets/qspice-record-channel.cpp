@@ -31,16 +31,16 @@ void QSpiceHelper::record_start(SpiceRecordChannel *channel,
     _record->audioFormat.setSampleRate(rate);
     QAudioDeviceInfo info(QAudioDeviceInfo::defaultInputDevice());
     if (!info.isFormatSupported(_record->audioFormat)) {
-        qWarning()<<"default format not supported, try to use nearest";
+        //qWarning()<<"default format not supported, try to use nearest";
         _record->audioFormat = info.nearestFormat(_record->audioFormat);
     };
     if ( _record->audioInput==nullptr ) {
         _record->audioInput = new QAudioInput(
                     _record->audioFormat, _record);
-        qDebug()<<"record_start"<<_record->audioInput;
+        //qDebug()<<"record_start"<<_record->audioInput;
         if ( _record->_dev && !_record->_dev->isOpen() ) {
             bool opened = _record->_dev->open();
-            qDebug()<<"record_dev_opened"<<opened;
+            //qDebug()<<"record_dev_opened"<<opened;
         };
         _record->audioInput->start(_record->_dev);
     };

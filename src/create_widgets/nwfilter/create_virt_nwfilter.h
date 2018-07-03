@@ -13,7 +13,7 @@
 #include <virt_objects/_virt_thread.h>
 #include "filterref_widget/filterref_widget.h"
 #include "chain_widget/chain_rules.h"
-#include <QDebug>
+//#include <QDebug>
 
 class NetFilterHelperThread : public _VirtThread
 {

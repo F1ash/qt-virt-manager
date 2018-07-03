@@ -9,7 +9,7 @@
 #include <QSettings>
 #include "virt_objects/open_file_menu.h"
 //#include "delete_pool_menu.h"
-#include <QDebug>
+//#include <QDebug>
 
 class StoragePoolToolBar : public QToolBar
 {

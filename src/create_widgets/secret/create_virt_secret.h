@@ -15,7 +15,7 @@
 #include <QDomDocument>
 #include <QStackedWidget>
 #include "virt_objects/virt_entity_config.h"
-#include <QDebug>
+//#include <QDebug>
 
 class CreateVirtSecret : public QDialog
 {

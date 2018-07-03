@@ -9,7 +9,7 @@
 #include <QMoveEvent>
 #include "vm_state_widget.h"
 #include "virt_objects/virt_entity_enums.h"
-#include <QDebug>
+//#include <QDebug>
 
 class ViewerToolBar : public QToolBar
 {

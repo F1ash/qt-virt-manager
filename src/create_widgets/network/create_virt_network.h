@@ -12,7 +12,7 @@
 #include <virt_objects/_virt_thread.h>
 #include "create_virt_network_adv.h"
 #include "create_virt_network_ass.h"
-#include <QDebug>
+//#include <QDebug>
 
 class NetHelperThread : public _VirtThread
 {

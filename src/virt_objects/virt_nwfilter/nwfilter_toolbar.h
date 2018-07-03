@@ -8,7 +8,7 @@
 #include <QTimerEvent>
 #include <QSettings>
 #include "virt_objects/open_file_menu.h"
-#include <QDebug>
+//#include <QDebug>
 
 class VirtNWFilterToolBar : public QToolBar
 {

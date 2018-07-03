@@ -4,8 +4,8 @@
 #include <QAbstractTableModel>
 #include <QIcon>
 #include <QList>
-#include <QDebug>
 #include "index.h"
+//#include <QDebug>
 
 class Model : public QAbstractTableModel
 {

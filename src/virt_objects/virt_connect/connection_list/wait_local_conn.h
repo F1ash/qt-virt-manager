@@ -5,7 +5,7 @@
 #include <QRegExp>
 #include "conn_item_model.h"
 #include "virt_objects/virt_connect/conn_element.h"
-#include <QDebug>
+//#include <QDebug>
 
 typedef QMap<QString, ConnElement*> CONN_LIST;
 

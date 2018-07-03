@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QDomDocument>
 #include "_disk_item.h"
-#include <QDebug>
+//#include <QDebug>
 
 class _Disks : public QScrollArea
 {

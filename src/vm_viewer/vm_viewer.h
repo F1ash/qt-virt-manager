@@ -21,7 +21,7 @@
 #include "create_widgets/snapshot/create_snapshot_dialog.h"
 #include "create_widgets/snapshot/snapshot_action_dialog.h"
 #include "ssh_tunnel/ssh_tunnel.h"
-#include <QDebug>
+//#include <QDebug>
 
 #define PERIOD      333
 

@@ -9,8 +9,8 @@
 #include <QLineEdit>
 #include <QGridLayout>
 #include <QDomDocument>
-#include <QDebug>
 #include "create_widgets/common/_changed.h"
+//#include <QDebug>
 
 class CPU_Allocation : public _Changed
 {

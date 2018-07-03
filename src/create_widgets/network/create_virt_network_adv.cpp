@@ -127,14 +127,16 @@ void CreateVirtNetwork_Adv::readXmlDescData(const QString &_xmlDesc)
         _ip = _network.firstChildElement("ip");
         _route = _network.firstChildElement("route");
         _forward = _network.firstChildElement("forward");
-        if ( _network.hasAttribute("ipv6") )
+        if ( _network.hasAttribute("ipv6") ) {
             ipv6->setChecked(
-                        (_network.attribute("ipv6").compare("yes")==0)?
-                            Qt::Checked : Qt::Unchecked);
-        if ( _network.hasAttribute("trustGuestRxFilters") )
+                        _network.attribute(
+                            "ipv6").compare("yes")==0);
+        };
+        if ( _network.hasAttribute("trustGuestRxFilters") ) {
             trustGuestRxFilters->setChecked(
-                        (_network.attribute("trustGuestRxFilters").compare("yes")==0)?
-                            Qt::Checked : Qt::Unchecked);
+                        _network.attribute(
+                            "trustGuestRxFilters").compare("yes")==0);
+        };
         _name = _network.firstChildElement("name");
         _uuid = _network.firstChildElement("uuid");
         networkName->setText(_name.text());
@@ -145,7 +147,9 @@ void CreateVirtNetwork_Adv::readXmlDescData(const QString &_xmlDesc)
         addressingWdg->setDataDescription(_xmlDesc);
         QoSWdg->setDataDescription(_xmlDesc);
         noGW->setChecked(
-                    _ip.isNull() && _route.isNull() && _forward.isNull() );
+                    _ip.isNull() &&
+                    _route.isNull() &&
+                    _forward.isNull() );
     };
 }
 

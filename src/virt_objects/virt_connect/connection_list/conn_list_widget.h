@@ -9,7 +9,7 @@
 #include "conn_list_delegate.h"
 #include "search_thread.h"
 #include "wait_local_conn.h"
-#include <QDebug>
+//#include <QDebug>
 
 #define TO_RUN true
 #define TO_STOP false
