@@ -163,7 +163,7 @@ void VNC_Viewer::pasteClipboardToVirtDomain()
     if ( nullptr==vncWdg ) return;
     const QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
     const QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
-    qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
+    //qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
     if ( !_text.isEmpty() ) {
         //vncWdg->sendClipboardDataToGuest(
         //            VD_AGENT_CLIPBOARD_UTF8_TEXT,

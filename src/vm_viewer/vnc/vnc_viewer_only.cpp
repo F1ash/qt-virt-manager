@@ -145,7 +145,7 @@ void VNC_Viewer_Only::pasteClipboardToVirtDomain()
     if ( nullptr==vncWdg ) return;
     const QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
     const QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
-    qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
+    //qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
     if ( !_text.isEmpty() ) {
         //vncWdg->sendClipboardDataToGuest(
         //            VD_AGENT_CLIPBOARD_UTF8_TEXT,
@@ -165,7 +165,7 @@ void VNC_Viewer_Only::pasteClipboardToVirtDomain()
                         .arg(_text));
             return;
         } else if ( _format.toLower().compare("png")==0 ) {
-            qDebug()<<"png";
+            //qDebug()<<"png";
             _frmt = VD_AGENT_CLIPBOARD_IMAGE_PNG;
         } else if ( _format.toLower().compare("bmp")==0 ) {
             _frmt = VD_AGENT_CLIPBOARD_IMAGE_BMP;

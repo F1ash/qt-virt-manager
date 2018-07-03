@@ -114,7 +114,7 @@ void QSpiceSmartcardManager::init()
         //qDebug()<<"SpiceSmartcardManager not initiated";
     }
 #else
-        qDebug()<<"WITHOUT_LIBCACARD";
+        //qDebug()<<"WITHOUT_LIBCACARD";
 #endif
 }
 
