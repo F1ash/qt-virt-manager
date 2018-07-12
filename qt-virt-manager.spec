@@ -1,8 +1,8 @@
 %global binname qt5-virt-manager
 
 Name:           qt-virt-manager
-Version:        0.60.88
-Release:        3%{?dist}
+Version:        0.70.90
+Release:        1%{?dist}
 Summary:        Qt Virtual Machine Manager
 
 License:        GPLv2+
@@ -114,6 +114,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/qt5-remote-viewer.de
 
 
 %changelog
+* Thu Jul 12 2018 Fl@sh <kaperang07@gmail.com> - 0.70.90-1
+- version updated;
+
 * Fri Apr 20 2018 Fl@sh <kaperang07@gmail.com> - 0.60.88-3
 - added bundled qterminal Provides;
 - release updated;
