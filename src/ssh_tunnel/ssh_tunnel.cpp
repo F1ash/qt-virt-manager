@@ -7,6 +7,7 @@ SSH_Tunnel::SSH_Tunnel(QObject *parent) :
 {
     ssh_tunnel = new QProcess();
     ssh_tunnel->setProcessChannelMode(QProcess::SeparateChannels);
+    ssh_tunnel->moveToThread(this);
 }
 
 void SSH_Tunnel::setData(QVariantMap _data)
@@ -66,7 +67,7 @@ void SSH_Tunnel::stop()
 {
     if ( ssh_tunnel==Q_NULLPTR ) return;
     if ( ssh_tunnel->isOpen() ) {
-        ssh_tunnel->close();
+        //ssh_tunnel->close();
         ssh_tunnel->kill();
     };
 }

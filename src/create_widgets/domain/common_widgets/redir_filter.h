@@ -8,7 +8,7 @@ class RedirFilter : public _List_Widget
     Q_OBJECT
 public:
     explicit RedirFilter(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag    = "");
     void             clearList();
 

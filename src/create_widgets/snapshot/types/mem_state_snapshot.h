@@ -8,7 +8,7 @@ class MemStateSnapshot : public _SnapshotStuff
     Q_OBJECT
 public:
     explicit MemStateSnapshot(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             bool     _state = false);
 
 private:

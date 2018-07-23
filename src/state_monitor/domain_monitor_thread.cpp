@@ -11,8 +11,8 @@ DomainMonitorThread::DomainMonitorThread(
 DomainMonitorThread::~DomainMonitorThread()
 {
     // release the reference because no longer required
-    if ( ptr_ConnPtr!=nullptr && nullptr!=*ptr_ConnPtr ) {
-        if ( nullptr!=domain ) {
+    if ( ptr_ConnPtr!=Q_NULLPTR && Q_NULLPTR!=*ptr_ConnPtr ) {
+        if ( Q_NULLPTR!=domain ) {
             if ( virDomainFree(domain)<0 )
                 sendConnErrors();
         };
@@ -20,7 +20,7 @@ DomainMonitorThread::~DomainMonitorThread()
         //qDebug()<<"virConnectRef -1"<<"DomainStateViewer"<<domainName<<(ret+1>0);
         // for reject the multiple releasing the reference
         if ( ret<0 ) sendConnErrors();
-        //*ptr_ConnPtr = nullptr;
+        //*ptr_ConnPtr = Q_NULLPTR;
     };
 }
 
@@ -31,20 +31,20 @@ void DomainMonitorThread::run()
 {
     if ( firstStep ) {
         // for new virConnect usage create the new virConnectRef[erence]
-        if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
+        if ( Q_NULLPTR!=ptr_ConnPtr && Q_NULLPTR!=*ptr_ConnPtr ) {
             if ( virConnectRef(*ptr_ConnPtr)<0 ) {
-                ptr_ConnPtr = nullptr;
+                ptr_ConnPtr = Q_NULLPTR;
                 sendConnErrors();
             } else {
                 //qDebug()<<"virConnectRef +1"<<"DomainMonitorThread"<<domainName<<(ret+1>0);
                 domain = virDomainLookupByName(
                             *ptr_ConnPtr, domainName.toUtf8().data());
-                if ( nullptr==domain ) sendConnErrors();
+                if ( Q_NULLPTR==domain ) sendConnErrors();
             };
         } else
             emit ptrIsNull();
     };
-    if ( nullptr!=domain ) {
+    if ( Q_NULLPTR!=domain ) {
         virDomainInfo info;
         quint64 curr_cpuTime, cpu_time_diff, _time_diff,
                 CPU_percent, MEM_percent, MEM;

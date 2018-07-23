@@ -12,7 +12,7 @@ class ConnItemModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit ConnItemModel(QObject *parent = nullptr);
+    explicit ConnItemModel(QObject *parent = Q_NULLPTR);
     ~ConnItemModel();
     QList<ConnItemIndex *>  connItemDataList;
 

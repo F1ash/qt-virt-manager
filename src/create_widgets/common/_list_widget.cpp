@@ -35,8 +35,8 @@ void _List_Widget::delItem()
 {
     int row = list->currentRow();
     QListWidgetItem *_item = list->takeItem(row);
-    if ( nullptr!=_item ) {
+    if ( Q_NULLPTR!=_item ) {
         delete _item;
-        _item = nullptr;
+        _item = Q_NULLPTR;
     };
 }

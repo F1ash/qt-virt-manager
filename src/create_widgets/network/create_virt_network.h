@@ -19,8 +19,8 @@ class NetHelperThread : public _VirtThread
     Q_OBJECT
 public:
     explicit NetHelperThread(
-            QObject        *parent      = nullptr,
-            virConnectPtr  *connPtrPtr  = nullptr);
+            QObject        *parent      = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr  = Q_NULLPTR);
     void             run();
 };
 
@@ -29,7 +29,7 @@ class CreateVirtNetwork : public QMainWindow
     Q_OBJECT
 public:
     explicit CreateVirtNetwork(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             TASK     _task  = TASK());
     ~CreateVirtNetwork();
 
@@ -40,19 +40,19 @@ signals:
 
 private:
     QSettings        settings;
-    virConnectPtr*   ptr_ConnPtr = nullptr;
+    virConnectPtr*   ptr_ConnPtr = Q_NULLPTR;
     QString          xmlFileName, xmlDesc;
     virErrorPtr      virtErrors;
 
-    QTemporaryFile  *xml = nullptr;
+    QTemporaryFile  *xml = Q_NULLPTR;
     bool             newbe = false;
     TASK             task;
 
     NetHelperThread *hlpThread;
     CreateVirtNetwork_Adv
-                    *advancedWdg = nullptr;
+                    *advancedWdg = Q_NULLPTR;
     CreateVirtNetwork_Ass
-                    *assistantWdg = nullptr;
+                    *assistantWdg = Q_NULLPTR;
 
 public slots:
     void             closeEvent(QCloseEvent*);

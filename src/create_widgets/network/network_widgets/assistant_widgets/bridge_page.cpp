@@ -22,7 +22,7 @@ int BridgePage::nextId() const
 {
     ForwardPage *f = static_cast<ForwardPage*>(
                 wizard()->page(CreateVirtNetwork_Ass::Page_Forward));
-    if ( nullptr!=f ) {
+    if ( Q_NULLPTR!=f ) {
         f->fr->setUsage(true);
         f->fr->setCurrentMode("bridge");
     };

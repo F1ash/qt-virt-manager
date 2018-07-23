@@ -22,7 +22,7 @@ class BIOS_Boot : public _QWidget
     Q_OBJECT
 public:
     explicit BIOS_Boot(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  _caps  = "");
     _Arch           *architecture;
     Path_To_File    *loader;

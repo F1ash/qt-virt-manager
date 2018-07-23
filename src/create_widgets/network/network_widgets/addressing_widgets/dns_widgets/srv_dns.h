@@ -8,7 +8,7 @@ class SRV_DNS : public _List_Widget
     Q_OBJECT
 public:
     explicit SRV_DNS(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag    = "SRVs");
 
 private:

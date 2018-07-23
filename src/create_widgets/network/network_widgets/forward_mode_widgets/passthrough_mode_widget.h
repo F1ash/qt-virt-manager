@@ -7,7 +7,7 @@ class PASSTHROUGH_Mode_widget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit PASSTHROUGH_Mode_widget(QWidget *parent = nullptr);
+    explicit PASSTHROUGH_Mode_widget(QWidget *parent = Q_NULLPTR);
 
 private:
     QLabel          *info;

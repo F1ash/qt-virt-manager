@@ -13,7 +13,7 @@ class VirtSecretControlMenu : public QMenu
     Q_OBJECT
 public:
     explicit VirtSecretControlMenu(
-            QWidget     *parent = nullptr,
+            QWidget     *parent = Q_NULLPTR,
             QStringList  params = QStringList(),
             bool         state  = false);
 
@@ -22,12 +22,12 @@ signals:
 
 private:
     bool            autoReloadState;
-    QAction        *start = nullptr;
-    QAction        *destroy = nullptr;
-    QAction        *undefine = nullptr;
-    QAction        *autoStart = nullptr;
-    QAction        *getXMLDesc = nullptr;
-    QAction        *reload = nullptr;
+    QAction        *start = Q_NULLPTR;
+    QAction        *destroy = Q_NULLPTR;
+    QAction        *undefine = Q_NULLPTR;
+    QAction        *autoStart = Q_NULLPTR;
+    QAction        *getXMLDesc = Q_NULLPTR;
+    QAction        *reload = Q_NULLPTR;
     QStringList     parameters;
 
 private slots:

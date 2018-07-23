@@ -9,7 +9,7 @@ dirAttach_HlpThread::dirAttach_HlpThread(
 }
 void dirAttach_HlpThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -32,7 +32,7 @@ void dirAttach_HlpThread::run()
         // therefore correctly to use for() command,
         // because networks[0] can not exist.
         int i = 0;
-        while ( nodeDevices[i] != nullptr ) {
+        while ( nodeDevices[i] != Q_NULLPTR ) {
             QDomDocument doc;
             QString _dev, _interface;
             // flags: extra flags; not used yet,
@@ -54,7 +54,7 @@ void dirAttach_HlpThread::run()
         if (nodeDevices) free(nodeDevices);
     };
 
-    virNWFilterPtr *filters = nullptr;
+    virNWFilterPtr *filters = Q_NULLPTR;
     //extra flags; not used yet, so callers should always pass 0
     flags = 0;
     ret = virConnectListAllNWFilters(
@@ -70,7 +70,7 @@ void dirAttach_HlpThread::run()
         };
         if (filters) free(filters);
     };
-    //int devs = virNodeNumOfDevices(ptr_ConnPtr, nullptr, 0);
+    //int devs = virNodeNumOfDevices(ptr_ConnPtr, Q_NULLPTR, 0);
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();
     emit result(devices);
@@ -244,7 +244,7 @@ void DirectAttachment::setDataDescription(const QString &_xmlDesc)
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
         addr->type->setEnabled(false);
         PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->domain->setText( _addr.attribute("domain") );
             wdg->bus->setText( _addr.attribute("bus") );
             wdg->slot->setText( _addr.attribute("slot") );

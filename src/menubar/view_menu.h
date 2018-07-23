@@ -7,7 +7,7 @@ class ViewMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit ViewMenu(QWidget *parent = nullptr);
+    explicit ViewMenu(QWidget *parent = Q_NULLPTR);
     QAction         *hardClassic;
     QAction         *softTouched;
 

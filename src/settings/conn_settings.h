@@ -21,7 +21,7 @@ class ConnSettings : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ConnSettings(QWidget *parent = nullptr);
+    explicit ConnSettings(QWidget *parent = Q_NULLPTR);
     QSettings            settings;
 
 signals:

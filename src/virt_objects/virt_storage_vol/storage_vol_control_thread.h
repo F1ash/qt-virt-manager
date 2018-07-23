@@ -9,13 +9,13 @@ class StorageVolControlThread : public ControlThread
 {
     Q_OBJECT
 public:
-    explicit StorageVolControlThread(QObject *parent = nullptr);
+    explicit StorageVolControlThread(QObject *parent = Q_NULLPTR);
 
 signals:
 
 private:
     QString               currPoolName;
-    virStoragePool       *currStoragePool = nullptr;
+    virStoragePool       *currStoragePool = Q_NULLPTR;
 
     const unsigned long long   bytes = 1;
     const unsigned long long   KiB   = 1024;

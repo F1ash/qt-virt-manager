@@ -8,7 +8,7 @@ class Host_Boot : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit Host_Boot(QWidget *parent = nullptr);
+    explicit Host_Boot(QWidget *parent = Q_NULLPTR);
     Path_To_File    *loader;
     QLineEdit       *args;
 

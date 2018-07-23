@@ -15,7 +15,7 @@ class StorageVolControlMenu : public QMenu
     Q_OBJECT
 public:
     explicit StorageVolControlMenu(
-            QWidget     *parent = nullptr,
+            QWidget     *parent = Q_NULLPTR,
             QStringList  params = QStringList(),
             bool         state  = false);
 
@@ -24,14 +24,14 @@ signals:
 
 private:
     bool            autoReloadState;
-    QAction        *delete_Action = nullptr;
-    QAction        *download_Action = nullptr;
-    QAction        *resize_Action = nullptr;
-    QAction        *upload_Action = nullptr;
-    QAction        *wipe_Action = nullptr;
-    WipeMenu       *wipe_Menu = nullptr;
-    QAction        *getXMLDesc_Action = nullptr;
-    QAction        *reload = nullptr;
+    QAction        *delete_Action = Q_NULLPTR;
+    QAction        *download_Action = Q_NULLPTR;
+    QAction        *resize_Action = Q_NULLPTR;
+    QAction        *upload_Action = Q_NULLPTR;
+    QAction        *wipe_Action = Q_NULLPTR;
+    WipeMenu       *wipe_Menu = Q_NULLPTR;
+    QAction        *getXMLDesc_Action = Q_NULLPTR;
+    QAction        *reload = Q_NULLPTR;
     QStringList     parameters;
 
 private slots:

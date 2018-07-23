@@ -15,7 +15,7 @@ class DockHeadWidget : public QWidget
     Q_OBJECT
 public:
     explicit DockHeadWidget(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             const QString = QString());
     void            setFloatible(bool);
 

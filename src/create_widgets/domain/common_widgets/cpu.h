@@ -13,7 +13,7 @@ class CPU : public _Tab
     Q_OBJECT
 public:
     explicit CPU(
-            QWidget *parent   = nullptr,
+            QWidget *parent   = Q_NULLPTR,
             QString  _caps    = "",
             QString  _xmlDesc = QString(),
             uint     cores    = 0);

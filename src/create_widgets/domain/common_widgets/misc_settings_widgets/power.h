@@ -14,7 +14,7 @@ class Power : public _Changed
 {
     Q_OBJECT
 public:
-    explicit Power(QWidget *parent = nullptr);
+    explicit Power(QWidget *parent = Q_NULLPTR);
     QCheckBox       *suspend_to_disk,
                     *suspend_to_mem;
 

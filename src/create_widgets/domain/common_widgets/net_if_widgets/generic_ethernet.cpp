@@ -97,7 +97,7 @@ void Generic_Ethernet::setDataDescription(const QString &_xmlDesc)
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
         addr->type->setEnabled(false);
         PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->domain->setText( _addr.attribute("domain") );
             wdg->bus->setText( _addr.attribute("bus") );
             wdg->slot->setText( _addr.attribute("slot") );

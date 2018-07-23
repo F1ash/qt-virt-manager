@@ -9,7 +9,7 @@ bridge_HlpThread::bridge_HlpThread(
 }
 void bridge_HlpThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -21,7 +21,7 @@ void bridge_HlpThread::run()
                 virConnectGetType(*ptr_ConnPtr))
             .toLower();
 
-    virNWFilterPtr *filters = nullptr;
+    virNWFilterPtr *filters = Q_NULLPTR;
     //extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     int ret = virConnectListAllNWFilters(
@@ -215,7 +215,7 @@ void Bridge_to_LAN::setDataDescription(const QString &_xmlDesc)
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
         addr->type->setEnabled(false);
         PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->domain->setText( _addr.attribute("domain") );
             wdg->bus->setText( _addr.attribute("bus") );
             wdg->slot->setText( _addr.attribute("slot") );

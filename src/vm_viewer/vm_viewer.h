@@ -30,8 +30,8 @@ class VM_Viewer : public QMainWindow
     Q_OBJECT
 public:
     explicit VM_Viewer(
-            QWidget        *parent     = nullptr,
-            virConnectPtr  *connPtrPtr = nullptr,
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr = Q_NULLPTR,
             QString         arg1       = QString(),
             QString         arg2       = QString(),
             QString         arg3       = QString());
@@ -39,9 +39,9 @@ public:
     virtual void     init();
     QString          connName, domain, addrData, TYPE;
     virConnectPtr*   ptr_ConnPtr;
-    virErrorPtr      virtErrors = nullptr;
+    virErrorPtr      virtErrors = Q_NULLPTR;
     QSettings        settings;
-    ViewerToolBar   *viewerToolBar = nullptr;
+    ViewerToolBar   *viewerToolBar = Q_NULLPTR;
     int              timerId = 0;
     int              killTimerId = 0;
     int              toolBarTimerId = 0;
@@ -49,11 +49,11 @@ public:
     int              killCounter = 0;
     int              reinitCounter = 0;
 
-    QVBoxLayout     *infoLayout = nullptr;
-    QLabel          *icon = nullptr, *err_msg = nullptr;
-    QWidget         *info = nullptr;
-    QShortcut       *actFullScreen = nullptr;
-    SSH_Tunnel      *sshTunnelThread = nullptr;
+    QVBoxLayout     *infoLayout = Q_NULLPTR;
+    QLabel          *icon = Q_NULLPTR, *err_msg = Q_NULLPTR;
+    QWidget         *info = Q_NULLPTR;
+    QShortcut       *actFullScreen = Q_NULLPTR;
+    SSH_Tunnel      *sshTunnelThread = Q_NULLPTR;
 
     QString          user, host, transport,
                      addr, port, socket, passwd;

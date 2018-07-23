@@ -7,7 +7,7 @@ class NWFilterControlThread : public ControlThread
 {
     Q_OBJECT
 public:
-    explicit NWFilterControlThread(QObject *parent = nullptr);
+    explicit NWFilterControlThread(QObject *parent = Q_NULLPTR);
 
 signals:
 

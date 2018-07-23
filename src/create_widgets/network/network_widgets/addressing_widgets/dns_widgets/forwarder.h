@@ -8,7 +8,7 @@ class Forwarder : public _List_Widget
     Q_OBJECT
 public:
     Forwarder(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag    = "Forwarders");
 
 private:

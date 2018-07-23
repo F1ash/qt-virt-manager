@@ -28,5 +28,5 @@ void Disk_Edit::setDataDescription(const QString &_xmlDesc)
     source->setCurrentIndex( (idx<0)? 0:idx );
     source->setEnabled(false);
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    if ( nullptr!=wdg ) wdg->setDataDescription(_xmlDesc);
+    if ( Q_NULLPTR!=wdg ) wdg->setDataDescription(_xmlDesc);
 }

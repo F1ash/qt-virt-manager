@@ -66,7 +66,7 @@ protected:
 
 private:
     // pointer to QSpiceWidget:
-    QWidget *parentWdg = nullptr;
+    QWidget *parentWdg = Q_NULLPTR;
     bool     scaled    = false;
 };
 

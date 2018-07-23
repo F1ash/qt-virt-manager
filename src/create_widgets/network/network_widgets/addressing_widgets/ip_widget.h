@@ -11,7 +11,7 @@ class IP_Widget : public _Checked_Widget
     Q_OBJECT
 public:
     IP_Widget(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag = "IP");
 
 private:

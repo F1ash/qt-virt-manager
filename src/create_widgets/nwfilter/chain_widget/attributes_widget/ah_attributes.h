@@ -6,7 +6,7 @@
 class AH_Attributes : public _Attributes
 {
 public:
-    explicit AH_Attributes(QWidget *parent = nullptr);
+    explicit AH_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // AH_ATTRIBUTES_H

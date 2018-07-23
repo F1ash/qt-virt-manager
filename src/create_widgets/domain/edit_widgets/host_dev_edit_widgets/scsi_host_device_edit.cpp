@@ -208,7 +208,7 @@ void SCSI_Host_Device_Edit::setDataDescription(const QString &_xmlDesc)
     addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
         DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->controller->setText( _addr.attribute("controller") );
             wdg->bus->setText( _addr.attribute("bus") );
             wdg->target->setText( _addr.attribute("target") );

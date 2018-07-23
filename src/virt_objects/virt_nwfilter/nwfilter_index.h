@@ -7,7 +7,7 @@ class NWFilter_Index : public QObject
 {
     Q_OBJECT
 public:
-    explicit NWFilter_Index(QObject *parent = nullptr);
+    explicit NWFilter_Index(QObject *parent = Q_NULLPTR);
 
 signals:
 

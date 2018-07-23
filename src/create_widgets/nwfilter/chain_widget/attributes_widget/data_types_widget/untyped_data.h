@@ -12,7 +12,7 @@ class UntypedData : public QWidget
     Q_OBJECT
 public:
     explicit UntypedData(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag    = "");
     void             setMatchUnusable();
     bool             isMatchUnusable() const;

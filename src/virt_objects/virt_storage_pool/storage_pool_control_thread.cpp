@@ -13,11 +13,11 @@ void StoragePoolControlThread::execAction(uint _num, TASK _task)
     number = _num;
     task = _task;
     keep_alive = false;
-    if ( nullptr!=task.srcConnPtr ) {
+    if ( Q_NULLPTR!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
-            task.srcConnPtr = nullptr;
+            task.srcConnPtr = Q_NULLPTR;
             sendConnErrors();
         } else
             keep_alive = true;
@@ -83,8 +83,8 @@ Result StoragePoolControlThread::getAllStoragePoolList()
 {
     Result result;
     ACT_RESULT storagePoolList;
-    if ( task.srcConnPtr!=nullptr && keep_alive ) {
-        virStoragePoolPtr *storagePool = nullptr;
+    if ( task.srcConnPtr!=Q_NULLPTR && keep_alive ) {
+        virStoragePoolPtr *storagePool = Q_NULLPTR;
         unsigned int flags =
                 VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                 VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
@@ -132,8 +132,8 @@ Result StoragePoolControlThread::getAllStoragePoolDataList()
 {
     Result result;
     ACT_RESULT storagePoolDataList;
-    if ( task.srcConnPtr!=nullptr && keep_alive ) {
-        virStoragePoolPtr *storagePool = nullptr;
+    if ( task.srcConnPtr!=Q_NULLPTR && keep_alive ) {
+        virStoragePoolPtr *storagePool = Q_NULLPTR;
         unsigned int flags =
                 VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                 VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
@@ -152,7 +152,7 @@ Result StoragePoolControlThread::getAllStoragePoolDataList()
             QString type, source, target;
             char *Returns = virStoragePoolGetXMLDesc(
                         storagePool[i], VIR_STORAGE_XML_INACTIVE);
-            if ( Returns!=nullptr ) {
+            if ( Returns!=Q_NULLPTR ) {
                 QDomDocument doc;
                 QString s;
                 QTextStream str;
@@ -196,7 +196,7 @@ Result StoragePoolControlThread::createStoragePool()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -216,7 +216,7 @@ Result StoragePoolControlThread::createStoragePool()
     unsigned int flags = 0;
     virStoragePoolPtr storagePool = virStoragePoolCreateXML(
                 *task.srcConnPtr, xmlData.data(), flags);
-    if ( storagePool==nullptr ) {
+    if ( storagePool==Q_NULLPTR ) {
         result.err = sendConnErrors();
         result.result = false;
         return result;
@@ -233,7 +233,7 @@ Result StoragePoolControlThread::defineStoragePool()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -253,7 +253,7 @@ Result StoragePoolControlThread::defineStoragePool()
     unsigned int flags = 0;
     virStoragePoolPtr storagePool = virStoragePoolDefineXML(
                 *task.srcConnPtr, xmlData.data(), flags);
-    if ( storagePool==nullptr ) {
+    if ( storagePool==Q_NULLPTR ) {
         result.err = sendConnErrors();
         result.result = false;
         return result;
@@ -273,7 +273,7 @@ Result StoragePoolControlThread::startStoragePool()
     unsigned int flags = VIR_CONNECT_LIST_STORAGE_POOLS_ACTIVE |
                          VIR_CONNECT_LIST_STORAGE_POOLS_INACTIVE;
     bool started = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -282,7 +282,7 @@ Result StoragePoolControlThread::startStoragePool()
     flags = 0;
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( storagePool!=nullptr ) {
+    if ( storagePool!=Q_NULLPTR ) {
         started = (virStoragePoolCreate(storagePool, flags)+1) ? true : false;
         if (!started)
             result.err = sendConnErrors();
@@ -300,14 +300,14 @@ Result StoragePoolControlThread::destroyStoragePool()
     Result result;
     QString name = task.object;
     bool deleted = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( storagePool!=nullptr ) {
+    if ( storagePool!=Q_NULLPTR ) {
         deleted = (virStoragePoolDestroy(storagePool)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -325,14 +325,14 @@ Result StoragePoolControlThread::undefineStoragePool()
     Result result;
     QString name = task.object;
     bool deleted = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( storagePool!=nullptr ) {
+    if ( storagePool!=Q_NULLPTR ) {
         deleted = (virStoragePoolUndefine(storagePool)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -351,14 +351,14 @@ Result StoragePoolControlThread::changeAutoStartStoragePool()
     QString name = task.object;
     int autostart = task.args.sign;
     bool set = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( storagePool!=nullptr ) {
+    if ( storagePool!=Q_NULLPTR ) {
         set = (virStoragePoolSetAutostart(storagePool, autostart)+1) ? true : false;
         if (!set)
             result.err = sendConnErrors();
@@ -378,14 +378,14 @@ Result StoragePoolControlThread::deleteStoragePool()
     uint flags = (task.args.sign)? VIR_STORAGE_POOL_DELETE_ZEROED
                                  : VIR_STORAGE_POOL_DELETE_NORMAL;
     bool deleted = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( storagePool!=nullptr ) {
+    if ( storagePool!=Q_NULLPTR ) {
         deleted = (virStoragePoolDelete(storagePool, flags)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -403,17 +403,17 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     Result result;
     QString name = task.object;
     bool read = false;
-    char *Returns = nullptr;
-    if ( task.srcConnPtr==nullptr ) {
+    char *Returns = Q_NULLPTR;
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virStoragePoolPtr storagePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( storagePool!=nullptr ) {
+    if ( storagePool!=Q_NULLPTR ) {
         Returns = virStoragePoolGetXMLDesc(storagePool, VIR_STORAGE_XML_INACTIVE);
-        if ( Returns==nullptr )
+        if ( Returns==Q_NULLPTR )
             result.err = sendConnErrors();
         else read = true;
         virStoragePoolFree(storagePool);
@@ -427,7 +427,7 @@ Result StoragePoolControlThread::getStoragePoolXMLDesc()
     if (read) f.write(Returns);
     result.fileName.append(f.fileName());
     f.close();
-    if ( Returns!=nullptr ) free(Returns);
+    if ( Returns!=Q_NULLPTR ) free(Returns);
     result.msg.append(QString(tr("'<b>%1</b>' StoragePool %2 XML'ed."))
                   .arg(name).arg((read)? "": tr("not")));
     result.name = name;

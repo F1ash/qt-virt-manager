@@ -48,7 +48,7 @@ DomainStateViewer::DomainStateViewer(
 
     // TODO: implement the display of different domain states:
     // CPU Usage, Disk I/O (?), Network I/O (?), MemoryStats.
-    if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
+    if ( Q_NULLPTR!=ptr_ConnPtr && Q_NULLPTR!=*ptr_ConnPtr ) {
         domainMonitorThread = new DomainMonitorThread(
                     this, ptr_ConnPtr, domainName);
         connect(domainMonitorThread, SIGNAL(dataChanged(int, int, int, int)),
@@ -76,7 +76,7 @@ void DomainStateViewer::closeDomainStateViewer()
 /* private slots */
 void DomainStateViewer::timerEvent(QTimerEvent *ev)
 {
-    if ( timerId==ev->timerId() && ptr_ConnPtr!=nullptr ) {
+    if ( timerId==ev->timerId() && ptr_ConnPtr!=Q_NULLPTR ) {
         if ( domainMonitorThread && !domainMonitorThread->isRunning() )
             domainMonitorThread->start();
     }

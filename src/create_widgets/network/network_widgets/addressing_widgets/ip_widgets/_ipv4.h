@@ -8,7 +8,7 @@ class _IPv4 : public _IPvX
     Q_OBJECT
 public:
     explicit _IPv4(
-            QWidget *parent  = nullptr,
+            QWidget *parent  = Q_NULLPTR,
             bool     hasDHCP = false,
             uint     _ver    = 0);
 

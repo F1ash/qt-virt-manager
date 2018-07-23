@@ -8,7 +8,7 @@ class TcpWidget : public _QWidget
     Q_OBJECT
 public:
     explicit TcpWidget(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  _tag   = "");
 
 private:

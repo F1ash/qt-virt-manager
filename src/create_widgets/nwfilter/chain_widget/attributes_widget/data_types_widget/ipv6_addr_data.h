@@ -9,7 +9,7 @@ class IPv6_ADDR_Data : public UntypedData
     Q_OBJECT
 public:
     explicit IPv6_ADDR_Data(
-            QWidget *parent     = nullptr,
+            QWidget *parent     = Q_NULLPTR,
             QString  tag        = "",
             QString  topValue   = "");
     QString          getAttrValue() const;

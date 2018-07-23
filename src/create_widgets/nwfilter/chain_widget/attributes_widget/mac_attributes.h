@@ -6,7 +6,7 @@
 class MAC_Attributes : public _Attributes
 {
 public:
-    explicit MAC_Attributes(QWidget *parent = nullptr);
+    explicit MAC_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // MAC_ATTRIBUTES_H

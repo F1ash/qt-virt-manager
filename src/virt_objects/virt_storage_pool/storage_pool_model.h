@@ -7,7 +7,7 @@ class StoragePoolModel : public Model
 {
     Q_OBJECT
 public:
-    explicit StoragePoolModel(QObject *parent = nullptr);
+    explicit StoragePoolModel(QObject *parent = Q_NULLPTR);
     //QIcon    onViewIcon;
     QVariant data(const QModelIndex &index, int role) const;
 };

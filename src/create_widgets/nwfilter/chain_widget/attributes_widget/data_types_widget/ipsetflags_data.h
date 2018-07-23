@@ -9,7 +9,7 @@ class IPSETFLAGS_Data : public UntypedData
     Q_OBJECT
 public:
     explicit IPSETFLAGS_Data(
-            QWidget *parent     = nullptr,
+            QWidget *parent     = Q_NULLPTR,
             QString  tag        = "",
             QString  topValue   = "");
     QString          getAttrValue() const;

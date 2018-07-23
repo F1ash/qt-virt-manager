@@ -9,7 +9,7 @@ vnc_graphHlpThread::vnc_graphHlpThread(
 }
 void vnc_graphHlpThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -18,7 +18,7 @@ void vnc_graphHlpThread::run()
         return;
     };
     QStringList nets;
-    virNetworkPtr *networks = nullptr;
+    virNetworkPtr *networks = Q_NULLPTR;
     unsigned int flags =
             VIR_CONNECT_LIST_NETWORKS_ACTIVE |
             VIR_CONNECT_LIST_NETWORKS_INACTIVE;
@@ -35,7 +35,7 @@ void vnc_graphHlpThread::run()
         };
         if (networks) free(networks);
     };
-    //int devs = virNodeNumOfDevices(ptr_ConnPtr, nullptr, 0);
+    //int devs = virNodeNumOfDevices(ptr_ConnPtr, Q_NULLPTR, 0);
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();
     emit result(nets);

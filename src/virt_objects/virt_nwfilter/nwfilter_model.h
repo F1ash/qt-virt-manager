@@ -11,7 +11,7 @@ class VirtNWFilterModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit VirtNWFilterModel(QObject *parent = nullptr);
+    explicit VirtNWFilterModel(QObject *parent = Q_NULLPTR);
     ~VirtNWFilterModel();
     QList<NWFilter_Index *>  DataList;
     QIcon    defined;

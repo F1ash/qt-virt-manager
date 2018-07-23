@@ -9,7 +9,7 @@ class CreateVirtNetwork_Ass : public QWizard
 {
     Q_OBJECT
 public:
-    explicit CreateVirtNetwork_Ass(QWidget *parent = nullptr);
+    explicit CreateVirtNetwork_Ass(QWidget *parent = Q_NULLPTR);
     enum {
         Page_Intro,
         Page_Bridge,

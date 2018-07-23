@@ -6,7 +6,7 @@
 class UDPLITE_Attributes : public _Attributes
 {
 public:
-    explicit UDPLITE_Attributes(QWidget *parent = nullptr);
+    explicit UDPLITE_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // UDPLITE_ATTRIBUTES_H

@@ -15,7 +15,7 @@ class VirtDomainControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
-    explicit VirtDomainControl(QWidget *parent = nullptr);
+    explicit VirtDomainControl(QWidget *parent = Q_NULLPTR);
     ~VirtDomainControl();
 
 signals:

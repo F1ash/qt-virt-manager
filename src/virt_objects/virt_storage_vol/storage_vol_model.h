@@ -11,7 +11,7 @@ class StorageVolModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit StorageVolModel(QObject *parent = nullptr);
+    explicit StorageVolModel(QObject *parent = Q_NULLPTR);
     ~StorageVolModel();
     QList<StorageVolIndex *>  DataList;
     QIcon    defined;

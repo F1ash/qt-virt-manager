@@ -15,7 +15,7 @@ class QSpiceUsbDeviceWidget : public QDialog
 {
     Q_OBJECT
 public:
-    explicit QSpiceUsbDeviceWidget(QWidget *parent = nullptr);
+    explicit QSpiceUsbDeviceWidget(QWidget *parent = Q_NULLPTR);
     ~QSpiceUsbDeviceWidget();
 
 signals:

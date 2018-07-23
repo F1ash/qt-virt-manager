@@ -6,7 +6,7 @@
 class UDP_Attributes : public _Attributes
 {
 public:
-    explicit UDP_Attributes(QWidget *parent = nullptr);
+    explicit UDP_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // UDP_ATTRIBUTES_H

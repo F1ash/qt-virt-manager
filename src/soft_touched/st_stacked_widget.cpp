@@ -8,7 +8,7 @@ ST_StackedWidget::ST_StackedWidget(QWidget *parent) :
 {
     // hack: layout()->count() is crashed
     wdgCount = 0;
-    showAnimation = nullptr;
+    showAnimation = Q_NULLPTR;
 }
 
 void ST_StackedWidget::addNewWidget(QWidget *w)
@@ -31,7 +31,7 @@ void ST_StackedWidget::showDock(const QString &_dock)
     for ( int i=0; i<wdgCount; i++ ) {
         QWidget *d =
                 static_cast<QWidget*>(widget(i));
-        if ( d!=nullptr ) {
+        if ( d!=Q_NULLPTR ) {
             if ( _dock.startsWith(d->objectName()) ) {
                 currentWidget()->hide();
                 d->show();
@@ -63,10 +63,10 @@ void ST_StackedWidget::animatedDockShow(int i)
     setCurrentIndex(i);
     QWidget *d =
             static_cast<QWidget*>(widget(i));
-    if ( d!=nullptr ) {
-        if ( showAnimation!=nullptr ) {
+    if ( d!=Q_NULLPTR ) {
+        if ( showAnimation!=Q_NULLPTR ) {
             delete showAnimation;
-            showAnimation = nullptr;
+            showAnimation = Q_NULLPTR;
         };
         d->setWindowFlags(
                     Qt::Popup | Qt::FramelessWindowHint);
@@ -88,10 +88,10 @@ void ST_StackedWidget::animatedDockShowComlete()
 {
     QPropertyAnimation *a =
             static_cast<QPropertyAnimation*>(sender());
-    if ( a!=nullptr ) {
+    if ( a!=Q_NULLPTR ) {
         QWidget *d =
                 static_cast<QWidget*>(a->targetObject());
-        if ( d!=nullptr ) {
+        if ( d!=Q_NULLPTR ) {
             d->setWindowFlags(Qt::Widget);
             disconnect(showAnimation, SIGNAL(finished()),
                        this, SLOT(animatedDockShowComlete()));

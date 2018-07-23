@@ -11,11 +11,11 @@ void NetControlThread::execAction(uint _num, TASK _task)
     number = _num;
     task = _task;
     keep_alive = false;
-    if ( nullptr!=task.srcConnPtr ) {
+    if ( Q_NULLPTR!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
-            task.srcConnPtr = nullptr;
+            task.srcConnPtr = Q_NULLPTR;
             sendConnErrors();
         } else
             keep_alive = true;
@@ -78,8 +78,8 @@ Result NetControlThread::getAllNetworkList()
 {
     Result result;
     ACT_RESULT virtNetList;
-    if ( task.srcConnPtr!=nullptr && keep_alive ) {
-        virNetworkPtr *networks = nullptr;
+    if ( task.srcConnPtr!=Q_NULLPTR && keep_alive ) {
+        virNetworkPtr *networks = Q_NULLPTR;
         unsigned int flags =
                 VIR_CONNECT_LIST_NETWORKS_ACTIVE |
                 VIR_CONNECT_LIST_NETWORKS_INACTIVE;
@@ -124,7 +124,7 @@ Result NetControlThread::createNetwork()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -141,7 +141,7 @@ Result NetControlThread::createNetwork()
     f.close();
     virNetworkPtr network = virNetworkCreateXML(
                 *task.srcConnPtr, xmlData.data());
-    if ( network==nullptr ) {
+    if ( network==Q_NULLPTR ) {
         result.err = sendConnErrors();
         return result;
     };
@@ -157,7 +157,7 @@ Result NetControlThread::defineNetwork()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -174,7 +174,7 @@ Result NetControlThread::defineNetwork()
     f.close();
     virNetworkPtr network = virNetworkDefineXML(
                 *task.srcConnPtr, xmlData.data());
-    if ( network==nullptr ) {
+    if ( network==Q_NULLPTR ) {
         result.err = sendConnErrors();
         return result;
     };
@@ -190,14 +190,14 @@ Result NetControlThread::startNetwork()
     Result result;
     QString name = task.object;
     bool started = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( network!=nullptr ) {
+    if ( network!=Q_NULLPTR ) {
         started = (virNetworkCreate(network)+1) ? true : false;
         if (!started)
             result.err = sendConnErrors();
@@ -215,14 +215,14 @@ Result NetControlThread::destroyNetwork()
     Result result;
     QString name = task.object;
     bool deleted = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( network!=nullptr ) {
+    if ( network!=Q_NULLPTR ) {
         deleted = (virNetworkDestroy(network)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -240,14 +240,14 @@ Result NetControlThread::undefineNetwork()
     Result result;
     QString name = task.object;
     bool deleted = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( network!=nullptr ) {
+    if ( network!=Q_NULLPTR ) {
         deleted = (virNetworkUndefine(network)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -267,14 +267,14 @@ Result NetControlThread::changeAutoStartNetwork()
     result.name = name;
     int autostart = task.args.sign;
     bool set = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( network!=nullptr ) {
+    if ( network!=Q_NULLPTR ) {
         set = (virNetworkSetAutostart(network, autostart)+1) ? true : false;
         if (!set)
             result.err = sendConnErrors();
@@ -292,18 +292,18 @@ Result NetControlThread::getVirtNetXMLDesc()
     QString name = task.object;
     result.name = name;
     bool read = false;
-    char *Returns = nullptr;
-    if ( task.srcConnPtr==nullptr ) {
+    char *Returns = Q_NULLPTR;
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNetworkPtr network = virNetworkLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( network!=nullptr ) {
+    if ( network!=Q_NULLPTR ) {
         Returns = virNetworkGetXMLDesc(
                     network, VIR_NETWORK_XML_INACTIVE);
-        if ( Returns==nullptr )
+        if ( Returns==Q_NULLPTR )
             result.err = sendConnErrors();
         else read = true;
         virNetworkFree(network);
@@ -318,7 +318,7 @@ Result NetControlThread::getVirtNetXMLDesc()
     if (read) f.write(Returns);
     result.fileName.append(f.fileName());
     f.close();
-    if ( Returns!=nullptr ) free(Returns);
+    if ( Returns!=Q_NULLPTR ) free(Returns);
     result.result = read;
     result.msg.append(QString(tr("'<b>%1</b>' Network %2 XML'ed."))
                       .arg(name).arg((read)? "": tr("not")));

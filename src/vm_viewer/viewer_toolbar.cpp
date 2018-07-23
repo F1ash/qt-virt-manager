@@ -123,7 +123,7 @@ void ViewerToolBar::downloadCompleted()
 void ViewerToolBar::showMenu()
 {
     QAction *act = static_cast<QAction*>(sender());
-    if ( act==nullptr ) return;
+    if ( act==Q_NULLPTR ) return;
     if ( act->menu()->isVisible() ) act->menu()->hide();
     else {
         act->menu()->show();

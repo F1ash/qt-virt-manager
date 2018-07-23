@@ -21,7 +21,7 @@ class _Attributes : public _QWidget
     Q_OBJECT
 public:
     explicit _Attributes(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag    = tr("Attribute:"));
     virtual ~_Attributes()  = 0;
     QString             protocolID;

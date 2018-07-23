@@ -13,7 +13,7 @@ class IP_Page : public QWizardPage
 {
     Q_OBJECT
 public:
-    explicit IP_Page(QWidget *parent = nullptr);
+    explicit IP_Page(QWidget *parent = Q_NULLPTR);
     void            initializePage();
     int             nextId() const;
     bool            isComplete() const;

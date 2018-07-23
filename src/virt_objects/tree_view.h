@@ -11,7 +11,7 @@ class TreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    explicit TreeView(QWidget *parent = nullptr);
+    explicit TreeView(QWidget *parent = Q_NULLPTR);
     HNavigationLabel *prevL, *nextL, *homeL;
     WaitLoadLabel    *loadL;
 

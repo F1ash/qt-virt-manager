@@ -7,7 +7,7 @@ class DockMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit DockMenu(QWidget *parent = nullptr);
+    explicit DockMenu(QWidget *parent = Q_NULLPTR);
     QAction         *logAct;
     QAction         *domainAct;
     QAction         *networkAct;

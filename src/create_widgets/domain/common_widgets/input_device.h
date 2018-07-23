@@ -8,7 +8,7 @@ class InputDevice : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit InputDevice(QWidget *parent = nullptr);
+    explicit InputDevice(QWidget *parent = Q_NULLPTR);
     QComboBox       *type;
     QComboBox       *bus;
     DeviceAddress   *addr;

@@ -144,7 +144,7 @@ QDomDocument Devices::getDataDocument() const
     QDomElement devices = doc.createElement("devices");
     for (int i=0; i<usedDeviceList->count(); i++) {
         QListWidgetItem *item = usedDeviceList->item(i);
-        if ( nullptr==item ) continue;
+        if ( Q_NULLPTR==item ) continue;
         QDomDocument _doc;
         _doc.setContent(item->data(Qt::UserRole).toString());
         QDomNodeList list = _doc.firstChildElement("device").childNodes();
@@ -178,9 +178,9 @@ void Devices::setEmulator(const QString &_emulator)
         QListWidgetItem *item =
                 usedDeviceList->takeItem(
                     usedDeviceList->row(_family.at(0)));
-        if ( nullptr!=item ) {
+        if ( Q_NULLPTR!=item ) {
             delete item;
-            item = nullptr;
+            item = Q_NULLPTR;
         };
     };
     // drop the infinite loop
@@ -303,9 +303,9 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc, const bool flag)
             QListWidgetItem *item =
                     usedDeviceList->takeItem(
                         usedDeviceList->row(_family.at(0)));
-            if ( nullptr!=item ) {
+            if ( Q_NULLPTR!=item ) {
                 delete item;
-                item = nullptr;
+                item = Q_NULLPTR;
             };
         };
         name.append("Emulator");
@@ -373,7 +373,7 @@ void Devices::addDeviceToUsedDevList(QDomDocument &doc, const bool flag)
          //usedDeviceList->item(row)->setData(Qt::UserRole, doc.toString());
          // don't show device here, because this metod
          // fill the device list only
-         // showDevice(item, nullptr);
+         // showDevice(item, Q_NULLPTR);
          inserted = true;
     } while ( !inserted );
     //qDebug()<<"added New Device:"<<name;
@@ -386,21 +386,21 @@ void Devices::delDevice()
     infoWidget->clearDataEdit();
     QListWidgetItem *item =
             usedDeviceList->takeItem(usedDeviceList->currentRow());
-    if ( nullptr!=item ) {
+    if ( Q_NULLPTR!=item ) {
         delete item;
-        item = nullptr;
+        item = Q_NULLPTR;
     };
     initBootDevices();
 }
 void Devices::showDevice()
 {
     QListWidgetItem *_curr = usedDeviceList->currentItem();
-    if ( nullptr!=_curr ) showDevice( _curr, nullptr );
+    if ( Q_NULLPTR!=_curr ) showDevice( _curr, Q_NULLPTR );
 }
 void Devices::showDevice(QListWidgetItem *_curr, QListWidgetItem *_prev)
 {
-    if ( nullptr!=_prev ) infoWidget->closeDataEdit();
-    if ( nullptr==_curr ) return;
+    if ( Q_NULLPTR!=_prev ) infoWidget->closeDataEdit();
+    if ( Q_NULLPTR==_curr ) return;
     QString _devName, _devDesc;
     _devName = _curr->text();
     _devDesc = _curr->data(Qt::UserRole).toString();
@@ -411,7 +411,7 @@ void Devices::showContextMenu(const QPoint &pos)
 {
     usedDeviceList->clearSelection();
     QListWidgetItem *item = usedDeviceList->itemAt(pos);
-    DeviceExistanceMenu *jobMenu = new DeviceExistanceMenu(this, (item!=nullptr));
+    DeviceExistanceMenu *jobMenu = new DeviceExistanceMenu(this, (item!=Q_NULLPTR));
     connect(jobMenu, SIGNAL(resultSign(Device_Action)),
             this, SLOT(execDevExistanceMenuResult(Device_Action)));
     jobMenu->move(mapToGlobal(pos));
@@ -457,9 +457,9 @@ void Devices::saveDeviceXMLDescription(const int idx, const QString &xmlDesc)
     usedDeviceList->blockSignals(true);
     if ( idx>=0 ) {
         QListWidgetItem *item = usedDeviceList->takeItem(idx);
-        if ( nullptr!=item ) {
+        if ( Q_NULLPTR!=item ) {
             delete item;
-            item = nullptr;
+            item = Q_NULLPTR;
         };
     };
     QDomDocument doc;

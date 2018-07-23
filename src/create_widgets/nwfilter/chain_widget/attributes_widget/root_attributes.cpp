@@ -89,7 +89,7 @@ ROOT_Attributes::ROOT_Attributes(QWidget *parent, QString tag) :
     for (int i=0; i<attrEditor->count(); i++) {
         _Attributes *a = static_cast<_Attributes*>(
                     attrEditor->widget(i));
-        if ( a==nullptr ) continue;
+        if ( a==Q_NULLPTR ) continue;
         connect(a, SIGNAL(dataChanged()),
                 this, SLOT(dataEdited()));
         connect(a, SIGNAL(dataChanged()),
@@ -101,7 +101,7 @@ void ROOT_Attributes::clearAllAttributeData()
     for (int i=0; i<attrEditor->count(); i++) {
         _Attributes *a = static_cast<_Attributes*>(
                     attrEditor->widget(i));
-        if ( a==nullptr ) continue;
+        if ( a==Q_NULLPTR ) continue;
         a->clearAllAttributeData();
     };
     attrName->setEnabled(true);
@@ -114,7 +114,7 @@ void ROOT_Attributes::setAttrValue(const QVariantMap &_map)
     for (int i=0; i<attrEditor->count(); i++) {
         _Attributes *e = static_cast<_Attributes*>(
                     attrEditor->widget(i));
-        if ( e==nullptr ) continue;
+        if ( e==Q_NULLPTR ) continue;
         if ( e->getProtocolID()==_protID ) {
             idx = i;
             break;
@@ -125,7 +125,7 @@ void ROOT_Attributes::setAttrValue(const QVariantMap &_map)
         attrName->setDisabled(true);
         _Attributes *a = static_cast<_Attributes*>(
                     attrEditor->currentWidget());
-        if ( a!=nullptr ) a->setAttrValue(_map);
+        if ( a!=Q_NULLPTR ) a->setAttrValue(_map);
     };
 }
 QVariantMap ROOT_Attributes::getAttrValue(QString &attr) const
@@ -133,7 +133,7 @@ QVariantMap ROOT_Attributes::getAttrValue(QString &attr) const
     QVariantMap ret;
     _Attributes *e = static_cast<_Attributes*>(
                 attrEditor->currentWidget());
-    if ( e!=nullptr ) {
+    if ( e!=Q_NULLPTR ) {
         ret = e->getAttrValue(attr);
     };
     return ret;
@@ -143,7 +143,7 @@ QStringList ROOT_Attributes::getAttrList() const
     QStringList l;
     _Attributes *e = static_cast<_Attributes*>(
                 attrEditor->currentWidget());
-    if ( e!=nullptr ) {
+    if ( e!=Q_NULLPTR ) {
         l = e->getAttrList();
     };
     return l;

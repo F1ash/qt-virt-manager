@@ -16,7 +16,7 @@ VM_Viewer_Only::VM_Viewer_Only(
     viewerToolBar = new ViewerToolBar(this);
     viewerToolBar->setAllowedAreas(Qt::NoToolBarArea);
     viewerToolBar->hide();
-    addToolBar(Qt::NoToolBarArea, viewerToolBar);
+    //addToolBar(Qt::NoToolBarArea, viewerToolBar);
     connect(viewerToolBar, SIGNAL(execMethod(const Act_Param&)),
             this, SLOT(resendExecMethod(const Act_Param&)));
 
@@ -59,10 +59,6 @@ VM_Viewer_Only::~VM_Viewer_Only()
         reinitTimerId = 0;
     };
     disconnectFromVirtDomain();
-    // double call segfault
-    //if ( sshTunnelThread!=nullptr ) {
-    //    sshTunnelThread->stop();
-    //};
     //qDebug()<<"VM_Viewer_Only destroyed";
 }
 void VM_Viewer_Only::init()
@@ -252,7 +248,7 @@ void VM_Viewer_Only::startCloseProcess()
     //qDebug()<<"startCloseProcess";
     if ( killTimerId==0 ) {
         killTimerId = startTimer(PERIOD);
-        if ( nullptr!=statusBar() ) statusBar()->show();
+        if ( Q_NULLPTR!=statusBar() ) statusBar()->show();
     };
     //qDebug()<<killTimerId<<"killTimer";
 }
@@ -415,4 +411,9 @@ void VM_Viewer_Only::moveEvent(QMoveEvent *ev)
     Q_UNUSED(ev)
     //viewerToolBar->move(mapToGlobal(toolBarPoint));
     startAnimatedHide();
+}
+void VM_Viewer_Only::closeEvent(QCloseEvent *ev)
+{
+    if ( sshTunnelThread!=Q_NULLPTR ) sshTunnelThread->stop();
+    ev->accept();
 }

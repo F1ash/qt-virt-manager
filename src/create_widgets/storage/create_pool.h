@@ -8,8 +8,8 @@ class CreatePool : public _CreateStorage
     Q_OBJECT
 public:
     explicit CreatePool(
-            QWidget         *parent     = nullptr,
-            virConnectPtr   *connPtrPtr = nullptr,
+            QWidget         *parent     = Q_NULLPTR,
+            virConnectPtr   *connPtrPtr = Q_NULLPTR,
             QString          _connName  = QString(),
             QString          _xmlFile   = QString());
     void             setDataDescription(const QString&);

@@ -6,7 +6,7 @@
 class VLAN_Attributes : public _Attributes
 {
 public:
-    explicit VLAN_Attributes(QWidget *parent = nullptr);
+    explicit VLAN_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // VLAN_ATTRIBUTES_H

@@ -8,7 +8,7 @@ class NWFilter_Params : public _List_Widget
     Q_OBJECT
 public:
     explicit NWFilter_Params(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag    = "");
     void             setNWFiltersList(const QStringList&);
 

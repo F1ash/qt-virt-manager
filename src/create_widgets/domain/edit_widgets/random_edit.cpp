@@ -80,6 +80,6 @@ void Random_Edit::setDataDescription(const QString &_xmlDesc)
         bkEGD->devType->setCurrentIndex( (idx<0)? 0:idx );
         _QWidget *wdg = static_cast<_QWidget*>(
                     bkEGD->charDevWdg->currentWidget() );
-        if ( wdg!=nullptr ) wdg->setDataDescription(_xml);
+        if ( wdg!=Q_NULLPTR ) wdg->setDataDescription(_xml);
     };
 }

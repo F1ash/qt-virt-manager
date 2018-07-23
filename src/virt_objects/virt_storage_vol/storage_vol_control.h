@@ -13,7 +13,7 @@ class VirtStorageVolControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
-    explicit VirtStorageVolControl(QWidget *parent = nullptr);
+    explicit VirtStorageVolControl(QWidget *parent = Q_NULLPTR);
     ~VirtStorageVolControl();
     QString             getCurrentVolumeName() const;
     QString             getCurrentVolumePath() const;

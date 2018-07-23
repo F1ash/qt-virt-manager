@@ -154,7 +154,7 @@ void CreateVirtSecret::buildXMLDescription()
     _uuid = doc.createElement("uuid");
     _secret.appendChild(_description);
     _secret.appendChild(_uuid);
-    if ( wdg!=nullptr ) {
+    if ( wdg!=Q_NULLPTR ) {
         _usageDoc = wdg->getSecStuff();
         _usage = _usageDoc.firstChildElement("usage");
     };

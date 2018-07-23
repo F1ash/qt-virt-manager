@@ -8,7 +8,7 @@ class TXT_DNS : public _List_Widget
     Q_OBJECT
 public:
     explicit TXT_DNS(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag    = "TXTs");
 
 private:

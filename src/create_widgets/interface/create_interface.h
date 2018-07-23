@@ -20,7 +20,7 @@ class CreateInterface : public QDialog
 {
     Q_OBJECT
 public:
-    explicit CreateInterface(QWidget *parent = nullptr);
+    explicit CreateInterface(QWidget *parent = Q_NULLPTR);
     ~CreateInterface();
 
 private:

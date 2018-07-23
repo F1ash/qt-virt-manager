@@ -24,7 +24,7 @@ void QSpiceHelper::inputs_modifiers(SpiceInputsChannel *spiceinputschannel, gpoi
     Q_UNUSED(spiceinputschannel)
 
     QSpiceInputsChannel *inputs = static_cast<QSpiceInputsChannel*>(user_data);
-    if ( nullptr==inputs ) return;
+    if ( Q_NULLPTR==inputs ) return;
     emit inputs->inputsModifiers();
 }
 

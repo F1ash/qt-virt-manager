@@ -15,15 +15,15 @@ Spice_Viewer_Only::Spice_Viewer_Only(
 /* private slots */
 void Spice_Viewer_Only::reconnectToVirtDomain()
 {
-    if ( nullptr!=spiceWdg ) {
+    if ( Q_NULLPTR!=spiceWdg ) {
         delete spiceWdg;
-        spiceWdg = nullptr;
+        spiceWdg = Q_NULLPTR;
         // resizing to any,
         // because will need to init new display configuration
         //resize(getWidgetSizeAroundDisplay());
         initGraphicWidget();
         QSize around_size = getWidgetSizeAroundDisplay();
-        if ( nullptr!=spiceWdg ) {
+        if ( Q_NULLPTR!=spiceWdg ) {
             spiceWdg->updateSize(
                         size().width()-around_size.width(),
                         size().height()-around_size.height());
@@ -34,40 +34,40 @@ void Spice_Viewer_Only::reconnectToVirtDomain()
 }
 void Spice_Viewer_Only::disconnectFromVirtDomain()
 {
-    if ( spiceWdg!=nullptr ) {
+    if ( spiceWdg!=Q_NULLPTR ) {
         spiceWdg->disconnectFromSpiceSource();
     };
 }
 void Spice_Viewer_Only::sendKeySeqToVirtDomain(Qt::Key key)
 {
-    if ( nullptr==spiceWdg ) return;
+    if ( Q_NULLPTR==spiceWdg ) return;
     spiceWdg->sendKeySequience(key);
 }
 void Spice_Viewer_Only::getScreenshotFromVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
+    if ( Q_NULLPTR==spiceWdg ) return;
     spiceWdg->getScreenshot();
 }
 void Spice_Viewer_Only::copyFilesToVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
+    if ( Q_NULLPTR==spiceWdg ) return;
     QStringList fileNames = QFileDialog::getOpenFileNames(
                 this, tr("Copy files to Guest"), "~");
     spiceWdg->fileCopyAsync(fileNames);
 }
 void Spice_Viewer_Only::cancelCopyFilesToVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
+    if ( Q_NULLPTR==spiceWdg ) return;
     spiceWdg->cancelFileCopyAsync();
 }
 void Spice_Viewer_Only::copyToClipboardFromVirtDomain()
 {
-    if ( nullptr!=spiceWdg )
+    if ( Q_NULLPTR!=spiceWdg )
         spiceWdg->copyToClipboardFromGuest();
 }
 void Spice_Viewer_Only::pasteClipboardToVirtDomain()
 {
-    if ( nullptr!=spiceWdg )
+    if ( Q_NULLPTR!=spiceWdg )
         spiceWdg->pasteClipboardToGuest();
 }
 void Spice_Viewer_Only::fullScreenVirtDomain()
@@ -138,7 +138,7 @@ void Spice_Viewer_Only::initGraphicWidget()
 
 void Spice_Viewer_Only::resizeViewer(const QSize &_size)
 {
-    if ( spiceWdg==nullptr ||
+    if ( spiceWdg==Q_NULLPTR ||
          !spiceWdg->isConnectedWithDisplay() ) return;
     QSize around_size = getWidgetSizeAroundDisplay();
     // will be showed when occured successful connection to VM
@@ -183,7 +183,7 @@ void Spice_Viewer_Only::scaleScreenVirtDomain()
 void Spice_Viewer_Only::resizeEvent(QResizeEvent *ev)
 {
     ev->accept();
-    if ( nullptr!=spiceWdg ) {
+    if ( Q_NULLPTR!=spiceWdg ) {
         if ( !spiceWdg->isConnectedWithDisplay() ) return;
         QSize around_size = getWidgetSizeAroundDisplay();
         spiceWdg->updateSize(
@@ -200,12 +200,12 @@ QSize Spice_Viewer_Only::getWidgetSizeAroundDisplay()
     viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
     _width = left+right;
     _height = top +bottom;
-    if ( nullptr!=scrolled ) {
+    if ( Q_NULLPTR!=scrolled ) {
         scrolled->getContentsMargins(&left, &top, &right, &bottom);
         _width += left+right;
         _height += top +bottom;
     };
-    if ( nullptr!=spiceWdg ) {
+    if ( Q_NULLPTR!=spiceWdg ) {
         spiceWdg->getContentsMargins(&left, &top, &right, &bottom);
         _width += left+right;
         _height += top +bottom;
@@ -225,9 +225,9 @@ void Spice_Viewer_Only::displayChannelState(bool state)
         setWindowTitle(QString(tr("Qt Remote Viewer -- %1")).arg(url));
     } else {
         delete spiceWdg;
-        spiceWdg = nullptr;
+        spiceWdg = Q_NULLPTR;
         delete scrolled;
-        scrolled = nullptr;
+        scrolled = Q_NULLPTR;
         showErrorInfo("");
     };
 }

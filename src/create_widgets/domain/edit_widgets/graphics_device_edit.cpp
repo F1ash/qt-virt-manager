@@ -27,5 +27,5 @@ void GraphicsDevice_Edit::setDataDescription(const QString &_xmlDesc)
     type->setCurrentIndex( (idx<0)? 0:idx );
     type->setEnabled(false);
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    if ( nullptr!=wdg ) wdg->setDataDescription(_xmlDesc);
+    if ( Q_NULLPTR!=wdg ) wdg->setDataDescription(_xmlDesc);
 }

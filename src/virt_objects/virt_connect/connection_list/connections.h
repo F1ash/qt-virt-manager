@@ -9,7 +9,7 @@ class Connections : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit Connections(QWidget *parent = nullptr);
+    explicit Connections(QWidget *parent = Q_NULLPTR);
     ConnectionList      *list;
     ToolBar             *toolBar;
     void                 setToolBarArea(int);

@@ -21,7 +21,7 @@ class URLMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit URLMenu(QWidget *parent = nullptr);
+    explicit URLMenu(QWidget *parent = Q_NULLPTR);
     Menu_Act         getState() const;
 private:
     Menu_Act         state = NONE;
@@ -35,7 +35,7 @@ class GetURLDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit GetURLDialog(QWidget *parent = nullptr);
+    explicit GetURLDialog(QWidget *parent = Q_NULLPTR);
     ~GetURLDialog();
     QString          getURL() const;
     void             saveToHistory(const QString&);

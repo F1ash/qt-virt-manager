@@ -34,7 +34,7 @@ QDomDocument HostDevice::getDataDocument() const
 {
     QDomDocument doc;
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    if ( nullptr!=wdg ) doc = wdg->getDataDocument();
+    if ( Q_NULLPTR!=wdg ) doc = wdg->getDataDocument();
     return doc;
 }
 
@@ -55,7 +55,7 @@ void HostDevice::init_wdg()
             info, SLOT(setCurrentIndex(int)));
     for(int i=0; i<info->count(); ++i) {
         _QWidget *wdg = static_cast<_QWidget*>(info->widget(i));
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             connect(wdg, SIGNAL(complete()),
                     this, SLOT(emitCompleteSignal()));
         }
@@ -64,7 +64,7 @@ void HostDevice::init_wdg()
 void HostDevice::emitCompleteSignal()
 {
     _QWidget *wdg = static_cast<_QWidget*>(sender());
-    if ( wdg!=nullptr ) {
+    if ( wdg!=Q_NULLPTR ) {
         ++completedWdg;
         if ( completedWdg>=info->count() ) {
             setEnabled(true);

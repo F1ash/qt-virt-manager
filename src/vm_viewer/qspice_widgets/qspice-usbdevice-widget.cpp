@@ -26,7 +26,7 @@ QSpiceUsbDeviceWidget::~QSpiceUsbDeviceWidget()
 /* private slots */
 void QSpiceUsbDeviceWidget::changeDeviceState(QListWidgetItem *item)
 {
-    if ( item==nullptr ) return;
+    if ( item==Q_NULLPTR ) return;
     QString _id = QString("%1 %2")
             .arg(item->text()).arg(item->data(Qt::UserRole).toString());
     //qDebug()<<item->text()<<item->checkState();

@@ -12,7 +12,7 @@ class VirtInterfaceControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
-    explicit VirtInterfaceControl(QWidget *parent = nullptr);
+    explicit VirtInterfaceControl(QWidget *parent = Q_NULLPTR);
     ~VirtInterfaceControl();
 
 signals:

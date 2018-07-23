@@ -10,7 +10,7 @@ class _SnapshotFlags : public QMenu
 {
     Q_OBJECT
 public:
-    explicit _SnapshotFlags(QWidget *parent = nullptr);
+    explicit _SnapshotFlags(QWidget *parent = Q_NULLPTR);
     QActionGroup    *actGroup;
     uint             getCompositeFlag() const;
     virtual void     changeAvailableFlags(int);

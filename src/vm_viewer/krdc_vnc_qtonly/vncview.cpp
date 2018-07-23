@@ -519,13 +519,13 @@ bool VncView::event(QEvent *event)
     case QEvent::KeyPress:
     case QEvent::KeyRelease:
 //         kDebug(5011) << "keyEvent";
-        if ( ek!=nullptr ) keyEventHandler(ek);
+        if ( ek!=Q_NULLPTR ) keyEventHandler(ek);
         return true;
     case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonRelease:
         emit mouseClickedInto();
-        if ( ev!=nullptr ) mouseEventHandler(ev);
+        if ( ev!=Q_NULLPTR ) mouseEventHandler(ev);
         return true;
     case QEvent::MouseMove:
 //         kDebug(5011) << "mouseEvent";
@@ -535,7 +535,7 @@ bool VncView::event(QEvent *event)
         return true;
     case QEvent::Wheel:
 //         kDebug(5011) << "wheelEvent";
-        if ( ew!=nullptr ) wheelEventHandler(ew);
+        if ( ew!=Q_NULLPTR ) wheelEventHandler(ew);
         return true;
     default:
         return RemoteView::event(event);

@@ -10,7 +10,7 @@ class NoGatewayPage : public QWizardPage
 {
     Q_OBJECT
 public:
-    explicit NoGatewayPage(QWidget *parent = nullptr);
+    explicit NoGatewayPage(QWidget *parent = Q_NULLPTR);
     int             nextId() const;
 
 private:

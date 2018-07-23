@@ -8,8 +8,8 @@ class BCh_Host_Device : public _QWidget
     Q_OBJECT
 public:
     explicit BCh_Host_Device(
-            QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
     QComboBox       *type;
     QLineEdit       *device;
 

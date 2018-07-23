@@ -4,7 +4,7 @@
 
 QSpiceRecordChannel::~QSpiceRecordChannel()
 {
-    if ( audioInput!=nullptr ) {
+    if ( audioInput!=Q_NULLPTR ) {
         //qDebug()<<"~QSpiceRecordChannel";
         // close the buffer before audioInput stopped
         if ( _dev ) {
@@ -26,7 +26,7 @@ void QSpiceHelper::record_start(SpiceRecordChannel *channel,
     if ( SPICE_AUDIO_FMT_S16!=format ) return;
     QSpiceRecordChannel *_record =
             static_cast<QSpiceRecordChannel*>(user_data);
-    if ( nullptr==_record ) return;
+    if ( Q_NULLPTR==_record ) return;
     _record->audioFormat.setChannelCount(channels);
     _record->audioFormat.setSampleRate(rate);
     QAudioDeviceInfo info(QAudioDeviceInfo::defaultInputDevice());
@@ -34,7 +34,7 @@ void QSpiceHelper::record_start(SpiceRecordChannel *channel,
         //qWarning()<<"default format not supported, try to use nearest";
         _record->audioFormat = info.nearestFormat(_record->audioFormat);
     };
-    if ( _record->audioInput==nullptr ) {
+    if ( _record->audioInput==Q_NULLPTR ) {
         _record->audioInput = new QAudioInput(
                     _record->audioFormat, _record);
         //qDebug()<<"record_start"<<_record->audioInput;
@@ -52,8 +52,8 @@ void QSpiceHelper::record_stop(SpiceRecordChannel *channel,
     Q_UNUSED(channel);
     QSpiceRecordChannel *_record =
             static_cast<QSpiceRecordChannel*>(user_data);
-    if ( nullptr==_record ) return;
-    if ( _record->audioInput!=nullptr ) {
+    if ( Q_NULLPTR==_record ) return;
+    if ( _record->audioInput!=Q_NULLPTR ) {
         _record->audioInput->stop();
         if ( _record->_dev->isOpen() ) {
             _record->_dev->flush();

@@ -1,7 +1,7 @@
 #include "channel_device.h"
 
 ChannelDevice::ChannelDevice(QWidget *parent) :
-    CharDevice(parent, nullptr, nullptr, "channel")
+    CharDevice(parent, Q_NULLPTR, Q_NULLPTR, "channel")
 {
     devType->insertItem(6, tr("Spice Agent"), "spicevmc");
     devType->insertItem(7, tr("Spice WebDAV"), "spiceport");
@@ -29,7 +29,7 @@ QDomDocument ChannelDevice::getDataDocument() const
 {
     QDomDocument doc;
     CharDevice *wdg = static_cast<CharDevice*>(charDevWdg->currentWidget());
-    if ( nullptr!=wdg ) doc = wdg->getDataDocument();
+    if ( Q_NULLPTR!=wdg ) doc = wdg->getDataDocument();
     if ( doc.isNull() ) {
         QDomElement _device, _devDesc;
         _device = doc.createElement("device");
@@ -92,7 +92,7 @@ void ChannelDevice::setDataDescription(const QString &_xmlDesc)
                 Qt::MatchContains);
     devType->setCurrentIndex( (idx<0)? 0:idx );
     _QWidget *wdg = static_cast<_QWidget*>(charDevWdg->currentWidget());
-    if ( wdg!=nullptr ) wdg->setDataDescription(_xmlDesc);
+    if ( wdg!=Q_NULLPTR ) wdg->setDataDescription(_xmlDesc);
 }
 
 /* private slots */
@@ -109,7 +109,7 @@ void ChannelDevice::chanNameChanged(const QString &text)
     } else {
         devType->setCurrentIndex(5);
         UnixWidget *wdg = static_cast<UnixWidget*>(charDevWdg->currentWidget());
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->setPath(QString("/var/lib/libvirt/qemu/channel/target/%1")
                      .arg(chanType->currentText()));
         };

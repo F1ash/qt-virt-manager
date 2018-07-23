@@ -16,7 +16,7 @@ class DeviceAddress : public _Changed
 {
     Q_OBJECT
 public:
-    explicit DeviceAddress(QWidget *parent = nullptr);
+    explicit DeviceAddress(QWidget *parent = Q_NULLPTR);
     QComboBox       *type;
     QCheckBox       *use;
     QStackedWidget  *info;

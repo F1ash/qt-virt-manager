@@ -28,7 +28,7 @@ class PropertiesDialog : public QDialog, Ui::PropertiesDialog
     QString oldAccelText; // Placeholder when editing shortcut
 
     public:
-        PropertiesDialog(QWidget *parent=nullptr);
+        PropertiesDialog(QWidget *parent=Q_NULLPTR);
         ~PropertiesDialog();
 
     signals:

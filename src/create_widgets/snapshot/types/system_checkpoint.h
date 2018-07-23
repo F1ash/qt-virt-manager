@@ -8,7 +8,7 @@ class SystemCheckpoint : public _SnapshotStuff
     Q_OBJECT
 public:
     SystemCheckpoint(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             bool     _state = false,
             bool     _external = false);
 

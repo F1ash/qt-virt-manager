@@ -6,7 +6,7 @@
 class IGMP_Attributes : public _Attributes
 {
 public:
-    explicit IGMP_Attributes(QWidget *parent = nullptr);
+    explicit IGMP_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // IGMP_ATTRIBUTES_H

@@ -25,7 +25,7 @@ class LogDock : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LogDock(QWidget *parent = nullptr);
+    explicit LogDock(QWidget *parent = Q_NULLPTR);
     ~LogDock();
     TextBrowser      *Log;
     void              setUsageInSoftTouched(bool);

@@ -12,7 +12,7 @@ class BootMenu : public _Changed
 {
     Q_OBJECT
 public:
-    explicit BootMenu(QWidget *parent = nullptr);
+    explicit BootMenu(QWidget *parent = Q_NULLPTR);
     QCheckBox       *menu;
     QSpinBox        *timeOut;
 

@@ -9,7 +9,7 @@ usb_hostHlpThread::usb_hostHlpThread(
 }
 void usb_hostHlpThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -38,7 +38,7 @@ void usb_hostHlpThread::run()
         };
         if (nodeDevices) free(nodeDevices);
     };
-    //int devs = virNodeNumOfDevices(ptr_ConnPtr, nullptr, 0);
+    //int devs = virNodeNumOfDevices(ptr_ConnPtr, Q_NULLPTR, 0);
     if ( virConnectClose(*ptr_ConnPtr)<0 )
         sendConnErrors();
     emit result(devices);

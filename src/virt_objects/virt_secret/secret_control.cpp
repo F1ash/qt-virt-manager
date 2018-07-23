@@ -222,7 +222,7 @@ void VirtSecretControl::execAction(const Act_Param &param)
             // show Secret Creator widget
             CreateVirtSecret *createVirtSec = new CreateVirtSecret(this, ptr_ConnPtr);
             int result = createVirtSec->exec();
-            if ( createVirtSec!=nullptr && result==QDialog::Accepted ) {
+            if ( createVirtSec!=Q_NULLPTR && result==QDialog::Accepted ) {
                 xml = createVirtSec->getXMLDescFileName();
                 show = createVirtSec->getShowing();
                 QStringList data;
@@ -238,7 +238,7 @@ void VirtSecretControl::execAction(const Act_Param &param)
                 emit addNewTask(&task);
             };
             delete createVirtSec;
-            createVirtSec = nullptr;
+            createVirtSec = Q_NULLPTR;
             //qDebug()<<xml<<"path"<<result;
         } else if ( param.method==Methods::undefineEntity ) {
             task.action     = Actions::UNDEFINE_ENTITY;
@@ -258,7 +258,7 @@ void VirtSecretControl::execAction(const Act_Param &param)
         CreateVirtSecret *createVirtSec =
                 new CreateVirtSecret(this, ptr_ConnPtr);
         int result = createVirtSec->exec();
-        if ( createVirtSec!=nullptr && result==QDialog::Accepted ) {
+        if ( createVirtSec!=Q_NULLPTR && result==QDialog::Accepted ) {
             xml = createVirtSec->getXMLDescFileName();
             show = createVirtSec->getShowing();
             QStringList data;
@@ -274,7 +274,7 @@ void VirtSecretControl::execAction(const Act_Param &param)
             emit addNewTask(&task);
         };
         delete createVirtSec;
-        createVirtSec = nullptr;
+        createVirtSec = Q_NULLPTR;
         //qDebug()<<xml<<"path"<<result;
     };
 }

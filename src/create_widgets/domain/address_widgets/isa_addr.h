@@ -7,7 +7,7 @@ class IsaAddr : public _Addr
 {
     Q_OBJECT
 public:
-    explicit IsaAddr(QWidget *parent = nullptr);
+    explicit IsaAddr(QWidget *parent = Q_NULLPTR);
 
 private:
     QLabel          *iobaseLabel;

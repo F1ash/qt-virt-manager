@@ -11,8 +11,8 @@ class dirAttach_HlpThread : public qwdHelpThread
     Q_OBJECT
 public:
     explicit dirAttach_HlpThread(
-            QObject        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QObject        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
     QStringList      nwFilters;
     void             run();
 signals:
@@ -24,8 +24,8 @@ class DirectAttachment : public _QWidget_Threaded
     Q_OBJECT
 public:
     explicit DirectAttachment(
-            QWidget        *parent      = nullptr,
-            virConnectPtr  *connPtrPtr  = nullptr);
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr  = Q_NULLPTR);
 
 private:
     QLabel          *netSourceLabel, *sourceModeLabel;

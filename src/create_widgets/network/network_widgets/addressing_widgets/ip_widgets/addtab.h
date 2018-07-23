@@ -7,7 +7,7 @@ class AddTab : public QMenu
 {
     Q_OBJECT
 public:
-    explicit AddTab(QWidget *parent = nullptr);
+    explicit AddTab(QWidget *parent = Q_NULLPTR);
     QAction     *addTabAction;
 };
 

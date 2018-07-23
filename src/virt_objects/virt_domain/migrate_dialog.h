@@ -130,8 +130,8 @@ class mgrHelpThread : public _VirtThread
 {
 public:
     explicit mgrHelpThread(
-            QObject         *parent     = nullptr,
-            virConnectPtr   *connPtrPtr = nullptr);
+            QObject         *parent     = Q_NULLPTR,
+            virConnectPtr   *connPtrPtr = Q_NULLPTR);
     QString hostName, connType;
     void    run();
 };
@@ -141,9 +141,9 @@ class MigrateDialog : public QDialog
     Q_OBJECT
 public:
     explicit MigrateDialog(
-            QWidget         *parent      = nullptr,
+            QWidget         *parent      = Q_NULLPTR,
             QString          _domain     = QString(),
-            virConnectPtr   *connPtrPtr  = nullptr);
+            virConnectPtr   *connPtrPtr  = Q_NULLPTR);
 
 signals:
 

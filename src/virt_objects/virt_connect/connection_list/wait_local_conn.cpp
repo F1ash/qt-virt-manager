@@ -14,25 +14,25 @@ WaitLocalConn::WaitLocalConn(
 void WaitLocalConn::run()
 {
     localConnsClosed = false;
-    if ( connections==nullptr || connItemModel==nullptr ) return;
+    if ( connections==Q_NULLPTR || connItemModel==Q_NULLPTR ) return;
     while (!localConnsClosed) {
         QStringList to_Delete;
         bool exist = false;
         foreach (QString key, connections->keys()) {
             ConnElement *el = static_cast<ConnElement*>(
                         connections->value(key));
-            if ( nullptr!=el ) {
+            if ( Q_NULLPTR!=el ) {
                 QRegExp rx("^\\{Local([0-9]+)_([A-Z]+)\\}$");
                 QString _name = el->getName();
                 if ( _name.contains(rx) ) {
                     exist = true;
                     const int count = connItemModel->rowCount();
                     for (int i=0; i<count; i++) {
-                        ConnItemIndex *idx = nullptr;
+                        ConnItemIndex *idx = Q_NULLPTR;
                         if ( 0<=i && i< connItemModel->connItemDataList.count() ) {
                             idx = connItemModel->connItemDataList.at(i);
                         };
-                        if ( nullptr==idx ) continue;
+                        if ( Q_NULLPTR==idx ) continue;
                         if ( idx->getName().compare(_name)==0 ) {
                             DATA _data = idx->getData();
                             if ( _data.value("isRunning").toInt()!=RUNNING ) {
@@ -52,14 +52,14 @@ void WaitLocalConn::run()
         foreach (QString key, to_Delete) {
             ConnElement *el = static_cast<ConnElement*>(
                         connections->value(key));
-            if ( nullptr!=el ) {
+            if ( Q_NULLPTR!=el ) {
                 QString _name = el->getName();
                 QList<ConnItemIndex*>::const_iterator i;
                 for (i=connItemModel->connItemDataList.constBegin();
                      i!=connItemModel->connItemDataList.constEnd();
                      ++i) {
                     ConnItemIndex *idx = (*i);
-                    if ( nullptr==idx ) continue;
+                    if ( Q_NULLPTR==idx ) continue;
                     if ( idx->getName().compare(_name)==0 ) {
                         int row =
                                 connItemModel->connItemDataList.indexOf(idx);

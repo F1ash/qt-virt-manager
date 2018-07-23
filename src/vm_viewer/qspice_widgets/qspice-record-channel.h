@@ -26,7 +26,7 @@ protected:
         audioFormat.setByteOrder(QAudioFormat::LittleEndian);
         audioFormat.setSampleType(QAudioFormat::Float);
         audioFormat.setSampleSize(16);
-        audioInput = nullptr;
+        audioInput = Q_NULLPTR;
         _dev = new QTemporaryFile(this);
         _dev->setAutoRemove(false);
         initCallbacks();

@@ -9,7 +9,7 @@ class MAC_MASK_Data : public UntypedData
     Q_OBJECT
 public:
     explicit MAC_MASK_Data(
-            QWidget *parent     = nullptr,
+            QWidget *parent     = Q_NULLPTR,
             QString  tag        = "",
             QString  topValue   = "");
     QString          getAttrValue() const;

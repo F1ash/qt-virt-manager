@@ -15,7 +15,7 @@ class QSpiceSmartcardWidget : public QDialog
 {
     Q_OBJECT
 public:
-    explicit QSpiceSmartcardWidget(QWidget *parent = nullptr);
+    explicit QSpiceSmartcardWidget(QWidget *parent = Q_NULLPTR);
     ~QSpiceSmartcardWidget();
 
 signals:

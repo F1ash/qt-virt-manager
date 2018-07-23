@@ -11,8 +11,8 @@ class Volume_Disk : public _Disk
     Q_OBJECT
 public:
     explicit Volume_Disk(
-            QWidget        *parent     = nullptr,
-            virConnectPtr*  connPtrPtr = nullptr);
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr = Q_NULLPTR);
 
 private:
     QLabel          *poolLabel, *modeLabel,

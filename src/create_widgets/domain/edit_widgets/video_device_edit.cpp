@@ -43,7 +43,7 @@ void VideoDevice_Edit::setDataDescription(const QString &_xmlDesc)
     addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
         PciAddr *wdg = static_cast<PciAddr*>( addr->getCurrentAddrWidget() );
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->domain->setText( _addr.attribute("domain") );
             wdg->bus->setText( _addr.attribute("bus") );
             wdg->slot->setText( _addr.attribute("slot") );

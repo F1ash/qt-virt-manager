@@ -20,8 +20,8 @@ class NetFilterHelperThread : public _VirtThread
     Q_OBJECT
 public:
     explicit NetFilterHelperThread(
-            QObject        *parent      = nullptr,
-            virConnectPtr  *connPtrPtr  = nullptr);
+            QObject        *parent      = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr  = Q_NULLPTR);
     QStringList      filterList;
     void             run();
 };
@@ -31,7 +31,7 @@ class CreateVirtNWFilter : public QMainWindow
     Q_OBJECT
 public:
     explicit CreateVirtNWFilter(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             TASK     _task  = TASK());
     ~CreateVirtNWFilter();
 
@@ -42,11 +42,11 @@ signals:
 
 private:
     QSettings        settings;
-    virConnectPtr*   ptr_ConnPtr = nullptr;
+    virConnectPtr*   ptr_ConnPtr = Q_NULLPTR;
     QString          xmlFileName, xmlDesc;
     virErrorPtr      virtErrors;
 
-    QTemporaryFile  *xml = nullptr;
+    QTemporaryFile  *xml = Q_NULLPTR;
     TASK             task;
 
     NetFilterHelperThread

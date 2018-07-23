@@ -41,7 +41,7 @@ void RedirDevDevice_Edit::setDataDescription(const QString &_xmlDesc)
     address->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
         USBAddr *wdg = static_cast<USBAddr*>( address->getCurrentAddrWidget() );
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->bus->setText( _addr.attribute("bus") );
             wdg->port->setText( _addr.attribute("port") );
         };

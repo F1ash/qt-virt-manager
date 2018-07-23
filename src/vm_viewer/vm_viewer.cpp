@@ -58,10 +58,6 @@ VM_Viewer::~VM_Viewer()
         reinitTimerId = 0;
     };
     disconnectFromVirtDomain();
-    // double call segfault
-    //if ( sshTunnelThread!=nullptr ) {
-    //    sshTunnelThread->stop();
-    //};
     //qDebug()<<"VM_Viewer destroyed";
 }
 void VM_Viewer::init()
@@ -165,9 +161,9 @@ void VM_Viewer::sendErrMsg(const QString &msg, const uint _number)
 
 void VM_Viewer::sendConnErrors()
 {
-    virtErrors = (nullptr!=ptr_ConnPtr && *ptr_ConnPtr)?
-                virConnGetLastError(*ptr_ConnPtr):nullptr;
-    if ( virtErrors!=nullptr && virtErrors->code>0 ) {
+    virtErrors = (Q_NULLPTR!=ptr_ConnPtr && *ptr_ConnPtr)?
+                virConnGetLastError(*ptr_ConnPtr):Q_NULLPTR;
+    if ( virtErrors!=Q_NULLPTR && virtErrors->code>0 ) {
         QString msg = QString("VirtError(%1) : %2").arg(virtErrors->code)
                 .arg(QString::fromUtf8(virtErrors->message));
         emit errorMsg( msg );
@@ -177,7 +173,7 @@ void VM_Viewer::sendConnErrors()
 void VM_Viewer::sendGlobalErrors()
 {
     virtErrors = virGetLastError();
-    if ( virtErrors!=nullptr && virtErrors->code>0 ) {
+    if ( virtErrors!=Q_NULLPTR && virtErrors->code>0 ) {
         QString msg = QString("VirtError(%1) : %2")
                 .arg(virtErrors->code)
                 .arg(QString::fromUtf8(virtErrors->message));
@@ -292,7 +288,7 @@ void VM_Viewer::startCloseProcess()
     //qDebug()<<"startCloseProcess";
     if ( killTimerId==0 ) {
         killTimerId = startTimer(PERIOD);
-        if ( nullptr!=statusBar() ) statusBar()->show();
+        if ( Q_NULLPTR!=statusBar() ) statusBar()->show();
     };
     //qDebug()<<killTimerId<<"killTimer";
 }

@@ -7,7 +7,7 @@ class ConnListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit ConnListDelegate(QObject *parent = nullptr);
+    explicit ConnListDelegate(QObject *parent = Q_NULLPTR);
 
 private slots:
     void paint(

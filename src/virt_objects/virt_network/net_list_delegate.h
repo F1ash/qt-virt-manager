@@ -7,7 +7,7 @@ class NetworkListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit NetworkListDelegate(QObject *parent = nullptr);
+    explicit NetworkListDelegate(QObject *parent = Q_NULLPTR);
 
 private slots:
     void paint(

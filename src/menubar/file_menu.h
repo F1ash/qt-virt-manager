@@ -7,7 +7,7 @@ class FileMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit FileMenu(QWidget *parent = nullptr);
+    explicit FileMenu(QWidget *parent = Q_NULLPTR);
     QAction     *newConn;
     QAction     *hideToTray;
     QAction     *restart;

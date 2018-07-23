@@ -11,7 +11,7 @@ class Events : public _Changed
 {
     Q_OBJECT
 public:
-    explicit Events(QWidget *parent = nullptr);
+    explicit Events(QWidget *parent = Q_NULLPTR);
     QCheckBox       *powerOffLabel, *rebootLabel,
                     *crashLabel, *lockFailureLabel;
     QComboBox       *on_powerOff, *on_reboot,

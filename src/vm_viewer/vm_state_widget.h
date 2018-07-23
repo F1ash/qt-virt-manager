@@ -14,7 +14,7 @@ class VM_State_Widget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit VM_State_Widget(QWidget *parent = nullptr);
+    explicit VM_State_Widget(QWidget *parent = Q_NULLPTR);
     void             setCloseProcessValue(int);
 
 signals:

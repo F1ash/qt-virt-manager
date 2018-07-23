@@ -22,7 +22,7 @@ class ConnAliveThread : public _VirtThread
 {
     Q_OBJECT
 public:
-    explicit ConnAliveThread(QObject *parent = nullptr);
+    explicit ConnAliveThread(QObject *parent = Q_NULLPTR);
     ~ConnAliveThread();
     void            setOnViewState(bool);
     bool            getOnViewState() const;

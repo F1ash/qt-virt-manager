@@ -9,9 +9,9 @@ StorageVolControlThread::StorageVolControlThread(QObject *parent) :
 void StorageVolControlThread::stop()
 {
     keep_alive = false;
-    if (currStoragePool!=nullptr) {
+    if (currStoragePool!=Q_NULLPTR) {
         virStoragePoolFree(currStoragePool);
-        currStoragePool = nullptr;
+        currStoragePool = Q_NULLPTR;
     };
     //qDebug()<<"stVol_thread (stop)\n\tConnection\t\t"<<ptr_ConnPtr
     //        <<"\n\tPool\t\t"<<currStoragePool
@@ -23,11 +23,11 @@ void StorageVolControlThread::execAction(uint _num, TASK _task)
     task = _task;
     keep_alive = false;
     currPoolName = task.args.object;
-    if ( nullptr!=task.srcConnPtr ) {
+    if ( Q_NULLPTR!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
-            task.srcConnPtr = nullptr;
+            task.srcConnPtr = Q_NULLPTR;
             sendConnErrors();
         } else
             keep_alive = true;
@@ -107,19 +107,19 @@ Result StorageVolControlThread::getAllStorageVolList()
     Result result;
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     ACT_RESULT storageVolList;
-    if (currStoragePool!=nullptr) {
+    if (currStoragePool!=Q_NULLPTR) {
         virStoragePoolFree(currStoragePool);
-        currStoragePool = nullptr;
+        currStoragePool = Q_NULLPTR;
     };
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     currStoragePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, currPoolName.toUtf8().data());
-    if ( currStoragePool!=nullptr && keep_alive ) {
-        virStorageVolPtr *storageVol = nullptr;
+    if ( currStoragePool!=Q_NULLPTR && keep_alive ) {
+        virStorageVolPtr *storageVol = Q_NULLPTR;
         // flags: extra flags; not used yet, so callers should always pass 0
         unsigned int flags = 0;
         int ret = virStoragePoolListAllVolumes(
@@ -199,7 +199,7 @@ Result StorageVolControlThread::createStorageVol()
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString path = task.args.path;
     QByteArray xmlData;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -215,15 +215,15 @@ Result StorageVolControlThread::createStorageVol()
     };
     xmlData = f.readAll();
     f.close();
-    if (currStoragePool!=nullptr) {
+    if (currStoragePool!=Q_NULLPTR) {
         virStoragePoolFree(currStoragePool);
-        currStoragePool = nullptr;
+        currStoragePool = Q_NULLPTR;
     };
     currStoragePool = virStoragePoolLookupByName(
                 *task.srcConnPtr, currPoolName.toUtf8().data());
     virStorageVolPtr storageVol = virStorageVolCreateXML(
                 currStoragePool, xmlData.data(), VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA);
-    if ( storageVol==nullptr ) {
+    if ( storageVol==Q_NULLPTR ) {
         result.err = sendConnErrors();
         result.result = false;
         return result;
@@ -241,11 +241,11 @@ Result StorageVolControlThread::deleteStorageVol()
     Result result;
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name = task.object;
-    if (currStoragePool!=nullptr) {
+    if (currStoragePool!=Q_NULLPTR) {
         virStoragePoolFree(currStoragePool);
-        currStoragePool = nullptr;
+        currStoragePool = Q_NULLPTR;
     };
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -258,7 +258,7 @@ Result StorageVolControlThread::deleteStorageVol()
     bool deleted = false;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
-    if ( storageVol!=nullptr ) {
+    if ( storageVol!=Q_NULLPTR ) {
         deleted = (virStorageVolDelete(storageVol, flags)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -278,11 +278,11 @@ Result StorageVolControlThread::downloadStorageVol()
     name = task.object;
     path = task.args.path;
     //qDebug()<<args.first()<<"download";
-    if (currStoragePool!=nullptr) {
+    if (currStoragePool!=Q_NULLPTR) {
         virStoragePoolFree(currStoragePool);
-        currStoragePool = nullptr;
+        currStoragePool = Q_NULLPTR;
     };
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -301,7 +301,7 @@ Result StorageVolControlThread::downloadStorageVol()
     uint flags = 0;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
-    if ( storageVol!=nullptr ) {
+    if ( storageVol!=Q_NULLPTR ) {
         int ret = virStorageVolDownload(
                     storageVol, stream, offset, length, flags);
         if ( ret<0 )
@@ -337,7 +337,7 @@ Result StorageVolControlThread::downloadStorageVol()
         };
         virStorageVolFree(storageVol);
     } else sendConnErrors();
-    if ( stream!=nullptr ) virStreamFree(stream);
+    if ( stream!=Q_NULLPTR ) virStreamFree(stream);
     f->close();
     f->deleteLater();
     result.msg.append(
@@ -353,11 +353,11 @@ Result StorageVolControlThread::resizeStorageVol()
     Result result;
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name = task.object;
-    if (currStoragePool!=nullptr) {
+    if (currStoragePool!=Q_NULLPTR) {
         virStoragePoolFree(currStoragePool);
-        currStoragePool = nullptr;
+        currStoragePool = Q_NULLPTR;
     };
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -369,7 +369,7 @@ Result StorageVolControlThread::resizeStorageVol()
     bool resized = false;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
-    if ( storageVol!=nullptr ) {
+    if ( storageVol!=Q_NULLPTR ) {
         int ret = virStorageVolResize(
                     storageVol, capacity,
                     VIR_STORAGE_VOL_RESIZE_ALLOCATE |
@@ -395,11 +395,11 @@ Result StorageVolControlThread::uploadStorageVol()
     name = task.object;
     path = task.args.path;
     //qDebug()<<path<<"upload";
-    if (currStoragePool!=nullptr) {
+    if (currStoragePool!=Q_NULLPTR) {
         virStoragePoolFree(currStoragePool);
-        currStoragePool = nullptr;
+        currStoragePool = Q_NULLPTR;
     };
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -417,7 +417,7 @@ Result StorageVolControlThread::uploadStorageVol()
     uint flags = 0;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
-    if ( storageVol!=nullptr ) {
+    if ( storageVol!=Q_NULLPTR ) {
         int ret = virStorageVolUpload(
                     storageVol, stream, offset, length, flags);
         if ( ret<0 ) {
@@ -454,7 +454,7 @@ Result StorageVolControlThread::uploadStorageVol()
         virStorageVolFree(storageVol);
     } else
         result.err = sendConnErrors();
-    if ( stream!=nullptr ) virStreamFree(stream);
+    if ( stream!=Q_NULLPTR ) virStreamFree(stream);
     f->close();
     f->deleteLater();
     result.msg.append(
@@ -470,11 +470,11 @@ Result StorageVolControlThread::wipeStorageVol()
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name, algorithm;
     name = task.object;
-    if (currStoragePool!=nullptr) {
+    if (currStoragePool!=Q_NULLPTR) {
         virStoragePoolFree(currStoragePool);
-        currStoragePool = nullptr;
+        currStoragePool = Q_NULLPTR;
     };
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -488,7 +488,7 @@ Result StorageVolControlThread::wipeStorageVol()
     bool wiped = false;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
-    if ( storageVol!=nullptr ) {
+    if ( storageVol!=Q_NULLPTR ) {
         int ret = virStorageVolWipePattern(storageVol, alg, flags);
         if ( ret<0 ) {
             result.err = sendConnErrors();
@@ -538,11 +538,11 @@ Result StorageVolControlThread::refreshStorageVolList()
 {
     Result result;
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
-    if (currStoragePool!=nullptr) {
+    if (currStoragePool!=Q_NULLPTR) {
         virStoragePoolFree(currStoragePool);
-        currStoragePool = nullptr;
+        currStoragePool = Q_NULLPTR;
     };
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -569,11 +569,11 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
     Result result;
     result.name = QString("%1_%2").arg(task.srcConName).arg(currPoolName);
     QString name = task.object;
-    if (currStoragePool!=nullptr) {
+    if (currStoragePool!=Q_NULLPTR) {
         virStoragePoolFree(currStoragePool);
-        currStoragePool = nullptr;
+        currStoragePool = Q_NULLPTR;
     };
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -582,14 +582,14 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
                 *task.srcConnPtr, currPoolName.toUtf8().data());
 
     bool read = false;
-    char *Returns = nullptr;
+    char *Returns = Q_NULLPTR;
     // flags: extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     virStorageVol *storageVol = virStorageVolLookupByName(
                 currStoragePool, name.toUtf8().data());
-    if ( storageVol!=nullptr ) {
+    if ( storageVol!=Q_NULLPTR ) {
         Returns = virStorageVolGetXMLDesc(storageVol, flags);
-        if ( Returns==nullptr )
+        if ( Returns==Q_NULLPTR )
             result.err = sendConnErrors();
         else read = true;
         virStorageVolFree(storageVol);
@@ -603,7 +603,7 @@ Result StorageVolControlThread::getStorageVolXMLDesc()
     if (read) f.write(Returns);
     result.fileName.append(f.fileName());
     f.close();
-    if ( Returns!=nullptr ) free(Returns);
+    if ( Returns!=Q_NULLPTR ) free(Returns);
     result.msg.append(QString(tr("'<b>%1</b>' StorageVol %2 XML'ed."))
                   .arg(name).arg((read)? "": tr("not")));
     result.result = read;

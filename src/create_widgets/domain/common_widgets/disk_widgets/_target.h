@@ -17,7 +17,7 @@ class _Target : public _Changed
 {
     Q_OBJECT
 public:
-    explicit _Target(QWidget *parent = nullptr);
+    explicit _Target(QWidget *parent = Q_NULLPTR);
     QCheckBox   *trayLabel, *removableLabel;
     QLineEdit   *devName;
     QComboBox   *bus, *tray, *removable;

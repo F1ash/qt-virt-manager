@@ -6,7 +6,7 @@
 class IPv6_Attributes : public _Attributes
 {
 public:
-    explicit IPv6_Attributes(QWidget *parent = nullptr);
+    explicit IPv6_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // IPV6_ATTRIBUTES_H

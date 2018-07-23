@@ -9,7 +9,7 @@ qwdHelpThread::qwdHelpThread(
 }
 void qwdHelpThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };

@@ -12,17 +12,17 @@ SetDisksDataThread::~SetDisksDataThread()
 
 void SetDisksDataThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
     // NOTE: currConnName == domainName
     virDomainPtr domain = virDomainLookupByName(
                 *ptr_ConnPtr, currConnName.toUtf8().data());
-    if ( nullptr!=domain ) {
+    if ( Q_NULLPTR!=domain ) {
         char *xmlDesc = virDomainGetXMLDesc(domain, 0);
         virDomainFree(domain);
-        if ( nullptr!=xmlDesc ) {
+        if ( Q_NULLPTR!=xmlDesc ) {
             QDomDocument doc;
             doc.setContent(QString(xmlDesc));
             free(xmlDesc);

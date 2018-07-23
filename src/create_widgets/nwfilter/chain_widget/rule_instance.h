@@ -9,7 +9,7 @@ class RuleInstance : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit RuleInstance(QWidget *parent = nullptr);
+    explicit RuleInstance(QWidget *parent = Q_NULLPTR);
     void             editRule(const QString&, int);
 
 signals:

@@ -9,7 +9,7 @@ NetFilterHelperThread::NetFilterHelperThread(
 }
 void NetFilterHelperThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -18,7 +18,7 @@ void NetFilterHelperThread::run()
         return;
     };
     // something data reading
-    virNWFilterPtr *filters = nullptr;
+    virNWFilterPtr *filters = Q_NULLPTR;
     //extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
     int ret = virConnectListAllNWFilters(

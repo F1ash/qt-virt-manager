@@ -32,7 +32,7 @@ QDomDocument IP_Widget::getDataDocument() const
     for (int i=0; i<ipSet->count(); i++) {
         _IP_Widget *wdg =
                 static_cast<_IP_Widget*>(ipSet->widget(i));
-        if ( nullptr==wdg ) continue;
+        if ( Q_NULLPTR==wdg ) continue;
         doc.appendChild(wdg->getDataDocument());
     };
     return doc;
@@ -55,7 +55,7 @@ void IP_Widget::setDataDescription(const QString &_xmlDesc)
                         if ( i>0 ) addTab();
                         _IP_Widget *wdg =
                                 static_cast<_IP_Widget*>(ipSet->widget(i));
-                        if ( nullptr!=wdg ) {
+                        if ( Q_NULLPTR!=wdg ) {
                             QDomDocument _doc;
                             _doc.setContent(QString());
                             _doc.appendChild(e.cloneNode());
@@ -91,7 +91,7 @@ void IP_Widget::updateDHCPUsage(uint ver, uint idx, bool state)
         if ( i==int(idx) ) continue;
         _IP_Widget *wdg =
                 static_cast<_IP_Widget*>(ipSet->widget(i));
-        if ( nullptr==wdg ) continue;
+        if ( Q_NULLPTR==wdg ) continue;
         wdg->updateDHCPUsage(ver, state);
     };
 }
@@ -116,7 +116,7 @@ void IP_Widget::addTab()
                 tr("IP Element"));
     _IP_Widget *wdg =
             static_cast<_IP_Widget*>(ipSet->widget(i));
-    if ( nullptr!=wdg ) {
+    if ( Q_NULLPTR!=wdg ) {
         wdg->setTabIdx(i);
         connect(wdg, SIGNAL(dhcpUsageChanged(uint, uint, bool)),
                 this, SLOT(updateDHCPUsage(uint, uint, bool)));
@@ -127,14 +127,14 @@ void IP_Widget::closeTab(int i)
     if ( ipSet->count()<2 ) return;
     _IP_Widget *wdg =
             static_cast<_IP_Widget*>(ipSet->widget(i));
-    if ( nullptr!=wdg ) {
+    if ( Q_NULLPTR!=wdg ) {
         wdg->tabToClose();
         ipSet->removeTab(i);
         wdg->deleteLater();
         for (int i=0; i<ipSet->count(); i++) {
             _IP_Widget *wdg =
                     static_cast<_IP_Widget*>(ipSet->widget(i));
-            if ( nullptr==wdg ) continue;
+            if ( Q_NULLPTR==wdg ) continue;
             // set new tab idx;
             wdg->setTabIdx(i);
         };

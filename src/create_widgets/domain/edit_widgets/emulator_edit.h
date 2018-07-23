@@ -8,7 +8,7 @@ class Emulator_Edit : public Emulator
     Q_OBJECT
 public:
     explicit Emulator_Edit(
-            QWidget *parent = nullptr);
+            QWidget *parent = Q_NULLPTR);
 
 signals:
 

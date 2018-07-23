@@ -12,7 +12,7 @@ class OpenFileMenu : public QMenu
     Q_OBJECT
 public:
     explicit OpenFileMenu(
-            QWidget     *parent = nullptr,
+            QWidget     *parent = Q_NULLPTR,
             Actions      _act   = Actions::_NONE_ACTION,
             VIRT_ENTITY  _e     = VIRT_ENTITY::_NONE_ENTITY);
 

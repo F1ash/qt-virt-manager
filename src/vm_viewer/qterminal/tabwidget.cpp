@@ -207,7 +207,7 @@ void TabWidget::propertiesChanged()
     for (int i = 0; i < count(); ++i)
     {
         TermWidgetHolder *console = static_cast<TermWidgetHolder*>(widget(i));
-        if ( console!=nullptr ) console->propertiesChanged();
+        if ( console!=Q_NULLPTR ) console->propertiesChanged();
     }
 }
 

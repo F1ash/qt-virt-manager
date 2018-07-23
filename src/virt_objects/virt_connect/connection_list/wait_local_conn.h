@@ -14,9 +14,9 @@ class WaitLocalConn : public QThread
     Q_OBJECT
 public:
     explicit WaitLocalConn(
-            QObject         *parent = nullptr,
-            CONN_LIST       *_conns = nullptr,
-            ConnItemModel   *_model = nullptr);
+            QObject         *parent = Q_NULLPTR,
+            CONN_LIST       *_conns = Q_NULLPTR,
+            ConnItemModel   *_model = Q_NULLPTR);
     CONN_LIST       *connections;
     ConnItemModel   *connItemModel;
     void             run();

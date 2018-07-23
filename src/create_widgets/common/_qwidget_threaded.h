@@ -8,8 +8,8 @@ class qwdHelpThread : public _VirtThread
 {
 public:
     explicit qwdHelpThread(
-            QObject         *parent     = nullptr,
-            virConnectPtr   *connPtrPtr = nullptr);
+            QObject         *parent     = Q_NULLPTR,
+            virConnectPtr   *connPtrPtr = Q_NULLPTR);
     QString         connType;
     virtual void    run();
 };
@@ -19,9 +19,9 @@ class _QWidget_Threaded : public _QWidget
     Q_OBJECT
 public:
     explicit _QWidget_Threaded(
-            QWidget         *parent     = nullptr,
-            virConnectPtr*   connPtrPtr = nullptr,
-            virDomainPtr     domain     = nullptr);
+            QWidget         *parent     = Q_NULLPTR,
+            virConnectPtr*   connPtrPtr = Q_NULLPTR,
+            virDomainPtr     domain     = Q_NULLPTR);
     qwdHelpThread   *hlpThread;
 
 public slots:

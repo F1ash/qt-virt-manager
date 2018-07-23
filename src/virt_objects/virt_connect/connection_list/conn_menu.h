@@ -6,7 +6,7 @@ class ConnectionMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit ConnectionMenu(QWidget *parent = nullptr);
+    explicit ConnectionMenu(QWidget *parent = Q_NULLPTR);
 
     QAction  *edit;
     QAction  *display;

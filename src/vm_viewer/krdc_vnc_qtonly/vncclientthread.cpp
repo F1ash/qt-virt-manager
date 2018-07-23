@@ -31,7 +31,7 @@ static QString outputErrorMessageString; // FIXME test it (static?)
 rfbBool VncClientThread::newclient(rfbClient *cl)
 {
     VncClientThread *t =
-            static_cast<VncClientThread*>(rfbClientGetClientData(cl, nullptr));
+            static_cast<VncClientThread*>(rfbClientGetClientData(cl, Q_NULLPTR));
     Q_ASSERT(t);
 
     const int width = cl->width, height = cl->height, depth = cl->format.bitsPerPixel;
@@ -89,7 +89,7 @@ void VncClientThread::updatefb(rfbClient* cl, int x, int y, int w, int h)
     }
 
     VncClientThread *t =
-            static_cast<VncClientThread*>(rfbClientGetClientData(cl, nullptr));
+            static_cast<VncClientThread*>(rfbClientGetClientData(cl, Q_NULLPTR));
     Q_ASSERT(t);
 
     t->setImage(img);
@@ -104,7 +104,7 @@ void VncClientThread::cuttext(rfbClient* cl, const char *text, int textlen)
 
     if (!cutText.isEmpty()) {
         VncClientThread *t =
-                static_cast<VncClientThread*>(rfbClientGetClientData(cl, nullptr));
+                static_cast<VncClientThread*>(rfbClientGetClientData(cl, Q_NULLPTR));
         Q_ASSERT(t);
 
         t->emitGotCut(cutText);
@@ -116,7 +116,7 @@ char *VncClientThread::passwdHandler(rfbClient *cl)
     kDebug(5011) << "password request" << kBacktrace();
 
     VncClientThread *t =
-            static_cast<VncClientThread*>(rfbClientGetClientData(cl, nullptr));
+            static_cast<VncClientThread*>(rfbClientGetClientData(cl, Q_NULLPTR));
     Q_ASSERT(t);
 
     t->passwordRequest();
@@ -160,7 +160,7 @@ void VncClientThread::outputHandler(const char *format, ...)
 
 VncClientThread::VncClientThread(QObject *parent)
         : QThread(parent)
-        , frameBuffer(nullptr)
+        , frameBuffer(Q_NULLPTR)
 {
     QMutexLocker locker(&mutex);
     m_stopped = false;
@@ -264,7 +264,7 @@ void VncClientThread::run()
         cl->GetPassword = passwdHandler;
         cl->GotFrameBufferUpdate = updatefb;
         cl->GotXCutText = cuttext;
-        rfbClientSetClientData(cl, nullptr, this);
+        rfbClientSetClientData(cl, Q_NULLPTR, this);
 
         cl->serverHost = strdup(m_host.toUtf8().constData());
 
@@ -277,7 +277,7 @@ void VncClientThread::run()
 
         kDebug(5011) << "--------------------- trying init ---------------------";
 
-        if (rfbInitClient(cl, nullptr, nullptr))
+        if (rfbInitClient(cl, Q_NULLPTR, Q_NULLPTR))
             break;
 
         if (m_passwordError)

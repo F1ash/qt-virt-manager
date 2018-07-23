@@ -25,8 +25,8 @@ protected:
         audioFormat.setByteOrder(QAudioFormat::LittleEndian);
         audioFormat.setSampleType(QAudioFormat::SignedInt);
         audioFormat.setSampleSize(16);
-        audioOutput = nullptr;
-        _dev = nullptr;
+        audioOutput = Q_NULLPTR;
+        _dev = Q_NULLPTR;
         initCallbacks();
     }
 

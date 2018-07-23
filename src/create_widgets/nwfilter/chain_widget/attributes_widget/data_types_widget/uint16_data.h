@@ -9,7 +9,7 @@ class UINT16_Data : public UntypedData
     Q_OBJECT
 public:
     explicit UINT16_Data(
-            QWidget *parent     = nullptr,
+            QWidget *parent     = Q_NULLPTR,
             QString  tag        = "",
             QString  topValue   = "65535");
     QString          getAttrValue() const;

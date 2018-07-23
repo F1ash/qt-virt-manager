@@ -7,7 +7,7 @@ class DriveAddr : public _Addr
 {
     Q_OBJECT
 public:
-    explicit DriveAddr(QWidget *parent = nullptr);
+    explicit DriveAddr(QWidget *parent = Q_NULLPTR);
     QLineEdit       *controller;
     QLineEdit       *bus;
     QLineEdit       *target;

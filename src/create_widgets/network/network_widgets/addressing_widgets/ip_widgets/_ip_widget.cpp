@@ -24,7 +24,7 @@ _IP_Widget::_IP_Widget(
             this, SLOT(ipv6StateChanged(bool)));
     for (int i=0; i<sets->count(); i++) {
         _IPvX *wdg = static_cast<_IPvX*>(sets->widget(i));
-        if ( nullptr==wdg ) continue;
+        if ( Q_NULLPTR==wdg ) continue;
         connect(staticRoute, SIGNAL(toggled(bool)),
                 this, SLOT(staticRouteChanged(bool)));
         connect(wdg, SIGNAL(dhcpUsageChanged(uint, bool)),
@@ -41,7 +41,7 @@ void _IP_Widget::tabToClose()
         // uncheck DHCP if was checked
         _IPvX *wdg = static_cast<_IPvX*>(
                         sets->currentWidget());
-        if ( nullptr!=wdg && wdg->getDHCPUsageState() ) {
+        if ( Q_NULLPTR!=wdg && wdg->getDHCPUsageState() ) {
             emit dhcpUsageChanged(wdg->ver, uint(tabIdx), false);
         };
     };
@@ -59,7 +59,7 @@ QDomDocument _IP_Widget::getDataDocument() const
         if ( ipv6->isChecked() )
             _addrElement.setAttribute("family", "ipv6");
         _IPvX *wdg = static_cast<_IPvX*>(sets->currentWidget());
-        if ( nullptr!=wdg ) {
+        if ( Q_NULLPTR!=wdg ) {
             _addrElement.setAttribute(
                         "address",
                         wdg->address->text());
@@ -77,7 +77,7 @@ QDomDocument _IP_Widget::getDataDocument() const
         if ( ipv6->isChecked() )
             _addrElement.setAttribute("family", "ipv6");
         _IPvX *wdg = static_cast<_IPvX*>(sets->currentWidget());
-        if ( nullptr!=wdg ) {
+        if ( Q_NULLPTR!=wdg ) {
             _addrElement.setAttribute(
                         "address",
                         wdg->address->text());
@@ -99,7 +99,7 @@ void _IP_Widget::setDataDescription(const QString &_xmlDesc)
     QString _ver = _el.attribute("family");
     ipv6->setChecked( _ver.compare("ipv6")==0 );
     _IPvX *wdg = static_cast<_IPvX*>(sets->currentWidget());
-    if ( nullptr!=wdg ) {
+    if ( Q_NULLPTR!=wdg ) {
         wdg->address->setText(
                     _el.attribute("address"));
         if ( _el.hasAttribute("netmask") ) {
@@ -136,7 +136,7 @@ void _IP_Widget::setDataDescription(const QString &_xmlDesc)
 }
 void _IP_Widget::updateDHCPUsage(uint ver, bool state)
 {
-    _IPvX *wdg = nullptr;
+    _IPvX *wdg = Q_NULLPTR;
     switch (ver) {
     case 4:
         wdg = static_cast<_IPvX*>(sets->widget(0));
@@ -147,7 +147,7 @@ void _IP_Widget::updateDHCPUsage(uint ver, bool state)
     default:
         break;
     };
-    if ( nullptr!=wdg )
+    if ( Q_NULLPTR!=wdg )
         wdg->updateDHCPUsage(state);
 }
 
@@ -162,7 +162,7 @@ void _IP_Widget::ipv6StateChanged(bool state)
     // because IP_Element is unused
     _IPvX *wdg = static_cast<_IPvX*>(
                     sets->widget( (state)? 0:1 ));
-    if ( nullptr!=wdg && wdg->getDHCPUsageState() ) {
+    if ( Q_NULLPTR!=wdg && wdg->getDHCPUsageState() ) {
         wdg->updateDHCPUsage(false);
         emit dhcpUsageChanged(wdg->ver, uint(tabIdx), false);
     };
@@ -176,7 +176,7 @@ void _IP_Widget::staticRouteChanged(bool state)
 {
     _IPvX *wdg = static_cast<_IPvX*>(
                     sets->currentWidget());
-    if ( nullptr!=wdg ) {
+    if ( Q_NULLPTR!=wdg ) {
         wdg->setStaticRouteMode(state);
     };
 }

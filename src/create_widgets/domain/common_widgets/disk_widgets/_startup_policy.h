@@ -11,7 +11,7 @@ class _StartupPolicy : public _Changed
 {
     Q_OBJECT
 public:
-    explicit _StartupPolicy(QWidget *parent = nullptr);
+    explicit _StartupPolicy(QWidget *parent = Q_NULLPTR);
 
 signals:
     //void             dataChanged();

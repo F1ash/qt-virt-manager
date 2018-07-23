@@ -23,8 +23,8 @@ class _CreateStorage : public QDialog
     Q_OBJECT
 public:
     explicit _CreateStorage(
-            QWidget         *parent     = nullptr,
-            virConnectPtr   *connPtrPtr = nullptr,
+            QWidget         *parent     = Q_NULLPTR,
+            virConnectPtr   *connPtrPtr = Q_NULLPTR,
             QString          _xmlFile   = QString());
     QComboBox           *type;
     QLineEdit           *stName;

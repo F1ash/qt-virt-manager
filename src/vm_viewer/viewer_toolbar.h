@@ -15,7 +15,7 @@ class ViewerToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit ViewerToolBar(QWidget *parent = nullptr);
+    explicit ViewerToolBar(QWidget *parent = Q_NULLPTR);
     //QAction         *start_Action;
     QAction         *restore_Action;
     QMenu           *start_Menu;

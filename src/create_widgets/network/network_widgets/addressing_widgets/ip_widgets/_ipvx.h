@@ -10,7 +10,7 @@ class _IPvX : public _QWidget
     Q_OBJECT
 public:
     explicit _IPvX(
-            QWidget *parent  = nullptr,
+            QWidget *parent  = Q_NULLPTR,
             bool     hasDHCP = false,
             uint     _ver    = 0);
     QComboBox       *significantBitsL;

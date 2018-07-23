@@ -11,7 +11,7 @@ class ForwardPage : public QWizardPage
 {
     Q_OBJECT
 public:
-    explicit ForwardPage(QWidget *parent = nullptr);
+    explicit ForwardPage(QWidget *parent = Q_NULLPTR);
     Forward_Widget *fr;
     void            initializePage();
     int             nextId() const;

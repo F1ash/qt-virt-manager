@@ -46,7 +46,7 @@ void RevertSnapshotFlags::changeAvailableFlags(int control)
 void RevertSnapshotFlags::changeFlagCompatibility()
 {
     QAction *act = static_cast<QAction*>(sender());
-    if ( nullptr==act ) return;
+    if ( Q_NULLPTR==act ) return;
     switch ( act->data().toInt() ) {
     case 1:
         if ( act->isChecked() ) {

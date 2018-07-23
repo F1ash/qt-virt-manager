@@ -13,7 +13,7 @@ class CPU_Topology : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit CPU_Topology(QWidget *parent = nullptr);
+    explicit CPU_Topology(QWidget *parent = Q_NULLPTR);
     QSpinBox        *sockets, *cores,
                     *threads;
 

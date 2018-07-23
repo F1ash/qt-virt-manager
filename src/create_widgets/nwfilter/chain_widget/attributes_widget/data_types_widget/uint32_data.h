@@ -9,7 +9,7 @@ class UINT32_Data : public UntypedData
     Q_OBJECT
 public:
     explicit UINT32_Data(
-            QWidget *parent     = nullptr,
+            QWidget *parent     = Q_NULLPTR,
             QString  tag        = "",
             QString  topValue   = "4294967295");
     QString          getAttrValue() const;

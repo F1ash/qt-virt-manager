@@ -8,7 +8,7 @@ class Domain_Widget : public _Checked_Widget
     Q_OBJECT
 public:
     explicit Domain_Widget(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag = "DNS Domain");
 
 private:

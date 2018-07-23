@@ -14,7 +14,7 @@ class VirtNetToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit VirtNetToolBar(QWidget *parent = nullptr);
+    explicit VirtNetToolBar(QWidget *parent = Q_NULLPTR);
     ~VirtNetToolBar();
 
 signals:

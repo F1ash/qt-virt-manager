@@ -11,7 +11,7 @@ class ControlThread : public _VirtThread
 {
     Q_OBJECT
 public:
-    explicit ControlThread(QObject *parent = nullptr);
+    explicit ControlThread(QObject *parent = Q_NULLPTR);
     TASK             task;
     QString          currConnName;
 

@@ -8,7 +8,7 @@ class FileWidget : public _QWidget
     Q_OBJECT
 public:
     explicit FileWidget(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  _tag   = "");
 
 private:

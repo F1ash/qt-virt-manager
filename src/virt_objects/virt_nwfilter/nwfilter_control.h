@@ -12,7 +12,7 @@ class VirtNWFilterControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
-    explicit VirtNWFilterControl(QWidget *parent = nullptr);
+    explicit VirtNWFilterControl(QWidget *parent = Q_NULLPTR);
     ~VirtNWFilterControl();
 
 signals:

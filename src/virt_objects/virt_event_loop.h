@@ -7,7 +7,7 @@ class VirtEventLoop : public _VirtThread
 {
     Q_OBJECT
 public:
-    explicit VirtEventLoop(QObject *parent = nullptr);
+    explicit VirtEventLoop(QObject *parent = Q_NULLPTR);
     QString     libVersion;
     bool        isSuccess() const;
     void        run();

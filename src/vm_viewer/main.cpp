@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
             _ret = d->exec();
             url = d->getURL();
             delete d;
-            d = nullptr;
+            d = Q_NULLPTR;
         };
         QString _type;
         if ( url.endsWith(".vv") ) {
@@ -58,10 +58,10 @@ int main(int argc, char *argv[])
         };
         if ( _ret!=255 ) {
             inLoop = true;
-            VM_Viewer_Only *w = nullptr;
+            VM_Viewer_Only *w = Q_NULLPTR;
             if ( _type.compare("vnc")==0 ) {
 #if WITH_VNC_SUPPORT
-                w = new VNC_Viewer_Only(nullptr, url);
+                w = new VNC_Viewer_Only(Q_NULLPTR, url);
 #else
                 QMessageBox::information(
                             Q_NULLPTR,
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 #endif
             } else if ( _type.compare("spice")==0 ) {
 #if WITH_SPICE_SUPPORT
-                w = new Spice_Viewer_Only(nullptr, url);
+                w = new Spice_Viewer_Only(Q_NULLPTR, url);
 #else
                 QMessageBox::information(
                             Q_NULLPTR,
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
                             QString("Application built without SPICE"));
 #endif
             };
-            if ( w!=nullptr ) {
+            if ( w!=Q_NULLPTR ) {
                 // it will be showed when connection to VM will be success
                 //w->show();
                 _ret = a.exec();

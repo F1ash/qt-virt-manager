@@ -7,7 +7,7 @@ class HubDevice_Edit : public HubDevice
 {
     Q_OBJECT
 public:
-    explicit HubDevice_Edit(QWidget *parent = nullptr);
+    explicit HubDevice_Edit(QWidget *parent = Q_NULLPTR);
 
 signals:
 

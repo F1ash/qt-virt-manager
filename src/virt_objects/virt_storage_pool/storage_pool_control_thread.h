@@ -7,7 +7,7 @@ class StoragePoolControlThread : public ControlThread
 {
     Q_OBJECT
 public:
-    explicit StoragePoolControlThread(QObject *parent = nullptr);
+    explicit StoragePoolControlThread(QObject *parent = Q_NULLPTR);
 
 signals:
 

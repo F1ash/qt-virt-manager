@@ -10,7 +10,7 @@ extern "C" {
 QSpiceSmartcardManager::QSpiceSmartcardManager(QObject *parent) :
     QSpiceObject(parent)
 {
-    gobject = nullptr;
+    gobject = Q_NULLPTR;
     init();
 }
 
@@ -22,7 +22,7 @@ void QSpiceHelper::card_inserted(SpiceSmartcardManager *manager,
 #if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
-    if ( nullptr==obj ) return;
+    if ( Q_NULLPTR==obj ) return;
     QString _name;
     VReader *_reader = reinterpret_cast<VReader*>(reader);
     _name.append(vreader_get_name(_reader));
@@ -43,7 +43,7 @@ void QSpiceHelper::card_removed(SpiceSmartcardManager *manager,
 #if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
-    if ( nullptr==obj ) return;
+    if ( Q_NULLPTR==obj ) return;
     QString _name;
     VReader *_reader = reinterpret_cast<VReader*>(reader);
     _name.append(vreader_get_name(_reader));
@@ -63,7 +63,7 @@ void QSpiceHelper::reader_added(SpiceSmartcardManager *manager,
 #if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
-    if ( nullptr==obj ) return;
+    if ( Q_NULLPTR==obj ) return;
     QString _name;
     VReader *_reader = reinterpret_cast<VReader*>(reader);
     _name.append(vreader_get_name(_reader));
@@ -83,7 +83,7 @@ void QSpiceHelper::reader_removed(SpiceSmartcardManager *manager,
 #if WITH_LIBCACARD
     QSpiceSmartcardManager *obj =
             static_cast<QSpiceSmartcardManager*>(user_data);
-    if ( nullptr==obj ) return;
+    if ( Q_NULLPTR==obj ) return;
     QString _name;
     VReader *_reader = reinterpret_cast<VReader*>(reader);
     _name.append(vreader_get_name(_reader));

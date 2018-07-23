@@ -8,7 +8,7 @@ class _Hosts : public _List_Widget
     Q_OBJECT
 public:
     explicit _Hosts(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag    = "");
 
 private:

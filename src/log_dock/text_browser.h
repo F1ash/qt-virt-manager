@@ -11,7 +11,7 @@ class TextBrowser : public QTextBrowser
 {
     Q_OBJECT
 public:
-    explicit TextBrowser(QWidget *parent = nullptr);
+    explicit TextBrowser(QWidget *parent = Q_NULLPTR);
     HNavigationLabel   *prevL, *nextL, *homeL;
 
 private:

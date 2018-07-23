@@ -6,7 +6,7 @@
 class ARP_Attributes : public _Attributes
 {
 public:
-    explicit ARP_Attributes(QWidget *parent = nullptr);
+    explicit ARP_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // ARP_ATTRIBUTES_H

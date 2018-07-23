@@ -15,7 +15,7 @@ void VirtEventLoop::run()
 {
     if ( virInitialize()==0 ) {
         ulong libVer;
-        int ret = virGetVersion(&libVer, nullptr, nullptr);
+        int ret = virGetVersion(&libVer, Q_NULLPTR, Q_NULLPTR);
         if (ret<0) {
             libVersion.append("?.??.???");
         } else {

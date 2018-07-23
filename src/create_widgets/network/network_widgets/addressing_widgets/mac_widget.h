@@ -8,7 +8,7 @@ class MAC_Widget : public _Checked_Widget
     Q_OBJECT
 public:
     MAC_Widget(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag = "MAC");
 
 private:

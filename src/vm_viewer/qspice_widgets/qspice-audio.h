@@ -11,8 +11,8 @@ class QSpiceAudio : public QSpiceObject
 {
 public:
     explicit QSpiceAudio(
-            QObject *parent   = nullptr,
-            void    *_session = nullptr);
+            QObject *parent   = Q_NULLPTR,
+            void    *_session = Q_NULLPTR);
     Q_GPROP_POINTER(MainContext, "main-context")
     Q_GPROP_POINTER(Session, "session")
 

@@ -50,7 +50,7 @@ void SmartCardDevice_Edit::setDataDescription(const QString &_xmlDesc)
     addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
         CCIDAddr *wdg = static_cast<CCIDAddr*>( addr->getCurrentAddrWidget() );
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->bus->setText( _addr.attribute("bus") );
             wdg->slot->setText( _addr.attribute("slot") );
         };

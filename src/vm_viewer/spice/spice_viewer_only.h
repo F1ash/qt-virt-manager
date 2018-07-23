@@ -10,12 +10,12 @@ class Spice_Viewer_Only : public VM_Viewer_Only
     Q_OBJECT
 public:
     explicit Spice_Viewer_Only(
-            QWidget        *parent  = nullptr,
+            QWidget        *parent  = Q_NULLPTR,
             const QString   _url    = "");
 
 private:
-    QScrollArea     *scrolled = nullptr;
-    QSpiceWidget    *spiceWdg = nullptr;
+    QScrollArea     *scrolled = Q_NULLPTR;
+    QSpiceWidget    *spiceWdg = Q_NULLPTR;
 
 private slots:
     void             reconnectToVirtDomain();
@@ -35,6 +35,7 @@ private slots:
     void             resizeEvent(QResizeEvent*);
     QSize            getWidgetSizeAroundDisplay();
     void             displayChannelState(bool);
+
 };
 
 #endif // SPICE_VIEWER_ONLY_H

@@ -7,7 +7,7 @@ class SecretControlThread : public ControlThread
 {
     Q_OBJECT
 public:
-    explicit SecretControlThread(QObject *parent = nullptr);
+    explicit SecretControlThread(QObject *parent = Q_NULLPTR);
 
 signals:
 

@@ -11,7 +11,7 @@ class BootType : public QWidget
 {
     Q_OBJECT
 public:
-    explicit BootType(QWidget *parent = nullptr);
+    explicit BootType(QWidget *parent = Q_NULLPTR);
     QComboBox       *bootType;
     QLineEdit       *osType;
 

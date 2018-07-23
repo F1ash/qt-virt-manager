@@ -8,7 +8,7 @@ class Bridge_Widget : public _Checked_Widget
     Q_OBJECT
 public:
     explicit Bridge_Widget(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag = "Bridge");
     // for Network Assistant
     void             disableOptionalAttr(bool);

@@ -17,7 +17,7 @@ class ProxyWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ProxyWidget(QWidget *parent = nullptr);
+    explicit ProxyWidget(QWidget *parent = Q_NULLPTR);
     void        setUsedViewMode(VIEW_MODE);
     void        returnToUntriggered();
 

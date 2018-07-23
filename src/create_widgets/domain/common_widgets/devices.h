@@ -21,8 +21,8 @@ class Devices : public _QWidget
     Q_OBJECT
 public:
     explicit Devices(
-            QWidget        *parent      = nullptr,
-            virConnectPtr  *connPtrPtr  = nullptr,
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr  = Q_NULLPTR,
             QString         _xmlDesc    = QString());
 
 signals:

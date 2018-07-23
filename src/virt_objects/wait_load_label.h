@@ -9,7 +9,7 @@ class WaitLoadLabel : public QLabel
 {
     Q_OBJECT
 public:
-    explicit WaitLoadLabel(QWidget *parent = nullptr);
+    explicit WaitLoadLabel(QWidget *parent = Q_NULLPTR);
     void        start();
     void        stop();
 

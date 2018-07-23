@@ -14,8 +14,8 @@ class Encryption : public QWidget
     Q_OBJECT
 public:
     explicit Encryption(
-            QWidget         *parent     = nullptr,
-            virConnectPtr   *connPtrPtr = nullptr);
+            QWidget         *parent     = Q_NULLPTR,
+            virConnectPtr   *connPtrPtr = Q_NULLPTR);
     bool                 isUsed() const;
     void                 setUsage(const bool);
     QString              getFormat() const;

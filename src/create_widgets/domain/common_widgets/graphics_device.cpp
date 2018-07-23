@@ -34,7 +34,7 @@ QDomDocument GraphicsDevice::getDataDocument() const
 {
     QDomDocument doc;
     _QWidget *wdg = static_cast<_QWidget*>(info->currentWidget());
-    if ( nullptr!=wdg ) doc = wdg->getDataDocument();
+    if ( Q_NULLPTR!=wdg ) doc = wdg->getDataDocument();
     return doc;
 }
 

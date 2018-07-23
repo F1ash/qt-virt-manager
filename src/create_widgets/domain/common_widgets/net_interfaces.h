@@ -17,8 +17,8 @@ class NetInterfaces : public _QWidget_Threaded
     Q_OBJECT
 public:
     explicit NetInterfaces(
-            QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
     QComboBox       *type;
     QStackedWidget  *info;
 

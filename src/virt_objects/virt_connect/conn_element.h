@@ -16,7 +16,7 @@ class ConnElement : public QObject
 {
     Q_OBJECT
 public:
-    explicit ConnElement(QObject *parent = nullptr);
+    explicit ConnElement(QObject *parent = Q_NULLPTR);
     void              buildURI();
     bool              getOnViewState() const;
     void              overviewOfConnection();

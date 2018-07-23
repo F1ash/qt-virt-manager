@@ -75,7 +75,7 @@ QDomDocument OS_Booting::getDataDocument() const
 {
     QDomDocument doc;
     _QWidget *wdg = static_cast<_QWidget*>(bootSet->currentWidget());
-    if ( nullptr!=wdg ) doc = wdg->getDataDocument();
+    if ( Q_NULLPTR!=wdg ) doc = wdg->getDataDocument();
     QDomElement _os, _type;
     _os = doc
             .firstChildElement("data")
@@ -104,7 +104,7 @@ QDomDocument OS_Booting::getDataDocument() const
 void OS_Booting::searchBootableDevices(QDomDocument &_doc)
 {
     BIOS_Boot *wdg = static_cast<BIOS_Boot*>(bootSet->widget(0));
-    if ( nullptr!=wdg ) wdg->searchBootableDevices(_doc);
+    if ( Q_NULLPTR!=wdg ) wdg->searchBootableDevices(_doc);
 }
 BootOrderList OS_Booting::getBootOrder() const
 {
@@ -113,7 +113,7 @@ BootOrderList OS_Booting::getBootOrder() const
     if ( idx==0 ) {
         BIOS_Boot *wdg = static_cast<BIOS_Boot*>(
                     bootSet->currentWidget());
-        if ( nullptr!=wdg ) {
+        if ( Q_NULLPTR!=wdg ) {
             _ret = wdg->getBootOrderData();
         };
     };
@@ -194,7 +194,7 @@ void OS_Booting::readXMLDesciption(const QString &_xmlDesc)
                 Qt::MatchContains);
     bootType->bootType->setCurrentIndex( (idx<0)? 0:idx );
     _QWidget *wdg = static_cast<_QWidget*>(bootSet->currentWidget());
-    if ( wdg!=nullptr ) wdg->setDataDescription(_xmlDesc);
+    if ( wdg!=Q_NULLPTR ) wdg->setDataDescription(_xmlDesc);
 }
 void OS_Booting::changeOSType(const QString &_type)
 {
@@ -208,7 +208,7 @@ void OS_Booting::changeBootType()
     emit emulatorType(_empty);
     emit domainType(_empty);
     _QWidget *wdg = static_cast<_QWidget*>(bootSet->currentWidget());
-    if ( wdg!=nullptr ) wdg->setInitState();
+    if ( wdg!=Q_NULLPTR ) wdg->setInitState();
     _type = bootType->bootType->itemData(
                 bootType->bootType->currentIndex(), Qt::UserRole)
             .toString();

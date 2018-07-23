@@ -80,17 +80,17 @@ void CreateVirtNetwork_Ass::buildXMLDescription()
     _xmlDesc.appendChild(_name);
 
     BridgePage *b = static_cast<BridgePage*>(page(Page_Bridge));
-    if ( nullptr!=b && b->br->isUsed() ) {
+    if ( Q_NULLPTR!=b && b->br->isUsed() ) {
         _xmlDesc.appendChild(
                     b->getDataDocument());
     };
     ForwardPage *f = static_cast<ForwardPage*>(page(Page_Forward));
-    if ( nullptr!=f  && f->fr->isUsed() ) {
+    if ( Q_NULLPTR!=f  && f->fr->isUsed() ) {
         _xmlDesc.appendChild(
                     f->getDataDocument());
     };
     IP_Page *i = static_cast<IP_Page*>(page(Page_IP));
-    if ( nullptr!=i && i->isUsed() ) {
+    if ( Q_NULLPTR!=i && i->isUsed() ) {
         _xmlDesc.appendChild(
                     i->getDataDocument());
     };

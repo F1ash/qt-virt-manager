@@ -9,8 +9,8 @@ class vnc_graphHlpThread : public _VirtThread
     Q_OBJECT
 public:
     explicit vnc_graphHlpThread(
-            QObject        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QObject        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
     void             run();
 signals:
     void             result(QStringList&);
@@ -21,8 +21,8 @@ class VNC_Graphics : public _QWidget
     Q_OBJECT
 public:
     explicit VNC_Graphics(
-            QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
 
 private:
     QLabel          *addrLabel;

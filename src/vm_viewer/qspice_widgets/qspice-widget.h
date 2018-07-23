@@ -26,7 +26,7 @@ class QSpiceWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit QSpiceWidget(QWidget *parent = nullptr);
+    explicit QSpiceWidget(QWidget *parent = Q_NULLPTR);
     virtual ~QSpiceWidget();
 
     /*

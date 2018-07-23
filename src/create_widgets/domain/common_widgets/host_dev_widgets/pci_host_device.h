@@ -10,8 +10,8 @@ class pci_hostHlpThread : public _VirtThread
     Q_OBJECT
 public:
     explicit pci_hostHlpThread(
-            QObject        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QObject        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
     void             run();
 signals:
     void             result(QStringList&);
@@ -22,8 +22,8 @@ class PCI_Host_Device : public _QWidget
     Q_OBJECT
 public:
     explicit PCI_Host_Device(
-            QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
 
 private:
     QListWidget     *devList;

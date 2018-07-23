@@ -11,7 +11,7 @@ class Bound_Widget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Bound_Widget(QWidget *parent = nullptr);
+    explicit Bound_Widget(QWidget *parent = Q_NULLPTR);
     QCheckBox      *averageL, *peakL,
                    *burstL, *floorL;
     QSpinBox       *average, *peak,

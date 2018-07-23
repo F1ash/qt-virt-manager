@@ -14,7 +14,7 @@ class VirtSecretToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit VirtSecretToolBar(QWidget *parent = nullptr);
+    explicit VirtSecretToolBar(QWidget *parent = Q_NULLPTR);
     ~VirtSecretToolBar();
 
 signals:

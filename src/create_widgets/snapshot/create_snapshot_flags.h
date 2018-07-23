@@ -8,7 +8,7 @@ class CreateSnapshotFlags : public _SnapshotFlags
     Q_OBJECT
 public:
     explicit CreateSnapshotFlags(
-            QWidget     *parent = nullptr);
+            QWidget     *parent = Q_NULLPTR);
 
 public slots:
     void             changeAvailableFlags(int);

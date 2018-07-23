@@ -6,7 +6,7 @@
 class SCTP6_Attributes : public _Attributes
 {
 public:
-    explicit SCTP6_Attributes(QWidget *parent = nullptr);
+    explicit SCTP6_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // SCTP6_ATTRIBUTES_H

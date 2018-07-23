@@ -29,5 +29,5 @@ void CharDevice_Edit::setDataDescription(const QString &_xmlDesc)
                 _type, Qt::UserRole, Qt::MatchExactly);
     devType->setCurrentIndex( (idx<0)? 0:idx );
     _QWidget *wdg = static_cast<_QWidget*>(charDevWdg->currentWidget());
-    if ( wdg!=nullptr ) wdg->setDataDescription(_xmlDesc);
+    if ( wdg!=Q_NULLPTR ) wdg->setDataDescription(_xmlDesc);
 }

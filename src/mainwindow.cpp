@@ -21,11 +21,11 @@ MainWindow::MainWindow(QWidget *parent)
     int _viewMode = settings.value("ViewMode", 0).toInt();
     viewMode = static_cast<VIEW_MODE>(_viewMode);
     restoreGeometry(settings.value("Geometry").toByteArray());
-    proxyWdg = new ProxyWidget(nullptr);
+    proxyWdg = new ProxyWidget(Q_NULLPTR);
     proxyWdg->setUsedViewMode(viewMode);
     proxyLayout = new QHBoxLayout();
     proxyWdg->setLayout(proxyLayout);
-    SoftTouchedWdg = nullptr;
+    SoftTouchedWdg = Q_NULLPTR;
     reloadFlag = true; // for first initiation of connections
     initTaskWareHouse();
     initDomainStateMonitor();
@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
                 tr("Progress for waiting the connection close"));
     statusBar()->addPermanentWidget(closeProgress);
     statusBar()->hide();
-    wait_thread = nullptr;
+    wait_thread = Q_NULLPTR;
     initVirEventloop();
 }
 
@@ -127,7 +127,7 @@ void MainWindow::saveSettings()
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
     if ( !this->isVisible() ) changeVisibility();
-    if ( wait_thread==nullptr ) {
+    if ( wait_thread==Q_NULLPTR ) {
         connListWidget->list->setEnabled(false);
         connListWidget->toolBar->setEnabled(false);
         logDock->setEnabled(false);
@@ -144,27 +144,27 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         // close VM Displays
         QStringList keys(VM_Displayed_Map.keys());
         foreach ( QString key, keys ) {
-            if ( VM_Displayed_Map.value(key, nullptr)!=nullptr ) {
-                VM_Viewer *value = nullptr;
+            if ( VM_Displayed_Map.value(key, Q_NULLPTR)!=Q_NULLPTR ) {
+                VM_Viewer *value = Q_NULLPTR;
                 QString _type =
-                        VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
+                        VM_Displayed_Map.value(key, Q_NULLPTR)->TYPE.toUpper();
                 if ( _type.compare("LXC")==0 ) {
 #if WITH_LXC_SUPPORT
                     value = static_cast<LXC_Viewer*>(
-                                VM_Displayed_Map.value(key, nullptr));
+                                VM_Displayed_Map.value(key, Q_NULLPTR));
 #endif
                 } else if ( _type.compare("SPICE")==0 ) {
 #if WITH_SPICE_SUPPORT
                     value = static_cast<Spice_Viewer*>(
-                                VM_Displayed_Map.value(key, nullptr));
+                                VM_Displayed_Map.value(key, Q_NULLPTR));
 #endif
                 } else if ( _type.compare("VNC")==0 ) {
 #if WITH_VNC_SUPPORT
                     value = static_cast<VNC_Viewer*>(
-                                VM_Displayed_Map.value(key, nullptr));
+                                VM_Displayed_Map.value(key, Q_NULLPTR));
 #endif
                 };
-                if ( nullptr!=value ) value->close();
+                if ( Q_NULLPTR!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -173,11 +173,11 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         // close StorageVolControls
         keys = Overviewed_StPool_Map.keys();
         foreach ( QString key, keys ) {
-            if ( Overviewed_StPool_Map.value(key, nullptr)!=nullptr ) {
-                VirtStorageVolControl *value = nullptr;
+            if ( Overviewed_StPool_Map.value(key, Q_NULLPTR)!=Q_NULLPTR ) {
+                VirtStorageVolControl *value = Q_NULLPTR;
                 value = static_cast<VirtStorageVolControl*>(
-                                Overviewed_StPool_Map.value(key, nullptr));
-                if ( nullptr!=value ) value->close();
+                                Overviewed_StPool_Map.value(key, Q_NULLPTR));
+                if ( Q_NULLPTR!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -186,11 +186,11 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         // close NetworkEditors
         keys = NetworkEditor_Map.keys();
         foreach ( QString key, keys ) {
-            if ( NetworkEditor_Map.value(key, nullptr)!=nullptr ) {
-                CreateVirtNetwork *value = nullptr;
+            if ( NetworkEditor_Map.value(key, Q_NULLPTR)!=Q_NULLPTR ) {
+                CreateVirtNetwork *value = Q_NULLPTR;
                 value = static_cast<CreateVirtNetwork*>(
-                                NetworkEditor_Map.value(key, nullptr));
-                if ( nullptr!=value ) value->close();
+                                NetworkEditor_Map.value(key, Q_NULLPTR));
+                if ( Q_NULLPTR!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -199,11 +199,11 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         // close NWFilterEditors
         keys = NWFilterEditor_Map.keys();
         foreach ( QString key, keys ) {
-            if ( NWFilterEditor_Map.value(key, nullptr)!=nullptr ) {
-                CreateVirtNWFilter *value = nullptr;
+            if ( NWFilterEditor_Map.value(key, Q_NULLPTR)!=Q_NULLPTR ) {
+                CreateVirtNWFilter *value = Q_NULLPTR;
                 value = static_cast<CreateVirtNWFilter*>(
-                                NWFilterEditor_Map.value(key, nullptr));
-                if ( nullptr!=value ) value->close();
+                                NWFilterEditor_Map.value(key, Q_NULLPTR));
+                if ( Q_NULLPTR!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -212,11 +212,11 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         // close DomainEditors
         keys = DomainEditor_Map.keys();
         foreach ( QString key, keys ) {
-            if ( DomainEditor_Map.value(key, nullptr)!=nullptr ) {
-                CreateVirtDomain *value = nullptr;
+            if ( DomainEditor_Map.value(key, Q_NULLPTR)!=Q_NULLPTR ) {
+                CreateVirtDomain *value = Q_NULLPTR;
                 value = static_cast<CreateVirtDomain*>(
-                                DomainEditor_Map.value(key, nullptr));
-                if ( nullptr!=value ) value->close();
+                                DomainEditor_Map.value(key, Q_NULLPTR));
+                if ( Q_NULLPTR!=value ) value->close();
                 //qDebug()<<key<<"removed into Close";
             };
         };
@@ -233,13 +233,13 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         virtEventLoop->stop();
         ev->ignore();
     } else if ( !runningConnExist() &&
-                (wait_thread==nullptr || !wait_thread->isRunning()) ) {
+                (wait_thread==Q_NULLPTR || !wait_thread->isRunning()) ) {
         trayIcon->hide();
         foreach (QWidget *widget, qApp->allWidgets())
             widget->hide();
         ev->accept();
     } else {
-        //  ( wait_thread!=nullptr || wait_thread->isRunning() )
+        //  ( wait_thread!=Q_NULLPTR || wait_thread->isRunning() )
         ev->accept();
     };
 }
@@ -670,9 +670,9 @@ void MainWindow::virtEventLoopFinished()
 {
     if ( reloadFlag ) {
         delete wait_thread;
-        wait_thread = nullptr;
+        wait_thread = Q_NULLPTR;
         delete virtEventLoop;
-        virtEventLoop = nullptr;
+        virtEventLoop = Q_NULLPTR;
         initVirEventloop();
         //qDebug()<<"restart Application done";
     } else {
@@ -852,7 +852,7 @@ bool MainWindow::runningConnExist()
         //qDebug()<<connListWidget->list->item(i)->text()
         //<< connListWidget->list->item(i)->data(Qt::UserRole)
         //.toMap().value("isRunning").toInt();
-        if ( idx!=nullptr &&
+        if ( idx!=Q_NULLPTR &&
              idx->getData().value("isRunning").toInt()==RUNNING ) {
             result = true;
             break;
@@ -984,7 +984,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
             VM_Displayed_Map.insert(
                         key,
                         new LXC_Viewer(
-                            nullptr,
+                            Q_NULLPTR,
                             connPtrPtr,
                             connName,
                             domName));
@@ -1000,7 +1000,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
             VM_Displayed_Map.insert(
                         key,
                         new VNC_Viewer(
-                            nullptr,
+                            Q_NULLPTR,
                             connPtrPtr,
                             connName,
                             domName,
@@ -1017,7 +1017,7 @@ void MainWindow::invokeVMDisplay(TASK *_task)
             VM_Displayed_Map.insert(
                         key,
                         new Spice_Viewer(
-                            nullptr,
+                            Q_NULLPTR,
                             connPtrPtr,
                             connName,
                             domName,
@@ -1048,12 +1048,12 @@ void MainWindow::invokeVMDisplay(TASK *_task)
         //VM_Displayed_Map.value(key)->show();
     } else {
         //qDebug()<<key<<"vm invoked"<<"exist";
-        if ( VM_Displayed_Map.value(key)!=nullptr ) {
+        if ( VM_Displayed_Map.value(key)!=Q_NULLPTR ) {
             VM_Displayed_Map.value(key)->show();
         } else {
             VM_Viewer *vm = static_cast<VM_Viewer*>(
                         VM_Displayed_Map.take(key));
-            if ( vm!=nullptr ) {
+            if ( vm!=Q_NULLPTR ) {
                 vm->deleteLater();
             };
         };
@@ -1063,25 +1063,25 @@ void MainWindow::deleteVMDisplay(const QString &key)
 {
     if ( VM_Displayed_Map.contains(key) ) {
         /*
-        VM_Viewer *value = nullptr;
+        VM_Viewer *value = Q_NULLPTR;
         QString _type =
-                VM_Displayed_Map.value(key, nullptr)->TYPE.toUpper();
+                VM_Displayed_Map.value(key, Q_NULLPTR)->TYPE.toUpper();
         if ( _type.compare("LXC")!=0 ) {
             value = static_cast<VM_Viewer*>(
-                        VM_Displayed_Map.value(key, nullptr));
-            if ( nullptr!=value ) {
+                        VM_Displayed_Map.value(key, Q_NULLPTR));
+            if ( Q_NULLPTR!=value ) {
                 delete value;
-                value = nullptr;
+                value = Q_NULLPTR;
             };
         };
         */
-        //if ( VM_Displayed_Map.value(key, nullptr)!=nullptr ) {
-        //    VM_Displayed_Map.value(key, nullptr)->deleteLater();
+        //if ( VM_Displayed_Map.value(key, Q_NULLPTR)!=Q_NULLPTR ) {
+        //    VM_Displayed_Map.value(key, Q_NULLPTR)->deleteLater();
         //};
         //VM_Displayed_Map.remove(key);
         VM_Viewer *vm = static_cast<VM_Viewer*>(
                     VM_Displayed_Map.take(key));
-        if ( vm!=nullptr ) {
+        if ( vm!=Q_NULLPTR ) {
             vm->deleteLater();
         };
     }
@@ -1090,7 +1090,7 @@ void MainWindow::buildMigrateArgs(TASK *_task)
 {
     virConnectPtr *namedConnection =
             connListWidget->list->getPtr_connectionPtr(_task->args.path);
-    if ( nullptr!=namedConnection ) {
+    if ( Q_NULLPTR!=namedConnection ) {
         domainDockContent->execMigrateAction(namedConnection, _task);
     } else {
         QString time = QTime::currentTime().toString();
@@ -1130,7 +1130,7 @@ void MainWindow::overviewStoragePool(
                 ->setCurrentStoragePool(
                     connPtrPtr, connName, poolName);
     };
-    if ( Overviewed_StPool_Map.value(key)!=nullptr ) {
+    if ( Overviewed_StPool_Map.value(key)!=Q_NULLPTR ) {
         Overviewed_StPool_Map.value(key)->show();
         Overviewed_StPool_Map.value(key)->setFocus();
     } else
@@ -1154,7 +1154,7 @@ void MainWindow::invokeDomainEditor(TASK *_task)
     if ( !DomainEditor_Map.contains(key) ) {
         DomainEditor_Map.insert(
                     key,
-                    new CreateVirtDomain(nullptr, *_task));
+                    new CreateVirtDomain(Q_NULLPTR, *_task));
         DomainEditor_Map.value(key)->setObjectName(key);
         DomainEditor_Map.value(key)->setWindowTitle(
                     tr("VM Settings / <%1> in [%2]")
@@ -1166,7 +1166,7 @@ void MainWindow::invokeDomainEditor(TASK *_task)
         connect(DomainEditor_Map.value(key), SIGNAL(addNewTask(TASK*)),
                 taskWrHouse, SLOT(addNewTask(TASK*)));
     };
-    if ( DomainEditor_Map.value(key)!=nullptr ) {
+    if ( DomainEditor_Map.value(key)!=Q_NULLPTR ) {
         DomainEditor_Map.value(key)->show();
         DomainEditor_Map.value(key)->setFocus();
     } else
@@ -1220,7 +1220,7 @@ void MainWindow::invokeNetworkEditor(TASK *_task)
     if ( !NetworkEditor_Map.contains(key) ) {
         NetworkEditor_Map.insert(
                     key,
-                    new CreateVirtNetwork(nullptr, *_task));
+                    new CreateVirtNetwork(Q_NULLPTR, *_task));
         NetworkEditor_Map.value(key)->setObjectName(key);
         NetworkEditor_Map.value(key)->setWindowTitle(
                     tr("Network Editor / <%1> in [%2]")
@@ -1232,7 +1232,7 @@ void MainWindow::invokeNetworkEditor(TASK *_task)
         connect(NetworkEditor_Map.value(key), SIGNAL(addNewTask(TASK*)),
                 taskWrHouse, SLOT(addNewTask(TASK*)));
     };
-    if ( NetworkEditor_Map.value(key)!=nullptr ) {
+    if ( NetworkEditor_Map.value(key)!=Q_NULLPTR ) {
         NetworkEditor_Map.value(key)->show();
         NetworkEditor_Map.value(key)->setFocus();
     } else
@@ -1256,7 +1256,7 @@ void MainWindow::invokeNWFilterEditor(TASK *_task)
     if ( !NWFilterEditor_Map.contains(key) ) {
         NWFilterEditor_Map.insert(
                     key,
-                    new CreateVirtNWFilter(nullptr, *_task));
+                    new CreateVirtNWFilter(Q_NULLPTR, *_task));
         NWFilterEditor_Map.value(key)->setObjectName(key);
         NWFilterEditor_Map.value(key)->setWindowTitle(
                     tr("NWFilter Editor / <%1> in [%2]")
@@ -1268,7 +1268,7 @@ void MainWindow::invokeNWFilterEditor(TASK *_task)
         connect(NWFilterEditor_Map.value(key), SIGNAL(addNewTask(TASK*)),
                 taskWrHouse, SLOT(addNewTask(TASK*)));
     };
-    if ( NWFilterEditor_Map.value(key)!=nullptr ) {
+    if ( NWFilterEditor_Map.value(key)!=Q_NULLPTR ) {
         NWFilterEditor_Map.value(key)->show();
         NWFilterEditor_Map.value(key)->setFocus();
     } else
@@ -1327,7 +1327,7 @@ void MainWindow::all_stuff_to_original()
 {
     setDockHeaderWheelEventsEnabled(false);
     setDockUsedInSoftTouched(false);
-    if ( SoftTouchedWdg!=nullptr ) {
+    if ( SoftTouchedWdg!=Q_NULLPTR ) {
         disconnect(proxyWdg, SIGNAL(viewDock(const QString&)),
                    SoftTouchedWdg, SLOT(showDock(const QString&)));
         disconnect(proxyWdg, SIGNAL(viewNextDock()),
@@ -1337,7 +1337,7 @@ void MainWindow::all_stuff_to_original()
         proxyLayout->removeWidget(SoftTouchedWdg);
         SoftTouchedWdg->removeAllWidgets();
         //delete SoftTouchedWdg;
-        //SoftTouchedWdg = nullptr;
+        //SoftTouchedWdg = Q_NULLPTR;
         SoftTouchedWdg->deleteLater();
     };
     /*
@@ -1554,7 +1554,7 @@ void MainWindow::setDockFloatible(bool state)
 }
 void MainWindow::setDockHeaderWheelEventsEnabled(bool state)
 {
-    if ( SoftTouchedWdg!=nullptr ) {
+    if ( SoftTouchedWdg!=Q_NULLPTR ) {
         if ( state ) {
             connect(logHeadWdg, SIGNAL(viewNextDock()),
                     SoftTouchedWdg, SLOT(showNextDock()));
@@ -1626,7 +1626,7 @@ void MainWindow::setDockHeaderWheelEventsEnabled(bool state)
 }
 void MainWindow::setDockUsedInSoftTouched(bool state)
 {
-    if ( SoftTouchedWdg!=nullptr ) {
+    if ( SoftTouchedWdg!=Q_NULLPTR ) {
         if ( state ) {
             connect(logDockContent->Log->nextL,
                     SIGNAL(released()),

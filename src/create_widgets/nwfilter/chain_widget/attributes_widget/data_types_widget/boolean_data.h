@@ -8,7 +8,7 @@ class BOOLEAN_Data : public UntypedData
     Q_OBJECT
 public:
     explicit BOOLEAN_Data(
-            QWidget *parent     = nullptr,
+            QWidget *parent     = Q_NULLPTR,
             QString  tag        = "",
             QString  topValue   = "no");
     QString          getAttrValue() const;

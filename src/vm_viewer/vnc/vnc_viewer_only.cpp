@@ -17,16 +17,16 @@ VNC_Viewer_Only::VNC_Viewer_Only(
 /* private slots */
 void VNC_Viewer_Only::reconnectToVirtDomain()
 {
-    if ( nullptr!=vncWdg ) {
+    if ( Q_NULLPTR!=vncWdg ) {
         delete vncWdg;
-        vncWdg = nullptr;
+        vncWdg = Q_NULLPTR;
         // resizing to any,
         // because will need to init new display configuration
         //resize(getWidgetSizeAroundDisplay());
         initGraphicWidget();
         QSize around_size = getWidgetSizeAroundDisplay();
         //resize(around_size);
-        if ( nullptr!=vncWdg ) {
+        if ( Q_NULLPTR!=vncWdg ) {
             vncWdg->newViewSize(
                         size().width()-around_size.width(),
                         size().height()-around_size.height());
@@ -37,13 +37,13 @@ void VNC_Viewer_Only::reconnectToVirtDomain()
 }
 void VNC_Viewer_Only::disconnectFromVirtDomain()
 {
-    if ( vncWdg!=nullptr ) {
+    if ( vncWdg!=Q_NULLPTR ) {
         vncWdg->disconnectVNC();
     };
 }
 void VNC_Viewer_Only::sendKeySeqToVirtDomain(Qt::Key key)
 {
-    if ( nullptr==vncWdg ) return;
+    if ( Q_NULLPTR==vncWdg ) return;
     QKeyEvent *ev;
     switch (key) {
     case Qt::Key_Launch1:
@@ -113,7 +113,7 @@ void VNC_Viewer_Only::sendKeySeqToVirtDomain(Qt::Key key)
 }
 void VNC_Viewer_Only::getScreenshotFromVirtDomain()
 {
-    if ( nullptr==vncWdg ) return;
+    if ( Q_NULLPTR==vncWdg ) return;
     QImage img = vncWdg->getScreenCapture();
     QString fileName = QFileDialog::getSaveFileName(
                 this,
@@ -130,19 +130,19 @@ void VNC_Viewer_Only::getScreenshotFromVirtDomain()
 }
 void VNC_Viewer_Only::copyFilesToVirtDomain()
 {
-    if ( nullptr==vncWdg ) return;
+    if ( Q_NULLPTR==vncWdg ) return;
     //QStringList fileNames = QFileDialog::getOpenFileNames(
     //            this, "Copy files to Guest", "~");
     //vncWdg->fileCopyAsync(fileNames);
 }
 void VNC_Viewer_Only::copyToClipboardFromVirtDomain()
 {
-    if ( nullptr==vncWdg ) return;
+    if ( Q_NULLPTR==vncWdg ) return;
     //vncWdg->copyToClipboardFromGuest();
 }
 void VNC_Viewer_Only::pasteClipboardToVirtDomain()
 {
-    if ( nullptr==vncWdg ) return;
+    if ( Q_NULLPTR==vncWdg ) return;
     const QString _text = QApplication::clipboard()->text(QClipboard::Clipboard);
     const QImage _image = QApplication::clipboard()->image(QClipboard::Clipboard);
     //qDebug()<<"copy:"<<_text<<_image.isNull()<<";";
@@ -257,7 +257,7 @@ void VNC_Viewer_Only::scaleScreenVirtDomain()
 void VNC_Viewer_Only::resizeEvent(QResizeEvent *ev)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
-    if ( nullptr!=vncWdg ) {
+    if ( Q_NULLPTR!=vncWdg ) {
         vncWdg->newViewSize(
                     ev->size().width()-around_size.width(),
                     ev->size().height()-around_size.height());

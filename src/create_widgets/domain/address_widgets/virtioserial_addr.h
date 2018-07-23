@@ -7,7 +7,7 @@ class VirtioSerialAddr : public _Addr
 {
     Q_OBJECT
 public:
-    explicit VirtioSerialAddr(QWidget *parent = nullptr);
+    explicit VirtioSerialAddr(QWidget *parent = Q_NULLPTR);
 
 private:
     QLabel          *contrLabel;

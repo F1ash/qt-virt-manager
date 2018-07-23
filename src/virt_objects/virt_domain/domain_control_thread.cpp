@@ -12,11 +12,11 @@ void DomControlThread::execAction(uint _num, TASK _task)
     number = _num;
     task = _task;
     keep_alive = false;
-    if ( nullptr!=task.srcConnPtr ) {
+    if ( Q_NULLPTR!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
-            task.srcConnPtr = nullptr;
+            task.srcConnPtr = Q_NULLPTR;
             sendConnErrors();
         } else
             keep_alive = true;
@@ -115,8 +115,8 @@ Result DomControlThread::getAllDomainList()
 {
     Result result;
     ACT_RESULT domainList;
-    if ( task.srcConnPtr!=nullptr && keep_alive ) {
-        virDomainPtr *domains = nullptr;
+    if ( task.srcConnPtr!=Q_NULLPTR && keep_alive ) {
+        virDomainPtr *domains = Q_NULLPTR;
         unsigned int flags =
                 VIR_CONNECT_LIST_DOMAINS_ACTIVE |
                 VIR_CONNECT_LIST_DOMAINS_INACTIVE;
@@ -213,7 +213,7 @@ Result DomControlThread::getDomainData0()
     QVariantMap domainDesc;
     QString name = task.object;
     result.name  = name;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -242,7 +242,7 @@ Result DomControlThread::getDomainData0()
         };
     };
     const char *_type = virConnectGetType(*task.srcConnPtr);
-    if ( _type==nullptr ) {
+    if ( _type==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Error at getting the connection type.");
     } else {
@@ -285,7 +285,7 @@ Result DomControlThread::getDomainData1()
             port, socket, transport, host, user, passwd;
     QString name = task.object;
     result.name  = name;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -314,7 +314,7 @@ Result DomControlThread::getDomainData1()
         };
     };
     const char *_type = virConnectGetType(*task.srcConnPtr);
-    if ( _type==nullptr ) {
+    if ( _type==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Error at getting the connection type.");
     } else {
@@ -386,7 +386,7 @@ Result DomControlThread::createDomain()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -403,7 +403,7 @@ Result DomControlThread::createDomain()
     f.close();
     virDomainPtr domain = virDomainCreateXML(
                 *task.srcConnPtr, xmlData.data(), VIR_DOMAIN_START_AUTODESTROY);
-    if ( domain==nullptr ) {
+    if ( domain==Q_NULLPTR ) {
         result.err = sendConnErrors();
         return result;
     };
@@ -420,7 +420,7 @@ Result DomControlThread::defineDomain()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -437,7 +437,7 @@ Result DomControlThread::defineDomain()
     f.close();
     virDomainPtr domain = virDomainDefineXML(
                 *task.srcConnPtr, xmlData.data());
-    if ( domain==nullptr ) {
+    if ( domain==Q_NULLPTR ) {
         result.err = sendConnErrors();
         return result;
     };
@@ -453,7 +453,7 @@ Result DomControlThread::startDomain()
 {
     Result result;
     QString name = task.object;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -461,7 +461,7 @@ Result DomControlThread::startDomain()
     bool started = false;
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         started = (virDomainCreate(domain)+1) ? true : false;
         if (!started)
             result.err = sendConnErrors();
@@ -480,7 +480,7 @@ Result DomControlThread::pauseDomain()
     Result result;
     QString name = task.object;
     bool invoked = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -489,7 +489,7 @@ Result DomControlThread::pauseDomain()
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
 
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         int state;
         int reason;
         // flags : extra flags; not used yet, so callers should always pass 0
@@ -526,14 +526,14 @@ Result DomControlThread::destroyDomain()
     Result result;
     QString name = task.object;
     bool deleted = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         deleted = (virDomainDestroy(domain)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -554,7 +554,7 @@ Result DomControlThread::resetDomain()
     bool invoked = false;
     // extra flags; not used yet, so callers should always pass 0
     unsigned int flags = 0;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -563,7 +563,7 @@ Result DomControlThread::resetDomain()
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
 
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         invoked = (virDomainReset(domain, flags)+1) ? true : false;
         if (!invoked)
             result.err = sendConnErrors();
@@ -588,7 +588,7 @@ Result DomControlThread::rebootDomain()
             VIR_DOMAIN_REBOOT_GUEST_AGENT |
             VIR_DOMAIN_REBOOT_INITCTL |
             VIR_DOMAIN_REBOOT_SIGNAL;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -597,7 +597,7 @@ Result DomControlThread::rebootDomain()
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
 
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         invoked = (virDomainReboot(domain, flags)+1) ? true : false;
         if (!invoked)
             result.err = sendConnErrors();
@@ -622,7 +622,7 @@ Result DomControlThread::shutdownDomain()
             VIR_DOMAIN_SHUTDOWN_GUEST_AGENT |
             VIR_DOMAIN_SHUTDOWN_INITCTL |
             VIR_DOMAIN_SHUTDOWN_SIGNAL;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -631,7 +631,7 @@ Result DomControlThread::shutdownDomain()
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
 
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         invoked = (virDomainShutdownFlags(
                        domain, flags)+1) ? true : false;
         if (!invoked)
@@ -651,10 +651,10 @@ Result DomControlThread::saveDomain()
     Result result;
     QString name = task.object;
     const char *to = task.args.path.toUtf8().data();
-    const char *dxml = nullptr;
+    const char *dxml = Q_NULLPTR;
     bool invoked = false;
     unsigned int flags = VIR_DOMAIN_SAVE_BYPASS_CACHE;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -663,7 +663,7 @@ Result DomControlThread::saveDomain()
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
 
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         int state;
         int reason;
         // flags : extra flags; not used yet, so callers should always pass 0
@@ -699,7 +699,7 @@ Result DomControlThread::restoreDomain()
     Result result;
     QString name = task.object;
     const char *from = task.args.path.toUtf8().data();
-    const char *dxml = nullptr;
+    const char *dxml = Q_NULLPTR;
     QString to_state = task.args.state;
     bool invoked = false;
     unsigned int flags = VIR_DOMAIN_SAVE_BYPASS_CACHE;
@@ -709,7 +709,7 @@ Result DomControlThread::restoreDomain()
         flags = flags | VIR_DOMAIN_SAVE_PAUSED;
     };
 
-    if ( task.srcConnPtr!=nullptr ) {
+    if ( task.srcConnPtr!=Q_NULLPTR ) {
         invoked = (virDomainRestoreFlags(
                        *task.srcConnPtr, from, dxml, flags)+1)
                 ? true : false;
@@ -728,14 +728,14 @@ Result DomControlThread::undefineDomain()
     Result result;
     QString name = task.object;
     bool deleted = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         deleted = (virDomainUndefine(domain)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -755,7 +755,7 @@ Result DomControlThread::changeAutoStartDomain()
     QString name = task.object;
     result.name = name;
     int autostart = task.args.sign;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -764,7 +764,7 @@ Result DomControlThread::changeAutoStartDomain()
     bool set = false;
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         set = (virDomainSetAutostart(
                    domain, autostart)+1) ? true : false;
         if (!set)
@@ -786,17 +786,17 @@ Result DomControlThread::getDomainXMLDesc()
     int flags = task.args.sign;
 
     bool read = false;
-    char *Returns = nullptr;
-    if ( task.srcConnPtr==nullptr ) {
+    char *Returns = Q_NULLPTR;
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         Returns = virDomainGetXMLDesc(domain, uint(flags));
-        if ( Returns==nullptr )
+        if ( Returns==Q_NULLPTR )
             result.err = sendConnErrors();
         else read = true;
         virDomainFree(domain);
@@ -812,7 +812,7 @@ Result DomControlThread::getDomainXMLDesc()
     if (read) f.write(Returns);
     result.fileName.append(f.fileName());
     f.close();
-    if ( Returns!=nullptr ) free(Returns);
+    if ( Returns!=Q_NULLPTR ) free(Returns);
     result.name = name;
     result.result = read;
     result.msg.append(
@@ -826,21 +826,21 @@ Result DomControlThread::migrateDomain()
     bool migrated = false;
     result.name = task.object;
     ulong flags = ulong(task.args.sign);
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, result.name.toUtf8().constData());
-    //const char *uri = ( args[2].isEmpty() ) ? nullptr : args[2].toUtf8().constData();
+    //const char *uri = ( args[2].isEmpty() ) ? Q_NULLPTR : args[2].toUtf8().constData();
     qulonglong maxDownTime = task.args.offset;
     qulonglong bdw = task.args.size;
-    if ( domain!=nullptr ) {
+    if ( domain!=Q_NULLPTR ) {
         // virDomainMigrateSetMaxDowntime
         // flags: extra flags; not used yet, so callers should always pass 0
         virDomainMigrateSetMaxDowntime(domain, maxDownTime, 0);
-        if ( nullptr!=task.args.dstConnPtr ) {
+        if ( Q_NULLPTR!=task.args.dstConnPtr ) {
             //qDebug()<<"migrate to exist connection";
             virDomainPtr newDomain =
             virDomainMigrate(domain,
@@ -849,7 +849,7 @@ Result DomControlThread::migrateDomain()
                              task.args.object.toUtf8().data(),
                              task.args.path.toUtf8().data(),
                              bdw);
-            migrated = nullptr!=newDomain;
+            migrated = Q_NULLPTR!=newDomain;
             if (migrated) virDomainFree( newDomain );
         } else {
             //qDebug()<< "migrate to URI";
@@ -870,7 +870,7 @@ Result DomControlThread::migrateDomain()
     result.msg.append(
                 QString(tr("'<b>%1</b>' Domain %2 Migrated."))
                 .arg(result.name).arg((migrated)? "": tr("not")));
-    //if ( task.args.dstConnPtr ) task.args.dstConnPtr = nullptr;
+    //if ( task.args.dstConnPtr ) task.args.dstConnPtr = Q_NULLPTR;
     return result;
 }
 Result DomControlThread::createSnapshoteDomain()
@@ -884,19 +884,19 @@ Result DomControlThread::createSnapshoteDomain()
     _xmlDesc.append(task.args.object);
     const char *xmlDesc = _xmlDesc.data();
     //qDebug()<<xmlDesc<<flags;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, domName.toUtf8().data());
-    if ( nullptr==domain ) {
+    if ( Q_NULLPTR==domain ) {
         result.err = sendConnErrors();
     } else {
         virDomainSnapshotPtr snapshot =
                 virDomainSnapshotCreateXML(domain, xmlDesc, flags);
-        if ( nullptr==snapshot ) {
+        if ( Q_NULLPTR==snapshot ) {
             result.err = sendConnErrors();
         } else {
             snapped = true;
@@ -919,20 +919,20 @@ Result DomControlThread::revertSnapshoteDomain()
     QString snapshotName(task.args.object);
     uint flags = uint(task.args.sign);
     //qDebug()<<snapshotName<<flags;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, domName.toUtf8().data());
-    if ( nullptr==domain ) {
+    if ( Q_NULLPTR==domain ) {
         result.err = sendConnErrors();
     } else {
         // flags: extra flags; not used yet, so callers should always pass 0
         virDomainSnapshotPtr snapshot = virDomainSnapshotLookupByName(
                     domain, snapshotName.toUtf8().data(), 0);
-        if ( nullptr==snapshot ) {
+        if ( Q_NULLPTR==snapshot ) {
             result.err = sendConnErrors();
        } else {
            int ret = virDomainRevertToSnapshot(snapshot, flags);
@@ -960,21 +960,21 @@ Result DomControlThread::deleteSnapshoteDomain()
     QString snapshotName(task.args.object);
     uint flags = uint(task.args.sign);
     //qDebug()<<snapshotName<<flags;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virDomainPtr domain = virDomainLookupByName(
                 *task.srcConnPtr, domName.toUtf8().data());
-    if ( nullptr==domain ) {
+    if ( Q_NULLPTR==domain ) {
         result.err = sendConnErrors();
     } else {
         // flags: extra flags; not used yet, so callers should always pass 0
         virDomainSnapshotPtr snapshot =
                 virDomainSnapshotLookupByName(
                     domain, snapshotName.toUtf8().data(), 0);
-        if ( nullptr==snapshot ) {
+        if ( Q_NULLPTR==snapshot ) {
             result.err = sendConnErrors();
         } else {
             int ret = virDomainSnapshotDelete(snapshot, flags);

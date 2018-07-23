@@ -8,7 +8,7 @@ class DHCP_Host : public _List_Widget
     Q_OBJECT
 public:
     explicit DHCP_Host(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag = "");
 
 private:

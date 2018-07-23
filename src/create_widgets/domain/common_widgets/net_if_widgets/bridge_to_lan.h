@@ -12,8 +12,8 @@ class bridge_HlpThread : public qwdHelpThread
     Q_OBJECT
 public:
     explicit bridge_HlpThread(
-            QObject        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QObject        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
     QStringList      nwFilters;
     void             run();
 signals:
@@ -25,8 +25,8 @@ class Bridge_to_LAN : public _QWidget_Threaded
     Q_OBJECT
 public:
     explicit Bridge_to_LAN(
-            QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
 
 private:
     QLabel          *bridgeLabel, *targetLabel;

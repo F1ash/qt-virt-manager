@@ -17,8 +17,8 @@ class DomainStateViewer : public QWidget
     Q_OBJECT
 public:
     explicit DomainStateViewer(
-            QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr,
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR,
             QString         _domainName = QString());
     const QString        domainName;
 
@@ -29,7 +29,7 @@ signals:
 private:
     virConnectPtr*       ptr_ConnPtr;
     DomainMonitorThread
-                        *domainMonitorThread = nullptr;
+                        *domainMonitorThread = Q_NULLPTR;
     int                  timerId = 0;
 
     QLabel              *monitorName, *cpuLabel,

@@ -7,7 +7,7 @@ class Secret_Index : public QObject
 {
     Q_OBJECT
 public:
-    explicit Secret_Index(QObject *parent = nullptr);
+    explicit Secret_Index(QObject *parent = Q_NULLPTR);
 
 signals:
 

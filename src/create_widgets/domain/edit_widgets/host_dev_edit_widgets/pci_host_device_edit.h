@@ -8,7 +8,7 @@ class PCI_Host_Device_Edit : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit PCI_Host_Device_Edit(QWidget *parent = nullptr);
+    explicit PCI_Host_Device_Edit(QWidget *parent = Q_NULLPTR);
     DeviceAddress       *addr;
 
 private:

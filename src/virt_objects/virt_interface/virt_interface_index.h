@@ -7,7 +7,7 @@ class Interface_Index : public QObject
 {
     Q_OBJECT
 public:
-    explicit Interface_Index(QObject *parent = nullptr);
+    explicit Interface_Index(QObject *parent = Q_NULLPTR);
 
 signals:
 

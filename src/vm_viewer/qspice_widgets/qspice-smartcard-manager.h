@@ -11,7 +11,7 @@ class QSpiceSmartcardManager : public QSpiceObject
 {
     Q_OBJECT
 public:
-    explicit QSpiceSmartcardManager(QObject *parent = nullptr);
+    explicit QSpiceSmartcardManager(QObject *parent = Q_NULLPTR);
 
 signals:
     void        cardInserted(QString&);

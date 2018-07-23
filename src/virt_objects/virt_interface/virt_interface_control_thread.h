@@ -7,7 +7,7 @@ class InterfaceControlThread : public ControlThread
 {
     Q_OBJECT
 public:
-    explicit InterfaceControlThread(QObject *parent = nullptr);
+    explicit InterfaceControlThread(QObject *parent = Q_NULLPTR);
 
 signals:
 

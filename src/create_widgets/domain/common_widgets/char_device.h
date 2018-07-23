@@ -15,9 +15,9 @@ class CharDevice : public _QWidget_Threaded
     Q_OBJECT
 public:
     explicit CharDevice(
-            QWidget        *parent      = nullptr,
-            virConnectPtr  *connPtrPtr  = nullptr,
-            virDomainPtr    domain      = nullptr,
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr  = Q_NULLPTR,
+            virDomainPtr    domain      = Q_NULLPTR,
             QString         _tag        = QString());
 
     QComboBox       *devType;

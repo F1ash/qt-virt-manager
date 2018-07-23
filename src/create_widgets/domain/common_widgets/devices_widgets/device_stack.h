@@ -14,8 +14,8 @@ class devstackHelpThread : public _VirtThread
 {
 public:
     explicit devstackHelpThread(
-            QObject         *parent     = nullptr,
-            virConnectPtr   *connPtrPtr = nullptr);
+            QObject         *parent     = Q_NULLPTR,
+            virConnectPtr   *connPtrPtr = Q_NULLPTR);
     QString         connType;
     virtual void    run();
 };
@@ -25,8 +25,8 @@ class DeviceStack : public QDialog
     Q_OBJECT
 public:
     explicit DeviceStack(
-            QWidget        *parent  = nullptr,
-            virConnectPtr*  conn    = nullptr);
+            QWidget        *parent  = Q_NULLPTR,
+            virConnectPtr*  conn    = Q_NULLPTR);
 
 signals:
     void             errorMsg(const QString&);
@@ -46,15 +46,15 @@ private:
     QVBoxLayout     *commonLayout;
 
     QScrollArea     *infoWidget;
-    QWidget         *scrolled = nullptr;
+    QWidget         *scrolled = Q_NULLPTR;
     QWidget         *listWidget;
     QWidget         *buttons;
 
     virConnectPtr*   ptr_ConnPtr;
     virErrorPtr      virtErrors;
 
-    _QWidget        *device = nullptr;
-    QLabel          *devIcon = nullptr;
+    _QWidget        *device = Q_NULLPTR;
+    QLabel          *devIcon = Q_NULLPTR;
     devstackHelpThread
                     *hlpThread;
 

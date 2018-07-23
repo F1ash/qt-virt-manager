@@ -8,7 +8,7 @@ class HubDevice : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit HubDevice(QWidget *parent = nullptr);
+    explicit HubDevice(QWidget *parent = Q_NULLPTR);
     DeviceAddress   *addr;
 
 private:

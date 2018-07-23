@@ -10,8 +10,8 @@ class _Pool_Stuff : public QWidget
     Q_OBJECT
 public:
     explicit _Pool_Stuff(
-            QWidget        *parent     = nullptr,
-            virConnectPtr*  connPtrPtr = nullptr);
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr = Q_NULLPTR);
     _Storage_Source        *source;
     _Storage_Target        *target;
     virtual void            setDataDescription(const QString&);

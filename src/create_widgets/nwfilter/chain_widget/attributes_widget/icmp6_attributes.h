@@ -6,7 +6,7 @@
 class ICMP6_Attributes : public _Attributes
 {
 public:
-    explicit ICMP6_Attributes(QWidget *parent = nullptr);
+    explicit ICMP6_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // ICMP6_ATTRIBUTES_H

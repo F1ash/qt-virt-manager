@@ -15,7 +15,7 @@ void Wait::run()
         QStringList to_Delete;
         for (int i=0; i<count; i++) {
             const ConnItemIndex *idx = wdg->getConnItemDataListIndex(i);
-            if ( nullptr==idx ) continue;
+            if ( Q_NULLPTR==idx ) continue;
             DATA _data = idx->getData();
             ConnElement *el = static_cast<ConnElement*>(
                         wdg->getConnElementByName(idx->getName()));
@@ -27,10 +27,10 @@ void Wait::run()
                 to_Delete.append(idx->getName());
                 break;
             case RUNNING:
-                if ( nullptr!=el ) el->closeConnection();
+                if ( Q_NULLPTR!=el ) el->closeConnection();
                 break;
             case CONNECT:
-                if ( nullptr!=el ) el->closeConnection();
+                if ( Q_NULLPTR!=el ) el->closeConnection();
                 break;
             default:
                 break;
@@ -39,12 +39,12 @@ void Wait::run()
         foreach (QString key, to_Delete) {
             ConnElement *el = static_cast<ConnElement*>(
                         wdg->getConnElementByName(key));
-            if ( nullptr!=el ) {
+            if ( Q_NULLPTR!=el ) {
                 QString _name = el->getName();
                 const int count = wdg->getListItemCount();
                 for (int i=0; i<count; i++) {
                     ConnItemIndex *idx = wdg->getConnItemDataListIndex(i);
-                    if ( idx!=nullptr && idx->getName().compare(_name)==0 ) {
+                    if ( idx!=Q_NULLPTR && idx->getName().compare(_name)==0 ) {
                         const int row = wdg->getConnItemDataListIndexOf(idx);
                         wdg->removeListItem(row);
                         wdg->removeConnItemDataList(idx);

@@ -72,7 +72,7 @@ QDomDocument DeviceData::getResult() const
 {
     //qDebug()<<"DeviceData result";
     QDomDocument doc;
-    if ( device!=nullptr ) {
+    if ( device!=Q_NULLPTR ) {
         doc = device->getDataDocument();
     };
     return doc;
@@ -80,7 +80,7 @@ QDomDocument DeviceData::getResult() const
 void DeviceData::showDevice(
         const int idx, const QString &deviceName, const QString &xmlDesc)
 {
-    if ( device!=nullptr ) closeDataEdit();
+    if ( device!=Q_NULLPTR ) closeDataEdit();
     emit dataProcessed(false);
     devName->setText(QString("<b>%1</b>").arg(deviceName));
     QDomDocument doc;
@@ -106,14 +106,14 @@ void DeviceData::showDevice(
     } else if ( deviceType.compare("serial")==0 ) {
         device = new CharDevice_Edit(
                     this,
-                    nullptr,
-                    nullptr,
+                    Q_NULLPTR,
+                    Q_NULLPTR,
                     deviceType);
     } else if ( deviceType.compare("parallel")==0 ) {
         device = new CharDevice_Edit(
                     this,
-                    nullptr,
-                    nullptr,
+                    Q_NULLPTR,
+                    Q_NULLPTR,
                     deviceType);
     } else if ( deviceType.compare("channel")==0 ) {
         device = new ChannelDevice(this);
@@ -183,7 +183,7 @@ void DeviceData::closeDataEdit()
         } else
             setStartState();
     };
-    if ( nullptr!=device && changed ) {
+    if ( Q_NULLPTR!=device && changed ) {
         QString xmlDesc = currentDeviceXMLDesc;
         int row = currentItemRow;
         setStartState();
@@ -194,15 +194,15 @@ void DeviceData::closeDataEdit()
 }
 void DeviceData::clearDataEdit()
 {
-    if ( nullptr!=device ) {
+    if ( Q_NULLPTR!=device ) {
         infoLayout->removeWidget(device);
         delete device;
-        device = nullptr;
+        device = Q_NULLPTR;
     };
-    if ( devIcon!=nullptr ) {
+    if ( devIcon!=Q_NULLPTR ) {
         infoLayout->removeWidget(devIcon);
         delete devIcon;
-        devIcon = nullptr;
+        devIcon = Q_NULLPTR;
     };
     deviceDataProcessed();
 }
@@ -217,7 +217,7 @@ void DeviceData::currentStateChanged()
 void DeviceData::saveDeviceData()
 {
     // save device data as previous state
-    if ( nullptr!=device ) {
+    if ( Q_NULLPTR!=device ) {
         currentDeviceXMLDesc = device->getDataDocument().toString();
     };
     currentStateSaved = true;
@@ -225,7 +225,7 @@ void DeviceData::saveDeviceData()
 }
 void DeviceData::revertDeviceData()
 {
-    if ( nullptr==device ) return;
+    if ( Q_NULLPTR==device ) return;
     QAction *act = static_cast<QAction*>(sender());
     if ( act==restoreMenu->revertData ) {
         // revert device data from previous state
@@ -251,7 +251,7 @@ void DeviceData::setStartState()
 }
 void DeviceData::deviceDataProcessed()
 {
-    if ( nullptr!=device ) {
+    if ( Q_NULLPTR!=device ) {
         device->setDataDescription(currentDeviceXMLDesc);
         connect(device, SIGNAL(dataChanged()),
                 this, SLOT(currentStateChanged()));

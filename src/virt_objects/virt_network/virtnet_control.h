@@ -11,7 +11,7 @@ class VirtNetControl : public VirtEntityControl
 {
     Q_OBJECT
 public:
-    explicit VirtNetControl(QWidget *parent = nullptr);
+    explicit VirtNetControl(QWidget *parent = Q_NULLPTR);
     ~VirtNetControl();
 
 signals:

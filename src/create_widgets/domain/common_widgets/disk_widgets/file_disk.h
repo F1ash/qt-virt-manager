@@ -10,8 +10,8 @@ class File_Disk : public _Disk
     Q_OBJECT
 public:
     explicit File_Disk(
-            QWidget        *parent     = nullptr,
-            virConnectPtr*  connPtrPtr = nullptr);
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr = Q_NULLPTR);
 
 private:
     QPushButton     *browse;

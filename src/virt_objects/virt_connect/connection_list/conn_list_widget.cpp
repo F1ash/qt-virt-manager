@@ -57,7 +57,7 @@ ConnItemIndex* ConnectionList::getConnItemDataListIndex(int i) const
     if ( 0<=i && i<getConnItemDataListCount() ) {
         return connItemModel->connItemDataList.at(i);
     } else {
-        return nullptr;
+        return Q_NULLPTR;
     };
 }
 int ConnectionList::getConnItemDataListCount() const
@@ -78,7 +78,7 @@ bool ConnectionList::removeConnItemDataList(ConnItemIndex *idx) const
 }
 ConnElement* ConnectionList::getConnElementByName(QString name) const
 {
-    return connections->value(name, nullptr);
+    return connections->value(name, Q_NULLPTR);
 }
 int ConnectionList::removeConnectionItembyName(QString name) const
 {
@@ -90,7 +90,7 @@ void ConnectionList::addConnItem(const QString &s)
     bool exist = false;
     for (int i=0; i<count; i++) {
         ConnItemIndex *idx = getConnItemDataListIndex(i);
-        if ( idx!=nullptr && idx->getName().compare(s)==0 ) {
+        if ( idx!=Q_NULLPTR && idx->getName().compare(s)==0 ) {
             exist = true;
             break;
         }
@@ -130,11 +130,11 @@ void ConnectionList::overviewOfConnection(const QModelIndex &_item)
         int conn_state;
         bool conn_availability;
         ConnItemIndex *idx = (*i);
-        if ( idx==nullptr ) continue;
+        if ( idx==Q_NULLPTR ) continue;
         const QString _name = idx->getName();
         ConnElement *conn = static_cast<ConnElement*>(
                     connections->value(_name));
-        if ( conn==nullptr ) continue;
+        if ( conn==Q_NULLPTR ) continue;
         const int row = getConnItemDataListIndexOf(idx);
         //qDebug()<<_name<<(row==_item.row());
         if ( row==_item.row() ) {
@@ -166,11 +166,11 @@ void ConnectionList::closeConnection(const QModelIndex &_item)
 virConnectPtr* ConnectionList::getPtr_connectionPtr(const QString &name)
 {
     //qDebug()<<name<<connections->contains(name);
-    virConnectPtr *_res = nullptr;
+    virConnectPtr *_res = Q_NULLPTR;
     if ( connections->contains(name) ) {
             ConnElement *conn = static_cast<ConnElement*>(
                         connections->value(name));
-            if ( nullptr!=conn )
+            if ( Q_NULLPTR!=conn )
                 _res = conn->getPtr_connectionPtr();
     };
     return _res;
@@ -195,7 +195,7 @@ int  ConnectionList::connItemEditAction()
         return exitCode;
     };
     ConnItemIndex *idx = getConnItemDataListIndex(_item.row());
-    if ( idx==nullptr ) return exitCode;
+    if ( idx==Q_NULLPTR ) return exitCode;
     ConnSettings *sDialog = new ConnSettings(this->parentWidget());
     sDialog->setConnectItem(idx);
     connect(sDialog, SIGNAL(creationConnCancelled()),
@@ -209,7 +209,7 @@ int  ConnectionList::connItemEditAction()
         const QString key = idx->getName();
         ConnElement *conn = static_cast<ConnElement*>(
                     connections->value(key));
-        if ( nullptr!=conn ) {
+        if ( Q_NULLPTR!=conn ) {
             conn->buildURI();
         };
     };
@@ -228,11 +228,11 @@ void ConnectionList::stopProcessing()
          i!=connItemModel->connItemDataList.constEnd();
          ++i) {
         ConnItemIndex *idx = (*i);
-        if ( idx==nullptr ) continue;
+        if ( idx==Q_NULLPTR ) continue;
         const QString _name = idx->getName();
         ConnElement *conn = static_cast<ConnElement*>(
                     connections->value(_name));
-        if ( nullptr==conn ) continue;
+        if ( Q_NULLPTR==conn ) continue;
         conn->disableOverviewOfConnection();
     };
     // set flag to FALSE
@@ -244,12 +244,12 @@ void ConnectionList::createConnection(const QModelIndex &_item)
 {
     if ( !_item.isValid() ) return;
     ConnItemIndex *idx = getConnItemDataListIndex(_item.row());
-    if ( idx==nullptr ) return;
+    if ( idx==Q_NULLPTR ) return;
     QString key = idx->getName();
     connections->insert(key, new ConnElement(this));
     ConnElement *conn = static_cast<ConnElement*>(
                 connections->value(key));
-    if ( conn==nullptr ) return;
+    if ( conn==Q_NULLPTR ) return;
     conn->setItemReference(connItemModel, idx);
     clearSelection();
     connect(conn, SIGNAL(warningShowed()),
@@ -287,7 +287,7 @@ void ConnectionList::checkConnection(const QModelIndex &_item, const bool to_run
     if ( !_item.isValid() ) return;
     int conn_state;
     ConnItemIndex *idx = getConnItemDataListIndex(_item.row());
-    if ( idx==nullptr ) return;
+    if ( idx==Q_NULLPTR ) return;
     conn_state = idx->getData().value(QString("isRunning"), CLOSED).toInt();
     if ( (to_run && conn_state!=RUNNING) || (!to_run && conn_state==RUNNING) )
         connItemDoubleClicked(_item);
@@ -296,7 +296,7 @@ void ConnectionList::deleteCurrentConnection(const QModelIndex &_item)
 {
     if ( _item.isValid() ) {
         ConnItemIndex *idx = getConnItemDataListIndex(_item.row());
-        if ( idx==nullptr ) return;
+        if ( idx==Q_NULLPTR ) return;
         const QString connection = idx->getName();
         ConnElement *conn = static_cast<ConnElement*>(
                     connections->value(connection));
@@ -351,7 +351,7 @@ void ConnectionList::deleteCurrentConnection(const QModelIndex &_item)
                 emit removeConnection(connection);
                 connections->remove(connection);
                 delete conn;
-                conn = nullptr;
+                conn = Q_NULLPTR;
             };
             connItemModel->removeRow(_item.row());
         };
@@ -381,7 +381,7 @@ void ConnectionList::connContextMenuRequested(const QPoint &pos)
     //qDebug()<<_item->text()<<" Connection detected";
     DATA conn_Status;
     ConnItemIndex *idx = getConnItemDataListIndex(_item.row());
-    if ( idx==nullptr ) return;
+    if ( idx==Q_NULLPTR ) return;
     conn_Status = idx->getData();
     if ( !conn_Status.value("availability", NOT_AVAILABLE).toBool() )
         return;
@@ -435,13 +435,13 @@ void ConnectionList::connItemClicked(const QModelIndex &_item)
 {
     //if ( !_item.isValid() ) return;
     ConnItemIndex *idx = getConnItemDataListIndex(_item.row());
-    if ( idx==nullptr ) return;
+    if ( idx==Q_NULLPTR ) return;
     QString _name = idx->getName();
     DATA conn_Status = idx->getData();
     QString key = conn_Status.value(QString("initName")).toString();
     ConnElement *conn = static_cast<ConnElement*>(
                 connections->value(key));
-    if ( nullptr==conn ) return;
+    if ( Q_NULLPTR==conn ) return;
     if ( key.compare(_name)!=0 ) {
         conn_Status.insert(QString("initName"), QVariant(_name));
         connections->insert(_name, conn);
@@ -460,14 +460,14 @@ void ConnectionList::connItemDoubleClicked(const QModelIndex &_item)
     if ( !_item.isValid() ) return;
     //clearSelection();
     ConnItemIndex *idx = getConnItemDataListIndex(_item.row());
-    if ( idx==nullptr ) return;
+    if ( idx==Q_NULLPTR ) return;
     QString _name = idx->getName();
     DATA conn_Status;
     conn_Status = idx->getData();
     QString key = conn_Status.value(QString("initName")).toString();
     ConnElement *conn = static_cast<ConnElement*>(
                 connections->value(key));
-    if ( nullptr==conn ) return;
+    if ( Q_NULLPTR==conn ) return;
     if ( key.compare(_name)!=0 ) {
         conn_Status.insert(QString("initName"), QVariant(_name));
         connections->insert(_name, conn);
@@ -522,12 +522,12 @@ void ConnectionList::createLocalConnection(const QString &uri)
     };
     if ( !_item.isValid() ) return;
     ConnItemIndex *idx = getConnItemDataListIndex(_item.row());
-    if ( idx==nullptr ) return;
+    if ( idx==Q_NULLPTR ) return;
     QString key = idx->getName();
     connections->insert(key, new ConnElement(this));
     ConnElement *conn = static_cast<ConnElement*>(
                 connections->value(key));
-    if ( nullptr==conn ) {
+    if ( Q_NULLPTR==conn ) {
         --localConn;
         return;
     };
@@ -586,7 +586,7 @@ void ConnectionList::mainWindowUp()
 void ConnectionList::getAuthCredentials(const QString &crd)
 {
     ConnElement *obj = static_cast<ConnElement*>(sender());
-    if ( nullptr==obj ) return;
+    if ( Q_NULLPTR==obj ) return;
     QString text;
     QLineEdit::EchoMode mode = (crd.toLower().compare("password")==0) ?
                 QLineEdit::PasswordEchoOnEdit :
@@ -613,12 +613,12 @@ void ConnectionList::setOnViewAvailableConnection(const QString &_newName)
          i!=connItemModel->connItemDataList.constEnd();
          ++i) {
         ConnItemIndex *idx = (*i);
-        if ( idx==nullptr ) continue;
+        if ( idx==Q_NULLPTR ) continue;
         const QString _name = idx->getName();
         if ( _newName.compare(_name)!=0 ) continue;
         ConnElement *conn = static_cast<ConnElement*>(
                     connections->value(_name));
-        if ( nullptr==conn ) continue;
+        if ( Q_NULLPTR==conn ) continue;
         conn->overviewOfConnection();
         // set flag to TRUE
         onViewExist = true;

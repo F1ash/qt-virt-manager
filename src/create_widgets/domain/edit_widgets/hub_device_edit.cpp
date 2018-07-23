@@ -23,7 +23,7 @@ void HubDevice_Edit::setDataDescription(const QString &_xmlDesc)
     addr->use->setChecked(!_addr.isNull());
     if ( !_addr.isNull() ) {
         USBAddr *wdg = static_cast<USBAddr*>( addr->getCurrentAddrWidget() );
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->bus->setText( _addr.attribute("bus") );
             wdg->port->setText( _addr.attribute("port") );
         };

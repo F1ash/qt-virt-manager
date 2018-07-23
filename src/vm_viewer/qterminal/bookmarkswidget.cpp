@@ -38,7 +38,7 @@ public:
         Command = 2
     };
 
-    AbstractBookmarkItem(AbstractBookmarkItem* parent = nullptr)
+    AbstractBookmarkItem(AbstractBookmarkItem* parent = Q_NULLPTR)
     {
         m_parent = parent;
     }

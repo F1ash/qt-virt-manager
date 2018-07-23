@@ -85,7 +85,7 @@ GetURLDialog::~GetURLDialog()
     for (int i=0; i<urlList->count(); i++) {
         QListWidgetItem *item =
                 urlList->item(i);
-        if ( item==nullptr ) continue;
+        if ( item==Q_NULLPTR ) continue;
         settings.setValue(
                     QString::number(i),
                     item->text());
@@ -109,7 +109,7 @@ bool GetURLDialog::isUnique(const QString &_url) const
     for (int i=0; i<urlList->count(); i++) {
         QListWidgetItem *item =
                 urlList->item(i);
-        if ( item==nullptr ) continue;
+        if ( item==Q_NULLPTR ) continue;
         if ( item->text().compare(_url)==0 ) {
             exist = false;
         };
@@ -161,7 +161,7 @@ void GetURLDialog::urlMenuRequested(const QPoint &pos)
         QListWidgetItem *item =
                 urlList->takeItem(idx.row());
         delete item;
-        item = nullptr;
+        item = Q_NULLPTR;
     } else if ( _state==CLEAR_LIST ) {
         url.clear();
         urlList->clear();
@@ -170,7 +170,7 @@ void GetURLDialog::urlMenuRequested(const QPoint &pos)
 }
 void GetURLDialog::urlActivated(QListWidgetItem *item)
 {
-    if ( nullptr!=item ) {
+    if ( Q_NULLPTR!=item ) {
         QString prevURL = urlEdit->text();
         urlEdit->setText(item->text());
         urlList->takeItem(

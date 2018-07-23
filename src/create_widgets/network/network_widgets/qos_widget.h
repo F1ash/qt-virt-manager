@@ -10,7 +10,7 @@ class QoS_Widget : public _Checked_Widget
     Q_OBJECT
 public:
     explicit QoS_Widget(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag = "QoS");
 
 signals:

@@ -8,7 +8,7 @@ class DeleteSnapshotFlags : public _SnapshotFlags
     Q_OBJECT
 public:
     DeleteSnapshotFlags(
-            QWidget     *parent = nullptr);
+            QWidget     *parent = Q_NULLPTR);
 
 public slots:
     void             changeAvailableFlags(int);

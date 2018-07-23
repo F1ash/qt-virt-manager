@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QStatusBar>
-#include <QCloseEvent>
 #include <QMessageBox>
 #include <QTime>
 #include <QFileDialog>
@@ -16,6 +15,7 @@
 #include <QShortcut>
 #include <QTimerEvent>
 #include <QMoveEvent>
+#include <QCloseEvent>
 #include <QSettings>
 #include "viewer_toolbar.h"
 #include "ssh_tunnel/ssh_tunnel.h"
@@ -28,7 +28,7 @@ class VM_Viewer_Only : public QMainWindow
     Q_OBJECT
 public:
     explicit VM_Viewer_Only(
-            QWidget        *parent  = nullptr,
+            QWidget        *parent  = Q_NULLPTR,
             const QString   _url    = "");
     virtual ~VM_Viewer_Only();
     virtual void     init();
@@ -37,7 +37,7 @@ public:
     QString          user, host, transport,
                      addr, port, socket, passwd;
     QSettings        settings;
-    ViewerToolBar   *viewerToolBar = nullptr;
+    ViewerToolBar   *viewerToolBar = Q_NULLPTR;
     int              timerId = 0;
     int              killTimerId = 0;
     int              toolBarTimerId = 0;
@@ -45,11 +45,11 @@ public:
     int              killCounter = 0;
     int              reinitCounter = 0;
 
-    QVBoxLayout     *infoLayout = nullptr;
-    QLabel          *icon = nullptr, *msg = nullptr;
-    QWidget         *info = nullptr;
-    SSH_Tunnel      *sshTunnelThread = nullptr;
-    QShortcut       *actFullScreen = nullptr;
+    QVBoxLayout     *infoLayout = Q_NULLPTR;
+    QLabel          *icon = Q_NULLPTR, *msg = Q_NULLPTR;
+    QWidget         *info = Q_NULLPTR;
+    SSH_Tunnel      *sshTunnelThread = Q_NULLPTR;
+    QShortcut       *actFullScreen = Q_NULLPTR;
 
 signals:
     void             initGraphic();
@@ -99,6 +99,7 @@ private slots:
     void             setNewPosition(const QPoint&);
     void             sshThreadFinished();
     void             moveEvent(QMoveEvent*);
+    void             closeEvent(QCloseEvent*);
 };
 
 #endif // VM_VIEWER_ONLY_H

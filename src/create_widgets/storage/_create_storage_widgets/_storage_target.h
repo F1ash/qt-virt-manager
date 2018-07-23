@@ -18,8 +18,8 @@ class _Storage_Target : public QWidget
     Q_OBJECT
 public:
     explicit _Storage_Target(
-            QWidget         *parent = nullptr,
-            virConnectPtr   *connPtrPtr = nullptr,
+            QWidget         *parent = Q_NULLPTR,
+            virConnectPtr   *connPtrPtr = Q_NULLPTR,
             QString          _type  = QString());
     QLineEdit       *path;
     QComboBox       *format;

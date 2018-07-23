@@ -9,7 +9,7 @@ class ConclusionPage : public QWizardPage
 {
     Q_OBJECT
 public:
-    explicit ConclusionPage(QWidget *parent = nullptr);
+    explicit ConclusionPage(QWidget *parent = Q_NULLPTR);
     void            initializePage();
 
 private:

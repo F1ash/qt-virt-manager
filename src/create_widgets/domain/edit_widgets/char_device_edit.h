@@ -8,9 +8,9 @@ class CharDevice_Edit : public CharDevice
     Q_OBJECT
 public:
     explicit CharDevice_Edit(
-            QWidget        *parent     = nullptr,
-            virConnectPtr*  connPtrPtr = nullptr,
-            virDomainPtr    domain     = nullptr,
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr = Q_NULLPTR,
+            virDomainPtr    domain     = Q_NULLPTR,
             QString         _tag       = QString());
 
 signals:

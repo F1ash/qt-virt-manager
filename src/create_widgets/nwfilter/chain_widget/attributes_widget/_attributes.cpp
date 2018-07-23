@@ -28,7 +28,7 @@ void _Attributes::clearAllAttributeData()
     for (int i=0; i<attrEditor->count(); i++) {
         UntypedData *d = static_cast<UntypedData*>(
                     attrEditor->widget(i));
-        if ( d==nullptr ) continue;
+        if ( d==Q_NULLPTR ) continue;
         d->clearData();
     };
     emit released(false);
@@ -40,7 +40,7 @@ void _Attributes::setAttrValue(const QVariantMap &_map)
         attrName->setCurrentIndex(idx);
         UntypedData *u = static_cast<UntypedData*>(
                     attrEditor->currentWidget());
-        if ( u!=nullptr ) {
+        if ( u!=Q_NULLPTR ) {
             // unused here
             //protocolID = _map.value("protocolID").toString();
             u->setAttrValue(_map.value("value").toString());
@@ -63,7 +63,7 @@ QVariantMap _Attributes::getAttrValue(QString &attr) const
         attrName->setCurrentIndex(idx);
         UntypedData *u = static_cast<UntypedData*>(
                     attrEditor->currentWidget());
-        if ( u!=nullptr && !u->getAttrValue().isEmpty() ) {
+        if ( u!=Q_NULLPTR && !u->getAttrValue().isEmpty() ) {
             if ( !u->isMatchUnusable() && !u->isMatch() ) {
                 ret.insert("match", "false");
             };

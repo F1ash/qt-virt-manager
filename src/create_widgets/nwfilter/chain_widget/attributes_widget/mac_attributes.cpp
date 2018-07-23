@@ -20,7 +20,7 @@ MAC_Attributes::MAC_Attributes(QWidget *parent) :
     for (int i=0; i<attrEditor->count(); i++) {
         UntypedData *d = static_cast<UntypedData*>(
                     attrEditor->widget(i));
-        if ( d==nullptr ) continue;
+        if ( d==Q_NULLPTR ) continue;
         connect(d, SIGNAL(dataChanged()),
                 this, SIGNAL(dataChanged()));
     };

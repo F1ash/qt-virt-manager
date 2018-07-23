@@ -11,7 +11,7 @@ class Donate_Dialog : public QDialog
 {
     Q_OBJECT
 public:
-    Donate_Dialog(QWidget *parent = nullptr);
+    Donate_Dialog(QWidget *parent = Q_NULLPTR);
     //bool             showAgain() const;
 
 private:

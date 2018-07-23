@@ -17,7 +17,7 @@ class HNavigationLabel : public QLabel
     Q_OBJECT
 public:
     explicit HNavigationLabel(
-            QWidget *parent     = nullptr,
+            QWidget *parent     = Q_NULLPTR,
             DIRECT   direction  = NONE);
     void        setUsageStatus(bool);
 

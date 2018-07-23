@@ -9,7 +9,7 @@ NetHelperThread::NetHelperThread(
 }
 void NetHelperThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -49,9 +49,9 @@ CreateVirtNetwork::CreateVirtNetwork(
 CreateVirtNetwork::~CreateVirtNetwork()
 {
     settings.beginGroup("VirtNetControl");
-    if ( nullptr!=advancedWdg ) {
+    if ( Q_NULLPTR!=advancedWdg ) {
         settings.setValue("AdvancedNetworkEditor", saveGeometry());
-    } else if ( nullptr!=assistantWdg ) {
+    } else if ( Q_NULLPTR!=assistantWdg ) {
         settings.setValue("NetworkEditorAssistant", saveGeometry());
     };
     if ( true ) {
@@ -128,14 +128,14 @@ void CreateVirtNetwork::set_Result(bool state)
             CreateVirtNetwork_Ass *a =
                     static_cast<CreateVirtNetwork_Ass*>(
                         centralWidget());
-            if ( nullptr!=a ) {
+            if ( Q_NULLPTR!=a ) {
                 _xml = a->getXMLDescFileName();
             };
         } else {
             CreateVirtNetwork_Adv *a =
                     static_cast<CreateVirtNetwork_Adv*>(
                         centralWidget());
-            if ( nullptr!=a ) {
+            if ( Q_NULLPTR!=a ) {
                 _xml = a->getXMLDescFileName();
             };
         };

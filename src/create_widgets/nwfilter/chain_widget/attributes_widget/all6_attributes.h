@@ -6,7 +6,7 @@
 class ALL6_Attributes : public _Attributes
 {
 public:
-    explicit ALL6_Attributes(QWidget *parent = nullptr);
+    explicit ALL6_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // ALL6_ATTRIBUTES_H

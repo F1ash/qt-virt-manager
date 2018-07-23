@@ -12,7 +12,7 @@ class Misc_Settings : public _Tab
     Q_OBJECT
 public:
     explicit Misc_Settings(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  _caps  = "",
             QString  _xmlDesc = QString());
 

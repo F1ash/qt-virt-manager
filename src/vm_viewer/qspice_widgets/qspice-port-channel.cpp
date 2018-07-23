@@ -10,7 +10,7 @@ void QSpiceHelper::port_data(SpicePortChannel *spiceportchannel,
     // emitted when data is available for receiving from port
     Q_UNUSED(spiceportchannel)
     QSpicePortChannel *_port = static_cast<QSpicePortChannel*>(user_data);
-    if ( nullptr==_port ) return;
+    if ( Q_NULLPTR==_port ) return;
     emit _port->portData(arg1, size_t(arg2));
 }
 
@@ -20,7 +20,7 @@ void QSpiceHelper::port_event(SpicePortChannel *spiceportchannel,
 {
     Q_UNUSED(spiceportchannel)
     QSpicePortChannel *_port = static_cast<QSpicePortChannel*>(user_data);
-    if ( nullptr==_port ) return;
+    if ( Q_NULLPTR==_port ) return;
     emit _port->portEvent(arg1);
 }
 
@@ -53,7 +53,7 @@ void QSpicePortChannel::writeBuffToPort(const void *buff, size_t _size)
                 static_cast<SpicePortChannel*>(gobject),
                 buff,
                 _size,
-                nullptr,
+                Q_NULLPTR,
                 GAsyncReadyCallback(writeFinishToPort),
                 this);
 }
@@ -73,11 +73,11 @@ void QSpicePortChannel::writeFinishToPort(void *_port, void *_res, void *_errs)
 
     QSpicePortChannel *obj = static_cast<QSpicePortChannel*>(
                 g_async_result_get_user_data(result));
-    if ( obj!=nullptr) {
+    if ( obj!=Q_NULLPTR) {
         SPICE_CHANNEL_MSG _msg;
         _msg.channel = tr("port");
         _msg.context = tr("writing data finished");
-        if ( errors!=nullptr && *errors!=nullptr ) {
+        if ( errors!=Q_NULLPTR && *errors!=Q_NULLPTR ) {
                 _msg.msg = QString(tr("Error(%1): %2"))
                         .arg((*errors)->code)
                         .arg(QString::fromUtf8((*errors)->message));

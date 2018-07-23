@@ -19,9 +19,9 @@ class _QWidget : public _Changed
     Q_OBJECT
 public:
     explicit _QWidget(
-            QWidget         *parent     = nullptr,
-            virConnectPtr*   connPtrPtr = nullptr,
-            virDomainPtr     domain     = nullptr);
+            QWidget         *parent     = Q_NULLPTR,
+            virConnectPtr*   connPtrPtr = Q_NULLPTR,
+            virDomainPtr     domain     = Q_NULLPTR);
 
     virConnectPtr           *ptr_ConnPtr;
     virDomain               *currDomain;

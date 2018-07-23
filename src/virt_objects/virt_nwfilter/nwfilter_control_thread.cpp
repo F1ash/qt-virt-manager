@@ -12,11 +12,11 @@ void NWFilterControlThread::execAction(uint _num, TASK _task)
     number = _num;
     task = _task;
     keep_alive = false;
-    if ( nullptr!=task.srcConnPtr ) {
+    if ( Q_NULLPTR!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
-            task.srcConnPtr = nullptr;
+            task.srcConnPtr = Q_NULLPTR;
             sendConnErrors();
         } else
             keep_alive = true;
@@ -65,8 +65,8 @@ Result NWFilterControlThread::getAllNWFilterList()
 {
     Result result;
     ACT_RESULT virtNWFilterList;
-    if ( task.srcConnPtr!=nullptr && keep_alive ) {
-        virNWFilterPtr *filters = nullptr;
+    if ( task.srcConnPtr!=Q_NULLPTR && keep_alive ) {
+        virNWFilterPtr *filters = Q_NULLPTR;
         //extra flags; not used yet, so callers should always pass 0
         unsigned int flags = 0;
         int ret = virConnectListAllNWFilters(
@@ -103,7 +103,7 @@ Result NWFilterControlThread::defineNWFilter()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -120,7 +120,7 @@ Result NWFilterControlThread::defineNWFilter()
     f.close();
     virNWFilterPtr filter = virNWFilterDefineXML(
                 *task.srcConnPtr, xmlData.data());
-    if ( filter==nullptr ) {
+    if ( filter==Q_NULLPTR ) {
         result.err = sendConnErrors();
         return result;
     };
@@ -138,14 +138,14 @@ Result NWFilterControlThread::undefineNWFilter()
     Result result;
     QString name = task.object;
     bool deleted = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNWFilterPtr filter = virNWFilterLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( filter!=nullptr ) {
+    if ( filter!=Q_NULLPTR ) {
         deleted = (virNWFilterUndefine(filter)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -164,19 +164,19 @@ Result NWFilterControlThread::getVirtNWFilterXMLDesc()
     QString name = task.object;
     result.name = name;
     bool read = false;
-    char *Returns = nullptr;
-    if ( task.srcConnPtr==nullptr ) {
+    char *Returns = Q_NULLPTR;
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virNWFilterPtr filter = virNWFilterLookupByName(
                 *task.srcConnPtr, name.toUtf8().data());
-    if ( filter!=nullptr ) {
+    if ( filter!=Q_NULLPTR ) {
         //extra flags; not used yet, so callers should always pass 0
         uint flags = 0;
         Returns = (virNWFilterGetXMLDesc(filter, flags));
-        if ( Returns==nullptr )
+        if ( Returns==Q_NULLPTR )
             result.err = sendConnErrors();
         else read = true;
         virNWFilterFree(filter);
@@ -192,7 +192,7 @@ Result NWFilterControlThread::getVirtNWFilterXMLDesc()
     if (read) f.write(Returns);
     result.fileName.append(f.fileName());
     f.close();
-    if ( Returns!=nullptr ) free(Returns);
+    if ( Returns!=Q_NULLPTR ) free(Returns);
     result.result = read;
     result.msg.append(QString(tr("'<b>%1</b>' NWFilter %2 XML'ed."))
                       .arg(name).arg((read)?"":"not"));

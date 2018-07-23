@@ -81,7 +81,7 @@ QDomDocument Forward_Widget::getDataDocument() const
     QDomDocument doc, _doc;
     _QWidget *wdg = static_cast<_QWidget*>(
                 frwdModeSet->currentWidget());
-    if( nullptr!=wdg ) _doc = wdg->getDataDocument();
+    if( Q_NULLPTR!=wdg ) _doc = wdg->getDataDocument();
     QDomElement _forward =
             doc.createElement("forward");
     _forward.setAttribute(
@@ -122,7 +122,7 @@ void Forward_Widget::setDataDescription(const QString &_xmlDesc)
             QString _xml = _doc.toString();
             _QWidget *wdg = static_cast<_QWidget*>(
                         frwdModeSet->currentWidget());
-            if( nullptr!=wdg ) wdg->setDataDescription(_xml);
+            if( Q_NULLPTR!=wdg ) wdg->setDataDescription(_xml);
         };
     };
 }

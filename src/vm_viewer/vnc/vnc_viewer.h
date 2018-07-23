@@ -10,14 +10,14 @@ class VNC_Viewer : public VM_Viewer
     Q_OBJECT
 public:
     explicit VNC_Viewer(
-            QWidget        *parent     = nullptr,
-            virConnectPtr  *connPtrPtr = nullptr,
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr = Q_NULLPTR,
             QString         arg1       = QString(),
             QString         arg2       = QString(),
             QString         arg3       = QString());
 
 private:
-    MachineView     *vncWdg = nullptr;
+    MachineView     *vncWdg = Q_NULLPTR;
 
 private slots:
     void             reconnectToVirtDomain();

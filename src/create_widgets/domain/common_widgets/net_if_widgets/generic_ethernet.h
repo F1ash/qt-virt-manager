@@ -9,8 +9,8 @@ class Generic_Ethernet : public _QWidget
     Q_OBJECT
 public:
     explicit Generic_Ethernet(
-            QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
 
 private:
     QLabel          *targetLabel, *scriptLabel;

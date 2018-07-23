@@ -9,11 +9,11 @@ class VNC_Viewer_Only : public VM_Viewer_Only
     Q_OBJECT
 public:
     explicit VNC_Viewer_Only(
-            QWidget        *parent  = nullptr,
+            QWidget        *parent  = Q_NULLPTR,
             const QString   _url    = "");
 
 private:
-    MachineView     *vncWdg = nullptr;
+    MachineView     *vncWdg = Q_NULLPTR;
 
 private slots:
     void             reconnectToVirtDomain();

@@ -128,7 +128,7 @@ void RuleInstance::editRule(const QString &rule, int row)
                 //s<<match<<" "<<a.name()<<" "<<a.value()<<endl;
                 _Attributes *_a = static_cast<_Attributes*>(
                             attributes->currentWidget());
-                if ( _a!=nullptr ) {
+                if ( _a!=Q_NULLPTR ) {
                     QVariantMap _m;
                     _m.insert("protocolID", protocolID);
                     _m.insert("match", match);
@@ -155,7 +155,7 @@ void RuleInstance::addRuleToList()
         _rule.setAttribute("statematch", "false");
     _Attributes *_a = static_cast<_Attributes*>(
                 attributes->currentWidget());
-    if ( _a!=nullptr ) {
+    if ( _a!=Q_NULLPTR ) {
         QDomElement _protocolID = doc.createElement(
                     _a->getProtocolID());
         foreach (QString _attr, _a->getAttrList()) {
@@ -184,7 +184,7 @@ void RuleInstance::clearRuleAttrbutes()
     // clear attributes
     _Attributes *a = static_cast<_Attributes*>(
                 attributes->currentWidget());
-    if ( a!=nullptr ) a->clearAllAttributeData();
+    if ( a!=Q_NULLPTR ) a->clearAllAttributeData();
 }
 void RuleInstance::cancelEditRule()
 {

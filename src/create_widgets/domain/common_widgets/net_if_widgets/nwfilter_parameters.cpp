@@ -71,7 +71,7 @@ QDomDocument NWFilter_Params::getDataDocument() const
     _filterref.setAttribute("filter", nwFilters->currentText());
     for ( int i=0; i<list->count(); i++ ) {
         QListWidgetItem *item = list->item(i);
-        if ( item==nullptr ) continue;
+        if ( item==Q_NULLPTR ) continue;
         QStringList _expr = item->text().split("=");
         QDomElement _parameter = doc.createElement("parameter");
         _parameter.setAttribute("name", _expr.first());

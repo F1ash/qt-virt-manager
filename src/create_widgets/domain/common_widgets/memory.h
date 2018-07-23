@@ -10,7 +10,7 @@ class Memory : public _Tab
     Q_OBJECT
 public:
     explicit Memory(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  _caps  = "",
             QString  _xmlDesc = QString());
 

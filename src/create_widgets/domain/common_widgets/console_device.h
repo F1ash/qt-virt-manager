@@ -8,9 +8,9 @@ class ConsoleDevice : public CharDevice
     Q_OBJECT
 public:
     explicit ConsoleDevice(
-            QWidget        *parent     = nullptr,
-            virConnectPtr*  connPtrPtr = nullptr,
-            virDomainPtr    domain     = nullptr);
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr = Q_NULLPTR,
+            virDomainPtr    domain     = Q_NULLPTR);
     QComboBox       *targetType;
 
 signals:

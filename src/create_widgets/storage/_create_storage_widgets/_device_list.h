@@ -9,7 +9,7 @@ class _DeviceList : public _List_Widget
     Q_OBJECT
 public:
     explicit _DeviceList(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag    = "");
     QLineEdit       *name;
     void             addNewDevicePath(const QString&);

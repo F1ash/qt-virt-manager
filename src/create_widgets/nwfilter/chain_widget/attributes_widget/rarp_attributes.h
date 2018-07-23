@@ -6,7 +6,7 @@
 class RARP_Attributes : public _Attributes
 {
 public:
-    explicit RARP_Attributes(QWidget *parent = nullptr);
+    explicit RARP_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // RARP_ATTRIBUTES_H

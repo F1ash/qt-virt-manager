@@ -19,8 +19,8 @@ class HostDevice : public _QWidget_Threaded
     Q_OBJECT
 public:
     explicit HostDevice(
-            QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
     QComboBox       *type;
     QStackedWidget  *info;
     QVBoxLayout     *commonLayout;

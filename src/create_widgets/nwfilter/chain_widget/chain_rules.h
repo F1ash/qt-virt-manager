@@ -8,7 +8,7 @@ class ChainRules : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit ChainRules(QWidget *parent = nullptr);
+    explicit ChainRules(QWidget *parent = Q_NULLPTR);
     void             setDataDescription(const QString&);
     QDomDocument     getDataDocument() const;
     QString          getChainProtocol() const;

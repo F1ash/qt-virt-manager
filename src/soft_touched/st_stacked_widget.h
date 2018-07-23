@@ -8,7 +8,7 @@ class ST_StackedWidget : public QStackedWidget
 {
     Q_OBJECT
 public:
-    explicit ST_StackedWidget(QWidget *parent = nullptr);
+    explicit ST_StackedWidget(QWidget *parent = Q_NULLPTR);
     void        addNewWidget(QWidget *);
     void        removeAllWidgets();
 

@@ -7,7 +7,7 @@ class SecretListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit SecretListDelegate(QObject *parent = nullptr);
+    explicit SecretListDelegate(QObject *parent = Q_NULLPTR);
 
 private slots:
     void paint(

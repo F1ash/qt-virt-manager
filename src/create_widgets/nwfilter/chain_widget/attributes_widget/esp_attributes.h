@@ -6,7 +6,7 @@
 class ESP_Attributes : public _Attributes
 {
 public:
-    explicit ESP_Attributes(QWidget *parent = nullptr);
+    explicit ESP_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // ESP_ATTRIBUTES_H

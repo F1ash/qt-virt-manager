@@ -30,7 +30,7 @@ class QSpiceObject : public QObject
 {
     Q_OBJECT
 public:
-    explicit QSpiceObject(QObject *parent = nullptr);
+    explicit QSpiceObject(QObject *parent = Q_NULLPTR);
     virtual ~QSpiceObject()               = 0;
     virtual bool objectDisposed();
 

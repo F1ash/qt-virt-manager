@@ -7,7 +7,7 @@ class IfaceListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit IfaceListDelegate(QObject *parent = nullptr);
+    explicit IfaceListDelegate(QObject *parent = Q_NULLPTR);
 
 private slots:
     void paint(

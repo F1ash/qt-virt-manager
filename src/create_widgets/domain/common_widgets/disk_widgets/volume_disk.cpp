@@ -230,7 +230,7 @@ void Volume_Disk::setDataDescription(const QString &_xmlDesc)
         addr->type->setCurrentIndex( (idx<0)? 0:idx );
         if ( _attr.compare("pci")==0 ) {
             PciAddr *wdg = static_cast<PciAddr*>(addr->getCurrentAddrWidget());
-            if ( wdg!=nullptr ) {
+            if ( wdg!=Q_NULLPTR ) {
                 wdg->domain->setText( _addr.attribute("domain") );
                 wdg->bus->setText( _addr.attribute("bus") );
                 wdg->slot->setText( _addr.attribute("slot") );
@@ -244,7 +244,7 @@ void Volume_Disk::setDataDescription(const QString &_xmlDesc)
             };
         } else if ( _attr.compare("drive")==0 ) {
             DriveAddr *wdg = static_cast<DriveAddr*>( addr->getCurrentAddrWidget() );
-            if ( wdg!=nullptr ) {
+            if ( wdg!=Q_NULLPTR ) {
                 wdg->controller->setText( _addr.attribute("controller") );
                 wdg->bus->setText( _addr.attribute("bus") );
                 wdg->target->setText( _addr.attribute("target") );

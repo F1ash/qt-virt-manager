@@ -13,7 +13,7 @@ class IfaceControlMenu : public QMenu
     Q_OBJECT
 public:
     explicit IfaceControlMenu(
-            QWidget *parent    = nullptr,
+            QWidget *parent    = Q_NULLPTR,
             QVariantMap params = QVariantMap(),
             bool state         = false);
 
@@ -23,14 +23,14 @@ signals:
 private:
     bool            autoReloadState;
     bool            state, changing;
-    QAction        *start = nullptr;
-    QAction        *destroy = nullptr;
-    QAction        *undefine = nullptr;
-    QAction        *changeBegin = nullptr;
-    QAction        *changeCommit = nullptr;
-    QAction        *changeRollback = nullptr;
-    QAction        *getXMLDesc = nullptr;
-    QAction        *reload = nullptr;
+    QAction        *start = Q_NULLPTR;
+    QAction        *destroy = Q_NULLPTR;
+    QAction        *undefine = Q_NULLPTR;
+    QAction        *changeBegin = Q_NULLPTR;
+    QAction        *changeCommit = Q_NULLPTR;
+    QAction        *changeRollback = Q_NULLPTR;
+    QAction        *getXMLDesc = Q_NULLPTR;
+    QAction        *reload = Q_NULLPTR;
 
 private slots:
     void            emitExecMethod(QAction*);

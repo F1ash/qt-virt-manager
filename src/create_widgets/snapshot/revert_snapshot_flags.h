@@ -8,7 +8,7 @@ class RevertSnapshotFlags : public _SnapshotFlags
     Q_OBJECT
 public:
     RevertSnapshotFlags(
-            QWidget     *parent = nullptr);
+            QWidget     *parent = Q_NULLPTR);
 
 public slots:
     void             changeAvailableFlags(int);

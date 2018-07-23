@@ -11,7 +11,7 @@ class IntroducePage : public QWizardPage
 {
     Q_OBJECT
 public:
-    explicit IntroducePage(QWidget *parent = nullptr);
+    explicit IntroducePage(QWidget *parent = Q_NULLPTR);
     int             nextId() const;
     bool            isComplete() const;
 

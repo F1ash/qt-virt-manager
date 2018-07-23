@@ -46,7 +46,7 @@ void DeleteSnapshotFlags::changeAvailableFlags(int control)
 void DeleteSnapshotFlags::changeFlagCompatibility()
 {
     QAction *act = static_cast<QAction*>(sender());
-    if ( nullptr==act ) return;
+    if ( Q_NULLPTR==act ) return;
     switch ( act->data().toInt() ) {
     case 1:
         if ( act->isChecked() ) {

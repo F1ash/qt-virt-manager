@@ -12,7 +12,7 @@ class StoragePoolControlMenu : public QMenu
     Q_OBJECT
 public:
     explicit StoragePoolControlMenu(
-            QWidget     *parent = nullptr,
+            QWidget     *parent = Q_NULLPTR,
             QVariantMap  params = QVariantMap(),
             bool         state  = false);
 
@@ -22,16 +22,16 @@ signals:
 private:
     bool            autoReloadState;
     bool            active, autostart, persistent;
-    QAction        *start = nullptr;
-    QAction        *destroy = nullptr;
-    QAction        *undefine = nullptr;
-    QAction        *autoStart = nullptr;
+    QAction        *start = Q_NULLPTR;
+    QAction        *destroy = Q_NULLPTR;
+    QAction        *undefine = Q_NULLPTR;
+    QAction        *autoStart = Q_NULLPTR;
     Delete_Pool_Menu
-                    *delete_Menu = nullptr;
-    QAction        *delete_Action = nullptr;
-    QAction        *getXMLDesc = nullptr;
-    QAction        *overview = nullptr;
-    QAction        *reload = nullptr;
+                    *delete_Menu = Q_NULLPTR;
+    QAction        *delete_Action = Q_NULLPTR;
+    QAction        *getXMLDesc = Q_NULLPTR;
+    QAction        *overview = Q_NULLPTR;
+    QAction        *reload = Q_NULLPTR;
 
 private slots:
     void            emitExecMethod(QAction*);

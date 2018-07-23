@@ -8,7 +8,7 @@ class VideoDevice : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit VideoDevice(QWidget *parent = nullptr);
+    explicit VideoDevice(QWidget *parent = Q_NULLPTR);
     QSpinBox        *vram;
     QCheckBox       *accel2d;
     QCheckBox       *accel3d;

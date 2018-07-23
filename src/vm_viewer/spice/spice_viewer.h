@@ -11,15 +11,15 @@ class Spice_Viewer : public VM_Viewer
     Q_OBJECT
 public:
     explicit Spice_Viewer(
-            QWidget        *parent     = nullptr,
-            virConnectPtr  *connPtrPtr = nullptr,
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr = Q_NULLPTR,
             QString         arg1       = QString(),
             QString         arg2       = QString(),
             QString         arg3       = QString());
 
 private:
-    QScrollArea     *scrolled = nullptr;
-    QSpiceWidget    *spiceWdg = nullptr;
+    QScrollArea     *scrolled = Q_NULLPTR;
+    QSpiceWidget    *spiceWdg = Q_NULLPTR;
 
 private slots:
     void             reconnectToVirtDomain();

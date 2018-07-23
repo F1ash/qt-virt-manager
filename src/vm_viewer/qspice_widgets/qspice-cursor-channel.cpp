@@ -36,6 +36,6 @@ void QSpiceHelper::cursor_set(SpiceCursorChannel *cursor,
     Q_UNUSED(cursor)
 
     QSpiceCursorChannel *_cursor = static_cast<QSpiceCursorChannel*>(user_data);
-    if ( nullptr==_cursor ) return;
+    if ( Q_NULLPTR==_cursor ) return;
     emit _cursor->cursorData(width, height, hot_x, hot_y, rgba);
 }

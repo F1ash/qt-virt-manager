@@ -114,7 +114,7 @@ QDomDocument ChainRules::getDataDocument() const
     QDomDocument doc;
     for (int i=0; i<ruleList->count(); i++) {
         QListWidgetItem *item = ruleList->item(i);
-        if ( item!=nullptr ) {
+        if ( item!=Q_NULLPTR ) {
             QString r = item->text();
             QDomDocument _r;
             _r.setContent(r);
@@ -193,7 +193,7 @@ void ChainRules::addRuleToList()
 void ChainRules::editRuleInList()
 {
     QList<QListWidgetItem*> l = ruleList->selectedItems();
-    if ( l.isEmpty() || l.at(0)==nullptr ) return;
+    if ( l.isEmpty() || l.at(0)==Q_NULLPTR ) return;
     QListWidgetItem *item = l.at(0);
     int row = ruleList->row(item);
     ruleWdg->editRule(item->text(), row);
@@ -202,12 +202,12 @@ void ChainRules::editRuleInList()
 void ChainRules::delRuleFromList()
 {
     QList<QListWidgetItem*> l = ruleList->selectedItems();
-    if ( l.isEmpty() || l.at(0)==nullptr ) return;
+    if ( l.isEmpty() || l.at(0)==Q_NULLPTR ) return;
     QListWidgetItem *item = l.at(0);
     int row = ruleList->row(item);
     ruleList->takeItem(row);
     delete item;
-    item = nullptr;
+    item = Q_NULLPTR;
 }
 void ChainRules::turnToChainWdg()
 {
@@ -219,7 +219,7 @@ void ChainRules::insertRuleToList(const QString &_rule, int row)
     if ( row<ruleList->count() ) {
         item = ruleList->takeItem(row);
         delete item;
-        item = nullptr;
+        item = Q_NULLPTR;
     };
     item = new QListWidgetItem;
     // item set text, data

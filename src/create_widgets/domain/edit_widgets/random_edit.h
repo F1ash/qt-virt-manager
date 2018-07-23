@@ -7,7 +7,7 @@ class Random_Edit : public Random
 {
     Q_OBJECT
 public:
-    explicit Random_Edit(QWidget *parent = nullptr);
+    explicit Random_Edit(QWidget *parent = Q_NULLPTR);
 
 signals:
 

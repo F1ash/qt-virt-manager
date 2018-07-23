@@ -165,7 +165,7 @@ void ConnElement::closeConnection()
 }
 void ConnElement::setAuthCredentials(const QString &crd, const QString &text)
 {
-    if ( connAliveThread!=nullptr ) {
+    if ( connAliveThread!=Q_NULLPTR ) {
         connAliveThread->setAuthCredentials(crd, text);
     }
 }

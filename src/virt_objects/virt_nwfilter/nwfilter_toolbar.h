@@ -14,7 +14,7 @@ class VirtNWFilterToolBar : public QToolBar
 {
     Q_OBJECT
 public:
-    explicit VirtNWFilterToolBar(QWidget *parent = nullptr);
+    explicit VirtNWFilterToolBar(QWidget *parent = Q_NULLPTR);
     ~VirtNWFilterToolBar();
 
 signals:

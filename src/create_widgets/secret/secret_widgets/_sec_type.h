@@ -13,8 +13,8 @@ class _SecType : public QWidget
     Q_OBJECT
 public:
     explicit _SecType(
-            QWidget        *parent     = nullptr,
-            virConnectPtr*  connPtrPtr = nullptr);
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr = Q_NULLPTR);
     QLabel                 *info;
     QVBoxLayout            *baseLayout;
     virConnectPtr*          ptr_ConnPtr;

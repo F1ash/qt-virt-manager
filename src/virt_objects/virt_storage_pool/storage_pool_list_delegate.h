@@ -7,7 +7,7 @@ class StoragePoolListDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit StoragePoolListDelegate(QObject *parent = nullptr);
+    explicit StoragePoolListDelegate(QObject *parent = Q_NULLPTR);
 
 private slots:
     void paint(

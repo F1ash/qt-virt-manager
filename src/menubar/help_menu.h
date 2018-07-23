@@ -7,7 +7,7 @@ class HelpMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit HelpMenu(QWidget *parent = nullptr);
+    explicit HelpMenu(QWidget *parent = Q_NULLPTR);
     QAction         *aboutQt;
     QAction         *aboutSelf;
     QAction         *donate;

@@ -113,7 +113,7 @@ void CreatePool::setDataDescription(const QString &_xmlDesc)
         };
         _Pool_Stuff *wdg =
                 static_cast<_Pool_Stuff*>(info->currentWidget());
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->setDataDescription(_xmlDesc);
         };
     };
@@ -149,7 +149,7 @@ QString CreatePool::getXMLDescFileName() const
 
     _Pool_Stuff *wdg =
             static_cast<_Pool_Stuff*>(info->currentWidget());
-    if ( wdg!=nullptr ) {
+    if ( wdg!=Q_NULLPTR ) {
         _stuff = wdg->getDataDocument();
         QDomNodeList list =
                 _stuff.firstChildElement("stuff").childNodes();

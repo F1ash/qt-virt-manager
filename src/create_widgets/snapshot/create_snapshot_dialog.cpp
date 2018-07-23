@@ -101,7 +101,7 @@ CreateSnapshotDialog::CreateSnapshotDialog(
     for (int i=0; i<baseWdg->count(); i++) {
         _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(
                     baseWdg->widget(i));
-        if ( nullptr!=wdg ) wdg->setParameters(connPtrPtr, domainName);
+        if ( Q_NULLPTR!=wdg ) wdg->setParameters(connPtrPtr, domainName);
         connect(wdg, SIGNAL(errMsg(QString&)),
                 this, SIGNAL(errMsg(QString&)));
     };
@@ -140,7 +140,7 @@ QString CreateSnapshotDialog::getSnapshotXMLDesc() const
         _desc.appendChild(_text);
     };
     _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(baseWdg->currentWidget());
-    if ( nullptr!=wdg ) {
+    if ( Q_NULLPTR!=wdg ) {
         _doc = wdg->getElements();
         QDomNodeList _nodeList = _doc.childNodes();
         int count = _nodeList.count();
@@ -162,7 +162,7 @@ void CreateSnapshotDialog::accept()
 {
     _SnapshotStuff *wdg = static_cast<_SnapshotStuff*>(baseWdg->currentWidget());
     QDomElement _node;
-    if ( wdg!=nullptr ) {
+    if ( wdg!=Q_NULLPTR ) {
         _node = wdg->getElements()
             .firstChildElement("disks")
             .firstChildElement("disk");

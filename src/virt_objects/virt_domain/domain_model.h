@@ -7,7 +7,7 @@ class DomainModel : public Model
 {
     Q_OBJECT
 public:
-    explicit DomainModel(QObject *parent = nullptr);
+    explicit DomainModel(QObject *parent = Q_NULLPTR);
     QVariant data(const QModelIndex&, int) const;
     bool     setData(const QModelIndex &index, const QVariant &value, int role);
 };

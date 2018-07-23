@@ -14,12 +14,12 @@ class VirtEntityControl : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit VirtEntityControl(QWidget *parent = nullptr);
+    explicit VirtEntityControl(QWidget *parent = Q_NULLPTR);
     virtual ~VirtEntityControl()               = 0;
     QString                  currConnName;
     QSettings                settings;
     TreeView                *entityList;
-    virConnectPtr           *ptr_ConnPtr = nullptr;
+    virConnectPtr           *ptr_ConnPtr = Q_NULLPTR;
 
     virtual void             stopProcessing();
     virtual bool             setCurrentWorkConnection(virConnectPtr*);

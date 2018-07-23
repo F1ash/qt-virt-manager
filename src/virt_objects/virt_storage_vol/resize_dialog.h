@@ -14,8 +14,8 @@ class resizeHelperThread : public _VirtThread
     Q_OBJECT
 public:
     explicit resizeHelperThread(
-            QObject        *pnullptrt   = nullptr,
-            virConnectPtr  *connPtrPtr  = nullptr,
+            QObject        *pQ_NULLPTRt   = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr  = Q_NULLPTR,
             QString         _poolName   = QString(),
             QString         _volName    = QString());
     unsigned long long  _size;
@@ -29,8 +29,8 @@ class ResizeDialog : public QDialog
     Q_OBJECT
 public:
     explicit ResizeDialog(
-            QWidget        *parent      = nullptr,
-            virConnectPtr  *connPtrPtr  = nullptr,
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr  = Q_NULLPTR,
             QString         _poolName   = QString(),
             QString         _volName    = QString());
 

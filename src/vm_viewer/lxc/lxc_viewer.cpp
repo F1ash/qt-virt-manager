@@ -8,7 +8,7 @@ lxcHlpThread::lxcHlpThread(
 }
 void lxcHlpThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -54,7 +54,7 @@ LXC_Viewer::~LXC_Viewer()
         killTimerId = 0;
     };
     QString msg;
-    if ( nullptr!=viewerThread ) {
+    if ( Q_NULLPTR!=viewerThread ) {
         viewerThread->blockSignals(true);
         viewerThread->keep_alive = false;
         viewerThread->wait(1000);
@@ -70,7 +70,7 @@ LXC_Viewer::~LXC_Viewer()
 void LXC_Viewer::init()
 {
     QString msg;
-    if ( hlpThread->domainPtr!=nullptr && hlpThread->domainIsActive ) {
+    if ( hlpThread->domainPtr!=Q_NULLPTR && hlpThread->domainIsActive ) {
         viewerThread = new LXC_ViewerThread(this);
         timerId = startTimer(PERIOD);
     } else {
@@ -92,7 +92,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
         int ptySlaveFd = this->getPtySlaveFd();
         killCounter++;
         //qDebug()<<counter<<ptySlaveFd;
-        if ( ptySlaveFd>0 && nullptr!=viewerThread ) {
+        if ( ptySlaveFd>0 && Q_NULLPTR!=viewerThread ) {
             killTimer(timerId);
             timerId = 0;
             killCounter = 0;
@@ -126,7 +126,7 @@ void LXC_Viewer::timerEvent(QTimerEvent *ev)
 void LXC_Viewer::setTerminalParameters()
 {
     TermWidget *t = getCurrentTerminal();
-    if ( nullptr!=t ) {
+    if ( Q_NULLPTR!=t ) {
         connect(t->impl(), SIGNAL(sendData(const char*,int)),
                 viewerThread, SLOT(sendDataToVMachine(const char*,int)));
         connect(viewerThread, SIGNAL(errorMsg(const QString&, const uint)),

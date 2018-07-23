@@ -18,7 +18,7 @@ class ConnectionList : public TreeView
 {
     Q_OBJECT
 public:
-    explicit ConnectionList(QWidget *parent = nullptr);
+    explicit ConnectionList(QWidget *parent = Q_NULLPTR);
 
     void                 setUsageInSoftTouched(bool);
     int                  getListItemCount() const;

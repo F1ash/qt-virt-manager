@@ -8,7 +8,7 @@ class DiskSnapshot : public _SnapshotStuff
     Q_OBJECT
 public:
     explicit DiskSnapshot(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             bool     _state = false,
             bool     _external = false);
 

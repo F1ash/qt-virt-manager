@@ -48,7 +48,7 @@ QDomDocument FilterrefWidget::getDataDocument() const
     QDomDocument doc;
     for (int i=0; i<list->count(); i++) {
         QListWidgetItem *item = list->item(i);
-        if ( item!=nullptr ) {
+        if ( item!=Q_NULLPTR ) {
             QString _filterName = item->text();
             QDomElement _filterref = doc.createElement("filterref");
             _filterref.setAttribute("filter", _filterName);
@@ -69,7 +69,7 @@ void FilterrefWidget::addItem()
 void FilterrefWidget::itemUp()
 {
     QList<QListWidgetItem*> l = list->selectedItems();
-    if ( l.isEmpty() || l.at(0)==nullptr ) return;
+    if ( l.isEmpty() || l.at(0)==Q_NULLPTR ) return;
     QListWidgetItem *item = l.at(0);
     int row = list->row(item);
     list->takeItem(row);
@@ -79,7 +79,7 @@ void FilterrefWidget::itemUp()
 void FilterrefWidget::itemDown()
 {
     QList<QListWidgetItem*> l = list->selectedItems();
-    if ( l.isEmpty() || l.at(0)==nullptr ) return;
+    if ( l.isEmpty() || l.at(0)==Q_NULLPTR ) return;
     QListWidgetItem *item = l.at(0);
     int row = list->row(item);
     list->takeItem(row);

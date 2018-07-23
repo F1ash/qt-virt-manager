@@ -27,7 +27,7 @@ devstackHelpThread::devstackHelpThread(
 }
 void devstackHelpThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -160,22 +160,22 @@ QDomDocument DeviceStack::getResult() const
 {
     //qDebug()<<"DeviceStack result";
     QDomDocument doc;
-    if ( device!=nullptr ) {
+    if ( device!=Q_NULLPTR ) {
         doc = device->getDataDocument();
     };
     return doc;
 }
 void DeviceStack::clearDevice()
 {
-    if ( device!=nullptr ) {
+    if ( device!=Q_NULLPTR ) {
         infoLayout->removeWidget(device);
         delete device;
-        device = nullptr;
+        device = Q_NULLPTR;
     };
-    if ( devIcon!=nullptr ) {
+    if ( devIcon!=Q_NULLPTR ) {
         infoLayout->removeWidget(devIcon);
         delete devIcon;
-        devIcon = nullptr;
+        devIcon = Q_NULLPTR;
     };
 }
 
@@ -221,7 +221,7 @@ void DeviceStack::init_wdg()
 }
 void DeviceStack::showDevice(QListWidgetItem *item)
 {
-    if ( item==nullptr ) {
+    if ( item==Q_NULLPTR ) {
         deviceDataProcessed();
         return;
     };
@@ -243,14 +243,14 @@ void DeviceStack::showDevice(QListWidgetItem *item)
     } else if ( deviceType.compare("serial")==0 ) {
         device = new CharDevice(
                     this,
-                    nullptr,
-                    nullptr,
+                    Q_NULLPTR,
+                    Q_NULLPTR,
                     deviceType);
     } else if ( deviceType.compare("parallel")==0 ) {
         device = new CharDevice(
                     this,
-                    nullptr,
-                    nullptr,
+                    Q_NULLPTR,
+                    Q_NULLPTR,
                     deviceType);
     } else if ( deviceType.compare("channel")==0 ) {
         device = new ChannelDevice(this);

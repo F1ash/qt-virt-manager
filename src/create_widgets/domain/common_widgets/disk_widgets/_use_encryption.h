@@ -16,8 +16,8 @@ class _UseEncryption : public _Changed
     Q_OBJECT
 public:
     explicit _UseEncryption(
-            QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
 
 signals:
     void                 errorMsg(const QString&);

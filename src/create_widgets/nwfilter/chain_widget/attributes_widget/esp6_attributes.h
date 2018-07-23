@@ -6,7 +6,7 @@
 class ESP6_Attributes : public _Attributes
 {
 public:
-    explicit ESP6_Attributes(QWidget *parent = nullptr);
+    explicit ESP6_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // ESP6_ATTRIBUTES_H

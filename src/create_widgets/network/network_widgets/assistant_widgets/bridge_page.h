@@ -11,7 +11,7 @@ class BridgePage : public QWizardPage
 {
     Q_OBJECT
 public:
-    explicit BridgePage(QWidget *parent = nullptr);
+    explicit BridgePage(QWidget *parent = Q_NULLPTR);
     Bridge_Widget  *br;
     int             nextId() const;
     bool            isComplete() const;

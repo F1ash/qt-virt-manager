@@ -23,7 +23,7 @@ void _Disks::setDisksData(QDomElement &_disk, bool external)
         disksLayout->addWidget(new _DiskItem(this));
         _DiskItem *wdg = static_cast<_DiskItem*>(
                     disksLayout->itemAt(disksLayout->count()-1)->widget());
-        if ( wdg!=nullptr ) {
+        if ( wdg!=Q_NULLPTR ) {
             wdg->setDiskName(_name);
             _type = QString(external? tr("external") : tr("internal"));
             wdg->setSnapshotType(_type);
@@ -44,7 +44,7 @@ QDomDocument _Disks::getElements(bool all) const
     for (int i=0; i<disksLayout->count(); i++) {
         _DiskItem *wdg = static_cast<_DiskItem*>(
                     disksLayout->itemAt(i)->widget());
-        if ( wdg==nullptr ) continue;
+        if ( wdg==Q_NULLPTR ) continue;
         QDomElement _disk = doc.createElement("disk");
         if ( wdg->isUsed() || all ) {
             _disk.setAttribute("name", wdg->getName());

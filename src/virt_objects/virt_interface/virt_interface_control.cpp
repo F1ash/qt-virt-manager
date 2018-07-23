@@ -282,7 +282,7 @@ void VirtInterfaceControl::newVirtEntityFromXML(const Act_Param &args)
         // show SRC Creator widget
         CreateInterface *createIface = new CreateInterface(this);
         int result = createIface->exec();
-        if ( createIface!=nullptr && result==QDialog::Accepted ) {
+        if ( createIface!=Q_NULLPTR && result==QDialog::Accepted ) {
             xml = createIface->getXMLDescFileName();
             show = createIface->getShowing();
             QStringList data;

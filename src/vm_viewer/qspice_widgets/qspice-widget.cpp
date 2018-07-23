@@ -39,16 +39,16 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     QWidget(parent)
 {
     spiceSession = new QSpiceSession(this);
-    display = nullptr;
-    inputs = nullptr;
-    cursor = nullptr;
-    smartcard = nullptr;
-    usbredir = nullptr;
-    webdav = nullptr;
-    playback = nullptr;
-    usbDevManager = nullptr;
-    smartcardManager = nullptr;
-    spiceAudio = nullptr;
+    display = Q_NULLPTR;
+    inputs = Q_NULLPTR;
+    cursor = Q_NULLPTR;
+    smartcard = Q_NULLPTR;
+    usbredir = Q_NULLPTR;
+    webdav = Q_NULLPTR;
+    playback = Q_NULLPTR;
+    usbDevManager = Q_NULLPTR;
+    smartcardManager = Q_NULLPTR;
+    spiceAudio = Q_NULLPTR;
     _width = 0;
     _height = 0;
     init_h = 0;
@@ -60,7 +60,7 @@ QSpiceWidget::QSpiceWidget(QWidget *parent) :
     is_FullScreen = false;
 
     tr_mode = Qt::SmoothTransformation;
-    img = nullptr;
+    img = Q_NULLPTR;
 
     resizeTimer.setSingleShot( true );
     connect(&resizeTimer, SIGNAL(timeout()), SLOT(resizeDone()));
@@ -78,8 +78,8 @@ QSpiceWidget::~QSpiceWidget()
 {
     // set NULL for drop signals from
     // display-channel with changes data
-    if ( display!=nullptr ) {
-        display->setParentWidget(nullptr);
+    if ( display!=Q_NULLPTR ) {
+        display->setParentWidget(Q_NULLPTR);
     };
     disconnectFromSpiceSource();
 }
@@ -98,7 +98,7 @@ void QSpiceWidget::disconnectFromSpiceSource()
 
 void QSpiceWidget::sendKeySequience(Qt::Key key)
 {
-    if ( nullptr!=inputs ) {
+    if ( Q_NULLPTR!=inputs ) {
         // inputs->inputsKeyPressAndRelease()
         // does not give the desired effect
         inputs->inputsQSequenceKeyPress(key);
@@ -108,21 +108,21 @@ void QSpiceWidget::sendKeySequience(Qt::Key key)
 
 void QSpiceWidget::fileCopyAsync(QStringList &fileNames)
 {
-    if ( nullptr!=main ) {
+    if ( Q_NULLPTR!=main ) {
         main->fileCopyAsync(fileNames);
     };
 }
 
 void QSpiceWidget::cancelFileCopyAsync()
 {
-    if ( nullptr!=main ) {
+    if ( Q_NULLPTR!=main ) {
         main->cancelFileCopyAsync();
     };
 }
 
 void QSpiceWidget::copyToClipboardFromGuest()
 {
-    if ( nullptr!=main ) {
+    if ( Q_NULLPTR!=main ) {
         emit copyPasteStateChanged(false);
         main->initClipboardSelectionRequestOnHost();
     };
@@ -130,7 +130,7 @@ void QSpiceWidget::copyToClipboardFromGuest()
 
 void QSpiceWidget::pasteClipboardToGuest()
 {
-    if ( nullptr!=main ) {
+    if ( Q_NULLPTR!=main ) {
         emit copyPasteStateChanged(false);
         main->initClipboardSelectionRequestOnGuest();
     };
@@ -138,7 +138,7 @@ void QSpiceWidget::pasteClipboardToGuest()
 
 void QSpiceWidget::sendClipboardDataToGuest(uint selection, quint32 type, const uchar *_data, long _size)
 {
-    if ( nullptr!=main ) {
+    if ( Q_NULLPTR!=main ) {
         main->clipboardSelectionNotify(selection, type, _data, _size);
     };
     emit copyPasteStateChanged(true);
@@ -151,7 +151,7 @@ bool QSpiceWidget::isScaledScreen() const
 
 bool QSpiceWidget::isConnectedWithDisplay() const
 {
-    if ( display==nullptr ) return false;
+    if ( display==Q_NULLPTR ) return false;
     return display->isConnected();
 }
 
@@ -374,29 +374,29 @@ void QSpiceWidget::obstructChannel(int channelType)
     switch(channelType) {
     case SPICE_CHANNEL_MAIN:
         delete main;
-        main = nullptr;
+        main = Q_NULLPTR;
         break;
 
     case SPICE_CHANNEL_DISPLAY:
         // set NULL for drop signals from
         // display-channel with changes data
-        if ( display!=nullptr )
-            display->setParentWidget(nullptr);
+        if ( display!=Q_NULLPTR )
+            display->setParentWidget(Q_NULLPTR);
         delete display;
-        display = nullptr;
+        display = Q_NULLPTR;
         emit displayChannelChanged(false);
         break;
 
     case SPICE_CHANNEL_INPUTS:
         delete inputs;
-        inputs = nullptr;
+        inputs = Q_NULLPTR;
         emit inputsChannelChanged(false);
         break;
 
     case SPICE_CHANNEL_CURSOR:
         setCursor(Qt::ArrowCursor);
         delete cursor;
-        cursor = nullptr;
+        cursor = Q_NULLPTR;
         emit cursorChannelChanged(false);
         break;
 
@@ -405,7 +405,7 @@ void QSpiceWidget::obstructChannel(int channelType)
             smartcardManager->deleteLater();
         };
         delete smartcard;
-        smartcard = nullptr;
+        smartcard = Q_NULLPTR;
         emit smartcardChannelChanged(false);
         break;
 
@@ -414,19 +414,19 @@ void QSpiceWidget::obstructChannel(int channelType)
             usbDevManager->deleteLater();
         };
         delete usbredir;
-        usbredir = nullptr;
+        usbredir = Q_NULLPTR;
         emit usbredirChannelChanged(false);
         break;
 
     case SPICE_CHANNEL_WEBDAV:
         delete webdav;
-        webdav = nullptr;
+        webdav = Q_NULLPTR;
         emit webdavChannelChanged(false);
         break;
 
     case SPICE_CHANNEL_PLAYBACK:
         delete playback;
-        playback = nullptr;
+        playback = Q_NULLPTR;
         emit playbackChannelChanged(false);
         if ( spiceAudio ) {
             spiceAudio->deleteLater();
@@ -435,7 +435,7 @@ void QSpiceWidget::obstructChannel(int channelType)
 
     case SPICE_CHANNEL_RECORD:
         delete record;
-        record = nullptr;
+        record = Q_NULLPTR;
         emit recordChannelChanged(false);
         if ( spiceAudio ) {
             spiceAudio->deleteLater();
@@ -683,7 +683,7 @@ void QSpiceWidget::displayPrimaryCreate(
 
     if (img) {
         delete img;
-        img = nullptr;
+        img = Q_NULLPTR;
     };
     switch(format) {
     case SPICE_SURFACE_FMT_32_xRGB:
@@ -837,11 +837,11 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
 
     if ( event->type() == QEvent::MouseMove ) {
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-        if ( ev==nullptr ) return false;
+        if ( ev==Q_NULLPTR ) return false;
         //qDebug()<<ev->x()<<ev->y()<<":"
         //<<ev->x()*zoom<<ev->y()*zoom<<":"<<zoom;
         //if ( is_FullScreen ) {
-        //    if ( (d_X==0 || d_Y==0) && img!=nullptr ) {
+        //    if ( (d_X==0 || d_Y==0) && img!=Q_NULLPTR ) {
         //        //d_X = (frameSize().width() -
         //        //      img->size().width())/2;
         //        //d_Y = (frameSize().height() -
@@ -864,20 +864,20 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         return true;
     } else if ( event->type() == QEvent::MouseButtonPress ) {
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-        if ( ev==nullptr ) return false;
+        if ( ev==Q_NULLPTR ) return false;
         inputs->inputsButtonPress(
                     QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
         return true;
     } else if ( event->type() == QEvent::MouseButtonRelease ) {
         emit mouseClickedInto();
         QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-        if ( ev==nullptr ) return false;
+        if ( ev==Q_NULLPTR ) return false;
         inputs->inputsButtonRelease(
                     QtButtonToSpice(ev), QtButtonsMaskToSpice(ev));
         return true;
     } else if ( event->type() == QEvent::KeyPress ) {
         QKeyEvent *ev = static_cast<QKeyEvent*>(event);
-        if ( ev==nullptr ) return false;
+        if ( ev==Q_NULLPTR ) return false;
         if ( ev->modifiers() & Qt::KeypadModifier ) {
             inputs->inputsQKeypadKeyPress(ev->key());
         } else {
@@ -886,7 +886,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         return true;
     } else if ( event->type() == QEvent::KeyRelease ) {
         QKeyEvent *ev = static_cast<QKeyEvent*>(event);
-        if ( ev==nullptr ) return false;
+        if ( ev==Q_NULLPTR ) return false;
         if ( ev->modifiers() & Qt::KeypadModifier ) {
             inputs->inputsQKeypadKeyRelease(ev->key());
         } else {
@@ -902,7 +902,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
         return true;
     } else if ( event->type() == QEvent::Wheel ) {
         QWheelEvent *ev = static_cast<QWheelEvent*>(event);
-        if ( ev==nullptr ) return false;
+        if ( ev==Q_NULLPTR ) return false;
         // TODO: ev->delta() is deprecated now, use pixelDelta or angleDelta
         if (ev->delta() > 0) {
             inputs->inputsButtonPress(
@@ -940,7 +940,7 @@ void QSpiceWidget::resizeEvent ( QResizeEvent * event )
 
 void QSpiceWidget::paintEvent(QPaintEvent *event)
 {
-    if ( img==nullptr ||
+    if ( img==Q_NULLPTR ||
          img->isNull() ||
          img->format() == QImage::Format_Invalid ) {
         event->ignore();
@@ -1182,7 +1182,7 @@ void QSpiceWidget::getScreenshot()
                     .arg(QDate::currentDate().toString("dd.MM.yyyy"))
                     .arg(QTime::currentTime().toString()),
                 "Images (*.png)");
-    if ( !fileName.isNull() && img!=nullptr ) {
+    if ( !fileName.isNull() && img!=Q_NULLPTR ) {
         img->save(fileName, "png");
     };
 }
@@ -1210,7 +1210,7 @@ void QSpiceWidget::setFullScreen(bool enable)
 
 void QSpiceWidget::setScaledScreen(bool state)
 {
-    if ( img==nullptr ) return;
+    if ( img==Q_NULLPTR ) return;
     scaled = state;
     if( scaled ) {
         qreal h_zoom = qreal(frameSize().height())/
@@ -1222,7 +1222,7 @@ void QSpiceWidget::setScaledScreen(bool state)
     } else {
         zoom = 1.0;
     };
-    if ( display!=nullptr )
+    if ( display!=Q_NULLPTR )
         display->setScaled(scaled);
     if ( !is_FullScreen ) {
         emit displayResized(

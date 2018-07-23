@@ -335,7 +335,7 @@ void VirtDomainControl::execAction(const Act_Param &param)
             task.args.sign  = int(autostartState);
             emit addNewTask(&task);
         } else if ( param.method==Methods::migrateVirtDomain ) {
-            if ( nullptr!=ptr_ConnPtr && nullptr!=*ptr_ConnPtr ) {
+            if ( Q_NULLPTR!=ptr_ConnPtr && Q_NULLPTR!=*ptr_ConnPtr ) {
                 MigrateDialog *migrateDialog =
                         new MigrateDialog(
                             this, domainName, ptr_ConnPtr);

@@ -6,7 +6,7 @@
 class TCP6_Attributes : public _Attributes
 {
 public:
-    explicit TCP6_Attributes(QWidget *parent = nullptr);
+    explicit TCP6_Attributes(QWidget *parent = Q_NULLPTR);
 };
 
 #endif // TCP6_ATTRIBUTES_H

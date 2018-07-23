@@ -8,7 +8,7 @@ class ROOT_Attributes : public _Attributes
     Q_OBJECT
 public:
     explicit ROOT_Attributes(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag = "Protocol:");
     void        clearAllAttributeData();
     void        setAttrValue(const QVariantMap&);

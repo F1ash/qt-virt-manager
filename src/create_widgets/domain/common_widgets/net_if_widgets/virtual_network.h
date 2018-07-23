@@ -13,8 +13,8 @@ class virtNet_HlpThread : public qwdHelpThread
     Q_OBJECT
 public:
     explicit virtNet_HlpThread(
-            QObject        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QObject        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
     QStringList      nwFilters;
     void             run();
 signals:
@@ -26,8 +26,8 @@ class Virtual_Network : public _QWidget_Threaded
     Q_OBJECT
 public:
     explicit Virtual_Network(
-            QWidget        *parent      = nullptr,
-            virConnectPtr*  connPtrPtr  = nullptr);
+            QWidget        *parent      = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr  = Q_NULLPTR);
 
 private:
     QLabel          *networkLabel, *targetLabel;

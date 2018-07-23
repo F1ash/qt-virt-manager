@@ -15,8 +15,8 @@ class _Storage_Source : public QWidget
     Q_OBJECT
 public:
     explicit _Storage_Source(
-            QWidget        *parent     = nullptr,
-            virConnectPtr*  connPtrPtr = nullptr);
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr = Q_NULLPTR);
     QLineEdit           *dir, *named, *vendor, *product;
     QLabel              *deviceLabel, *dirLabel,
                         *hostLabel, *namedLabel,

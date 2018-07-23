@@ -30,7 +30,7 @@
 QSpiceSession::QSpiceSession(QObject *parent) :
     QSpiceObject(parent)
 {
-    gobject = nullptr;
+    gobject = Q_NULLPTR;
     init();
 }
 
@@ -39,16 +39,16 @@ void QSpiceHelper::ss_channel_new(SpiceSession *session, SpiceChannel *channel, 
 {
     Q_UNUSED(session);
     QSpiceSession *_session = static_cast<QSpiceSession *>(user_data);
-    if ( nullptr==_session ) return;
+    if ( Q_NULLPTR==_session ) return;
 
     gint channelType = 0;
     g_object_get(
                 G_OBJECT (channel),
                 "channel-type",
                 &channelType,
-                nullptr);
+                Q_NULLPTR);
 
-    QSpiceChannel *_channel = nullptr;
+    QSpiceChannel *_channel = Q_NULLPTR;
 
     switch(channelType)
     {
@@ -100,14 +100,14 @@ void QSpiceHelper::ss_channel_destroy(SpiceSession *session, SpiceChannel *chann
 {
     Q_UNUSED(session);
     QSpiceSession *_session = static_cast<QSpiceSession *>(user_data);
-    if ( nullptr==_session ) return;
+    if ( Q_NULLPTR==_session ) return;
 
     gint channelType = 0;
     g_object_get(
                 G_OBJECT (channel),
                 "channel-type",
                 &channelType,
-                nullptr);
+                Q_NULLPTR);
 
     //emit _session->channelDestroyed(channelType);
 }
@@ -118,7 +118,7 @@ void QSpiceSession::init()
     //qDebug()<<"Spice.ver.:"<<spice_util_get_version_string()
     //       <<"\nDEBUG mode:"<<(bool)spice_util_get_debug();
     gobject = spice_session_new ();
-    if ( nullptr==gobject ) {
+    if ( Q_NULLPTR==gobject ) {
         //qDebug()<<"session not inited";
         return;
     };

@@ -29,15 +29,15 @@ Spice_Viewer::Spice_Viewer(
 /* private slots */
 void Spice_Viewer::reconnectToVirtDomain()
 {
-    if ( nullptr!=spiceWdg ) {
+    if ( Q_NULLPTR!=spiceWdg ) {
         delete spiceWdg;
-        spiceWdg = nullptr;
+        spiceWdg = Q_NULLPTR;
         // resizing to any,
         // because will need to init new display configuration
         //resize(getWidgetSizeAroundDisplay());
         initGraphicWidget();
         QSize around_size = getWidgetSizeAroundDisplay();
-        if ( nullptr!=spiceWdg ) {
+        if ( Q_NULLPTR!=spiceWdg ) {
             spiceWdg->updateSize(
                         size().width()-around_size.width(),
                         size().height()-around_size.height());
@@ -48,40 +48,40 @@ void Spice_Viewer::reconnectToVirtDomain()
 }
 void Spice_Viewer::disconnectFromVirtDomain()
 {
-    if ( spiceWdg!=nullptr ) {
+    if ( spiceWdg!=Q_NULLPTR ) {
         spiceWdg->disconnectFromSpiceSource();
     };
 }
 void Spice_Viewer::sendKeySeqToVirtDomain(Qt::Key key)
 {
-    if ( nullptr==spiceWdg ) return;
+    if ( Q_NULLPTR==spiceWdg ) return;
     spiceWdg->sendKeySequience(key);
 }
 void Spice_Viewer::getScreenshotFromVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
+    if ( Q_NULLPTR==spiceWdg ) return;
     spiceWdg->getScreenshot();
 }
 void Spice_Viewer::copyFilesToVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
+    if ( Q_NULLPTR==spiceWdg ) return;
     QStringList fileNames = QFileDialog::getOpenFileNames(
                 this, tr("Copy files to Guest"), "~");
     spiceWdg->fileCopyAsync(fileNames);
 }
 void Spice_Viewer::cancelCopyFilesToVirtDomain()
 {
-    if ( nullptr==spiceWdg ) return;
+    if ( Q_NULLPTR==spiceWdg ) return;
     spiceWdg->cancelFileCopyAsync();
 }
 void Spice_Viewer::copyToClipboardFromVirtDomain()
 {
-    if ( nullptr!=spiceWdg )
+    if ( Q_NULLPTR!=spiceWdg )
         spiceWdg->copyToClipboardFromGuest();
 }
 void Spice_Viewer::pasteClipboardToVirtDomain()
 {
-    if ( nullptr!=spiceWdg )
+    if ( Q_NULLPTR!=spiceWdg )
         spiceWdg->pasteClipboardToGuest();
 }
 void Spice_Viewer::fullScreenVirtDomain()
@@ -194,7 +194,7 @@ void Spice_Viewer::scaleScreenVirtDomain()
 void Spice_Viewer::resizeEvent(QResizeEvent *ev)
 {
     QSize around_size = getWidgetSizeAroundDisplay();
-    if ( nullptr!=spiceWdg ) {
+    if ( Q_NULLPTR!=spiceWdg ) {
         spiceWdg->updateSize(
                     ev->size().width()-around_size.width(),
                     ev->size().height()-around_size.height());
@@ -207,12 +207,12 @@ QSize Spice_Viewer::getWidgetSizeAroundDisplay()
     viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
     _width = left+right;
     _height = top +bottom;
-    if ( nullptr!=scrolled ) {
+    if ( Q_NULLPTR!=scrolled ) {
         scrolled->getContentsMargins(&left, &top, &right, &bottom);
         _width += left+right;
         _height += top +bottom;
     };
-    if ( nullptr!=spiceWdg ) {
+    if ( Q_NULLPTR!=spiceWdg ) {
         spiceWdg->getContentsMargins(&left, &top, &right, &bottom);
         _width += left+right;
         _height += top +bottom;

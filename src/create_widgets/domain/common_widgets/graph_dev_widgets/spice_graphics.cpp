@@ -9,7 +9,7 @@ spice_graphHlpThread::spice_graphHlpThread(
 }
 void spice_graphHlpThread::run()
 {
-    if ( nullptr==ptr_ConnPtr || nullptr==*ptr_ConnPtr ) {
+    if ( Q_NULLPTR==ptr_ConnPtr || Q_NULLPTR==*ptr_ConnPtr ) {
         emit ptrIsNull();
         return;
     };
@@ -18,7 +18,7 @@ void spice_graphHlpThread::run()
         return;
     };
     QStringList nets;
-    virNetworkPtr *networks = nullptr;
+    virNetworkPtr *networks = Q_NULLPTR;
     unsigned int flags =
             VIR_CONNECT_LIST_NETWORKS_ACTIVE |
             VIR_CONNECT_LIST_NETWORKS_INACTIVE;
@@ -35,7 +35,7 @@ void spice_graphHlpThread::run()
         };
         if (networks) free(networks);
     };
-    //int devs = virNodeNumOfDevices(ptr_ConnPtr, nullptr, 0);
+    //int devs = virNodeNumOfDevices(ptr_ConnPtr, Q_NULLPTR, 0);
     if ( virConnectClose(*ptr_ConnPtr)<0 ) {
         sendConnErrors();
     };
@@ -675,7 +675,7 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
     defaultPolicy->setCurrentIndex( (idx<0)? 0:idx );
     _channel = _device.firstChildElement("channel");
     while ( !_channel.isNull() ) {
-        QComboBox *obj = nullptr;
+        QComboBox *obj = Q_NULLPTR;
         QString _name, _mode;
         _name = _channel.attribute("name");
         _mode = _channel.attribute("mode");
@@ -704,7 +704,7 @@ void Spice_Graphics::setDataDescription(const QString &_xmlDesc)
             usbredirLabel->setChecked(true);
             obj = usbredir;
         };
-        if ( nullptr!=obj ) {
+        if ( Q_NULLPTR!=obj ) {
             idx = obj->findData(_mode, Qt::UserRole, Qt::MatchExactly);
             obj->setCurrentIndex( (idx<0)? 0:idx);
         };

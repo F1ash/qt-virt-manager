@@ -11,7 +11,7 @@ class MenuBar : public QMenuBar
 {
     Q_OBJECT
 public:
-    explicit MenuBar(QWidget *parent = nullptr);
+    explicit MenuBar(QWidget *parent = Q_NULLPTR);
     FileMenu       *fileMenu;
     ViewMenu       *viewMenu;
     DockMenu       *dockMenu;

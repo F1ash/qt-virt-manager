@@ -47,10 +47,10 @@ DeviceAddress::DeviceAddress(QWidget *parent) :
 AttrList DeviceAddress::getAttrList() const
 {
     AttrList _ret;
-    if ( use->isChecked() && info!=nullptr ) {
+    if ( use->isChecked() && info!=Q_NULLPTR ) {
         // get attribute list from current address type
         _Addr *wdg = static_cast<_Addr*>(info->currentWidget());
-        if ( wdg!=nullptr ) _ret = wdg->getAttrList();
+        if ( wdg!=Q_NULLPTR ) _ret = wdg->getAttrList();
         /*
          * Every address has a mandatory attribute type
          * that describes which bus the device is on.
@@ -77,6 +77,6 @@ void DeviceAddress::setCurrentAddrWidget(int i)
 void DeviceAddress::addressUsed(bool state)
 {
     type->setVisible(state);
-    if ( info!=nullptr ) info->setVisible(state);
+    if ( info!=Q_NULLPTR ) info->setVisible(state);
     emit dataChanged();
 }

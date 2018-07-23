@@ -12,8 +12,8 @@ class pooHelperThread : public _VirtThread
     Q_OBJECT
 public:
     explicit pooHelperThread(
-            QObject        *parent      = nullptr,
-            virConnectPtr  *connPtrPtr  = nullptr,
+            QObject        *parent      = Q_NULLPTR,
+            virConnectPtr  *connPtrPtr  = Q_NULLPTR,
             QString         _name       = QString());
     virStoragePool      *pool;
     QString              name, type;
@@ -25,8 +25,8 @@ class CreateVolume : public _CreateStorage
     Q_OBJECT
 public:
     explicit CreateVolume(
-            QWidget         *parent      = nullptr,
-            virConnectPtr   *connPtrPtr  = nullptr,
+            QWidget         *parent      = Q_NULLPTR,
+            virConnectPtr   *connPtrPtr  = Q_NULLPTR,
             QString          _poolName   = QString(),
             QString          _xmlFile    = QString());
     void             setDataDescription(const QString&);

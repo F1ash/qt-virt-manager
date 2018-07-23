@@ -38,7 +38,7 @@ Disk::Disk(QWidget *parent, virConnectPtr *connPtrPtr) :
     info->addWidget(new Network_Disk(this, ptr_ConnPtr));
     for(int i=0; i<info->count(); i++) {
         _Disk *_d = static_cast<_Disk*>(info->widget(i));
-        if ( nullptr==_d ) continue;
+        if ( Q_NULLPTR==_d ) continue;
         connect(_d, SIGNAL(errorMsg(const QString&)),
                 this, SIGNAL(errorMsg(const QString&)));
     };
@@ -57,6 +57,6 @@ QDomDocument Disk::getDataDocument() const
 {
     QDomDocument doc;
     _Disk *wdg = static_cast<_Disk*>(info->currentWidget());
-    if ( nullptr!=wdg ) doc = wdg->getDataDocument();
+    if ( Q_NULLPTR!=wdg ) doc = wdg->getDataDocument();
     return doc;
 }

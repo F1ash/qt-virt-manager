@@ -146,7 +146,7 @@ void VirtNetToolBar::timerEvent(QTimerEvent *event)
 void VirtNetToolBar::showHoveredMenu()
 {
     QAction *act = static_cast<QAction*>(sender());
-    if ( act==nullptr ) return;
+    if ( act==Q_NULLPTR ) return;
     if ( act==create_Action ) {
         if ( define_Action->menu()->isVisible() )
             define_Action->menu()->hide();
@@ -167,7 +167,7 @@ void VirtNetToolBar::showHoveredMenu()
 void VirtNetToolBar::showMenu()
 {
     QAction *act = static_cast<QAction*>(sender());
-    if ( act==nullptr ) return;
+    if ( act==Q_NULLPTR ) return;
     if ( act->menu()->isVisible() ) act->menu()->hide();
     else {
         act->menu()->show();

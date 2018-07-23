@@ -33,7 +33,7 @@ class TabWidget : public QTabWidget
 {
 Q_OBJECT
 public:
-    TabWidget(QWidget* parent = nullptr,
+    TabWidget(QWidget* parent = Q_NULLPTR,
               QString  _name = QString());
 
     TermWidgetHolder * terminalHolder();

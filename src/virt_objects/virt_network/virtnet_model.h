@@ -7,7 +7,7 @@ class VirtNetModel : public Model
 {
     Q_OBJECT
 public:
-    explicit VirtNetModel(QObject *parent = nullptr);
+    explicit VirtNetModel(QObject *parent = Q_NULLPTR);
 };
 
 #endif // VIRTNET_MODEL_H

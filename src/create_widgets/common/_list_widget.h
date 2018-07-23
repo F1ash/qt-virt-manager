@@ -10,7 +10,7 @@ class _List_Widget : public _Checked_Widget
     Q_OBJECT
 public:
     explicit _List_Widget(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  tag    = "");
     QListWidget     *list;
     QHBoxLayout     *panelLayout;

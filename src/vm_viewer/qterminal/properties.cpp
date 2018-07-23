@@ -20,7 +20,7 @@
 #include "config.h"
 
 
-Properties * Properties::m_instance = nullptr;
+Properties * Properties::m_instance = Q_NULLPTR;
 
 
 Properties * Properties::Instance(const QString& filename)
@@ -44,7 +44,7 @@ Properties::~Properties()
     qDebug("Properties destructor called");
     saveSettings();
     delete m_instance;
-    m_instance = nullptr;
+    m_instance = Q_NULLPTR;
 }
 
 QFont Properties::defaultFont()
@@ -77,9 +77,9 @@ void Properties::loadSettings()
         QKeySequence sequence = QKeySequence( settings.value( key ).toString() );
         if ( sequence.isEmpty() || sequence.count()<4 ) continue;
         if( Properties::Instance()->actions.contains( key )
-                && nullptr!=Properties::Instance()->actions[ key ] ) {
+                && Q_NULLPTR!=Properties::Instance()->actions[ key ] ) {
             QAction *act = static_cast<QAction *>(Properties::Instance()->actions[ key ]);
-            if (nullptr!=act) act->setShortcut( sequence );
+            if (Q_NULLPTR!=act) act->setShortcut( sequence );
         };
     }
     settings.endGroup();
@@ -154,7 +154,7 @@ void Properties::saveSettings()
         // TODO: fix shortcuts
         //qDebug()<< it.key()<<it.value();
         QAction *act = const_cast<QAction*>(it.value());
-        if ( nullptr==act ) continue;
+        if ( Q_NULLPTR==act ) continue;
         //QKeySequence shortcut(act->shortcut());
         //settings.setValue( it.key(), shortcut.toString() );
     };

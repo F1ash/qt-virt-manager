@@ -8,8 +8,8 @@ class ConsoleDevice_Edit : public ConsoleDevice
     Q_OBJECT
 public:
     explicit ConsoleDevice_Edit(
-            QWidget        *parent     = nullptr,
-            virConnectPtr*  connPtrPtr = nullptr);
+            QWidget        *parent     = Q_NULLPTR,
+            virConnectPtr*  connPtrPtr = Q_NULLPTR);
 
 signals:
 

@@ -11,7 +11,7 @@ class _Arch : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit _Arch(QWidget *parent = nullptr,
+    explicit _Arch(QWidget *parent = Q_NULLPTR,
                    QString  _caps  = "");
 
 signals:

@@ -9,7 +9,7 @@ class LXC_OSBooting : public _QWidget
     Q_OBJECT
 public:
     explicit LXC_OSBooting(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  _caps  = "");
     _Arch           *architecture;
 

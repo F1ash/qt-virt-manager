@@ -8,7 +8,7 @@ class Direct_Kernel_Boot : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit Direct_Kernel_Boot(QWidget *parent = nullptr);
+    explicit Direct_Kernel_Boot(QWidget *parent = Q_NULLPTR);
     QLineEdit       *cmdline;
     Path_To_File    *loader, *kernel, *initrd, *dtb;
 

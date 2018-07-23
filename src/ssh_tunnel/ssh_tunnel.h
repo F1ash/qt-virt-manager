@@ -9,7 +9,7 @@ class SSH_Tunnel : public QThread
 {
     Q_OBJECT
 public:
-    explicit SSH_Tunnel(QObject *parent = nullptr);
+    explicit SSH_Tunnel(QObject *parent = Q_NULLPTR);
     void        setData(QVariantMap);
     void        run();
     void        stop();
@@ -20,7 +20,7 @@ signals:
 private:
     QString     remoteHost, remotePort, User,
                 graphicsAddr, graphicsPort, graphicsSock;
-    QProcess   *ssh_tunnel = nullptr;
+    QProcess   *ssh_tunnel = Q_NULLPTR;
 };
 
 #endif // SSH_TUNNEL_H

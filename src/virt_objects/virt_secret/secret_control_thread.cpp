@@ -12,11 +12,11 @@ void SecretControlThread::execAction(uint _num, TASK _task)
     number = _num;
     task = _task;
     keep_alive = false;
-    if ( nullptr!=task.srcConnPtr ) {
+    if ( Q_NULLPTR!=task.srcConnPtr ) {
         // for new virConnect usage create the new virConnectRef[erence]
         int ret = virConnectRef(*task.srcConnPtr);
         if ( ret<0 ) {
-            task.srcConnPtr = nullptr;
+            task.srcConnPtr = Q_NULLPTR;
             sendConnErrors();
         } else
             keep_alive = true;
@@ -64,8 +64,8 @@ Result SecretControlThread::getAllSecretList()
 {
     Result result;
     ACT_RESULT virtSecretList;
-    if ( task.srcConnPtr!=nullptr && keep_alive ) {
-        virSecretPtr *secrets = nullptr;
+    if ( task.srcConnPtr!=Q_NULLPTR && keep_alive ) {
+        virSecretPtr *secrets = Q_NULLPTR;
         //extra flags; not used yet, so callers should always pass 0
         unsigned int flags = 0;
         int ret = virConnectListAllSecrets(
@@ -108,7 +108,7 @@ Result SecretControlThread::getAllSecretList()
                 type.append("NONE");
                 break;
             };
-            char *xmlDesc = nullptr;
+            char *xmlDesc = Q_NULLPTR;
             xmlDesc = virSecretGetXMLDesc(secrets[i], 0);
             QDomDocument doc;
             doc.setContent(QString::fromUtf8(xmlDesc));
@@ -144,7 +144,7 @@ Result SecretControlThread::defineSecret()
     Result result;
     QString path = task.args.path;
     QByteArray xmlData;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
@@ -163,7 +163,7 @@ Result SecretControlThread::defineSecret()
     uint flags = 0;
     virSecretPtr secret = virSecretDefineXML(
                 *task.srcConnPtr, xmlData.data(), flags);
-    if ( secret==nullptr ) {
+    if ( secret==Q_NULLPTR ) {
         result.err = sendConnErrors();
         return result;
     };
@@ -190,14 +190,14 @@ Result SecretControlThread::undefineSecret()
     Result result;
     QString uuid = task.object;
     bool deleted = false;
-    if ( task.srcConnPtr==nullptr ) {
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virSecretPtr secret = virSecretLookupByUUIDString(
                 *task.srcConnPtr, uuid.toUtf8().data());
-    if ( secret!=nullptr ) {
+    if ( secret!=Q_NULLPTR ) {
         deleted = (virSecretUndefine(secret)+1) ? true : false;
         if (!deleted)
             result.err = sendConnErrors();
@@ -216,19 +216,19 @@ Result SecretControlThread::getVirtSecretXMLDesc()
     QString uuid = task.object;
     result.name = uuid;
     bool read = false;
-    char *Returns = nullptr;
-    if ( task.srcConnPtr==nullptr ) {
+    char *Returns = Q_NULLPTR;
+    if ( task.srcConnPtr==Q_NULLPTR ) {
         result.result = false;
         result.err = tr("Connection pointer is NULL.");
         return result;
     };
     virSecretPtr secret = virSecretLookupByUUIDString(
                 *task.srcConnPtr, uuid.toUtf8().data());
-    if ( secret!=nullptr ) {
+    if ( secret!=Q_NULLPTR ) {
         //extra flags; not used yet, so callers should always pass 0
         uint flags = 0;
         Returns = (virSecretGetXMLDesc(secret, flags));
-        if ( Returns==nullptr )
+        if ( Returns==Q_NULLPTR )
             result.err = sendConnErrors();
         else read = true;
         virSecretFree(secret);
@@ -244,7 +244,7 @@ Result SecretControlThread::getVirtSecretXMLDesc()
     if (read) f.write(Returns);
     result.fileName.append(f.fileName());
     f.close();
-    if ( Returns!=nullptr ) free(Returns);
+    if ( Returns!=Q_NULLPTR ) free(Returns);
     result.result = read;
     result.msg.append(QString(tr("'<b>%1</b>' Secret %2 XML'ed."))
                       .arg(uuid).arg((read)? "": tr("not")));

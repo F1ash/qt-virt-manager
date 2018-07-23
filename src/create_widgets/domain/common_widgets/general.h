@@ -9,7 +9,7 @@ class General : public _Tab
     Q_OBJECT
 public:
     explicit General(
-            QWidget *parent = nullptr,
+            QWidget *parent = Q_NULLPTR,
             QString  _caps  = "",
             QString  _xmlDesc = QString());
 

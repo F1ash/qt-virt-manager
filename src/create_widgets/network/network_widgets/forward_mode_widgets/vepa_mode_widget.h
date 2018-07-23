@@ -7,7 +7,7 @@ class VEPA_Mode_widget : public _QWidget
 {
     Q_OBJECT
 public:
-    explicit VEPA_Mode_widget(QWidget *parent = nullptr);
+    explicit VEPA_Mode_widget(QWidget *parent = Q_NULLPTR);
 
 private:
     QLabel          *info;

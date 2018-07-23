@@ -18,7 +18,7 @@ class CreateVirtNetwork_Adv : public QWidget
     Q_OBJECT
 public:
     explicit CreateVirtNetwork_Adv(
-            QWidget *parent = nullptr);
+            QWidget *parent = Q_NULLPTR);
     ~CreateVirtNetwork_Adv();
     void             readXmlDescData(const QString&);
 
