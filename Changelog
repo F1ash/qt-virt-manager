@@ -243,3 +243,7 @@ fixes for spice-client-glib newest than 0.34.* version;
 update translation;
 enhancements for readable;
 some fixes;
+
+0.70.91 :
+fixed the closing of ssh_tunnel process;
+some fixes;
