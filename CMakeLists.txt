@@ -1205,8 +1205,14 @@ install ( TARGETS ${PROJECT_NAME}
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
 install ( DIRECTORY src/misc
     DESTINATION ${SHARE_INSTALL_PREFIX}/${PROJECT_NAME} )
-install ( FILES src/icons/256x256/apps/virtual-engineering.png
-    DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
+if    (NOT APPLE)
+    install ( FILES src/icons/256x256/apps/virtual-engineering.png
+        DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
+else  (NOT APPLE)
+    install ( FILES src/icons/256x256/apps/virtual-engineering.png
+        DESTINATION /Applications/${PROJECT_NAME}.app/Contents/Resources )
+    MESSAGE(STATUS "Copy app icon for QtVirtManaget")
+endif (NOT APPLE)
 
 if ( WITH_VNC_SUPPORT OR WITH_SPICE_SUPPORT )
     set (VIEWER_NAME ${PROJ_PREFIX}-remote-viewer)
@@ -1238,8 +1244,14 @@ if ( WITH_VNC_SUPPORT OR WITH_SPICE_SUPPORT )
         RENAME ${VIEWER_NAME}.desktop )
     install ( TARGETS ${VIEWER_NAME}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin )
-    install ( FILES src/icons/256x256/apps/remote-desktop-viewer.png
-    DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
+    if    (NOT APPLE)
+        install ( FILES src/icons/256x256/apps/remote-desktop-viewer.png
+            DESTINATION ${SHARE_INSTALL_PREFIX}/icons/hicolor/256x256/apps )
+    else  (NOT APPLE)
+        install ( FILES src/icons/256x256/apps/remote-desktop-viewer.png
+            DESTINATION /Applications/${PROJECT_NAME}.app/Contents/Resources )
+        MESSAGE(STATUS "Copy app icon for Remote Viewer")
+    endif (NOT APPLE)
 install ( FILES ${VIEWER_MIME_FILE}
     DESTINATION ${SHARE_INSTALL_PREFIX}/mime/packages )
 else ()
