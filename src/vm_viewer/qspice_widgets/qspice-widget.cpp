@@ -352,7 +352,7 @@ void QSpiceWidget::setChannel(QSpiceChannel *channel)
         online = record->connectToChannel();
         //qDebug()<<"USE_SPICE_AUDIO";
 #else
-        qDebug()<<"NOT USE_SPICE_AUDIO";
+        //qDebug()<<"NOT USE_SPICE_AUDIO";
 #endif
         if ( online && !spiceAudio ) {
             spiceAudio = new QSpiceAudio(
