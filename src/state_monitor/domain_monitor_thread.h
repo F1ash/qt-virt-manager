@@ -2,7 +2,11 @@
 #define DOMAIN_MONITOR_THREAD_H
 
 #include <QThread>
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
+#include <QElapsedTimer>
+#else
 #include <QTime>
+#endif
 #include "virt_objects/_virt_thread.h"
 //#include <QDebug>
 
@@ -23,7 +27,11 @@ private:
     virDomainPtr         domain;
     const QString        domainName;
     quint64              prev_cpuTime;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QElapsedTimer        tMark;
+#else
     QTime                tMark;
+#endif
     bool                 firstStep;
 
 public slots:

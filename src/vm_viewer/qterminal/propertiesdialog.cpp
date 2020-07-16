@@ -42,7 +42,7 @@ PropertiesDialog::PropertiesDialog(QWidget *parent)
     QStringList colorSchemes = QTermWidget::availableColorSchemes();
 
     listWidget->setCurrentRow(0);
-#if QT_VERSION > 0x050200
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
     listWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContentsOnFirstShow);
 #endif
 
@@ -268,7 +268,11 @@ void PropertiesDialog::validateAction(int row, int column)
 void PropertiesDialog::bookmarksButton_clicked()
 {
     QFileDialog dia(this, tr("Open or create bookmarks file"));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+    dia.setOption(QFileDialog::DontConfirmOverwrite, true);
+#else
     dia.setConfirmOverwrite(false);
+#endif
     dia.setFileMode(QFileDialog::AnyFile);
     if (!dia.exec())
         return;

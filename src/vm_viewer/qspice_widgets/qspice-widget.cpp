@@ -596,7 +596,11 @@ void QSpiceWidget::sendImageClipboardDataToGuest(QClipboard::Mode mode)
                     selection,
                     VD_AGENT_CLIPBOARD_IMAGE_PNG,
                     _image.constBits(),
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+                    long(_image.sizeInBytes()));
+#else
                     long(_image.byteCount()));
+#endif
     } else {
         emit copyPasteStateChanged(true);
     };

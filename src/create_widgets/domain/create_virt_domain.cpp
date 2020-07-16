@@ -7,6 +7,7 @@
 #include "common_widgets/misc_settings.h"
 #include "common_widgets/devices.h"
 #include <QTime>
+//#include <QTextStream>
 
 HelperThread::HelperThread(
         QObject         *parent,
@@ -168,6 +169,8 @@ void CreateVirtDomain::closeEvent(QCloseEvent *ev)
 void CreateVirtDomain::readCapabilities()
 {
     //qDebug()<<hlpThread->capabilities;
+    //QTextStream s(stdout);
+    //s<< hlpThread->capabilities<<endl;
     QDomDocument doc;
     doc.setContent(hlpThread->capabilities);
     QDomElement _domain = doc.
@@ -204,6 +207,7 @@ void CreateVirtDomain::readCapabilities()
         _xml->deleteLater();
     };
     //qDebug()<<xmlDesc<<"desc"<<type<<xmlFileName;
+    //s<< xmlDesc<<"desc "<<type<<" : "<<xmlFileName<<endl;
     readDataLists();
 }
 void CreateVirtDomain::readDataLists()
@@ -362,18 +366,30 @@ void CreateVirtDomain::create_specified_widgets()
         wdgList.insert(
                     tr("SecurityLabel"),
                     new SecurityLabel(this, xmlDesc));
-        connect(wdgList.value(tr("General")), SIGNAL(newName(const QString&)),
-                this, SLOT(setNewWindowTitle(const QString&)));
-        connect(wdgList.value(tr("OS_Booting")), SIGNAL(domainType(const QString&)),
-                wdgList.value(tr("General")), SLOT(changeArch(const QString&)));
-        connect(wdgList.value(tr("OS_Booting")), SIGNAL(emulatorType(const QString&)),
-                wdgList.value(tr("Devices")), SLOT(setEmulator(const QString&)));
-        connect(wdgList.value(tr("Devices")), SIGNAL(devicesChanged(QDomDocument&)),
-                wdgList.value(tr("OS_Booting")), SLOT(searchBootableDevices(QDomDocument&)));
-        connect(wdgList.value(tr("OS_Booting")), SIGNAL(maxVCPU(const QString&)),
-                wdgList.value(tr("CPU")), SLOT(setMaxVCPU(const QString&)));
-        connect(wdgList.value(tr("OS_Booting")), SIGNAL(archChanged(const QString&)),
-                wdgList.value(tr("CPU")), SLOT(changeArch(const QString&)));
+        connect(static_cast<General*>(wdgList.value(tr("General"))),
+                SIGNAL(newName(const QString&)),
+                this,
+                SLOT(setNewWindowTitle(const QString&)));
+        connect(static_cast<OS_Booting*>(wdgList.value(tr("OS_Booting"))),
+                SIGNAL(domainType(const QString&)),
+                static_cast<General*>(wdgList.value(tr("General"))),
+                SLOT(changeArch(const QString&)));
+        connect(static_cast<OS_Booting*>(wdgList.value(tr("OS_Booting"))),
+                SIGNAL(emulatorType(const QString&)),
+                static_cast<Devices*>(wdgList.value(tr("Devices"))),
+                SLOT(setEmulator(const QString&)));
+        connect(static_cast<Devices*>(wdgList.value(tr("Devices"))),
+                SIGNAL(devicesChanged(QDomDocument&)),
+                static_cast<OS_Booting*>(wdgList.value(tr("OS_Booting"))),
+                SLOT(searchBootableDevices(QDomDocument&)));
+        connect(static_cast<OS_Booting*>(wdgList.value(tr("OS_Booting"))),
+                SIGNAL(maxVCPU(const QString&)),
+                static_cast<CPU*>(wdgList.value(tr("CPU"))),
+                SLOT(setMaxVCPU(const QString&)));
+        connect(static_cast<OS_Booting*>(wdgList.value(tr("OS_Booting"))),
+                SIGNAL(archChanged(const QString&)),
+                static_cast<CPU*>(wdgList.value(tr("CPU"))),
+                SLOT(changeArch(const QString&)));
     } else {
         wdgList.clear();
         QMessageBox::information(
@@ -440,10 +456,6 @@ void CreateVirtDomain::restoreParameters()
 {
     setEnabled(false);
     tabWidget->clear();
-    //disconnect(wdgList.value(tr("OS_Booting")), SIGNAL(domainType(const QString&)),
-    //           wdgList.value(tr("General")), SLOT(changeArch(const QString&)));
-    //disconnect(wdgList.value(tr("OS_Booting")), SIGNAL(emulatorType(const QString&)),
-    //           wdgList.value(tr("Devices")), SLOT(setEmulator(QString&)));
     foreach (QString key, wdgList.keys()) {
         _QWidget *Wdg = static_cast<_QWidget*>(wdgList.value(key));
         if ( Q_NULLPTR!=Wdg ) {

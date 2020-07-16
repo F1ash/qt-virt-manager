@@ -1,4 +1,5 @@
 #include "cpu.h"
+//#include <QTextStream>
 
 CPU::CPU(QWidget *parent, QString _caps, QString _xmlDesc, uint cores) :
     _Tab(parent), capabilities(_caps), xmlDesc(_xmlDesc)
@@ -124,6 +125,8 @@ QDomDocument CPU::getDataDocument() const
 void CPU::setMaxVCPU(const QString &_vcpu)
 {
     //qDebug()<<_vcpu;
+    //QTextStream s(stdout);
+    //s<< "Set MAX VCPU :"<<_vcpu<<endl;
     cpuAlloc->vcpu->setRange(1, _vcpu.toInt());
     cpuTopology->setMaxVCPU(_vcpu.toInt());
 }

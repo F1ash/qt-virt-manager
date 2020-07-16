@@ -1,5 +1,5 @@
 #include "logical_host_cpu.h"
-#include <QThread>
+//#include <QThread>
 
 LogicalHostCPU::LogicalHostCPU(
         QWidget *parent, uint _cores) :
@@ -27,6 +27,6 @@ LogicalHostCPU::LogicalHostCPU(
 /* public slots */
 void LogicalHostCPU::changeInfoVisibility(int i)
 {
-    info->setVisible( (uint)i > cores );
-    icon->setVisible( (uint)i > cores );
+    info->setVisible( static_cast<uint>(i) > cores );
+    icon->setVisible( static_cast<uint>(i) > cores );
 }

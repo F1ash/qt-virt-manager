@@ -197,20 +197,52 @@ void Spice_Viewer_Only::resizeEvent(QResizeEvent *ev)
 QSize Spice_Viewer_Only::getWidgetSizeAroundDisplay()
 {
     int left, top, right, bottom, _width, _height;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QMargins _m = viewerToolBar->contentsMargins();
+    left    = _m.left();
+    top     = _m.top();
+    right   = _m.right();
+    bottom  = _m.bottom();
+#else
     viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
+#endif
     _width = left+right;
     _height = top +bottom;
     if ( Q_NULLPTR!=scrolled ) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        _m = scrolled->contentsMargins();
+        left    = _m.left();
+        top     = _m.top();
+        right   = _m.right();
+        bottom  = _m.bottom();
+#else
         scrolled->getContentsMargins(&left, &top, &right, &bottom);
+#endif
         _width += left+right;
         _height += top +bottom;
     };
     if ( Q_NULLPTR!=spiceWdg ) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        _m = spiceWdg->contentsMargins();
+        left    = _m.left();
+        top     = _m.top();
+        right   = _m.right();
+        bottom  = _m.bottom();
+#else
         spiceWdg->getContentsMargins(&left, &top, &right, &bottom);
+#endif
         _width += left+right;
         _height += top +bottom;
     };
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    _m = contentsMargins();
+    left    = _m.left();
+    top     = _m.top();
+    right   = _m.right();
+    bottom  = _m.bottom();
+#else
     getContentsMargins(&left, &top, &right, &bottom);
+#endif
     _width += left+right;
     _height += top +bottom;
     QSize _size(_width, _height);

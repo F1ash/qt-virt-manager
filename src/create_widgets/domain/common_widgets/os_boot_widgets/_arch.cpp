@@ -1,4 +1,5 @@
 #include "_arch.h"
+//#include <QTextStream>
 
 _Arch::_Arch(QWidget *parent, QString _caps) :
     _QWidget(parent), capabilities(_caps)
@@ -67,20 +68,23 @@ QString _Arch::getMachine() const
 }
 void _Arch::machineChanged(const QString &_machine)
 {
+    //QTextStream s(stdout);
+    //s<<"Machine :"<< _machine<<endl;
     QString _arch, _vcpu;
     _arch = arch->currentText();
-    QDomElement _el = doc
+    QDomElement _guest = doc
             .firstChildElement("capabilities")
             .firstChildElement("guest");
-    while ( !_el.isNull() ) {
-        if ( _el
+    while ( !_guest.isNull() ) {
+        if ( _guest
              .firstChildElement("arch")
              .attribute("name").compare(_arch)==0 ) {
             QDomElement _domain, _ell;
-            _domain = _el
+            _domain = _guest
                     .firstChildElement("arch")
                     .firstChildElement("domain");
             bool exist = false;
+            /*
             while ( !_domain.isNull() ) {
                 QString _domType = _domain.attribute("type");
                 // WARNING: in this application
@@ -93,13 +97,14 @@ void _Arch::machineChanged(const QString &_machine)
                 };
                 _domain = _domain.nextSiblingElement("domain");
             };
+            */
             if ( !exist ) {
-                _ell = _el
+                _ell = _guest
                         .firstChildElement("arch")
                         .firstChildElement("machine");
             };
             while ( !_ell.isNull() ) {
-                if ( machines->currentText().compare(_machine)==0 ) {
+                if ( _ell.firstChild().toText().data().compare(_machine)==0 ) {
                     _vcpu = _ell.attribute("maxCpus");
                     break;
                 };
@@ -107,31 +112,34 @@ void _Arch::machineChanged(const QString &_machine)
             };
             break;
         };
-        _el = _el.nextSiblingElement("guest");
+        _guest = _guest.nextSiblingElement("guest");
     };
     //qDebug()<<_vcpu;
+    //s<<"MAX VCPU :"<<_vcpu<<endl;
     emit maxVCPU(_vcpu);
 }
 void _Arch::archChanged(const QString &_arch)
 {
-    QString _domType, _osType, _emulType, _Arch;
-    _Arch = _arch;
+    //QTextStream s(stdout);
+    //s<<"arch changed :"<< _arch<<endl;
+    QString _domType, _osType, _emulType;
     machines->clear();
-    QDomElement _el = doc
+    QDomElement _guest = doc
             .firstChildElement("capabilities")
             .firstChildElement("guest");
-    while ( !_el.isNull() ) {
-        _osType = _el
+    while ( !_guest.isNull() ) {
+        _osType = _guest
                 .firstChildElement("os_type")
                 .firstChild().toText().data();
-        if ( _el
+        if ( _guest
              .firstChildElement("arch")
              .attribute("name").compare(_arch)==0 ) {
             QDomElement _domain, _ell;
-            _domain = _el
+            _domain = _guest
                     .firstChildElement("arch")
                     .firstChildElement("domain");
             bool exist = false;
+            /*
             while ( !_domain.isNull() ) {
                 _domType = _domain.attribute("type");
                 _emulType = _domain
@@ -147,12 +155,13 @@ void _Arch::archChanged(const QString &_arch)
                 };
                 _domain = _domain.nextSiblingElement("domain");
             };
+            */
             if ( !exist ) {
-                _emulType = _el
+                _emulType = _guest
                         .firstChildElement("arch")
                         .firstChildElement("emulator")
                         .firstChild().toText().data();
-                _ell = _el
+                _ell = _guest
                         .firstChildElement("arch")
                         .firstChildElement("machine");
             };
@@ -164,10 +173,10 @@ void _Arch::archChanged(const QString &_arch)
             };
             break;
         };
-        _el = _el.nextSiblingElement("guest");
+        _guest = _guest.nextSiblingElement("guest");
     };
     emit domainType(_domType);
-    emit archType(_Arch);
+    emit archType(_arch);
     emit osType(_osType);
     emit emulatorType(_emulType);
 }

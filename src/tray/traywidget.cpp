@@ -17,7 +17,7 @@ TrayIcon::TrayIcon(QWidget *parent)
     taskUpAction = new QAction(tr("Task WareHouse"), this);
     taskUpAction->setIcon ( QIcon::fromTheme("job") );
     closeAction = new QAction(tr("Exit"), this);
-    closeAction->setIcon (QIcon::fromTheme("exit"));
+    closeAction->setIcon (QIcon::fromTheme("exit", QIcon(":/exit.png")));
 
     trayIconMenu = new QMenu(parent);
     trayIconMenu->addAction(hideAction);

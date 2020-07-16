@@ -70,7 +70,7 @@ void Donate_Dialog::donationClicked()
     } else if ( sender()==donate2 ) {
         donate2->setEnabled(false);
         QClipboard *c = QApplication::clipboard();
-        c->setText("5106218039443361", QClipboard::Clipboard);
+        c->setText("5469400029117988", QClipboard::Clipboard);
     } else if ( sender()==donate3 ) {
         donate3->setEnabled(false);
         QClipboard *c = QApplication::clipboard();

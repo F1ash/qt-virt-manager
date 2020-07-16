@@ -131,8 +131,11 @@ void VncClientThread::outputHandler(const char *format, ...)
     va_start(args, format);
 
     QString message;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    message.vasprintf(format, args);
+#else
     message.vsprintf(format, args);
-
+#endif
     va_end(args);
 
     message = message.trimmed();
