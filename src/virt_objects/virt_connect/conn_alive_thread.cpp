@@ -66,7 +66,10 @@ void ConnAliveThread::closeConnection()
         //qDebug()<<"closeConnection2"<<*ptr_ConnPtr<<URI;
         unregisterConnEvents();
         //qDebug()<<"closeConnection3"<<*ptr_ConnPtr<<URI;
-        int ret = virConnectClose(*ptr_ConnPtr);
+        int ret = 1;
+        while (ret>0) {
+            ret = virConnectClose(*ptr_ConnPtr);
+        };
         *ptr_ConnPtr = Q_NULLPTR;
         //qDebug()<<"virConnectRef -1"<<"ConnAliveThread"<<URI<<(ret+1>0);
         if ( ret<0 ) {

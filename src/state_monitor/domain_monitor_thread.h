@@ -27,7 +27,7 @@ private:
     virDomainPtr         domain;
     const QString        domainName;
     quint64              prev_cpuTime;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
     QElapsedTimer        tMark;
 #else
     QTime                tMark;
