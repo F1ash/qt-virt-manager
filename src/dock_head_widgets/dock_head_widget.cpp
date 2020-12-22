@@ -65,10 +65,18 @@ void DockHeadWidget::wheelEvent(QWheelEvent *ev)
     ev->ignore();
     if ( floatIt->isEnabled() ) return;
     if ( ev->type()==QEvent::Wheel ) {
+#if QT_VERSION_CHECK(5, 14, 0)
+        if ( ev->angleDelta().y()>0 ) {
+            emit viewNextDock();
+        } else if ( ev->angleDelta().y()<0 ) {
+            emit viewPrevDock();
+        };
+#else
         if ( ev->delta()>0 ) {
             emit viewNextDock();
         } else if ( ev->delta()<0 ) {
             emit viewPrevDock();
         };
+#endif
     };
 }

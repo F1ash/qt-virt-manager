@@ -4,7 +4,6 @@
 #include "virt_objects/tree_view.h"
 #include <QMessageBox>
 #include <QInputDialog>
-#include <QMutex>
 #include "conn_menu.h"
 #include "conn_list_delegate.h"
 #include "search_thread.h"
@@ -58,7 +57,6 @@ public slots:
     void                 stopProcessing();
 
 private :
-    QMutex               mutex;
     CONN_LIST           *connections;
     ConnItemModel       *connItemModel;
     ConnListDelegate    *connListDlg;

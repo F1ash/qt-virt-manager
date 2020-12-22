@@ -87,5 +87,9 @@ void HNavigationLabel::paintEvent(QPaintEvent *ev)
     painter.setOpacity(opacity);
     painter.drawPixmap(
                 rect(),
+#if QT_VERSION_CHECK(5, 15, 0)
+                pixmap(Qt::ReturnByValue).copy());
+#else
                 pixmap()->copy());
+#endif
 }

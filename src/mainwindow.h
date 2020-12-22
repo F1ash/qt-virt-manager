@@ -93,7 +93,7 @@ private :
     int                          killTimerId = 0;
     int                          counter = 0;
     int                          waitAtClose;
-    bool                         reloadFlag;
+    bool                         reloadFlag, toExit;
     VIEW_MODE                    viewMode;
 
     ViewerMap                    VM_Displayed_Map;
@@ -109,7 +109,7 @@ private slots:
     void                         saveSettings();
     void                         closeEvent(QCloseEvent*);
     void                         startCloseProcess();
-    void                         timerEvent(QTimerEvent*);
+    //void                         timerEvent(QTimerEvent*);
     void                         changeVisibility();
     void                         mainWindowUp();
     void                         initTaskWareHouse();

@@ -61,7 +61,11 @@ public:
 #endif
 
     void setViewOnly(bool viewOnly);
+#ifdef Q_OS_LINUX
+    void showLocalCursor(LocalCursorState state);
+#else
     void showDotCursor(DotCursorState state);
+#endif
     void enableScaling(bool scale);
     
     virtual void updateConfiguration();

@@ -408,7 +408,11 @@ void VM_Viewer::startSSHTunnel(QString _user, QString _graphicsParam)
 {
     QVariantMap _data;
     _data.insert("User", _user);
+#if QT_VERSION_CHECK(5, 14, 0)
+    QStringList _remoteAddr = host.split(":", Qt::SkipEmptyParts);
+#else
     QStringList _remoteAddr = host.split(":", QString::SkipEmptyParts);
+#endif
     if ( _remoteAddr.count()>1 ) {
         _data.insert("RemotePort", _remoteAddr.last());
         _remoteAddr.removeLast();

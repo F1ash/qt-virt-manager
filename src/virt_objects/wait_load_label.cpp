@@ -50,5 +50,9 @@ void WaitLoadLabel::paintEvent(QPaintEvent *ev)
     painter.rotate(angle);
     painter.drawPixmap(
                 frameRect(),
+#if QT_VERSION_CHECK(5, 15, 0)
+                pixmap(Qt::ReturnByValue).copy());
+#else
                 pixmap()->copy());
+#endif
 }

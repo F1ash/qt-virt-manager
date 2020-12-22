@@ -7,7 +7,9 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QGridLayout>
+extern "C" {
 #include <libvirt.h>
+}
 
 class Encryption : public QWidget
 {

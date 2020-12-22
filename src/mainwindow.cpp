@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     proxyWdg->setLayout(proxyLayout);
     SoftTouchedWdg = Q_NULLPTR;
     reloadFlag = true; // for first initiation of connections
+    toExit = false;
     initTaskWareHouse();
     initDomainStateMonitor();
     initTrayIcon();
@@ -127,7 +128,7 @@ void MainWindow::saveSettings()
 void MainWindow::closeEvent(QCloseEvent *ev)
 {
     if ( !this->isVisible() ) changeVisibility();
-    if ( wait_thread==Q_NULLPTR ) {
+    if ( wait_thread==Q_NULLPTR && !toExit ) {
         connListWidget->list->setEnabled(false);
         connListWidget->toolBar->setEnabled(false);
         logDock->setEnabled(false);
@@ -226,20 +227,43 @@ void MainWindow::closeEvent(QCloseEvent *ev)
         // stop virtEventLoop after closing all connections;
         connect(wait_thread, SIGNAL(finished()),
                 virtEventLoop, SLOT(stop()));
+        // Dirty hack for close application, because virtEvent thread
+        // is infinite loop. Maybe incorrect implementation of loop initiation.
+        connect(virtEventLoop, SIGNAL(timerStopped()),
+                this, SLOT(close()));
+        //qDebug() << "wait_thread->start()";
+        toExit = true;
         wait_thread->start();
         ev->ignore();
-        startCloseProcess();
-    } else if ( virtEventLoop->isRunning() ) {
-        virtEventLoop->stop();
-        ev->ignore();
-    } else if ( !runningConnExist() &&
-                (wait_thread==Q_NULLPTR || !wait_thread->isRunning()) ) {
+        //startCloseProcess();
+    //} else if ( virtEventLoop->keep_alive) {
+    //    qDebug()<< "if ( virtEventLoop->isRunning() )";
+    //    virtEventLoop->stop();
+    //    ev->ignore();
+    //} else if ( !runningConnExist() &&
+    //            (wait_thread==Q_NULLPTR || !wait_thread->isRunning()) ) {
+    //    qDebug()<< "!runningConnExist() &&";
+    //    virtEventLoopFinished();
+    //    trayIcon->hide();
+    //    foreach (QWidget *widget, qApp->allWidgets())
+    //        widget->hide();
+    //    if ( killTimerId ) {
+    //        killTimer(killTimerId);
+    //        killTimerId = 0;
+    //        counter = 0;
+    //    };
+    //    ev->accept();
+    } else {
+        //qDebug()<< "else";
+        //  ( wait_thread!=Q_NULLPTR || wait_thread->isRunning() )
+        if ( killTimerId ) {
+            killTimer(killTimerId);
+            killTimerId = 0;
+            counter = 0;
+        };
         trayIcon->hide();
         foreach (QWidget *widget, qApp->allWidgets())
             widget->hide();
-        ev->accept();
-    } else {
-        //  ( wait_thread!=Q_NULLPTR || wait_thread->isRunning() )
         ev->accept();
     };
 }
@@ -248,22 +272,28 @@ void MainWindow::startCloseProcess()
     //qDebug()<<"startCloseProcess";
     statusBar()->show();
     killTimerId = startTimer(PERIOD);
-    //qDebug()<<killTimerId<<"killTimer";
+    //qDebug()<<killTimerId<<" <= killTimer";
 }
+/*
 void MainWindow::timerEvent(QTimerEvent *ev)
 {
     if ( ev->timerId()==killTimerId ) {
         counter++;
         closeProgress->setValue(counter*PERIOD);
         // TODO: use instead 3*TIMEOUT the default from libvirt
+        //qDebug()<<waitAtClose*1000<< " waitAtClose <" << counter*PERIOD;
         if ( waitAtClose*1000<counter*PERIOD ) {
             killTimer(killTimerId);
             killTimerId = 0;
             counter = 0;
-            wait_thread->terminate();
+            //qDebug()<< "wait_thread->terminate()";
+            //wait_thread->terminate();
+            //qDebug()<< "close()";
+            close();
         };
     };
 }
+*/
 void MainWindow::initTaskWareHouse()
 {
     taskWrHouse = new TaskWareHouse();
@@ -658,8 +688,8 @@ void MainWindow::initVirEventloop()
 {
     virtEventLoop = new VirtEventLoop(this);
     // close application after closing virtEventLoop if reloadFlag is false
-    connect(virtEventLoop, SIGNAL(finished()),
-            this, SLOT(virtEventLoopFinished()));
+    //connect(virtEventLoop, SIGNAL(finished()),
+    //        this, SLOT(virtEventLoopFinished()));
     connect(virtEventLoop, SIGNAL(errorMsg(const QString&, const uint)),
             this, SLOT(writeToErrorLog(const QString&, const uint)));
     connect(virtEventLoop, SIGNAL(result(bool)),
@@ -668,14 +698,21 @@ void MainWindow::initVirEventloop()
 }
 void MainWindow::virtEventLoopFinished()
 {
+    //qDebug()<<"virtEventLoopFinished";
     if ( reloadFlag ) {
         delete wait_thread;
         wait_thread = Q_NULLPTR;
         delete virtEventLoop;
         virtEventLoop = Q_NULLPTR;
-        initVirEventloop();
-        //qDebug()<<"restart Application done";
+        if ( !toExit ) {
+            initVirEventloop();
+            //qDebug()<<"restart Application done";
+        } else {
+            //qDebug()<< "to Close flag";
+            close();
+        };
     } else {
+        //qDebug()<<"stop Application done";
         close();
     };
 }
@@ -695,7 +732,7 @@ void MainWindow::restartApplication()
     wait_thread = new Wait(this, connListWidget->list);
     // stop virtEventLoop after closing all connections;
     connect(wait_thread, SIGNAL(finished()),
-            virtEventLoop, SLOT(stop()));
+            this, SLOT(virtEventLoopFinished()));
     wait_thread->start();
 }
 void MainWindow::initConnections(bool started)

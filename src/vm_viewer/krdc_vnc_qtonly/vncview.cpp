@@ -219,7 +219,11 @@ bool VncView::start()
 
     // set local cursor on by default because low quality mostly means slow internet connection
     if (quality == RemoteView::Low) {
+#ifdef Q_OS_LINUX
+        showLocalCursor(RemoteView::CursorOn);
+#else
         showDotCursor(RemoteView::CursorOn);
+#endif
 #ifndef QTONLY
         // KRDC does always just have one main window, so at(0) is safe
         KXMLGUIClient *mainWindow = dynamic_cast<KXMLGUIClient*>(KMainWindow::memberList().at(0));
@@ -309,7 +313,11 @@ void VncView::outputErrorMessage(const QString &message)
     kDebug(5011) << message;
 
     if (message == "INTERNAL:APPLE_VNC_COMPATIBILTY") {
+#ifdef Q_OS_LINUX
+        setCursor(localDefaultCursor());
+#else
         setCursor(localDotCursor());
+#endif
         m_forceLocalCursor = true;
         return;
     }
@@ -353,8 +361,13 @@ void VncView::updateImage(int x, int y, int w, int h)
         setAttribute(Qt::WA_OpaquePaintEvent);
         installEventFilter(this);
 
+#ifdef Q_OS_LINUX
+        setCursor(((m_localCursorState == CursorOn) || m_forceLocalCursor)
+                  ? localDefaultCursor() : Qt::BlankCursor);
+#else
         setCursor(((m_dotCursorState == CursorOn) || m_forceLocalCursor)
                   ? localDotCursor() : Qt::BlankCursor);
+#endif
 
         setMouseTracking(true); // get mouse events even when there is no mousebutton pressed
         setFocusPolicy(Qt::WheelFocus);
@@ -409,10 +422,24 @@ void VncView::setViewOnly(bool viewOnly)
     if (viewOnly)
         setCursor(Qt::ArrowCursor);
     else
+#ifdef Q_OS_LINUX
+        setCursor(m_localCursorState == CursorOn
+                  ? localDefaultCursor() : Qt::BlankCursor);
+#else
         setCursor(m_dotCursorState == CursorOn
                   ? localDotCursor() : Qt::BlankCursor);
+#endif
 }
 
+#ifdef Q_OS_LINUX
+void VncView::showLocalCursor(LocalCursorState state)
+{
+    RemoteView::showLocalCursor(state);
+
+    setCursor(state == CursorOn
+              ? localDefaultCursor() : Qt::BlankCursor);
+}
+#else
 void VncView::showDotCursor(DotCursorState state)
 {
     RemoteView::showDotCursor(state);
@@ -420,6 +447,7 @@ void VncView::showDotCursor(DotCursorState state)
     setCursor(state == CursorOn
               ? localDotCursor() : Qt::BlankCursor);
 }
+#endif
 
 void VncView::enableScaling(bool scale)
 {
@@ -577,13 +605,22 @@ void VncView::mouseEventHandler(QMouseEvent *e)
 void VncView::wheelEventHandler(QWheelEvent *event)
 {
     int eb = 0;
+#if QT_VERSION_CHECK(5, 15, 0)
+    if (event->angleDelta().y() < 0)
+#else
     if (event->delta() < 0)
+#endif
         eb |= 0x10;
     else
         eb |= 0x8;
 
+#if QT_VERSION_CHECK(5, 14, 0)
+    const int x = qRound(event->position().x() / m_horizontalFactor);
+    const int y = qRound(event->position().y() / m_verticalFactor);
+#else
     const int x = qRound(event->x() / m_horizontalFactor);
     const int y = qRound(event->y() / m_verticalFactor);
+#endif
 
     vncThread.mouseEvent(x, y, eb | m_buttonMask);
     vncThread.mouseEvent(x, y, m_buttonMask);

@@ -1,5 +1,7 @@
 #include "wipe_menu.h"
+extern "C" {
 #include <libvirt.h>
+}
 
 WipeMenu::WipeMenu(QWidget *parent) :
     QMenu(parent)

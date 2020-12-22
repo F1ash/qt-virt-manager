@@ -907,8 +907,11 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     } else if ( event->type() == QEvent::Wheel ) {
         QWheelEvent *ev = static_cast<QWheelEvent*>(event);
         if ( ev==Q_NULLPTR ) return false;
-        // TODO: ev->delta() is deprecated now, use pixelDelta or angleDelta
+#if QT_VERSION_CHECK (5, 15, 0)
+        if (ev->angleDelta().y() > 0) {
+#else
         if (ev->delta() > 0) {
+#endif
             inputs->inputsButtonPress(
                         SPICE_MOUSE_BUTTON_UP,
                         QtButtonsMaskToSpice(

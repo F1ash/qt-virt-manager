@@ -442,7 +442,7 @@ void QSpiceMainChannel::clipboardSelectionNotify(uint selection, quint32 type, c
     //qDebug()<<"clipboardSelectionNotify";
 
     gpointer conv = Q_NULLPTR;
-    size_t len = 0;
+    uint len = 0;
     if ( type==VD_AGENT_CLIPBOARD_UTF8_TEXT ) {
         /* gtk+ internal utf8 newline is always LF, even on windows */
         if (
@@ -491,7 +491,7 @@ void QSpiceMainChannel::clipboardSelectionNotify(uint selection, quint32 type, c
                 selection,
                 type,
                 _conv ? _conv : data,
-                len? len : size_t(size));
+                len? len : uint(size));
     g_free(conv);
 
     clipboardSelectionRelease(type);

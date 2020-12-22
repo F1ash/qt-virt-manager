@@ -78,9 +78,13 @@ public:
     * is a dot and the remote cursor is the 'real' cursor, usually an arrow.
     */
 
+#ifdef Q_OS_LINUX
+    Q_ENUMS(LocalCursorState)
+    enum LocalCursorState {
+#else
     Q_ENUMS(DotCursorState)
-
     enum DotCursorState {
+#endif
         CursorOn,  ///< Always show local cursor (and the remote one).
         CursorOff, ///< Never show local cursor, only the remote one.
         /// Try to measure the lag and enable the local cursor if the latency is too high.
@@ -153,6 +157,10 @@ public:
      * @see DotCursorState
      * @see showDotCursor()
      * @see dotCursorState()
+     * new:
+     * @see LocalCursorState
+     * @see showLocalCursor()
+     * @see localCursorState()
      */
     virtual bool supportsLocalCursor() const;
 
@@ -162,18 +170,32 @@ public:
      * @param state the new state (CursorOn, CursorOff or
      *        CursorAuto)
      * @see dotCursorState()
+     * new:
+     * @see localCursorState()
+     *
      * @see supportsLocalCursor()
      */
+#ifdef Q_OS_LINUX
+    virtual void showLocalCursor(LocalCursorState state);
+#else
     virtual void showDotCursor(DotCursorState state);
+#endif
 
     /**
      * Returns the state of the local cursor. The default implementation returns
      * always CursorOff.
      * @return true if local cursors are supported/known
      * @see showDotCursor()
+     * new:
+     * @see showLocalCursor()
+     *
      * @see supportsLocalCursor()
      */
+#ifdef Q_OS_LINUX
+    virtual LocalCursorState localCursorState() const;
+#else
     virtual DotCursorState dotCursorState() const;
+#endif
 
     /**
      * Checks whether the view is in view-only mode. This means
@@ -387,7 +409,11 @@ protected:
      */
     virtual void setStatus(RemoteStatus s);
 
+#ifdef Q_OS_LINUX
+    QCursor localDefaultCursor() const;
+#else
     QCursor localDotCursor() const;
+#endif
 
     QString m_host;
     int m_port;
@@ -403,7 +429,11 @@ protected:
     KWallet::Wallet *m_wallet;
 #endif
 
+#ifdef Q_OS_LINUX
+    LocalCursorState m_localCursorState;
+#else
     DotCursorState m_dotCursorState;
+#endif
 };
 
 #endif

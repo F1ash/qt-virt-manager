@@ -881,7 +881,7 @@ Result DomControlThread::createSnapshoteDomain()
     result.name = domName;
     uint flags = uint(task.args.sign);
     QByteArray _xmlDesc;
-    _xmlDesc.append(task.args.object);
+    _xmlDesc.append(task.args.object.toUtf8());
     const char *xmlDesc = _xmlDesc.data();
     //qDebug()<<xmlDesc<<flags;
     if ( task.srcConnPtr==Q_NULLPTR ) {

@@ -14,9 +14,17 @@ public:
 
 signals:
     void        result(bool);
+    void        timerStopped();
 
 private:
     bool        success;
+    int         timer_id;
+    static void callback(int, void*);
+    static void freeCallback(void*);
+
+public slots:
+    void        stop();
+
 };
 
 #endif // VIRT_EVENT_LOOP_H

@@ -44,7 +44,11 @@ RemoteView::RemoteView(QWidget *parent)
 #ifndef QTONLY
         m_wallet(0),
 #endif
+#ifdef Q_OS_LINUX
+        m_localCursorState(CursorOff)
+#else
         m_dotCursorState(CursorOff)
+#endif
 {
 }
 
@@ -158,6 +162,17 @@ void RemoteView::setGrabAllKeys(bool grabAllKeys)
     }
 }
 
+#ifdef Q_OS_LINUX
+void RemoteView::showLocalCursor(LocalCursorState state)
+{
+    m_localCursorState = state;
+}
+
+RemoteView::LocalCursorState RemoteView::localCursorState() const
+{
+    return m_localCursorState;
+}
+#else
 void RemoteView::showDotCursor(DotCursorState state)
 {
     m_dotCursorState = state;
@@ -167,6 +182,7 @@ RemoteView::DotCursorState RemoteView::dotCursorState() const
 {
     return m_dotCursorState;
 }
+#endif
 
 bool RemoteView::scaling() const
 {
@@ -243,7 +259,11 @@ void RemoteView::saveWalletPassword(const QString &password, bool fromUserNameOn
 }
 #endif
 
+#ifdef Q_OS_LINUX
+QCursor RemoteView::localDefaultCursor() const
+#else
 QCursor RemoteView::localDotCursor() const
+#endif
 {
 #ifdef QTONLY
     QBitmap cursorBitmap( ":images/pointcursor.png" );

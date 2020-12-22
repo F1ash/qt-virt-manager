@@ -15,7 +15,9 @@
 #include <QDir>
 #include <QTemporaryFile>
 #include <QSettings>
+extern "C" {
 #include <libvirt.h>
+}
 //#include <QDebug>
 
 class _CreateStorage : public QDialog
