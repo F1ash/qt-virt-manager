@@ -251,3 +251,8 @@ some fixes;
 0.71.95 :
 fixed deprecated function;
 some fixes;
+
+0.72.97 :
+fixed deprecated methods;
+fixed the close of application;
+fixes for new krdc version;
