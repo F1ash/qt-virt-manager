@@ -17,10 +17,8 @@
  * Then will implemented the copy/paste cross blocking.
  */
 
-extern "C" {
 #include <spice-client.h>
 #include <spice/vd_agent.h>
-}
 #include "qspice-widget.h"
 #include "qspice-smartcard-widget.h"
 #include "qspice-usbdevice-widget.h"
@@ -907,7 +905,7 @@ bool QSpiceWidget::eventFilter(QObject *object, QEvent *event)
     } else if ( event->type() == QEvent::Wheel ) {
         QWheelEvent *ev = static_cast<QWheelEvent*>(event);
         if ( ev==Q_NULLPTR ) return false;
-#if QT_VERSION_CHECK (5, 15, 0)
+#if (QT_VERSION >= QT_VERSION_CHECK (5, 15, 0))
         if (ev->angleDelta().y() > 0) {
 #else
         if (ev->delta() > 0) {

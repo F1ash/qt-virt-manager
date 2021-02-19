@@ -605,7 +605,7 @@ void VncView::mouseEventHandler(QMouseEvent *e)
 void VncView::wheelEventHandler(QWheelEvent *event)
 {
     int eb = 0;
-#if QT_VERSION_CHECK(5, 15, 0)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     if (event->angleDelta().y() < 0)
 #else
     if (event->delta() < 0)
@@ -614,7 +614,7 @@ void VncView::wheelEventHandler(QWheelEvent *event)
     else
         eb |= 0x8;
 
-#if QT_VERSION_CHECK(5, 14, 0)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     const int x = qRound(event->position().x() / m_horizontalFactor);
     const int y = qRound(event->position().y() / m_verticalFactor);
 #else

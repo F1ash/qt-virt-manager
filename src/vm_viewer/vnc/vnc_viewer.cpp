@@ -280,26 +280,18 @@ void VNC_Viewer::resizeEvent(QResizeEvent *ev)
 QSize VNC_Viewer::getWidgetSizeAroundDisplay()
 {
     int left, top, right, bottom, _width, _height;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QMargins _m = viewerToolBar->contentsMargins();
     left    = _m.left();
     top     = _m.top();
     right   = _m.right();
     bottom  = _m.bottom();
-#else
-    viewerToolBar->getContentsMargins(&left, &top, &right, &bottom);
-#endif
     _width = left+right;
     _height = top +bottom;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     _m = contentsMargins();
     left    = _m.left();
     top     = _m.top();
     right   = _m.right();
     bottom  = _m.bottom();
-#else
-    getContentsMargins(&left, &top, &right, &bottom);
-#endif
     _width += left+right;
     _height += top +bottom;
     QSize _size(_width, _height);

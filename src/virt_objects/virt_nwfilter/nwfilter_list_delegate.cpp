@@ -11,7 +11,7 @@ void NWFilterListDelegate::paint(
         const QModelIndex &index) const
 {
     if ( index.column() >= 0 ) {
-#if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
+#if (QT_VERSION > QT_VERSION_CHECK(5, 0, 0))
         //QStyleOptionViewItem _option = option;
         //_option.rect = option.rect;
         //_option.displayAlignment = Qt::AlignLeft;

@@ -23,9 +23,9 @@
 #warning "Only <qspice-widget.h> can be included directly"
 #endif
 
-extern "C" {
+
 #include <spice-client.h>
-}
+
 //#include <QDebug>
 
 class QSpiceHelper

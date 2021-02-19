@@ -1,7 +1,5 @@
 
-extern "C" {
 #include <spice-client.h>
-}
 #include "qspice-audio.h"
 
 QSpiceAudio::QSpiceAudio(QObject *parent, void *_session) :

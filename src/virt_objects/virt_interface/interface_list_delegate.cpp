@@ -16,7 +16,7 @@ void IfaceListDelegate::paint(
                         index, Qt::DecorationRole));
         icon.paint(painter, option.rect, Qt::AlignCenter);
     } else if ( index.column() < 2 ) {
-#if QT_VERSION > QT_VERSION_CHECK(5, 0, 0)
+#if (QT_VERSION > QT_VERSION_CHECK(5, 0, 0))
         //QStyleOptionViewItem _option = option;
         //_option.rect = option.rect;
         //_option.displayAlignment = Qt::AlignLeft;
