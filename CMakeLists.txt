@@ -100,7 +100,7 @@ endif ()
 set (PROJECT_NAME ${PROJ_PREFIX}-virt-manager)
 set (VERSION_MAJOR   0)
 set (VERSION_MINOR  72)
-set (VERSION_MICRO  97)
+set (VERSION_MICRO  98)
 
 set (QTERM_UI_SRC
     src/vm_viewer/qterminal/forms/qterminal.ui

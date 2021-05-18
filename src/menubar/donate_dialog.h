@@ -15,8 +15,9 @@ public:
     //bool             showAgain() const;
 
 private:
-    Click_Label     *donate1, *donate2,
-                    *donate3, *donate4;
+    Click_Label     //*donate1,
+                    *donate2;
+                    //*donate3, *donate4;
     QGridLayout     *donateLayout;
     QWidget         *donateWdg;
     //QCheckBox       *again;

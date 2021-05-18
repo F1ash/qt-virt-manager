@@ -256,3 +256,7 @@ some fixes;
 fixed deprecated methods;
 fixed the close of application;
 fixes for new krdc version;
+
+0.72.98 :
+some fixes for build with new Qt and CPP version;
+donation card corrected;
