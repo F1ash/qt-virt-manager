@@ -1,9 +1,9 @@
 #ifndef VIRT_ENTITY_CONFIG
 #define VIRT_ENTITY_CONFIG
 
-extern "C" {
+
 #include <libvirt.h>
-}
+
 #include <QStringList>
 #include <QVariantMap>
 #include "virt_entity_enums.h"

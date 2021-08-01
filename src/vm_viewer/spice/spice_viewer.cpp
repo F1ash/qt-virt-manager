@@ -1,8 +1,8 @@
 #include "spice_viewer.h"
 #include <QApplication>
-extern "C" {
+
 #include <spice/vd_agent.h>
-}
+
 
 Spice_Viewer::Spice_Viewer(
         QWidget         *parent,

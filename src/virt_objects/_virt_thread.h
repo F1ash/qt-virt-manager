@@ -3,10 +3,10 @@
 
 #include <QThread>
 #include <QString>
-extern "C" {
+
 #include <libvirt.h>
 #include <virterror.h>
-}
+
 //#include <QDebug>
 
 class _VirtThread : public QThread

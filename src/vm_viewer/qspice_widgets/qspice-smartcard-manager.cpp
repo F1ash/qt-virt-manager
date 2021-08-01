@@ -1,8 +1,8 @@
 
 #if WITH_LIBCACARD
-extern "C" {
+
 #include <libcacard.h>
-}
+
 #endif
 #include "qspice-helper.h"
 #include "qspice-smartcard-manager.h"

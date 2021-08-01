@@ -11,10 +11,10 @@
 #include <QGridLayout>
 #include <QDomDocument>
 #include "_changed.h"
-extern "C" {
+
 #include <libvirt.h>
 #include <virterror.h>
-}
+
 
 class _QWidget : public _Changed
 {

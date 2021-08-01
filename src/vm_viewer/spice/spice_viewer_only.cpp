@@ -1,8 +1,8 @@
 #include "spice_viewer_only.h"
 #include <QApplication>
-extern "C" {
+
 #include <spice/vd_agent.h>
-}
+
 
 Spice_Viewer_Only::Spice_Viewer_Only(
         QWidget        *parent,

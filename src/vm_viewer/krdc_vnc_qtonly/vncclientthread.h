@@ -47,9 +47,9 @@
 #include <QImage>
 #include <QMutex>
 
-extern "C" {
+
 #include <rfb/rfbclient.h>
-}
+
 
 class ClientEvent
 {

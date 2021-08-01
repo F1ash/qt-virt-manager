@@ -1,7 +1,7 @@
 #include "delete_pool_menu.h"
-extern "C" {
+
 #include <libvirt.h>
-}
+
 
 Delete_Pool_Menu::Delete_Pool_Menu(QWidget *parent) :
     QMenu(parent)
